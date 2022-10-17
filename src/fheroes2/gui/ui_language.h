@@ -38,6 +38,7 @@ namespace fheroes2
         // All languages listed below are original to fheroes2.
         Belarusian,
         Bulgarian,
+        Dutch,
         Norwegian,
         Portuguese,
         Romanian,

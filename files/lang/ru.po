@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
-"PO-Revision-Date: 2022-10-12 20:15+0300\n"
+"POT-Creation-Date: 2022-10-16 14:29+0000\n"
+"PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -1307,18 +1307,19 @@ msgid "The army will be carried over the scenario."
 msgstr "Армия будет перенесена в следующий сценарий."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
-msgstr "Королевство ежедневно будет получать +%{count} %{resource}"
+msgstr "Королевство ежедневно будет получать +%{count} %{resource}."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr "Заклинание \"%{spell}\" будет перенесено в следующий сценарий."
+msgstr "Заклинание \"%{spell}\" будет доступно в этом сценарии."
 
 msgid "%{hero} can be hired in the scenario."
-msgstr "%{hero}  может быть нанят в этом сценарии."
+msgstr "%{hero} может быть нанят в этом сценарии."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
-"Герой %{hero} был повержен и не появится в последующих сценариях."
+"%{hero} был повержен, и больше не будет досаждать Вам в этом и последующих "
+"сценариях."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
@@ -1349,8 +1350,7 @@ msgstr ""
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
 "pass.\""
-msgstr ""
-"Гномы приветствуют Вас: \"Друг Роланда - наш друг. Вы можете пройти.\""
+msgstr "Гномы приветствуют Вас: \"Друг Роланда - наш друг. Вы можете пройти\"."
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
@@ -1444,130 +1444,130 @@ msgid "campaignBonus|White Pearl"
 msgstr "Бел. Жемчужина"
 
 msgid "campaignBonus|Basic Archery"
-msgstr "Базовая стрельба"
+msgstr "Баз. стрельба"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr "Продвинутая стрельба"
+msgstr "Прод. стрельба"
 
 msgid "campaignBonus|Expert Archery"
-msgstr "Экспертная стрельба"
+msgstr "Эксп. стрельба"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Базовая баллистика"
+msgstr "Баз. баллистика"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Продвинутая баллистика"
+msgstr "Прод. баллистика"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Экспертная балиистика"
+msgstr "Эксп. баллистика"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Базовая дипломатия"
+msgstr "Баз. дипломатия"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr "Продвинутая дипломатия"
+msgstr "Прод. дипломатия"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr "Экспертная дипломатия"
+msgstr "Эксп. дипломатия"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Базовый оргиный взор"
+msgstr "Баз. орлиный взор"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Продвинутый орлиный взор"
+msgstr "Прод. орлиный взор"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Экспертный орлиный взор"
+msgstr "Эксп. орлиный взор"
 
 msgid "campaignBonus|Basic Estates"
-msgstr "Базовый казначей"
+msgstr "Баз. казначей"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr "Продвинутый казначей"
+msgstr "Прод. казначей"
 
 msgid "campaignBonus|Expert Estates"
-msgstr "Экспертный казначей"
+msgstr "Эксп. казначей"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr "Базовое лидерство"
+msgstr "Баз. лидерство"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr "Продвинутое лидерство"
+msgstr "Прод. лидерство"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr "Экспертное лидерство"
+msgstr "Эксп. лидерство"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr "Базовая логистика"
+msgstr "Баз. логистика"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr "Продвинутая логистика"
+msgstr "Прод. логистика"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr "Экспертная логистика"
+msgstr "Эксп. логистика"
 
 msgid "campaignBonus|Basic Luck"
-msgstr "Базовая удача"
+msgstr "Баз. удача"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr "Продвинутая удача"
+msgstr "Прод. удача"
 
 msgid "campaignBonus|Expert Luck"
-msgstr "Экспертная удача"
+msgstr "Эксп. удача"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Базовый мистицизм"
+msgstr "Баз. мистицизм"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr "Продвинутый мистицизм"
+msgstr "Прод. мистицизм"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr "Экспертный мистицизм"
+msgstr "Эксп. мистицизм"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr "Базовая навигация"
+msgstr "Баз. навигация"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr "Продвинутая навигация"
+msgstr "Прод. навигация"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr "Экспертная навигация"
+msgstr "Эксп. навигация"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Базовая некромантия"
+msgstr "Баз. некромантия"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr "Продвинутая некромантия"
+msgstr "Прод. некромантия"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr "Экспертная некромантия"
+msgstr "Эксп. некромантия"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Базовый следопыт"
+msgstr "Баз. следопыт"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "Продвинутый следопыт"
+msgstr "Прод. следопыт"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr "Экспертный следопыт"
+msgstr "Эксп. следопыт"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr "Базовая разведка"
+msgstr "Баз. разведка"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Продвинутая разведка"
+msgstr "Прод. разведка"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr "Экспертная разведка"
+msgstr "Эксп. разведка"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Базовая мудрость"
+msgstr "Баз. мудрость"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Продвинутая мудрость"
+msgstr "Прод. мудрость"
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr "Экспертная мудрость"
+msgstr "Эксп. мудрость"
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Поднять нежить"
@@ -2674,7 +2674,7 @@ msgid "Black & White"
 msgstr "Чёрно-белый"
 
 msgid "Mouse Cursor"
-msgstr "Указатель мыши"
+msgstr "Курсор мыши"
 
 msgid "Color"
 msgstr "Цветной"
@@ -4277,6 +4277,9 @@ msgstr "Португальский"
 msgid "Turkish"
 msgstr "Турецкий"
 
+msgid "Dutch"
+msgstr ""
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -5878,8 +5881,8 @@ msgstr ""
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
-"Вы не владеете ни одним городом или замком. Потому это заклинание "
-"не сработает."
+"Вы не владеете ни одним городом или замком. Потому это заклинание не "
+"сработает."
 
 msgid "This hero is already in a town, so you can't cast the spell."
 msgstr "Этот герой уже в замке, пожтому вам не произнести данное заклинание."
@@ -7951,7 +7954,7 @@ msgstr ""
 "от жрицы друидов. Среди этих останков вы замечаете таинственный свиток."
 
 msgid "Endless Sack of Gold"
-msgstr "Бездонный Мешок"
+msgstr "Бездонный Мешок Золота"
 
 msgid "The %{name} provides you with %{count} gold per day."
 msgstr "%{name} ежедневно приносит Вам %{count} золотых."
@@ -7967,7 +7970,7 @@ msgstr ""
 "растворяется в воздухе. Вы забираете мешок себе."
 
 msgid "Endless Bag of Gold"
-msgstr "Бездонная Сума"
+msgstr "Бездонная Сума Золота"
 
 msgid ""
 "A noblewoman, separated from her traveling companions, asks for your help. "
@@ -8575,7 +8578,7 @@ msgstr ""
 "досталась маска Громлака Грина. Теперь от нее не избавиться!"
 
 msgid "Endless Pouch of Sulfur"
-msgstr "Мешочек Серы"
+msgstr "Бездонный Мешочек Серы"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру серы."
@@ -8590,7 +8593,7 @@ msgstr ""
 "серы, которая вам очень даже пригодится."
 
 msgid "Endless Vial of Mercury"
-msgstr "Колба Ртути"
+msgstr "Бездонная Колба Ртути"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру ртути."
@@ -8605,7 +8608,7 @@ msgstr ""
 "сокровище в любом предмете, вы хватаете его и кладёте в свой карман."
 
 msgid "Endless Pouch of Gems"
-msgstr "Мешочек Самоцветов"
+msgstr "Бездонный Мешочек Самоцветов"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру самоцветов."
@@ -8621,7 +8624,7 @@ msgstr ""
 "эльф, предлагает взамен бездонную суму самоцветов."
 
 msgid "Endless Cord of Wood"
-msgstr "Вязанка Дров"
+msgstr "Нескончаемая Вязанка Дров"
 
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру древесины."
@@ -8637,7 +8640,7 @@ msgstr ""
 "понимаете, что дрова зачарованы, и забираете их себе."
 
 msgid "Endless Cart of Ore"
-msgstr "Вагонетка Руды"
+msgstr "Бездонная Вагонетка Руды"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру руды."
@@ -8652,7 +8655,7 @@ msgstr ""
 "обнаруживаете волшебную вагонетку с рудой."
 
 msgid "Endless Pouch of Crystal"
-msgstr "Мешочек Кристаллов"
+msgstr "Бездонный Мешочек Кристаллов"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру кристаллов."
