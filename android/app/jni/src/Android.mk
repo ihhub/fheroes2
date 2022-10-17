@@ -24,6 +24,8 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := main
 
+# TODO: this should be $(LOCAL_PATH)/../../../../src
+# TODO: by changing it make sure that it is compilable on Windows due to command line length limitation.
 FHEROES2_ROOT := $(LOCAL_PATH)
 
 LOCAL_C_INCLUDES :=                        \
@@ -67,6 +69,7 @@ LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer
 
 LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -lOpenSLES -llog -landroid -lz
 
+# TODO: separate debug and release build flags
 LOCAL_CPPFLAGS += -std=c++17 -frtti -fcxx-exceptions -DWITH_DEBUG
 
 include $(BUILD_SHARED_LIBRARY)
