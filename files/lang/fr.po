@@ -1180,7 +1180,7 @@ msgstr ""
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr ""
-"Reprendre le château des portes d'ivoire, qui est tombé à cause de la trahison."
+"Reprendre le château des portes d'ivoire, qui est tombé à cause d'une trahison."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
@@ -2838,7 +2838,7 @@ msgid "Select count %{resource}:"
 msgstr "Sélectionner %{resource} :"
 
 msgid "Select Recipients"
-msgstr "Sélectionner les destinataires",
+msgstr "Sélectionner les destinataires"
 
 msgid "Your Funds"
 msgstr "Vos fonds"
