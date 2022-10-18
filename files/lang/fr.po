@@ -3047,19 +3047,19 @@ msgid "Warning!"
 msgstr "Attention !"
 
 msgid "Select Monster:"
-msgstr "Choisir Créature :"
+msgstr "Choisir créature :"
 
 msgid "Select Hero:"
-msgstr "Choisir Héros :"
+msgstr "Choisir héros :"
 
 msgid "Select Artifact:"
-msgstr "Choisir Artéfact :"
+msgstr "Choisir artéfact :"
 
 msgid "Select Spell:"
-msgstr "Choisir Sort :"
+msgstr "Choisir sort :"
 
 msgid "Select Skill:"
-msgstr "Choisir Compétence :"
+msgstr "Choisir compétence :"
 
 msgid "Location: "
 msgstr "Emplacement : "
@@ -3089,7 +3089,7 @@ msgid "Run out of time. Fail to win by a certain point."
 msgstr "Manquer de temps. Ne pas gagner avant un certain point."
 
 msgid "Loss Condition"
-msgstr "Conditions de Défaite"
+msgstr "Conditions de défaite"
 
 msgid "Defeat all enemy heroes and towns."
 msgstr "Vaincre tous les héros et villages ennemis."
@@ -3110,7 +3110,7 @@ msgid "Accumulate a large amount of gold."
 msgstr "Accumuler une grande quantité d'or."
 
 msgid "Victory Condition"
-msgstr "Conditions de Victoire"
+msgstr "Conditions de victoire"
 
 msgid "Map difficulty:"
 msgstr "Difficulté de la carte :"
@@ -3254,7 +3254,7 @@ msgid "Sets the speed at which you scroll the window."
 msgstr "Définit la vitesse à laquelle vous faites défiler la fenêtre."
 
 msgid "Toggle interface visibility."
-msgstr "Visibilité d'Interface."
+msgstr "Visibilité d'interface."
 
 msgid "Att."
 msgstr "Att."
@@ -3299,13 +3299,13 @@ msgid "Number of Castles:"
 msgstr "Nombre de châteaux :"
 
 msgid "Number of Heroes:"
-msgstr "Nombre de Héros :"
+msgstr "Nombre de héros :"
 
 msgid "Gold in Treasury:"
 msgstr "Or dans la trésorerie :"
 
 msgid "Wood & Ore:"
-msgstr "Bois et Fer :"
+msgstr "Bois et fer :"
 
 msgid "Gems, Cr, Slf & Mer:"
 msgstr "Rubis, Cr, Sfr et Mer :"
@@ -3323,10 +3323,10 @@ msgid "Income:"
 msgstr "Rentrées d'argent :"
 
 msgid "Best Hero:"
-msgstr "Meilleur Héros :"
+msgstr "Meilleur héros :"
 
 msgid "Best Hero Stats:"
-msgstr "Stats du meilleur Héros :"
+msgstr "Stats du meilleur héros :"
 
 msgid "Personality:"
 msgstr "Personnalité :"
@@ -3395,7 +3395,7 @@ msgstr "Voir la vidéo d'introduction du scénario actuel."
 
 msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
-"Choisissez la difficulté de la campagne. Elle ne pourra pas être modifié par "
+"Choisissez la difficulté de la campagne. Elle ne pourra pas être modifiée par "
 "la suite."
 
 msgid "Restart"
@@ -3435,7 +3435,7 @@ msgid "Visit us at "
 msgstr "Rendez-vous sur "
 
 msgid "Special Thanks to"
-msgstr "Merci spécial à"
+msgstr "Remerciements spéciaux à"
 
 msgid "and many other contributors!"
 msgstr "et aux nombreux autres contributeurs !"
