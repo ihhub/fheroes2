@@ -43,6 +43,34 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 
+namespace
+{
+    enum GameInfoCoordinates
+    {
+        SCENARIO_INFO_VALUES_BOX_WIDTH = 80,
+        DIALOG_CONTENT_WIDTH = 420,
+        SCENARIO_INFO_BOX_RIGHT_MARGIN = 11,
+        SCENARIO_INFO_ROW_LEFT_MARGIN = 16,
+        // This is a shadow offset from the original ICN::SCENIBKG image.
+        DIALOG_SHADOW_OFFSET_X = 16,
+        DIALOG_SHADOW_OFFSET_Y = 4,
+        DIALOG_BORDER_WIDTH = 18,
+        // CALCULATED
+        SCENARIO_INFO_ROW_OFFSET = DIALOG_BORDER_WIDTH + SCENARIO_INFO_ROW_LEFT_MARGIN,
+        SCENARIO_MAP_DIFFICULTY_OFFSET = SCENARIO_INFO_ROW_OFFSET,
+        SCENARIO_GAME_DIFFICULTY_OFFSET = SCENARIO_INFO_ROW_OFFSET + SCENARIO_INFO_VALUES_BOX_WIDTH + SCENARIO_INFO_BOX_RIGHT_MARGIN,
+        SCENARIO_RATING_OFFSET = SCENARIO_INFO_ROW_OFFSET + SCENARIO_INFO_VALUES_BOX_WIDTH * 2 + SCENARIO_INFO_BOX_RIGHT_MARGIN * 2,
+        SCENARIO_MAP_SIZE_OFFSET = SCENARIO_INFO_ROW_OFFSET + SCENARIO_INFO_VALUES_BOX_WIDTH * 3 + SCENARIO_INFO_BOX_RIGHT_MARGIN * 3,
+        PLAYER_INFO_ROW_OFFSET = DIALOG_BORDER_WIDTH + 5,
+        CONDITION_LABEL_OFFSET = DIALOG_BORDER_WIDTH + 5,
+        CONDITION_LABEL_WIDTH = 80,
+        CONDITION_DESCRIPTION_OFFSET = CONDITION_LABEL_OFFSET + CONDITION_LABEL_WIDTH + 10,
+        CONDITION_DESCRIPTION_WIDTH = 278,
+        CONFIG_BUTTON_OFFSET = CONDITION_LABEL_OFFSET,
+        OK_BUTTON_OFFSET = DIALOG_CONTENT_WIDTH/2 - 47,
+    };
+}
+
 void Dialog::GameInfo()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -53,69 +81,67 @@ void Dialog::GameInfo()
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
-    // This is a shadow offset from the original ICN::SCENIBKG image.
-    const fheroes2::Point shadowOffset( -16, 4 );
+    fheroes2::Point dp( ( display.width() - box.width() ) / 2, ( ( display.height() - box.height() ) / 2 ) );
+    fheroes2::Blit( box, display, dp.x, dp.y );
 
-    fheroes2::Point pt( ( display.width() - box.width() + shadowOffset.x ) / 2, ( ( display.height() - box.height() + shadowOffset.y ) / 2 ) );
-    fheroes2::ImageRestorer back( display, pt.x, pt.y, box.width(), box.height() );
-    fheroes2::Blit( box, display, pt.x, pt.y );
-
+    fheroes2::Point pt( dp.x + DIALOG_SHADOW_OFFSET_X, dp.y );
     fheroes2::Text text;
 
     text.set( conf.MapsName(), fheroes2::FontType::normalWhite() );
-    text.draw( pt.x + 52, pt.y + 32, 350, display );
+    text.draw( pt.x, pt.y + 32, DIALOG_CONTENT_WIDTH, display );
 
     text.set( _( "Map\nDifficulty" ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 50, pt.y + 56, 80, display );
+    text.draw( pt.x + SCENARIO_MAP_DIFFICULTY_OFFSET, pt.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( _( "Game\nDifficulty" ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 140, pt.y + 56, 80, display );
+    text.draw( pt.x + SCENARIO_GAME_DIFFICULTY_OFFSET, pt.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( _( "Rating" ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 230, pt.y + 78 - text.height( 80 ), 80, display );
+    text.draw( pt.x + SCENARIO_RATING_OFFSET, pt.y + 78 - text.height( SCENARIO_INFO_VALUES_BOX_WIDTH ), SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( _( "Map Size" ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 322, pt.y + 78 - text.height( 80 ), 80, display );
+    text.draw( pt.x + SCENARIO_MAP_SIZE_OFFSET, pt.y + 78 - text.height( SCENARIO_INFO_VALUES_BOX_WIDTH ), SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( Difficulty::String( conf.MapsDifficulty() ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 50, pt.y + 84, 80, display );
+    text.draw( pt.x + SCENARIO_MAP_DIFFICULTY_OFFSET, pt.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( Difficulty::String( Game::getDifficulty() ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 140, pt.y + 84, 80, display );
+    text.draw( pt.x + SCENARIO_GAME_DIFFICULTY_OFFSET, pt.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( std::to_string( Game::GetRating() ) + " %", fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 230, pt.y + 84, 80, display );
+    text.draw( pt.x + SCENARIO_RATING_OFFSET, pt.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( Maps::SizeString( conf.MapsSize().width ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 322, pt.y + 84, 80, display );
+    text.draw( pt.x + SCENARIO_MAP_SIZE_OFFSET, pt.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( conf.MapsDescription(), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 52, pt.y + 107, 350, display );
+    text.draw( pt.x, pt.y + 107, DIALOG_CONTENT_WIDTH, display );
 
     text.set( _( "Opponents" ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 52, pt.y + 152, 350, display );
+    text.draw( pt.x, pt.y + 152, DIALOG_CONTENT_WIDTH, display );
 
     text.set( _( "Class" ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 52, pt.y + 227, 350, display );
+    text.draw( pt.x, pt.y + 229, DIALOG_CONTENT_WIDTH, display );
 
     Interface::PlayersInfo playersInfo;
 
-    playersInfo.UpdateInfo( conf.GetPlayers(), fheroes2::Point( pt.x + 40, pt.y + 165 ), fheroes2::Point( pt.x + 40, pt.y + 240 ) );
+    playersInfo.UpdateInfo( conf.GetPlayers(), fheroes2::Point( pt.x + PLAYER_INFO_ROW_OFFSET, pt.y + 165 ),
+                            fheroes2::Point( pt.x + PLAYER_INFO_ROW_OFFSET, pt.y + 240 ) );
     playersInfo.RedrawInfo( true );
 
     text.set( _( "Victory\nConditions" ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 40, pt.y + 347, 80, display );
+    text.draw( pt.x + CONDITION_LABEL_OFFSET, pt.y + 347, CONDITION_LABEL_WIDTH, display );
 
     text.set( GameOver::GetActualDescription( conf.ConditionWins() ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 130, pt.y + 350, 272, display );
+    text.draw( pt.x + CONDITION_DESCRIPTION_OFFSET, pt.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Loss\nConditions" ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 40, pt.y + 392, 80, display );
+    text.draw( pt.x + CONDITION_LABEL_OFFSET, pt.y + 392, CONDITION_LABEL_WIDTH, display );
 
     text.set( GameOver::GetActualDescription( conf.ConditionLoss() ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 130, pt.y + 398, 272, display );
+    text.draw( pt.x + CONDITION_DESCRIPTION_OFFSET, pt.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
 
-    fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );
+    fheroes2::Button buttonOk( pt.x + OK_BUTTON_OFFSET, pt.y + 426, ICN::REQUESTS, 1, 2 );
     buttonOk.draw();
 
     display.render();
