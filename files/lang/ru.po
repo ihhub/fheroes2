@@ -2244,7 +2244,7 @@ msgstr ""
 "Колодец увеличивает прирост всех существ в замке на %{count} в неделю."
 
 msgid "The Statue increases your town's income by %{count} per day."
-msgstr "Статуя ежедневно приносит в казну %{count} золотых."
+msgstr "Статуя приносит в казну %{count} золотых ежедневно."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr "Левая башня наносит дополнительный урон врагу во время осады замка."
