@@ -125,7 +125,7 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     case Cursor::CURSOR_HERO_FIGHT_6:
     case Cursor::CURSOR_HERO_FIGHT_7:
     case Cursor::CURSOR_HERO_FIGHT_8:
-        _offset = { -8, -16 };
+        _offset = { -8, -8 };
         break;
 
     case Cursor::SCROLL_TOPRIGHT:
