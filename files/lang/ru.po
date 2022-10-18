@@ -532,7 +532,7 @@ msgid "View Captain's options"
 msgstr "Посмотреть возможности капитана"
 
 msgid "View Hero's options"
-msgstr "Возможности героя"
+msgstr "Посмотреть возможности героя"
 
 msgid "View opposing Captain"
 msgstr "Посмотреть капитана соперника"
