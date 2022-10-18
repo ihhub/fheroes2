@@ -5750,7 +5750,7 @@ msgid ""
 "As the sirens sing their eerie song, your small, determined army manages to "
 "overcome the urge to dive headlong into the sea."
 msgstr ""
-"Едва сирены затянули свою ужасную песню, как ваша команда посильнее налегла "
+"Едва сирены затянули свою ужасную песню, как Ваша команда посильнее налегла "
 "на вёсла и увела корабль подальше в открытое море."
 
 msgid ""
