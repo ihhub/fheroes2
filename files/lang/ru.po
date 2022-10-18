@@ -7721,7 +7721,7 @@ msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
 "an exquisite jeweled necklace."
 msgstr ""
-"Волшебница, спасённая из проклятой гробницы, она вознаграждает ваш героизм "
+"Волшебница, спасённая из проклятой гробницы, вознаграждает Ваш героизм "
 "изысканным ожерельем, украшенным драгоценными камнями."
 
 msgid "Caster's Bracelet of Magic"
