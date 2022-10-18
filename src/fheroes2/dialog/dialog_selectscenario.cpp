@@ -396,8 +396,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     fheroes2::Button buttonSelectSmall( rt.x + 36, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::REQUESTS, 9, 10 );
     fheroes2::Button buttonSelectMedium( rt.x + 98, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::REQUESTS, 11, 12 );
     fheroes2::Button buttonSelectLarge( rt.x + 160, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::REQUESTS, 13, 14 );
-    fheroes2::Button buttonSelectXLarge( rt.x + 223, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::REQUESTS, 15, 16 );
-    fheroes2::Button buttonSelectAll( rt.x + 285, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::REQUESTS, 17, 18 );
+    fheroes2::Button buttonSelectXLarge( rt.x + 222, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::REQUESTS, 15, 16 );
+    fheroes2::Button buttonSelectAll( rt.x + 284, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::REQUESTS, 17, 18 );
 
     fheroes2::ButtonBase * currentPressedButton = nullptr;
 
