@@ -1295,7 +1295,7 @@ msgid " defeated"
 msgstr " поражение"
 
 msgid " will always run away from your army."
-msgstr " будут всегда убегать от вашей армии."
+msgstr " будут всегда убегать от Вашей армии."
 
 msgid " will be willing to join your army."
 msgstr " будут желать вступить в вашу армию."
