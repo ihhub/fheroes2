@@ -1301,7 +1301,7 @@ msgid " will be willing to join your army."
 msgstr " будут желать вступить в Вашу армию."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr "Артифакт \"%{artifact}\"  будет перенесён в следующий сценарий."
+msgstr "Артефакт "%{artifact}" будет доступен в этом сценарии."
 
 msgid "The army will be carried over the scenario."
 msgstr "Армия будет перенесена в следующий сценарий."
@@ -1641,7 +1641,7 @@ msgstr ""
 "%{count} %{skill}."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr "Основной герой в начале сценария будет иметь %{skill}."
+msgstr "Основной герой в начале сценария будет иметь навык %{skill}."
 
 msgid "Roland"
 msgstr "Роланд"
@@ -1662,7 +1662,7 @@ msgid "Descendants"
 msgstr "Наследники"
 
 msgid "The %{building} produces %{monster}."
-msgstr "%{monster} доступны для найма в строении %{building}."
+msgstr "В постройке "%{building}" живут %{monster}."
 
 msgid "Requires:"
 msgstr "Требует:"
@@ -1680,7 +1680,7 @@ msgid "disable build."
 msgstr "отключить строение."
 
 msgid "Cannot afford %{name}."
-msgstr "Недостаточно золота для постройки: %{name}."
+msgstr "Недостаточно ресурсов для постройки: %{name}."
 
 msgid "%{name} is already built."
 msgstr "Постройка \"%{name}\" уже возведена."
@@ -5885,7 +5885,7 @@ msgstr ""
 "сработает."
 
 msgid "This hero is already in a town, so you can't cast the spell."
-msgstr "Этот герой уже в замке, пожтому вам не произнести данное заклинание."
+msgstr "Этот герой уже в замке, поэтому Вам не произнести данное заклинание."
 
 msgid ""
 "The nearest town is %{town}.\n"
