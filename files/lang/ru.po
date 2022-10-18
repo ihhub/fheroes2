@@ -286,7 +286,7 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
-"Выключить/выключить отрисовку тени под курсором на гексагоднальной "
+"Включить/выключить отрисовку тени под курсором на гексагональной "
 "сетке."
 
 msgid "The enemy has surrendered!"
