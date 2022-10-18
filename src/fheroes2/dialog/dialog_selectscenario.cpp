@@ -60,7 +60,7 @@ namespace
         SELECTED_SCENARIO_COUNT_PLAYERS_OFFSET_X = 45,
         SELECTED_SCENARIO_MAP_SIZE_OFFSET_X = 64,
         SELECTED_SCENARIO_MAP_TYPE_OFFSET_X = 83,
-        SELECTED_SCENARIO_MAP_NAME_OFFSET_X = 107,
+        SELECTED_SCENARIO_MAP_NAME_OFFSET_X = 108,
         SELECTED_SCENARIO_MAP_NAME_WIDTH = 160,
         SELECTED_SCENARIO_VICTORY_CONDITION_OFFSET_X = 276,
         SELECTED_SCENARIO_LOSS_CONDITION_OFFSET_X = 295,
@@ -230,21 +230,19 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
 
     fheroes2::Text mapNameText( info.name, fheroes2::FontType::normalWhite() );
     mapNameText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_MAP_NAME_OFFSET_X, SELECTED_SCENARIO_MAP_NAME_WIDTH, mapNameText.width() ),
-                      dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y + 3, display );
+                      dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y + 2, display );
 
     fheroes2::Blit( _getWinConditionsIcon( info.conditions_wins ), display, dst.x + SELECTED_SCENARIO_VICTORY_CONDITION_OFFSET_X,
                     dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
     fheroes2::Blit( _getLossConditionsIcon( info.conditions_loss ), display, dst.x + SELECTED_SCENARIO_LOSS_CONDITION_OFFSET_X,
-                    dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
-
-    const int32_t difficultyOffsetY = SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y;
+                    dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );    
 
     fheroes2::Text difficultyLabelText( _( "Map difficulty:" ), fheroes2::FontType::normalWhite() );
-    difficultyLabelText.draw( dst.x + 210 - difficultyLabelText.width(), dst.y + difficultyOffsetY, display );
+    difficultyLabelText.draw( dst.x + 210 - difficultyLabelText.width(), dst.y + SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y, display );
 
     fheroes2::Text difficultyText( Difficulty::String( info.difficulty ), fheroes2::FontType::normalWhite() );
     difficultyText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_DIFFICULTY_OFFSET_X, SELECTED_SCENARIO_DIFFICULTY_WIDTH, difficultyText.width() ),
-                         dst.y + difficultyOffsetY, display );
+                         dst.y + SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y, display );
 
     fheroes2::Text descriptionText( info.description, fheroes2::FontType::normalWhite() );
     descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 5, SELECTED_SCENARIO_DESCRIPTION_WIDTH - 2,
@@ -399,47 +397,10 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     fheroes2::Button buttonSelectXLarge( rt.x + 222, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::REQUESTS, 15, 16 );
     fheroes2::Button buttonSelectAll( rt.x + 284, rt.y + MAP_SIZE_BUTTON_OFFSET_Y, ICN::REQUESTS, 17, 18 );
 
-    fheroes2::ButtonBase * currentPressedButton = nullptr;
-
+    fheroes2::ButtonBase * currentPressedButton = &buttonSelectAll;
+    buttonSelectAll.press();
     // This variable is used to remember the selection of map size through the game.
     static int selectedMapSize = Maps::mapsize_t::ZERO;
-
-    switch ( selectedMapSize ) {
-    case Maps::SMALL:
-        if ( !small.empty() ) {
-            buttonSelectSmall.press();
-            currentPressedButton = &buttonSelectSmall;
-        }
-        break;
-    case Maps::MEDIUM:
-        if ( !medium.empty() ) {
-            buttonSelectMedium.press();
-            currentPressedButton = &buttonSelectMedium;
-        }
-        break;
-    case Maps::LARGE:
-        if ( !large.empty() ) {
-            buttonSelectLarge.press();
-            currentPressedButton = &buttonSelectLarge;
-        }
-        break;
-    case Maps::XLARGE:
-        if ( !xlarge.empty() ) {
-            buttonSelectXLarge.press();
-            currentPressedButton = &buttonSelectXLarge;
-        }
-        break;
-    default:
-        break;
-    }
-
-    if ( currentPressedButton == nullptr ) {
-        buttonSelectAll.press();
-        currentPressedButton = &buttonSelectAll;
-        selectedMapSize = Maps::mapsize_t::ZERO;
-    }
-
-    assert( currentPressedButton != nullptr );
 
     fheroes2::OptionButtonGroup buttonGroup;
     buttonGroup.addButton( &buttonSelectSmall );
@@ -466,18 +427,34 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
     switch ( selectedMapSize ) {
     case Maps::SMALL:
+        if ( !small.empty() ) {
+            buttonSelectSmall.press();
+            currentPressedButton = &buttonSelectSmall;
+        }
         listbox.SetListContent( small );
         listbox.SetCurrent( GetSelectedMapId( small ) );
         break;
     case Maps::MEDIUM:
+        if ( !medium.empty() ) {
+            buttonSelectMedium.press();
+            currentPressedButton = &buttonSelectMedium;
+        }
         listbox.SetListContent( medium );
         listbox.SetCurrent( GetSelectedMapId( medium ) );
         break;
     case Maps::LARGE:
+        if ( !large.empty() ) {
+            buttonSelectLarge.press();
+            currentPressedButton = &buttonSelectLarge;
+        }
         listbox.SetListContent( large );
         listbox.SetCurrent( GetSelectedMapId( large ) );
         break;
     case Maps::XLARGE:
+        if ( !xlarge.empty() ) {
+            buttonSelectXLarge.press();
+            currentPressedButton = &buttonSelectXLarge;
+        }
         listbox.SetListContent( xlarge );
         listbox.SetCurrent( GetSelectedMapId( xlarge ) );
         break;
