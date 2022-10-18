@@ -4198,7 +4198,7 @@ msgid "No Handicap"
 msgstr "Нет форы"
 
 msgid "No special restrictions on start resources and earning them per turn."
-msgstr "Никаких особых ограничений на начальные ресурсы и их приход за ход."
+msgstr "Никаких особых ограничений на начальные ресурсы и их поступление за ход."
 
 msgid "Mild Handicap"
 msgstr "Малая фора"
