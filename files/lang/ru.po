@@ -1298,7 +1298,7 @@ msgid " will always run away from your army."
 msgstr " будут всегда убегать от Вашей армии."
 
 msgid " will be willing to join your army."
-msgstr " будут желать вступить в вашу армию."
+msgstr " будут желать вступить в Вашу армию."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
 msgstr "Артифакт \"%{artifact}\"  будет перенесён в следующий сценарий."
