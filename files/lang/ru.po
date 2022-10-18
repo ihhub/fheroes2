@@ -3334,7 +3334,7 @@ msgid ""
 "Choose this difficulty if you want challenge. AI is stronger in comparison "
 "with normal difficulty."
 msgstr ""
-"Выберите эту сложность, если хотите серьёзных сражений. ИИ сильнее по "
+"Выберите эту сложность, если хотите серьёзных сражений. ИИ сильнее, по "
 "сравнению с нормальной сложностью."
 
 msgid "Easy"
