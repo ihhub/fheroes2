@@ -1603,7 +1603,7 @@ msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
 msgstr ""
-"Основной герой в начале сценария будет иметь артифакт "
+"Основной герой в начале сценария будет обладать артефактом "
 "\"%{artifact}\""
 
 msgid ""
