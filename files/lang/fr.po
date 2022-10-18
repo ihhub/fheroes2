@@ -1590,7 +1590,7 @@ msgid "campaignBonus|Fireblast"
 msgstr "Souffle de feu"
 
 msgid "campaignBonus|Mass Curse"
-msgstr "Malédiction massive"
+msgstr "Grande malédiction"
 
 msgid "campaignBonus|Mass Haste"
 msgstr "Célérité de masse"
@@ -6609,7 +6609,7 @@ msgid "Heroes"
 msgstr "Héros"
 
 msgid "View Heroes."
-msgstr "Voir Héros."
+msgstr "Voir héros."
 
 msgid "Towns/Castles"
 msgstr "Villages/Châteaux"
@@ -9695,7 +9695,7 @@ msgid "Causes all Heroes across the land to become visible."
 msgstr "Rend visibles tous les Héros."
 
 msgid "View Heroes"
-msgstr "Voir Héros"
+msgstr "Voir héros"
 
 msgid "Causes the entire land to become visible."
 msgstr "Rend visibles tout le pays."
