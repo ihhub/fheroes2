@@ -4003,7 +4003,7 @@ msgid ""
 "Do you want to transfer control from you to the AI? The effect will take "
 "place only on the next turn."
 msgstr ""
-"Хотите ли вы передать управление ИИ? Передача вступит в силу "
+"Хотите ли Вы передать управление ИИ? Передача вступит в силу "
 "со следующего хода."
 
 msgid ""
