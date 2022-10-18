@@ -3353,7 +3353,7 @@ msgid "View Intro"
 msgstr "Посмотреть вступление"
 
 msgid "View Intro videos for the current state of the campaign."
-msgstr "Просмотреть вступительное видео по текущему состоянию капмании."
+msgstr "Просмотреть вступительное видео по текущему состоянию кампании."
 
 msgid "Select campaign difficulty. It cannot be changed after."
 msgstr "Выбор сложности кампании. Этот выбор невозможно будет изменить."
