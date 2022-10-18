@@ -3522,7 +3522,7 @@ msgid "Designers"
 msgstr "Concepteurs"
 
 msgid "Programming Lead"
-msgstr "Responsable de Programmation"
+msgstr "Responsable de programmation"
 
 msgid "Art Lead"
 msgstr "Responsable artistique"
@@ -3573,10 +3573,10 @@ msgid "Package Design"
 msgstr "Conception du conditionnement"
 
 msgid "Unknown Hero"
-msgstr "Héros Inconnu"
+msgstr "Héros inconnu"
 
 msgid "Your Name"
-msgstr "Votre Nom"
+msgstr "Votre nom"
 
 msgid "Standard"
 msgstr "Jeu standard"
@@ -3616,7 +3616,7 @@ msgid "' language, but the current language of the game is '"
 msgstr "', mais la langue actuelle du jeu est '"
 
 msgid "Hot Seat"
-msgstr "Hot Seat"
+msgstr "Tour de rôle"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
@@ -3629,16 +3629,16 @@ msgid "Cancel back to the main menu."
 msgstr "Annuler et revenir au menu principal."
 
 msgid "A single player game playing out a single map."
-msgstr "Une partie mono-joueur sur une seule carte."
+msgstr "Une partie joueur solo sur une seule carte."
 
 msgid "Standard Game"
 msgstr "Jeu standard"
 
 msgid "A single player game playing through a series of maps."
-msgstr "Une partie mono-joueur à travers une série de cartes."
+msgstr "Une partie joueur solo à travers une série de cartes."
 
 msgid "Campaign Game"
-msgstr "Mode Campagne"
+msgstr "Mode campagne"
 
 msgid ""
 "A multi-player game, with several human players completing against each "
@@ -3736,10 +3736,10 @@ msgstr ""
 "Magic II."
 
 msgid "Original Campaign"
-msgstr "Campagne Originale"
+msgstr "Campagne originale"
 
 msgid "Expansion Campaign"
-msgstr "Campagne Expansion"
+msgstr "Campagne expansion"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
@@ -3819,7 +3819,7 @@ msgstr "Jouer avec 6 joueurs humains."
 
 msgid "Dragon city has fallen!  You are now the Master of the Dragons."
 msgstr ""
-"La cité des dragons est tombée !  Vous êtes maintenant le Maître des dragons."
+"La cité des dragons est tombée !  Vous êtes maintenant le maître des dragons."
 
 msgid ""
 "You captured %{name}!\n"
@@ -3978,7 +3978,7 @@ msgid "Scenario"
 msgstr "Scénario"
 
 msgid "Game Difficulty"
-msgstr "Difficulté du Jeu"
+msgstr "Difficulté du jeu"
 
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
@@ -3991,7 +3991,7 @@ msgstr ""
 "supplémentaires à l'ordinateur."
 
 msgid "Difficulty Rating"
-msgstr "Taux de Difficulté"
+msgstr "Taux de difficulté"
 
 msgid ""
 "The difficulty rating reflects a combination of various settings for your "
@@ -4010,10 +4010,10 @@ msgid "No maps available!"
 msgstr "Aucune carte disponible !"
 
 msgid "Astrologers proclaim the Month of the %{name}."
-msgstr "Les astrologues proclament le Mois %{name}."
+msgstr "Les astrologues proclament le mois %{name}."
 
 msgid "Astrologers proclaim the Week of the %{name}."
-msgstr "Les astrologues proclament la Semaine %{name}."
+msgstr "Les astrologues proclament la semaine %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr ""
@@ -4089,13 +4089,13 @@ msgid "Continue Movement"
 msgstr "Continuer le mouvement"
 
 msgid "Continue the Hero's movement along the current path."
-msgstr "Fait continuer le mouvement du héros le long du chemin actuel."
+msgstr "Fait poursuivre le déplacement du héros le long du chemin actuel."
 
 msgid "Kingdom Summary"
-msgstr "Informations sur votre Royaume"
+msgstr "Informations sur votre royaume"
 
 msgid "View a Summary of your Kingdom."
-msgstr "Voir un récapitulatif de votre Royaume."
+msgstr "Voir un récapitulatif de votre royaume."
 
 msgid "Cast an adventure spell."
 msgstr "Lancer un sort d'aventure."
