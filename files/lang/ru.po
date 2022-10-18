@@ -1631,7 +1631,7 @@ msgstr ""
 "Основной герой в начале сценария будет иметь заклинание \"%{spell}\"."
 
 msgid "The starting race of the scenario will be %{race}."
-msgstr "Начальная раса сценария будет %{race}."
+msgstr "Начальная фракция сценария будет %{race}."
 
 msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
