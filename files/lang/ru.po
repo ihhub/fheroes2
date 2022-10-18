@@ -4098,7 +4098,7 @@ msgstr "Попробуйте поискать на земле!!!"
 msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
 "it even if he found it - all his artifact slots are full."
-msgstr "Поиски великого артифакта будут бесполезными. Если даже ваш герой и "
+msgstr "Поиски великого артефакта будут бесполезными. Если даже Ваш герой и "
 "найдёт его, то у него попросу нет места, чтобы его унести. Весь инвентарь "
 "героя занят."
 
