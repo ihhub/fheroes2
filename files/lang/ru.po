@@ -2593,7 +2593,7 @@ msgid "Music Type"
 msgstr "Тип музыки"
 
 msgid "3D Audio"
-msgstr "3D Аудио"
+msgstr "3D Звук"
 
 msgid "Toggle ambient music level."
 msgstr "Уровень музыки."
