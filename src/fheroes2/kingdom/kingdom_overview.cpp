@@ -726,8 +726,8 @@ void Kingdom::openOverviewDialog()
         listStats = &listHeroes;
     }
 
-    listCastles.setTopVisibleItem( _topItemInKingdomView & 0xFFFF );
-    listHeroes.setTopVisibleItem( _topItemInKingdomView >> 16 );
+    listCastles.setTopVisibleItem( _topCastleInKingdomView );
+    listHeroes.setTopVisibleItem( _topHeroInKingdomView );
 
     listStats->Redraw();
 
@@ -760,7 +760,6 @@ void Kingdom::openOverviewDialog()
 
         // Exit this dialog.
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
-            updateTopItemInKingdomView( listStats->getTopId() );
             break;
         }
 
@@ -768,7 +767,7 @@ void Kingdom::openOverviewDialog()
         if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes.area() ) ) {
             buttonHeroes.drawOnPress();
             buttonCastle.drawOnRelease();
-            updateTopItemInKingdomView( listStats->getTopId() );
+            _topHeroInKingdomView = listStats->getTopId();
             listStats = &listHeroes;
             ResetModes( KINGDOM_OVERVIEW_CASTLE_SELECTION );
             redraw = true;
@@ -776,7 +775,7 @@ void Kingdom::openOverviewDialog()
         else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle.area() ) ) {
             buttonCastle.drawOnPress();
             buttonHeroes.drawOnRelease();
-            updateTopItemInKingdomView( listStats->getTopId() );
+            _topCastleInKingdomView = listStats->getTopId();
             listStats = &listCastles;
             SetModes( KINGDOM_OVERVIEW_CASTLE_SELECTION );
             redraw = true;
@@ -814,6 +813,13 @@ void Kingdom::openOverviewDialog()
         display.render();
 
         redraw = false;
+    }
+
+    if ( Modes( KINGDOM_OVERVIEW_CASTLE_SELECTION ) ) {
+        _topCastleInKingdomView = listStats->getTopId();
+    }
+    else {
+        _topHeroInKingdomView = listStats->getTopId();
     }
 
     if ( worldMapRedrawMask != 0 ) {

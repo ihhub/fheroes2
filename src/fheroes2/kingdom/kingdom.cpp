@@ -79,7 +79,8 @@ Kingdom::Kingdom()
     , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
-    , _topItemInKingdomView( -1 )
+    , _topCastleInKingdomView( -1 )
+    , _topHeroInKingdomView( -1 )
 {
     // Do nothing.
 }
@@ -535,18 +536,6 @@ bool Kingdom::IsVisitTravelersTent( int col ) const
     return ( visited_tents_colors & ( 1 << col ) ) != 0;
 }
 
-void Kingdom::updateTopItemInKingdomView( int32_t value )
-{
-    if ( Modes( KINGDOM_OVERVIEW_CASTLE_SELECTION ) ) {
-        _topItemInKingdomView &= _topItemInKingdomView & 0xFFFF0000;
-        _topItemInKingdomView |= value;
-    }
-    else {
-        _topItemInKingdomView &= 0xFFFF;
-        _topItemInKingdomView |= value << 16;
-    }
-}
-
 bool Kingdom::AllowRecruitHero( bool check_payment ) const
 {
     return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero() ) );
@@ -978,14 +967,27 @@ cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
-    return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._lastBattleWinHeroID << kingdom._topItemInKingdomView;
+    msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits << kingdom.visit_object
+        << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._lastBattleWinHeroID << kingdom._topCastleInKingdomView;
+
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_0921_RELEASE ) {
+        msg << kingdom._topHeroInKingdomView;
+    }
+
+    return msg;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
     msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
-        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topItemInKingdomView;
+        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topCastleInKingdomView;
+
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_0921_RELEASE ) {
+        msg >> kingdom._topHeroInKingdomView;
+    }
+    else {
+        kingdom._topHeroInKingdomView = kingdom._topCastleInKingdomView;
+    }
 
     return msg;
 }
