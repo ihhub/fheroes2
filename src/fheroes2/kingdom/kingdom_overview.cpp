@@ -767,7 +767,6 @@ void Kingdom::openOverviewDialog()
         if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes.area() ) ) {
             buttonHeroes.drawOnPress();
             buttonCastle.drawOnRelease();
-            _topHeroInKingdomView = listStats->getTopId();
             listStats = &listHeroes;
             ResetModes( KINGDOM_OVERVIEW_CASTLE_SELECTION );
             redraw = true;
@@ -775,7 +774,6 @@ void Kingdom::openOverviewDialog()
         else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle.area() ) ) {
             buttonCastle.drawOnPress();
             buttonHeroes.drawOnRelease();
-            _topCastleInKingdomView = listStats->getTopId();
             listStats = &listCastles;
             SetModes( KINGDOM_OVERVIEW_CASTLE_SELECTION );
             redraw = true;
@@ -815,12 +813,8 @@ void Kingdom::openOverviewDialog()
         redraw = false;
     }
 
-    if ( Modes( KINGDOM_OVERVIEW_CASTLE_SELECTION ) ) {
-        _topCastleInKingdomView = listStats->getTopId();
-    }
-    else {
-        _topHeroInKingdomView = listStats->getTopId();
-    }
+    _topCastleInKingdomView = listCastles.getTopId();
+    _topHeroInKingdomView = listHeroes.getTopId();
 
     if ( worldMapRedrawMask != 0 ) {
         // Force redraw of all UI elements that changed, that were masked by Kingdom window
