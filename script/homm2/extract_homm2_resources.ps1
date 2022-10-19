@@ -69,7 +69,7 @@ try {
                        "HKEY_CURRENT_USER\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall",
                        "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
                        "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall",
-		       "HKEY_LOCAL_MACHINE\SOFTWARE\New World Computing\Heroes of Might and Magic 2")) {
+                       "HKEY_LOCAL_MACHINE\SOFTWARE\New World Computing\Heroes of Might and Magic 2")) {
         if (-Not (Test-Path -Path "Microsoft.PowerShell.Core\Registry::$key" -PathType Container)) {
             continue
         }
@@ -77,19 +77,19 @@ try {
         foreach ($subkey in (Get-ChildItem -Path "Microsoft.PowerShell.Core\Registry::$key")) {
             $path = $subkey.GetValue("InstallLocation")
             
-	    # Legacy installed path detection
+            # Legacy installed path detection
             if ($null -Eq $path) {
             	$path = $subkey.GetValue("AppPath")
             }
 	    
             if ($null -Ne $path) {
                 $path = $path.TrimEnd("\")
-            	# Legacy installed drive path detection
-            	$DrivePath = $subkey.GetValue("CDDrive")
+
 				
                 if (Test-HoMM2DirectoryPath -Path $path) {
                     $homm2Path = $path
-                    $homm2DrivePath = $DrivePath
+                    # Legacy installed drive path detection
+                    $homm2DrivePath = $subkey.GetValue("CDDrive")
 
                     break
                 }
@@ -119,7 +119,10 @@ try {
         $shell = New-Object -ComObject "Shell.Application"
 
         foreach ($homm2Dir in @($homm2Path, $homm2DrivePath )) {
-		
+            if ($null -Eq $homm2Dir) {
+                continue
+            }
+			
             foreach ($srcDir in @("HEROES2\ANIM", "ANIM", "DATA", "MAPS", "MUSIC")) {
                 if (-Not (Test-Path -Path "$homm2Dir\$srcDir" -PathType Container)) {
                     continue
@@ -136,7 +139,7 @@ try {
                 foreach ($item in $content.Items()) {
                     $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
 
-		}
+                }
             }
         }
     }
