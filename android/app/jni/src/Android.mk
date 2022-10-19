@@ -23,7 +23,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := main
-
+# Mitigate the issue with Windows command line size limit
 LOCAL_SHORT_COMMANDS := true
 
 FHEROES2_ROOT := $(LOCAL_PATH)/../../../../src
@@ -61,9 +61,8 @@ LOCAL_SRC_FILES :=                                   \
 
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer
 
-LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -lOpenSLES -llog -landroid -lz
-
 # TODO: separate debug and release build flags
 LOCAL_CPPFLAGS += -std=c++17 -frtti -fcxx-exceptions -DWITH_DEBUG
+LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -lOpenSLES -llog -landroid -lz
 
 include $(BUILD_SHARED_LIBRARY)
