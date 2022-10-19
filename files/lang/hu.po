@@ -197,7 +197,7 @@ msgid "%{name} has turned off the auto battle"
 msgstr "%{name} kikapcsolta az automata harcot"
 
 msgid "%{name} has turned on the auto battle"
-msgstr "%{name} kikapcsolta az automata harcot"
+msgstr "%{name} bekapcsolta az automata harcot"
 
 msgid "Spell failed!"
 msgstr "A varázslat nem sikerült!"
