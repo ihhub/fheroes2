@@ -64,6 +64,7 @@
 *.hs
 *.smk
 *.ogg
+DATA/NETLODR.DAT
 
 # build directory
 build
