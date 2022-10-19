@@ -24,9 +24,9 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := main
 
-# TODO: this should be $(LOCAL_PATH)/../../../../src
-# TODO: by changing it make sure that it is compilable on Windows due to command line length limitation.
-FHEROES2_ROOT := $(LOCAL_PATH)
+LOCAL_SHORT_COMMANDS := true
+
+FHEROES2_ROOT := $(LOCAL_PATH)/../../../../src
 
 LOCAL_C_INCLUDES :=                        \
     $(FHEROES2_ROOT)/fheroes2/agg          \
@@ -53,17 +53,11 @@ LOCAL_C_INCLUDES :=                        \
     $(FHEROES2_ROOT)/engine                \
     $(FHEROES2_ROOT)/thirdparty/libsmacker
 
-# TODO: find a better solution for getting relative paths for source files.
-define walk
-  $(wildcard $(1)) $(foreach e, $(wildcard $(1)/*), $(call walk, $(e)))
-endef
-
-ALL_FILES = $(call walk, $(FHEROES2_ROOT))
-SOURCE_FILE_LIST := $(filter %.cpp, $(ALL_FILES))
-
 LOCAL_SRC_FILES :=                                   \
-	$(SOURCE_FILE_LIST:$(LOCAL_PATH)/%=%)            \
-	$(FHEROES2_ROOT)/thirdparty/libsmacker/smacker.c
+    $(wildcard $(FHEROES2_ROOT)/fheroes2/*/*.cpp)    \
+    $(wildcard $(FHEROES2_ROOT)/fheroes2/*/*/*.cpp)  \
+    $(wildcard $(FHEROES2_ROOT)/engine/*.cpp)        \
+    $(FHEROES2_ROOT)/thirdparty/libsmacker/smacker.c
 
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer
 
