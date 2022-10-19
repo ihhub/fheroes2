@@ -153,11 +153,26 @@ namespace
             // Uppercase A with breve
             original[195 - 32] = original[65 - 32];
             original[198 - 32] = original[67 - 32];
+            // Uppercase E with acute
+            original[201 - 32] = original[69 - 32];
             original[202 - 32] = original[69 - 32];
+            // Uppercase I with acute
+            original[205 - 32] = original[73 - 32];
             // Uppercase I with circumflex
             original[206 - 32] = original[73 - 32];
             original[209 - 32] = original[78 - 32];
+            // Uppercase O with acute
             original[211 - 32] = original[79 - 32];
+            // Uppercase O with double acute
+            original[213 - 32] = original[79 - 32];
+            // Uppercase O with diaeresis
+            original[214 - 32] = original[79 - 32];
+            // Uppercase U with acute
+            original[218 - 32] = original[85 - 32];
+            // Uppercase U with double acute
+            original[219 - 32] = original[85 - 32];
+            // Uppercase U with diaeresis
+            original[220 - 32] = original[85 - 32];
             // Uppercase T with cedilla
             original[222 - 32] = original[84 - 32];
             // Lowercase a with circumflex
@@ -165,11 +180,26 @@ namespace
             // Lowercase a with breve
             original[227 - 32] = original[97 - 32];
             original[230 - 32] = original[99 - 32];
+            // Lowercase e with acute
+            original[233 - 32] = original[101 - 32];
             original[234 - 32] = original[101 - 32];
+            // Lowercase i with acute
+            original[237 - 32] = original[105 - 32];
             // Lowercase i with circumflex
             original[238 - 32] = original[105 - 32];
             original[241 - 32] = original[110 - 32];
+            // Lowercase o with acute
             original[243 - 32] = original[111 - 32];
+            // Lowercase o with double acute
+            original[245 - 32] = original[111 - 32];
+            // Lowercase o with diaeresis
+            original[246 - 32] = original[111 - 32];
+            // Lowercase u with acute
+            original[250 - 32] = original[117 - 32];
+            // Lowercase u with double acute
+            original[251 - 32] = original[117 - 32];
+            // Lowercase u with double acute
+            original[252 - 32] = original[117 - 32];
             // Lowercase t with cedilla
             original[254 - 32] = original[116 - 32];
         }
