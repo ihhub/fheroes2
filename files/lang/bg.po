@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-14 16:16+0000\n"
+"POT-Creation-Date: 2022-10-19 23:53+0000\n"
 "PO-Revision-Date: 2022-09-24 12:02+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3082,6 +3082,9 @@ msgstr "Условие за победа"
 
 msgid "Map difficulty:"
 msgstr "Трудност на карта:"
+
+msgid "N"
+msgstr ""
 
 msgid "No maps exist at that size"
 msgstr "Няма карти в този размер"
