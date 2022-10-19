@@ -11,15 +11,15 @@ android {
     compileSdkVersion 31
     defaultConfig {
         if (buildAsApplication) {
-            applicationId "org.libsdl.app"
+            applicationId "org.fheroes2"
         }
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         externalNativeBuild {
             ndkBuild {
-                arguments "APP_PLATFORM=android-16"
+                arguments "APP_PLATFORM=android-19"
                 abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
             }
         }
@@ -54,7 +54,7 @@ android {
             variant.outputs.each { output ->
                 def outputFile = output.outputFile
                 if (outputFile != null && outputFile.name.endsWith(".aar")) {
-                    def fileName = "org.libsdl.app.aar";
+                    def fileName = "org.fheroes2.aar";
                     output.outputFile = new File(outputFile.parent, fileName);
                 }
             }
@@ -64,4 +64,5 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':sdl2')
 }

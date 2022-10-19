@@ -3,7 +3,7 @@
      com.gamemaker.game
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.libsdl.app"
+    package="org.fheroes2"
     android:versionCode="1"
     android:versionName="1.0"
     android:installLocation="auto">
@@ -54,10 +54,10 @@
     <!-- if you want to capture audio, uncomment this. -->
     <!-- <uses-permission android:name="android.permission.RECORD_AUDIO" /> -->
 
-    <!-- Create a Java class extending SDLActivity and place it in a
+    <!-- Create a Java class extending MainActivity and place it in a
          directory under app/src/main/java matching the package, e.g. app/src/main/java/com/gamemaker/game/MyGame.java
  
-         then replace "SDLActivity" with the name of your class (e.g. "MyGame")
+         then replace "MainActivity" with the name of your class (e.g. "MyGame")
          in the XML below.
 
          An example Java class can be found in README-android.md
@@ -72,7 +72,7 @@
         <meta-data android:name="SDL_ENV.SDL_ACCELEROMETER_AS_JOYSTICK" android:value="0"/>
          -->
      
-        <activity android:name="SDLActivity"
+        <activity android:name="MainActivity"
             android:label="@string/app_name"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleInstance"
