@@ -121,31 +121,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "sereg| Kevés (1-4)"
+msgstr "Kevés (1-4)"
 
 msgid "army|Several"
-msgstr "sereg| Számos (5-9)"
+msgstr "Számos (5-9)"
 
 msgid "army|Pack"
-msgstr "sereg| Csoport (10-19)"
+msgstr "Csoport (10-19)"
 
 msgid "army|Lots"
-msgstr "sereg| Sok (20-49)"
+msgstr "Sok (20-49)"
 
 msgid "army|Horde"
-msgstr "sereg| Horda (50-99)"
+msgstr "Horda (50-99)"
 
 msgid "army|Throng"
-msgstr "sereg| Tömeg (100-199)"
+msgstr "Tömeg (100-199)"
 
 msgid "army|Swarm"
-msgstr "sereg| Több száz (200-499)"
+msgstr "Több száz (200-499)"
 
 msgid "army|Zounds"
-msgstr "sereg| Ezrednyi (500-999)"
+msgstr "Ezrednyi (500-999)"
 
 msgid "army|Legion"
-msgstr "sereg| Légió (1000-)"
+msgstr "Légió (1000-)"
 
 msgid "All %{race} troops +1"
 msgstr "Minden %{race} csapat +1"
@@ -236,7 +236,7 @@ msgid "Army Order"
 msgstr ""
 
 msgid "Auto Spell Casting"
-msgstr "Automata Varázslás"
+msgstr "Automata varázslás"
 
 msgid "Grid"
 msgstr ""
@@ -3351,19 +3351,19 @@ msgid "Best Monster:"
 msgstr "Legjobb szörny:"
 
 msgid "difficulty|Easy"
-msgstr "nehézség | Könnyű"
+msgstr "Könnyű"
 
 msgid "difficulty|Normal"
-msgstr "nehézség | Normál"
+msgstr "Normál"
 
 msgid "difficulty|Hard"
-msgstr "nehézség | Nehéz"
+msgstr "Nehéz"
 
 msgid "difficulty|Expert"
-msgstr "nehézség | Szakértő"
+msgstr "Szakértő"
 
 msgid "difficulty|Impossible"
-msgstr "nehézség | Lehetetlen"
+msgstr "Lehetetlen"
 
 msgid "and more..."
 msgstr ""
@@ -3391,7 +3391,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Normal"
-msgstr "szerencse|Normál"
+msgstr "Normál"
 
 msgid "Hard"
 msgstr ""
@@ -5807,10 +5807,10 @@ msgstr "Jó Morál"
 
 #, fuzzy
 msgid "%{morale} Morale"
-msgstr "morál|Normál"
+msgstr "%{morale} Morál
 
 msgid "%{luck} Luck"
-msgstr ""
+msgstr "%{luck} Szerencse"
 
 msgid "Current Luck Modifiers:"
 msgstr ""
@@ -6419,25 +6419,25 @@ msgid "View Towns and Castles."
 msgstr "Városok mutatása"
 
 msgid "luck|Cursed"
-msgstr "szerencse|Átkozott"
+msgstr "Átkozott"
 
 msgid "luck|Awful"
-msgstr "szerencse|Szörnyű"
+msgstr "Szörnyű"
 
 msgid "luck|Bad"
-msgstr "szerencse|Rossz"
+msgstr "Rossz"
 
 msgid "luck|Normal"
-msgstr "szerencse|Normál"
+msgstr "Normál"
 
 msgid "luck|Good"
-msgstr "szerencse|Jó"
+msgstr "Jó"
 
 msgid "luck|Great"
-msgstr "szerencse|Nagyszerű"
+msgstr "Nagyszerű"
 
 msgid "luck|Irish"
-msgstr "szerencse|Páratlan"
+msgstr "Páratlan"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -6461,25 +6461,25 @@ msgstr ""
 "támadásra (dupla erősségű) a csata során."
 
 msgid "morale|Treason"
-msgstr "morál|Felségárulás"
+msgstr "Felségárulás"
 
 msgid "morale|Awful"
-msgstr "morál|Szörnyű"
+msgstr "Szörnyű"
 
 msgid "morale|Poor"
-msgstr "morál|Rossz"
+msgstr "Rossz"
 
 msgid "morale|Normal"
-msgstr "morál|Normál"
+msgstr "Normál"
 
 msgid "morale|Good"
-msgstr "morál|Jó"
+msgstr "Jó"
 
 msgid "morale|Great"
-msgstr "morál|Nagyszerű"
+msgstr "Nagyszerű"
 
 msgid "morale|Blood!"
-msgstr "morál|Örjöngő!"
+msgstr "Örjöngő!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr "Rossz morál következtében csapattagok kimaradhatnak a körből."
@@ -6531,7 +6531,7 @@ msgid "speed|Very Slow"
 msgstr ""
 
 msgid "speed|Slow"
-msgstr "sebesség|Lassú"
+msgstr "Lassú"
 
 msgid "speed|Average"
 msgstr ""
@@ -6565,7 +6565,7 @@ msgstr ""
 
 #, fuzzy
 msgid "week|Rat"
-msgstr "hét"
+msgstr "Patkány"
 
 msgid "week|Eagle"
 msgstr ""
@@ -6581,7 +6581,7 @@ msgstr ""
 
 #, fuzzy
 msgid "week|Dog"
-msgstr "hét"
+msgstr "Kutya"
 
 msgid "week|Aardvark"
 msgstr ""
