@@ -148,6 +148,8 @@ namespace
             // Lowercase s with cedilla
             original[186 - 32] = original[115 - 32];
             original[191 - 32] = original[122 - 32];
+            // Uppercase A with acute
+            original[193 - 32] = original[65 - 32];
             // Uppercase A with circumflex
             original[194 - 32] = original[65 - 32];
             // Uppercase A with breve
@@ -175,6 +177,8 @@ namespace
             original[220 - 32] = original[85 - 32];
             // Uppercase T with cedilla
             original[222 - 32] = original[84 - 32];
+            // Lowercase a with acute
+            original[225 - 32] = original[97 - 32];
             // Lowercase a with circumflex
             original[226 - 32] = original[97 - 32];
             // Lowercase a with breve
