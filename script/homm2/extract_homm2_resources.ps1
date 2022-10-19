@@ -63,9 +63,11 @@ try {
     Write-Host "[2/3] determining the HoMM2 directory"
 
     $homm2Path = $null
-
+    $homm2DrivePath = $null
+	
     foreach ($key in @("HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
                        "HKEY_CURRENT_USER\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall",
+                       "HKEY_LOCAL_MACHINE\SOFTWARE\New World Computing\Heroes of Might and Magic 2",
                        "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
                        "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall")) {
         if (-Not (Test-Path -Path "Microsoft.PowerShell.Core\Registry::$key" -PathType Container)) {
@@ -74,12 +76,20 @@ try {
 
         foreach ($subkey in (Get-ChildItem -Path "Microsoft.PowerShell.Core\Registry::$key")) {
             $path = $subkey.GetValue("InstallLocation")
-
+			
+			# Legacy installed path detection
+			if ($null -Eq $path) {
+				$path = $subkey.GetValue("AppPath")
+			}
+			
             if ($null -Ne $path) {
                 $path = $path.TrimEnd("\")
-
+				# Legacy installed drive path detection
+				$DrivePath = $subkey.GetValue("CDDrive")
+				
                 if (Test-HoMM2DirectoryPath -Path $path) {
                     $homm2Path = $path
+                    $homm2DrivePath = $DrivePath
 
                     break
                 }
@@ -107,24 +117,29 @@ try {
         Write-Host -ForegroundColor Green "Apparently fheroes2 was installed to the directory of the original game, there is no need to copy anything"
     } else {
         $shell = New-Object -ComObject "Shell.Application"
+	
+        foreach ($homm2Dir in @($homm2Path, $homm2DrivePath )) {
+		
+			foreach ($srcDir in @("HEROES2\ANIM", "ANIM", "DATA", "MAPS", "MUSIC")) {
+				if (-Not (Test-Path -Path "$homm2Dir\$srcDir" -PathType Container)) {
+					continue
+				}
 
-        foreach ($srcDir in @("HEROES2\ANIM", "ANIM", "DATA", "MAPS", "MUSIC")) {
-            if (-Not (Test-Path -Path "$homm2Path\$srcDir" -PathType Container)) {
-                continue
-            }
+				$destDir = (Split-Path $srcDir -Leaf).ToLower()
 
-            $destDir = (Split-Path $srcDir -Leaf).ToLower()
+				if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
+					[void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
+				}
 
-            if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
-                [void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
-            }
+				$content = $shell.NameSpace((Resolve-Path "$homm2Dir\$srcDir").Path)
 
-            $content = $shell.NameSpace((Resolve-Path "$homm2Path\$srcDir").Path)
+				foreach ($item in $content.Items()) {
+					$shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
 
-            foreach ($item in $content.Items()) {
-                $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
-            }
-        }
+				}
+
+			}
+		}
     }
 
     # Special case - CD image from GOG
