@@ -235,7 +235,7 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
     fheroes2::Blit( _getWinConditionsIcon( info.conditions_wins ), display, dst.x + SELECTED_SCENARIO_VICTORY_CONDITION_OFFSET_X,
                     dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
     fheroes2::Blit( _getLossConditionsIcon( info.conditions_loss ), display, dst.x + SELECTED_SCENARIO_LOSS_CONDITION_OFFSET_X,
-                    dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );    
+                    dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
 
     fheroes2::Text difficultyLabelText( _( "Map difficulty:" ), fheroes2::FontType::normalWhite() );
     difficultyLabelText.draw( dst.x + 210 - difficultyLabelText.width(), dst.y + SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y, display );
