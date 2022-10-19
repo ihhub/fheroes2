@@ -194,10 +194,10 @@ msgstr[0] "%{name} elpusztítja az ellenséges csapatok felét!"
 msgstr[1] "%{name} elpusztítják az ellenséges csapatok felét!"
 
 msgid "%{name} has turned off the auto battle"
-msgstr "%{name} következő szintre lépett"
+msgstr "%{name} kikapcsolta az automata harcot"
 
 msgid "%{name} has turned on the auto battle"
-msgstr "%{name} következő szintre lépett"
+msgstr "%{name} kikapcsolta az automata harcot"
 
 msgid "Spell failed!"
 msgstr "A varázslat nem sikerült!"
