@@ -210,7 +210,7 @@ void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
     }
 }
 
-void ScenarioListBox::_renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current )
+void ScenarioListBox::_renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, const int32_t dsty, const bool current ) const
 {
     fheroes2::Blit( _getPlayersCountIcon( info.kingdom_colors ), display, _offsetX + SCENARIO_LIST_COUNT_PLAYERS_OFFSET_X, dsty );
     _renderMapIcon( info.size_w, display, _offsetX + SCENARIO_LIST_MAP_SIZE_OFFSET_X, dsty );
