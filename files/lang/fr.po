@@ -6779,7 +6779,7 @@ msgstr "du criquet"
 msgid "week|Earthworm"
 msgstr "du ver"
 
-# hornet = frelon. guêpe = wasp, but can make the deal.
+# hornet = frelon. guêpe = wasp, but can make the deal here.
 msgid "week|Hornet"
 msgstr "du frelon"
 
@@ -7032,13 +7032,13 @@ msgid "Peasant Hut"
 msgstr "Grange"
 
 msgid "Dwarf Cottage"
-msgstr "Cottage de nains"
+msgstr "Cottage de Nains"
 
 msgid "Stone Liths"
 msgstr "Porte"
 
 msgid "Magic Well"
-msgstr "Puits"
+msgstr "Puits magique"
 
 msgid "Sign"
 msgstr "Panneau"
@@ -7065,7 +7065,7 @@ msgid "Trees"
 msgstr "Arbres"
 
 msgid "Dead Tree"
-msgstr "Arbre mort"
+msgstr "Arbre Morte"
 
 msgid "Mountains"
 msgstr "Montagnes"
@@ -7103,11 +7103,8 @@ msgstr "Squelette"
 msgid "Treasure Chest"
 msgstr "Coffre au trésor"
 
-# I'd like something different from "coffre au trésor" (plain)
-# in french we have "les mondes engloutis" or "royaumes engloutis"
-# for something long hidden under the sea
 msgid "Sea Chest"
-msgstr "Coffre au trésor englouti"
+msgstr "Coffre au trésor"
 
 msgid "Campfire"
 msgstr "Feu de camp"
@@ -7137,22 +7134,22 @@ msgid "Boat"
 msgstr "Navire"
 
 msgid "Random Artifact"
-msgstr "Artéfact aléatoire"
+msgstr "Artéfact Aléatoire"
 
 msgid "Random Resource"
-msgstr "Ressource aléatoire"
+msgstr "Ressource Aléatoire"
 
 msgid "Random Monster - weak"
-msgstr "Monstre aléatoire - faible"
+msgstr "Monstre Aléatoire - faible"
 
 msgid "Random Monster - medium"
-msgstr "Monstre aléatoire - moyen"
+msgstr "Monstre Aléatoire - moyen"
 
 msgid "Random Monster - strong"
-msgstr "Monstre aléatoire - fort"
+msgstr "Monstre Aléatoire - fort"
 
 msgid "Random Monster - very strong"
-msgstr "Monstre aléatoire - très fort"
+msgstr "Monstre Aléatoire - très fort"
 
 msgid "Standing Stones"
 msgstr "Pierres dressées"
@@ -7161,7 +7158,7 @@ msgid "Event"
 msgstr "Événement"
 
 msgid "Random Monster"
-msgstr "Monstre aléatoire"
+msgstr "Monstre Aléatoire"
 
 msgid "Random Ultimate Artifact"
 msgstr "Ultime artéfact aléatoire"
@@ -7217,31 +7214,31 @@ msgid "Barrier"
 msgstr "Barrière magique"
 
 msgid "Fire Summoning Altar"
-msgstr "Autel d'invocation du feu"
+msgstr "Autel d'invocation du Feu"
 
 msgid "Air Summoning Altar"
-msgstr "Autel d'invocation de l'air"
+msgstr "Autel d'invocation de l'Air"
 
 msgid "Earth Summoning Altar"
-msgstr "Autel d'invocation de la terre"
+msgstr "Autel d'invocation de la Terre"
 
 msgid "Water Summoning Altar"
-msgstr "Autel d'invocation de l'eau"
+msgstr "Autel d'invocation de l'Eau"
 
 msgid "Barrow Mounds"
 msgstr "Tumulus"
 
 msgid "Stables"
-msgstr "Écurie"
+msgstr "Ecurie"
 
 msgid "Alchemist's Tower"
 msgstr "Tour d'alchimiste"
 
 msgid "Hut of the Magi"
-msgstr "Hutte du mage"
+msgstr "Hutte du Mage"
 
 msgid "Eye of the Magi"
-msgstr "Oeil du mage"
+msgstr "Oeil du Mage"
 
 msgid "Mermaid"
 msgstr "Nymphe"
@@ -7253,10 +7250,10 @@ msgid "Reefs"
 msgstr "Récifs"
 
 msgid "Unknown Monster"
-msgstr "Monstre inconnu"
+msgstr "Monstre Inconnu"
 
 msgid "Unknown Monsters"
-msgstr "Monstres inconnus"
+msgstr "Monstres Inconnus"
 
 msgid "Peasant"
 msgstr "Paysan"
@@ -7283,10 +7280,10 @@ msgid "Pikemen"
 msgstr "Fantassins"
 
 msgid "Veteran Pikeman"
-msgstr "Fantassin vétéran"
+msgstr "Fantassin Vétéran"
 
 msgid "Veteran Pikemen"
-msgstr "Fantassins vétérans"
+msgstr "Fantassins Vétérans"
 
 msgid "Swordsman"
 msgstr "Spadassin"
@@ -7295,10 +7292,10 @@ msgid "Swordsmen"
 msgstr "Spadassins"
 
 msgid "Master Swordsman"
-msgstr "Maître spadassin"
+msgstr "Maître Spadassin"
 
 msgid "Master Swordsmen"
-msgstr "Maîtres spadassins"
+msgstr "Maîtres Spadassins"
 
 msgid "Cavalries"
 msgstr "Cavaliers"
@@ -7319,10 +7316,10 @@ msgid "Paladins"
 msgstr "Paladins"
 
 msgid "Crusader"
-msgstr "Grand paladin"
+msgstr "Grand Paladin"
 
 msgid "Crusaders"
-msgstr "Grands paladins"
+msgstr "Grands Paladins"
 
 msgid "Goblin"
 msgstr "Gobelin"
@@ -7337,10 +7334,10 @@ msgid "Orcs"
 msgstr "Orcs"
 
 msgid "Orc Chief"
-msgstr "Chef orc"
+msgstr "Chef Orc"
 
 msgid "Orc Chiefs"
-msgstr "Chefs orcs"
+msgstr "Chefs Orcs"
 
 msgid "Wolf"
 msgstr "Loup"
@@ -7355,10 +7352,10 @@ msgid "Ogres"
 msgstr "Ogres"
 
 msgid "Ogre Lord"
-msgstr "Grand ogre"
+msgstr "Grand Ogre"
 
 msgid "Ogre Lords"
-msgstr "Grands ogres"
+msgstr "Grands Ogres"
 
 msgid "Troll"
 msgstr "Troll"
@@ -7367,10 +7364,10 @@ msgid "Trolls"
 msgstr "Trolls"
 
 msgid "War Troll"
-msgstr "Troll guerrier"
+msgstr "Troll Guerrier"
 
 msgid "War Trolls"
-msgstr "Trolls guerriers"
+msgstr "Trolls Guerriers"
 
 msgid "Cyclopes"
 msgstr "Cyclopes"
@@ -7391,10 +7388,10 @@ msgid "Dwarves"
 msgstr "Nains"
 
 msgid "Battle Dwarf"
-msgstr "Nain guerrier"
+msgstr "Nain Guerrier"
 
 msgid "Battle Dwarves"
-msgstr "Nains guerriers"
+msgstr "Nains Guerriers"
 
 msgid "Elf"
 msgstr "Elfe"
@@ -7403,10 +7400,10 @@ msgid "Elves"
 msgstr "Elfes"
 
 msgid "Grand Elf"
-msgstr "Grand elfe"
+msgstr "Grand Elfe"
 
 msgid "Grand Elves"
-msgstr "Grands elfes"
+msgstr "Grands Elfes"
 
 msgid "Druid"
 msgstr "Druide"
@@ -7415,10 +7412,10 @@ msgid "Druids"
 msgstr "Druides"
 
 msgid "Greater Druid"
-msgstr "Grand druide"
+msgstr "Grand Druide"
 
 msgid "Greater Druids"
-msgstr "Grands druides"
+msgstr "Grands Druides"
 
 msgid "Unicorn"
 msgstr "Licorne"
@@ -7457,10 +7454,10 @@ msgid "Minotaurs"
 msgstr "Minotaures"
 
 msgid "Minotaur King"
-msgstr "Roi minotaure"
+msgstr "Roi Minotaure"
 
 msgid "Minotaur Kings"
-msgstr "Rois minotaures"
+msgstr "Rois Minotaures"
 
 msgid "Hydra"
 msgstr "Hydre"
@@ -7469,22 +7466,22 @@ msgid "Hydras"
 msgstr "Hydres"
 
 msgid "Green Dragon"
-msgstr "Dragon vert"
+msgstr "Dragon Vert"
 
 msgid "Green Dragons"
-msgstr "Dragons verts"
+msgstr "Dragons Verts"
 
 msgid "Red Dragon"
-msgstr "Dragon rouge"
+msgstr "Dragon Rouge"
 
 msgid "Red Dragons"
-msgstr "Dragons rouges"
+msgstr "Dragons Rouges"
 
 msgid "Black Dragon"
-msgstr "Dragon noir"
+msgstr "Dragon Noir"
 
 msgid "Black Dragons"
-msgstr "Dragons noirs"
+msgstr "Dragons Noirs"
 
 msgid "Halfling"
 msgstr "Galopin"
