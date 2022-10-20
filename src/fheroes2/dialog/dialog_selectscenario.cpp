@@ -190,10 +190,10 @@ namespace
         return startCoordX + centerTransform;
     }
 
-    void SwitchPressedMapSizeButtons( fheroes2::ButtonBase *& currentPressedButton, fheroes2::Button & newlyPressedButton )
+    fheroes2::ButtonBase * SwitchPressedMapSizeButtons( fheroes2::Button & newlyPressedButton )
     {
-        currentPressedButton = &newlyPressedButton;
-        currentPressedButton->press();
+        newlyPressedButton.press();
+        return &newlyPressedButton;
     }
 }
 
@@ -263,28 +263,28 @@ void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected
     mapName.draw( xCoordinate, yCoordinate, display );
 }
 
-void ScenarioListBox::SelectMapSize( MapsFileInfoList & mapsList, const Maps::mapsize_t selectedSize_ )
+void ScenarioListBox::SelectMapSize( MapsFileInfoList & mapsList, const int selectedSize_ )
 {
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
     const fheroes2::Image updatedScrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( mapsList.size() ),
                                                                                       { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
-    this->setScrollBarImage( updatedScrollbarSlider );
+    setScrollBarImage( updatedScrollbarSlider );
     Maps::FileInfo currentScenario;
 
-    if ( this->_size() > 0 ) {
-        currentScenario = this->GetCurrent();
+    if ( _size() > 0 ) {
+        currentScenario = GetCurrent();
     }
     else {
         currentScenario = mapsList[0];
     }
 
-    this->SetListContent( mapsList );
+    SetListContent( mapsList );
 
     if ( currentScenario.size_w == selectedSize_ || selectedSize_ == Maps::ZERO ) {
-        this->SetCurrent( currentScenario );
+        SetCurrent( currentScenario );
     }
 
-    this->selectedSize = selectedSize_;
+    selectedSize = selectedSize_;
 }
 
 void ScenarioListBox::_renderMapIcon( const uint16_t size, fheroes2::Display & display, const int32_t coordX, const int32_t coordY )
@@ -493,7 +493,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all_ )
             }
             else {
                 listbox.SelectMapSize( small, Maps::SMALL );
-                SwitchPressedMapSizeButtons( currentPressedButton, buttonSelectSmall );
+                currentPressedButton = SwitchPressedMapSizeButtons( buttonSelectSmall );
             }
 
             needRedraw = true;
@@ -506,7 +506,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all_ )
             }
             else {
                 listbox.SelectMapSize( medium, Maps::MEDIUM );
-                SwitchPressedMapSizeButtons( currentPressedButton, buttonSelectMedium );
+                currentPressedButton = SwitchPressedMapSizeButtons( buttonSelectMedium );
             }
 
             needRedraw = true;
@@ -519,7 +519,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all_ )
             }
             else {
                 listbox.SelectMapSize( large, Maps::LARGE );
-                SwitchPressedMapSizeButtons( currentPressedButton, buttonSelectLarge );
+                currentPressedButton = SwitchPressedMapSizeButtons( buttonSelectLarge );
             }
 
             needRedraw = true;
@@ -532,14 +532,14 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all_ )
             }
             else {
                 listbox.SelectMapSize( xlarge, Maps::XLARGE );
-                SwitchPressedMapSizeButtons( currentPressedButton, buttonSelectXLarge );
+                currentPressedButton = SwitchPressedMapSizeButtons( buttonSelectXLarge );
             }
 
             needRedraw = true;
         }
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL ) ) {
             listbox.SelectMapSize( all, Maps::ZERO );
-            SwitchPressedMapSizeButtons( currentPressedButton, buttonSelectAll );
+            currentPressedButton = SwitchPressedMapSizeButtons( buttonSelectAll );
 
             needRedraw = true;
         }

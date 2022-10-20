@@ -43,7 +43,7 @@ public:
 
     void RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & dst ) override;
-    void SelectMapSize( MapsFileInfoList & mapsList, const Maps::mapsize_t selectedSize );
+    void SelectMapSize( MapsFileInfoList & mapsList, const int selectedSize );
     void ActionCurrentUp() override
     {
         // Do nothing.
@@ -69,7 +69,8 @@ public:
     bool selectOk;
 
 private:
-    Maps::mapsize_t selectedSize{ Maps::ZERO };
+    enum mapsize_t : int;
+    int selectedSize{ Maps::ZERO };
     const int32_t _offsetX;
 
     void _renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current );
