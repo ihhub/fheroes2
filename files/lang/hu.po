@@ -121,31 +121,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "Kevés (1-4)"
+msgstr "Kevés"
 
 msgid "army|Several"
-msgstr "Számos (5-9)"
+msgstr "Számos"
 
 msgid "army|Pack"
-msgstr "Csoport (10-19)"
+msgstr "Csoport"
 
 msgid "army|Lots"
-msgstr "Sok (20-49)"
+msgstr "Sok"
 
 msgid "army|Horde"
-msgstr "Horda (50-99)"
+msgstr "Horda"
 
 msgid "army|Throng"
-msgstr "Tömeg (100-199)"
+msgstr "Tömeg"
 
 msgid "army|Swarm"
-msgstr "Több száz (200-499)"
+msgstr "Század"
 
 msgid "army|Zounds"
-msgstr "Ezrednyi (500-999)"
+msgstr "Ezred"
 
 msgid "army|Legion"
-msgstr "Légió (1000-)"
+msgstr "Légió"
 
 msgid "All %{race} troops +1"
 msgstr "Minden %{race} csapat +1"
@@ -254,7 +254,7 @@ msgid "On"
 msgstr "Be"
 
 msgid "Set the speed of combat actions and animations."
-msgstr "Állítsd be a harci műveletek és animációk gyorsaságát."
+msgstr "Állítsd be a harci cselekmények és animációk gyorsaságát."
 
 msgid "Toggle to display army order during the battle."
 msgstr ""
@@ -405,7 +405,7 @@ msgstr ""
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
-"Nyisd meg a Hős Képernyőt hogy megnézhesd az összes információt a hősről."
+"Nyisd meg a Hős Képernyőt, hogy megnézhesd az összes információt a hősről."
 
 msgid "Return to the battle."
 msgstr "Visszatérés a csatába."
@@ -3389,7 +3389,6 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
-#, fuzzy
 msgid "Normal"
 msgstr "Normál"
 
@@ -5805,12 +5804,11 @@ msgstr "Következő hősök"
 msgid "Blood Morale"
 msgstr "Jó Morál"
 
-#, fuzzy
 msgid "%{morale} Morale"
-msgstr "%{morale} Morál
+msgstr "%{morale} morál"
 
 msgid "%{luck} Luck"
-msgstr "%{luck} Szerencse"
+msgstr "%{luck} szerencse"
 
 msgid "Current Luck Modifiers:"
 msgstr ""
@@ -6552,23 +6550,22 @@ msgid "speed|Instant"
 msgstr ""
 
 msgid "week|Squirrel"
-msgstr ""
+msgstr "Mókus"
 
 msgid "week|Rabbit"
-msgstr ""
+msgstr "Nyúl"
 
 msgid "week|Gopher"
 msgstr ""
 
 msgid "week|Badger"
-msgstr ""
+msgstr "Borz"
 
-#, fuzzy
 msgid "week|Rat"
 msgstr "Patkány"
 
 msgid "week|Eagle"
-msgstr ""
+msgstr "Sas"
 
 msgid "week|Weasel"
 msgstr ""
@@ -6579,7 +6576,6 @@ msgstr ""
 msgid "week|Mongoose"
 msgstr ""
 
-#, fuzzy
 msgid "week|Dog"
 msgstr "Kutya"
 
