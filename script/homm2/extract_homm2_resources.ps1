@@ -63,6 +63,7 @@ try {
     Write-Host "[2/3] determining the HoMM2 directory"
 
     $homm2Path = $null
+    # Some legacy HoMM2 installation use a CD drive
     $homm2CD = $null
 
     foreach ($key in @("HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
