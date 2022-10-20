@@ -77,19 +77,24 @@ try {
 
         foreach ($subkey in (Get-ChildItem -Path "Microsoft.PowerShell.Core\Registry::$key")) {
             $path = $subkey.GetValue("InstallLocation")
+            $cdDrive = $null
 
             if ($null -Eq $path) {
                 # From HKLM\SOFTWARE\New World Computing\Heroes of Might and Magic 2
             	$path = $subkey.GetValue("AppPath")
+                $cdDrive = $subkey.GetValue("CDDrive")
             }
 
             if ($null -Ne $path) {
                 $path = $path.TrimEnd("\")
 
+                if ($null -Ne $cdDrive) {
+                    $cdDrive = $cdDrive.TrimEnd("\")
+                }
+
                 if (Test-HoMM2DirectoryPath -Path $path) {
                     $homm2Path = $path
-                    # From HKLM\SOFTWARE\New World Computing\Heroes of Might and Magic 2
-                    $homm2CD = $subkey.GetValue("CDDrive")
+                    $homm2CD = $cdDrive
 
                     break
                 }
@@ -112,7 +117,7 @@ try {
     Write-Host -ForegroundColor Green (-Join("HoMM2 directory: ", (Resolve-Path $homm2Path).Path))
 
     if ($null -Ne $homm2CD) {
-        Write-Host -ForegroundColor Green (-Join("HoMM2 CD drive: ", (Resolve-Path $homm2CD).Path))
+        Write-Host -ForegroundColor Green "HoMM2 CD drive: $homm2CD"
     }
 
     Write-Host "[3/3] copying game resources"
