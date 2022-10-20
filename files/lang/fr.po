@@ -1482,13 +1482,13 @@ msgid "campaignBonus|Expert Diplomacy"
 msgstr "Expert en diplomatie"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Principes de vue d'aigle"
+msgstr "Principes d'oeil d'aigle"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Vue d'aigle avancé"
+msgstr "Oeil d'aigle avancé"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Expert en vue d'aigle"
+msgstr "Expert en oeil d'aigle"
 
 msgid "campaignBonus|Basic Estates"
 msgstr "Principes de finances"
@@ -6249,7 +6249,7 @@ msgid "Ballistics"
 msgstr "Balistique"
 
 msgid "Eagle Eye"
-msgstr "Vue d'aigle"
+msgstr "Oeil d'aigle"
 
 msgid "Necromancy"
 msgstr "Nécromancie"
@@ -6351,13 +6351,13 @@ msgid "Advanced Ballistics"
 msgstr "Balistique avancée"
 
 msgid "Advanced Eagle Eye"
-msgstr "Vue d'aigle avancée"
+msgstr "Oeil d'aigle avancé"
 
 msgid "Basic Ballistics"
 msgstr "Principes de balistique"
 
 msgid "Basic Eagle Eye"
-msgstr "Principes de vue d'aigle"
+msgstr "Principes d'oeil d'aigle"
 
 msgid "Expert Ballistics"
 msgstr "Expert en balistique"
@@ -6372,7 +6372,7 @@ msgid "Basic Necromancy"
 msgstr "Principes de nécromancie"
 
 msgid "Expert Eagle Eye"
-msgstr "Expert en vue d'aigle"
+msgstr "Expert en oeil d'aigle"
 
 msgid "Expert Necromancy"
 msgstr "Expert en nécromancie"
@@ -6812,7 +6812,7 @@ msgid "week|Mongoose"
 msgstr "de la mangouste"
 
 msgid "week|Aardvark"
-msgstr "de l'oryctérope du Cap"
+msgstr "de l'oryctérope du cap"
 
 msgid "week|Lizard"
 msgstr "du lézard"
@@ -7005,7 +7005,7 @@ msgid "Magellan's Maps"
 msgstr "Cartes de Magellan"
 
 msgid "Derelict Ship"
-msgstr "Navire abandonnée"
+msgstr "Navire abandonné"
 
 msgid "Shipwreck"
 msgstr "Épave"
@@ -7032,10 +7032,10 @@ msgid "Peasant Hut"
 msgstr "Grange"
 
 msgid "Dwarf Cottage"
-msgstr "Cottage de Nains"
+msgstr "Cottage des nains"
 
 msgid "Stone Liths"
-msgstr "Porte"
+msgstr "Menhirs"
 
 msgid "Magic Well"
 msgstr "Puits magique"
@@ -7065,7 +7065,7 @@ msgid "Trees"
 msgstr "Arbres"
 
 msgid "Dead Tree"
-msgstr "Arbre Morte"
+msgstr "Arbre mort"
 
 msgid "Mountains"
 msgstr "Montagnes"
@@ -7103,8 +7103,11 @@ msgstr "Squelette"
 msgid "Treasure Chest"
 msgstr "Coffre au trésor"
 
+# I'd like something different from "coffre au trésor" (plain)
+# in french we have "les mondes engloutis" or "royaumes engloutis"
+# for something long hidden under the sea
 msgid "Sea Chest"
-msgstr "Coffre au trésor"
+msgstr "Coffre au trésor englouti"
 
 msgid "Campfire"
 msgstr "Feu de camp"
@@ -7134,22 +7137,22 @@ msgid "Boat"
 msgstr "Navire"
 
 msgid "Random Artifact"
-msgstr "Artéfact Aléatoire"
+msgstr "Artéfact aléatoire"
 
 msgid "Random Resource"
-msgstr "Ressource Aléatoire"
+msgstr "Ressource aléatoire"
 
 msgid "Random Monster - weak"
-msgstr "Monstre Aléatoire - faible"
+msgstr "Monstre aléatoire - faible"
 
 msgid "Random Monster - medium"
-msgstr "Monstre Aléatoire - moyen"
+msgstr "Monstre aléatoire - moyen"
 
 msgid "Random Monster - strong"
-msgstr "Monstre Aléatoire - fort"
+msgstr "Monstre aléatoire - fort"
 
 msgid "Random Monster - very strong"
-msgstr "Monstre Aléatoire - très fort"
+msgstr "Monstre aléatoire - très fort"
 
 msgid "Standing Stones"
 msgstr "Pierres dressées"
@@ -7158,7 +7161,7 @@ msgid "Event"
 msgstr "Événement"
 
 msgid "Random Monster"
-msgstr "Monstre Aléatoire"
+msgstr "Monstre aléatoire"
 
 msgid "Random Ultimate Artifact"
 msgstr "Ultime artéfact aléatoire"
@@ -7214,28 +7217,30 @@ msgid "Barrier"
 msgstr "Barrière magique"
 
 msgid "Fire Summoning Altar"
-msgstr "Autel d'invocation du Feu"
+msgstr "Autel d'invocation du feu"
 
 msgid "Air Summoning Altar"
-msgstr "Autel d'invocation de l'Air"
+msgstr "Autel d'invocation de l'air"
 
 msgid "Earth Summoning Altar"
-msgstr "Autel d'invocation de la Terre"
+msgstr "Autel d'invocation de la terre"
 
 msgid "Water Summoning Altar"
-msgstr "Autel d'invocation de l'Eau"
+msgstr "Autel d'invocation de l'eau"
 
 msgid "Barrow Mounds"
 msgstr "Tumulus"
 
 msgid "Stables"
-msgstr "Ecurie"
+msgstr "Écurie"
 
 msgid "Alchemist's Tower"
 msgstr "Tour d'alchimiste"
 
+# should it be : hutte des mages ?
+# magus singular, magi plural
 msgid "Hut of the Magi"
-msgstr "Hutte du Mage"
+msgstr "Hutte du mage"
 
 msgid "Eye of the Magi"
 msgstr "Oeil du Mage"
@@ -7250,10 +7255,10 @@ msgid "Reefs"
 msgstr "Récifs"
 
 msgid "Unknown Monster"
-msgstr "Monstre Inconnu"
+msgstr "Monstre inconnu"
 
 msgid "Unknown Monsters"
-msgstr "Monstres Inconnus"
+msgstr "Monstres inconnus"
 
 msgid "Peasant"
 msgstr "Paysan"
@@ -7280,10 +7285,10 @@ msgid "Pikemen"
 msgstr "Fantassins"
 
 msgid "Veteran Pikeman"
-msgstr "Fantassin Vétéran"
+msgstr "Fantassin vétéran"
 
 msgid "Veteran Pikemen"
-msgstr "Fantassins Vétérans"
+msgstr "Fantassins vétérans"
 
 msgid "Swordsman"
 msgstr "Spadassin"
@@ -7292,10 +7297,10 @@ msgid "Swordsmen"
 msgstr "Spadassins"
 
 msgid "Master Swordsman"
-msgstr "Maître Spadassin"
+msgstr "Maître spadassin"
 
 msgid "Master Swordsmen"
-msgstr "Maîtres Spadassins"
+msgstr "Maîtres spadassins"
 
 msgid "Cavalries"
 msgstr "Cavaliers"
@@ -7316,10 +7321,10 @@ msgid "Paladins"
 msgstr "Paladins"
 
 msgid "Crusader"
-msgstr "Grand Paladin"
+msgstr "Grand paladin"
 
 msgid "Crusaders"
-msgstr "Grands Paladins"
+msgstr "Grands paladins"
 
 msgid "Goblin"
 msgstr "Gobelin"
@@ -7334,10 +7339,10 @@ msgid "Orcs"
 msgstr "Orcs"
 
 msgid "Orc Chief"
-msgstr "Chef Orc"
+msgstr "Chef orc"
 
 msgid "Orc Chiefs"
-msgstr "Chefs Orcs"
+msgstr "Chefs orcs"
 
 msgid "Wolf"
 msgstr "Loup"
@@ -7352,10 +7357,10 @@ msgid "Ogres"
 msgstr "Ogres"
 
 msgid "Ogre Lord"
-msgstr "Grand Ogre"
+msgstr "Grand ogre"
 
 msgid "Ogre Lords"
-msgstr "Grands Ogres"
+msgstr "Grands ogres"
 
 msgid "Troll"
 msgstr "Troll"
@@ -7364,10 +7369,10 @@ msgid "Trolls"
 msgstr "Trolls"
 
 msgid "War Troll"
-msgstr "Troll Guerrier"
+msgstr "Troll guerrier"
 
 msgid "War Trolls"
-msgstr "Trolls Guerriers"
+msgstr "Trolls guerriers"
 
 msgid "Cyclopes"
 msgstr "Cyclopes"
@@ -7388,10 +7393,10 @@ msgid "Dwarves"
 msgstr "Nains"
 
 msgid "Battle Dwarf"
-msgstr "Nain Guerrier"
+msgstr "Nain guerrier"
 
 msgid "Battle Dwarves"
-msgstr "Nains Guerriers"
+msgstr "Nains guerriers"
 
 msgid "Elf"
 msgstr "Elfe"
@@ -7400,10 +7405,10 @@ msgid "Elves"
 msgstr "Elfes"
 
 msgid "Grand Elf"
-msgstr "Grand Elfe"
+msgstr "Grand elfe"
 
 msgid "Grand Elves"
-msgstr "Grands Elfes"
+msgstr "Grands elfes"
 
 msgid "Druid"
 msgstr "Druide"
@@ -7412,10 +7417,10 @@ msgid "Druids"
 msgstr "Druides"
 
 msgid "Greater Druid"
-msgstr "Grand Druide"
+msgstr "Grand druide"
 
 msgid "Greater Druids"
-msgstr "Grands Druides"
+msgstr "Grands druides"
 
 msgid "Unicorn"
 msgstr "Licorne"
@@ -7454,10 +7459,10 @@ msgid "Minotaurs"
 msgstr "Minotaures"
 
 msgid "Minotaur King"
-msgstr "Roi Minotaure"
+msgstr "Roi minotaure"
 
 msgid "Minotaur Kings"
-msgstr "Rois Minotaures"
+msgstr "Rois minotaures"
 
 msgid "Hydra"
 msgstr "Hydre"
@@ -7466,22 +7471,22 @@ msgid "Hydras"
 msgstr "Hydres"
 
 msgid "Green Dragon"
-msgstr "Dragon Vert"
+msgstr "Dragon vert"
 
 msgid "Green Dragons"
-msgstr "Dragons Verts"
+msgstr "Dragons verts"
 
 msgid "Red Dragon"
-msgstr "Dragon Rouge"
+msgstr "Dragon rouge"
 
 msgid "Red Dragons"
-msgstr "Dragons Rouges"
+msgstr "Dragons rouges"
 
 msgid "Black Dragon"
-msgstr "Dragon Noir"
+msgstr "Dragon noir"
 
 msgid "Black Dragons"
-msgstr "Dragons Noirs"
+msgstr "Dragons noirs"
 
 msgid "Halfling"
 msgstr "Galopin"
