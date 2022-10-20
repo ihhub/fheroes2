@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-14 16:16+0000\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3137,6 +3137,9 @@ msgstr "Condiciones de victoria"
 msgid "Map difficulty:"
 msgstr "Nivel del mapa:"
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr ""
 
@@ -4367,6 +4370,10 @@ msgstr ""
 
 msgid "Dutch"
 msgstr ""
+
+#, fuzzy
+msgid "Hungarian"
+msgstr "Bárbaro"
 
 msgid ", FPS: "
 msgstr ""
