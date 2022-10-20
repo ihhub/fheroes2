@@ -6993,7 +6993,7 @@ msgid "Sphinx"
 msgstr "Sphinx"
 
 msgid "Troll Bridge"
-msgstr "Pont du troll"
+msgstr "Pont des trolls"
 
 msgid "Witch's Hut"
 msgstr "Cabane de la sorcière"
