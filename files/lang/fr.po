@@ -7232,13 +7232,11 @@ msgstr "Écurie"
 msgid "Alchemist's Tower"
 msgstr "Tour d'alchimiste"
 
-# should it be : hutte des mages ?
-# magus singular, magi plural
 msgid "Hut of the Magi"
-msgstr "Hutte des mage"
+msgstr "Hutte des mages"
 
 msgid "Eye of the Magi"
-msgstr "Oeils des Mages"
+msgstr "Oeil des mages"
 
 msgid "Mermaid"
 msgstr "Nymphe"
@@ -7772,7 +7770,7 @@ msgid "Soul Eater"
 msgstr "Dévoreur d'âmes"
 
 msgid "Elemental"
-msgstr "Esprit"
+msgstr "Élémentaire"
 
 msgid "No Morale"
 msgstr "Pas de moral"
@@ -8075,9 +8073,8 @@ msgstr ""
 "Une bande de voleurs pille les dépouilles de guerriers. En effrayant les "
 "charognards, vous remarquez qu'ils ont oublié un beau plastron."
 
-# Should it be : Le parchemin mineur de la connaissance ?
 msgid "Minor Scroll of Knowledge"
-msgstr "Le parchemin mineur"
+msgstr "Le parchemin mineur de la connaissance"
 
 msgid ""
 "Before you appears a levitating glass case with a scroll, perched upon a bed "
@@ -8088,9 +8085,8 @@ msgstr ""
 "lit de velours cramoisi. À votre contact, le couvercle s'ouvre et le "
 "parchemin flotte jusqu'à vos mains impatientes."
 
-# same here. Parchemin majeur de la connaissance
 msgid "Major Scroll of Knowledge"
-msgstr "Le parchemin majeur"
+msgstr "Le parchemin majeur de la connaissance"
 
 msgid ""
 "Visiting a local wiseman, you explain the intent of your journey. He reaches "
@@ -8100,9 +8096,8 @@ msgstr ""
 "voyage. Il fouille dans un sac et en retire un parchemin jauni qu'il vous "
 "remet."
 
-# Parchemin supérieur de la connaissance ?
 msgid "Superior Scroll of Knowledge"
-msgstr "Le parchemin supérieur"
+msgstr "Le parchemin supérieur de la connaissance"
 
 msgid ""
 "You come across the remains of an ancient Druid. Bones, yellowed with age, "
@@ -8330,7 +8325,7 @@ msgstr ""
 "dans votre nouveau sac de voyage."
 
 msgid "Ice Cloak"
-msgstr "La cape de glace"
+msgstr "Le manteau de glace"
 
 msgid "The %{name} halves all damage your troops take from cold spells."
 msgstr ""
@@ -8343,10 +8338,10 @@ msgid ""
 msgstr ""
 "Répondant aux cris paniqués d'une demoiselle en détresse, vous découvrez une "
 "jeune femme fuyant un ours affamé. Vous tuez la bête à temps, et la sorcière "
-"reconnaissante tisse une cape magique à partir de la peau de l'ours."
+"reconnaissante tisse un manteau magique à partir de la peau de l'ours."
 
 msgid "Fire Cloak"
-msgstr "La cape de feu"
+msgstr "Le manteau de feu"
 
 msgid "The %{name} halves all damage your troops take from fire spells."
 msgstr "%{name} réduit de moitié tous les dégâts de feu subis par vos troupes."
@@ -8360,7 +8355,7 @@ msgstr ""
 "Vous tombez sur un combat entre un nécromancien et un paladin. Le "
 "nécromancien frappe le paladin avec un éclair de feu, le mettant à genoux. "
 "Agissant rapidement, vous tuez le nécromancien juste avant le coup fatal. "
-"Reconnaissant, le paladin vous donne la cape de feu qui l'a sauvé."
+"Reconnaissant, le paladin vous donne le manteau de feu qui l'a sauvé."
 
 msgid "Lightning Helm"
 msgstr "Le casque paratonnerre"
@@ -9771,33 +9766,33 @@ msgstr ""
 "produire des ressources.  (Si je ne peux pas la garder, personne ne l'aura !)"
 
 msgid "Set Earth Guardian"
-msgstr "Gardien terre"
+msgstr "Gardien de terre"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr ""
-"Invoque les é de la Terre pour garder une mine contre les armées "
+"Invoque les élémentaires de la terre pour garder une mine contre les armées "
 "ennemies."
 
 msgid "Set Air Guardian"
-msgstr "Gardien Air"
+msgstr "Gardien d'air"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr ""
-"Invoque les Esprits de l'Air pour garder une mine contre les armées ennemies."
+"Invoque les élémentaires de l'air pour garder une mine contre les armées ennemies."
 
 msgid "Set Fire Guardian"
-msgstr "Gardien Feu"
+msgstr "Gardien de feu"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
 msgstr ""
-"Invoque les Esprits du Feu pour garder une mine contre les armées ennemies."
+"Invoque les élémentaires du feu pour garder une mine contre les armées ennemies."
 
 msgid "Set Water Guardian"
-msgstr "Gardien Eau"
+msgstr "Gardien d'eau"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
-"Invoque les Esprits de l'Eau pour garder une mine contre les armées ennemies."
+"Invoque les élémentaires de l'eau pour garder une mine contre les armées ennemies."
 
 msgid "Petrification"
 msgstr "Pétrification"
