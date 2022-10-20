@@ -122,7 +122,7 @@ try {
     } else {
         $shell = New-Object -ComObject "Shell.Application"
 
-        foreach ($homm2Dir in @($homm2Path, $homm2CD )) {
+        foreach ($homm2Dir in @($homm2Path, $homm2CD)) {
             if ($null -Eq $homm2Dir) {
                 continue
             }
