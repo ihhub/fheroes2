@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-14 16:16+0000\n"
+"POT-Creation-Date: 2022-10-19 23:53+0000\n"
 "PO-Revision-Date: 2022-09-30 21:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -2898,6 +2898,9 @@ msgid "Victory Condition"
 msgstr ""
 
 msgid "Map difficulty:"
+msgstr ""
+
+msgid "N"
 msgstr ""
 
 msgid "No maps exist at that size"
