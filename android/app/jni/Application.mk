@@ -21,4 +21,4 @@
 # Build app with shared C++ STL
 APP_STL := c++_shared
 # Minimum supported Android API level
-APP_PLATFORM=android-19
+APP_PLATFORM := android-19
