@@ -7552,10 +7552,10 @@ msgid "Zombies"
 msgstr "Zombies"
 
 msgid "Mutant Zombie"
-msgstr "Zombie Mutant"
+msgstr "Zombie mutant"
 
 msgid "Mutant Zombies"
-msgstr "Zombies Mutants"
+msgstr "Zombies mutants"
 
 msgid "Mummies"
 msgstr "Momies"
@@ -7564,10 +7564,10 @@ msgid "Mummy"
 msgstr "Momie"
 
 msgid "Royal Mummies"
-msgstr "Momies Royales"
+msgstr "Momies royales"
 
 msgid "Royal Mummy"
-msgstr "Momie Royale"
+msgstr "Momie royale"
 
 msgid "Vampire"
 msgstr "Vampire"
@@ -7576,10 +7576,10 @@ msgid "Vampires"
 msgstr "Vampires"
 
 msgid "Vampire Lord"
-msgstr "Grand Vampire"
+msgstr "Grand vampire"
 
 msgid "Vampire Lords"
-msgstr "Grands Vampires"
+msgstr "Grands vampires"
 
 msgid "Lich"
 msgstr "Macchabée"
@@ -7588,16 +7588,16 @@ msgid "Liches"
 msgstr "Macchabées"
 
 msgid "Power Lich"
-msgstr "Grand Macchabée"
+msgstr "Grand macchabée"
 
 msgid "Power Liches"
-msgstr "Grands Macchabées"
+msgstr "Grands macchabées"
 
 msgid "Bone Dragon"
-msgstr "Dragon Étique"
+msgstr "Dragon étique"
 
 msgid "Bone Dragons"
-msgstr "Dragons Étiques"
+msgstr "Dragons étiques"
 
 msgid "Rogue"
 msgstr "Pillard"
@@ -7630,55 +7630,55 @@ msgid "Medusas"
 msgstr "Méduses"
 
 msgid "Earth Elemental"
-msgstr "Elémentaire de la Terre"
+msgstr "Elémentaire de la terre"
 
 msgid "Earth Elementals"
-msgstr "Elémentaires de la Terre"
+msgstr "Elémentaires de la terre"
 
 msgid "Air Elemental"
-msgstr "Elémentaire de l'Air"
+msgstr "Elémentaire de l'air"
 
 msgid "Air Elementals"
-msgstr "Elémentaires de l'Air"
+msgstr "Elémentaires de l'air"
 
 msgid "Fire Elemental"
-msgstr "Elémentaire de Feu"
+msgstr "Elémentaire de feu"
 
 msgid "Fire Elementals"
-msgstr "Elémentaires de Feu"
+msgstr "Elémentaires de feu"
 
 msgid "Water Elemental"
-msgstr "Elémentaire de l'Eau"
+msgstr "Elémentaire de l'eau"
 
 msgid "Water Elementals"
-msgstr "Elémentaires de l'Eau"
+msgstr "Elémentaires de l'eau"
 
 msgid "Random Monsters"
-msgstr "Monstres Aléatoires"
+msgstr "Monstres aléatoires"
 
 msgid "Random Monster 1"
-msgstr "Monstre Aléatoire 1"
+msgstr "Monstre aléatoire 1"
 
 msgid "Random Monsters 1"
-msgstr "Monstres Aléatoires 1"
+msgstr "Monstres aléatoires 1"
 
 msgid "Random Monster 2"
-msgstr "Monstre Aléatoire 2"
+msgstr "Monstre aléatoire 2"
 
 msgid "Random Monsters 2"
-msgstr "Monstres Aléatoires 2"
+msgstr "Monstres aléatoires 2"
 
 msgid "Random Monster 3"
-msgstr "Monstre Aléatoire 3"
+msgstr "Monstre aléatoire 3"
 
 msgid "Random Monsters 3"
-msgstr "Monstres Aléatoires 3"
+msgstr "Monstres aléatoires 3"
 
 msgid "Random Monster 4"
-msgstr "Monstre Aléatoire 4"
+msgstr "Monstre aléatoire 4"
 
 msgid "Random Monsters 4"
-msgstr "Monstres Aléatoires 4"
+msgstr "Monstres aléatoires 4"
 
 msgid "Double shot"
 msgstr "Double tir"
@@ -7720,16 +7720,16 @@ msgid "% chance to Dispel beneficial spells"
 msgstr "% de chances de dissiper les sorts bénéfiques"
 
 msgid "% chance to Paralyze"
-msgstr "% de chances de Paralyser"
+msgstr "% de chances de paralyser"
 
 msgid "% chance to Petrify"
-msgstr "% de chances de Pétrifier"
+msgstr "% de chances de pétrifier"
 
 msgid "% chance to Blind"
-msgstr "% de chances d'Aveugler"
+msgstr "% de chances d'aveugler"
 
 msgid "% chance to Curse"
-msgstr "% de chances de Maudire"
+msgstr "% de chances de maudire"
 
 msgid "% chance to cast %{spell} spell"
 msgstr "% de chances de lancer le sort %{spell}"
@@ -7780,13 +7780,13 @@ msgid "Elemental"
 msgstr "Esprit"
 
 msgid "No Morale"
-msgstr "Pas de Moral"
+msgstr "Pas de moral"
 
 msgid "200% damage from Fire spells"
-msgstr "200% des dégâts des sorts du Feu"
+msgstr "200% des dégâts des sorts du feu"
 
 msgid "200% damage from Cold spells"
-msgstr "200% des dégâts des sorts du Froid"
+msgstr "200% des dégâts des sorts du froid"
 
 msgid "% damage from %{spell} spell"
 msgstr "% de dégâts du sort %{spell}"
@@ -7813,7 +7813,7 @@ msgid "Move %{name}"
 msgstr "Déplacer %{name}"
 
 msgid "Cannot move the Spellbook"
-msgstr "Impossible de déplacer le Grimoire"
+msgstr "Impossible de déplacer le grimoire"
 
 msgid "This item can't be traded."
 msgstr "Cet objet ne peut pas être échangé."
@@ -7955,7 +7955,7 @@ msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
 "noblemen's Knights, you are honored with the Medal of Distinction."
 msgstr ""
-"Après avoir débarrassé ces terres de l'affreux Minotaure qui adorait dévorer "
+"Après avoir débarrassé ces terres de l'affreux minotaure qui adorait dévorer "
 "les nobles chevaliers, on vous décerne la médaille de la distinction."
 
 msgid "Fizbin of Misfortune"
@@ -7994,8 +7994,8 @@ msgid ""
 "You encounter the infamous Black Knight!  After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
 msgstr ""
-"Vous rencontrez le tristement célèbre Chevalier Noir ! Après un duel "
-"éreintant suivi d'un match nul, le Chevalier, par respect, vous offre une "
+"Vous rencontrez le tristement célèbre chevalier noir ! Après un duel "
+"éreintant suivi d'un match nul, le chevalier, par respect, vous offre une "
 "paire de gantelets renforcés."
 
 msgid "Defender Helm of Protection"
