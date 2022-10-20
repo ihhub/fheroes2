@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  make:
     strategy:
       matrix:
         config:
@@ -103,7 +103,7 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-  build-psv:
+  make-psv:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -190,7 +190,7 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-  build-switch:
+  make-switch:
     name: Make (Nintendo Switch)
     runs-on: ubuntu-latest
     timeout-minutes: 30
