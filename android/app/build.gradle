@@ -25,10 +25,6 @@ android {
             path 'jni/Android.mk'
         }
     }
-
-    lintOptions {
-        abortOnError false
-    }
 }
 
 dependencies {

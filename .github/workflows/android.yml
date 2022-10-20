@@ -1,0 +1,32 @@
+name: Android
+
+on:
+  workflow_call:
+
+env:
+  ANDROID_DEPS_URL: https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/android-deps/android.zip
+
+jobs:
+  android:
+    name: Android
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        wget "$ANDROID_DEPS_URL"
+        unzip -d android android.zip
+    - name: Build
+      run: |
+        cd android
+        ./gradlew assembleDebug
+    - name: Lint
+      run: |
+        cd android
+        ./gradlew app:lint
+    - uses: actions/upload-artifact@v3
+      if: ${{ success() || failure() }}
+      with:
+        name: android-lint-report
+        path: android/app/build/reports/
