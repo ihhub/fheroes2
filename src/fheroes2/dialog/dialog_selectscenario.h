@@ -69,7 +69,6 @@ public:
     bool selectOk;
 
 private:
-    enum mapsize_t : int;
     int selectedSize{ Maps::ZERO };
     const int32_t _offsetX;
 
