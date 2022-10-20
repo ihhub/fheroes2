@@ -6616,7 +6616,7 @@ msgid "Towns/Castles"
 msgstr "Villages/Châteaux"
 
 msgid "View Towns and Castles."
-msgstr "Voir Villages et Châteaux."
+msgstr "Voir Villages et châteaux."
 
 msgid "luck|Cursed"
 msgstr "Maudite"
@@ -6661,7 +6661,7 @@ msgstr ""
 "chanceuses (dégâts doublés) au combat."
 
 msgid "morale|Treason"
-msgstr "Traitre"
+msgstr "Traître"
 
 msgid "morale|Awful"
 msgstr "Désastreux"
@@ -6756,73 +6756,75 @@ msgid "week|PLAGUE"
 msgstr "de la PESTE"
 
 msgid "week|Ant"
-msgstr "de la Fourmi"
+msgstr "de la fourmi"
 
 msgid "week|Grasshopper"
-msgstr "de la Sauterelle"
+msgstr "de la sauterelle"
 
 msgid "week|Dragonfly"
-msgstr "de la Libellule"
+msgstr "de la libellule"
 
 msgid "week|Spider"
-msgstr "de l'Araignée"
+msgstr "de l'araignée"
 
 msgid "week|Butterfly"
-msgstr "du Papillon"
+msgstr "du papillon"
 
 msgid "week|Bumblebee"
-msgstr "du Bourdon"
+msgstr "du bourdon"
 
 msgid "week|Locust"
-msgstr "du Criquet"
+msgstr "du criquet"
 
 msgid "week|Earthworm"
-msgstr "du Ver"
+msgstr "du ver"
 
+# hornet = frelon. guêpe = wasp, but can make the deal.
 msgid "week|Hornet"
-msgstr "de la Guêpe"
+msgstr "du frelon"
 
 msgid "week|Beetle"
-msgstr "de la Coccinelle"
+msgstr "de la coccinelle"
 
 msgid "week|Squirrel"
-msgstr "de l'Écureuil"
+msgstr "de l'écureuil"
 
 msgid "week|Rabbit"
-msgstr "du Lapin"
+msgstr "du lapin"
 
+# marmotte ou chien de prairie ? marmotte could be inexact but please search "gopher" on google images
 msgid "week|Gopher"
-msgstr "de la Gourde"
+msgstr "de la marmotte"
 
 msgid "week|Badger"
-msgstr "du Blaireau"
+msgstr "du blaireau"
 
 msgid "week|Eagle"
-msgstr "de l'Aigle"
+msgstr "de l'aigle"
 
 msgid "week|Weasel"
-msgstr "de la Belette"
+msgstr "de la belette"
 
 msgid "week|Raven"
-msgstr "du Corbeau"
+msgstr "du corbeau"
 
 msgid "week|Mongoose"
-msgstr "de la Mangouste"
+msgstr "de la mangouste"
 
 msgid "week|Aardvark"
-msgstr "de l'Oryctérope du Cap"
+msgstr "de l'oryctérope du Cap"
 
 msgid "week|Lizard"
-msgstr "du Lézard"
+msgstr "du lézard"
 
 msgid "week|Tortoise"
-msgstr "de la Tortue"
+msgstr "de la tortue"
 
 msgid "week|Hedgehog"
-msgstr "du Hérisson"
+msgstr "du hérisson"
 
 msgid "week|Condor"
-msgstr "du Condor"
+msgstr "du condor"
 
 msgid "Desert"
 msgstr "Désert"
@@ -6861,22 +6863,22 @@ msgid "maps|Extra Large"
 msgstr "Très grande"
 
 msgid "maps|Custom Size"
-msgstr "Taille Personnalisée"
+msgstr "Taille personnalisée"
 
 msgid "Ore Mine"
 msgstr "Mine de fer"
 
 msgid "Sulfur Mine"
-msgstr "Mine de Soufre"
+msgstr "Mine de soufre"
 
 msgid "Crystal Mine"
-msgstr "Mine de Cristal"
+msgstr "Mine de cristal"
 
 msgid "Gems Mine"
-msgstr "Mine de Rubis"
+msgstr "Mine de rubis"
 
 msgid "Gold Mine"
-msgstr "Mine d'Or"
+msgstr "Mine d'or"
 
 msgid "Mine"
 msgstr "Mine"
@@ -6906,7 +6908,7 @@ msgid "Faerie Ring"
 msgstr "Anneau des fées"
 
 msgid "Dragon City"
-msgstr "Cité des Dragons"
+msgstr "Cité des dragons"
 
 msgid "Lighthouse"
 msgstr "Phare"
@@ -6940,7 +6942,7 @@ msgstr "Roulotte"
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Moulin à vent"
-msgstr[1] "Moulin à vent"
+msgstr[1] "Moulins à vent"
 
 msgid "Random Town"
 msgstr "Village aléatoire"
@@ -6985,13 +6987,13 @@ msgid "Mercenary Camp"
 msgstr "Camp de mercenaires"
 
 msgid "City of the Dead"
-msgstr "Cité des Morts"
+msgstr "Cité des morts"
 
 msgid "Sphinx"
 msgstr "Sphinx"
 
 msgid "Troll Bridge"
-msgstr "Pont"
+msgstr "Pont du troll"
 
 msgid "Witch's Hut"
 msgstr "Cabane de la sorcière"
