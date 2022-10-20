@@ -1596,13 +1596,13 @@ msgid "campaignBonus|Mass Haste"
 msgstr "Célérité de masse"
 
 msgid "campaignBonus|Mirror Image"
-msgstr "Image miroir"
+msgstr "Miroir"
 
 msgid "campaignBonus|Resurrect"
 msgstr "Résurrection"
 
 msgid "campaignBonus|Steelskin"
-msgstr "Peau d'acier"
+msgstr "Chair d'acier"
 
 msgid "campaignBonus|Summon Earth"
 msgstr "Invoquer la terre"
@@ -6779,7 +6779,6 @@ msgstr "du criquet"
 msgid "week|Earthworm"
 msgstr "du ver"
 
-# hornet = frelon. guêpe = wasp, but can make the deal here.
 msgid "week|Hornet"
 msgstr "du frelon"
 
@@ -6792,7 +6791,6 @@ msgstr "de l'écureuil"
 msgid "week|Rabbit"
 msgstr "du lapin"
 
-# marmotte ou chien de prairie ? marmotte could be inexact but please search "gopher" on google images
 msgid "week|Gopher"
 msgstr "de la marmotte"
 
@@ -7103,9 +7101,6 @@ msgstr "Squelette"
 msgid "Treasure Chest"
 msgstr "Coffre au trésor"
 
-# I'd like something different from "coffre au trésor" (plain)
-# in french we have "les mondes engloutis" or "royaumes engloutis"
-# for something long hidden under the sea
 msgid "Sea Chest"
 msgstr "Coffre au trésor englouti"
 
@@ -7240,10 +7235,10 @@ msgstr "Tour d'alchimiste"
 # should it be : hutte des mages ?
 # magus singular, magi plural
 msgid "Hut of the Magi"
-msgstr "Hutte du mage"
+msgstr "Hutte des mage"
 
 msgid "Eye of the Magi"
-msgstr "Oeil du Mage"
+msgstr "Oeils des Mages"
 
 msgid "Mermaid"
 msgstr "Nymphe"
@@ -9343,7 +9338,7 @@ msgid "Lightning Bolt"
 msgstr "Éclair foudroyant"
 
 msgid "Chain Lightning"
-msgstr "Chaîne foudroyante"
+msgstr "Foudre"
 
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
@@ -9447,14 +9442,14 @@ msgid "Magically increases the defense skill of the selected creatures."
 msgstr "Augmente la défense des créatures sélectionnées."
 
 msgid "Stoneskin"
-msgstr "Peau de pierre"
+msgstr "Chair de pierre"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Augmente la défense des créatures ciblées.  Il s'agit d'une version "
-"améliorée de peau de pierre."
+"améliorée de chair de pierre."
 
 msgid "Steelskin"
 msgstr "Chair d'acier"
@@ -9596,7 +9591,7 @@ msgid ""
 "improved version of Death Ripple."
 msgstr ""
 "Blesse toutes les créatures vivantes (non mortes-vivantes) dans la "
-"bataille.  Ce sort est une version améliorée de Onde mortelle."
+"bataille.  Ce sort est une version améliorée de onde mortelle."
 
 msgid "Dragon Slayer"
 msgstr "Anti-dragon"
@@ -9604,7 +9599,7 @@ msgstr "Anti-dragon"
 msgid "Greatly increases a unit's attack skill vs. Dragons."
 msgstr ""
 "Augmente considérablement la compétence d'attaque d'une créature contre les "
-"Dragons."
+"dragons."
 
 msgid "Blood Lust"
 msgstr "Soif de sang"
@@ -9649,29 +9644,29 @@ msgid "Mass Shield"
 msgstr "Grand bouclier"
 
 msgid "Summon Earth Elemental"
-msgstr "Invoquer Elémentaire de la Terre"
+msgstr "Invoquer élémentaire de la terre"
 
 msgid "Summons Earth Elementals to fight for your army."
 msgstr ""
-"Invoque des Elémentaires de la Terre pour qu'ils se battent à vos côtés."
+"Invoque des élémentaires de la terre pour qu'ils se battent à vos côtés."
 
 msgid "Summon Air Elemental"
-msgstr "Invoquer Elémentaire de l'Air"
+msgstr "Invoquer élémentaire de l'air"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr "Invoque des Elémentaires de l'Air pour qu'ils se battent à vos côtés."
+msgstr "Invoque des élémentaires de l'air pour qu'ils se battent à vos côtés."
 
 msgid "Summon Fire Elemental"
-msgstr "Invoquer Elémentaire de Feu"
+msgstr "Invoquer élémentaire de feu"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr "Invoque des Elémentaires de Feu pour qu'ils se battent à vos côtés."
+msgstr "Invoque des élémentaires de feu pour qu'ils se battent à vos côtés."
 
 msgid "Summon Water Elemental"
-msgstr "Invoquer l'Elémentaire de l'Eau"
+msgstr "Invoquer l'élémentaire de l'eau"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr "Invoque des Elémentaires de l'Eau pour qu'ils se battent à vos côtés."
+msgstr "Invoque des élémentaires de l'eau pour qu'ils se battent à vos côtés."
 
 msgid "Damages castle walls."
 msgstr "Endommage les murs des châteaux."
@@ -9683,28 +9678,28 @@ msgid "Causes all mines across the land to become visible."
 msgstr "Rend visibles toutes les mines du pays."
 
 msgid "View Mines"
-msgstr "Voir Mines"
+msgstr "Voir mines"
 
 msgid "Causes all resources across the land to become visible."
 msgstr "Rend visibles toutes les ressources du pays."
 
 msgid "View Resources"
-msgstr "Voir Ressources"
+msgstr "Voir ressources"
 
 msgid "Causes all artifacts across the land to become visible."
 msgstr "Rend visibles tous les artéfacts du pays."
 
 msgid "View Artifacts"
-msgstr "Voir Artéfacts"
+msgstr "Voir artéfacts"
 
 msgid "Causes all towns and castles across the land to become visible."
 msgstr "Rend visibles toutes les villages et tous les châteaux du pays."
 
 msgid "View Towns"
-msgstr "Voir Villages"
+msgstr "Voir villages"
 
 msgid "Causes all Heroes across the land to become visible."
-msgstr "Rend visibles tous les Héros."
+msgstr "Rend visibles tous les héros."
 
 msgid "View Heroes"
 msgstr "Voir héros"
@@ -9713,15 +9708,15 @@ msgid "Causes the entire land to become visible."
 msgstr "Rend visibles tout le pays."
 
 msgid "View All"
-msgstr "Tout Voir"
+msgstr "Tout voir"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
 "Permet au lanceur du sort de visualiser des informations détaillées sur les "
-"Héros ennemis."
+"héros ennemis."
 
 msgid "Identify Hero"
-msgstr "Identifier Héros"
+msgstr "Identifier héros"
 
 msgid "Summon Boat"
 msgstr "Embarquement"
@@ -9776,11 +9771,11 @@ msgstr ""
 "produire des ressources.  (Si je ne peux pas la garder, personne ne l'aura !)"
 
 msgid "Set Earth Guardian"
-msgstr "Gardien Terre"
+msgstr "Gardien terre"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr ""
-"Invoque les Esprits de la Terre pour garder une mine contre les armées "
+"Invoque les é de la Terre pour garder une mine contre les armées "
 "ennemies."
 
 msgid "Set Air Guardian"
