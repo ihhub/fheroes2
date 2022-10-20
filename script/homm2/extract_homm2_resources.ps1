@@ -76,16 +76,15 @@ try {
 
         foreach ($subkey in (Get-ChildItem -Path "Microsoft.PowerShell.Core\Registry::$key")) {
             $path = $subkey.GetValue("InstallLocation")
-            
+
             # Legacy installed path detection
             if ($null -Eq $path) {
             	$path = $subkey.GetValue("AppPath")
             }
-	    
+
             if ($null -Ne $path) {
                 $path = $path.TrimEnd("\")
 
-				
                 if (Test-HoMM2DirectoryPath -Path $path) {
                     $homm2Path = $path
                     # Legacy installed drive path detection
@@ -122,7 +121,7 @@ try {
             if ($null -Eq $homm2Dir) {
                 continue
             }
-			
+
             foreach ($srcDir in @("HEROES2\ANIM", "ANIM", "DATA", "MAPS", "MUSIC")) {
                 if (-Not (Test-Path -Path "$homm2Dir\$srcDir" -PathType Container)) {
                     continue
@@ -138,7 +137,6 @@ try {
 
                 foreach ($item in $content.Items()) {
                     $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
-
                 }
             }
         }
