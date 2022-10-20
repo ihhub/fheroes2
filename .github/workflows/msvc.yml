@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  msvc:
     strategy:
       matrix:
         config:

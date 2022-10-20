@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  cmake:
     strategy:
       matrix:
         config:
@@ -54,7 +54,7 @@ jobs:
     - name: Install
       run: |
         sudo cmake --install build
-  build-windows:
+  cmake-windows:
     name: CMake (Windows SDL2)
     runs-on: windows-latest
     timeout-minutes: 30
