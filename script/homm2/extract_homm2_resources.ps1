@@ -63,12 +63,13 @@ try {
     Write-Host "[2/3] determining the HoMM2 directory"
 
     $homm2Path = $null
-    $homm2DrivePath = $null
+    $homm2CD = $null
 
     foreach ($key in @("HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
                        "HKEY_CURRENT_USER\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall",
                        "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
                        "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall",
+                       # Legacy HoMM2 installation
                        "HKEY_LOCAL_MACHINE\SOFTWARE\New World Computing\Heroes of Might and Magic 2")) {
         if (-Not (Test-Path -Path "Microsoft.PowerShell.Core\Registry::$key" -PathType Container)) {
             continue
@@ -77,8 +78,8 @@ try {
         foreach ($subkey in (Get-ChildItem -Path "Microsoft.PowerShell.Core\Registry::$key")) {
             $path = $subkey.GetValue("InstallLocation")
 
-            # Legacy installed path detection
             if ($null -Eq $path) {
+                # From HKLM\SOFTWARE\New World Computing\Heroes of Might and Magic 2
             	$path = $subkey.GetValue("AppPath")
             }
 
@@ -87,8 +88,8 @@ try {
 
                 if (Test-HoMM2DirectoryPath -Path $path) {
                     $homm2Path = $path
-                    # Legacy installed drive path detection
-                    $homm2DrivePath = $subkey.GetValue("CDDrive")
+                    # From HKLM\SOFTWARE\New World Computing\Heroes of Might and Magic 2
+                    $homm2CD = $subkey.GetValue("CDDrive")
 
                     break
                 }
@@ -110,6 +111,10 @@ try {
 
     Write-Host -ForegroundColor Green (-Join("HoMM2 directory: ", (Resolve-Path $homm2Path).Path))
 
+    if ($null -Ne $homm2CD) {
+        Write-Host -ForegroundColor Green (-Join("HoMM2 CD drive: ", (Resolve-Path $homm2CD).Path))
+    }
+
     Write-Host "[3/3] copying game resources"
 
     if ((Resolve-Path $homm2Path).Path -Eq (Resolve-Path $destPath).Path) {
@@ -117,7 +122,7 @@ try {
     } else {
         $shell = New-Object -ComObject "Shell.Application"
 
-        foreach ($homm2Dir in @($homm2Path, $homm2DrivePath )) {
+        foreach ($homm2Dir in @($homm2Path, $homm2CD )) {
             if ($null -Eq $homm2Dir) {
                 continue
             }
