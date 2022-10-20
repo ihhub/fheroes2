@@ -6045,7 +6045,7 @@ msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
-"La formation de combat 'Groupée' regroupe votre armée au centre du champ de "
+"La formation de combat 'groupée' regroupe votre armée au centre du champ de "
 "bataille, de votre coté."
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -6058,13 +6058,13 @@ msgid "View Spell Points Info"
 msgstr "Voir les infos sur les points de magie"
 
 msgid "Set army combat formation to 'Spread'"
-msgstr "Utiliser la formation de combat 'Dispersée'"
+msgstr "Utiliser la formation de combat 'dispersée'"
 
 msgid "Set army combat formation to 'Grouped'"
-msgstr "Utiliser la formation de combat 'Groupée'"
+msgstr "Utiliser la formation de combat 'groupée'"
 
 msgid "Exit Hero Screen"
-msgstr "Quitter la fenêtre d'informations du Héros"
+msgstr "Quitter la fenêtre d'informations du héros"
 
 msgid "You cannot dismiss a hero in a castle"
 msgstr "Vous ne pouvez pas renvoyer un héros dans un château"
@@ -6151,7 +6151,7 @@ msgid ""
 "work."
 msgstr ""
 "Vous devez être à maximum %{count} de distance d'un monstre pour que le sort "
-"Visions fonctionne."
+"visions fonctionne."
 
 msgid "The creatures are willing to join us!"
 msgstr "Les créatures sont prêtes à nous rallier !"
@@ -6249,7 +6249,7 @@ msgid "Ballistics"
 msgstr "Balistique"
 
 msgid "Eagle Eye"
-msgstr "Oeil d'aigle"
+msgstr "Vue d'aigle"
 
 msgid "Necromancy"
 msgstr "Nécromancie"
@@ -6264,124 +6264,124 @@ msgid "Advanced Pathfinding"
 msgstr "Orientation avancée"
 
 msgid "Basic Archery"
-msgstr "Principes d'Archerie"
+msgstr "Principes d'archerie"
 
 msgid "Basic Pathfinding"
-msgstr "Principes d'Orientation"
+msgstr "Principes d'orientation"
 
 msgid "Expert Pathfinding"
-msgstr "Expert en Orientation"
+msgstr "Expert en orientation"
 
 msgid "Advanced Logistics"
-msgstr "Logistique Avancée"
+msgstr "Logistique avancée"
 
 msgid "Basic Logistics"
-msgstr "Principes de Logistique"
+msgstr "Principes de logistique"
 
 msgid "Basic Scouting"
-msgstr "Principes de Reconnaissance"
+msgstr "Principes de reconnaissance"
 
 msgid "Expert Archery"
-msgstr "Expert en Archerie"
+msgstr "Expert en archerie"
 
 msgid "Expert Logistics"
-msgstr "Expert en Logistique"
+msgstr "Expert en logistique"
 
 msgid "Advanced Diplomacy"
-msgstr "Diplomatie Avancée"
+msgstr "Diplomatie avancée"
 
 msgid "Advanced Scouting"
-msgstr "Reconnaissance Avancée"
+msgstr "Reconnaissance avancée"
 
 msgid "Basic Diplomacy"
-msgstr "Principes de Diplomatie"
+msgstr "Principes de diplomatie"
 
 msgid "Expert Diplomacy"
-msgstr "Expert en Diplomatie"
+msgstr "Expert en diplomatie"
 
 msgid "Expert Scouting"
-msgstr "Expert en Reconnaissance"
+msgstr "Expert en reconnaissance"
 
 msgid "Advanced Leadership"
-msgstr "Charisme Avancée"
+msgstr "Charisme avancée"
 
 msgid "Advanced Navigation"
-msgstr "Navigation Avancée"
+msgstr "Navigation avancée"
 
 msgid "Basic Leadership"
-msgstr "Principes de Charisme"
+msgstr "Principes de charisme"
 
 msgid "Basic Navigation"
-msgstr "Principes de Navigation"
+msgstr "Principes de navigation"
 
 msgid "Expert Navigation"
-msgstr "Expert en Navigation"
+msgstr "Expert en navigation"
 
 msgid "Advanced Wisdom"
-msgstr "Sagesse Avancée"
+msgstr "Sagesse avancée"
 
 msgid "Basic Mysticism"
-msgstr "Principes de Mysticisme"
+msgstr "Principes de mysticisme"
 
 msgid "Basic Wisdom"
-msgstr "Principes de Sagesse"
+msgstr "Principes de sagesse"
 
 msgid "Expert Leadership"
-msgstr "Expert en Charisme"
+msgstr "Expert en charisme"
 
 msgid "Expert Wisdom"
-msgstr "Expert en Sagesse"
+msgstr "Expert en sagesse"
 
 msgid "Advanced Luck"
-msgstr "Chance Avancée"
+msgstr "Chance avancée"
 
 msgid "Advanced Mysticism"
-msgstr "Mysticisme Avancé"
+msgstr "Mysticisme avancé"
 
 msgid "Basic Luck"
-msgstr "Principes de Chance"
+msgstr "Principes de chance"
 
 msgid "Expert Luck"
-msgstr "Expert en Chance"
+msgstr "Expert en chance"
 
 msgid "Expert Mysticism"
-msgstr "Expert en Mysticisme"
+msgstr "Expert en mysticisme"
 
 msgid "Advanced Ballistics"
-msgstr "Balistique Avancée"
+msgstr "Balistique avancée"
 
 msgid "Advanced Eagle Eye"
-msgstr "Oeil d'aigle Avancé"
+msgstr "Vue d'aigle avancée"
 
 msgid "Basic Ballistics"
-msgstr "Principes de Balistique"
+msgstr "Principes de balistique"
 
 msgid "Basic Eagle Eye"
-msgstr "Principes d'Oeil d'aigle"
+msgstr "Principes de vue d'aigle"
 
 msgid "Expert Ballistics"
-msgstr "Expert en Balistique"
+msgstr "Expert en balistique"
 
 msgid "Advanced Necromancy"
-msgstr "Nécromancie Avancée"
+msgstr "Nécromancie avancée"
 
 msgid "Basic Estates"
-msgstr "Principes de Finances"
+msgstr "Principes de finances"
 
 msgid "Basic Necromancy"
-msgstr "Principes de Nécromancie"
+msgstr "Principes de nécromancie"
 
 msgid "Expert Eagle Eye"
-msgstr "Expert en Oeil d'aigle"
+msgstr "Expert en vue d'aigle"
 
 msgid "Expert Necromancy"
-msgstr "Expert en Nécromancie"
+msgstr "Expert en nécromancie"
 
 msgid "Advanced Estates"
-msgstr "Finances Avancées"
+msgstr "Finances avancées"
 
 msgid "Expert Estates"
-msgstr "Expert en Finances"
+msgstr "Expert en finances"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
