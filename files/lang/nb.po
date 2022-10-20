@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
 "PO-Revision-Date: 2022-10-10 13:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3144,6 +3144,9 @@ msgstr "Seiersvilkår"
 msgid "Map difficulty:"
 msgstr "Brettets utfordring:"
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr "Ingen brett fins i den størrelsen"
 
@@ -4377,6 +4380,12 @@ msgid "Portuguese"
 msgstr ""
 
 msgid "Turkish"
+msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+msgid "Hungarian"
 msgstr ""
 
 msgid ", FPS: "
@@ -6757,8 +6766,52 @@ msgstr "Fykende"
 msgid "speed|Instant"
 msgstr "Lynrask"
 
-msgid "week|PLAGUE"
-msgstr "pest"
+msgid "week|Squirrel"
+msgstr "ekorn"
+
+msgid "week|Rabbit"
+msgstr "hare"
+
+msgid "week|Gopher"
+msgstr "jordekorn"
+
+msgid "week|Badger"
+msgstr "grevling"
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "hare"
+
+msgid "week|Eagle"
+msgstr "ørn"
+
+msgid "week|Weasel"
+msgstr "vesel"
+
+msgid "week|Raven"
+msgstr "ravn"
+
+msgid "week|Mongoose"
+msgstr "manguster"
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "ørn"
+
+msgid "week|Aardvark"
+msgstr "jordsvin"
+
+msgid "week|Lizard"
+msgstr "øgle"
+
+msgid "week|Tortoise"
+msgstr "landskilpadde"
+
+msgid "week|Hedgehog"
+msgstr "piggsvin"
+
+msgid "week|Condor"
+msgstr "gribb"
 
 msgid "week|Ant"
 msgstr "maur"
@@ -6790,44 +6843,12 @@ msgstr "veps"
 msgid "week|Beetle"
 msgstr "bille"
 
-msgid "week|Squirrel"
-msgstr "ekorn"
+msgid "week|PLAGUE"
+msgstr "pest"
 
-msgid "week|Rabbit"
-msgstr "hare"
-
-msgid "week|Gopher"
-msgstr "jordekorn"
-
-msgid "week|Badger"
-msgstr "grevling"
-
-msgid "week|Eagle"
+#, fuzzy
+msgid "week|Unnamed"
 msgstr "ørn"
-
-msgid "week|Weasel"
-msgstr "vesel"
-
-msgid "week|Raven"
-msgstr "ravn"
-
-msgid "week|Mongoose"
-msgstr "manguster"
-
-msgid "week|Aardvark"
-msgstr "jordsvin"
-
-msgid "week|Lizard"
-msgstr "øgle"
-
-msgid "week|Tortoise"
-msgstr "landskilpadde"
-
-msgid "week|Hedgehog"
-msgstr "piggsvin"
-
-msgid "week|Condor"
-msgstr "gribb"
 
 msgid "Desert"
 msgstr "Ørken"

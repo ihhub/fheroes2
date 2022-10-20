@@ -165,7 +165,7 @@ void Player::SetPlay( bool f )
         ResetModes( ST_INGAME );
 }
 
-void Player::setHandicapStatus( const uint8_t status )
+void Player::setHandicapStatus( const HandicapStatus status )
 {
     if ( status == HandicapStatus::NONE ) {
         _handicapStatus = status;
@@ -227,7 +227,8 @@ StreamBase & operator<<( StreamBase & msg, const Player & player )
     const BitModes & modes = player;
 
     assert( player._ai != nullptr );
-    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai << player._handicapStatus;
+    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
+        << static_cast<uint8_t>( player._handicapStatus );
     return msg;
 }
 
@@ -244,7 +245,11 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
         player._handicapStatus = Player::HandicapStatus::NONE;
     }
     else {
-        msg >> player._handicapStatus;
+        uint8_t handicapStatusInt;
+
+        msg >> handicapStatusInt;
+
+        player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
     }
 
     return msg;

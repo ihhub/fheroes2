@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  make:
     strategy:
       matrix:
         config:
@@ -60,7 +60,7 @@ jobs:
     runs-on: ${{ matrix.config.os }}
     timeout-minutes: 30
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
@@ -85,7 +85,7 @@ jobs:
       run: |
         cp docs/README.txt script/demo/download_demo_version.sh script/homm2/extract_homm2_resources.sh .
         zip ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' && matrix.config.package_name != '' }}
       with:
         name: ${{ matrix.config.package_name }}
@@ -103,12 +103,12 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-  build-psv:
+  make-psv:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -172,7 +172,7 @@ jobs:
         cp docs/README.txt docs/README_PSV.md .
         # Translations and H2D files are already included in fheroes2.vpk
         zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE changelog.txt README.txt README_PSV.md
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_psv_sdl2.zip
@@ -190,13 +190,13 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-  build-switch:
+  make-switch:
     name: Make (Nintendo Switch)
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container: devkitpro/devkita64:latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -215,7 +215,7 @@ jobs:
       run: |
         cp docs/README.txt docs/README_switch.md .
         zip fheroes2_switch_sdl2.zip fheroes2.nro LICENSE changelog.txt README.txt README_switch.md files/lang/*.mo files/data/*.h2d
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_switch_sdl2.zip

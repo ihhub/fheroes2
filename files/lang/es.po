@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3137,6 +3137,9 @@ msgstr "Condiciones de victoria"
 msgid "Map difficulty:"
 msgstr "Nivel del mapa:"
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr ""
 
@@ -4364,6 +4367,13 @@ msgstr "Bandidos"
 
 msgid "Turkish"
 msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+#, fuzzy
+msgid "Hungarian"
+msgstr "Bárbaro"
 
 msgid ", FPS: "
 msgstr ""
@@ -6704,8 +6714,52 @@ msgstr "Fugaz"
 msgid "speed|Instant"
 msgstr "Instantáneo"
 
-msgid "week|PLAGUE"
-msgstr "PLAGA"
+msgid "week|Squirrel"
+msgstr "Ardilla"
+
+msgid "week|Rabbit"
+msgstr "Conejo"
+
+msgid "week|Gopher"
+msgstr "Tuza"
+
+msgid "week|Badger"
+msgstr "Tejón"
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "Conejo"
+
+msgid "week|Eagle"
+msgstr "Águila"
+
+msgid "week|Weasel"
+msgstr "Comadreja"
+
+msgid "week|Raven"
+msgstr "Cuervo"
+
+msgid "week|Mongoose"
+msgstr "Mangosta"
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "Águila"
+
+msgid "week|Aardvark"
+msgstr "Oso hormiguero"
+
+msgid "week|Lizard"
+msgstr "Lagarto"
+
+msgid "week|Tortoise"
+msgstr "Tortuga"
+
+msgid "week|Hedgehog"
+msgstr "Puercoespín"
+
+msgid "week|Condor"
+msgstr "Cóndor"
 
 msgid "week|Ant"
 msgstr "Hormiga"
@@ -6737,44 +6791,12 @@ msgstr "Avispa"
 msgid "week|Beetle"
 msgstr "Escarabajo"
 
-msgid "week|Squirrel"
-msgstr "Ardilla"
+msgid "week|PLAGUE"
+msgstr "PLAGA"
 
-msgid "week|Rabbit"
-msgstr "Conejo"
-
-msgid "week|Gopher"
-msgstr "Tuza"
-
-msgid "week|Badger"
-msgstr "Tejón"
-
-msgid "week|Eagle"
+#, fuzzy
+msgid "week|Unnamed"
 msgstr "Águila"
-
-msgid "week|Weasel"
-msgstr "Comadreja"
-
-msgid "week|Raven"
-msgstr "Cuervo"
-
-msgid "week|Mongoose"
-msgstr "Mangosta"
-
-msgid "week|Aardvark"
-msgstr "Oso hormiguero"
-
-msgid "week|Lizard"
-msgstr "Lagarto"
-
-msgid "week|Tortoise"
-msgstr "Tortuga"
-
-msgid "week|Hedgehog"
-msgstr "Puercoespín"
-
-msgid "week|Condor"
-msgstr "Cóndor"
 
 msgid "Desert"
 msgstr "Desierto"

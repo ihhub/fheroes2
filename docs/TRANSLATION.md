@@ -28,11 +28,14 @@ edit translations.
 
 Currently all implemented languages, except French, adhere to a standardized font encoding/charset.
 
-NOTE: The fheroes2 team has set a limit of 1000 added or modified lines for any Pull Request (PR) for translations. This is because
+NOTE: The fheroes2 team has set a maximum amount of 400 added or modified lines for any Pull Request (PR) for translations. This is because
 every PR needs to be reviewed and adding too many lines at once will only slow this process down. In addition, GitHub becomes hard
 to navigate once too many changes, comments and so on are present within the same PR page, further slowing down the process of reviewing it.
 
-Preferrably a PR should contain a small amount of changes, about 100 lines, all focused on translating a few parts of the game - for
+In addition, we have decided on a minimum amount of 15 changed strings for a translation PR. For languages that have translations that are more
+or less complete, less than this amount can be accepted.
+
+Preferrably a PR should contain a small amount of changes, about 100 lines, all focused on translating a specific of the game - for
 example creature names or castle buildings.
 
 ## Build binary translation files

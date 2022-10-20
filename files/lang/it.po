@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2980,6 +2980,9 @@ msgstr "Condizione Vittoria"
 msgid "Map difficulty:"
 msgstr "Difficoltà mappa:"
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr "Non esistono mappe di quella dimensione"
 
@@ -4132,6 +4135,13 @@ msgstr "Furfanti"
 
 msgid "Turkish"
 msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+#, fuzzy
+msgid "Hungarian"
+msgstr "Barbaro"
 
 msgid ", FPS: "
 msgstr ""
@@ -6085,8 +6095,52 @@ msgstr "Folgore"
 msgid "speed|Instant"
 msgstr "Istantanea"
 
-msgid "week|PLAGUE"
-msgstr "PESTE"
+msgid "week|Squirrel"
+msgstr "Scoiattolo"
+
+msgid "week|Rabbit"
+msgstr "Coniglio"
+
+msgid "week|Gopher"
+msgstr "Topo"
+
+msgid "week|Badger"
+msgstr "Tasso"
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "Coniglio"
+
+msgid "week|Eagle"
+msgstr "Aquila"
+
+msgid "week|Weasel"
+msgstr "Donnola"
+
+msgid "week|Raven"
+msgstr "Corvo"
+
+msgid "week|Mongoose"
+msgstr "Mangusta"
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "Aquila"
+
+msgid "week|Aardvark"
+msgstr "Formichiere"
+
+msgid "week|Lizard"
+msgstr "Lucertola"
+
+msgid "week|Tortoise"
+msgstr "Testuggine"
+
+msgid "week|Hedgehog"
+msgstr "Riccio"
+
+msgid "week|Condor"
+msgstr "Condor"
 
 msgid "week|Ant"
 msgstr "Formica"
@@ -6118,44 +6172,12 @@ msgstr "Calabrone"
 msgid "week|Beetle"
 msgstr "Scarabeo"
 
-msgid "week|Squirrel"
-msgstr "Scoiattolo"
+msgid "week|PLAGUE"
+msgstr "PESTE"
 
-msgid "week|Rabbit"
-msgstr "Coniglio"
-
-msgid "week|Gopher"
-msgstr "Topo"
-
-msgid "week|Badger"
-msgstr "Tasso"
-
-msgid "week|Eagle"
+#, fuzzy
+msgid "week|Unnamed"
 msgstr "Aquila"
-
-msgid "week|Weasel"
-msgstr "Donnola"
-
-msgid "week|Raven"
-msgstr "Corvo"
-
-msgid "week|Mongoose"
-msgstr "Mangusta"
-
-msgid "week|Aardvark"
-msgstr "Formichiere"
-
-msgid "week|Lizard"
-msgstr "Lucertola"
-
-msgid "week|Tortoise"
-msgstr "Testuggine"
-
-msgid "week|Hedgehog"
-msgstr "Riccio"
-
-msgid "week|Condor"
-msgstr "Condor"
 
 msgid "Desert"
 msgstr "Deserto"

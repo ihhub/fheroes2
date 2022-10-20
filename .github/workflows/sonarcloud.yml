@@ -6,16 +6,17 @@ on:
       SONAR_TOKEN:
         required: true
 
+env:
+  SONAR_SCANNER_VERSION: 4.5.0.2216
+
 jobs:
   sonarcloud:
     name: SonarCloud Analyzer
     runs-on: ubuntu-latest
     timeout-minutes: 30
     if: ${{ github.repository == 'ihhub/fheroes2' && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) ) }}
-    env:
-      SONAR_SCANNER_VERSION: 4.5.0.2216
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Install dependencies

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
 "PO-Revision-Date: 2022-10-10 15:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3115,6 +3115,9 @@ msgstr "Conditions de victoire"
 msgid "Map difficulty:"
 msgstr "Difficulté de la carte :"
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr "Aucune carte de cette taille n'existe"
 
@@ -4350,6 +4353,13 @@ msgstr ""
 
 msgid "Turkish"
 msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+#, fuzzy
+msgid "Hungarian"
+msgstr "Bulgare"
 
 msgid ", FPS: "
 msgstr ", FPS : "
@@ -6752,8 +6762,50 @@ msgstr "Foudroyante"
 msgid "speed|Instant"
 msgstr "Téléportée"
 
-msgid "week|PLAGUE"
-msgstr "de la PESTE"
+msgid "week|Squirrel"
+msgstr "de l'écureuil"
+
+msgid "week|Rabbit"
+msgstr "du lapin"
+
+msgid "week|Gopher"
+msgstr "de la marmotte"
+
+msgid "week|Badger"
+msgstr "du blaireau"
+
+msgid "week|Rat"
+msgstr "du rat"
+
+msgid "week|Eagle"
+msgstr "de l'aigle"
+
+msgid "week|Weasel"
+msgstr "de la belette"
+
+msgid "week|Raven"
+msgstr "du corbeau"
+
+msgid "week|Mongoose"
+msgstr "de la mangouste"
+
+msgid "week|Dog"
+msgstr "du chien"
+
+msgid "week|Aardvark"
+msgstr "de l'oryctérope du cap"
+
+msgid "week|Lizard"
+msgstr "du lézard"
+
+msgid "week|Tortoise"
+msgstr "de la tortue"
+
+msgid "week|Hedgehog"
+msgstr "du hérisson"
+
+msgid "week|Condor"
+msgstr "du condor"
 
 msgid "week|Ant"
 msgstr "de la fourmi"
@@ -6780,49 +6832,16 @@ msgid "week|Earthworm"
 msgstr "du ver"
 
 msgid "week|Hornet"
-msgstr "du frelon"
+msgstr "de la frelon"
 
 msgid "week|Beetle"
 msgstr "de la coccinelle"
 
-msgid "week|Squirrel"
-msgstr "de l'écureuil"
+msgid "week|PLAGUE"
+msgstr "de la PESTE"
 
-msgid "week|Rabbit"
-msgstr "du lapin"
-
-msgid "week|Gopher"
-msgstr "de la marmotte"
-
-msgid "week|Badger"
-msgstr "du blaireau"
-
-msgid "week|Eagle"
-msgstr "de l'aigle"
-
-msgid "week|Weasel"
-msgstr "de la belette"
-
-msgid "week|Raven"
-msgstr "du corbeau"
-
-msgid "week|Mongoose"
-msgstr "de la mangouste"
-
-msgid "week|Aardvark"
-msgstr "de l'oryctérope du cap"
-
-msgid "week|Lizard"
-msgstr "du lézard"
-
-msgid "week|Tortoise"
-msgstr "de la tortue"
-
-msgid "week|Hedgehog"
-msgstr "du hérisson"
-
-msgid "week|Condor"
-msgstr "du condor"
+msgid "week|Unnamed"
+msgstr "sans nom"
 
 msgid "Desert"
 msgstr "Désert"
