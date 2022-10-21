@@ -41,12 +41,6 @@ enum class ViewWorldMode : int
     ViewAll = 6,
 };
 
-struct IconOffset
-{
-    int offsetX;
-    int offsetY;
-};
-
 class ViewWorld
 {
 public:

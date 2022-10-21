@@ -36,7 +36,7 @@
 #include "view_world.h"
 #include "world.h"
 
-#define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
+// #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
 
 #if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
 #define SAVE_WORLD_MAP
@@ -51,6 +51,12 @@ namespace
 
 namespace
 {
+    struct IconOffset
+    {
+        int offsetX;
+        int offsetY;
+    };
+
     const std::array<int, 4> tileSizePerZoomLevel{ { 4, 6, 12, 32 } };
     const std::array<int, 4> icnPerZoomLevel{ { ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 } };
     const std::array<int, 4> icnLetterPerZoomLevel{ { ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 } };
