@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 
 #include "agg_image.h"
@@ -50,12 +51,12 @@ namespace
 
 namespace
 {
-    const int tileSizePerZoomLevel[4] = { 4, 6, 12, 32 };
-    const int icnPerZoomLevel[4] = { ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 };
-    const int icnLetterPerZoomLevel[4] = { ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
-    const int icnPerZoomLevelFlags[4] = { ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12 };
+    const std::array<int, 4> tileSizePerZoomLevel{ { 4, 6, 12, 32 } };
+    const std::array<int, 4> icnPerZoomLevel{ { ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 } };
+    const std::array<int, 4> icnLetterPerZoomLevel{ { ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 } };
+    const std::array<int, 4> icnPerZoomLevelFlags{ { ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12 } };
 
-    const static std::map<std::pair<MP2::MapObjectType, ViewWorld::ZoomLevel>, IconOffset> iconsOffsetMap = {
+    const std::map<std::pair<MP2::MapObjectType, ViewWorld::ZoomLevel>, IconOffset> iconsOffsetMap = {
         { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel0 ), { 0, 0 } },       { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel1 ), { -1, -1 } },
         { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel2 ), { 0, 0 } },       { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel3 ), { 10, 6 } },
         { std::make_pair( MP2::OBJ_MINES, ViewWorld::ZoomLevel0 ), { -3, -3 } },      { std::make_pair( MP2::OBJ_MINES, ViewWorld::ZoomLevel1 ), { -3, -3 } },
