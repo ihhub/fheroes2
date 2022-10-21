@@ -759,25 +759,25 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 
                 uint32_t stackCount = 2;
                 switch ( currentTroop->GetSpeed() ) {
-                    case Speed::BLAZING:
-                    case Speed::ULTRAFAST:
-                    case Speed::FAST:
-                        stackCount = 2;
-                        break;
-                    case Speed::AVERAGE:
-                        stackCount = Rand::Get( 2, 3 );
-                        break;
-                    case Speed::SLOW:
-                        stackCount = 3;
-                        break;
-                    case Speed::VERYSLOW:
-                    case Speed::CRAWLING:
-                        stackCount = Rand::Get( 3, 5 );
-                        break;
-                    default:
-                        // Did you add a new speed type? Add the logic above!
-                        assert( 0 );
-                        break;
+                case Speed::BLAZING:
+                case Speed::ULTRAFAST:
+                case Speed::FAST:
+                    stackCount = 2;
+                    break;
+                case Speed::AVERAGE:
+                    stackCount = Rand::Get( 2, 3 );
+                    break;
+                case Speed::SLOW:
+                    stackCount = 3;
+                    break;
+                case Speed::VERYSLOW:
+                case Speed::CRAWLING:
+                    stackCount = Rand::Get( 3, 5 );
+                    break;
+                default:
+                    // Did you add a new speed type? Add the logic above!
+                    assert( 0 );
+                    break;
                 }
 
                 Troop temp( *currentTroop );
