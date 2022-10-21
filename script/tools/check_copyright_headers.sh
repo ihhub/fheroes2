@@ -12,7 +12,7 @@ HEADERS_DIR="$SCRIPT_DIR/copyright_headers"
 
 CXX_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|rc)$" || true) \
                                                 | (grep -v "^src/thirdparty/.*/.*" || true))
-MAKEFILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*(CMakeLists.txt|Makefile[^/]*)$" || true) \
+MAKEFILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*(CMakeLists.txt|Makefile[^/]*|Android.mk|Application.mk)$" || true) \
                                                 | (grep -v "^src/thirdparty/.*/.*" || true))
 
 if [ -z "$CXX_FILES_TO_CHECK" ] && [ -z "$MAKEFILES_TO_CHECK" ]; then
