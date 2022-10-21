@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include "view_world.h"
 #include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
@@ -33,9 +32,10 @@
 #include "maps.h"
 #include "settings.h"
 #include "tools.h"
+#include "view_world.h"
 #include "world.h"
 
-// #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
+#define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
 
 #if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
 #define SAVE_WORLD_MAP
@@ -50,10 +50,25 @@ namespace
 
 namespace
 {
-    const int tileSizePerZoomLevel[4] = {4, 6, 12, 32};
-    const int icnPerZoomLevel[4] = {ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12};
+    const int tileSizePerZoomLevel[4] = { 4, 6, 12, 32 };
+    const int icnPerZoomLevel[4] = { ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 };
     const int icnLetterPerZoomLevel[4] = { ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
-    const int icnPerZoomLevelFlags[4] = {ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12};
+    const int icnPerZoomLevelFlags[4] = { ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12 };
+
+    const static std::map<std::pair<MP2::MapObjectType, ViewWorld::ZoomLevel>, IconOffset> iconsOffsetMap = {
+        { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel0 ), { 0, 0 } },       { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel1 ), { -1, -1 } },
+        { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel2 ), { 0, 0 } },       { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel3 ), { 10, 6 } },
+        { std::make_pair( MP2::OBJ_MINES, ViewWorld::ZoomLevel0 ), { -3, -3 } },      { std::make_pair( MP2::OBJ_MINES, ViewWorld::ZoomLevel1 ), { -3, -3 } },
+        { std::make_pair( MP2::OBJ_MINES, ViewWorld::ZoomLevel2 ), { -3, -6 } },      { std::make_pair( MP2::OBJ_MINES, ViewWorld::ZoomLevel3 ), { -3, -6 } },
+        { std::make_pair( MP2::OBJ_SAWMILL, ViewWorld::ZoomLevel0 ), { -3, -3 } },    { std::make_pair( MP2::OBJ_SAWMILL, ViewWorld::ZoomLevel1 ), { -3, -3 } },
+        { std::make_pair( MP2::OBJ_SAWMILL, ViewWorld::ZoomLevel2 ), { -3, -6 } },    { std::make_pair( MP2::OBJ_SAWMILL, ViewWorld::ZoomLevel3 ), { -3, -6 } },
+        { std::make_pair( MP2::OBJ_ALCHEMYLAB, ViewWorld::ZoomLevel0 ), { -3, -3 } }, { std::make_pair( MP2::OBJ_ALCHEMYLAB, ViewWorld::ZoomLevel1 ), { -3, -3 } },
+        { std::make_pair( MP2::OBJ_ALCHEMYLAB, ViewWorld::ZoomLevel2 ), { -3, -6 } }, { std::make_pair( MP2::OBJ_ALCHEMYLAB, ViewWorld::ZoomLevel3 ), { 0, -6 } },
+        { std::make_pair( MP2::OBJ_ARTIFACT, ViewWorld::ZoomLevel0 ), { -3, -4 } },   { std::make_pair( MP2::OBJ_ARTIFACT, ViewWorld::ZoomLevel1 ), { -3, -6 } },
+        { std::make_pair( MP2::OBJ_ARTIFACT, ViewWorld::ZoomLevel2 ), { -3, -6 } },   { std::make_pair( MP2::OBJ_ARTIFACT, ViewWorld::ZoomLevel3 ), { 6, 8 } },
+        { std::make_pair( MP2::OBJ_RESOURCE, ViewWorld::ZoomLevel0 ), { -3, -4 } },   { std::make_pair( MP2::OBJ_RESOURCE, ViewWorld::ZoomLevel1 ), { -3, -3 } },
+        { std::make_pair( MP2::OBJ_RESOURCE, ViewWorld::ZoomLevel2 ), { -3, -3 } },   { std::make_pair( MP2::OBJ_RESOURCE, ViewWorld::ZoomLevel3 ), { 6, 10 } },
+    };
 
     // Compute a rectangle that defines which world pixels we can see in the "view world" window,
     // based on given zoom level and initial center
@@ -130,6 +145,16 @@ namespace
         default:
             return -1;
         }
+    }
+
+    IconOffset GetIconOffset( MP2::MapObjectType objectType, ViewWorld::ZoomLevel zoomLevel )
+    {
+        std::pair<MP2::MapObjectType, ViewWorld::ZoomLevel> key = std::make_pair( objectType, zoomLevel );
+
+        if ( iconsOffsetMap.count( key ) > 0 )
+            return iconsOffsetMap.at( key );
+
+        return { 0, 0 };
     }
 
     struct CacheForMapWithResources
@@ -291,9 +316,6 @@ namespace
 
                     int letterIndex = -1;
 
-                    int spriteOffsetX = 0;
-                    int spriteOffsetY = 0;
-
                     switch ( objectType ) {
                     case MP2::OBJ_HEROES: {
                         if ( revealHeroes || !tile.isFog( color ) ) {
@@ -322,7 +344,6 @@ namespace
                     case MP2::OBJ_SAWMILL:
                         if ( revealMines || !tile.isFog( color ) ) {
                             index = colorToOffsetICN( tile.QuantityColor() );
-                            spriteOffsetX = -6; // TODO -4 , -3
                             letterIndex = tile.QuantityResourceCount().first;
                         }
                         break;
@@ -345,8 +366,9 @@ namespace
                     }
 
                     if ( index >= 0 ) {
+                        const IconOffset spriteOffset = GetIconOffset( objectType, ROI._zoomLevel );
                         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
-                        fheroes2::Blit( sprite, display, dstx + spriteOffsetX, dsty + spriteOffsetY );
+                        fheroes2::Blit( sprite, display, dstx + spriteOffset.offsetX, dsty + spriteOffset.offsetY );
 
                         if ( letterIndex >= 0 ) {
                             switch ( letterIndex ) {
@@ -376,8 +398,8 @@ namespace
                             }
 
                             const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
-                            fheroes2::Blit( letter, display, dstx + spriteOffsetX + ( sprite.width() - letter.width() ) / 2,
-                                            dsty + spriteOffsetY + ( sprite.height() - letter.height() ) / 2 );
+                            fheroes2::Blit( letter, display, dstx + spriteOffset.offsetX + ( sprite.width() - letter.width() ) / 2,
+                                            dsty + spriteOffset.offsetY + ( sprite.height() - letter.height() ) / 2 );
                         }
                     }
                 }
