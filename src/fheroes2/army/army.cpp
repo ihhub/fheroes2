@@ -733,7 +733,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
             }
             else {
                 uint32_t acceptableCount = static_cast<uint32_t>( strengthLimit / weakestStrength * weakest->GetCount() );
-                assert( acceptableCount >=0 && acceptableCount <= weakest->GetCount() );
+                assert( acceptableCount >= 0 && acceptableCount <= weakest->GetCount() );
                 if ( acceptableCount < 1 ) {
                     acceptableCount = 1;
                 }
