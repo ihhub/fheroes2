@@ -70,7 +70,7 @@ public:
 private:
     const int32_t _offsetX;
 
-    void _renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current );
+    void _renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, const int32_t dsty, const bool current ) const;
     void _renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst );
     void _renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const;
     static void _renderMapIcon( const uint16_t size, fheroes2::Display & display, const int32_t coordX, const int32_t coordY );
