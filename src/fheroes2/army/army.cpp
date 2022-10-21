@@ -787,7 +787,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
                 troops2.SplitTroopIntoFreeSlots( temp, *lastTroop, stackCount );
             }
 
-            // Make it less predictable to guess where troops would be. It makes human heroes to suffer by constantly adjusting the position of their troops.
+            // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
             Rand::Shuffle( troops2 );
         }
     }
