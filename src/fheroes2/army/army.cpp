@@ -48,6 +48,7 @@
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
+#include "speed.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_text.h"
@@ -734,6 +735,11 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
             else {
                 uint32_t acceptableCount = static_cast<uint32_t>( strengthLimit / weakestStrength * weakest->GetCount() );
                 assert( acceptableCount >= 0 && acceptableCount <= weakest->GetCount() );
+                if ( acceptableCount >= weakest->GetCount() / 2 ) {
+                    // No more than half.
+                    acceptableCount = weakest->GetCount() / 2;
+                }
+
                 if ( acceptableCount < 1 ) {
                     acceptableCount = 1;
                 }
@@ -741,6 +747,47 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
                 troops2.JoinTroop( *weakest, acceptableCount );
                 weakest->SetCount( weakest->GetCount() - acceptableCount );
             }
+
+            // Make sure that this hero can survive an attack by splitting a single stack of monsters into multiple.
+            // The slower the monster the higher chance it would be killed being in one stack so more stacks are advisable.
+            Troop * firstValidStack = troops2.GetFirstValid();
+            assert( firstValidStack != nullptr );
+            if ( firstValidStack->GetCount() > 1 ) {
+                Troop * currentTroop = troops2.GetTroop( 0 );
+                Troop * lastTroop = troops2.GetTroop( 4 );
+                assert( currentTroop == firstValidStack && lastTroop != nullptr );
+
+                uint32_t stackCount = 2;
+                switch ( currentTroop->GetSpeed() ) {
+                    case Speed::BLAZING:
+                    case Speed::ULTRAFAST:
+                    case Speed::FAST:
+                        stackCount = 2;
+                        break;
+                    case Speed::AVERAGE:
+                        stackCount = Rand::Get( 2, 3 );
+                        break;
+                    case Speed::SLOW:
+                        stackCount = 3;
+                        break;
+                    case Speed::VERYSLOW:
+                    case Speed::CRAWLING:
+                        stackCount = Rand::Get( 3, 5 );
+                        break;
+                    default:
+                        // Did you add a new speed type? Add the logic above!
+                        assert( 0 );
+                        break;
+                }
+
+                Troop temp( *currentTroop );
+                currentTroop->Reset();
+
+                troops2.SplitTroopIntoFreeSlots( temp, *lastTroop, stackCount );
+            }
+
+            // Make it less predictable to guess where troops would be.
+            Rand::Shuffle( troops2 );
         }
     }
 }
