@@ -22,47 +22,45 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := main
 # Mitigate the issue with Windows command line size limit
 LOCAL_SHORT_COMMANDS := true
 
-FHEROES2_ROOT := $(LOCAL_PATH)/../../../../src
+MAIN_SRC_DIR := $(LOCAL_PATH)/../../../../src/fheroes2
 
-LOCAL_C_INCLUDES :=                        \
-    $(FHEROES2_ROOT)/fheroes2/agg          \
-    $(FHEROES2_ROOT)/fheroes2/ai           \
-    $(FHEROES2_ROOT)/fheroes2/army         \
-    $(FHEROES2_ROOT)/fheroes2/audio        \
-    $(FHEROES2_ROOT)/fheroes2/battle       \
-    $(FHEROES2_ROOT)/fheroes2/campaign     \
-    $(FHEROES2_ROOT)/fheroes2/castle       \
-    $(FHEROES2_ROOT)/fheroes2/dialog       \
-    $(FHEROES2_ROOT)/fheroes2/game         \
-    $(FHEROES2_ROOT)/fheroes2/gui          \
-    $(FHEROES2_ROOT)/fheroes2/h2d          \
-    $(FHEROES2_ROOT)/fheroes2/heroes       \
-    $(FHEROES2_ROOT)/fheroes2/image        \
-    $(FHEROES2_ROOT)/fheroes2/kingdom      \
-    $(FHEROES2_ROOT)/fheroes2/maps         \
-    $(FHEROES2_ROOT)/fheroes2/monster      \
-    $(FHEROES2_ROOT)/fheroes2/objects      \
-    $(FHEROES2_ROOT)/fheroes2/resource     \
-    $(FHEROES2_ROOT)/fheroes2/spell        \
-    $(FHEROES2_ROOT)/fheroes2/system       \
-    $(FHEROES2_ROOT)/fheroes2/world        \
-    $(FHEROES2_ROOT)/engine                \
-    $(FHEROES2_ROOT)/thirdparty/libsmacker
-
-LOCAL_SRC_FILES :=                                   \
-    $(wildcard $(FHEROES2_ROOT)/fheroes2/*/*.cpp)    \
-    $(wildcard $(FHEROES2_ROOT)/fheroes2/*/*/*.cpp)  \
-    $(wildcard $(FHEROES2_ROOT)/engine/*.cpp)        \
-    $(FHEROES2_ROOT)/thirdparty/libsmacker/smacker.c
-
+# SDL expects libmain.so as the main application module
+LOCAL_MODULE := main
+LOCAL_C_INCLUDES := \
+    $(MAIN_SRC_DIR)/agg \
+    $(MAIN_SRC_DIR)/ai \
+    $(MAIN_SRC_DIR)/army \
+    $(MAIN_SRC_DIR)/audio \
+    $(MAIN_SRC_DIR)/battle \
+    $(MAIN_SRC_DIR)/campaign \
+    $(MAIN_SRC_DIR)/castle \
+    $(MAIN_SRC_DIR)/dialog \
+    $(MAIN_SRC_DIR)/game \
+    $(MAIN_SRC_DIR)/gui \
+    $(MAIN_SRC_DIR)/h2d \
+    $(MAIN_SRC_DIR)/heroes \
+    $(MAIN_SRC_DIR)/image \
+    $(MAIN_SRC_DIR)/kingdom \
+    $(MAIN_SRC_DIR)/maps \
+    $(MAIN_SRC_DIR)/monster \
+    $(MAIN_SRC_DIR)/objects \
+    $(MAIN_SRC_DIR)/resource \
+    $(MAIN_SRC_DIR)/spell \
+    $(MAIN_SRC_DIR)/system \
+    $(MAIN_SRC_DIR)/world
+LOCAL_SRC_FILES := \
+    $(wildcard $(MAIN_SRC_DIR)/*/*.cpp) \
+    $(wildcard $(MAIN_SRC_DIR)/*/*/*.cpp)
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer
-
-# TODO: separate debug and release build flags
-LOCAL_CPPFLAGS += -std=c++17 -frtti -fcxx-exceptions -DWITH_DEBUG
-LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -lOpenSLES -llog -landroid -lz
+LOCAL_STATIC_LIBRARIES := engine
+LOCAL_CPP_FEATURES := exceptions rtti
+LOCAL_CPPFLAGS := \
+    -std=c++17 \
+    $(FHEROES2_CC_WARN_OPTIONS) \
+    $(FHEROES2_CPP_WARN_OPTIONS)
+LOCAL_LDLIBS := -llog -lz
 
 include $(BUILD_SHARED_LIBRARY)

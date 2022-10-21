@@ -18,23 +18,24 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-FHEROES2_CC_WARN_OPTIONS := \
-    -pedantic \
-    -Wall \
-    -Wextra \
-    -Wcast-align \
-    -Wextra-semi \
-    -Wfloat-conversion \
-    -Wfloat-equal \
-    -Winit-self \
-    -Wredundant-decls \
-    -Wshadow \
-    -Wundef \
-    -Wuninitialized \
-    -Wunused
+LOCAL_PATH := $(call my-dir)
 
-FHEROES2_CPP_WARN_OPTIONS := \
-    -Wctor-dtor-privacy \
-    -Woverloaded-virtual
+include $(CLEAR_VARS)
 
-include $(call all-subdir-makefiles)
+# Mitigate the issue with Windows command line size limit
+LOCAL_SHORT_COMMANDS := true
+
+ENGINE_SRC_DIR := $(LOCAL_PATH)/../../../../src/engine
+
+LOCAL_MODULE := engine
+LOCAL_SRC_FILES := $(wildcard $(ENGINE_SRC_DIR)/*.cpp)
+LOCAL_EXPORT_C_INCLUDES := $(ENGINE_SRC_DIR)
+LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer
+LOCAL_STATIC_LIBRARIES := smacker
+LOCAL_CPP_FEATURES := exceptions rtti
+LOCAL_CPPFLAGS := \
+    -std=c++17 \
+    $(FHEROES2_CC_WARN_OPTIONS) \
+    $(FHEROES2_CPP_WARN_OPTIONS)
+
+include $(BUILD_STATIC_LIBRARY)
