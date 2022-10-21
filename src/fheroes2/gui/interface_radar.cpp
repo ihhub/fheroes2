@@ -188,7 +188,7 @@ void Interface::Radar::Generate()
 
                 const MP2::MapObjectType objectType = tile.GetObject();
                 if ( objectType == MP2::OBJ_MOUNTS || objectType == MP2::OBJ_TREES )
-                    color += 2;
+                    color += 3;
             }
 
             fheroes2::SetPixel( spriteArea, x, y, color );
