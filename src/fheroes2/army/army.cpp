@@ -678,7 +678,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
     }
 
     // if there's more units than slots, start optimizing
-    if ( troops2.GetCount() ) {
+    if ( troops2.GetCount() > 0 ) {
         Troops rightPriority = troops2.GetOptimized();
         troops2.Clean();
         // strongest at the end
@@ -720,8 +720,27 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
         Troop * weakest = GetWeakestTroop();
 
         if ( weakest && weakest->isValid() ) {
-            troops2.JoinTroop( *weakest, 1 );
-            weakest->SetCount( weakest->GetCount() - 1 );
+            // First check if the weakest troop is actually worth to keep.
+            const double weakestStrength = weakest->GetStrength();
+            const double totalArmyStrength = GetStrength();
+            // The weakest army should not be more than 5% from the overall army.
+            const double strengthLimit = totalArmyStrength / 20;
+
+            if ( weakestStrength < strengthLimit ) {
+                // The weakest troop is less than 5% of the army strength. Just kick it out.
+                troops2.JoinTroop( *weakest, weakest->GetCount() );
+                weakest->Reset();
+            }
+            else {
+                uint32_t acceptableCount = static_cast<uint32_t>( strengthLimit / weakestStrength * weakest->GetCount() );
+                assert( acceptableCount >=0 && acceptableCount <= weakest->GetCount() );
+                if ( acceptableCount < 1 ) {
+                    acceptableCount = 1;
+                }
+
+                troops2.JoinTroop( *weakest, acceptableCount );
+                weakest->SetCount( weakest->GetCount() - acceptableCount );
+            }
         }
     }
 }
@@ -1215,8 +1234,8 @@ std::string Army::String() const
 
 void Army::JoinStrongestFromArmy( Army & army2 )
 {
-    bool save_last = army2.commander && army2.commander->isHeroes();
-    JoinStrongest( army2, save_last );
+    const bool saveLast = ( army2.commander != nullptr ) && army2.commander->isHeroes();
+    JoinStrongest( army2, saveLast );
 }
 
 uint32_t Army::ActionToSirens() const
