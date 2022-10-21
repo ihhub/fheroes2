@@ -724,18 +724,18 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
             // First check if the weakest troop is actually worth to keep.
             const double weakestStrength = weakest->GetStrength();
             const double totalArmyStrength = GetStrength();
-            // The weakest army should not be more than 5% from the overall army.
+            // The weakest army should not be more than 5% from the overall army strength.
             const double strengthLimit = totalArmyStrength / 20;
 
             if ( weakestStrength < strengthLimit ) {
-                // The weakest troop is less than 5% of the army strength. Just kick it out.
+                // The weakest troop is less than limit. Just kick this weakling out.
                 troops2.JoinTroop( *weakest, weakest->GetCount() );
                 weakest->Reset();
             }
             else {
                 uint32_t acceptableCount = static_cast<uint32_t>( strengthLimit / weakestStrength * weakest->GetCount() );
                 assert( acceptableCount >= 0 && acceptableCount <= weakest->GetCount() );
-                if ( acceptableCount >= weakest->GetCount() / 2 ) {
+                if ( acceptableCount > weakest->GetCount() / 2 ) {
                     // No more than half.
                     acceptableCount = weakest->GetCount() / 2;
                 }
@@ -752,6 +752,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
             // The slower the monster the higher chance it would be killed being in one stack so more stacks are advisable.
             Troop * firstValidStack = troops2.GetFirstValid();
             assert( firstValidStack != nullptr );
+
             if ( firstValidStack->GetCount() > 1 ) {
                 Troop * currentTroop = troops2.GetTroop( 0 );
                 Troop * lastTroop = troops2.GetTroop( 4 );
@@ -786,7 +787,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
                 troops2.SplitTroopIntoFreeSlots( temp, *lastTroop, stackCount );
             }
 
-            // Make it less predictable to guess where troops would be.
+            // Make it less predictable to guess where troops would be. It makes human heroes to suffer by constantly adjusting the position of their troops.
             Rand::Shuffle( troops2 );
         }
     }
