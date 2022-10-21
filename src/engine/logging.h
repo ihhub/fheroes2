@@ -134,7 +134,7 @@ namespace Logging
     {                                                                                                                                                                    \
         std::ostringstream osss;                                                                                                                                         \
         osss << x << std::endl;                                                                                                                                          \
-        __android_log_print( ANDROID_LOG_INFO, "LOG_FHEROES2", "%s", osss.str().c_str() );                                                                               \
+        __android_log_print( ANDROID_LOG_INFO, "fheroes2", "%s", osss.str().c_str() );                                                                                   \
     }
 #else // Default: log to STDERR
 #define COUT( x )                                                                                                                                                        \
