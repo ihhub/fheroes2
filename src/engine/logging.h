@@ -76,8 +76,6 @@ namespace Logging
     // This mutex protects operations with logFile
     extern std::mutex logMutex;
 }
-#elif defined( ANDROID )
-#include <android/log.h>
 #endif
 
 namespace Logging
@@ -130,6 +128,7 @@ namespace Logging
         syslog( LOG_WARNING, "fheroes2_log: %s", logMessage.str().c_str() );                                                                                             \
     }
 #elif defined( ANDROID )
+#include <android/log.h>
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
         std::ostringstream osss;                                                                                                                                         \
