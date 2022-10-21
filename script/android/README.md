@@ -1,4 +1,4 @@
 Package installation for Android Studio
 ======
 
-Run "install_packages.bat" file and it would try to install everything in one shot.
+Run the `install_packages.bat` or `install_packages.sh` and it will try to install everything at once.
