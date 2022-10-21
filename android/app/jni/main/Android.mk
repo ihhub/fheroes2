@@ -61,6 +61,5 @@ LOCAL_CPPFLAGS := \
     -std=c++17 \
     $(FHEROES2_CC_WARN_OPTIONS) \
     $(FHEROES2_CPP_WARN_OPTIONS)
-LOCAL_LDLIBS := -llog -lz
 
 include $(BUILD_SHARED_LIBRARY)
