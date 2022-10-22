@@ -30,27 +30,8 @@ MAIN_SRC_DIR := $(LOCAL_PATH)/../../../../src/fheroes2
 # SDL expects libmain.so as the main application module
 LOCAL_MODULE := main
 LOCAL_C_INCLUDES := \
-    $(MAIN_SRC_DIR)/agg \
-    $(MAIN_SRC_DIR)/ai \
-    $(MAIN_SRC_DIR)/army \
-    $(MAIN_SRC_DIR)/audio \
-    $(MAIN_SRC_DIR)/battle \
-    $(MAIN_SRC_DIR)/campaign \
-    $(MAIN_SRC_DIR)/castle \
-    $(MAIN_SRC_DIR)/dialog \
-    $(MAIN_SRC_DIR)/game \
-    $(MAIN_SRC_DIR)/gui \
-    $(MAIN_SRC_DIR)/h2d \
-    $(MAIN_SRC_DIR)/heroes \
-    $(MAIN_SRC_DIR)/image \
-    $(MAIN_SRC_DIR)/kingdom \
-    $(MAIN_SRC_DIR)/maps \
-    $(MAIN_SRC_DIR)/monster \
-    $(MAIN_SRC_DIR)/objects \
-    $(MAIN_SRC_DIR)/resource \
-    $(MAIN_SRC_DIR)/spell \
-    $(MAIN_SRC_DIR)/system \
-    $(MAIN_SRC_DIR)/world
+    $(filter %/, $(wildcard $(MAIN_SRC_DIR)/*/)) \
+    $(filter %/, $(wildcard $(MAIN_SRC_DIR)/*/*/))
 LOCAL_SRC_FILES := \
     $(wildcard $(MAIN_SRC_DIR)/*/*.cpp) \
     $(wildcard $(MAIN_SRC_DIR)/*/*/*.cpp)
