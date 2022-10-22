@@ -25,6 +25,7 @@
 #define H2SELECT_SCENARIO_H
 
 #include "interface_list.h"
+#include "maps.h"
 #include "maps_fileinfo.h"
 
 class ScenarioListBox : public Interface::ListBox<Maps::FileInfo>
@@ -42,7 +43,7 @@ public:
 
     void RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & dst ) override;
-
+    void SelectMapSize( MapsFileInfoList & mapsList, const int selectedSize );
     void ActionCurrentUp() override
     {
         // Do nothing.
@@ -68,6 +69,7 @@ public:
     bool selectOk;
 
 private:
+    int selectedSize{ Maps::ZERO };
     const int32_t _offsetX;
 
     void _renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, const int32_t dsty, const bool current ) const;
