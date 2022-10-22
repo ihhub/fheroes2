@@ -68,7 +68,7 @@ public:
 
     double getReinforcementValue( const Troops & reinforcement ) const;
 
-    uint32_t GetOccupiedMonsterSlotCount() const;
+    uint32_t GetOccupiedSlotCount() const;
     bool isValid() const;
     bool HasMonster( const Monster & ) const;
 
@@ -106,6 +106,8 @@ public:
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
     void JoinAllTroopsOfType( const Troop & targetTroop );
+
+    void addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots );
 };
 
 struct NeutralMonsterJoiningCondition
@@ -208,7 +210,7 @@ public:
 
     bool isFullHouse() const
     {
-        return GetOccupiedMonsterSlotCount() == size();
+        return GetOccupiedSlotCount() == size();
     }
 
     bool SaveLastTroop() const;

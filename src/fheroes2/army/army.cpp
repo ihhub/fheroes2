@@ -319,7 +319,7 @@ bool Troops::isValid() const
     return false;
 }
 
-uint32_t Troops::GetOccupiedMonsterSlotCount() const
+uint32_t Troops::GetOccupiedSlotCount() const
 {
     uint32_t total = 0;
     for ( const_iterator it = begin(); it != end(); ++it ) {
@@ -463,7 +463,7 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep )
     }
 
     auto moveTroops = [this, &from, monsterIdToKeep]( const bool ignoreMonstersToKeep ) {
-        uint32_t stacksLeft = from.GetOccupiedMonsterSlotCount();
+        uint32_t stacksLeft = from.GetOccupiedSlotCount();
 
         for ( Troop * troop : from ) {
             assert( troop != nullptr );
@@ -679,7 +679,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
     }
 
     // if there's more units than slots, start optimizing
-    if ( troops2.GetOccupiedMonsterSlotCount() > 0 ) {
+    if ( troops2.GetOccupiedSlotCount() > 0 ) {
         Troops rightPriority = troops2.GetOptimized();
         troops2.Clean();
         // strongest at the end
@@ -689,7 +689,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
         MergeTroops();
 
         // 2. Fill empty slots with best troops (if there are any)
-        uint32_t count = GetOccupiedMonsterSlotCount();
+        uint32_t count = GetOccupiedSlotCount();
         while ( count < ARMYMAXTROOPS && !rightPriority.empty() ) {
             JoinTroop( *rightPriority.back() );
             rightPriority.PopBack();
@@ -749,58 +749,52 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
             }
 
             // Make sure that this hero can survive an attack by splitting a single stack of monsters into multiple.
-            // The slower the monster the higher chance it would be killed being in one stack so more stacks are advisable.
-            const Troop * firstValidStack = troops2.GetFirstValid();
+            Troop * firstValidStack = troops2.GetFirstValid();
             assert( firstValidStack != nullptr );
 
             if ( firstValidStack->GetCount() > 1 ) {
-                Troop * currentTroop = troops2.GetTroop( 0 );
-                const Troop * lastTroop = troops2.GetTroop( 4 );
-                assert( currentTroop == firstValidStack && lastTroop != nullptr );
+                const uint32_t stackCount = std::min( 5u, firstValidStack->GetCount() );
 
-                uint32_t stackCount = 2;
-                switch ( currentTroop->GetSpeed() ) {
-                case Speed::BLAZING:
-                case Speed::ULTRAFAST:
-                case Speed::FAST:
-                    stackCount = 2;
-                    break;
-                case Speed::AVERAGE:
-                    stackCount = Rand::Get( 2, 3 );
-                    break;
-                case Speed::SLOW:
-                    stackCount = 3;
-                    break;
-                case Speed::VERYSLOW:
-                case Speed::CRAWLING:
-                    stackCount = Rand::Get( 3, 5 );
-                    break;
-                default:
-                    // Did you add a new speed type? Add the logic above!
-                    assert( 0 );
-                    break;
-                }
+                Troop temp( *firstValidStack );
+                firstValidStack->Reset();
 
-                Troop temp( *currentTroop );
-                currentTroop->Reset();
-
-                troops2.SplitTroopIntoFreeSlots( temp, *lastTroop, stackCount );
+                troops2.addNewTroopsToFreeSlots( temp, stackCount );
             }
 
             // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
-            Rand::Shuffle( troops2 );
+            if ( troops2.GetOccupiedSlotCount() < 5 ) {
+                Rand::Shuffle( troops2 );
+            }
         }
     }
 }
 
 void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots )
 {
-    if ( slots < 1 || slots > ( Size() - GetOccupiedMonsterSlotCount() ) )
-        return;
+    const iterator selectedSlotIterator = std::find( begin(), end(), &selectedSlot );
 
-    const uint32_t chunk = troop.GetCount() / slots;
-    uint32_t remainingCount = troop.GetCount() % slots;
-    uint32_t remainingSlots = slots;
+    // this means the selected slot is actually not part of the army, which is not the intended logic
+    if ( selectedSlotIterator == end() ) {
+        return;
+    }
+
+    addNewTroopsToFreeSlots( troop, slots );
+}
+
+void Troops::addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots )
+{
+    if ( maxSlots < 1 || GetOccupiedSlotCount() >= 5 ) {
+        assert( 0 );
+        return;
+    }
+
+    if ( maxSlots > Size() - GetOccupiedSlotCount() ) {
+        maxSlots = static_cast<uint32_t>( Size() ) - GetOccupiedSlotCount();
+    }
+
+    const uint32_t chunk = troop.GetCount() / maxSlots;
+    uint32_t remainingCount = troop.GetCount() % maxSlots;
+    uint32_t remainingSlots = maxSlots;
 
     auto TryCreateTroopChunk = [&remainingSlots, &remainingCount, chunk, troop]( Troop & newTroop ) {
         if ( remainingSlots <= 0 )
@@ -815,21 +809,7 @@ void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selecte
         }
     };
 
-    const iterator selectedSlotIterator = std::find( begin(), end(), &selectedSlot );
-
-    // this means the selected slot is actually not part of the army, which is not the intended logic
-    if ( selectedSlotIterator == end() )
-        return;
-
-    const size_t iteratorIndex = selectedSlotIterator - begin();
-
-    // try to create chunks to the right of the selected slot
-    for ( size_t i = iteratorIndex + 1; i < Size(); ++i ) {
-        TryCreateTroopChunk( *GetTroop( i ) );
-    }
-
-    // this time, try to create chunks to the left of the selected slot
-    for ( int i = static_cast<int>( iteratorIndex ) - 1; i >= 0; --i ) {
+    for ( size_t i = 0; i < Size(); ++i ) {
         TryCreateTroopChunk( *GetTroop( i ) );
     }
 }
@@ -1356,7 +1336,7 @@ void Army::drawMiniMonsLine( const Troops & troops, int32_t cx, int32_t cy, uint
 
 void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact, bool isScouteView )
 {
-    const uint32_t count = troops.GetOccupiedMonsterSlotCount();
+    const uint32_t count = troops.GetOccupiedSlotCount();
     const int offsetX = lineWidth / 6;
     const int offsetY = compact ? 31 : 49;
 
@@ -1477,7 +1457,7 @@ void Army::SwapTroops( Troop & t1, Troop & t2 )
 
 bool Army::SaveLastTroop() const
 {
-    return commander && commander->isHeroes() && 1 == GetOccupiedMonsterSlotCount();
+    return commander && commander->isHeroes() && 1 == GetOccupiedSlotCount();
 }
 
 Monster Army::GetStrongestMonster() const
