@@ -18,6 +18,8 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
+LOCAL_PATH := $(call my-dir)
+
 # Common for both C and C++ compilers
 FHEROES2_C_WARN_OPTIONS := \
     -pedantic \
