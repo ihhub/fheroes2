@@ -86,6 +86,9 @@ VisualStudio/packages
 android/app/jni/SDL2/
 android/app/jni/SDL2_mixer/
 android/sdl2/
+android/local.properties
+android/.idea
+android/.gradle
 
 # Mac magic folders
 .DS_Store
