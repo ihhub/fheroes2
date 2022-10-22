@@ -972,6 +972,11 @@ namespace
                 height_ = correctResolution.height;
             }
 
+#if defined( ANDROID )
+            // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" );
+#endif
+
             uint32_t flags = SDL_WINDOW_SHOWN;
             if ( isFullScreen ) {
 #if defined( _WIN32 )
