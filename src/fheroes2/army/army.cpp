@@ -48,7 +48,6 @@
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
-#include "speed.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_text.h"
