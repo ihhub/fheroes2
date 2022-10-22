@@ -5759,7 +5759,7 @@ msgid ""
 "battle, you slay the monster and find the %{art} in the back of the cave."
 msgstr ""
 "Le Démon pousse son cri de défi et attaque ! Après une courte "
-" bataille désespérée, vous tuez le monstre et trouvez l'artéfact '%{art}' "
+"bataille désespérée, vous tuez le monstre et trouvez l'artéfact '%{art}' "
 "à l'arrière de la grotte."
 
 msgid ""
@@ -6626,7 +6626,7 @@ msgid "Towns/Castles"
 msgstr "Villages/Châteaux"
 
 msgid "View Towns and Castles."
-msgstr "Voir Villages et châteaux."
+msgstr "Voir villages et châteaux."
 
 msgid "luck|Cursed"
 msgstr "Maudite"
@@ -6793,7 +6793,7 @@ msgid "week|Dog"
 msgstr "du chien"
 
 msgid "week|Aardvark"
-msgstr "de l'oryctérope du cap"
+msgstr "de l'oryctérope"
 
 msgid "week|Lizard"
 msgstr "du lézard"
@@ -6832,7 +6832,7 @@ msgid "week|Earthworm"
 msgstr "du ver"
 
 msgid "week|Hornet"
-msgstr "de la frelon"
+msgstr "du frelon"
 
 msgid "week|Beetle"
 msgstr "de la coccinelle"
@@ -7052,7 +7052,7 @@ msgid "Dwarf Cottage"
 msgstr "Cottage des nains"
 
 msgid "Stone Liths"
-msgstr "Menhirs"
+msgstr "Portail magique"
 
 msgid "Magic Well"
 msgstr "Puits magique"
@@ -9169,7 +9169,7 @@ msgstr ""
 "Vous tombez sur une bataille où un paladin a été mortellement blessé par un "
 "groupe de zombies. Il vous demande de prendre son marteau et de terminer ce "
 "qu'il a commencé. Lorsque vous le ramassez, un bourdonnement s'entend, puis "
-"tout devient flou. Les Zombies gisent sur le sol, le marteau dégouline de "
+"tout devient flou. Les zombies gisent sur le sol, le marteau dégouline de "
 "sang. Vous l'attachez à votre ceinture."
 
 msgid "Legendary Scepter"
@@ -9605,10 +9605,10 @@ msgid ""
 "improved version of Death Ripple."
 msgstr ""
 "Blesse toutes les créatures vivantes (non mortes-vivantes) dans la "
-"bataille. Ce sort est une version améliorée de onde mortelle."
+"bataille. Ce sort est une version améliorée d'onde mortelle."
 
 msgid "Dragon Slayer"
-msgstr "Tueur de dragons"
+msgstr "Anti-dragon"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
 msgstr ""
@@ -9677,7 +9677,7 @@ msgid "Summons Fire Elementals to fight for your army."
 msgstr "Invoque des élémentaires de feu pour qu'ils se battent à vos côtés."
 
 msgid "Summon Water Elemental"
-msgstr "Invoquer l'élémentaire de l'eau"
+msgstr "Invoquer élémentaire de l'eau"
 
 msgid "Summons Water Elementals to fight for your army."
 msgstr "Invoque des élémentaires de l'eau pour qu'ils se battent à vos côtés."
@@ -9749,7 +9749,7 @@ msgstr ""
 "Permet au lanceur du sort de se transporter magiquement dans un lieu proche."
 
 msgid "Dimension Door"
-msgstr "Porte dimensionnelle"
+msgstr "autre dimension"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
@@ -9757,7 +9757,7 @@ msgstr ""
 "possède actuellement."
 
 msgid "Town Gate"
-msgstr "Portes du village"
+msgstr "Retour village"
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
