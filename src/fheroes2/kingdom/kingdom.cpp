@@ -981,6 +981,9 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
     if ( Game::GetLoadVersion() >= FORMAT_VERSION_0921_RELEASE ) {
         msg >> kingdom._topHeroInKingdomView;
     }
+    else {
+        kingdom._topHeroInKingdomView = -1;
+    }
 
     return msg;
 }
