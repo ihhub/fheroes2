@@ -18,7 +18,8 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-FHEROES2_CC_WARN_OPTIONS := \
+# Common for both C and C++ compilers
+FHEROES2_C_WARN_OPTIONS := \
     -pedantic \
     -Wall \
     -Wextra \
@@ -33,6 +34,7 @@ FHEROES2_CC_WARN_OPTIONS := \
     -Wuninitialized \
     -Wunused
 
+# C++ compilers only
 FHEROES2_CPP_WARN_OPTIONS := \
     -Wctor-dtor-privacy \
     -Woverloaded-virtual
