@@ -54,7 +54,7 @@ cd "$DEST_PATH/demo"
 if [[ "$(command -v wget)" != "" ]]; then
     wget -O h2demo.zip "$H2DEMO_URL"
 elif [[ "$(command -v curl)" != "" ]]; then
-    curl -O -L "$H2DEMO_URL" > h2demo.zip
+    curl -o h2demo.zip -L "$H2DEMO_URL"
 else
     echo_red "Neither wget nor curl were found in your system. Unable to download the demo version. Installation aborted."
     exit 1

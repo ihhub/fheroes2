@@ -3,9 +3,6 @@ name: Android
 on:
   workflow_call:
 
-env:
-  ANDROID_DEPS_URL: https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/android-deps/android.zip
-
 jobs:
   android:
     name: Android
@@ -15,8 +12,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Install dependencies
       run: |
-        wget "$ANDROID_DEPS_URL"
-        unzip -d android android.zip
+        bash script/android/install_packages.sh
     - name: Build
       run: |
         cd android
