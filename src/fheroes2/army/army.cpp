@@ -753,7 +753,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
             assert( firstValidStack != nullptr );
 
             if ( firstValidStack->GetCount() > 1 ) {
-                const uint32_t stackCount = std::min( 5u, firstValidStack->GetCount() );
+                const uint32_t stackCount = std::min( static_cast<uint32_t>( troops2.size() ), firstValidStack->GetCount() );
 
                 Troop temp( *firstValidStack );
                 firstValidStack->Reset();
@@ -762,7 +762,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
             }
 
             // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
-            if ( troops2.GetOccupiedSlotCount() < 5 ) {
+            if ( troops2.GetOccupiedSlotCount() < troops2.size() ) {
                 Rand::Shuffle( troops2 );
             }
         }
@@ -783,7 +783,7 @@ void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selecte
 
 void Troops::addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots )
 {
-    if ( maxSlots < 1 || GetOccupiedSlotCount() >= 5 ) {
+    if ( maxSlots < 1 || GetOccupiedSlotCount() >= Size() ) {
         assert( 0 );
         return;
     }
