@@ -51,18 +51,12 @@ namespace
 
 namespace
 {
-    struct IconOffset
-    {
-        int offsetX;
-        int offsetY;
-    };
-
     const std::array<int, 4> tileSizePerZoomLevel{ { 4, 6, 12, 32 } };
     const std::array<int, 4> icnPerZoomLevel{ { ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 } };
     const std::array<int, 4> icnLetterPerZoomLevel{ { ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 } };
     const std::array<int, 4> icnPerZoomLevelFlags{ { ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12 } };
 
-    const std::map<std::pair<MP2::MapObjectType, ViewWorld::ZoomLevel>, IconOffset> iconsOffsetMap = {
+    const std::map<std::pair<MP2::MapObjectType, ViewWorld::ZoomLevel>, fheroes2::Point> iconsOffsetMap = {
         { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel0 ), { 0, 0 } },       { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel1 ), { -1, -1 } },
         { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel2 ), { 0, 0 } },       { std::make_pair( MP2::OBJ_HEROES, ViewWorld::ZoomLevel3 ), { 10, 6 } },
         { std::make_pair( MP2::OBJ_MINES, ViewWorld::ZoomLevel0 ), { -3, -3 } },      { std::make_pair( MP2::OBJ_MINES, ViewWorld::ZoomLevel1 ), { -3, -3 } },
@@ -154,12 +148,14 @@ namespace
         }
     }
 
-    IconOffset GetIconOffset( MP2::MapObjectType objectType, ViewWorld::ZoomLevel zoomLevel )
+    fheroes2::Point GetIconOffset( const MP2::MapObjectType objectType, const ViewWorld::ZoomLevel zoomLevel )
     {
-        std::pair<MP2::MapObjectType, ViewWorld::ZoomLevel> key = std::make_pair( objectType, zoomLevel );
+        const std::pair<MP2::MapObjectType, ViewWorld::ZoomLevel> key = std::make_pair( objectType, zoomLevel );
 
-        if ( iconsOffsetMap.count( key ) > 0 )
-            return iconsOffsetMap.at( key );
+        auto iter = iconsOffsetMap.find( key );
+        if ( iter != iconsOffsetMap.end() ) {
+            return iter->second;
+        }
 
         return { 0, 0 };
     }
@@ -373,9 +369,9 @@ namespace
                     }
 
                     if ( index >= 0 ) {
-                        const IconOffset spriteOffset = GetIconOffset( objectType, ROI._zoomLevel );
+                        const fheroes2::Point spriteOffset = GetIconOffset( objectType, ROI._zoomLevel );
                         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
-                        fheroes2::Blit( sprite, display, dstx + spriteOffset.offsetX, dsty + spriteOffset.offsetY );
+                        fheroes2::Blit( sprite, display, dstx + spriteOffset.x, dsty + spriteOffset.y );
 
                         if ( letterIndex >= 0 ) {
                             switch ( letterIndex ) {
@@ -405,8 +401,8 @@ namespace
                             }
 
                             const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
-                            fheroes2::Blit( letter, display, dstx + spriteOffset.offsetX + ( sprite.width() - letter.width() ) / 2,
-                                            dsty + spriteOffset.offsetY + ( sprite.height() - letter.height() ) / 2 );
+                            fheroes2::Blit( letter, display, dstx + spriteOffset.x + ( sprite.width() - letter.width() ) / 2,
+                                            dsty + spriteOffset.y + ( sprite.height() - letter.height() ) / 2 );
                         }
                     }
                 }
