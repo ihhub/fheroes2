@@ -68,7 +68,7 @@ public:
 
     double getReinforcementValue( const Troops & reinforcement ) const;
 
-    uint32_t GetCount() const;
+    uint32_t GetOccupiedMonsterSlotCount() const;
     bool isValid() const;
     bool HasMonster( const Monster & ) const;
 
@@ -208,7 +208,7 @@ public:
 
     bool isFullHouse() const
     {
-        return GetCount() == size();
+        return GetOccupiedMonsterSlotCount() == size();
     }
 
     bool SaveLastTroop() const;
