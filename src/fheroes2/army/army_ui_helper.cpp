@@ -35,7 +35,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, 
     }
 
     if ( 0 == count ) {
-        count = troops.GetCount();
+        count = troops.GetOccupiedSlotCount();
     }
 
     const int chunk = width / count;

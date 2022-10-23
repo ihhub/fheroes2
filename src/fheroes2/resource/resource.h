@@ -83,10 +83,14 @@ public:
     Funds & operator-=( const Funds & );
     Funds & operator=( const cost_t & );
 
+    bool operator>=( const Funds & ) const;
+    bool operator<( const Funds & funds ) const
+    {
+        return !operator>=( funds );
+    }
+
     int32_t Get( int rs ) const;
     int32_t * GetPtr( int rs );
-
-    bool operator>=( const Funds & ) const;
 
     int getLowestQuotient( const Funds & ) const;
     int GetValidItems() const;

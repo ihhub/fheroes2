@@ -1797,7 +1797,7 @@ namespace AI
         }
 
         // Whirlpool effect affects heroes only with more than one creature in more than one slot
-        if ( heroArmy.GetCount() == 1 && weakestTroop->GetCount() == 1 ) {
+        if ( heroArmy.GetOccupiedSlotCount() == 1 && weakestTroop->GetCount() == 1 ) {
             return;
         }
 

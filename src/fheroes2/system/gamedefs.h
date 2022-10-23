@@ -41,9 +41,6 @@
 #define MAXPRIMARYSKILL 4
 #define MAXSECONDARYSKILL 14
 
-// hardcore defines: army
-#define ARMYMAXTROOPS 5
-
 // hardcore defines: interface
 #define RADARWIDTH 144
 #define BORDERWIDTH 16
