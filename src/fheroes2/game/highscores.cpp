@@ -64,7 +64,7 @@ namespace
                                                                    Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
                                                                    Monster::TITAN,         Monster::BLACK_DRAGON };
 
-    int32_t saveHighscoreEntry( fheroes2::HighscoreData && data, std::vector<fheroes2::HighscoreData> & entries )
+    int32_t saveHighscoreEntry( fheroes2::HighscoreData && data, std::vector<fheroes2::HighscoreData> & entries, const bool isCampaign )
     {
         auto iter = std::find( entries.begin(), entries.end(), data );
         if ( iter != entries.end() ) {
@@ -74,7 +74,10 @@ namespace
         }
 
         entries.emplace_back( data );
-        std::sort( entries.begin(), entries.end(), []( const fheroes2::HighscoreData & first, const fheroes2::HighscoreData & second ) {
+        std::sort( entries.begin(), entries.end(), [isCampaign]( const fheroes2::HighscoreData & first, const fheroes2::HighscoreData & second ) {
+            if ( isCampaign ) {
+                return first.rating < second.rating;
+            }
             return first.rating > second.rating;
         } );
 
@@ -163,12 +166,12 @@ namespace fheroes2
 
     int32_t HighScoreDataContainer::registerScoreStandard( HighscoreData && data )
     {
-        return saveHighscoreEntry( std::move( data ), _highScoresStandard );
+        return saveHighscoreEntry( std::move( data ), _highScoresStandard, false );
     }
 
     int32_t HighScoreDataContainer::registerScoreCampaign( HighscoreData && data )
     {
-        return saveHighscoreEntry( std::move( data ), _highScoresCampaign );
+        return saveHighscoreEntry( std::move( data ), _highScoresCampaign, true );
     }
 
     Monster HighScoreDataContainer::getMonsterByRating( const size_t rating )
