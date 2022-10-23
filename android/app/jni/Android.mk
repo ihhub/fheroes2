@@ -20,7 +20,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-# Common for both C and C++ compilers
+# Common for both C and C++
 FHEROES2_C_WARN_OPTIONS := \
     -pedantic \
     -Wall \
@@ -36,7 +36,7 @@ FHEROES2_C_WARN_OPTIONS := \
     -Wuninitialized \
     -Wunused
 
-# C++ compilers only
+# C++ only
 FHEROES2_CPP_WARN_OPTIONS := \
     -Wctor-dtor-privacy \
     -Woverloaded-virtual
