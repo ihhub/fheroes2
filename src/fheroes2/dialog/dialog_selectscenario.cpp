@@ -350,9 +350,9 @@ void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & )
     selectOk = true;
 }
 
-const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all_ )
+const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps )
 {
-    if ( all_.empty() )
+    if ( allMaps.empty() )
         return nullptr;
 
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -365,7 +365,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all_ )
     MapsFileInfoList medium;
     MapsFileInfoList large;
     MapsFileInfoList xlarge;
-    MapsFileInfoList all( all_ );
+    MapsFileInfoList all( allMaps );
 
     small.reserve( all.size() );
     medium.reserve( all.size() );
@@ -478,8 +478,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all_ )
         bool needRedraw = false;
 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.selectOk ) {
-            MapsFileInfoList::const_iterator it = std::find( all.begin(), all.end(), listbox.GetCurrent() );
-            return ( it != all.end() ) ? &( *it ) : nullptr;
+            MapsFileInfoList::const_iterator it = std::find( allMaps.begin(), allMaps.end(), listbox.GetCurrent() );
+            return ( it != allMaps.end() ) ? &( *it ) : nullptr;
         }
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
