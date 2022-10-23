@@ -487,53 +487,17 @@ namespace fheroes2
             }
             case ICN::UNIFORM_GOOD_MAX_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out.resize( GetICN( ICN::RECRUIT, 4 + i ).width() - 6, GetICN( ICN::RECRUIT, 4 + i ).height() - 5 + i );
+                    out.reset();
+                    fheroes2::Copy( GetICN( ICN::SYSTEM, 11 + i ), 0, 0, out, 0, 0, GetICN( ICN::RECRUIT, 4 + i ).width() - 13 + i,
+                                    GetICN( ICN::RECRUIT, 4 + i ).height() - 5 + i );
+                    fheroes2::Copy( GetICN( ICN::SYSTEM, 11 + i ), 89 + i, 0, out, 53 + i, 0, 7 - i,
+                                    GetICN( ICN::RECRUIT, 4 + i ).height() - i );
+                }
 
-                // Generate background
-                Image background( 60, 25 );
-                Copy( GetICN( ICN::SYSTEM, 12 ), 0, 0, background, 0, 0, 53, 25 );
-                Copy( GetICN( ICN::SYSTEM, 12 ), 89, 0, background, 53, 0, 7, 25 );
-
-                // Released button
-                Image temp( 60, 25 );
-                Copy( GetICN( ICN::SYSTEM, 11 ), 0, 0, temp, 0, 0, 53, 25 );
-                Copy( GetICN( ICN::SYSTEM, 11 ), 89, 0, temp, 53, 0, 7, 25 );
-                Copy( GetICN( ICN::RECRUIT, 4 ), 9, 2, temp, 4, 2, 52, 19 );
-
-                _icnVsSprite[id][0] = background;
-                Blit( temp, _icnVsSprite[id][0] );
-                _icnVsSprite[id][0].setPosition( 0, 0 );
-
-                // Pressed button
-                _icnVsSprite[id][1] = background;
-                Copy( GetICN( ICN::RECRUIT, 5 ), 9, 2, _icnVsSprite[id][1], 3, 2, 53, 19 );
-
-                break;
-            }
-            case ICN::UNIFORM_GOOD_MIN_BUTTON: {
-                _icnVsSprite[id].resize( 2 );
-
-                // Generate background
-                Image background( 60, 25 );
-                Copy( GetICN( ICN::SYSTEM, 12 ), 0, 0, background, 0, 0, 53, 25 );
-                Copy( GetICN( ICN::SYSTEM, 12 ), 89, 0, background, 53, 0, 7, 25 );
-
-                // Released button
-                Image temp( 60, 25 );
-                Copy( GetICN( ICN::SYSTEM, 11 ), 0, 0, temp, 0, 0, 53, 25 );
-                Copy( GetICN( ICN::SYSTEM, 11 ), 89, 0, temp, 53, 0, 7, 25 );
-                Copy( GetICN( ICN::RECRUIT, 4 ), 9, 2, temp, 4, 2, 21, 19 ); // letter 'M'
-                Copy( GetICN( ICN::APANEL, 4 ), 23, 21, temp, 28, 5, 8, 14 ); // letter 'I'
-                Copy( GetICN( ICN::APANEL, 4 ), 31, 21, temp, 39, 5, 17, 14 ); // letter 'N'
-
-                _icnVsSprite[id][0] = background;
-                Blit( temp, _icnVsSprite[id][0] );
-                _icnVsSprite[id][0].setPosition( 0, 0 );
-
-                // Pressed button
-                _icnVsSprite[id][1] = background;
-                Copy( GetICN( ICN::RECRUIT, 5 ), 9, 3, _icnVsSprite[id][1], 3, 3, 19, 17 ); // letter 'M'
-                Copy( GetICN( ICN::APANEL, 5 ), 21, 22, _icnVsSprite[id][1], 25, 6, 8, 14 ); // letter 'I'
-                Copy( GetICN( ICN::APANEL, 5 ), 30, 21, _icnVsSprite[id][1], 37, 5, 17, 15 ); // letter 'N'
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), { 6, 5 }, { 4, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -567,6 +531,34 @@ namespace fheroes2
                 _icnVsSprite[id][1].image()[353] = 21;
                 _icnVsSprite[id][1].image()[622] = 21;
                 _icnVsSprite[id][1].image()[964] = 21;
+
+                break;
+            }
+            case ICN::UNIFORM_GOOD_MIN_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+
+                // Generate background
+                Image background( 60, 25 );
+                Copy( GetICN( ICN::SYSTEM, 12 ), 0, 0, background, 0, 0, 53, 25 );
+                Copy( GetICN( ICN::SYSTEM, 12 ), 89, 0, background, 53, 0, 7, 25 );
+
+                // Released button
+                Image temp( 60, 25 );
+                Copy( GetICN( ICN::SYSTEM, 11 ), 0, 0, temp, 0, 0, 53, 25 );
+                Copy( GetICN( ICN::SYSTEM, 11 ), 89, 0, temp, 53, 0, 7, 25 );
+                Copy( GetICN( ICN::RECRUIT, 4 ), 9, 2, temp, 4, 2, 21, 19 ); // letter 'M'
+                Copy( GetICN( ICN::APANEL, 4 ), 23, 21, temp, 28, 5, 8, 14 ); // letter 'I'
+                Copy( GetICN( ICN::APANEL, 4 ), 31, 21, temp, 39, 5, 17, 14 ); // letter 'N'
+
+                _icnVsSprite[id][0] = background;
+                Blit( temp, _icnVsSprite[id][0] );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                // Pressed button
+                _icnVsSprite[id][1] = background;
+                Copy( GetICN( ICN::RECRUIT, 5 ), 9, 3, _icnVsSprite[id][1], 3, 3, 19, 17 ); // letter 'M'
+                Copy( GetICN( ICN::APANEL, 5 ), 21, 22, _icnVsSprite[id][1], 25, 6, 8, 14 ); // letter 'I'
+                Copy( GetICN( ICN::APANEL, 5 ), 30, 21, _icnVsSprite[id][1], 37, 5, 17, 15 ); // letter 'N'
 
                 break;
             }
