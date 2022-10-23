@@ -188,7 +188,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             const auto & campaignHighscoreData = highScoreDataContainer.getHighScoresCampaign();
             assert( !campaignHighscoreData.empty() );
 
-            if ( campaignHighscoreData.back().rating > rating ) {
+            if ( campaignHighscoreData.back().rating < rating ) {
                 gameResult.ResetResult();
                 return fheroes2::GameMode::MAIN_MENU;
             }
