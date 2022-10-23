@@ -29,9 +29,9 @@ jobs:
         path: android/app/build/reports/
     - name: Create package
       run: |
-        mkdir .apk
-        cp android/app/build/outputs/apk/debug/app-debug.apk .apk/fheroes2_debug.apk
-        zip fheroes2_android.zip .apk/* LICENSE changelog.txt README.txt
+        cp android/app/build/outputs/apk/debug/app-debug.apk fheroes2.apk
+        cp docs/README.txt .
+        zip fheroes2_android.zip fheroes2.apk LICENSE changelog.txt README.txt
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
