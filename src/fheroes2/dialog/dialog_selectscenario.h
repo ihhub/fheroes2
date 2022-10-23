@@ -84,7 +84,7 @@ private:
 
 namespace Dialog
 {
-    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & all );
+    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & allMaps );
 }
 
 #endif
