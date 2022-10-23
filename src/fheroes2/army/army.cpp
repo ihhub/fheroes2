@@ -816,7 +816,7 @@ void Troops::addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots )
     uint32_t remainingCount = troop.GetCount() % maxSlots;
     uint32_t remainingSlots = maxSlots;
 
-    auto TryCreateTroopChunk = [&remainingSlots, &remainingCount, chunk, troop]( Troop & newTroop ) {
+    auto TryCreateTroopChunk = [&remainingSlots, &remainingCount, chunk, &troop]( Troop & newTroop ) {
         if ( remainingSlots <= 0 )
             return;
 
