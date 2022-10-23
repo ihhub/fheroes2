@@ -974,7 +974,9 @@ namespace
 
 #if defined( ANDROID )
             // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-            SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" );
+            if ( SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set a hint for screen orientation." )
+            }
 #endif
 
             uint32_t flags = SDL_WINDOW_SHOWN;
