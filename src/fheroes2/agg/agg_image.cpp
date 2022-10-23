@@ -493,8 +493,7 @@ namespace fheroes2
                     out.reset();
                     fheroes2::Copy( GetICN( ICN::SYSTEM, 11 + i ), 0, 0, out, 0, 0, GetICN( ICN::RECRUIT, 4 + i ).width() - 13 + i,
                                     GetICN( ICN::RECRUIT, 4 + i ).height() - 5 + i );
-                    fheroes2::Copy( GetICN( ICN::SYSTEM, 11 + i ), 89 + i, 0, out, 53 + i, 0, 7 - i,
-                                    GetICN( ICN::RECRUIT, 4 + i ).height() - i );
+                    fheroes2::Copy( GetICN( ICN::SYSTEM, 11 + i ), 89 + i, 0, out, 53 + i, 0, 7 - i, GetICN( ICN::RECRUIT, 4 + i ).height() - i );
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), { 6, 5 }, { 4, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
