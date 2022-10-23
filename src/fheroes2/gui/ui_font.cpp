@@ -151,16 +151,37 @@ namespace
             font[163 - 32] = font[76 - 32];
             // Uppercase A with ogonek
             font[165 - 32] = font[65 - 32];
-            // Uppercase S with cedilla
-            font[170 - 32] = font[83 - 32];
+
+            // Uppercase S with cedilla. Generate for further use.
+            font[170 - 32].resize( font[83 - 32].width(), font[83 - 32].height() + 3 );
+            font[170 - 32].reset();
+            fheroes2::Copy( font[83 - 32], 0, 0, font[170 - 32], 0, 0, font[83 - 32].width(), font[83 - 32].height() );
+            fheroes2::Copy( font[67], 2, 1, font[170 - 32], 5, 11, 1, 1 );
+            fheroes2::Copy( font[67], 5, 6, font[170 - 32], 6, 11, 1, 1 );
+            fheroes2::Copy( font[67], 2, 6, font[170 - 32], 7, 11, 1, 1 );
+            fheroes2::Copy( font[67], 2, 1, font[170 - 32], 6, 12, 1, 1 );
+            fheroes2::Copy( font[67], 5, 6, font[170 - 32], 7, 12, 1, 1 );
+            fheroes2::Copy( font[67], 2, 1, font[170 - 32], 5, 13, 1, 1 );
+            fheroes2::Copy( font[67], 5, 6, font[170 - 32], 6, 13, 1, 1 );
+            fheroes2::Copy( font[67], 3, 0, font[170 - 32], 7, 13, 1, 1 );
+            font[170 - 32].setPosition( font[83 - 32].x(), font[83 - 32].y() );
+            updateNormalFontLetterShadow( font[170 - 32] );
+
             // Uppercase Z with dot above
             font[175 - 32] = font[90 - 32];
             // Lowercase l with stroke
             font[179 - 32] = font[108 - 32];
             // Lowercase a with ogonek
             font[185 - 32] = font[97 - 32];
+
             // Lowercase s with cedilla
-            font[186 - 32] = font[115 - 32];
+            font[186 - 32].resize( font[115 - 32].width(), font[115 - 32].height() + 3 );
+            font[186 - 32].reset();
+            fheroes2::Copy( font[115 - 32], 0, 0, font[186 - 32], 0, 0, font[115 - 32].width(), font[115 - 32].height() );
+            fheroes2::Copy( font[170 - 32], 5, 11, font[186 - 32], 4, 7, 3, 3 );
+            font[186 - 32].setPosition( font[115 - 32].x(), font[115 - 32].y() );
+            updateNormalFontLetterShadow( font[186 - 32] );
+
             // Lowercase z with dot above
             font[191 - 32] = font[122 - 32];
             // Uppercase A with acute
