@@ -77,6 +77,8 @@ namespace
         return System::ConcatePath( "ux0:data", prog );
 #elif defined( TARGET_NINTENDO_SWITCH )
         return System::ConcatePath( "/switch", prog );
+#elif defined( ANDROID )
+        return System::ConcatePath( "/sdcard", prog );
 #endif
 
         const char * homeEnvPath = getenv( "HOME" );
@@ -187,8 +189,6 @@ std::string System::GetDataDirectory( const std::string & prog )
     }
 
     return {};
-#elif defined( ANDROID )
-    return System::ConcatePath( "/sdcard", prog );
 #else
     return GetHomeDirectory( prog );
 #endif
