@@ -232,19 +232,29 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
 
+            // Uppercase S with acute
             font[140 - 32] = font[83 - 32];
+            // Uppercase Z with acute
             font[143 - 32] = font[90 - 32];
+            // Lowercase s with acute
             font[156 - 32] = font[115 - 32];
+            // Lowercase z with acute
             font[159 - 32] = font[122 - 32];
+            // Uppercase L with stroke
             font[163 - 32] = font[76 - 32];
+            // Uppercase A with ogonek
             font[165 - 32] = font[65 - 32];
             // Uppercase S with cedilla
             font[170 - 32] = font[83 - 32];
+            // Uppercase Z with dot above
             font[175 - 32] = font[90 - 32];
+            // Lowercase l with stroke
             font[179 - 32] = font[108 - 32];
+            // Lowercase a with ogonek
             font[185 - 32] = font[97 - 32];
             // Lowercase s with cedilla
             font[186 - 32] = font[115 - 32];
+            // Lowercase z with dot above
             font[191 - 32] = font[122 - 32];
             // Uppercase A with acute
             font[193 - 32] = font[65 - 32];
@@ -252,14 +262,17 @@ namespace
             font[194 - 32] = font[65 - 32];
             // Uppercase A with breve
             font[195 - 32] = font[65 - 32];
+            // Uppercase C with acute
             font[198 - 32] = font[67 - 32];
             // Uppercase E with acute
             font[201 - 32] = font[69 - 32];
+            // Uppercase E with ogonek
             font[202 - 32] = font[69 - 32];
             // Uppercase I with acute
             font[205 - 32] = font[73 - 32];
             // Uppercase I with circumflex
             font[206 - 32] = font[73 - 32];
+            // Uppercase N with acute
             font[209 - 32] = font[78 - 32];
             // Uppercase O with acute
             font[211 - 32] = font[79 - 32];
@@ -281,14 +294,17 @@ namespace
             font[226 - 32] = font[97 - 32];
             // Lowercase a with breve
             font[227 - 32] = font[97 - 32];
+            // Lowercase c with acute
             font[230 - 32] = font[99 - 32];
             // Lowercase e with acute
             font[233 - 32] = font[101 - 32];
+            // Lowercase e with ogonek
             font[234 - 32] = font[101 - 32];
             // Lowercase i with acute
             font[237 - 32] = font[105 - 32];
             // Lowercase i with circumflex
             font[238 - 32] = font[105 - 32];
+            // Lowercase n with acute
             font[241 - 32] = font[110 - 32];
             // Lowercase o with acute
             font[243 - 32] = font[111 - 32];
