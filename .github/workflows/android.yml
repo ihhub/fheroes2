@@ -18,11 +18,23 @@ jobs:
         cd android
         ./gradlew assembleDebug
     - name: Lint
+      if: ${{ github.event_name == 'pull_request' }}
       run: |
         cd android
         ./gradlew app:lint
     - uses: actions/upload-artifact@v3
-      if: ${{ success() || failure() }}
+      if: ${{ github.event_name == 'pull_request' && ( success() || failure() ) }}
       with:
         name: android-lint-report
         path: android/app/build/reports/
+    - name: Create package
+      run: |
+        mkdir .apk
+        cp android/app/build/outputs/apk/debug/app-debug.apk .apk/fheroes2_debug.apk
+        zip fheroes2_android.zip .apk/* LICENSE changelog.txt README.txt
+    - uses: actions/upload-artifact@v3
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: fheroes2_android.zip
+        path: fheroes2_android.zip
+        if-no-files-found: error
