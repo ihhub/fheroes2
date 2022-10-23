@@ -510,24 +510,6 @@ namespace fheroes2
 
                 break;
             }
-            /*case ICN::UNIFORM_EVIL_MIN_BUTTON:
-            case ICN::UNIFORM_EVIL_MAX_BUTTON: {
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out.resize( GetICN( ICN::RECRUIT, 4 + i ).width() - 6, GetICN( ICN::RECRUIT, 4 + i ).height() - 5 + i );
-                    out.reset();
-                    fheroes2::Copy( GetICN( ICN::SYSTEME, 11 + i ), 0, 0, out, 0, 0, GetICN( ICN::RECRUIT, 4 + i ).width() - 13 + i,
-                                    GetICN( ICN::RECRUIT, 4 + i ).height() - 5 + i );
-                    fheroes2::Copy( GetICN( ICN::SYSTEME, 11 + i ), 89 + i, 0, out, 53 + i, 0, 7 - i, GetICN( ICN::RECRUIT, 4 + i ).height() - i );
-                }
-
-                const char * text( ( id == ICN::UNIFORM_EVIL_MIN_BUTTON ) ? "MIN" : "MAX" );
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( text ), { 6, 5 }, { 4, 6 }, { 52, 16 }, fheroes2::FontColor::GRAY );
-
-                break;
-            }*/
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
