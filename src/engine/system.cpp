@@ -74,9 +74,9 @@ namespace
     std::string GetHomeDirectory( const std::string & prog )
     {
 #if defined( TARGET_PS_VITA )
-        return "ux0:data/fheroes2";
+        return System::ConcatePath( "ux0:data", prog );
 #elif defined( TARGET_NINTENDO_SWITCH )
-        return "/switch/fheroes2";
+        return System::ConcatePath( "/switch", prog );
 #endif
 
         const char * homeEnvPath = getenv( "HOME" );
