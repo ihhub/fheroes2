@@ -1596,7 +1596,7 @@ msgid "campaignBonus|Mass Haste"
 msgstr "Célérité de masse"
 
 msgid "campaignBonus|Mirror Image"
-msgstr "Miroir"
+msgstr "Image miroir"
 
 msgid "campaignBonus|Resurrect"
 msgstr "Résurrection"
@@ -9630,7 +9630,7 @@ msgstr ""
 "permanente."
 
 msgid "Mirror Image"
-msgstr "Miroir"
+msgstr "Image miroir"
 
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units.  "
@@ -9749,7 +9749,7 @@ msgstr ""
 "Permet au lanceur du sort de se transporter magiquement dans un lieu proche."
 
 msgid "Dimension Door"
-msgstr "autre dimension"
+msgstr "Autre dimension"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
