@@ -24,7 +24,6 @@
 #ifndef H2AI_H
 #define H2AI_H
 
-#include "gamedefs.h"
 #include "mp2.h"
 #include "rand.h"
 

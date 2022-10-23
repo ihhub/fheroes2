@@ -101,7 +101,7 @@ public:
 
     void SortStrongest();
 
-    void JoinStrongest( Troops &, bool );
+    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
 
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
@@ -133,6 +133,8 @@ struct NeutralMonsterJoiningCondition
 class Army : public Troops, public Control
 {
 public:
+    static const size_t maximumTroopCount = 5;
+
     static std::string SizeString( uint32_t );
     static std::string TroopSizeString( const Troop & );
 

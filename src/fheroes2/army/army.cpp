@@ -302,7 +302,7 @@ double Troops::getReinforcementValue( const Troops & reinforcement ) const
     combined.MergeTroops();
     combined.SortStrongest();
 
-    while ( combined.Size() > ARMYMAXTROOPS ) {
+    while ( combined.Size() > Army::maximumTroopCount ) {
         combined.PopBack();
     }
 
@@ -642,20 +642,22 @@ void Troops::SortStrongest()
     std::sort( begin(), end(), Army::StrongestTroop );
 }
 
-void Troops::JoinStrongest( Troops & troops2, bool saveLast )
+void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver )
 {
-    if ( this == &troops2 )
+    if ( this == &giverArmy )
         return;
 
-    // validate the size (can be different from ARMYMAXTROOPS)
-    if ( troops2.size() < size() )
-        troops2.resize( size() );
+    // validate the size (can be different from maximumTroopCount)
+    if ( giverArmy.size() < size() )
+        giverArmy.resize( size() );
 
     // first try to keep units in the same slots
     for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * leftTroop = at( slot );
-        Troop * rightTroop = troops2[slot];
+        Troop * rightTroop = giverArmy[slot];
         if ( rightTroop && rightTroop->isValid() ) {
+            assert( leftTroop != nullptr );
+
             if ( !leftTroop->isValid() ) {
                 // if slot is empty, simply move the unit
                 leftTroop->Set( *rightTroop );
@@ -670,17 +672,17 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
     }
 
     // there's still unmerged units left and there's empty room for them
-    for ( size_t slot = 0; slot < troops2.size(); ++slot ) {
-        Troop * rightTroop = troops2[slot];
+    for ( size_t slot = 0; slot < giverArmy.size(); ++slot ) {
+        Troop * rightTroop = giverArmy[slot];
         if ( rightTroop && JoinTroop( rightTroop->GetMonster(), rightTroop->GetCount(), true ) ) {
             rightTroop->Reset();
         }
     }
 
     // if there's more units than slots, start optimizing
-    if ( troops2.GetOccupiedSlotCount() > 0 ) {
-        Troops rightPriority = troops2.GetOptimized();
-        troops2.Clean();
+    if ( giverArmy.GetOccupiedSlotCount() > 0 ) {
+        Troops rightPriority = giverArmy.GetOptimized();
+        giverArmy.Clean();
         // strongest at the end
         std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
 
@@ -688,9 +690,12 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
         MergeTroops();
 
         // 2. Fill empty slots with best troops (if there are any)
-        uint32_t count = GetOccupiedSlotCount();
-        while ( count < ARMYMAXTROOPS && !rightPriority.empty() ) {
-            JoinTroop( *rightPriority.back() );
+        size_t count = GetOccupiedSlotCount();
+        while ( count < Army::maximumTroopCount && !rightPriority.empty() ) {
+            if ( !JoinTroop( *rightPriority.back() ) ) {
+                // Something is wrong with calculation of free monster slots. Check the logic!
+                assert( 0 );
+            }
             rightPriority.PopBack();
             ++count;
         }
@@ -710,61 +715,77 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 
         // 4. The rest goes back to second army
         while ( !rightPriority.empty() ) {
-            troops2.JoinTroop( *rightPriority.back() );
+            if ( !giverArmy.JoinTroop( *rightPriority.back() ) ) {
+                // We somehow cannot give the same army back.
+                assert( 0 );
+            }
             rightPriority.PopBack();
         }
     }
 
-    // save weakest unit to army2 (for heroes)
-    if ( saveLast && !troops2.isValid() ) {
-        Troop * weakest = GetWeakestTroop();
+    if ( !keepAtLeastOneSlotForGiver || giverArmy.isValid() ) {
+        // Either the giver army does no need extra army or it already has some.
+        return;
+    }
 
-        if ( weakest && weakest->isValid() ) {
-            // First check if the weakest troop is actually worth to keep.
-            const double weakestStrength = weakest->GetStrength();
-            const double totalArmyStrength = GetStrength();
-            // The weakest army should not be more than 5% from the overall army strength.
-            const double strengthLimit = totalArmyStrength / 20;
+    Troop * weakest = GetWeakestTroop();
+    if ( weakest == nullptr || !weakest->isValid() ) {
+        // How is possible that after we have merged 2 armies no monsters are present?
+        assert( 0 );
+        return;
+    }
 
-            if ( weakestStrength < strengthLimit ) {
-                // The weakest troop is less than limit. Just kick this weakling out.
-                troops2.JoinTroop( *weakest, weakest->GetCount() );
-                weakest->Reset();
-            }
-            else {
-                uint32_t acceptableCount = static_cast<uint32_t>( strengthLimit / weakestStrength * weakest->GetCount() );
-                assert( acceptableCount <= weakest->GetCount() );
-                if ( acceptableCount > weakest->GetCount() / 2 ) {
-                    // No more than half.
-                    acceptableCount = weakest->GetCount() / 2;
-                }
+    // First check if the weakest troop is actually worth to keep.
+    const double weakestStrength = weakest->GetStrength();
+    const double totalArmyStrength = GetStrength();
+    // The weakest army should not be more than 5% from the overall army strength.
+    const double strengthLimit = totalArmyStrength / 20;
 
-                if ( acceptableCount < 1 ) {
-                    acceptableCount = 1;
-                }
-
-                troops2.JoinTroop( *weakest, acceptableCount );
-                weakest->SetCount( weakest->GetCount() - acceptableCount );
-            }
-
-            // Make sure that this hero can survive an attack by splitting a single stack of monsters into multiple.
-            Troop * firstValidStack = troops2.GetFirstValid();
-            assert( firstValidStack != nullptr );
-
-            if ( firstValidStack->GetCount() > 1 ) {
-                const uint32_t stackCount = std::min( static_cast<uint32_t>( troops2.size() ), firstValidStack->GetCount() );
-
-                Troop temp( *firstValidStack );
-                firstValidStack->Reset();
-
-                troops2.addNewTroopsToFreeSlots( temp, stackCount );
-            }
-
-            // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
-            if ( troops2.GetOccupiedSlotCount() < troops2.size() ) {
-                Rand::Shuffle( troops2 );
-            }
+    if ( weakestStrength < strengthLimit ) {
+        // The weakest troop is less than limit. Just kick this weakling out.
+        if ( !giverArmy.JoinTroop( *weakest, weakest->GetCount() ) ) {
+            // The army is empty and we cannot add more troops?
+            assert( 0 );
         }
+
+        weakest->Reset();
+    }
+    else {
+        uint32_t acceptableCount = static_cast<uint32_t>( strengthLimit / weakestStrength * weakest->GetCount() );
+        assert( acceptableCount <= weakest->GetCount() );
+        if ( acceptableCount > weakest->GetCount() / 2 ) {
+            // No more than half.
+            acceptableCount = weakest->GetCount() / 2;
+        }
+
+        if ( acceptableCount < 1 ) {
+            acceptableCount = 1;
+        }
+
+        if ( !giverArmy.JoinTroop( *weakest, acceptableCount ) ) {
+            // The army is empty and we cannot add more troops?
+            assert( 0 );
+        }
+
+        weakest->SetCount( weakest->GetCount() - acceptableCount );
+    }
+
+    // Make sure that this hero can survive an attack by splitting a single stack of monsters into multiple.
+    Troop * firstValidStack = giverArmy.GetFirstValid();
+    assert( firstValidStack != nullptr );
+
+    if ( firstValidStack->GetCount() > 1 ) {
+        const uint32_t stackCount = std::min( static_cast<uint32_t>( giverArmy.size() ), firstValidStack->GetCount() );
+
+        Troop temp( *firstValidStack );
+        firstValidStack->Reset();
+
+        giverArmy.addNewTroopsToFreeSlots( temp, stackCount );
+    }
+
+    // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
+    if ( giverArmy.GetOccupiedSlotCount() < giverArmy.size() ) {
+        Rand::Shuffle( giverArmy );
     }
 }
 
@@ -848,8 +869,8 @@ Army::Army( HeroBase * s )
     , combat_format( true )
     , color( Color::NONE )
 {
-    reserve( ARMYMAXTROOPS );
-    for ( uint32_t ii = 0; ii < ARMYMAXTROOPS; ++ii )
+    reserve( maximumTroopCount );
+    for ( size_t i = 0; i < maximumTroopCount; ++i )
         push_back( new ArmyTroop( this ) );
 }
 
@@ -858,8 +879,8 @@ Army::Army( const Maps::Tiles & t )
     , combat_format( true )
     , color( Color::NONE )
 {
-    reserve( ARMYMAXTROOPS );
-    for ( uint32_t ii = 0; ii < ARMYMAXTROOPS; ++ii )
+    reserve( maximumTroopCount );
+    for ( size_t i = 0; i < maximumTroopCount; ++i )
         push_back( new ArmyTroop( this ) );
 
     setFromTile( t );
@@ -1483,10 +1504,10 @@ void Army::ArrangeForWhirlpool()
 {
     // Make an "optimized" version first (each unit type occupies just one slot)
     const Troops optimizedTroops = GetOptimized();
-    assert( optimizedTroops.Size() > 0 && optimizedTroops.Size() <= ARMYMAXTROOPS );
+    assert( optimizedTroops.Size() > 0 && optimizedTroops.Size() <= maximumTroopCount );
 
     // Already a full house, there is no room for further optimization
-    if ( optimizedTroops.Size() == ARMYMAXTROOPS ) {
+    if ( optimizedTroops.Size() == maximumTroopCount ) {
         return;
     }
 
@@ -1527,7 +1548,7 @@ void Army::ArrangeForWhirlpool()
 
 void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount )
 {
-    assert( stacksCount > 0 && stacksCount <= size() && size() == ARMYMAXTROOPS );
+    assert( stacksCount > 0 && stacksCount <= size() && size() == maximumTroopCount );
     assert( std::all_of( begin(), end(), []( const Troop * troop ) { return troop->isEmpty(); } ) );
 
     size_t stacks;
@@ -1561,7 +1582,7 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
 
     // Archers should always be divided into as many stacks as possible
     if ( monster.isArchers() ) {
-        stacksCount = ARMYMAXTROOPS;
+        stacksCount = maximumTroopCount;
     }
     else {
         std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
