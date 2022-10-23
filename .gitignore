@@ -82,5 +82,15 @@ script/demo/demo
 # Installed packages for Visual Studio
 VisualStudio/packages
 
+# Third-party packages for Android Studio
+android/app/jni/SDL2/
+android/app/jni/SDL2_mixer/
+android/sdl2/
+
+# Android Studio files specific to the developer's local configuration
+android/local.properties
+android/.idea
+android/.gradle
+
 # Mac magic folders
 .DS_Store

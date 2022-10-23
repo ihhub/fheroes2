@@ -20,25 +20,15 @@
 
 LOCAL_PATH := $(call my-dir)
 
-# Common for both C and C++
-FHEROES2_C_WARN_OPTIONS := \
-    -pedantic \
-    -Wall \
-    -Wextra \
-    -Wcast-align \
-    -Wextra-semi \
-    -Wfloat-conversion \
-    -Wfloat-equal \
-    -Winit-self \
-    -Wredundant-decls \
-    -Wshadow \
-    -Wundef \
-    -Wuninitialized \
-    -Wunused
+include $(CLEAR_VARS)
 
-# C++ only
-FHEROES2_CPP_WARN_OPTIONS := \
-    -Wctor-dtor-privacy \
-    -Woverloaded-virtual
+# Mitigate the issue with Windows command line size limit
+LOCAL_SHORT_COMMANDS := true
 
-include $(call all-subdir-makefiles)
+SMACKER_SRC_DIR := $(LOCAL_PATH)/../../../../src/thirdparty/libsmacker
+
+LOCAL_MODULE := smacker
+LOCAL_SRC_FILES := $(SMACKER_SRC_DIR)/smacker.c
+LOCAL_EXPORT_C_INCLUDES := $(SMACKER_SRC_DIR)
+
+include $(BUILD_STATIC_LIBRARY)
