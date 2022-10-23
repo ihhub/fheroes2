@@ -122,7 +122,43 @@ namespace
         return heroArmyStrength > ai.getTargetArmyStrength( tile, objectType ) * targetStrengthMultiplier;
     }
 
-    bool HeroesValidObject( const Heroes & hero, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai, const double heroArmyStrength )
+    bool isArmyValuableToObtain( const Troop & monster, const double rawArmyStrength, const Heroes::Role role, const bool armyHasMonster )
+    {
+        const double objectArmyStrength = monster.GetStrength();
+        double strengthLimit = 0.05;
+        switch ( role ) {
+        case Heroes::Role::SCOUT:
+            strengthLimit = 0.01;
+            break;
+        case Heroes::Role::COURIER:
+            strengthLimit = 0.015;
+            break;
+        case Heroes::Role::HUNTER:
+            strengthLimit = 0.02;
+            break;
+        case Heroes::Role::FIGHTER:
+            strengthLimit = 0.025;
+            break;
+        case Heroes::Role::CHAMPION:
+            strengthLimit = 0.03;
+            break;
+        default:
+            // Did you add a new AI hero role? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        if ( armyHasMonster ) {
+            // Since the army has the same monster the limit must be reduced.
+            strengthLimit /= 2;
+        }
+
+        // Do not even care about visiting this object as it brings no visible advantage.
+        return objectArmyStrength > rawArmyStrength * strengthLimit;
+    }
+
+    bool HeroesValidObject( const Heroes & hero, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai, const double heroArmyStrength,
+                            const double rawArmyStrength )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -350,15 +386,19 @@ namespace
         case MP2::OBJ_GOBLINHUT:
         case MP2::OBJ_DWARFCOTT:
         case MP2::OBJ_HALFLINGHOLE:
-        case MP2::OBJ_THATCHEDHUT: {
-            const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
-        }
-
+        case MP2::OBJ_THATCHEDHUT:
         case MP2::OBJ_PEASANTHUT: {
-            // Peasants are special monsters. They're the weakest! Think twice before getting them.
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
+            if ( !troop.isValid() ) {
+                return false;
+            }
+
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() ) {
+                return false;
+            }
+
+            return isArmyValuableToObtain( troop, rawArmyStrength, hero.getAIRole(), armyHasMonster );
         }
 
         // recruit army
@@ -370,11 +410,24 @@ namespace
         case MP2::OBJ_AIRALTAR:
         case MP2::OBJ_FIREALTAR:
         case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS: {
+        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_ANCIENTLAMP: {
             const Troop & troop = tile.QuantityTroop();
-            const payment_t & paymentCosts = troop.GetTotalCost();
+            if ( !troop.isValid() ) {
+                return false;
+            }
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || !army.isFullHouse() );
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() ) {
+                return false;
+            }
+
+            const payment_t & paymentCosts = troop.GetTotalCost();
+            if ( !kingdom.AllowPayment( paymentCosts ) ) {
+                return false;
+            }
+
+            return isArmyValuableToObtain( troop, rawArmyStrength, hero.getAIRole(), armyHasMonster );
         }
 
         // recruit army (battle)
@@ -384,20 +437,23 @@ namespace
             if ( Color::NONE == tile.QuantityColor() ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
-            else {
-                const Troop & troop = tile.QuantityTroop();
-                const payment_t & paymentCosts = troop.GetTotalCost();
 
-                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
-            }
-        }
-
-        // recruit genie
-        case MP2::OBJ_ANCIENTLAMP: {
             const Troop & troop = tile.QuantityTroop();
-            const payment_t & paymentCosts = troop.GetTotalCost();
+            if ( !troop.isValid() ) {
+                return false;
+            }
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() ) {
+                return false;
+            }
+
+            const payment_t & paymentCosts = troop.GetTotalCost();
+            if ( !kingdom.AllowPayment( paymentCosts ) ) {
+                return false;
+            }
+
+            return isArmyValuableToObtain( troop, rawArmyStrength, hero.getAIRole(), armyHasMonster );
         }
 
         // upgrade army
@@ -549,6 +605,7 @@ namespace
             , _pathfinder( pathfinder )
             , _ai( ai )
             , _heroArmyStrength( hero.GetArmy().GetStrength() )
+            , _rawArmyStrength( hero.GetArmy().getTroops().GetStrength() )
         {
             // Do nothing.
         }
@@ -560,7 +617,7 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = HeroesValidObject( _hero, index, _pathfinder, _ai, _heroArmyStrength );
+            const bool valid = HeroesValidObject( _hero, index, _pathfinder, _ai, _heroArmyStrength, _rawArmyStrength );
             _validObjects[index] = valid;
             return valid;
         }
@@ -573,6 +630,9 @@ namespace
         // Hero's strength value is valid till any action is done.
         // Since an instance of this class is used only for evaluation of the future movement it is appropriate to cache the strength.
         const double _heroArmyStrength;
+
+        // Raw army strength is used in cases when it is required to measure possible future additional army to join.
+        const double _rawArmyStrength;
 
         std::map<int, bool> _validObjects;
     };
