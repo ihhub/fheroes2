@@ -499,8 +499,10 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out.resize( GetICN( ICN::RECRUIT, 4 + i ).width() - 6, GetICN( ICN::RECRUIT, 4 + i ).height() - 5 + i );
                     out.reset();
+                    // Copy left main body of button.
                     fheroes2::Copy( GetICN( baseIcnId, 11 + i ), 0, 0, out, 0, 0, GetICN( ICN::RECRUIT, 4 + i ).width() - 13 + i,
                                     GetICN( ICN::RECRUIT, 4 + i ).height() - 5 + i );
+                    // Copy terminating right margin of the button.
                     fheroes2::Copy( GetICN( baseIcnId, 11 + i ), 89 + i, 0, out, 53 + i, 0, 7 - i, GetICN( ICN::RECRUIT, 4 + i ).height() - i );
                 }
 
