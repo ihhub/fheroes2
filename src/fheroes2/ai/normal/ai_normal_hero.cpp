@@ -153,7 +153,7 @@ namespace
             strengthLimit /= 2;
         }
 
-        // Do not even care about visiting this object as it brings no visible advantage.
+        // Do not even care about this monster as it brings no visible advantage to the army.
         return objectArmyStrength > rawArmyStrength * strengthLimit;
     }
 
