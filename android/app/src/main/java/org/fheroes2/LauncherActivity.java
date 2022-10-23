@@ -27,7 +27,7 @@ public class LauncherActivity extends Activity {
                 return;
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // On Android 6 to 11 we need to request the WRITE_EXTERNAL_STORAGE permission,
+            // On Android 6 to 10 we need to request the WRITE_EXTERNAL_STORAGE permission,
             // READ_EXTERNAL_STORAGE permission will be granted automatically
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
