@@ -20,25 +20,27 @@
 
 LOCAL_PATH := $(call my-dir)
 
-# Common for both C and C++ compilers
-FHEROES2_C_WARN_OPTIONS := \
-    -pedantic \
-    -Wall \
-    -Wextra \
-    -Wcast-align \
-    -Wextra-semi \
-    -Wfloat-conversion \
-    -Wfloat-equal \
-    -Winit-self \
-    -Wredundant-decls \
-    -Wshadow \
-    -Wundef \
-    -Wuninitialized \
-    -Wunused
+include $(CLEAR_VARS)
 
-# C++ compilers only
-FHEROES2_CPP_WARN_OPTIONS := \
-    -Wctor-dtor-privacy \
-    -Woverloaded-virtual
+# Mitigate the issue with Windows command line size limit
+LOCAL_SHORT_COMMANDS := true
 
-include $(call all-subdir-makefiles)
+MAIN_SRC_DIR := $(LOCAL_PATH)/../../../../src/fheroes2
+
+# SDL expects libmain.so as the main application module
+LOCAL_MODULE := main
+LOCAL_C_INCLUDES := \
+    $(filter %/, $(wildcard $(MAIN_SRC_DIR)/*/)) \
+    $(filter %/, $(wildcard $(MAIN_SRC_DIR)/*/*/))
+LOCAL_SRC_FILES := \
+    $(wildcard $(MAIN_SRC_DIR)/*/*.cpp) \
+    $(wildcard $(MAIN_SRC_DIR)/*/*/*.cpp)
+LOCAL_SHARED_LIBRARIES := SDL2
+LOCAL_STATIC_LIBRARIES := engine
+LOCAL_CFLAGS := $(FHEROES2_C_WARN_OPTIONS)
+LOCAL_CPP_FEATURES := exceptions rtti
+LOCAL_CPPFLAGS := \
+    -std=c++17 \
+    $(FHEROES2_CPP_WARN_OPTIONS)
+
+include $(BUILD_SHARED_LIBRARY)

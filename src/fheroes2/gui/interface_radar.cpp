@@ -56,11 +56,11 @@ namespace
         COLOR_DESERT = 0x76,
         COLOR_SNOW = 0x0D,
         COLOR_SWAMP = 0x68,
-        COLOR_WASTELAND = 0xCD,
+        COLOR_WASTELAND = 0xCE,
         COLOR_BEACH = 0x29,
         COLOR_LAVA = 0x20,
         COLOR_DIRT = 0x36,
-        COLOR_GRASS = 0x63,
+        COLOR_GRASS = 0x62,
         COLOR_WATER = 0x4D,
         COLOR_ROAD = 0x7A,
 
@@ -188,7 +188,7 @@ void Interface::Radar::Generate()
 
                 const MP2::MapObjectType objectType = tile.GetObject();
                 if ( objectType == MP2::OBJ_MOUNTS || objectType == MP2::OBJ_TREES )
-                    color += 2;
+                    color += 3;
             }
 
             fheroes2::SetPixel( spriteArea, x, y, color );

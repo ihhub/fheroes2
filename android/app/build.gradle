@@ -25,6 +25,16 @@ android {
             path 'jni/Android.mk'
         }
     }
+
+    buildTypes {
+        debug {
+            externalNativeBuild {
+                ndkBuild {
+                    cFlags '-DWITH_DEBUG', '-Werror'
+                }
+            }
+        }
+    }
 }
 
 dependencies {
