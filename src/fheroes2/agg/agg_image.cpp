@@ -485,10 +485,10 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::UNIFORM_EVIL_MIN_BUTTON:
             case ICN::UNIFORM_EVIL_MAX_BUTTON:
-            case ICN::UNIFORM_GOOD_MIN_BUTTON:
-            case ICN::UNIFORM_GOOD_MAX_BUTTON: {
+            case ICN::UNIFORM_EVIL_MIN_BUTTON:
+            case ICN::UNIFORM_GOOD_MAX_BUTTON:
+            case ICN::UNIFORM_GOOD_MIN_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isGoodInterface = ( id == ICN::UNIFORM_GOOD_MAX_BUTTON || id == ICN::UNIFORM_GOOD_MIN_BUTTON );
