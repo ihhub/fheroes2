@@ -29,7 +29,8 @@ public class LauncherActivity extends Activity {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // On Android 6 to 10 we need to request the WRITE_EXTERNAL_STORAGE permission,
             // READ_EXTERNAL_STORAGE permission will be granted automatically
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
 
                 return;
@@ -45,7 +46,8 @@ public class LauncherActivity extends Activity {
 
         if (requestCode == REQUEST_CODE_WRITE_EXTERNAL_STORAGE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     startMainActivity();
                 }
             }
