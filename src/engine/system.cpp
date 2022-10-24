@@ -74,9 +74,20 @@ namespace
     std::string GetHomeDirectory( const std::string & prog )
     {
 #if defined( TARGET_PS_VITA )
-        return "ux0:data/fheroes2";
+        return System::ConcatePath( "ux0:data", prog );
 #elif defined( TARGET_NINTENDO_SWITCH )
-        return "/switch/fheroes2";
+        return System::ConcatePath( "/switch", prog );
+#elif defined( ANDROID )
+        (void)prog;
+
+        const char * storagePath = SDL_AndroidGetExternalStoragePath();
+        if ( storagePath == nullptr ) {
+            ERROR_LOG( "Failed to obtain the path to external storage. The error: " << SDL_GetError() )
+            return {};
+        }
+
+        VERBOSE_LOG( "Application storage path is " << storagePath )
+        return storagePath;
 #endif
 
         const char * homeEnvPath = getenv( "HOME" );
@@ -186,21 +197,6 @@ std::string System::GetDataDirectory( const std::string & prog )
         return System::ConcatePath( System::ConcatePath( homeEnv, "Library/Application Support" ), prog );
     }
 
-    return {};
-#elif defined( ANDROID )
-    const char * internalDir = SDL_AndroidGetInternalStoragePath();
-    if ( internalDir ) {
-        VERBOSE_LOG( "Internal storage path is " << internalDir )
-        return System::ConcatePath( internalDir, prog );
-    }
-
-    if ( SDL_AndroidGetExternalStorageState() & SDL_ANDROID_EXTERNAL_STORAGE_READ ) {
-        const char * externalDir = SDL_AndroidGetExternalStoragePath();
-        if ( externalDir ) {
-            VERBOSE_LOG( "External storage path is " << internalDir )
-            return System::ConcatePath( externalDir, prog );
-        }
-    }
     return {};
 #else
     return GetHomeDirectory( prog );
