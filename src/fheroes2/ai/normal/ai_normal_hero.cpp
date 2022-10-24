@@ -548,7 +548,7 @@ namespace
             return kingdom.AllowPayment( payment );
         }
         default:
-            // Did you add a new action object but forgot to add AI interaction for it?
+            // Did you add a new action object but forget to add AI interaction for it?
             assert( 0 );
             break;
         }
@@ -588,8 +588,6 @@ namespace
             , _heroArmyStrength( hero.GetArmy().GetStrength() )
             , _armyStrengthThreshold( 0.05 )
         {
-            const double rawArmyStrength = hero.GetArmy().getTroops().GetStrength();
-
             switch ( hero.getAIRole() ) {
             case Heroes::Role::SCOUT:
                 _armyStrengthThreshold = 0.01;
@@ -611,6 +609,8 @@ namespace
                 assert( 0 );
                 break;
             }
+
+            _armyStrengthThreshold *= hero.GetArmy().getTroops().GetStrength();
         }
 
         bool isValid( const int index )
