@@ -81,6 +81,7 @@ public class LauncherActivity extends Activity
     private void startMainActivity()
     {
         startActivity( new Intent( this, MainActivity.class ) );
+
         // Remove this Activity from history to avoid it being resumed when the MainActivity is finished
         finish();
     }
