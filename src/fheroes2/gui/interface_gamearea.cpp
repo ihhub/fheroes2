@@ -873,7 +873,7 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
-const int32_t _minimalRequiredDraggingMovement = 10;
+const int32_t minimalRequiredDraggingMovement = 10;
 
 void Interface::GameArea::QueueEventProcessing()
 {
@@ -885,7 +885,7 @@ void Interface::GameArea::QueueEventProcessing()
         _startMouseDragPosition = mp;
     }
     if ( _mouseDraggingInitiated ) {
-        if ( abs( _startMouseDragPosition.x - mp.x ) > _minimalRequiredDraggingMovement || abs( _startMouseDragPosition.y - mp.y ) > _minimalRequiredDraggingMovement ) {
+        if ( abs( _startMouseDragPosition.x - mp.x ) > minimalRequiredDraggingMovement || abs( _startMouseDragPosition.y - mp.y ) > minimalRequiredDraggingMovement ) {
             _mouseDraggingMovement = true;
         }
     }
