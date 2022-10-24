@@ -78,7 +78,16 @@ namespace
 #elif defined( TARGET_NINTENDO_SWITCH )
         return System::ConcatePath( "/switch", prog );
 #elif defined( ANDROID )
-        return System::ConcatePath( "/sdcard", prog );
+        (void)prog;
+
+        const char * storagePath = SDL_AndroidGetExternalStoragePath();
+        if ( storagePath == nullptr ) {
+            ERROR_LOG( "Failed to obtain the path to external storage. The error: " << SDL_GetError() )
+            return {};
+        }
+
+        VERBOSE_LOG( "Application storage path is " << storagePath )
+        return storagePath;
 #endif
 
         const char * homeEnvPath = getenv( "HOME" );
