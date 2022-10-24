@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 31
+
+    defaultConfig {
+        applicationId 'org.fheroes2'
+
+        minSdkVersion 19
+        targetSdkVersion 31
+
+        versionCode 1
+        versionName '1.0'
+
+        externalNativeBuild {
+            ndkBuild {
+                abiFilters 'arm64-v8a', 'x86_64'
+                arguments '-j4'
+            }
+        }
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'jni/Android.mk'
+        }
+    }
+
+    buildTypes {
+        debug {
+            externalNativeBuild {
+                ndkBuild {
+                    cFlags '-DWITH_DEBUG', '-Werror'
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':sdl2')
+}

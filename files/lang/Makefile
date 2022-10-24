@@ -33,8 +33,8 @@ merge: ../../src/dist/fheroes2.pot
 fr.mo: fr.po
 	sed -e 'y/àâçéèêîïôùûüÇÉÊÀ/@*^~`|><#&$$uCEEA/; s/œ/oe/g' $< | msgfmt - -o $@
 
-# Czech, Polish versions use CP1250
-cs.mo pl.mo: %.mo: %.po
+# Czech, Hungarian and Polish versions use CP1250
+cs.mo hu.mo pl.mo: %.mo: %.po
 	$(call MSGFMT,CP1250)
 
 # Belarusian, Bulgarian, Ukrainian versions use CP1251
@@ -43,8 +43,8 @@ cs.mo pl.mo: %.mo: %.po
 be.mo bg.mo ru.mo uk.mo: %.mo: %.po
 	$(call MSGFMT,CP1251)
 
-# German, Italian, Norwegian, Portuguese, Spanish, Swedish versions use CP1252
-de.mo es.mo it.mo nb.mo pt.mo sv.mo: %.mo: %.po
+# German, Italian, Dutch, Norwegian, Portuguese, Spanish, Swedish versions use CP1252
+de.mo es.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
 	$(call MSGFMT,CP1252)
 
 # Turkish uses CP1254

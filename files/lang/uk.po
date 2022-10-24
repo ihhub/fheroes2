@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 15:21+0000\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3260,6 +3260,9 @@ msgstr ""
 msgid "Map difficulty:"
 msgstr "Складність мапи:"
 
+msgid "N"
+msgstr ""
+
 #, fuzzy
 msgid "No maps exist at that size"
 msgstr "Немає мап такого розміру"
@@ -4369,6 +4372,12 @@ msgid "Portuguese"
 msgstr ""
 
 msgid "Turkish"
+msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+msgid "Hungarian"
 msgstr ""
 
 msgid ", FPS: "

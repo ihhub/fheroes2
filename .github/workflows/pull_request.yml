@@ -12,19 +12,16 @@ jobs:
   style:
     name: Code style check
     uses: ./.github/workflows/code_style_check.yml
-
   clang:
     name: Clang Analyzer
     needs:
     - style
     uses: ./.github/workflows/clang_analyzer.yml
-
   msvc:
     name: MSVC
     needs:
     - style
     uses: ./.github/workflows/msvc.yml
-
   sonarcloud:
     name: SonarCloud Analyzer
     needs:
@@ -32,13 +29,16 @@ jobs:
     uses: ./.github/workflows/sonarcloud.yml
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
+  android:
+    name: Android
+    needs:
+    - msvc
+    uses: ./.github/workflows/android.yml
   cmake:
     name: CMake
     needs:
     - msvc
     uses: ./.github/workflows/cmake.yml
-
   make:
     name: Make
     needs:

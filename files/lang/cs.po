@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 15:21+0000\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -2954,6 +2954,9 @@ msgstr ""
 "Mapa\n"
 "Obtížnost"
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr ""
 
@@ -4071,6 +4074,12 @@ msgid "Portuguese"
 msgstr ""
 
 msgid "Turkish"
+msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+msgid "Hungarian"
 msgstr ""
 
 msgid ", FPS: "

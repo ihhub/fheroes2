@@ -3083,6 +3083,9 @@ msgstr "Условие за победа"
 msgid "Map difficulty:"
 msgstr "Трудност на карта:"
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr "Няма карти в този размер"
 
@@ -4298,6 +4301,13 @@ msgstr "Португалски"
 
 msgid "Turkish"
 msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+#, fuzzy
+msgid "Hungarian"
+msgstr "Български"
 
 msgid ", FPS: "
 msgstr ""

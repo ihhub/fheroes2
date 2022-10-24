@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  make:
     strategy:
       matrix:
         config:
@@ -103,7 +103,7 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-  build-psv:
+  make-psv:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -131,23 +131,6 @@ jobs:
         rm -rf ~/.vitasdk-cache
       env:
         VITASDK: /usr/local/vitasdk
-    - name: Apply temporary patches
-      run: |
-        [[ -d ~/.vitasdk-cache ]] && exit 0
-        cd /usr/local/vitasdk
-        patch --force -p0 << EOF
-        --- arm-vita-eabi/include/SDL2/SDL_atomic.h.orig        2022-08-19 23:51:15.143690708 +0300
-        +++ arm-vita-eabi/include/SDL2/SDL_atomic.h     2022-08-19 23:51:40.734117312 +0300
-        @@ -240,7 +240,7 @@
-         /* "REP NOP" is PAUSE, coded for tools that don't know it by that name. */
-         #if (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
-             #define SDL_CPUPauseInstruction() __asm__ __volatile__("pause\n")  /* Some assemblers can't do REP NOP, so go with PAUSE. */
-        -#elif (defined(__arm__) && __ARM_ARCH__ >= 7) || defined(__aarch64__)
-        +#elif (defined(__arm__) && __ARM_ARCH >= 7) || defined(__aarch64__)
-             #define SDL_CPUPauseInstruction() __asm__ __volatile__("yield" ::: "memory")
-         #elif (defined(__powerpc__) || defined(__powerpc64__))
-             #define SDL_CPUPauseInstruction() __asm__ __volatile__("or 27,27,27");
-        EOF
     - name: Restore Vita SDK from cache
       run: |
         if [[ -d ~/.vitasdk-cache ]]; then
@@ -190,7 +173,7 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-  build-switch:
+  make-switch:
     name: Make (Nintendo Switch)
     runs-on: ubuntu-latest
     timeout-minutes: 30

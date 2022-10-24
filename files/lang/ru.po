@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 15:21+0000\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -553,9 +553,8 @@ msgstr ""
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
-#, fuzzy
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Вы уверены, что хотите распустить этот отряд?"
+msgstr "Вы уверены, что хотите закончить битву в авторежиме?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускают ход."
@@ -660,9 +659,8 @@ msgstr "Фантомный отряд создан!"
 msgid "The mirror image is destroyed!"
 msgstr "Фантомный отряд уничтожен!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr "Вы действительно хотите отступить?"
+msgstr "Вы действительно хотите прервать автобитву?"
 
 msgid "Error"
 msgstr "Ошибка"
@@ -801,7 +799,7 @@ msgid "Turning Point"
 msgstr "Переломный момент"
 
 msgid "scenarioName|Defender"
-msgstr ""
+msgstr "Защитник"
 
 msgid "Corlagon's Defense"
 msgstr "Защита Корлагона"
@@ -1314,17 +1312,19 @@ msgid "The army will be carried over the scenario."
 msgstr ""
 
 msgid "The kingdom will have +%{count} %{resource} each day."
-msgstr ""
+msgstr "Королевство ежедневно будет получать +%{count} %{resource}."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr ""
+msgstr "Заклинание \"%{spell}\" будет доступно в этом сценарии."
 
 msgid "%{hero} can be hired in the scenario."
-msgstr ""
+msgstr "%{hero} может быть нанят в этом сценарии."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
+"%{hero} был повержен, и больше не будет досаждать Вам в этом и последующих "
+"сценариях."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
@@ -1355,8 +1355,7 @@ msgstr ""
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
 "pass.\""
-msgstr ""
-"Гномы приветствуют Вас: \"Любой друг Роланда - наш друг. Вы можете пройти\"."
+msgstr "Гномы приветствуют Вас: \"Друг Роланда - наш друг. Вы можете пройти\"."
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
@@ -1449,173 +1448,131 @@ msgstr "Сапоги Путника"
 msgid "campaignBonus|White Pearl"
 msgstr "Бел. Жемчужина"
 
-#, fuzzy
 msgid "campaignBonus|Basic Archery"
-msgstr "Чёрн. Жемчужина"
+msgstr "Баз. стрельба"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Archery"
-msgstr "Продвинутая стрельба"
+msgstr "Прод. стрельба"
 
-#, fuzzy
 msgid "campaignBonus|Expert Archery"
-msgstr "Топор Власти"
+msgstr "Эксп. стрельба"
 
-#, fuzzy
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Баллиста"
+msgstr "Баз. баллистика"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Баллиста"
+msgstr "Прод. баллистика"
 
-#, fuzzy
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Баллиста"
+msgstr "Эксп. баллистика"
 
-#, fuzzy
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Защитный Доспех"
+msgstr "Баз. дипломатия"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr "Продвинутая дипломатия"
+msgstr "Прод. дипломатия"
 
-#, fuzzy
 msgid "campaignBonus|Expert Diplomacy"
-msgstr "Экспертная дипломатия"
+msgstr "Эксп. дипломатия"
 
-#, fuzzy
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Чёрн. Жемчужина"
+msgstr "Баз. орлиный взор"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Продвинутый орлиный взор"
+msgstr "Прод. орлиный взор"
 
-#, fuzzy
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Экспертный орлиный взор"
+msgstr "Эксп. орлиный взор"
 
-#, fuzzy
 msgid "campaignBonus|Basic Estates"
-msgstr "Баллиста"
+msgstr "Баз. казначей"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Estates"
-msgstr "Защитный Доспех"
+msgstr "Прод. казначей"
 
-#, fuzzy
 msgid "campaignBonus|Expert Estates"
-msgstr "Защитный Доспех"
+msgstr "Эксп. казначей"
 
-#, fuzzy
 msgid "campaignBonus|Basic Leadership"
-msgstr "Чёрн. Жемчужина"
+msgstr "Баз. лидерство"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Leadership"
-msgstr "Продвинутое лидерство"
+msgstr "Прод. лидерство"
 
-#, fuzzy
 msgid "campaignBonus|Expert Leadership"
-msgstr "Экспертное лидерство"
+msgstr "Эксп. лидерство"
 
-#, fuzzy
 msgid "campaignBonus|Basic Logistics"
-msgstr "Баллиста"
+msgstr "Баз. логистика"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Logistics"
-msgstr "Продвинутая логистика"
+msgstr "Прод. логистика"
 
-#, fuzzy
 msgid "campaignBonus|Expert Logistics"
-msgstr "Экспертная логистика"
+msgstr "Эксп. логистика"
 
-#, fuzzy
 msgid "campaignBonus|Basic Luck"
-msgstr "Общее проклятие"
+msgstr "Баз. удача"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Luck"
-msgstr "Податная"
+msgstr "Прод. удача"
 
-#, fuzzy
 msgid "campaignBonus|Expert Luck"
-msgstr "Податная"
+msgstr "Эксп. удача"
 
-#, fuzzy
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Баллиста"
+msgstr "Баз. мистицизм"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Mysticism"
-msgstr "Продвинутый мистицизм"
+msgstr "Прод. мистицизм"
 
-#, fuzzy
 msgid "campaignBonus|Expert Mysticism"
-msgstr "Экспертный мистицизм"
+msgstr "Эксп. мистицизм"
 
-#, fuzzy
 msgid "campaignBonus|Basic Navigation"
-msgstr "Цепь молний"
+msgstr "Баз. навигация"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Navigation"
-msgstr "Продвинутая навигация"
+msgstr "Прод. навигация"
 
-#, fuzzy
 msgid "campaignBonus|Expert Navigation"
-msgstr "Экспертная навигация"
+msgstr "Эксп. навигация"
 
-#, fuzzy
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Чёрн. Жемчужина"
+msgstr "Баз. некромантия"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Necromancy"
-msgstr "Продвинутая некромантия"
+msgstr "Прод. некромантия"
 
-#, fuzzy
 msgid "campaignBonus|Expert Necromancy"
-msgstr "Экспертная некромантия"
+msgstr "Эксп. некромантия"
 
-#, fuzzy
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Цепь молний"
+msgstr "Баз. следопыт"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "Продвинутый следопыт"
+msgstr "Прод. следопыт"
 
-#, fuzzy
 msgid "campaignBonus|Expert Pathfinding"
-msgstr "Экспертный следопыт"
+msgstr "Эксп. следопыт"
 
-#, fuzzy
 msgid "campaignBonus|Basic Scouting"
-msgstr "Кольцо Мага"
+msgstr "Баз. разведка"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Кольцо Мага"
+msgstr "Прод. разведка"
 
-#, fuzzy
 msgid "campaignBonus|Expert Scouting"
-msgstr "Податная"
+msgstr "Эксп. разведка"
 
-#, fuzzy
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Баллиста"
+msgstr "Баз. мудрость"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Поднять нежить"
+msgstr "Прод. мудрость"
 
-#, fuzzy
 msgid "campaignBonus|Expert Wisdom"
-msgstr "Шипованный Щит"
+msgstr "Эксп. мудрость"
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Поднять нежить"
@@ -2711,24 +2668,20 @@ msgstr ""
 msgid "Configure"
 msgstr ""
 
-#, fuzzy
 msgid "Hot Keys"
-msgstr "За одним компьютером"
+msgstr "Горячие клавиши"
 
-#, fuzzy
 msgid "Black & White"
-msgstr "Блэкридж"
+msgstr "Чёрно-белый"
 
-#, fuzzy
 msgid "Mouse Cursor"
-msgstr "Тень-курсор"
+msgstr "Курсор мыши"
 
 msgid "Color"
-msgstr ""
+msgstr "Цветной"
 
-#, fuzzy
 msgid "Text Support"
-msgstr "Контроль качества и поддержка"
+msgstr "Текстовое сопровождение"
 
 msgid "Evil"
 msgstr "Злой"
@@ -2987,29 +2940,23 @@ msgstr "Неизвестный"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (Уровень %{level})"
 
-#, fuzzy
 msgid "Attack:"
-msgstr "Атака"
+msgstr "Атака:"
 
-#, fuzzy
 msgid "Defense:"
-msgstr "Защита"
+msgstr "Защита:"
 
-#, fuzzy
 msgid "Spell Power:"
-msgstr "Сила магии"
+msgstr "Сила магии:"
 
-#, fuzzy
 msgid "Knowledge:"
-msgstr "Знания"
+msgstr "Знания:"
 
-#, fuzzy
 msgid "Spell Points:"
-msgstr "Очки магии"
+msgstr "Очки магии:"
 
-#, fuzzy
 msgid "Move Points:"
-msgstr "Запас хода"
+msgstr "Запас хода:"
 
 msgid "Cost per troop:"
 msgstr "Цена воина:"
@@ -3133,6 +3080,9 @@ msgstr "Условия победы"
 
 msgid "Map difficulty:"
 msgstr "Сложность карты:"
+
+msgid "N"
+msgstr ""
 
 msgid "No maps exist at that size"
 msgstr "Нет карт такого размера"
@@ -3554,21 +3504,17 @@ msgstr ""
 msgid "Designer"
 msgstr ""
 
-#, fuzzy
 msgid "Producers"
-msgstr "Продюсер"
+msgstr "Продюсеры"
 
-#, fuzzy
 msgid "QA Managers"
-msgstr "Менеджер по контролю качества"
+msgstr "Менеджеры по контролю качества"
 
-#, fuzzy
 msgid "Sound Design"
-msgstr "Композиторы и звукорежиссёры"
+msgstr "Звуковое оформление"
 
-#, fuzzy
 msgid "Town Themes"
-msgstr "Врата в город"
+msgstr "Музыкальные темы городов"
 
 msgid "Alto Sax"
 msgstr ""
@@ -4339,6 +4285,13 @@ msgstr "Разбойники"
 msgid "Turkish"
 msgstr ""
 
+msgid "Dutch"
+msgstr ""
+
+#, fuzzy
+msgid "Hungarian"
+msgstr "Варвар"
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -4547,10 +4500,10 @@ msgid "Martine"
 msgstr "Мартина"
 
 msgid " gives you maximum morale"
-msgstr ""
+msgstr " повышает Вашу мораль до максимума"
 
 msgid " gives you maximum luck"
-msgstr ""
+msgstr " повышает Вашу удачу до максимума"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Вы не можете забрать этот артефакт, у Вас нет свободного места!"
@@ -5940,6 +5893,8 @@ msgstr ""
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
+"Вы не владеете ни одним городом или замком. Потому это заклинание не "
+"сработает."
 
 #, fuzzy
 msgid "This hero is already in a town, so you can't cast the spell."
@@ -7969,7 +7924,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Sack of Gold"
-msgstr "Бездонный Мешок"
+msgstr "Бездонный Мешок Золота"
 
 msgid "The %{name} provides you with %{count} gold per day."
 msgstr "%{name} ежедневно приносит Вам %{count} золотых."
@@ -7982,7 +7937,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Bag of Gold"
-msgstr "Бездонная Сума"
+msgstr "Бездонная Сума Золота"
 
 msgid ""
 "A noblewoman, separated from her traveling companions, asks for your help. "
@@ -8475,7 +8430,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Sulfur"
-msgstr "Мешочек Серы"
+msgstr "Бездонный Мешочек Серы"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру серы."
@@ -8487,7 +8442,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Vial of Mercury"
-msgstr "Колба Ртути"
+msgstr "Бездонная Колба Ртути"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру ртути."
@@ -8499,7 +8454,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Gems"
-msgstr "Мешочек Самоцветов"
+msgstr "Бездонный Мешочек Самоцветов"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру самоцветов."
@@ -8512,7 +8467,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Cord of Wood"
-msgstr "Вязанка Дров"
+msgstr "Нескончаемая Вязанка Дров"
 
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру древесины."
@@ -8525,7 +8480,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Cart of Ore"
-msgstr "Вагонетка Руды"
+msgstr "Бездонная Вагонетка Руды"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру руды."
@@ -8537,7 +8492,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Crystal"
-msgstr "Мешочек Кристаллов"
+msgstr "Бездонный Мешочек Кристаллов"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру кристаллов."

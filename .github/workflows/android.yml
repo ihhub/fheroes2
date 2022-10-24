@@ -1,0 +1,40 @@
+name: Android
+
+on:
+  workflow_call:
+
+jobs:
+  android:
+    name: Android
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        bash script/android/install_packages.sh
+    - name: Build
+      run: |
+        cd android
+        ./gradlew assembleDebug
+    - name: Lint
+      if: ${{ github.event_name == 'pull_request' }}
+      run: |
+        cd android
+        ./gradlew app:lint
+    - uses: actions/upload-artifact@v3
+      if: ${{ github.event_name == 'pull_request' && ( success() || failure() ) }}
+      with:
+        name: android-lint-report
+        path: android/app/build/reports/
+    - name: Create package
+      run: |
+        cp android/app/build/outputs/apk/debug/app-debug.apk fheroes2.apk
+        cp docs/README.txt .
+        zip fheroes2_android.zip fheroes2.apk LICENSE changelog.txt README.txt
+    - uses: actions/upload-artifact@v3
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: fheroes2_android.zip
+        path: fheroes2_android.zip
+        if-no-files-found: error
