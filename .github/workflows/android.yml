@@ -43,3 +43,15 @@ jobs:
         name: fheroes2_android.zip
         path: fheroes2_android.zip
         if-no-files-found: error
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' }}
+      with:
+        artifacts: fheroes2_android.zip
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Android build (latest commit)
+        tag: fheroes2-android
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true
