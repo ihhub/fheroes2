@@ -299,7 +299,7 @@ double Troops::getReinforcementValue( const Troops & reinforcement ) const
     const double initialValue = combined.GetStrength();
 
     combined.Insert( reinforcement.GetOptimized() );
-    combined.MergeTroops();
+    combined.MergeSameMonsterTroops();
     combined.SortStrongest();
 
     while ( combined.Size() > Army::maximumTroopCount ) {
@@ -358,24 +358,26 @@ bool Troops::CanJoinTroop( const Monster & mons ) const
 
 bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst )
 {
-    if ( mons.isValid() && count ) {
-        auto findEmptySlot = []( const Troop * troop ) { return !troop->isValid(); };
-        auto findMonster = [&mons]( const Troop * troop ) { return troop->isValid() && troop->isMonster( mons.GetID() ); };
+    if ( !mons.isValid() || count == 0 ) {
+        return false;
+    }
 
-        iterator it = emptySlotFirst ? std::find_if( begin(), end(), findEmptySlot ) : std::find_if( begin(), end(), findMonster );
-        if ( it == end() ) {
-            it = emptySlotFirst ? std::find_if( begin(), end(), findMonster ) : std::find_if( begin(), end(), findEmptySlot );
-        }
+    auto findEmptySlot = []( const Troop * troop ) { return !troop->isValid(); };
+    auto findMonster = [&mons]( const Troop * troop ) { return troop->isValid() && troop->isMonster( mons.GetID() ); };
 
-        if ( it != end() ) {
-            if ( ( *it )->isValid() )
-                ( *it )->SetCount( ( *it )->GetCount() + count );
-            else
-                ( *it )->Set( mons, count );
+    iterator it = emptySlotFirst ? std::find_if( begin(), end(), findEmptySlot ) : std::find_if( begin(), end(), findMonster );
+    if ( it == end() ) {
+        it = emptySlotFirst ? std::find_if( begin(), end(), findMonster ) : std::find_if( begin(), end(), findEmptySlot );
+    }
 
-            DEBUG_LOG( DBG_GAME, DBG_INFO, std::dec << count << " " << ( *it )->GetName() )
-            return true;
-        }
+    if ( it != end() ) {
+        if ( ( *it )->isValid() )
+            ( *it )->SetCount( ( *it )->GetCount() + count );
+        else
+            ( *it )->Set( mons, count );
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, std::dec << count << " " << ( *it )->GetName() )
+        return true;
     }
 
     return false;
@@ -383,7 +385,11 @@ bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirs
 
 bool Troops::JoinTroop( const Troop & troop )
 {
-    return troop.isValid() ? JoinTroop( troop.GetMonster(), troop.GetCount() ) : false;
+    if ( !troop.isValid() ) {
+        return false;
+    }
+
+    return JoinTroop( troop.GetMonster(), troop.GetCount() );
 }
 
 bool Troops::CanJoinTroops( const Troops & troops2 ) const
@@ -420,7 +426,7 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep )
     assert( this != &from );
 
     // Combine troops of the same type in one slot to leave more room for new troops to join
-    MergeTroops();
+    MergeSameMonsterTroops();
 
     assert( isValid() && from.isValid() );
 
@@ -600,7 +606,7 @@ Troop * Troops::GetSlowestTroop() const
     return *lowest;
 }
 
-void Troops::MergeTroops()
+void Troops::MergeSameMonsterTroops()
 {
     for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * troop = at( slot );
@@ -687,7 +693,7 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
         std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
 
         // 1. Merge any remaining stacks to free some space
-        MergeTroops();
+        MergeSameMonsterTroops();
 
         // 2. Fill empty slots with best troops (if there are any)
         size_t count = GetOccupiedSlotCount();
