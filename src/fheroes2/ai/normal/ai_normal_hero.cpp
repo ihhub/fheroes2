@@ -122,43 +122,19 @@ namespace
         return heroArmyStrength > ai.getTargetArmyStrength( tile, objectType ) * targetStrengthMultiplier;
     }
 
-    bool isArmyValuableToObtain( const Troop & monster, const double rawArmyStrength, const Heroes::Role role, const bool armyHasMonster )
+    bool isArmyValuableToObtain( const Troop & monster, double armyStrengthThreshold, const bool armyHasMonster )
     {
-        const double objectArmyStrength = monster.GetStrength();
-        double strengthLimit = 0.05;
-        switch ( role ) {
-        case Heroes::Role::SCOUT:
-            strengthLimit = 0.01;
-            break;
-        case Heroes::Role::COURIER:
-            strengthLimit = 0.015;
-            break;
-        case Heroes::Role::HUNTER:
-            strengthLimit = 0.02;
-            break;
-        case Heroes::Role::FIGHTER:
-            strengthLimit = 0.025;
-            break;
-        case Heroes::Role::CHAMPION:
-            strengthLimit = 0.03;
-            break;
-        default:
-            // Did you add a new AI hero role? Add the logic above!
-            assert( 0 );
-            break;
-        }
-
         if ( armyHasMonster ) {
             // Since the army has the same monster the limit must be reduced.
-            strengthLimit /= 2;
+            armyStrengthThreshold /= 2;
         }
 
-        // Do not even care about this monster as it brings no visible advantage to the army.
-        return objectArmyStrength > rawArmyStrength * strengthLimit;
+        // Do not even care about this monster if it brings no visible advantage to the army.
+        return monster.GetStrength() > armyStrengthThreshold;
     }
 
-    bool HeroesValidObject( const Heroes & hero, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai, const double heroArmyStrength,
-                            const double rawArmyStrength )
+    bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai,
+                            const double armyStrengthThreshold )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -199,6 +175,7 @@ namespace
             return false;
 
         case MP2::OBJ_MAGELLANMAPS:
+            // TODO: avoid hardcoded resource values for objects.
             return !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
 
         case MP2::OBJ_WHIRLPOOL:
@@ -398,7 +375,7 @@ namespace
                 return false;
             }
 
-            return isArmyValuableToObtain( troop, rawArmyStrength, hero.getAIRole(), armyHasMonster );
+            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
         }
 
         // recruit army
@@ -423,11 +400,12 @@ namespace
             }
 
             const payment_t & paymentCosts = troop.GetTotalCost();
+            // TODO: even if AI does not have enough money it might still buy few monsters.
             if ( !kingdom.AllowPayment( paymentCosts ) ) {
                 return false;
             }
 
-            return isArmyValuableToObtain( troop, rawArmyStrength, hero.getAIRole(), armyHasMonster );
+            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
         }
 
         // recruit army (battle)
@@ -449,11 +427,12 @@ namespace
             }
 
             const payment_t & paymentCosts = troop.GetTotalCost();
+            // TODO: even if AI does not have enough money it might still buy few monsters.
             if ( !kingdom.AllowPayment( paymentCosts ) ) {
                 return false;
             }
 
-            return isArmyValuableToObtain( troop, rawArmyStrength, hero.getAIRole(), armyHasMonster );
+            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
         }
 
         // upgrade army
@@ -561,13 +540,15 @@ namespace
         case MP2::OBJ_ALCHEMYTOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
             const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
+            if ( cursed == 0 ) {
+                return false;
+            }
 
             const payment_t payment = PaymentConditions::ForAlchemist();
-
-            return cursed > 0 && kingdom.AllowPayment( payment );
+            return kingdom.AllowPayment( payment );
         }
         default:
-            // Did you add a new action object but forget to add AI interaction for it?
+            // Did you add a new action object but forgot to add AI interaction for it?
             assert( 0 );
             break;
         }
@@ -605,9 +586,31 @@ namespace
             , _pathfinder( pathfinder )
             , _ai( ai )
             , _heroArmyStrength( hero.GetArmy().GetStrength() )
-            , _rawArmyStrength( hero.GetArmy().getTroops().GetStrength() )
+            , _armyStrengthThreshold( 0.05 )
         {
-            // Do nothing.
+            const double rawArmyStrength = hero.GetArmy().getTroops().GetStrength();
+
+            switch ( hero.getAIRole() ) {
+            case Heroes::Role::SCOUT:
+                _armyStrengthThreshold = 0.01;
+                break;
+            case Heroes::Role::COURIER:
+                _armyStrengthThreshold = 0.015;
+                break;
+            case Heroes::Role::HUNTER:
+                _armyStrengthThreshold = 0.02;
+                break;
+            case Heroes::Role::FIGHTER:
+                _armyStrengthThreshold = 0.025;
+                break;
+            case Heroes::Role::CHAMPION:
+                _armyStrengthThreshold = 0.03;
+                break;
+            default:
+                // Did you add a new AI hero role? Add the logic above!
+                assert( 0 );
+                break;
+            }
         }
 
         bool isValid( const int index )
@@ -617,7 +620,7 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = HeroesValidObject( _hero, index, _pathfinder, _ai, _heroArmyStrength, _rawArmyStrength );
+            const bool valid = HeroesValidObject( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold );
             _validObjects[index] = valid;
             return valid;
         }
@@ -631,8 +634,8 @@ namespace
         // Since an instance of this class is used only for evaluation of the future movement it is appropriate to cache the strength.
         const double _heroArmyStrength;
 
-        // Raw army strength is used in cases when it is required to measure possible future additional army to join.
-        const double _rawArmyStrength;
+        // Army strength threshold is used to decide whether getting extra monsters is useful.
+        double _armyStrengthThreshold;
 
         std::map<int, bool> _validObjects;
     };
