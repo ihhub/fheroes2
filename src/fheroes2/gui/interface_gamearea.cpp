@@ -873,58 +873,60 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
+const int32_t _minimalRequiredDraggingMovement = 10;
+
 void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
 
     if ( le.MouseDownLeft() ) {
-        _dragScroll = true;
-        _dragScrollPos = mp;
+        _mouseDraggingInitiated = true;
+        _startMouseDragPosition = mp;
     }
-    if ( _dragScroll ) {
-        if ( abs( _dragScrollPos.x - mp.x ) > 10 || abs( _dragScrollPos.y - mp.y ) > 10 ) {
-            _dragScrollHysteresis = true;
+    if ( _mouseDraggingInitiated ) {
+        if ( abs( _startMouseDragPosition.x - mp.x ) > _minimalRequiredDraggingMovement || abs( _startMouseDragPosition.y - mp.y ) > _minimalRequiredDraggingMovement ) {
+            _mouseDraggingMovement = true;
         }
     }
     if ( !le.MousePressLeft() ) {
-        _dragScroll = false;
-        _dragScrollHysteresis = false;
+        _mouseDraggingInitiated = false;
+        _mouseDraggingMovement = false;
     }
 
-    if ( _dragScrollHysteresis ) {
-        SetCenterInPixels( getCurrentCenterInPixels() + _dragScrollPos - mp );
-        _dragScrollPos = mp;
+    if ( _mouseDraggingMovement ) {
+        SetCenterInPixels( getCurrentCenterInPixels() + _startMouseDragPosition - mp );
+        _startMouseDragPosition = mp;
+        return;
     }
-    else {
-        int32_t index = GetValidTileIdFromPoint( mp );
 
-        // change cursor if need
-        if ( updateCursor || index != _prevIndexPos ) {
-            Cursor::Get().SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
-            _prevIndexPos = index;
-            updateCursor = false;
-        }
+    int32_t index = GetValidTileIdFromPoint( mp );
 
-        // out of range
-        if ( index < 0 )
-            return;
-
-        const Settings & conf = Settings::Get();
-        if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
-            return;
-
-        const fheroes2::Point tileOffset = _topLeftTileOffset + mp - _windowROI.getPosition();
-        const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
-                                       ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
-
-        const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
-
-        if ( le.MouseClickLeft( tileROI ) )
-            interface.MouseCursorAreaClickLeft( index );
-        else if ( le.MousePressRight( tileROI ) )
-            interface.MouseCursorAreaPressRight( index );
+    // change cursor if need
+    if ( updateCursor || index != _prevIndexPos ) {
+        Cursor::Get().SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
+        _prevIndexPos = index;
+        updateCursor = false;
     }
+
+    // out of range
+    if ( index < 0 )
+        return;
+
+    const Settings & conf = Settings::Get();
+    if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
+        return;
+
+    const fheroes2::Point tileOffset = _topLeftTileOffset + mp - _windowROI.getPosition();
+    const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
+                                   ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
+
+    const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
+
+    if ( le.MouseClickLeft( tileROI ) )
+        interface.MouseCursorAreaClickLeft( index );
+    else if ( le.MousePressRight( tileROI ) )
+        interface.MouseCursorAreaPressRight( index );
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const

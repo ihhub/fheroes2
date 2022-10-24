@@ -1104,9 +1104,6 @@ LocalEvent & LocalEvent::GetClean()
 
 bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 {
-    mouse_button_ll = MousePressLeft();
-    mouse_button_lr = MousePressRight();
-
     if ( colorCycling.isRedrawRequired() ) {
         // Looks like there is no explicit rendering so the code for color cycling was executed here.
         if ( delay ) {
@@ -1122,6 +1119,10 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             fheroes2::Display::instance().render();
         }
     }
+
+    //save last state of buttons for detecting button changes
+    isLeftMouseButtonPressed = MousePressLeft();
+    isRightMouseButtonPressed = MousePressRight();
 
     SDL_Event event;
 

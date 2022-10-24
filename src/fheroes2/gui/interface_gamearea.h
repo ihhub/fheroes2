@@ -240,7 +240,7 @@ namespace Interface
 
         bool isDragScroll() const
         {
-            return _dragScrollHysteresis;
+            return _mouseDraggingMovement;
         }
 
     private:
@@ -278,9 +278,9 @@ namespace Interface
 
         void updateObjectAnimationInfo() const;
 
-        bool _dragScroll;
-        bool _dragScrollHysteresis;
-        fheroes2::Point _dragScrollPos;
+        bool _mouseDraggingInitiated = false;
+        bool _mouseDraggingMovement = false;
+        fheroes2::Point _startMouseDragPosition;
     };
 }
 

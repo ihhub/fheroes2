@@ -221,7 +221,7 @@ public:
 
     bool MouseDownLeft() const
     {
-        return !mouse_button_ll && MousePressLeft();
+        return !isLeftMouseButtonPressed && MousePressLeft();
     }
 
     bool MousePressRight() const;
@@ -233,7 +233,7 @@ public:
 
     bool MouseDownRight() const
     {
-        return !mouse_button_lr && MousePressRight();
+        return !isRightMouseButtonPressed && MousePressRight();
     }
 
     bool MouseReleaseLeft() const;
@@ -369,8 +369,8 @@ private:
 
     fheroes2::Point mouse_wm; // wheel movement
 
-    bool mouse_button_ll; // last left
-    bool mouse_button_lr; // last right
+    bool isLeftMouseButtonPressed;
+    bool isRightMouseButtonPressed;
 
     void ( *redraw_cursor_func )( int32_t, int32_t );
     void ( *keyboard_filter_func )( int, int );

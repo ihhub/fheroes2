@@ -428,13 +428,13 @@ void Interface::Radar::QueueEventProcessing()
         // move cursor
 
         if ( le.MouseDownLeft() ) {
-            _dragScroll = true;
+            _mouseDragging = true;
         }
         if ( !le.MousePressLeft() ) {
-            _dragScroll = false;
+            _mouseDragging = false;
         }
 
-        if ( _dragScroll ) {
+        if ( _mouseDragging ) {
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
