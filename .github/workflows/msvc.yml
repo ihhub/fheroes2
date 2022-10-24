@@ -13,28 +13,28 @@ jobs:
           build_config: Release-SDL1
           deploy_config: SDL1
           package_name: fheroes2_windows_x86_SDL1
-          release_name: Windows x86 build with SDL1 support (latest commit)
+          release_name: Windows x86 build with SDL1 (latest commit)
           release_tag: fheroes2-windows-x86-SDL1
         - name: SDL1 x64
           platform: x64
           build_config: Release-SDL1
           deploy_config: SDL1
           package_name: fheroes2_windows_x64_SDL1
-          release_name: Windows x64 build with SDL1 support (latest commit)
+          release_name: Windows x64 build with SDL1 (latest commit)
           release_tag: fheroes2-windows-x64-SDL1
         - name: SDL2 x86
           platform: x86
           build_config: Release-SDL2
           deploy_config: SDL2
           package_name: fheroes2_windows_x86_SDL2
-          release_name: Windows x86 build with SDL2 support (latest commit)
+          release_name: Windows x86 build with SDL2 (latest commit)
           release_tag: fheroes2-windows-x86-SDL2
         - name: SDL2 x64
           platform: x64
           build_config: Release-SDL2
           deploy_config: SDL2
           package_name: fheroes2_windows_x64_SDL2
-          release_name: Windows x64 build with SDL2 support (latest commit)
+          release_name: Windows x64 build with SDL2 (latest commit)
           release_tag: fheroes2-windows-x64-SDL2
     name: MSVC (${{ matrix.config.name }})
     runs-on: windows-2019
