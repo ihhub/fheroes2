@@ -497,13 +497,13 @@ namespace fheroes2
 
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out.resize( GetICN( ICN::RECRUIT, 4 + i ).width() - 6, GetICN( ICN::RECRUIT, 4 + i ).height() - 5 + i );
+                    const Sprite & originalButton = GetICN( ICN::RECRUIT, 4 + i );
+                    out.resize( originalButton.width() - 6, originalButton.height() - 5 + i );
                     out.reset();
                     // Copy left main body of button.
-                    fheroes2::Copy( GetICN( baseIcnId, 11 + i ), 0, 0, out, 0, 0, GetICN( ICN::RECRUIT, 4 + i ).width() - 13 + i,
-                                    GetICN( ICN::RECRUIT, 4 + i ).height() - 5 + i );
+                    fheroes2::Copy( GetICN( baseIcnId, 11 + i ), 0, 0, out, 0, 0, originalButton.width() - 13 + i, originalButton.height() - 5 + i );
                     // Copy terminating right margin of the button.
-                    fheroes2::Copy( GetICN( baseIcnId, 11 + i ), 89 + i, 0, out, 53 + i, 0, 7 - i, GetICN( ICN::RECRUIT, 4 + i ).height() - i );
+                    fheroes2::Copy( GetICN( baseIcnId, 11 + i ), 89 + i, 0, out, 53 + i, 0, 7 - i, originalButton.height() - i );
                 }
 
                 const char * text( ( id == ICN::UNIFORM_GOOD_MIN_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON ) ? "MIN" : "MAX" );
