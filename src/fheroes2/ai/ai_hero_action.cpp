@@ -1378,6 +1378,7 @@ namespace AI
             Kingdom & kingdom = hero.GetKingdom();
             const payment_t paymentCosts = troop.GetTotalCost();
 
+            // TODO: add logic for buying a part of monsters when the AI does not have enough resources.
             if ( kingdom.AllowPayment( paymentCosts ) && hero.GetArmy().JoinTroop( troop ) ) {
                 tile.MonsterSetCount( 0 );
                 kingdom.OddFundsResource( paymentCosts );
@@ -1797,7 +1798,7 @@ namespace AI
         }
 
         // Whirlpool effect affects heroes only with more than one creature in more than one slot
-        if ( heroArmy.GetCount() == 1 && weakestTroop->GetCount() == 1 ) {
+        if ( heroArmy.GetOccupiedSlotCount() == 1 && weakestTroop->GetCount() == 1 ) {
             return;
         }
 
