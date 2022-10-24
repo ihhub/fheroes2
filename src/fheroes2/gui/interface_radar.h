@@ -85,7 +85,7 @@ namespace Interface
         fheroes2::Point offset;
         bool hide;
 
-        bool _mouseDragging;
+        bool _mouseDragging = false;
     };
 }
 
