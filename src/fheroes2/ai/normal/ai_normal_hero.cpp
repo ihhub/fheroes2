@@ -371,6 +371,8 @@ namespace
             }
 
             const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            // TODO: full house does not mean that slots can't be merged together for the same monster types.
+            // TODO: we need to call a method which takes it into account.
             if ( !armyHasMonster && army.isFullHouse() ) {
                 return false;
             }
@@ -395,6 +397,8 @@ namespace
             }
 
             const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            // TODO: full house does not mean that slots can't be merged together for the same monster types.
+            // TODO: we need to call a method which takes it into account.
             if ( !armyHasMonster && army.isFullHouse() ) {
                 return false;
             }
@@ -422,6 +426,8 @@ namespace
             }
 
             const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            // TODO: full house does not mean that slots can't be merged together for the same monster types.
+            // TODO: we need to call a method which takes it into account.
             if ( !armyHasMonster && army.isFullHouse() ) {
                 return false;
             }
