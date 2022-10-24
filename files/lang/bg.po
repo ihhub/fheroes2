@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-12 15:21+0000\n"
-"PO-Revision-Date: 2022-10-24 10:48+0100\n"
+"PO-Revision-Date: 2022-10-24 12:18+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -2728,14 +2728,12 @@ msgstr "Експериментални настройки на играта."
 msgid "Toggle instant battle mode."
 msgstr "Превключи режима на незабавна битка."
 
-#, fuzzy
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Провери всички горещи клавиши, използвани в играта."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
-#, fuzzy
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 "Включване/изключване на цветните курсори. Цветните курсори изглеждат по-"
@@ -5006,15 +5004,15 @@ msgid ""
 "An old Knight appears on the steps of the gazebo. \"I am sorry, my liege, I "
 "have taught you all I can.\""
 msgstr ""
-"На стъпалата на беседката се появява стар рицар. — Съжалявам, господарю мой, "
-"научих те на всичко, което мога."
+"На стъпалата на беседката се появява стар рицар. \"Съжалявам, господарю мой, "
+"научих те на всичко, което мога.\""
 
 msgid ""
 "An old Knight appears on the steps of the gazebo. \"My liege, I will teach "
 "you all that I know to aid you in your travels.\""
 msgstr ""
-"На стъпалата на беседката се появява стар рицар. — Господарю мой, ще те "
-"науча на всичко, което знам, за да ти помагам в пътуванията ти."
+"На стъпалата на беседката се появява стар рицар. \"Господарю мой, ще те "
+"науча на всичко, което знам, за да ти помагам в пътуванията ти.\""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
@@ -5022,7 +5020,7 @@ msgid ""
 "you're all full.\""
 msgstr ""
 "Спаси оцелял от корабокрушение от сигурна смърт човек в безмилостния океан. "
-"Благодарен, той казва: „Бих ти дал артефакт като награда, но нямаш място.“"
+"Благодарен, той казва: \"Бих ти дал артефакт като награда, но нямаш място.\""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
@@ -6469,7 +6467,7 @@ msgid "week|PLAGUE"
 msgstr "ЧУМА"
 
 msgid "week|Unnamed"
-msgstr "Безиме"
+msgstr "Безименен"
 
 msgid "Desert"
 msgstr "Пустиня"
@@ -7517,7 +7515,7 @@ msgstr ""
 "героизъм с изящна огърлица със скъпоценни камъни."
 
 msgid "Caster's Bracelet of Magic"
-msgstr "Магическата гривна на Кастър"
+msgstr "Магическа гривна на Заклинателя"
 
 msgid ""
 "While searching through the rubble of a caved-in mine, you free a group of "
@@ -7584,7 +7582,7 @@ msgstr ""
 "роби, тя те награждава с Медал на честта."
 
 msgid "Medal of Distinction"
-msgstr "Медал"
+msgstr "Медал на унищожението"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
@@ -7593,14 +7591,12 @@ msgstr ""
 "Освобождавайки провинцията от отвратителния Минотавър, който се забавляваше "
 "с изяждането на рицари на благородници, ти си удостоен с Медал."
 
-#, fuzzy
 msgid "Fizbin of Misfortune"
 msgstr "Медал на нещастието"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "%{name} значително намалява морала ти с %{count}."
 
-#, fuzzy
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
 "your inventory, you become aware that you have acquired the undesirable "
@@ -7643,11 +7639,9 @@ msgstr ""
 "Отблясък на златна светлина привлича окото ти. При по-нататъшно проучване "
 "намираш златен шлем, скрит под един храст."
 
-#, fuzzy
 msgid "Giant Flail of Dominion"
 msgstr "Гигантска бухалка на господството"
 
-#, fuzzy
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
 "skill with this weapon, you confidently remove the spectacular flail from "
