@@ -40,4 +40,23 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':sdl2')
+    implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
+}
+
+task copyH2D(type: Copy) {
+    from('../../files/data') {
+        include '*.h2d'
+    }
+    into 'src/main/assets/files/data'
+}
+
+task copyTranslations(type: Copy) {
+    from('../../files/lang') {
+        include '*.mo'
+    }
+    into 'src/main/assets/files/lang'
+}
+
+preBuild {
+    dependsOn copyH2D, copyTranslations
 }

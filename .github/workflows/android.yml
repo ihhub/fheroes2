@@ -13,6 +13,11 @@ jobs:
     - name: Install dependencies
       run: |
         bash script/android/install_packages.sh
+        sudo apt-get -y update
+        sudo apt-get -y install gettext
+    - name: Generate translations
+      run: |
+        make -C files/lang -j 2
     - name: Build
       run: |
         cd android

@@ -20,10 +20,27 @@
 
 package org.fheroes2;
 
+import android.os.Bundle;
+import android.util.Log;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import org.apache.commons.io.IOUtils;
 import org.libsdl.app.SDLActivity;
 
 public class MainActivity extends SDLActivity
 {
+    @Override
+    protected void onCreate( Bundle savedInstanceState )
+    {
+        extractAssetsFromDir( "files" );
+
+        super.onCreate( savedInstanceState );
+    }
+
     @Override
     protected void onDestroy()
     {
@@ -36,5 +53,61 @@ public class MainActivity extends SDLActivity
         // TODO:
         // TODO: This workaround terminates the whole app when this Activity exits, allowing SDL to initialize normally on startup
         System.exit( 0 );
+    }
+
+    private void extractAssetsFromDir( String dir )
+    {
+        ArrayList<String> assetsPaths = null;
+
+        try {
+            assetsPaths = getAssetsPaths( dir );
+        }
+        catch ( Exception ex ) {
+            Log.e( "fheroes2", "Failed to get a list of assets.", ex );
+        }
+
+        if ( assetsPaths != null ) {
+            for ( String path : assetsPaths ) {
+                try ( InputStream in = getAssets().open( path ) ) {
+                    File outFile = new File( getExternalFilesDir( null ), path );
+                    String outFileDir = outFile.getParent();
+
+                    if ( outFileDir != null ) {
+                        ( new File( outFileDir ) ).mkdirs();
+                    }
+
+                    try ( OutputStream out = new FileOutputStream( outFile ) ) {
+                        IOUtils.copy( in, out );
+                    }
+                }
+                catch ( Exception ex ) {
+                    Log.e( "fheroes2", "Failed to extract the asset.", ex );
+                }
+            }
+        }
+    }
+
+    private ArrayList<String> getAssetsPaths( String path ) throws IOException
+    {
+        ArrayList<String> result = new ArrayList<>();
+
+        String[] assets = getAssets().list( path );
+        if ( assets == null ) {
+            return result;
+        }
+
+        for ( String asset : assets ) {
+            String assetPath = path + File.separator + asset;
+            ArrayList<String> subAssetsPaths = getAssetsPaths( assetPath );
+
+            if ( subAssetsPaths.isEmpty() ) {
+                result.add( assetPath );
+            }
+            else {
+                result.addAll( subAssetsPaths );
+            }
+        }
+
+        return result;
     }
 }
