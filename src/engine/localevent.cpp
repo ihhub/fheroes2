@@ -1120,7 +1120,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         }
     }
 
-    //save last state of buttons for detecting button changes
+    // save last state of buttons for detecting button changes
     isLeftMouseButtonPressed = MousePressLeft();
     isRightMouseButtonPressed = MousePressRight();
 
