@@ -87,7 +87,7 @@ public:
     // hero's meeting dialog
     void MoveTroops( Troops & from, const int monsterIdToKeep );
 
-    void MergeTroops();
+    void MergeSameMonsterTroops();
     Troops GetOptimized() const;
 
     virtual double GetStrength() const;

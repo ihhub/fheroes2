@@ -1378,6 +1378,7 @@ namespace AI
             Kingdom & kingdom = hero.GetKingdom();
             const payment_t paymentCosts = troop.GetTotalCost();
 
+            // TODO: add logic for buying a part of monsters when the AI does not have enough resources.
             if ( kingdom.AllowPayment( paymentCosts ) && hero.GetArmy().JoinTroop( troop ) ) {
                 tile.MonsterSetCount( 0 );
                 kingdom.OddFundsResource( paymentCosts );
