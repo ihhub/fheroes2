@@ -139,12 +139,32 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
 
+            // Uppercase S with caron
+            font[138 - 32] = font[83 - 32];
             // Uppercase S with acute
             font[140 - 32] = font[83 - 32];
+            // Uppercase T with caron
+            font[141 - 32].resize( font[84 - 32].width(), font[84 - 32].height() + 3 );
+            font[141 - 32].reset();
+            fheroes2::Copy( font[84 - 32], 0, 0, font[141 - 32], 0, 3, font[84 - 32].width(), font[84 - 32].height() );
+            font[141 - 32].setPosition( font[84 - 32].x(), font[84 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[141 - 32] );
+            // Uppercase Z with caron
+            font[142 - 32] = font[90 - 32];
             // Uppercase Z with acute
             font[143 - 32] = font[90 - 32];
+            // Lowercase s with caron
+            font[154 - 32] = font[115 - 32];
             // Lowercase s with acute
             font[156 - 32] = font[115 - 32];
+            // Lowercase t with caron
+            font[157 - 32].resize( font[116 - 32].width(), font[116 - 32].height() + 3 );
+            font[157 - 32].reset();
+            fheroes2::Copy( font[116 - 32], 0, 0, font[157 - 32], 0, 3, font[116 - 32].width(), font[116 - 32].height() );
+            font[157 - 32].setPosition( font[116 - 32].x(), font[116 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[157 - 32] );
+            // Lowercase z with caron
+            font[158 - 32] = font[122 - 32];
             // Lowercase z with acute
             font[159 - 32] = font[122 - 32];
 
@@ -242,6 +262,8 @@ namespace
             font[195 - 32] = font[65 - 32];
             // Uppercase C with acute
             font[198 - 32] = font[67 - 32];
+            // Uppercase C with caron
+            font[200 - 32] = font[67 - 32];
             // Uppercase E with acute
             font[201 - 32] = font[69 - 32];
 
@@ -254,24 +276,36 @@ namespace
             // Shadows are already made for the ogonek.
             fheroes2::Copy( font[165 - 32], 10, 11, font[202 - 32], 5, 11, 5, 5 );
 
+            // Uppercase E with caron
+            font[204 - 32] = font[69 - 32];
             // Uppercase I with acute
             font[205 - 32] = font[73 - 32];
             // Uppercase I with circumflex
             font[206 - 32] = font[73 - 32];
+            // Uppercase D with caron
+            font[207 - 32] = font[68 - 32];
             // Uppercase N with acute
             font[209 - 32] = font[78 - 32];
+            // Uppercase N with caron
+            font[210 - 32] = font[78 - 32];
             // Uppercase O with acute
             font[211 - 32] = font[79 - 32];
             // Uppercase O with double acute
             font[213 - 32] = font[79 - 32];
             // Uppercase O with diaeresis
             font[214 - 32] = font[79 - 32];
+            // Uppercase R with caron
+            font[216 - 32] = font[82 - 32];
+            // Uppercase U with ring above
+            font[217 - 32] = font[85 - 32];
             // Uppercase U with acute
             font[218 - 32] = font[85 - 32];
             // Uppercase U with double acute
             font[219 - 32] = font[85 - 32];
             // Uppercase U with diaeresis
             font[220 - 32] = font[85 - 32];
+            // Uppercase Y with acute
+            font[221 - 32] = font[89 - 32];
 
             // Uppercase T with cedilla
             font[222 - 32].resize( font[84 - 32].width(), font[84 - 32].height() + 3 );
@@ -289,6 +323,8 @@ namespace
             font[227 - 32] = font[97 - 32];
             // Lowercase c with acute
             font[230 - 32] = font[99 - 32];
+            // Lowercase c with caron
+            font[232 - 32] = font[99 - 32];
             // Lowercase e with acute
             font[233 - 32] = font[101 - 32];
 
@@ -301,24 +337,36 @@ namespace
             // Shadows are already made for the ogonek.
             fheroes2::Copy( font[165 - 32], 10, 11, font[234 - 32], 3, 7, 5, 5 );
 
+            // Lowercase e with caron
+            font[236 - 32] = font[101 - 32];
             // Lowercase i with acute
             font[237 - 32] = font[105 - 32];
             // Lowercase i with circumflex
             font[238 - 32] = font[105 - 32];
+            // Lowercase d with caron
+            font[239 - 32] = font[100 - 32];
             // Lowercase n with acute
             font[241 - 32] = font[110 - 32];
+            // Lowercase n with caron
+            font[242 - 32] = font[110 - 32];
             // Lowercase o with acute
             font[243 - 32] = font[111 - 32];
             // Lowercase o with double acute
             font[245 - 32] = font[111 - 32];
             // Lowercase o with diaeresis
             font[246 - 32] = font[111 - 32];
+            // Lowercase r with caron
+            font[248 - 32] = font[114 - 32];
+            // Lowercase u with ring above
+            font[249 - 32] = font[117 - 32];
             // Lowercase u with acute
             font[250 - 32] = font[117 - 32];
             // Lowercase u with double acute
             font[251 - 32] = font[117 - 32];
-            // Lowercase u with double acute
+            // Lowercase u with diaeresis
             font[252 - 32] = font[117 - 32];
+            // Lowercase y with acute
+            font[253 - 32] = font[121 - 32];
 
             // Lowercase t with cedilla
             font[254 - 32].resize( font[116 - 32].width(), font[116 - 32].height() + 3 );
