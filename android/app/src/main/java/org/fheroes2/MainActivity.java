@@ -20,10 +20,32 @@
 
 package org.fheroes2;
 
+import android.os.Bundle;
+import android.util.Log;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import org.apache.commons.io.IOUtils;
 import org.libsdl.app.SDLActivity;
 
 public class MainActivity extends SDLActivity
 {
+    @Override
+    protected void onCreate( Bundle savedInstanceState )
+    {
+        // Extract H2D and translations to the external app-specific storage (sdcard)
+        extractAssets( "files", getExternalFilesDir( null ) );
+
+        // Extract TiMidity GUS patches and config file to the internal app-specific storage
+        extractAssets( "instruments", getFilesDir() );
+        extractAssets( "timidity.cfg", getFilesDir() );
+
+        super.onCreate( savedInstanceState );
+    }
+
     @Override
     protected void onDestroy()
     {
@@ -36,5 +58,63 @@ public class MainActivity extends SDLActivity
         // TODO:
         // TODO: This workaround terminates the whole app when this Activity exits, allowing SDL to initialize normally on startup
         System.exit( 0 );
+    }
+
+    private void extractAssets( String srcPath, File dstDir )
+    {
+        ArrayList<String> assetsPaths;
+
+        try {
+            assetsPaths = getAssetsPaths( srcPath );
+        }
+        catch ( Exception ex ) {
+            Log.e( "fheroes2", "Failed to get a list of assets.", ex );
+
+            return;
+        }
+
+        for ( String path : assetsPaths ) {
+            try ( InputStream in = getAssets().open( path ) ) {
+                File outFile = new File( dstDir, path );
+
+                String outFileDir = outFile.getParent();
+                if ( outFileDir != null ) {
+                    ( new File( outFileDir ) ).mkdirs();
+                }
+
+                try ( OutputStream out = new FileOutputStream( outFile ) ) {
+                    IOUtils.copy( in, out );
+                }
+            }
+            catch ( Exception ex ) {
+                Log.e( "fheroes2", "Failed to extract the asset.", ex );
+            }
+        }
+    }
+
+    private ArrayList<String> getAssetsPaths( String path ) throws IOException
+    {
+        ArrayList<String> result = new ArrayList<>();
+
+        String[] assets = getAssets().list( path );
+
+        // There is no such path at all
+        if ( assets == null ) {
+            return result;
+        }
+
+        // Leaf node
+        if ( assets.length == 0 ) {
+            result.add( path );
+
+            return result;
+        }
+
+        // Regular node
+        for ( String asset : assets ) {
+            result.addAll( getAssetsPaths( path + File.separator + asset ) );
+        }
+
+        return result;
     }
 }
