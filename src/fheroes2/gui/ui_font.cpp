@@ -4077,6 +4077,7 @@ namespace fheroes2
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
         switch ( language ) {
+        case SupportedLanguage::Czech:
         case SupportedLanguage::Hungarian:
         case SupportedLanguage::Polish:
             generateCP1250Alphabet( icnVsSprite );
@@ -4137,6 +4138,7 @@ namespace fheroes2
         case SupportedLanguage::Ukrainian:
         case SupportedLanguage::Dutch:
         case SupportedLanguage::Hungarian:
+        case SupportedLanguage::Czech:
             return true;
         default:
             break;
@@ -4163,6 +4165,7 @@ namespace fheroes2
             generateBaseButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
                                     icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
             return;
+        case SupportedLanguage::Czech:
         case SupportedLanguage::Hungarian:
         case SupportedLanguage::Polish:
             generateCP1250GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
