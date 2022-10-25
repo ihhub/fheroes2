@@ -4228,6 +4228,5 @@ namespace fheroes2
             icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
             updateSmallFontLetterShadow( icnVsSprite[75] );
         }
-        return;
     }
 }
