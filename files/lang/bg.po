@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-12 15:21+0000\n"
-"PO-Revision-Date: 2022-10-24 12:42+0100\n"
+"PO-Revision-Date: 2022-10-25 19:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -2728,14 +2728,12 @@ msgstr "Експериментални настройки на играта."
 msgid "Toggle instant battle mode."
 msgstr "Превключи режима на незабавна битка."
 
-#, fuzzy
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Провери и конфигурирай всички горещи клавиши в играта."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
-#, fuzzy
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 "Включване/изключване на цветните курсори. Това е само естетически избор."
@@ -3857,7 +3855,6 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Времето свърши. (Не успя да победиш в определеното време.)"
 
-#, fuzzy
 msgid "You must defeat the enemy %{enemies}."
 msgid_plural "You must defeat the enemy alliance of %{enemies}."
 msgstr[0] "Трябва да победиш врага %{enemies}."
@@ -4305,7 +4302,6 @@ msgstr "Турски"
 msgid "Dutch"
 msgstr "Холандски"
 
-#, fuzzy
 msgid "Hungarian"
 msgstr "Унгарски"
 
@@ -6403,7 +6399,6 @@ msgstr "Гризач"
 msgid "week|Badger"
 msgstr "Язовец"
 
-#, fuzzy
 msgid "week|Rat"
 msgstr "Плъх"
 
@@ -6419,7 +6414,6 @@ msgstr "Гарван"
 msgid "week|Mongoose"
 msgstr "Мангуста"
 
-#, fuzzy
 msgid "week|Dog"
 msgstr "Куче"
 
@@ -6471,7 +6465,6 @@ msgstr "Бръмбар"
 msgid "week|PLAGUE"
 msgstr "ЧУМА"
 
-#, fuzzy
 msgid "week|Unnamed"
 msgstr "Безименен"
 
@@ -6684,7 +6677,7 @@ msgid "Dwarf Cottage"
 msgstr "Вила на джуджета"
 
 msgid "Stone Liths"
-msgstr ""
+msgstr "Каменни литове"
 
 msgid "Magic Well"
 msgstr "Магически кладенец"
