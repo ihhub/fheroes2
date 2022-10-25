@@ -147,10 +147,22 @@ namespace
             font[156 - 32] = font[115 - 32];
             // Lowercase z with acute
             font[159 - 32] = font[122 - 32];
-            // Uppercase L with stroke
-            font[163 - 32] = font[76 - 32];
 
-            // Uppercase A with ogonek. Generate for further use.
+            // Uppercase L with stroke
+            font[163 - 32].resize( font[76 - 32].width(), font[76 - 32].height() + 3 );
+            font[163 - 32].reset();
+            fheroes2::Copy( font[76 - 32], 0, 0, font[163 - 32], 0, 0, font[76 - 32].width(), font[76 - 32].height() );
+            // Stroke diacritic.
+            fheroes2::Copy( font[76 - 32], 1, 1, font[163 - 32], 6, 5, 1, 1 );
+            fheroes2::Copy( font[76 - 32], 1, 1, font[163 - 32], 7, 4, 1, 1 );
+            fheroes2::Copy( font[76 - 32], 1, 1, font[163 - 32], 8, 3, 1, 1 );
+            fheroes2::Copy( font[76 - 32], 2, 1, font[163 - 32], 6, 6, 1, 1 );
+            fheroes2::Copy( font[76 - 32], 2, 1, font[163 - 32], 7, 5, 1, 1 );
+            fheroes2::Copy( font[76 - 32], 2, 1, font[163 - 32], 8, 4, 1, 1 );
+            font[163 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() );
+            updateNormalFontLetterShadow( font[163 - 32] );
+
+            // Uppercase A with ogonek. Generate ogonek for further use.
             font[165 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
             font[165 - 32].reset();
             fheroes2::Copy( font[65 - 32], 0, 0, font[165 - 32], 0, 0, font[65 - 32].width(), font[65 - 32].height() );
@@ -171,7 +183,7 @@ namespace
             fheroes2::FillTransform( font[165 - 32], 10, 15, 1, 1, 1 );
             fheroes2::FillTransform( font[165 - 32], 13, 15, 1, 1, 1 );
 
-            // Uppercase S with cedilla. Generate for further use.
+            // Uppercase S with cedilla. Generate cedilla for further use.
             font[170 - 32].resize( font[83 - 32].width(), font[83 - 32].height() + 3 );
             font[170 - 32].reset();
             fheroes2::Copy( font[83 - 32], 0, 0, font[170 - 32], 0, 0, font[83 - 32].width(), font[83 - 32].height() );
@@ -188,8 +200,20 @@ namespace
 
             // Uppercase Z with dot above
             font[175 - 32] = font[90 - 32];
+
             // Lowercase l with stroke
-            font[179 - 32] = font[108 - 32];
+            font[179 - 32].resize( font[108 - 32].width(), font[108 - 32].height() + 3 );
+            font[179 - 32].reset();
+            fheroes2::Copy( font[108 - 32], 0, 0, font[179 - 32], 0, 0, font[108 - 32].width(), font[108 - 32].height() );
+            // Stroke diacritic.
+            fheroes2::Copy( font[108 - 32], 3, 1, font[179 - 32], 4, 3, 1, 1 );
+            fheroes2::Copy( font[108 - 32], 2, 1, font[179 - 32], 4, 4, 1, 1 );
+            fheroes2::Copy( font[108 - 32], 3, 1, font[179 - 32], 2, 6, 1, 1 );
+            fheroes2::Copy( font[108 - 32], 2, 1, font[179 - 32], 1, 6, 1, 1 );
+            fheroes2::Copy( font[108 - 32], 3, 0, font[179 - 32], 2, 7, 1, 1 );
+            fheroes2::Copy( font[108 - 32], 1, 1, font[179 - 32], 1, 7, 1, 1 );
+            font[179 - 32].setPosition( font[108 - 32].x(), font[108 - 32].y() );
+            updateNormalFontLetterShadow( font[179 - 32] );
 
             // Lowercase a with ogonek
             font[185 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 3 );
