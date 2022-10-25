@@ -26,13 +26,13 @@ msgid ""
 msgstr ""
 
 msgid "GIFT"
-msgstr "ПАДАРУНАК"
+msgstr "АДДАЦЬ"
 
 msgid "MIN"
 msgstr "МІН"
 
 msgid "DIFFICULTY"
-msgstr "УЗРОВЕНЬ"
+msgstr "ЦЯЖКАСЦЬ"
 
 msgid "Warrior"
 msgstr "Ваяр"
@@ -166,19 +166,19 @@ msgid "Move or right click to redistribute %{name}"
 msgstr ""
 
 msgid "Combine %{name} armies"
-msgstr "Аб’яднаць войскі %{name}"
+msgstr "Аб’яднаць войскі: %{name}"
 
 msgid "Exchange %{name2} with %{name}"
 msgstr ""
 
 msgid "Select %{name}"
-msgstr "Выбраць %{name}"
+msgstr "Выбраць: %{name}"
 
 msgid "Cannot move last troop"
 msgstr ""
 
 msgid "Move the %{name}"
-msgstr "Рухаць %{name}"
+msgstr "Перамясціць: %{name}"
 
 msgid "Set Count"
 msgstr ""
@@ -248,7 +248,7 @@ msgid "On"
 msgstr "Укл"
 
 msgid "Set the speed of combat actions and animations."
-msgstr "Усталяваць хуткасць баявых дзеянняў і анімацый"
+msgstr "Усталяваць хуткасць баявых дзеянняў і анімацый."
 
 msgid "Toggle to display army order during the battle."
 msgstr ""
@@ -307,7 +307,7 @@ msgid "Defender"
 msgstr "Абаронца"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr "Сярод вашых трафеяў апынуўся артэфакт - %{name}! Але як только вы дакрануліся да яго, той містычна знік."
+msgstr "Сярод вашых трафеяў апынуўся артэфакт - %{name}! Але як толькі вы дакрануліся да яго, той містычна знік."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Як толькі вораг дабраўся да артэфакту - %{name}, той містычна знік."
@@ -322,9 +322,8 @@ msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
-"Практыкуючы цёмнае майстэрства некраманціі, вы можаце павялічыць колькасць "
-"паўшых ворагаў да %{count}, якія будуць далучацца  да вашага войску як "
-"%{monster}."
+"Практыкуючы цёмнае майстэрства некраманціі, вы можаце адрадзіць %{count} паўшых ворагаў, якія "
+"далучацца да вашага войску як %{monster}."
 
 msgid "%{name} the %{race}"
 msgstr "%{race} %{name}"
@@ -393,7 +392,7 @@ msgid ""
 msgstr ""
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr "Адчыніце экран героя, каб праглядзець усю інфармацыю аб ім."
+msgstr "Разгарніце экран героя, каб праглядзець усю інфармацыю пра яго."
 
 msgid "Return to the battle."
 msgstr "Вярнуцца да бою."
@@ -437,7 +436,7 @@ msgid "Turn %{turn}"
 msgstr ""
 
 msgid "Teleport here"
-msgstr "Тэлепартавацца сюды"
+msgstr "Тэлепартаваць сюды"
 
 msgid "Invalid teleport destination"
 msgstr ""
@@ -709,7 +708,7 @@ msgid "%{count} %{name} rise(s) from the dead!"
 msgstr ""
 
 msgid "Dwarven Alliance"
-msgstr "Альянс дворфаў"
+msgstr "Альянс з гномамі"
 
 msgid "Sorceress Guild"
 msgstr "Гільдыя чараўніц"
@@ -718,16 +717,16 @@ msgid "Necromancer Guild"
 msgstr "Гільдыя некрамантаў"
 
 msgid "Ogre Alliance"
-msgstr "Альянс ограў"
+msgstr "Альянс з ограмі"
 
 msgid "Dwarfbane"
 msgstr ""
 
 msgid "Dragon Alliance"
-msgstr "Альянс цмокаў"
+msgstr "Альянс з цмокамі"
 
 msgid "Elven Alliance"
-msgstr "Альянс эльфаў"
+msgstr "Альянс з эльфамі"
 
 msgid "Kraeger defeated"
 msgstr ""
@@ -739,13 +738,13 @@ msgid "Uncle Ivan"
 msgstr "Дзядзька Іван"
 
 msgid "Annexation"
-msgstr "Анэксія"
+msgstr "Анексія"
 
 msgid "Force of Arms"
 msgstr "Сіла зброі"
 
 msgid "Save the Dwarves"
-msgstr "Абараніце дворфаў"
+msgstr "Уратаванне гномаў"
 
 msgid "Carator Mines"
 msgstr "Руднікі Каратора"
@@ -778,7 +777,7 @@ msgid ""
 "when you have defeated all of their castles and heroes."
 msgstr ""
 "Роланду патрэбна, каб вы перамаглі лордаў каля ягонага замку, каб распачаць "
-"паўстанне супраць брата. Яны не хаўрусьнікі, таму вялікую частку часу будуць "
+"паўстанне супраць брата. Яны не хаўруснікі, таму вялікую частку часу будуць "
 "змагацца адзін з адным. Вы скончыце паспяхова місію, як толькі пераможаце "
 "ўсіх лордаў і захопіце іхныя замкі."
 
@@ -796,15 +795,15 @@ msgid ""
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
-"Вашая задача - абараніць дворфаў ад войскаў Арчыбальда. Каб перамагчы - "
+"Вашая задача - абараніць гномаў ад войскаў Арчыбальда. Каб перамагчы - "
 "захапіце ўсе варожыя гарады і замкі. Сачыце за тым, каб не страціць адразу "
-"ўсе гарады дворфаў, іначай вораг пераможа."
+"ўсе гарады гномаў, іначай вораг пераможа."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
-"Вы сутыкнёцеся з чатырма ворагамі-хаўрусьнікамі ў бітве за рэсурсы і скарбы. "
+"Вы сутыкнёцеся з чатырма ворагамі-хаўруснікамі ў бітве за рэсурсы і скарбы. "
 "Для перамогі захапіце ўсе варожыя замкі."
 
 msgid ""
@@ -823,7 +822,7 @@ msgid ""
 "castle on an island in the ocean.)"
 msgstr ""
 "Гільдыя Чараўніц Нарастону звярнулася да Роланда па дапамогу ў абароне ад "
-"нападу хаўрусьнікаў Арчыбальда. Захапіце ўсе варожыя замкі, каб перамагчы, "
+"нападу хаўруснікаў Арчыбальда. Захапіце ўсе варожыя замкі, каб перамагчы, "
 "але не дапусціце страту Нарастону, іначай вы атрымаеце паразу. (Падказка: на "
 "востраве ў акіяне ёсць варожы замак)"
 
@@ -835,7 +834,7 @@ msgid ""
 msgstr ""
 "Збярыце як мага болей войска, каб за 8 тыдняў захапіць варожы замак. Вам "
 "супрацьстаіць толькі адзін вораг, але вы мусіце прайсці доўгую дарогу да "
-"ягонага замку. Будзь якія войскі, якімі вы авалодаеце напрыканцы сцэнару, "
+"ягонага замку. Усе войскі, якія застануцца пад катролем вашага герою напрыканцы сцэнару, "
 "будуць прымаць удзел у рашучым баю."
 
 msgid ""
@@ -851,7 +850,7 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
-"Тры ворага-хаўрусьніка разам з Лордам Карлагонам стаяць паміж вамі і вашай "
+"Тры ворага-хаўрусніка разам з Лордам Карлагонам стаяць паміж вамі і вашай "
 "перамогай. Роланд знаходзіцца ў замку на паўночна-заходнім кірунку, і вы "
 "прайграеце, калі яго захопяць. Памятайце, што захоп Лорда Карлагона гарантуе "
 "тое, што ён не будзе змагацца супраць вас у фінальным сцэнары."
@@ -1502,7 +1501,7 @@ msgstr "Арчыбальд"
 
 #, fuzzy
 msgid "The Price of Loyalty"
-msgstr "Цана вернасці"
+msgstr "Кошт вернасці"
 
 msgid "Voyage Home"
 msgstr ""
@@ -1514,7 +1513,7 @@ msgid "Descendants"
 msgstr ""
 
 msgid "The %{building} produces %{monster}."
-msgstr "%{building} падрыхтоўвае %{monster}."
+msgstr "%{building} - пабудова, дзе штотыдзень падрыхтоўваюцца %{monster}."
 
 msgid "Requires:"
 msgstr "Неабходна:"
@@ -1535,13 +1534,13 @@ msgid "Cannot afford %{name}."
 msgstr ""
 
 msgid "%{name} is already built."
-msgstr "%{name} ужо пабудавана."
+msgstr "У горадзе ўжо ёсць %{name}."
 
 msgid "Cannot build %{name}."
-msgstr "Нельга пабудаваць %{name}."
+msgstr "%{name}. Нельга пабудаваць."
 
 msgid "Build %{name}."
-msgstr "Пабудаваць %{name}."
+msgstr "%{name}. Можна пабудаваць."
 
 msgid "Blackridge"
 msgstr ""
@@ -1871,7 +1870,7 @@ msgid "Fenced Meadow"
 msgstr ""
 
 msgid "sorceress|Red Tower"
-msgstr ""
+msgstr "Чырвоная вежа"
 
 msgid "Dungeon"
 msgstr ""
@@ -1928,10 +1927,10 @@ msgid "Cliff Nest"
 msgstr "Гняздо на кручы"
 
 msgid "Ivory Tower"
-msgstr "Вежа са слановай косці"
+msgstr "Вежа магаў"
 
 msgid "Upg. Ivory Tower"
-msgstr ""
+msgstr "Абсерваторыя магаў"
 
 msgid "Cloud Castle"
 msgstr "Воблачны замак"
@@ -2009,7 +2008,7 @@ msgid ""
 "level of the guild."
 msgstr ""
 "Бібліятэка павялічвае колькасць загавораў у Гільдыі на адзін на кожны "
-"узровень гільдыі."
+"ўзровень гільдыі."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
 msgstr "Фруктовы сад прываблівае дадатковых %{count} хобітаў штотыдзень."
@@ -2088,7 +2087,7 @@ msgid ""
 msgstr ""
 
 msgid "The Statue increases your town's income by %{count} per day."
-msgstr "Статуя павялічвае гарадзкія зборы на %{count} штодзень."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr "Левая вежа забяспечвае дадатковую агнявую моц падчас абароны замка."
@@ -2107,14 +2106,14 @@ msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
 "there and becomes more vulnerable to attack."
 msgstr ""
-"Роў запавольвае атакуючыя войскі. Будзь-якое войска, якое ўвайшло ў роў не можа "
+"Роў запавольвае атакуючыя войскі. Любое войска, якое ўвайшло ў роў не можа "
 "рухацца далей і павінна скончыць свой ход, а таксама горш абараняецца."
 
 msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
 msgstr ""
-"Замак узмацняе абарону горада і павялічвае гарадзкія зборы да %{count} золата "
+"Замак узмацняе абарону горада і павялічвае гарадcкія зборы да %{count} золата "
 "штодзень."
 
 msgid ""
@@ -2131,11 +2130,11 @@ msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
-"Гільдыя магаў дазваляе героям вучыць загаворы і папаўняць іхныя магічныя "
-"ачкі."
+"Гільдыя магаў дазваляе героям вучыць загаворы і папаўняць іхныя запасы "
+"маны."
 
 msgid "Recruit %{name}"
-msgstr "Рэкрутаваць %{name}"
+msgstr "%{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
 msgstr "Месяц: %{month}, Тыдзень: %{week}, Дзень: %{day}"
@@ -2205,7 +2204,7 @@ msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
 
 msgid "Recruit Hero"
-msgstr ""
+msgstr "Рэкрутаваць героя"
 
 msgid "%{name} is a level %{value} %{race} "
 msgstr ""
@@ -2236,7 +2235,7 @@ msgid "Grouped Formation"
 msgstr ""
 
 msgid "Recruit %{name} the %{race}"
-msgstr ""
+msgstr "Рэкрутаваць %{race} %{name}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2248,7 +2247,7 @@ msgid "Exit Castle Options"
 msgstr ""
 
 msgid "Castle Options"
-msgstr ""
+msgstr "Наладкі замка"
 
 msgid "Not enough resources to recruit creatures."
 msgstr ""
@@ -2754,7 +2753,7 @@ msgid "Move Points:"
 msgstr ""
 
 msgid "Cost per troop:"
-msgstr "Цана за адзінку:"
+msgstr "Кошт за адзінку:"
 
 msgid "Available: %{count}"
 msgstr "Даступна: %{count}"
@@ -3414,30 +3413,32 @@ msgid ""
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
-msgstr ""
+msgstr "Выйсці з Heroes of Might and Magic II."
 
 msgid "Credits"
-msgstr ""
+msgstr "Звесткі пра каманду"
 
 msgid "View the credits screen."
 msgstr ""
 
 msgid "High Scores"
-msgstr ""
+msgstr "Лепшыя дасягненні"
 
 msgid "View the high scores screen."
-msgstr ""
+msgstr "Праглядзець лепшыя дасягненні."
 
 msgid "Change language, resolution and settings of the game."
-msgstr ""
+msgstr "Змяніць мову, экран і наладкі гульні."
 
 msgid "Game Settings"
-msgstr ""
+msgstr "Наладкі гульні"
 
 msgid ""
 "Required video files for campaign selection window are missing. Please make "
 "sure that all necessary files are present in the system."
 msgstr ""
+"Бракуе відэя файлаў для абранай кампаніі. Праверце, ці "
+"ўсе неабходныя файлы былі скапіяваны."
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -3445,10 +3446,10 @@ msgid ""
 msgstr ""
 
 msgid "Original Campaign"
-msgstr ""
+msgstr "Асноўны сцэнар"
 
 msgid "Expansion Campaign"
-msgstr ""
+msgstr "Дадатковыя сцэнары"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
@@ -3746,10 +3747,10 @@ msgid "Continue the Hero's movement along the current path."
 msgstr ""
 
 msgid "Kingdom Summary"
-msgstr ""
+msgstr "Зводка аб каралеўстве"
 
 msgid "View a Summary of your Kingdom."
-msgstr ""
+msgstr "Праглядзець зводку аб каралеўстве."
 
 msgid "Cast an adventure spell."
 msgstr ""
@@ -3828,13 +3829,13 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 
 msgid "World Map"
-msgstr ""
+msgstr "Мапа свету"
 
 msgid "Month: %{month} Week: %{week}"
-msgstr ""
+msgstr "Месяц: %{month} Тыдзень: %{week}"
 
 msgid "Day: %{day}"
-msgstr ""
+msgstr "Дзень: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -3855,7 +3856,7 @@ msgid ""
 msgstr ""
 
 msgid "Necroman"
-msgstr ""
+msgstr "Некрамант"
 
 msgid ""
 "This lets you change player starting positions and colors. A particular "
@@ -3880,7 +3881,7 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player"
-msgstr ""
+msgstr "%{color} гулец"
 
 msgid "No Handicap"
 msgstr ""
@@ -3907,13 +3908,13 @@ msgid ""
 msgstr ""
 
 msgid "View %{skill} Info"
-msgstr ""
+msgstr "Даведацца пра %{skill}"
 
 msgid "Kingdom Income"
-msgstr ""
+msgstr "Прыбытак каралеўства"
 
 msgid "Kingdom Income per day."
-msgstr ""
+msgstr "Прыбытак каралеўства штодзень."
 
 msgid "English"
 msgstr ""
@@ -6908,10 +6909,10 @@ msgid "The three Anduran artifacts magically combine into one."
 msgstr ""
 
 msgid "View Spells"
-msgstr ""
+msgstr "Праглядзець загаворы"
 
 msgid "View %{name} Info"
-msgstr ""
+msgstr "Праглядзець інфармацыю: %{name}"
 
 msgid "Move %{name}"
 msgstr ""
