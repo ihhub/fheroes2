@@ -235,6 +235,13 @@ namespace fheroes2
         return result;
     }
 
+    int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons )
+    {
+        fheroes2::Text header( std::move( headerText ), fheroes2::FontType::normalYellow() );
+        fheroes2::Text body( std::move( messageBody ), fheroes2::FontType::normalWhite() );
+        return fheroes2::showMessage( header, body, buttons );
+    }
+
     TextDialogElement::TextDialogElement( const std::shared_ptr<TextBase> & text )
         : _text( text )
     {

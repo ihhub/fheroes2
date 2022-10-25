@@ -22,6 +22,7 @@
 #include <cassert>
 #include <cstring>
 #include <map>
+#include <set>
 #include <vector>
 
 #include "agg.h"
@@ -53,6 +54,21 @@ namespace
     const uint32_t headerSize = 6;
 
     std::map<int, std::vector<fheroes2::Sprite>> _icnVsScaledSprite;
+
+    // Some resources are language dependent. These are mostly buttons with a text of them.
+    // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
+    const std::set<int> languageDependentIcnId{ ICN::BTNBATTLEONLY,
+                                                ICN::BTNGIFT_GOOD,
+                                                ICN::BTNGIFT_EVIL,
+                                                ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
+                                                ICN::BUTTON_DIFFICULTY_ARCHIBALD,
+                                                ICN::BUTTON_DIFFICULTY_ROLAND,
+                                                ICN::BUTTON_DIFFICULTY_POL };
+
+    bool isLanguageDependentIcnId( const int id )
+    {
+        return languageDependentIcnId.count( id ) > 0;
+    }
 
     bool IsValidICNId( int id )
     {
@@ -99,7 +115,7 @@ namespace
 
     void replaceTranformPixel( fheroes2::Image & image, const int32_t position, const uint8_t value )
     {
-        if ( image.transform()[position] != 0 ) {
+        if ( ( position < ( image.width() * image.height() ) ) && ( image.transform()[position] != 0 ) ) {
             image.transform()[position] = 0;
             image.image()[position] = value;
         }
@@ -424,7 +440,10 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
                     // clean the button.
-                    Fill( out, 13 + 2 * i, 3 + 2 * i, 129 - 2 * i, 16, out.image()[13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) )] );
+                    const int32_t pixelPosition = 13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) );
+                    if ( pixelPosition < ( out.width() * out.height() ) ) {
+                        Fill( out, 13 + 2 * i, 3 + 2 * i, 129 - 2 * i, 16, out.image()[pixelPosition] );
+                    }
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 11, 5 }, { 12, 6 }, { 131, 17 },
@@ -452,7 +471,10 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::X_CMPBTN, 0 + i );
                     // clean the button.
-                    Fill( out, 4, 3 + i, 132 - i, 16, out.image()[5 * 132] );
+                    const int32_t pixelPosition = 5 * 132;
+                    if ( pixelPosition < ( out.width() * out.height() ) ) {
+                        Fill( out, 4, 3 + i, 132 - i, 16, out.image()[pixelPosition] );
+                    }
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 5, 5 }, { 5, 5 }, { 132, 17 }, fheroes2::FontColor::GRAY );
@@ -751,6 +773,8 @@ namespace fheroes2
 
         void generateLanguageSpecificImages( int id )
         {
+            assert( isLanguageDependentIcnId( id ) );
+
             // Language-specific image generators, may fail
             switch ( fheroes2::getResourceLanguage() ) {
             case fheroes2::SupportedLanguage::German:
@@ -2623,7 +2647,7 @@ namespace fheroes2
             return errorImage;
         }
 
-        void updateAlphabet( const SupportedLanguage language, const bool loadOriginalAlphabet )
+        void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
         {
             if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
                 alphabetPreserver.restore();
@@ -2635,6 +2659,11 @@ namespace fheroes2
                 generateAlphabet( language, _icnVsSprite );
             }
             generateButtonAlphabet( language, _icnVsSprite );
+
+            // Clear language dependent resources.
+            for ( const int id : languageDependentIcnId ) {
+                _icnVsSprite[id].clear();
+            }
         }
     }
 }
