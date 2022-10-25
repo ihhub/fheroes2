@@ -6677,7 +6677,7 @@ msgid "Dwarf Cottage"
 msgstr "Вила на джуджета"
 
 msgid "Stone Liths"
-msgstr "Каменни литове"
+msgstr "Телепорт"
 
 msgid "Magic Well"
 msgstr "Магически кладенец"
