@@ -4203,6 +4203,7 @@ namespace fheroes2
         updateButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
                           icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
     }
+
     void editOriginalFont( std::vector<fheroes2::Sprite> & icnVsSprite, const bool normalFont )
     {
         if ( normalFont ) {
