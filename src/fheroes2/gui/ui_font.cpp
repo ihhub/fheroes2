@@ -248,8 +248,14 @@ namespace
             font[170 - 32].setPosition( font[83 - 32].x(), font[83 - 32].y() );
             updateNormalFontLetterShadow( font[170 - 32] );
 
-            // Uppercase Z with dot above
-            font[175 - 32] = font[90 - 32];
+            // Uppercase Z with dot above. Generate dot for further use.
+            font[175 - 32].resize( font[90 - 32].width(), font[90 - 32].height() + 3 );
+            font[175 - 32].reset();
+            fheroes2::Copy( font[90 - 32], 0, 0, font[175 - 32], 0, 3, font[90 - 32].width(), font[90 - 32].height() );
+            fheroes2::Copy( font[122 - 32], 7, 5, font[175 - 32], 5, 0, 2, 1 );
+            fheroes2::Copy( font[122 - 32], 6, 1, font[175 - 32], 5, 1, 2, 1 );
+            font[175 - 32].setPosition( font[90 - 32].x(), font[90 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[175 - 32] );
 
             // Lowercase l with stroke
             font[179 - 32].resize( font[108 - 32].width(), font[108 - 32].height() + 3 );
@@ -283,7 +289,12 @@ namespace
             updateNormalFontLetterShadow( font[186 - 32] );
 
             // Lowercase z with dot above
-            font[191 - 32] = font[122 - 32];
+            font[191 - 32].resize( font[122 - 32].width(), font[122 - 32].height() + 3 );
+            font[191 - 32].reset();
+            fheroes2::Copy( font[122 - 32], 0, 0, font[191 - 32], 0, 3, font[122 - 32].width(), font[122 - 32].height() );
+            fheroes2::Copy( font[175 - 32], 5, 0, font[191 - 32], 4, 0, 2, 2 );
+            font[191 - 32].setPosition( font[122 - 32].x(), font[122 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[191 - 32] );
 
             // Uppercase A with acute
             font[193 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
@@ -456,8 +467,14 @@ namespace
 
             // Lowercase i with circumflex
             font[238 - 32] = font[105 - 32];
-            // Lowercase d with caron
-            font[239 - 32] = font[100 - 32];
+
+            // Lowercase d with caron. Requires acute accent.
+            font[239 - 32].resize( font[100 - 32].width() + 3, font[100 - 32].height() );
+            font[239 - 32].reset();
+            fheroes2::Copy( font[100 - 32], 0, 0, font[239 - 32], 0, 0, font[100 - 32].width(), font[100 - 32].height() );
+            fheroes2::Copy( font[140 - 32], 4, 0, font[239 - 32], 10, 0, 3, 2 );
+            font[239 - 32].setPosition( font[100 - 32].x(), font[100 - 32].y() );
+            updateNormalFontLetterShadow( font[239 - 32] );
 
             // Lowercase n with acute
             font[241 - 32].resize( font[110 - 32].width(), font[110 - 32].height() + 3 );
