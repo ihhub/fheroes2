@@ -1052,7 +1052,6 @@ msgstr "Coeur de la corruption"
 msgid "The Giant's Pass"
 msgstr "Col des géants"
 
-#, fuzzy
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
