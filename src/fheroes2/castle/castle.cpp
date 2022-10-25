@@ -474,16 +474,32 @@ double Castle::getVisitValue( const Heroes & hero ) const
     Troops futureArmy( heroArmy );
     const double heroArmyStrength = futureArmy.GetStrength();
 
+    Funds potentialFunds = GetKingdom().GetFunds();
+
     double spellValue = 0;
-    const int spellPower = hero.GetPower();
-    const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
-    for ( const Spell & spell : guildSpells ) {
-        if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
-            spellValue += spell.getStrategicValue( heroArmyStrength, hero.GetMaxSpellPoints(), spellPower );
+    const int mageGuildLevel = GetLevelMageGuild();
+    if ( mageGuildLevel > 0 ) {
+        const int spellPower = hero.GetPower();
+        const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
+        for ( const Spell & spell : guildSpells ) {
+            if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
+                spellValue += spell.getStrategicValue( heroArmyStrength, hero.GetMaxSpellPoints(), spellPower );
+            }
+        }
+
+        if ( !hero.HaveSpellBook() && spellValue > 0 ) {
+            const payment_t payment = PaymentConditions::BuySpellBook();
+            if ( potentialFunds < payment || hero.GetBagArtifacts().isFull() ) {
+                // Since the hero does not have a magic book and cannot buy any then spells are useless.
+                spellValue = 0;
+            }
+            else {
+                // The hero does not have a magic book but it can buy one. Let's make the visit little more valuable.
+                potentialFunds -= payment;
+                spellValue += 50;
+            }
         }
     }
-
-    Funds potentialFunds = GetKingdom().GetFunds();
 
     for ( size_t i = 0; i < futureArmy.Size(); ++i ) {
         Troop * troop = futureArmy.GetTroop( i );

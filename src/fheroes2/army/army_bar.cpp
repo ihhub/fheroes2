@@ -70,7 +70,7 @@ namespace
             troopTarget.SetCount( 2 );
         }
         else {
-            uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetCount() );
+            uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetOccupiedSlotCount() );
 
             if ( isSameTroopType )
                 ++freeSlots;
@@ -122,7 +122,7 @@ namespace
         if ( troopFrom.GetCount() <= 1 || count == 0 )
             return;
 
-        const size_t freeSlots = armyTarget->Size() - armyTarget->GetCount();
+        const size_t freeSlots = armyTarget->Size() - armyTarget->GetOccupiedSlotCount();
         if ( freeSlots == 0 )
             return;
 

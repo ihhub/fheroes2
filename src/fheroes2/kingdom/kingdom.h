@@ -195,7 +195,8 @@ private:
     uint32_t visited_tents_colors;
 
     // Used to remember which item was selected in Kingdom View dialog.
-    int _topItemInKingdomView;
+    int _topCastleInKingdomView;
+    int _topHeroInKingdomView;
 };
 
 class Kingdoms

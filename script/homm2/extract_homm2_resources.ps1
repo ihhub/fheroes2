@@ -63,23 +63,39 @@ try {
     Write-Host "[2/3] determining the HoMM2 directory"
 
     $homm2Path = $null
+    # Some legacy HoMM2 installation use a CD drive
+    $homm2CD = $null
 
     foreach ($key in @("HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
                        "HKEY_CURRENT_USER\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall",
                        "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
-                       "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall")) {
+                       "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall",
+                       # Legacy HoMM2 installation
+                       "HKEY_LOCAL_MACHINE\SOFTWARE\New World Computing\Heroes of Might and Magic 2")) {
         if (-Not (Test-Path -Path "Microsoft.PowerShell.Core\Registry::$key" -PathType Container)) {
             continue
         }
 
         foreach ($subkey in (Get-ChildItem -Path "Microsoft.PowerShell.Core\Registry::$key")) {
             $path = $subkey.GetValue("InstallLocation")
+            $cdDrive = $null
+
+            if ($null -Eq $path) {
+                # From HKLM\SOFTWARE\New World Computing\Heroes of Might and Magic 2
+            	$path = $subkey.GetValue("AppPath")
+                $cdDrive = $subkey.GetValue("CDDrive")
+            }
 
             if ($null -Ne $path) {
                 $path = $path.TrimEnd("\")
 
+                if ($null -Ne $cdDrive) {
+                    $cdDrive = $cdDrive.TrimEnd("\")
+                }
+
                 if (Test-HoMM2DirectoryPath -Path $path) {
                     $homm2Path = $path
+                    $homm2CD = $cdDrive
 
                     break
                 }
@@ -101,6 +117,10 @@ try {
 
     Write-Host -ForegroundColor Green (-Join("HoMM2 directory: ", (Resolve-Path $homm2Path).Path))
 
+    if ($null -Ne $homm2CD) {
+        Write-Host -ForegroundColor Green "HoMM2 CD drive: $homm2CD"
+    }
+
     Write-Host "[3/3] copying game resources"
 
     if ((Resolve-Path $homm2Path).Path -Eq (Resolve-Path $destPath).Path) {
@@ -108,21 +128,27 @@ try {
     } else {
         $shell = New-Object -ComObject "Shell.Application"
 
-        foreach ($srcDir in @("HEROES2\ANIM", "ANIM", "DATA", "MAPS", "MUSIC")) {
-            if (-Not (Test-Path -Path "$homm2Path\$srcDir" -PathType Container)) {
+        foreach ($homm2Dir in @($homm2Path, $homm2CD)) {
+            if ($null -Eq $homm2Dir) {
                 continue
             }
 
-            $destDir = (Split-Path $srcDir -Leaf).ToLower()
+            foreach ($srcDir in @("HEROES2\ANIM", "ANIM", "DATA", "MAPS", "MUSIC")) {
+                if (-Not (Test-Path -Path "$homm2Dir\$srcDir" -PathType Container)) {
+                    continue
+                }
 
-            if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
-                [void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
-            }
+                $destDir = (Split-Path $srcDir -Leaf).ToLower()
 
-            $content = $shell.NameSpace((Resolve-Path "$homm2Path\$srcDir").Path)
+                if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
+                    [void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
+                }
 
-            foreach ($item in $content.Items()) {
-                $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
+                $content = $shell.NameSpace((Resolve-Path "$homm2Dir\$srcDir").Path)
+
+                foreach ($item in $content.Items()) {
+                    $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
+                }
             }
         }
     }

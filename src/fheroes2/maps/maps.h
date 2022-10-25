@@ -35,7 +35,7 @@ using MapsIndexes = std::vector<int32_t>;
 
 namespace Maps
 {
-    enum mapsize_t
+    enum mapsize_t : int
     {
         ZERO = 0,
         SMALL = 36,

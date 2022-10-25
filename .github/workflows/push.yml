@@ -9,23 +9,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  android:
+    name: Android
+    uses: ./.github/workflows/android.yml
   make:
     name: Make
     uses: ./.github/workflows/make.yml
-
   msvc:
     name: MSVC
     uses: ./.github/workflows/msvc.yml
-
   sonarcloud:
     name: SonarCloud Analyzer
     uses: ./.github/workflows/sonarcloud.yml
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
   translation:
     name: Translation update
     needs:
+    - android
     - make
     - msvc
     uses: ./.github/workflows/translation_update.yml

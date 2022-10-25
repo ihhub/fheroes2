@@ -68,7 +68,7 @@ public:
 
     double getReinforcementValue( const Troops & reinforcement ) const;
 
-    uint32_t GetCount() const;
+    uint32_t GetOccupiedSlotCount() const;
     bool isValid() const;
     bool HasMonster( const Monster & ) const;
 
@@ -87,7 +87,7 @@ public:
     // hero's meeting dialog
     void MoveTroops( Troops & from, const int monsterIdToKeep );
 
-    void MergeTroops();
+    void MergeSameMonsterTroops();
     Troops GetOptimized() const;
 
     virtual double GetStrength() const;
@@ -101,11 +101,13 @@ public:
 
     void SortStrongest();
 
-    void JoinStrongest( Troops &, bool );
+    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
 
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
     void JoinAllTroopsOfType( const Troop & targetTroop );
+
+    void addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots );
 };
 
 struct NeutralMonsterJoiningCondition
@@ -131,6 +133,8 @@ struct NeutralMonsterJoiningCondition
 class Army : public Troops, public Control
 {
 public:
+    static const size_t maximumTroopCount = 5;
+
     static std::string SizeString( uint32_t );
     static std::string TroopSizeString( const Troop & );
 
@@ -208,7 +212,7 @@ public:
 
     bool isFullHouse() const
     {
-        return GetCount() == size();
+        return GetOccupiedSlotCount() == size();
     }
 
     bool SaveLastTroop() const;
