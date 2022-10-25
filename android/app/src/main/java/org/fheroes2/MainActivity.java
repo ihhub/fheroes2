@@ -60,12 +60,12 @@ public class MainActivity extends SDLActivity
         System.exit( 0 );
     }
 
-    private void extractAssets( String assetsDir, File dstDir )
+    private void extractAssets( String srcPath, File dstDir )
     {
         ArrayList<String> assetsPaths;
 
         try {
-            assetsPaths = getAssetsPaths( assetsDir );
+            assetsPaths = getAssetsPaths( srcPath );
         }
         catch ( Exception ex ) {
             Log.e( "fheroes2", "Failed to get a list of assets.", ex );
@@ -76,8 +76,8 @@ public class MainActivity extends SDLActivity
         for ( String path : assetsPaths ) {
             try ( InputStream in = getAssets().open( path ) ) {
                 File outFile = new File( dstDir, path );
-                String outFileDir = outFile.getParent();
 
+                String outFileDir = outFile.getParent();
                 if ( outFileDir != null ) {
                     ( new File( outFileDir ) ).mkdirs();
                 }
