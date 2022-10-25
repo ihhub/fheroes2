@@ -586,6 +586,16 @@ namespace
             fheroes2::Copy( font[170 - 32], 5, 11, font[254 - 32], 3, 11, 3, 3 );
             font[254 - 32].setPosition( font[116 - 32].x(), font[116 - 32].y() );
             updateNormalFontLetterShadow( font[254 - 32] );
+
+            // Proper lowercase k. Kept at end in case any letters use it for generation.
+            fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
+            fheroes2::Copy( font[43], 6, 5, font[75], 4, 7, 3, 1 );
+            fheroes2::Copy( font[43], 6, 4, font[75], 4, 6, 4, 1 );
+            fheroes2::Copy( font[43], 7, 4, font[75], 6, 5, 3, 1 );
+            fheroes2::Copy( font[43], 7, 4, font[75], 7, 4, 2, 1 );
+            fheroes2::Copy( font[43], 6, 6, font[75], 4, 8, 4, 1 );
+            font[75].setPosition( font[75].x(), font[75].y() );
+            updateNormalFontLetterShadow( font[75] );
         }
         // Small font.
         {
