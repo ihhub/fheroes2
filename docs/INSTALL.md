@@ -274,15 +274,15 @@ You can download the precompiled binaries of the latest commit (snapshot) for
 [**x86 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL1)
 ),
 **macOS x86-64** (
-[**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-macos-x86-64-SDL2) and
-[**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-macos-x86-64-SDL1)
+[**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl2_dev) and
+[**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl1_dev)
 ),
 **Ubuntu** (
-[**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-ubuntu-SDL2) and
-[**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-ubuntu-SDL1)
+[**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev) and
+[**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl1_dev)
 ),
 [**Android**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-android),
-[**PlayStation Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv) and
-[**Nintendo Switch**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-switch).
+[**PlayStation Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev) and
+[**Nintendo Switch**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-switch-sdl2_dev).
 **These binaries incorporate all the latest changes, but also all the latest bugs, and are mainly intended for developers.
 DON'T EXPECT THEM TO WORK PROPERLY.**

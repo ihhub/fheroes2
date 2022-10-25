@@ -15,7 +15,7 @@ jobs:
           package_name: fheroes2_ubuntu_SDL1.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu (Linux) build with SDL1 (latest commit)
-          release_tag: fheroes2-ubuntu-SDL1
+          release_tag: fheroes2-linux-sdl1_dev
         - name: Linux SDL1 Debug
           os: ubuntu-latest
           dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
@@ -27,7 +27,7 @@ jobs:
           package_name: fheroes2_ubuntu_SDL2.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu (Linux) build with SDL2 (latest commit)
-          release_tag: fheroes2-ubuntu-SDL2
+          release_tag: fheroes2-linux-sdl2_dev
         - name: Linux SDL2 Debug
           os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
@@ -39,7 +39,7 @@ jobs:
           package_name: fheroes2_macos_x86-64_SDL1.zip
           package_files: fheroes2 LICENSE script/macos/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: macOS x86-64 build with SDL1 (latest commit)
-          release_tag: fheroes2-macos-x86-64-SDL1
+          release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
           os: macos-11
           dependencies: sdl sdl_mixer dylibbundler
@@ -51,7 +51,7 @@ jobs:
           package_name: fheroes2_macos_x86-64_SDL2.zip
           package_files: fheroes2 LICENSE script/macos/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: macOS x86-64 build with SDL2 (latest commit)
-          release_tag: fheroes2-macos-x86-64-SDL2
+          release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
           os: macos-11
           dependencies: sdl2 sdl2_mixer dylibbundler
@@ -168,7 +168,7 @@ jobs:
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: PS Vita build (latest commit)
-        tag: fheroes2-psv
+        tag: fheroes2-psv-sdl2_dev
         allowUpdates: true
         artifactErrorsFailBuild: true
         prerelease: true
@@ -211,7 +211,7 @@ jobs:
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Nintendo Switch build (latest commit)
-        tag: fheroes2-switch
+        tag: fheroes2-switch-sdl2_dev
         allowUpdates: true
         artifactErrorsFailBuild: true
         prerelease: true
