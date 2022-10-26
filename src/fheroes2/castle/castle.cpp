@@ -528,6 +528,10 @@ bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
     }
 
     if ( buildingToCheck & BUILD_MAGEGUILD ) {
+        static_assert( BUILD_MAGEGUILD1 < BUILD_MAGEGUILD2 && BUILD_MAGEGUILD2 < BUILD_MAGEGUILD3 && BUILD_MAGEGUILD3 < BUILD_MAGEGUILD4
+                           && BUILD_MAGEGUILD4 < BUILD_MAGEGUILD5,
+                       "The order of values in the building enum has changed, check the logic below" );
+
         auto checkMageGuild = [this]( const uint32_t levels ) {
             // A higher level of the Mage Guild has been built
             if ( ( building & BUILD_MAGEGUILD ) > levels ) {
@@ -557,7 +561,9 @@ bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
     }
 
     if ( buildingToCheck & ( DWELLING_MONSTERS | DWELLING_UPGRADES ) ) {
-        static_assert( DWELLING_MONSTERS < DWELLING_UPGRADES, "The order of values in the building enum has changed, check the logic below" );
+        static_assert( DWELLING_MONSTER2 < DWELLING_UPGRADE2 && DWELLING_MONSTER3 < DWELLING_UPGRADE3 && DWELLING_MONSTER4 < DWELLING_UPGRADE4
+                           && DWELLING_MONSTER5 < DWELLING_UPGRADE5 && DWELLING_MONSTER6 < DWELLING_UPGRADE6 && DWELLING_UPGRADE6 < DWELLING_UPGRADE7,
+                       "The order of values in the building enum has changed, check the logic below" );
 
         auto checkDwelling = [this]( const uint32_t expectedLevels, const uint32_t allLevels ) {
             // A higher level of this dwelling has been built
