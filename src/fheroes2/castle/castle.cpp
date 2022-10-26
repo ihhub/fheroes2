@@ -733,8 +733,8 @@ void Castle::ActionNewWeek()
 
         // population halved
         if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
-            for ( size_t i = 0; i < CASTLEMAXMONSTER; ++i ) {
-                dwelling[i] /= 2;
+            for ( uint32_t & dwellingRef : dwelling ) {
+                dwellingRef /= 2;
             }
         }
         // Month Of
