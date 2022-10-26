@@ -651,7 +651,7 @@ void Castle::ActionNewDay()
 
 void Castle::ActionNewWeek()
 {
-    // skip the first week
+    // Skip the first week
     if ( world.CountWeek() < 2 ) {
         return;
     }
@@ -662,12 +662,12 @@ void Castle::ActionNewWeek()
 
     const bool isNeutral = GetColor() == Color::NONE;
 
-    // increase population
+    // Increase the population
     if ( world.GetWeekType().GetType() != WeekName::PLAGUE ) {
         static const std::array<uint32_t, 6> basicDwellings
             = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
 
-        // simple growth
+        // Normal population growth
         for ( const uint32_t dwellingId : basicDwellings ) {
             uint32_t * dwellingPtr = GetDwelling( dwellingId );
 
@@ -678,12 +678,12 @@ void Castle::ActionNewWeek()
 
             uint32_t growth = Monster( race, GetActualDwelling( dwellingId ) ).GetGrown();
 
-            // well build
+            // The well is built
             if ( building & BUILD_WELL ) {
                 growth += GetGrownWell();
             }
 
-            // wel2 extras
+            // The Horde building is built
             if ( ( dwellingId == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) ) {
                 growth += GetGrownWel2();
             }
@@ -692,7 +692,7 @@ void Castle::ActionNewWeek()
                 growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
             }
 
-            // Neutral towns always have half population growth.
+            // Neutral towns always have 50% population growth
             if ( isNeutral ) {
                 growth /= 2;
             }
@@ -723,10 +723,10 @@ void Castle::ActionNewWeek()
             }
         }
 
-        // neutral town: increase garrisons
+        // Neutral town: increase the garrison
         if ( isNeutral ) {
             JoinRNDArmy();
-            // if it's a town there's 40% chance (or it's a castle) to get extra troops
+            // The probability that a town will get additional troops is 40%, castle always gets them
             if ( isCastle() || Rand::Get( 1, 100 ) <= 40 ) {
                 JoinRNDArmy();
             }
@@ -737,7 +737,7 @@ void Castle::ActionNewWeek()
     if ( world.BeginMonth() ) {
         assert( world.GetMonth() > 1 );
 
-        // population halved
+        // Population halved
         if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
             for ( uint32_t & dwellingRef : dwelling ) {
                 dwellingRef /= 2;
