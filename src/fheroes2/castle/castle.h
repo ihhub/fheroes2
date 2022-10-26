@@ -275,8 +275,8 @@ private:
         RecruitHero // Recruit a hero.
     };
 
-    // Checks whether a building of exactly the given level has been built in the castle
-    // (unlike the isBuild(), upgraded versions of the same building are not taken into account)
+    // Checks whether this particular building was built in the castle (unlike the
+    // isBuild(), upgraded versions of the same building are not taken into account)
     bool isExactBuildingBuilt( const uint32_t buildingToCheck ) const;
 
     uint32_t * GetDwelling( uint32_t dw );
