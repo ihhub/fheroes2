@@ -582,30 +582,32 @@ bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
             // Level 1 dwellings have no upgrades
             return true;
         case DWELLING_MONSTER2:
-            return checkDwelling( buildingToCheck, buildingToCheck | DWELLING_UPGRADE2 );
+            return checkDwelling( DWELLING_MONSTER2, DWELLING_MONSTER2 | DWELLING_UPGRADE2 );
         case DWELLING_MONSTER3:
-            return checkDwelling( buildingToCheck, buildingToCheck | DWELLING_UPGRADE3 );
+            return checkDwelling( DWELLING_MONSTER3, DWELLING_MONSTER3 | DWELLING_UPGRADE3 );
         case DWELLING_MONSTER4:
-            return checkDwelling( buildingToCheck, buildingToCheck | DWELLING_UPGRADE4 );
+            return checkDwelling( DWELLING_MONSTER4, DWELLING_MONSTER4 | DWELLING_UPGRADE4 );
         case DWELLING_MONSTER5:
-            return checkDwelling( buildingToCheck, buildingToCheck | DWELLING_UPGRADE5 );
+            return checkDwelling( DWELLING_MONSTER5, DWELLING_MONSTER5 | DWELLING_UPGRADE5 );
         case DWELLING_MONSTER6:
             // Take the Black Dragon upgrade (DWELLING_UPGRADE7) into account
-            return checkDwelling( buildingToCheck, buildingToCheck | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
+            return checkDwelling( DWELLING_MONSTER6, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
+
         case DWELLING_UPGRADE2:
-            return checkDwelling( DWELLING_MONSTER2 | buildingToCheck, DWELLING_MONSTER2 | buildingToCheck );
+            return checkDwelling( DWELLING_MONSTER2 | DWELLING_UPGRADE2, DWELLING_MONSTER2 | DWELLING_UPGRADE2 );
         case DWELLING_UPGRADE3:
-            return checkDwelling( DWELLING_MONSTER3 | buildingToCheck, DWELLING_MONSTER3 | buildingToCheck );
+            return checkDwelling( DWELLING_MONSTER3 | DWELLING_UPGRADE3, DWELLING_MONSTER3 | DWELLING_UPGRADE3 );
         case DWELLING_UPGRADE4:
-            return checkDwelling( DWELLING_MONSTER4 | buildingToCheck, DWELLING_MONSTER4 | buildingToCheck );
+            return checkDwelling( DWELLING_MONSTER4 | DWELLING_UPGRADE4, DWELLING_MONSTER4 | DWELLING_UPGRADE4 );
         case DWELLING_UPGRADE5:
-            return checkDwelling( DWELLING_MONSTER5 | buildingToCheck, DWELLING_MONSTER5 | buildingToCheck );
+            return checkDwelling( DWELLING_MONSTER5 | DWELLING_UPGRADE5, DWELLING_MONSTER5 | DWELLING_UPGRADE5 );
         case DWELLING_UPGRADE6:
             // Take the Black Dragon upgrade (DWELLING_UPGRADE7) into account
-            return checkDwelling( DWELLING_MONSTER6 | buildingToCheck, DWELLING_MONSTER6 | buildingToCheck | DWELLING_UPGRADE7 );
+            return checkDwelling( DWELLING_MONSTER6 | DWELLING_UPGRADE6, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         case DWELLING_UPGRADE7:
             // Black Dragon upgrade
-            return checkDwelling( DWELLING_MONSTER6 | DWELLING_UPGRADE6 | buildingToCheck, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | buildingToCheck );
+            return checkDwelling( DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
+
         default:
             assert( 0 );
         }
