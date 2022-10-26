@@ -710,14 +710,14 @@ void Castle::ActionNewWeek()
                     continue;
                 }
 
-                uint32_t * dwellingPtr = GetDwelling( dwellingId );
-                assert( dwellingPtr != nullptr );
-
                 const Monster mons( race, dwellingId );
 
                 if ( !mons.isValid() || mons.GetID() != world.GetWeekType().GetMonster() ) {
                     continue;
                 }
+
+                uint32_t * dwellingPtr = GetDwelling( dwellingId );
+                assert( dwellingPtr != nullptr );
 
                 *dwellingPtr += GetGrownWeekOf();
 
@@ -753,14 +753,14 @@ void Castle::ActionNewWeek()
                     continue;
                 }
 
-                uint32_t * dwellingPtr = GetDwelling( dwellingId );
-                assert( dwellingPtr != nullptr );
-
                 const Monster mons( race, dwellingId );
 
                 if ( !mons.isValid() || mons.GetID() != world.GetWeekType().GetMonster() ) {
                     continue;
                 }
+
+                uint32_t * dwellingPtr = GetDwelling( dwellingId );
+                assert( dwellingPtr != nullptr );
 
                 *dwellingPtr += *dwellingPtr * GetGrownMonthOf() / 100;
 
