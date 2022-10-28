@@ -4148,6 +4148,11 @@ namespace fheroes2
     {
         assert( !icnVsSprite.empty() );
 
+        // Remove white line from % symbol
+        fheroes2::FillTransform( icnVsSprite[5], 3, 0, 4, 1, 1 );
+        fheroes2::FillTransform( icnVsSprite[5], 4, 1, 2, 1, 1 );
+        updateNormalFontLetterShadow( icnVsSprite[5] );
+
         // Proper lowercase k.
         icnVsSprite[75].resize( 6, 8 );
         icnVsSprite[75].reset();
