@@ -4206,7 +4206,7 @@ namespace fheroes2
 
     void modifyBaseNormalFont( std::vector<fheroes2::Sprite> & icnVsSprite )
     {
-        assert( icnVsSprite.size() > 0 );
+        assert( !icnVsSprite.empty() );
 
         // Proper lowercase k.
         fheroes2::FillTransform( icnVsSprite[75], 4, 1, 5, 8, 1 );
@@ -4221,7 +4221,7 @@ namespace fheroes2
 
     void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite )
     {
-        assert( icnVsSprite.size() > 0 );
+        assert( !icnVsSprite.empty() );
 
         // Proper lowercase k.
         icnVsSprite[75].resize( 6, 8 );
