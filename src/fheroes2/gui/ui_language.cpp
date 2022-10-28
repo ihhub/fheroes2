@@ -107,7 +107,7 @@ namespace fheroes2
                                                              SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian,
                                                              SupportedLanguage::Romanian,   SupportedLanguage::Spanish,   SupportedLanguage::Portuguese,
                                                              SupportedLanguage::Swedish,    SupportedLanguage::Turkish,   SupportedLanguage::Dutch,
-                                                             SupportedLanguage::Hungarian };
+                                                             SupportedLanguage::Hungarian,  SupportedLanguage::Czech };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {

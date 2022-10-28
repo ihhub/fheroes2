@@ -111,7 +111,10 @@ namespace
 
                 totalSplitTroopCount -= troopFromSplitCount;
                 totalSplitTroopCount -= troopTargetSplitCount;
-                armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount ), troopTarget, slots - 2 );
+
+                if ( slots > 2 ) {
+                    armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount ), troopTarget, slots - 2 );
+                }
             }
         }
     }
