@@ -425,19 +425,6 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON: {
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::RECRUIT, 4 + i );
-                    // clean the button.
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, out, 11 - i, 4 + i, 50, 16 );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
-
-                break;
-            }
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -482,6 +469,19 @@ namespace fheroes2
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 5, 5 }, { 5, 5 }, { 132, 17 }, fheroes2::FontColor::GRAY );
+
+                break;
+            }
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button.
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, out, 11 - i, 4 + i, 50, 16 );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
