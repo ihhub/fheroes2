@@ -826,7 +826,7 @@ namespace fheroes2
                             letter.setPosition( letter.x(), letter.y() - 1 );
                         }
                     }
-                    editOriginalFont( _icnVsSprite[id], false );
+                    modifyBaseSmallFont( _icnVsSprite[id] );
                 }
 
                 if ( id == ICN::FONT ) {
@@ -834,7 +834,7 @@ namespace fheroes2
                     for ( size_t i = 0; i < imageArray.size(); ++i ) {
                         ReplaceColorIdByTransformId( imageArray[i], 50, 2 );
                     }
-                    editOriginalFont( _icnVsSprite[id], true );
+                    modifyBaseNormalFont( _icnVsSprite[id] );
                 }
 
                 // Some checks that we really have CP1251 font

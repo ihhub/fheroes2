@@ -4204,30 +4204,34 @@ namespace fheroes2
                           icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
     }
 
-    void editOriginalFont( std::vector<fheroes2::Sprite> & icnVsSprite, const bool normalFont )
+    void modifyBaseNormalFont( std::vector<fheroes2::Sprite> & icnVsSprite )
     {
-        if ( normalFont ) {
-            // Proper lowercase k. Kept at end in case any letters use it for generation.
-            fheroes2::FillTransform( icnVsSprite[75], 4, 1, 5, 8, 1 );
-            fheroes2::Copy( icnVsSprite[43], 6, 5, icnVsSprite[75], 4, 7, 3, 1 );
-            fheroes2::Copy( icnVsSprite[43], 6, 4, icnVsSprite[75], 4, 6, 4, 1 );
-            fheroes2::Copy( icnVsSprite[43], 7, 4, icnVsSprite[75], 6, 5, 3, 1 );
-            fheroes2::Copy( icnVsSprite[43], 7, 4, icnVsSprite[75], 7, 4, 2, 1 );
-            fheroes2::Copy( icnVsSprite[43], 6, 6, icnVsSprite[75], 4, 8, 4, 1 );
-            icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
-            updateNormalFontLetterShadow( icnVsSprite[75] );
-        }
-        else {
-            // Proper lowercase k. Kept at end in case any letters use it for generation.
-            icnVsSprite[75].resize( 6, 8 );
-            icnVsSprite[75].reset();
-            fheroes2::Copy( icnVsSprite[76], 1, 0, icnVsSprite[75], 1, 0, 2, 7 );
-            fheroes2::Copy( icnVsSprite[76], 1, 0, icnVsSprite[75], 1, 6, 1, 1 );
-            fheroes2::Copy( icnVsSprite[56], 6, 0, icnVsSprite[75], 3, 2, 3, 3 );
-            fheroes2::Copy( icnVsSprite[65], 2, icnVsSprite[65].height() - 2, icnVsSprite[75], 5, 6, 2, 1 );
-            fheroes2::Copy( icnVsSprite[65], 2, 0, icnVsSprite[75], 4, 5, 1, 1 );
-            icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
-            updateSmallFontLetterShadow( icnVsSprite[75] );
-        }
+        assert( icnVsSprite.size() > 0 );
+
+        // Proper lowercase k.
+        fheroes2::FillTransform( icnVsSprite[75], 4, 1, 5, 8, 1 );
+        fheroes2::Copy( icnVsSprite[43], 6, 5, icnVsSprite[75], 4, 7, 3, 1 );
+        fheroes2::Copy( icnVsSprite[43], 6, 4, icnVsSprite[75], 4, 6, 4, 1 );
+        fheroes2::Copy( icnVsSprite[43], 7, 4, icnVsSprite[75], 6, 5, 3, 1 );
+        fheroes2::Copy( icnVsSprite[43], 7, 4, icnVsSprite[75], 7, 4, 2, 1 );
+        fheroes2::Copy( icnVsSprite[43], 6, 6, icnVsSprite[75], 4, 8, 4, 1 );
+        icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
+        updateNormalFontLetterShadow( icnVsSprite[75] );
+    }
+
+    void modifyBaseSmallFont(std::vector<fheroes2::Sprite>& icnVsSprite)
+    {
+        assert( icnVsSprite.size() > 0 );
+
+        // Proper lowercase k.
+        icnVsSprite[75].resize( 6, 8 );
+        icnVsSprite[75].reset();
+        fheroes2::Copy( icnVsSprite[76], 1, 0, icnVsSprite[75], 1, 0, 2, 7 );
+        fheroes2::Copy( icnVsSprite[76], 1, 0, icnVsSprite[75], 1, 6, 1, 1 );
+        fheroes2::Copy( icnVsSprite[56], 6, 0, icnVsSprite[75], 3, 2, 3, 3 );
+        fheroes2::Copy( icnVsSprite[65], 2, icnVsSprite[65].height() - 2, icnVsSprite[75], 5, 6, 2, 1 );
+        fheroes2::Copy( icnVsSprite[65], 2, 0, icnVsSprite[75], 4, 5, 1, 1 );
+        icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
+        updateSmallFontLetterShadow( icnVsSprite[75] );
     }
 }
