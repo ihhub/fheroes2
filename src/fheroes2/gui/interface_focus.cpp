@@ -89,6 +89,29 @@ void Interface::Basic::SetFocus( Castle * castle )
     }
 }
 
+void Interface::Basic::updateFocus()
+{
+    Player * player = Settings::Get().GetPlayers().GetCurrent();
+
+    if ( !player ) {
+        return;
+    }
+
+    Focus & focus = player->GetFocus();
+    if ( focus.first == FOCUS_CASTLE ) {
+        Castle * castle = GetFocusCastle();
+        iconsPanel.Select( castle );
+        gameArea.SetCenter( castle->GetCenter() );
+        statusWindow.SetState( StatusType::STATUS_FUNDS );
+    }
+    else if ( focus.first == FOCUS_HEROES ) {
+        Heroes * hero = GetFocusHeroes();
+        iconsPanel.Select( hero );
+        gameArea.SetCenter( hero->GetCenter() );
+        statusWindow.SetState( StatusType::STATUS_ARMY );
+    }
+}
+
 void Interface::Basic::ResetFocus( int priority )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();

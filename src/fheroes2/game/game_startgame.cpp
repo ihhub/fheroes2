@@ -730,7 +730,12 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
 
-    ResetFocus( GameFocus::FIRSTHERO );
+    if ( isload ) {
+        updateFocus();
+    }
+    else {
+        ResetFocus( GameFocus::FIRSTHERO );
+    }
 
     radar.SetHide( false );
     statusWindow.Reset();
