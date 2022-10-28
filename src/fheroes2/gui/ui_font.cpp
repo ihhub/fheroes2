@@ -1472,9 +1472,8 @@ namespace
             // Shorter k.
             font[234 - 32].resize( font[75].width() - 1, font[75].height() - 4 );
             font[234 - 32].reset();
-            fheroes2::Copy( font[75], 2, 2, font[234 - 32], 2, 0, 7, 4 );
-            fheroes2::Copy( font[75], 1, 0, font[234 - 32], 1, 0, 3, 1 );
-            fheroes2::Copy( font[75], 0, 7, font[234 - 32], 0, 4, font[75].width(), 2 );
+            fheroes2::Copy( font[75], 0, 0, font[234 - 32], 0, 0, 4, 6 );
+            fheroes2::Copy( font[75], 4, 4, font[234 - 32], 4, 0, 5, 6 );
             fheroes2::Copy( font[75], 0, 10, font[234 - 32], 0, 6, 4, 1 );
             fheroes2::Copy( font[75], 7, 10, font[234 - 32], 6, 6, 3, 1 );
             font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
@@ -1911,11 +1910,10 @@ namespace
             font[233 - 32].setPosition( font[232 - 32].x(), font[232 - 32].y() - 2 );
             updateSmallFontLetterShadow( font[233 - 32] );
 
-            font[234 - 32].resize( font[75].width() - 2, font[75].height() - 2 );
+            font[234 - 32].resize( font[75].width(), font[75].height() - 2 );
             font[234 - 32].reset();
             fheroes2::Copy( font[75], 1, 0, font[234 - 32], 1, 0, 2, 5 );
-            fheroes2::Copy( font[75], 4, 1, font[234 - 32], 3, 0, 3, 3 );
-            fheroes2::Copy( font[75], 5, 4, font[234 - 32], 4, 3, 2, 2 );
+            fheroes2::Copy( font[75], 3, 2, font[234 - 32], 3, 0, 3, 5 );
             font[234 - 32].setPosition( font[75].x(), font[75].y() + 2 );
             updateSmallFontLetterShadow( font[234 - 32] );
 
