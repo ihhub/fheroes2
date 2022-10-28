@@ -4219,7 +4219,7 @@ namespace fheroes2
         updateNormalFontLetterShadow( icnVsSprite[75] );
     }
 
-    void modifyBaseSmallFont(std::vector<fheroes2::Sprite>& icnVsSprite)
+    void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite )
     {
         assert( icnVsSprite.size() > 0 );
 
