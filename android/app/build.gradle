@@ -10,7 +10,7 @@ android {
         targetSdkVersion 31
 
         versionCode 1
-        versionName '1.0'
+        versionName '0.9.20'
 
         externalNativeBuild {
             ndkBuild {
@@ -38,7 +38,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':sdl2')
     implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
 }
