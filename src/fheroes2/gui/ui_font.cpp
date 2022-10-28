@@ -4129,6 +4129,10 @@ namespace fheroes2
         fheroes2::FillTransform( icnVsSprite[5], 6, 2, 2, 1, 1 );
         updateNormalFontLetterShadow( icnVsSprite[5] );
 
+        // Move "-" further down
+        icnVsSprite[13].setPosition( icnVsSprite[13].x(), icnVsSprite[13].y() + 1 );
+        updateNormalFontLetterShadow( icnVsSprite[13] );
+
         // Proper lowercase k.
         fheroes2::FillTransform( icnVsSprite[75], 4, 1, 5, 8, 1 );
         fheroes2::Copy( icnVsSprite[43], 6, 5, icnVsSprite[75], 4, 7, 3, 1 );
