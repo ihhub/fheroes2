@@ -371,9 +371,7 @@ namespace
             }
 
             const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
-            // TODO: full house does not mean that slots can't be merged together for the same monster types.
-            // TODO: we need to call a method which takes it into account.
-            if ( !armyHasMonster && army.isFullHouse() ) {
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
                 return false;
             }
 
@@ -397,19 +395,26 @@ namespace
             }
 
             const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
-            // TODO: full house does not mean that slots can't be merged together for the same monster types.
-            // TODO: we need to call a method which takes it into account.
-            if ( !armyHasMonster && army.isFullHouse() ) {
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
                 return false;
             }
 
-            const payment_t & paymentCosts = troop.GetTotalCost();
-            // TODO: even if AI does not have enough money it might still buy few monsters.
-            if ( !kingdom.AllowPayment( paymentCosts ) ) {
+            const payment_t singleMonsterCost = troop.GetCost();
+
+            const uint32_t availableTroopCount = troop.GetCount();
+            uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
+            if ( recruitTroopCount <= 0 ) {
+                // We do not have resources to hire even a single creature.
                 return false;
             }
 
-            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
+            if ( recruitTroopCount > troop.GetCount() ) {
+                recruitTroopCount = troop.GetCount();
+            }
+
+            const Troop troopToHire{ troop.GetID(), recruitTroopCount };
+
+            return isArmyValuableToObtain( troopToHire, armyStrengthThreshold, armyHasMonster );
         }
 
         // recruit army (battle)
@@ -426,9 +431,7 @@ namespace
             }
 
             const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
-            // TODO: full house does not mean that slots can't be merged together for the same monster types.
-            // TODO: we need to call a method which takes it into account.
-            if ( !armyHasMonster && army.isFullHouse() ) {
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
                 return false;
             }
 
@@ -592,31 +595,9 @@ namespace
             , _pathfinder( pathfinder )
             , _ai( ai )
             , _heroArmyStrength( hero.GetArmy().GetStrength() )
-            , _armyStrengthThreshold( 0.05 )
+            , _armyStrengthThreshold( hero.getAIMininumJoiningArmyStrength() )
         {
-            switch ( hero.getAIRole() ) {
-            case Heroes::Role::SCOUT:
-                _armyStrengthThreshold = 0.01;
-                break;
-            case Heroes::Role::COURIER:
-                _armyStrengthThreshold = 0.015;
-                break;
-            case Heroes::Role::HUNTER:
-                _armyStrengthThreshold = 0.02;
-                break;
-            case Heroes::Role::FIGHTER:
-                _armyStrengthThreshold = 0.025;
-                break;
-            case Heroes::Role::CHAMPION:
-                _armyStrengthThreshold = 0.03;
-                break;
-            default:
-                // Did you add a new AI hero role? Add the logic above!
-                assert( 0 );
-                break;
-            }
-
-            _armyStrengthThreshold *= hero.GetArmy().getTroops().GetStrength();
+            // Do nothing.
         }
 
         bool isValid( const int index )
@@ -641,7 +622,7 @@ namespace
         const double _heroArmyStrength;
 
         // Army strength threshold is used to decide whether getting extra monsters is useful.
-        double _armyStrengthThreshold;
+        const double _armyStrengthThreshold;
 
         std::map<int, bool> _validObjects;
     };
