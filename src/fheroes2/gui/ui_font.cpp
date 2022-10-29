@@ -4289,44 +4289,51 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        released[165].setPosition( buttonFontOffset.x, -2 );
+        released[197 - 32].setPosition( buttonFontOffset.x, -2 );
+        released[201 - 32].setPosition( buttonFontOffset.x, -3 );
 
         // A with circle on top
-        released[165].resize( 13 + offset * 2, 12 + offset * 2 );
-        released[165].reset();
-        fheroes2::DrawLine( released[165], { offset + 0, offset + 11 }, { offset + 4, offset + 11 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[165], { offset + 8, offset + 11 }, { offset + 12, offset + 11 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[165], { offset + 5, offset + 7 }, { offset + 8, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[165], { offset + 2, offset + 10 }, { offset + 4, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[165], { offset + 7, offset + 3 }, { offset + 10, offset + 10 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[165], { offset + 5, offset + 1 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[165], { offset + 8, offset + 1 }, { offset + 8, offset + 2 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[165], { offset + 6, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[165], offset + 4, offset + 6, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[165], offset + 5, offset + 5, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[165], offset + 5, offset + 4, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[165], offset + 6, offset + 3, buttonGoodReleasedColor );
+        released[197 - 32].resize( 13 + offset * 2, 12 + offset * 2 );
+        released[197 - 32].reset();
+        fheroes2::DrawLine( released[197 - 32], { offset + 0, offset + 11 }, { offset + 4, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[197 - 32], { offset + 8, offset + 11 }, { offset + 12, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[197 - 32], { offset + 5, offset + 7 }, { offset + 8, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[197 - 32], { offset + 2, offset + 10 }, { offset + 4, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[197 - 32], { offset + 7, offset + 3 }, { offset + 10, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[197 - 32], { offset + 5, offset + 1 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[197 - 32], { offset + 8, offset + 1 }, { offset + 8, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[197 - 32], { offset + 6, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[197 - 32], offset + 4, offset + 6, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[197 - 32], offset + 5, offset + 5, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[197 - 32], offset + 5, offset + 4, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[197 - 32], offset + 6, offset + 3, buttonGoodReleasedColor );
 
         // A attached to E.
-        released[166].resize( 18 + offset * 2, 12 + offset * 2 );
-        released[166].reset();
-        fheroes2::DrawLine( released[166], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 8, offset + 9 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 5, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 2, offset + 8 }, { offset + 4, offset + 5 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 7, offset + 1 }, { offset + 10, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 7, offset + 0 }, { offset + 14, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 13, offset + 9 }, { offset + 14, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 9, offset + 4 }, { offset + 12, offset + 4 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 4, offset + 4, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 5, offset + 3, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 5, offset + 2, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 6, offset + 1, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 6, offset + 0, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 14, offset + 1, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 14, offset + 8, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 12, offset + 3, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 12, offset + 5, buttonGoodReleasedColor );
+        released[198 - 32].resize( 18 + offset * 2, 12 + offset * 2 );
+        released[198 - 32].reset();
+        fheroes2::DrawLine( released[198 - 32], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[198 - 32], { offset + 8, offset + 9 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[198 - 32], { offset + 5, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[198 - 32], { offset + 2, offset + 8 }, { offset + 4, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[198 - 32], { offset + 7, offset + 1 }, { offset + 10, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[198 - 32], { offset + 7, offset + 0 }, { offset + 14, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[198 - 32], { offset + 13, offset + 9 }, { offset + 14, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[198 - 32], { offset + 9, offset + 4 }, { offset + 12, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[198 - 32], offset + 4, offset + 4, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[198 - 32], offset + 5, offset + 3, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[198 - 32], offset + 5, offset + 2, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[198 - 32], offset + 6, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[198 - 32], offset + 6, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[198 - 32], offset + 14, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[198 - 32], offset + 14, offset + 8, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[198 - 32], offset + 12, offset + 3, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[198 - 32], offset + 12, offset + 5, buttonGoodReleasedColor );
+
+        // E with acute.
+        released[201 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 3 );
+        released[201 - 32].reset();
+        fheroes2::Copy( released[69 - 32], 0, 0, released[201 - 32], 0, 3, released[69 - 32].width(), released[69 - 32].height() );
+        fheroes2::DrawLine( released[201 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
     }
 }
 
@@ -4419,7 +4426,6 @@ namespace fheroes2
     {
         generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
 
-        // NOTE: As soon as code structure is agreed on functions for all Code Pages will be added.
         switch ( language ) {
         case SupportedLanguage::English:
             generateBaseButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
@@ -4430,12 +4436,6 @@ namespace fheroes2
         case SupportedLanguage::Polish:
             generateCP1250GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
-        case SupportedLanguage::French:
-            // TODO: Adjust French to use CP1252 button font.
-            // Currently all French capital letters are replaced with the Latin counterpart during .mo compilation.
-            // Therefore, there is no need to generate a French specific button alphabet.
-            // generateFrenchGoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
-            break;
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Russian:
@@ -4443,6 +4443,7 @@ namespace fheroes2
             generateCP1251GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::Dutch:
+        case SupportedLanguage::French:
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
         case SupportedLanguage::Norwegian:
