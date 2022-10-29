@@ -623,16 +623,6 @@ namespace
             fheroes2::Copy( font[140 - 32], 4, 0, font[253 - 32], 5, 0, 3, 2 );
             font[253 - 32].setPosition( font[121 - 32].x(), font[121 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[253 - 32] );
-
-            // Proper lowercase k. Kept at end in case any letters use it for generation.
-            fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
-            fheroes2::Copy( font[43], 6, 5, font[75], 4, 7, 3, 1 );
-            fheroes2::Copy( font[43], 6, 4, font[75], 4, 6, 4, 1 );
-            fheroes2::Copy( font[43], 7, 4, font[75], 6, 5, 3, 1 );
-            fheroes2::Copy( font[43], 7, 4, font[75], 7, 4, 2, 1 );
-            fheroes2::Copy( font[43], 6, 6, font[75], 4, 8, 4, 1 );
-            font[75].setPosition( font[75].x(), font[75].y() );
-            updateNormalFontLetterShadow( font[75] );
         }
         // Small font.
         {
@@ -1080,17 +1070,6 @@ namespace
             fheroes2::Copy( font[122 - 32], 2, 2, font[253 - 32], 4, 0, 2, 2 );
             font[253 - 32].setPosition( font[121 - 32].x(), font[121 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[253 - 32] );
-
-            // Proper lowercase k. Kept at end in case any letters use it for generation.
-            font[75].resize( 6, 8 );
-            font[75].reset();
-            fheroes2::Copy( font[76], 1, 0, font[75], 1, 0, 2, 7 );
-            fheroes2::Copy( font[76], 1, 0, font[75], 1, 6, 1, 1 );
-            fheroes2::Copy( font[56], 6, 0, font[75], 3, 2, 3, 3 );
-            fheroes2::Copy( font[65], 2, font[65].height() - 2, font[75], 5, 6, 2, 1 );
-            fheroes2::Copy( font[65], 2, 0, font[75], 4, 5, 1, 1 );
-            font[75].setPosition( font[75].x(), font[75].y() );
-            updateSmallFontLetterShadow( font[75] );
         }
     }
 
@@ -1684,9 +1663,8 @@ namespace
             // Shorter k.
             font[234 - 32].resize( font[75].width() - 1, font[75].height() - 4 );
             font[234 - 32].reset();
-            fheroes2::Copy( font[75], 2, 2, font[234 - 32], 2, 0, 7, 4 );
-            fheroes2::Copy( font[75], 1, 0, font[234 - 32], 1, 0, 3, 1 );
-            fheroes2::Copy( font[75], 0, 7, font[234 - 32], 0, 4, font[75].width(), 2 );
+            fheroes2::Copy( font[75], 0, 0, font[234 - 32], 0, 0, 4, 6 );
+            fheroes2::Copy( font[75], 4, 4, font[234 - 32], 4, 0, 5, 6 );
             fheroes2::Copy( font[75], 0, 10, font[234 - 32], 0, 6, 4, 1 );
             fheroes2::Copy( font[75], 7, 10, font[234 - 32], 6, 6, 3, 1 );
             font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
@@ -2123,11 +2101,10 @@ namespace
             font[233 - 32].setPosition( font[232 - 32].x(), font[232 - 32].y() - 2 );
             updateSmallFontLetterShadow( font[233 - 32] );
 
-            font[234 - 32].resize( font[75].width() - 2, font[75].height() - 2 );
+            font[234 - 32].resize( font[75].width(), font[75].height() - 2 );
             font[234 - 32].reset();
             fheroes2::Copy( font[75], 1, 0, font[234 - 32], 1, 0, 2, 5 );
-            fheroes2::Copy( font[75], 4, 1, font[234 - 32], 3, 0, 3, 3 );
-            fheroes2::Copy( font[75], 5, 4, font[234 - 32], 4, 3, 2, 2 );
+            fheroes2::Copy( font[75], 3, 2, font[234 - 32], 3, 0, 3, 5 );
             font[234 - 32].setPosition( font[75].x(), font[75].y() + 2 );
             updateSmallFontLetterShadow( font[234 - 32] );
 
@@ -2688,16 +2665,6 @@ namespace
             fheroes2::Copy( font[252 - 32], 2, 0, font[252 - 32], 6, 0, 2, 2 );
             font[252 - 32].setPosition( font[85].x(), font[85].y() - 3 );
             updateNormalFontLetterShadow( font[252 - 32] );
-
-            // Proper lowercase k. Kept at end in case any letters use it for generation.
-            fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
-            fheroes2::Copy( font[43], 6, 5, font[75], 4, 7, 3, 1 );
-            fheroes2::Copy( font[43], 6, 4, font[75], 4, 6, 4, 1 );
-            fheroes2::Copy( font[43], 7, 4, font[75], 6, 5, 3, 1 );
-            fheroes2::Copy( font[43], 7, 4, font[75], 7, 4, 2, 1 );
-            fheroes2::Copy( font[43], 6, 6, font[75], 4, 8, 4, 1 );
-            font[75].setPosition( font[75].x(), font[75].y() );
-            updateNormalFontLetterShadow( font[75] );
         }
         // Small font.
         {
@@ -3073,17 +3040,6 @@ namespace
             fheroes2::Copy( font[252 - 32], 2, 0 + 2, font[252 - 32], 6, 0, 1, 1 );
             font[252 - 32].setPosition( font[85].x(), font[85].y() - 2 );
             updateSmallFontLetterShadow( font[252 - 32] );
-
-            // Proper lowercase k. Kept at end in case any letters use it for generation.
-            font[75].resize( 6, 8 );
-            font[75].reset();
-            fheroes2::Copy( font[76], 1, 0, font[75], 1, 0, 2, 7 );
-            fheroes2::Copy( font[76], 1, 0, font[75], 1, 6, 1, 1 );
-            fheroes2::Copy( font[56], 6, 0, font[75], 3, 2, 3, 3 );
-            fheroes2::Copy( font[65], 2, font[65].height() - 2, font[75], 5, 6, 2, 1 );
-            fheroes2::Copy( font[65], 2, 0, font[75], 4, 5, 1, 1 );
-            font[75].setPosition( font[75].x(), font[75].y() );
-            updateSmallFontLetterShadow( font[75] );
         }
     }
 
@@ -3213,16 +3169,6 @@ namespace
             fheroes2::Copy( font[199 - 32], 7, 11, font[254 - 32], 4, 7, 3, 3 );
             font[254 - 32].setPosition( font[83].x(), font[83].y() );
             updateNormalFontLetterShadow( font[254 - 32] );
-
-            // Proper lowercase k. Kept at end in case any letters use it for generation.
-            fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
-            fheroes2::Copy( font[43], 6, 5, font[75], 4, 7, 3, 1 );
-            fheroes2::Copy( font[43], 6, 4, font[75], 4, 6, 4, 1 );
-            fheroes2::Copy( font[43], 7, 4, font[75], 6, 5, 3, 1 );
-            fheroes2::Copy( font[43], 7, 4, font[75], 7, 4, 2, 1 );
-            fheroes2::Copy( font[43], 6, 6, font[75], 4, 8, 4, 1 );
-            font[75].setPosition( font[75].x(), font[75].y() );
-            updateNormalFontLetterShadow( font[75] );
         }
         // Small font.
         {
@@ -3330,17 +3276,6 @@ namespace
             fheroes2::Copy( font[35], 1, 1, font[254 - 32], 2, 5, 2, 2 );
             font[254 - 32].setPosition( font[83].x(), font[83].y() );
             updateSmallFontLetterShadow( font[254 - 32] );
-
-            // Proper lowercase k. Kept at end in case any letters use it for generation.
-            font[75].resize( 6, 8 );
-            font[75].reset();
-            fheroes2::Copy( font[76], 1, 0, font[75], 1, 0, 2, 7 );
-            fheroes2::Copy( font[76], 1, 0, font[75], 1, 6, 1, 1 );
-            fheroes2::Copy( font[56], 6, 0, font[75], 3, 2, 3, 3 );
-            fheroes2::Copy( font[65], 2, font[65].height() - 2, font[75], 5, 6, 2, 1 );
-            fheroes2::Copy( font[65], 2, 0, font[75], 4, 5, 1, 1 );
-            font[75].setPosition( font[75].x(), font[75].y() );
-            updateSmallFontLetterShadow( font[75] );
         }
     }
 
@@ -3432,16 +3367,6 @@ namespace
             fheroes2::Copy( font[12], 0, 0, font[254 - 32], 1, 12, font[12].width(), font[12].height() );
             font[254 - 32].setPosition( font[84].x(), font[84].y() );
             updateNormalFontLetterShadow( font[254 - 32] );
-
-            // Proper lowercase k. Kept at end in case any letters use it for generation.
-            fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
-            fheroes2::Copy( font[43], 6, 5, font[75], 4, 7, 3, 1 );
-            fheroes2::Copy( font[43], 6, 4, font[75], 4, 6, 4, 1 );
-            fheroes2::Copy( font[43], 7, 4, font[75], 6, 5, 3, 1 );
-            fheroes2::Copy( font[43], 7, 4, font[75], 7, 4, 2, 1 );
-            fheroes2::Copy( font[43], 6, 6, font[75], 4, 8, 4, 1 );
-            font[75].setPosition( font[75].x(), font[75].y() );
-            updateNormalFontLetterShadow( font[75] );
         }
         // Small font.
         {
@@ -3514,17 +3439,6 @@ namespace
             fheroes2::Copy( font[12], 0, 0, font[254 - 32], 1, 8, font[12].width(), font[12].height() );
             font[254 - 32].setPosition( font[84].x(), font[84].y() );
             updateSmallFontLetterShadow( font[254 - 32] );
-
-            // Proper lowercase k. Kept at end in case any letters use it for generation.
-            font[75].resize( 6, 8 );
-            font[75].reset();
-            fheroes2::Copy( font[76], 1, 0, font[75], 1, 0, 2, 7 );
-            fheroes2::Copy( font[76], 1, 0, font[75], 1, 6, 1, 1 );
-            fheroes2::Copy( font[56], 6, 0, font[75], 3, 2, 3, 3 );
-            fheroes2::Copy( font[65], 2, font[65].height() - 2, font[75], 5, 6, 2, 1 );
-            fheroes2::Copy( font[65], 2, 0, font[75], 4, 5, 1, 1 );
-            font[75].setPosition( font[75].x(), font[75].y() );
-            updateSmallFontLetterShadow( font[75] );
         }
     }
 
@@ -4404,5 +4318,54 @@ namespace fheroes2
 
         updateButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
                           icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
+    }
+
+    void modifyBaseNormalFont( std::vector<fheroes2::Sprite> & icnVsSprite )
+    {
+        if ( icnVsSprite.size() < 96 ) {
+            return;
+        }
+
+        // Remove white line from % symbol
+        fheroes2::FillTransform( icnVsSprite[5], 5, 0, 5, 1, 1 );
+        fheroes2::FillTransform( icnVsSprite[5], 6, 2, 2, 1, 1 );
+        updateNormalFontLetterShadow( icnVsSprite[5] );
+
+        // Move "-" further down
+        icnVsSprite[13].setPosition( icnVsSprite[13].x(), icnVsSprite[13].y() + 1 );
+        updateNormalFontLetterShadow( icnVsSprite[13] );
+
+        // Proper lowercase k.
+        fheroes2::FillTransform( icnVsSprite[75], 4, 1, 5, 8, 1 );
+        fheroes2::Copy( icnVsSprite[43], 6, 5, icnVsSprite[75], 4, 7, 3, 1 );
+        fheroes2::Copy( icnVsSprite[43], 6, 4, icnVsSprite[75], 4, 6, 4, 1 );
+        fheroes2::Copy( icnVsSprite[43], 7, 4, icnVsSprite[75], 6, 5, 3, 1 );
+        fheroes2::Copy( icnVsSprite[43], 7, 4, icnVsSprite[75], 7, 4, 2, 1 );
+        fheroes2::Copy( icnVsSprite[43], 6, 6, icnVsSprite[75], 4, 8, 4, 1 );
+        icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
+        updateNormalFontLetterShadow( icnVsSprite[75] );
+    }
+
+    void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite )
+    {
+        if ( icnVsSprite.size() < 96 ) {
+            return;
+        }
+
+        // Remove white line from % symbol
+        fheroes2::FillTransform( icnVsSprite[5], 3, 0, 4, 1, 1 );
+        fheroes2::FillTransform( icnVsSprite[5], 4, 1, 2, 1, 1 );
+        updateNormalFontLetterShadow( icnVsSprite[5] );
+
+        // Proper lowercase k.
+        icnVsSprite[75].resize( 6, 8 );
+        icnVsSprite[75].reset();
+        fheroes2::Copy( icnVsSprite[76], 1, 0, icnVsSprite[75], 1, 0, 2, 7 );
+        fheroes2::Copy( icnVsSprite[76], 1, 0, icnVsSprite[75], 1, 6, 1, 1 );
+        fheroes2::Copy( icnVsSprite[56], 6, 0, icnVsSprite[75], 3, 2, 3, 3 );
+        fheroes2::Copy( icnVsSprite[65], 2, icnVsSprite[65].height() - 2, icnVsSprite[75], 5, 6, 2, 1 );
+        fheroes2::Copy( icnVsSprite[65], 2, 0, icnVsSprite[75], 4, 5, 1, 1 );
+        icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
+        updateSmallFontLetterShadow( icnVsSprite[75] );
     }
 }
