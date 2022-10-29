@@ -1110,7 +1110,7 @@ namespace
             font[42 - 32] = font[226 - 32];
             // Lowercase i with diaeresis
             font[60 - 32] = font[239 - 32];
-            // Lowercase i with circumflex <- Confirmed used in the OG.
+            // Lowercase i with circumflex <- Confirmed used in the OG Succession wars.
             font[62 - 32] = font[238 - 32];
             // Lowercase a with grave accent
             font[64 - 32] = font[224 - 32];
