@@ -9,8 +9,9 @@ android {
         minSdkVersion 19
         targetSdkVersion 31
 
-        versionCode 1
-        versionName '1.0'
+        // These paths are set relative to the android project directory
+        versionCode((new File('../version_code.txt')).getText('UTF-8').trim().toInteger())
+        versionName((new File('../version.txt')).getText('UTF-8').trim())
 
         externalNativeBuild {
             ndkBuild {
@@ -38,7 +39,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':sdl2')
     implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
 }
