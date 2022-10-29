@@ -2200,8 +2200,15 @@ namespace
             font[194 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[194 - 32] );
 
-            // A with tilde accent ~. TODO Move generation of accent for further use here.
-            font[195 - 32] = font[33];
+            // A with tilde accent ~. Generate accent for further use.
+            font[195 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 4 );
+            font[195 - 32].reset();
+            fheroes2::Copy( font[65 - 32], 0, 0, font[195 - 32], 0, 4, font[65 - 32].width(), font[65 - 32].height() );
+            fheroes2::Copy( font[37 - 32], 7, 5, font[195 - 32], 4, 0, 5, 2 );
+            fheroes2::Copy( font[37 - 32], 8, 8, font[195 - 32], 8, 2, 3, 1 );
+            fheroes2::Copy( font[37 - 32], 10, 7, font[195 - 32], 10, 1, 2, 1 );
+            font[195 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 4 );
+            updateNormalFontLetterShadow( font[195 - 32] );
 
             // A with 2 dots on top.
             font[196 - 32].resize( font[33].width(), font[33].height() + 3 );
@@ -2317,14 +2324,11 @@ namespace
             font[207 - 32].setPosition( font[41].x(), font[41].y() - 3 );
             updateNormalFontLetterShadow( font[207 - 32] );
 
-            // N with tilde ~. Generate accent for further use.
-            // TODO: Move tilde generation code to A with tilde when adding Portuguese.
+            // N with tilde ~.
             font[209 - 32].resize( font[46].width(), font[46].height() + 3 );
             font[209 - 32].reset();
             fheroes2::Copy( font[46], 0, 0, font[209 - 32], 0, 3, font[46].width(), font[46].height() );
-            fheroes2::Copy( font[37 - 32], 7, 5, font[209 - 32], 4, 0, 5, 2 );
-            fheroes2::Copy( font[37 - 32], 8, 8, font[209 - 32], 8, 2, 3, 1 );
-            fheroes2::Copy( font[37 - 32], 10, 7, font[209 - 32], 10, 1, 2, 1 );
+            fheroes2::Copy( font[195 - 32], 4, 0, font[209 - 32], 4, 0, 8, 3 );
             font[209 - 32].setPosition( font[46].x(), font[46].y() - 3 );
             updateNormalFontLetterShadow( font[209 - 32] );
 
@@ -2353,7 +2357,12 @@ namespace
             updateNormalFontLetterShadow( font[212 - 32] );
 
             // O with tilde accent ~.
-            font[213 - 32] = font[47];
+            font[213 - 32].resize( font[79 - 32].width(), font[79 - 32].height() + 4 );
+            font[213 - 32].reset();
+            fheroes2::Copy( font[79 - 32], 0, 0, font[213 - 32], 0, 4, font[79 - 32].width(), font[79 - 32].height() );
+            fheroes2::Copy( font[195 - 32], 4, 0, font[213 - 32], 4, 0, 8, 3 );
+            font[213 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 4 );
+            updateNormalFontLetterShadow( font[213 - 32] );
 
             // O with 2 dots on top. TODO replace with previous accent generation in A.
             font[214 - 32].resize( font[47].width(), font[47].height() + 3 );
@@ -2453,7 +2462,12 @@ namespace
             updateNormalFontLetterShadow( font[226 - 32] );
 
             // a with tilde accent ~.
-            font[227 - 32] = font[65];
+            font[227 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 4 );
+            font[227 - 32].reset();
+            fheroes2::Copy( font[97 - 32], 0, 0, font[227 - 32], 0, 4, font[97 - 32].width(), font[97 - 32].height() );
+            fheroes2::Copy( font[195 - 32], 4, 0, font[227 - 32], 1, 0, 8, 3 );
+            font[227 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 4 );
+            updateNormalFontLetterShadow( font[227 - 32] );
 
             // a with 2 dots on top.
             font[228 - 32].resize( font[65].width(), font[65].height() + 3 );
@@ -2554,7 +2568,7 @@ namespace
             font[241 - 32].resize( font[110 - 32].width(), font[110 - 32].height() + 4 );
             font[241 - 32].reset();
             fheroes2::Copy( font[110 - 32], 0, 0, font[241 - 32], 0, 4, font[110 - 32].width(), font[110 - 32].height() );
-            fheroes2::Copy( font[209 - 32], 4, 0, font[241 - 32], 1, 0, 8, 3 );
+            fheroes2::Copy( font[195 - 32], 4, 0, font[241 - 32], 1, 0, 8, 3 );
             font[241 - 32].setPosition( font[110 - 32].x(), font[110 - 32].y() - 4 );
             updateNormalFontLetterShadow( font[241 - 32] );
 
@@ -2583,7 +2597,12 @@ namespace
             updateNormalFontLetterShadow( font[244 - 32] );
 
             // o with tilde accent ~.
-            font[245 - 32] = font[79];
+            font[245 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 4 );
+            font[245 - 32].reset();
+            fheroes2::Copy( font[111 - 32], 0, 0, font[245 - 32], 0, 4, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[195 - 32], 4, 0, font[245 - 32], 1, 0, 8, 3 );
+            font[245 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 4 );
+            updateNormalFontLetterShadow( font[245 - 32] );
 
             // o with 2 dots on top.
             font[246 - 32].resize( font[79].width(), font[79].height() + 3 );
@@ -2714,8 +2733,15 @@ namespace
             font[194 - 32].setPosition( font[33].x(), font[33].y() - 3 );
             updateSmallFontLetterShadow( font[194 - 32] );
 
-            // A with tilde accent ~. TODO Move generation of accent for further use here.
-            font[195 - 32] = font[33];
+            // A with tilde accent ~. Generate for further use.
+            font[195 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
+            font[195 - 32].reset();
+            fheroes2::Copy( font[65 - 32], 0, 0, font[195 - 32], 0, 3, font[65 - 32].width(), font[65 - 32].height() );
+            fheroes2::Copy( font[37 - 32], 5, 4, font[195 - 32], 3, 0, 3, 2 );
+            fheroes2::Copy( font[37 - 32], 5, 4, font[195 - 32], 6, 1, 2, 2 );
+            font[195 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[195 - 32] );
+            
 
             // A with 2 dots on top.
             font[196 - 32].resize( font[33].width(), font[33].height() + 2 );
@@ -2805,13 +2831,11 @@ namespace
             font[206 - 32].setPosition( font[73 - 32].x(), font[73 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[206 - 32] );
 
-            // N with tilde ~. Generate tilde accent for further use.
-            // TODO: Move tilde accent generation to A with tilde when adding Portuguese.
+            // N with tilde ~.
             font[209 - 32].resize( font[46].width(), font[46].height() + 3 );
             font[209 - 32].reset();
             fheroes2::Copy( font[46], 0, 0, font[209 - 32], 0, 4, font[46].width(), font[46].height() );
-            fheroes2::Copy( font[37 - 32], 5, 4, font[209 - 32], 4, 0, 3, 2 );
-            fheroes2::Copy( font[37 - 32], 5, 4, font[209 - 32], 7, 1, 2, 2 );
+            fheroes2::Copy( font[195 - 32], 3, 0, font[209 - 32], 4, 0, 5, 3 );
             font[209 - 32].setPosition( font[46].x(), font[46].y() - 4 );
             updateSmallFontLetterShadow( font[209 - 32] );
 
@@ -2840,7 +2864,13 @@ namespace
             updateSmallFontLetterShadow( font[212 - 32] );
 
             // O with tilde accent ~.
-            font[213 - 32] = font[47];
+            font[213 - 32].resize( font[79 - 32].width(), font[79 - 32].height() + 3 );
+            font[213 - 32].reset();
+            fheroes2::Copy( font[79 - 32], 0, 0, font[213 - 32], 0, 3, font[79 - 32].width(), font[79 - 32].height() );
+            fheroes2::Copy( font[195 - 32], 3, 0, font[213 - 32], 2, 0, 5, 3 );
+            font[213 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[213 - 32] );
+            
 
             // O with 2 dots on top.
             font[214 - 32].resize( font[47].width(), font[47].height() + 2 );
@@ -2932,7 +2962,12 @@ namespace
             updateSmallFontLetterShadow( font[226 - 32] );
 
             // a with tilde accent ~.
-            font[227 - 32] = font[65];
+            font[227 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 4 );
+            font[227 - 32].reset();
+            fheroes2::Copy( font[97 - 32], 0, 0, font[227 - 32], 0, 4, font[97 - 32].width(), font[97 - 32].height() );
+            fheroes2::Copy( font[195 - 32], 3, 0, font[227 - 32], 1, 0, 5, 3 );
+            font[227 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 4 );
+            updateSmallFontLetterShadow( font[227 - 32] );
 
             // a with 2 dots on top.
             font[228 - 32].resize( font[65].width(), font[65].height() + 2 );
@@ -3019,7 +3054,7 @@ namespace
             font[241 - 32].resize( font[110 - 32].width(), font[110 - 32].height() + 4 );
             font[241 - 32].reset();
             fheroes2::Copy( font[110 - 32], 0, 0, font[241 - 32], 0, 4, font[110 - 32].width(), font[110 - 32].height() );
-            fheroes2::Copy( font[209 - 32], 4, 0, font[241 - 32], 2, 0, 5, 3 );
+            fheroes2::Copy( font[195 - 32], 3, 0, font[241 - 32], 2, 0, 5, 3 );
             font[241 - 32].setPosition( font[110 - 32].x(), font[110 - 32].y() - 4 );
             updateSmallFontLetterShadow( font[241 - 32] );
 
@@ -3048,7 +3083,12 @@ namespace
             updateSmallFontLetterShadow( font[244 - 32] );
 
             // o with tilde accent ~.
-            font[245 - 32] = font[79];
+            font[245 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 4 );
+            font[245 - 32].reset();
+            fheroes2::Copy( font[111 - 32], 0, 0, font[245 - 32], 0, 4, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[195 - 32], 3, 0, font[245 - 32], 1, 0, 5, 3 );
+            font[245 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 4 );
+            updateSmallFontLetterShadow( font[245 - 32] );
 
             // o with 2 dots on top.
             font[246 - 32].resize( font[79].width(), font[79].height() + 2 );
