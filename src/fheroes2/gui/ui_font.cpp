@@ -4364,7 +4364,7 @@ namespace fheroes2
             break;
         case SupportedLanguage::French:
             generateCP1252Alphabet( icnVsSprite );
-            // Make compatible with original French custom encoding.
+            // This serves to make the font compatible with the original French custom encoding.
             generateFrenchAlphabet( icnVsSprite );
             break;
         case SupportedLanguage::Turkish:
