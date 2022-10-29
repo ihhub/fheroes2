@@ -2741,7 +2741,6 @@ namespace
             fheroes2::Copy( font[37 - 32], 5, 4, font[195 - 32], 6, 1, 2, 2 );
             font[195 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[195 - 32] );
-            
 
             // A with 2 dots on top.
             font[196 - 32].resize( font[33].width(), font[33].height() + 2 );
@@ -2870,7 +2869,6 @@ namespace
             fheroes2::Copy( font[195 - 32], 3, 0, font[213 - 32], 2, 0, 5, 3 );
             font[213 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[213 - 32] );
-            
 
             // O with 2 dots on top.
             font[214 - 32].resize( font[47].width(), font[47].height() + 2 );
