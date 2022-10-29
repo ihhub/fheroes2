@@ -156,7 +156,7 @@ namespace
             icnIndex = spellcast ? 7 : 6;
         }
         else {
-            value = _( "Manual" );
+            value = _( "autoBattle|Manual" );
 
             icnId = ICN::SPANEL;
             icnIndex = 18;
