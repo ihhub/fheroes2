@@ -864,7 +864,7 @@ bool Troops::mergeWeakestTroopsIfNeeded()
         return true;
     }
 
-    std::map<int, double> monsterIdVsSlotCount;
+    std::map<int, uint32_t> monsterIdVsSlotCount;
     std::map<int, double> monsterIdVsStrength;
 
     for ( Troop * troop : *this ) {
