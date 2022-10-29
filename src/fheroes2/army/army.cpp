@@ -900,7 +900,7 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     assert( !sortedMultiSlotMonsterIdVsStrength.empty() );
 
     std::sort( sortedMultiSlotMonsterIdVsStrength.begin(), sortedMultiSlotMonsterIdVsStrength.end(),
-               []( const auto & left, const auto & right ){ return left.second < right.second; } );
+               []( const auto & left, const auto & right ) { return left.second < right.second; } );
 
     const int weakestMonsterToMerge = sortedMultiSlotMonsterIdVsStrength.front().first;
 
