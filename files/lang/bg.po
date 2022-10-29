@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 15:21+0000\n"
+"POT-Creation-Date: 2022-10-29 03:00+0000\n"
 "PO-Revision-Date: 2022-10-25 19:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -28,11 +28,11 @@ msgstr ""
 msgid "GIFT"
 msgstr "ДАРИ"
 
-msgid "MIN"
-msgstr "МИН"
-
 msgid "DIFFICULTY"
 msgstr "ТРУДНОСТ"
+
+msgid "MIN"
+msgstr "МИН"
 
 msgid "Warrior"
 msgstr "Войн"
