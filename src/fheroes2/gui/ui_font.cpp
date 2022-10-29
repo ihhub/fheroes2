@@ -4120,7 +4120,9 @@ namespace fheroes2
 
     void modifyBaseNormalFont( std::vector<fheroes2::Sprite> & icnVsSprite )
     {
-        assert( !icnVsSprite.empty() );
+        if ( icnVsSprite.size() < 96 ) {
+            return;
+        }
 
         // Remove white line from % symbol
         fheroes2::FillTransform( icnVsSprite[5], 5, 0, 5, 1, 1 );
@@ -4144,7 +4146,9 @@ namespace fheroes2
 
     void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite )
     {
-        assert( !icnVsSprite.empty() );
+        if ( icnVsSprite.size() < 96 ) {
+            return;
+        }
 
         // Remove white line from % symbol
         fheroes2::FillTransform( icnVsSprite[5], 3, 0, 4, 1, 1 );
