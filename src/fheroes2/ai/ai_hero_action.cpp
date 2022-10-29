@@ -1410,15 +1410,15 @@ namespace AI
         Kingdom & kingdom = hero.GetKingdom();
         const payment_t singleMonsterCost = troop.GetCost();
 
-        const uint32_t availableTroopCount = troop.GetCount();
         uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
         if ( recruitTroopCount <= 0 ) {
             // We do not have resources to hire even a single creature.
             return;
         }
 
-        if ( recruitTroopCount > troop.GetCount() ) {
-            recruitTroopCount = troop.GetCount();
+        const uint32_t availableTroopCount = troop.GetCount();
+        if ( recruitTroopCount > availableTroopCount ) {
+            recruitTroopCount = availableTroopCount;
         }
 
         const Troop troopToHire{ troop.GetID(), recruitTroopCount };
