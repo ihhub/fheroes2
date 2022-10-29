@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'org.fheroes2'
+
     compileSdkVersion 31
 
     defaultConfig {
