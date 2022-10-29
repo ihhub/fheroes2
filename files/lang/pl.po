@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -3078,6 +3078,9 @@ msgstr "Warunki zwycięstwa"
 msgid "Map difficulty:"
 msgstr "Poziom:"
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr "Brak map o tym rozmiarze"
 
@@ -4286,6 +4289,13 @@ msgstr "Portugalski"
 
 msgid "Turkish"
 msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+#, fuzzy
+msgid "Hungarian"
+msgstr "Bułgarski"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -6625,8 +6635,52 @@ msgstr "Ogromna"
 msgid "speed|Instant"
 msgstr "Błyskawica"
 
-msgid "week|PLAGUE"
-msgstr "PLAGA"
+msgid "week|Squirrel"
+msgstr "Wiewiórka"
+
+msgid "week|Rabbit"
+msgstr "Królik"
+
+msgid "week|Gopher"
+msgstr "Świstak"
+
+msgid "week|Badger"
+msgstr "Borsuk"
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "Królik"
+
+msgid "week|Eagle"
+msgstr "Orzeł"
+
+msgid "week|Weasel"
+msgstr "Łasica"
+
+msgid "week|Raven"
+msgstr "Kruk"
+
+msgid "week|Mongoose"
+msgstr "Mangusta"
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "Orzeł"
+
+msgid "week|Aardvark"
+msgstr "Mrówkojad"
+
+msgid "week|Lizard"
+msgstr "Jaszczurka"
+
+msgid "week|Tortoise"
+msgstr "Żółw"
+
+msgid "week|Hedgehog"
+msgstr "Jeż"
+
+msgid "week|Condor"
+msgstr "Kondor"
 
 msgid "week|Ant"
 msgstr "Mrówka"
@@ -6658,44 +6712,12 @@ msgstr "Szerszeń"
 msgid "week|Beetle"
 msgstr "Żuk"
 
-msgid "week|Squirrel"
-msgstr "Wiewiórka"
+msgid "week|PLAGUE"
+msgstr "PLAGA"
 
-msgid "week|Rabbit"
-msgstr "Królik"
-
-msgid "week|Gopher"
-msgstr "Świstak"
-
-msgid "week|Badger"
-msgstr "Borsuk"
-
-msgid "week|Eagle"
+#, fuzzy
+msgid "week|Unnamed"
 msgstr "Orzeł"
-
-msgid "week|Weasel"
-msgstr "Łasica"
-
-msgid "week|Raven"
-msgstr "Kruk"
-
-msgid "week|Mongoose"
-msgstr "Mangusta"
-
-msgid "week|Aardvark"
-msgstr "Mrówkojad"
-
-msgid "week|Lizard"
-msgstr "Jaszczurka"
-
-msgid "week|Tortoise"
-msgstr "Żółw"
-
-msgid "week|Hedgehog"
-msgstr "Jeż"
-
-msgid "week|Condor"
-msgstr "Kondor"
 
 msgid "Desert"
 msgstr "Pustynia"

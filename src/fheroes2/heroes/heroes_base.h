@@ -112,6 +112,11 @@ public:
     // Returns all spells present in Magic Book and in Scrolls.
     SpellStorage getAllSpells() const;
 
+    const SpellStorage & getMagicBookSpells() const
+    {
+        return spell_book;
+    }
+
     void EditSpellBook();
     Spell OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const bool restorePreviousState,
                          const std::function<void( const std::string & )> * statusCallback ) const;

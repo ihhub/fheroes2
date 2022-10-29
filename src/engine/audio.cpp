@@ -53,7 +53,12 @@ namespace
             format = AUDIO_S16;
             channels = 2; // Support stereo audio.
             silence = 0;
+#if defined( ANDROID )
+            // TODO: a value greater than 1024 causes audio distortion on Android
+            samples = 1024;
+#else
             samples = 2048;
+#endif
             size = 0;
             // TODO: research if we need to utilize these 2 paremeters in the future.
             callback = nullptr;

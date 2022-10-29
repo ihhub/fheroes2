@@ -95,7 +95,7 @@ namespace
         return std::atan2( end.y - start.y, end.x - start.x );
     }
 
-    std::vector<std::pair<LightningPoint, LightningPoint> > GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
+    std::vector<std::pair<LightningPoint, LightningPoint>> GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
     {
         const int distance = static_cast<int>( getDistance( src, dst ) );
         const double angle = getAngle( src, dst );
@@ -106,13 +106,13 @@ namespace
         if ( iterationCount > 5 )
             iterationCount = 5;
 
-        std::vector<std::pair<LightningPoint, LightningPoint> > lines;
+        std::vector<std::pair<LightningPoint, LightningPoint>> lines;
         lines.emplace_back( LightningPoint( { 0, 0 }, 5 ), LightningPoint( { distance, 0 }, 3 ) );
 
         int maxOffset = distance;
 
         for ( int step = 0; step < iterationCount; ++step ) {
-            std::vector<std::pair<LightningPoint, LightningPoint> > oldLines;
+            std::vector<std::pair<LightningPoint, LightningPoint>> oldLines;
             std::swap( lines, oldLines );
 
             for ( size_t i = 0; i < oldLines.size(); ++i ) {
@@ -153,7 +153,7 @@ namespace
         return lines;
     }
 
-    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, uint8_t color, fheroes2::Image & surface,
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint>> & lightning, uint8_t color, fheroes2::Image & surface,
                           const fheroes2::Rect & roi = fheroes2::Rect() )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
@@ -247,7 +247,7 @@ namespace Battle
 
             const int32_t scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7;
 
-            setScrollBarArea( { ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12, scrollbarSliderAreaLength} );
+            setScrollBarArea( { ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12, scrollbarSliderAreaLength } );
 
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
             const fheroes2::Image scrollbarSlider
@@ -664,11 +664,11 @@ Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroB
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( _heroIcnId, _currentAnim.getFrame() );
 
     if ( reflect ) {
-        pos.x = _offset.x + fheroes2::Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.width() );
+        pos.x = _offset.x + fheroes2::Display::DEFAULT_WIDTH - RIGHT_HERO_X_OFFSET - ( sprite.x() + sprite.width() );
         pos.y = _offset.y + RIGHT_HERO_Y_OFFSET + sprite.y();
     }
     else {
-        pos.x = _offset.x + HERO_X_OFFSET + sprite.x();
+        pos.x = _offset.x + LEFT_HERO_X_OFFSET + sprite.x();
         pos.y = _offset.y + LEFT_HERO_Y_OFFSET + sprite.y();
     }
 
@@ -745,10 +745,10 @@ void Battle::OpponentSprite::Redraw( fheroes2::Image & dst ) const
     }
 
     if ( reflect )
-        fheroes2::Blit( hero, dst, offset.x + fheroes2::Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.width() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y(),
-                        reflect );
+        fheroes2::Blit( hero, dst, offset.x + fheroes2::Display::DEFAULT_WIDTH - RIGHT_HERO_X_OFFSET - ( hero.x() + hero.width() ),
+                        offset.y + RIGHT_HERO_Y_OFFSET + hero.y(), reflect );
     else
-        fheroes2::Blit( hero, dst, offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
+        fheroes2::Blit( hero, dst, offset.x + LEFT_HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
 }
 
 void Battle::OpponentSprite::Update()
@@ -1458,7 +1458,7 @@ void Battle::Interface::RedrawOpponentsFlags()
         }
 
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ) );
-        fheroes2::Blit( flag, _mainSurface, opponent1->Offset().x + OpponentSprite::HERO_X_OFFSET + flag.x(),
+        fheroes2::Blit( flag, _mainSurface, opponent1->Offset().x + OpponentSprite::LEFT_HERO_X_OFFSET + flag.x(),
                         opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
     }
 
@@ -1491,7 +1491,7 @@ void Battle::Interface::RedrawOpponentsFlags()
 
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ) );
         const fheroes2::Point offset = opponent2->Offset();
-        fheroes2::Blit( flag, _mainSurface, offset.x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.width() ),
+        fheroes2::Blit( flag, _mainSurface, offset.x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::RIGHT_HERO_X_OFFSET - ( flag.x() + flag.width() ),
                         offset.y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y(), true );
     }
 }

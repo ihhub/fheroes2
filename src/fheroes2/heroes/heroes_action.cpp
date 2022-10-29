@@ -216,7 +216,7 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
     }
 
     // Whirlpool effect affects heroes only with more than one creature in more than one slot
-    if ( heroArmy.GetCount() == 1 && weakestTroop->GetCount() == 1 ) {
+    if ( heroArmy.GetOccupiedSlotCount() == 1 && weakestTroop->GetCount() == 1 ) {
         return;
     }
 
@@ -290,7 +290,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     }
 
     // "Musical" sounds use the volume of sounds instead of the volume of music, reset the music volume after completing the action
-    const struct MusicVolumeRestorer
+    struct MusicVolumeRestorer
     {
         MusicVolumeRestorer() = default;
 
@@ -302,7 +302,9 @@ void Heroes::Action( int tileIndex, bool isDestination )
         }
 
         MusicVolumeRestorer & operator=( const MusicVolumeRestorer & ) = delete;
-    } musicVolumeRestorer;
+    };
+
+    const MusicVolumeRestorer musicVolumeRestorer;
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );

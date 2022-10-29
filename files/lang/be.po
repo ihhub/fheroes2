@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -34,19 +34,19 @@ msgid "DIFFICULTY"
 msgstr ""
 
 msgid "Warrior"
-msgstr ""
+msgstr "Ваяр"
 
 msgid "Builder"
-msgstr ""
+msgstr "Будаўнік"
 
 msgid "Explorer"
-msgstr ""
+msgstr "Даследчык"
 
 msgid "None"
 msgstr ""
 
 msgid "Warning"
-msgstr ""
+msgstr "Увага"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
@@ -273,13 +273,13 @@ msgid ""
 msgstr ""
 
 msgid "The enemy has surrendered!"
-msgstr "Праціўнік здаўся!"
+msgstr "Вораг здаўся!"
 
 msgid "The enemy has fled!"
-msgstr "Праціўнік уцёк!"
+msgstr "Вораг уцёк!"
 
 msgid "A glorious victory!"
-msgstr "Выдатная перамога!"
+msgstr "Слаўная перамога!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
 msgstr "За мужнасць у баі %{name} атрымлівае %{exp} вопыту."
@@ -288,22 +288,22 @@ msgid "The cowardly %{name} flees from battle."
 msgstr "%{name} баязліва ўцякае з поля бітвы."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr "%{name} здаўся праціўніку і пакінуў з ганьбай."
+msgstr "%{name} здаўся ворагу і сышоў з ганьбай."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr "Вашы войскі былі знішчаны і %{name} пакідае вас."
+msgstr "Вашыя войскі былі знішчаны, а %{name} пакідае вас."
 
 msgid "Your force suffer a bitter defeat."
-msgstr "Вашы войскі былі знішчаны."
+msgstr "Вашыя войскі былі знішчаны."
 
 msgid "Battlefield Casualties"
-msgstr ""
+msgstr "Страты на полі бою"
 
 msgid "Attacker"
-msgstr ""
+msgstr "Нападнік"
 
 msgid "Defender"
-msgstr ""
+msgstr "Абаронца"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
@@ -2819,6 +2819,9 @@ msgstr ""
 msgid "Map difficulty:"
 msgstr ""
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr ""
 
@@ -3889,7 +3892,7 @@ msgid "Norwegian"
 msgstr ""
 
 msgid "Belarusian"
-msgstr "Беларускі"
+msgstr "Беларуская"
 
 msgid "Bulgarian"
 msgstr ""
@@ -3910,6 +3913,12 @@ msgid "Portuguese"
 msgstr ""
 
 msgid "Turkish"
+msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+msgid "Hungarian"
 msgstr ""
 
 msgid ", FPS: "
@@ -5809,7 +5818,49 @@ msgstr "Нястрымная"
 msgid "speed|Instant"
 msgstr "Імгненная"
 
-msgid "week|PLAGUE"
+msgid "week|Squirrel"
+msgstr ""
+
+msgid "week|Rabbit"
+msgstr ""
+
+msgid "week|Gopher"
+msgstr ""
+
+msgid "week|Badger"
+msgstr ""
+
+msgid "week|Rat"
+msgstr ""
+
+msgid "week|Eagle"
+msgstr ""
+
+msgid "week|Weasel"
+msgstr ""
+
+msgid "week|Raven"
+msgstr ""
+
+msgid "week|Mongoose"
+msgstr ""
+
+msgid "week|Dog"
+msgstr ""
+
+msgid "week|Aardvark"
+msgstr ""
+
+msgid "week|Lizard"
+msgstr ""
+
+msgid "week|Tortoise"
+msgstr ""
+
+msgid "week|Hedgehog"
+msgstr ""
+
+msgid "week|Condor"
 msgstr ""
 
 msgid "week|Ant"
@@ -5842,43 +5893,10 @@ msgstr ""
 msgid "week|Beetle"
 msgstr ""
 
-msgid "week|Squirrel"
+msgid "week|PLAGUE"
 msgstr ""
 
-msgid "week|Rabbit"
-msgstr ""
-
-msgid "week|Gopher"
-msgstr ""
-
-msgid "week|Badger"
-msgstr ""
-
-msgid "week|Eagle"
-msgstr ""
-
-msgid "week|Weasel"
-msgstr ""
-
-msgid "week|Raven"
-msgstr ""
-
-msgid "week|Mongoose"
-msgstr ""
-
-msgid "week|Aardvark"
-msgstr ""
-
-msgid "week|Lizard"
-msgstr ""
-
-msgid "week|Tortoise"
-msgstr ""
-
-msgid "week|Hedgehog"
-msgstr ""
-
-msgid "week|Condor"
+msgid "week|Unnamed"
 msgstr ""
 
 msgid "Desert"

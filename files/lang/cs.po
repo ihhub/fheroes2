@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
-"PO-Revision-Date: 2022-09-23 16:01+0200\n"
+"POT-Creation-Date: 2022-10-20 14:48+0000\n"
+"PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
@@ -2954,6 +2954,9 @@ msgstr ""
 "Mapa\n"
 "Obtížnost"
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr ""
 
@@ -4044,7 +4047,7 @@ msgid "Italian"
 msgstr ""
 
 msgid "Czech"
-msgstr ""
+msgstr "Čeština"
 
 msgid "Norwegian"
 msgstr ""
@@ -4071,6 +4074,12 @@ msgid "Portuguese"
 msgstr ""
 
 msgid "Turkish"
+msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+msgid "Hungarian"
 msgstr ""
 
 msgid ", FPS: "
@@ -5990,7 +5999,49 @@ msgstr ""
 msgid "speed|Instant"
 msgstr ""
 
-msgid "week|PLAGUE"
+msgid "week|Squirrel"
+msgstr ""
+
+msgid "week|Rabbit"
+msgstr ""
+
+msgid "week|Gopher"
+msgstr ""
+
+msgid "week|Badger"
+msgstr ""
+
+msgid "week|Rat"
+msgstr ""
+
+msgid "week|Eagle"
+msgstr ""
+
+msgid "week|Weasel"
+msgstr ""
+
+msgid "week|Raven"
+msgstr ""
+
+msgid "week|Mongoose"
+msgstr ""
+
+msgid "week|Dog"
+msgstr ""
+
+msgid "week|Aardvark"
+msgstr ""
+
+msgid "week|Lizard"
+msgstr ""
+
+msgid "week|Tortoise"
+msgstr ""
+
+msgid "week|Hedgehog"
+msgstr ""
+
+msgid "week|Condor"
 msgstr ""
 
 msgid "week|Ant"
@@ -6023,43 +6074,10 @@ msgstr ""
 msgid "week|Beetle"
 msgstr ""
 
-msgid "week|Squirrel"
+msgid "week|PLAGUE"
 msgstr ""
 
-msgid "week|Rabbit"
-msgstr ""
-
-msgid "week|Gopher"
-msgstr ""
-
-msgid "week|Badger"
-msgstr ""
-
-msgid "week|Eagle"
-msgstr ""
-
-msgid "week|Weasel"
-msgstr ""
-
-msgid "week|Raven"
-msgstr ""
-
-msgid "week|Mongoose"
-msgstr ""
-
-msgid "week|Aardvark"
-msgstr ""
-
-msgid "week|Lizard"
-msgstr ""
-
-msgid "week|Tortoise"
-msgstr ""
-
-msgid "week|Hedgehog"
-msgstr ""
-
-msgid "week|Condor"
+msgid "week|Unnamed"
 msgstr ""
 
 msgid "Desert"

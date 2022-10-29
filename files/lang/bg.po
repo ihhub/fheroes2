@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
-"PO-Revision-Date: 2022-09-24 12:02+0100\n"
+"POT-Creation-Date: 2022-10-12 15:21+0000\n"
+"PO-Revision-Date: 2022-10-25 19:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -22,6 +22,8 @@ msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
+"САМО\n"
+"БИТКА"
 
 msgid "GIFT"
 msgstr "ДАРИ"
@@ -2515,7 +2517,7 @@ msgid "Shots Left"
 msgstr "Ост. изстрели"
 
 msgid "Damage"
-msgstr "Щета"
+msgstr "Щети"
 
 msgid "Hit Points"
 msgstr "Живот"
@@ -2583,10 +2585,10 @@ msgid "Effects"
 msgstr "Ефекти"
 
 msgid "MIDI"
-msgstr "МИДИ"
+msgstr "MIDI"
 
 msgid "MIDI Expansion"
-msgstr "МИДИ Продължение"
+msgstr "MIDI Продължение"
 
 msgid "External"
 msgstr "Външна"
@@ -2667,7 +2669,7 @@ msgid "Audio"
 msgstr "Звукови"
 
 msgid "Configure"
-msgstr ""
+msgstr "Настрой"
 
 msgid "Hot Keys"
 msgstr "Бързи клавиши"
@@ -2691,10 +2693,10 @@ msgid "Good"
 msgstr "Добър"
 
 msgid "Interface Type"
-msgstr "Вид на интерфейс"
+msgstr "Интерфейс"
 
 msgid "Auto Resolve"
-msgstr "Авто разрешаване"
+msgstr "Авто"
 
 msgid "Auto, No Spells"
 msgstr "Авто, без магий"
@@ -2726,18 +2728,15 @@ msgstr "Експериментални настройки на играта."
 msgid "Toggle instant battle mode."
 msgstr "Превключи режима на незабавна битка."
 
-#, fuzzy
 msgid "Check and configure all the hot keys present in the game."
-msgstr "Провери всички горещи клавиши, използвани в играта."
+msgstr "Провери и конфигурирай всички горещи клавиши в играта."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
-#, fuzzy
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
-"Включване/изключване на цветните курсори. Цветните курсори изглеждат по-"
-"хубави, но понякога не се движат толкова гладко, колкото черно-белите."
+"Включване/изключване на цветните курсори. Това е само естетически избор."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3081,6 +3080,9 @@ msgstr "Условие за победа"
 msgid "Map difficulty:"
 msgstr "Трудност на карта:"
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr "Няма карти в този размер"
 
@@ -3299,19 +3301,19 @@ msgid "Best Monster:"
 msgstr "Най-добро чудовище:"
 
 msgid "difficulty|Easy"
-msgstr "Лесно"
+msgstr "Лесна"
 
 msgid "difficulty|Normal"
-msgstr "Нормално"
+msgstr "Нормална"
 
 msgid "difficulty|Hard"
-msgstr "Трудно"
+msgstr "Трудна"
 
 msgid "difficulty|Expert"
-msgstr "Експерт"
+msgstr "Експертна"
 
 msgid "difficulty|Impossible"
-msgstr "Невъзможно"
+msgstr "Невъзможна"
 
 msgid "and more..."
 msgstr "и още..."
@@ -3853,11 +3855,10 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Времето свърши. (Не успя да победиш в определеното време.)"
 
-#, fuzzy
 msgid "You must defeat the enemy %{enemies}."
 msgid_plural "You must defeat the enemy alliance of %{enemies}."
-msgstr[0] "Победи героя '%{name}'."
-msgstr[1] "Победи героя '%{name}'."
+msgstr[0] "Трябва да победиш врага %{enemies}."
+msgstr[1] "Трябва да победиш вражеският съюз от %{enemies}."
 
 msgid ""
 "The alliance consisting of %{allies} and you must defeat the enemy "
@@ -3866,7 +3867,10 @@ msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
 msgstr[0] ""
+"Съюзът, състоящ се от %{allies} и ти трябва да победите врага %{enemies}."
 msgstr[1] ""
+"Съюзът, състоящ се от %{allies} и ти трябва да победите вражеския съюз от "
+"%{enemies}."
 
 msgid "Capture the castle '%{name}'."
 msgstr "Превземи замъка '%{name}'."
@@ -4293,7 +4297,13 @@ msgid "Portuguese"
 msgstr "Португалски"
 
 msgid "Turkish"
-msgstr ""
+msgstr "Турски"
+
+msgid "Dutch"
+msgstr "Холандски"
+
+msgid "Hungarian"
+msgstr "Унгарски"
 
 msgid ", FPS: "
 msgstr ""
@@ -4856,262 +4866,356 @@ msgid ""
 "You've come upon a mercenary camp practicing their tactics. \"You're too "
 "advanced for us,\" the mercenary captain says. \"We can teach nothing more.\""
 msgstr ""
+"Попадаш на лагер на наемници, който упражняват своите умения. \"Твърде си "
+"напреднал за нас\", казва капитанът на наемниците. \"Не можем да те научим "
+"на нищо повече.\""
 
 msgid ""
 "You've come upon a mercenary camp practicing their tactics. The mercenaries "
 "welcome you and your troops and invite you to train with them."
 msgstr ""
+"Попадаш на лагер на наемници, който упражняват своите умения. Наемниците "
+"приветстват теб и твоите войски и ви канят да тренирате с тях."
 
 msgid "\"Go 'way!\", the witch doctor barks, \"you know all I know.\""
-msgstr ""
+msgstr "\"Заминавай!\", излайва врачката, \"вече знаеш всичко, което и аз.\""
 
 msgid ""
 "An Orcish witch doctor living in the hut deepens your knowledge of magic by "
 "showing you how to cast stones, read portents, and decipher the intricacies "
 "of chicken entrails."
 msgstr ""
+"Оркският знахар, който живее в колибата, задълбочава знанията ти за магия, "
+"като ти показва как да хвърляш камъни, да разчиташ знамения и да дешифрираш "
+"тънкостите на пилешките вътрешности."
 
 msgid ""
 "You've found a group of Druids worshipping at one of their strange stone "
 "edifices. Silently, the Druids turn you away, indicating they have nothing "
 "new to teach you."
 msgstr ""
+"Намираш група друиди на поклонение в една от техните странни каменни сгради. "
+"Мълчаливо друидите те отблъскват, показвайки, че нямат какво ново да те "
+"научат."
 
 msgid ""
 "You've found a group of Druids worshipping at one of their strange stone "
 "edifices. Silently, they teach you new ways to cast spells."
 msgstr ""
+"Намераш група друиди да се покланят в една от техните странни каменни "
+"сгради. Тихичко те ви научават на нови начини да правите магии."
 
 msgid ""
 "You tentatively approach the burial ground of ancient warriors. Do you want "
 "to search the graves?"
 msgstr ""
+"Неуверено се приближаваш до гробището на древни воини. Искаш ли да претърсиш "
+"гробовете?"
 
 msgid ""
 "You spend several hours searching the graves and find nothing. Such a "
 "despicable act reduces your army's morale."
 msgstr ""
+"Прекарваш няколко часа в претърсване на гробовете и не намираш нищо. Подобно "
+"презряно действие намалява морала на твоята армия."
 
 msgid "Upon defeating the Zombies you search the graves and find something!"
-msgstr ""
+msgstr "След като побеждаваш зомбитата, претърсваш гробовете и намираш нещо!"
 
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
 "against the rocks. Do you wish to search the shipwreck?"
 msgstr ""
+"Гниещият корпус на голям пиратски кораб скърца зловещо, докато се блъска в "
+"скалите. Искаш ли да претърсиш останките на кораба?"
 
 msgid ""
 "You spend several hours sifting through the debris and find nothing. Such a "
 "despicable act reduces your army's morale."
 msgstr ""
+"Прекарваш няколко часа в пресяване на отломките и не намирате нищо. Подобно "
+"презряно действие намалява морала на вашата армия."
 
 msgid ""
 "Upon defeating the Ghosts you sift through the debris and find something!"
-msgstr ""
+msgstr "След като побеждаваш призраците, пресяваш отломките и намираш нещо!"
 
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
 "against the rocks. Do you wish to search the ship?"
 msgstr ""
+"Гниещият корпус на голям пиратски кораб скърца зловещо, докато се блъска в "
+"скалите. Искаш ли да претърсиш кораба?"
 
 msgid ""
 "Upon defeating the Skeletons you sift through the debris and find something!"
-msgstr ""
+msgstr "След като побеждаваш скелетите, пресяваш отломките и намираш нещо!"
 
 msgid "Your men spot a navigational buoy, confirming that you are on course."
 msgstr ""
+"Твойте хора забелязват навигационен буй, потвърждаващ, че сте на правилния "
+"курс."
 
 msgid ""
 "Your men spot a navigational buoy, confirming that you are on course and "
 "increasing their morale."
 msgstr ""
+"Твойте хора забелязват навигационен буй, който потвърждава, че сте на "
+"правилния курс и повишава морала им."
 
 msgid ""
 "The drink at the oasis is refreshing, but offers no further benefit. The "
 "oasis might help again if you fought a battle first."
 msgstr ""
+"Напитката в оазиса е освежаваща, но не носи допълнителна полза. Оазисът може "
+"да помогне отново, ако си водил битка."
 
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
 "spirits.  You can travel a bit further today."
 msgstr ""
+"Едно питие в оазиса изпълва войските ти със сила и повдига духа им. Днес "
+"можеш да пътуваш малко по-далеч."
 
 msgid ""
 "The drink at the watering hole is refreshing, but offers no further benefit. "
 "The watering hole might help again if you fought a battle first."
 msgstr ""
+"Напитката във водопоя е освежаваща, но не носи допълнителна полза. Дупката "
+"за поливане може да помогне отново, ако си водил битка."
 
 msgid ""
 "A drink at the watering hole fills your troops with strength and lifts their "
 "spirits. You can travel a bit further today."
 msgstr ""
+"Едно питие на водопоя изпълва войските ти със сила и повдига духа им. Днес "
+"можеш да пътуваш малко по-далеч."
 
 msgid ""
 "It doesn't help to pray twice before a battle. Come back after you've fought."
 msgstr ""
+"Не помага да се молиш два пъти преди битка. Върни се, след като си се бил."
 
 msgid "A visit and a prayer at the temple raises the morale of your troops."
-msgstr ""
+msgstr "Посещението и молитвата в храма повишават морала на твойте войски."
 
 msgid ""
 "An old Knight appears on the steps of the gazebo. \"I am sorry, my liege, I "
 "have taught you all I can.\""
 msgstr ""
+"На стъпалата на беседката се появява стар рицар. \"Съжалявам, господарю мой, "
+"научих те на всичко, което мога.\""
 
 msgid ""
 "An old Knight appears on the steps of the gazebo. \"My liege, I will teach "
 "you all that I know to aid you in your travels.\""
 msgstr ""
+"На стъпалата на беседката се появява стар рицар. \"Господарю мой, ще те "
+"науча на всичко, което знам, за да ти помагам в пътуванията ти.\""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
 "ocean. Grateful, he says, \"I would give you an artifact as a reward, but "
 "you're all full.\""
 msgstr ""
+"Спаси оцелял от корабокрушение от сигурна смърт човек в безмилостния океан. "
+"Благодарен, той казва: \"Бих ти дал артефакт като награда, но нямаш място.\""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
 "ocean. Grateful, he rewards you for your act of kindness by giving you the "
 "%{art}."
 msgstr ""
+"Спаси оцелял от корабокрушение от сигурна смърт човек в безмилостния океан. "
+"Благодарен, той те възнаграждава за проявената доброта, като ти дава %{art}."
 
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
-msgstr ""
+msgstr "Леприкона ти предлага %{art} на малката цена от %{gold} злато."
 
 msgid ""
 "A leprechaun offers you the %{art} for the small price of %{gold} Gold and "
 "%{count} %{res}."
 msgstr ""
+"Леприконя ти предлага %{art} на ниската цена от %{gold} злато и %{count} "
+"%{res}."
 
 msgid "Do you wish to buy this artifact?"
-msgstr ""
+msgstr "Искаш ли да купиш този артефакт?"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
 "leprechaun stamps his foot and ignores you."
 msgstr ""
+"Опитваш се да платиш на леприкона, но разбираш, че не можеш да си го "
+"позволиш. Леприконът тропва с крак и те игнорира."
 
 msgid ""
 "Insulted by your refusal of his generous offer, the leprechaun stamps his "
 "foot and ignores you."
 msgstr ""
+"Обиден от отказа ти на щедрото му предложение, леприконът тропва с крак и те "
+"игнорира."
 
 msgid "You've found the artifact: "
-msgstr ""
+msgstr "Ти откри артефакта:"
 
 msgid ""
 "You've found the humble dwelling of a withered hermit. The hermit tells you "
 "that he is willing to give the %{art} to the first wise person he meets."
 msgstr ""
+"Намери скромното жилище на изсъхнал отшелник. Отшелникът ти казва, че е "
+"готов да даде %{art} на първия мъдър човек, когото срещне."
 
 msgid ""
 "You've come across the spartan quarters of a retired soldier. The soldier "
 "tells you that he is willing to pass on the %{art} to the first true leader "
 "he meets."
 msgstr ""
+"Попаднал сте на спартанските квартири на пенсиониран войник. Войникът ти "
+"казва, че е готов да предаде %{art} на първия истински лидер, когото срещне."
 
 msgid ""
 "You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
+"Срещаш странен човек с шапка и бухал върху нея. Той ти казва, че е готов да "
+"даде %{art}, ако имате %{skill}."
 
 msgid ""
 "You come upon an ancient artifact. As you reach for it, a pack of Rogues "
 "leap out of the brush to guard their stolen loot."
 msgstr ""
+"Попадаш на древен артефакт. Когато посягаш към него, група мошеници изскачат "
+"от храстите, за да опазят откраднатата си плячка."
 
 msgid ""
 "Through a clearing you observe an ancient artifact. Unfortunately, it's "
 "guarded by a nearby %{monster}. Do you want to fight the %{monster} for the "
 "artifact?"
 msgstr ""
+"През поляна наблюдаваш древен артефакт. За съжаление, той се охранява от "
+"близко %{monster}. Искате ли да се биете с %{monster} за артефакта?"
 
 msgid "Victorious, you take your prize, the %{art}."
-msgstr ""
+msgstr "Победител, ти вземаш своята награда, %{art}."
 
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
 msgstr ""
+"Дискретността е по-добрата част от доблестта и ти решаваш да избегнеш тази "
+"битка днес."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
 "and find %{gold} gold pieces."
 msgstr ""
+"След като си прекарал часове в опити да извадиш сандъка от морето, ти го "
+"отваряш и намирате %{gold} златни парчета."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
 "and find %{gold} gold and the %{art}."
 msgstr ""
+"След като си прекарал часове в опити да извадиш сандъка от морето, ти го "
+"отваряш и намираш %{gold} злато и %{art}."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it, "
 "only to find it empty."
 msgstr ""
+"След като си прекарал часове в опити да извадиш сандъка от морето, ти го "
+"отваряш, само за да го намериш празен."
 
 msgid ""
 "After scouring the area, you fall upon a hidden treasure cache. You may take "
 "the gold or distribute the gold to the peasants for experience. Do you wish "
 "to keep the gold?"
 msgstr ""
+"След като претърси района, попадаш на скрит тайник със съкровища. Можеш да "
+"вземеш златото или да го раздадеш на селяните за опит. Искаш ли да запазиш "
+"златото?"
 
 msgid ""
 "After scouring the area, you fall upon a hidden chest, containing the "
 "%{gold} gold pieces."
 msgstr ""
+"След като претърси района, попадаш на скрит сандък, съдържащ %{gold} златни "
+"парчета."
 
 msgid ""
 "After scouring the area, you fall upon a hidden chest, containing the "
 "ancient artifact %{art}."
 msgstr ""
+"След като претърси района, попадаш на скрит сандък, съдържащ древния "
+"артефакт %{art}."
 
 msgid ""
 "You stumble upon a dented and tarnished lamp lodged deep in the earth. Do "
 "you wish to rub the lamp?"
 msgstr ""
+"Натъкваш се на вдлъбната и зацапана лампа, забита дълбоко в земята. Искаш ли "
+"да потъркаш лампата?"
 
 msgid ""
 "You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
 "wish to enter?"
 msgstr ""
+"Попадаш на изоставена златна мина. Мината изглежда обитавана от духове. "
+"Желаеш ли да влезеш?"
 
 msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
+"Пое контрол над местния магазин на Алхимика. Ще ви осигури %{count} единица "
+"живак на ден."
 
 msgid ""
 "You gain control of a sawmill. It will provide you with %{count} units of "
 "wood per day."
 msgstr ""
+"Получаваш контрол над дъскорезницата. Ще ви осигури %{count} единици дърва "
+"на ден."
 
 msgid "You beat the Ghosts and are able to restore the mine to production."
 msgstr ""
+"Ти побеждаваш Призраците и си в състояние да възстановиш мината за "
+"производство."
 
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
 msgstr ""
+"Получаваш контрол над мина за руда. Ще ви осигури %{count} единици руда на "
+"ден."
 
 msgid ""
 "You gain control of a sulfur mine. It will provide you with %{count} unit of "
 "sulfur per day."
 msgstr ""
+"Получаваш контрол над сярна мина. Тя ще ви осигури %{count} единица сяра на "
+"ден."
 
 msgid ""
 "You gain control of a crystal mine. It will provide you with %{count} unit "
 "of crystal per day."
 msgstr ""
+"Получаваш контрол над кристална мина. Тя ще ви осигури %{count} единица "
+"кристал на ден."
 
 msgid ""
 "You gain control of a gem mine. It will provide you with %{count} unit of "
 "gems per day."
 msgstr ""
+"Получаваш контрол над мина за скъпоценни камъни. Тя ще ви осигури %{count} "
+"единица скъпоценни камъни на ден."
 
 msgid ""
 "You gain control of a gold mine. It will provide you with %{count} gold per "
 "day."
 msgstr ""
+"Получаваш контрол над златна мина. Ще ви осигури %{count} злато на ден."
 
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
@@ -5628,9 +5732,11 @@ msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
+"'Групирана' бойна формация обединява армията ти в центъра на твоята страна "
+"на бойното поле."
 
 msgid "Are you sure you want to dismiss this Hero?"
-msgstr ""
+msgstr "Сигурен ли си, че искаш да отсвободиш този герой?"
 
 msgid "View Experience Info"
 msgstr "Виж информация за опит"
@@ -5672,21 +5778,23 @@ msgid "%{luck} Luck"
 msgstr "%{luck} Късмет"
 
 msgid "Current Luck Modifiers:"
-msgstr ""
+msgstr "Текущи модификатори на късмета:"
 
 msgid "Current Morale Modifiers:"
-msgstr ""
+msgstr "Текущи модификатори на морала:"
 
 msgid "Entire army is undead, so morale does not apply."
-msgstr ""
+msgstr "Цялата армия е немъртва, така че моралът не се прилага."
 
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
 msgstr ""
+"Текущ опит %{exp1}.\n"
+"  Следващо ниво %{exp2}."
 
 msgid "Level %{level}"
-msgstr ""
+msgstr "Ниво %{level}"
 
 msgid ""
 "%{name} currently has %{point} spell points out of a maximum of %{max}. The "
@@ -6059,52 +6167,52 @@ msgid "Purple"
 msgstr "Лилав"
 
 msgid "barrier|Aqua"
-msgstr ""
+msgstr "Воден"
 
 msgid "barrier|Blue"
-msgstr ""
+msgstr "Син"
 
 msgid "barrier|Brown"
-msgstr ""
+msgstr "Кафяв"
 
 msgid "barrier|Gold"
-msgstr ""
+msgstr "Златен"
 
 msgid "barrier|Green"
-msgstr ""
+msgstr "Зелен"
 
 msgid "barrier|Orange"
-msgstr ""
+msgstr "Оранжев"
 
 msgid "barrier|Purple"
-msgstr ""
+msgstr "Лилав"
 
 msgid "barrier|Red"
-msgstr ""
+msgstr "Червен"
 
 msgid "tent|Aqua"
-msgstr ""
+msgstr "Воден"
 
 msgid "tent|Blue"
-msgstr ""
+msgstr "Синя"
 
 msgid "tent|Brown"
-msgstr ""
+msgstr "Кафява"
 
 msgid "tent|Gold"
-msgstr ""
+msgstr "Златна"
 
 msgid "tent|Green"
-msgstr ""
+msgstr "Зелена"
 
 msgid "tent|Orange"
-msgstr ""
+msgstr "Оранжева"
 
 msgid "tent|Purple"
-msgstr ""
+msgstr "Лилава"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Червена"
 
 msgid "Experience"
 msgstr "Опит"
@@ -6171,16 +6279,22 @@ msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
 "only do half damage."
 msgstr ""
+"Лош късмет понякога сполетява твойте армии в битка, което кара техните атаки "
+"да нанасят само половината щети."
 
 msgid ""
 "Neutral luck means your armies will never get lucky or unlucky attacks on "
 "the enemy."
 msgstr ""
+"Неутрален късмет означава, че армиите ти никога няма да получат късмет или "
+"злощастни атаки срещу врага."
 
 msgid ""
 "Good luck sometimes lets your armies get lucky attacks (double strength) in "
 "combat."
 msgstr ""
+"Добрият късмет понякога позволява на твойте армии да получават късметлийски "
+"атаки (двойна сила) в битка."
 
 msgid "morale|Treason"
 msgstr "Измяна"
@@ -6204,15 +6318,17 @@ msgid "morale|Blood!"
 msgstr "Кървав!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
-msgstr ""
+msgstr "Лошият морал може да накара армиите ти да замръзнат в битка."
 
 msgid ""
 "Neutral morale means your armies will never be blessed with extra attacks or "
 "freeze in combat."
 msgstr ""
+"Неутрален морал означава, че твойте армии никога няма да бъдат благословени "
+"с допълнителни атаки или да замръзнат в битка."
 
 msgid "Good morale may give your armies extra attacks in combat."
-msgstr ""
+msgstr "Добрият морал може да даде на твойте армии допълнителни атаки в битка."
 
 msgid "Knight"
 msgstr "Рицар"
@@ -6271,8 +6387,50 @@ msgstr "Пламтяща"
 msgid "speed|Instant"
 msgstr "Мигновена"
 
-msgid "week|PLAGUE"
-msgstr "ЧУМА"
+msgid "week|Squirrel"
+msgstr "Катерица"
+
+msgid "week|Rabbit"
+msgstr "Заек"
+
+msgid "week|Gopher"
+msgstr "Гризач"
+
+msgid "week|Badger"
+msgstr "Язовец"
+
+msgid "week|Rat"
+msgstr "Плъх"
+
+msgid "week|Eagle"
+msgstr "Орел"
+
+msgid "week|Weasel"
+msgstr "Невестулка"
+
+msgid "week|Raven"
+msgstr "Гарван"
+
+msgid "week|Mongoose"
+msgstr "Мангуста"
+
+msgid "week|Dog"
+msgstr "Куче"
+
+msgid "week|Aardvark"
+msgstr "Мравояд"
+
+msgid "week|Lizard"
+msgstr "Гущер"
+
+msgid "week|Tortoise"
+msgstr "Костенурка"
+
+msgid "week|Hedgehog"
+msgstr "Таралеж"
+
+msgid "week|Condor"
+msgstr "Кондор"
 
 msgid "week|Ant"
 msgstr "Мравка"
@@ -6304,44 +6462,11 @@ msgstr "Стършел"
 msgid "week|Beetle"
 msgstr "Бръмбар"
 
-msgid "week|Squirrel"
-msgstr "Катерица"
+msgid "week|PLAGUE"
+msgstr "ЧУМА"
 
-msgid "week|Rabbit"
-msgstr "Заек"
-
-msgid "week|Gopher"
-msgstr "Гризач"
-
-msgid "week|Badger"
-msgstr "Язовец"
-
-msgid "week|Eagle"
-msgstr "Орел"
-
-msgid "week|Weasel"
-msgstr "Невестулка"
-
-msgid "week|Raven"
-msgstr "Гарван"
-
-msgid "week|Mongoose"
-msgstr "Мангуста"
-
-msgid "week|Aardvark"
-msgstr "Мравояд"
-
-msgid "week|Lizard"
-msgstr "Гущер"
-
-msgid "week|Tortoise"
-msgstr "Костенурка"
-
-msgid "week|Hedgehog"
-msgstr "Таралеж"
-
-msgid "week|Condor"
-msgstr "Кондор"
+msgid "week|Unnamed"
+msgstr "Безименен"
 
 msgid "Desert"
 msgstr "Пустиня"
@@ -6552,7 +6677,7 @@ msgid "Dwarf Cottage"
 msgstr "Вила на джуджета"
 
 msgid "Stone Liths"
-msgstr ""
+msgstr "Телепорт"
 
 msgid "Magic Well"
 msgstr "Магически кладенец"
@@ -7193,127 +7318,127 @@ msgid "Random Monsters 4"
 msgstr "Случайни чудовища 4"
 
 msgid "Double shot"
-msgstr ""
+msgstr "Двоен изстрел"
 
 msgid "2-hex monster"
-msgstr ""
+msgstr "2-шестоъгълника чудовище"
 
 msgid "Double strike"
-msgstr ""
+msgstr "Двоен удар"
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Двойни щети на Немъртвеца"
 
 msgid "% magic resistance"
-msgstr ""
+msgstr "% магическа устойчивост"
 
 msgid "Immune to Mind spells"
-msgstr ""
+msgstr "Имунитет към умствени магии"
 
 msgid "Immune to Elemental spells"
-msgstr ""
+msgstr "Имунитет към стихийни магии"
 
 msgid "Immune to Fire spells"
-msgstr ""
+msgstr "Имунитет към огнени магии"
 
 msgid "Immune to Cold spells"
-msgstr ""
+msgstr "Имунитет към ледени магии"
 
 msgid "Immune to "
-msgstr ""
+msgstr "Имунитет към "
 
 msgid "% immunity to %{spell} spell"
-msgstr ""
+msgstr "% имунитет към %{spell} магия"
 
 msgid "% damage from Elemental spells"
-msgstr ""
+msgstr "% щети от стихийни магии"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% шанс за отблъскване на полезни заклинания"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% шанс за парализиране"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% шанс за вкаменяване"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% шанс за заслепяване"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% шанс за проклятие"
 
 msgid "% chance to cast %{spell} spell"
-msgstr ""
+msgstr "% шанс да направиш %{spell} заклинание"
 
 msgid "HP regeneration"
 msgstr "Възстановяване на живот"
 
 msgid "Two hexes attack"
-msgstr ""
+msgstr "Атака в два шестоъгълника"
 
 msgid "Flyer"
-msgstr ""
+msgstr "Летец"
 
 msgid "Always retaliates"
-msgstr ""
+msgstr "Винаги отмъщава"
 
 msgid "Attacks all adjacent enemies"
-msgstr ""
+msgstr "Атакува всички съседни врагове"
 
 msgid "No melee penalty"
-msgstr ""
+msgstr "Без наказание за ръкопашен бой"
 
 msgid "Dragon"
-msgstr ""
+msgstr "Дракон"
 
 msgid "Undead"
-msgstr ""
+msgstr "Немъртъв"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Без вражеско отмъщение"
 
 msgid "HP drain"
 msgstr "Изсмукване на живот"
 
 msgid "Cloud attack"
-msgstr ""
+msgstr "Облачна атака"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Намалява морала на врага с"
 
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% шанс да намалиш враговете наполовина"
 
 msgid "Soul Eater"
-msgstr ""
+msgstr "Душеяд"
 
 msgid "Elemental"
-msgstr ""
+msgstr "Елементал"
 
 msgid "No Morale"
-msgstr ""
+msgstr "Без морал"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "200% щети от огнени магии"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "200% щети от студени магии"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% щети от %{spell} заклинание"
 
 msgid "% immunity to "
-msgstr ""
+msgstr "% имунитет към "
 
 msgid "Lightning"
-msgstr ""
+msgstr "Светкавица"
 
 msgid "% damage from "
-msgstr ""
+msgstr "% щети от "
 
 msgid "The three Anduran artifacts magically combine into one."
-msgstr ""
+msgstr "Трите артефакта от Андуран магически се комбинират в едно."
 
 msgid "View Spells"
 msgstr "Преглед на магиите"
@@ -7325,175 +7450,205 @@ msgid "Move %{name}"
 msgstr "Премести %{name}"
 
 msgid "Cannot move the Spellbook"
-msgstr ""
+msgstr "Не може да се премести книгата с магий"
 
 msgid "This item can't be traded."
-msgstr ""
+msgstr "Този артикул не може да се търгува."
 
 msgid "The %{name} increases your knowledge by %{count}."
-msgstr ""
+msgstr "%{name} увеличава знанията ти с %{count}."
 
 msgid "Ultimate Book of Knowledge"
-msgstr ""
+msgstr "Върховна книга на знанието"
 
 msgid "The %{name} increases your attack skill by %{count}."
-msgstr ""
+msgstr "%{name} увеличава уменията ти за атака с %{count}."
 
 msgid "Ultimate Sword of Dominion"
-msgstr ""
+msgstr "Върховен меч на господството"
 
 msgid "The %{name} increases your defense skill by %{count}."
-msgstr ""
+msgstr "%{name} увеличава твойте умения за защита с %{count}."
 
 msgid "Ultimate Cloak of Protection"
-msgstr ""
+msgstr "Върховно наметало за защита"
 
 msgid "The %{name} increases your spell power by %{count}."
-msgstr ""
+msgstr "%{name} увеличава силата на заклинанието ти с %{count}."
 
 msgid "Ultimate Wand of Magic"
-msgstr ""
+msgstr "Върховна магическа пръчка"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
-msgstr ""
+msgstr "%{name} увеличава твойте умения за атака и защита с по %{count} всяко."
 
 msgid "Ultimate Shield"
-msgstr ""
+msgstr "Върховен щит"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
-msgstr ""
+msgstr "%{name} увеличава твоята магическа сила и знания с %{count} всеки."
 
 msgid "Ultimate Staff"
-msgstr ""
+msgstr "Върховен жезъл"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr ""
+msgstr "%{name} увеличава всяко от вашите основни умения с %{count} точки."
 
 msgid "Ultimate Crown"
-msgstr ""
+msgstr "Върховна корона"
 
 msgid "Golden Goose"
-msgstr ""
+msgstr "Златна гъска"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
-msgstr ""
+msgstr "%{name} носи доход от %{count} злато на ден."
 
 msgid "Arcane Necklace of Magic"
-msgstr ""
+msgstr "Тайнствена огърлица на магията"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
 "an exquisite jeweled necklace."
 msgstr ""
+"След като спаси магьосница от прокълната гробница, тя възнаграждава твоя "
+"героизъм с изящна огърлица със скъпоценни камъни."
 
 msgid "Caster's Bracelet of Magic"
-msgstr ""
+msgstr "Магическа гривна на Заклинателя"
 
 msgid ""
 "While searching through the rubble of a caved-in mine, you free a group of "
 "trapped Dwarves. Grateful, the leader gives you a golden bracelet."
 msgstr ""
+"Докато търсиш сред отломките на пропаднала мина, освобождаваш група хванати "
+"в капан джуджета. Благодарен, лидерът им ти дава златна гривна."
 
 msgid "Mage's Ring of Power"
-msgstr ""
+msgstr "Магьоснически пръстенът на силата"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
 "creature free, he hands you a small pouch. Emptying the contents, you find a "
 "dazzling jeweled ring."
 msgstr ""
+"Вик на болка те отвежда до кентавър, хванат в капан. След като освобождаваш "
+"създанието, то ти подава малка торбичка. Изпразвайки съдържанието, намираш "
+"ослепителен пръстен със скъпоценни камъни."
 
 msgid "Witch's Broach of Magic"
-msgstr ""
+msgstr "Магическа брошка на вещица"
 
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
 "designed. Approaching the corpse with caution, you add the broach to your "
 "inventory."
 msgstr ""
+"До останките на изгорена вещица лежи красива брошка със сложен дизайн. "
+"Приближаваш предпазливо тялото, ти добавяш брошката към инвентара си."
 
 msgid "Medal of Valor"
-msgstr ""
+msgstr "Медал за доблест"
 
 msgid "The %{name} increases your morale."
-msgstr ""
+msgstr "%{name} повишава морала ти."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
 "granted a Medal of Valor by the King's herald."
 msgstr ""
+"Освобождавайки добродетелна девойка от лапите на зъл владетел, ти получаваш "
+"Медал за доблест от кралския глашатай."
 
 msgid "Medal of Courage"
-msgstr ""
+msgstr "Медал за храброст"
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
 "his father's manor. The grateful nobleman awards you with a Medal of Courage."
 msgstr ""
+"След като спасяваш младо момче от жестока глутница вълци, ти го връщаш в "
+"имението на баща му. Благодарният благородник те награждава с медал за "
+"храброст."
 
 msgid "Medal of Honor"
-msgstr ""
+msgstr "Медал на честта"
 
 msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
 "despicable slavers, she awards you with a Medal of Honor."
 msgstr ""
+"След като освободи принцеса от съседно кралство от злите лапи на презрени "
+"роби, тя те награждава с Медал на честта."
 
 msgid "Medal of Distinction"
-msgstr ""
+msgstr "Медал на унищожението"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
 "noblemen's Knights, you are honored with the Medal of Distinction."
 msgstr ""
+"Освобождавайки провинцията от отвратителния Минотавър, който се забавляваше "
+"с изяждането на рицари на благородници, ти си удостоен с Медал."
 
 msgid "Fizbin of Misfortune"
-msgstr ""
+msgstr "Медал на нещастието"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
-msgstr ""
+msgstr "%{name} значително намалява морала ти с %{count}."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
 "your inventory, you become aware that you have acquired the undesirable "
 "Fizbin of Misfortune, greatly decreasing your army's morale."
 msgstr ""
+"Натъкваш се на медал край празния път. Добавяйки медала към инвентара си, "
+"разбираш, че си се сдобили с нежелания Медал на нещастието, което значително "
+"намалява морала на твоята армия."
 
 msgid "Thunder Mace of Dominion"
-msgstr ""
+msgstr "Гръмотевичен боздуган на господството"
 
 msgid ""
 "During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
 "Inside the tree you find a mysterious mace."
 msgstr ""
+"По време на внезапна буря мълния удря едно дърво и го разцепва. Вътре в "
+"дървото намираш мистериозен боздуган."
 
 msgid "Armored Gauntlets of Protection"
-msgstr ""
+msgstr "Бронирани ръкавици за защита"
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr ""
+msgstr "%{name} повишава уменията ти за защита с %{count}."
 
 msgid ""
 "You encounter the infamous Black Knight!  After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
 msgstr ""
+"Срещаш прословутия Черен рицар! След изтощителен дуел, завършил наравно, "
+"Рицарят, от уважение, ти предлага чифт бронирани ръкавици."
 
 msgid "Defender Helm of Protection"
-msgstr ""
+msgstr "Защитен шлем на защитата"
 
 msgid ""
 "A glint of golden light catches your eye. Upon further investigation, you "
 "find a golden helm hidden under a bush."
 msgstr ""
+"Отблясък на златна светлина привлича окото ти. При по-нататъшно проучване "
+"намираш златен шлем, скрит под един храст."
 
 msgid "Giant Flail of Dominion"
-msgstr ""
+msgstr "Гигантска бухалка на господството"
 
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
 "skill with this weapon, you confidently remove the spectacular flail from "
 "the fallen Giant."
 msgstr ""
+"Непохватен великан се е самоубил със собствената си бухалка. Знаейки "
+"превъзходните си умения с това оръжие, ти уверено отстраняваш зрелищната "
+"бухалка от падналия Великан."
 
 msgid "Ballista of Quickness"
 msgstr ""
@@ -8187,22 +8342,22 @@ msgid "The %{name} enables you to cast spells."
 msgstr "%{name} ти позволява да правиш магии."
 
 msgid "Dummy 1"
-msgstr ""
+msgstr "Манекен 1"
 
 msgid "The reserved artifact."
-msgstr ""
+msgstr "Запазеният артефакт."
 
 msgid "Dummy 2"
-msgstr ""
+msgstr "Манекен 2"
 
 msgid "Dummy 3"
-msgstr ""
+msgstr "Манекен 3"
 
 msgid "Dummy 4"
-msgstr ""
+msgstr "Манекен 4"
 
 msgid "Spell Scroll"
-msgstr ""
+msgstr "Свитък за заклинание"
 
 msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
@@ -8911,38 +9066,42 @@ msgid "View next page"
 msgstr "Виж следващата страница"
 
 msgid "Close Spellbook"
-msgstr ""
+msgstr "Затвори книгата с магий"
 
 msgid "View %{spell}"
 msgstr "Виж %{spell}"
 
 msgid "This spell does %{damage} points of damage."
-msgstr ""
+msgstr "Това заклинание нанася %{damage} точки щети."
 
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
 msgstr ""
+"Това заклинание призовава\n"
+"%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
-msgstr ""
+msgstr "Това заклинание възстановява %{hp} живот."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
-msgstr ""
+msgstr "Това заклинание призовава %{count} %{monster} да пазят мината."
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "Най-близкият град е %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Този град е окупиран от твоя герой %{hero}."
 
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
 msgstr ""
+"Това заклинание контролира до\n"
+"%{hp} живот."
 
 msgid "battle: show damage info"
-msgstr ""
+msgstr "битка: показва информация за щетите"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "свят: Скаутските умения показват разширена информация за съдържанието"
@@ -8993,64 +9152,64 @@ msgid "game: offer to continue the game after victory condition"
 msgstr "игра: предложение за продължаване на играта след условие за победа"
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr ""
+msgstr "Върховният артефакт наистина е %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "Върховният артефакт може да бъде намерен в %{name} региони на света."
 
 msgid "north-west"
-msgstr ""
+msgstr "северозапад"
 
 msgid "north"
-msgstr ""
+msgstr "север"
 
 msgid "north-east"
-msgstr ""
+msgstr "североизток"
 
 msgid "west"
-msgstr ""
+msgstr "запад"
 
 msgid "center"
-msgstr ""
+msgstr "център"
 
 msgid "east"
-msgstr ""
+msgstr "изток"
 
 msgid "south-west"
-msgstr ""
+msgstr "югозапад"
 
 msgid "south"
-msgstr ""
+msgstr "юг"
 
 msgid "south-east"
-msgstr ""
+msgstr "югоизток"
 
 msgid "The truth is out there."
-msgstr ""
+msgstr "Истината е някъде там."
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "Тъмната страна е по-силна."
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "Краят на света е близо."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Костите на Лорд Убиец са погребани в основата на арената."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "Черен дракон ще унищожава титан всеки ден от седмицата."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
-msgstr ""
+msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя каза: \"Бла, бла, бла..."
 
 msgid "An unknown force is being resurrected..."
-msgstr ""
+msgstr "Непозната сила възкръсва..."
 
 msgid ""
 "Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Moved %{monster}"
-#~ msgstr "Преместено %{monster}"
+"Проверете най-новата версия на играта на\n"
+"https://github.com/ihhub/\n"
+"fheroes2/releases"
