@@ -9,8 +9,9 @@ android {
         minSdkVersion 19
         targetSdkVersion 31
 
-        versionCode 1
-        versionName '0.9.20'
+        // These paths are set relative to the android project directory
+        versionCode((new File('../version_code.txt')).getText('UTF-8').trim().toInteger())
+        versionName((new File('../version.txt')).getText('UTF-8').trim())
 
         externalNativeBuild {
             ndkBuild {
