@@ -184,7 +184,7 @@ namespace
         }
         else {
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 18 );
-            drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "Manual" ) );
+            drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "autoBattle|Manual" ) );
         }
     }
 
