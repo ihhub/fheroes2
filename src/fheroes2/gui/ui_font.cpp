@@ -4211,6 +4211,14 @@ namespace
         released[191].resize( released[50].width(), released[50].height() );
         released[191].reset();
         fheroes2::Flip( released[50], 0, 0, released[191], 0, 0, released[50].width(), released[50].height(), true, false );
+
+        // Cyrillic TSE
+        released[182].resize( 12 + offset * 2, 12 + offset * 2 );
+        released[182].reset();
+        fheroes2::Copy( released[41], 0, 0, released[182], 0, 0, released[41].width(), released[41].height() );
+        fheroes2::Copy( released[41], 0, 0, released[182], 7, 0, released[41].width(), released[41].height() );
+        fheroes2::DrawLine( released[182], { offset + 5, offset + 9 }, { offset + 6, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[182], { offset + 11, offset + 10 }, { offset + 11, offset + 11 }, buttonGoodReleasedColor );
     }
 
     void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
