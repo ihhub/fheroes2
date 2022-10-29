@@ -1110,7 +1110,7 @@ namespace
             font[42 - 32] = font[226 - 32];
             // Lowercase i with diaeresis
             font[60 - 32] = font[239 - 32];
-            // Lowercase i with circumflex
+            // Lowercase i with circumflex <- Confirmed used in the OG.
             font[62 - 32] = font[238 - 32];
             // Lowercase a with grave accent
             font[64 - 32] = font[224 - 32];
@@ -2188,8 +2188,17 @@ namespace
             font[193 - 32].setPosition( font[33].x(), font[33].y() - 3 );
             updateNormalFontLetterShadow( font[193 - 32] );
 
-            // A with circumflex accent. TODO Move generation of accent for further use here.
-            font[194 - 32] = font[33];
+            // A with circumflex accent. Generation of accent for further use.
+            font[194 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
+            font[194 - 32].reset();
+            fheroes2::Copy( font[65 - 32], 0, 0, font[194 - 32], 0, 3, font[65 - 32].width(), font[65 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 7, 1, font[194 - 32], 7, 1, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 7, 1, font[194 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 7, 1, font[194 - 32], 9, 1, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 1, 0, font[194 - 32], 7, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 1, 0, font[194 - 32], 9, 0, 1, 1 );
+            font[194 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[194 - 32] );
 
             // A with tilde accent ~. TODO Move generation of accent for further use here.
             font[195 - 32] = font[33];
@@ -2261,7 +2270,12 @@ namespace
             updateNormalFontLetterShadow( font[201 - 32] );
 
             // E with circumflex accent.
-            font[202 - 32] = font[37];
+            font[202 - 32].resize( font[69 - 32].width(), font[69 - 32].height() + 3 );
+            font[202 - 32].reset();
+            fheroes2::Copy( font[69 - 32], 0, 0, font[202 - 32], 0, 3, font[69 - 32].width(), font[69 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[202 - 32], 5, 0, 3, 2 );
+            font[202 - 32].setPosition( font[69 - 32].x(), font[69 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[202 - 32] );
 
             // E with diaeresis.
             font[203 - 32].resize( font[37].width(), font[37].height() + 3 );
@@ -2291,7 +2305,7 @@ namespace
             font[206 - 32].resize( font[41].width(), font[41].height() + 3 );
             font[206 - 32].reset();
             fheroes2::Copy( font[41], 0, 0, font[206 - 32], 0, 3, font[41].width(), font[41].height() );
-            fheroes2::Copy( font[193 - 32], 7, 0, font[206 - 32], 3, 0, 4, 2 );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[206 - 32], 3, 0, 3, 2 );
             font[206 - 32].setPosition( font[41].x(), font[41].y() - 3 );
             updateNormalFontLetterShadow( font[206 - 32] );
 
@@ -2331,7 +2345,12 @@ namespace
             updateNormalFontLetterShadow( font[211 - 32] );
 
             // O with circumflex accent.
-            font[212 - 32] = font[47];
+            font[212 - 32].resize( font[79 - 32].width(), font[79 - 32].height() + 3 );
+            font[212 - 32].reset();
+            fheroes2::Copy( font[79 - 32], 0, 0, font[212 - 32], 0, 3, font[79 - 32].width(), font[79 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[212 - 32], 7, 0, 3, 2 );
+            font[212 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[212 - 32] );
 
             // O with tilde accent ~.
             font[213 - 32] = font[47];
@@ -2378,6 +2397,7 @@ namespace
             font[219 - 32].resize( font[53].width(), font[53].height() + 3 );
             font[219 - 32].reset();
             fheroes2::Copy( font[53], 0, 0, font[219 - 32], 0, 3, font[53].width(), font[53].height() );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[219 - 32], 6, 0, 3, 2 );
             font[219 - 32].setPosition( font[53].x(), font[53].y() - 3 );
             updateNormalFontLetterShadow( font[219 - 32] );
 
@@ -2425,7 +2445,12 @@ namespace
             updateNormalFontLetterShadow( font[225 - 32] );
 
             // a with circumflex accent.
-            font[226 - 32] = font[65];
+            font[226 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 3 );
+            font[226 - 32].reset();
+            fheroes2::Copy( font[97 - 32], 0, 0, font[226 - 32], 0, 3, font[97 - 32].width(), font[97 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[226 - 32], 3, 0, 3, 2 );
+            font[226 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[226 - 32] );
 
             // a with tilde accent ~.
             font[227 - 32] = font[65];
@@ -2487,7 +2512,12 @@ namespace
             updateNormalFontLetterShadow( font[233 - 32] );
 
             // e with circumflex accent.
-            font[234 - 32] = font[69];
+            font[234 - 32].resize( font[101 - 32].width(), font[101 - 32].height() + 3 );
+            font[234 - 32].reset();
+            fheroes2::Copy( font[101 - 32], 0, 0, font[234 - 32], 0, 3, font[101 - 32].width(), font[101 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[234 - 32], 4, 0, 3, 2 );
+            font[234 - 32].setPosition( font[101 - 32].x(), font[101 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[234 - 32] );
 
             // e with diaeresis.
             font[235 - 32].resize( font[69].width(), font[69].height() + 3 );
@@ -2511,7 +2541,7 @@ namespace
             // i with circumflex.
             font[238 - 32] = font[73];
             fheroes2::FillTransform( font[238 - 32], 0, 0, font[238 - 32].width(), 3, 1 );
-            fheroes2::Copy( font[193 - 32], 7, 0, font[238 - 32], 1, 0, 4, 2 );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[238 - 32], 1, 0, 3, 2 );
             updateNormalFontLetterShadow( font[238 - 32] );
 
             // i with diaeresis.
@@ -2545,7 +2575,12 @@ namespace
             updateNormalFontLetterShadow( font[243 - 32] );
 
             // o with circumflex accent.
-            font[244 - 32] = font[79];
+            font[244 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 3 );
+            font[244 - 32].reset();
+            fheroes2::Copy( font[111 - 32], 0, 0, font[244 - 32], 0, 3, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[244 - 32], 4, 0, 3, 2 );
+            font[244 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[244 - 32] );
 
             // o with tilde accent ~.
             font[245 - 32] = font[79];
@@ -2593,6 +2628,7 @@ namespace
             font[251 - 32].resize( font[85].width(), font[85].height() + 3 );
             font[251 - 32].reset();
             fheroes2::Copy( font[85], 0, 0, font[251 - 32], 0, 3, font[85].width(), font[85].height() );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[251 - 32], 4, 0, 3, 2 );
             font[251 - 32].setPosition( font[85].x(), font[85].y() - 3 );
             updateNormalFontLetterShadow( font[251 - 32] );
 
@@ -2668,8 +2704,15 @@ namespace
             font[193 - 32].setPosition( font[33].x(), font[33].y() - 4 );
             updateSmallFontLetterShadow( font[193 - 32] );
 
-            // A with circumflex accent. TODO Move generation of accent for further use here.
-            font[194 - 32] = font[33];
+            // A with circumflex accent. Generate accent for further use.
+            font[194 - 32].resize( font[33].width(), font[33].height() + 3 );
+            font[194 - 32].reset();
+            fheroes2::Copy( font[33], 0, 0, font[194 - 32], 0, 3, font[33].width(), font[33].height() );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 4, 1, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 5, 0, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 6, 1, 1, 1 );
+            font[194 - 32].setPosition( font[33].x(), font[33].y() - 3 );
+            updateSmallFontLetterShadow( font[194 - 32] );
 
             // A with tilde accent ~. TODO Move generation of accent for further use here.
             font[195 - 32] = font[33];
@@ -2731,7 +2774,12 @@ namespace
             updateSmallFontLetterShadow( font[201 - 32] );
 
             // E with circumflex accent.
-            font[202 - 32] = font[37];
+            font[202 - 32].resize( font[69 - 32].width(), font[69 - 32].height() + 3 );
+            font[202 - 32].reset();
+            fheroes2::Copy( font[69 - 32], 0, 0, font[202 - 32], 0, 3, font[69 - 32].width(), font[69 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[202 - 32], 3, 0, 3, 2 );
+            font[202 - 32].setPosition( font[69 - 32].x(), font[69 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[202 - 32] );
 
             // I with grave accent `.
             font[204 - 32].resize( font[41].width(), font[41].height() + 4 );
@@ -2748,6 +2796,14 @@ namespace
             fheroes2::Copy( font[193 - 32], 4, 0, font[205 - 32], 1, 0, 3, 3 );
             font[205 - 32].setPosition( font[41].x(), font[41].y() - 4 );
             updateSmallFontLetterShadow( font[205 - 32] );
+
+            // I with circumflex
+            font[206 - 32].resize( font[73 - 32].width() + 1, font[73 - 32].height() + 3 );
+            font[206 - 32].reset();
+            fheroes2::Copy( font[73 - 32], 0, 0, font[206 - 32], 0, 3, font[73 - 32].width(), font[73 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[206 - 32], 2, 0, 3, 2 );
+            font[206 - 32].setPosition( font[73 - 32].x(), font[73 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[206 - 32] );
 
             // N with tilde ~. Generate tilde accent for further use.
             // TODO: Move tilde accent generation to A with tilde when adding Portuguese.
@@ -2776,7 +2832,12 @@ namespace
             updateSmallFontLetterShadow( font[211 - 32] );
 
             // O with circumflex accent.
-            font[212 - 32] = font[47];
+            font[212 - 32].resize( font[79 - 32].width(), font[79 - 32].height() + 3 );
+            font[212 - 32].reset();
+            fheroes2::Copy( font[79 - 32], 0, 0, font[212 - 32], 0, 3, font[79 - 32].width(), font[79 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[212 - 32], 3, 0, 3, 2 );
+            font[212 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[212 - 32] );
 
             // O with tilde accent ~.
             font[213 - 32] = font[47];
@@ -2815,6 +2876,14 @@ namespace
             fheroes2::Copy( font[193 - 32], 4, 0, font[218 - 32], 4, 0, 3, 3 );
             font[218 - 32].setPosition( font[53].x(), font[53].y() - 4 );
             updateSmallFontLetterShadow( font[218 - 32] );
+
+            // U with circumflex.
+            font[219 - 32].resize( font[85 - 32].width(), font[85 - 32].height() + 3 );
+            font[219 - 32].reset();
+            fheroes2::Copy( font[85 - 32], 0, 0, font[219 - 32], 0, 3, font[85 - 32].width(), font[85 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[219 - 32], 4, 0, 3, 2 );
+            font[219 - 32].setPosition( font[85 - 32].x(), font[85 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[219 - 32] );
 
             // U with 2 dots on top.
             font[220 - 32].resize( font[53].width(), font[53].height() + 2 );
@@ -2855,7 +2924,12 @@ namespace
             updateSmallFontLetterShadow( font[225 - 32] );
 
             // a with circumflex accent.
-            font[226 - 32] = font[65];
+            font[226 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 3 );
+            font[226 - 32].reset();
+            fheroes2::Copy( font[97 - 32], 0, 0, font[226 - 32], 0, 3, font[97 - 32].width(), font[97 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[226 - 32], 2, 0, 3, 2 );
+            font[226 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[226 - 32] );
 
             // a with tilde accent ~.
             font[227 - 32] = font[65];
@@ -2910,7 +2984,12 @@ namespace
             updateSmallFontLetterShadow( font[233 - 32] );
 
             // e with circumflex accent.
-            font[234 - 32] = font[69];
+            font[234 - 32].resize( font[101 - 32].width(), font[101 - 32].height() + 3 );
+            font[234 - 32].reset();
+            fheroes2::Copy( font[101 - 32], 0, 0, font[234 - 32], 0, 3, font[101 - 32].width(), font[101 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[234 - 32], 2, 0, 3, 2 );
+            font[234 - 32].setPosition( font[101 - 32].x(), font[101 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[234 - 32] );
 
             // i with grave accent `.
             font[236 - 32].resize( font[73].width(), font[73].height() + 1 );
@@ -2927,6 +3006,14 @@ namespace
             fheroes2::Copy( font[193 - 32], 5, 0, font[237 - 32], 1, 0, 2, 2 );
             font[237 - 32].setPosition( font[73].x(), font[73].y() - 1 );
             updateSmallFontLetterShadow( font[237 - 32] );
+
+            // i with circumflex.
+            font[238 - 32].resize( font[105 - 32].width(), font[105 - 32].height() + 1 );
+            font[238 - 32].reset();
+            fheroes2::Copy( font[105 - 32], 0, 2, font[238 - 32], 0, 3, font[105 - 32].width(), font[105 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[238 - 32], 1, 0, 3, 2 );
+            font[238 - 32].setPosition( font[105 - 32].x(), font[105 - 32].y() - 1 );
+            updateSmallFontLetterShadow( font[238 - 32] );
 
             // n with tilde ~.
             font[241 - 32].resize( font[110 - 32].width(), font[110 - 32].height() + 4 );
@@ -2953,7 +3040,12 @@ namespace
             updateSmallFontLetterShadow( font[243 - 32] );
 
             // o with circumflex accent.
-            font[244 - 32] = font[79];
+            font[244 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 3 );
+            font[244 - 32].reset();
+            fheroes2::Copy( font[111 - 32], 0, 0, font[244 - 32], 0, 3, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[244 - 32], 2, 0, 3, 2 );
+            font[244 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[244 - 32] );
 
             // o with tilde accent ~.
             font[245 - 32] = font[79];
@@ -2993,6 +3085,14 @@ namespace
             fheroes2::Copy( font[193 - 32], 5, 0, font[250 - 32], 3, 0, 2, 2 );
             font[250 - 32].setPosition( font[85].x(), font[85].y() - 3 );
             updateSmallFontLetterShadow( font[250 - 32] );
+
+            // u with circumflex accent.
+            font[251 - 32].resize( font[117 - 32].width(), font[117 - 32].height() + 3 );
+            font[251 - 32].reset();
+            fheroes2::Copy( font[117 - 32], 0, 0, font[251 - 32], 0, 3, font[117 - 32].width(), font[117 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[251 - 32], 3, 0, 3, 2 );
+            font[251 - 32].setPosition( font[117 - 32].x(), font[117 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[251 - 32] );
 
             // u with 2 dots on top.
             font[252 - 32].resize( font[85].width(), font[85].height() + 2 );
