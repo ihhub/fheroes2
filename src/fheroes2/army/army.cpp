@@ -340,7 +340,7 @@ bool Troops::areAllTroopsUnique() const
 
         auto [it, inserted] = monsterId.emplace( troop->GetID() );
         if ( !inserted ) {
-          return false;
+            return false;
         }
     }
 
