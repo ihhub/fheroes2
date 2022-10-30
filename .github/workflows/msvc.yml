@@ -48,7 +48,7 @@ jobs:
       run: |
         script/windows/install_packages.bat
         choco.exe install cygwin cyg-get -y
-        cyg-get.bat make libiconv gettext-devel=0.21-1
+        cyg-get.bat make libiconv libunistring5 gettext-devel
     - uses: microsoft/setup-msbuild@v1
     - name: Generate version information
       run: |
