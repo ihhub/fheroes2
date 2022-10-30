@@ -191,52 +191,65 @@ void Kingdom::ActionBeforeTurn()
 
 void Kingdom::ActionNewDay()
 {
-    // countdown of days since the loss of the last town, first day isn't counted
+    // Clear the visited objects with a lifetime of one day, even if this kingdom has already been vanquished
+    visit_object.remove_if( Visit::isDayLife );
+
+    if ( !isPlay() ) {
+        return;
+    }
+
+    // Countdown of days since the loss of the last town, first day isn't counted
     if ( world.CountDay() > 1 && castles.empty() && lost_town_days > 0 ) {
         --lost_town_days;
     }
 
-    // check the conditions of the loss
+    // Check the basic conditions of losing the game
     if ( isLoss() || 0 == lost_town_days ) {
         LossPostActions();
+
         return;
     }
 
-    // modes
+    // Reset the effect of the "Identify Hero" spell
     ResetModes( IDENTIFYHERO );
 
-    // skip the income for the first day
+    // Skip the income for the first day
     if ( world.CountDay() > 1 ) {
-        // income
         AddFundsResource( GetIncome() );
 
-        // handle resource bonus campaign awards
+        // Resource bonuses from campaign awards
         if ( isControlHuman() && Settings::Get().isCampaignGameType() ) {
             const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
             for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
-                if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS )
+                if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS ) {
                     continue;
+                }
 
                 AddFundsResource( Funds( campaignAwards[i]._subType, campaignAwards[i]._amount ) );
             }
         }
     }
 
-    // check event day AI
-    EventsDate events = world.GetEventsDate( GetColor() );
-    for ( EventsDate::const_iterator it = events.begin(); it != events.end(); ++it )
-        AddFundsResource( ( *it ).resource );
-
-    // remove day visit object
-    visit_object.remove_if( Visit::isDayLife );
+    // Resources from events
+    const EventsDate events = world.GetEventsDate( GetColor() );
+    for ( const EventDate & event : events ) {
+        AddFundsResource( event.resource );
+    }
 }
 
 void Kingdom::ActionNewWeek()
 {
-    // skip the first week
+    // Clear the visited objects with a lifetime of one week, even if this kingdom has already been vanquished
+    visit_object.remove_if( Visit::isWeekLife );
+
+    if ( !isPlay() ) {
+        return;
+    }
+
+    // Skip the first week
     if ( world.CountWeek() > 1 ) {
-        // debug a gift
+        // Additional gift in debug mode
         if ( IS_DEVEL() && isControlHuman() ) {
             Funds gift( 20, 20, 10, 10, 10, 10, 5000 );
             DEBUG_LOG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() )
@@ -244,16 +257,13 @@ void Kingdom::ActionNewWeek()
         }
     }
 
-    // remove week visit object
-    visit_object.remove_if( Visit::isWeekLife );
-
     // Settle a new set of recruits
     GetRecruits();
 }
 
 void Kingdom::ActionNewMonth()
 {
-    // remove month visit object
+    // Clear the visited objects with a lifetime of one month, even if this kingdom has already been vanquished
     visit_object.remove_if( Visit::isMonthLife );
 }
 
@@ -781,23 +791,23 @@ void Kingdom::appendSurrenderedHero( Heroes & hero )
 
 void Kingdoms::NewDay()
 {
-    for ( Kingdom & kingdom : kingdoms )
-        if ( kingdom.isPlay() )
-            kingdom.ActionNewDay();
+    for ( Kingdom & kingdom : kingdoms ) {
+        kingdom.ActionNewDay();
+    }
 }
 
 void Kingdoms::NewWeek()
 {
-    for ( Kingdom & kingdom : kingdoms )
-        if ( kingdom.isPlay() )
-            kingdom.ActionNewWeek();
+    for ( Kingdom & kingdom : kingdoms ) {
+        kingdom.ActionNewWeek();
+    }
 }
 
 void Kingdoms::NewMonth()
 {
-    for ( Kingdom & kingdom : kingdoms )
-        if ( kingdom.isPlay() )
-            kingdom.ActionNewMonth();
+    for ( Kingdom & kingdom : kingdoms ) {
+        kingdom.ActionNewMonth();
+    }
 }
 
 int Kingdoms::GetNotLossColors() const
