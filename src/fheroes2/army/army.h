@@ -72,12 +72,14 @@ public:
     bool isValid() const;
     bool HasMonster( const Monster & ) const;
 
+    bool areAllTroopsUnique() const;
+
     bool AllTroopsAreUndead() const;
     // Returns true if all valid troops have the same ID or if there are no troops, otherwise returns false
     bool AllTroopsAreTheSame() const;
 
-    bool JoinTroop( const Troop & );
-    bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst = false );
+    bool JoinTroop( const Troop & troop );
+    bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
 
     void JoinTroops( Troops & );
@@ -101,13 +103,21 @@ public:
 
     void SortStrongest();
 
-    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
+    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver, const bool prioritizeEmptySlots );
 
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
     void JoinAllTroopsOfType( const Troop & targetTroop );
 
     void addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots );
+
+    bool isFullHouse() const
+    {
+        return GetOccupiedSlotCount() == size();
+    }
+
+    // If the army has no slot find 2 or more slots of the same monster which is the weakest and merge them releasing one slot in troops.
+    bool mergeWeakestTroopsIfNeeded();
 };
 
 struct NeutralMonsterJoiningCondition
@@ -198,7 +208,7 @@ public:
 
     std::string String() const;
 
-    void JoinStrongestFromArmy( Army & );
+    void JoinStrongestFromArmy( Army & giver, const bool prioritizeEmptySlots );
 
     void SetSpreadFormat( bool f )
     {
@@ -208,11 +218,6 @@ public:
     bool isSpreadFormat() const
     {
         return combat_format;
-    }
-
-    bool isFullHouse() const
-    {
-        return GetOccupiedSlotCount() == size();
     }
 
     bool SaveLastTroop() const;

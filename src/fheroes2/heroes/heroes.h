@@ -480,6 +480,8 @@ public:
         return static_cast<uint8_t>( _alphaValue );
     }
 
+    double getAIMininumJoiningArmyStrength() const;
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
