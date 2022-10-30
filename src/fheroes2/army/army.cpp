@@ -332,18 +332,19 @@ bool Troops::areAllTroopsUnique() const
 {
     std::set<int> monsterId;
 
-    size_t counter = 0;
-
     for ( const Troop * troop : *this ) {
-        if ( troop == nullptr || !troop->isValid() ) {
+        assert( troop != nullptr );
+        if ( !troop->isValid() ) {
             continue;
         }
 
-        monsterId.emplace( troop->GetID() );
-        ++counter;
+        auto [it, inserted] = monsterId.emplace( troop->GetID() );
+        if ( !inserted ) {
+          return false;
+        }
     }
 
-    return counter == monsterId.size();
+    return true;
 }
 
 bool Troops::HasMonster( const Monster & mons ) const
@@ -666,7 +667,7 @@ void Troops::SortStrongest()
     std::sort( begin(), end(), Army::StrongestTroop );
 }
 
-void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver, const bool priotirizeEmptySlots )
+void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver, const bool prioritizeEmptySlots )
 {
     if ( this == &giverArmy )
         return;
@@ -698,7 +699,7 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
     // there's still unmerged units left and there's empty room for them
     for ( size_t slot = 0; slot < giverArmy.size(); ++slot ) {
         Troop * rightTroop = giverArmy[slot];
-        if ( rightTroop && JoinTroop( rightTroop->GetMonster(), rightTroop->GetCount(), priotirizeEmptySlots ) ) {
+        if ( rightTroop && JoinTroop( rightTroop->GetMonster(), rightTroop->GetCount(), prioritizeEmptySlots ) ) {
             rightTroop->Reset();
         }
     }
@@ -868,7 +869,8 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     std::map<int, double> monsterIdVsStrength;
 
     for ( Troop * troop : *this ) {
-        if ( troop == nullptr || !troop->isValid() ) {
+        assert( troop != nullptr );
+        if ( !troop->isValid() ) {
             continue;
         }
 
@@ -879,8 +881,8 @@ bool Troops::mergeWeakestTroopsIfNeeded()
             ++monsterIdVsSlotCount[id];
         }
         else {
-            monsterIdVsSlotCount.emplace( troop->GetID(), 1 );
-            monsterIdVsStrength.emplace( troop->GetID(), troop->GetStrength() );
+            monsterIdVsSlotCount.emplace( id, 1 );
+            monsterIdVsStrength.emplace( id, troop->GetStrength() );
         }
     }
 
@@ -891,7 +893,7 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     assert( monsterIdVsSlotCount.size() == monsterIdVsStrength.size() );
 
     std::vector<std::pair<int, double>> sortedMultiSlotMonsterIdVsStrength;
-    for ( auto & [id, slotCount] : monsterIdVsSlotCount ) {
+    for ( const auto & [id, slotCount] : monsterIdVsSlotCount ) {
         if ( slotCount > 1 ) {
             sortedMultiSlotMonsterIdVsStrength.emplace_back( id, monsterIdVsStrength[id] );
         }
@@ -908,7 +910,8 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     uint32_t monsterCount = 0;
 
     for ( Troop * troop : *this ) {
-        if ( troop == nullptr || !troop->isValid() ) {
+        assert( troop != nullptr );
+        if ( !troop->isValid() ) {
             continue;
         }
 
@@ -1369,10 +1372,10 @@ std::string Army::String() const
     return os.str();
 }
 
-void Army::JoinStrongestFromArmy( Army & giver, const bool priotirizeEmptySlots )
+void Army::JoinStrongestFromArmy( Army & giver, const bool prioritizeEmptySlots )
 {
     const bool saveLast = ( giver.commander != nullptr ) && giver.commander->isHeroes();
-    JoinStrongest( giver, saveLast, priotirizeEmptySlots );
+    JoinStrongest( giver, saveLast, prioritizeEmptySlots );
 }
 
 uint32_t Army::ActionToSirens() const

@@ -103,7 +103,7 @@ public:
 
     void SortStrongest();
 
-    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver, const bool priotirizeEmptySlots );
+    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver, const bool prioritizeEmptySlots );
 
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
@@ -208,7 +208,7 @@ public:
 
     std::string String() const;
 
-    void JoinStrongestFromArmy( Army & giver, const bool priotirizeEmptySlots );
+    void JoinStrongestFromArmy( Army & giver, const bool prioritizeEmptySlots );
 
     void SetSpreadFormat( bool f )
     {
