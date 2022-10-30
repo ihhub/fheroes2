@@ -47,7 +47,8 @@ jobs:
     - name: Install dependencies and cygwin
       run: |
         script/windows/install_packages.bat
-        choco.exe install make gettext-devel -y --source cygwin
+        choco.exe install cygwin cyg-get -y
+        cyg-get.bat make libiconv libunistring5 gettext-devel
     - uses: microsoft/setup-msbuild@v1
     - name: Generate version information
       run: |
