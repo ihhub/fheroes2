@@ -96,6 +96,25 @@ namespace
 
         return false;
     }
+
+    bool canMonsterJoinHero( const Troop & troop, Heroes & hero )
+    {
+        if ( hero.GetArmy().HasMonster( troop.GetID() ) ) {
+            return true;
+        }
+
+        if ( troop.GetStrength() < hero.getAIMininumJoiningArmyStrength() ) {
+            // No use to hire such a weak troop.
+            return false;
+        }
+
+        if ( !hero.GetArmy().mergeWeakestTroopsIfNeeded() ) {
+            // The army has no slots and we cannot rearrange it.
+            return false;
+        }
+
+        return true;
+    }
 }
 
 namespace AI
@@ -667,7 +686,7 @@ namespace AI
             assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) );
 
             DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." )
-            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
+            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount, false );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
             destroy = true;
         }
@@ -1360,11 +1379,22 @@ namespace AI
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Troop & troop = tile.QuantityTroop();
-
-        if ( troop.isValid() && hero.GetArmy().JoinTroop( troop ) ) {
-            tile.MonsterSetCount( 0 );
-            hero.unmarkHeroMeeting();
+        if ( !troop.isValid() ) {
+            return;
         }
+
+        if ( !canMonsterJoinHero( troop, hero ) ) {
+            return;
+        }
+
+        if ( !hero.GetArmy().JoinTroop( troop ) ) {
+            // How is it possible that an army has free slots but monsters cannot join it?
+            assert( 0 );
+            return;
+        }
+
+        tile.MonsterSetCount( 0 );
+        hero.unmarkHeroMeeting();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -1373,25 +1403,46 @@ namespace AI
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Troop & troop = tile.QuantityTroop();
-
-        if ( troop.isValid() ) {
-            Kingdom & kingdom = hero.GetKingdom();
-            const payment_t paymentCosts = troop.GetTotalCost();
-
-            // TODO: add logic for buying a part of monsters when the AI does not have enough resources.
-            if ( kingdom.AllowPayment( paymentCosts ) && hero.GetArmy().JoinTroop( troop ) ) {
-                tile.MonsterSetCount( 0 );
-                kingdom.OddFundsResource( paymentCosts );
-
-                // remove ancient lamp sprite
-                if ( MP2::OBJ_ANCIENTLAMP == objectType ) {
-                    tile.RemoveObjectSprite();
-                    tile.setAsEmpty();
-                }
-
-                hero.unmarkHeroMeeting();
-            }
+        if ( !troop.isValid() ) {
+            return;
         }
+
+        Kingdom & kingdom = hero.GetKingdom();
+        const payment_t singleMonsterCost = troop.GetCost();
+
+        uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
+        if ( recruitTroopCount <= 0 ) {
+            // We do not have resources to hire even a single creature.
+            return;
+        }
+
+        const uint32_t availableTroopCount = troop.GetCount();
+        if ( recruitTroopCount > availableTroopCount ) {
+            recruitTroopCount = availableTroopCount;
+        }
+
+        const Troop troopToHire{ troop.GetID(), recruitTroopCount };
+
+        if ( !canMonsterJoinHero( troopToHire, hero ) ) {
+            return;
+        }
+
+        if ( !hero.GetArmy().JoinTroop( troopToHire ) ) {
+            // How is it possible that an army has free slots but monsters cannot join it?
+            assert( 0 );
+            return;
+        }
+
+        tile.MonsterSetCount( availableTroopCount - recruitTroopCount );
+        kingdom.OddFundsResource( troopToHire.GetTotalCost() );
+
+        // Remove ancient lamp sprite if no genies are available to hire.
+        if ( MP2::OBJ_ANCIENTLAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
+            tile.RemoveObjectSprite();
+            tile.setAsEmpty();
+        }
+
+        hero.unmarkHeroMeeting();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -1625,7 +1676,7 @@ namespace AI
 
         // TODO: do not transfer the whole army from one hero to another. Add logic to leave a fast unit for Scout and Courier. Also 3-5 monsters are better than
         // having 1 Peasant in one stack which leads to an instant death if the hero is attacked by an opponent.
-        taker.GetArmy().JoinStrongestFromArmy( giver.GetArmy() );
+        taker.GetArmy().JoinStrongestFromArmy( giver.GetArmy(), false );
 
         taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts(), taker, giver );
     }

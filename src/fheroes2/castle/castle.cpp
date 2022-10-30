@@ -2488,7 +2488,7 @@ void Castle::JoinRNDArmy()
         count += Rand::Get( 8, 15 );
     }
 
-    army.JoinTroop( Monster( race, dwellingType ), count );
+    army.JoinTroop( Monster( race, dwellingType ), count, false );
 }
 
 void Castle::ActionPreBattle()
@@ -2496,7 +2496,7 @@ void Castle::ActionPreBattle()
     CastleHeroes heroes = world.GetHeroes( *this );
     Heroes * hero = heroes.GuardFirst();
     if ( hero && army.isValid() )
-        hero->GetArmy().JoinStrongestFromArmy( army );
+        hero->GetArmy().JoinStrongestFromArmy( army, true );
 
     if ( isControlAI() )
         AI::Get().CastlePreBattle( *this );
