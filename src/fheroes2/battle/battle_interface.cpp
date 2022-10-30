@@ -5256,7 +5256,8 @@ void Battle::PopupDamageInfo::Reset()
         _cell = nullptr;
         _attacker = nullptr;
         _defender = nullptr;
-    }
+        SetPosition(0, 0, 0, 0);
+	}
 
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
 }
