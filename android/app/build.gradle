@@ -27,6 +27,34 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile({
+                def keystorePath = System.getenv('FHEROES2_KEYSTORE')
+
+                return keystorePath ? file(keystorePath) : null
+            }.call())
+
+            storePassword({
+                def keystorePass = System.getenv('FHEROES2_KEYSTORE_PASSWORD')
+
+                return keystorePass ? keystorePass : ''
+            }.call())
+
+            keyAlias({
+                def keyAlias = System.getenv('FHEROES2_KEY_ALIAS')
+
+                return keyAlias ? keyAlias : ''
+            }.call())
+
+            keyPassword({
+                def keyPass = System.getenv('FHEROES2_KEY_PASSWORD')
+
+                return keyPass ? keyPass : ''
+            }.call())
+        }
+    }
+
     buildTypes {
         debug {
             externalNativeBuild {
@@ -34,6 +62,10 @@ android {
                     cFlags '-DWITH_DEBUG', '-Werror'
                 }
             }
+        }
+
+        release {
+            signingConfig signingConfigs.release
         }
     }
 }
