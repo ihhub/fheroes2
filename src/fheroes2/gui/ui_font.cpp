@@ -2120,7 +2120,7 @@ namespace
             updateNormalFontLetterShadow( font[161 - 32] );
 
             // Left-pointing double angle quotation mark <<.
-            font[171 - 32].resize( 9, 9 );
+            font[171 - 32].resize( 8, 9 );
             font[171 - 32].reset();
             fheroes2::Copy( font[47 - 32], 5, 0, font[171 - 32], 1, 0, 3, 3 );
             fheroes2::Flip( font[47 - 32], 5, 0, font[171 - 32], 1, 4, 3, 3, false, true );
