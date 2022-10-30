@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'org.fheroes2'
+
     compileSdkVersion 31
 
     defaultConfig {
@@ -72,7 +74,7 @@ android {
 
 dependencies {
     implementation project(':sdl2')
-    implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 }
 
 task copyH2D(type: Copy) {
