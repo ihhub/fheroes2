@@ -199,7 +199,7 @@ public:
     }
 
     LevelType GetRandomUnitLevel() const;
-    uint32_t GetRNDSize( bool skip ) const;
+    uint32_t GetRNDSize() const;
 
     const char * GetName() const;
     const char * GetMultiName() const;

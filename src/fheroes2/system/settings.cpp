@@ -906,8 +906,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
         return _( "world: allow to set guardian to objects" );
-    case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
-        return _( "world: Neutral armies scale with game difficulty" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
         return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::CASTLE_ALLOW_GUARDIANS:

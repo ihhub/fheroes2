@@ -9604,9 +9604,6 @@ msgstr ""
 msgid "world: allow to set guardian to objects"
 msgstr "mundo: permitir establecer guardianes en objetos"
 
-msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 

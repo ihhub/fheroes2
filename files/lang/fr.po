@@ -9892,10 +9892,6 @@ msgstr "monde : reconnaissance affiche des infos supplémentaires"
 msgid "world: allow to set guardian to objects"
 msgstr "monde : autoriser le placement de gardiens pour certains lieux"
 
-msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
-"monde : la puissance des armées neutres augmente avec la difficulté du jeu"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 "monde : moulins, roues hydrauliques et jardins magiques peuvent être capturés"
