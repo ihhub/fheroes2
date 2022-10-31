@@ -9735,9 +9735,6 @@ msgstr ""
 msgid "world: allow to set guardian to objects"
 msgstr "świat: pozwól zostawiać strażników w obiektach"
 
-msgid "world: Neutral armies scale with game difficulty"
-msgstr "świat: siła naturalnych armii zmienia się wraz z trudnością gry"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "świat: Wiatraki, Młyny wodne i Magiczne ogrody mogą być przejęte"
 
