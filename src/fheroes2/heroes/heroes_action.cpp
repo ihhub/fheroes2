@@ -198,7 +198,7 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             const payment_t paymentCosts = troop.GetMonster().GetCost() * recruit;
             hero.GetKingdom().OddFundsResource( paymentCosts );
 
-            hero.GetArmy().JoinTroop( troop.GetMonster(), recruit );
+            hero.GetArmy().JoinTroop( troop.GetMonster(), recruit, false );
 
             Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
         }
@@ -690,7 +690,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
         DEBUG_LOG( DBG_GAME, DBG_INFO, join.monsterCount << " " << troop.GetName() << " want to join " << hero.GetName() << " for " << joiningCost << " gold" )
 
         if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.monsterCount, joiningCost ) ) {
-            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
+            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount, false );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
 
             I.SetRedraw( Interface::REDRAW_STATUS );
