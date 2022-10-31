@@ -2119,6 +2119,30 @@ namespace
             font[161 - 32].setPosition( font[33 - 32].x(), font[33 - 32].y() + 2 );
             updateNormalFontLetterShadow( font[161 - 32] );
 
+            // Left-pointing double angle quotation mark <<.
+            font[171 - 32].resize( 8, 9 );
+            font[171 - 32].reset();
+            fheroes2::Copy( font[47 - 32], 5, 0, font[171 - 32], 1, 0, 3, 3 );
+            fheroes2::Flip( font[47 - 32], 5, 0, font[171 - 32], 1, 4, 3, 3, false, true );
+            fheroes2::Flip( font[47 - 32], 5, 2, font[171 - 32], 1, 3, 2, 1, true, false );
+            fheroes2::Copy( font[47 - 32], 5, 2, font[171 - 32], 1, 1, 1, 1 );
+            fheroes2::Copy( font[47 - 32], 5, 2, font[171 - 32], 1, 5, 1, 1 );
+            // Second mark.
+            fheroes2::Copy( font[171 - 32], 1, 0, font[171 - 32], 5, 0, 3, 7 );
+            font[171 - 32].setPosition( font[33].x(), font[33].y() + 4 );
+            updateNormalFontLetterShadow( font[171 - 32] );
+
+            // Right-pointing double angle quotation mark >>.
+            font[187 - 32].resize( 8, 9 );
+            font[187 - 32].reset();
+            fheroes2::Flip( font[171 - 32], 1, 0, font[187 - 32], 1, 0, 7, 7, true, false );
+            // Remove old shadows
+            fheroes2::FillTransform( font[187 - 32], 3, 6, 1, 1, 1 );
+            fheroes2::FillTransform( font[187 - 32], 7, 6, 1, 1, 1 );
+            fheroes2::FillTransform( font[187 - 32], 4, 5, 1, 1, 1 );
+            font[187 - 32].setPosition( font[33].x(), font[33].y() + 4 );
+            updateNormalFontLetterShadow( font[187 - 32] );
+
             // Inverted question mark ?.
             font[191 - 32].resize( font[63 - 32].width() + 1, font[63 - 32].height() );
             font[191 - 32].reset();
