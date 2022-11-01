@@ -834,7 +834,7 @@ namespace
         }
 
         const int32_t textWidth = windowRoi.width - 16;
-        const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 140 };
+        const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 135 };
 
         fheroes2::Text description( currentDescription, fheroes2::FontType::normalWhite() );
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
