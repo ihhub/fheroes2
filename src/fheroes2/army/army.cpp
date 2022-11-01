@@ -1586,6 +1586,9 @@ void Army::resetInvalidMonsters() const
 void Army::ArrangeForTownDefense( Army & townArmy )
 {
     assert( this != &townArmy );
+    // This method is not designed to take reinforcements from a hero's army, because
+    // it can leave the townArmy empty
+    assert( townArmy.commander == nullptr || townArmy.commander->isCaptain() );
 
     // There is no garrison in the town
     if ( !townArmy.isValid() ) {
