@@ -1609,10 +1609,10 @@ void Army::ArrangeForCastleDefense( Army & garrison )
         }
     }
 
-    // Sort the garrison troops by their strength (strongest first)
+    // Sort the garrison troops by their strength (most powerful stacks first)
     std::sort( garrisonTroops.begin(), garrisonTroops.end(), StrongestTroop );
 
-    // Try to reinforce this army with garrison troops (strongest troops first)
+    // Try to reinforce this army with garrison troops (most powerful stacks first)
     for ( Troop * troop : garrisonTroops ) {
         if ( !CanJoinTroop( troop->GetMonster() ) ) {
             continue;
