@@ -118,6 +118,10 @@ public:
 
     // If the army has no slot find 2 or more slots of the same monster which is the weakest and merge them releasing one slot in troops.
     bool mergeWeakestTroopsIfNeeded();
+
+private:
+    // Returns the stack that best matches the specified condition or nullptr if there are no valid stacks
+    Troop * getBestMatchToCondition( const std::function<bool( const Troop *, const Troop * )> & condition ) const;
 };
 
 struct NeutralMonsterJoiningCondition
@@ -150,11 +154,12 @@ public:
 
     static std::pair<uint32_t, uint32_t> SizeRange( const uint32_t count );
 
-    // compare
+    // Comparison functions
     static bool WeakestTroop( const Troop *, const Troop * );
     static bool StrongestTroop( const Troop *, const Troop * );
     static bool SlowestTroop( const Troop *, const Troop * );
     static bool FastestTroop( const Troop *, const Troop * );
+
     static void SwapTroops( Troop &, Troop & );
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
@@ -226,6 +231,9 @@ public:
 
     void resetInvalidMonsters() const;
 
+    // Performs the pre-battle arrangement for the town defense, trying to add reinforcements from the city garrison (most powerful
+    // stacks first), by adding them either to free slots or to slots that already contain troops of the same type
+    void ArrangeForTownDefense( Army & townArmy );
     // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
     void ArrangeForWhirlpool();
 

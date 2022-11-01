@@ -2471,11 +2471,14 @@ void Castle::ActionPreBattle()
 {
     CastleHeroes heroes = world.GetHeroes( *this );
     Heroes * hero = heroes.GuardFirst();
-    if ( hero && army.isValid() )
-        hero->GetArmy().JoinStrongestFromArmy( army, true );
 
-    if ( isControlAI() )
+    if ( hero ) {
+        hero->GetArmy().ArrangeForTownDefense( army );
+    }
+
+    if ( isControlAI() ) {
         AI::Get().CastlePreBattle( *this );
+    }
 }
 
 void Castle::ActionAfterBattle( bool attacker_wins )

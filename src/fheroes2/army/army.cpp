@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <iterator>
 #include <numeric>
 
 #include "agg_image.h"
@@ -578,51 +579,41 @@ Troop * Troops::GetFirstValid()
     return it == end() ? nullptr : *it;
 }
 
+Troop * Troops::getBestMatchToCondition( const std::function<bool( const Troop *, const Troop * )> & condition ) const
+{
+    const_iterator bestMatch = std::find_if( begin(), end(), []( const Troop * troop ) {
+        assert( troop != nullptr );
+
+        return troop->isValid();
+    } );
+
+    if ( bestMatch == end() ) {
+        return nullptr;
+    }
+
+    const_iterator iter = std::next( bestMatch );
+
+    while ( iter != end() ) {
+        assert( *iter != nullptr );
+
+        if ( ( *iter )->isValid() && condition( *iter, *bestMatch ) ) {
+            bestMatch = iter;
+        }
+
+        ++iter;
+    }
+
+    return *bestMatch;
+}
+
 Troop * Troops::GetWeakestTroop() const
 {
-    const_iterator first = begin();
-    const_iterator last = end();
-
-    while ( first != last )
-        if ( ( *first )->isValid() )
-            break;
-        else
-            ++first;
-
-    if ( first == end() )
-        return nullptr;
-
-    const_iterator lowest = first;
-
-    if ( first != last )
-        while ( ++first != last )
-            if ( ( *first )->isValid() && Army::WeakestTroop( *first, *lowest ) )
-                lowest = first;
-
-    return *lowest;
+    return getBestMatchToCondition( Army::WeakestTroop );
 }
 
 Troop * Troops::GetSlowestTroop() const
 {
-    const_iterator first = begin();
-    const_iterator last = end();
-
-    while ( first != last )
-        if ( ( *first )->isValid() )
-            break;
-        else
-            ++first;
-
-    if ( first == end() )
-        return nullptr;
-    const_iterator lowest = first;
-
-    if ( first != last )
-        while ( ++first != last )
-            if ( ( *first )->isValid() && Army::SlowestTroop( *first, *lowest ) )
-                lowest = first;
-
-    return *lowest;
+    return getBestMatchToCondition( Army::SlowestTroop );
 }
 
 void Troops::MergeSameMonsterTroops()
@@ -1589,6 +1580,46 @@ void Army::resetInvalidMonsters() const
         if ( troop->GetID() != Monster::UNKNOWN && !troop->isValid() ) {
             troop->Set( Monster::UNKNOWN, 0 );
         }
+    }
+}
+
+void Army::ArrangeForTownDefense( Army & townArmy )
+{
+    assert( this != &townArmy );
+
+    // There is no garrison in the town
+    if ( !townArmy.isValid() ) {
+        return;
+    }
+
+    // Create and fill a temporary container for convenient sorting of garrison troops
+    std::vector<Troop *> townTroops;
+
+    townTroops.reserve( townArmy.Size() );
+
+    for ( size_t i = 0; i < townArmy.Size(); ++i ) {
+        Troop * troop = townArmy.GetTroop( i );
+        assert( troop != nullptr );
+
+        if ( troop->isValid() ) {
+            townTroops.push_back( troop );
+        }
+    }
+
+    // Sort the garrison troops by their strength (strongest first)
+    std::sort( townTroops.begin(), townTroops.end(), StrongestTroop );
+
+    // Try to reinforce this army with garrison troops (strongest troops first)
+    for ( Troop * troop : townTroops ) {
+        if ( !CanJoinTroop( troop->GetMonster() ) ) {
+            continue;
+        }
+
+        if ( !JoinTroop( *troop ) ) {
+            assert( 0 );
+        }
+
+        troop->Reset();
     }
 }
 
