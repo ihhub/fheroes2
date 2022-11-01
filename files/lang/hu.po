@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-29 03:00+0000\n"
+"POT-Creation-Date: 2022-11-01 18:49+0300\n"
 "PO-Revision-Date: 2022-10-25 08:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2731,7 +2731,7 @@ msgstr ""
 msgid "Auto, No Spells"
 msgstr ""
 
-msgid "Manual"
+msgid "autoBattle|Manual"
 msgstr ""
 
 #, fuzzy
@@ -3586,6 +3586,9 @@ msgid "Soprano Vocal"
 msgstr ""
 
 msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "credits|Manual"
 msgstr ""
 
 msgid "German Consultant"
