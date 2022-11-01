@@ -1586,7 +1586,7 @@ void Army::resetInvalidMonsters() const
 void Army::ArrangeForCastleDefense( Army & garrison )
 {
     assert( this != &garrison );
-    // This method is not designed to take reinforcements from a hero's army, because
+    // This method is designed to take reinforcements only from the garrison, because
     // it can leave the garrison empty
     assert( garrison.commander == nullptr || garrison.commander->isCaptain() );
 
