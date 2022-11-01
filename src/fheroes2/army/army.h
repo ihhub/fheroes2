@@ -232,9 +232,9 @@ public:
 
     void resetInvalidMonsters() const;
 
-    // Performs the pre-battle arrangement for the town defense, trying to add reinforcements from the city garrison (most powerful
-    // stacks first), by adding them either to free slots or to slots that already contain troops of the same type
-    void ArrangeForTownDefense( Army & townArmy );
+    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison (most
+    // powerful stacks first), by adding them either to free slots or to slots that already contain troops of the same type
+    void ArrangeForCastleDefense( Army & garrison );
     // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
     void ArrangeForWhirlpool();
 

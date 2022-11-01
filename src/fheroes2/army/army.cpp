@@ -1583,37 +1583,37 @@ void Army::resetInvalidMonsters() const
     }
 }
 
-void Army::ArrangeForTownDefense( Army & townArmy )
+void Army::ArrangeForCastleDefense( Army & garrison )
 {
-    assert( this != &townArmy );
+    assert( this != &garrison );
     // This method is not designed to take reinforcements from a hero's army, because
-    // it can leave the townArmy empty
-    assert( townArmy.commander == nullptr || townArmy.commander->isCaptain() );
+    // it can leave the garrison empty
+    assert( garrison.commander == nullptr || garrison.commander->isCaptain() );
 
-    // There is no garrison in the town
-    if ( !townArmy.isValid() ) {
+    // There are no troops in the garrison
+    if ( !garrison.isValid() ) {
         return;
     }
 
     // Create and fill a temporary container for convenient sorting of garrison troops
-    std::vector<Troop *> townTroops;
+    std::vector<Troop *> garrisonTroops;
 
-    townTroops.reserve( townArmy.Size() );
+    garrisonTroops.reserve( garrison.Size() );
 
-    for ( size_t i = 0; i < townArmy.Size(); ++i ) {
-        Troop * troop = townArmy.GetTroop( i );
+    for ( size_t i = 0; i < garrison.Size(); ++i ) {
+        Troop * troop = garrison.GetTroop( i );
         assert( troop != nullptr );
 
         if ( troop->isValid() ) {
-            townTroops.push_back( troop );
+            garrisonTroops.push_back( troop );
         }
     }
 
     // Sort the garrison troops by their strength (strongest first)
-    std::sort( townTroops.begin(), townTroops.end(), StrongestTroop );
+    std::sort( garrisonTroops.begin(), garrisonTroops.end(), StrongestTroop );
 
     // Try to reinforce this army with garrison troops (strongest troops first)
-    for ( Troop * troop : townTroops ) {
+    for ( Troop * troop : garrisonTroops ) {
         if ( !CanJoinTroop( troop->GetMonster() ) ) {
             continue;
         }

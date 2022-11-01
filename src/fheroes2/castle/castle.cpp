@@ -2473,7 +2473,7 @@ void Castle::ActionPreBattle()
     Heroes * hero = heroes.GuardFirst();
 
     if ( hero ) {
-        hero->GetArmy().ArrangeForTownDefense( army );
+        hero->GetArmy().ArrangeForCastleDefense( army );
     }
 
     if ( isControlAI() ) {
