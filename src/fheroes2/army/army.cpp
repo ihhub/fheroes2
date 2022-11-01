@@ -658,7 +658,7 @@ void Troops::SortStrongest()
     std::sort( begin(), end(), Army::StrongestTroop );
 }
 
-void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver, const bool prioritizeEmptySlots )
+void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver )
 {
     if ( this == &giverArmy )
         return;
@@ -690,7 +690,7 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
     // there's still unmerged units left and there's empty room for them
     for ( size_t slot = 0; slot < giverArmy.size(); ++slot ) {
         Troop * rightTroop = giverArmy[slot];
-        if ( rightTroop && JoinTroop( rightTroop->GetMonster(), rightTroop->GetCount(), prioritizeEmptySlots ) ) {
+        if ( rightTroop && JoinTroop( rightTroop->GetMonster(), rightTroop->GetCount(), false ) ) {
             rightTroop->Reset();
         }
     }
@@ -1363,10 +1363,10 @@ std::string Army::String() const
     return os.str();
 }
 
-void Army::JoinStrongestFromArmy( Army & giver, const bool prioritizeEmptySlots )
+void Army::JoinStrongestFromArmy( Army & giver )
 {
     const bool saveLast = ( giver.commander != nullptr ) && giver.commander->isHeroes();
-    JoinStrongest( giver, saveLast, prioritizeEmptySlots );
+    JoinStrongest( giver, saveLast );
 }
 
 uint32_t Army::ActionToSirens() const
