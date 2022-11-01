@@ -24,6 +24,7 @@
 #ifndef H2ARMY_H
 #define H2ARMY_H
 
+#include <functional>
 #include <string>
 #include <utility>
 #include <vector>
