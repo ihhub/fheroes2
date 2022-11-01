@@ -1614,15 +1614,9 @@ void Army::ArrangeForCastleDefense( Army & garrison )
 
     // Try to reinforce this army with garrison troops (most powerful stacks first)
     for ( Troop * troop : garrisonTroops ) {
-        if ( !CanJoinTroop( troop->GetMonster() ) ) {
-            continue;
+        if ( JoinTroop( *troop ) ) {
+            troop->Reset();
         }
-
-        if ( !JoinTroop( *troop ) ) {
-            assert( 0 );
-        }
-
-        troop->Reset();
     }
 }
 
