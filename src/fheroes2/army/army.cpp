@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <iterator>
 #include <numeric>
 
 #include "agg_image.h"
@@ -591,7 +590,7 @@ Troop * Troops::getBestMatchToCondition( const std::function<bool( const Troop *
         return nullptr;
     }
 
-    const_iterator iter = std::next( bestMatch );
+    const_iterator iter = bestMatch + 1;
 
     while ( iter != end() ) {
         assert( *iter != nullptr );
