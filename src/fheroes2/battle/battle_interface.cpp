@@ -3964,7 +3964,6 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Sprite & missile = fheroes2::AGG::GetICN( ICN::BOULDER, 0 );
     const fheroes2::Rect & area = GetArea();
 
     AudioManager::PlaySound( M82::CATSND00 );
@@ -3991,8 +3990,12 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     pt2.y += area.y;
     max.y += area.y;
 
-    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, max, missile.width() );
+    const fheroes2::Sprite & boulderFirstFrame = fheroes2::AGG::GetICN( ICN::BOULDER, 0 );
+    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, max, boulderFirstFrame.width() );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
+
+    uint32_t boulderFrameId = 0;
+    const uint32_t boulderMaxFrame = fheroes2::AGG::GetICNCount( ICN::BOULDER );
 
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
@@ -4002,9 +4005,13 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
                 ++catapult_frame;
 
             RedrawPartialStart();
-            fheroes2::Blit( missile, _mainSurface, pnt->x, pnt->y );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BOULDER, boulderFrameId ), _mainSurface, pnt->x, pnt->y );
             RedrawPartialFinish();
             ++pnt;
+            ++boulderFrameId;
+            if ( boulderFrameId >= boulderMaxFrame ) {
+                boulderFrameId = 0;
+            }
         }
     }
 
