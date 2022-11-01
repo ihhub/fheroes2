@@ -104,8 +104,6 @@ public:
 
     void SortStrongest();
 
-    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
-
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
     void JoinAllTroopsOfType( const Troop & targetTroop );
@@ -119,6 +117,9 @@ public:
 
     // If the army has no slot find 2 or more slots of the same monster which is the weakest and merge them releasing one slot in troops.
     bool mergeWeakestTroopsIfNeeded();
+
+protected:
+    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
 
 private:
     // Returns the stack that best matches the specified condition or nullptr if there are no valid stacks
