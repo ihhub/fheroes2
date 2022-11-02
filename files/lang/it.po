@@ -2596,9 +2596,8 @@ msgstr "Auto-Risolva"
 msgid "Auto, No Spells"
 msgstr "Auto, Senza Magie"
 
-#, fuzzy
 msgid "autoBattle|Manual"
-msgstr "Manualmente"
+msgstr "Manuali"
 
 msgid "Battles"
 msgstr "Battaglie"
