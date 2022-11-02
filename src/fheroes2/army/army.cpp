@@ -1642,7 +1642,7 @@ void Army::ArrangeForWhirlpool()
             continue;
         }
 
-        if ( troopOfWeakestUnits == nullptr || troopOfWeakestUnits->Monster::GetHitPoints() > troop->Monster::GetHitPoints() ) {
+        if ( troopOfWeakestUnits == nullptr || troopOfWeakestUnits->GetMonsterStrength() > troop->GetMonsterStrength() ) {
             troopOfWeakestUnits = troop;
         }
     }
