@@ -9901,9 +9901,6 @@ msgstr "Verden: Speiding gir deg utvidet info"
 msgid "world: allow to set guardian to objects"
 msgstr "Verden: Tillat å plassere voktere på objekter"
 
-msgid "world: Neutral armies scale with game difficulty"
-msgstr "Verden: Nøytrale hærer øker med spillets vanskelighetsgrad"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget"
 

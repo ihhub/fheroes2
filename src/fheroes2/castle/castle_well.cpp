@@ -67,9 +67,9 @@ namespace
 
         if ( count > 0 ) {
             if ( tempCastleArmy.CanJoinTroop( monsters ) )
-                tempCastleArmy.JoinTroop( monsters, count );
+                tempCastleArmy.JoinTroop( monsters, count, false );
             else if ( tempHeroArmy.CanJoinTroop( monsters ) )
-                tempHeroArmy.JoinTroop( monsters, count );
+                tempHeroArmy.JoinTroop( monsters, count, false );
         }
 
         return count;

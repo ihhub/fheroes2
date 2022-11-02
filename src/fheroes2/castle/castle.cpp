@@ -527,86 +527,62 @@ bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
         return false;
     }
 
+    auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
+        // All expected levels should be built
+        assert( ( building & expectedLevels ) == expectedLevels );
+
+        // Only the expected levels of all possible levels should be built
+        return ( building & allPossibleLevels ) == expectedLevels;
+    };
+
     if ( buildingToCheck & BUILD_MAGEGUILD ) {
-        static_assert( BUILD_MAGEGUILD1 < BUILD_MAGEGUILD2 && BUILD_MAGEGUILD2 < BUILD_MAGEGUILD3 && BUILD_MAGEGUILD3 < BUILD_MAGEGUILD4
-                           && BUILD_MAGEGUILD4 < BUILD_MAGEGUILD5,
-                       "The order of values in the building enum has changed, check the logic below" );
-
-        auto checkMageGuild = [this]( const uint32_t levels ) {
-            // A higher level of the Mage Guild has been built
-            if ( ( building & BUILD_MAGEGUILD ) > levels ) {
-                return false;
-            }
-
-            // All previous levels must also be built
-            assert( ( building & BUILD_MAGEGUILD ) == levels );
-
-            return true;
-        };
-
         switch ( buildingToCheck ) {
         case BUILD_MAGEGUILD1:
-            return checkMageGuild( BUILD_MAGEGUILD1 );
+            return checkBuilding( BUILD_MAGEGUILD1, BUILD_MAGEGUILD );
         case BUILD_MAGEGUILD2:
-            return checkMageGuild( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 );
+            return checkBuilding( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2, BUILD_MAGEGUILD );
         case BUILD_MAGEGUILD3:
-            return checkMageGuild( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 | BUILD_MAGEGUILD3 );
+            return checkBuilding( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 | BUILD_MAGEGUILD3, BUILD_MAGEGUILD );
         case BUILD_MAGEGUILD4:
-            return checkMageGuild( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 | BUILD_MAGEGUILD3 | BUILD_MAGEGUILD4 );
+            return checkBuilding( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 | BUILD_MAGEGUILD3 | BUILD_MAGEGUILD4, BUILD_MAGEGUILD );
         case BUILD_MAGEGUILD5:
-            return checkMageGuild( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 | BUILD_MAGEGUILD3 | BUILD_MAGEGUILD4 | BUILD_MAGEGUILD5 );
+            return checkBuilding( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 | BUILD_MAGEGUILD3 | BUILD_MAGEGUILD4 | BUILD_MAGEGUILD5, BUILD_MAGEGUILD );
         default:
             assert( 0 );
         }
     }
 
     if ( buildingToCheck & ( DWELLING_MONSTERS | DWELLING_UPGRADES ) ) {
-        static_assert( DWELLING_MONSTER2 < DWELLING_UPGRADE2 && DWELLING_MONSTER3 < DWELLING_UPGRADE3 && DWELLING_MONSTER4 < DWELLING_UPGRADE4
-                           && DWELLING_MONSTER5 < DWELLING_UPGRADE5 && DWELLING_MONSTER6 < DWELLING_UPGRADE6 && DWELLING_UPGRADE6 < DWELLING_UPGRADE7,
-                       "The order of values in the building enum has changed, check the logic below" );
-
-        auto checkDwelling = [this]( const uint32_t expectedLevels, const uint32_t allLevels ) {
-            // A higher level of this dwelling has been built
-            if ( ( building & allLevels ) > expectedLevels ) {
-                return false;
-            }
-
-            // All previous levels must also be built
-            assert( ( building & allLevels ) == expectedLevels );
-
-            return true;
-        };
-
         switch ( buildingToCheck ) {
         case DWELLING_MONSTER1:
             // Level 1 dwellings have no upgrades
             return true;
         case DWELLING_MONSTER2:
-            return checkDwelling( DWELLING_MONSTER2, DWELLING_MONSTER2 | DWELLING_UPGRADE2 );
+            return checkBuilding( DWELLING_MONSTER2, DWELLING_MONSTER2 | DWELLING_UPGRADE2 );
         case DWELLING_MONSTER3:
-            return checkDwelling( DWELLING_MONSTER3, DWELLING_MONSTER3 | DWELLING_UPGRADE3 );
+            return checkBuilding( DWELLING_MONSTER3, DWELLING_MONSTER3 | DWELLING_UPGRADE3 );
         case DWELLING_MONSTER4:
-            return checkDwelling( DWELLING_MONSTER4, DWELLING_MONSTER4 | DWELLING_UPGRADE4 );
+            return checkBuilding( DWELLING_MONSTER4, DWELLING_MONSTER4 | DWELLING_UPGRADE4 );
         case DWELLING_MONSTER5:
-            return checkDwelling( DWELLING_MONSTER5, DWELLING_MONSTER5 | DWELLING_UPGRADE5 );
+            return checkBuilding( DWELLING_MONSTER5, DWELLING_MONSTER5 | DWELLING_UPGRADE5 );
         case DWELLING_MONSTER6:
             // Take the Black Dragon upgrade (DWELLING_UPGRADE7) into account
-            return checkDwelling( DWELLING_MONSTER6, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
+            return checkBuilding( DWELLING_MONSTER6, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
 
         case DWELLING_UPGRADE2:
-            return checkDwelling( DWELLING_MONSTER2 | DWELLING_UPGRADE2, DWELLING_MONSTER2 | DWELLING_UPGRADE2 );
+            return checkBuilding( DWELLING_MONSTER2 | DWELLING_UPGRADE2, DWELLING_MONSTER2 | DWELLING_UPGRADE2 );
         case DWELLING_UPGRADE3:
-            return checkDwelling( DWELLING_MONSTER3 | DWELLING_UPGRADE3, DWELLING_MONSTER3 | DWELLING_UPGRADE3 );
+            return checkBuilding( DWELLING_MONSTER3 | DWELLING_UPGRADE3, DWELLING_MONSTER3 | DWELLING_UPGRADE3 );
         case DWELLING_UPGRADE4:
-            return checkDwelling( DWELLING_MONSTER4 | DWELLING_UPGRADE4, DWELLING_MONSTER4 | DWELLING_UPGRADE4 );
+            return checkBuilding( DWELLING_MONSTER4 | DWELLING_UPGRADE4, DWELLING_MONSTER4 | DWELLING_UPGRADE4 );
         case DWELLING_UPGRADE5:
-            return checkDwelling( DWELLING_MONSTER5 | DWELLING_UPGRADE5, DWELLING_MONSTER5 | DWELLING_UPGRADE5 );
+            return checkBuilding( DWELLING_MONSTER5 | DWELLING_UPGRADE5, DWELLING_MONSTER5 | DWELLING_UPGRADE5 );
         case DWELLING_UPGRADE6:
             // Take the Black Dragon upgrade (DWELLING_UPGRADE7) into account
-            return checkDwelling( DWELLING_MONSTER6 | DWELLING_UPGRADE6, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
+            return checkBuilding( DWELLING_MONSTER6 | DWELLING_UPGRADE6, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         case DWELLING_UPGRADE7:
             // Black Dragon upgrade
-            return checkDwelling( DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
+            return checkBuilding( DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
 
         default:
             assert( 0 );
@@ -2488,7 +2464,7 @@ void Castle::JoinRNDArmy()
         count += Rand::Get( 8, 15 );
     }
 
-    army.JoinTroop( Monster( race, dwellingType ), count );
+    army.JoinTroop( Monster( race, dwellingType ), count, false );
 }
 
 void Castle::ActionPreBattle()
@@ -2496,7 +2472,7 @@ void Castle::ActionPreBattle()
     CastleHeroes heroes = world.GetHeroes( *this );
     Heroes * hero = heroes.GuardFirst();
     if ( hero && army.isValid() )
-        hero->GetArmy().JoinStrongestFromArmy( army );
+        hero->GetArmy().JoinStrongestFromArmy( army, true );
 
     if ( isControlAI() )
         AI::Get().CastlePreBattle( *this );

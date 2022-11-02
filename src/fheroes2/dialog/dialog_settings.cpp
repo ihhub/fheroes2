@@ -153,7 +153,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
-    states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
     states.push_back( Settings::HEROES_REMEMBER_MP_WHEN_RETREATING );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );

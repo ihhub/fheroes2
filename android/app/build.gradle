@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'org.fheroes2'
+
     compileSdkVersion 31
 
     defaultConfig {
@@ -27,6 +29,34 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile({
+                def keystorePath = System.getenv('FHEROES2_KEYSTORE')
+
+                return keystorePath ? file(keystorePath) : null
+            }.call())
+
+            storePassword({
+                def keystorePass = System.getenv('FHEROES2_KEYSTORE_PASSWORD')
+
+                return keystorePass ? keystorePass : ''
+            }.call())
+
+            keyAlias({
+                def keyAlias = System.getenv('FHEROES2_KEY_ALIAS')
+
+                return keyAlias ? keyAlias : ''
+            }.call())
+
+            keyPassword({
+                def keyPass = System.getenv('FHEROES2_KEY_PASSWORD')
+
+                return keyPass ? keyPass : ''
+            }.call())
+        }
+    }
+
     buildTypes {
         debug {
             externalNativeBuild {
@@ -35,12 +65,16 @@ android {
                 }
             }
         }
+
+        release {
+            signingConfig signingConfigs.release
+        }
     }
 }
 
 dependencies {
     implementation project(':sdl2')
-    implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 }
 
 task copyH2D(type: Copy) {

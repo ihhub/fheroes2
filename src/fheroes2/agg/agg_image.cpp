@@ -69,10 +69,12 @@ namespace
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
                                                 ICN::BUTTON_DIFFICULTY_POL };
 
+#ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
     {
         return languageDependentIcnId.count( id ) > 0;
     }
+#endif
 
     bool IsValidICNId( int id )
     {

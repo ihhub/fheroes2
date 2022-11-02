@@ -9960,9 +9960,6 @@ msgstr "Welt: Scouting-Skill zeigt erweiterte Inhaltsangaben"
 msgid "world: allow to set guardian to objects"
 msgstr "Welt: Wächter auf Objekte setzen lassen"
 
-msgid "world: Neutral armies scale with game difficulty"
-msgstr "Welt: Neutrale Armeen steigen mit der Spielschwierigkeit"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "Welt: Windmühlen, Wasserräder und Zaubergärten können erobert werden"
 

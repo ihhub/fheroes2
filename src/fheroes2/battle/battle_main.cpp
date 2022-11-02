@@ -401,7 +401,7 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
     uint32_t raiseCount = Monster::GetCountFromHitPoints( raisedMonsterType, mons.GetHitPoints() * enemyTroopsKilled * necromancyPercent / 100 );
     if ( raiseCount == 0u )
         raiseCount = 1;
-    army.JoinTroop( mons, raiseCount );
+    army.JoinTroop( mons, raiseCount, false );
 
     if ( isControlHuman )
         arena.DialogBattleNecromancy( raiseCount, raisedMonsterType );

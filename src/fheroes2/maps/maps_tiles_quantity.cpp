@@ -931,7 +931,7 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
         tile.MonsterSetCount( count );
     }
     else {
-        tile.MonsterSetCount( mons.GetRNDSize( true ) );
+        tile.MonsterSetCount( mons.GetRNDSize() );
     }
 
     if ( mons.GetID() == Monster::GHOST || mons.isElemental() ) {
@@ -1080,7 +1080,7 @@ void Maps::Tiles::UpdateMonsterPopulation( Tiles & tile )
     const uint32_t troopCount = troop.GetCount();
 
     if ( troopCount == 0 ) {
-        tile.MonsterSetCount( troop.GetRNDSize( false ) );
+        tile.MonsterSetCount( troop.GetRNDSize() );
     }
     else {
         const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( troopCount % 7 ) ) ? 1 : 0;
