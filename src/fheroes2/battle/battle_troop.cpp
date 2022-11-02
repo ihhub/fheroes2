@@ -1514,7 +1514,11 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
         SetPosition( GetPosition() );
 
         if ( Arena::GetInterface() ) {
-            std::string str( _( "%{count} %{name} rise(s) from the dead!" ) );
+            std::string str( _( "%{count} %{name} rise from the dead!" ) );
+            if (count > 1)
+            {
+                StringReplace( str, "rise", "rises") ;
+            }
             StringReplace( str, "%{count}", resurrect );
             StringReplace( str, "%{name}", GetName() );
             Arena::GetInterface()->SetStatus( str, true );
