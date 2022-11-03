@@ -3995,7 +3995,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     uint32_t boulderFrameId = 0;
-    const uint32_t boulderMaxFrame = fheroes2::AGG::GetICNCount( ICN::BOULDER );
+    const uint32_t boulderFramesCount = fheroes2::AGG::GetICNCount( ICN::BOULDER );
 
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
@@ -4009,7 +4009,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
             RedrawPartialFinish();
             ++pnt;
             ++boulderFrameId;
-            if ( boulderFrameId >= boulderMaxFrame ) {
+            if ( boulderFrameId >= boulderFramesCount ) {
                 boulderFrameId = 0;
             }
         }
