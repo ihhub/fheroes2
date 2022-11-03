@@ -101,17 +101,13 @@ void Interface::Basic::updateFocus()
     if ( focus.first == FOCUS_CASTLE ) {
         Castle * castle = GetFocusCastle();
         if ( castle != nullptr ) {
-            iconsPanel.Select( castle );
-            gameArea.SetCenter( castle->GetCenter() );
-            statusWindow.SetState( StatusType::STATUS_FUNDS );
+            SetFocus( castle );
         }
     }
     else if ( focus.first == FOCUS_HEROES ) {
         Heroes * hero = GetFocusHeroes();
         if ( hero != nullptr ) {
-            iconsPanel.Select( hero );
-            gameArea.SetCenter( hero->GetCenter() );
-            statusWindow.SetState( StatusType::STATUS_ARMY );
+            SetFocus( hero );
         }
     }
 }
