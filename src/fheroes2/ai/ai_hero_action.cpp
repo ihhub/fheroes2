@@ -551,11 +551,6 @@ namespace AI
                 if ( res.DefenderWins() ) {
                 other_hero->IncreaseExperience( res.GetExperienceDefender() );
             }
-
-            hero.ActionAfterBattle();
-            if ( other_hero->isControlAI() ) {
-                other_hero->ActionAfterBattle();
-            }
         }
     }
 
@@ -632,7 +627,6 @@ namespace AI
                 castle->Scoute();
             }
         }
-        hero.ActionAfterBattle();
     }
 
     void AIToMonster( Heroes & hero, int32_t dst_index )
@@ -708,7 +702,6 @@ namespace AI
             tile.setAsEmpty();
         }
 
-        hero.ActionAfterBattle();
         hero.unmarkHeroMeeting();
     }
 
@@ -1635,8 +1628,6 @@ namespace AI
         taker.GetArmy().JoinStrongestFromArmy( giver.GetArmy() );
 
         taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts(), taker, giver );
-        left.ActionAfterBattle();
-        right.ActionAfterBattle();
     }
 
     void HeroesMove( Heroes & hero )
