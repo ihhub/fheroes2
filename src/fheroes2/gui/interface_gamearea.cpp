@@ -692,8 +692,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         const fheroes2::Rect extendedVisibleRoi{ tileROI.x - 1, tileROI.y - 1, tileROI.width + 2, tileROI.height + 2 };
 
         for ( ; currentStep != path.end(); ++currentStep ) {
-            const int32_t from = currentStep->GetIndex();
-            const fheroes2::Point & mp = Maps::GetPoint( from );
+            const int32_t tileIndex = currentStep->GetIndex();
+            const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
 
             ++nextStep;
             --greenColorSteps;
@@ -705,7 +705,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             uint32_t routeSpriteIndex = 0;
             if ( nextStep != path.end() ) {
-                const Maps::Tiles & tile = world.GetTiles( from );
+                const Maps::Tiles & tile = world.GetTiles( tileIndex );
                 const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, pathfinding );
 
                 routeSpriteIndex = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
