@@ -705,16 +705,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             uint32_t routeSpriteIndex = 0;
             if ( nextStep != path.end() ) {
-                const Maps::Tiles & tileFrom = world.GetTiles( from );
-                const Maps::Tiles & tileTo = world.GetTiles( nextStep->GetIndex() );
-                uint32_t cost = 0;
-
-                if ( tileFrom.isRoad() && tileTo.isRoad() ) {
-                    cost = Maps::Ground::roadPenalty;
-                }
-                else {
-                    cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
-                }
+                const Maps::Tiles & tile = world.GetTiles( from );
+                const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, pathfinding );
 
                 routeSpriteIndex = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
             }
