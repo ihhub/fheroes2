@@ -79,17 +79,17 @@ namespace
             // Do nothing.
         }
 
-        void ActionListSingleClick( fheroes2::SupportedLanguage & /*language*/) override
+        void ActionListSingleClick( fheroes2::SupportedLanguage & /*language*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListPressRight( fheroes2::SupportedLanguage & /*language*/) override
+        void ActionListPressRight( fheroes2::SupportedLanguage & /*language*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListDoubleClick( fheroes2::SupportedLanguage & /*language*/) override
+        void ActionListDoubleClick( fheroes2::SupportedLanguage & /*language*/ ) override
         {
             _isDoubleClicked = true;
         }
@@ -117,12 +117,6 @@ namespace
 
     bool getLanguage( const std::vector<fheroes2::SupportedLanguage> & languages, fheroes2::SupportedLanguage chosenLanguage )
     {
-        size_t selectionId = 0;
-        auto currentLanguageIt = std::find( languages.begin(), languages.end(), chosenLanguage );
-        if ( currentLanguageIt != languages.end() ) {
-            selectionId = static_cast<size_t>( currentLanguageIt - languages.begin() );
-        }
-
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
