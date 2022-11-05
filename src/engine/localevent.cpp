@@ -1277,11 +1277,9 @@ void LocalEvent::OnActiveEvent( const SDL_Event & event )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
-    if ( _numTouches == 2 ) {
-        if ( _firstFingerId != event.fingerId && _secondFingerId != event.fingerId ) {
-            // We do not support more than 2 fingers.
-            return;
-        }
+    if ( _numTouches == 2  && _firstFingerId != event.fingerId && _secondFingerId != event.fingerId ) {
+        // We do not support more than 2 fingers.
+        return;
     }
 
     if ( event.type == SDL_FINGERDOWN ) {
