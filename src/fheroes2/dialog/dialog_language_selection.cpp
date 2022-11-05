@@ -186,7 +186,8 @@ namespace
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
             }
-            else if ( le.MousePressRight( buttonCancel.area() ) ) {
+
+            if ( le.MousePressRight( buttonCancel.area() ) ) {
                 fheroes2::Text header( _( "Cancel" ), fheroes2::FontType::normalYellow() );
                 fheroes2::Text body( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() );
                 fheroes2::showMessage( header, body, 0 );
