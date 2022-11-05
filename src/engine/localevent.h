@@ -324,13 +324,13 @@ private:
 
     enum flag_t
     {
-        KEY_PRESSED = 0x0001,
-        MOUSE_MOTION = 0x0002,
+        KEY_PRESSED = 0x0001, // key on the keyboard has been pressed
+        MOUSE_MOTION = 0x0002, // mouse cursor has been moved
         MOUSE_PRESSED = 0x0004, // mouse button is currently pressed
         MOUSE_RELEASED = 0x0008, // mouse button has just been released
         MOUSE_CLICKED = 0x0010, // mouse button has been clicked
-        MOUSE_WHEEL = 0x0020,
-        KEY_HOLD = 0x0040
+        MOUSE_WHEEL = 0x0020, // mouse wheel has been rotated
+        KEY_HOLD = 0x0040 // key on the keyboard is currently being held down
     };
 
     void SetModes( flag_t f )
