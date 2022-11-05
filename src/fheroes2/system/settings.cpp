@@ -351,19 +351,17 @@ bool Settings::Read( const std::string & filename )
 
 bool Settings::Save( const std::string & filename ) const
 {
-    if ( filename.empty() )
+    if ( filename.empty() ) {
         return false;
+    }
+
+    const std::string cfgFilename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), filename );
 
     std::fstream file;
-#if defined( TARGET_PS_VITA )
-    const std::string vitaFilename = "ux0:data/fheroes2/" + filename;
-    file.open( vitaFilename.data(), std::fstream::out | std::fstream::trunc );
-#else
-    const std::string cfgFilename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), filename );
     file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );
-#endif
-    if ( !file )
+    if ( !file ) {
         return false;
+    }
 
     const std::string & data = String();
     file.write( data.data(), data.size() );
