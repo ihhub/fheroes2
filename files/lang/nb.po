@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 04:04+0000\n"
+"POT-Creation-Date: 2022-11-05 16:38+0000\n"
 "PO-Revision-Date: 2022-10-10 13:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2893,6 +2893,10 @@ msgstr "Hurtigtaster:"
 
 msgid "Select Game Language:"
 msgstr "Velg et språk:"
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Trykk for å bruke den valgte oppløsningen."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} gikk opp en level."
