@@ -93,19 +93,22 @@ void Interface::Basic::updateFocus()
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
-    if ( !player ) {
+    if ( player == nullptr ) {
         return;
     }
 
-    Focus & focus = player->GetFocus();
+    const Focus & focus = player->GetFocus();
+
     if ( focus.first == FOCUS_CASTLE ) {
         Castle * castle = GetFocusCastle();
+
         if ( castle != nullptr ) {
             SetFocus( castle );
         }
     }
     else if ( focus.first == FOCUS_HEROES ) {
         Heroes * hero = GetFocusHeroes();
+
         if ( hero != nullptr ) {
             SetFocus( hero );
         }
