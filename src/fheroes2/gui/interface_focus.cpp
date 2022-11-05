@@ -89,6 +89,29 @@ void Interface::Basic::SetFocus( Castle * castle )
     }
 }
 
+void Interface::Basic::updateFocus()
+{
+    Player * player = Settings::Get().GetPlayers().GetCurrent();
+
+    if ( !player ) {
+        return;
+    }
+
+    Focus & focus = player->GetFocus();
+    if ( focus.first == FOCUS_CASTLE ) {
+        Castle * castle = GetFocusCastle();
+        if ( castle != nullptr ) {
+            SetFocus( castle );
+        }
+    }
+    else if ( focus.first == FOCUS_HEROES ) {
+        Heroes * hero = GetFocusHeroes();
+        if ( hero != nullptr ) {
+            SetFocus( hero );
+        }
+    }
+}
+
 void Interface::Basic::ResetFocus( int priority )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
