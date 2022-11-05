@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-29 03:00+0000\n"
+"POT-Creation-Date: 2022-11-05 04:04+0000\n"
 "PO-Revision-Date: 2022-10-25 08:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -759,8 +759,11 @@ msgstr ""
 "A(z) %{artifact} varázstárgy hatása miatt a %{spell} varázslat nem "
 "használható a csatában."
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr "%{count} %{name} lényt feltámasztották a halálból!"
+#, fuzzy
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] "%{count} %{name} lényt feltámasztották a halálból!"
+msgstr[1] "%{count} %{name} lényt feltámasztották a halálból!"
 
 #, fuzzy
 msgid "Dwarven Alliance"
