@@ -79,17 +79,17 @@ namespace
             // Do nothing.
         }
 
-        void ActionListSingleClick( fheroes2::SupportedLanguage & ) override
+        void ActionListSingleClick( fheroes2::SupportedLanguage & /*language*/) override
         {
             // Do nothing.
         }
 
-        void ActionListPressRight( fheroes2::SupportedLanguage & ) override
+        void ActionListPressRight( fheroes2::SupportedLanguage & /*language*/) override
         {
             // Do nothing.
         }
 
-        void ActionListDoubleClick( fheroes2::SupportedLanguage & ) override
+        void ActionListDoubleClick( fheroes2::SupportedLanguage & /*language*/) override
         {
             _isDoubleClicked = true;
         }
@@ -188,7 +188,8 @@ namespace
                  || items.isDoubleClicked() ) {
                 return true;
             }
-            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+
+            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
             }
             else if ( le.MousePressRight( buttonCancel.area() ) ) {
@@ -238,13 +239,13 @@ namespace fheroes2
             return;
         }
 
-        size_t selectionId = 0;
-        auto currentLanguageIt = std::find( languages.begin(), languages.end(), currentLanguage );
-        if ( currentLanguageIt != languages.end() ) {
-            selectionId = static_cast<size_t>( currentLanguageIt - languages.begin() );
+        SupportedLanguage chosenLanguage = languages.front();
+        for ( const SupportedLanguage language : languages ) {
+            if ( currentLanguage == language ) {
+                chosenLanguage = currentLanguage;
+                break;
+            }
         }
-
-        SupportedLanguage chosenLanguage = languages[selectionId];
 
         if ( !getLanguage( languages, chosenLanguage ) ) {
             Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
