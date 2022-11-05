@@ -152,9 +152,6 @@ namespace
         std::vector<fheroes2::SupportedLanguage> temp = languages;
         items.SetListContent( temp );
 
-        const fheroes2::Size currentResolution( display.width(), display.height() );
-
-        fheroes2::Size selectedResolution;
         for ( size_t i = 0; i < languages.size(); ++i ) {
             if ( languages[i] == chosenLanguage ) {
                 items.SetCurrent( i );
