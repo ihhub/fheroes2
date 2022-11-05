@@ -578,51 +578,41 @@ Troop * Troops::GetFirstValid()
     return it == end() ? nullptr : *it;
 }
 
+Troop * Troops::getBestMatchToCondition( const std::function<bool( const Troop *, const Troop * )> & condition ) const
+{
+    const_iterator bestMatch = std::find_if( begin(), end(), []( const Troop * troop ) {
+        assert( troop != nullptr );
+
+        return troop->isValid();
+    } );
+
+    if ( bestMatch == end() ) {
+        return nullptr;
+    }
+
+    const_iterator iter = bestMatch + 1;
+
+    while ( iter != end() ) {
+        assert( *iter != nullptr );
+
+        if ( ( *iter )->isValid() && condition( *iter, *bestMatch ) ) {
+            bestMatch = iter;
+        }
+
+        ++iter;
+    }
+
+    return *bestMatch;
+}
+
 Troop * Troops::GetWeakestTroop() const
 {
-    const_iterator first = begin();
-    const_iterator last = end();
-
-    while ( first != last )
-        if ( ( *first )->isValid() )
-            break;
-        else
-            ++first;
-
-    if ( first == end() )
-        return nullptr;
-
-    const_iterator lowest = first;
-
-    if ( first != last )
-        while ( ++first != last )
-            if ( ( *first )->isValid() && Army::WeakestTroop( *first, *lowest ) )
-                lowest = first;
-
-    return *lowest;
+    return getBestMatchToCondition( Army::WeakestTroop );
 }
 
 Troop * Troops::GetSlowestTroop() const
 {
-    const_iterator first = begin();
-    const_iterator last = end();
-
-    while ( first != last )
-        if ( ( *first )->isValid() )
-            break;
-        else
-            ++first;
-
-    if ( first == end() )
-        return nullptr;
-    const_iterator lowest = first;
-
-    if ( first != last )
-        while ( ++first != last )
-            if ( ( *first )->isValid() && Army::SlowestTroop( *first, *lowest ) )
-                lowest = first;
-
-    return *lowest;
+    return getBestMatchToCondition( Army::SlowestTroop );
 }
 
 void Troops::MergeSameMonsterTroops()
@@ -667,7 +657,7 @@ void Troops::SortStrongest()
     std::sort( begin(), end(), Army::StrongestTroop );
 }
 
-void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver, const bool prioritizeEmptySlots )
+void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver )
 {
     if ( this == &giverArmy )
         return;
@@ -699,7 +689,7 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
     // there's still unmerged units left and there's empty room for them
     for ( size_t slot = 0; slot < giverArmy.size(); ++slot ) {
         Troop * rightTroop = giverArmy[slot];
-        if ( rightTroop && JoinTroop( rightTroop->GetMonster(), rightTroop->GetCount(), prioritizeEmptySlots ) ) {
+        if ( rightTroop && JoinTroop( rightTroop->GetMonster(), rightTroop->GetCount(), false ) ) {
             rightTroop->Reset();
         }
     }
@@ -1372,10 +1362,10 @@ std::string Army::String() const
     return os.str();
 }
 
-void Army::JoinStrongestFromArmy( Army & giver, const bool prioritizeEmptySlots )
+void Army::JoinStrongestFromArmy( Army & giver )
 {
     const bool saveLast = ( giver.commander != nullptr ) && giver.commander->isHeroes();
-    JoinStrongest( giver, saveLast, prioritizeEmptySlots );
+    JoinStrongest( giver, saveLast );
 }
 
 uint32_t Army::ActionToSirens() const
@@ -1592,6 +1582,43 @@ void Army::resetInvalidMonsters() const
     }
 }
 
+void Army::ArrangeForCastleDefense( Army & garrison )
+{
+    assert( this != &garrison );
+    // This method is designed to take reinforcements only from the garrison, because
+    // it can leave the garrison empty
+    assert( garrison.commander == nullptr || garrison.commander->isCaptain() );
+
+    // There are no troops in the garrison
+    if ( !garrison.isValid() ) {
+        return;
+    }
+
+    // Create and fill a temporary container for convenient sorting of garrison troops
+    std::vector<Troop *> garrisonTroops;
+
+    garrisonTroops.reserve( garrison.Size() );
+
+    for ( size_t i = 0; i < garrison.Size(); ++i ) {
+        Troop * troop = garrison.GetTroop( i );
+        assert( troop != nullptr );
+
+        if ( troop->isValid() ) {
+            garrisonTroops.push_back( troop );
+        }
+    }
+
+    // Sort the garrison troops by their strength (most powerful stacks first)
+    std::sort( garrisonTroops.begin(), garrisonTroops.end(), StrongestTroop );
+
+    // Try to reinforce this army with garrison troops (most powerful stacks first)
+    for ( Troop * troop : garrisonTroops ) {
+        if ( JoinTroop( *troop ) ) {
+            troop->Reset();
+        }
+    }
+}
+
 void Army::ArrangeForWhirlpool()
 {
     // Make an "optimized" version first (each unit type occupies just one slot)
@@ -1615,7 +1642,7 @@ void Army::ArrangeForWhirlpool()
             continue;
         }
 
-        if ( troopOfWeakestUnits == nullptr || troopOfWeakestUnits->Monster::GetHitPoints() > troop->Monster::GetHitPoints() ) {
+        if ( troopOfWeakestUnits == nullptr || troopOfWeakestUnits->GetMonsterStrength() > troop->GetMonsterStrength() ) {
             troopOfWeakestUnits = troop;
         }
     }
