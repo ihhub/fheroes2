@@ -764,7 +764,7 @@ namespace
                 SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
             }
 
-            _retrieveWindowInfo();
+            updateScreenParameters();
 
             _toggleMouseCaptureMode();
         }
@@ -834,6 +834,11 @@ namespace
         fheroes2::Rect getActiveWindowROI() const override
         {
             return _activeWindowROI;
+        }
+
+        fheroes2::Rect getRenderROI() const override
+        {
+            return _renderROI;
         }
 
         fheroes2::Size getCurrentScreenResolution() const override
@@ -1064,7 +1069,7 @@ namespace
                 return false;
             }
 
-            _retrieveWindowInfo();
+            updateScreenParameters();
 
             _toggleMouseCaptureMode();
 
@@ -1100,6 +1105,7 @@ namespace
         fheroes2::Point _prevWindowPos;
         fheroes2::Size _currentScreenResolution;
         fheroes2::Rect _activeWindowROI;
+        fheroes2::Rect _renderROI;
 
         fheroes2::Size _windowedSize;
 
@@ -1137,7 +1143,7 @@ namespace
             }
         }
 
-        void _retrieveWindowInfo()
+        void updateScreenParameters() override
         {
             const int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
             SDL_DisplayMode displayMode;
@@ -1152,8 +1158,13 @@ namespace
 
 #if defined( TARGET_NINTENDO_SWITCH )
             // On a Nintendo Switch the game is always fullscreen
-            _activeWindowROI = fheroes2::Rect( 0, 0, _currentScreenResolution.width, _currentScreenResolution.height );
+            _activeWindowROI = { 0, 0, _currentScreenResolution.width, _currentScreenResolution.height };
 #else
+            SDL_Rect area;
+            SDL_RenderGetViewport( _renderer, &area );
+
+            _renderROI = { area.x, area.y, area.w, area.h };
+
             SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
             SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
 #endif

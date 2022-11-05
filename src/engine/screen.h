@@ -67,12 +67,22 @@ namespace fheroes2
             return fheroes2::Rect();
         }
 
+        virtual fheroes2::Rect getRenderROI() const
+        {
+            return fheroes2::Rect();
+        }
+
         virtual fheroes2::Size getCurrentScreenResolution() const
         {
             return fheroes2::Size();
         }
 
         virtual void setVSync( const bool )
+        {
+            // Do nothing.
+        }
+
+        virtual void updateScreenParameters()
         {
             // Do nothing.
         }

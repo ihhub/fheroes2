@@ -29,6 +29,10 @@
 #include <cassert>
 #include <map>
 
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( ANDROID )
+#define TOUCHSCREEN_SUPPORT
+#endif
+
 namespace
 {
     int getSDLKey( const fheroes2::Key key )
@@ -941,7 +945,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#if defined( TOUCHSCREEN_SUPPORT )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
@@ -1249,6 +1253,7 @@ void LocalEvent::OnSdl2WindowEvent( const SDL_Event & event )
         ResumeSounds();
     }
     else if ( event.window.event == SDL_WINDOWEVENT_RESIZED ) {
+        fheroes2::engine().updateScreenParameters();
         fheroes2::Display::instance().render();
     }
 }
@@ -1272,26 +1277,36 @@ void LocalEvent::OnActiveEvent( const SDL_Event & event )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
-    if ( event.touchId != 0 )
-        return;
+    if ( _numTouches == 2 ) {
+        if ( event.type == SDL_FINGERDOWN ) {
+            // We do not support more than 2 fingers.
+            return;
+        }
+    }
 
     if ( event.type == SDL_FINGERDOWN ) {
-        ++_numTouches;
-        if ( _numTouches == 1 ) {
+        if ( _numTouches == 0 ) {
             _firstFingerId = event.fingerId;
+            ++_numTouches;
+        }
+        else if ( _numTouches == 1 ) {
+            _secondFingerId = event.fingerId;
+            ++_numTouches;
         }
     }
     else if ( event.type == SDL_FINGERUP ) {
         --_numTouches;
     }
 
-    if ( _firstFingerId == event.fingerId ) {
+    // Ignore first finger movement if the second finger is pressed.
+    const bool isFirstFinger = ( _numTouches < 2 && _firstFingerId == event.fingerId );
+    const bool isSecondFinger = ( _secondFingerId == event.fingerId );
+
+    if ( isFirstFinger || isSecondFinger ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Size gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
-
-        SetModes( MOUSE_MOTION );
 
         _emulatedPointerPosX
             = static_cast<double>( screenResolution.width * event.x - windowRect.x ) * ( static_cast<double>( gameSurfaceRes.width ) / windowRect.width );
@@ -1300,6 +1315,10 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
+    }
+
+    if ( isFirstFinger ) {
+        SetModes( MOUSE_MOTION );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
             ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
@@ -1319,6 +1338,31 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         }
 
         mouse_button = SDL_BUTTON_LEFT;
+    }
+    else if ( isSecondFinger ) {
+        if ( _numTouches < 2 ) {
+            // Only the second finger is pressing.
+            SetModes( MOUSE_MOTION );
+
+            if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
+                ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
+            }
+        }
+
+        if ( event.type == SDL_FINGERDOWN ) {
+            mouse_pr = mouse_cu;
+
+            SetModes( MOUSE_PRESSED );
+        }
+        else if ( event.type == SDL_FINGERUP ) {
+            mouse_rr = mouse_cu;
+
+            ResetModes( MOUSE_PRESSED );
+            SetModes( MOUSE_RELEASED );
+            SetModes( MOUSE_CLICKED );
+        }
+
+        mouse_button = SDL_BUTTON_RIGHT;
     }
 }
 
@@ -1548,8 +1592,20 @@ void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
 {
     SetModes( MOUSE_MOTION );
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        updateEmulatedMousePosition( motion.x, motion.y );
+    }
+    else {
+        mouse_cu.x = motion.x;
+        mouse_cu.y = motion.y;
+    }
+#else
+    // SDL1 does not support window scaling.
     mouse_cu.x = motion.x;
     mouse_cu.y = motion.y;
+#endif
     _emulatedPointerPosX = mouse_cu.x;
     _emulatedPointerPosY = mouse_cu.y;
 }
@@ -1567,8 +1623,19 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
     mouse_button = button.button;
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        updateEmulatedMousePosition( button.x, button.y );
+    }
+    else {
+        mouse_cu.x = button.x;
+        mouse_cu.y = button.y;
+    }
+#else
+    // SDL1 does not support window scaling.
     mouse_cu.x = button.x;
     mouse_cu.y = button.y;
+#endif
     _emulatedPointerPosX = mouse_cu.x;
     _emulatedPointerPosY = mouse_cu.y;
 
@@ -1631,6 +1698,18 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
     mouse_wm.x = wheel.x;
     mouse_wm.y = wheel.y;
 }
+
+void LocalEvent::updateEmulatedMousePosition( const int32_t x, const int32_t y )
+{
+    const fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Rect renderROI = fheroes2::engine().getRenderROI(); // rendering area
+    const fheroes2::Size gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
+    const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
+
+    mouse_cu.x = ( x + renderROI.x ) * windowRect.width / ( gameSurfaceRes.width + renderROI.x * 2 );
+    mouse_cu.y = ( y + renderROI.y ) * windowRect.height / ( gameSurfaceRes.height + renderROI.y * 2 );
+}
+
 #endif
 
 bool LocalEvent::MouseClickLeft()
@@ -1769,7 +1848,7 @@ void LocalEvent::SetStateDefaults()
     SetState( SDL_SYSWMEVENT, false );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#if defined( TOUCHSCREEN_SUPPORT )
     SetState( SDL_FINGERDOWN, true );
     SetState( SDL_FINGERUP, true );
     SetState( SDL_FINGERMOTION, true );

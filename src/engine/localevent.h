@@ -316,6 +316,8 @@ private:
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
     static void OnSdl2WindowEvent( const SDL_Event & event );
+
+    void updateEmulatedMousePosition( const int32_t x, const int32_t y );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 
@@ -382,6 +384,7 @@ private:
 
     SDL_GameController * _gameController = nullptr;
     SDL_FingerID _firstFingerId = 0;
+    SDL_FingerID _secondFingerId = 0;
     fheroes2::Time _controllerTimer;
     int16_t _controllerLeftXAxis = 0;
     int16_t _controllerLeftYAxis = 0;
