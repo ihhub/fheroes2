@@ -64,17 +64,17 @@ namespace fheroes2
 
         virtual fheroes2::Rect getActiveWindowROI() const
         {
-            return fheroes2::Rect();
+            return {};
         }
 
         virtual fheroes2::Rect getRenderROI() const
         {
-            return fheroes2::Rect();
+            return {};
         }
 
         virtual fheroes2::Size getCurrentScreenResolution() const
         {
-            return fheroes2::Size();
+            return {};
         }
 
         virtual void setVSync( const bool )
