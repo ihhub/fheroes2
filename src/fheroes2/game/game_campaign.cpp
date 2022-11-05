@@ -1182,10 +1182,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     const bool isDifficultySelectionAllowed = campaignSaveData.isStarting() && !allowToRestart;
 
-    if ( !scenario.isMapFilePresent() ) {
-        buttonOk.disable();
-    }
-
     if ( allowToRestart ) {
         buttonOk.disable();
         buttonOk.hide();
@@ -1199,6 +1195,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     // Only one button can be enabled at the time.
     assert( buttonRestart.isHidden() != buttonOk.isHidden() && buttonRestart.isDisabled() != buttonOk.isDisabled() );
+
+    if ( !scenario.isMapFilePresent() ) {
+        buttonOk.disable();
+    }
 
     buttonCancel.draw();
 
