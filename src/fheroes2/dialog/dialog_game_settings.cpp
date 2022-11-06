@@ -273,8 +273,8 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an esthetic choice." ), 0 );
             }
             else if ( le.MousePressRight( windowTextSupportModeRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Text Support" ),
-                                                   _( "Toggle text support mode to output extra information about windows and events in the game." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Text Support" ), _( "Toggle text support mode to output extra information about windows and events in the game." ),
+                                                   0 );
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
