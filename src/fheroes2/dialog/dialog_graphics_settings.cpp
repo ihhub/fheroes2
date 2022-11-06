@@ -172,7 +172,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "Enabled V-Sync option is useful for some monitors to resolve flickering issues." ), 0 );
             }
             if ( le.MousePressRight( windowSystemInfoRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "System Info" ), _( "Show extra information such as FPS and current date and time." ), 0 );
+                fheroes2::showStandardTextMessage( _( "System Info" ), _( "Show extra information such as FPS and current time." ), 0 );
             }
         }
 
