@@ -238,7 +238,7 @@ namespace Interface
         // Make sure you do not have a copy of this object after the execution of the method to avoid incorrect object removal in some cases.
         void runSingleObjectAnimation( const std::shared_ptr<BaseObjectAnimationInfo> & info );
 
-        bool isDragScroll()
+        bool isDragScroll() const
         {
             return _mouseDraggingMovement;
         }

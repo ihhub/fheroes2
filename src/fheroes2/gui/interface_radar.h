@@ -58,8 +58,8 @@ namespace Interface
 
         void QueueEventProcessing();
         bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const;
-        
-        bool isDragRadar()
+
+        bool isDragRadar() const
         {
             return _mouseDraggingMovement;
         }

@@ -420,7 +420,7 @@ void Interface::Radar::QueueEventProcessing()
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Rect & rect = GetArea();
-    
+
     _mouseDraggingMovement = false;
 
     // Move border window
