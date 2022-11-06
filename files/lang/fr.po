@@ -2733,9 +2733,8 @@ msgstr "Combat auto"
 msgid "Auto, No Spells"
 msgstr "Auto sans magie"
 
-#, fuzzy
 msgid "autoBattle|Manual"
-msgstr "Manuel"
+msgstr "Manuelles"
 
 msgid "Battles"
 msgstr "Batailles"
@@ -3568,9 +3567,8 @@ msgstr "Soprano (Voix)"
 msgid "Recorded at Green Street Studios"
 msgstr "Enregistrée aux Green Street Studios"
 
-#, fuzzy
 msgid "credits|Manual"
-msgstr "Guide"
+msgstr "Manuel"
 
 msgid "German Consultant"
 msgstr "Consultant allemand"
