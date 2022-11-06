@@ -1164,9 +1164,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
                 if ( removedController == _gameController ) {
                     SDL_GameControllerClose( _gameController );
                     _gameController = nullptr;
-                    if ( !_touchpadAvailable ) {
-                        fheroes2::cursor().enableSoftwareEmulation( false );
-                    }
                 }
             }
             break;

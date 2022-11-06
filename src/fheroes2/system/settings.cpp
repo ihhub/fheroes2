@@ -65,7 +65,7 @@ namespace
         GLOBAL_SHOWSTATUS = 0x00000400,
         GLOBAL_FULLSCREEN = 0x00008000,
         GLOBAL_3D_AUDIO = 0x00010000,
-        // UNUSED = 0x00020000,
+        GLOBAL_CURSOR_SOFT_EMULATION = 0x00020000,
         // UNUSED = 0x00040000,
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
@@ -344,6 +344,16 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    if ( config.Exists( "cursor soft rendering" ) ) {
+        if ( config.StrParams( "cursor soft rendering" ) == "on" ) {
+            _optGlobal.SetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+            fheroes2::cursor().enableSoftwareEmulation( true );
+        }
+        else {
+            _optGlobal.ResetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+        }
+    }
+
     BinaryLoad();
 
     return true;
@@ -459,6 +469,9 @@ std::string Settings::String() const
 
     os << std::endl << "# enable 3D audio for objects on Adventure Map" << std::endl;
     os << "3d audio = " << ( _optGlobal.Modes( GLOBAL_3D_AUDIO ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# enable cursor software rendering" << std::endl;
+    os << "cursor soft rendering = " << ( _optGlobal.Modes( GLOBAL_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
