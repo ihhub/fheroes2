@@ -1120,10 +1120,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         }
     }
 
-    // save last state of buttons for detecting button changes
-    isLeftMouseButtonPressed = MousePressLeft();
-    isRightMouseButtonPressed = MousePressRight();
-
     SDL_Event event;
 
     // We shouldn't reset the MOUSE_PRESSED and KEY_HOLD here because these are "lasting" states

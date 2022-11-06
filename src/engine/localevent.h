@@ -219,21 +219,11 @@ public:
         return MousePressLeft() && ( rt & mouse_pl );
     }
 
-    bool MouseDownLeft() const
-    {
-        return !isLeftMouseButtonPressed && MousePressLeft();
-    }
-
     bool MousePressRight() const;
 
     bool MousePressRight( const fheroes2::Rect & rt ) const
     {
         return MousePressRight() && ( rt & mouse_pr );
-    }
-
-    bool MouseDownRight() const
-    {
-        return !isRightMouseButtonPressed && MousePressRight();
     }
 
     bool MouseReleaseLeft() const;
@@ -368,9 +358,6 @@ private:
     fheroes2::Point mouse_cu; // point cursor
 
     fheroes2::Point mouse_wm; // wheel movement
-
-    bool isLeftMouseButtonPressed;
-    bool isRightMouseButtonPressed;
 
     void ( *redraw_cursor_func )( int32_t, int32_t );
     void ( *keyboard_filter_func )( int, int );

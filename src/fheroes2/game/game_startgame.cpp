@@ -971,7 +971,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            radar.QueueEventProcessing();
+            if ( !gameArea.isDragScroll() )
+                radar.QueueEventProcessing();
+            else if ( !le.MousePressLeft() )
+                gameArea.QueueEventProcessing();
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
@@ -981,7 +984,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
         // cursor is over the game area
         else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
-            gameArea.QueueEventProcessing();
+            if ( !radar.isDragRadar() )
+                gameArea.QueueEventProcessing();
+            else if ( !le.MousePressLeft() )
+                radar.QueueEventProcessing();
         }
         // cursor is somewhere else
         else if ( !gameArea.NeedScroll() ) {

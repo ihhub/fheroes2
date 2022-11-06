@@ -141,6 +141,7 @@ Interface::Radar::Radar( Basic & basic )
     , radarType( RadarType::WorldMap )
     , interface( basic )
     , hide( true )
+    , _mouseDraggingMovement( false )
 {}
 
 Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
@@ -149,6 +150,7 @@ Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display 
     , interface( radar.interface )
     , spriteArea( radar.spriteArea )
     , hide( false )
+    , _mouseDraggingMovement( false )
 {}
 
 void Interface::Radar::SavePosition()
@@ -418,6 +420,8 @@ void Interface::Radar::QueueEventProcessing()
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Rect & rect = GetArea();
+    
+    _mouseDraggingMovement = false;
 
     // Move border window
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
@@ -426,15 +430,8 @@ void Interface::Radar::QueueEventProcessing()
     }
     else if ( le.MouseCursor( rect ) ) {
         // move cursor
-
-        if ( le.MouseDownLeft() ) {
-            _mouseDragging = true;
-        }
-        if ( !le.MousePressLeft() ) {
-            _mouseDragging = false;
-        }
-
-        if ( _mouseDragging ) {
+        if ( le.MouseClickLeft() || le.MousePressLeft() ) {
+            _mouseDraggingMovement = true;
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
@@ -449,7 +446,7 @@ void Interface::Radar::QueueEventProcessing()
                 }
             }
         }
-        if ( le.MousePressRight( GetRect() ) ) {
+        else if ( le.MousePressRight( GetRect() ) ) {
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
         }
     }

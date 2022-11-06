@@ -42,6 +42,8 @@
 
 namespace
 {
+    const int32_t minimalRequiredDraggingMovement = 10;
+
     struct RenderObjectInfo
     {
         RenderObjectInfo() = default;
@@ -316,6 +318,8 @@ Interface::GameArea::GameArea( Basic & basic )
     , _prevIndexPos( 0 )
     , scrollDirection( 0 )
     , updateCursor( false )
+    , _mouseDraggingInitiated( false )
+    , _mouseDraggingMovement( false )
 {
     // Do nothing.
 }
@@ -873,25 +877,21 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
-const int32_t minimalRequiredDraggingMovement = 10;
-
 void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
 
-    if ( le.MouseDownLeft() ) {
-        _mouseDraggingInitiated = true;
-        _startMouseDragPosition = mp;
-    }
-    if ( _mouseDraggingInitiated ) {
-        if ( abs( _startMouseDragPosition.x - mp.x ) > minimalRequiredDraggingMovement || abs( _startMouseDragPosition.y - mp.y ) > minimalRequiredDraggingMovement ) {
-            _mouseDraggingMovement = true;
-        }
-    }
     if ( !le.MousePressLeft() ) {
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
+    }
+    else if ( !_mouseDraggingInitiated ) {
+        _mouseDraggingInitiated = true;
+        _startMouseDragPosition = mp;
+    }
+    else if ( abs( _startMouseDragPosition.x - mp.x ) > minimalRequiredDraggingMovement || abs( _startMouseDragPosition.y - mp.y ) > minimalRequiredDraggingMovement ) {
+        _mouseDraggingMovement = true;
     }
 
     if ( _mouseDraggingMovement ) {
