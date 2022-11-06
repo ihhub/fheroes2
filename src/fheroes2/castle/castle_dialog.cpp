@@ -512,6 +512,16 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 need_redraw = true;
             }
 
+            if ( heroes.Guard() && le.MousePressRight( rectSign1 ) ) {
+                Dialog::QuickInfo( *heroes.Guard() );
+            }
+            else if ( heroes.Guest() && le.MousePressRight( rectSign2 ) ) {
+                Dialog::QuickInfo( *heroes.Guest() );
+            }
+            else if ( !heroes.Guard() && isBuild( BUILD_CAPTAIN ) && le.MousePressRight( rectSign1 ) ) {
+                Dialog::QuickInfo( GetCaptain() );
+            }
+
             // Get pressed hotkey.
             const building_t hotKeyBuilding = getPressedBuildingHotkey();
 
