@@ -944,7 +944,6 @@ void LocalEvent::OpenTouchpad()
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
-        _touchpadAvailable = true;
         fheroes2::cursor().enableSoftwareEmulation( true );
 #if SDL_VERSION_ATLEAST( 2, 0, 10 )
         SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );

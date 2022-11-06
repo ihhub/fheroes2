@@ -390,7 +390,6 @@ private:
     int16_t _controllerRightXAxis = 0;
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
-    bool _touchpadAvailable = false;
     int16_t _numTouches = 0;
 #endif
 };
