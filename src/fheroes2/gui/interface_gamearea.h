@@ -32,7 +32,7 @@ namespace Interface
 {
     class Basic;
 
-    enum ScollingType
+    enum ScrollingType
     {
         SCROLL_NONE = 0x00,
         SCROLL_LEFT = 0x01,

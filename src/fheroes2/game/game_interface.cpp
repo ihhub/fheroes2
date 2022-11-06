@@ -42,6 +42,8 @@ Interface::Basic::Basic()
     , statusWindow( *this )
     , controlPanel( *this )
     , redraw( 0 )
+    , scrollDelayType( Game::SCROLL_START_DELAY )
+    , lastScrollPosition( SCROLL_NONE )
 {
     Reset();
 }

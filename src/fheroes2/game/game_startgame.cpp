@@ -53,6 +53,7 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
+#include "interface_gamearea.h"
 
 namespace
 {
@@ -123,6 +124,23 @@ void Game::DialogPlayers( int color, std::string str )
 
     const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
     fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( std::move( str ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
+}
+
+int Interface::Basic::GetScrollPosition()
+{
+    int scrollPosition = SCROLL_NONE;
+    LocalEvent & le = LocalEvent::Get();
+
+    if ( isScrollLeft( le.GetMouseCursor() ) )
+        scrollPosition |= SCROLL_LEFT;
+    else if ( isScrollRight( le.GetMouseCursor() ) )
+        scrollPosition |= SCROLL_RIGHT;
+    if ( isScrollTop( le.GetMouseCursor() ) )
+        scrollPosition |= SCROLL_TOP;
+    else if ( isScrollBottom( le.GetMouseCursor() ) )
+        scrollPosition |= SCROLL_BOTTOM;
+
+    return scrollPosition;
 }
 
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
@@ -902,19 +920,13 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( fheroes2::cursor().isFocusActive() ) {
-            int scrollPosition = SCROLL_NONE;
-
-            if ( isScrollLeft( le.GetMouseCursor() ) )
-                scrollPosition |= SCROLL_LEFT;
-            else if ( isScrollRight( le.GetMouseCursor() ) )
-                scrollPosition |= SCROLL_RIGHT;
-            if ( isScrollTop( le.GetMouseCursor() ) )
-                scrollPosition |= SCROLL_TOP;
-            else if ( isScrollBottom( le.GetMouseCursor() ) )
-                scrollPosition |= SCROLL_BOTTOM;
+            int scrollPosition = GetScrollPosition();
 
             if ( scrollPosition != SCROLL_NONE ) {
-                if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
+                if ( lastScrollPosition != scrollPosition ) {
+                    scrollDelayType = Game::SCROLL_START_DELAY;
+                }
+                if ( Game::validateAnimationDelay( scrollDelayType ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
                     }
@@ -922,11 +934,14 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
                 if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
                     gameArea.SetScroll( scrollPosition );
+                    scrollDelayType = Game::SCROLL_START_DELAY;
                 }
+                
             }
             else {
                 fastScrollRepeatCount = 0;
             }
+            lastScrollPosition = scrollPosition;
         }
         else {
             fastScrollRepeatCount = 0;
@@ -1197,6 +1212,8 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
         else {
             Game::OpenCastleDialog( *to_castle );
             Cursor::Get().SetThemes( Cursor::CASTLE );
+            scrollDelayType = Game::SCROLL_AFTER_CLOSE_CASTLE_DIALOG_DELAY;
+            lastScrollPosition = GetScrollPosition();
         }
         break;
     }

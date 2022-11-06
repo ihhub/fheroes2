@@ -58,6 +58,7 @@ namespace Game
 
         CURRENT_HERO_DELAY,
         CURRENT_AI_DELAY,
+        SCROLL_AFTER_CLOSE_CASTLE_DIALOG_DELAY,
         CUSTOM_DELAY,
 
         // IMPORTANT!!! All new entries must be put before this entry!

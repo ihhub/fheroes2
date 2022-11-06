@@ -31,6 +31,8 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "players.h"
+#include "game_delays.h"
+
 
 class Castle;
 class Heroes;
@@ -197,6 +199,8 @@ namespace Interface
         void ShowPathOrStartMoveHero( Heroes *, int32_t );
         void MoveHeroFromArrowKeys( Heroes & hero, int direct );
         fheroes2::GameMode HumanTurn( bool );
+        int GetScrollPosition();
+
 
         GameArea gameArea;
         Radar radar;
@@ -206,6 +210,9 @@ namespace Interface
         ControlPanel controlPanel;
 
         uint32_t redraw;
+
+        Game::DelayType scrollDelayType;
+        int lastScrollPosition;
     };
 }
 
