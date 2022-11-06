@@ -1090,12 +1090,15 @@ void LocalEvent::PauseCycling()
 LocalEvent & LocalEvent::GetClean()
 {
     LocalEvent & le = Get();
+
     le.ResetModes( KEY_PRESSED );
     le.ResetModes( MOUSE_MOTION );
     le.ResetModes( MOUSE_PRESSED );
     le.ResetModes( MOUSE_RELEASED );
     le.ResetModes( MOUSE_CLICKED );
+    le.ResetModes( MOUSE_WHEEL );
     le.ResetModes( KEY_HOLD );
+
     return le;
 }
 
@@ -1119,12 +1122,12 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
     SDL_Event event;
 
+    // We shouldn't reset the MOUSE_PRESSED and KEY_HOLD here because these are "lasting" states
+    ResetModes( KEY_PRESSED );
     ResetModes( MOUSE_MOTION );
     ResetModes( MOUSE_RELEASED );
     ResetModes( MOUSE_CLICKED );
-    ResetModes( KEY_PRESSED );
-
-    mouse_wm = fheroes2::Point();
+    ResetModes( MOUSE_WHEEL );
 
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
