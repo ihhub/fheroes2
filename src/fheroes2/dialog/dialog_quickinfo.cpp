@@ -861,7 +861,8 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
     const Kingdom & kingdom = world.GetKingdom( conf.CurrentColor() );
     const bool isFriend = ColorBase( hero.GetColor() ).isFriends( conf.CurrentColor() );
     const bool isUnderIdentifyHeroSpell = kingdom.Modes( Kingdom::IDENTIFYHERO );
-    const bool showFullInfo = hero.GetColor() == 0 || isFriend || isUnderIdentifyHeroSpell || kingdom.IsTileVisibleFromCrystalBall( hero.GetIndex() );
+    const bool isNeutralHero = ( hero.GetColor() == Color::NONE );
+    const bool showFullInfo = isNeutralHero || isFriend || isUnderIdentifyHeroSpell || kingdom.IsTileVisibleFromCrystalBall( hero.GetIndex() );
 
     const Heroes * activeHero = dynamic_cast<const Heroes *>( &hero );
     const Captain * activeCaptain = dynamic_cast<const Captain *>( &hero );
