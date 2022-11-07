@@ -169,10 +169,13 @@ namespace
                 fheroes2::showStandardTextMessage( _( "window|Mode" ), _( "Toggle between fullscreen and windowed modes." ), 0 );
             }
             else if ( le.MousePressRight( windowVSyncRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "Enabled V-Sync option is useful for some monitors to resolve flickering issues." ), 0 );
+                fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "The V-Sync option can be enabled to resolve flickering issues on some monitors." ), 0 );
             }
             if ( le.MousePressRight( windowSystemInfoRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "System Info" ), _( "Show extra information such as FPS and current time." ), 0 );
+            }
+            else if ( le.MousePressRight( okayButton.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
         }
 
