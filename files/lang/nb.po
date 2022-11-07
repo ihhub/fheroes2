@@ -5200,7 +5200,7 @@ msgid ""
 "leap out of the brush to guard their stolen loot."
 msgstr ""
 "Du kommer over en eldgammel gjenstand. Idet du strekker deg fram for å ta "
-"den, hopper en flokk røvere ut fra buskene for å beskytte det som tydeligvis "
+"den, hopper en gjeng banditter ut fra buskene for å beskytte det som tydeligvis "
 "er tyvegodset deres."
 
 msgid ""
@@ -5388,7 +5388,7 @@ msgid ""
 "A colorful Rogues' wagon stands empty here. Perhaps more Rogues will be here "
 "later."
 msgstr ""
-"Det står en fargerik men tom røverkjerre her. Kanskje det vil komme røvere "
+"Det står en fargerik men tom bandittkjerre her. Kanskje det vil komme banditter "
 "hit senere."
 
 msgid ""
@@ -7388,16 +7388,16 @@ msgid "Wolves"
 msgstr "Varger"
 
 msgid "Ogre"
-msgstr "Rise"
+msgstr "Ogre"
 
 msgid "Ogres"
-msgstr "Riser"
+msgstr "Ogrer"
 
 msgid "Ogre Lord"
-msgstr "Overrise"
+msgstr "Ogrehersker"
 
 msgid "Ogre Lords"
-msgstr "Overriser"
+msgstr "Ogreherskere"
 
 msgid "Troll"
 msgstr "Troll"
@@ -7478,10 +7478,10 @@ msgid "Centaurs"
 msgstr "Kentaurer"
 
 msgid "Gargoyle"
-msgstr "Gravstatue"
+msgstr "Vannspyer"
 
 msgid "Gargoyles"
-msgstr "Gravstatuer"
+msgstr "Vannspyere"
 
 msgid "Griffin"
 msgstr "Griff"
