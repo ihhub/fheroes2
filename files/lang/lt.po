@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-29 03:00+0000\n"
+"POT-Creation-Date: 2022-11-05 16:38+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -709,8 +709,11 @@ msgid ""
 "spell."
 msgstr ""
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, fuzzy
 msgid "Dwarven Alliance"
@@ -2684,6 +2687,9 @@ msgid "Hot Keys:"
 msgstr ""
 
 msgid "Select Game Language:"
+msgstr ""
+
+msgid "Click to choose the selected language."
 msgstr ""
 
 msgid "%{name} has gained a level."
@@ -8734,9 +8740,6 @@ msgid "world: Scouting skill shows extended content info"
 msgstr ""
 
 msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Neutral armies scale with game difficulty"
 msgstr ""
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"

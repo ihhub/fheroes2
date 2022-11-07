@@ -182,7 +182,7 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
     return attackDefense * fheroes2::getMonsterData( id ).battleStats.monsterBaseStrength;
 }
 
-uint32_t Monster::GetRNDSize( bool skip_factor ) const
+uint32_t Monster::GetRNDSize() const
 {
     if ( !isValid() )
         return 0;
@@ -234,37 +234,6 @@ uint32_t Monster::GetRNDSize( bool skip_factor ) const
         // for most units default range is okay
         result = defaultArmySizePerLevel[GetMonsterLevel()];
         break;
-    }
-
-    if ( !skip_factor && Settings::Get().ExtWorldNeutralArmyDifficultyScaling() ) {
-        uint32_t factor = 100;
-
-        switch ( Game::getDifficulty() ) {
-        case Difficulty::EASY:
-            factor = 80;
-            break;
-        case Difficulty::NORMAL:
-            factor = 100;
-            break;
-        case Difficulty::HARD:
-            factor = 130;
-            break;
-        case Difficulty::EXPERT:
-            factor = 160;
-            break;
-        case Difficulty::IMPOSSIBLE:
-            factor = 190;
-            break;
-        default:
-            // Did you add a new difficulty mode? Add the corresponding case above!
-            assert( 0 );
-            break;
-        }
-
-        result = ( result * factor / 100 );
-        // force minimal
-        if ( result == 0 )
-            result = 1;
     }
 
     return ( result > 1 ) ? Rand::Get( result / 2, result ) : 1;

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-29 03:00+0000\n"
+"POT-Creation-Date: 2022-11-05 16:38+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -771,8 +771,11 @@ msgstr ""
 "El artefacto %{artifact} está en efecto por esta batalla, deshabilitando el "
 "hechizo %{spell}."
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr "¡%{count} %{name} se eleva(n) de la muerte!"
+#, fuzzy
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] "¡%{count} %{name} se eleva(n) de la muerte!"
+msgstr[1] "¡%{count} %{name} se eleva(n) de la muerte!"
 
 #, fuzzy
 msgid "Dwarven Alliance"
@@ -2872,6 +2875,10 @@ msgstr ""
 
 msgid "Select Game Language:"
 msgstr ""
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Haz clic para volver al menú principal"
 
 msgid "%{name} has gained a level."
 msgstr "%{name} ha ganado un nivel."
@@ -9603,9 +9610,6 @@ msgstr ""
 #, fuzzy
 msgid "world: allow to set guardian to objects"
 msgstr "mundo: permitir establecer guardianes en objetos"
-
-msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""

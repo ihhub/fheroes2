@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-29 03:00+0000\n"
+"POT-Creation-Date: 2022-11-05 16:38+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -750,8 +750,11 @@ msgstr ""
 "Das %{artifact} Artefakt ist für diesen Kampf wirksam und deaktiviert "
 "%{spell} Zauberspruch."
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr "%{count} %{name} auferstehen aus den Toten!"
+#, fuzzy
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] "%{count} %{name} auferstehen aus den Toten!"
+msgstr[1] "%{count} %{name} auferstehen aus den Toten!"
 
 msgid "Dwarven Alliance"
 msgstr "Zwergen-Allianz"
@@ -2889,6 +2892,10 @@ msgstr "Hotkeys:"
 
 msgid "Select Game Language:"
 msgstr "Spielsprache wählen:"
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Klicken Sie, um die ausgewählte Auflösung anzuwenden."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} hat eine neue Stufe erreicht."
@@ -9955,9 +9962,6 @@ msgstr "Welt: Scouting-Skill zeigt erweiterte Inhaltsangaben"
 
 msgid "world: allow to set guardian to objects"
 msgstr "Welt: Wächter auf Objekte setzen lassen"
-
-msgid "world: Neutral armies scale with game difficulty"
-msgstr "Welt: Neutrale Armeen steigen mit der Spielschwierigkeit"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "Welt: Windmühlen, Wasserräder und Zaubergärten können erobert werden"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-29 03:00+0000\n"
+"POT-Creation-Date: 2022-11-05 16:38+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -748,8 +748,11 @@ msgstr ""
 "%{artifact}-artefakten är i effekt för denna strid och inaktiverar %{spell}-"
 "besvärjelsen."
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr "%{count} %{name} uppstår från de döda!"
+#, fuzzy
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] "%{count} %{name} uppstår från de döda!"
+msgstr[1] "%{count} %{name} uppstår från de döda!"
 
 #, fuzzy
 msgid "Dwarven Alliance"
@@ -2826,6 +2829,10 @@ msgstr ""
 
 msgid "Select Game Language:"
 msgstr ""
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Klicka för att gå tillbaka till huvudmenyn."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} har gått upp en level."
@@ -9333,9 +9340,6 @@ msgid "world: Scouting skill shows extended content info"
 msgstr ""
 
 msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Neutral armies scale with game difficulty"
 msgstr ""
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"

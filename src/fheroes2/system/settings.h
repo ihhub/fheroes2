@@ -96,7 +96,7 @@ public:
         // UNUSED = 0x30000001,
         // UNUSED = 0x30000008,
         // UNUSED = 0x30000010,
-        WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
+        // UNUSED = 0x30000020,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
         // UNUSED = 0x30000100,
         // UNUSED = 0x30000200,
@@ -279,11 +279,6 @@ public:
     bool ExtWorldAllowSetGuardian() const
     {
         return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
-    }
-
-    bool ExtWorldNeutralArmyDifficultyScaling() const
-    {
-        return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
     }
 
     bool ExtWorldExtObjectsCaptured() const

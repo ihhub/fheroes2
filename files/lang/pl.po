@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-29 03:00+0000\n"
+"POT-Creation-Date: 2022-11-05 16:38+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -742,8 +742,12 @@ msgstr ""
 "W czasie bitwy działa artefakt o nazwie %{artifact}, uniemożliwiający "
 "rzucenie czaru %{spell}."
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr "%{count} %{name} powstaje z martwych!"
+#, fuzzy
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] "%{count} %{name} powstaje z martwych!"
+msgstr[1] "%{count} %{name} powstaje z martwych!"
+msgstr[2] "%{count} %{name} powstaje z martwych!"
 
 msgid "Dwarven Alliance"
 msgstr "Przymierze Krasnolud."
@@ -2826,6 +2830,10 @@ msgstr "Skróty klawiszowe:"
 
 msgid "Select Game Language:"
 msgstr "Wybierz język gry:"
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Użyj wskazanej rozdzielczości."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} zyskuje poziom."
@@ -9734,9 +9742,6 @@ msgstr ""
 
 msgid "world: allow to set guardian to objects"
 msgstr "świat: pozwól zostawiać strażników w obiektach"
-
-msgid "world: Neutral armies scale with game difficulty"
-msgstr "świat: siła naturalnych armii zmienia się wraz z trudnością gry"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "świat: Wiatraki, Młyny wodne i Magiczne ogrody mogą być przejęte"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-29 03:00+0000\n"
+"POT-Creation-Date: 2022-11-05 16:38+0000\n"
 "PO-Revision-Date: 2022-10-10 13:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -745,8 +745,11 @@ msgstr ""
 "Gjenstanden %{artifact} er i bruk i denne kampen, dermed forhindres "
 "trolldommen %{spell}."
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr "%{count} %{name} gjenoppstod fra de døde!"
+#, fuzzy
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] "%{count} %{name} gjenoppstod fra de døde!"
+msgstr[1] "%{count} %{name} gjenoppstod fra de døde!"
 
 msgid "Dwarven Alliance"
 msgstr "Dvergealliansen"
@@ -2890,6 +2893,10 @@ msgstr "Hurtigtaster:"
 
 msgid "Select Game Language:"
 msgstr "Velg et språk:"
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Trykk for å bruke den valgte oppløsningen."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} gikk opp en level."
@@ -9897,9 +9904,6 @@ msgstr "Verden: Speiding gir deg utvidet info"
 
 msgid "world: allow to set guardian to objects"
 msgstr "Verden: Tillat å plassere voktere på objekter"
-
-msgid "world: Neutral armies scale with game difficulty"
-msgstr "Verden: Nøytrale hærer øker med spillets vanskelighetsgrad"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget"
