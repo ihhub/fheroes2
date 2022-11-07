@@ -1333,7 +1333,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             if ( !world.LoadMapMP2( mapInfo.file ) ) {
                 Dialog::Message( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ), Font::BIG, Dialog::OK );
-                conf.SetCurrentFileInfo( Maps::FileInfo() );
+
+                if ( !allowToRestart ) {
+                    conf.SetCurrentFileInfo( Maps::FileInfo() );
+                }
                 continue;
             }
 
