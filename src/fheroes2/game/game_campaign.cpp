@@ -1196,10 +1196,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     // Only one button can be enabled at the time.
     assert( buttonRestart.isHidden() != buttonOk.isHidden() && buttonRestart.isDisabled() != buttonOk.isDisabled() );
 
-    if ( !scenario.isMapFilePresent() ) {
-        buttonOk.disable();
-    }
-
     buttonCancel.draw();
 
     for ( uint32_t i = 0; i < bonusChoiceCount; ++i )
