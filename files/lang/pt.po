@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-01 18:49+0300\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -743,8 +743,10 @@ msgid ""
 "spell."
 msgstr ""
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Dwarven Alliance"
 msgstr ""
@@ -2601,14 +2603,14 @@ msgstr "Sair do Jogo & retornar ao sistema operacional."
 msgid "Language"
 msgstr "Idioma"
 
-msgid "Resolution"
-msgstr "Resolução"
-
-msgid "Experimental"
-msgstr "Experimental"
+msgid "Graphics"
+msgstr ""
 
 msgid "Settings"
 msgstr "Configurações"
+
+msgid "Experimental"
+msgstr "Experimental"
 
 msgid "Audio"
 msgstr ""
@@ -2634,15 +2636,15 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
+#, fuzzy
+msgid "Interface Type"
+msgstr "Aparência"
+
 msgid "Evil"
 msgstr "Mal"
 
 msgid "Good"
 msgstr "Bom"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Aparência"
 
 msgid "Auto Resolve"
 msgstr ""
@@ -2656,16 +2658,14 @@ msgstr ""
 msgid "Battles"
 msgstr ""
 
-msgid "Select Game Language"
-msgstr "Selecione o idioma do jogo"
-
 msgid "Change the language of the game."
 msgstr "Mudar o idioma do jogo."
 
-msgid "Select Game Resolution"
-msgstr "Selecione a resolução do jogo"
+msgid "Select Game Language"
+msgstr "Selecione o idioma do jogo"
 
-msgid "Change the resolution of the game."
+#, fuzzy
+msgid "Change the graphics settings of the game."
 msgstr "Mudar a resolução do jogo."
 
 #, fuzzy
@@ -2767,6 +2767,49 @@ msgstr ""
 msgid "Gift from %{name}"
 msgstr "Recruta %{name}"
 
+msgid "Resolution"
+msgstr "Resolução"
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "Nenhum"
+
+msgid "FPS"
+msgstr ""
+
+#, fuzzy
+msgid "System Info"
+msgstr "Opções do Sistema"
+
+msgid "Change the resolution of the game."
+msgstr "Mudar a resolução do jogo."
+
+msgid "Select Game Resolution"
+msgstr "Selecione a resolução do jogo"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
+
 msgid "Set Guardian"
 msgstr "Selecione o Guardião"
 
@@ -2778,6 +2821,10 @@ msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Escolha o idioma do jogo:"
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Salvar o jogo atual."
 
 msgid "%{name} has gained a level."
 msgstr ""
@@ -3617,17 +3664,7 @@ msgid "door"
 msgstr ""
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-
-msgid "F4"
-msgstr ""
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
@@ -9054,9 +9091,6 @@ msgid "battle: allow soft wait for troops"
 msgstr ""
 
 msgid "battle: deterministic events"
-msgstr ""
-
-msgid "game: show system info"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"

@@ -124,8 +124,6 @@ namespace
         {
             const Settings & conf = Settings::Get();
 
-            fheroes2::engine().setVSync( conf.isVSyncEnabled() );
-
             fheroes2::Display & display = fheroes2::Display::instance();
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
                 fheroes2::engine().toggleFullScreen();

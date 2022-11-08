@@ -24,6 +24,7 @@
 #ifndef H2ARMY_H
 #define H2ARMY_H
 
+#include <functional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -103,8 +104,6 @@ public:
 
     void SortStrongest();
 
-    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver, const bool prioritizeEmptySlots );
-
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
     void JoinAllTroopsOfType( const Troop & targetTroop );
@@ -118,6 +117,13 @@ public:
 
     // If the army has no slot find 2 or more slots of the same monster which is the weakest and merge them releasing one slot in troops.
     bool mergeWeakestTroopsIfNeeded();
+
+protected:
+    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
+
+private:
+    // Returns the stack that best matches the specified condition or nullptr if there are no valid stacks
+    Troop * getBestMatchToCondition( const std::function<bool( const Troop *, const Troop * )> & condition ) const;
 };
 
 struct NeutralMonsterJoiningCondition
@@ -150,11 +156,12 @@ public:
 
     static std::pair<uint32_t, uint32_t> SizeRange( const uint32_t count );
 
-    // compare
+    // Comparison functions
     static bool WeakestTroop( const Troop *, const Troop * );
     static bool StrongestTroop( const Troop *, const Troop * );
     static bool SlowestTroop( const Troop *, const Troop * );
     static bool FastestTroop( const Troop *, const Troop * );
+
     static void SwapTroops( Troop &, Troop & );
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
@@ -208,7 +215,7 @@ public:
 
     std::string String() const;
 
-    void JoinStrongestFromArmy( Army & giver, const bool prioritizeEmptySlots );
+    void JoinStrongestFromArmy( Army & giver );
 
     void SetSpreadFormat( bool f )
     {
@@ -226,6 +233,9 @@ public:
 
     void resetInvalidMonsters() const;
 
+    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison (most
+    // powerful stacks first), by adding them either to free slots or to slots that already contain troops of the same type
+    void ArrangeForCastleDefense( Army & garrison );
     // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
     void ArrangeForWhirlpool();
 

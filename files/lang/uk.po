@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-01 18:49+0300\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -879,8 +879,11 @@ msgid ""
 msgstr "Артефакт %{artifact} впливає на цю битву і відключає чари %{spell}."
 
 #, fuzzy
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr "%{count} %{name} піднялось з мертвих!"
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] "%{count} %{name} піднялось з мертвих!"
+msgstr[1] "%{count} %{name} піднялось з мертвих!"
+msgstr[2] "%{count} %{name} піднялось з мертвих!"
 
 #, fuzzy
 msgid "Dwarven Alliance"
@@ -2838,13 +2841,13 @@ msgstr "Залишити Heroes of Might and Magic II."
 msgid "Language"
 msgstr "Мова"
 
-msgid "Resolution"
-msgstr ""
-
-msgid "Experimental"
+msgid "Graphics"
 msgstr ""
 
 msgid "Settings"
+msgstr ""
+
+msgid "Experimental"
 msgstr ""
 
 msgid "Audio"
@@ -2868,15 +2871,15 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
+#, fuzzy
+msgid "Interface Type"
+msgstr "Тип Інтерфейсу"
+
 msgid "Evil"
 msgstr ""
 
 msgid "Good"
 msgstr ""
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Тип Інтерфейсу"
 
 msgid "Auto Resolve"
 msgstr ""
@@ -2890,17 +2893,14 @@ msgstr ""
 msgid "Battles"
 msgstr ""
 
-msgid "Select Game Language"
-msgstr "Обрати мову гри"
-
 msgid "Change the language of the game."
 msgstr "Змінити мову гри."
 
-msgid "Select Game Resolution"
-msgstr ""
+msgid "Select Game Language"
+msgstr "Обрати мову гри"
 
 #, fuzzy
-msgid "Change the resolution of the game."
+msgid "Change the graphics settings of the game."
 msgstr "Змінити мову гри."
 
 #, fuzzy
@@ -2995,6 +2995,50 @@ msgstr ""
 msgid "Gift from %{name}"
 msgstr ""
 
+msgid "Resolution"
+msgstr ""
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "Відсутні"
+
+msgid "FPS"
+msgstr ""
+
+#, fuzzy
+msgid "System Info"
+msgstr "Системні Параметри"
+
+#, fuzzy
+msgid "Change the resolution of the game."
+msgstr "Змінити мову гри."
+
+msgid "Select Game Resolution"
+msgstr ""
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
+
 msgid "Set Guardian"
 msgstr ""
 
@@ -3007,6 +3051,9 @@ msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Обрати мову гри:"
+
+msgid "Click to choose the selected language."
+msgstr ""
 
 msgid "%{name} has gained a level."
 msgstr ""
@@ -3811,17 +3858,7 @@ msgid "door"
 msgstr ""
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-
-msgid "F4"
-msgstr ""
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
@@ -9401,9 +9438,6 @@ msgstr ""
 msgid "battle: deterministic events"
 msgstr ""
 
-msgid "game: show system info"
-msgstr "гра: показувати системну інфу"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "гра: автозберігати на початку дня"
 
@@ -9478,3 +9512,6 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: show system info"
+#~ msgstr "гра: показувати системну інфу"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-01 18:49+0300\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -736,8 +736,11 @@ msgstr ""
 "L'artéfact %{artifact} est en vigueur pour ce combat, désactivant le sort "
 "%{spell}."
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr "%{count} %{name} reviennent à la vie !"
+#, fuzzy
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] "%{count} %{name} reviennent à la vie !"
+msgstr[1] "%{count} %{name} reviennent à la vie !"
 
 msgid "Dwarven Alliance"
 msgstr "Alliance des nains"
@@ -2684,16 +2687,16 @@ msgstr "Quittez Heroes of Might and Magic II."
 msgid "Language"
 msgstr "Langue"
 
-msgid "Resolution"
-msgstr "Résolution"
+msgid "Graphics"
+msgstr ""
+
+msgid "Settings"
+msgstr "Paramètres"
 
 msgid "Experimental"
 msgstr ""
 "Expéri-\n"
 "mentaux"
-
-msgid "Settings"
-msgstr "Paramètres"
 
 msgid "Audio"
 msgstr "Audio"
@@ -2718,14 +2721,14 @@ msgstr "Couleur"
 msgid "Text Support"
 msgstr "Mode texte"
 
+msgid "Interface Type"
+msgstr "Interface"
+
 msgid "Evil"
 msgstr "Mal"
 
 msgid "Good"
 msgstr "Bien"
-
-msgid "Interface Type"
-msgstr "Interface"
 
 msgid "Auto Resolve"
 msgstr "Combat auto"
@@ -2739,17 +2742,15 @@ msgstr "Manuelles"
 msgid "Battles"
 msgstr "Batailles"
 
-msgid "Select Game Language"
-msgstr "Choix de la langue"
-
 msgid "Change the language of the game."
 msgstr "Changer la langue du jeu."
 
-msgid "Select Game Resolution"
-msgstr "Choisir la résolution d'écran"
+msgid "Select Game Language"
+msgstr "Choix de la langue"
 
-msgid "Change the resolution of the game."
-msgstr "Changer la résolution du jeu."
+#, fuzzy
+msgid "Change the graphics settings of the game."
+msgstr "Changer les paramètres du son du jeu."
 
 msgid "Change the audio settings of the game."
 msgstr "Changer les paramètres du son du jeu."
@@ -2850,6 +2851,50 @@ msgstr "Don planifié"
 msgid "Gift from %{name}"
 msgstr "Don de la part de %{name}"
 
+msgid "Resolution"
+msgstr "Résolution"
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "1"
+
+#, fuzzy
+msgid "FPS"
+msgstr ", FPS : "
+
+#, fuzzy
+msgid "System Info"
+msgstr "Options du système"
+
+msgid "Change the resolution of the game."
+msgstr "Changer la résolution du jeu."
+
+msgid "Select Game Resolution"
+msgstr "Choisir la résolution d'écran"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
+
 msgid "Set Guardian"
 msgstr "Assigner gardien"
 
@@ -2861,6 +2906,10 @@ msgstr "Raccourcis clavier :"
 
 msgid "Select Game Language:"
 msgstr "Choix de la langue :"
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Cliquez pour valider la résolution choisie."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} a gagné un niveau."
@@ -3683,27 +3732,10 @@ msgid "door"
 msgstr "porte"
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-" sur le côté gauche du menu principal.\n"
-"\n"
-"Pour basculer entre le mode fenêtré et le mode plein écran\n"
-"appuyiez "
-
-msgid "F4"
-msgstr "F4"
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" .\n"
-"\n"
-"Profitez du jeu !"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -9920,9 +9952,6 @@ msgstr "combat : permettre aux créatures d'attendre au cours du combat"
 msgid "battle: deterministic events"
 msgstr "bataille : événements déterministes"
 
-msgid "game: show system info"
-msgstr "jeu : afficher les informations système"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "jeu : sauvegarde auto en début de journée"
 
@@ -9998,6 +10027,32 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ " on the left side of main menu.\n"
+#~ "\n"
+#~ "To switch between windowed and full screen modes\n"
+#~ "press "
+#~ msgstr ""
+#~ " sur le côté gauche du menu principal.\n"
+#~ "\n"
+#~ "Pour basculer entre le mode fenêtré et le mode plein écran\n"
+#~ "appuyiez "
+
+#~ msgid "F4"
+#~ msgstr "F4"
+
+#~ msgid ""
+#~ " key on the keyboard.\n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ " .\n"
+#~ "\n"
+#~ "Profitez du jeu !"
+
+#~ msgid "game: show system info"
+#~ msgstr "jeu : afficher les informations système"
 
 #~ msgid "Moved %{monster}"
 #~ msgstr "%{monster} déplacé"
