@@ -1314,7 +1314,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 continue;
             }
 
-            const Maps::FileInfo mapInfo = scenario.loadMap();
+            Maps::FileInfo mapInfo = scenario.loadMap();
+            Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
+
             conf.SetCurrentFileInfo( mapInfo );
 
             // starting faction scenario bonus has to be called before players.SetStartGame()
