@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 16:38+0000\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2650,14 +2650,14 @@ msgstr "Выйти из игры Heroes of Might and Magic II."
 msgid "Language"
 msgstr "Язык"
 
-msgid "Resolution"
-msgstr "Разрешение"
-
-msgid "Experimental"
-msgstr "Расширенные"
+msgid "Graphics"
+msgstr ""
 
 msgid "Settings"
 msgstr "Настройки"
+
+msgid "Experimental"
+msgstr "Расширенные"
 
 msgid "Audio"
 msgstr "Звук"
@@ -2680,14 +2680,14 @@ msgstr "Цветной"
 msgid "Text Support"
 msgstr "Текстовое сопровождение"
 
+msgid "Interface Type"
+msgstr "Интерфейс"
+
 msgid "Evil"
 msgstr "Злой"
 
 msgid "Good"
 msgstr "Добрый"
-
-msgid "Interface Type"
-msgstr "Интерфейс"
 
 msgid "Auto Resolve"
 msgstr "Авто, с магией"
@@ -2701,17 +2701,15 @@ msgstr "Вручную"
 msgid "Battles"
 msgstr "Битвы"
 
-msgid "Select Game Language"
-msgstr "Выберите язык игры:"
-
 msgid "Change the language of the game."
 msgstr "Изменить язык интерфейса."
 
-msgid "Select Game Resolution"
-msgstr "Выбор разрешения экрана"
+msgid "Select Game Language"
+msgstr "Выберите язык игры:"
 
-msgid "Change the resolution of the game."
-msgstr "Изменить разрешение экрана."
+#, fuzzy
+msgid "Change the graphics settings of the game."
+msgstr "Настроить параметры аудио."
 
 msgid "Change the audio settings of the game."
 msgstr "Настроить параметры аудио."
@@ -2810,6 +2808,50 @@ msgstr "Подарить"
 
 msgid "Gift from %{name}"
 msgstr "Дар от %{name}"
+
+msgid "Resolution"
+msgstr "Разрешение"
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "1"
+
+#, fuzzy
+msgid "FPS"
+msgstr ", FPS: "
+
+#, fuzzy
+msgid "System Info"
+msgstr "Параметры системы"
+
+msgid "Change the resolution of the game."
+msgstr "Изменить разрешение экрана."
+
+msgid "Select Game Resolution"
+msgstr "Выбор разрешения экрана"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
 
 msgid "Set Guardian"
 msgstr "Установить охрану"
@@ -3635,27 +3677,10 @@ msgid "door"
 msgstr "дверь"
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-" на левой стороне основного меню.\n"
-"\n"
-"Для переключения между оконным и полноэкранным режимом\n"
-"нажмите клавишу "
-
-msgid "F4"
-msgstr "F4"
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" на клавиатуре.\n"
-"\n"
-"Наслаждайтесь игрой!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Завершить игру Heroes of Might and Magic II и вернуться в систему."
@@ -9686,9 +9711,6 @@ msgstr "битва: использовать альтернативный про
 msgid "battle: deterministic events"
 msgstr "битва: детерминированные события"
 
-msgid "game: show system info"
-msgstr "игра: показать информационную строку (время, память и т.п.)"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "игра: автосохранение в начале дня"
 
@@ -9763,6 +9785,32 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ " on the left side of main menu.\n"
+#~ "\n"
+#~ "To switch between windowed and full screen modes\n"
+#~ "press "
+#~ msgstr ""
+#~ " на левой стороне основного меню.\n"
+#~ "\n"
+#~ "Для переключения между оконным и полноэкранным режимом\n"
+#~ "нажмите клавишу "
+
+#~ msgid "F4"
+#~ msgstr "F4"
+
+#~ msgid ""
+#~ " key on the keyboard.\n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ " на клавиатуре.\n"
+#~ "\n"
+#~ "Наслаждайтесь игрой!"
+
+#~ msgid "game: show system info"
+#~ msgstr "игра: показать информационную строку (время, память и т.п.)"
 
 #~ msgid "Moved %{monster}"
 #~ msgstr "%{monster} переместились"
