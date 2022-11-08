@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-08 00:48+0000\n"
-"PO-Revision-Date: 2022-11-03 20:40+0000\n"
+"PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -2659,7 +2659,7 @@ msgid "Language"
 msgstr "Език"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Графика"
 
 msgid "Settings"
 msgstr "Настойки"
@@ -2715,9 +2715,8 @@ msgstr "Промяна на езика на играта."
 msgid "Select Game Language"
 msgstr "Език на играта"
 
-#, fuzzy
 msgid "Change the graphics settings of the game."
-msgstr "Промени звуковите настройки на играта."
+msgstr "Промени графичните настройки на играта."
 
 msgid "Change the audio settings of the game."
 msgstr "Промени звуковите настройки на играта."
@@ -2820,27 +2819,25 @@ msgid "Resolution"
 msgstr "Резолюция"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Цял екран"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Режим"
 
 msgid "Windowed"
-msgstr ""
+msgstr "В прозорец"
 
 msgid "V-Sync"
 msgstr ""
 
-#, fuzzy
 msgid "on"
-msgstr "едно"
+msgstr "на"
 
 msgid "FPS"
 msgstr ""
 
-#, fuzzy
 msgid "System Info"
-msgstr "Системни настройки"
+msgstr "Системна информация"
 
 msgid "Change the resolution of the game."
 msgstr "Промяна на резолюцията на играта."
@@ -2849,15 +2846,17 @@ msgid "Select Game Resolution"
 msgstr "Избери резолюция на играта"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Превключи между цял екран и прозорец."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
 msgstr ""
+"Опцията V-Sync може да бъде активирана за разрешаване на проблеми с трептене "
+"на някои монитори."
 
 msgid "Show extra information such as FPS and current time."
-msgstr ""
+msgstr "Показване на допълнителна информация като FPS и текущо време."
 
 msgid "Set Guardian"
 msgstr "Задайте Пазител"
@@ -3686,6 +3685,10 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
+"от лявата страна на главното меню или като цъкнеш на бутона за "
+"конфигурация.\n"
+"\n"
+"Приятна игра!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
