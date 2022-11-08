@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-08 00:48+0000\n"
-"PO-Revision-Date: 2022-11-08 18:51+0100\n"
+"PO-Revision-Date: 2022-11-08 19:04+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -2716,6 +2716,8 @@ msgstr "Språk"
 
 msgid "Graphics"
 msgstr ""
+"Bilde-\n"
+"innstillinger"
 
 msgid "Settings"
 msgstr "Innstillinger"
@@ -2773,9 +2775,8 @@ msgstr "Endre språket til spillet."
 msgid "Select Game Language"
 msgstr "Velg spillspråk"
 
-#, fuzzy
 msgid "Change the graphics settings of the game."
-msgstr "Endre lydinnstillingene til spillet."
+msgstr "Endre bildeinnstillingene til spillet."
 
 msgid "Change the audio settings of the game."
 msgstr "Endre lydinnstillingene til spillet."
@@ -2882,28 +2883,25 @@ msgid "Resolution"
 msgstr "Oppløsning"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Fullskjerm"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Skjermmodus"
 
 msgid "Windowed"
-msgstr ""
+msgstr "Vindu"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "V-synk"
 
-#, fuzzy
 msgid "on"
-msgstr "1"
+msgstr "på"
 
-#, fuzzy
 msgid "FPS"
-msgstr ", FPS: "
+msgstr "FPS"
 
-#, fuzzy
 msgid "System Info"
-msgstr "Systeminnstillinger"
+msgstr "Systeminfo"
 
 msgid "Change the resolution of the game."
 msgstr "Endre oppløsningen til spillet."
@@ -2912,15 +2910,17 @@ msgid "Select Game Resolution"
 msgstr "Velg spilloppløsning"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Velg mellom fullskjerm og vindusskjerm."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
 msgstr ""
+"V-synk kan bli skrudd på for å potensielt løse problemer med hakkete bilde "
+"eller ujevn bildeflyt."
 
 msgid "Show extra information such as FPS and current time."
-msgstr ""
+msgstr "Vis ekstra informasjon som bilder per sekund (FPS) og tid."
 
 msgid "Set Guardian"
 msgstr "Plasser vokter"
@@ -3764,6 +3764,9 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
+" til venstre på hovedmenyen eller ved å trykke på knappen \"Valg\".\n"
+"\n"
+"Vi håper du får en fin opplevelse med spillet!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
