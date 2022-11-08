@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 16:38+0000\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
 "PO-Revision-Date: 2022-11-08 18:51+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2714,16 +2714,16 @@ msgstr "Forlat Heroes of Might and Magic II."
 msgid "Language"
 msgstr "Språk"
 
-msgid "Resolution"
-msgstr "Oppløsning"
+msgid "Graphics"
+msgstr ""
+
+msgid "Settings"
+msgstr "Innstillinger"
 
 msgid "Experimental"
 msgstr ""
 "Under\n"
 "utvikling"
-
-msgid "Settings"
-msgstr "Innstillinger"
 
 msgid "Audio"
 msgstr "Lyd"
@@ -2746,14 +2746,14 @@ msgstr "Farget"
 msgid "Text Support"
 msgstr "Tekstmodus"
 
+msgid "Interface Type"
+msgstr "Grensesnitt"
+
 msgid "Evil"
 msgstr "Ond"
 
 msgid "Good"
 msgstr "God"
-
-msgid "Interface Type"
-msgstr "Grensesnitt"
 
 msgid "Auto Resolve"
 msgstr "Datastyrt"
@@ -2767,17 +2767,15 @@ msgstr "Manuelt"
 msgid "Battles"
 msgstr "Kampstyring"
 
-msgid "Select Game Language"
-msgstr "Velg spillspråk"
-
 msgid "Change the language of the game."
 msgstr "Endre språket til spillet."
 
-msgid "Select Game Resolution"
-msgstr "Velg spilloppløsning"
+msgid "Select Game Language"
+msgstr "Velg spillspråk"
 
-msgid "Change the resolution of the game."
-msgstr "Endre oppløsningen til spillet."
+#, fuzzy
+msgid "Change the graphics settings of the game."
+msgstr "Endre lydinnstillingene til spillet."
 
 msgid "Change the audio settings of the game."
 msgstr "Endre lydinnstillingene til spillet."
@@ -2879,6 +2877,50 @@ msgstr "Gis bort"
 
 msgid "Gift from %{name}"
 msgstr "Gave fra %{name}"
+
+msgid "Resolution"
+msgstr "Oppløsning"
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "1"
+
+#, fuzzy
+msgid "FPS"
+msgstr ", FPS: "
+
+#, fuzzy
+msgid "System Info"
+msgstr "Systeminnstillinger"
+
+msgid "Change the resolution of the game."
+msgstr "Endre oppløsningen til spillet."
+
+msgid "Select Game Resolution"
+msgstr "Velg spilloppløsning"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
 
 msgid "Set Guardian"
 msgstr "Plasser vokter"
@@ -3718,27 +3760,10 @@ msgid "door"
 msgstr "døra"
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-" til venstre på hovedmenyen.\n"
-"\n"
-"For å bytte mellom vindus- og fullskjermsmodus\n"
-"trykk på "
-
-msgid "F4"
-msgstr "F4"
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-"-tasten på tastaturet\n"
-"\n"
-"Vi håper du nyter spillet!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -9917,9 +9942,6 @@ msgstr "Kamp: Avvent styrke til rundens slutt"
 msgid "battle: deterministic events"
 msgstr "Kamp: Forutbestemte turer"
 
-msgid "game: show system info"
-msgstr "Parti: Vis systeminfo"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "Parti: Autolagringen skjer ved begynnelsen av dagen"
 
@@ -9994,6 +10016,32 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ " on the left side of main menu.\n"
+#~ "\n"
+#~ "To switch between windowed and full screen modes\n"
+#~ "press "
+#~ msgstr ""
+#~ " til venstre på hovedmenyen.\n"
+#~ "\n"
+#~ "For å bytte mellom vindus- og fullskjermsmodus\n"
+#~ "trykk på "
+
+#~ msgid "F4"
+#~ msgstr "F4"
+
+#~ msgid ""
+#~ " key on the keyboard.\n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ "-tasten på tastaturet\n"
+#~ "\n"
+#~ "Vi håper du nyter spillet!"
+
+#~ msgid "game: show system info"
+#~ msgstr "Parti: Vis systeminfo"
 
 #~ msgid "Moved %{monster}"
 #~ msgstr "Flyttet troppen med %{monster}"

@@ -200,9 +200,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         fheroes2::MultiFontText body;
         body.add( { _( "You can always change game resolution by clicking on the " ), fheroes2::FontType::normalWhite() } );
         body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " on the left side of main menu.\n\nTo switch between windowed and full screen modes\npress " ), fheroes2::FontType::normalWhite() } );
-        body.add( { _( "F4" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " key on the keyboard.\n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( " on the left side of main menu or by clicking on the configuration button. \n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::OK );
 
