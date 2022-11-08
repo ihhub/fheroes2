@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-08 00:48+0000\n"
-"PO-Revision-Date: 2022-11-08 22:46+0100\n"
+"PO-Revision-Date: 2022-11-08 22:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -926,7 +926,7 @@ msgstr "Sortekunstnere"
 
 # Slakt brukes mer om dyr på norsk.
 msgid "Slay the Dwarves"
-msgstr "Drep dvergene"
+msgstr "Myrd dvergene"
 
 msgid "Country Lords"
 msgstr "Landsherrene"
