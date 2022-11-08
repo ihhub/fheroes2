@@ -357,11 +357,8 @@ void Game::KeyboardGlobalFilter( int sdlKey, int mod )
 {
     if ( fheroes2::getKeyFromSDL( sdlKey ) == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key
          && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
-        fheroes2::engine().toggleFullScreen();
-        fheroes2::Display::instance().render();
-
         Settings & conf = Settings::Get();
-        conf.setFullScreen( fheroes2::engine().isFullScreen() );
+        conf.setFullScreen( !fheroes2::engine().isFullScreen() );
         conf.Save( Settings::configFileName );
     }
 }
