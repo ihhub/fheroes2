@@ -195,6 +195,20 @@ namespace
 
         return false;
     }
+
+    uint64_t addToProgressiveCost( uint64_t progressiveCost, const uint32_t additionalCost )
+    {
+        // Calculate the progressive cost if there is no risk of overflow,
+        // otherwise use the regular cost calculation method
+        if ( ( progressiveCost & 0xF000000000000000U ) == 0 ) {
+            progressiveCost *= 2;
+        }
+
+        // Check for unsigned overflow
+        assert( progressiveCost <= UINT64_MAX - additionalCost );
+
+        return progressiveCost + additionalCost;
+    }
 }
 
 void WorldPathfinder::checkWorldSize()
@@ -307,16 +321,18 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
 
             const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, newIndex, directions[i] );
             const uint32_t moveCost = currentNode._cost + movementPenalty;
+            const uint64_t progressiveCost = addToProgressiveCost( currentNode._progressiveCost, movementPenalty );
             const uint32_t remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
 
             WorldNode & newNode = _cache[newIndex];
 
-            if ( isValidPath( currentNodeIdx, directions[i], _currentColor ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
+            if ( isValidPath( currentNodeIdx, directions[i], _currentColor ) && ( newNode._from == -1 || newNode._progressiveCost > progressiveCost ) ) {
                 const Maps::Tiles & tile = world.GetTiles( newIndex );
 
                 newNode._from = currentNodeIdx;
                 newNode._cost = moveCost;
                 newNode._objectID = tile.GetObject();
+                newNode._progressiveCost = progressiveCost;
                 newNode._remainingMovePoints = remainingMovePoints;
 
                 nodesToExplore.push_back( newIndex );
@@ -389,10 +405,10 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( const int targetIndex )
     return path;
 }
 
-// Follows regular (for user's interface) passability rules
-void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx )
+void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx )
 {
     const bool isFirstNode = currentNodeIdx == _pathStart;
+    const WorldNode & currentNode = _cache[currentNodeIdx];
 
     if ( !isFirstNode && isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
         return;
@@ -408,14 +424,16 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
             if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && isValidPath( currentNodeIdx, direction, _currentColor ) ) {
                 // add straight to cache, can't move further from the monster
                 const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, monsterIndex, direction );
-                const uint32_t moveCost = _cache[currentNodeIdx]._cost + movementPenalty;
-                const uint32_t remainingMovePoints = substractMovePoints( _cache[currentNodeIdx]._remainingMovePoints, movementPenalty );
+                const uint32_t moveCost = currentNode._cost + movementPenalty;
+                const uint64_t progressiveCost = addToProgressiveCost( currentNode._progressiveCost, movementPenalty );
+                const uint32_t remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
 
                 WorldNode & monsterNode = _cache[monsterIndex];
 
-                if ( monsterNode._from == -1 || monsterNode._cost > moveCost ) {
+                if ( monsterNode._from == -1 || monsterNode._progressiveCost > progressiveCost ) {
                     monsterNode._from = currentNodeIdx;
                     monsterNode._cost = moveCost;
+                    monsterNode._progressiveCost = progressiveCost;
                     monsterNode._remainingMovePoints = remainingMovePoints;
                 }
             }
@@ -468,8 +486,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, co
     }
 }
 
-// Overwrites base version in WorldPathfinder, using custom node passability rules
-void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx )
+void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx )
 {
     const bool isFirstNode = currentNodeIdx == _pathStart;
     WorldNode & currentNode = _cache[currentNodeIdx];
@@ -521,10 +538,11 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
         WorldNode & teleportNode = _cache[teleportIdx];
 
         // check if move is actually faster through teleport
-        if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
+        if ( teleportNode._from == -1 || teleportNode._progressiveCost > currentNode._progressiveCost ) {
             teleportNode._from = currentNodeIdx;
             teleportNode._cost = currentNode._cost;
             teleportNode._objectID = world.GetTiles( teleportIdx ).GetObject();
+            teleportNode._progressiveCost = currentNode._progressiveCost;
             teleportNode._remainingMovePoints = currentNode._remainingMovePoints;
 
             nodesToExplore.push_back( teleportIdx );
@@ -589,7 +607,8 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 for ( ; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                     const int nodeIdx = nodesToExplore[lastProcessedNode];
                     const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scouteValue, _currentColor );
-                    if ( maxTilesToReveal < tilesToReveal || ( maxTilesToReveal == tilesToReveal && _cache[nodeIdx]._cost < _cache[bestIndex]._cost ) ) {
+                    if ( maxTilesToReveal < tilesToReveal
+                         || ( maxTilesToReveal == tilesToReveal && _cache[nodeIdx]._progressiveCost < _cache[bestIndex]._progressiveCost ) ) {
                         maxTilesToReveal = tilesToReveal;
                         bestIndex = nodeIdx;
                     }
