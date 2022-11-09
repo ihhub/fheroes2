@@ -170,6 +170,8 @@ uint32_t Monster::GetShots() const
 // Doesn't account for situational special bonuses such as spell immunity
 double Monster::GetMonsterStrength( int attack, int defense ) const
 {
+    // TODO: do not use virtual functions when calculating strength for troops without hero's skills.
+
     // If no modified values were provided then re-calculate
     // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
     if ( attack == -1 )

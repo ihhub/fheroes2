@@ -1969,7 +1969,7 @@ double Heroes::getAIMininumJoiningArmyStrength() const
         break;
     }
 
-    return strengthThreshold * Troops( GetArmy() ).GetStrength();
+    return strengthThreshold * Troops( GetArmy().getTroops() ).GetStrength();
 }
 
 StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )
