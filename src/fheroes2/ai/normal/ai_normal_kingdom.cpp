@@ -179,12 +179,13 @@ namespace AI
 
         Army & heroArmy = hero.GetArmy();
         Army & garrison = castle.GetArmy();
-        // We need to compare a strength of troops excluding hero's stats.
-        const double armyStrength = heroArmy.Troops::GetStrength();
 
         heroArmy.UpgradeTroops( castle );
         castle.recruitBestAvailable( budget );
         heroArmy.JoinStrongestFromArmy( garrison );
+
+        // We need to compare a strength of troops excluding hero's stats.
+        const double armyStrength = heroArmy.Troops::GetStrength();
 
         const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
         // check if we should leave some troops in the garrison
