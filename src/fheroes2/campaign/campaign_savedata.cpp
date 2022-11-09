@@ -123,18 +123,8 @@ namespace Campaign
 
     StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
     {
-        msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus >> data._finishedMaps >> data._daysPassed
-            >> data._obtainedCampaignAwards >> data._carryOverTroops;
-
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0919_RELEASE, "Remove the check below." );
-        if ( Game::GetLoadVersion() < FORMAT_VERSION_0919_RELEASE ) {
-            data._difficulty = CampaignDifficulty::Normal;
-        }
-        else {
-            msg >> data._difficulty;
-        }
-
-        return msg;
+        return msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus >> data._finishedMaps
+                   >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
     }
 
     ScenarioVictoryCondition getCurrentScenarioVictoryCondition()
