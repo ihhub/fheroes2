@@ -25,6 +25,8 @@
 #define H2HEROES_H
 
 #include <algorithm>
+#include <cassert>
+#include <exception>
 #include <list>
 #include <string>
 #include <vector>
@@ -223,11 +225,14 @@ public:
             double currentArmyStrength = 0;
 
             try {
-                // SonarQube complains about this place to throw an exception so we had to add exception handling code.
+                // Army::GetStrength() could potentially throw an exception, and SonarQube complains about a potentially uncaught exception
+                // in the destructor. This is not a problem per se, because calling std::terminate() is OK, so let's just do this ourselves.
                 currentArmyStrength = _hero.GetArmy().GetStrength();
             }
             catch ( ... ) {
-                return;
+                // This should never happen
+                assert( 0 );
+                std::terminate();
             }
 
             if ( std::fabs( _initialArmyStrength - currentArmyStrength ) > 0.001 ) {
