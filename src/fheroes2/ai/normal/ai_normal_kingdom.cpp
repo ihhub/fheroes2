@@ -226,6 +226,8 @@ namespace AI
                     else {
                         unitToSwap->SetCount( count - toMove );
                     }
+
+                    // TODO: distribute units across slots to avoid only one stack of monsters being present.
                 }
             }
         }
