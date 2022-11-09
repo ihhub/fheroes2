@@ -626,6 +626,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
+
+        if ( le.MousePressRight( hero1Area ) ) {
+            Dialog::QuickInfo( *this );
+        }
+        else if ( le.MousePressRight( hero2Area ) ) {
+            Dialog::QuickInfo( otherHero );
+        }
     }
 
     selectArmy1.ResetSelected();
