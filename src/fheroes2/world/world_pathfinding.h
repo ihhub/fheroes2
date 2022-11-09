@@ -32,9 +32,6 @@ class IndexObject;
 
 struct WorldNode : public PathfindingNode<MP2::MapObjectType>
 {
-    // The cost calculated by the method in which the previous steps have more weight than the subsequent
-    // ones in order to prefer straight moves to diagonal ones in the early stages of the route
-    uint64_t _progressiveCost = 0;
     // The number of movement points remaining for the hero after moving to this node
     uint32_t _remainingMovePoints = 0;
 
@@ -55,7 +52,6 @@ struct WorldNode : public PathfindingNode<MP2::MapObjectType>
     {
         PathfindingNode::resetNode();
 
-        _progressiveCost = 0;
         _remainingMovePoints = 0;
     }
 };

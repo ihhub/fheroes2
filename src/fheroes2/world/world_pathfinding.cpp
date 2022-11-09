@@ -195,20 +195,6 @@ namespace
 
         return false;
     }
-
-    uint64_t addToProgressiveCost( uint64_t progressiveCost, const uint32_t additionalCost )
-    {
-        // Calculate the progressive cost if there is no risk of overflow,
-        // otherwise use the regular cost calculation method
-        if ( ( progressiveCost & 0xF000000000000000U ) == 0 ) {
-            progressiveCost *= 2;
-        }
-
-        // Check for unsigned overflow
-        assert( progressiveCost <= UINT64_MAX - additionalCost );
-
-        return progressiveCost + additionalCost;
-    }
 }
 
 void WorldPathfinder::checkWorldSize()
@@ -314,29 +300,29 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
     const WorldNode & currentNode = _cache[currentNodeIdx];
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
-        if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
-            const int newIndex = currentNodeIdx + _mapOffset[i];
-            if ( newIndex == _pathStart )
-                continue;
+        if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) || !isValidPath( currentNodeIdx, directions[i], _currentColor ) ) {
+            continue;
+        }
 
-            const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, newIndex, directions[i] );
-            const uint32_t moveCost = currentNode._cost + movementPenalty;
-            const uint64_t progressiveCost = addToProgressiveCost( currentNode._progressiveCost, movementPenalty );
-            const uint32_t remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
+        const int newIndex = currentNodeIdx + _mapOffset[i];
+        if ( newIndex == _pathStart ) {
+            continue;
+        }
 
-            WorldNode & newNode = _cache[newIndex];
+        const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, newIndex, directions[i] );
+        const uint32_t movementCost = currentNode._cost + movementPenalty;
 
-            if ( isValidPath( currentNodeIdx, directions[i], _currentColor ) && ( newNode._from == -1 || newNode._progressiveCost > progressiveCost ) ) {
-                const Maps::Tiles & tile = world.GetTiles( newIndex );
+        WorldNode & newNode = _cache[newIndex];
 
-                newNode._from = currentNodeIdx;
-                newNode._cost = moveCost;
-                newNode._objectID = tile.GetObject();
-                newNode._progressiveCost = progressiveCost;
-                newNode._remainingMovePoints = remainingMovePoints;
+        if ( newNode._from == -1 || newNode._cost > movementCost ) {
+            const Maps::Tiles & newTile = world.GetTiles( newIndex );
 
-                nodesToExplore.push_back( newIndex );
-            }
+            newNode._from = currentNodeIdx;
+            newNode._cost = movementCost;
+            newNode._objectID = newTile.GetObject();
+            newNode._remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
+
+            nodesToExplore.push_back( newIndex );
         }
     }
 }
@@ -416,26 +402,27 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
 
     const MapsIndexes & monsters = Maps::getMonstersProtectingTile( currentNodeIdx );
 
-    // check if current tile is protected, can move only to adjacent monster
+    // If the current tile is protected, then the hero can only move to one of the neighboring monsters
     if ( !isFirstNode && !monsters.empty() ) {
         for ( int monsterIndex : monsters ) {
             const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
-            if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && isValidPath( currentNodeIdx, direction, _currentColor ) ) {
-                // add straight to cache, can't move further from the monster
-                const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, monsterIndex, direction );
-                const uint32_t moveCost = currentNode._cost + movementPenalty;
-                const uint64_t progressiveCost = addToProgressiveCost( currentNode._progressiveCost, movementPenalty );
-                const uint32_t remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
+            if ( direction == Direction::UNKNOWN || direction == Direction::CENTER || !isValidPath( currentNodeIdx, direction, _currentColor ) ) {
+                continue;
+            }
 
-                WorldNode & monsterNode = _cache[monsterIndex];
+            const uint32_t movementPenalty = getMovementPenalty( currentNodeIdx, monsterIndex, direction );
+            const uint32_t movementCost = currentNode._cost + movementPenalty;
 
-                if ( monsterNode._from == -1 || monsterNode._progressiveCost > progressiveCost ) {
-                    monsterNode._from = currentNodeIdx;
-                    monsterNode._cost = moveCost;
-                    monsterNode._progressiveCost = progressiveCost;
-                    monsterNode._remainingMovePoints = remainingMovePoints;
-                }
+            WorldNode & monsterNode = _cache[monsterIndex];
+
+            if ( monsterNode._from == -1 || monsterNode._cost > movementCost ) {
+                const Maps::Tiles & monsterTile = world.GetTiles( monsterIndex );
+
+                monsterNode._from = currentNodeIdx;
+                monsterNode._cost = movementCost;
+                monsterNode._objectID = monsterTile.GetObject();
+                monsterNode._remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
             }
         }
     }
@@ -491,7 +478,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     const bool isFirstNode = currentNodeIdx == _pathStart;
     WorldNode & currentNode = _cache[currentNodeIdx];
 
-    // find out if current node is protected by a strong army
+    // Find out if current node is protected by a strong army
     bool isProtected = isTileProtectedForAI( currentNodeIdx, _armyStrength, _advantage );
     if ( !isProtected ) {
         const MapsIndexes & monsters = Maps::getMonstersProtectingTile( currentNodeIdx );
@@ -503,19 +490,19 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
         }
     }
 
-    // if we can't move here, reset
+    // If we can't move here, reset
     if ( isProtected ) {
         currentNode.resetNode();
     }
 
-    // always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
+    // Always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
     if ( !isFirstNode && ( isProtected || isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength, _isArtifactBagFull ) ) ) {
         return;
     }
 
     MapsIndexes teleports;
 
-    // we shouldn't use teleport at the starting tile
+    // We shouldn't use teleport at the starting tile
     if ( !isFirstNode ) {
         teleports = world.GetTeleportEndPoints( currentNodeIdx );
 
@@ -524,12 +511,12 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
         }
     }
 
-    // do not check adjacent if we're going through the teleport in the middle of the path
+    // Do not check adjacent if we're going through the teleport in the middle of the path
     if ( teleports.empty() || std::find( teleports.begin(), teleports.end(), currentNode._from ) != teleports.end() ) {
         checkAdjacentNodes( nodesToExplore, currentNodeIdx );
     }
 
-    // special case: move through teleports
+    // Special case: move through teleports
     for ( const int teleportIdx : teleports ) {
         if ( teleportIdx == _pathStart ) {
             continue;
@@ -537,12 +524,13 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
 
         WorldNode & teleportNode = _cache[teleportIdx];
 
-        // check if move is actually faster through teleport
-        if ( teleportNode._from == -1 || teleportNode._progressiveCost > currentNode._progressiveCost ) {
+        // Check if move is actually faster through teleport
+        if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
+            const Maps::Tiles & teleportTile = world.GetTiles( teleportIdx );
+
             teleportNode._from = currentNodeIdx;
             teleportNode._cost = currentNode._cost;
-            teleportNode._objectID = world.GetTiles( teleportIdx ).GetObject();
-            teleportNode._progressiveCost = currentNode._progressiveCost;
+            teleportNode._objectID = teleportTile.GetObject();
             teleportNode._remainingMovePoints = currentNode._remainingMovePoints;
 
             nodesToExplore.push_back( teleportIdx );
@@ -607,8 +595,8 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 for ( ; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                     const int nodeIdx = nodesToExplore[lastProcessedNode];
                     const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scouteValue, _currentColor );
-                    if ( maxTilesToReveal < tilesToReveal
-                         || ( maxTilesToReveal == tilesToReveal && _cache[nodeIdx]._progressiveCost < _cache[bestIndex]._progressiveCost ) ) {
+
+                    if ( std::make_tuple( maxTilesToReveal, _cache[nodeIdx]._cost ) < std::make_tuple( tilesToReveal, _cache[bestIndex]._cost ) ) {
                         maxTilesToReveal = tilesToReveal;
                         bestIndex = nodeIdx;
                     }
