@@ -1504,7 +1504,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     }
 
     // Neutral monsters don't care about hero's stats. Ignoring hero's stats makes hero's army strength be smaller in eyes of neutrals and they won't join so often.
-    const double armyStrengthRatio = hero.GetArmy().getTroops().GetStrength() / troop.GetStrength();
+    const double armyStrengthRatio = hero.GetArmy().Troops::GetStrength() / troop.GetStrength();
 
     // The ability to accept monsters (a free slot or a stack of monsters of the same type) is a
     // mandatory condition for their joining in accordance with the mechanics of the original game

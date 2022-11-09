@@ -180,7 +180,7 @@ namespace AI
         Army & heroArmy = hero.GetArmy();
         Army & garrison = castle.GetArmy();
         // We need to compare a strength of troops excluding hero's stats.
-        const double armyStrength = heroArmy.getTroops().GetStrength();
+        const double armyStrength = heroArmy.Troops::GetStrength();
 
         heroArmy.UpgradeTroops( castle );
         castle.recruitBestAvailable( budget );
