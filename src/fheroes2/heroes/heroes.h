@@ -220,7 +220,15 @@ public:
 
         ~AIHeroMeetingUpdater()
         {
-            const double currentArmyStrength = _hero.GetArmy().GetStrength();
+            double currentArmyStrength = 0;
+
+            try {
+                // SonarQube complains about this place to throw an exception so we had to add exception handling code.
+                currentArmyStrength = _hero.GetArmy().GetStrength();
+            }
+            catch ( ... ) {
+                return;
+            }
 
             if ( std::fabs( _initialArmyStrength - currentArmyStrength ) > 0.001 ) {
                 _hero.unmarkHeroMeeting();
