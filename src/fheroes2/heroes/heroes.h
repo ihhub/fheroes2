@@ -226,8 +226,7 @@ public:
                 // SonarQube complains about this place to throw an exception so we had to add exception handling code.
                 currentArmyStrength = _hero.GetArmy().GetStrength();
             }
-            catch(...)
-            {
+            catch ( ... ) {
                 return;
             }
 
