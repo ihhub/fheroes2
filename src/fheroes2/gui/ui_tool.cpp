@@ -46,7 +46,7 @@ namespace
 
         void preRender()
         {
-            if ( !Settings::Get().ExtGameShowSystemInfo() )
+            if ( !Settings::Get().isSystemInfoEnabled() )
                 return;
 
             const int32_t offsetX = 26;

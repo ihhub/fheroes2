@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 16:38+0000\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
 "PO-Revision-Date: 2022-11-03 20:40+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2659,14 +2659,14 @@ msgstr "Напусни Heroes of Might and Magic II."
 msgid "Language"
 msgstr "Език"
 
-msgid "Resolution"
-msgstr "Резолюция"
-
-msgid "Experimental"
-msgstr "Пробни"
+msgid "Graphics"
+msgstr ""
 
 msgid "Settings"
 msgstr "Настойки"
+
+msgid "Experimental"
+msgstr "Пробни"
 
 msgid "Audio"
 msgstr "Звукови"
@@ -2689,14 +2689,14 @@ msgstr "Цветен"
 msgid "Text Support"
 msgstr "Доп. информация"
 
+msgid "Interface Type"
+msgstr "Интерфейс"
+
 msgid "Evil"
 msgstr "Зъл"
 
 msgid "Good"
 msgstr "Добър"
-
-msgid "Interface Type"
-msgstr "Интерфейс"
 
 msgid "Auto Resolve"
 msgstr "Авто"
@@ -2710,17 +2710,15 @@ msgstr "Ръчно"
 msgid "Battles"
 msgstr "Сражения"
 
-msgid "Select Game Language"
-msgstr "Език на играта"
-
 msgid "Change the language of the game."
 msgstr "Промяна на езика на играта."
 
-msgid "Select Game Resolution"
-msgstr "Избери резолюция на играта"
+msgid "Select Game Language"
+msgstr "Език на играта"
 
-msgid "Change the resolution of the game."
-msgstr "Промяна на резолюцията на играта."
+#, fuzzy
+msgid "Change the graphics settings of the game."
+msgstr "Промени звуковите настройки на играта."
 
 msgid "Change the audio settings of the game."
 msgstr "Промени звуковите настройки на играта."
@@ -2818,6 +2816,49 @@ msgstr "Планиран подарък"
 
 msgid "Gift from %{name}"
 msgstr "Подарък от %{name}"
+
+msgid "Resolution"
+msgstr "Резолюция"
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "едно"
+
+msgid "FPS"
+msgstr ""
+
+#, fuzzy
+msgid "System Info"
+msgstr "Системни настройки"
+
+msgid "Change the resolution of the game."
+msgstr "Промяна на резолюцията на играта."
+
+msgid "Select Game Resolution"
+msgstr "Избери резолюция на играта"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
 
 msgid "Set Guardian"
 msgstr "Задайте Пазител"
@@ -3646,27 +3687,10 @@ msgid "door"
 msgstr "вратата"
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-" от лявата страна на главното меню.\n"
-"\n"
-"За да превключиш между режим на прозорец и цял екран,\n"
-"натисни "
-
-msgid "F4"
-msgstr ""
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" клавиш на клавиатурата.\n"
-"\n"
-"Приятна игра!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -9434,9 +9458,6 @@ msgstr "битка: позволява меко изчакване за войс
 msgid "battle: deterministic events"
 msgstr "битка: детерминистични събития"
 
-msgid "game: show system info"
-msgstr "игра: показва информация за системата"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "игра: автоматично запазване ще бъде направено в началото на деня"
 
@@ -9511,3 +9532,26 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ " on the left side of main menu.\n"
+#~ "\n"
+#~ "To switch between windowed and full screen modes\n"
+#~ "press "
+#~ msgstr ""
+#~ " от лявата страна на главното меню.\n"
+#~ "\n"
+#~ "За да превключиш между режим на прозорец и цял екран,\n"
+#~ "натисни "
+
+#~ msgid ""
+#~ " key on the keyboard.\n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ " клавиш на клавиатурата.\n"
+#~ "\n"
+#~ "Приятна игра!"
+
+#~ msgid "game: show system info"
+#~ msgstr "игра: показва информация за системата"

@@ -86,9 +86,9 @@ namespace AI
         // Do nothing.
     }
 
-    void Base::HeroesAfterBattle( HeroBase &, bool )
+    void Base::HeroesAfterBattle( HeroBase & hero, bool /*unused*/ )
     {
-        // Do nothing.
+        hero.ActionAfterBattle();
     }
 
     void Base::HeroesActionNewPosition( Heroes & )
