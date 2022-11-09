@@ -752,11 +752,14 @@ namespace Campaign
                 return;
             }
 
-            const uint8_t humanColor = humanColors.front();
+            // If this assertion blows up then the whole logic behind colors is going crazy.
+            assert( aiColors < 256 );
+
+            const uint8_t humanColor = static_cast<uint8_t>( humanColors.front() );
 
             for ( uint8_t & allianceColor : mapInfo.unions ) {
                 if ( allianceColor != humanColor && ( aiColors & allianceColor ) ) {
-                    allianceColor = aiColors;
+                    allianceColor = static_cast<uint8_t>( aiColors );
                 }
             }
         }
