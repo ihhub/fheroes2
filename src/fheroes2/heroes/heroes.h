@@ -212,6 +212,12 @@ public:
             // Do nothing.
         }
 
+        AIHeroMeetingUpdater( const AIHeroMeetingUpdater & ) = delete;
+        AIHeroMeetingUpdater( AIHeroMeetingUpdater && ) = delete;
+
+        AIHeroMeetingUpdater & operator=( const AIHeroMeetingUpdater & ) = delete;
+        AIHeroMeetingUpdater & operator=( AIHeroMeetingUpdater && ) = delete;
+
         ~AIHeroMeetingUpdater()
         {
             const double currentArmyStrength = _hero.GetArmy().GetStrength();
