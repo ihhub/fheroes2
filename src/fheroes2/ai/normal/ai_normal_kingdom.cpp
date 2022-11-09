@@ -172,6 +172,8 @@ namespace AI
 
     void Normal::reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
     {
+        const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
+
         if ( !hero.HaveSpellBook() && castle.GetLevelMageGuild() > 0 && !hero.IsFullBagArtifacts() ) {
             // this call will check if AI kingdom have enough resources to buy book
             hero.BuySpellBook( &castle );
@@ -230,9 +232,6 @@ namespace AI
         }
 
         OptimizeTroopsOrder( heroArmy );
-        if ( std::fabs( armyStrength - heroArmy.GetStrength() ) > 0.001 ) {
-            hero.unmarkHeroMeeting();
-        }
     }
 
     void Normal::evaluateRegionSafety()

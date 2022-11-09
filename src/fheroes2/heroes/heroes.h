@@ -144,9 +144,6 @@ public:
         UNKNOWN
     };
 
-    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
-    static const char * GetName( int heroid );
-
     enum flags_t : uint32_t
     {
         SHIPMASTER = 0x00000001,
@@ -203,6 +200,32 @@ public:
         CHAMPION
     };
 
+    // This class is used to update a flag for an AI hero to make him available to meet other heroes.
+    // Such cases happen after battles, reinforcements or collecting artifacts.
+    class AIHeroMeetingUpdater
+    {
+    public:
+        explicit AIHeroMeetingUpdater( Heroes & hero )
+            : _hero( hero )
+            , _initialArmyStrength( hero.GetArmy().GetStrength() )
+        {
+            // Do nothing.
+        }
+
+        ~AIHeroMeetingUpdater()
+        {
+            const double currentArmyStrength = _hero.GetArmy().GetStrength();
+
+            if ( std::fabs( _initialArmyStrength - currentArmyStrength ) > 0.001 ) {
+                _hero.unmarkHeroMeeting();
+            }
+        }
+
+    private:
+        Heroes & _hero;
+        const double _initialArmyStrength;
+    };
+
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( int heroID, int race, int initialLevel );
@@ -211,6 +234,9 @@ public:
     ~Heroes() override = default;
 
     Heroes & operator=( const Heroes & ) = delete;
+
+    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
+    static const char * GetName( int heroid );
 
     bool isValid() const override;
     bool isFreeman() const;
@@ -382,6 +408,8 @@ public:
     // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;
     void markHeroMeeting( int heroID );
+
+    // Do not call this method directly. It is used by AIHeroMeetingUpdater class.
     void unmarkHeroMeeting();
 
     bool Move( bool fast = false );
