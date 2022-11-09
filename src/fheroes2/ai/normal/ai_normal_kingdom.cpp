@@ -196,7 +196,7 @@ namespace AI
             Troop * unitToSwap = heroArmy.GetSlowestTroop();
             if ( unitToSwap ) {
                 // We need to compare a strength of troops excluding hero's stats.
-                const double troopsStrength = heroArmy.Troops::GetStrength();
+                const double troopsStrength = Troops( heroArmy ).GetStrength();
 
                 const double significanceRatio = isFigtherHero ? 20.0 : 10.0;
                 if ( unitToSwap->GetStrength() > troopsStrength / significanceRatio ) {
