@@ -179,13 +179,11 @@ namespace AI
 
         Army & heroArmy = hero.GetArmy();
         Army & garrison = castle.GetArmy();
+        const double heroStrengthBefore = heroArmy.GetStrength();
 
         heroArmy.UpgradeTroops( castle );
         castle.recruitBestAvailable( budget );
         heroArmy.JoinStrongestFromArmy( garrison );
-
-        // We need to compare a strength of troops excluding hero's stats.
-        const double armyStrength = heroArmy.Troops::GetStrength();
 
         const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
         // check if we should leave some troops in the garrison
@@ -197,14 +195,17 @@ namespace AI
             bool onlyHalf = false;
             Troop * unitToSwap = heroArmy.GetSlowestTroop();
             if ( unitToSwap ) {
+                // We need to compare a strength of troops excluding hero's stats.
+                const double troopsStrength = heroArmy.Troops::GetStrength();
+
                 const double significanceRatio = isFigtherHero ? 20.0 : 10.0;
-                if ( unitToSwap->GetStrength() > armyStrength / significanceRatio ) {
+                if ( unitToSwap->GetStrength() > troopsStrength / significanceRatio ) {
                     Troop * weakest = heroArmy.GetWeakestTroop();
 
                     assert( weakest != nullptr );
                     if ( weakest ) {
                         unitToSwap = weakest;
-                        if ( weakest->GetStrength() > armyStrength / significanceRatio ) {
+                        if ( weakest->GetStrength() > troopsStrength / significanceRatio ) {
                             if ( isFigtherHero ) {
                                 // if it's an important hero and all troops are significant - keep the army
                                 unitToSwap = nullptr;
@@ -227,13 +228,14 @@ namespace AI
                         unitToSwap->SetCount( count - toMove );
                     }
 
-                    // TODO: distribute units across slots to avoid only one stack of monsters being present.
+                    // TODO: redistribute troops properly.
+                    OptimizeTroopsOrder( garrison );
                 }
             }
         }
 
         OptimizeTroopsOrder( heroArmy );
-        if ( std::fabs( armyStrength - heroArmy.GetStrength() ) > 0.001 ) {
+        if ( std::fabs( heroStrengthBefore - heroArmy.GetStrength() ) > 0.001 ) {
             hero.unmarkHeroMeeting();
         }
     }
