@@ -24,8 +24,6 @@
 #include <string>
 #include <vector>
 
-struct smk_t; // IWYU pragma: keep
-
 namespace fheroes2
 {
     class Image;
