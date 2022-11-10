@@ -21,7 +21,7 @@ jobs:
         cmake --build build 2> >(tee iwyu-result.txt >&2)
         ! grep "^Warning: include-what-you-use reported diagnostics:" iwyu-result.txt > /dev/null
     - uses: actions/upload-artifact@v3
-      if: ${{ success() || failure() }}
+      if: ${{ failure() }}
       with:
         name: iwyu-result
         path: iwyu-result.txt
