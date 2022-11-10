@@ -1,0 +1,27 @@
+name: IWYU
+
+on:
+  workflow_call:
+
+jobs:
+  iwyu:
+    name: IWYU
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext iwyu
+    - name: Analyze
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DUSE_SDL_VERSION=SDL2 \
+                       -DCMAKE_CXX_INCLUDE_WHAT_YOU_USE="include-what-you-use;-Xiwyu;--cxx17ns;-Xiwyu;--mapping_file=$GITHUB_WORKSPACE/iwyu.map"
+        cmake --build build 2> >(tee iwyu-result.txt >&2)
+        ! grep "^Warning: include-what-you-use reported diagnostics:" iwyu-result.txt > /dev/null
+    - uses: actions/upload-artifact@v3
+      if: ${{ success() || failure() }}
+      with:
+        name: iwyu-result
+        path: iwyu-result.txt
