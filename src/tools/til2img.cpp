@@ -27,6 +27,7 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <sstream> // IWYU pragma: keep
 #include <string>
 #include <vector>
 

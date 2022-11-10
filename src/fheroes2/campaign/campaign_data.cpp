@@ -27,6 +27,7 @@
 
 #include "artifact.h"
 #include "campaign_data.h"
+#include "color.h"
 #include "game_video_type.h"
 #include "heroes.h"
 #include "maps_fileinfo.h"

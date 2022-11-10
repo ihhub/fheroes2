@@ -26,6 +26,7 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <sstream> // IWYU pragma: keep
 #include <string>
 #include <vector>
 

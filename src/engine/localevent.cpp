@@ -40,7 +40,9 @@
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #include <SDL_gamecontroller.h>
+#include <SDL_hints.h> // IWYU pragma: keep
 #include <SDL_keycode.h>
+#include <SDL_touch.h> // IWYU pragma: keep
 #endif
 
 #include "audio.h"
