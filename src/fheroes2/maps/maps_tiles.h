@@ -243,9 +243,6 @@ namespace Maps
 
         void setOwnershipFlag( const MP2::MapObjectType objectType, const int color );
 
-        void correctOldSaveOwnershipFlag();
-        void correctDiggingHoles();
-
         void removeOwnershipFlag( const MP2::MapObjectType objectType );
 
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
@@ -418,8 +415,6 @@ namespace Maps
 
         static void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon );
         void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
-
-        static bool removeOldFlag( Addons & addons, const uint8_t startIndex, int & ownerColor );
 
         Addons addons_level1; // bottom layer
         Addons addons_level2; // top layer

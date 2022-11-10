@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-11-10 13:19+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -307,7 +307,9 @@ msgid "Defender"
 msgstr "Абаронца"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr "Сярод вашых трафеяў апынуўся артэфакт - %{name}! Але як толькі вы дакрануліся да яго, той містычна знік."
+msgstr ""
+"Сярод вашых трафеяў апынуўся артэфакт - %{name}! Але як толькі вы "
+"дакрануліся да яго, той містычна знік."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Як толькі вораг дабраўся да артэфакту - %{name}, той містычна знік."
@@ -322,8 +324,8 @@ msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
-"Практыкуючы цёмнае майстэрства некраманціі, вы можаце адрадзіць %{count} паўшых ворагаў, якія "
-"далучацца да вашага войску як %{monster}."
+"Практыкуючы цёмнае майстэрства некраманціі, вы можаце адрадзіць %{count} "
+"паўшых ворагаў, якія далучацца да вашага войску як %{monster}."
 
 msgid "%{name} the %{race}"
 msgstr "%{race} %{name}"
@@ -837,8 +839,8 @@ msgid ""
 msgstr ""
 "Збярыце як мага болей войска, каб за 8 тыдняў захапіць варожы замак. Вам "
 "супрацьстаіць толькі адзін вораг, але вы мусіце прайсці доўгую дарогу да "
-"ягонага замку. Усе войскі, якія застануцца пад катролем вашага герою напрыканцы сцэнару, "
-"будуць прымаць удзел у рашучым баю."
+"ягонага замку. Усе войскі, якія застануцца пад катролем вашага герою "
+"напрыканцы сцэнару, будуць прымаць удзел у рашучым баю."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
@@ -2102,8 +2104,8 @@ msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
-"Рынак дазваляе мяняць адзін від рэсурсаў на іншы. "
-"Чым болей рынкаў вы маеце, тым лепей будуць умовы абмену."
+"Рынак дазваляе мяняць адзін від рэсурсаў на іншы. Чым болей рынкаў вы маеце, "
+"тым лепей будуць умовы абмену."
 
 msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
@@ -2116,8 +2118,8 @@ msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
 msgstr ""
-"Замак узмацняе абарону горада і павялічвае гарадcкія зборы да %{count} золата "
-"штодзень."
+"Замак узмацняе абарону горада і павялічвае гарадcкія зборы да %{count} "
+"золата штодзень."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
@@ -2133,8 +2135,7 @@ msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
-"Гільдыя магаў дазваляе героям вучыць загаворы і папаўняць іхныя запасы "
-"маны."
+"Гільдыя магаў дазваляе героям вучыць загаворы і папаўняць іхныя запасы маны."
 
 msgid "Recruit %{name}"
 msgstr "%{name}"
@@ -3474,8 +3475,8 @@ msgid ""
 "Required video files for campaign selection window are missing. Please make "
 "sure that all necessary files are present in the system."
 msgstr ""
-"Бракуе відэя файлаў для абранай кампаніі. Праверце, ці "
-"ўсе неабходныя файлы былі скапіяваны."
+"Бракуе відэя файлаў для абранай кампаніі. Праверце, ці ўсе неабходныя файлы "
+"былі скапіяваны."
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -5904,7 +5905,51 @@ msgstr "Нястрымная"
 msgid "speed|Instant"
 msgstr "Імгненная"
 
-msgid "week|PLAGUE"
+msgid "week|Squirrel"
+msgstr ""
+
+msgid "week|Rabbit"
+msgstr ""
+
+msgid "week|Gopher"
+msgstr ""
+
+msgid "week|Badger"
+msgstr ""
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "тыдзень"
+
+msgid "week|Eagle"
+msgstr ""
+
+msgid "week|Weasel"
+msgstr ""
+
+msgid "week|Raven"
+msgstr ""
+
+msgid "week|Mongoose"
+msgstr ""
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "тыдзень"
+
+msgid "week|Aardvark"
+msgstr ""
+
+msgid "week|Lizard"
+msgstr ""
+
+msgid "week|Tortoise"
+msgstr ""
+
+msgid "week|Hedgehog"
+msgstr ""
+
+msgid "week|Condor"
 msgstr ""
 
 msgid "week|Ant"
@@ -5937,43 +5982,10 @@ msgstr ""
 msgid "week|Beetle"
 msgstr ""
 
-msgid "week|Squirrel"
+msgid "week|PLAGUE"
 msgstr ""
 
-msgid "week|Rabbit"
-msgstr ""
-
-msgid "week|Gopher"
-msgstr ""
-
-msgid "week|Badger"
-msgstr ""
-
-msgid "week|Eagle"
-msgstr ""
-
-msgid "week|Weasel"
-msgstr ""
-
-msgid "week|Raven"
-msgstr ""
-
-msgid "week|Mongoose"
-msgstr ""
-
-msgid "week|Aardvark"
-msgstr ""
-
-msgid "week|Lizard"
-msgstr ""
-
-msgid "week|Tortoise"
-msgstr ""
-
-msgid "week|Hedgehog"
-msgstr ""
-
-msgid "week|Condor"
+msgid "week|Unnamed"
 msgstr ""
 
 msgid "Desert"

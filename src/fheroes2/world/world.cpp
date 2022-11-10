@@ -1439,14 +1439,6 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
     w.PostLoad( false );
 
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0918_RELEASE ) {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove the code in this block." );
-        for ( Maps::Tiles & tile : world.vec_tiles ) {
-            tile.correctOldSaveOwnershipFlag();
-            tile.correctDiggingHoles();
-        }
-    }
-
     return msg;
 }
 
