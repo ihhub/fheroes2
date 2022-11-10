@@ -211,10 +211,10 @@ msgid "That spell will affect no one!"
 msgstr "Това заклинание няма да засегне никого!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr "Можеш да призовеш само един тип стихия за битка."
+msgstr "Можеш да призовеш само един тип елементал за битка."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr "Няма открито пространство до твоя герой, където да призовеш стихия."
+msgstr "Няма открито пространство до твоя герой, където да призовеш елементал."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -2831,7 +2831,7 @@ msgid "V-Sync"
 msgstr ""
 
 msgid "on"
-msgstr "на"
+msgstr "вкл"
 
 msgid "FPS"
 msgstr ""
@@ -6624,7 +6624,7 @@ msgid "Necromancer"
 msgstr "Некромант"
 
 msgid "Multi"
-msgstr "Случаен"
+msgstr "Комбинация"
 
 msgid "race|Random"
 msgstr "Случаен"
@@ -7542,28 +7542,28 @@ msgid "Medusas"
 msgstr "Медузи"
 
 msgid "Earth Elemental"
-msgstr "Земна стихия"
+msgstr "Земен елементал"
 
 msgid "Earth Elementals"
-msgstr "Земни стихии"
+msgstr "Земни елементали"
 
 msgid "Air Elemental"
-msgstr "Въздушна стихия"
+msgstr "Въздушен елементал"
 
 msgid "Air Elementals"
-msgstr "Въздушни стихии"
+msgstr "Въздушни елементали"
 
 msgid "Fire Elemental"
-msgstr "Огнена стихия"
+msgstr "Огнен елементал"
 
 msgid "Fire Elementals"
-msgstr "Огнени стихии"
+msgstr "Огнени елементали"
 
 msgid "Water Elemental"
-msgstr "Водна стихия"
+msgstr "Воден елементал"
 
 msgid "Water Elementals"
-msgstr "Водни стихии"
+msgstr "Водни елементали"
 
 msgid "Random Monsters"
 msgstr "Случайни чудовища"
@@ -7611,7 +7611,7 @@ msgid "Immune to Mind spells"
 msgstr "Имунитет към умствени магии"
 
 msgid "Immune to Elemental spells"
-msgstr "Имунитет към стихийни магии"
+msgstr "Имунитет към магии на елементал"
 
 msgid "Immune to Fire spells"
 msgstr "Имунитет към огнени магии"
@@ -7626,7 +7626,7 @@ msgid "% immunity to %{spell} spell"
 msgstr "% имунитет към %{spell} магия"
 
 msgid "% damage from Elemental spells"
-msgstr "% щети от стихийни магии"
+msgstr "% щети от магии на елементал"
 
 msgid "% chance to Dispel beneficial spells"
 msgstr "% шанс за отблъскване на полезни заклинания"
@@ -7689,7 +7689,7 @@ msgid "Soul Eater"
 msgstr "Душеяд"
 
 msgid "Elemental"
-msgstr "Стихия"
+msgstr "Елементал"
 
 msgid "No Morale"
 msgstr "Без морал"
@@ -8391,7 +8391,7 @@ msgstr ""
 "от Книгата на елементите."
 
 msgid "Elemental Ring"
-msgstr "Пръстен на стихиите"
+msgstr "Пръстен на елементал"
 
 msgid "The %{name} halves the casting cost of all summoning spells."
 msgstr ""
