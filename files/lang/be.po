@@ -1531,7 +1531,7 @@ msgid "disable build."
 msgstr ""
 
 msgid "Cannot afford %{name}."
-msgstr ""
+msgstr "Нельга пабудаваць."
 
 msgid "%{name} is already built."
 msgstr "У горадзе ўжо ёсць %{name}."
