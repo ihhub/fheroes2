@@ -42,12 +42,16 @@
 #include <strings.h>
 #endif
 
-#include <SDL_platform.h> // IWYU pragma: keep
 #include <SDL_version.h>
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#include <SDL_filesystem.h> // IWYU pragma: keep
-#include <SDL_system.h> // IWYU pragma: keep
+#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && defined( ANDROID )
+#include <SDL_error.h>
+#include <SDL_system.h>
+#endif
+
+#if SDL_VERSION_ATLEAST( 2, 0, 1 ) && !defined( __LINUX__ )
+#include <SDL_filesystem.h>
+#include <SDL_stdinc.h>
 #endif
 
 #if defined( _WIN32 )
@@ -122,7 +126,7 @@ namespace
         }
 
         std::string res;
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 1 )
         char * path = SDL_GetPrefPath( "", prog.c_str() );
         if ( path ) {
             res = path;

@@ -39,10 +39,14 @@
 #include <SDL_video.h>
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+
 #include <SDL_gamecontroller.h>
-#include <SDL_hints.h> // IWYU pragma: keep
 #include <SDL_keycode.h>
-#include <SDL_touch.h> // IWYU pragma: keep
+
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#include <SDL_hints.h>
+#endif
+
 #endif
 
 #include "audio.h"
