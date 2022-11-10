@@ -40,10 +40,11 @@
 #include "resource.h"
 
 class StreamBase;
+
 namespace Maps
 {
     class Tiles;
-} // namespace Maps
+}
 
 struct CapturedObjects;
 

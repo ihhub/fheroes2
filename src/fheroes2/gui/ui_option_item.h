@@ -27,9 +27,6 @@
 namespace fheroes2
 {
     class Sprite;
-}
 
-namespace fheroes2
-{
     void drawOption( const Rect & optionRoi, const Sprite & icon, std::string titleText, std::string valueText );
 }

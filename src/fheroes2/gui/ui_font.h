@@ -27,10 +27,7 @@
 namespace fheroes2
 {
     class Sprite;
-}
 
-namespace fheroes2
-{
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
 
     bool isAlphabetSupported( const SupportedLanguage language );

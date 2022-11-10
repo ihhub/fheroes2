@@ -61,10 +61,6 @@ namespace Maps
 namespace fheroes2
 {
     class Image;
-}
-
-namespace fheroes2
-{
     class Sprite;
 }
 

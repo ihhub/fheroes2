@@ -27,9 +27,6 @@ class Monster;
 namespace fheroes2
 {
     class Image;
-}
 
-namespace fheroes2
-{
     void renderMonsterFrame( const Monster & monster, Image & output, const Point & offset );
 }

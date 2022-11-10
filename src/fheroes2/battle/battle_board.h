@@ -33,11 +33,6 @@
 #include "battle_cell.h"
 #include "math_base.h"
 
-namespace Battle
-{
-    class Unit;
-}
-
 #define ARENAW 11
 #define ARENAH 9
 #define ARENASIZE ARENAW * ARENAH
@@ -49,6 +44,8 @@ namespace Maps
 
 namespace Battle
 {
+    class Unit;
+
     inline direction_t & operator++( direction_t & d )
     {
         return d = ( CENTER == d ? TOP_LEFT : direction_t( d << 1 ) );

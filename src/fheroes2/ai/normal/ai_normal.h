@@ -45,16 +45,9 @@ class Spell;
 namespace Battle
 {
     class Actions;
-}
-
-namespace Battle
-{
     class Arena;
-}
-
-namespace Battle
-{
     class Unit;
+    class Units;
 }
 
 namespace Maps
@@ -69,11 +62,6 @@ namespace Rand
 
 struct VecHeroes;
 struct KingdomCastles;
-
-namespace Battle
-{
-    class Units;
-}
 
 namespace AI
 {
