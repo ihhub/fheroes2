@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <utility>
 
 #include "battle_grave.h"
 #include "battle_troop.h"

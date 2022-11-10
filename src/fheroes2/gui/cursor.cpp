@@ -26,6 +26,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
 #include "screen.h"
 

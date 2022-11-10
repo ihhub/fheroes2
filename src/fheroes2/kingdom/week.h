@@ -24,6 +24,8 @@
 #ifndef H2WEEK_H
 #define H2WEEK_H
 
+#include <cstdint>
+
 #include "monster.h"
 
 enum class WeekName : int

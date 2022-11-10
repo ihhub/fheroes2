@@ -21,22 +21,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+// IWYU pragma: no_include <bits/getopt_core.h>
+// IWYU pragma: no_include <SDL2/SDL_platform.h>
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
-#include <fstream>
-#include <map>
-#include <memory>
+#include <utility>
 
 #if defined( _WIN32 )
 #include <clocale>
+#include <map>
 #endif
 
-#include "logging.h"
 #include "system.h"
-#include "tools.h"
 
-#include <SDL.h>
+#if defined( _WIN32 ) || defined( ANDROID )
+#include "logging.h"
+#else
+#include <strings.h>
+#endif
+
+#include <SDL_platform.h> // IWYU pragma: keep
+#include <SDL_version.h>
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_filesystem.h> // IWYU pragma: keep
+#endif
 
 #if defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN

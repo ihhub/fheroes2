@@ -24,10 +24,11 @@
 #ifndef H2SYSTEM_H
 #define H2SYSTEM_H
 
-#include <ctime>
-#include <vector>
+// IWYU pragma: no_include <bits/types/struct_tm.h>
 
-#include "dir.h"
+#include <ctime>
+#include <string>
+#include <vector>
 
 namespace System
 {

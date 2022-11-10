@@ -21,16 +21,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+// IWYU pragma: no_include <ext/alloc_traits.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dir.h"
+#include "game.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "game_mainmenu_ui.h"
+#include "game_mode.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
 #include "logging.h"
 #include "mus.h"

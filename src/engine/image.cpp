@@ -18,13 +18,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "image.h"
-#include "image_palette.h"
+// IWYU pragma: no_include <bits/std_abs.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
+#include <type_traits>
+
+#include "image.h"
+#include "image_palette.h"
 
 namespace
 {

@@ -18,30 +18,41 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "screen.h"
-#include "image_palette.h"
-#include "logging.h"
-#include "tools.h"
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <cstring>
+#include <iterator>
+#include <ostream>
+#include <set>
+#include <utility>
 
+#include <SDL_error.h>
+#include <SDL_stdinc.h>
 #include <SDL_version.h>
 #include <SDL_video.h>
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #include <SDL_events.h>
 #include <SDL_hints.h>
 #include <SDL_mouse.h>
+#include <SDL_pixels.h>
+#include <SDL_rect.h>
 #include <SDL_render.h>
+#include <SDL_surface.h>
 #else
 #include <SDL_active.h>
 #endif
 
-#include <algorithm>
-#include <cassert>
-#include <cmath>
-#include <set>
-
 #if defined( TARGET_PS_VITA )
 #include <vita2d.h>
 #endif
+
+#include "image_palette.h"
+#include "logging.h"
+#include "screen.h"
+#include "tools.h"
 
 namespace
 {

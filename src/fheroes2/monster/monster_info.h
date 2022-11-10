@@ -21,10 +21,12 @@
 #ifndef H2MONSTER_INFO_H
 #define H2MONSTER_INFO_H
 
-#include "resource.h"
-
+#include <algorithm>
+#include <cstdint>
 #include <string>
 #include <vector>
+
+#include "resource.h"
 
 namespace fheroes2
 {

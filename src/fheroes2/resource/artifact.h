@@ -23,15 +23,18 @@
 #ifndef H2ARTIFACT_H
 #define H2ARTIFACT_H
 
+#include <cstdint>
 #include <set>
+#include <string>
 #include <vector>
 
 #include "artifact_info.h"
+#include "image.h"
 #include "interface_itemsbar.h"
+#include "math_base.h"
 #include "mp2.h"
 #include "ui_tool.h"
 
-class Spell;
 class Heroes;
 class StatusBar;
 class StreamBase;

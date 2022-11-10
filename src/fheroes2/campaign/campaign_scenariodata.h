@@ -21,8 +21,14 @@
 #ifndef H2CAMPAIGN_SCENARIODATA_H
 #define H2CAMPAIGN_SCENARIODATA_H
 
+#include <cstdint>
+#include <string>
+#include <vector>
+
 #include "game_video_type.h"
 #include "maps_fileinfo.h"
+
+class StreamBase;
 
 namespace Campaign
 {

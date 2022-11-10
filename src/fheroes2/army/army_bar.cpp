@@ -21,21 +21,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "army_bar.h"
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <vector>
+
 #include "agg_image.h"
 #include "army.h"
+#include "army_bar.h"
+#include "army_troop.h"
+#include "castle.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "kingdom.h"
+#include "localevent.h"
+#include "monster.h"
 #include "race.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_monster.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {

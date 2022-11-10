@@ -21,6 +21,10 @@
 #ifndef H2CAMPAIGN_DATA_H
 #define H2CAMPAIGN_DATA_H
 
+#include <cstdint>
+#include <string>
+#include <vector>
+
 #include "campaign_scenariodata.h"
 
 namespace Campaign

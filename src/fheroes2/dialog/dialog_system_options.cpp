@@ -18,27 +18,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "dialog_system_options.h"
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "cursor.h"
-#include "dialog.h"
 #include "dialog_audio.h"
 #include "dialog_hotkeys.h"
-#include "game.h"
+#include "dialog_system_options.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
-#include "ui_text.h"
-
-#include <cassert>
 
 namespace
 {

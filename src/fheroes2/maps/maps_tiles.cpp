@@ -21,22 +21,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+// IWYU pragma: no_include <bits/std_abs.h>
+
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstdint>
+#include <cstdlib>
 #include <iostream>
+#include <map>
+#include <set>
 
 #include "agg_image.h"
+#include "army.h"
 #include "castle.h"
 #include "game.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
-#ifdef WITH_DEBUG
-#include "game_interface.h"
-#else
+#include "image.h"
 #include "interface_gamearea.h"
-#endif
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -58,7 +62,6 @@
 #include "race.h"
 #include "save_format_version.h"
 #include "serialize.h"
-#include "settings.h"
 #include "spell.h"
 #include "til.h"
 #include "trees.h"

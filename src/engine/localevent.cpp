@@ -21,13 +21,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "localevent.h"
-#include "audio.h"
-#include "pal.h"
-#include "screen.h"
+// IWYU pragma: no_include <bits/std_abs.h>
 
 #include <cassert>
+#include <cmath>
+#include <cstdlib>
 #include <map>
+#include <utility>
+#include <vector>
+
+#include <SDL_events.h>
+#include <SDL_joystick.h>
+#include <SDL_keyboard.h>
+#include <SDL_mouse.h>
+#include <SDL_timer.h>
+#include <SDL_version.h>
+#include <SDL_video.h>
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_gamecontroller.h>
+#include <SDL_keycode.h>
+#endif
+
+#include "audio.h"
+#include "localevent.h"
+#include "pal.h"
+#include "screen.h"
 
 namespace
 {

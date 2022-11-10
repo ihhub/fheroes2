@@ -24,9 +24,6 @@
 #ifndef H2M82_H
 #define H2M82_H
 
-#include <cstddef>
-#include <cstdint>
-
 #include "mp2.h"
 
 namespace M82

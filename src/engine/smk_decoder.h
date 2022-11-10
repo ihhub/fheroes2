@@ -20,10 +20,11 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
-struct smk_t;
+struct smk_t; // IWYU pragma: keep
 
 namespace fheroes2
 {
@@ -60,7 +61,7 @@ public:
     }
 
 private:
-    std::vector<std::vector<uint8_t> > _audioChannel;
+    std::vector<std::vector<uint8_t>> _audioChannel;
     int32_t _width;
     int32_t _height;
     int32_t _heightScaleFactor;

@@ -18,14 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "campaign_savedata.h"
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <memory>
+
 #include "army.h"
 #include "campaign_data.h"
+#include "campaign_savedata.h"
 #include "game.h"
 #include "save_format_version.h"
 #include "serialize.h"
-#include <algorithm>
-#include <cassert>
 
 namespace Campaign
 {

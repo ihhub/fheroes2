@@ -21,13 +21,53 @@
 #ifndef H2AI_NORMAL_H
 #define H2AI_NORMAL_H
 
-#include "ai.h"
-#include "kingdom.h"
-#include "world_pathfinding.h"
-
+#include <cassert>
+#include <cstdint>
 #include <map>
 #include <set>
+#include <utility>
+#include <vector>
 
+#include "ai.h"
+#include "color.h"
+#include "mp2.h"
+#include "pairs.h"
+#include "world_pathfinding.h"
+
+class Army;
+class Castle;
+class Funds;
+class HeroBase;
+class Heroes;
+class Kingdom;
+class Spell;
+
+namespace Battle
+{
+    class Actions;
+}
+
+namespace Battle
+{
+    class Arena;
+}
+
+namespace Battle
+{
+    class Unit;
+}
+
+namespace Maps
+{
+    class Tiles;
+}
+
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
+
+struct VecHeroes;
 struct KingdomCastles;
 
 namespace Battle

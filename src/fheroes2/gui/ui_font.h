@@ -20,8 +20,14 @@
 
 #pragma once
 
-#include "image.h"
+#include <vector>
+
 #include "ui_language.h"
+
+namespace fheroes2
+{
+    class Sprite;
+}
 
 namespace fheroes2
 {

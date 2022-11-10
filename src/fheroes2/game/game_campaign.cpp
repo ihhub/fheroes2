@@ -18,10 +18,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+// IWYU pragma: no_include <ext/alloc_traits.h>
+
+#include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
+#include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "campaign_data.h"
@@ -33,18 +48,34 @@
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "game_video.h"
+#include "game_video_type.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mus.h"
 #include "pal.h"
+#include "players.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_campaign.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 

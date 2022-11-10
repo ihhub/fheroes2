@@ -21,8 +21,11 @@
 #ifndef H2LOGGING_H
 #define H2LOGGING_H
 
+// IWYU pragma: no_include <bits/types/struct_tm.h>
+
 #include <iostream>
-#include <sstream>
+#include <sstream> // IWYU pragma: keep
+#include <string>
 
 enum
 {
@@ -169,12 +172,10 @@ namespace Logging
     // This structure simply adds text separators. It is used for Text Support Mode only.
     struct TextSupportLogger
     {
-        TextSupportLogger()
-        {
-            COUT( "----------" )
-        }
+        TextSupportLogger(){ COUT( "----------" ) }
 
-        TextSupportLogger( const TextSupportLogger & ) = delete;
+        TextSupportLogger( const TextSupportLogger & )
+            = delete;
         TextSupportLogger( const TextSupportLogger && ) = delete;
         TextSupportLogger & operator=( const TextSupportLogger & ) = delete;
         TextSupportLogger & operator=( const TextSupportLogger && ) = delete;

@@ -18,18 +18,48 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <set>
+#include <string>
 #include <tuple>
 #include <utility>
+#include <vector>
 
+#include "ai.h"
 #include "ai_normal.h"
+#include "army.h"
+#include "army_troop.h"
+#include "audio.h"
 #include "audio_manager.h"
+#include "castle.h"
+#include "castle_heroes.h"
+#include "color.h"
 #include "game_interface.h"
-#include "game_over.h"
 #include "ground.h"
+#include "heroes.h"
+#include "heroes_recruits.h"
+#include "interface_status.h"
+#include "kingdom.h"
 #include "logging.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "mp2.h"
 #include "mus.h"
+#include "pairs.h"
+#include "players.h"
+#include "resource.h"
+#include "skill.h"
+#include "spell.h"
 #include "world.h"
+#include "world_pathfinding.h"
+#include "world_regions.h"
 
 namespace
 {

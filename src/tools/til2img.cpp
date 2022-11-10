@@ -21,11 +21,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstdint>
+#include <cstdlib>
 #include <cstring>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
+#include <string>
+#include <vector>
 
+#include "image.h"
 #include "image_tool.h"
 #include "serialize.h"
 #include "system.h"

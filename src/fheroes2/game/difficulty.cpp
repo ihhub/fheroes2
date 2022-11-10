@@ -21,10 +21,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "difficulty.h"
 #include "translations.h"
-
-#include <cassert>
 
 std::string Difficulty::String( int difficulty )
 {

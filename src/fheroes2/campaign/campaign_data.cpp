@@ -18,17 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "campaign_data.h"
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <cstddef>
+#include <memory>
+#include <utility>
+
 #include "artifact.h"
+#include "campaign_data.h"
+#include "game_video_type.h"
 #include "heroes.h"
 #include "monster.h"
 #include "resource.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
-
-#include <array>
-#include <cassert>
 
 namespace
 {

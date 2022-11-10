@@ -21,7 +21,12 @@
 #ifndef H2BATTLE_ANIMATION_H
 #define H2BATTLE_ANIMATION_H
 
+#include <cstddef>
+#include <cstdint>
+#include <vector>
+
 #include "bin_info.h"
+#include "math_base.h"
 #include "timing.h"
 
 // This timer is used for randomized idle animation delays, automatically setting it in range of 75%-125% of the intended value
@@ -102,8 +107,8 @@ protected:
     std::vector<int> _death;
     monsterReturnAnim _melee[3];
     monsterReturnAnim _ranged[3];
-    std::vector<std::vector<int> > _idle;
-    std::vector<std::vector<int> > _offsetX;
+    std::vector<std::vector<int>> _idle;
+    std::vector<std::vector<int>> _offsetX;
 
     bool appendFrames( std::vector<int> & target, int animID );
 };

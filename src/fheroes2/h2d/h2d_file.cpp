@@ -19,10 +19,12 @@
  ***************************************************************************/
 
 #include "h2d_file.h"
-#include "image.h"
 
 #include <cassert>
+#include <cstdint>
 #include <cstring>
+
+#include "image.h"
 
 namespace
 {

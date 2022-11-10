@@ -18,24 +18,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "audio_manager.h"
+// IWYU pragma: no_include <bits/std_abs.h>
+// IWYU pragma: no_include <ext/alloc_traits.h>
+
+#include <algorithm>
+#include <array>
+#include <atomic>
+#include <cassert>
+#include <cstddef>
+#include <cstdlib>
+#include <deque>
+#include <list>
+#include <memory>
+#include <mutex>
+#include <optional>
+#include <ostream>
+#include <utility>
+
 #include "agg_file.h"
-#include "game.h"
+#include "audio_manager.h"
+#include "dir.h"
 #include "logging.h"
 #include "m82.h"
 #include "mus.h"
+#include "serialize.h"
 #include "settings.h"
 #include "system.h"
 #include "thread.h"
 #include "tools.h"
 #include "xmi.h"
-
-#include <algorithm>
-#include <array>
-#include <cassert>
-#include <deque>
-#include <optional>
-#include <utility>
 
 namespace
 {

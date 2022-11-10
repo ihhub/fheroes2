@@ -18,10 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+// IWYU pragma: no_include <ext/alloc_traits.h>
+
 #include "ui_font.h"
-#include "icn.h"
 
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <initializer_list>
+#include <memory>
+
+#include "icn.h"
+#include "image.h"
+#include "math_base.h"
 
 namespace
 {

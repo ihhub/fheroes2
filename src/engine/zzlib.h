@@ -24,8 +24,9 @@
 #ifndef H2ZLIB_H
 #define H2ZLIB_H
 
+#include <cstddef>
 #include <cstdint>
-#include <vector>
+#include <string>
 
 #include "image.h"
 #include "serialize.h"

@@ -21,13 +21,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+// IWYU pragma: no_include <ext/alloc_traits.h>
+
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
 #include <fstream>
-#include <iomanip>
 #include <list>
 #include <map>
+#include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 

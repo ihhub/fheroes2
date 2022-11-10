@@ -20,9 +20,14 @@
 
 #pragma once
 
-#include "image.h"
+#include "math_base.h"
 
 class Monster;
+
+namespace fheroes2
+{
+    class Image;
+}
 
 namespace fheroes2
 {

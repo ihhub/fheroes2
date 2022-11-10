@@ -18,11 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+// IWYU pragma: no_include <ext/alloc_traits.h>
+
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstring>
+#include <initializer_list>
 #include <map>
+#include <memory>
+#include <random>
 #include <set>
+#include <string>
+#include <utility>
 #include <vector>
 
 #include "agg.h"
@@ -32,9 +40,11 @@
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
+#include "math_base.h"
 #include "pal.h"
 #include "rand.h"
 #include "screen.h"
+#include "serialize.h"
 #include "text.h"
 #include "til.h"
 #include "tools.h"

@@ -22,30 +22,50 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <cstdint>
+#include <memory>
 #include <queue>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "army.h"
+#include "artifact.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_interface.h"
+#include "color.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "luck.h"
+#include "math_base.h"
+#include "monster.h"
 #include "morale.h"
 #include "mus.h"
+#include "payment.h"
+#include "players.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_dialog.h"
 
 namespace

@@ -24,7 +24,14 @@
 #ifndef H2INTERFACE_GAMEAREA_H
 #define H2INTERFACE_GAMEAREA_H
 
+#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <utility>
+#include <vector>
+
 #include "image.h"
+#include "math_base.h"
 #include "mp2.h"
 #include "timing.h"
 

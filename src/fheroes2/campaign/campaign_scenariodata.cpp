@@ -18,8 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "campaign_scenariodata.h"
+// IWYU pragma: no_include <bits/std_abs.h>
+
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <cstdlib>
+#include <list>
+#include <map>
+#include <utility>
+
 #include "artifact.h"
+#include "campaign_scenariodata.h"
+#include "dir.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
@@ -31,9 +42,6 @@
 #include "system.h"
 #include "tools.h"
 #include "translations.h"
-
-#include <cassert>
-#include <map>
 
 namespace
 {
@@ -575,7 +583,7 @@ namespace
         }
     }
 
-    const char * getSpellCampaignName( const Uint32 spellId )
+    const char * getSpellCampaignName( const int32_t spellId )
     {
         switch ( spellId ) {
         case Spell::ANIMATEDEAD:

@@ -23,25 +23,32 @@
 #ifndef H2TILES_H
 #define H2TILES_H
 
+#include <cstdint>
 #include <list>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
 #include "direction.h"
+#include "math_base.h"
 #include "mp2.h"
+#include "pairs.h"
 #include "resource.h"
 #include "skill.h"
 #include "world_regions.h"
 
 class Heroes;
-class Spell;
 class Monster;
+class Spell;
+class StreamBase;
 
-namespace MP2
+namespace fheroes2
 {
-    struct mp2tile_t;
-    struct mp2addon_t;
+    class Image;
+    class Sprite;
 }
 
 namespace Interface
