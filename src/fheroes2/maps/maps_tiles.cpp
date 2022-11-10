@@ -60,7 +60,6 @@
 #include "objwatr.h"
 #include "objxloc.h"
 #include "race.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "spell.h"
 #include "til.h"
