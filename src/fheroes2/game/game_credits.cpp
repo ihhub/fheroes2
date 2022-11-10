@@ -341,6 +341,7 @@ namespace
         contributors = "Kiril Lipatov\n"
                        "Matt Taylor\n"
                        "Andrew Szucs\n"
+                       "Kresimir Condic\n"
                        "slvclw\n";
 
         name.Set( contributors, Font::BIG, output.width() - textInitialOffsetX );
