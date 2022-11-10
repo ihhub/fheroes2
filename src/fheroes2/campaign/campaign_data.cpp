@@ -29,6 +29,7 @@
 #include "campaign_data.h"
 #include "game_video_type.h"
 #include "heroes.h"
+#include "maps_fileinfo.h"
 #include "monster.h"
 #include "resource.h"
 #include "spell.h"
@@ -711,6 +712,61 @@ namespace Campaign
             static const Campaign::CampaignData noCampaign;
             return noCampaign;
         }
+        }
+    }
+
+    void CampaignData::updateScenarioGameplayConditions( const Campaign::ScenarioInfoId & scenarioInfoId, Maps::FileInfo & mapInfo )
+    {
+        bool allAIPlayersInAlliance = false;
+
+        switch ( scenarioInfoId.campaignId ) {
+        case ROLAND_CAMPAIGN:
+            if ( scenarioInfoId.scenarioId == 9 ) {
+                allAIPlayersInAlliance = true;
+            }
+            break;
+        case ARCHIBALD_CAMPAIGN:
+            if ( scenarioInfoId.scenarioId == 10 ) {
+                allAIPlayersInAlliance = true;
+            }
+            break;
+        case PRICE_OF_LOYALTY_CAMPAIGN:
+        case DESCENDANTS_CAMPAIGN:
+        case VOYAGE_HOME_CAMPAIGN:
+        case WIZARDS_ISLE_CAMPAIGN:
+            break;
+        default:
+            // Did you add a new campaign? Add the corresponding case above.
+            assert( 0 );
+            return;
+        }
+
+        if ( allAIPlayersInAlliance ) {
+            const Colors humanColors( mapInfo.allow_human_colors );
+            // Make sure that this is only one human player on the map.
+            if ( humanColors.size() != 1 ) {
+                // Looks like somebody is modifying the original map.
+                assert( 0 );
+                return;
+            }
+
+            const int aiColors = ( mapInfo.kingdom_colors & ( ~mapInfo.allow_human_colors ) );
+            if ( aiColors == 0 ) {
+                // This is definitely not the map to modify.
+                assert( 0 );
+                return;
+            }
+
+            // If this assertion blows up then the whole logic behind colors is going crazy.
+            assert( aiColors < 256 );
+
+            const uint8_t humanColor = static_cast<uint8_t>( humanColors.front() );
+
+            for ( uint8_t & allianceColor : mapInfo.unions ) {
+                if ( allianceColor != humanColor && ( aiColors & allianceColor ) ) {
+                    allianceColor = static_cast<uint8_t>( aiColors );
+                }
+            }
         }
     }
 
