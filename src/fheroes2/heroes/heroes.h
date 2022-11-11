@@ -25,7 +25,10 @@
 #define H2HEROES_H
 
 #include <algorithm>
+#include <cassert>
+#include <cmath>
 #include <cstdint>
+#include <exception>
 #include <list>
 #include <string>
 #include <utility>
