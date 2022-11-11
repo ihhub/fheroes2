@@ -1279,7 +1279,6 @@ void LocalEvent::OnSdl2WindowEvent( const SDL_Event & event )
         ResumeSounds();
     }
     else if ( event.window.event == SDL_WINDOWEVENT_RESIZED ) {
-        fheroes2::engine().updateScreenParameters();
         fheroes2::Display::instance().render();
     }
 }
@@ -1617,19 +1616,8 @@ void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
 {
     SetModes( MOUSE_MOTION );
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( fheroes2::cursor().isSoftwareEmulation() ) {
-        updateEmulatedMousePosition( motion.x, motion.y );
-    }
-    else {
-        mouse_cu.x = motion.x;
-        mouse_cu.y = motion.y;
-    }
-#else
-    // SDL1 does not support window scaling.
     mouse_cu.x = motion.x;
     mouse_cu.y = motion.y;
-#endif
     _emulatedPointerPosX = mouse_cu.x;
     _emulatedPointerPosY = mouse_cu.y;
 }
@@ -1647,19 +1635,8 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
     mouse_button = button.button;
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( fheroes2::cursor().isSoftwareEmulation() ) {
-        updateEmulatedMousePosition( button.x, button.y );
-    }
-    else {
-        mouse_cu.x = button.x;
-        mouse_cu.y = button.y;
-    }
-#else
-    // SDL1 does not support window scaling.
     mouse_cu.x = button.x;
     mouse_cu.y = button.y;
-#endif
     _emulatedPointerPosX = mouse_cu.x;
     _emulatedPointerPosY = mouse_cu.y;
 
@@ -1721,17 +1698,6 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
     mouse_rm = mouse_cu;
     mouse_wm.x = wheel.x;
     mouse_wm.y = wheel.y;
-}
-
-void LocalEvent::updateEmulatedMousePosition( const int32_t x, const int32_t y )
-{
-    const fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Rect renderROI = fheroes2::engine().getRenderROI(); // rendering area
-    const fheroes2::Size gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
-    const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
-
-    mouse_cu.x = ( x + renderROI.x ) * windowRect.width / ( gameSurfaceRes.width + renderROI.x * 2 );
-    mouse_cu.y = ( y + renderROI.y ) * windowRect.height / ( gameSurfaceRes.height + renderROI.y * 2 );
 }
 
 #endif
