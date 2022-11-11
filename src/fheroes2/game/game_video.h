@@ -21,10 +21,8 @@
 #pragma once
 
 #include <string>
-#include <vector>
 
 #include "game_video_type.h"
-#include "math_base.h"
 
 namespace Video
 {

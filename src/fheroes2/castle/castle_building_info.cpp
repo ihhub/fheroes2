@@ -18,12 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+
 #include "castle_building_info.h"
 #include "maps_fileinfo.h"
 #include "race.h"
 #include "translations.h"
-
-#include <cassert>
 
 namespace
 {

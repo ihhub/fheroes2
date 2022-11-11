@@ -36,10 +36,12 @@ class Kingdom;
 class Army;
 class Spell;
 struct VecHeroes;
+
 namespace Maps
 {
     class Tiles;
 }
+
 namespace Battle
 {
     class Arena;

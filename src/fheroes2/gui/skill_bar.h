@@ -20,7 +20,13 @@
 
 #pragma once
 
+#include <cstdint>
+#include <string>
+#include <vector>
+
+#include "image.h"
 #include "interface_itemsbar.h"
+#include "math_base.h"
 
 class Heroes;
 namespace Skill

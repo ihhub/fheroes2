@@ -21,24 +21,36 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "interface_gamearea.h"
-
-#include "agg_image.h"
-#include "cursor.h"
-#include "game.h"
-#include "game_delays.h"
-#include "game_interface.h"
-#include "ground.h"
-#include "icn.h"
-#include "logging.h"
-#include "maps.h"
-#include "pal.h"
-#include "route.h"
-#include "settings.h"
-#include "world.h"
-
+#include <algorithm>
 #include <cassert>
 #include <deque>
+#include <list>
+#include <map>
+#include <ostream>
+#include <type_traits>
+
+#include "agg_image.h"
+#include "castle.h"
+#include "cursor.h"
+#include "game_delays.h"
+#include "game_interface.h"
+#include "gamedefs.h"
+#include "ground.h"
+#include "heroes.h"
+#include "icn.h"
+#include "interface_cpanel.h"
+#include "interface_gamearea.h"
+#include "localevent.h"
+#include "logging.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "pal.h"
+#include "players.h"
+#include "route.h"
+#include "screen.h"
+#include "settings.h"
+#include "skill.h"
+#include "world.h"
 
 namespace
 {

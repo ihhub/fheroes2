@@ -26,28 +26,46 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <cstdint>
 #include <exception>
 #include <list>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "army.h"
+#include "artifact.h"
+#include "color.h"
+#include "direction.h"
 #include "heroes_base.h"
+#include "math_base.h"
+#include "mp2.h"
 #include "pairs.h"
 #include "route.h"
+#include "skill.h"
+#include "spell.h"
 #include "visit.h"
+
+class Castle;
+class StreamBase;
+class StreamBuf;
 
 namespace Battle
 {
     class Only;
 }
 
-namespace Interface
+namespace Maps
 {
-    class GameArea;
+    class Tiles;
 }
 
-class StreamBuf;
+namespace fheroes2
+{
+    class Image;
+    class Sprite;
+}
 
 struct HeroSeedsForLevelUp
 {
@@ -585,7 +603,6 @@ private:
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
-
 
     mutable int _alphaValue;
 

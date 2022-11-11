@@ -20,20 +20,50 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <list>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <utility>
+#include <vector>
 
+#include "ai.h"
 #include "ai_normal.h"
-#include "game.h"
+#include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "castle.h"
+#include "castle_heroes.h"
+#include "color.h"
 #include "game_over.h"
 #include "game_static.h"
+#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
+#include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
 #include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "monster.h"
 #include "morale.h"
 #include "mp2.h"
+#include "pairs.h"
+#include "payment.h"
+#include "players.h"
+#include "rand.h"
+#include "resource.h"
+#include "route.h"
 #include "settings.h"
+#include "skill.h"
+#include "spell.h"
+#include "visit.h"
 #include "world.h"
+#include "world_pathfinding.h"
 
 namespace
 {

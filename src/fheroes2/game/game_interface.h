@@ -24,13 +24,19 @@
 #ifndef H2GAMEINTERFACE_H
 #define H2GAMEINTERFACE_H
 
+#include <cstdint>
+
+#include "game_mode.h"
+#include "gamedefs.h"
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_radar.h"
 #include "interface_status.h"
+#include "math_base.h"
 #include "players.h"
+#include "screen.h"
 
 class Castle;
 class Heroes;

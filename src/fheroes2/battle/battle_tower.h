@@ -24,7 +24,16 @@
 #ifndef H2BATTLE_TOWER_H
 #define H2BATTLE_TOWER_H
 
+#include <cstdint>
+#include <string>
+
 #include "battle_troop.h"
+#include "math_base.h"
+
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
 
 class Castle;
 

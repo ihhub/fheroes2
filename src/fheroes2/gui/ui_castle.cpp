@@ -18,19 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "ui_castle.h"
+#include <array>
+#include <cassert>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "castle.h"
 #include "color.h"
 #include "icn.h"
 #include "logging.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
-#include "tools.h"
+#include "ui_castle.h"
 #include "ui_text.h"
-
-#include <array>
-#include <cassert>
 
 namespace
 {

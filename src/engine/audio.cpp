@@ -24,18 +24,26 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
+#include <cstddef>
+#include <list>
 #include <map>
 #include <memory>
 #include <mutex>
 #include <numeric>
+#include <ostream>
+#include <type_traits>
 #include <utility>
 #include <variant>
 
-#include <SDL.h>
+#include <SDL_audio.h>
+#include <SDL_error.h>
 #include <SDL_mixer.h>
+#include <SDL_rwops.h>
+#include <SDL_version.h>
 
 #include "audio.h"
 #include "core.h"
+#include "dir.h"
 #include "logging.h"
 #include "system.h"
 #include "thread.h"

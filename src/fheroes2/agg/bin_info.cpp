@@ -18,7 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdlib>
 #include <map>
+#include <memory>
+#include <ostream>
+#include <utility>
 
 #include "agg.h"
 #include "battle_animation.h"
@@ -26,6 +30,7 @@
 #include "bin_info.h"
 #include "logging.h"
 #include "monster.h"
+#include "monster_info.h"
 #include "serialize.h"
 
 namespace
@@ -259,7 +264,7 @@ namespace Bin_Info
             return false;
 
         // Absolute minimal set up
-        const int essentialAnimations[7] = {MOVE_MAIN, STATIC, DEATH, WINCE_UP, ATTACK1, ATTACK2, ATTACK3};
+        const int essentialAnimations[7] = { MOVE_MAIN, STATIC, DEATH, WINCE_UP, ATTACK1, ATTACK2, ATTACK3 };
 
         for ( int i = 0; i < 7; ++i ) {
             if ( animationFrames.at( essentialAnimations[i] ).empty() )

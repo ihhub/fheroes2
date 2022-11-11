@@ -23,9 +23,14 @@
 #ifndef H2MAPS_ACTIONS_H
 #define H2MAPS_ACTIONS_H
 
+#include <cstdint>
+#include <string>
+
 #include "artifact.h"
 #include "color.h"
 #include "resource.h"
+
+class StreamBase;
 
 class Heroes;
 enum

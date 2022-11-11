@@ -24,9 +24,14 @@
 #ifndef H2BATTLE_BOARD_H
 #define H2BATTLE_BOARD_H
 
+#include <algorithm>
+#include <cstdint>
 #include <random>
+#include <string>
+#include <vector>
 
 #include "battle_cell.h"
+#include "math_base.h"
 
 #define ARENAW 11
 #define ARENAH 9
@@ -39,6 +44,8 @@ namespace Maps
 
 namespace Battle
 {
+    class Unit;
+
     inline direction_t & operator++( direction_t & d )
     {
         return d = ( CENTER == d ? TOP_LEFT : direction_t( d << 1 ) );

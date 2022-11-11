@@ -21,9 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "army.h"
 #include "army_troop.h"
+#include "army.h"
+#include "color.h"
 #include "heroes_base.h"
+#include "resource.h"
 #include "serialize.h"
 #include "speed.h"
 

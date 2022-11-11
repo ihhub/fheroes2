@@ -23,24 +23,35 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <functional>
+#include <string>
 #include <vector>
 
 #include "agg_image.h"
+#include "artifact_ultimate.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_gamearea.h"
+#include "interface_radar.h"
+#include "localevent.h"
 #include "logging.h"
+#include "math_base.h"
 #include "mus.h"
 #include "puzzle.h"
 #include "rand.h"
+#include "screen.h"
 #include "serialize.h"
 #include "settings.h"
+#include "ui_button.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -277,7 +288,7 @@ void Puzzle::ShowMapsDialog() const
 
 StreamBase & operator<<( StreamBase & msg, const Puzzle & pzl )
 {
-    msg << pzl.to_string<char, std::char_traits<char>, std::allocator<char> >();
+    msg << pzl.to_string<char, std::char_traits<char>, std::allocator<char>>();
 
     // orders
     msg << static_cast<uint8_t>( pzl.zone1_order.size() );

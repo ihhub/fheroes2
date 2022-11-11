@@ -23,12 +23,15 @@
 #ifndef H2MAPS_OBJECTS_H
 #define H2MAPS_OBJECTS_H
 
+#include <cstdint>
 #include <list>
 #include <string>
 
 #include "artifact.h"
 #include "position.h"
 #include "resource.h"
+
+class StreamBase;
 
 class StreamBuf;
 

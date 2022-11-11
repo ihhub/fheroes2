@@ -19,6 +19,18 @@
  ***************************************************************************/
 
 #include "monster_info.h"
+
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <set>
+#include <sstream>
+#include <utility>
+
 #include "icn.h"
 #include "m82.h"
 #include "monster.h"
@@ -27,12 +39,6 @@
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
-
-#include <algorithm>
-#include <cassert>
-#include <map>
-#include <set>
-#include <sstream>
 
 namespace
 {

@@ -24,19 +24,27 @@
 #ifndef H2BATTLE_INTERFACE_H
 #define H2BATTLE_INTERFACE_H
 
+#include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "battle_animation.h"
 #include "battle_board.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "image.h"
+#include "math_base.h"
 #include "spell.h"
 #include "text.h"
 #include "ui_button.h"
 
-class Settings;
+class Castle;
+class HeroBase;
+class Kingdom;
 class LocalEvent;
+class Settings;
 
 namespace fheroes2
 {
@@ -47,7 +55,6 @@ namespace Battle
 {
     class Actions;
     class Arena;
-    class Board;
     class Cell;
     class Position;
     class StatusListBox;

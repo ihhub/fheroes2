@@ -23,26 +23,40 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstring>
-#include <iomanip>
+#include <ostream>
 
 #include "agg_image.h"
+#include "army.h"
+#include "artifact.h"
+#include "artifact_info.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_board.h"
 #include "battle_cell.h"
+#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
+#include "castle.h"
+#include "color.h"
 #include "game_static.h"
+#include "heroes_base.h"
+#include "image.h"
 #include "logging.h"
+#include "m82.h"
+#include "monster.h"
 #include "monster_anim.h"
+#include "monster_info.h"
 #include "morale.h"
+#include "rand.h"
+#include "resource.h"
+#include "skill.h"
 #include "speed.h"
+#include "spell.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
-#include "world.h"
 
 Battle::ModeDuration::ModeDuration( uint32_t mode, uint32_t duration )
     : std::pair<uint32_t, uint32_t>( mode, duration )

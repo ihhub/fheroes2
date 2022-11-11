@@ -28,7 +28,7 @@
 #include <string>
 #include <vector>
 
-#include "dir.h"
+struct ListFiles;
 
 namespace Audio
 {
