@@ -647,7 +647,7 @@ namespace
         int32_t offsetY = textInitialOffsetY;
         int32_t offsetX = 0;
 
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Manual" ), "Bryan Farina" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "credits|Manual" ), "Bryan Farina" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "German Consultant" ), "Dr. Brock H. Summers" );
         renderText( output, offsetX, offsetY, textWidth, _( "Map Designers" ),
                     "Christian Vanover\n"

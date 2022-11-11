@@ -2759,7 +2759,7 @@ msgstr "Auto-Auflösen"
 msgid "Auto, No Spells"
 msgstr "Auto, ohne Zauber"
 
-msgid "Manual"
+msgid "autoBattle|Manual"
 msgstr "Manuell"
 
 msgid "Battles"
@@ -3646,6 +3646,10 @@ msgstr ""
 
 msgid "Recorded at Green Street Studios"
 msgstr ""
+
+#, fuzzy
+msgid "credits|Manual"
+msgstr "Spielanleitung"
 
 msgid "German Consultant"
 msgstr ""
@@ -5633,8 +5637,8 @@ msgid ""
 "Recognizing you, the butler refuses to admit you. \"The master,\" he says, "
 "\"will not see the same student twice.\""
 msgstr ""
-"Als der Butler Sie erkennt, weigert er sich, Sie einzulassen. \"Der Meister"
-"\", sagt er, \"will denselben Schüler nicht zweimal sehen.\""
+"Als der Butler Sie erkennt, weigert er sich, Sie einzulassen. \"Der "
+"Meister\", sagt er, \"will denselben Schüler nicht zweimal sehen.\""
 
 msgid ""
 "The butler admits you to see the master of the house. He trains you in the "
