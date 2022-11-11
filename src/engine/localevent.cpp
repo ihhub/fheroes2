@@ -1343,7 +1343,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     if ( isFirstFinger ) {
         SetModes( MOUSE_MOTION );
 
-        if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
+        if ( redraw_cursor_func ) {
             ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
         }
 
@@ -1367,7 +1367,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             // Only the second finger is pressing.
             SetModes( MOUSE_MOTION );
 
-            if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
+            if ( redraw_cursor_func ) {
                 ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
             }
         }
@@ -1552,7 +1552,7 @@ void LocalEvent::ProcessControllerAxisMotion()
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
-        if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
+        if ( redraw_cursor_func ) {
             ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
         }
     }
