@@ -1111,7 +1111,6 @@ namespace
         fheroes2::Point _prevWindowPos;
         fheroes2::Size _currentScreenResolution;
         fheroes2::Rect _activeWindowROI;
-        fheroes2::Rect _renderROI;
 
         fheroes2::Size _windowedSize;
 
