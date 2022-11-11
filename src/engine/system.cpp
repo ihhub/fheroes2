@@ -46,7 +46,7 @@
 #include <SDL_system.h>
 #endif
 
-#if SDL_VERSION_ATLEAST( 2, 0, 1 ) && !defined( __linux__ )
+#if SDL_VERSION_ATLEAST( 2, 0, 1 ) && ( !defined( __linux__ ) || defined( ANDROID ) )
 #include <SDL_filesystem.h>
 #include <SDL_stdinc.h>
 #endif
@@ -81,7 +81,7 @@
 #define SEPARATOR '/'
 #endif
 
-#if !defined( __linux__ )
+#if !defined( __linux__ ) || defined( ANDROID )
 namespace
 {
     std::string GetHomeDirectory( const std::string & prog )
@@ -173,7 +173,7 @@ void System::appendOSSpecificDirectories( std::vector<std::string> & directories
 
 std::string System::GetConfigDirectory( const std::string & prog )
 {
-#if defined( __linux__ )
+#if defined( __linux__ ) && !defined( ANDROID )
     const char * configEnv = getenv( "XDG_CONFIG_HOME" );
     if ( configEnv ) {
         return System::ConcatePath( configEnv, prog );
@@ -192,7 +192,7 @@ std::string System::GetConfigDirectory( const std::string & prog )
 
 std::string System::GetDataDirectory( const std::string & prog )
 {
-#if defined( __linux__ )
+#if defined( __linux__ ) && !defined( ANDROID )
     const char * dataEnv = getenv( "XDG_DATA_HOME" );
     if ( dataEnv ) {
         return System::ConcatePath( dataEnv, prog );
