@@ -567,7 +567,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
-        else if ( le.MouseClickLeft( moveArmyToHero1.area() ) HotKeyHoldEvent( Game::HotKeyEvent::MOVE_LEFT ) ) {
+        else if ( le.MouseClickLeft( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::MOVE_LEFT ) ) {
             const ArmyTroop * keep = nullptr;
 
             if ( selectArmy1.isSelected() ) {
