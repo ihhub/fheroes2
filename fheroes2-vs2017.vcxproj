@@ -265,6 +265,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_frameborder.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_gameinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_giftresources.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_graphics_settings.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_guardian.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_hotkeys.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_language_selection.cpp" />
@@ -326,6 +327,7 @@
     <ClCompile Include="src\fheroes2\gui\ui_language.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_monster.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_scrollbar.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_option_item.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_text.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_tool.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_window.cpp" />
@@ -467,6 +469,7 @@
     <ClInclude Include="src\fheroes2\dialog\dialog.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_audio.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_game_settings.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_graphics_settings.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_hotkeys.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_language_selection.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_resolution.h" />
@@ -512,6 +515,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_language.h" />
     <ClInclude Include="src\fheroes2\gui\ui_monster.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_option_item.h" />
     <ClInclude Include="src\fheroes2\gui\ui_text.h" />
     <ClInclude Include="src\fheroes2\gui\ui_tool.h" />
     <ClInclude Include="src\fheroes2\gui\ui_window.h" />

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 04:04+0000\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2714,14 +2714,14 @@ msgstr "Heroes of Might and Magic II beenden."
 msgid "Language"
 msgstr "Sprache"
 
-msgid "Resolution"
-msgstr "Auflösung"
-
-msgid "Experimental"
-msgstr "Experimentelle"
+msgid "Graphics"
+msgstr ""
 
 msgid "Settings"
 msgstr "Einstellungen"
+
+msgid "Experimental"
+msgstr "Experimentelle"
 
 msgid "Audio"
 msgstr ""
@@ -2744,14 +2744,14 @@ msgstr "Farbe"
 msgid "Text Support"
 msgstr "Text-Unterst."
 
+msgid "Interface Type"
+msgstr "Interface"
+
 msgid "Evil"
 msgstr "Böse"
 
 msgid "Good"
 msgstr "Gut"
-
-msgid "Interface Type"
-msgstr "Interface"
 
 msgid "Auto Resolve"
 msgstr "Auto-Auflösen"
@@ -2765,17 +2765,15 @@ msgstr "Manuell"
 msgid "Battles"
 msgstr "Schlachten"
 
-msgid "Select Game Language"
-msgstr "Spielsprache auswählen"
-
 msgid "Change the language of the game."
 msgstr "Sprache des Spiels ändern."
 
-msgid "Select Game Resolution"
-msgstr "Spielauflösung wählen"
+msgid "Select Game Language"
+msgstr "Spielsprache auswählen"
 
-msgid "Change the resolution of the game."
-msgstr "Auflösung des Spiels ändern."
+#, fuzzy
+msgid "Change the graphics settings of the game."
+msgstr "Sprache, Auflösung und Einstellungen des Spiels ändern."
 
 #, fuzzy
 msgid "Change the audio settings of the game."
@@ -2881,6 +2879,50 @@ msgstr "Geplantes Geschenk"
 msgid "Gift from %{name}"
 msgstr "Geschenk von %{name}"
 
+msgid "Resolution"
+msgstr "Auflösung"
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "1"
+
+#, fuzzy
+msgid "FPS"
+msgstr ", FPS: "
+
+#, fuzzy
+msgid "System Info"
+msgstr "System-Optionen"
+
+msgid "Change the resolution of the game."
+msgstr "Auflösung des Spiels ändern."
+
+msgid "Select Game Resolution"
+msgstr "Spielauflösung wählen"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
+
 msgid "Set Guardian"
 msgstr "Wache setzen"
 
@@ -2892,6 +2934,10 @@ msgstr "Hotkeys:"
 
 msgid "Select Game Language:"
 msgstr "Spielsprache wählen:"
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Klicken Sie, um die ausgewählte Auflösung anzuwenden."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} hat eine neue Stufe erreicht."
@@ -3718,27 +3764,10 @@ msgid "door"
 msgstr "Tür"
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-" auf der linken Seite des Hauptmenüs klicken.\n"
-"\n"
-"Um zwischen Fenster- und Vollbildmodus zu wechseln\n"
-"drücken Sie "
-
-msgid "F4"
-msgstr "F4"
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" Taste auf der Tastatur.\n"
-"\n"
-"Viel Spaß beim Spielen!"
 
 #, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -9981,9 +10010,6 @@ msgstr "Kampf: weiche Warteschleife erlauben"
 msgid "battle: deterministic events"
 msgstr "Kampf: deterministische Ereignisse"
 
-msgid "game: show system info"
-msgstr "Spiel: Systeminformationen anzeigen"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "Spiel: automatische Speicherung erfolgt zu Beginn des Tages"
 
@@ -10058,6 +10084,32 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ " on the left side of main menu.\n"
+#~ "\n"
+#~ "To switch between windowed and full screen modes\n"
+#~ "press "
+#~ msgstr ""
+#~ " auf der linken Seite des Hauptmenüs klicken.\n"
+#~ "\n"
+#~ "Um zwischen Fenster- und Vollbildmodus zu wechseln\n"
+#~ "drücken Sie "
+
+#~ msgid "F4"
+#~ msgstr "F4"
+
+#~ msgid ""
+#~ " key on the keyboard.\n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ " Taste auf der Tastatur.\n"
+#~ "\n"
+#~ "Viel Spaß beim Spielen!"
+
+#~ msgid "game: show system info"
+#~ msgstr "Spiel: Systeminformationen anzeigen"
 
 #~ msgid "Moved %{monster}"
 #~ msgstr "Bewegt %{monster}"

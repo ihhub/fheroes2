@@ -148,6 +148,7 @@ namespace Interface
         void SetFocus( Castle * );
         void ResetFocus( int );
         void RedrawFocus();
+        void updateFocus();
 
         void EventSwitchHeroSleeping();
         fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );

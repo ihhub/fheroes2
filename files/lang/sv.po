@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 04:04+0000\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2650,16 +2650,15 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#, fuzzy
-msgid "Resolution"
-msgstr "Revolution"
+msgid "Graphics"
+msgstr ""
+
+msgid "Settings"
+msgstr "Inställningar"
 
 #, fuzzy
 msgid "Experimental"
 msgstr "Luftelement"
-
-msgid "Settings"
-msgstr "Inställningar"
 
 msgid "Audio"
 msgstr ""
@@ -2685,15 +2684,15 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teleportera"
 
+#, fuzzy
+msgid "Interface Type"
+msgstr "Gränssnitt"
+
 msgid "Evil"
 msgstr "Ond"
 
 msgid "Good"
 msgstr "God"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Gränssnitt"
 
 msgid "Auto Resolve"
 msgstr ""
@@ -2708,18 +2707,14 @@ msgstr ""
 msgid "Battles"
 msgstr "Flaska"
 
-#, fuzzy
-msgid "Select Game Language"
-msgstr "Vald beskrivning"
-
 msgid "Change the language of the game."
 msgstr ""
 
 #, fuzzy
-msgid "Select Game Resolution"
+msgid "Select Game Language"
 msgstr "Vald beskrivning"
 
-msgid "Change the resolution of the game."
+msgid "Change the graphics settings of the game."
 msgstr ""
 
 msgid "Change the audio settings of the game."
@@ -2818,6 +2813,51 @@ msgstr ""
 msgid "Gift from %{name}"
 msgstr "Rekrytera %{name}"
 
+#, fuzzy
+msgid "Resolution"
+msgstr "Revolution"
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "ett"
+
+msgid "FPS"
+msgstr ""
+
+#, fuzzy
+msgid "System Info"
+msgstr "Systemalternativ"
+
+msgid "Change the resolution of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Select Game Resolution"
+msgstr "Vald beskrivning"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
+
 msgid "Set Guardian"
 msgstr "Ange beskyddare"
 
@@ -2829,6 +2869,10 @@ msgstr ""
 
 msgid "Select Game Language:"
 msgstr ""
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Klicka för att gå tillbaka till huvudmenyn."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} har gått upp en level."
@@ -3665,17 +3709,7 @@ msgid "door"
 msgstr ""
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-
-msgid "F4"
-msgstr ""
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
@@ -9359,9 +9393,6 @@ msgstr ""
 msgid "battle: deterministic events"
 msgstr ""
 
-msgid "game: show system info"
-msgstr "spel: Visa systeminfo"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "spel: automatisk sparning kommer att utföras i början på dagen"
 
@@ -9443,6 +9474,9 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: show system info"
+#~ msgstr "spel: Visa systeminfo"
 
 #, fuzzy
 #~ msgid "Moved %{monster}"

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,22 +18,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "ui_option_item.h"
+#include "screen.h"
+#include "ui_text.h"
 
-#include <cstdint>
-
-enum SaveFileFormat : uint16_t
+namespace
 {
-    // !!! IMPORTANT !!!
-    // If you're adding a new version you must assign it to CURRENT_FORMAT_VERSION located at the bottom.
-    // If you're removing an old version you must assign the oldest available to LAST_SUPPORTED_FORMAT_VERSION located at the bottom.
+    const fheroes2::Point textOffset{ 11, 12 };
+    const int32_t nameOffset = 6;
+}
 
-    // 10000 value must be used for 1.0 release so all version before it should have lower than this value.
-    FORMAT_VERSION_0921_RELEASE = 9950,
-    FORMAT_VERSION_0920_RELEASE = 9940,
-    FORMAT_VERSION_0919_RELEASE = 9930,
+namespace fheroes2
+{
+    void drawOption( const Rect & optionRoi, const Sprite & icon, std::string titleText, std::string valueText )
+    {
+        Display & display = Display::instance();
 
-    LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_0919_RELEASE,
+        const Text title( std::move( titleText ), FontType::smallWhite() );
+        const Text name( std::move( valueText ), FontType::smallWhite() );
 
-    CURRENT_FORMAT_VERSION = FORMAT_VERSION_0921_RELEASE
-};
+        const int32_t textMaxWidth = 87;
+
+        title.draw( optionRoi.x - textOffset.x, optionRoi.y - textOffset.y + title.height() - title.height( textMaxWidth ), textMaxWidth, display );
+        name.draw( optionRoi.x - textOffset.x, optionRoi.y + optionRoi.height + nameOffset, textMaxWidth, display );
+
+        Blit( icon, 0, 0, display, optionRoi.x, optionRoi.y, icon.width(), icon.height() );
+    }
+}

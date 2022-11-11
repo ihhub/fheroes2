@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 04:04+0000\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2548,14 +2548,14 @@ msgstr "Esci da fheroes2."
 msgid "Language"
 msgstr "Lingua"
 
-msgid "Resolution"
-msgstr "Risoluzione"
-
-msgid "Experimental"
-msgstr "Sperimentale"
+msgid "Graphics"
+msgstr ""
 
 msgid "Settings"
 msgstr "Impostazioni"
+
+msgid "Experimental"
+msgstr "Sperimentale"
 
 msgid "Audio"
 msgstr ""
@@ -2583,14 +2583,14 @@ msgstr ""
 "Tele-\n"
 "trasporto"
 
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
+
 msgid "Evil"
 msgstr "Cattivo"
 
 msgid "Good"
 msgstr "Buono"
-
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
 
 msgid "Auto Resolve"
 msgstr "Auto-Risolva"
@@ -2604,17 +2604,15 @@ msgstr "Manuali"
 msgid "Battles"
 msgstr "Battaglie"
 
-msgid "Select Game Language"
-msgstr "Scegli lingua del gioco"
-
 msgid "Change the language of the game."
 msgstr "Cambia la lingua del gioco."
 
-msgid "Select Game Resolution"
-msgstr "Scegli la risoluzione del gioco"
+msgid "Select Game Language"
+msgstr "Scegli lingua del gioco"
 
-msgid "Change the resolution of the game."
-msgstr "Cambia la risoluzione del gioco."
+#, fuzzy
+msgid "Change the graphics settings of the game."
+msgstr "Cambia le impostazioni dell'audio del gioco."
 
 msgid "Change the audio settings of the game."
 msgstr "Cambia le impostazioni dell'audio del gioco."
@@ -2713,6 +2711,49 @@ msgstr "Dono Scelto"
 msgid "Gift from %{name}"
 msgstr "Dono da %{name}"
 
+msgid "Resolution"
+msgstr "Risoluzione"
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "1"
+
+msgid "FPS"
+msgstr ""
+
+#, fuzzy
+msgid "System Info"
+msgstr "Opzioni Sistema"
+
+msgid "Change the resolution of the game."
+msgstr "Cambia la risoluzione del gioco."
+
+msgid "Select Game Resolution"
+msgstr "Scegli la risoluzione del gioco"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
+
 msgid "Set Guardian"
 msgstr ""
 
@@ -2724,6 +2765,10 @@ msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Scegli la lingua del gioco:"
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Clicca per salvare la partita in corso."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} sale di livello."
@@ -3539,27 +3584,10 @@ msgid "door"
 msgstr "porta"
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-" sul lato sinistro della schermata principale. \n"
-"\n"
-"Per andare da modalità finestra a schermo intero\n"
-"premi il tasto "
-
-msgid "F4"
-msgstr "F4"
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" sulla tastiera.\n"
-"\n"
-"Divertiti!"
 
 #, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -8883,9 +8911,6 @@ msgstr ""
 msgid "battle: deterministic events"
 msgstr ""
 
-msgid "game: show system info"
-msgstr ""
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr ""
 
@@ -8965,6 +8990,29 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ " on the left side of main menu.\n"
+#~ "\n"
+#~ "To switch between windowed and full screen modes\n"
+#~ "press "
+#~ msgstr ""
+#~ " sul lato sinistro della schermata principale. \n"
+#~ "\n"
+#~ "Per andare da modalità finestra a schermo intero\n"
+#~ "premi il tasto "
+
+#~ msgid "F4"
+#~ msgstr "F4"
+
+#~ msgid ""
+#~ " key on the keyboard.\n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ " sulla tastiera.\n"
+#~ "\n"
+#~ "Divertiti!"
 
 #~ msgid "Moved %{monster}"
 #~ msgstr "Spostato %{monster}"

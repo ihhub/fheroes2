@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,20 +20,11 @@
 
 #pragma once
 
-#include <cstdint>
+#include "image.h"
 
-enum SaveFileFormat : uint16_t
+#include <string>
+
+namespace fheroes2
 {
-    // !!! IMPORTANT !!!
-    // If you're adding a new version you must assign it to CURRENT_FORMAT_VERSION located at the bottom.
-    // If you're removing an old version you must assign the oldest available to LAST_SUPPORTED_FORMAT_VERSION located at the bottom.
-
-    // 10000 value must be used for 1.0 release so all version before it should have lower than this value.
-    FORMAT_VERSION_0921_RELEASE = 9950,
-    FORMAT_VERSION_0920_RELEASE = 9940,
-    FORMAT_VERSION_0919_RELEASE = 9930,
-
-    LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_0919_RELEASE,
-
-    CURRENT_FORMAT_VERSION = FORMAT_VERSION_0921_RELEASE
-};
+    void drawOption( const Rect & optionRoi, const Sprite & icon, std::string titleText, std::string valueText );
+}

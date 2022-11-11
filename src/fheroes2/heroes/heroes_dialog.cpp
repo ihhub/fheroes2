@@ -332,7 +332,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // right info
-        if ( !readonly && le.MousePressRight( portPos ) ) {
+        if ( le.MousePressRight( portPos ) ) {
             Dialog::QuickInfo( *this );
         }
         else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {

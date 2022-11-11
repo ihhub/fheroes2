@@ -98,6 +98,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     dst_pt.y = dst_pt.y + recruitHeroText.h() + spacer;
     fheroes2::Blit( portrait_frame, display, dst_pt.x, dst_pt.y );
 
+    const fheroes2::Rect heroPortraitArea( dst_pt.x, dst_pt.y, portrait_frame.width(), portrait_frame.height() );
     dst_pt.x = dst_pt.x + 5;
     dst_pt.y = dst_pt.y + 6;
     hero->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
@@ -136,6 +137,10 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
         if ( le.MouseClickLeft( button2.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
             break;
+
+        if ( le.MousePressRight( heroPortraitArea ) ) {
+            Dialog::QuickInfo( *hero );
+        }
     }
 
     return Dialog::CANCEL;

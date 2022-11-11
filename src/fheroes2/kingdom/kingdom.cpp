@@ -67,6 +67,12 @@ namespace
 
         return 100;
     }
+
+    Funds getHandicapDependentIncome( const Funds & original, const Player::HandicapStatus handicapStatus )
+    {
+        const int32_t handicapPercentage = getHandicapIncomePercentage( handicapStatus );
+        return ( original * handicapPercentage + Funds( 99, 99, 99, 99, 99, 99, 99 ) ) / 100;
+    }
 }
 
 bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
@@ -103,8 +109,7 @@ void Kingdom::Init( int clr )
         // Some human players can have handicap for resources.
         const Player * player = Players::Get( color );
         assert( player != nullptr );
-        const int32_t handicapPercentage = getHandicapIncomePercentage( player->getHandicapStatus() );
-        resource = resource * handicapPercentage / 100;
+        resource = getHandicapDependentIncome( resource, player->getHandicapStatus() );
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
@@ -667,8 +672,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     // Some human players can have handicap for resources.
     const Player * player = Players::Get( color );
     assert( player != nullptr );
-    const int32_t handicapPercentage = getHandicapIncomePercentage( player->getHandicapStatus() );
-    return totalIncome * handicapPercentage / 100;
+    return getHandicapDependentIncome( totalIncome, player->getHandicapStatus() );
 }
 
 Heroes * Kingdom::GetBestHero()
