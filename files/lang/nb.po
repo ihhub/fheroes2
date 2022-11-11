@@ -2759,8 +2759,8 @@ msgstr "Datastyrt"
 msgid "Auto, No Spells"
 msgstr "Data, ingen magi"
 
-msgid "Manual"
-msgstr "Manuelt"
+msgid "autoBattle|Manual"
+msgstr "Manuell"
 
 msgid "Battles"
 msgstr "Kampstyring"
@@ -3643,6 +3643,9 @@ msgstr "Sopran"
 
 msgid "Recorded at Green Street Studios"
 msgstr "Opptak gjort ved Green Street Studios"
+
+msgid "credits|Manual"
+msgstr "Håndbok"
 
 msgid "German Consultant"
 msgstr "Tyskrådgiver"
