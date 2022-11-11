@@ -38,6 +38,7 @@
 #include "world.h"
 
 #include <cassert>
+#include <cmath>
 #include <deque>
 
 namespace
