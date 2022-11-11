@@ -41,7 +41,8 @@
 #include <SDL_gamecontroller.h>
 #include <SDL_keycode.h>
 
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( ANDROID )
+#define TOUCHSCREEN_SUPPORT
 #include <SDL_hints.h>
 #endif
 
@@ -51,10 +52,6 @@
 #include "localevent.h"
 #include "pal.h"
 #include "screen.h"
-
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( ANDROID )
-#define TOUCHSCREEN_SUPPORT
-#endif
 
 namespace
 {
