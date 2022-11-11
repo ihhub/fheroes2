@@ -23,7 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
+#include <cstdlib>
 #include <deque>
 #include <list>
 #include <map>
@@ -903,7 +903,8 @@ void Interface::GameArea::QueueEventProcessing()
         _mouseDraggingInitiated = true;
         _startMouseDragPosition = mp;
     }
-    else if ( abs( _startMouseDragPosition.x - mp.x ) > minimalRequiredDraggingMovement || abs( _startMouseDragPosition.y - mp.y ) > minimalRequiredDraggingMovement ) {
+    else if ( std::abs( _startMouseDragPosition.x - mp.x ) > minimalRequiredDraggingMovement
+              || std::abs( _startMouseDragPosition.y - mp.y ) > minimalRequiredDraggingMovement ) {
         _mouseDraggingMovement = true;
     }
 
