@@ -261,6 +261,8 @@ namespace AI
 
     void HeroesAction( Heroes & hero, const int32_t dst_index )
     {
+        const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
+
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
         bool isAction = true;
@@ -720,8 +722,6 @@ namespace AI
             tile.MonsterSetCount( 0 );
             tile.setAsEmpty();
         }
-
-        hero.unmarkHeroMeeting();
     }
 
     void AIToPickupResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -1394,7 +1394,6 @@ namespace AI
         }
 
         tile.MonsterSetCount( 0 );
-        hero.unmarkHeroMeeting();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -1442,8 +1441,6 @@ namespace AI
             tile.setAsEmpty();
         }
 
-        hero.unmarkHeroMeeting();
-
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
@@ -1461,8 +1458,6 @@ namespace AI
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 tile.QuantitySetColor( hero.GetColor() );
                 tile.SetObjectPassable( true );
-
-                hero.unmarkHeroMeeting();
             }
             else {
                 AIBattleLose( hero, res, true );
