@@ -130,13 +130,17 @@ namespace
 
         for ( int32_t current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
             const int32_t offset = width * current;
+			int32_t normalSpecificOffset;
             // Add offset shift because the original difficulty icons have irregular spacing.
             if ( current == Difficulty::NORMAL ) {
-                offset++;
+                normalSpecificOffset++;
             }
+			else {
+				normalSpecificOffset = 0;
+			}
 
             fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
-            text.draw( dst.x + 31 + offset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
+            text.draw( dst.x + 31 + offset + normalSpecificOffset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }
 
