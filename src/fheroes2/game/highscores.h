@@ -21,7 +21,10 @@
 #ifndef H2HIGHSCORES_H
 #define H2HIGHSCORES_H
 
+#include <cstddef>
+#include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "monster.h"

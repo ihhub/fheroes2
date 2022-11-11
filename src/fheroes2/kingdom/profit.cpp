@@ -21,11 +21,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+#include <vector>
+
+#include "artifact_info.h"
 #include "castle.h"
 #include "profit.h"
 #include "race.h"
-
-#include <cassert>
+#include "resource.h"
 
 payment_t ProfitConditions::FromBuilding( uint32_t building, int race )
 {

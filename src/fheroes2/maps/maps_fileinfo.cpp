@@ -27,7 +27,11 @@
 #include <algorithm>
 #include <cassert>
 #include <cstring>
+#include <list>
+#include <locale>
 #include <map>
+#include <ostream>
+#include <utility>
 
 #include "artifact.h"
 #include "color.h"

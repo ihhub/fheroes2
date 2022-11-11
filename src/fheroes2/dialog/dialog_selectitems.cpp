@@ -21,15 +21,27 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "dialog_selectitems.h"
+#include <cstddef>
+#include <cstdint>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
+#include "gamedefs.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_list.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_text.h"
 
 class SelectEnum : public Interface::ListBox<int>

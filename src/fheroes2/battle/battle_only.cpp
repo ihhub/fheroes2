@@ -21,23 +21,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "battle_only.h"
+#include <cstdint>
+#include <string>
+
 #include "agg_image.h"
 #include "army_bar.h"
+#include "army_troop.h"
 #include "battle.h"
+#include "battle_only.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
+#include "monster.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"

@@ -19,12 +19,14 @@
  ***************************************************************************/
 
 #include "h2d.h"
+
+#include <ostream>
+#include <stdexcept>
+
 #include "h2d_file.h"
 #include "logging.h"
 #include "settings.h"
 #include "system.h"
-
-#include <stdexcept>
 
 namespace
 {

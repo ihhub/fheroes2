@@ -20,19 +20,34 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <vector>
 
-#include "view_world.h"
 #include "agg_image.h"
+#include "castle.h"
 #include "color.h"
 #include "cursor.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
+#include "gamedefs.h"
+#include "heroes.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_border.h"
+#include "interface_gamearea.h"
+#include "interface_radar.h"
+#include "localevent.h"
 #include "maps.h"
+#include "maps_tiles.h"
+#include "mp2.h"
+#include "pairs.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
-#include "tools.h"
+#include "ui_button.h"
+#include "view_world.h"
 #include "world.h"
 
 // #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
@@ -50,10 +65,10 @@ namespace
 
 namespace
 {
-    const int tileSizePerZoomLevel[4] = {4, 6, 12, 32};
-    const int icnPerZoomLevel[4] = {ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12};
+    const int tileSizePerZoomLevel[4] = { 4, 6, 12, 32 };
+    const int icnPerZoomLevel[4] = { ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 };
     const int icnLetterPerZoomLevel[4] = { ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
-    const int icnPerZoomLevelFlags[4] = {ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12};
+    const int icnPerZoomLevelFlags[4] = { ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12 };
 
     // Compute a rectangle that defines which world pixels we can see in the "view world" window,
     // based on given zoom level and initial center

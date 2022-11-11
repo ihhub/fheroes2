@@ -26,6 +26,7 @@
 
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 void StringAppendModifiers( std::string &, int );

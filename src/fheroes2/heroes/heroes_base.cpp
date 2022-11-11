@@ -22,20 +22,22 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <array>
 #include <cassert>
+#include <vector>
 
 #include "army.h"
+#include "artifact_info.h"
 #include "castle.h"
+#include "castle_heroes.h"
+#include "gamedefs.h"
+#include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "race.h"
 #include "serialize.h"
-#include "settings.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
-#include "world.h"
 
 HeroBase::HeroBase( const int type, const int race )
     : magic_point( 0 )

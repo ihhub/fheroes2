@@ -24,6 +24,8 @@
 #ifndef H2ARMY_H
 #define H2ARMY_H
 
+#include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <string>
 #include <utility>
@@ -31,6 +33,8 @@
 
 #include "monster.h"
 #include "players.h"
+
+class StreamBase;
 
 class Castle;
 class HeroBase;

@@ -19,12 +19,6 @@
  ***************************************************************************/
 
 #include "ui_tool.h"
-#include "localevent.h"
-#include "screen.h"
-#include "settings.h"
-#include "system.h"
-#include "text.h"
-#include "translations.h"
 
 #include <chrono>
 #include <cmath>
@@ -32,7 +26,15 @@
 #include <cstring>
 #include <ctime>
 #include <deque>
+#include <string>
 #include <utility>
+
+#include "localevent.h"
+#include "screen.h"
+#include "settings.h"
+#include "system.h"
+#include "text.h"
+#include "translations.h"
 
 namespace
 {

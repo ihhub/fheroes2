@@ -21,12 +21,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "battle_tower.h"
+#include <algorithm>
+#include <cassert>
+#include <vector>
+
+#include "army_troop.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_board.h"
 #include "battle_cell.h"
+#include "battle_tower.h"
 #include "castle.h"
+#include "monster.h"
+#include "rand.h"
 #include "tools.h"
 #include "translations.h"
 

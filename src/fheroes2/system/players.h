@@ -24,12 +24,16 @@
 #ifndef H2PLAYERS_H
 #define H2PLAYERS_H
 
+#include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "bitmodes.h"
 #include "color.h"
+
+class StreamBase;
 
 namespace Maps
 {

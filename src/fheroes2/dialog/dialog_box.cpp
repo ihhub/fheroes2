@@ -21,13 +21,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstdint>
+#include <memory>
+
 #include "agg_image.h"
 #include "dialog.h"
 #include "icn.h"
+#include "image.h"
+#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
-
-#include <algorithm>
 
 namespace
 {

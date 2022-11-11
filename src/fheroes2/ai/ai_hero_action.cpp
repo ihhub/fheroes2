@@ -23,12 +23,23 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <vector>
 
 #include "ai.h"
 #include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
+#include "castle_heroes.h"
+#include "color.h"
+#include "dialog.h"
+#include "direction.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -37,15 +48,31 @@
 #include "heroes.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "m82.h"
+#include "maps.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mp2.h"
+#include "pairs.h"
 #include "payment.h"
+#include "players.h"
+#include "puzzle.h"
 #include "race.h"
+#include "rand.h"
+#include "resource.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
+#include "spell.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "visit.h"
 #include "world.h"
 
 namespace

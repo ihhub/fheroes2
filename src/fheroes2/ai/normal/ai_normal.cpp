@@ -18,9 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstdint>
+
 #include "ai_normal.h"
+#include "army.h"
 #include "maps_tiles.h"
 #include "pairs.h"
+#include "rand.h"
 
 namespace AI
 {

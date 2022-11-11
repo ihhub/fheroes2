@@ -24,6 +24,10 @@
 #ifndef H2STATUSBAR_H
 #define H2STATUSBAR_H
 
+#include <cstdint>
+#include <string>
+
+#include "math_base.h"
 #include "text.h"
 
 class StatusBar : public TextSprite

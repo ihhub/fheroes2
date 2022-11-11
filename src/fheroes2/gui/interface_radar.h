@@ -24,10 +24,18 @@
 #ifndef H2INTERFACE_RADAR_H
 #define H2INTERFACE_RADAR_H
 
+#include <cstdint>
+
+#include "image.h"
 #include "interface_border.h"
-#include "screen.h"
+#include "math_base.h"
 #include "ui_tool.h"
 #include "view_world.h"
+
+namespace fheroes2
+{
+    class Display;
+}
 
 namespace Interface
 {

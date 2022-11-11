@@ -22,12 +22,22 @@
  ***************************************************************************/
 
 #include "resource.h"
+
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <memory>
+#include <ostream>
+#include <utility>
+#include <vector>
+
 #include "agg_image.h"
 #include "icn.h"
 #include "image.h"
 #include "logging.h"
 #include "pairs.h"
 #include "rand.h"
+#include "screen.h"
 #include "serialize.h"
 #include "text.h"
 #include "translations.h"
@@ -595,7 +605,7 @@ void RedrawResourceSprite( const fheroes2::Image & sf, const fheroes2::Point & p
 
 void Resource::BoxSprite::Redraw() const
 {
-    std::vector<std::pair<int32_t, uint32_t> > valueVsSprite;
+    std::vector<std::pair<int32_t, uint32_t>> valueVsSprite;
 
     if ( rs.wood )
         valueVsSprite.emplace_back( rs.wood, 0 );

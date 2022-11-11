@@ -27,7 +27,8 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
-#include <fstream>
+#include <fstream> // IWYU pragma: keep
+#include <memory>
 
 #include "logging.h"
 #include "tools.h"

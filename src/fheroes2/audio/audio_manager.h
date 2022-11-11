@@ -26,7 +26,8 @@
 #include <vector>
 
 #include "audio.h"
-#include "dir.h"
+
+struct ListFiles;
 
 namespace M82
 {

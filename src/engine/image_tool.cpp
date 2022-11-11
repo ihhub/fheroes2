@@ -18,14 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "image_tool.h"
-#include "image_palette.h"
-#include "logging.h"
-
 #include <cassert>
+#include <cstdint>
+#include <cstring>
+#include <ostream>
+#include <vector>
 
+#include <SDL_error.h>
 #include <SDL_version.h>
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_pixels.h>
 #include <SDL_surface.h>
 #else
 #include <SDL_video.h>
@@ -37,6 +40,10 @@
 #include <SDL_image.h>
 #endif
 #endif
+
+#include "image_palette.h"
+#include "image_tool.h"
+#include "logging.h"
 
 namespace
 {
