@@ -1103,7 +1103,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         if ( ( gameArea.NeedScroll() && !isMovingHero ) || gameArea.isDragScroll() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
                 if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
-                     || isScrollBottom( le.GetMouseCursor() ) ) && !gameArea.isDragScroll() ) {
+                    || isScrollBottom( le.GetMouseCursor() ) )
+                    && !gameArea.isDragScroll() ) {
                     cursor.SetThemes( gameArea.GetScrollCursor() );
                 }
 
