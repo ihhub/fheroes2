@@ -21,9 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-// IWYU pragma: no_include <bits/getopt_core.h>
-// IWYU pragma: no_include <SDL2/SDL_platform.h>
-
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
@@ -49,7 +46,7 @@
 #include <SDL_system.h>
 #endif
 
-#if SDL_VERSION_ATLEAST( 2, 0, 1 ) && !defined( __LINUX__ )
+#if SDL_VERSION_ATLEAST( 2, 0, 1 ) && !defined( __linux__ )
 #include <SDL_filesystem.h>
 #include <SDL_stdinc.h>
 #endif
@@ -84,7 +81,7 @@
 #define SEPARATOR '/'
 #endif
 
-#if !defined( __LINUX__ )
+#if !defined( __linux__ )
 namespace
 {
     std::string GetHomeDirectory( const std::string & prog )
@@ -176,7 +173,7 @@ void System::appendOSSpecificDirectories( std::vector<std::string> & directories
 
 std::string System::GetConfigDirectory( const std::string & prog )
 {
-#if defined( __LINUX__ )
+#if defined( __linux__ )
     const char * configEnv = getenv( "XDG_CONFIG_HOME" );
     if ( configEnv ) {
         return System::ConcatePath( configEnv, prog );
@@ -195,7 +192,7 @@ std::string System::GetConfigDirectory( const std::string & prog )
 
 std::string System::GetDataDirectory( const std::string & prog )
 {
-#if defined( __LINUX__ )
+#if defined( __linux__ )
     const char * dataEnv = getenv( "XDG_DATA_HOME" );
     if ( dataEnv ) {
         return System::ConcatePath( dataEnv, prog );

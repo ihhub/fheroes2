@@ -24,8 +24,6 @@
 #ifndef H2SYSTEM_H
 #define H2SYSTEM_H
 
-// IWYU pragma: no_include <bits/types/struct_tm.h>
-
 #include <ctime>
 #include <string>
 #include <vector>

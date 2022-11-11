@@ -21,8 +21,6 @@
 #ifndef H2LOGGING_H
 #define H2LOGGING_H
 
-// IWYU pragma: no_include <bits/types/struct_tm.h>
-
 #include <iostream>
 #include <sstream> // IWYU pragma: keep
 #include <string>

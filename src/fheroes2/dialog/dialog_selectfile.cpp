@@ -21,8 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-// IWYU pragma: no_include <bits/types/struct_tm.h>
-
 #include <algorithm>
 #include <cstdint>
 #include <ctime>

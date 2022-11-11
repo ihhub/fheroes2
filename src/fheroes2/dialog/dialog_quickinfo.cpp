@@ -21,8 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-// IWYU pragma: no_include <bits/std_abs.h>
-
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
