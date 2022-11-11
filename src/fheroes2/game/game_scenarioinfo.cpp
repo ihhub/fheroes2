@@ -135,9 +135,9 @@ namespace
             if ( current == Difficulty::NORMAL ) {
                 normalSpecificOffset++;
             }
-			else {
-				normalSpecificOffset = 0;
-			}
+            else {
+                normalSpecificOffset = 0;
+            }
 
             fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
             text.draw( dst.x + 31 + offset + normalSpecificOffset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
