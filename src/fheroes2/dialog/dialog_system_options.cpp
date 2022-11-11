@@ -169,7 +169,6 @@ namespace
         else {
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 18 );
             fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "autoBattle|Manual" ) );
-            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "Manual" ) );
         }
     }
 
