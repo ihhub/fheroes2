@@ -21,7 +21,9 @@
 #pragma once
 
 #include <array>
+#include <cstdint>
 #include <list>
+#include <vector>
 
 #include "battle_animation.h"
 

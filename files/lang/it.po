@@ -2598,7 +2598,7 @@ msgstr "Auto-Risolva"
 msgid "Auto, No Spells"
 msgstr "Auto, Senza Magie"
 
-msgid "Manual"
+msgid "autoBattle|Manual"
 msgstr "Manuali"
 
 msgid "Battles"
@@ -3478,6 +3478,9 @@ msgstr ""
 
 msgid "Recorded at Green Street Studios"
 msgstr ""
+
+msgid "credits|Manual"
+msgstr "Manuale"
 
 msgid "German Consultant"
 msgstr ""

@@ -22,21 +22,33 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <set>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "army_troop.h"
+#include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
-#include "logging.h"
-#include "settings.h"
+#include "image.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "monster.h"
+#include "screen.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
@@ -44,6 +56,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {

@@ -18,18 +18,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <set>
+#include <string>
 #include <tuple>
 #include <utility>
+#include <vector>
 
+#include "ai.h"
 #include "ai_normal.h"
+#include "army.h"
+#include "army_troop.h"
+#include "audio.h"
 #include "audio_manager.h"
+#include "castle.h"
+#include "castle_heroes.h"
+#include "color.h"
 #include "game_interface.h"
-#include "game_over.h"
 #include "ground.h"
+#include "heroes.h"
+#include "heroes_recruits.h"
+#include "interface_status.h"
+#include "kingdom.h"
 #include "logging.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "mp2.h"
 #include "mus.h"
+#include "pairs.h"
+#include "players.h"
+#include "resource.h"
+#include "skill.h"
+#include "spell.h"
 #include "world.h"
+#include "world_pathfinding.h"
+#include "world_regions.h"
 
 namespace
 {
@@ -172,6 +201,8 @@ namespace AI
 
     void Normal::reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
     {
+        const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
+
         if ( !hero.HaveSpellBook() && castle.GetLevelMageGuild() > 0 && !hero.IsFullBagArtifacts() ) {
             // this call will check if AI kingdom have enough resources to buy book
             hero.BuySpellBook( &castle );
@@ -179,7 +210,6 @@ namespace AI
 
         Army & heroArmy = hero.GetArmy();
         Army & garrison = castle.GetArmy();
-        const double heroStrengthBefore = heroArmy.GetStrength();
 
         heroArmy.UpgradeTroops( castle );
         castle.recruitBestAvailable( budget );
@@ -235,9 +265,6 @@ namespace AI
         }
 
         OptimizeTroopsOrder( heroArmy );
-        if ( std::fabs( heroStrengthBefore - heroArmy.GetStrength() ) > 0.001 ) {
-            hero.unmarkHeroMeeting();
-        }
     }
 
     void Normal::evaluateRegionSafety()

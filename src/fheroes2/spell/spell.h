@@ -23,7 +23,7 @@
 #ifndef H2SPELL_H
 #define H2SPELL_H
 
-#include "payment.h"
+#include <cstdint>
 
 #define DEFAULT_SPELL_DURATION 3
 

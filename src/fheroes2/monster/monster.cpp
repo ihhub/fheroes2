@@ -21,21 +21,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cmath>
+#include <algorithm>
+#include <vector>
 
 #include "castle.h"
-#include "difficulty.h"
-#include "game.h"
+#include "color.h"
 #include "icn.h"
 #include "luck.h"
 #include "monster.h"
 #include "morale.h"
 #include "race.h"
 #include "rand.h"
-#include "save_format_version.h"
-#include "serialize.h"
-#include "settings.h"
-#include "speed.h"
+#include "resource.h"
+#include "spell.h"
 #include "translations.h"
 
 uint32_t Monster::GetMissileICN( uint32_t monsterID )
@@ -189,7 +187,7 @@ uint32_t Monster::GetRNDSize() const
     if ( !isValid() )
         return 0;
 
-    const uint32_t defaultArmySizePerLevel[7] = {0, 50, 30, 25, 25, 12, 8};
+    const uint32_t defaultArmySizePerLevel[7] = { 0, 50, 30, 25, 25, 12, 8 };
     uint32_t result = 0;
 
     // Check for outliers
@@ -823,7 +821,7 @@ int Monster::ICNMonh() const
 payment_t Monster::GetUpgradeCost() const
 {
     const Monster upgr = GetUpgrade();
-    const payment_t pay = id != upgr.id ? upgr.GetCost() - GetCost() : GetCost();
+    const payment_t pay = ( id != upgr.id ) ? ( upgr.GetCost() - GetCost() ) * 2 : GetCost();
 
     return pay;
 }

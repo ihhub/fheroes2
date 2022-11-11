@@ -24,15 +24,20 @@
 #ifndef H2LOCALEVENT_H
 #define H2LOCALEVENT_H
 
+#include <cstddef>
 #include <cstdint>
-#include <map>
-#include <set>
 #include <string>
+
+#include <SDL_events.h>
+#include <SDL_version.h>
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_gamecontroller.h>
+#include <SDL_touch.h>
+#endif
 
 #include "math_base.h"
 #include "timing.h"
-
-#include <SDL.h>
 
 namespace fheroes2
 {

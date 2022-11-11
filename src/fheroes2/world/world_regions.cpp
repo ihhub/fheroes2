@@ -18,14 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <set>
+#include <utility>
+#include <vector>
+
+#include "castle.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "mp2.h"
 #include "world.h"
+#include "world_regions.h"
 
 namespace
 {
     // Aliases to make data structures easier to work with
     // TileData.first is index, TileData.second is payload
     using TileData = std::pair<int, int>;
-    using TileDataVector = std::vector<std::pair<int, int> >;
+    using TileDataVector = std::vector<std::pair<int, int>>;
 
     // Values in Direction namespace can't be used as index, use a custom value here
     // Converted into bitfield later

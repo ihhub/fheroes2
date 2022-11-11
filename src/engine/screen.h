@@ -17,12 +17,16 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
-#include "image.h"
-
+#include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
+
+#include "image.h"
+#include "math_base.h"
 
 namespace fheroes2
 {

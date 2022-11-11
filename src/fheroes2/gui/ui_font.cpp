@@ -19,9 +19,16 @@
  ***************************************************************************/
 
 #include "ui_font.h"
-#include "icn.h"
 
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <initializer_list>
+#include <memory>
+
+#include "icn.h"
+#include "image.h"
+#include "math_base.h"
 
 namespace
 {

@@ -23,13 +23,19 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <vector>
 
 #include "agg_image.h"
 #include "castle.h"
 #include "castle_building_info.h"
 #include "game_delays.h"
 #include "icn.h"
+#include "image.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
 #include "ui_castle.h"
 

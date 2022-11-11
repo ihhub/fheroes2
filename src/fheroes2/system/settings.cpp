@@ -24,7 +24,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
-#include <tuple>
+#include <memory>
+#include <utility>
 
 #if defined( MACOS_APP_BUNDLE )
 #include <CoreFoundation/CoreFoundation.h>
@@ -33,6 +34,7 @@
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
+#include "gamedefs.h"
 #include "logging.h"
 #include "save_format_version.h"
 #include "screen.h"

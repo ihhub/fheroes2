@@ -23,7 +23,6 @@
 #ifndef H2MP2_H
 #define H2MP2_H
 
-#include <cstddef>
 #include <cstdint>
 
 namespace MP2

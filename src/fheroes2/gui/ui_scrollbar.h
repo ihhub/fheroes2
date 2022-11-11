@@ -20,6 +20,10 @@
 
 #pragma once
 
+#include <cstdint>
+
+#include "image.h"
+#include "math_base.h"
 #include "ui_tool.h"
 
 namespace fheroes2

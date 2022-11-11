@@ -1,0 +1,6 @@
+[
+    { include: [ "<bits/getopt_core.h>",     private, "<unistd.h>", public ] },
+    { include: [ "<bits/std_abs.h>",         private, "<cstdlib>",  public ] },
+    { include: [ "<bits/types/struct_tm.h>", private, "<ctime>",    public ] },
+    { include: [ "<ext/alloc_traits.h>",     private, "<memory>",   public ] }
+]
