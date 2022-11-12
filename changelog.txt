@@ -1,4 +1,5 @@
 version 0.9.21 (12 November 2022)
+- do not show any hero status for AI heroes
 - add hotkeys for moving armies between heroes
 - update the Norwegian translation
 - fix monster upgrade cost formula
