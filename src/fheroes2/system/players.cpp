@@ -37,7 +37,6 @@
 #include "players.h"
 #include "race.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "world.h"
