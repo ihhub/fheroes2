@@ -34,6 +34,7 @@
 #include "screen.h"
 #include "text.h"
 #include "ui_button.h"
+#include "translations.h"
 
 namespace
 {
@@ -72,7 +73,7 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     const CursorRestorer cursorRestorer( buttons != 0, Cursor::POINTER );
 
     TextBox textbox1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
-    TextBox textbox2( message, ft, BOXAREA_WIDTH );
+    TextBox textbox2( _(message), ft, BOXAREA_WIDTH );
 
     const int32_t headerHeight = !header.empty() ? textbox1.h() + 10 : 0;
     FrameBox box( 10 + headerHeight + textbox2.h(), buttons != 0 );
