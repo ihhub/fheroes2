@@ -608,25 +608,20 @@ msgstr ""
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Заклинание \"%{spell}\" наносит %{damage} урона всем живым существам."
 
-#, fuzzy
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "%{name} ослеплены единорогами!"
+msgstr "%{attacker}: в результате атаки противник (%{target}) ослеп!"
 
-#, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "%{name} обращены в камень взглядом медузы!"
+msgstr "%{attacker}: противник (%{target}) обращён взглядом в камень!"
 
-#, fuzzy
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "%{name} прокляты мумиями!"
+msgstr "%{attacker}: противник (%{target}) проклят!"
 
-#, fuzzy
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "%{name} парализованы циклопами!"
+msgstr "%{attacker}: противник (%{target}) парализован!"
 
-#, fuzzy
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "Архимаги рассеяли хорошую магию с отряда %{name}!"
+msgstr "%{attacker}: рассеяны все положительные чары с противника (%{target})!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
 msgstr "%{attacker} применяет \"%{spell}\" (цель: %{target})."
@@ -741,12 +736,11 @@ msgid ""
 "spell."
 msgstr "%{artifact} запрещает использовать \"%{spell}\"."
 
-#, fuzzy
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] "%{count} %{name} воскресли из мёртвых!"
-msgstr[1] "%{count} %{name} воскресли из мёртвых!"
-msgstr[2] "%{count} %{name} воскресли из мёртвых!"
+msgstr[0] "%{name}: %{count} воскрес из мёртвых!"
+msgstr[1] "%{name}: %{count} воскресло из мёртвых!"
+msgstr[2] "%{name}: %{count} воскресли из мёртвых!"
 
 msgid "Dwarven Alliance"
 msgstr "Альянс гномов"
@@ -2651,7 +2645,7 @@ msgid "Language"
 msgstr "Язык"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Графика"
 
 msgid "Settings"
 msgstr "Настройки"
@@ -2707,9 +2701,8 @@ msgstr "Изменить язык интерфейса."
 msgid "Select Game Language"
 msgstr "Выберите язык игры:"
 
-#, fuzzy
 msgid "Change the graphics settings of the game."
-msgstr "Настроить параметры аудио."
+msgstr "Настроить параметры графики."
 
 msgid "Change the audio settings of the game."
 msgstr "Настроить параметры аудио."
@@ -2813,28 +2806,25 @@ msgid "Resolution"
 msgstr "Разрешение"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Полноэкранный"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Режим"
 
 msgid "Windowed"
-msgstr ""
+msgstr "В окне"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "Вертикальная синхронизация"
 
-#, fuzzy
 msgid "on"
-msgstr "1"
+msgstr "вкл."
 
-#, fuzzy
 msgid "FPS"
-msgstr ", FPS: "
+msgstr "FPS"
 
-#, fuzzy
 msgid "System Info"
-msgstr "Параметры системы"
+msgstr "Системная информация"
 
 msgid "Change the resolution of the game."
 msgstr "Изменить разрешение экрана."
@@ -2843,15 +2833,19 @@ msgid "Select Game Resolution"
 msgstr "Выбор разрешения экрана"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Переключение между полноэкранным и оконным режимами."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
 msgstr ""
+"Вертикальная синхронизация может быть включена для исключения мерцания "
+"изображения на некоторых мониторах."
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
+"Показать дополнительную информацию, такую как FPS (количество отображаемых "
+"кадров в секунду) и текущее время."
 
 msgid "Set Guardian"
 msgstr "Установить охрану"
@@ -2865,9 +2859,8 @@ msgstr "Горячие клавиши:"
 msgid "Select Game Language:"
 msgstr "Выберите язык игры:"
 
-#, fuzzy
 msgid "Click to choose the selected language."
-msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
+msgstr "Щёлкните, чтобы применить выбранный язык интерфейса игры."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} получает уровень."
@@ -3016,8 +3009,9 @@ msgstr "Выбор разрешения экрана:"
 msgid "Click to apply the selected resolution."
 msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
 
+# do not translate until Russian font generation is optimized
 msgid "MAX"
-msgstr "МАКС"
+msgstr "MAX"
 
 msgid "How many troops to move?"
 msgstr "Сколько существ перенести?"
@@ -3684,6 +3678,9 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
+" на левой стороне основного меню или нажав на кнопку настройки игры.\n"
+"\n"
+"Наслаждайтесь игрой!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Завершить игру Heroes of Might and Magic II и вернуться в систему."
@@ -3870,12 +3867,11 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Не успеть вовремя."
 
-#, fuzzy
 msgid "You must defeat the enemy %{enemies}."
 msgid_plural "You must defeat the enemy alliance of %{enemies}."
-msgstr[0] "Победить героя '%{name}'."
-msgstr[1] "Победить героя '%{name}'."
-msgstr[2] "Победить героя '%{name}'."
+msgstr[0] "%{enemies} враг должен быть побеждён."
+msgstr[1] "Вам следует победить вражеский союз: %{enemies}."
+msgstr[2] "Вам следует победить вражеский союз: %{enemies}."
 
 msgid ""
 "The alliance consisting of %{allies} and you must defeat the enemy "
@@ -3883,9 +3879,9 @@ msgid ""
 msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%{enemies} враг должен быть побеждён Вами в союзе с: %{allies}."
+msgstr[1] "Враги %{enemies} должны быть побеждены Вами в союзе с: %{allies}."
+msgstr[2] "Враги %{enemies} должны быть побеждены Вами в союзе с: %{allies}."
 
 msgid "Capture the castle '%{name}'."
 msgstr "Захватить замок '%{name}'."
@@ -4314,11 +4310,10 @@ msgid "Turkish"
 msgstr "Турецкий"
 
 msgid "Dutch"
-msgstr ""
+msgstr "Голландский"
 
-#, fuzzy
 msgid "Hungarian"
-msgstr "Варвар"
+msgstr "Венгерский"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -6806,8 +6801,8 @@ msgstr "Маяк"
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Водяное колесо"
-msgstr[1] "Водяные колёса"
-msgstr[2] "Водяные колёса"
+msgstr[1] "Водяных колеса"
+msgstr[2] "Водяных колёс"
 
 msgid "Mines"
 msgstr "Шахты"
@@ -6833,8 +6828,8 @@ msgstr "Вагоны"
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Ветряная мельница"
-msgstr[1] "Ветряная мельница"
-msgstr[2] "Ветряная мельница"
+msgstr[1] "Ветряные мельницы"
+msgstr[2] "Ветряных мельниц"
 
 msgid "Random Town"
 msgstr "Случайный город"
