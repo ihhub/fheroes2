@@ -357,7 +357,7 @@ void Castle::PostLoad()
     if ( building & BUILD_CAPTAIN ) {
         captain.LoadDefaults( HeroBase::CAPTAIN, race );
         captain.SetSpellPoints( captain.GetMaxSpellPoints() );
-}
+    }
 
     // MageGuild
     mageguild.initialize( race, HaveLibraryCapability() );
