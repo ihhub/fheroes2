@@ -26,6 +26,8 @@
 
 #include "spell_storage.h"
 
+class StreamBase;
+
 class HeroBase;
 
 class MageGuild

@@ -25,12 +25,25 @@
 #ifndef H2HEROESBASE_H
 #define H2HEROESBASE_H
 
+#include <cstdint>
+#include <functional>
+#include <string>
+
 #include "artifact.h"
 #include "bitmodes.h"
 #include "players.h"
 #include "position.h"
 #include "skill.h"
+#include "spell.h"
 #include "spell_book.h"
+#include "spell_storage.h"
+
+class StreamBase;
+
+namespace fheroes2
+{
+    class Image;
+}
 
 class Army;
 class Castle;

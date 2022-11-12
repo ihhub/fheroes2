@@ -18,17 +18,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstdlib>
+#include <memory>
 #include <set>
 #include <tuple>
+#include <type_traits>
+#include <utility>
 
 #include "army.h"
+#include "artifact.h"
+#include "direction.h"
 #include "game_over.h"
 #include "ground.h"
-#include "logging.h"
+#include "heroes.h"
+#include "kingdom.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "pairs.h"
 #include "rand.h"
+#include "route.h"
 #include "settings.h"
+#include "spell.h"
 #include "world.h"
 #include "world_pathfinding.h"
 

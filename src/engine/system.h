@@ -25,9 +25,8 @@
 #define H2SYSTEM_H
 
 #include <ctime>
+#include <string>
 #include <vector>
-
-#include "dir.h"
 
 namespace System
 {

@@ -18,12 +18,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game_credits.h"
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
+#include "game_credits.h"
 #include "game_delays.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
 #include "mus.h"
 #include "pal.h"
@@ -32,8 +41,6 @@
 #include "text.h"
 #include "translations.h"
 #include "ui_text.h"
-
-#include <cassert>
 
 namespace
 {
@@ -641,7 +648,7 @@ namespace
         int32_t offsetY = textInitialOffsetY;
         int32_t offsetX = 0;
 
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Manual" ), "Bryan Farina" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "credits|Manual" ), "Bryan Farina" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "German Consultant" ), "Dr. Brock H. Summers" );
         renderText( output, offsetX, offsetY, textWidth, _( "Map Designers" ),
                     "Christian Vanover\n"

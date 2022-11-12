@@ -20,9 +20,11 @@
 
 #pragma once
 
+#include <cstdint>
 #include <functional>
 
 #include "image.h"
+#include "math_base.h"
 #include "timing.h"
 #include "ui_base.h"
 

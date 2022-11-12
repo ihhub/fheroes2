@@ -24,9 +24,13 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <iterator>
+#include <ostream>
 
 #include "agg_image.h"
 #include "ai.h"
+#include "army_troop.h"
+#include "artifact.h"
 #include "audio_manager.h"
 #include "battle_board.h"
 #include "battle_tower.h"
@@ -34,24 +38,38 @@
 #include "castle_building_info.h"
 #include "dialog.h"
 #include "difficulty.h"
+#include "direction.h"
 #include "game.h"
 #include "game_static.h"
 #include "ground.h"
+#include "heroes.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "maps.h"
 #include "maps_tiles.h"
 #include "morale.h"
+#include "mp2.h"
 #include "payment.h"
 #include "profit.h"
 #include "race.h"
+#include "rand.h"
+#include "resource.h"
+#include "route.h"
+#include "screen.h"
 #include "serialize.h"
 #include "settings.h"
+#include "skill.h"
+#include "spell.h"
+#include "spell_storage.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "week.h"
 #include "world.h"
 
 namespace

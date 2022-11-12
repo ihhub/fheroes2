@@ -23,6 +23,8 @@
 #ifndef H2CURSOR_H
 #define H2CURSOR_H
 
+#include <cstdint>
+
 #include "math_base.h"
 
 namespace fheroes2

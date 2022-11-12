@@ -23,10 +23,15 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
 #include <string>
 #include <vector>
 
 #include "agg_image.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -36,12 +41,18 @@
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
+#include "game_mode.h"
 #include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
+#include "math_base.h"
 #include "mus.h"
 #include "player_info.h"
+#include "players.h"
+#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "text.h"

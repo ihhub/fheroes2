@@ -21,15 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <array>
-
-#include "game.h"
 #include "game_static.h"
 #include "mp2.h"
 #include "race.h"
-#include "resource.h"
-#include "save_format_version.h"
-#include "serialize.h"
 #include "skill.h"
 #include "skill_static.h"
 
@@ -117,7 +111,7 @@ namespace Skill
         /* archery */ 1,   /* ballistics */ 1, /* diplomacy */ 1, /* eagleeye */ 1,
         /* estates */ 1,   /* leadership */ 0, /* logistics */ 1, /* luck */ 1,
         /* mysticism */ 1, /* navigation */ 1, /* necromancy*/ 0, /* pathfinding */ 1,
-        /* scouting */ 1,  /* wisdom */ 1};
+        /* scouting */ 1,  /* wisdom */ 1 };
 }
 
 namespace GameStatic

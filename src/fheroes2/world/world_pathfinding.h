@@ -21,14 +21,21 @@
 #pragma once
 
 #include <cstdint>
+#include <list>
+#include <vector>
 
 #include "color.h"
 #include "mp2.h"
 #include "pathfinding.h"
-#include "route.h"
 #include "skill.h"
 
+class Heroes;
 class IndexObject;
+
+namespace Route
+{
+    class Step;
+}
 
 struct WorldNode : public PathfindingNode<MP2::MapObjectType>
 {

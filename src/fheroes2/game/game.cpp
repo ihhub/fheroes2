@@ -23,29 +23,39 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <map>
+#include <utility>
+#include <vector>
 
+#include "army.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "campaign_savedata.h"
+#include "castle.h"
+#include "color.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
 #include "game_credits.h"
-#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
-#include "icn.h"
+#include "heroes.h"
+#include "localevent.h"
 #include "m82.h"
+#include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
-#include "monster.h"
+#include "math_base.h"
 #include "mp2.h"
+#include "mus.h"
+#include "players.h"
 #include "rand.h"
 #include "save_format_version.h"
 #include "settings.h"
 #include "skill.h"
 #include "tools.h"
-#include "translations.h"
 #include "world.h"
 
 namespace

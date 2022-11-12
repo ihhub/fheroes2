@@ -20,11 +20,16 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "battle_board.h"
+#include "battle_cell.h"
 #include "pathfinding.h"
 
 namespace Battle
 {
+    class Unit;
+
     const uint16_t MAX_MOVE_COST = ARENASIZE;
 
     /* BattleNode, different situations

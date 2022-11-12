@@ -24,10 +24,16 @@
 #ifndef H2INTERFACE_ICONS_H
 #define H2INTERFACE_ICONS_H
 
+#include <cassert>
+#include <cstdint>
+
+#include "image.h"
 #include "interface_border.h"
 #include "interface_list.h"
+#include "math_base.h"
 
-#include <cassert>
+class Castle;
+class Heroes;
 
 enum icons_t
 {

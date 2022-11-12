@@ -18,19 +18,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
+#include "army_troop.h"
+#include "artifact.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
 #include "dialog.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "math_base.h"
 #include "monster.h"
-#include "race.h"
-#include "tools.h"
-#include "translations.h"
+#include "skill.h"
+#include "spell.h"
 #include "ui_campaign.h"
 #include "ui_dialog.h"
 #include "ui_monster.h"

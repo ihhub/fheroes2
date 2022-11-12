@@ -21,24 +21,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "dialog_selectscenario.h"
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectscenario.h"
 #include "difficulty.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
 #include "ui_text.h"
-
-#include <cassert>
 
 namespace
 {

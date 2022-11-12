@@ -24,34 +24,47 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <map>
+#include <memory>
 #include <numeric>
+#include <ostream>
+#include <random>
+#include <set>
 
-#include "agg_image.h"
 #include "army.h"
+#include "army_troop.h"
 #include "army_ui_helper.h"
+#include "artifact.h"
+#include "artifact_info.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "castle.h"
 #include "color.h"
-#include "game.h"
 #include "heroes.h"
 #include "heroes_base.h"
-#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
 #include "maps_tiles.h"
 #include "morale.h"
+#include "mp2.h"
 #include "payment.h"
 #include "race.h"
 #include "rand.h"
+#include "resource.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
+#include "skill.h"
 #include "tools.h"
 #include "translations.h"
-#include "ui_text.h"
 #include "world.h"
+
+namespace fheroes2
+{
+    class Image;
+}
 
 enum armysize_t
 {

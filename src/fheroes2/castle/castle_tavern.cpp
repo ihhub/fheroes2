@@ -21,9 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdint>
+#include <memory>
 #include <string>
 
-#include "agg_image.h"
+#include "castle.h"
 #include "dialog.h"
 #include "game_delays.h"
 #include "icn.h"

@@ -28,8 +28,6 @@
 #include <string>
 
 #include "game_mode.h"
-#include "mp2.h"
-#include "mus.h"
 
 class Players;
 class Heroes;

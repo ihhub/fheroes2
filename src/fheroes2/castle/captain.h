@@ -23,8 +23,13 @@
 #ifndef H2CAPTAIN_H
 #define H2CAPTAIN_H
 
-#include "heroes_base.h"
+#include <cstdint>
+#include <string>
 
+#include "heroes_base.h"
+#include "image.h"
+
+class Army;
 class Castle;
 
 class Captain final : public HeroBase

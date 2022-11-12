@@ -21,8 +21,13 @@
 #ifndef H2CAMPAIGN_SAVEDATA_H
 #define H2CAMPAIGN_SAVEDATA_H
 
+#include <cstdint>
+#include <vector>
+
 #include "army_troop.h"
 #include "campaign_scenariodata.h"
+
+class StreamBase;
 
 class Troops;
 

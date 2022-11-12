@@ -22,20 +22,33 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <cstdint>
+#include <functional>
 #include <string>
 
 #include "agg_image.h"
+#include "army.h"
+#include "artifact.h"
 #include "buildinginfo.h"
+#include "captain.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
+#include "heroes_recruits.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
 #include "payment.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "statusbar.h"
 #include "text.h"
 #include "tools.h"
@@ -43,6 +56,7 @@
 #include "ui_button.h"
 #include "ui_castle.h"
 #include "ui_kingdom.h"
+#include "ui_tool.h"
 #include "world.h"
 
 int Castle::DialogBuyHero( const Heroes * hero ) const

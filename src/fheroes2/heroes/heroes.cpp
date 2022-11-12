@@ -21,40 +21,51 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <array>
-#include <cassert>
 #include <cmath>
-#include <functional>
+#include <cstddef>
+#include <iterator>
+#include <map>
+#include <ostream>
+#include <set>
 
 #include "agg_image.h"
 #include "ai.h"
+#include "army_troop.h"
 #include "artifact.h"
+#include "artifact_info.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
+#include "castle_heroes.h"
 #include "dialog.h"
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
 #include "game_static.h"
+#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
-#include "interface_icons.h"
+#include "image.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
+#include "m82.h"
+#include "maps.h"
 #include "maps_objects.h"
+#include "maps_tiles.h"
 #include "monster.h"
 #include "morale.h"
 #include "mp2.h"
 #include "payment.h"
+#include "players.h"
 #include "race.h"
-#include "save_format_version.h"
+#include "rand.h"
 #include "serialize.h"
 #include "settings.h"
 #include "speed.h"
+#include "spell_book.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"

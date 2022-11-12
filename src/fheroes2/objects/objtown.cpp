@@ -22,6 +22,10 @@
  ***************************************************************************/
 
 #include "objtown.h"
+
+#include <bitset>
+#include <vector>
+
 #include "direction.h"
 #include "mp2.h"
 #include "tools.h"

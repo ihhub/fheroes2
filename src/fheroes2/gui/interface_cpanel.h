@@ -24,10 +24,11 @@
 #ifndef H2INTERFACE_CPANEL_H
 #define H2INTERFACE_CPANEL_H
 
+#include <cstdint>
+#include <memory>
+
 #include "game_mode.h"
 #include "math_base.h"
-
-#include <memory>
 
 namespace fheroes2
 {

@@ -22,12 +22,21 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
 #include <cstdlib>
+#include <functional>
+#include <initializer_list>
+#include <ostream>
+#include <set>
 
 #include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_bridge.h"
@@ -35,27 +44,47 @@
 #include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_interface.h"
+#include "battle_pathfinding.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
+#include "bin_info.h"
 #include "castle.h"
+#include "color.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "ground.h"
+#include "heroes_base.h"
 #include "icn.h"
 #include "interface_list.h"
+#include "localevent.h"
 #include "logging.h"
+#include "m82.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "monster.h"
 #include "monster_anim.h"
+#include "monster_info.h"
+#include "mp2.h"
 #include "mus.h"
 #include "pal.h"
+#include "players.h"
 #include "race.h"
 #include "rand.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell_book.h"
+#include "timing.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
+
+class Kingdom;
 
 namespace
 {

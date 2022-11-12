@@ -2704,7 +2704,7 @@ msgstr "Automatyczna"
 msgid "Auto, No Spells"
 msgstr "Auto, bez zaklęć"
 
-msgid "Manual"
+msgid "autoBattle|Manual"
 msgstr "Ręczna"
 
 msgid "Battles"
@@ -3570,6 +3570,9 @@ msgstr "Sopran (partie wokalne)"
 
 msgid "Recorded at Green Street Studios"
 msgstr "Nagrano w Green Street Studios"
+
+msgid "credits|Manual"
+msgstr "Przewodnik"
 
 msgid "German Consultant"
 msgstr "Konsultant ds. j. niemieckiego"

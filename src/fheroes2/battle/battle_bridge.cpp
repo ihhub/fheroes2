@@ -23,6 +23,7 @@
 
 #include "battle_bridge.h"
 #include "battle_arena.h"
+#include "battle_board.h"
 #include "battle_cell.h"
 #include "battle_grave.h"
 #include "battle_interface.h"

@@ -24,9 +24,10 @@
 #define H2TOOLS_H
 
 #include <bitset>
+#include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <iomanip>
-#include <list>
 #include <sstream>
 #include <string>
 #include <type_traits>
