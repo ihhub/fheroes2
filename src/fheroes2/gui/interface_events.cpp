@@ -23,27 +23,53 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <ostream>
+#include <string>
 #include <vector>
 
+#include "artifact.h"
+#include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "dialog_system_options.h"
+#include "direction.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "image.h"
+#include "interface_buttons.h"
+#include "interface_gamearea.h"
+#include "interface_icons.h"
+#include "interface_radar.h"
+#include "interface_status.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "mp2.h"
+#include "mus.h"
+#include "puzzle.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell.h"
+#include "spell_book.h"
 #include "system.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "view_world.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const

@@ -24,6 +24,8 @@
 #ifndef H2POSITION_H
 #define H2POSITION_H
 
+#include <cstdint>
+
 #include "math_base.h"
 
 class StreamBase;

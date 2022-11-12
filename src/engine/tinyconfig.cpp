@@ -23,6 +23,9 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstddef>
+#include <utility>
+#include <vector>
 
 #include "serialize.h"
 #include "tinyconfig.h"

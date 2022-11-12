@@ -23,25 +23,32 @@
 #ifndef H2TILES_H
 #define H2TILES_H
 
+#include <cstdint>
 #include <list>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
 #include "direction.h"
+#include "math_base.h"
 #include "mp2.h"
+#include "pairs.h"
 #include "resource.h"
 #include "skill.h"
 #include "world_regions.h"
 
 class Heroes;
-class Spell;
 class Monster;
+class Spell;
+class StreamBase;
 
-namespace MP2
+namespace fheroes2
 {
-    struct mp2tile_t;
-    struct mp2addon_t;
+    class Image;
+    class Sprite;
 }
 
 namespace Interface
@@ -236,9 +243,6 @@ namespace Maps
 
         void setOwnershipFlag( const MP2::MapObjectType objectType, const int color );
 
-        void correctOldSaveOwnershipFlag();
-        void correctDiggingHoles();
-
         void removeOwnershipFlag( const MP2::MapObjectType objectType );
 
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
@@ -411,8 +415,6 @@ namespace Maps
 
         static void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon );
         void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
-
-        static bool removeOldFlag( Addons & addons, const uint8_t startIndex, int & ownerColor );
 
         Addons addons_level1; // bottom layer
         Addons addons_level2; // top layer

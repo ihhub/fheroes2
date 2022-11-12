@@ -28,8 +28,6 @@
 
 #include "mp2.h"
 
-class StreamBase;
-
 namespace Skill
 {
     struct stats_t;

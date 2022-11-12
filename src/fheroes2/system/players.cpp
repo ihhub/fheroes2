@@ -23,13 +23,20 @@
 
 #include <algorithm>
 #include <cassert>
+#include <ostream>
 
+#include "ai.h"
+#include "castle.h"
 #include "game.h"
+#include "gamedefs.h"
+#include "heroes.h"
 #include "logging.h"
+#include "maps.h"
 #include "maps_fileinfo.h"
 #include "normal/ai_normal.h"
 #include "players.h"
 #include "race.h"
+#include "rand.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"

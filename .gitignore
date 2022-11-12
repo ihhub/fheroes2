@@ -92,5 +92,8 @@ android/local.properties
 android/.idea
 android/.gradle
 
+# Automatically created Android assets
+android/app/src/main/assets/files/
+
 # Mac magic folders
 .DS_Store

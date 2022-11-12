@@ -12,9 +12,9 @@ jobs:
           os: ubuntu-latest
           dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
-          package_name: fheroes2_ubuntu_sdl1.zip
+          package_name: fheroes2_ubuntu_SDL1.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: Ubuntu (Linux) build with SDL 1.2 support (latest commit)
+          release_name: Ubuntu (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-sdl1_dev
         - name: Linux SDL1 Debug
           os: ubuntu-latest
@@ -24,9 +24,9 @@ jobs:
           os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
-          package_name: fheroes2_ubuntu_sdl2.zip
+          package_name: fheroes2_ubuntu_SDL2.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: Ubuntu (Linux) build with SDL 2.0 support (latest commit)
+          release_name: Ubuntu (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux SDL2 Debug
           os: ubuntu-latest
@@ -36,9 +36,9 @@ jobs:
           os: macos-11
           dependencies: sdl sdl_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
-          package_name: fheroes2_macos11_sdl1_x86-64.zip
+          package_name: fheroes2_macos_x86-64_SDL1.zip
           package_files: fheroes2 LICENSE script/macos/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: MacOS build with SDL 1 support (latest commit)
+          release_name: macOS x86-64 build with SDL1 (latest commit)
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
           os: macos-11
@@ -48,9 +48,9 @@ jobs:
           os: macos-11
           dependencies: sdl2 sdl2_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
-          package_name: fheroes2_macos11_sdl2_x86-64.zip
+          package_name: fheroes2_macos_x86-64_SDL2.zip
           package_files: fheroes2 LICENSE script/macos/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: MacOS build with SDL 2 support (latest commit)
+          release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
           os: macos-11
@@ -154,20 +154,20 @@ jobs:
       run: |
         cp docs/README.txt docs/README_PSV.md .
         # Translations and H2D files are already included in fheroes2.vpk
-        zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE changelog.txt README.txt README_PSV.md
+        zip fheroes2_psv.zip fheroes2.vpk LICENSE changelog.txt README.txt README_PSV.md
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
-        name: fheroes2_psv_sdl2.zip
-        path: fheroes2_psv_sdl2.zip
+        name: fheroes2_psv.zip
+        path: fheroes2_psv.zip
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
-        artifacts: fheroes2_psv_sdl2.zip
+        artifacts: fheroes2_psv.zip
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: PS Vita build with SDL 2.0 support (latest commit)
+        name: PS Vita build (latest commit)
         tag: fheroes2-psv-sdl2_dev
         allowUpdates: true
         artifactErrorsFailBuild: true
@@ -197,20 +197,20 @@ jobs:
     - name: Create package
       run: |
         cp docs/README.txt docs/README_switch.md .
-        zip fheroes2_switch_sdl2.zip fheroes2.nro LICENSE changelog.txt README.txt README_switch.md files/lang/*.mo files/data/*.h2d
+        zip fheroes2_switch.zip fheroes2.nro LICENSE changelog.txt README.txt README_switch.md files/lang/*.mo files/data/*.h2d
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
-        name: fheroes2_switch_sdl2.zip
-        path: fheroes2_switch_sdl2.zip
+        name: fheroes2_switch.zip
+        path: fheroes2_switch.zip
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
-        artifacts: fheroes2_switch_sdl2.zip
+        artifacts: fheroes2_switch.zip
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Nintendo Switch build with SDL 2.0 support (latest commit)
+        name: Nintendo Switch build (latest commit)
         tag: fheroes2-switch-sdl2_dev
         allowUpdates: true
         artifactErrorsFailBuild: true

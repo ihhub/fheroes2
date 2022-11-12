@@ -22,17 +22,27 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <string>
 
 #include "agg_image.h"
 #include "army.h"
 #include "castle.h"
+#include "color.h"
+#include "dialog.h"
 #include "game_interface.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_status.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "players.h"
 #include "resource.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"

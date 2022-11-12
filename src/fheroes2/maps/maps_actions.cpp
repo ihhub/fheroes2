@@ -22,12 +22,16 @@
  ***************************************************************************/
 
 #include "maps_actions.h"
+
+#include <list>
+
 #include "dialog.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "serialize.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "visit.h"
 #include "world.h"
 
 StreamBase & operator<<( StreamBase & sb, const ActionSimple & st )

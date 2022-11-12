@@ -24,18 +24,26 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
+#include <cstddef>
+#include <list>
 #include <map>
 #include <memory>
 #include <mutex>
 #include <numeric>
+#include <ostream>
+#include <type_traits>
 #include <utility>
 #include <variant>
 
-#include <SDL.h>
+#include <SDL_audio.h>
+#include <SDL_error.h>
 #include <SDL_mixer.h>
+#include <SDL_rwops.h>
+#include <SDL_version.h>
 
 #include "audio.h"
 #include "core.h"
+#include "dir.h"
 #include "logging.h"
 #include "system.h"
 #include "thread.h"
@@ -53,7 +61,12 @@ namespace
             format = AUDIO_S16;
             channels = 2; // Support stereo audio.
             silence = 0;
+#if defined( ANDROID )
+            // TODO: a value greater than 1024 causes audio distortion on Android
+            samples = 1024;
+#else
             samples = 2048;
+#endif
             size = 0;
             // TODO: research if we need to utilize these 2 paremeters in the future.
             callback = nullptr;

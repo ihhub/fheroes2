@@ -23,11 +23,17 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <functional>
+#include <iterator>
+#include <ostream>
+#include <random>
 
 #include "ai.h"
 #include "army.h"
 #include "army_troop.h"
+#include "artifact.h"
+#include "artifact_info.h"
 #include "audio.h"
 #include "battle_arena.h"
 #include "battle_army.h"
@@ -39,16 +45,29 @@
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "castle.h"
+#include "castle_heroes.h"
+#include "color.h"
 #include "ground.h"
+#include "heroes.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
 #include "monster.h"
-#include "race.h"
+#include "players.h"
+#include "rand.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "speed.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_tool.h"
 #include "world.h"
 
 namespace Battle

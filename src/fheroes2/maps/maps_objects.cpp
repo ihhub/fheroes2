@@ -22,6 +22,8 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <ostream>
+#include <vector>
 
 #include "color.h"
 #include "logging.h"

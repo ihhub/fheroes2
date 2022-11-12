@@ -19,12 +19,17 @@
  ***************************************************************************/
 
 #include "ui_text.h"
-#include "agg_image.h"
-#include "image.h"
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <deque>
+#include <memory>
+#include <utility>
+
+#include "agg_image.h"
+#include "image.h"
+#include "math_base.h"
 
 namespace
 {

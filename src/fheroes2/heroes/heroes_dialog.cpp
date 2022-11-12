@@ -21,21 +21,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <functional>
+#include <memory>
 #include <string>
 
 #include "agg_image.h"
+#include "army.h"
 #include "army_bar.h"
+#include "artifact.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "statusbar.h"
+#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -332,7 +344,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // right info
-        if ( !readonly && le.MousePressRight( portPos ) ) {
+        if ( le.MousePressRight( portPos ) ) {
             Dialog::QuickInfo( *this );
         }
         else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {

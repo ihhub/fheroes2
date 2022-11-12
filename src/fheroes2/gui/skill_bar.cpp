@@ -19,16 +19,20 @@
  ***************************************************************************/
 
 #include "skill_bar.h"
+
+#include <cassert>
+
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "heroes.h"
 #include "icn.h"
+#include "screen.h"
+#include "skill.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-
-#include <cassert>
 
 namespace
 {

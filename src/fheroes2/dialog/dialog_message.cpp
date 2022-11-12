@@ -21,13 +21,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdint>
+#include <ostream>
+#include <string>
+
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "localevent.h"
 #include "logging.h"
+#include "math_base.h"
+#include "screen.h"
 #include "text.h"
-
 #include "ui_button.h"
 
 namespace

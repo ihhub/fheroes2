@@ -23,27 +23,38 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <set>
+#include <string>
 #include <type_traits>
+#include <utility>
+#include <vector>
 
 #include "artifact.h"
-#include "campaign_data.h"
+#include "artifact_ultimate.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "castle.h"
+#include "color.h"
 #include "game_over.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "maps.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
+#include "math_base.h"
 #include "mp2.h"
 #include "mp2_helper.h"
+#include "players.h"
 #include "race.h"
 #include "rand.h"
 #include "serialize.h"
 #include "settings.h"
-#include "tools.h"
-#include "translations.h"
 #include "world.h"
 
 namespace

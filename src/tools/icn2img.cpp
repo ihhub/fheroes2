@@ -21,12 +21,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <fstream>
+#include <cstdint>
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
+#include <memory>
+#include <sstream> // IWYU pragma: keep
+#include <string>
+#include <vector>
 
 #include "agg_file.h"
+#include "image.h"
 #include "image_palette.h"
 #include "image_tool.h"
 #include "serialize.h"

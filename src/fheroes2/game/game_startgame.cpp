@@ -22,36 +22,65 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <list>
+#include <ostream>
+#include <string>
+#include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
 #include "ai.h"
+#include "army.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "battle_only.h"
 #include "castle.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "direction.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_buttons.h"
+#include "interface_cpanel.h"
+#include "interface_gamearea.h"
+#include "interface_icons.h"
+#include "interface_radar.h"
+#include "interface_status.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
+#include "maps.h"
 #include "maps_tiles.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mp2.h"
 #include "mus.h"
+#include "players.h"
+#include "resource.h"
 #include "route.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
+#include "week.h"
 #include "world.h"
 
 namespace
@@ -730,7 +759,12 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
 
-    ResetFocus( GameFocus::FIRSTHERO );
+    if ( isload ) {
+        updateFocus();
+    }
+    else {
+        ResetFocus( GameFocus::FIRSTHERO );
+    }
 
     radar.SetHide( false );
     statusWindow.Reset();

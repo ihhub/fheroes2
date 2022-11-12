@@ -20,20 +20,50 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <list>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <utility>
+#include <vector>
 
+#include "ai.h"
 #include "ai_normal.h"
-#include "game.h"
+#include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "castle.h"
+#include "castle_heroes.h"
+#include "color.h"
 #include "game_over.h"
 #include "game_static.h"
+#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
+#include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
 #include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "monster.h"
 #include "morale.h"
 #include "mp2.h"
+#include "pairs.h"
+#include "payment.h"
+#include "players.h"
+#include "rand.h"
+#include "resource.h"
+#include "route.h"
 #include "settings.h"
+#include "skill.h"
+#include "spell.h"
+#include "visit.h"
 #include "world.h"
+#include "world_pathfinding.h"
 
 namespace
 {
@@ -122,7 +152,19 @@ namespace
         return heroArmyStrength > ai.getTargetArmyStrength( tile, objectType ) * targetStrengthMultiplier;
     }
 
-    bool HeroesValidObject( const Heroes & hero, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai, const double heroArmyStrength )
+    bool isArmyValuableToObtain( const Troop & monster, double armyStrengthThreshold, const bool armyHasMonster )
+    {
+        if ( armyHasMonster ) {
+            // Since the army has the same monster the limit must be reduced.
+            armyStrengthThreshold /= 2;
+        }
+
+        // Do not even care about this monster if it brings no visible advantage to the army.
+        return monster.GetStrength() > armyStrengthThreshold;
+    }
+
+    bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai,
+                            const double armyStrengthThreshold )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -163,6 +205,7 @@ namespace
             return false;
 
         case MP2::OBJ_MAGELLANMAPS:
+            // TODO: avoid hardcoded resource values for objects.
             return !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
 
         case MP2::OBJ_WHIRLPOOL:
@@ -350,15 +393,19 @@ namespace
         case MP2::OBJ_GOBLINHUT:
         case MP2::OBJ_DWARFCOTT:
         case MP2::OBJ_HALFLINGHOLE:
-        case MP2::OBJ_THATCHEDHUT: {
-            const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
-        }
-
+        case MP2::OBJ_THATCHEDHUT:
         case MP2::OBJ_PEASANTHUT: {
-            // Peasants are special monsters. They're the weakest! Think twice before getting them.
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
+            if ( !troop.isValid() ) {
+                return false;
+            }
+
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
+                return false;
+            }
+
+            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
         }
 
         // recruit army
@@ -370,11 +417,34 @@ namespace
         case MP2::OBJ_AIRALTAR:
         case MP2::OBJ_FIREALTAR:
         case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS: {
+        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_ANCIENTLAMP: {
             const Troop & troop = tile.QuantityTroop();
-            const payment_t & paymentCosts = troop.GetTotalCost();
+            if ( !troop.isValid() ) {
+                return false;
+            }
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || !army.isFullHouse() );
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
+                return false;
+            }
+
+            const payment_t singleMonsterCost = troop.GetCost();
+
+            uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
+            if ( recruitTroopCount <= 0 ) {
+                // We do not have resources to hire even a single creature.
+                return false;
+            }
+
+            const uint32_t availableTroopCount = troop.GetCount();
+            if ( recruitTroopCount > availableTroopCount ) {
+                recruitTroopCount = availableTroopCount;
+            }
+
+            const Troop troopToHire{ troop.GetID(), recruitTroopCount };
+
+            return isArmyValuableToObtain( troopToHire, armyStrengthThreshold, armyHasMonster );
         }
 
         // recruit army (battle)
@@ -384,20 +454,24 @@ namespace
             if ( Color::NONE == tile.QuantityColor() ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
-            else {
-                const Troop & troop = tile.QuantityTroop();
-                const payment_t & paymentCosts = troop.GetTotalCost();
 
-                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
-            }
-        }
-
-        // recruit genie
-        case MP2::OBJ_ANCIENTLAMP: {
             const Troop & troop = tile.QuantityTroop();
-            const payment_t & paymentCosts = troop.GetTotalCost();
+            if ( !troop.isValid() ) {
+                return false;
+            }
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
+                return false;
+            }
+
+            const payment_t & paymentCosts = troop.GetTotalCost();
+            // TODO: even if AI does not have enough money it might still buy few monsters.
+            if ( !kingdom.AllowPayment( paymentCosts ) ) {
+                return false;
+            }
+
+            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
         }
 
         // upgrade army
@@ -505,10 +579,12 @@ namespace
         case MP2::OBJ_ALCHEMYTOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
             const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
+            if ( cursed == 0 ) {
+                return false;
+            }
 
             const payment_t payment = PaymentConditions::ForAlchemist();
-
-            return cursed > 0 && kingdom.AllowPayment( payment );
+            return kingdom.AllowPayment( payment );
         }
         default:
             // Did you add a new action object but forget to add AI interaction for it?
@@ -549,6 +625,7 @@ namespace
             , _pathfinder( pathfinder )
             , _ai( ai )
             , _heroArmyStrength( hero.GetArmy().GetStrength() )
+            , _armyStrengthThreshold( hero.getAIMininumJoiningArmyStrength() )
         {
             // Do nothing.
         }
@@ -560,7 +637,7 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = HeroesValidObject( _hero, index, _pathfinder, _ai, _heroArmyStrength );
+            const bool valid = HeroesValidObject( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold );
             _validObjects[index] = valid;
             return valid;
         }
@@ -573,6 +650,9 @@ namespace
         // Hero's strength value is valid till any action is done.
         // Since an instance of this class is used only for evaluation of the future movement it is appropriate to cache the strength.
         const double _heroArmyStrength;
+
+        // Army strength threshold is used to decide whether getting extra monsters is useful.
+        const double _armyStrengthThreshold;
 
         std::map<int, bool> _validObjects;
     };

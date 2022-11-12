@@ -25,27 +25,47 @@
 #define H2HEROES_H
 
 #include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <exception>
 #include <list>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "army.h"
+#include "artifact.h"
+#include "color.h"
+#include "direction.h"
 #include "heroes_base.h"
+#include "math_base.h"
+#include "mp2.h"
 #include "pairs.h"
 #include "route.h"
+#include "skill.h"
+#include "spell.h"
 #include "visit.h"
+
+class Castle;
+class StreamBase;
+class StreamBuf;
 
 namespace Battle
 {
     class Only;
 }
 
-namespace Interface
+namespace Maps
 {
-    class GameArea;
+    class Tiles;
 }
 
-class StreamBuf;
+namespace fheroes2
+{
+    class Image;
+    class Sprite;
+}
 
 struct HeroSeedsForLevelUp
 {
@@ -144,9 +164,6 @@ public:
         UNKNOWN
     };
 
-    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
-    static const char * GetName( int heroid );
-
     enum flags_t : uint32_t
     {
         SHIPMASTER = 0x00000001,
@@ -203,6 +220,49 @@ public:
         CHAMPION
     };
 
+    // This class is used to update a flag for an AI hero to make him available to meet other heroes.
+    // Such cases happen after battles, reinforcements or collecting artifacts.
+    class AIHeroMeetingUpdater
+    {
+    public:
+        explicit AIHeroMeetingUpdater( Heroes & hero )
+            : _hero( hero )
+            , _initialArmyStrength( hero.GetArmy().GetStrength() )
+        {
+            // Do nothing.
+        }
+
+        AIHeroMeetingUpdater( const AIHeroMeetingUpdater & ) = delete;
+        AIHeroMeetingUpdater( AIHeroMeetingUpdater && ) = delete;
+
+        AIHeroMeetingUpdater & operator=( const AIHeroMeetingUpdater & ) = delete;
+        AIHeroMeetingUpdater & operator=( AIHeroMeetingUpdater && ) = delete;
+
+        ~AIHeroMeetingUpdater()
+        {
+            double currentArmyStrength = 0;
+
+            try {
+                // Army::GetStrength() could potentially throw an exception, and SonarQube complains about a potentially uncaught exception
+                // in the destructor. This is not a problem per se, because calling std::terminate() is OK, so let's just do this ourselves.
+                currentArmyStrength = _hero.GetArmy().GetStrength();
+            }
+            catch ( ... ) {
+                // This should never happen
+                assert( 0 );
+                std::terminate();
+            }
+
+            if ( std::fabs( _initialArmyStrength - currentArmyStrength ) > 0.001 ) {
+                _hero.unmarkHeroMeeting();
+            }
+        }
+
+    private:
+        Heroes & _hero;
+        const double _initialArmyStrength;
+    };
+
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( int heroID, int race, int initialLevel );
@@ -211,6 +271,9 @@ public:
     ~Heroes() override = default;
 
     Heroes & operator=( const Heroes & ) = delete;
+
+    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
+    static const char * GetName( int heroid );
 
     bool isValid() const override;
     bool isFreeman() const;
@@ -382,6 +445,8 @@ public:
     // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;
     void markHeroMeeting( int heroID );
+
+    // Do not call this method directly. It is used by AIHeroMeetingUpdater class.
     void unmarkHeroMeeting();
 
     bool Move( bool fast = false );
@@ -480,6 +545,8 @@ public:
         return static_cast<uint8_t>( _alphaValue );
     }
 
+    double getAIMininumJoiningArmyStrength() const;
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
@@ -536,7 +603,6 @@ private:
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
-
 
     mutable int _alphaValue;
 

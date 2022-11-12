@@ -20,14 +20,21 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <string>
 
 #include "agg_image.h"
+#include "color.h"
 #include "dialog.h"
 #include "game.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "maps_fileinfo.h"
 #include "player_info.h"
+#include "players.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"

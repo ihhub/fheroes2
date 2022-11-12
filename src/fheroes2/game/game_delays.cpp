@@ -22,8 +22,10 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <memory>
 
 #include "game_delays.h"
+#include "gamedefs.h"
 #include "settings.h"
 #include "timing.h"
 

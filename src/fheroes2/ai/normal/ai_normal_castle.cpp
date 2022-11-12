@@ -18,11 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstddef>
+#include <cstdint>
+#include <vector>
+
+#include "ai.h"
 #include "ai_normal.h"
 #include "castle.h"
 #include "kingdom.h"
+#include "maps_tiles.h"
+#include "payment.h"
 #include "race.h"
+#include "resource.h"
 #include "world.h"
+#include "world_regions.h"
 
 namespace AI
 {

@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'org.fheroes2'
+
     compileSdkVersion 31
 
     defaultConfig {
@@ -9,8 +11,9 @@ android {
         minSdkVersion 19
         targetSdkVersion 31
 
-        versionCode 1
-        versionName '1.0'
+        // These paths are set relative to the android project directory
+        versionCode((new File('../version_code.txt')).getText('UTF-8').trim().toInteger())
+        versionName((new File('../version.txt')).getText('UTF-8').trim())
 
         externalNativeBuild {
             ndkBuild {
@@ -26,6 +29,34 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile({
+                def keystorePath = System.getenv('FHEROES2_KEYSTORE')
+
+                return keystorePath ? file(keystorePath) : null
+            }.call())
+
+            storePassword({
+                def keystorePass = System.getenv('FHEROES2_KEYSTORE_PASSWORD')
+
+                return keystorePass ? keystorePass : ''
+            }.call())
+
+            keyAlias({
+                def keyAlias = System.getenv('FHEROES2_KEY_ALIAS')
+
+                return keyAlias ? keyAlias : ''
+            }.call())
+
+            keyPassword({
+                def keyPass = System.getenv('FHEROES2_KEY_PASSWORD')
+
+                return keyPass ? keyPass : ''
+            }.call())
+        }
+    }
+
     buildTypes {
         debug {
             externalNativeBuild {
@@ -34,10 +65,32 @@ android {
                 }
             }
         }
+
+        release {
+            signingConfig signingConfigs.release
+        }
     }
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':sdl2')
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+}
+
+task copyH2D(type: Copy) {
+    from('../../files/data') {
+        include '*.h2d'
+    }
+    into 'src/main/assets/files/data'
+}
+
+task copyTranslations(type: Copy) {
+    from('../../files/lang') {
+        include '*.mo'
+    }
+    into 'src/main/assets/files/lang'
+}
+
+preBuild {
+    dependsOn copyH2D, copyTranslations
 }

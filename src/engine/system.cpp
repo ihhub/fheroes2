@@ -24,19 +24,32 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
-#include <fstream>
-#include <map>
-#include <memory>
+#include <utility>
 
 #if defined( _WIN32 )
 #include <clocale>
+#include <map>
 #endif
 
-#include "logging.h"
 #include "system.h"
-#include "tools.h"
 
-#include <SDL.h>
+#if defined( _WIN32 ) || defined( ANDROID )
+#include "logging.h"
+#else
+#include <strings.h>
+#endif
+
+#include <SDL_version.h>
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && defined( ANDROID )
+#include <SDL_error.h>
+#include <SDL_system.h>
+#endif
+
+#if SDL_VERSION_ATLEAST( 2, 0, 1 ) && ( !defined( __linux__ ) || defined( ANDROID ) )
+#include <SDL_filesystem.h>
+#include <SDL_stdinc.h>
+#endif
 
 #if defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN
@@ -68,15 +81,26 @@
 #define SEPARATOR '/'
 #endif
 
-#if !defined( __LINUX__ )
+#if !defined( __linux__ ) || defined( ANDROID )
 namespace
 {
     std::string GetHomeDirectory( const std::string & prog )
     {
 #if defined( TARGET_PS_VITA )
-        return "ux0:data/fheroes2";
+        return System::ConcatePath( "ux0:data", prog );
 #elif defined( TARGET_NINTENDO_SWITCH )
-        return "/switch/fheroes2";
+        return System::ConcatePath( "/switch", prog );
+#elif defined( ANDROID )
+        (void)prog;
+
+        const char * storagePath = SDL_AndroidGetExternalStoragePath();
+        if ( storagePath == nullptr ) {
+            ERROR_LOG( "Failed to obtain the path to external storage. The error: " << SDL_GetError() )
+            return {};
+        }
+
+        VERBOSE_LOG( "Application storage path is " << storagePath )
+        return storagePath;
 #endif
 
         const char * homeEnvPath = getenv( "HOME" );
@@ -99,7 +123,7 @@ namespace
         }
 
         std::string res;
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 1 )
         char * path = SDL_GetPrefPath( "", prog.c_str() );
         if ( path ) {
             res = path;
@@ -149,7 +173,7 @@ void System::appendOSSpecificDirectories( std::vector<std::string> & directories
 
 std::string System::GetConfigDirectory( const std::string & prog )
 {
-#if defined( __LINUX__ )
+#if defined( __linux__ ) && !defined( ANDROID )
     const char * configEnv = getenv( "XDG_CONFIG_HOME" );
     if ( configEnv ) {
         return System::ConcatePath( configEnv, prog );
@@ -168,7 +192,7 @@ std::string System::GetConfigDirectory( const std::string & prog )
 
 std::string System::GetDataDirectory( const std::string & prog )
 {
-#if defined( __LINUX__ )
+#if defined( __linux__ ) && !defined( ANDROID )
     const char * dataEnv = getenv( "XDG_DATA_HOME" );
     if ( dataEnv ) {
         return System::ConcatePath( dataEnv, prog );
@@ -186,21 +210,6 @@ std::string System::GetDataDirectory( const std::string & prog )
         return System::ConcatePath( System::ConcatePath( homeEnv, "Library/Application Support" ), prog );
     }
 
-    return {};
-#elif defined( ANDROID )
-    const char * internalDir = SDL_AndroidGetInternalStoragePath();
-    if ( internalDir ) {
-        VERBOSE_LOG( "Internal storage path is " << internalDir )
-        return System::ConcatePath( internalDir, prog );
-    }
-
-    if ( SDL_AndroidGetExternalStorageState() & SDL_ANDROID_EXTERNAL_STORAGE_READ ) {
-        const char * externalDir = SDL_AndroidGetExternalStoragePath();
-        if ( externalDir ) {
-            VERBOSE_LOG( "External storage path is " << internalDir )
-            return System::ConcatePath( externalDir, prog );
-        }
-    }
     return {};
 #else
     return GetHomeDirectory( prog );

@@ -22,12 +22,21 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
 #include <cstdlib>
+#include <functional>
+#include <initializer_list>
+#include <ostream>
+#include <set>
 
 #include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_bridge.h"
@@ -35,27 +44,47 @@
 #include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_interface.h"
+#include "battle_pathfinding.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
+#include "bin_info.h"
 #include "castle.h"
+#include "color.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "ground.h"
+#include "heroes_base.h"
 #include "icn.h"
 #include "interface_list.h"
+#include "localevent.h"
 #include "logging.h"
+#include "m82.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "monster.h"
 #include "monster_anim.h"
+#include "monster_info.h"
+#include "mp2.h"
 #include "mus.h"
 #include "pal.h"
+#include "players.h"
 #include "race.h"
 #include "rand.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell_book.h"
+#include "timing.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
+
+class Kingdom;
 
 namespace
 {
@@ -3964,7 +3993,6 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Sprite & missile = fheroes2::AGG::GetICN( ICN::BOULDER, 0 );
     const fheroes2::Rect & area = GetArea();
 
     AudioManager::PlaySound( M82::CATSND00 );
@@ -3991,8 +4019,12 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     pt2.y += area.y;
     max.y += area.y;
 
-    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, max, missile.width() );
+    const fheroes2::Sprite & boulderFirstFrame = fheroes2::AGG::GetICN( ICN::BOULDER, 0 );
+    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, max, boulderFirstFrame.width() );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
+
+    uint32_t boulderFrameId = 0;
+    const uint32_t boulderFramesCount = fheroes2::AGG::GetICNCount( ICN::BOULDER );
 
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
@@ -4002,9 +4034,13 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
                 ++catapult_frame;
 
             RedrawPartialStart();
-            fheroes2::Blit( missile, _mainSurface, pnt->x, pnt->y );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BOULDER, boulderFrameId ), _mainSurface, pnt->x, pnt->y );
             RedrawPartialFinish();
             ++pnt;
+            ++boulderFrameId;
+            if ( boulderFrameId >= boulderFramesCount ) {
+                boulderFrameId = 0;
+            }
         }
     }
 

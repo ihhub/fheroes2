@@ -22,11 +22,25 @@
  ***************************************************************************/
 
 #include "interface_radar.h"
+
+#include <utility>
+
 #include "agg_image.h"
 #include "castle.h"
+#include "color.h"
+#include "dialog.h"
 #include "game_interface.h"
+#include "gamedefs.h"
 #include "ground.h"
+#include "heroes.h"
 #include "icn.h"
+#include "interface_gamearea.h"
+#include "localevent.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "mp2.h"
+#include "players.h"
+#include "screen.h"
 #ifdef WITH_DEBUG
 #include "logging.h"
 #endif
@@ -65,10 +79,10 @@ namespace
         COLOR_ROAD = 0x7A,
 
         COLOR_BLUE = 0x47,
-        COLOR_GREEN = 0x69,
+        COLOR_GREEN = 0x5D,
         COLOR_RED = 0xbd,
         COLOR_YELLOW = 0x70,
-        COLOR_ORANGE = 0xcd,
+        COLOR_ORANGE = 0xCA,
         COLOR_PURPLE = 0x87,
         COLOR_GRAY = 0x10,
         COLOR_WHITE = 0x0a

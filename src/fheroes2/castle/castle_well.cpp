@@ -21,23 +21,38 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
 #include <string>
+#include <vector>
 
 #include "agg_image.h"
+#include "army.h"
 #include "army_troop.h"
 #include "battle_cell.h"
 #include "castle.h"
+#include "castle_heroes.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "monster.h"
 #include "monster_anim.h"
+#include "payment.h"
 #include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "speed.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 
@@ -67,9 +82,9 @@ namespace
 
         if ( count > 0 ) {
             if ( tempCastleArmy.CanJoinTroop( monsters ) )
-                tempCastleArmy.JoinTroop( monsters, count );
+                tempCastleArmy.JoinTroop( monsters, count, false );
             else if ( tempHeroArmy.CanJoinTroop( monsters ) )
-                tempHeroArmy.JoinTroop( monsters, count );
+                tempHeroArmy.JoinTroop( monsters, count, false );
         }
 
         return count;

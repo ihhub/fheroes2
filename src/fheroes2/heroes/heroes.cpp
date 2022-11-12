@@ -21,40 +21,51 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <array>
-#include <cassert>
 #include <cmath>
-#include <functional>
+#include <cstddef>
+#include <iterator>
+#include <map>
+#include <ostream>
+#include <set>
 
 #include "agg_image.h"
 #include "ai.h"
+#include "army_troop.h"
 #include "artifact.h"
+#include "artifact_info.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
+#include "castle_heroes.h"
 #include "dialog.h"
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
 #include "game_static.h"
+#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
-#include "interface_icons.h"
+#include "image.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
+#include "m82.h"
+#include "maps.h"
 #include "maps_objects.h"
+#include "maps_tiles.h"
 #include "monster.h"
 #include "morale.h"
 #include "mp2.h"
 #include "payment.h"
+#include "players.h"
 #include "race.h"
-#include "save_format_version.h"
+#include "rand.h"
 #include "serialize.h"
 #include "settings.h"
 #include "speed.h"
+#include "spell_book.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -220,8 +231,8 @@ Heroes::Heroes( int heroid, int rc )
     switch ( hid ) {
     case DEBUG_HERO:
         army.Clean();
-        army.JoinTroop( Monster::BLACK_DRAGON, 2 );
-        army.JoinTroop( Monster::RED_DRAGON, 3 );
+        army.JoinTroop( Monster::BLACK_DRAGON, 2, false );
+        army.JoinTroop( Monster::RED_DRAGON, 3, false );
 
         secondary_skills = Skill::SecSkills();
         secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::PATHFINDING, Skill::Level::ADVANCED ) );
@@ -1938,6 +1949,38 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
     seeds.seedSecondaySkill2 = hash + 2;
     seeds.seedSecondaySkillRandomChoose = hash + 3;
     return seeds;
+}
+
+double Heroes::getAIMininumJoiningArmyStrength() const
+{
+    // Ideally we need to assert here that the hero is under AI control.
+    // But in cases when we regain a temporary control from the AI then the hero becomes non-AI.
+
+    double strengthThreshold = 0.05;
+
+    switch ( getAIRole() ) {
+    case Heroes::Role::SCOUT:
+        strengthThreshold = 0.01;
+        break;
+    case Heroes::Role::COURIER:
+        strengthThreshold = 0.015;
+        break;
+    case Heroes::Role::HUNTER:
+        strengthThreshold = 0.02;
+        break;
+    case Heroes::Role::FIGHTER:
+        strengthThreshold = 0.025;
+        break;
+    case Heroes::Role::CHAMPION:
+        strengthThreshold = 0.03;
+        break;
+    default:
+        // Did you add a new AI hero role? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return strengthThreshold * Troops( GetArmy().getTroops() ).GetStrength();
 }
 
 StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )

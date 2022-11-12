@@ -21,7 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdint>
+#include <cstdlib>
 #include <iostream>
+#include <string>
+#include <vector>
 
 #include "audio.h"
 #include "tools.h"

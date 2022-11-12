@@ -19,8 +19,13 @@
  ***************************************************************************/
 
 #include "game_logo.h"
+
+#include <cstdint>
+
 #include "game_delays.h"
+#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "screen.h"
 #include "translations.h"
 #include "ui_text.h"

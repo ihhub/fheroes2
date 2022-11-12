@@ -24,24 +24,36 @@
 #define H2CASTLE_H
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
 #include <map>
+#include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "army.h"
 #include "bitmodes.h"
 #include "captain.h"
 #include "castle_heroes.h"
+#include "color.h"
+#include "gamedefs.h"
 #include "mageguild.h"
+#include "math_base.h"
+#include "monster.h"
+#include "players.h"
 #include "position.h"
-#include "ui_button.h"
 
 namespace fheroes2
 {
     class RandomMonsterAnimation;
 }
 
+class Funds;
+class HeroBase;
 class Heroes;
+class StreamBase;
+class Troop;
 
 enum building_t : uint32_t
 {
@@ -274,6 +286,10 @@ private:
         Build, // Build something.
         RecruitHero // Recruit a hero.
     };
+
+    // Checks whether this particular building is currently built in the castle (unlike
+    // the isBuild(), upgraded versions of the same building are not taken into account)
+    bool isExactBuildingBuilt( const uint32_t buildingToCheck ) const;
 
     uint32_t * GetDwelling( uint32_t dw );
     void EducateHeroes();

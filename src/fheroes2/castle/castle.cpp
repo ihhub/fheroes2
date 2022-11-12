@@ -24,9 +24,13 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <iterator>
+#include <ostream>
 
 #include "agg_image.h"
 #include "ai.h"
+#include "army_troop.h"
+#include "artifact.h"
 #include "audio_manager.h"
 #include "battle_board.h"
 #include "battle_tower.h"
@@ -34,24 +38,38 @@
 #include "castle_building_info.h"
 #include "dialog.h"
 #include "difficulty.h"
+#include "direction.h"
 #include "game.h"
 #include "game_static.h"
 #include "ground.h"
+#include "heroes.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "maps.h"
 #include "maps_tiles.h"
 #include "morale.h"
+#include "mp2.h"
 #include "payment.h"
 #include "profit.h"
 #include "race.h"
+#include "rand.h"
+#include "resource.h"
+#include "route.h"
+#include "screen.h"
 #include "serialize.h"
 #include "settings.h"
+#include "skill.h"
+#include "spell.h"
+#include "spell_storage.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "week.h"
 #include "world.h"
 
 namespace
@@ -518,6 +536,80 @@ double Castle::getVisitValue( const Heroes & hero ) const
     return spellValue + upgradeStrength + futureArmy.getReinforcementValue( getAvailableArmy( potentialFunds ) );
 }
 
+bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
+{
+    assert( CountBits( buildingToCheck ) == 1 );
+
+    // This building is not built at all
+    if ( ( building & buildingToCheck ) == 0 ) {
+        return false;
+    }
+
+    auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
+        // All expected levels should be built
+        assert( ( building & expectedLevels ) == expectedLevels );
+
+        // Only the expected levels of all possible levels should be built
+        return ( building & allPossibleLevels ) == expectedLevels;
+    };
+
+    if ( buildingToCheck & BUILD_MAGEGUILD ) {
+        switch ( buildingToCheck ) {
+        case BUILD_MAGEGUILD1:
+            return checkBuilding( BUILD_MAGEGUILD1, BUILD_MAGEGUILD );
+        case BUILD_MAGEGUILD2:
+            return checkBuilding( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2, BUILD_MAGEGUILD );
+        case BUILD_MAGEGUILD3:
+            return checkBuilding( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 | BUILD_MAGEGUILD3, BUILD_MAGEGUILD );
+        case BUILD_MAGEGUILD4:
+            return checkBuilding( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 | BUILD_MAGEGUILD3 | BUILD_MAGEGUILD4, BUILD_MAGEGUILD );
+        case BUILD_MAGEGUILD5:
+            return checkBuilding( BUILD_MAGEGUILD1 | BUILD_MAGEGUILD2 | BUILD_MAGEGUILD3 | BUILD_MAGEGUILD4 | BUILD_MAGEGUILD5, BUILD_MAGEGUILD );
+        default:
+            assert( 0 );
+        }
+    }
+
+    if ( buildingToCheck & ( DWELLING_MONSTERS | DWELLING_UPGRADES ) ) {
+        switch ( buildingToCheck ) {
+        case DWELLING_MONSTER1:
+            // Level 1 dwellings have no upgrades
+            return true;
+        case DWELLING_MONSTER2:
+            return checkBuilding( DWELLING_MONSTER2, DWELLING_MONSTER2 | DWELLING_UPGRADE2 );
+        case DWELLING_MONSTER3:
+            return checkBuilding( DWELLING_MONSTER3, DWELLING_MONSTER3 | DWELLING_UPGRADE3 );
+        case DWELLING_MONSTER4:
+            return checkBuilding( DWELLING_MONSTER4, DWELLING_MONSTER4 | DWELLING_UPGRADE4 );
+        case DWELLING_MONSTER5:
+            return checkBuilding( DWELLING_MONSTER5, DWELLING_MONSTER5 | DWELLING_UPGRADE5 );
+        case DWELLING_MONSTER6:
+            // Take the Black Dragon upgrade (DWELLING_UPGRADE7) into account
+            return checkBuilding( DWELLING_MONSTER6, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
+
+        case DWELLING_UPGRADE2:
+            return checkBuilding( DWELLING_MONSTER2 | DWELLING_UPGRADE2, DWELLING_MONSTER2 | DWELLING_UPGRADE2 );
+        case DWELLING_UPGRADE3:
+            return checkBuilding( DWELLING_MONSTER3 | DWELLING_UPGRADE3, DWELLING_MONSTER3 | DWELLING_UPGRADE3 );
+        case DWELLING_UPGRADE4:
+            return checkBuilding( DWELLING_MONSTER4 | DWELLING_UPGRADE4, DWELLING_MONSTER4 | DWELLING_UPGRADE4 );
+        case DWELLING_UPGRADE5:
+            return checkBuilding( DWELLING_MONSTER5 | DWELLING_UPGRADE5, DWELLING_MONSTER5 | DWELLING_UPGRADE5 );
+        case DWELLING_UPGRADE6:
+            // Take the Black Dragon upgrade (DWELLING_UPGRADE7) into account
+            return checkBuilding( DWELLING_MONSTER6 | DWELLING_UPGRADE6, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
+        case DWELLING_UPGRADE7:
+            // Black Dragon upgrade
+            return checkBuilding( DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7, DWELLING_MONSTER6 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
+
+        default:
+            assert( 0 );
+        }
+    }
+
+    return true;
+}
+
 uint32_t * Castle::GetDwelling( uint32_t dw )
 {
     if ( isBuild( dw ) )
@@ -555,64 +647,85 @@ void Castle::ActionNewDay()
 
 void Castle::ActionNewWeek()
 {
-    // skip the first week
+    // Skip the first week
     if ( world.CountWeek() < 2 ) {
         return;
     }
 
+    static const std::array<uint32_t, 12> allDwellings
+        = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6,
+            DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5, DWELLING_UPGRADE6, DWELLING_UPGRADE7 };
+
     const bool isNeutral = GetColor() == Color::NONE;
 
-    // increase population
+    // Increase the population
     if ( world.GetWeekType().GetType() != WeekName::PLAGUE ) {
-        const uint32_t dwellings1[7] = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6, 0 };
-        uint32_t * dw = nullptr;
+        static const std::array<uint32_t, 6> basicDwellings
+            = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
 
-        // simple growth
-        for ( uint32_t ii = 0; dwellings1[ii]; ++ii )
-            if ( nullptr != ( dw = GetDwelling( dwellings1[ii] ) ) ) {
-                uint32_t growth = Monster( race, GetActualDwelling( dwellings1[ii] ) ).GetGrown();
+        // Normal population growth
+        for ( const uint32_t dwellingId : basicDwellings ) {
+            uint32_t * dwellingPtr = GetDwelling( dwellingId );
 
-                // well build
-                if ( building & BUILD_WELL )
-                    growth += GetGrownWell();
-
-                // wel2 extras
-                if ( ( dwellings1[ii] == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) )
-                    growth += GetGrownWel2();
-
-                if ( isControlAI() && !isNeutral ) {
-                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
-                }
-
-                // Neutral towns always have half population growth.
-                if ( isNeutral ) {
-                    growth /= 2;
-                }
-
-                *dw += growth;
+            // Such dwelling (or its upgrade) has not been built
+            if ( dwellingPtr == nullptr ) {
+                continue;
             }
+
+            uint32_t growth = Monster( race, GetActualDwelling( dwellingId ) ).GetGrown();
+
+            // The well is built
+            if ( building & BUILD_WELL ) {
+                growth += GetGrownWell();
+            }
+
+            // The Horde building is built
+            if ( ( dwellingId == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) ) {
+                growth += GetGrownWel2();
+            }
+
+            if ( isControlAI() && !isNeutral ) {
+                growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
+            }
+
+            // Neutral towns always have 50% population growth
+            if ( isNeutral ) {
+                growth /= 2;
+            }
+
+            *dwellingPtr += growth;
+        }
 
         // Week Of
         if ( world.GetWeekType().GetType() == WeekName::MONSTERS && !world.BeginMonth() ) {
-            const uint32_t dwellings2[10] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                              DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
-
-            for ( uint32_t ii = 0; dwellings2[ii]; ++ii )
-                if ( nullptr != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
-                    const Monster mons( race, dwellings2[ii] );
-                    if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
-                        *dw += GetGrownWeekOf();
-                        break;
-                    }
+            for ( const uint32_t dwellingId : allDwellings ) {
+                // A building of exactly this level should be built (its upgraded versions should not be considered)
+                if ( !isExactBuildingBuilt( dwellingId ) ) {
+                    continue;
                 }
+
+                const Monster mons( race, dwellingId );
+
+                if ( !mons.isValid() || mons.GetID() != world.GetWeekType().GetMonster() ) {
+                    continue;
+                }
+
+                uint32_t * dwellingPtr = GetDwelling( dwellingId );
+                assert( dwellingPtr != nullptr );
+
+                *dwellingPtr += GetGrownWeekOf();
+
+                break;
+            }
         }
 
-        // neutral town: increase garrisons
+        // Neutral town: increase the garrison
         if ( isNeutral ) {
             JoinRNDArmy();
-            // if it's a town there's 40% chance (or it's a castle) to get extra troops
-            if ( isCastle() || Rand::Get( 1, 100 ) <= 40 )
+            // The probability that a town will get additional troops is 40%, castle always gets them
+            if ( isCastle() || Rand::Get( 1, 100 ) <= 40 ) {
                 JoinRNDArmy();
+            }
         }
     }
 
@@ -620,26 +733,32 @@ void Castle::ActionNewWeek()
     if ( world.BeginMonth() ) {
         assert( world.GetMonth() > 1 );
 
-        // population halved
+        // Population halved
         if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
-            for ( uint32_t ii = 0; ii < CASTLEMAXMONSTER; ++ii ) {
-                dwelling[ii] /= 2;
+            for ( uint32_t & dwellingRef : dwelling ) {
+                dwellingRef /= 2;
             }
         }
         // Month Of
         else if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
-            const uint32_t dwellings[10] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                             DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
-            uint32_t * dw = nullptr;
-
-            for ( uint32_t ii = 0; dwellings[ii]; ++ii ) {
-                if ( nullptr != ( dw = GetDwelling( dwellings[ii] ) ) ) {
-                    const Monster mons( race, dwellings[ii] );
-                    if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
-                        *dw += *dw * GetGrownMonthOf() / 100;
-                        break;
-                    }
+            for ( const uint32_t dwellingId : allDwellings ) {
+                // A building of exactly this level should be built (its upgraded versions should not be considered)
+                if ( !isExactBuildingBuilt( dwellingId ) ) {
+                    continue;
                 }
+
+                const Monster mons( race, dwellingId );
+
+                if ( !mons.isValid() || mons.GetID() != world.GetWeekType().GetMonster() ) {
+                    continue;
+                }
+
+                uint32_t * dwellingPtr = GetDwelling( dwellingId );
+                assert( dwellingPtr != nullptr );
+
+                *dwellingPtr += *dwellingPtr * GetGrownMonthOf() / 100;
+
+                break;
             }
         }
     }
@@ -2363,18 +2482,21 @@ void Castle::JoinRNDArmy()
         count += Rand::Get( 8, 15 );
     }
 
-    army.JoinTroop( Monster( race, dwellingType ), count );
+    army.JoinTroop( Monster( race, dwellingType ), count, false );
 }
 
 void Castle::ActionPreBattle()
 {
     CastleHeroes heroes = world.GetHeroes( *this );
     Heroes * hero = heroes.GuardFirst();
-    if ( hero && army.isValid() )
-        hero->GetArmy().JoinStrongestFromArmy( army );
 
-    if ( isControlAI() )
+    if ( hero ) {
+        hero->GetArmy().ArrangeForCastleDefense( army );
+    }
+
+    if ( isControlAI() ) {
         AI::Get().CastlePreBattle( *this );
+    }
 }
 
 void Castle::ActionAfterBattle( bool attacker_wins )

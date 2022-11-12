@@ -10,27 +10,27 @@ jobs:
         config:
         - name: Linux SDL1
           os: ubuntu-latest
-          dependencies: libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev gettext
+          dependencies: libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev gettext ninja-build
           options: -DUSE_SDL_VERSION=SDL
         - name: Linux SDL2
           os: ubuntu-latest
-          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext ninja-build
           options: -DUSE_SDL_VERSION=SDL2
         - name: macOS SDL1
           os: macos-latest
-          dependencies: sdl sdl_mixer sdl_image
+          dependencies: sdl sdl_mixer sdl_image ninja
           options: -DUSE_SDL_VERSION=SDL
         - name: macOS SDL1 App Bundle
           os: macos-latest
-          dependencies: sdl sdl_mixer sdl_image dylibbundler
+          dependencies: sdl sdl_mixer sdl_image ninja dylibbundler
           options: -DUSE_SDL_VERSION=SDL -DMACOS_APP_BUNDLE=ON
         - name: macOS SDL2
           os: macos-latest
-          dependencies: sdl2 sdl2_mixer sdl2_image
+          dependencies: sdl2 sdl2_mixer sdl2_image ninja
           options: -DUSE_SDL_VERSION=SDL2
         - name: macOS SDL2 App Bundle
           os: macos-latest
-          dependencies: sdl2 sdl2_mixer sdl2_image dylibbundler
+          dependencies: sdl2 sdl2_mixer sdl2_image ninja dylibbundler
           options: -DUSE_SDL_VERSION=SDL2 -DMACOS_APP_BUNDLE=ON
     name: CMake (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
@@ -49,8 +49,9 @@ jobs:
         brew install ${{ matrix.config.dependencies }}
     - name: Build
       run: |
-        cmake -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON ${{ matrix.config.options }}
-        cmake --build build -j2
+        cmake -B build -G Ninja -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON \
+                                -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON ${{ matrix.config.options }}
+        cmake --build build
     - name: Install
       run: |
         sudo cmake --install build
@@ -75,9 +76,10 @@ jobs:
         vcpkg.exe --triplet x64-windows install sdl2 sdl2-mixer sdl2-image zlib
     - name: Build
       run: |
-        cmake.exe -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DUSE_SDL_VERSION=SDL2 \
-                           -DCMAKE_TOOLCHAIN_FILE="C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
-        cmake.exe --build build --config Debug -j2
+        cmake.exe -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON \
+                           -DENABLE_TOOLS=ON -DUSE_SDL_VERSION=SDL2 -DCMAKE_TOOLCHAIN_FILE="C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake" \
+                           -DVCPKG_TARGET_TRIPLET=x64-windows
+        cmake.exe --build build --config Debug
     - name: Install
       run: |
         cmake.exe --install build --config Debug

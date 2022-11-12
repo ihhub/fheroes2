@@ -22,32 +22,46 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <cstdint>
+#include <functional>
 #include <string>
+#include <vector>
 
 #include "agg_image.h"
+#include "army.h"
 #include "army_bar.h"
+#include "army_troop.h"
+#include "audio.h"
 #include "audio_manager.h"
+#include "captain.h"
 #include "castle.h"
 #include "castle_building_info.h"
+#include "castle_heroes.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "m82.h"
+#include "math_base.h"
+#include "monster.h"
 #include "mus.h"
-#include "payment.h"
-#include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "statusbar.h"
+#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_castle.h"
 #include "ui_kingdom.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -510,6 +524,18 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 // View hero.
                 openHeroDialog( topArmyBar, bottomArmyBar, *heroes.Guest() );
                 need_redraw = true;
+            }
+
+            if ( le.MousePressRight( rectSign1 ) ) {
+                if ( heroes.Guard() ) {
+                    Dialog::QuickInfo( *heroes.Guard() );
+                }
+                else if ( isBuild( BUILD_CAPTAIN ) ) {
+                    Dialog::QuickInfo( GetCaptain() );
+                }
+            }
+            else if ( heroes.Guest() && le.MousePressRight( rectSign2 ) ) {
+                Dialog::QuickInfo( *heroes.Guest() );
             }
 
             // Get pressed hotkey.

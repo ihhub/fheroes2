@@ -21,21 +21,38 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include <array>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_game_settings.h"
+#include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_mainmenu_ui.h"
+#include "game_mode.h"
 #include "game_video.h"
+#include "game_video_type.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
 #include "mus.h"
+#include "screen.h"
 #include "settings.h"
 #include "smk_decoder.h"
 #include "text.h"
@@ -45,9 +62,6 @@
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
-
-#include <array>
-#include <cmath>
 
 namespace
 {

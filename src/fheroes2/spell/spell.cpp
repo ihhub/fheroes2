@@ -21,14 +21,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "spell.h"
+#include <algorithm>
+#include <cassert>
+#include <vector>
+
 #include "artifact.h"
+#include "artifact_info.h"
 #include "heroes_base.h"
 #include "monster.h"
 #include "race.h"
 #include "rand.h"
-#include "resource.h"
 #include "serialize.h"
+#include "spell.h"
 #include "translations.h"
 
 struct spellstats_t

@@ -23,11 +23,13 @@
 
 #include <cassert>
 
-#include "interface_cpanel.h"
 #include "agg_image.h"
 #include "game_interface.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_cpanel.h"
 #include "localevent.h"
+#include "screen.h"
 #include "settings.h"
 
 Interface::ControlPanel::ControlPanel( Basic & basic )
