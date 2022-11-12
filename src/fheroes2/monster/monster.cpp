@@ -697,7 +697,6 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
         case 3:
             return LevelType::LEVEL_4;
         }
-        break;
 
     default:
         break;
