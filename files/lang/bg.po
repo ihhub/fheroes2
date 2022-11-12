@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-10 10:28+0000\n"
-"PO-Revision-Date: 2022-11-10 19:09+0000\n"
+"PO-Revision-Date: 2022-11-12 17:49+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -708,7 +708,7 @@ msgid "Monsters"
 msgstr "Чудовища"
 
 msgid "N/A"
-msgstr "Няма"
+msgstr "Без"
 
 msgid "Left Turret"
 msgstr "Лява кула"
@@ -2828,13 +2828,13 @@ msgid "Windowed"
 msgstr "В прозорец"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "V-синхронизация"
 
 msgid "on"
 msgstr "вкл"
 
 msgid "FPS"
-msgstr ""
+msgstr "Кадри в секунда"
 
 msgid "System Info"
 msgstr "Системна информация"
@@ -2925,7 +2925,7 @@ msgid "Available Trades"
 msgstr "Налични сделки"
 
 msgid "n/a"
-msgstr "няма"
+msgstr "без"
 
 msgid "guarded by "
 msgstr "охраняван от "
@@ -4342,7 +4342,7 @@ msgid "Hungarian"
 msgstr "Унгарски"
 
 msgid ", FPS: "
-msgstr ""
+msgstr ", кадри в секунда:"
 
 msgid "%{object} robber"
 msgstr "%{object} разбойник"
@@ -8877,12 +8877,14 @@ msgstr ""
 "сила."
 
 msgid "Arm of the Martyr"
-msgstr ""
+msgstr "Ръката на мъченика"
 
 msgid ""
 "The %{name} increases your spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
+"%{name} увеличава силата на заклинанието ти с %{count}, но добавя наказание "
+"за морала на немъртвите."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -8891,12 +8893,16 @@ msgid ""
 "seems to hold some sort of magical power that influences your decision "
 "making."
 msgstr ""
+"Един от по-малко интелигентните членове на твоята група вдига ръка от "
+"земята. Въпреки че липсва тяло, тя все още се движи. Твойте войски намират "
+"разчленената ръка за отблъскваща, но не можеш да я оствиш: изглежда "
+"притежава някаква магическа сила, която влияе върху вземането на решения."
 
 msgid "Breastplate of Anduran"
-msgstr ""
+msgstr "Нагръдник на Андуран"
 
 msgid "The %{name} increases your defense by %{count}."
-msgstr ""
+msgstr "%{name} увеличава твоята защита с %{count}."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -8904,42 +8910,58 @@ msgid ""
 "you stand up, you feel a coldness against your skin. Looking down, you find "
 "that you are suddenly wearing a gleaming, ornate breastplate."
 msgstr ""
+"Попадаш на знак. Той гласи: \"Тук лежи тялото на Андуран. Поклони се и се "
+"закълни във вярност и ще бъдеш възнаграден.\" Ти решаваш да направиш както е "
+"казано. Докато се изправяш, усещаш тръпки по кожата си. Поглеждайки надолу, "
+"откриваш, че някакси носиш блестящ, богато украсен нагръдник."
 
 msgid "Broach of Shielding"
-msgstr ""
+msgstr "Брошка за защита"
 
 msgid ""
 "The %{name} provides %{count} percent protection from Armageddon and "
 "Elemental Storm, but decreases spell power by 2."
 msgstr ""
+"%{name} осигурява %{count} процента защита от Армагедон и Елементна буря, но "
+"намалява силата на заклинанията с 2."
 
 msgid ""
 "A kindly Sorceress thinks that your army's defenses could use a magical "
 "boost. She offers to enchant the Broach that you wear on your cloak, and you "
 "accept."
 msgstr ""
+"Любезна магьосница смята, че защитата на твоята армия може да се нуждае от "
+"магически тласък. Тя предлага да омагьоса Брошка, която носиш на наметалото "
+"си, и ти приемаш."
 
 msgid "Battle Garb of Anduran"
-msgstr ""
+msgstr "Бойно облекло на Андуран"
 
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts.  It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
 msgstr ""
+"%{name} съчетава силите на трите артефакта от Андуран. Осигурява максимален "
+"късмет и морал на твойте войски и ти дава заклинанието Портал на града."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
 "hawking for too much gold. Later, as you search through it, you find it "
 "contains the 3 pieces of the legendary battle garb of Anduran!"
 msgstr ""
+"От съжаление към беден селянин купуваш сандък със стари боклуци, които той "
+"продава за много злато. По-късно, докато го претърсваш, откриваш, че съдържа "
+"3-те части от легендарното бойно облекло на Андуран!"
 
 msgid "Crystal Ball"
-msgstr ""
+msgstr "Кристална топка"
 
 msgid ""
 "The %{name} lets you get more specific information about monsters, enemy "
 "heroes, and castles nearby the hero who holds it."
 msgstr ""
+"%{name} ти позволява да получиш по-конкретна информация за чудовища, "
+"вражески герои и замъци в близост до героя, който го държи."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
@@ -8948,14 +8970,20 @@ msgid ""
 "anyway. They laugh hysterically, but admire your bravery, giving you a "
 "Crystal Ball."
 msgstr ""
+"Попадаш на керван от цигани, които пируват и подсилват тялото си с медовина. "
+"Извикват те напред и казват: \"Ако докажеш, че можеш да танцуваш Рама-Бута, "
+"ще те възнаградим.\" Не го знаеш, но все пак опитваш. Те се смеят истерично, "
+"но се възхищават на смелостта ти, давайки ти кристална топка."
 
 msgid "Heart of Fire"
-msgstr ""
+msgstr "Огнено сърце"
 
 msgid ""
 "The %{name} provides %{count} percent protection from fire, but doubles the "
 "damage taken from cold."
 msgstr ""
+"%{name} осигурява %{count} процента защита от огън, но удвоява щетите, "
+"причинени от студ."
 
 msgid ""
 "You enter a recently burned glade and come upon a Fire Elemental sitting "
@@ -8963,14 +8991,20 @@ msgid ""
 "pain. It then tosses a glowing object at you. You put up your hands to block "
 "it, but it passes right through them and sears itself into your chest."
 msgstr ""
+"Излизаш на наскоро опожарена поляна и попадаш на огнен елементал, седнал на "
+"върха на една скала. Той поглежда нагоре и пламналото му лице се сгърчва в "
+"израз на силна болка. След това хвърля светещ обект към теб. Вдигаш ръце, за "
+"да го блокираш, но той минава точно през тях и се врязва в гърдите ти."
 
 msgid "Heart of Ice"
-msgstr ""
+msgstr "Сърце от лед"
 
 msgid ""
 "The %{name} provides %{count} percent protection from cold, but doubles the "
 "damage taken from fire."
 msgstr ""
+"%{name} осигурява %{count} процента защита от студ, но удвоява щетите, "
+"причинени от огън."
 
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
@@ -8979,9 +9013,13 @@ msgid ""
 "laughter. You turn around just in time to see a Frost Giant run off into the "
 "woods and disappear."
 msgstr ""
+"Изведнъж хапеща студенина поглъща тялото ти. Сгърчваш се, падайки от коня "
+"си. Болката отшумява, но все още се чувстваш сякаш гърдите ти са замръзнали. "
+"Докато се повдигаш от земята, чуваш сърдечен смях. Обръщаш се точно навреме, "
+"за да видиш леден гигант да се изгубва в гората."
 
 msgid "Helmet of Anduran"
-msgstr ""
+msgstr "Шлем на Андуран"
 
 msgid ""
 "You spy a gleaming object poking up out of the ground. You send a member of "
@@ -8989,9 +9027,13 @@ msgid ""
 "hands. You realize that it must be the helmet of the legendary Anduran, the "
 "only man who was known to wear solid gold armor."
 msgstr ""
+"Виждаш блестящ обект, който стърчи от земята. Изпращаш член на твоята група "
+"да разследва. Връща се със златен шлем в ръце. Разбираш, че това трябва да е "
+"шлемът на легендарния Андуран, единственият човек, за когото е известно, че "
+"носи броня от масивно злато."
 
 msgid "Holy Hammer"
-msgstr ""
+msgstr "Свещен чук"
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
@@ -8999,12 +9041,16 @@ msgid ""
 "you pick it up, it begins to hum, and then everything becomes a blur. The "
 "Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
 msgstr ""
+"Попадаш в битка, в която паладин е бил смъртоносно ранен от група зомбита. "
+"Той те моли да вземеш неговия чук и да завършиш започнатото от него. Когато "
+"го вдигаш, той оживява и размазва всички наоколо. Зомбитата лежат мъртви, а "
+"от чукът капе кръв. Закачаш го на колана си."
 
 msgid "Legendary Scepter"
-msgstr ""
+msgstr "Легендарният скиптър"
 
 msgid "The %{name} adds %{count} points to all attributes."
-msgstr ""
+msgstr "%{name} добавя %{count} точки към всички атрибути."
 
 msgid ""
 "Upon cresting a small hill, you come upon a ridiculous looking sight. A "
@@ -9013,12 +9059,18 @@ msgid ""
 "answers: \"You think this is funny? Fine. You can carry it. I much prefer "
 "flying anyway.\""
 msgstr ""
+"При изкачване на малък хълм се натъкваш на нелепо изглеждаща гледка. Фея се "
+"опитва да носи скиптър, който е почти толкова голям, колкото нея. Опитвайки "
+"се да не се смееш, ти питаш: \"Имаш ли нужда от помощ?\" Феята ви гледа "
+"ядосано и отговаря: \"Мислиш, че това е смешно? Добре. Може да го носиш. И "
+"без това предпочитам да летя.“"
 
+#, fuzzy
 msgid "Masthead"
-msgstr ""
+msgstr "Заглавие"
 
 msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
+msgstr "%{name} повишава твоя късмет и морал с %{count} всеки в морски бой."
 
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
@@ -9026,24 +9078,31 @@ msgid ""
 "map that shows where he hid it. After much exploring, you find it stashed "
 "underneath a nearby dock."
 msgstr ""
+"Един стар моряк ти разказва приказка за омагьосана сфера, която използвал в "
+"младостта си, за да събере екипажа си по време на проблеми. След това той ти "
+"дава избледняла карта, която показва къде я е скрил. След дълго проучване я "
+"намирате скрита под близкия док."
 
 msgid "Sphere of Negation"
-msgstr ""
+msgstr "Сфера на отрицанието"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
-msgstr ""
+msgstr "%{name} деактивира всички заклинания, и за двете страни, в битка."
 
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
 "hands you a tiny sphere. As soon as you grasp it, you feel the magical "
 "energy drain from your limbs..."
 msgstr ""
+"Спираш, за да помогнеш на селянин да хване избягала кобила. За да покаже "
+"своята благодарност, той ти дава малка сфера. Веднага щом я хващаш, усещаш "
+"как магическата енергия започва да струи от крайниците ви..."
 
 msgid "Staff of Wizardry"
-msgstr ""
+msgstr "Персоналът на магьосничеството"
 
 msgid "The %{name} boosts your spell power by %{count}."
-msgstr ""
+msgstr "%{name} увеличава силата на заклинанията ти с %{count}."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -9051,17 +9110,23 @@ msgid ""
 "inscription. It reads: \"Brains best brawn and magic beats might. Heed my "
 "words, and you'll win every fight.\""
 msgstr ""
+"Докато плашиш дивеча, твойте войски откриват мистериозен жезъл, който "
+"левитира на около три фута над земята. Подават ти го и забелязваш надпис на "
+"него. Той гласи: \"Мозъците са най-добрите мускули и магията бие мощта. "
+"Вслушай се в думите ми и ще спечелиш всяка битка.\""
 
 msgid "Sword Breaker"
-msgstr ""
+msgstr "Разбивач на мечове"
 
 msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr ""
+msgstr "%{name} увеличава защитата ти с %{count} и атаката с 1."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
 "Sword Breaker that he relied on during his tour of duty."
 msgstr ""
+"Бивш капитан на гвардията се възхищава на твоята мисия и ти дава омагьосания "
+"Разбивач на мечове, на който е разчитал по време на службата си."
 
 msgid ""
 "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
@@ -9070,24 +9135,31 @@ msgid ""
 "sword, you give thanks that half-witted Trolls tend to grab the wrong end of "
 "sharp objects."
 msgstr ""
+"Трол те спира и казва: \"Плати ми 5000 злато, или Мечът на Андуран ще те "
+"убие там, където стоиш.\" Отказваш. Тролът грабва меча, висящ на колана му, "
+"крещи от болка и бяга. Взимайки легендарния меч, ти благодариш, че "
+"малоумните тролове са склонни да хващат грешния край на острите предмети."
 
 msgid "Sword of Anduran"
-msgstr ""
+msgstr "Мечът на Андуран"
 
 msgid "Spade of Necromancy"
-msgstr ""
+msgstr "Пика на некромантията"
 
 msgid "The %{name} gives you increased necromancy skill."
-msgstr ""
+msgstr "%{name} ви дава повишено умение за некромантия."
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
 msgstr ""
+"Мръсна лопата е забита в земна могила наблизо. След проучване откриваш, че "
+"това е омагьосаната лопата на Гробарите, дълго смятана за изгубена от "
+"смъртните."
 
 msgid "Invalid Artifact"
-msgstr ""
+msgstr "Неработещ артефакт"
 
 msgid "Wood"
 msgstr "Дърво"
@@ -9117,31 +9189,41 @@ msgid ""
 "Mercury, Sulfur and Crystal are rare magical resources used for the most "
 "powerful creatures and buildings."
 msgstr ""
+"Има седем ресурса в \"Герой 2\", използвани за изграждане и подобряване на "
+"замъци, закупуване на войски и набиране на герои. Златото е най-често "
+"срещаното, необходимо за почти всичко. За повечето сгради се използват дърво "
+"и руда. Скъпоценни камъни, живак, сяра и кристал са редки магически ресурси, "
+"използвани за най-мощните същества и сгради."
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
 msgstr ""
+"Причинява удър от гигантска огнена топка в избраната област, увреждайки "
+"всички близки същества."
 
 msgid "Fireball"
-msgstr ""
+msgstr "Огнена топка"
 
 msgid "Fireblast"
-msgstr ""
+msgstr "Огнена експлозия"
 
 msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
 "center point of the spell, rather than one."
 msgstr ""
+"Подобрена версия на огнена топка, Огнена експлозия засяга два хекса около "
+"централната точка на заклинанието, а не един."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
 msgstr ""
+"Причинява удър на стрелба от електрическа енергия в избраното създание."
 
 msgid "Lightning Bolt"
-msgstr ""
+msgstr "Светкавица"
 
 msgid "Chain Lightning"
-msgstr ""
+msgstr "Верижна светкавица"
 
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
@@ -9149,414 +9231,456 @@ msgid ""
 "creature with half again damage, and so on, until it becomes too weak to be "
 "harmful.  Warning:  This spell can hit your own creatures!"
 msgstr ""
+"Причинява удър на стрелба от електрическа енергия в избрано същество, след "
+"това ударя най-близкото същество с половин щета, след това ударя СЛЕДВАЩОТО "
+"най-близко същество отново с половин щета и така нататък, докато стане "
+"твърде слабо, за да бъде вредно. Предупреждение: Това заклинание може да "
+"удари твойте собствени същества!"
 
 msgid "Teleport"
-msgstr ""
+msgstr "Телепорт"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
 msgstr ""
+"Телепортира избраното от теб същество до произволна отворена позиция на "
+"бойното поле."
 
 msgid "Cure"
-msgstr ""
+msgstr "Лек"
 
 msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
+"Премахва всички негативни заклинания, хвърлени върху една от твойте единици, "
+"и възстановява до %{count} HP на ниво сила на заклинанието."
 
 msgid "Mass Cure"
-msgstr ""
+msgstr "Всеобщ лек"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
 "%{count} HP per level of spell power, per creature."
 msgstr ""
+"Премахва всички негативни заклинания, хвърлени върху една от твойте единици, "
+"и възстановява Живота до %{count} на всяко ниво сила на заклинанието."
 
 msgid "Resurrect"
-msgstr ""
+msgstr "Възкресяване"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
+"Възкресява същества от повредена или мъртва единица до края на битката."
 
 msgid "Resurrect True"
-msgstr ""
+msgstr "Истинско възкресяване"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
-msgstr ""
+msgstr "Възкресява същества от повредена или мъртва единица за постоянно."
 
 msgid "Haste"
-msgstr ""
+msgstr "Бързина"
 
 msgid "Increases the speed of any creature by %{count}."
-msgstr ""
+msgstr "Увеличава скоростта на всяко създание с %{count}."
 
 msgid "Increases the speed of all of your creatures by %{count}."
-msgstr ""
+msgstr "Увеличава скоростта на всички ваши същества с %{count}."
 
 msgid "Mass Haste"
-msgstr ""
+msgstr "Всеобща бързина"
 
 msgid "Slows target to half movement rate."
-msgstr ""
+msgstr "Забавя целта до половината скорост на движение."
 
 msgid "spell|Slow"
-msgstr ""
+msgstr "Забавяне"
 
 msgid "Mass Slow"
-msgstr ""
+msgstr "Всеобщо забавяне"
 
 msgid "Slows all enemies to half movement rate."
-msgstr ""
+msgstr "Забавя всички врагове до половината скорост на движение."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr ""
+msgstr "Замъглява очите на засегнатите същества, като им пречи да се движат."
 
 msgid "spell|Blind"
-msgstr ""
+msgstr "Слепота"
 
 msgid "Bless"
-msgstr ""
+msgstr "Благословия"
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr ""
+msgstr "Кара избраните същества да нанасят максимални щети."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr ""
+msgstr "Кара всичките ти единици да нанасят максимални щети."
 
 msgid "Mass Bless"
-msgstr ""
+msgstr "Всеобща слепота"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr ""
+msgstr "Магически увеличава защитните умения на избраните същества."
 
 msgid "Stoneskin"
-msgstr ""
+msgstr "Каменна кожа"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
 "version of Stoneskin."
 msgstr ""
+"Увеличава защитните умения на набелязаните същества. Това е подобрена версия "
+"на Каменна кожа."
 
 msgid "Steelskin"
-msgstr ""
+msgstr "Стоманена кожа"
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr ""
+msgstr "Кара избраните същества да нанасят минимални щети."
 
 msgid "Curse"
-msgstr ""
+msgstr "Проклятие"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr ""
+msgstr "Кара всички вражески войски да нанасят минимални щети."
 
 msgid "Mass Curse"
-msgstr ""
+msgstr "Всеобщо проклятие"
 
 msgid "Damages all undead in the battle."
-msgstr ""
+msgstr "Нанася щети на всички немъртви в битката."
 
 msgid "Holy Word"
-msgstr ""
+msgstr "Свято Слово"
 
 msgid ""
 "Damages all undead in the battle.  This is an improved version of Holy Word."
 msgstr ""
+"Нанася щети на всички немъртви в битката. Това е подобрена версия на Свято "
+"Слово."
 
 msgid "Holy Shout"
-msgstr ""
+msgstr "Свещен вик"
 
 msgid "Anti-Magic"
-msgstr ""
+msgstr "Антимагия"
 
 msgid "Prevents harmful magic against the selected creatures."
-msgstr ""
+msgstr "Предотвратява вредната магия срещу избраните същества."
 
 msgid "Dispel Magic"
-msgstr ""
+msgstr "Премахване на магия"
 
 msgid "Removes all magic spells from a single target."
-msgstr ""
+msgstr "Премахва всички магически заклинания от една цел."
 
 msgid "Mass Dispel"
-msgstr ""
+msgstr "Всеобщо премахване на магия"
 
 msgid "Removes all magic spells from all creatures."
-msgstr ""
+msgstr "Премахва всички магически заклинания от всички същества."
 
 msgid "Causes a magic arrow to strike the selected target."
-msgstr ""
+msgstr "Кара магическа стрела да удари избраната цел."
 
 msgid "Magic Arrow"
-msgstr ""
+msgstr "Магическа стрела"
 
 msgid "Berserker"
-msgstr ""
+msgstr "Берсерк"
 
 msgid "Causes a creature to attack its nearest neighbor."
-msgstr ""
+msgstr "Кара създание да атакува най-близкия си съсед."
 
 msgid "Armageddon"
-msgstr ""
+msgstr "Армагедон"
 
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
+"Свещеният ужас връхлита бойното поле, причинявайки сериозни щети на всички "
+"същества."
 
 msgid "Elemental Storm"
-msgstr ""
+msgstr "Стихийна буря"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr ""
+"Магически елементи се изсипват на бойното поле, увреждайки всички същества."
 
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
 msgstr ""
+"Дъжд от камъни удря зона на бойното поле, увреждайки всички близки същества."
 
 msgid "Meteor Shower"
-msgstr ""
+msgstr "Метеоритен дъжд"
 
 msgid "Paralyze"
-msgstr ""
+msgstr "Парализиране"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
 msgstr ""
+"Набелязаните същества са парализирани, не могат да се движат или да отмъстят."
 
 msgid "Hypnotize"
-msgstr ""
+msgstr "Хипнотизиране"
 
 msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
 "%{count} times the caster's spell power."
 msgstr ""
+"Поставя под твой контрол една вражеска единица, ако нейните удари са по-"
+"малко от %{count} пъти силата на заклинанието на заклинателя."
 
 msgid "Cold Ray"
-msgstr ""
+msgstr "Студен лъч"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr ""
+msgstr "Изцежда телесната топлина от една вражеска единица."
 
 msgid "Cold Ring"
-msgstr ""
+msgstr "Студен пръстен"
 
 msgid ""
 "Drains body heat from all units surrounding the center point, but not "
 "including the center point."
 msgstr ""
+"Източва топлината на тялото от всички единици, заобикалящи централната "
+"точка, но без да включва централната точка."
 
 msgid "Disrupting Ray"
-msgstr ""
+msgstr "Разрушаващ лъч"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr ""
+msgstr "Намалява рейтинга на отбраната на вражеска единица с три."
 
 msgid "Damages all living (non-undead) units in the battle."
-msgstr ""
+msgstr "Нанася щети на всички живи (не-мъртви) единици в битката."
 
 msgid "Death Ripple"
-msgstr ""
+msgstr "Смъртоносна вълна"
 
 msgid "Death Wave"
-msgstr ""
+msgstr "Вълна на смъртта"
 
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
 msgstr ""
+"Нанася щети на всички живи (не-мъртви) единици в битката. Това заклинание е "
+"подобрена версия на Death Ripple."
 
 msgid "Dragon Slayer"
-msgstr ""
+msgstr "Убиец на дракони"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr ""
+msgstr "Увеличава значително умението за атака на единица срещу дракони."
 
 msgid "Blood Lust"
-msgstr ""
+msgstr "Кръвожадност"
 
 msgid "Increases a unit's attack skill."
-msgstr ""
+msgstr "Увеличава умението за атака на единица."
 
 msgid "Animate Dead"
-msgstr ""
+msgstr "Анимирана смърт"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
+"Възкресява за постоянно същества от повредена или мъртва немъртва единица."
 
 msgid "Mirror Image"
-msgstr ""
+msgstr "Огледална картина"
 
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units.  "
 "This illusionary unit does the same damages as the original, but will vanish "
 "if it takes any damage."
 msgstr ""
+"Създава илюзорна единица, която дублира една от твойте съществуващи единици. "
+"Тази илюзорна единица нанася същите щети като оригинала, но ще изчезне, ако "
+"понесе някакви щети."
 
 msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
+msgstr "Намалява наполовина щетите, получени от далечни атаки за една единица."
 
 msgid "Shield"
-msgstr ""
+msgstr "Щит"
 
 msgid "Halves damage received from ranged attacks for all of your units."
 msgstr ""
+"Намалява наполовина щетите, получени от далечни атаки за всички твой единици."
 
 msgid "Mass Shield"
-msgstr ""
+msgstr "Всеобщ щит"
 
 msgid "Summon Earth Elemental"
-msgstr ""
+msgstr "Призови земен елементал"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr ""
+msgstr "Призовава земните елементали да се бият за твоята армия."
 
 msgid "Summon Air Elemental"
-msgstr ""
+msgstr "Призови въздушен елементал"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr ""
+msgstr "Призовава въздушни елементали да се бият за твоята армия."
 
 msgid "Summon Fire Elemental"
-msgstr ""
+msgstr "Призови огнен елементал"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr ""
+msgstr "Призовава огнени елементали да се бият за твоята армия."
 
 msgid "Summon Water Elemental"
-msgstr ""
+msgstr "Призови воден елементал"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr ""
+msgstr "Призовава водни елементали да се бият за твоята армия."
 
 msgid "Damages castle walls."
-msgstr ""
+msgstr "Поврежда стените на замъка."
 
 msgid "Earthquake"
-msgstr ""
+msgstr "Земетресение"
 
 msgid "Causes all mines across the land to become visible."
-msgstr ""
+msgstr "Кара всички мини по земята да станат видими."
 
 msgid "View Mines"
 msgstr "Виж мините"
 
 msgid "Causes all resources across the land to become visible."
-msgstr ""
+msgstr "Кара всички ресурси в земята да станат видими."
 
 msgid "View Resources"
 msgstr "Виж ресурсите"
 
 msgid "Causes all artifacts across the land to become visible."
-msgstr ""
+msgstr "Кара всички артефакти по земята да станат видими."
 
 msgid "View Artifacts"
 msgstr "Виж артефактите"
 
 msgid "Causes all towns and castles across the land to become visible."
-msgstr ""
+msgstr "Кара всички градове и замъци по земята да станат видими."
 
 msgid "View Towns"
 msgstr "Виж градовете"
 
 msgid "Causes all Heroes across the land to become visible."
-msgstr ""
+msgstr "Кара всички герои в цялата страна да станат видими."
 
 msgid "View Heroes"
 msgstr "Виж героите"
 
 msgid "Causes the entire land to become visible."
-msgstr ""
+msgstr "Кара цялата земя да стане видима."
 
 msgid "View All"
 msgstr "Виж всичко"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
+"Позволява на заклинателя да вижда подробна информация за вражеските герои."
 
 msgid "Identify Hero"
-msgstr ""
+msgstr "Идентифицирай героя"
 
 msgid "Summon Boat"
-msgstr ""
+msgstr "Призови кораб"
 
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore "
 "location.  A friendly boat is one which you just built or were the most "
 "recent player to occupy."
 msgstr ""
+"Извиква най-близката незаета, приятелска лодка до съседно място на брега. "
+"Приятелска лодка е тази, която току-що си построил или си бил последният "
+"играч, който я е ползвал."
 
 msgid "Allows the caster to magically transport to a nearby location."
-msgstr ""
+msgstr "Позволява на заклинателя магически да се транспортира до близко място."
 
 msgid "Dimension Door"
-msgstr ""
+msgstr "Врата между измеренията"
 
 msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
+msgstr "Връща заклинателя във всеки град или замък, притежаван в момента."
 
 msgid "Town Gate"
-msgstr ""
+msgstr "Градска порта"
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
 msgstr ""
+"Връща героя в град или замък по избор, при условие че е контролиран от теб."
 
 msgid "Visions"
-msgstr ""
+msgstr "Видения"
 
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
+"Виденията предсказват вероятния резултат от среща с неутрален армейски лагер."
 
 msgid "Haunt"
-msgstr ""
+msgstr "Обладаване"
 
 msgid ""
 "Haunts a mine you control with Ghosts.  This mine stops producing "
 "resources.  (If I can't keep it, nobody will!)"
 msgstr ""
+"Обладава мина, която контролирате с призраци. Тази мина спира да произвежда "
+"ресурси. (Ако аз не мога да го запазя, никой няма да го направи!)"
 
 msgid "Set Earth Guardian"
-msgstr ""
+msgstr "Задай Земен пазител"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Кара земните елементали да пазят мина срещу вражески армии."
 
 msgid "Set Air Guardian"
-msgstr ""
+msgstr "Задай Въздушен паззител"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Кара Въздушни елемнетали да пазят мина срещу вражески армии."
 
 msgid "Set Fire Guardian"
-msgstr ""
+msgstr "Задай Огнен пазител"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Кара Огнени елементали да пазят мина срещу вражески армии."
 
 msgid "Set Water Guardian"
-msgstr ""
+msgstr "Задай Воден пазител"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Кара Водни елементали да пазят мина срещу вражески армии"
 
 msgid "Petrification"
-msgstr ""
+msgstr "Вкаменяване"
 
 msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
+"Превръща засегнатото същество в камък. Вкаменено същество получава "
+"половината щети от директна атака."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "Нямаш магическа книга, така че не можеш да направиш магия."
 
 msgid "No spell to cast."
-msgstr ""
+msgstr "Няма магия за правене."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr ""
+msgstr "Твоят герой има %{point} оставащи точки магия."
 
 msgid "View Adventure Spells"
 msgstr "Виж приключенски магии"
