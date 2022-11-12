@@ -292,16 +292,18 @@ namespace
 
         const int32_t textInitialOffsetX = 350;
         const int32_t columnStep = 430;
-        const int32_t textInitialOffsetY = 55;
+        const int32_t textInitialOffsetY = 42;
         const int32_t textWidth = 300;
 
         int32_t offsetY = textInitialOffsetY;
 
         TextBox title( _( "Support us at" ), Font::BIG, textWidth );
         TextBox name( "https://www.patreon.com/fheroes2", Font::YELLOW_BIG, textWidth );
+        TextBox nameSecond( "https://boosty.to/fheroes2", Font::YELLOW_BIG, textWidth );
         title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 5;
+        nameSecond.Blit( ( textInitialOffsetX - nameSecond.w() ) / 2, offsetY + title.h() + name.h(), output );
+        offsetY += title.h() + name.h() + nameSecond.h() + 5;
 
         const fheroes2::Sprite & wizard = fheroes2::AGG::GetICN( ICN::CMBTCAPZ, 4 );
         fheroes2::Blit( wizard, output, ( textInitialOffsetX - wizard.width() ) / 2, offsetY );
@@ -327,7 +329,7 @@ namespace
         fheroes2::ApplyPalette( labyrinth, 2 );
         fheroes2::Blit( labyrinth, output, ( textInitialOffsetX - labyrinth.width() ) / 2, offsetY );
 
-        offsetY = textInitialOffsetY + 35;
+        offsetY = textInitialOffsetY + 22;
 
         title.Set( _( "Special Thanks to" ), Font::YELLOW_BIG, output.width() - textInitialOffsetX );
         title.Blit( textInitialOffsetX + ( output.width() - textInitialOffsetX - title.w() ) / 2, offsetY, output );
