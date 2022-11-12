@@ -3,7 +3,6 @@ version 0.9.21 (12 November 2022)
 - update the Norwegian translation
 - fix monster upgrade cost formula
 - reset AI hero meeting flag every time if hero's strength has changed
-- update Belarusian translation
 - add missing alliance conditions for the Succession Wars campaign last scenarios
 - add small optimizations for the pathfinding algorithm
 - fix incorrect evaluation of army strength where hero's abilities should not be taken into account
