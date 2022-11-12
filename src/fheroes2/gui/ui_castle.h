@@ -19,7 +19,10 @@
  ***************************************************************************/
 #pragma once
 
+#include <cstdint>
+
 #include "image.h"
+#include "math_base.h"
 
 class Castle;
 class Funds;

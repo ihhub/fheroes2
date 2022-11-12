@@ -21,8 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "battle_catapult.h"
+#include <algorithm>
+#include <ostream>
+
 #include "artifact.h"
+#include "artifact_info.h"
+#include "battle_catapult.h"
 #include "heroes_base.h"
 #include "logging.h"
 #include "rand.h"

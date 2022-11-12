@@ -24,11 +24,12 @@
 #ifndef H2MONSTER_H
 #define H2MONSTER_H
 
+#include <cstdint>
+
 #include "monster_info.h"
 #include "payment.h"
 
 class Spell;
-class StreamBase;
 
 class Monster
 {

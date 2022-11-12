@@ -19,6 +19,11 @@
  ***************************************************************************/
 
 #include "ui_option_item.h"
+
+#include <cstdint>
+#include <utility>
+
+#include "image.h"
 #include "screen.h"
 #include "ui_text.h"
 

@@ -2703,8 +2703,8 @@ msgstr "Авто"
 msgid "Auto, No Spells"
 msgstr "Авто, без магий"
 
-msgid "Manual"
-msgstr "Ръчно"
+msgid "autoBattle|Manual"
+msgstr "Вручную"
 
 msgid "Battles"
 msgstr "Сражения"
@@ -3571,6 +3571,9 @@ msgstr "Сопрано вокал"
 
 msgid "Recorded at Green Street Studios"
 msgstr "Записано в Green Street Studios"
+
+msgid "credits|Manual"
+msgstr "Руководство по игре"
 
 msgid "German Consultant"
 msgstr "Немски консултант"

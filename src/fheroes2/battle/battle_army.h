@@ -24,8 +24,14 @@
 #ifndef H2BATTLE_ARMY_H
 #define H2BATTLE_ARMY_H
 
+#include <cstdint>
+#include <vector>
+
 #include "army.h"
 #include "bitmodes.h"
+#include "monster.h"
+
+class HeroBase;
 
 namespace Rand
 {

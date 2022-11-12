@@ -20,6 +20,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include <cstring>
+#include <utility>
+
+#if !defined( _WIN32 )
+#include <strings.h>
+#endif
+
 #if defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -31,14 +39,6 @@
 
 #include "dir.h"
 #include "system.h"
-#if defined( TARGET_PS_VITA )
-#include "tools.h"
-#endif
-
-#include <cstring>
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
-#include <strings.h> // for strcasecmp
-#endif
 
 namespace
 {

@@ -24,9 +24,18 @@
 #ifndef H2SELECT_SCENARIO_H
 #define H2SELECT_SCENARIO_H
 
+#include <cstdint>
+
 #include "interface_list.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
+#include "math_base.h"
+
+namespace fheroes2
+{
+    class Display;
+    class Sprite;
+}
 
 class ScenarioListBox : public Interface::ListBox<Maps::FileInfo>
 {

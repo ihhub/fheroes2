@@ -23,6 +23,7 @@
 #ifndef H2MAPS_H
 #define H2MAPS_H
 
+#include <algorithm>
 #include <cstdint>
 #include <vector>
 

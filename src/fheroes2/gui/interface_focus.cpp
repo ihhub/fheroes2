@@ -22,14 +22,21 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <vector>
 
+#include "audio.h"
 #include "audio_manager.h"
 #include "castle.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "interface_gamearea.h"
+#include "interface_icons.h"
+#include "interface_status.h"
 #include "kingdom.h"
+#include "maps_tiles.h"
 #include "mus.h"
+#include "players.h"
 #include "settings.h"
 #include "world.h"
 

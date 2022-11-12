@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-11-11 09:31+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2695,7 +2695,7 @@ msgstr "Авто, с магией"
 msgid "Auto, No Spells"
 msgstr "Авто, без магии"
 
-msgid "Manual"
+msgid "autoBattle|Manual"
 msgstr "Вручную"
 
 msgid "Battles"
@@ -3570,6 +3570,9 @@ msgstr "Сопрано вокал"
 
 msgid "Recorded at Green Street Studios"
 msgstr "Записано на Green Street Studios"
+
+msgid "credits|Manual"
+msgstr "Руководство по игре"
 
 msgid "German Consultant"
 msgstr "Немецкий консультант"

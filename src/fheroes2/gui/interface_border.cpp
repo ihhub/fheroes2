@@ -23,12 +23,14 @@
 
 #include <algorithm>
 
-#include "interface_border.h"
 #include "agg_image.h"
-#include "game_interface.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_border.h"
 #include "localevent.h"
 #include "maps.h"
+#include "screen.h"
 #include "settings.h"
 #include "ui_tool.h"
 

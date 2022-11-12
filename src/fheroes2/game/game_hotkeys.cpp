@@ -22,6 +22,25 @@
  ***************************************************************************/
 
 #include "game_hotkeys.h"
+
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <cstring>
+#include <fstream>
+#include <map>
+#include <set>
+#include <type_traits>
+#include <utility>
+
+#include <SDL_version.h>
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_keycode.h>
+#else
+#include <SDL_keysym.h>
+#endif
+
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -29,13 +48,6 @@
 #include "system.h"
 #include "tinyconfig.h"
 #include "tools.h"
-
-#include <array>
-#include <cassert>
-#include <fstream>
-#include <map>
-#include <set>
-#include <type_traits>
 
 namespace
 {

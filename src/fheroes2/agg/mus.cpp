@@ -22,7 +22,7 @@
  ***************************************************************************/
 
 #include <array>
-#include <iomanip>
+#include <cassert>
 #include <string>
 
 #include "ground.h"

@@ -24,19 +24,32 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
-#include <fstream>
-#include <map>
-#include <memory>
+#include <utility>
 
 #if defined( _WIN32 )
 #include <clocale>
+#include <map>
 #endif
 
-#include "logging.h"
 #include "system.h"
-#include "tools.h"
 
-#include <SDL.h>
+#if defined( _WIN32 ) || defined( ANDROID )
+#include "logging.h"
+#else
+#include <strings.h>
+#endif
+
+#include <SDL_version.h>
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && defined( ANDROID )
+#include <SDL_error.h>
+#include <SDL_system.h>
+#endif
+
+#if SDL_VERSION_ATLEAST( 2, 0, 1 ) && ( !defined( __linux__ ) || defined( ANDROID ) )
+#include <SDL_filesystem.h>
+#include <SDL_stdinc.h>
+#endif
 
 #if defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN
@@ -68,7 +81,7 @@
 #define SEPARATOR '/'
 #endif
 
-#if !defined( __LINUX__ )
+#if !defined( __linux__ ) || defined( ANDROID )
 namespace
 {
     std::string GetHomeDirectory( const std::string & prog )
@@ -110,7 +123,7 @@ namespace
         }
 
         std::string res;
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 1 )
         char * path = SDL_GetPrefPath( "", prog.c_str() );
         if ( path ) {
             res = path;
@@ -160,7 +173,7 @@ void System::appendOSSpecificDirectories( std::vector<std::string> & directories
 
 std::string System::GetConfigDirectory( const std::string & prog )
 {
-#if defined( __LINUX__ )
+#if defined( __linux__ ) && !defined( ANDROID )
     const char * configEnv = getenv( "XDG_CONFIG_HOME" );
     if ( configEnv ) {
         return System::ConcatePath( configEnv, prog );
@@ -179,7 +192,7 @@ std::string System::GetConfigDirectory( const std::string & prog )
 
 std::string System::GetDataDirectory( const std::string & prog )
 {
-#if defined( __LINUX__ )
+#if defined( __linux__ ) && !defined( ANDROID )
     const char * dataEnv = getenv( "XDG_DATA_HOME" );
     if ( dataEnv ) {
         return System::ConcatePath( dataEnv, prog );

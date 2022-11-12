@@ -21,10 +21,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
-#include "army.h"
+#include "army_troop.h"
 #include "battle.h"
 #include "battle_cell.h"
 #include "cursor.h"
@@ -32,19 +39,24 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
 #include "luck.h"
+#include "math_base.h"
 #include "monster.h"
 #include "monster_anim.h"
+#include "monster_info.h"
 #include "morale.h"
 #include "payment.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
-#include "world.h"
 
 namespace
 {

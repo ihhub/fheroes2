@@ -20,11 +20,13 @@
 
 #pragma once
 
-#include "image.h"
+#include "math_base.h"
 
 class Monster;
 
 namespace fheroes2
 {
+    class Image;
+
     void renderMonsterFrame( const Monster & monster, Image & output, const Point & offset );
 }

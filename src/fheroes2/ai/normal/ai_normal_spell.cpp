@@ -18,13 +18,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <ostream>
+#include <vector>
+
+#include "ai.h"
 #include "ai_normal.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "artifact_info.h"
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_board.h"
+#include "battle_cell.h"
 #include "battle_troop.h"
 #include "heroes_base.h"
 #include "logging.h"
+#include "monster.h"
 #include "speed.h"
+#include "spell.h"
+#include "spell_storage.h"
 
 using namespace Battle;
 
