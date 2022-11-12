@@ -1025,7 +1025,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             gameArea.ResetCursorPosition();
         }
 
-        if ( !le.MouseInsideRenderArea() && !le.MousePressLeft()) {
+        if ( !le.MouseInsideRenderArea() && !le.MousePressLeft() ) {
             if ( gameArea.isDragScroll() ) {
                 gameArea.QueueEventProcessing();
             }
