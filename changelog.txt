@@ -1,4 +1,9 @@
 version 0.9.21 (12 November 2022)
+- add hotkeys for moving armies between heroes
+- update the Norwegian translation
+- fix monster upgrade cost formula
+- reset AI hero meeting flag every time if hero's strength has changed
+- update Belarusian translation
 - add missing alliance conditions for the Succession Wars campaign last scenarios
 - add small optimizations for the pathfinding algorithm
 - fix incorrect evaluation of army strength where hero's abilities should not be taken into account
@@ -22,7 +27,7 @@ version 0.9.21 (12 November 2022)
 - generate new MAX/MIN buttons for other languages
 - add Czech language option in game and add fonts
 - fix the troop splitting logic
-- include project's resource files into Adnroid packages
+- include project's resource files into Android packages
 - translate language names in native language
 - add proper CP1250 font
 - update French translation
