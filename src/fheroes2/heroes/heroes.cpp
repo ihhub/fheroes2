@@ -1639,7 +1639,7 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
         }
     }
 
-    if ( ( GetControl() & CONTROL_AI ) != 0 ) {
+    if ( isControlAI() ) {
         // AI heroes should not have any UI indicators for their statuses.
         return;
     }
