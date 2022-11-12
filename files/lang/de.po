@@ -162,7 +162,7 @@ msgid "View %{name}"
 msgstr "%{name} ansehen"
 
 msgid "Move the %{name} "
-msgstr "%{name} verschieben"
+msgstr "%{name} umstellen"
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "%{name} verteilen: ziehen oder mit der rechten Maustaste tippen"
@@ -180,7 +180,7 @@ msgid "Cannot move last troop"
 msgstr "Letzte Truppe kann nicht umgestellt werden"
 
 msgid "Move the %{name}"
-msgstr "%{name} verschieben"
+msgstr "%{name} umstellen"
 
 msgid "Set Count"
 msgstr "Anzahl festlegen"
@@ -610,7 +610,7 @@ msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Der %{spell} verursacht %{damage} Schaden an allen lebenden Kreaturen."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Der Angriff des %{attacker} blendet die %{target}!"
+msgstr "%{target} wegen des Angriffs von %{attacker} geblendet!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "Der Blick des %{attacker} verwandelt das %{target} in Stein!"
@@ -3474,7 +3474,7 @@ msgid "Days spent"
 msgstr "Verbrachte Tage"
 
 msgid "The number of days spent on this campaign."
-msgstr "Die Anzahl der Tage, die für diese Kampagne aufgewendet wurden."
+msgstr "Die Anzahl der Tage, die für diesen Feldzug aufgewendet wurden."
 
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination und Kernentwicklung"
