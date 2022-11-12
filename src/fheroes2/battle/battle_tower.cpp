@@ -105,7 +105,6 @@ fheroes2::Point Battle::Tower::GetPortPosition() const
     switch ( type ) {
     case TWR_LEFT:
         return { 410, 70 };
-        break;
     case TWR_RIGHT:
         return { 410, 320 };
     case TWR_CENTER:
