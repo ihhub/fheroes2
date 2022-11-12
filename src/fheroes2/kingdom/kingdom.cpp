@@ -53,7 +53,6 @@
 #include "profit.h"
 #include "race.h"
 #include "route.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
