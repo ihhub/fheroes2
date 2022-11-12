@@ -1006,7 +1006,7 @@ void LocalEvent::CloseVirtualKeyboard()
 #endif
 }
 
-bool LocalEvent::MouseInsideRenderArea()
+bool LocalEvent::MouseInsideRenderArea() const
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Size gameSurfaceRes( display.width(), display.height() );

@@ -299,7 +299,7 @@ public:
         }
     }
 
-    bool MouseInsideRenderArea();
+    bool MouseInsideRenderArea() const;
 
 private:
     LocalEvent();
