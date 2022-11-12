@@ -354,8 +354,10 @@ void Castle::PostLoad()
     army.SetColor( GetColor() );
 
     // fix captain
-    if ( building & BUILD_CAPTAIN )
+    if ( building & BUILD_CAPTAIN ) {
         captain.LoadDefaults( HeroBase::CAPTAIN, race );
+        captain.SetSpellPoints( captain.GetMaxSpellPoints() );
+}
 
     // MageGuild
     mageguild.initialize( race, HaveLibraryCapability() );
@@ -1462,6 +1464,7 @@ bool Castle::BuyBuilding( uint32_t build )
 
     case BUILD_CAPTAIN:
         captain.LoadDefaults( HeroBase::CAPTAIN, race );
+        captain.SetSpellPoints( captain.GetMaxSpellPoints() );
         if ( GetLevelMageGuild() )
             MageGuildEducateHero( captain );
         break;
