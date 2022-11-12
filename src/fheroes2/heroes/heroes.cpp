@@ -1639,6 +1639,11 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
         }
     }
 
+    if ( isControlAI() ) {
+        // AI heroes should not have any UI indicators for their statuses.
+        return;
+    }
+
     if ( Modes( Heroes::GUARDIAN ) ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MISC6, 11 );
         fheroes2::Image guardianBG( sprite.width(), sprite.height() );
