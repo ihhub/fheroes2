@@ -24,6 +24,8 @@
 #ifndef H2INTERFACE_STATUS_H
 #define H2INTERFACE_STATUS_H
 
+#include <cstdint>
+
 #include "interface_border.h"
 #include "timing.h"
 

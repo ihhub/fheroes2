@@ -20,22 +20,24 @@
 
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "artifact.h"
+#include "image.h"
 #include "math_base.h"
 #include "skill.h"
 #include "spell.h"
 
 class Funds;
+class HeroBase;
 class Heroes;
 
 namespace fheroes2
 {
     class DialogElement;
-    class Image;
     class TextBase;
 
     int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements = {} );

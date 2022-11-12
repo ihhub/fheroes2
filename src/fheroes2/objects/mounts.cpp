@@ -22,6 +22,9 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <bitset>
+#include <iterator>
+#include <vector>
 
 #include "direction.h"
 #include "icn.h"

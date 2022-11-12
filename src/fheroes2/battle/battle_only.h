@@ -24,15 +24,17 @@
 #ifndef H2BATTLE_ONLY_H
 #define H2BATTLE_ONLY_H
 
+#include <memory>
+
 #include "army.h"
 #include "army_bar.h"
+#include "artifact.h"
 #include "heroes_indicator.h"
+#include "math_base.h"
 #include "players.h"
 #include "skill_bar.h"
 
-#include <memory>
-
-class ArtifactsBar;
+class Heroes;
 
 namespace Battle
 {

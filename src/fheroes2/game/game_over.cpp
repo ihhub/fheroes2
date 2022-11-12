@@ -24,9 +24,13 @@
 #include <cassert>
 #include <cstddef>
 #include <utility>
+#include <vector>
 
+#include "artifact.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
@@ -34,7 +38,9 @@
 #include "game_interface.h"
 #include "game_over.h"
 #include "game_video.h"
+#include "game_video_type.h"
 #include "gamedefs.h"
+#include "heroes.h"
 #include "kingdom.h"
 #include "mus.h"
 #include "players.h"

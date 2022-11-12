@@ -18,12 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <memory>
+#include <ostream>
+
 #include "battle_animation.h"
 #include "logging.h"
 #include "monster.h"
 #include "monster_anim.h"
 #include "rand.h"
-#include <algorithm>
 
 RandomizedDelay::RandomizedDelay( const uint32_t delay )
     : fheroes2::TimeDelay( delay )

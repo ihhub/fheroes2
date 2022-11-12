@@ -8,3 +8,4 @@ Exec=fheroes2
 Terminal=false
 StartupNotify=false
 Categories=Game;StrategyGame;
+Keywords=heroes;homm2;

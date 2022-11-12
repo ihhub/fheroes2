@@ -22,6 +22,8 @@
  ***************************************************************************/
 
 #include "visit.h"
+
+#include "mp2.h"
 #include "pairs.h"
 
 bool Visit::isDayLife( const IndexObject & visit )

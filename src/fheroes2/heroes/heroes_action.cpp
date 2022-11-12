@@ -21,38 +21,69 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <list>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "ai.h"
+#include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
+#include "castle_heroes.h"
+#include "color.h"
+#include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_gamearea.h"
+#include "interface_status.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "m82.h"
+#include "maps.h"
 #include "maps_actions.h"
 #include "maps_objects.h"
+#include "maps_tiles.h"
+#include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
 #include "mus.h"
+#include "pairs.h"
 #include "payment.h"
+#include "players.h"
 #include "profit.h"
-#include "race.h"
+#include "puzzle.h"
+#include "rand.h"
+#include "resource.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
 #include "skill.h"
+#include "spell.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
+#include "visit.h"
 #include "world.h"
 
 namespace
@@ -3086,7 +3117,7 @@ void ActionToSirens( Heroes & hero, const MP2::MapObjectType objectType, int32_t
         const uint32_t experience = hero.GetArmy().ActionToSirens();
         if ( experience == 0 ) {
             Dialog::Message( title, _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ),
-                         Font::BIG, Dialog::OK );
+                             Font::BIG, Dialog::OK );
         }
         else {
             const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( experience ) );

@@ -20,11 +20,13 @@
 
 #pragma once
 
-#include "image.h"
-
 #include <string>
+
+#include "math_base.h"
 
 namespace fheroes2
 {
+    class Sprite;
+
     void drawOption( const Rect & optionRoi, const Sprite & icon, std::string titleText, std::string valueText );
 }

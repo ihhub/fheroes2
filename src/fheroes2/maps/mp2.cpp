@@ -22,14 +22,16 @@
  ***************************************************************************/
 
 #include "mp2.h"
+
+#include <cassert>
+#include <ostream>
+
 #include "direction.h"
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
 #include "settings.h"
 #include "translations.h"
-
-#include <cassert>
 
 int MP2::GetICNObject( const uint8_t tileset )
 {

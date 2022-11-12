@@ -3,10 +3,21 @@
 # output every command that modifies files on the build system.
 #export DH_VERBOSE = 1
 
-export DEB_CFLAGS_MAINT_APPEND = -DFHEROES2_DATA=/usr/share/games/fheroes2
+export LC_ALL = C.UTF-8
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_CFLAGS_MAINT_STRIP = -O2
+export DEB_CXXFLAGS_MAINT_STRIP = -O2
+
+export FHEROES2_DATA = /usr/share/games/fheroes2
 
 %:
-	dh $@ --parallel
+	dh $@
 
 override_dh_auto_build:
 	dh_auto_build
+	make -C docs
+
+override_dh_auto_clean:
+	make -C docs clean
+	dh_auto_clean

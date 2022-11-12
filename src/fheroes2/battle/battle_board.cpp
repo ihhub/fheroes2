@@ -25,9 +25,15 @@
 #include <array>
 #include <cassert>
 #include <cstdint>
+#include <cstdlib>
 #include <iterator>
+#include <map>
+#include <memory>
+#include <ostream>
 #include <set>
+#include <utility>
 
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_board.h"
@@ -39,6 +45,7 @@
 #include "icn.h"
 #include "logging.h"
 #include "maps_tiles.h"
+#include "mp2.h"
 #include "rand.h"
 #include "tools.h"
 #include "translations.h"
@@ -467,7 +474,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
 
 std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
 {
-    std::vector<std::pair<Battle::Unit *, uint32_t> > foundUnits;
+    std::vector<std::pair<Battle::Unit *, uint32_t>> foundUnits;
 
     for ( Cell & cell : *this ) {
         Unit * cellUnit = cell.GetUnit();

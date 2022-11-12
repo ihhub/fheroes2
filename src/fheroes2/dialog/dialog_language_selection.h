@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "ui_language.h"
-
 #include <vector>
+
+#include "ui_language.h"
 
 namespace fheroes2
 {

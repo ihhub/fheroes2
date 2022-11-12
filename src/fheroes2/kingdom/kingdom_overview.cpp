@@ -21,29 +21,48 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "army_bar.h"
+#include "artifact.h"
 #include "buildinginfo.h"
+#include "captain.h"
 #include "castle.h"
+#include "castle_heroes.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "mp2.h"
+#include "resource.h"
+#include "screen.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_kingdom.h"
+#include "ui_scrollbar.h"
 #include "ui_window.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {

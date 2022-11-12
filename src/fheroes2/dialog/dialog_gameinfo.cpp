@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -29,9 +31,12 @@
 #include "game_hotkeys.h"
 #include "game_over.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
 #include "maps.h"
+#include "math_base.h"
 #include "player_info.h"
+#include "screen.h"
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"

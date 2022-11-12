@@ -21,8 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <fstream>
+#include <cstdint>
+#include <cstdlib>
+#include <fstream> // IWYU pragma: keep
 #include <iostream>
+#include <string>
 
 #include "serialize.h"
 

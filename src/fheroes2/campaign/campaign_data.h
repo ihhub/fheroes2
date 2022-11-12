@@ -21,7 +21,16 @@
 #ifndef H2CAMPAIGN_DATA_H
 #define H2CAMPAIGN_DATA_H
 
+#include <cstdint>
+#include <string>
+#include <vector>
+
 #include "campaign_scenariodata.h"
+
+namespace Maps
+{
+    struct FileInfo;
+}
 
 namespace Campaign
 {
@@ -52,6 +61,9 @@ namespace Campaign
         void setCampaignScenarios( std::vector<ScenarioData> && scenarios );
 
         static const CampaignData & getCampaignData( const int campaignID );
+
+        // Some scenarios have different gameplay conditions like unions which are not specified within the map file itself.
+        static void updateScenarioGameplayConditions( const Campaign::ScenarioInfoId & scenarioInfoId, Maps::FileInfo & mapInfo );
 
     private:
         int _campaignID{ 0 };

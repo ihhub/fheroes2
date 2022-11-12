@@ -24,7 +24,6 @@
 #include <algorithm>
 
 #include "artifact.h"
-#include "settings.h"
 #include "spell_storage.h"
 
 SpellStorage::SpellStorage()

@@ -24,10 +24,17 @@
 #ifndef H2SETTINGS_H
 #define H2SETTINGS_H
 
+#include <cstdint>
+#include <string>
+#include <vector>
+
 #include "bitmodes.h"
 #include "dir.h"
 #include "maps_fileinfo.h"
+#include "math_base.h"
 #include "players.h"
+
+class StreamBase;
 
 enum : int
 {

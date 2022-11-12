@@ -23,22 +23,42 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <list>
 #include <map>
 #include <string>
 #include <vector>
 
+#include "army_troop.h"
 #include "artifact_ultimate.h"
+#include "castle.h"
 #include "castle_heroes.h"
+#include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
 #include "maps_tiles.h"
-#include "week.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mp2.h"
+#include "pairs.h"
+#include "resource.h"
 #include "world_pathfinding.h"
 #include "world_regions.h"
 
-class MapObjectSimple;
 class ActionSimple;
+class MapObjectSimple;
+class StreamBase;
+class StreamBuf;
+
 struct MapEvent;
+struct Week;
+
+namespace Route
+{
+    class Step;
+}
 
 struct ListActions : public std::list<ActionSimple *>
 {

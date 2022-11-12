@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <cassert>
+#include <algorithm>
 #include <cstdint>
 #include <string>
 #include <vector>
