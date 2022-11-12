@@ -162,7 +162,7 @@ msgid "View %{name}"
 msgstr "%{name} ansehen"
 
 msgid "Move the %{name} "
-msgstr "Verschiebt den %{name} "
+msgstr "%{name} verschieben"
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "%{name} verteilen: ziehen oder mit der rechten Maustaste tippen"
@@ -3642,7 +3642,7 @@ msgid "View High Scores for Standard Maps."
 msgstr "Bestenliste für Standardkarten anzeigen."
 
 msgid "Campaign"
-msgstr "Kampagne"
+msgstr "Feldzug"
 
 msgid "View High Scores for Campaigns."
 msgstr "Bestenliste für Kampagnen anzeigen."
