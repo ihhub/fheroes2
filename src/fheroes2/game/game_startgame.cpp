@@ -930,7 +930,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             break;
         }
 
-        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar() ) {
+        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar() && le.MouseInsideRenderArea() ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
@@ -1023,6 +1023,15 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             gameArea.ResetCursorPosition();
+        }
+
+        if ( !le.MouseInsideRenderArea() && !le.MousePressLeft()) {
+            if ( gameArea.isDragScroll() ) {
+                gameArea.QueueEventProcessing();
+            }
+            if ( radar.isDragRadar() ) {
+                radar.QueueEventProcessing();
+            }
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
