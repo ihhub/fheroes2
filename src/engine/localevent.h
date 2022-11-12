@@ -299,6 +299,8 @@ public:
         }
     }
 
+    bool MouseInsideRenderArea();
+
 private:
     LocalEvent();
 
