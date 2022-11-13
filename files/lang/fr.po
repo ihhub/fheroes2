@@ -9953,9 +9953,6 @@ msgstr ""
 msgid "battle: allow soft wait for troops"
 msgstr "combat : permettre aux créatures d'attendre au cours du combat"
 
-msgid "battle: deterministic events"
-msgstr "bataille : événements déterministes"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "jeu : sauvegarde auto en début de journée"
 
@@ -10031,32 +10028,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
-#~ msgstr ""
-#~ " sur le côté gauche du menu principal.\n"
-#~ "\n"
-#~ "Pour basculer entre le mode fenêtré et le mode plein écran\n"
-#~ "appuyiez "
-
-#~ msgid "F4"
-#~ msgstr "F4"
-
-#~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " .\n"
-#~ "\n"
-#~ "Profitez du jeu !"
-
-#~ msgid "game: show system info"
-#~ msgstr "jeu : afficher les informations système"
-
-#~ msgid "Moved %{monster}"
-#~ msgstr "%{monster} déplacé"

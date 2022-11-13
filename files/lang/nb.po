@@ -9948,9 +9948,6 @@ msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
 msgid "battle: allow soft wait for troops"
 msgstr "Kamp: Avvent styrke til rundens slutt"
 
-msgid "battle: deterministic events"
-msgstr "Kamp: Forutbestemte turer"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "Parti: Autolagringen skjer ved begynnelsen av dagen"
 
@@ -10025,32 +10022,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
-#~ msgstr ""
-#~ " til venstre på hovedmenyen.\n"
-#~ "\n"
-#~ "For å bytte mellom vindus- og fullskjermsmodus\n"
-#~ "trykk på "
-
-#~ msgid "F4"
-#~ msgstr "F4"
-
-#~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ "-tasten på tastaturet\n"
-#~ "\n"
-#~ "Vi håper du nyter spillet!"
-
-#~ msgid "game: show system info"
-#~ msgstr "Parti: Vis systeminfo"
-
-#~ msgid "Moved %{monster}"
-#~ msgstr "Flyttet troppen med %{monster}"

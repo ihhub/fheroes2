@@ -10015,9 +10015,6 @@ msgstr "Helden: in der Arena kann man jeder Primärfähigkeit wählen"
 msgid "battle: allow soft wait for troops"
 msgstr "Kampf: weiche Warteschleife erlauben"
 
-msgid "battle: deterministic events"
-msgstr "Kampf: deterministische Ereignisse"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "Spiel: automatische Speicherung erfolgt zu Beginn des Tages"
 
@@ -10092,32 +10089,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
-#~ msgstr ""
-#~ " auf der linken Seite des Hauptmenüs klicken.\n"
-#~ "\n"
-#~ "Um zwischen Fenster- und Vollbildmodus zu wechseln\n"
-#~ "drücken Sie "
-
-#~ msgid "F4"
-#~ msgstr "F4"
-
-#~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " Taste auf der Tastatur.\n"
-#~ "\n"
-#~ "Viel Spaß beim Spielen!"
-
-#~ msgid "game: show system info"
-#~ msgstr "Spiel: Systeminformationen anzeigen"
-
-#~ msgid "Moved %{monster}"
-#~ msgstr "Bewegt %{monster}"

@@ -8586,9 +8586,6 @@ msgstr ""
 msgid "battle: allow soft wait for troops"
 msgstr ""
 
-msgid "battle: deterministic events"
-msgstr ""
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr ""
 
