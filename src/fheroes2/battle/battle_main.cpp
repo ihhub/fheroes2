@@ -232,9 +232,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         }
     }
 
+    const uint32_t battleSeed = computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 );
+
     bool isBattleOver = false;
     while ( !isBattleOver ) {
-        const uint32_t battleSeed = computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 );
         Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
         Arena arena( army1, army2, mapsindex, showBattle, randomGenerator );
 
