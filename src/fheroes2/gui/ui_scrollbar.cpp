@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "ui_scrollbar.h"
-#include "pal.h"
 
 #include <algorithm>
 #include <cassert>
@@ -203,7 +202,7 @@ namespace fheroes2
         }
 
         const int32_t step = horizonalSlider ? middleSliderArea.width : middleSliderArea.height;
-        const int32_t middleLength = ( sliderAreaLength * elementCountPerView / std::max( elementCountPerView,  totalElementCount ) ) - currentSliderLength;
+        const int32_t middleLength = ( sliderAreaLength * elementCountPerView / std::max( elementCountPerView, totalElementCount ) ) - currentSliderLength;
 
         int32_t width = originalSlider.width();
         int32_t height = originalSlider.height();
@@ -261,8 +260,8 @@ namespace fheroes2
                   originalSlider.width() - startSliderArea.width, startSliderArea.height );
         }
         else {
-            Copy( originalSlider, startSliderArea.x, startSliderArea.y + startSliderArea.height, output, startSliderArea.x, offset,
-                  startSliderArea.width, originalSlider.height() - startSliderArea.height );
+            Copy( originalSlider, startSliderArea.x, startSliderArea.y + startSliderArea.height, output, startSliderArea.x, offset, startSliderArea.width,
+                  originalSlider.height() - startSliderArea.height );
         }
 
         return output;

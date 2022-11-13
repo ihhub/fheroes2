@@ -27,8 +27,6 @@
 #include <cstdint>
 #include <utility>
 
-#include "heroes.h"
-
 class Heroes;
 class StreamBase;
 

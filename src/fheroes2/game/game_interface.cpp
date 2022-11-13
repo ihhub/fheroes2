@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include "game_interface.h"
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -29,8 +30,12 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_border.h"
+#include "localevent.h"
 #include "maps.h"
 #include "settings.h"
+#include "ui_button.h"
 #include "ui_tool.h"
 #include "world.h"
 

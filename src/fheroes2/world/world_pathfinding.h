@@ -20,16 +20,26 @@
 
 #pragma once
 
+#include <cstdint>
+#include <list>
+#include <vector>
+
 #include "color.h"
 #include "mp2.h"
 #include "pathfinding.h"
-#include "route.h"
 #include "skill.h"
 
+class Heroes;
 class IndexObject;
+
+namespace Route
+{
+    class Step;
+}
 
 struct WorldNode : public PathfindingNode<MP2::MapObjectType>
 {
+    // The number of movement points remaining for the hero after moving to this node
     uint32_t _remainingMovePoints = 0;
 
     WorldNode() = default;
@@ -72,7 +82,7 @@ protected:
     void checkAdjacentNodes( std::vector<int> & nodesToExplore, int currentNodeIdx );
 
     // This method defines pathfinding rules. This has to be implemented by the derived class.
-    virtual void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) = 0;
+    virtual void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) = 0;
 
     // Calculates the movement penalty when moving from the src tile to the adjacent dst tile in the specified direction.
     // If the "last move" logic should be taken into account (when performing pathfinding for a real hero on the map),
@@ -104,7 +114,8 @@ public:
     std::list<Route::Step> buildPath( const int targetIndex ) const;
 
 private:
-    void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;
+    // Follows regular passability rules (for the human player)
+    void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) override;
 };
 
 class AIWorldPathfinder : public WorldPathfinder
@@ -151,7 +162,8 @@ public:
     void setSpellPointReserve( const double reserve );
 
 private:
-    void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;
+    // Follows custom passability rules (for the AI)
+    void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) override;
 
     // Adds special logic for AI-controlled heroes to encourage them to overcome water obstacles using boats.
     // If this logic should be taken into account (when performing pathfinding for a real hero on the map),

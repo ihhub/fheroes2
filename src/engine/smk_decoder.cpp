@@ -19,14 +19,15 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <cstring>
+#include <memory>
 
 #include "image.h"
 #include "serialize.h"
 #include "smacker.h"
 #include "smk_decoder.h"
-
-#include <cassert>
-#include <cstring>
 
 namespace
 {
@@ -54,7 +55,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     uint8_t channelsPerTrack[audioChannelCount] = { 0 };
     uint8_t audioBitDepth[audioChannelCount] = { 0 };
     unsigned long audioRate[audioChannelCount] = { 0 };
-    std::vector<std::vector<uint8_t> > soundBuffer( audioChannelCount );
+    std::vector<std::vector<uint8_t>> soundBuffer( audioChannelCount );
 
     unsigned long width = 0;
     unsigned long height = 0;
@@ -290,7 +291,7 @@ std::vector<uint8_t> SMKVideoSequence::getCurrentPalette() const
     return std::vector<uint8_t>( paletteData, paletteData + 256 * 3 );
 }
 
-const std::vector<std::vector<uint8_t> > & SMKVideoSequence::getAudioChannels() const
+const std::vector<std::vector<uint8_t>> & SMKVideoSequence::getAudioChannels() const
 {
     return _audioChannel;
 }

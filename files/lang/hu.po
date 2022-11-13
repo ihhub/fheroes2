@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 16:38+0000\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
 "PO-Revision-Date: 2022-10-25 08:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2683,16 +2683,15 @@ msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
 msgid "Language"
 msgstr ""
 
-#, fuzzy
-msgid "Resolution"
-msgstr "Kiválasztott Leírás"
+msgid "Graphics"
+msgstr ""
+
+msgid "Settings"
+msgstr "Beállítások"
 
 #, fuzzy
 msgid "Experimental"
 msgstr "Elemi Gyűrű"
-
-msgid "Settings"
-msgstr "Beállítások"
 
 msgid "Audio"
 msgstr ""
@@ -2718,15 +2717,15 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teleportálás"
 
+#, fuzzy
+msgid "Interface Type"
+msgstr "Kezelőfelület"
+
 msgid "Evil"
 msgstr "Gonosz"
 
 msgid "Good"
 msgstr "Jó"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Kezelőfelület"
 
 msgid "Auto Resolve"
 msgstr ""
@@ -2734,25 +2733,21 @@ msgstr ""
 msgid "Auto, No Spells"
 msgstr ""
 
-msgid "Manual"
+msgid "autoBattle|Manual"
 msgstr ""
 
 #, fuzzy
 msgid "Battles"
 msgstr "Üveg"
 
-#, fuzzy
-msgid "Select Game Language"
-msgstr "Kiválasztott Leírás"
-
 msgid "Change the language of the game."
 msgstr ""
 
 #, fuzzy
-msgid "Select Game Resolution"
+msgid "Select Game Language"
 msgstr "Kiválasztott Leírás"
 
-msgid "Change the resolution of the game."
+msgid "Change the graphics settings of the game."
 msgstr ""
 
 msgid "Change the audio settings of the game."
@@ -2854,6 +2849,51 @@ msgstr ""
 #, fuzzy
 msgid "Gift from %{name}"
 msgstr "%{name} toborzása"
+
+#, fuzzy
+msgid "Resolution"
+msgstr "Kiválasztott Leírás"
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "egy"
+
+msgid "FPS"
+msgstr ""
+
+#, fuzzy
+msgid "System Info"
+msgstr "Rendszerbeállítások"
+
+msgid "Change the resolution of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Select Game Resolution"
+msgstr "Kiválasztott Leírás"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
 
 msgid "Set Guardian"
 msgstr ""
@@ -3595,6 +3635,9 @@ msgstr ""
 msgid "Recorded at Green Street Studios"
 msgstr ""
 
+msgid "credits|Manual"
+msgstr ""
+
 msgid "German Consultant"
 msgstr ""
 
@@ -3705,17 +3748,7 @@ msgid "door"
 msgstr ""
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-
-msgid "F4"
-msgstr ""
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
@@ -9417,9 +9450,6 @@ msgid "battle: allow soft wait for troops"
 msgstr ""
 
 msgid "battle: deterministic events"
-msgstr ""
-
-msgid "game: show system info"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"

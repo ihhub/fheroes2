@@ -19,6 +19,14 @@
  ***************************************************************************/
 
 #include "ui_language.h"
+
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <map>
+#include <set>
+#include <utility>
+
 #include "agg.h"
 #include "agg_image.h"
 #include "icn.h"
@@ -26,10 +34,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_font.h"
-
-#include <cassert>
-#include <map>
-#include <set>
 
 namespace
 {

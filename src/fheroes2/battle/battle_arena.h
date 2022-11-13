@@ -28,33 +28,42 @@
 #include <cstdint>
 #include <list>
 #include <memory>
+#include <string>
 #include <utility>
+#include <vector>
 
 #include "battle.h"
 #include "battle_board.h"
+#include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
-#include "rand.h"
+#include "battle_tower.h"
+#include "spell.h"
 #include "spell_storage.h"
 
+class Army;
+class Artifact;
 class Castle;
 class HeroBase;
+
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
 
 namespace Battle
 {
     class Bridge;
     class Catapult;
     class Force;
+    class Position;
     class Units;
     class Unit;
-    class Command;
-    class Tower;
     class Interface;
     class Status;
 
     class Actions : public std::list<Command>
-    {
-    };
+    {};
 
     class TroopsUidGenerator
     {

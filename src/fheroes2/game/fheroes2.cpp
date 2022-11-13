@@ -21,16 +21,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
 #include <cstdlib>
+#include <exception>
 #include <iostream>
+#include <list>
+#include <memory>
+#include <set>
 #include <string>
 
-#include <SDL.h>
+#include <SDL_events.h>
+#include <SDL_main.h> // IWYU pragma: keep
+#include <SDL_mouse.h>
+#include <SDL_version.h>
 
-#if defined( _WIN32 ) && !SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( _WIN32 )
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <cassert>
+#else
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#endif
+
 #endif
 
 #include "agg.h"
@@ -43,10 +55,13 @@
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
+#include "game_video_type.h"
 #include "h2d.h"
+#include "image.h"
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
+#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -123,8 +138,6 @@ namespace
         DisplayInitializer()
         {
             const Settings & conf = Settings::Get();
-
-            fheroes2::engine().setVSync( conf.isVSyncEnabled() );
 
             fheroes2::Display & display = fheroes2::Display::instance();
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )

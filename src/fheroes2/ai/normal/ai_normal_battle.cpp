@@ -18,29 +18,42 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <set>
+#include <string>
+#include <tuple>
+#include <utility>
+#include <vector>
+
+#include "ai.h"
 #include "ai_normal.h"
 #include "artifact.h"
+#include "artifact_info.h"
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_board.h"
 #include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "castle.h"
+#include "color.h"
 #include "difficulty.h"
 #include "game.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "logging.h"
+#include "monster_info.h"
+#include "rand.h"
 #include "settings.h"
-#include "speed.h"
-
-#include <cassert>
-#include <cmath>
-#include <cstdint>
-#include <map>
-#include <set>
-#include <tuple>
-#include <utility>
 
 using namespace Battle;
 

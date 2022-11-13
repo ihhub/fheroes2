@@ -18,10 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
+#include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "campaign_data.h"
@@ -33,18 +46,34 @@
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "game_video.h"
+#include "game_video_type.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mus.h"
 #include "pal.h"
+#include "players.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_campaign.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -1181,24 +1210,31 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     buttonDifficulty.draw();
 
     const bool isDifficultySelectionAllowed = campaignSaveData.isStarting() && !allowToRestart;
-
-    if ( !scenario.isMapFilePresent() ) {
-        buttonOk.disable();
-    }
+    const bool isMapPresent = scenario.isMapFilePresent();
 
     if ( allowToRestart ) {
         buttonOk.disable();
         buttonOk.hide();
+
+        if ( !isMapPresent ) {
+            buttonRestart.disable();
+        }
+
         buttonRestart.draw();
     }
     else {
         buttonRestart.disable();
         buttonRestart.hide();
+
+        if ( !isMapPresent ) {
+            buttonOk.disable();
+        }
+
         buttonOk.draw();
     }
 
     // Only one button can be enabled at the time.
-    assert( buttonRestart.isHidden() != buttonOk.isHidden() && buttonRestart.isDisabled() != buttonOk.isDisabled() );
+    assert( buttonRestart.isHidden() != buttonOk.isHidden() );
 
     buttonCancel.draw();
 
@@ -1314,7 +1350,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 continue;
             }
 
-            const Maps::FileInfo mapInfo = scenario.loadMap();
+            Maps::FileInfo mapInfo = scenario.loadMap();
+            Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
+
             conf.SetCurrentFileInfo( mapInfo );
 
             // starting faction scenario bonus has to be called before players.SetStartGame()
@@ -1337,6 +1375,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             if ( !world.LoadMapMP2( mapInfo.file ) ) {
                 Dialog::Message( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ), Font::BIG, Dialog::OK );
+
+                // TODO: find a way to restore world for the current game after a failure.
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
             }

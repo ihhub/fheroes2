@@ -22,20 +22,31 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdint>
+#include <iterator>
 #include <vector>
 
 #include "agg_image.h"
 #include "castle.h"
+#include "castle_heroes.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
 #include "mageguild.h"
+#include "math_base.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell.h"
+#include "spell_storage.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 

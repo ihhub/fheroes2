@@ -22,6 +22,25 @@
  ***************************************************************************/
 
 #include "game_hotkeys.h"
+
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <cstring>
+#include <fstream>
+#include <map>
+#include <set>
+#include <type_traits>
+#include <utility>
+
+#include <SDL_version.h>
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_keycode.h>
+#else
+#include <SDL_keysym.h>
+#endif
+
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -29,13 +48,6 @@
 #include "system.h"
 #include "tinyconfig.h"
 #include "tools.h"
-
-#include <array>
-#include <cassert>
-#include <fstream>
-#include <map>
-#include <set>
-#include <type_traits>
 
 namespace
 {
@@ -357,11 +369,8 @@ void Game::KeyboardGlobalFilter( int sdlKey, int mod )
 {
     if ( fheroes2::getKeyFromSDL( sdlKey ) == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key
          && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
-        fheroes2::engine().toggleFullScreen();
-        fheroes2::Display::instance().render();
-
         Settings & conf = Settings::Get();
-        conf.setFullScreen( fheroes2::engine().isFullScreen() );
+        conf.setFullScreen( !fheroes2::engine().isFullScreen() );
         conf.Save( Settings::configFileName );
     }
 }

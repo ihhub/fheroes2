@@ -24,30 +24,40 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <limits>
+#include <memory>
+#include <ostream>
 #include <set>
 #include <tuple>
+#include <utility>
 
 #include "ai.h"
 #include "artifact.h"
-#include "campaign_data.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "castle.h"
+#include "color.h"
+#include "direction.h"
 #include "game.h"
 #include "game_over.h"
-#include "ground.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
 #include "maps_actions.h"
+#include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "mp2.h"
 #include "pairs.h"
+#include "players.h"
 #include "race.h"
+#include "rand.h"
 #include "resource.h"
-#include "save_format_version.h"
+#include "route.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "week.h"
 #include "world.h"
 
 namespace
@@ -1427,14 +1437,6 @@ StreamBase & operator>>( StreamBase & msg, World & w )
         >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
-
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0918_RELEASE ) {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove the code in this block." );
-        for ( Maps::Tiles & tile : world.vec_tiles ) {
-            tile.correctOldSaveOwnershipFlag();
-            tile.correctDiggingHoles();
-        }
-    }
 
     return msg;
 }

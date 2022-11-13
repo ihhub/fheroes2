@@ -19,8 +19,10 @@
  ***************************************************************************/
 
 #include "ui_monster.h"
+
 #include "agg_image.h"
 #include "icn.h"
+#include "image.h"
 #include "monster.h"
 #include "race.h"
 

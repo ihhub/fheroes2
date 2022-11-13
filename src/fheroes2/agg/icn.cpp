@@ -21,8 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "heroes.h"
 #include "icn.h"
+#include "color.h"
+#include "heroes.h"
 #include "race.h"
 #include "settings.h"
 

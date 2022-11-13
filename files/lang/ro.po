@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-05 16:38+0000\n"
+"POT-Creation-Date: 2022-11-11 09:31+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2504,13 +2504,13 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-msgid "Resolution"
-msgstr ""
-
-msgid "Experimental"
+msgid "Graphics"
 msgstr ""
 
 msgid "Settings"
+msgstr ""
+
+msgid "Experimental"
 msgstr ""
 
 msgid "Audio"
@@ -2534,13 +2534,13 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
+msgid "Interface Type"
+msgstr ""
+
 msgid "Evil"
 msgstr ""
 
 msgid "Good"
-msgstr ""
-
-msgid "Interface Type"
 msgstr ""
 
 msgid "Auto Resolve"
@@ -2549,22 +2549,19 @@ msgstr ""
 msgid "Auto, No Spells"
 msgstr ""
 
-msgid "Manual"
+msgid "autoBattle|Manual"
 msgstr ""
 
 msgid "Battles"
 msgstr ""
 
-msgid "Select Game Language"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr ""
 
-msgid "Select Game Resolution"
+msgid "Select Game Language"
 msgstr ""
 
-msgid "Change the resolution of the game."
+msgid "Change the graphics settings of the game."
 msgstr ""
 
 msgid "Change the audio settings of the game."
@@ -2649,6 +2646,49 @@ msgid "Planned Gift"
 msgstr ""
 
 msgid "Gift from %{name}"
+msgstr ""
+
+msgid "Resolution"
+msgstr ""
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "Nimic"
+
+msgid "FPS"
+msgstr ""
+
+#, fuzzy
+msgid "System Info"
+msgstr "System Options"
+
+msgid "Change the resolution of the game."
+msgstr ""
+
+msgid "Select Game Resolution"
+msgstr ""
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
 msgstr ""
 
 msgid "Set Guardian"
@@ -3334,6 +3374,9 @@ msgstr ""
 msgid "Recorded at Green Street Studios"
 msgstr ""
 
+msgid "credits|Manual"
+msgstr ""
+
 msgid "German Consultant"
 msgstr ""
 
@@ -3436,17 +3479,7 @@ msgid "door"
 msgstr ""
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-
-msgid "F4"
-msgstr ""
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
@@ -8614,9 +8647,6 @@ msgid "battle: allow soft wait for troops"
 msgstr ""
 
 msgid "battle: deterministic events"
-msgstr ""
-
-msgid "game: show system info"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"

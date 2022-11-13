@@ -24,24 +24,36 @@
 #define H2CASTLE_H
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
 #include <map>
+#include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "army.h"
 #include "bitmodes.h"
 #include "captain.h"
 #include "castle_heroes.h"
+#include "color.h"
+#include "gamedefs.h"
 #include "mageguild.h"
+#include "math_base.h"
+#include "monster.h"
+#include "players.h"
 #include "position.h"
-#include "ui_button.h"
 
 namespace fheroes2
 {
     class RandomMonsterAnimation;
 }
 
+class Funds;
+class HeroBase;
 class Heroes;
+class StreamBase;
+class Troop;
 
 enum building_t : uint32_t
 {

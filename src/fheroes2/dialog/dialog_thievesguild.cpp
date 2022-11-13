@@ -22,20 +22,37 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "castle.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
+#include "heroes.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
 #include "monster.h"
+#include "mp2.h"
+#include "players.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "world.h"
 
 struct ValueColors : std::pair<int, int>

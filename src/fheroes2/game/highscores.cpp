@@ -21,8 +21,10 @@
 #include <algorithm>
 #include <array>
 #include <ctime>
+#include <memory>
 
 #include "highscores.h"
+#include "serialize.h"
 #include "zzlib.h"
 
 namespace

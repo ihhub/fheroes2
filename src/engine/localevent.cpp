@@ -21,13 +21,36 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "localevent.h"
+#include <cassert>
+#include <cmath>
+#include <cstdlib>
+#include <map>
+#include <utility>
+#include <vector>
+
+#include <SDL_events.h>
+#include <SDL_joystick.h>
+#include <SDL_keyboard.h>
+#include <SDL_mouse.h>
+#include <SDL_timer.h>
+#include <SDL_version.h>
+#include <SDL_video.h>
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+
+#include <SDL_gamecontroller.h>
+#include <SDL_keycode.h>
+
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#include <SDL_hints.h>
+#endif
+
+#endif
+
 #include "audio.h"
+#include "localevent.h"
 #include "pal.h"
 #include "screen.h"
-
-#include <cassert>
-#include <map>
 
 namespace
 {
@@ -1089,12 +1112,15 @@ void LocalEvent::PauseCycling()
 LocalEvent & LocalEvent::GetClean()
 {
     LocalEvent & le = Get();
+
     le.ResetModes( KEY_PRESSED );
     le.ResetModes( MOUSE_MOTION );
     le.ResetModes( MOUSE_PRESSED );
     le.ResetModes( MOUSE_RELEASED );
     le.ResetModes( MOUSE_CLICKED );
+    le.ResetModes( MOUSE_WHEEL );
     le.ResetModes( KEY_HOLD );
+
     return le;
 }
 
@@ -1118,12 +1144,12 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
     SDL_Event event;
 
+    // We shouldn't reset the MOUSE_PRESSED and KEY_HOLD here because these are "lasting" states
+    ResetModes( KEY_PRESSED );
     ResetModes( MOUSE_MOTION );
     ResetModes( MOUSE_RELEASED );
     ResetModes( MOUSE_CLICKED );
-    ResetModes( KEY_PRESSED );
-
-    mouse_wm = fheroes2::Point();
+    ResetModes( MOUSE_WHEEL );
 
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {

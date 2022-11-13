@@ -23,13 +23,28 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
+#include <cstdint>
+#include <list>
 #include <set>
 
+#include "bitmodes.h"
 #include "castle.h"
+#include "gamedefs.h"
+#include "heroes.h"
 #include "heroes_recruits.h"
+#include "monster.h"
 #include "mp2.h"
 #include "pairs.h"
+#include "players.h"
 #include "puzzle.h"
+#include "resource.h"
+
+class StreamBase;
+
+namespace Maps
+{
+    class Tiles;
+}
 
 struct CapturedObjects;
 

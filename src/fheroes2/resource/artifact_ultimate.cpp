@@ -22,10 +22,8 @@
  ***************************************************************************/
 
 #include "artifact_ultimate.h"
-#include "game.h"
 #include "interface_gamearea.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "serialize.h"
 
 UltimateArtifact::UltimateArtifact()
