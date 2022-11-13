@@ -947,6 +947,8 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
         }
     }
 
+    dst_pt.y = cur_rt.y + 13;
+
     // color flags, except for neutral heroes
     if ( !isNeutralHero ) {
         uint32_t index = 0;
@@ -973,8 +975,6 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
         default:
             break;
         }
-
-        dst_pt.y = cur_rt.y + 13;
 
         const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
         dst_pt.x = cur_rt.x + ( cur_rt.width - 40 ) / 2 - l_flag.width();
