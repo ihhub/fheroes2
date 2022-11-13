@@ -167,7 +167,7 @@ std::string Battle::Tower::GetInfo( const Castle & castle )
         const int towerId = *it;
 
         if ( isTowerValid( towerId ) ) {
-            Tower tower( castle, towerId, Rand::DeterministicRandomGenerator( 0 ), 0 );
+            const Tower tower( castle, towerId, Rand::DeterministicRandomGenerator( 0 ), 0 );
 
             msg.append( _( "The %{name} fires with the strength of %{count} Archers" ) );
             StringReplace( msg, "%{name}", tower.GetName() );
