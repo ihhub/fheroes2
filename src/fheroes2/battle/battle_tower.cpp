@@ -131,42 +131,70 @@ void Battle::Tower::SetDestroy()
     valid = false;
 }
 
-std::string Battle::Tower::GetInfo( const Castle & cstl )
+std::string Battle::Tower::GetInfo( const Castle & castle )
 {
-    if ( !cstl.isBuild( BUILD_CASTLE ) ) {
+    if ( !castle.isBuild( BUILD_CASTLE ) ) {
         return {};
     }
 
-    std::vector<int> towers;
-    towers.push_back( TWR_CENTER );
+    std::vector<int> towerIds;
 
-    if ( cstl.isBuild( BUILD_LEFTTURRET ) )
-        towers.push_back( TWR_LEFT );
-    if ( cstl.isBuild( BUILD_RIGHTTURRET ) )
-        towers.push_back( TWR_RIGHT );
+    towerIds.push_back( TWR_CENTER );
+    if ( castle.isBuild( BUILD_LEFTTURRET ) ) {
+        towerIds.push_back( TWR_LEFT );
+    }
+    if ( castle.isBuild( BUILD_RIGHTTURRET ) ) {
+        towerIds.push_back( TWR_RIGHT );
+    }
 
-    const char * tmpl = _( "The %{name} fires with the strength of %{count} Archers" );
-    const char * addn = _( "each with a +%{attack} bonus to their attack skill." );
+    // This method can be called both during combat and outside of it. In the
+    // former case, we have to check if the tower was destroyed during the siege.
+    auto isTowerValid = []( const int towerId ) {
+        // If the siege is in progress, we need to check the current state of the tower
+        if ( GetArena() ) {
+            const Tower * tower = Arena::GetTower( towerId );
+            assert( tower != nullptr );
+
+            return tower->isValid();
+        }
+
+        return true;
+    };
 
     std::string msg;
-    for ( std::vector<int>::const_iterator it = towers.begin(); it != towers.end(); ++it ) {
-        Tower twr( cstl, *it, Rand::DeterministicRandomGenerator( 0 ), 0 );
 
-        msg.append( tmpl );
-        StringReplace( msg, "%{name}", twr.GetName() );
-        StringReplace( msg, "%{count}", twr.GetCount() );
+    for ( std::vector<int>::const_iterator it = towerIds.begin(); it != towerIds.end(); ++it ) {
+        const int towerId = *it;
 
-        if ( twr.GetBonus() ) {
-            msg.append( ", " );
-            msg.append( addn );
-            StringReplace( msg, "%{attack}", twr.GetBonus() );
+        if ( isTowerValid( towerId ) ) {
+            Tower tower( castle, towerId, Rand::DeterministicRandomGenerator( 0 ), 0 );
+
+            msg.append( _( "The %{name} fires with the strength of %{count} Archers" ) );
+            StringReplace( msg, "%{name}", tower.GetName() );
+            StringReplace( msg, "%{count}", tower.GetCount() );
+
+            if ( tower.GetBonus() ) {
+                msg.append( ", " );
+                msg.append( _( "each with a +%{attack} bonus to their attack skill." ) );
+                StringReplace( msg, "%{attack}", tower.GetBonus() );
+            }
+            else {
+                msg += '.';
+            }
         }
         else {
-            msg += '.';
+            assert( GetArena() != nullptr );
+
+            const Tower * tower = Arena::GetTower( towerId );
+            assert( tower != nullptr );
+
+            msg.append( _( "The %{name} is destroyed." ) );
+            StringReplace( msg, "%{name}", tower->GetName() );
         }
 
-        if ( ( it + 1 ) != towers.end() )
+        if ( ( it + 1 ) != towerIds.end() ) {
             msg.append( "\n \n" );
+        }
     }
 
     return msg;
