@@ -329,7 +329,7 @@ namespace
         fheroes2::ApplyPalette( labyrinth, 2 );
         fheroes2::Blit( labyrinth, output, ( textInitialOffsetX - labyrinth.width() ) / 2, offsetY );
 
-        offsetY = textInitialOffsetY + 22;
+        offsetY = textInitialOffsetY + 35;
 
         title.Set( _( "Special Thanks to" ), Font::YELLOW_BIG, output.width() - textInitialOffsetX );
         title.Blit( textInitialOffsetX + ( output.width() - textInitialOffsetX - title.w() ) / 2, offsetY, output );
