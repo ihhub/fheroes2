@@ -9630,9 +9630,6 @@ msgstr "герои: позволяват да избереш всяко осно
 msgid "battle: allow soft wait for troops"
 msgstr "битка: позволява меко изчакване за войски"
 
-msgid "battle: deterministic events"
-msgstr "битка: детерминистични събития"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "игра: автоматично запазване ще бъде направено в началото на деня"
 
@@ -9707,26 +9704,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
-#~ msgstr ""
-#~ " от лявата страна на главното меню.\n"
-#~ "\n"
-#~ "За да превключиш между режим на прозорец и цял екран,\n"
-#~ "натисни "
-
-#~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " клавиш на клавиатурата.\n"
-#~ "\n"
-#~ "Приятна игра!"
-
-#~ msgid "game: show system info"
-#~ msgstr "игра: показва информация за системата"

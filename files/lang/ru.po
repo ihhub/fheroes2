@@ -9711,9 +9711,6 @@ msgstr "герои: в постройке Арена можно получить
 msgid "battle: allow soft wait for troops"
 msgstr "битва: использовать альтернативный пропуск хода (как в H3)"
 
-msgid "battle: deterministic events"
-msgstr "битва: детерминированные события"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "игра: автосохранение в начале дня"
 
@@ -9788,32 +9785,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
-#~ msgstr ""
-#~ " на левой стороне основного меню.\n"
-#~ "\n"
-#~ "Для переключения между оконным и полноэкранным режимом\n"
-#~ "нажмите клавишу "
-
-#~ msgid "F4"
-#~ msgstr "F4"
-
-#~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " на клавиатуре.\n"
-#~ "\n"
-#~ "Наслаждайтесь игрой!"
-
-#~ msgid "game: show system info"
-#~ msgstr "игра: показать информационную строку (время, память и т.п.)"
-
-#~ msgid "Moved %{monster}"
-#~ msgstr "%{monster} переместились"

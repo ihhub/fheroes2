@@ -114,7 +114,7 @@ public:
         // UNUSED = 0x30008000,
 
         // UNUSED = 0x40004000,
-        BATTLE_DETERMINISTIC_RESULT = 0x40008000,
+        // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         // UNUSED = 0x40020000
     };
@@ -307,11 +307,6 @@ public:
     bool ExtBattleSoftWait() const
     {
         return ExtModes( BATTLE_SOFT_WAITING );
-    }
-
-    bool ExtBattleDeterministicResult() const
-    {
-        return ExtModes( BATTLE_DETERMINISTIC_RESULT );
     }
 
     bool ExtGameContinueAfterVictory() const

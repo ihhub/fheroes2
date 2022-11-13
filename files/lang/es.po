@@ -9663,9 +9663,6 @@ msgstr ""
 msgid "battle: allow soft wait for troops"
 msgstr "batalla: espera de tropa fluido"
 
-msgid "battle: deterministic events"
-msgstr ""
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr ""
 
@@ -9747,10 +9744,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "game: show system info"
-#~ msgstr "juego: mostrar información del sistema"
-
-#, fuzzy
-#~ msgid "Moved %{monster}"
-#~ msgstr "Mover a %{monster} aquí."

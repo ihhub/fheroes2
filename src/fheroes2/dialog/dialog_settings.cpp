@@ -164,7 +164,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
-    states.push_back( Settings::BATTLE_DETERMINISTIC_RESULT );
 
     std::sort( states.begin(), states.end(), []( uint32_t first, uint32_t second ) { return Settings::ExtName( first ) > Settings::ExtName( second ); } );
 
