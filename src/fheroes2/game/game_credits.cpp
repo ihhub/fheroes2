@@ -292,25 +292,23 @@ namespace
 
         const int32_t textInitialOffsetX = 350;
         const int32_t columnStep = 430;
-        const int32_t textInitialOffsetY = 42;
+        const int32_t textInitialOffsetY = 55;
         const int32_t textWidth = 300;
 
         int32_t offsetY = textInitialOffsetY;
 
-        TextBox title( _( "Support us at" ), Font::BIG, textWidth );
-        TextBox name( "https://www.patreon.com/fheroes2", Font::YELLOW_BIG, textWidth );
-        TextBox nameSecond( "https://boosty.to/fheroes2", Font::YELLOW_BIG, textWidth );
+        TextBox title( _( "Support us at\nLineTest" ), Font::BIG, textWidth );
+        TextBox name( _( "local-donation-platform|" ), Font::YELLOW_BIG, textWidth );
         title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
-        nameSecond.Blit( ( textInitialOffsetX - nameSecond.w() ) / 2, offsetY + title.h() + name.h(), output );
-        offsetY += title.h() + name.h() + nameSecond.h() + 5;
+        offsetY += title.h() + name.h() + 5;
 
         const fheroes2::Sprite & wizard = fheroes2::AGG::GetICN( ICN::CMBTCAPZ, 4 );
         fheroes2::Blit( wizard, output, ( textInitialOffsetX - wizard.width() ) / 2, offsetY );
         offsetY += wizard.height();
 
         title.Set( _( "Connect with us at" ), Font::BIG, textWidth );
-        name.Set( "https://www.facebook.com/groups/fheroes2", Font::YELLOW_BIG, textWidth - 10 ); // special case to properly split the string
+        name.Set( _( "local-social-network|" ), Font::YELLOW_BIG, textWidth - 10 ); // special case to properly split the string
         title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
         offsetY += title.h() + name.h() + 10;
