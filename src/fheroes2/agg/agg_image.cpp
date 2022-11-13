@@ -284,7 +284,7 @@ namespace
         const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
         const int32_t minimumButtonSize = 16;
         const int32_t maximumButtonSize = 200; // no idea why you need that big button.
-        width = std::clamp( width,minimumButtonSize, maximumButtonSize );
+        width = std::clamp( width, minimumButtonSize, maximumButtonSize );
 
         const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( icnId, 0 );
         const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( icnId, 1 );
