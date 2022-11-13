@@ -277,6 +277,45 @@ namespace
         }
     }
 
+    void getCustomNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const bool isEvilInterface, int32_t width )
+    {
+        assert( width > 0 );
+
+        const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
+        const int32_t minimumButtonSize = 16;
+        const int32_t maximumButtonSize = 200; // no idea why you need that big button.
+        width = std::clamp( width,minimumButtonSize, maximumButtonSize );
+
+        const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( icnId, 0 );
+        const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( icnId, 1 );
+
+        released.resize( width, originalReleased.height() );
+        released.reset();
+        released.setPosition( originalReleased.x(), originalReleased.y() );
+
+        if ( originalReleased.width() >= width ) {
+            const int32_t widthDiff = originalReleased.width() - width;
+            fheroes2::Copy( originalReleased, 0, 0, released, 0, 0, width / 2, released.height() );
+            fheroes2::Copy( originalReleased, originalReleased.width() - width / 2, 0, released, released.width() - width / 2, 0, width - width / 2, released.height() );
+        }
+        else {
+            released = fheroes2::Stretch( originalReleased, 0, 0, originalReleased.width(), originalReleased.height(), width, originalReleased.height() );
+        }
+
+        pressed.resize( width, originalPressed.height() );
+        pressed.reset();
+        pressed.setPosition( originalPressed.x(), originalPressed.y() );
+
+        if ( originalPressed.width() >= width ) {
+            const int32_t widthDiff = originalPressed.width() - width;
+            fheroes2::Copy( originalPressed, 0, 0, pressed, 0, 0, width / 2, pressed.height() );
+            fheroes2::Copy( originalPressed, originalPressed.width() - width / 2, 0, pressed, pressed.width() - width / 2, 0, width - width / 2, pressed.height() );
+        }
+        else {
+            pressed = fheroes2::Stretch( originalPressed, 0, 0, originalPressed.width(), originalPressed.height(), width, originalPressed.height() );
+        }
+    }
+
     uint8_t getButtonFillingColor( const bool isReleasedState, const bool isGoodInterface = true )
     {
         if ( isGoodInterface ) {
@@ -2276,6 +2315,43 @@ namespace fheroes2
                 }
 
                 return true;
+            }
+            case ICN::EMPTY_GOOD_BUTTON:
+            case ICN::EMPTY_EVIL_BUTTON: {
+                const int32_t originalId = ( id == ICN::EMPTY_GOOD_BUTTON ) ? ICN::SYSTEM : ICN::SYSTEME;
+                LoadOriginalICN( originalId );
+
+                _icnVsSprite[id].resize( 2 );
+
+                if ( _icnVsSprite[originalId].size() < 13 ) {
+                    // Invalid game resources!
+                    assert( 0 );
+                    break;
+                }
+
+                Sprite & released = _icnVsSprite[id][0];
+                Sprite & pressed = _icnVsSprite[id][1];
+
+                released = _icnVsSprite[originalId][11];
+                pressed = _icnVsSprite[originalId][12];
+
+                if ( pressed.width() > 2 && pressed.height() > 2 ) {
+                    // Make the background transparent.
+                    FillTransform( pressed, 0, 0, pressed.width(), 1, 1 );
+                    FillTransform( pressed, pressed.width() - 2, 1, 2, pressed.height() - 1, 1 );
+
+                    FillTransform( pressed, 0, 1, 2, 1, 1 );
+                    FillTransform( pressed, 0, 2, 1, 1, 1 );
+
+                    FillTransform( pressed, pressed.width() - 4, 1, 2, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 3, 2, 1, 1, 1 );
+
+                    FillTransform( pressed, pressed.width() - 5, pressed.height() - 1, 3, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 4, pressed.height() - 2, 2, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 3, pressed.height() - 3, 1, 1, 1 );
+                }
+
+                break;
             }
             default:
                 break;
