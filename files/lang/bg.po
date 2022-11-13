@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-10 10:28+0000\n"
+"POT-Creation-Date: 2022-11-13 14:27+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -721,6 +721,10 @@ msgstr "%{name} стреля със силата на %{count} стрелци"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "всеки получава +%{attack} бонус към своето умение за нападение."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Огледалният образ е унищожен!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "

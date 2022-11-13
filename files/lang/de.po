@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 09:31+0000\n"
+"POT-Creation-Date: 2022-11-13 14:27+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -742,6 +742,10 @@ msgstr "Der %{name} feuert mit der Kraft von %{count} Bogenschützen"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "jeder mit einem +%{attack} Bonus auf seine Angriffsfähigkeit."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Das Spiegelbild ist zerstört!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
