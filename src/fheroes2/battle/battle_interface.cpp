@@ -3998,7 +3998,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     AudioManager::PlaySound( M82::CATSND00 );
 
     // catapult animation
-    while ( le.HandleEvents( false ) && catapult_frame < 6 ) {
+    while ( le.HandleEvents( false ) && catapult_frame < 5 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_DELAY ) ) {
@@ -4008,19 +4008,17 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     }
 
     // boulder animation
-    fheroes2::Point pt1( 90, 220 );
+    fheroes2::Point pt1( 40, 290 );
     fheroes2::Point pt2 = Catapult::GetTargetPosition( target, hit );
-    fheroes2::Point max( 300, 20 );
+    const int32_t maxHeight = 120;
 
     pt1.x += area.x;
     pt2.x += area.x;
-    max.x += area.x;
     pt1.y += area.y;
     pt2.y += area.y;
-    max.y += area.y;
 
     const fheroes2::Sprite & boulderFirstFrame = fheroes2::AGG::GetICN( ICN::BOULDER, 0 );
-    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, max, boulderFirstFrame.width() );
+    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, maxHeight, boulderFirstFrame.width() );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     uint32_t boulderFrameId = 0;

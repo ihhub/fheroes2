@@ -310,23 +310,27 @@ namespace fheroes2
         return res;
     }
 
-    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const Point & max, const int32_t step )
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t maxHeight, const int32_t step )
     {
         std::vector<Point> res;
+        Point pt( from );
+        res.push_back( pt );
 
-        Point tempPoint( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
-        std::vector<Point> points = GetLinePoints( from, tempPoint, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        const double x1 = from.x;
+        const double y1 = from.y;
+        const double dx = to.x - x1;
+        const double dy = to.y - y1;
+        const double maxy = maxHeight - y1;
 
-        points = GetLinePoints( tempPoint, max, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        const double a = - 4 * maxy / dx / dx;
+        const double b = 4 * maxy * ( dx + 2 * x1 ) / dx / dx;
+        const double c = y1 - 4 * maxy * x1 * x1 / dx / dx - 4 * maxy * x1 / dx;
 
-        tempPoint = { max.x + std::abs( to.x - max.x ) / 2, to.y - std::abs( to.y - max.y ) * 3 / 4 };
-        points = GetLinePoints( max, tempPoint, step );
-        res.insert( res.end(), points.begin(), points.end() );
-
-        points = GetLinePoints( tempPoint, to, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        for ( int32_t i = 1; i <= ( dx / step ); i++ ) {
+            pt.x = pt.x + step;
+            pt.y = int32_t( a * pt.x * pt.x + b * pt.x + c + ( pt.x - x1) * dy / dx + 0.5 );
+            res.push_back( pt );
+        }
 
         return res;
     }
