@@ -294,7 +294,6 @@ namespace
         released.setPosition( originalReleased.x(), originalReleased.y() );
 
         if ( originalReleased.width() >= width ) {
-            const int32_t widthDiff = originalReleased.width() - width;
             fheroes2::Copy( originalReleased, 0, 0, released, 0, 0, width / 2, released.height() );
             fheroes2::Copy( originalReleased, originalReleased.width() - width / 2, 0, released, released.width() - width / 2, 0, width - width / 2, released.height() );
         }
@@ -307,7 +306,6 @@ namespace
         pressed.setPosition( originalPressed.x(), originalPressed.y() );
 
         if ( originalPressed.width() >= width ) {
-            const int32_t widthDiff = originalPressed.width() - width;
             fheroes2::Copy( originalPressed, 0, 0, pressed, 0, 0, width / 2, pressed.height() );
             fheroes2::Copy( originalPressed, originalPressed.width() - width / 2, 0, pressed, pressed.width() - width / 2, 0, width - width / 2, pressed.height() );
         }
