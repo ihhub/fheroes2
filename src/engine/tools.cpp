@@ -322,13 +322,13 @@ namespace fheroes2
         const double dy = to.y - y1;
         const double maxy = maxHeight - y1;
 
-        const double a = - 4 * maxy / dx / dx;
+        const double a = -4 * maxy / dx / dx;
         const double b = 4 * maxy * ( dx + 2 * x1 ) / dx / dx;
         const double c = y1 - 4 * maxy * x1 * x1 / dx / dx - 4 * maxy * x1 / dx;
 
         for ( int32_t i = 1; i <= ( dx / step ); i++ ) {
             pt.x = pt.x + step;
-            pt.y = int32_t( a * pt.x * pt.x + b * pt.x + c + ( pt.x - x1) * dy / dx + 0.5 );
+            pt.y = static_cast<int32_t>( std::lround( a * pt.x * pt.x + b * pt.x + c + ( pt.x - x1 ) * dy / dx ) );
             res.push_back( pt );
         }
 
