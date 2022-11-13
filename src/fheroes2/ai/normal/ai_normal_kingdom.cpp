@@ -131,6 +131,12 @@ namespace
             heroList.pop_back();
         }
 
+        if ( heroList.size() > 2 ) {
+            // Assign the role and remove them so they aren't counted towards the median strength
+            heroList.back().hero->setAIRole( Heroes::Role::SCOUT );
+            heroList.pop_back();
+        }
+
         assert( !heroList.empty() );
 
         std::sort( heroList.begin(), heroList.end(), []( const HeroValue & first, const HeroValue & second ) { return first.strength > second.strength; } );
