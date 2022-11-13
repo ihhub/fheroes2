@@ -21,21 +21,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <functional>
+#include <memory>
 #include <string>
 
 #include "agg_image.h"
+#include "army.h"
 #include "army_bar.h"
+#include "artifact.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "statusbar.h"
+#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -85,10 +97,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 1 );
 
     PrimarySkillsBar primskill_bar( this, false );
-    primskill_bar.SetColRows( 4, 1 );
-    primskill_bar.SetHSpace( 6 );
-    primskill_bar.SetPos( cur_pt.x + 156, cur_pt.y + 31 );
-    primskill_bar.Redraw();
+    primskill_bar.setTableSize( { 4, 1 } );
+    primskill_bar.setInBetweenItemsOffset( { 6, 0 } );
+    primskill_bar.setRenderingOffset( { cur_pt.x + 156, cur_pt.y + 31 } );
+    primskill_bar.Redraw( display );
 
     // morale
     dst_pt.x = cur_pt.x + 514;
@@ -154,18 +166,18 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     dst_pt.y = cur_pt.y + 130;
 
     ArmyBar selectArmy( &army, false, readonly );
-    selectArmy.SetColRows( 5, 1 );
-    selectArmy.SetPos( dst_pt.x, dst_pt.y );
-    selectArmy.SetHSpace( 6 );
-    selectArmy.Redraw();
+    selectArmy.setTableSize( { 5, 1 } );
+    selectArmy.setRenderingOffset( dst_pt );
+    selectArmy.setInBetweenItemsOffset( { 6, 0 } );
+    selectArmy.Redraw( display );
 
     // secskill
     SecondarySkillsBar secskill_bar( *this, false );
-    secskill_bar.SetColRows( 8, 1 );
-    secskill_bar.SetHSpace( 5 );
+    secskill_bar.setTableSize( { 8, 1 } );
+    secskill_bar.setInBetweenItemsOffset( { 5, 0 } );
     secskill_bar.SetContent( secondary_skills.ToVector() );
-    secskill_bar.SetPos( cur_pt.x + 3, cur_pt.y + 233 );
-    secskill_bar.Redraw();
+    secskill_bar.setRenderingOffset( { cur_pt.x + 3, cur_pt.y + 233 } );
+    secskill_bar.Redraw( display );
 
     // bottom small bar
     dst_pt.x = cur_pt.x + 22;
@@ -181,12 +193,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     dst_pt.y = cur_pt.y + 308;
 
     ArtifactsBar selectArtifacts( this, false, readonly, false, true, &statusBar );
-    selectArtifacts.SetColRows( 7, 2 );
-    selectArtifacts.SetHSpace( 15 );
-    selectArtifacts.SetVSpace( 15 );
+    selectArtifacts.setTableSize( { 7, 2 } );
+    selectArtifacts.setInBetweenItemsOffset( { 15, 15 } );
     selectArtifacts.SetContent( GetBagArtifacts() );
-    selectArtifacts.SetPos( dst_pt.x, dst_pt.y );
-    selectArtifacts.Redraw();
+    selectArtifacts.setRenderingOffset( dst_pt );
+    selectArtifacts.Redraw( display );
 
     // button prev
     dst_pt.x = cur_pt.x;
@@ -261,7 +272,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         if ( le.MouseCursor( selectArmy.GetArea() ) && selectArmy.QueueEventProcessing( &message ) ) {
             if ( selectArtifacts.isSelected() )
                 selectArtifacts.ResetSelected();
-            selectArmy.Redraw();
+            selectArmy.Redraw( display );
 
             redrawMorale = true;
             redrawLuck = true;
@@ -270,7 +281,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         if ( le.MouseCursor( selectArtifacts.GetArea() ) && selectArtifacts.QueueEventProcessing( &message ) ) {
             if ( selectArmy.isSelected() )
                 selectArmy.ResetSelected();
-            selectArtifacts.Redraw();
+            selectArtifacts.Redraw( display );
 
             spellPointsInfo.Redraw();
 
@@ -333,7 +344,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // right info
-        if ( !readonly && le.MousePressRight( portPos ) ) {
+        if ( le.MousePressRight( portPos ) ) {
             Dialog::QuickInfo( *this );
         }
         else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {

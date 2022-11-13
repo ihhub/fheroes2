@@ -18,24 +18,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "audio_manager.h"
+#include <algorithm>
+#include <array>
+#include <atomic>
+#include <cassert>
+#include <cstddef>
+#include <cstdlib>
+#include <deque>
+#include <list>
+#include <memory>
+#include <mutex>
+#include <optional>
+#include <ostream>
+#include <utility>
+
 #include "agg_file.h"
-#include "game.h"
+#include "audio_manager.h"
+#include "dir.h"
 #include "logging.h"
 #include "m82.h"
 #include "mus.h"
+#include "serialize.h"
 #include "settings.h"
 #include "system.h"
 #include "thread.h"
 #include "tools.h"
 #include "xmi.h"
-
-#include <algorithm>
-#include <array>
-#include <cassert>
-#include <deque>
-#include <optional>
-#include <utility>
 
 namespace
 {
@@ -204,10 +212,9 @@ namespace
         return v;
     }
 
-    void PlaySoundInternally( const int m82, const int soundVolume );
-    void PlayMusicInternally( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
-    void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
-                                   const bool is3DAudioEnabled );
+    void PlaySoundImp( const int m82, const int soundVolume );
+    void PlayMusicImp( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
+    void playLoopSoundsImp( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled );
 
     // SDL MIDI player is a single threaded library which requires a lot of time to start playing some long midi compositions.
     // This leads to a situation of a short application freeze while a hero crosses terrains or ending a battle.
@@ -400,13 +407,13 @@ namespace
                 // Nothing to do.
                 return;
             case TaskType::PlayMusic:
-                PlayMusicInternally( _currentMusicTask.musicId, _currentMusicTask.musicType, _currentMusicTask.playbackMode );
+                PlayMusicImp( _currentMusicTask.musicId, _currentMusicTask.musicType, _currentMusicTask.playbackMode );
                 return;
             case TaskType::PlaySound:
-                PlaySoundInternally( _currentSoundTask.m82Sound, _currentSoundTask.soundVolume );
+                PlaySoundImp( _currentSoundTask.m82Sound, _currentSoundTask.soundVolume );
                 return;
             case TaskType::PlayLoopSound:
-                playLoopSoundsInternally( std::move( _currentLoopSoundTask.soundEffects ), _currentLoopSoundTask.soundVolume, _currentLoopSoundTask.is3DAudioEnabled );
+                playLoopSoundsImp( std::move( _currentLoopSoundTask.soundEffects ), _currentLoopSoundTask.soundVolume, _currentLoopSoundTask.is3DAudioEnabled );
                 return;
             default:
                 // How is it even possible? Did you add a new task?
@@ -419,6 +426,9 @@ namespace
     std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> currentAudioLoopEffects;
     bool is3DAudioLoopEffectsEnabled{ false };
 
+    // The music track last requested to be played
+    int lastRequestedMusicTrackId{ MUS::UNKNOWN };
+    // The music track that is currently being played
     std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
 
     fheroes2::AGGFile g_midiHeroes2AGG;
@@ -439,7 +449,7 @@ namespace
 
     AsyncSoundManager g_asyncSoundManager;
 
-    void PlaySoundInternally( const int m82, const int soundVolume )
+    void PlaySoundImp( const int m82, const int soundVolume )
     {
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
@@ -469,7 +479,7 @@ namespace
         return ( static_cast<uint64_t>( musicType ) << 32 ) + static_cast<uint64_t>( trackId );
     }
 
-    void PlayMusicInternally( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
+    void PlayMusicImp( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
     {
         // Make sure that the music track is valid.
         assert( trackId != MUS::UNUSED && trackId != MUS::UNKNOWN );
@@ -596,8 +606,7 @@ namespace
         currentAudioLoopEffects.clear();
     }
 
-    void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
-                                   const bool is3DAudioEnabled )
+    void playLoopSoundsImp( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled )
     {
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
@@ -772,7 +781,11 @@ namespace AudioManager
             // Set the volume for all channels to 0. This is required to avoid random volume spikes at the beginning of the game.
             Mixer::setVolume( -1, 0 );
 
-            Music::SetMidiSoundFonts( midiSoundFonts );
+            // Some platforms (e.g. Linux) may have their own predefined soundfonts, don't overwrite them if we don't have our own
+            if ( !midiSoundFonts.empty() ) {
+                Music::SetMidiSoundFonts( midiSoundFonts );
+            }
+
             Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
             Music::SetFadeInMs( 900 );
         }
@@ -798,25 +811,13 @@ namespace AudioManager
     }
 
     MusicRestorer::MusicRestorer()
-        : _music( currentMusicTrackId )
+        : _music( lastRequestedMusicTrackId )
     {
         // Do nothing.
     }
 
     MusicRestorer::~MusicRestorer()
     {
-        if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
-            currentMusicTrackId = _music;
-
-            return;
-        }
-
-        // Set current music to MUS::UNKNOWN to prevent attempts to play the old music by new instances of
-        // MusicRestorer while the music being currently restored is starting in the background
-        if ( _music != currentMusicTrackId ) {
-            currentMusicTrackId = MUS::UNKNOWN;
-        }
-
         // It is assumed that the previous track was looped and should be resumed
         PlayMusicAsync( _music, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
@@ -845,7 +846,7 @@ namespace AudioManager
         // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
         g_asyncSoundManager.removeAllTasks();
 
-        PlaySoundInternally( m82, Settings::Get().SoundVolume() );
+        PlaySoundImp( m82, Settings::Get().SoundVolume() );
     }
 
     void PlaySoundAsync( const int m82 )
@@ -863,27 +864,31 @@ namespace AudioManager
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode )
     {
-        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
+        if ( !Audio::isValid() ) {
             return;
         }
 
-        if ( !Audio::isValid() ) {
+        lastRequestedMusicTrackId = trackId;
+
+        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
             return;
         }
 
         // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
         g_asyncSoundManager.removeAllTasks();
 
-        PlayMusicInternally( trackId, Settings::Get().MusicType(), playbackMode );
+        PlayMusicImp( trackId, Settings::Get().MusicType(), playbackMode );
     }
 
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode )
     {
-        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
+        if ( !Audio::isValid() ) {
             return;
         }
 
-        if ( !Audio::isValid() ) {
+        lastRequestedMusicTrackId = trackId;
+
+        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
             return;
         }
 
@@ -907,7 +912,7 @@ namespace AudioManager
 
         const int trackId = currentMusicTrackId.exchange( MUS::UNKNOWN );
 
-        PlayMusicInternally( trackId, Settings::Get().MusicType(), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+        PlayMusicImp( trackId, Settings::Get().MusicType(), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
     void stopSounds()
@@ -940,6 +945,7 @@ namespace AudioManager
         Music::Stop();
         Mixer::Stop();
 
+        lastRequestedMusicTrackId = MUS::UNKNOWN;
         currentMusicTrackId = MUS::UNKNOWN;
     }
 }

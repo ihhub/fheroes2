@@ -132,7 +132,7 @@ make FHEROES2_MACOS_APP_BUNDLE=ON bundle
 <a name="macos-zip-archive"></a>
 ### macOS ZIP archive
 
-* Download the [**macOS ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_macos10_15_sdl2_x86-64.zip).
+* Download the [**macOS ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_macos_x86-64_SDL2.zip).
   Currently only x86-64 binaries are provided. If you use a machine with an Apple Silicon chip, you should choose another installation
   method (using [**MacPorts**](#macports) or [**Homebrew**](#homebrew-mac)), or
   [**build the project from source**](DEVELOPMENT.md#macos-and-linux).
@@ -217,8 +217,8 @@ You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the 
 ### Linux ZIP archive
 
 * Download one of the following Linux ZIP archives:<br>
-  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_sdl2.zip) or<br>
-  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_sdl1.zip).
+  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_SDL2.zip) or<br>
+  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_SDL1.zip).
 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice. Then you will need to install the SDL libraries
   required to run the game. The installation procedure depends on the Linux distribution you are using:
@@ -250,7 +250,7 @@ You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the 
 
 **Please note**: you need to be running custom firmware for it to work.
 
-* Download the [**PlayStation Vita ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_psv_sdl2.zip).
+* Download the [**PlayStation Vita ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_psv.zip).
 
 * Follow the [**instructions**](README_PSV.md).
 
@@ -259,7 +259,7 @@ You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the 
 
 **Please note**: you need to be running custom firmware for it to work.
 
-* Download the [**Nintendo Switch ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_switch_sdl2.zip).
+* Download the [**Nintendo Switch ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_switch.zip).
 
 * Follow the [**instructions**](README_switch.md).
 
@@ -273,7 +273,7 @@ You can download the precompiled binaries of the latest commit (snapshot) for
 [**x86 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL2) and
 [**x86 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL1)
 ),
-**macOS** (
+**macOS x86-64** (
 [**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl2_dev) and
 [**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl1_dev)
 ),
@@ -281,6 +281,7 @@ You can download the precompiled binaries of the latest commit (snapshot) for
 [**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev) and
 [**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl1_dev)
 ),
+[**Android**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-android),
 [**PlayStation Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev) and
 [**Nintendo Switch**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-switch-sdl2_dev).
 **These binaries incorporate all the latest changes, but also all the latest bugs, and are mainly intended for developers.

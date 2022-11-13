@@ -21,21 +21,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "army_bar.h"
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <vector>
+
 #include "agg_image.h"
 #include "army.h"
+#include "army_bar.h"
+#include "army_troop.h"
+#include "castle.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "kingdom.h"
+#include "localevent.h"
+#include "monster.h"
 #include "race.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_monster.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -70,7 +79,7 @@ namespace
             troopTarget.SetCount( 2 );
         }
         else {
-            uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetCount() );
+            uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetOccupiedSlotCount() );
 
             if ( isSameTroopType )
                 ++freeSlots;
@@ -111,7 +120,10 @@ namespace
 
                 totalSplitTroopCount -= troopFromSplitCount;
                 totalSplitTroopCount -= troopTargetSplitCount;
-                armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount ), troopTarget, slots - 2 );
+
+                if ( slots > 2 ) {
+                    armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount ), troopTarget, slots - 2 );
+                }
             }
         }
     }
@@ -122,7 +134,7 @@ namespace
         if ( troopFrom.GetCount() <= 1 || count == 0 )
             return;
 
-        const size_t freeSlots = armyTarget->Size() - armyTarget->GetCount();
+        const size_t freeSlots = armyTarget->Size() - armyTarget->GetOccupiedSlotCount();
         if ( freeSlots == 0 )
             return;
 
@@ -170,7 +182,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
         SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
-        SetItemSize( sprite.width(), sprite.height() );
+        setSingleItemSize( { sprite.width(), sprite.height() } );
     }
 
     SetArmy( ptr );
@@ -203,18 +215,21 @@ bool ArmyBar::isValid() const
 
 void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor )
 {
-    if ( use_mini_sprite ) {
-        SetItemSize( sz.width, sz.height );
-
-        backsf.resize( sz.width, sz.height );
-        backsf.fill( fillColor );
-
-        fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
-
-        spcursor.resize( sz.width, sz.height );
-        spcursor.reset();
-        fheroes2::DrawBorder( spcursor, 214 );
+    if ( !use_mini_sprite ) {
+        // Nothing to draw.
+        return;
     }
+
+    setSingleItemSize( sz );
+
+    backsf.resize( sz.width, sz.height );
+    backsf.fill( fillColor );
+
+    fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
+
+    spcursor.resize( sz.width, sz.height );
+    spcursor.reset();
+    fheroes2::DrawBorder( spcursor, 214 );
 }
 
 void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
@@ -227,38 +242,41 @@ void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & ds
 
 void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool selected, fheroes2::Image & dstsf )
 {
-    if ( troop.isValid() ) {
-        Text text( std::to_string( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
+    if ( !troop.isValid() ) {
+        // Nothing to draw.
+        return;
+    }
 
-        if ( use_mini_sprite ) {
-            const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
-            fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
+    Text text( std::to_string( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
 
-            if ( mons32.width() > pos.width ) {
-                srcrt.x = ( mons32.width() - pos.width ) / 2;
-                srcrt.width = pos.width;
-            }
+    if ( use_mini_sprite ) {
+        const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
+        fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
 
-            if ( mons32.height() > pos.height ) {
-                srcrt.y = ( mons32.height() - pos.height ) / 2;
-                srcrt.height = pos.height;
-            }
-
-            fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - 1, srcrt.width,
-                            srcrt.height );
-
-            text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h(), dstsf );
-        }
-        else {
-            fheroes2::renderMonsterFrame( troop, dstsf, pos.getPosition() );
-
-            text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h() - 1, dstsf );
+        if ( mons32.width() > pos.width ) {
+            srcrt.x = ( mons32.width() - pos.width ) / 2;
+            srcrt.width = pos.width;
         }
 
-        if ( selected ) {
-            spcursor.setPosition( pos.x, pos.y );
-            spcursor.show();
+        if ( mons32.height() > pos.height ) {
+            srcrt.y = ( mons32.height() - pos.height ) / 2;
+            srcrt.height = pos.height;
         }
+
+        fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - 1, srcrt.width,
+                        srcrt.height );
+
+        text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h(), dstsf );
+    }
+    else {
+        fheroes2::renderMonsterFrame( troop, dstsf, pos.getPosition() );
+
+        text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h() - 1, dstsf );
+    }
+
+    if ( selected ) {
+        spcursor.setPosition( pos.x, pos.y );
+        spcursor.show();
     }
 }
 
@@ -287,7 +305,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 
         if ( &troop == troop2 ) {
             msg = _( "View %{name}" );
-            StringReplace( msg, "%{name}", troop.GetName() );
+            StringReplace( msg, "%{name}", Translation::StringLower( troop.GetName() ) );
         }
         else if ( !troop.isValid() ) {
             if ( !read_only ) {
@@ -298,24 +316,24 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
                     msg = _( "Move or right click to redistribute %{name}" );
                 }
 
-                StringReplace( msg, "%{name}", troop2->GetName() );
+                StringReplace( msg, "%{name}", Translation::StringLower( troop2->GetName() ) );
             }
         }
         else if ( troop.GetID() == troop2->GetID() ) {
             if ( !read_only ) {
                 msg = _( "Combine %{name} armies" );
-                StringReplace( msg, "%{name}", troop.GetName() );
+                StringReplace( msg, "%{name}", Translation::StringLower( troop.GetName() ) );
             }
         }
         else if ( !read_only ) {
             msg = _( "Exchange %{name2} with %{name}" );
-            StringReplace( msg, "%{name}", troop.GetName() );
-            StringReplace( msg, "%{name2}", troop2->GetName() );
+            StringReplace( msg, "%{name}", Translation::StringLower( troop.GetName() ) );
+            StringReplace( msg, "%{name2}", Translation::StringLower( troop2->GetName() ) );
         }
     }
     else if ( troop.isValid() ) {
         msg = _( "Select %{name}" );
-        StringReplace( msg, "%{name}", troop.GetName() );
+        StringReplace( msg, "%{name}", Translation::StringLower( troop.GetName() ) );
     }
 
     return false;
@@ -328,14 +346,14 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
     if ( destTroop.isValid() ) {
         if ( destTroop.GetID() != selectedTroop.GetID() ) {
             msg = _( "Exchange %{name2} with %{name}" );
-            StringReplace( msg, "%{name}", destTroop.GetName() );
-            StringReplace( msg, "%{name2}", selectedTroop.GetName() );
+            StringReplace( msg, "%{name}", Translation::StringLower( destTroop.GetName() ) );
+            StringReplace( msg, "%{name2}", Translation::StringLower( selectedTroop.GetName() ) );
         }
         else if ( save_last_troop )
             msg = _( "Cannot move last troop" );
         else {
             msg = _( "Combine %{name} armies" );
-            StringReplace( msg, "%{name}", destTroop.GetName() );
+            StringReplace( msg, "%{name}", Translation::StringLower( destTroop.GetName() ) );
         }
     }
     else if ( save_last_troop )
@@ -348,7 +366,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
             msg = _( "Move or right click to redistribute %{name}" );
         }
 
-        StringReplace( msg, "%{name}", selectedTroop.GetName() );
+        StringReplace( msg, "%{name}", Translation::StringLower( selectedTroop.GetName() ) );
     }
 
     return false;

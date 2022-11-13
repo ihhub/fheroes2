@@ -18,13 +18,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <ostream>
+#include <vector>
+
+#include "ai.h"
 #include "ai_normal.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "artifact_info.h"
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_board.h"
+#include "battle_cell.h"
 #include "battle_troop.h"
 #include "heroes_base.h"
 #include "logging.h"
+#include "monster.h"
 #include "speed.h"
+#include "spell.h"
+#include "spell_storage.h"
 
 using namespace Battle;
 
@@ -52,7 +69,7 @@ namespace AI
             return bestSpell;
         }
 
-        const std::vector<Spell> allSpells = _commander->GetSpells();
+        const SpellStorage allSpells = _commander->getAllSpells();
         const Units friendly( arena.getForce( _myColor ).getUnits(), true );
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
 
@@ -376,7 +393,7 @@ namespace AI
         else if ( spellID == Spell::ANTIMAGIC && !target.Modes( IS_GOOD_MAGIC ) && _enemySpellStrength > antimagicLowLimit ) {
             double ratioLimit = 0.9;
 
-            const std::vector<Spell> & spellList = _commander->GetSpells();
+            const SpellStorage spellList = _commander->getAllSpells();
             for ( const Spell & otherSpell : spellList ) {
                 if ( otherSpell.isResurrect() && _commander->HaveSpellPoints( otherSpell ) && target.AllowApplySpell( otherSpell, _commander ) ) {
                     // Can resurrect unit in the future, limit the ratio
@@ -545,7 +562,7 @@ namespace AI
 
     double BattlePlanner::commanderMaximumSpellDamageValue( const HeroBase & commander )
     {
-        const std::vector<Spell> & spells = commander.GetSpells();
+        const SpellStorage spells = commander.getAllSpells();
         const double spellPower = static_cast<double>( commander.GetPower() );
 
         double bestValue = 0;

@@ -19,14 +19,15 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <cstring>
+#include <memory>
 
 #include "image.h"
 #include "serialize.h"
 #include "smacker.h"
 #include "smk_decoder.h"
-
-#include <cassert>
-#include <cstring>
 
 namespace
 {
@@ -36,6 +37,7 @@ namespace
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     : _width( 0 )
     , _height( 0 )
+    , _heightScaleFactor( 1 )
     , _fps( 0 )
     , _frameCount( 0 )
     , _currentFrameId( 0 )
@@ -50,21 +52,33 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     const uint8_t audioChannelCount = 7;
 
     uint8_t trackMask = 0;
-    uint8_t channel[audioChannelCount] = {0};
-    uint8_t audioBitDepth[audioChannelCount] = {0};
-    unsigned long audioRate[audioChannelCount] = {0};
-    std::vector<std::vector<uint8_t> > soundBuffer( audioChannelCount );
+    uint8_t channelsPerTrack[audioChannelCount] = { 0 };
+    uint8_t audioBitDepth[audioChannelCount] = { 0 };
+    unsigned long audioRate[audioChannelCount] = { 0 };
+    std::vector<std::vector<uint8_t>> soundBuffer( audioChannelCount );
 
     unsigned long width = 0;
     unsigned long height = 0;
+    unsigned char scaledYMode = 1;
 
     smk_info_all( _videoFile, nullptr, &_frameCount, &usf );
-    smk_info_video( _videoFile, &width, &height, nullptr );
+    smk_info_video( _videoFile, &width, &height, &scaledYMode );
+
+    _heightScaleFactor = scaledYMode;
+
+    if ( _heightScaleFactor < 1 ) {
+        // This is some corrupted video file. Let's still proceed with it.
+        _heightScaleFactor = 1;
+    }
+    else if ( _heightScaleFactor > 2 ) {
+        // None of formats supports scaling more than 2.
+        _heightScaleFactor = 2;
+    }
 
     _width = static_cast<int32_t>( width );
-    _height = static_cast<int32_t>( height );
+    _height = static_cast<int32_t>( height ) * _heightScaleFactor;
 
-    smk_info_audio( _videoFile, &trackMask, channel, audioBitDepth, audioRate );
+    smk_info_audio( _videoFile, &trackMask, channelsPerTrack, audioBitDepth, audioRate );
 
     if ( usf > 0 )
         _fps = 1000000.0 / usf;
@@ -145,7 +159,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
             wavHeader.putLE32( 0x20746D66 ); // FMT
             wavHeader.putLE32( 0x10 ); // 16 == PCM
             wavHeader.putLE16( 0x01 ); // format
-            wavHeader.putLE16( 0x01 ); // channels
+            wavHeader.putLE16( channelsPerTrack[i] ); // channels
             wavHeader.putLE32( audioRate[i] ); // samples
             wavHeader.putLE32( audioRate[i] * audioBitDepth[i] / 8 ); // byteper
             wavHeader.putLE16( 0x01 ); // align
@@ -211,9 +225,26 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, c
     width = _width;
     height = _height;
 
+    assert( _heightScaleFactor == 1 || _heightScaleFactor == 2 );
+    assert( ( _height % _heightScaleFactor ) == 0 );
+
     if ( image.width() == _width && image.height() == _height && x == 0 && y == 0 ) {
         const size_t size = static_cast<size_t>( _width ) * _height;
-        std::copy( data, data + size, image.image() );
+
+        if ( _heightScaleFactor == 2 ) {
+            assert( ( height % _heightScaleFactor ) == 0 );
+
+            const uint8_t * inY = data;
+            uint8_t * outY = image.image();
+            const uint8_t * outYEnd = outY + height * _width;
+
+            for ( ; outY != outYEnd; outY += _heightScaleFactor * _width, inY += _width ) {
+                std::copy( inY, inY + width, outY );
+            }
+        }
+        else {
+            std::copy( data, data + size, image.image() );
+        }
     }
     else {
         if ( x + width > image.width() ) {
@@ -227,10 +258,19 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, c
 
         const int32_t imageWidth = image.width();
         uint8_t * outY = image.image() + x + y * imageWidth;
-        const uint8_t * outYEnd = outY + height * imageWidth;
+        const uint8_t * outYEnd = outY + ( height / _heightScaleFactor ) * _heightScaleFactor * imageWidth;
 
-        for ( ; outY != outYEnd; outY += imageWidth, inY += _width ) {
-            std::copy( inY, inY + width, outY );
+        if ( _heightScaleFactor == 2 ) {
+            assert( ( height % _heightScaleFactor ) == 0 );
+
+            for ( ; outY != outYEnd; outY += _heightScaleFactor * imageWidth, inY += _width ) {
+                std::copy( inY, inY + width, outY );
+            }
+        }
+        else {
+            for ( ; outY != outYEnd; outY += imageWidth, inY += _width ) {
+                std::copy( inY, inY + width, outY );
+            }
         }
     }
 
@@ -251,7 +291,7 @@ std::vector<uint8_t> SMKVideoSequence::getCurrentPalette() const
     return std::vector<uint8_t>( paletteData, paletteData + 256 * 3 );
 }
 
-const std::vector<std::vector<uint8_t> > & SMKVideoSequence::getAudioChannels() const
+const std::vector<std::vector<uint8_t>> & SMKVideoSequence::getAudioChannels() const
 {
     return _audioChannel;
 }

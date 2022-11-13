@@ -24,6 +24,8 @@
 #ifndef H2PROFIT_H
 #define H2PROFIT_H
 
+#include <cstdint>
+
 #include "payment.h"
 
 namespace ProfitConditions

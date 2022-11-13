@@ -19,12 +19,6 @@
  ***************************************************************************/
 
 #include "ui_tool.h"
-#include "localevent.h"
-#include "screen.h"
-#include "settings.h"
-#include "system.h"
-#include "text.h"
-#include "translations.h"
 
 #include <chrono>
 #include <cmath>
@@ -32,7 +26,15 @@
 #include <cstring>
 #include <ctime>
 #include <deque>
+#include <string>
 #include <utility>
+
+#include "localevent.h"
+#include "screen.h"
+#include "settings.h"
+#include "system.h"
+#include "text.h"
+#include "translations.h"
 
 namespace
 {
@@ -46,7 +48,7 @@ namespace
 
         void preRender()
         {
-            if ( !Settings::Get().ExtGameShowSystemInfo() )
+            if ( !Settings::Get().isSystemInfoEnabled() )
                 return;
 
             const int32_t offsetX = 26;
@@ -123,6 +125,13 @@ namespace fheroes2
         , _isHidden( false )
     {}
 
+    MovableSprite::~MovableSprite()
+    {
+        if ( _isHidden ) {
+            _restorer.reset();
+        }
+    }
+
     MovableSprite & MovableSprite::operator=( const Sprite & sprite )
     {
         Sprite::operator=( sprite );
@@ -132,6 +141,11 @@ namespace fheroes2
 
     void MovableSprite::setPosition( int32_t x_, int32_t y_ )
     {
+        if ( _isHidden ) {
+            Sprite::setPosition( x_, y_ );
+            return;
+        }
+
         hide();
         Sprite::setPosition( x_, y_ );
         show();
@@ -152,17 +166,6 @@ namespace fheroes2
             _restorer.restore();
             _isHidden = true;
         }
-    }
-
-    void MovableSprite::redraw()
-    {
-        hide();
-        show();
-    }
-
-    bool MovableSprite::isHidden() const
-    {
-        return _isHidden;
     }
 
     TimedEventValidator::TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs, const uint64_t delayBetweenUpdateMs )

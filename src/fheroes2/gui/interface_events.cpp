@@ -23,27 +23,53 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <ostream>
+#include <string>
 #include <vector>
 
+#include "artifact.h"
+#include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "dialog_system_options.h"
+#include "direction.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "image.h"
+#include "interface_buttons.h"
+#include "interface_gamearea.h"
+#include "interface_icons.h"
+#include "interface_radar.h"
+#include "interface_status.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "mp2.h"
+#include "mus.h"
+#include "puzzle.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell.h"
+#include "spell_book.h"
 #include "system.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "view_world.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
@@ -361,8 +387,17 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
-        if ( hero->isShipMaster() )
+        if ( hero->isShipMaster() ) {
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
+        }
+        else if ( hero->GetBagArtifacts().isFull() ) {
+            fheroes2::showMessage(
+                fheroes2::Text( "", {} ),
+                fheroes2::
+                    Text( _( "Searching for the Ultimate Artifact is fruitless. Your hero could not carry it even if he found it - all his artifact slots are full." ),
+                          fheroes2::FontType::normalWhite() ),
+                Dialog::OK );
+        }
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
             // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
             if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == hero->GetIndex() ) {
@@ -381,7 +416,11 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                     }
 
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
-                    hero->PickupArtifact( ultimate );
+
+                    if ( !hero->PickupArtifact( ultimate ) ) {
+                        assert( 0 );
+                    }
+
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
 

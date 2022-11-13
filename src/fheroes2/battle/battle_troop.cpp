@@ -23,26 +23,40 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstring>
-#include <iomanip>
+#include <ostream>
 
 #include "agg_image.h"
+#include "army.h"
+#include "artifact.h"
+#include "artifact_info.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_board.h"
 #include "battle_cell.h"
+#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
+#include "castle.h"
+#include "color.h"
 #include "game_static.h"
+#include "heroes_base.h"
+#include "image.h"
 #include "logging.h"
+#include "m82.h"
+#include "monster.h"
 #include "monster_anim.h"
+#include "monster_info.h"
 #include "morale.h"
+#include "rand.h"
+#include "resource.h"
+#include "skill.h"
 #include "speed.h"
+#include "spell.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
-#include "world.h"
 
 Battle::ModeDuration::ModeDuration( uint32_t mode, uint32_t duration )
     : std::pair<uint32_t, uint32_t>( mode, duration )
@@ -1169,11 +1183,6 @@ int Battle::Unit::GetControl() const
     return !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
 }
 
-bool Battle::Unit::isArchers() const
-{
-    return ArmyTroop::isArchers() && shots;
-}
-
 void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * hero )
 {
     if ( hero ) {
@@ -1519,9 +1528,9 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
         SetPosition( GetPosition() );
 
         if ( Arena::GetInterface() ) {
-            std::string str( _( "%{count} %{name} rise(s) from the dead!" ) );
+            std::string str( _n( "%{count} %{name} rises from the dead!", "%{count} %{name} rise from the dead!", resurrect ) );
             StringReplace( str, "%{count}", resurrect );
-            StringReplace( str, "%{name}", GetName() );
+            StringReplace( str, "%{name}", Monster::GetPluralName( resurrect ) );
             Arena::GetInterface()->SetStatus( str, true );
         }
         break;
@@ -1534,17 +1543,16 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
 
 bool Battle::Unit::isDoubleAttack() const
 {
-    switch ( GetID() ) {
-    case Monster::ELF:
-    case Monster::GRAND_ELF:
-    case Monster::RANGER:
-        return !isHandFighting();
-
-    default:
-        break;
+    if ( isHandFighting() ) {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK );
     }
 
-    return ArmyTroop::isDoubleAttack();
+    // Archers with double shooting ability can only fire a second shot if they have enough ammo
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING ) ) {
+        return GetShots() > 1;
+    }
+
+    return false;
 }
 
 uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const

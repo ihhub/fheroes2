@@ -22,12 +22,22 @@
  ***************************************************************************/
 
 #include "resource.h"
+
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <memory>
+#include <ostream>
+#include <utility>
+#include <vector>
+
 #include "agg_image.h"
 #include "icn.h"
 #include "image.h"
 #include "logging.h"
 #include "pairs.h"
 #include "rand.h"
+#include "screen.h"
 #include "serialize.h"
 #include "text.h"
 #include "translations.h"
@@ -242,6 +252,26 @@ Funds Funds::operator-( const Funds & pm ) const
     return res;
 }
 
+Funds Funds::operator/( const int32_t div ) const
+{
+    if ( div == 0 ) {
+        assert( 0 );
+        return {};
+    }
+
+    Funds res;
+
+    res.wood = wood / div;
+    res.mercury = mercury / div;
+    res.ore = ore / div;
+    res.sulfur = sulfur / div;
+    res.crystal = crystal / div;
+    res.gems = gems / div;
+    res.gold = gold / div;
+
+    return res;
+}
+
 Funds & Funds::operator-=( const Funds & pm )
 {
     wood -= pm.wood;
@@ -302,6 +332,24 @@ Funds & Funds::operator*=( uint32_t mul )
     crystal *= mul;
     gems *= mul;
     gold *= mul;
+
+    return *this;
+}
+
+Funds & Funds::operator/=( const int32_t div )
+{
+    if ( div == 0 ) {
+        assert( 0 );
+        return *this;
+    }
+
+    wood /= div;
+    mercury /= div;
+    ore /= div;
+    sulfur /= div;
+    crystal /= div;
+    gems /= div;
+    gold /= div;
 
     return *this;
 }
@@ -557,7 +605,7 @@ void RedrawResourceSprite( const fheroes2::Image & sf, const fheroes2::Point & p
 
 void Resource::BoxSprite::Redraw() const
 {
-    std::vector<std::pair<int32_t, uint32_t> > valueVsSprite;
+    std::vector<std::pair<int32_t, uint32_t>> valueVsSprite;
 
     if ( rs.wood )
         valueVsSprite.emplace_back( rs.wood, 0 );

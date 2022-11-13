@@ -22,6 +22,25 @@
  ***************************************************************************/
 
 #include "game_hotkeys.h"
+
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <cstring>
+#include <fstream>
+#include <map>
+#include <set>
+#include <type_traits>
+#include <utility>
+
+#include <SDL_version.h>
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_keycode.h>
+#else
+#include <SDL_keysym.h>
+#endif
+
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -29,13 +48,6 @@
 #include "system.h"
 #include "tinyconfig.h"
 #include "tools.h"
-
-#include <array>
-#include <cassert>
-#include <fstream>
-#include <map>
-#include <set>
-#include <type_traits>
 
 namespace
 {
@@ -144,6 +156,10 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS )]
             = { HotKeyCategory::MAIN_GAME, "select third campaign bonus", fheroes2::Key::KEY_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_VIEW_INTRO )] = { HotKeyCategory::MAIN_GAME, "view campaign intro", fheroes2::Key::KEY_V };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY )]
+            = { HotKeyCategory::MAIN_GAME, "select campaign difficulty", fheroes2::Key::KEY_D };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_RESTART_SCENARIO )]
+            = { HotKeyCategory::MAIN_GAME, "restart campaign scenario", fheroes2::Key::KEY_R };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_OKAY )] = { HotKeyCategory::DEFAULT_EVENTS, "default okay event", fheroes2::Key::KEY_ENTER };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_CANCEL )] = { HotKeyCategory::DEFAULT_EVENTS, "default cancel event", fheroes2::Key::KEY_ESCAPE };
@@ -191,6 +207,10 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SCROLL_RIGHT )] = { HotKeyCategory::WORLD_MAP, "scroll right", fheroes2::Key::KEY_KP_6 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SCROLL_UP )] = { HotKeyCategory::WORLD_MAP, "scroll up", fheroes2::Key::KEY_KP_8 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SCROLL_DOWN )] = { HotKeyCategory::WORLD_MAP, "scroll down", fheroes2::Key::KEY_KP_2 };
+
+#if defined( WITH_DEBUG )
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI )] = { HotKeyCategory::WORLD_MAP, "transfer control to ai", fheroes2::Key::KEY_F8 };
+#endif
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SPLIT_STACK_BY_HALF )] = { HotKeyCategory::MONSTER, "split stack by half", fheroes2::Key::KEY_SHIFT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SPLIT_STACK_BY_ONE )] = { HotKeyCategory::MONSTER, "split stack by one", fheroes2::Key::KEY_CONTROL };
@@ -349,11 +369,8 @@ void Game::KeyboardGlobalFilter( int sdlKey, int mod )
 {
     if ( fheroes2::getKeyFromSDL( sdlKey ) == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key
          && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
-        fheroes2::engine().toggleFullScreen();
-        fheroes2::Display::instance().render();
-
         Settings & conf = Settings::Get();
-        conf.setFullScreen( fheroes2::engine().isFullScreen() );
+        conf.setFullScreen( !fheroes2::engine().isFullScreen() );
         conf.Save( Settings::configFileName );
     }
 }

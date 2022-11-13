@@ -20,15 +20,24 @@
 
 #pragma once
 
-#include "image.h"
+#include <vector>
+
 #include "ui_language.h"
 
 namespace fheroes2
 {
+    class Sprite;
+
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
 
     bool isAlphabetSupported( const SupportedLanguage language );
 
-    void generateBaseButtonFont( std::vector<Sprite> & released, std::vector<Sprite> & pressed, const uint8_t releasedFontColor, const uint8_t pressedFontColor,
-                                 const uint8_t releasedContourColor );
+    void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed, std::vector<Sprite> & evilReleased,
+                                 std::vector<Sprite> & evilPressed );
+
+    void generateButtonAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
+
+    void modifyBaseNormalFont( std::vector<fheroes2::Sprite> & icnVsSprite );
+
+    void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite );
 }

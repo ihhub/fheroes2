@@ -40,7 +40,7 @@ namespace Difficulty
 
     int GetScoutingBonus( int difficulty );
     double GetGoldIncomeBonus( int difficulty );
-    double GetUnitGrowthBonus( int difficulty );
+    double GetUnitGrowthBonusForAI( int difficulty );
     int GetHeroMovementBonus( int difficulty );
     double GetAIRetreatRatio( int difficulty );
 }

@@ -23,6 +23,7 @@
 #ifndef H2MAPS_H
 #define H2MAPS_H
 
+#include <algorithm>
 #include <cstdint>
 #include <vector>
 
@@ -35,7 +36,7 @@ using MapsIndexes = std::vector<int32_t>;
 
 namespace Maps
 {
-    enum mapsize_t
+    enum mapsize_t : int
     {
         ZERO = 0,
         SMALL = 36,

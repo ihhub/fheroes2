@@ -22,20 +22,22 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <array>
 #include <cassert>
+#include <vector>
 
 #include "army.h"
+#include "artifact_info.h"
 #include "castle.h"
+#include "castle_heroes.h"
+#include "gamedefs.h"
+#include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "race.h"
 #include "serialize.h"
-#include "settings.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
-#include "world.h"
 
 HeroBase::HeroBase( const int type, const int race )
     : magic_point( 0 )
@@ -166,14 +168,13 @@ Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, const bool canCas
     return spell_book.Open( *this, filter, canCastSpell, restorePreviousState, statusCallback );
 }
 
-bool HeroBase::HaveSpellBook() const
+SpellStorage HeroBase::getAllSpells() const
 {
-    return hasArtifact( Artifact::MAGIC_BOOK );
-}
+    SpellStorage storage;
+    storage.Append( spell_book );
+    storage.Append( bag_artifacts );
 
-std::vector<Spell> HeroBase::GetSpells( const int lvl ) const
-{
-    return spell_book.GetSpells( lvl );
+    return storage;
 }
 
 bool HeroBase::HaveSpell( const Spell & spell, const bool skip_bag ) const
@@ -333,7 +334,7 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
 
 double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
 {
-    const std::vector<Spell> & spells = GetSpells();
+    const SpellStorage spells = getAllSpells();
     const uint32_t currentSpellPoints = GetSpellPoints();
     const int spellPower = GetPower();
 

@@ -22,14 +22,21 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <vector>
 
+#include "audio.h"
 #include "audio_manager.h"
 #include "castle.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "interface_gamearea.h"
+#include "interface_icons.h"
+#include "interface_status.h"
 #include "kingdom.h"
+#include "maps_tiles.h"
 #include "mus.h"
+#include "players.h"
 #include "settings.h"
 #include "world.h"
 
@@ -85,6 +92,32 @@ void Interface::Basic::SetFocus( Castle * castle )
         if ( Game::UpdateSoundsOnFocusUpdate() ) {
             Game::EnvironmentSoundMixer();
             AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+        }
+    }
+}
+
+void Interface::Basic::updateFocus()
+{
+    Player * player = Settings::Get().GetPlayers().GetCurrent();
+
+    if ( player == nullptr ) {
+        return;
+    }
+
+    const Focus & focus = player->GetFocus();
+
+    if ( focus.first == FOCUS_CASTLE ) {
+        Castle * castle = GetFocusCastle();
+
+        if ( castle != nullptr ) {
+            SetFocus( castle );
+        }
+    }
+    else if ( focus.first == FOCUS_HEROES ) {
+        Heroes * hero = GetFocusHeroes();
+
+        if ( hero != nullptr ) {
+            SetFocus( hero );
         }
     }
 }

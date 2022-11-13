@@ -18,7 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <fstream>
+#include <cstdint>
+#include <cstdlib>
+#include <fstream> // IWYU pragma: keep
 #include <iostream>
 #include <string>
 #include <vector>
@@ -141,8 +143,8 @@ int main( int argc, char ** argv )
         }
 
         if ( frameCount != static_cast<int>( data[243 + setId] ) )
-            std::cout << "WARNING: In " << fileName << " file number of for animation frames for animation " << setId + 1 <<
-                         " should be " << static_cast<int>( data[243 + setId] ) << " while found number is " << frameCount << std::endl;
+            std::cout << "WARNING: In " << fileName << " file number of for animation frames for animation " << setId + 1 << " should be "
+                      << static_cast<int>( data[243 + setId] ) << " while found number is " << frameCount << std::endl;
 
         file << "\n";
     }

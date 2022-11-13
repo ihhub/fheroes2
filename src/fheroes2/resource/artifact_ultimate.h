@@ -24,7 +24,13 @@
 #ifndef H2ARTIFACT_ULTIMATE_H
 #define H2ARTIFACT_ULTIMATE_H
 
+#include <cstdint>
+
 #include "artifact.h"
+#include "image.h"
+#include "math_base.h"
+
+class StreamBase;
 
 class UltimateArtifact : public Artifact
 {

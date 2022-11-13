@@ -23,15 +23,18 @@
 #ifndef H2ARTIFACT_H
 #define H2ARTIFACT_H
 
+#include <cstdint>
 #include <set>
+#include <string>
 #include <vector>
 
 #include "artifact_info.h"
+#include "image.h"
 #include "interface_itemsbar.h"
+#include "math_base.h"
 #include "mp2.h"
 #include "ui_tool.h"
 
-class Spell;
 class Heroes;
 class StatusBar;
 class StreamBase;
@@ -207,7 +210,7 @@ public:
     int Level() const;
     int LoyaltyLevel() const;
 
-    int getArtifactValue() const;
+    double getArtifactValue() const;
 
     // return index of the sprite from objnarti.icn
     uint32_t IndexSprite() const
@@ -303,9 +306,9 @@ public:
     bool isFull() const;
     bool ContainUltimateArtifact() const;
 
-    void exchangeArtifacts( BagArtifacts & giftBag );
+    void exchangeArtifacts( BagArtifacts & giftBag, const Heroes & taker, const Heroes & giver );
 
-    int getArtifactValue() const;
+    double getArtifactValue() const;
     uint32_t CountArtifacts() const;
     uint32_t Count( const Artifact & ) const;
 
@@ -326,7 +329,7 @@ public:
     void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
 
     void ResetSelected();
-    void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
+    void Redraw( fheroes2::Image & dstsf );
 
     bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;
     bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;

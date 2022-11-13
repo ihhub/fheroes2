@@ -22,10 +22,17 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <array>
 #include <cassert>
+#include <cstddef>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <vector>
 
 #include "ai.h"
+#include "army.h"
+#include "artifact.h"
+#include "artifact_info.h"
 #include "battle.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
@@ -34,20 +41,50 @@
 #include "game.h"
 #include "game_interface.h"
 #include "game_static.h"
+#include "interface_icons.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "maps.h"
+#include "maps_fileinfo.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "payment.h"
 #include "players.h"
 #include "profit.h"
 #include "race.h"
+#include "route.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
-#include "tools.h"
-#include "translations.h"
+#include "skill.h"
 #include "visit.h"
 #include "world.h"
 
-#include <cassert>
+namespace
+{
+    int32_t getHandicapIncomePercentage( const Player::HandicapStatus handicapStatus )
+    {
+        switch ( handicapStatus ) {
+        case Player::HandicapStatus::NONE:
+            return 100;
+        case Player::HandicapStatus::MILD:
+            return 85;
+        case Player::HandicapStatus::SEVERE:
+            return 70;
+        default:
+            // Did you add a new handicap status? Add the logic above!
+            break;
+        }
+
+        return 100;
+    }
+
+    Funds getHandicapDependentIncome( const Funds & original, const Player::HandicapStatus handicapStatus )
+    {
+        const int32_t handicapPercentage = getHandicapIncomePercentage( handicapStatus );
+        return ( original * handicapPercentage + Funds( 99, 99, 99, 99, 99, 99, 99 ) ) / 100;
+    }
+}
 
 bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 {
@@ -59,7 +96,8 @@ Kingdom::Kingdom()
     , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
-    , _topItemInKingdomView( -1 )
+    , _topCastleInKingdomView( -1 )
+    , _topHeroInKingdomView( -1 )
 {
     // Do nothing.
 }
@@ -78,6 +116,11 @@ void Kingdom::Init( int clr )
         const int difficultyLevel = ( configuration.isCampaignGameType() ? configuration.CurrentFileInfo().difficulty : configuration.GameDifficulty() );
 
         resource = _getKingdomStartingResources( difficultyLevel );
+
+        // Some human players can have handicap for resources.
+        const Player * player = Players::Get( color );
+        assert( player != nullptr );
+        resource = getHandicapDependentIncome( resource, player->getHandicapStatus() );
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
@@ -164,52 +207,65 @@ void Kingdom::ActionBeforeTurn()
 
 void Kingdom::ActionNewDay()
 {
-    // countdown of days since the loss of the last town, first day isn't counted
+    // Clear the visited objects with a lifetime of one day, even if this kingdom has already been vanquished
+    visit_object.remove_if( Visit::isDayLife );
+
+    if ( !isPlay() ) {
+        return;
+    }
+
+    // Countdown of days since the loss of the last town, first day isn't counted
     if ( world.CountDay() > 1 && castles.empty() && lost_town_days > 0 ) {
         --lost_town_days;
     }
 
-    // check the conditions of the loss
+    // Check the basic conditions of losing the game
     if ( isLoss() || 0 == lost_town_days ) {
         LossPostActions();
+
         return;
     }
 
-    // modes
+    // Reset the effect of the "Identify Hero" spell
     ResetModes( IDENTIFYHERO );
 
-    // skip the income for the first day
+    // Skip the income for the first day
     if ( world.CountDay() > 1 ) {
-        // income
         AddFundsResource( GetIncome() );
 
-        // handle resource bonus campaign awards
+        // Resource bonuses from campaign awards
         if ( isControlHuman() && Settings::Get().isCampaignGameType() ) {
             const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
             for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
-                if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS )
+                if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS ) {
                     continue;
+                }
 
                 AddFundsResource( Funds( campaignAwards[i]._subType, campaignAwards[i]._amount ) );
             }
         }
     }
 
-    // check event day AI
-    EventsDate events = world.GetEventsDate( GetColor() );
-    for ( EventsDate::const_iterator it = events.begin(); it != events.end(); ++it )
-        AddFundsResource( ( *it ).resource );
-
-    // remove day visit object
-    visit_object.remove_if( Visit::isDayLife );
+    // Resources from events
+    const EventsDate events = world.GetEventsDate( GetColor() );
+    for ( const EventDate & event : events ) {
+        AddFundsResource( event.resource );
+    }
 }
 
 void Kingdom::ActionNewWeek()
 {
-    // skip the first week
+    // Clear the visited objects with a lifetime of one week, even if this kingdom has already been vanquished
+    visit_object.remove_if( Visit::isWeekLife );
+
+    if ( !isPlay() ) {
+        return;
+    }
+
+    // Skip the first week
     if ( world.CountWeek() > 1 ) {
-        // debug a gift
+        // Additional gift in debug mode
         if ( IS_DEVEL() && isControlHuman() ) {
             Funds gift( 20, 20, 10, 10, 10, 10, 5000 );
             DEBUG_LOG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() )
@@ -217,16 +273,13 @@ void Kingdom::ActionNewWeek()
         }
     }
 
-    // remove week visit object
-    visit_object.remove_if( Visit::isWeekLife );
-
     // Settle a new set of recruits
     GetRecruits();
 }
 
 void Kingdom::ActionNewMonth()
 {
-    // remove month visit object
+    // Clear the visited objects with a lifetime of one month, even if this kingdom has already been vanquished
     visit_object.remove_if( Visit::isMonthLife );
 }
 
@@ -627,7 +680,10 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
         totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Game::getDifficulty() ) );
     }
 
-    return totalIncome;
+    // Some human players can have handicap for resources.
+    const Player * player = Players::Get( color );
+    assert( player != nullptr );
+    return getHandicapDependentIncome( totalIncome, player->getHandicapStatus() );
 }
 
 Heroes * Kingdom::GetBestHero()
@@ -750,23 +806,23 @@ void Kingdom::appendSurrenderedHero( Heroes & hero )
 
 void Kingdoms::NewDay()
 {
-    for ( Kingdom & kingdom : kingdoms )
-        if ( kingdom.isPlay() )
-            kingdom.ActionNewDay();
+    for ( Kingdom & kingdom : kingdoms ) {
+        kingdom.ActionNewDay();
+    }
 }
 
 void Kingdoms::NewWeek()
 {
-    for ( Kingdom & kingdom : kingdoms )
-        if ( kingdom.isPlay() )
-            kingdom.ActionNewWeek();
+    for ( Kingdom & kingdom : kingdoms ) {
+        kingdom.ActionNewWeek();
+    }
 }
 
 void Kingdoms::NewMonth()
 {
-    for ( Kingdom & kingdom : kingdoms )
-        if ( kingdom.isPlay() )
-            kingdom.ActionNewMonth();
+    for ( Kingdom & kingdom : kingdoms ) {
+        kingdom.ActionNewMonth();
+    }
 }
 
 int Kingdoms::GetNotLossColors() const
@@ -896,8 +952,23 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 
 cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 {
-    if ( isControlAI() )
+    if ( isControlAI() ) {
+        switch ( difficulty ) {
+        case Difficulty::EASY:
+        case Difficulty::NORMAL:
+            return { 7500, 20, 5, 20, 5, 5, 5 };
+        case Difficulty::HARD:
+        case Difficulty::EXPERT:
+        case Difficulty::IMPOSSIBLE:
+            return { 10000, 30, 10, 30, 10, 10, 10 };
+        default:
+            // Did you add a new difficulty level?
+            assert( 0 );
+            break;
+        }
+
         return { 10000, 30, 10, 30, 10, 10, 10 };
+    }
 
     switch ( difficulty ) {
     case Difficulty::EASY:
@@ -922,13 +993,22 @@ cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._lastBattleWinHeroID << kingdom._topItemInKingdomView;
+               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._lastBattleWinHeroID << kingdom._topCastleInKingdomView
+               << kingdom._topHeroInKingdomView;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
     msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
-        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topItemInKingdomView;
+        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topCastleInKingdomView;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0921_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_0921_RELEASE ) {
+        msg >> kingdom._topHeroInKingdomView;
+    }
+    else {
+        kingdom._topHeroInKingdomView = -1;
+    }
 
     return msg;
 }

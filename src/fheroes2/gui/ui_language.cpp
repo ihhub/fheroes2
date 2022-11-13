@@ -19,6 +19,14 @@
  ***************************************************************************/
 
 #include "ui_language.h"
+
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <map>
+#include <set>
+#include <utility>
+
 #include "agg.h"
 #include "agg_image.h"
 #include "icn.h"
@@ -26,10 +34,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_font.h"
-
-#include <cassert>
-#include <map>
-#include <set>
 
 namespace
 {
@@ -55,7 +59,11 @@ namespace
             { "bg", fheroes2::SupportedLanguage::Bulgarian },  { "bulgarian", fheroes2::SupportedLanguage::Bulgarian },
             { "es", fheroes2::SupportedLanguage::Spanish },    { "spanish", fheroes2::SupportedLanguage::Spanish },
             { "pt", fheroes2::SupportedLanguage::Portuguese }, { "portuguese", fheroes2::SupportedLanguage::Portuguese },
-            { "sv", fheroes2::SupportedLanguage::Swedish },    { "swedish", fheroes2::SupportedLanguage::Swedish } };
+            { "sv", fheroes2::SupportedLanguage::Swedish },    { "swedish", fheroes2::SupportedLanguage::Swedish },
+            { "tr", fheroes2::SupportedLanguage::Turkish },    { "turkish", fheroes2::SupportedLanguage::Turkish },
+            { "ro", fheroes2::SupportedLanguage::Romanian },   { "romanian", fheroes2::SupportedLanguage::Romanian },
+            { "nl", fheroes2::SupportedLanguage::Dutch },      { "dutch", fheroes2::SupportedLanguage::Dutch },
+            { "hu", fheroes2::SupportedLanguage::Hungarian },  { "hungarian", fheroes2::SupportedLanguage::Hungarian } };
 }
 
 namespace fheroes2
@@ -98,11 +106,12 @@ namespace fheroes2
             languages.emplace_back( resourceLanguage );
         }
 
-        const std::set<SupportedLanguage> possibleLanguages{
-            SupportedLanguage::French,    SupportedLanguage::Polish,     SupportedLanguage::German,    SupportedLanguage::Russian,   SupportedLanguage::Italian,
-            SupportedLanguage::Norwegian, SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian, SupportedLanguage::Romanian,
-            SupportedLanguage::Spanish,   SupportedLanguage::Portuguese, SupportedLanguage::Swedish,
-        };
+        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,    SupportedLanguage::German,
+                                                             SupportedLanguage::Russian,    SupportedLanguage::Italian,   SupportedLanguage::Norwegian,
+                                                             SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian,
+                                                             SupportedLanguage::Romanian,   SupportedLanguage::Spanish,   SupportedLanguage::Portuguese,
+                                                             SupportedLanguage::Swedish,    SupportedLanguage::Turkish,   SupportedLanguage::Dutch,
+                                                             SupportedLanguage::Hungarian,  SupportedLanguage::Czech };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
@@ -162,6 +171,12 @@ namespace fheroes2
             return _( "Swedish" );
         case SupportedLanguage::Portuguese:
             return _( "Portuguese" );
+        case SupportedLanguage::Turkish:
+            return _( "Turkish" );
+        case SupportedLanguage::Dutch:
+            return _( "Dutch" );
+        case SupportedLanguage::Hungarian:
+            return _( "Hungarian" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -202,6 +217,12 @@ namespace fheroes2
             return "sv";
         case SupportedLanguage::Portuguese:
             return "pt";
+        case SupportedLanguage::Turkish:
+            return "tr";
+        case SupportedLanguage::Dutch:
+            return "nl";
+        case SupportedLanguage::Hungarian:
+            return "hu";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -231,6 +252,6 @@ namespace fheroes2
         const SupportedLanguage language = getLanguageFromAbbreviation( abbreviation );
         const bool isOriginalResourceLanguage = ( language == SupportedLanguage::English ) || ( language == getResourceLanguage() );
 
-        AGG::updateAlphabet( language, isOriginalResourceLanguage );
+        AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
     }
 }

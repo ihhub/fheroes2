@@ -22,11 +22,15 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdint>
 #include <ctime>
 #include <iomanip>
 #include <iterator>
+#include <list>
+#include <memory>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -34,16 +38,21 @@
 #include "dir.h"
 #include "game.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_list.h"
+#include "localevent.h"
 #include "maps_fileinfo.h"
-#include "settings.h"
+#include "math_base.h"
+#include "screen.h"
 #include "system.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "world.h"
 

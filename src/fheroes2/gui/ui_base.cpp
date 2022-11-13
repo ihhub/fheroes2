@@ -22,24 +22,8 @@
 
 namespace fheroes2
 {
-    ActionObject::ActionObject()
-        : _receiver( nullptr )
-    {}
-
-    void ActionObject::subscribe( ActionObject * receiver )
+    void ActionObject::senderUpdate( const ActionObject * /*unused*/ )
     {
-        _receiver = receiver;
-    }
-
-    void ActionObject::unsubscribe()
-    {
-        _receiver = nullptr;
-    }
-
-    void ActionObject::updateSubscription()
-    {
-        if ( _receiver != nullptr ) {
-            _receiver->senderUpdate( this );
-        }
+        // Do nothing.
     }
 }

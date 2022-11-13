@@ -19,16 +19,20 @@
  ***************************************************************************/
 
 #include "skill_bar.h"
+
+#include <cassert>
+
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "heroes.h"
 #include "icn.h"
+#include "screen.h"
+#include "skill.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
-
-#include <cassert>
 
 namespace
 {
@@ -50,11 +54,11 @@ PrimarySkillsBar::PrimarySkillsBar( const Heroes * hero, bool mini )
 {
     if ( useSmallSize ) {
         backsf = GetBarBackgroundSprite();
-        SetItemSize( backsf.width(), backsf.height() );
+        setSingleItemSize( { backsf.width(), backsf.height() } );
     }
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::PRIMSKIL, 0 );
-        SetItemSize( sprite.width(), sprite.height() );
+        setSingleItemSize( { sprite.width(), sprite.height() } );
     }
 
     SetContent( content );
@@ -192,11 +196,11 @@ SecondarySkillsBar::SecondarySkillsBar( const Heroes & hero, bool mini /* true *
 {
     if ( use_mini_sprite ) {
         backsf = GetBarBackgroundSprite();
-        SetItemSize( backsf.width(), backsf.height() );
+        setSingleItemSize( { backsf.width(), backsf.height() } );
     }
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SECSKILL, 0 );
-        SetItemSize( sprite.width(), sprite.height() );
+        setSingleItemSize( { sprite.width(), sprite.height() } );
     }
 }
 
@@ -302,8 +306,8 @@ namespace fheroes2
         text.Blit( pos.x + 320 - text.w() / 2, pos.y + 160 );
 
         if ( bar1 )
-            bar1->Redraw();
+            bar1->Redraw( fheroes2::Display::instance() );
         if ( bar2 )
-            bar2->Redraw();
+            bar2->Redraw( fheroes2::Display::instance() );
     }
 }

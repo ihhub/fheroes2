@@ -19,13 +19,22 @@
  ***************************************************************************/
 
 #include "spell_info.h"
+
+#include <cassert>
+#include <vector>
+
+#include "artifact.h"
+#include "artifact_info.h"
+#include "castle.h"
+#include "castle_heroes.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "kingdom.h"
+#include "math_base.h"
+#include "monster.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
-
-#include <cassert>
 
 namespace
 {

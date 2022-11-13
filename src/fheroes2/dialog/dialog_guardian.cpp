@@ -21,14 +21,24 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdint>
+#include <string>
+
 #include "agg_image.h"
+#include "army.h"
 #include "army_bar.h"
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "monster.h"
+#include "screen.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -193,10 +203,10 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     dst_pt.y = area.y + 73;
 
     ArmyBar selectArmy( &hero.GetArmy(), true, false );
-    selectArmy.SetColRows( 5, 1 );
-    selectArmy.SetPos( dst_pt.x, dst_pt.y );
-    selectArmy.SetHSpace( 2 );
-    selectArmy.Redraw();
+    selectArmy.setTableSize( { 5, 1 } );
+    selectArmy.setRenderingOffset( dst_pt );
+    selectArmy.setInBetweenItemsOffset( { 2, 0 } );
+    selectArmy.Redraw( display );
 
     // guardian
     dst_pt.x = area.x + 93;
@@ -250,7 +260,7 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
             }
             else if ( selectArmy.QueueEventProcessing() ) {
                 guardian.select = false;
-                selectArmy.Redraw();
+                selectArmy.Redraw( display );
 
                 needRedraw = true;
             }
@@ -317,7 +327,7 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
         guardian.Redraw();
         moraleIndicator.Redraw();
         luckIndicator.Redraw();
-        selectArmy.Redraw();
+        selectArmy.Redraw( display );
         armySplit.Redraw( troop );
         display.render();
     }

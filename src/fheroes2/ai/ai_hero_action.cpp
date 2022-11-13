@@ -23,25 +23,56 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <vector>
 
 #include "ai.h"
 #include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
+#include "castle_heroes.h"
+#include "color.h"
+#include "dialog.h"
+#include "direction.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "m82.h"
+#include "maps.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mp2.h"
+#include "pairs.h"
 #include "payment.h"
+#include "players.h"
+#include "puzzle.h"
 #include "race.h"
+#include "rand.h"
+#include "resource.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
+#include "spell.h"
+#include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
+#include "visit.h"
 #include "world.h"
 
 namespace
@@ -91,6 +122,25 @@ namespace
             return true;
 
         return false;
+    }
+
+    bool canMonsterJoinHero( const Troop & troop, Heroes & hero )
+    {
+        if ( hero.GetArmy().HasMonster( troop.GetID() ) ) {
+            return true;
+        }
+
+        if ( troop.GetStrength() < hero.getAIMininumJoiningArmyStrength() ) {
+            // No use to hire such a weak troop.
+            return false;
+        }
+
+        if ( !hero.GetArmy().mergeWeakestTroopsIfNeeded() ) {
+            // The army has no slots and we cannot rearrange it.
+            return false;
+        }
+
+        return true;
     }
 }
 
@@ -238,6 +288,8 @@ namespace AI
 
     void HeroesAction( Heroes & hero, const int32_t dst_index )
     {
+        const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
+
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
         bool isAction = true;
@@ -663,7 +715,7 @@ namespace AI
             assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) );
 
             DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." )
-            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
+            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount, false );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
             destroy = true;
         }
@@ -697,8 +749,6 @@ namespace AI
             tile.MonsterSetCount( 0 );
             tile.setAsEmpty();
         }
-
-        hero.unmarkHeroMeeting();
     }
 
     void AIToPickupResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -1356,11 +1406,21 @@ namespace AI
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Troop & troop = tile.QuantityTroop();
-
-        if ( troop.isValid() && hero.GetArmy().JoinTroop( troop ) ) {
-            tile.MonsterSetCount( 0 );
-            hero.unmarkHeroMeeting();
+        if ( !troop.isValid() ) {
+            return;
         }
+
+        if ( !canMonsterJoinHero( troop, hero ) ) {
+            return;
+        }
+
+        if ( !hero.GetArmy().JoinTroop( troop ) ) {
+            // How is it possible that an army has free slots but monsters cannot join it?
+            assert( 0 );
+            return;
+        }
+
+        tile.MonsterSetCount( 0 );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -1369,23 +1429,43 @@ namespace AI
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Troop & troop = tile.QuantityTroop();
+        if ( !troop.isValid() ) {
+            return;
+        }
 
-        if ( troop.isValid() ) {
-            Kingdom & kingdom = hero.GetKingdom();
-            const payment_t paymentCosts = troop.GetTotalCost();
+        Kingdom & kingdom = hero.GetKingdom();
+        const payment_t singleMonsterCost = troop.GetCost();
 
-            if ( kingdom.AllowPayment( paymentCosts ) && hero.GetArmy().JoinTroop( troop ) ) {
-                tile.MonsterSetCount( 0 );
-                kingdom.OddFundsResource( paymentCosts );
+        uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
+        if ( recruitTroopCount <= 0 ) {
+            // We do not have resources to hire even a single creature.
+            return;
+        }
 
-                // remove ancient lamp sprite
-                if ( MP2::OBJ_ANCIENTLAMP == objectType ) {
-                    tile.RemoveObjectSprite();
-                    tile.setAsEmpty();
-                }
+        const uint32_t availableTroopCount = troop.GetCount();
+        if ( recruitTroopCount > availableTroopCount ) {
+            recruitTroopCount = availableTroopCount;
+        }
 
-                hero.unmarkHeroMeeting();
-            }
+        const Troop troopToHire{ troop.GetID(), recruitTroopCount };
+
+        if ( !canMonsterJoinHero( troopToHire, hero ) ) {
+            return;
+        }
+
+        if ( !hero.GetArmy().JoinTroop( troopToHire ) ) {
+            // How is it possible that an army has free slots but monsters cannot join it?
+            assert( 0 );
+            return;
+        }
+
+        tile.MonsterSetCount( availableTroopCount - recruitTroopCount );
+        kingdom.OddFundsResource( troopToHire.GetTotalCost() );
+
+        // Remove ancient lamp sprite if no genies are available to hire.
+        if ( MP2::OBJ_ANCIENTLAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
+            tile.RemoveObjectSprite();
+            tile.setAsEmpty();
         }
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -1405,8 +1485,6 @@ namespace AI
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 tile.QuantitySetColor( hero.GetColor() );
                 tile.SetObjectPassable( true );
-
-                hero.unmarkHeroMeeting();
             }
             else {
                 AIBattleLose( hero, res, true );
@@ -1622,8 +1700,7 @@ namespace AI
         // having 1 Peasant in one stack which leads to an instant death if the hero is attacked by an opponent.
         taker.GetArmy().JoinStrongestFromArmy( giver.GetArmy() );
 
-        // TODO: pass heroes instances into this method to identify which artifacts are useful: some might be curses, others could be duplicates with no effects.
-        taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts() );
+        taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts(), taker, giver );
     }
 
     void HeroesMove( Heroes & hero )
@@ -1651,6 +1728,19 @@ namespace AI
             const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY };
 
             while ( LocalEvent::Get().HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
+#if defined( WITH_DEBUG )
+                if ( HotKeyPressEvent( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
+                    if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
+                                                fheroes2::Text( _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
+                                                                fheroes2::FontType::normalWhite() ),
+                                                Dialog::YES | Dialog::NO )
+                         == Dialog::YES ) {
+                        Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
+                        continue;
+                    }
+                }
+#endif
+
                 if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
                     break;
                 }
@@ -1781,7 +1871,7 @@ namespace AI
         }
 
         // Whirlpool effect affects heroes only with more than one creature in more than one slot
-        if ( heroArmy.GetCount() == 1 && weakestTroop->GetCount() == 1 ) {
+        if ( heroArmy.GetOccupiedSlotCount() == 1 && weakestTroop->GetCount() == 1 ) {
             return;
         }
 

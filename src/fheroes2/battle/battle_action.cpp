@@ -22,22 +22,40 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
-#include <iomanip>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
 #include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_board.h"
 #include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_command.h"
+#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
+#include "color.h"
+#include "heroes.h"
+#include "heroes_base.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "monster.h"
+#include "monster_info.h"
+#include "players.h"
 #include "rand.h"
+#include "resource.h"
 #include "spell.h"
+#include "spell_storage.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -342,6 +360,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, attacker->String() << " to " << defender->String() )
 
         const bool handfighting = Unit::isHandFighting( *attacker, *defender );
+        const bool doubleAttack = attacker->isDoubleAttack();
 
         if ( attacker->isArchers() || handfighting ) {
             defender->SetBlindAnswer( defender->Modes( SP_BLIND ) );
@@ -356,7 +375,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
 
                 defender->SetBlindAnswer( false );
 
-                if ( attacker->isValid() && attacker->isDoubleAttack() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+                if ( doubleAttack && attacker->isValid() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "double attack" )
                     BattleProcess( *attacker, *defender, dst, dir );
                 }

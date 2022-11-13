@@ -24,19 +24,27 @@
 #ifndef H2BATTLE_INTERFACE_H
 #define H2BATTLE_INTERFACE_H
 
+#include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "battle_animation.h"
 #include "battle_board.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "image.h"
+#include "math_base.h"
 #include "spell.h"
 #include "text.h"
 #include "ui_button.h"
 
-class Settings;
+class Castle;
+class HeroBase;
+class Kingdom;
 class LocalEvent;
+class Settings;
 
 namespace fheroes2
 {
@@ -47,7 +55,6 @@ namespace Battle
 {
     class Actions;
     class Arena;
-    class Board;
     class Cell;
     class Position;
     class StatusListBox;
@@ -123,7 +130,8 @@ namespace Battle
 
         enum
         {
-            HERO_X_OFFSET = 30,
+            RIGHT_HERO_X_OFFSET = 29,
+            LEFT_HERO_X_OFFSET = 30,
             LEFT_HERO_Y_OFFSET = 183,
             RIGHT_HERO_Y_OFFSET = 148,
             CAPTAIN_X_OFFSET = 6,
@@ -151,13 +159,14 @@ namespace Battle
         Status & operator=( const Status & ) = delete;
 
         void SetPosition( int32_t, int32_t );
+
         void SetLogs( StatusListBox * logs )
         {
             listlog = logs;
         }
 
         void SetMessage( const std::string & message, bool top = false );
-        void Redraw() const;
+        void Redraw( fheroes2::Image & output ) const;
 
         const std::string & GetMessage() const
         {
@@ -402,7 +411,7 @@ namespace Battle
         int32_t teleport_src;
         fheroes2::Rect main_tower;
 
-        StatusListBox * listlog;
+        std::unique_ptr<StatusListBox> listlog;
 
         PopupDamageInfo popup;
         ArmiesOrder armies_order;

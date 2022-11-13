@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-31 01:55+0000\n"
-"PO-Revision-Date: 2022-05-14 22:35+0200\n"
+"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -17,7 +17,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+
+msgid "GIFT"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr ""
+
+msgid "MIN"
+msgstr ""
 
 #, fuzzy
 msgid "Warrior"
@@ -31,6 +45,14 @@ msgstr ""
 
 msgid "None"
 msgstr "Ninguna"
+
+msgid "Warning"
+msgstr "Advertencia"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
 
 msgid ""
 "A few\n"
@@ -363,6 +385,10 @@ msgid "Hero Screen"
 msgstr "Pantalla de Héroe"
 
 #, fuzzy
+msgid "Captain's Options"
+msgstr "Opciones del castillo"
+
+#, fuzzy
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -499,9 +525,15 @@ msgid ""
 "get to go again until the next round."
 msgstr ""
 
+msgid "View Captain's options"
+msgstr ""
+
 #, fuzzy
 msgid "View Hero's options"
 msgstr "Opciones del héroe"
+
+msgid "View opposing Captain"
+msgstr ""
 
 msgid "View opposing Hero"
 msgstr "Ver el Heroe Contrario"
@@ -546,12 +578,8 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "Un %{defender} murió."
 msgstr[1] "%{count} %{defender} murieron."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
-
-#, fuzzy
-msgid "Moved %{monster}"
-msgstr "Mover a %{monster} aquí."
 
 msgid "The %{name} resist the spell!"
 msgstr "¡El %{name} resiste el hechizo!"
@@ -736,6 +764,10 @@ msgstr ""
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr ""
 
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "El %{nombre} incrementa tu moral."
+
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
@@ -743,8 +775,11 @@ msgstr ""
 "El artefacto %{artifact} está en efecto por esta batalla, deshabilitando el "
 "hechizo %{spell}."
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr "¡%{count} %{name} se eleva(n) de la muerte!"
+#, fuzzy
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] "¡%{count} %{name} se eleva(n) de la muerte!"
+msgstr[1] "¡%{count} %{name} se eleva(n) de la muerte!"
 
 #, fuzzy
 msgid "Dwarven Alliance"
@@ -786,15 +821,26 @@ msgstr "Uncle Ivan"
 msgid "Annexation"
 msgstr "Anexión"
 
-msgid "Carator Mines"
-msgstr "Minas de Carator"
-
 #, fuzzy
 msgid "Force of Arms"
 msgstr "\"La Fuerza de las Armas\""
 
 msgid "Save the Dwarves"
 msgstr "Salva a los Enanos"
+
+msgid "Carator Mines"
+msgstr "Minas de Carator"
+
+#, fuzzy
+msgid "Turning Point"
+msgstr "\"Punto de retorno\""
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+#, fuzzy
+msgid "Corlagon's Defense"
+msgstr "Corlagon"
 
 msgid "The Crown"
 msgstr "La Corona"
@@ -803,16 +849,8 @@ msgstr "La Corona"
 msgid "The Gauntlet"
 msgstr "\"El Guantelete\""
 
-#, fuzzy
-msgid "Turning Point"
-msgstr "\"Punto de retorno\""
-
 msgid "Betrayal"
 msgstr "Traición"
-
-#, fuzzy
-msgid "Corlagon's Defense"
-msgstr "Corlagon"
 
 msgid "Final Justice"
 msgstr ""
@@ -2424,6 +2462,14 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr "Reclutar Heroe"
 
+#, fuzzy
+msgid "Max"
+msgstr "Maximus"
+
+#, fuzzy
+msgid "Hire all creatures in the town."
+msgstr "Perder todos tus héroes y ciudades."
+
 msgid "Town Population Information and Statistics"
 msgstr "Población y estadísticas de la ciudad"
 
@@ -2651,30 +2697,25 @@ msgstr "Salir del juego y volver al sistema operativo."
 msgid "Language"
 msgstr ""
 
-#, fuzzy
-msgid "Resolution"
-msgstr "Revolución"
+msgid "Graphics"
+msgstr ""
+
+msgid "Settings"
+msgstr "Ajustes"
 
 #, fuzzy
 msgid "Experimental"
 msgstr "Elemental del Aire"
 
-msgid "Settings"
-msgstr "Ajustes"
-
 msgid "Audio"
 msgstr ""
 
-#, fuzzy
-msgid "settings"
-msgstr "Ajustes"
+msgid "Configure"
+msgstr ""
 
 #, fuzzy
 msgid "Hot Keys"
 msgstr "Asiento caliente."
-
-msgid "In-game"
-msgstr ""
 
 #, fuzzy
 msgid "Black & White"
@@ -2691,15 +2732,15 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teletransporte"
 
+#, fuzzy
+msgid "Interface Type"
+msgstr "Interfaz"
+
 msgid "Evil"
 msgstr "Mal"
 
 msgid "Good"
 msgstr "Bien"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Interfaz"
 
 msgid "Auto Resolve"
 msgstr ""
@@ -2707,28 +2748,24 @@ msgstr ""
 msgid "Auto, No Spells"
 msgstr ""
 
-msgid "Manual"
+msgid "autoBattle|Manual"
 msgstr ""
 
 #, fuzzy
 msgid "Battles"
 msgstr "Botella"
 
+msgid "Change the language of the game."
+msgstr ""
+
 #, fuzzy
 msgid "Select Game Language"
 msgstr "Descripción seleccionada"
 
-msgid "Change language of the game."
+msgid "Change the graphics settings of the game."
 msgstr ""
 
-#, fuzzy
-msgid "Select Game Resolution"
-msgstr "Descripción seleccionada"
-
-msgid "Change resolution of the game."
-msgstr ""
-
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr ""
 
 #, fuzzy
@@ -2738,15 +2775,13 @@ msgstr "Configuración del juego FHeroes2"
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "Check all Hot Keys used in the game."
+msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -2828,6 +2863,51 @@ msgstr ""
 msgid "Gift from %{name}"
 msgstr "Recluta %{name}"
 
+#, fuzzy
+msgid "Resolution"
+msgstr "Revolución"
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "uno"
+
+msgid "FPS"
+msgstr ""
+
+#, fuzzy
+msgid "System Info"
+msgstr "Opciones del Sistema"
+
+msgid "Change the resolution of the game."
+msgstr ""
+
+#, fuzzy
+msgid "Select Game Resolution"
+msgstr "Descripción seleccionada"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
+
 msgid "Set Guardian"
 msgstr "Establecer Guardián"
 
@@ -2839,6 +2919,10 @@ msgstr ""
 
 msgid "Select Game Language:"
 msgstr ""
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Haz clic para volver al menú principal"
 
 msgid "%{name} has gained a level."
 msgstr "%{name} ha ganado un nivel."
@@ -2876,10 +2960,6 @@ msgstr "Te puedo ofrecer %{count} por 1 unidad de  %{resfrom}."
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 "Te puedo ofrecer 1 unidad de %{resto} por %{count} unidades de %{resfrom}"
-
-#, fuzzy
-msgid "Max"
-msgstr "Maximus"
 
 #, fuzzy
 msgid "Min"
@@ -2988,6 +3068,10 @@ msgstr "Disponible: %{count}"
 
 msgid "Number to buy:"
 msgstr "NÚMERO"
+
+#, fuzzy
+msgid "Select Game Resolution:"
+msgstr "Descripción seleccionada"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
@@ -3103,6 +3187,9 @@ msgstr "Condiciones de victoria"
 
 msgid "Map difficulty:"
 msgstr "Nivel del mapa:"
+
+msgid "N"
+msgstr ""
 
 msgid "No maps exist at that size"
 msgstr ""
@@ -3339,9 +3426,6 @@ msgstr "Imposible"
 msgid "and more..."
 msgstr ""
 
-msgid "DIFFICULTY"
-msgstr ""
-
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr "Dificultad del juego"
@@ -3398,6 +3482,12 @@ msgid "Campaign Scenario loading failure"
 msgstr ""
 
 msgid "Please make sure that campaign files are correct and present."
+msgstr ""
+
+msgid "Days spent"
+msgstr ""
+
+msgid "The number of days spent on this campaign."
 msgstr ""
 
 msgid "Project Coordination and Core Development"
@@ -3553,6 +3643,9 @@ msgstr ""
 msgid "Recorded at Green Street Studios"
 msgstr ""
 
+msgid "credits|Manual"
+msgstr ""
+
 msgid "German Consultant"
 msgstr ""
 
@@ -3582,9 +3675,6 @@ msgstr "Partida de Campaña"
 #, fuzzy
 msgid "View High Scores for Campaigns."
 msgstr "Ver la pantalla de puntuaciones más altas"
-
-msgid "Warning"
-msgstr "Advertencia"
 
 msgid "This file contains a save with an invalid game type."
 msgstr ""
@@ -3668,17 +3758,7 @@ msgid "door"
 msgstr ""
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-
-msgid "F4"
-msgstr ""
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
@@ -3879,6 +3959,21 @@ msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Agotarse el tiempo. (Fracasando sin ganar por alguna condición.)"
 
 #, fuzzy
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] "Derrota el héroe '%{name}"
+msgstr[1] "Derrota el héroe '%{name}"
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+
+#, fuzzy
 msgid "Capture the castle '%{name}'."
 msgstr "Captura el castillo de '%{name}'"
 
@@ -4035,6 +4130,11 @@ msgid "%{color} player's turn."
 msgstr "Turno del jugador %{color}"
 
 msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -4128,6 +4228,11 @@ msgstr ""
 msgid "Try looking on land!!!"
 msgstr ""
 
+msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
@@ -4206,8 +4311,43 @@ msgstr ""
 "razas. Dependiendo del escenario, un jugador puede recibir ciudades y/o "
 "héroes adicionales no pertenecientes a su primer alineamiento."
 
+#, fuzzy
+msgid "Handicap"
+msgstr "Mandigal"
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 msgid "%{color} player"
 msgstr "%{color} jugador"
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
+msgstr ""
 
 msgid "View %{skill} Info"
 msgstr "Ver información de %{skill}"
@@ -4268,6 +4408,16 @@ msgstr ""
 #, fuzzy
 msgid "Portuguese"
 msgstr "Bandidos"
+
+msgid "Turkish"
+msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+#, fuzzy
+msgid "Hungarian"
+msgstr "Bárbaro"
 
 msgid ", FPS: "
 msgstr ""
@@ -6608,8 +6758,52 @@ msgstr "Fugaz"
 msgid "speed|Instant"
 msgstr "Instantáneo"
 
-msgid "week|PLAGUE"
-msgstr "PLAGA"
+msgid "week|Squirrel"
+msgstr "Ardilla"
+
+msgid "week|Rabbit"
+msgstr "Conejo"
+
+msgid "week|Gopher"
+msgstr "Tuza"
+
+msgid "week|Badger"
+msgstr "Tejón"
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "Conejo"
+
+msgid "week|Eagle"
+msgstr "Águila"
+
+msgid "week|Weasel"
+msgstr "Comadreja"
+
+msgid "week|Raven"
+msgstr "Cuervo"
+
+msgid "week|Mongoose"
+msgstr "Mangosta"
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "Águila"
+
+msgid "week|Aardvark"
+msgstr "Oso hormiguero"
+
+msgid "week|Lizard"
+msgstr "Lagarto"
+
+msgid "week|Tortoise"
+msgstr "Tortuga"
+
+msgid "week|Hedgehog"
+msgstr "Puercoespín"
+
+msgid "week|Condor"
+msgstr "Cóndor"
 
 msgid "week|Ant"
 msgstr "Hormiga"
@@ -6641,44 +6835,12 @@ msgstr "Avispa"
 msgid "week|Beetle"
 msgstr "Escarabajo"
 
-msgid "week|Squirrel"
-msgstr "Ardilla"
+msgid "week|PLAGUE"
+msgstr "PLAGA"
 
-msgid "week|Rabbit"
-msgstr "Conejo"
-
-msgid "week|Gopher"
-msgstr "Tuza"
-
-msgid "week|Badger"
-msgstr "Tejón"
-
-msgid "week|Eagle"
+#, fuzzy
+msgid "week|Unnamed"
 msgstr "Águila"
-
-msgid "week|Weasel"
-msgstr "Comadreja"
-
-msgid "week|Raven"
-msgstr "Cuervo"
-
-msgid "week|Mongoose"
-msgstr "Mangosta"
-
-msgid "week|Aardvark"
-msgstr "Oso hormiguero"
-
-msgid "week|Lizard"
-msgstr "Lagarto"
-
-msgid "week|Tortoise"
-msgstr "Tortuga"
-
-msgid "week|Hedgehog"
-msgstr "Puercoespín"
-
-msgid "week|Condor"
-msgstr "Cóndor"
 
 msgid "Desert"
 msgstr "Desierto"
@@ -9486,9 +9648,6 @@ msgstr ""
 msgid "world: allow to set guardian to objects"
 msgstr "mundo: permitir establecer guardianes en objetos"
 
-msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
@@ -9507,12 +9666,6 @@ msgstr ""
 #, fuzzy
 msgid "battle: allow soft wait for troops"
 msgstr "batalla: espera de tropa fluido"
-
-msgid "battle: deterministic events"
-msgstr ""
-
-msgid "game: show system info"
-msgstr "juego: mostrar información del sistema"
 
 msgid "game: autosave will be made at the beginning of the day"
 msgstr ""
@@ -9595,7 +9748,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Break auto battle?"
-#~ msgstr "Activar combate automático"

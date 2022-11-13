@@ -22,7 +22,8 @@
 #define H2LOGGING_H
 
 #include <iostream>
-#include <sstream>
+#include <sstream> // IWYU pragma: keep
+#include <string>
 
 enum
 {
@@ -66,6 +67,18 @@ enum
     DBG_ALL_TRACE = DBG_ENGINE_TRACE | DBG_GAME_TRACE | DBG_BATTLE_TRACE | DBG_AI_TRACE | DBG_NETWORK_TRACE | DBG_OTHER_TRACE
 };
 
+#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
+#include <fstream>
+#include <mutex>
+
+namespace Logging
+{
+    extern std::ofstream logFile;
+    // This mutex protects operations with logFile
+    extern std::mutex logMutex;
+}
+#endif
+
 namespace Logging
 {
     const char * GetDebugOptionName( const int name );
@@ -82,17 +95,16 @@ namespace Logging
     bool isTextSupportModeEnabled();
 }
 
-#if defined( TARGET_NINTENDO_SWITCH )
-#include <fstream>
-#include <mutex>
-
-namespace Logging
-{
-    extern std::ofstream logFile;
-    // This mutex protects operations with logFile
-    extern std::mutex logMutex;
-}
-
+#if defined( _WIN32 ) && defined( WITH_DEBUG )
+#define COUT( x )                                                                                                                                                        \
+    {                                                                                                                                                                    \
+        const std::scoped_lock<std::mutex> _logfile_lock( Logging::logMutex ); /* The name was chosen on purpose to avoid name collisions with outer code blocks. */     \
+                                                                                                                                                                         \
+        Logging::logFile << x << std::endl;                                                                                                                              \
+        Logging::logFile.flush();                                                                                                                                        \
+        std::cerr << x << std::endl;                                                                                                                                     \
+    }
+#elif defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
         const std::scoped_lock<std::mutex> _logfile_lock( Logging::logMutex ); /* The name was chosen on purpose to avoid name collisions with outer code blocks. */     \
@@ -115,6 +127,14 @@ namespace Logging
         std::ostringstream logMessage;                                                                                                                                   \
         logMessage << x;                                                                                                                                                 \
         syslog( LOG_WARNING, "fheroes2_log: %s", logMessage.str().c_str() );                                                                                             \
+    }
+#elif defined( ANDROID )
+#include <android/log.h>
+#define COUT( x )                                                                                                                                                        \
+    {                                                                                                                                                                    \
+        std::ostringstream osss;                                                                                                                                         \
+        osss << x << std::endl;                                                                                                                                          \
+        __android_log_print( ANDROID_LOG_INFO, "fheroes2", "%s", osss.str().c_str() );                                                                                   \
     }
 #else // Default: log to STDERR
 #define COUT( x )                                                                                                                                                        \
@@ -150,12 +170,10 @@ namespace Logging
     // This structure simply adds text separators. It is used for Text Support Mode only.
     struct TextSupportLogger
     {
-        TextSupportLogger()
-        {
-            COUT( "----------" )
-        }
+        TextSupportLogger(){ COUT( "----------" ) }
 
-        TextSupportLogger( const TextSupportLogger & ) = delete;
+        TextSupportLogger( const TextSupportLogger & )
+            = delete;
         TextSupportLogger( const TextSupportLogger && ) = delete;
         TextSupportLogger & operator=( const TextSupportLogger & ) = delete;
         TextSupportLogger & operator=( const TextSupportLogger && ) = delete;

@@ -21,7 +21,10 @@
 #ifndef H2HIGHSCORES_H
 #define H2HIGHSCORES_H
 
+#include <cstddef>
+#include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "monster.h"
@@ -68,7 +71,7 @@ namespace fheroes2
         // Rating is used only for standalone scenarios. Campaigns do not use this member.
         uint32_t rating{ 0 };
 
-        // Map seed is used to identify the same game compeltion to avoid duplicates in highscores.
+        // Map seed is used to identify the same game completion to avoid duplicates in highscores.
         uint32_t mapSeed{ 0 };
 
         static uint32_t generateCompletionTime();

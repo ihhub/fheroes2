@@ -24,6 +24,9 @@
 #ifndef H2BATTLE_TROOP_H
 #define H2BATTLE_TROOP_H
 
+#include <cstddef>
+#include <cstdint>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -31,6 +34,8 @@
 #include "battle_animation.h"
 #include "battle_cell.h"
 #include "bitmodes.h"
+#include "math_base.h"
+#include "payment.h"
 #include "players.h"
 
 class Spell;
@@ -100,7 +105,6 @@ namespace Battle
         void NewTurn();
 
         bool isValid() const override;
-        bool isArchers() const;
         bool isFlying() const;
         bool isDoubleAttack() const;
 

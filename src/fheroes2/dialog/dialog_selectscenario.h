@@ -24,8 +24,18 @@
 #ifndef H2SELECT_SCENARIO_H
 #define H2SELECT_SCENARIO_H
 
+#include <cstdint>
+
 #include "interface_list.h"
+#include "maps.h"
 #include "maps_fileinfo.h"
+#include "math_base.h"
+
+namespace fheroes2
+{
+    class Display;
+    class Sprite;
+}
 
 class ScenarioListBox : public Interface::ListBox<Maps::FileInfo>
 {
@@ -37,11 +47,12 @@ public:
     explicit ScenarioListBox( const fheroes2::Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , selectOk( false )
+        , _offsetX( pt.x )
     {}
 
-    void RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current ) override;
-    void RedrawBackground( const fheroes2::Point & ) override;
-
+    void RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/, int32_t dsty, bool current ) override;
+    void RedrawBackground( const fheroes2::Point & dst ) override;
+    void SelectMapSize( MapsFileInfoList & mapsList, const int selectedSize );
     void ActionCurrentUp() override
     {
         // Do nothing.
@@ -65,11 +76,24 @@ public:
     }
 
     bool selectOk;
+
+private:
+    int selectedSize{ Maps::ZERO };
+    const int32_t _offsetX;
+
+    void _renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, const int32_t dsty, const bool current ) const;
+    void _renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst );
+    void _renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const;
+    static void _renderMapIcon( const uint16_t size, fheroes2::Display & display, const int32_t coordX, const int32_t coordY );
+    static const fheroes2::Sprite & _getPlayersCountIcon( const uint8_t colors );
+    static const fheroes2::Sprite & _getMapTypeIcon( const GameVersion version );
+    static const fheroes2::Sprite & _getWinConditionsIcon( const uint8_t condition );
+    static const fheroes2::Sprite & _getLossConditionsIcon( const uint8_t condition );
 };
 
 namespace Dialog
 {
-    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & all );
+    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & allMaps );
 }
 
 #endif

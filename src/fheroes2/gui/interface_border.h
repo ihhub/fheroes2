@@ -24,7 +24,10 @@
 #ifndef H2INTERFACE_BORDER_H
 #define H2INTERFACE_BORDER_H
 
+#include <cstdint>
+
 #include "dialog.h"
+#include "math_base.h"
 
 namespace Interface
 {

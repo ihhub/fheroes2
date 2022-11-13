@@ -22,19 +22,26 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdint>
+#include <string>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "pal.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_scrollbar.h"
 #include "ui_window.h"
 
 class SettingsListBox : public Interface::ListBox<uint32_t>
@@ -146,20 +153,17 @@ void Dialog::ExtSettings( bool readonly )
     std::vector<uint32_t> states;
     states.reserve( 16 );
 
-    states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
-    states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
     states.push_back( Settings::HEROES_REMEMBER_MP_WHEN_RETREATING );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
-    states.push_back( Settings::BATTLE_DETERMINISTIC_RESULT );
 
     std::sort( states.begin(), states.end(), []( uint32_t first, uint32_t second ) { return Settings::ExtName( first ) > Settings::ExtName( second ); } );
 

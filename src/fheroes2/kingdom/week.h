@@ -24,12 +24,32 @@
 #ifndef H2WEEK_H
 #define H2WEEK_H
 
+#include <cstdint>
+
 #include "monster.h"
 
 enum class WeekName : int
 {
     UNNAMED,
-    PLAGUE,
+
+    // A regular week (Week Of ...)
+    SQUIRREL,
+    RABBIT,
+    GOPHER,
+    BADGER,
+    RAT,
+    EAGLE,
+    WEASEL,
+    RAVEN,
+    MONGOOSE,
+    DOG,
+    AARDVARK,
+    LIZARD,
+    TORTOISE,
+    HEDGEHOG,
+    CONDOR,
+
+    // A regular first week of the month (Month Of ...)
     ANT,
     GRASSHOPPER,
     DRAGONFLY,
@@ -40,23 +60,13 @@ enum class WeekName : int
     EARTHWORM,
     HORNET,
     BEETLE,
-    SQUIRREL,
-    RABBIT,
-    GOPHER,
-    BADGER,
-    EAGLE,
-    WEASEL,
-    RAVEN,
-    MONGOOSE,
-    AARDVARK,
-    LIZARD,
-    TORTOISE,
-    HEDGEHOG,
-    CONDOR,
-    MONSTERS // week of "monster"
-};
 
-class World;
+    // The Week of a monster (the Month of a monster, if it's the first week of the month)
+    MONSTERS,
+
+    // The Month of the Plague
+    PLAGUE
+};
 
 struct Week
 {
@@ -77,7 +87,7 @@ struct Week
 
     const char * GetName() const;
 
-    static Week RandomWeek( const World & world, const bool isNewMonth, const uint32_t weekSeed );
+    static Week RandomWeek( const bool isNewMonth, const uint32_t weekSeed );
 
 private:
     WeekName _week;

@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -62,6 +63,8 @@ namespace Game
         CAMPAIGN_SELECT_SECOND_BONUS,
         CAMPAIGN_SELECT_THIRD_BONUS,
         CAMPAIGN_VIEW_INTRO,
+        CAMPAIGN_SELECT_DIFFICULTY,
+        CAMPAIGN_RESTART_SCENARIO,
 
         DEFAULT_OKAY,
         DEFAULT_CANCEL,
@@ -101,6 +104,11 @@ namespace Game
         SHOW_BUTTONS,
         SHOW_STATUS,
         SHOW_ICONS,
+
+#if defined( WITH_DEBUG )
+        // This hotkey is only for debug mode as of now.
+        TRANSFER_CONTROL_TO_AI,
+#endif
 
         BATTLE_RETREAT,
         BATTLE_SURRENDER,

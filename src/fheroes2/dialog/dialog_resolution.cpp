@@ -18,20 +18,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "dialog_resolution.h"
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "cursor.h"
+#include "dialog_resolution.h"
 #include "embedded_image.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "screen.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "zzlib.h"
 
@@ -104,7 +113,7 @@ namespace
 
     void RedrawInfo( const fheroes2::Point & dst, const fheroes2::Size & resolution )
     {
-        Text text( _( "Select Game Resolution" ), Font::YELLOW_BIG );
+        Text text( _( "Select Game Resolution:" ), Font::YELLOW_BIG );
         text.Blit( dst.x + ( 377 - text.w() ) / 2, dst.y + 30 );
 
         if ( resolution.width > 0 && resolution.height > 0 ) {

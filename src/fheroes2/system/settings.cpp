@@ -24,7 +24,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
-#include <tuple>
+#include <memory>
+#include <utility>
 
 #if defined( MACOS_APP_BUNDLE )
 #include <CoreFoundation/CoreFoundation.h>
@@ -33,6 +34,7 @@
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
+#include "gamedefs.h"
 #include "logging.h"
 #include "save_format_version.h"
 #include "screen.h"
@@ -65,7 +67,7 @@ namespace
         GLOBAL_SHOWSTATUS = 0x00000400,
         GLOBAL_FULLSCREEN = 0x00008000,
         GLOBAL_3D_AUDIO = 0x00010000,
-        // UNUSED = 0x00020000,
+        GLOBAL_SYSTEM_INFO = 0x00020000,
         // UNUSED = 0x00040000,
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
@@ -307,41 +309,23 @@ bool Settings::Read( const std::string & filename )
     }
 
     if ( config.Exists( "v-sync" ) ) {
-        if ( config.StrParams( "v-sync" ) == "on" ) {
-            _optGlobal.SetModes( GLOBAL_RENDER_VSYNC );
-        }
-        else {
-            _optGlobal.ResetModes( GLOBAL_RENDER_VSYNC );
-        }
+        setVSync( config.StrParams( "v-sync" ) == "on" );
     }
 
     if ( config.Exists( "text support mode" ) ) {
-        if ( config.StrParams( "text support mode" ) == "on" ) {
-            _optGlobal.SetModes( GLOBAL_TEXT_SUPPORT_MODE );
-            Logging::setTextSupportMode( true );
-        }
-        else {
-            _optGlobal.ResetModes( GLOBAL_TEXT_SUPPORT_MODE );
-        }
+        setTextSupportMode( config.StrParams( "text support mode" ) == "on" );
     }
 
     if ( config.Exists( "monochrome cursor" ) ) {
-        if ( config.StrParams( "monochrome cursor" ) == "on" ) {
-            _optGlobal.SetModes( GLOBAL_MONOCHROME_CURSOR );
-            Cursor::Get().setMonochromeCursor( true );
-        }
-        else {
-            _optGlobal.ResetModes( GLOBAL_MONOCHROME_CURSOR );
-        }
+        setMonochromeCursor( config.StrParams( "monochrome cursor" ) == "on" );
     }
 
     if ( config.Exists( "3d audio" ) ) {
-        if ( config.StrParams( "3d audio" ) == "on" ) {
-            _optGlobal.SetModes( GLOBAL_3D_AUDIO );
-        }
-        else {
-            _optGlobal.ResetModes( GLOBAL_3D_AUDIO );
-        }
+        set3DAudio( config.StrParams( "3d audio" ) == "on" );
+    }
+
+    if ( config.Exists( "system info" ) ) {
+        setSystemInfo( config.StrParams( "system info" ) == "on" );
     }
 
     BinaryLoad();
@@ -351,19 +335,17 @@ bool Settings::Read( const std::string & filename )
 
 bool Settings::Save( const std::string & filename ) const
 {
-    if ( filename.empty() )
+    if ( filename.empty() ) {
         return false;
+    }
+
+    const std::string cfgFilename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), filename );
 
     std::fstream file;
-#if defined( TARGET_PS_VITA )
-    const std::string vitaFilename = "ux0:data/fheroes2/" + filename;
-    file.open( vitaFilename.data(), std::fstream::out | std::fstream::trunc );
-#else
-    const std::string cfgFilename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), filename );
     file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );
-#endif
-    if ( !file )
+    if ( !file ) {
         return false;
+    }
 
     const std::string & data = String();
     file.write( data.data(), data.size() );
@@ -453,14 +435,17 @@ std::string Settings::String() const
     os << std::endl << "# enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
     os << "v-sync = " << ( _optGlobal.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable text support mode to output extra information in console window" << std::endl;
+    os << std::endl << "# enable text support mode to output extra information in console window: on/off" << std::endl;
     os << "text support mode = " << ( _optGlobal.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable monochrome (black and white) cursors in the game" << std::endl;
+    os << std::endl << "# enable monochrome (black and white) cursors in the game: on/off" << std::endl;
     os << "monochrome cursor = " << ( _optGlobal.Modes( GLOBAL_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable 3D audio for objects on Adventure Map" << std::endl;
+    os << std::endl << "# enable 3D audio for objects on Adventure Map: on/off" << std::endl;
     os << "3d audio = " << ( _optGlobal.Modes( GLOBAL_3D_AUDIO ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# display system information: on/off" << std::endl;
+    os << "system info = " << ( _optGlobal.Modes( GLOBAL_SYSTEM_INFO ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
@@ -665,6 +650,9 @@ void Settings::setFullScreen( const bool enable )
     else {
         _optGlobal.ResetModes( GLOBAL_FULLSCREEN );
     }
+
+    fheroes2::engine().toggleFullScreen();
+    fheroes2::Display::instance().render();
 }
 
 void Settings::setMonochromeCursor( const bool enable )
@@ -703,6 +691,28 @@ void Settings::set3DAudio( const bool enable )
     }
 }
 
+void Settings::setVSync( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_RENDER_VSYNC );
+        fheroes2::engine().setVSync( true );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_RENDER_VSYNC );
+        fheroes2::engine().setVSync( false );
+    }
+}
+
+void Settings::setSystemInfo( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_SYSTEM_INFO );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_SYSTEM_INFO );
+    }
+}
+
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
@@ -727,6 +737,11 @@ bool Settings::isTextSupportModeEnabled() const
 bool Settings::is3DAudioEnabled() const
 {
     return _optGlobal.Modes( GLOBAL_3D_AUDIO );
+}
+
+bool Settings::isSystemInfoEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_SYSTEM_INFO );
 }
 
 bool Settings::ShowControlPanel() const
@@ -906,8 +921,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
         return _( "world: allow to set guardian to objects" );
-    case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
-        return _( "world: Neutral armies scale with game difficulty" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
         return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::CASTLE_ALLOW_GUARDIANS:
@@ -920,10 +933,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
         return _( "battle: allow soft wait for troops" );
-    case Settings::BATTLE_DETERMINISTIC_RESULT:
-        return _( "battle: deterministic events" );
-    case Settings::GAME_SHOW_SYSTEM_INFO:
-        return _( "game: show system info" );
     case Settings::GAME_AUTOSAVE_BEGIN_DAY:
         return _( "game: autosave will be made at the beginning of the day" );
     case Settings::GAME_EVIL_INTERFACE:

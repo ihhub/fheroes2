@@ -25,12 +25,12 @@
 #define H2INTERFACE_ITEMSBAR_H
 
 #include <algorithm>
-#include <list>
+#include <cassert>
 #include <utility>
 
 #include "gamedefs.h"
+#include "image.h"
 #include "localevent.h"
-#include "screen.h"
 
 namespace Interface
 {
@@ -38,16 +38,102 @@ namespace Interface
     class ItemsBar
     {
     public:
-        ItemsBar()
-            : colrows( 0, 0 )
-            , hspace( 0 )
-            , vspace( 0 )
-        {}
+        ItemsBar() = default;
 
         virtual ~ItemsBar() = default;
 
         virtual void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) = 0;
         virtual void RedrawItem( Item &, const fheroes2::Rect &, fheroes2::Image & ) = 0;
+
+        void setTableSize( const fheroes2::Size & size )
+        {
+            assert( size.width > 0 && size.height > 0 );
+
+            tableSize = size;
+
+            calculateRoi();
+        }
+
+        void SetContent( std::vector<Item> & content )
+        {
+            items.clear();
+            items.reserve( content.size() );
+
+            for ( Item & item : content ) {
+                items.push_back( &item );
+            }
+
+            SetContentItems();
+        }
+
+        void setRenderingOffset( const fheroes2::Point & offset )
+        {
+            renderingRoi.x = offset.x;
+            renderingRoi.y = offset.y;
+        }
+
+        void setSingleItemSize( const fheroes2::Size & size )
+        {
+            assert( size.width > 0 && size.height > 0 );
+
+            singleItemRoi = size;
+
+            calculateRoi();
+        }
+
+        void setInBetweenItemsOffset( const fheroes2::Size & offset )
+        {
+            offsetBetweenItems = offset;
+
+            calculateRoi();
+        }
+
+        Item * GetItem( const fheroes2::Point & pt )
+        {
+            ItemsIterator posItem = GetItemIter( pt );
+            return posItem != items.end() ? *posItem : nullptr;
+        }
+
+        const fheroes2::Rect & GetArea() const
+        {
+            return renderingRoi;
+        }
+
+        void Redraw( fheroes2::Image & output )
+        {
+            fheroes2::Point itemOffset{ renderingRoi.x, renderingRoi.y };
+
+            for ( int32_t y = 0; y < tableSize.height; ++y ) {
+                for ( int32_t x = 0; x < tableSize.width; ++x ) {
+                    RedrawBackground( { itemOffset.x, itemOffset.y, singleItemRoi.width, singleItemRoi.height }, output );
+
+                    itemOffset.x += offsetBetweenItems.width + singleItemRoi.width;
+                }
+
+                itemOffset.x = renderingRoi.x;
+                itemOffset.y += offsetBetweenItems.height + singleItemRoi.height;
+            }
+
+            itemOffset = { renderingRoi.x, renderingRoi.y };
+
+            ItemsIterator itemIter = GetTopItemIter();
+
+            for ( int32_t y = 0; y < tableSize.height; ++y ) {
+                for ( int32_t x = 0; x < tableSize.width; ++x ) {
+                    if ( itemIter == items.end() ) {
+                        return;
+                    }
+
+                    RedrawItemIter( itemIter, { itemOffset.x, itemOffset.y, singleItemRoi.width, singleItemRoi.height }, output );
+                    ++itemIter;
+
+                    itemOffset.x += offsetBetweenItems.width + singleItemRoi.width;
+                }
+
+                itemOffset.x = renderingRoi.x;
+                itemOffset.y += offsetBetweenItems.height + singleItemRoi.height;
+            }
+        }
 
         virtual bool ActionBarLeftMouseSingleClick( Item & )
         {
@@ -64,112 +150,22 @@ namespace Interface
             return false;
         }
 
-        // body
-        void SetColRows( int32_t col, int32_t row )
-        {
-            colrows.width = col;
-            colrows.height = row;
-            RescanSize();
-        }
-
-        void SetContent( std::vector<Item> & content )
-        {
-            items.clear();
-            for ( typename std::vector<Item>::iterator it = content.begin(); it != content.end(); ++it )
-                items.push_back( &( *it ) );
-            SetContentItems();
-        }
-
-        void SetPos( int32_t px, int32_t py )
-        {
-            barsz.x = px;
-            barsz.y = py;
-        }
-
-        void SetItemSize( int32_t pw, int32_t ph )
-        {
-            itemsz.width = pw;
-            itemsz.height = ph;
-            RescanSize();
-        }
-
-        void SetHSpace( int val )
-        {
-            hspace = val;
-            RescanSize();
-        }
-
-        void SetVSpace( int val )
-        {
-            vspace = val;
-            RescanSize();
-        }
-
-        Item * GetItem( const fheroes2::Point & pt )
-        {
-            ItemsIterator posItem = GetItemIter( pt );
-            return posItem != items.end() ? *posItem : nullptr;
-        }
-
-        fheroes2::Point GetPos() const
-        {
-            return fheroes2::Point( barsz.x, barsz.y );
-        }
-
-        const fheroes2::Rect & GetArea() const
-        {
-            return barsz;
-        }
-
-        void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() )
-        {
-            fheroes2::Point dstpt( barsz.x, barsz.y );
-
-            for ( int32_t y = 0; y < colrows.height; ++y ) {
-                for ( int32_t x = 0; x < colrows.width; ++x ) {
-                    RedrawBackground( { dstpt.x, dstpt.y, itemsz.width, itemsz.height }, dstsf );
-
-                    dstpt.x += hspace + itemsz.width;
-                }
-
-                dstpt.x = barsz.x;
-                dstpt.y += vspace + itemsz.height;
-            }
-
-            dstpt.x = barsz.x;
-            dstpt.y = barsz.y;
-
-            ItemsIterator posItem = GetTopItemIter();
-
-            for ( int32_t y = 0; y < colrows.height; ++y ) {
-                for ( int32_t x = 0; x < colrows.width; ++x ) {
-                    if ( posItem != items.end() ) {
-                        RedrawItemIter( posItem, { dstpt.x, dstpt.y, itemsz.width, itemsz.height }, dstsf );
-
-                        ++posItem;
-                    }
-
-                    dstpt.x += hspace + itemsz.width;
-                }
-
-                dstpt.x = barsz.x;
-                dstpt.y += vspace + itemsz.height;
-            }
-        }
-
         bool QueueEventProcessing()
         {
-            const fheroes2::Point & cursor = LocalEvent::Get().GetMouseCursor();
+            if ( isItemsEmpty() ) {
+                return false;
+            }
 
-            return isItemsEmpty() ? false : ActionCursorItemIter( cursor, GetItemIterPos( cursor ) );
+            const fheroes2::Point & cursor = LocalEvent::Get().GetMouseCursor();
+            return ActionCursorItemIter( cursor, GetItemIterPos( cursor ) );
         }
 
     protected:
-        using Items = std::list<Item *>;
-        using ItemsIterator = typename std::list<Item *>::iterator;
+        // Since we store pointers and the number of elements do not change in a container, vector is the most efficient container to be used.
+        using ItemsIterator = typename std::vector<Item *>::iterator;
         using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
 
-        Items items;
+        std::vector<Item *> items;
 
         virtual void SetContentItems()
         {
@@ -196,22 +192,28 @@ namespace Interface
             return items.end();
         }
 
-        virtual void RedrawItemIter( ItemsIterator it, const fheroes2::Rect & pos, fheroes2::Image & dstsf )
+        virtual void RedrawItemIter( ItemsIterator it, const fheroes2::Rect & pos, fheroes2::Image & output )
         {
-            RedrawItem( **it, pos, dstsf );
+            RedrawItem( **it, pos, output );
         }
 
         virtual bool ActionCursorItemIter( const fheroes2::Point &, ItemIterPos iterPos )
         {
-            if ( iterPos.first != GetEndItemIter() ) {
-                LocalEvent & le = LocalEvent::Get();
+            if ( iterPos.first == GetEndItemIter() ) {
+                return false;
+            }
 
-                if ( ActionBarCursor( **iterPos.first ) )
-                    return true;
-                else if ( le.MouseClickLeft( iterPos.second ) )
-                    return ActionBarLeftMouseSingleClick( **iterPos.first );
-                else if ( le.MousePressRight( iterPos.second ) )
-                    return ActionBarRightMouseHold( **iterPos.first );
+            if ( ActionBarCursor( **iterPos.first ) ) {
+                return true;
+            }
+
+            LocalEvent & le = LocalEvent::Get();
+            if ( le.MouseClickLeft( iterPos.second ) ) {
+                return ActionBarLeftMouseSingleClick( **iterPos.first );
+            }
+
+            if ( le.MousePressRight( iterPos.second ) ) {
+                return ActionBarRightMouseHold( **iterPos.first );
             }
 
             return false;
@@ -227,42 +229,51 @@ namespace Interface
             return GetItemIterPos( pt ).first;
         }
 
-        ItemIterPos GetItemIterPos( const fheroes2::Point & pt )
+        ItemIterPos GetItemIterPos( const fheroes2::Point & position )
         {
-            const fheroes2::Point position( pt.x, pt.y );
-            fheroes2::Rect dstrt( barsz.x, barsz.y, itemsz.width, itemsz.height );
+            fheroes2::Rect dstrt( renderingRoi.x, renderingRoi.y, singleItemRoi.width, singleItemRoi.height );
             ItemsIterator posItem = GetTopItemIter();
 
-            for ( int32_t y = 0; y < colrows.height; ++y ) {
-                for ( int32_t x = 0; x < colrows.width; ++x ) {
+            for ( int32_t y = 0; y < tableSize.height; ++y ) {
+                for ( int32_t x = 0; x < tableSize.width; ++x ) {
                     if ( posItem != items.end() ) {
                         if ( dstrt & position )
                             return ItemIterPos( posItem, dstrt );
                         ++posItem;
                     }
 
-                    dstrt.x += hspace + itemsz.width;
+                    dstrt.x += offsetBetweenItems.width + singleItemRoi.width;
                 }
 
-                dstrt.x = barsz.x;
-                dstrt.y += vspace + itemsz.height;
+                dstrt.x = renderingRoi.x;
+                dstrt.y += offsetBetweenItems.height + singleItemRoi.height;
             }
 
-            return std::pair<ItemsIterator, fheroes2::Rect>( items.end(), fheroes2::Rect() );
+            return { items.end(), {} };
         }
 
     private:
-        void RescanSize()
+        void calculateRoi()
         {
-            barsz.width = colrows.width ? colrows.width * itemsz.width + ( colrows.width - 1 ) * hspace : 0;
-            barsz.height = colrows.height ? colrows.height * itemsz.height + ( colrows.height - 1 ) * vspace : 0;
+            if ( tableSize.width > 0 ) {
+                renderingRoi.width = tableSize.width * singleItemRoi.width + ( tableSize.width - 1 ) * offsetBetweenItems.width;
+            }
+            else {
+                renderingRoi.width = 0;
+            }
+
+            if ( tableSize.height > 0 ) {
+                renderingRoi.height = tableSize.height * singleItemRoi.height + ( tableSize.height - 1 ) * offsetBetweenItems.height;
+            }
+            else {
+                renderingRoi.height = 0;
+            }
         }
 
-        fheroes2::Rect barsz;
-        fheroes2::Size itemsz;
-        fheroes2::Size colrows;
-        int32_t hspace;
-        int32_t vspace;
+        fheroes2::Rect renderingRoi;
+        fheroes2::Size singleItemRoi;
+        fheroes2::Size tableSize;
+        fheroes2::Size offsetBetweenItems;
     };
 
     template <class Item>
@@ -326,7 +337,7 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarLeftMouseHold( Item & )
+        virtual bool ActionBarLeftMouseHold( Item &, const fheroes2::Rect & )
         {
             return false;
         }
@@ -351,17 +362,6 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarRightMouseRelease( Item & )
-        {
-            return true;
-        }
-
-        virtual bool ActionBarRightMouseRelease( Item &, Item & )
-        {
-            return true;
-        }
-
-        // body
         Item * GetSelectedItem()
         {
             return *GetCurItemIter();
@@ -398,10 +398,13 @@ namespace Interface
             const LocalEvent & le = LocalEvent::Get();
             const fheroes2::Point & cursor = le.GetMouseCursor();
 
-            if ( ItemsBar<Item>::isItemsEmpty() && other.isItemsEmpty() )
+            if ( ItemsBar<Item>::isItemsEmpty() && other.isItemsEmpty() ) {
                 return false;
-            else if ( other.GetItem( le.GetMousePressLeft() ) && ActionCrossItemBarDrag( cursor, other ) )
+            }
+
+            if ( other.GetItem( le.GetMousePressLeft() ) && ActionCrossItemBarDrag( cursor, other ) ) {
                 return true;
+            }
 
             return other.isSelected() ? ActionCursorItemIter( cursor, other ) : ActionCursorItemIter( cursor, ItemsBar<Item>::GetItemIterPos( cursor ) );
         }
@@ -428,9 +431,9 @@ namespace Interface
             ResetSelected();
         }
 
-        void RedrawItemIter( ItemsIterator it, const fheroes2::Rect & pos, fheroes2::Image & dstsf ) override
+        void RedrawItemIter( ItemsIterator it, const fheroes2::Rect & pos, fheroes2::Image & output ) override
         {
-            RedrawItem( **it, pos, GetCurItemIter() == it, dstsf );
+            RedrawItem( **it, pos, GetCurItemIter() == it, output );
         }
 
         bool ActionCrossItemBarDrag( const fheroes2::Point & cursor, ItemsActionBar<Item> & other )
@@ -439,18 +442,19 @@ namespace Interface
             Item * otherItemPress = other.GetItem( le.GetMousePressLeft() );
 
             // already did check for this before we go here, maybe not necessary?
-            if ( !otherItemPress )
+            if ( !otherItemPress ) {
                 return false;
+            }
 
             ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
-
             if ( iterPos1.first == ItemsBar<Item>::GetEndItemIter() )
                 return false;
 
             if ( le.MousePressLeft( iterPos1.second ) ) {
                 return ActionBarLeftMouseHold( **iterPos1.first, *otherItemPress );
             }
-            else if ( le.MouseReleaseLeft( iterPos1.second ) ) {
+
+            if ( le.MouseReleaseLeft( iterPos1.second ) ) {
                 if ( ActionBarLeftMouseRelease( **iterPos1.first, *otherItemPress ) ) {
                     le.ResetPressLeft();
                     other.ResetSelected();
@@ -464,40 +468,44 @@ namespace Interface
 
         bool ActionCursorItemIter( const fheroes2::Point &, ItemIterPos iterPos ) override
         {
-            if ( iterPos.first != ItemsBar<Item>::GetEndItemIter() ) {
-                LocalEvent & le = LocalEvent::Get();
+            if ( iterPos.first == ItemsBar<Item>::GetEndItemIter() ) {
+                return false;
+            }
 
-                if ( ActionBarCursor( **iterPos.first ) ) {
-                    return true;
-                }
-                else if ( le.MouseClickLeft( iterPos.second ) ) {
-                    if ( iterPos.first == GetCurItemIter() ) {
-                        return ActionBarLeftMouseDoubleClick( **iterPos.first );
-                    }
-                    else {
-                        if ( ActionBarLeftMouseSingleClick( **iterPos.first ) )
-                            curItemPos = iterPos;
-                        else
-                            ResetSelected();
+            if ( ActionBarCursor( **iterPos.first ) ) {
+                return true;
+            }
 
-                        return true;
-                    }
+            LocalEvent & le = LocalEvent::Get();
+            if ( le.MouseClickLeft( iterPos.second ) ) {
+                if ( iterPos.first == GetCurItemIter() ) {
+                    return ActionBarLeftMouseDoubleClick( **iterPos.first );
                 }
-                else if ( le.MousePressLeft( iterPos.second ) ) {
-                    return ActionBarLeftMouseHold( **iterPos.first );
+
+                if ( ActionBarLeftMouseSingleClick( **iterPos.first ) ) {
+                    curItemPos = iterPos;
                 }
-                else if ( le.MouseReleaseLeft( iterPos.second ) ) {
-                    return ActionBarLeftMouseRelease( **iterPos.first );
+                else {
+                    ResetSelected();
                 }
-                else if ( le.MouseClickRight( iterPos.second ) ) {
-                    return ActionBarRightMouseSingleClick( **iterPos.first );
-                }
-                else if ( le.MousePressRight( iterPos.second ) ) {
-                    return ActionBarRightMouseHold( **iterPos.first );
-                }
-                else if ( le.MouseReleaseRight( iterPos.second ) ) {
-                    return ActionBarRightMouseRelease( **iterPos.first );
-                }
+
+                return true;
+            }
+
+            if ( le.MousePressLeft( iterPos.second ) ) {
+                return ActionBarLeftMouseHold( **iterPos.first, iterPos.second );
+            }
+
+            if ( le.MouseReleaseLeft( iterPos.second ) ) {
+                return ActionBarLeftMouseRelease( **iterPos.first );
+            }
+
+            if ( le.MouseClickRight( iterPos.second ) ) {
+                return ActionBarRightMouseSingleClick( **iterPos.first );
+            }
+
+            if ( le.MousePressRight( iterPos.second ) ) {
+                return ActionBarRightMouseHold( **iterPos.first );
             }
 
             return false;
@@ -506,40 +514,41 @@ namespace Interface
         bool ActionCursorItemIter( const fheroes2::Point & cursor, ItemsActionBar<Item> & other )
         {
             ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
+            if ( iterPos1.first == ItemsBar<Item>::GetEndItemIter() ) {
+                return false;
+            }
+
             ItemIterPos iterPos2 = other.curItemPos;
+            if ( ActionBarCursor( **iterPos1.first, **iterPos2.first ) ) {
+                return true;
+            }
 
-            if ( iterPos1.first != ItemsBar<Item>::GetEndItemIter() ) {
-                LocalEvent & le = LocalEvent::Get();
+            LocalEvent & le = LocalEvent::Get();
+            if ( le.MouseClickLeft( iterPos1.second ) ) {
+                if ( ActionBarLeftMouseSingleClick( **iterPos1.first, **iterPos2.first ) )
+                    curItemPos = iterPos1;
+                else
+                    ResetSelected();
 
-                if ( ActionBarCursor( **iterPos1.first, **iterPos2.first ) ) {
-                    return true;
-                }
-                else if ( le.MouseClickLeft( iterPos1.second ) ) {
-                    if ( ActionBarLeftMouseSingleClick( **iterPos1.first, **iterPos2.first ) )
-                        curItemPos = iterPos1;
-                    else
-                        ResetSelected();
+                other.ResetSelected();
+                return true;
+            }
 
-                    other.ResetSelected();
-                    return true;
-                }
-                else if ( le.MousePressLeft( iterPos1.second ) ) {
-                    return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
-                }
-                // let ActionCrossItemBarDrag handle MousePressRelease instead
-                else if ( le.MouseClickRight( iterPos1.second ) ) {
-                    ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
-                    other.ResetSelected();
+            if ( le.MousePressLeft( iterPos1.second ) ) {
+                return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
+            }
 
-                    // has to return true to display selection reset
-                    return true;
-                }
-                else if ( le.MousePressRight( iterPos1.second ) ) {
-                    return ActionBarRightMouseHold( **iterPos1.first, **iterPos2.first );
-                }
-                else if ( le.MouseReleaseRight( iterPos1.second ) ) {
-                    return ActionBarRightMouseRelease( **iterPos1.first, **iterPos2.first );
-                }
+            // let ActionCrossItemBarDrag handle MousePressRelease instead
+            if ( le.MouseClickRight( iterPos1.second ) ) {
+                ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
+                other.ResetSelected();
+
+                // has to return true to display selection reset
+                return true;
+            }
+
+            if ( le.MousePressRight( iterPos1.second ) ) {
+                return ActionBarRightMouseHold( **iterPos1.first, **iterPos2.first );
             }
 
             return false;

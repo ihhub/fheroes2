@@ -24,9 +24,14 @@
 #ifndef H2BATTLE_BOARD_H
 #define H2BATTLE_BOARD_H
 
+#include <algorithm>
+#include <cstdint>
 #include <random>
+#include <string>
+#include <vector>
 
 #include "battle_cell.h"
+#include "math_base.h"
 
 #define ARENAW 11
 #define ARENAH 9
@@ -39,6 +44,8 @@ namespace Maps
 
 namespace Battle
 {
+    class Unit;
+
     inline direction_t & operator++( direction_t & d )
     {
         return d = ( CENTER == d ? TOP_LEFT : direction_t( d << 1 ) );
@@ -102,10 +109,10 @@ namespace Battle
 
         // Checks that the current unit (to which the current passability information relates) is able (in principle)
         // to attack from the cell with the given index
-        static bool CanAttackUnitFromCell( const Unit & currentUnit, const int32_t from );
+        static bool CanAttackFromCell( const Unit & currentUnit, const int32_t from );
         // Checks that the current unit (to which the current passability information relates) is able to attack the
         // target from the position which corresponds to the given index
-        static bool CanAttackUnitFromPosition( const Unit & currentUnit, const Unit & target, const int32_t dst );
+        static bool CanAttackTargetFromPosition( const Unit & currentUnit, const Unit & target, const int32_t dst );
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
 

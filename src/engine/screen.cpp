@@ -18,30 +18,41 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "screen.h"
-#include "image_palette.h"
-#include "logging.h"
-#include "tools.h"
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <cstring>
+#include <iterator>
+#include <ostream>
+#include <set>
+#include <utility>
 
+#include <SDL_error.h>
+#include <SDL_stdinc.h>
 #include <SDL_version.h>
 #include <SDL_video.h>
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #include <SDL_events.h>
 #include <SDL_hints.h>
 #include <SDL_mouse.h>
+#include <SDL_pixels.h>
+#include <SDL_rect.h>
 #include <SDL_render.h>
+#include <SDL_surface.h>
 #else
 #include <SDL_active.h>
 #endif
 
-#include <algorithm>
-#include <cassert>
-#include <cmath>
-#include <set>
-
 #if defined( TARGET_PS_VITA )
 #include <vita2d.h>
 #endif
+
+#include "image_palette.h"
+#include "logging.h"
+#include "screen.h"
+#include "tools.h"
 
 namespace
 {
@@ -732,7 +743,7 @@ namespace
             bool fullScreen = true;
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
-#if defined( __WIN32__ )
+#if defined( _WIN32 )
                 flags &= ~SDL_WINDOW_FULLSCREEN;
 #else
                 flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -741,7 +752,7 @@ namespace
                 fullScreen = false;
             }
             else {
-#if defined( __WIN32__ )
+#if defined( _WIN32 )
                 flags |= SDL_WINDOW_FULLSCREEN;
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -972,9 +983,16 @@ namespace
                 height_ = correctResolution.height;
             }
 
+#if defined( ANDROID )
+            // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            if ( SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set a hint for screen orientation." )
+            }
+#endif
+
             uint32_t flags = SDL_WINDOW_SHOWN;
             if ( isFullScreen ) {
-#if defined( __WIN32__ )
+#if defined( _WIN32 )
                 flags |= SDL_WINDOW_FULLSCREEN;
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -1336,7 +1354,7 @@ namespace
 
         uint32_t renderFlags() const
         {
-#if defined( __WIN32__ )
+#if defined( _WIN32 )
             return SDL_HWSURFACE | SDL_HWPALETTE;
 #else
             return SDL_SWSURFACE;

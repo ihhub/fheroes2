@@ -22,32 +22,46 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <cstdint>
+#include <functional>
 #include <string>
+#include <vector>
 
 #include "agg_image.h"
+#include "army.h"
 #include "army_bar.h"
+#include "army_troop.h"
+#include "audio.h"
 #include "audio_manager.h"
+#include "captain.h"
 #include "castle.h"
 #include "castle_building_info.h"
+#include "castle_heroes.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "m82.h"
+#include "math_base.h"
+#include "monster.h"
 #include "mus.h"
-#include "payment.h"
-#include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "statusbar.h"
+#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_castle.h"
 #include "ui_kingdom.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -110,7 +124,7 @@ namespace
 
         const Monster monster( race, buildingId );
         std::string msgStatus = _( "Recruit %{name}" );
-        StringReplace( msgStatus, "%{name}", monster.GetMultiName() );
+        StringReplace( msgStatus, "%{name}", Translation::StringLower( monster.GetMultiName() ) );
         return msgStatus;
     }
 
@@ -181,38 +195,35 @@ namespace
         return output;
     }
 
-    void verifyMagicBookPresence( const Castle & castle, CastleHeroes & heroes )
+    bool purchaseSpellBookIfNecessary( const Castle & castle, CastleHeroes & heroes )
     {
-        bool noFreeSpaceForMagicBook = false;
+        bool spellBookPurchased = false;
 
-        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
-            if ( heroes.Guard()->IsFullBagArtifacts() ) {
-                noFreeSpaceForMagicBook = true;
+        auto purchaseSpellBookForHero = [&castle, &spellBookPurchased]( Heroes * hero ) {
+            assert( hero != nullptr );
+
+            if ( hero->IsFullBagArtifacts() ) {
+                Dialog::Message(
+                    hero->GetName(),
+                    _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                    Font::BIG, Dialog::OK );
             }
             else {
-                heroes.Guard()->BuySpellBook( &castle );
+                const bool purchased = hero->BuySpellBook( &castle );
+
+                spellBookPurchased = spellBookPurchased || purchased;
             }
+        };
+
+        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
+            purchaseSpellBookForHero( heroes.Guard() );
         }
 
         if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
-            if ( heroes.Guest()->IsFullBagArtifacts() ) {
-                noFreeSpaceForMagicBook = true;
-            }
-            else {
-                heroes.Guest()->BuySpellBook( &castle );
-            }
+            purchaseSpellBookForHero( heroes.Guest() );
         }
 
-        if ( noFreeSpaceForMagicBook ) {
-            const Heroes * hero = heroes.Guard();
-            if ( !hero || hero->HaveSpellBook() || !hero->IsFullBagArtifacts() )
-                hero = heroes.Guest();
-
-            Dialog::Message(
-                hero->GetName(),
-                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Font::BIG, Dialog::OK );
-        }
+        return spellBookPurchased;
     }
 
     void openHeroDialog( ArmyBar & topArmyBar, ArmyBar & bottomArmyBar, Heroes & hero )
@@ -238,9 +249,9 @@ namespace
         fheroes2::Blit( port, image, 5, 5 );
 
         ArmyBar armyBar( &heroes.Guest()->GetArmy(), false, false );
-        armyBar.SetColRows( 5, 1 );
-        armyBar.SetPos( 112, 5 );
-        armyBar.SetHSpace( 6 );
+        armyBar.setTableSize( { 5, 1 } );
+        armyBar.setRenderingOffset( { 112, 5 } );
+        armyBar.setInBetweenItemsOffset( { 6, 0 } );
         armyBar.Redraw( image );
     }
 }
@@ -328,26 +339,26 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     // castle troops selector
     // castle army bar
     ArmyBar topArmyBar( ( heroes.Guard() ? &heroes.Guard()->GetArmy() : &army ), false, readOnly );
-    topArmyBar.SetColRows( 5, 1 );
-    topArmyBar.SetPos( cur_pt.x + 112, cur_pt.y + 262 );
-    topArmyBar.SetHSpace( 6 );
-    topArmyBar.Redraw();
+    topArmyBar.setTableSize( { 5, 1 } );
+    topArmyBar.setRenderingOffset( { cur_pt.x + 112, cur_pt.y + 262 } );
+    topArmyBar.setInBetweenItemsOffset( { 6, 0 } );
+    topArmyBar.Redraw( display );
 
     // portrait heroes or captain or sign
     const fheroes2::Rect rectSign2( cur_pt.x + 5, cur_pt.y + 361, 100, 92 );
 
     // castle_heroes troops background
     ArmyBar bottomArmyBar( nullptr, false, readOnly );
-    bottomArmyBar.SetColRows( 5, 1 );
-    bottomArmyBar.SetPos( cur_pt.x + 112, cur_pt.y + 361 );
-    bottomArmyBar.SetHSpace( 6 );
+    bottomArmyBar.setTableSize( { 5, 1 } );
+    bottomArmyBar.setRenderingOffset( { cur_pt.x + 112, cur_pt.y + 361 } );
+    bottomArmyBar.setInBetweenItemsOffset( { 6, 0 } );
 
     if ( heroes.Guest() ) {
         bottomArmyBar.SetArmy( &heroes.Guest()->GetArmy() );
 
         if ( alphaHero != 0 ) {
             // Draw bottom bar only if no hero fading animation is going.
-            bottomArmyBar.Redraw();
+            bottomArmyBar.Redraw( display );
         }
     }
 
@@ -515,6 +526,18 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 need_redraw = true;
             }
 
+            if ( le.MousePressRight( rectSign1 ) ) {
+                if ( heroes.Guard() ) {
+                    Dialog::QuickInfo( *heroes.Guard() );
+                }
+                else if ( isBuild( BUILD_CAPTAIN ) ) {
+                    Dialog::QuickInfo( GetCaptain() );
+                }
+            }
+            else if ( heroes.Guest() && le.MousePressRight( rectSign2 ) ) {
+                Dialog::QuickInfo( *heroes.Guest() );
+            }
+
             // Get pressed hotkey.
             const building_t hotKeyBuilding = getPressedBuildingHotkey();
 
@@ -556,7 +579,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     else if ( isMagicGuild ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
-                        verifyMagicBookPresence( *this, heroes );
+                        if ( purchaseSpellBookIfNecessary( *this, heroes ) ) {
+                            // At least one of the castle heroes purchased the spellbook, redraw the resource panel
+                            need_redraw = true;
+                        }
 
                         OpenMageGuild( heroes );
                     }
@@ -655,7 +681,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                                     topArmyBar.SetArmy( &heroes.Guard()->GetArmy() );
                                     bottomArmyBar.SetArmy( nullptr );
 
-                                    topArmyBar.Redraw();
+                                    topArmyBar.Redraw( display );
                                     RedrawIcons( *this, CastleHeroes( nullptr, heroes.Guard() ), cur_pt );
                                 }
                                 AudioManager::PlaySound( M82::BUILDTWN );
@@ -707,9 +733,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
         }
 
         if ( need_redraw ) {
-            topArmyBar.Redraw();
+            topArmyBar.Redraw( display );
             if ( bottomArmyBar.isValid() && alphaHero >= 255 )
-                bottomArmyBar.Redraw();
+                bottomArmyBar.Redraw( display );
             fheroes2::drawCastleName( *this, display, cur_pt );
             fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
 

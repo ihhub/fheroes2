@@ -22,20 +22,31 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdint>
+#include <iterator>
 #include <vector>
 
 #include "agg_image.h"
 #include "castle.h"
+#include "castle_heroes.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
 #include "mageguild.h"
+#include "math_base.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell.h"
+#include "spell_storage.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 
@@ -48,7 +59,7 @@ namespace
     {
     public:
         RowSpells( const fheroes2::Point & pos, const Castle & castle, const int lvl );
-        void Redraw();
+        void Redraw( fheroes2::Image & output );
         bool QueueEventProcessing();
 
     private:
@@ -97,9 +108,8 @@ RowSpells::RowSpells( const fheroes2::Point & pos, const Castle & castle, const 
     spells.resize( coords.size(), Spell::NONE );
 }
 
-void RowSpells::Redraw()
+void RowSpells::Redraw( fheroes2::Image & output )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & roll_show = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
 
     for ( std::vector<fheroes2::Rect>::iterator it = coords.begin(); it != coords.end(); ++it ) {
@@ -109,14 +119,14 @@ void RowSpells::Redraw()
         // roll hide
         if ( dst.width < roll_show.width() || spell == Spell::NONE ) {
             const fheroes2::Sprite & roll_hide = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
-            fheroes2::Blit( roll_hide, display, dst.x, dst.y );
+            fheroes2::Blit( roll_hide, output, dst.x, dst.y );
         }
         // roll show
         else {
-            fheroes2::Blit( roll_show, display, dst.x, dst.y );
+            fheroes2::Blit( roll_show, output, dst.x, dst.y );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-            fheroes2::Blit( icon, display, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
+            fheroes2::Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
             TextBox text( spell.GetName(), Font::SMALL, 78 );
             text.Blit( dst.x + 18, dst.y + 55 );
@@ -219,11 +229,11 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     RowSpells spells2( { cur_pt.x + 250, cur_pt.y + 275 }, *this, 2 );
     RowSpells spells1( { cur_pt.x + 250, cur_pt.y + 365 }, *this, 1 );
 
-    spells1.Redraw();
-    spells2.Redraw();
-    spells3.Redraw();
-    spells4.Redraw();
-    spells5.Redraw();
+    spells1.Redraw( display );
+    spells2.Redraw( display );
+    spells3.Redraw( display );
+    spells4.Redraw( display );
+    spells5.Redraw( display );
 
     fheroes2::Button buttonExit( cur_pt.x + exitButtonOffsetX, cur_pt.y + bottomBarOffsetY, ICN::WELLXTRA, 0, 1 );
     buttonExit.draw();

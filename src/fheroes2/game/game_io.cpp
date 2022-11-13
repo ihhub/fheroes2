@@ -23,17 +23,20 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstdint>
 #include <ctime>
+#include <ostream>
 
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_io.h"
 #include "game_over.h"
-#include "game_static.h"
 #include "logging.h"
-#include "monster.h"
+#include "maps_fileinfo.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "system.h"
 #include "translations.h"

@@ -1,3 +1,142 @@
+version 0.9.21 (12 November 2022)
+- fix audio playback issues on Windows OSes
+- do not show any hero status for AI heroes
+- add hotkeys for moving armies between heroes
+- update the Norwegian translation
+- fix monster upgrade cost formula
+- reset AI hero meeting flag every time if hero's strength has changed
+- add missing alliance conditions for the Succession Wars campaign last scenarios
+- add small optimizations for the pathfinding algorithm
+- fix incorrect evaluation of army strength where hero's abilities should not be taken into account
+- fix handicap income calculation
+- add right click quick info in more dialogs for hero and castle captain
+- fix possible assertion hit for campaign scenario info dialog
+- Luck / Morale related objects are now reset after meeting / battle for AI heroes
+- add a separate graphics options window
+- make more contrast for player objects on the minimap
+- do not override hero or castle selection focus on a game load
+- change language selection window to support many languages
+- improve the combat log's use of plural forms
+- draw the correct arrows for the paths on the adventure map
+- rework the troops arrangement mechanics for the castle defense
+- fix catapult's boulder animation
+- update position for text in difficulty selection dialog
+- add CP1252 French quotation marks
+- clear the kingdom's visited objects according to their lifetime, even if this kingdom has already been vanquished
+- update AI logic for monster distribution and recruitment
+- do not increase the number of upgraded creatures on Week Of/Month Of basic creatures
+- generate new MAX/MIN buttons for other languages
+- add Czech language option in game and add fonts
+- fix the troop splitting logic
+- include project's resource files into Android packages
+- translate language names in native language
+- add proper CP1250 font
+- update French translation
+- do not waste time to get useless monsters for an AI army
+- add audio support for Android devices
+- take Magic Book into account while visiting a castle by an AI hero
+- avoid using armies with 1 monster for AI heroes
+- lock the screen orientation to landscape for Android devices
+- fix campaign score sorting issue
+- fix an issue when kingdom overview scrollbar does not not remember last position
+- fix terrain colors on the minimap
+- memorize selected Scenario in Scenario Selection dialog
+- do not overwrite default platform's soundfonts if none is included into the package
+- update Hungarian translation
+- add Hungarian language option and font replacements
+- fix the shade used for mountains and trees
+- fix UI elements position in Select Scenario dialog
+- fix hero's fight cursor offset
+- fix heroes position on battle screen
+- add Android compilation
+- update Russian translation
+- redraw the castle's resource panel when a hero purchases the spellbook
+- add Dutch font and language option
+- update language dependent resources while changing language
+- update Bulgarian Translation
+- fix the Week Of / Month Of logic
+- update Belarusian translation
+- fix button font generation for original buttons
+
+version 0.9.20 (10 October 2022)
+- add Russian and French button translations
+- update the Norwegian translation
+- recalculate the hero's path when the hero was selected with the mouse
+- fix stopped music in events of quickly closing dialogs with internal music
+- add proper logic for artifact exchange between AI heroes
+- add Dutch translation
+- do not let the archers perform a double attack if they are out of ammo
+- add Hotkey support for restarting Campaign's Scenario
+- AI heroes now use spells from scrolls
+- fix neutral town unit growth
+- display detailed information about the composition of alliances in the scenario info window
+- add date to logging for the future bug fixing
+- add turkish translation
+- make sure that there is a place for the Ultimate Artifact in the artifact bag before trying to dig it out
+- do not ask player's name if the score is too low for High score board
+- add Romanian translation
+- hide console window for Windows OSes and add log file for this platform
+- add Romanian font and language option
+- update Polish translation
+- add Turkish language option and CP1254 font
+- add proper icons for Petrification spell
+- speed up Adventure Map rendering
+- take into consideration a case with full artifact bag while checking AI hero's path
+- generate button fonts for different code pages
+- apply usual rules for unit growth in neutral towns/castles with custom troops
+- decrease monster growth bonus for AI
+- fix incorrect usage of Dimension Door by AI heroes
+- make logging for monster movement in battle more user-friendly
+- add UI improvements of the Settings dialog
+- fix logic of processing cells containing units available for possible AI unit attack
+- fix incorrect object evaluation for AI heroes on boats
+- add a feature to give human player control to AI (debug build only)
+- make creature names lowercased for certain dialogs
+- generate new Gift button
+- generate full button English alphabet and new Battle Only button
+- fix switching of terrain music in case of hero loss
+- update Bulgarian translation
+- add Handicap feature for single and multiplayer games
+- fix a case when a hidden scrollbar during battle is visible for one frame
+- fix sound volume for objects while using external music type
+- include rating calculation for Campaign's high score
+- fix incorrectly rendered monochrome cursor for campaign selection window
+- update French translation
+
+version 0.9.19 (11 September 2022)
+- add popup dialogs for Well's buttons
+- generate MIN button based on newly added font
+- fix constantly moving AI heroes when they have nothing to do
+- update Polish translation
+- implement some improvements when exchanging an army between heroes
+- show intro videos like in the original game
+- fix messages displayed for captains during battle
+- update Bulgarian translation
+- correct start resources for AI players
+- add a popup dialog for Days spent info within campaign dialog
+- make Artifact evaluation for AI more granular
+- add Difficulty selection for Campaigns
+- add popup dialogs for mage guild and scenario info windows
+- fix rendering of Mine Guardians
+- do not show monsters and campfires on Puzzle screen
+- fix moving AI hero rendering
+- implement instant finishing of battles
+- update Norwegian translation
+- fix incorrect rendering of some icons in The Price of Loyalty campaign windows
+- make "Show terrain penalty" option the default
+- fix double income from captured objects
+- fix the distribution of Mutant Zombies in the Graveyard
+- fix the battle order after bad morale events
+- always use the current color of a unit when toggling auto battle (take the Hypnotize spell into account)
+- speed up file search on case-insensitive file systems
+- optimize Mini-map rendering
+- do not show boats on puzzle image
+- fix a possible crash in UI window
+- fix castle rendering on Mini-map
+- fix Ultimate Artifact placement conditions
+- fix rendering of towns for View Towns spell
+- fix tall object rendering
+
 version 0.9.18 (10 August 2022)
 - speed up rendering of Mini Map area
 - fix missing shadows from path arrows when they are on the edge of screen

@@ -3,17 +3,20 @@
 set DST_DIR=%~dp0\..\..\VisualStudio\packages
 
 set PKG_FILE=windows.zip
-set PKG_FILE_SHA256=4E1A622183E839727245782BDBF3CFA7BD4206FBC183FF764E1B7E9C79669D29
+set PKG_FILE_SHA256=139382B653B2C38A7D523184ADA2C651AE79D6D692A2673FDBFCF1D4098FBF54
 set PKG_URL=https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/windows-deps/%PKG_FILE%
 set PKG_TLS=[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-call :install_packages
+set EXIT_CODE=0
+
+call :install_packages || ^
+set EXIT_CODE=1
 
 if not "%CI%" == "true" (
     pause
 )
 
-exit /B
+exit /B %EXIT_CODE%
 
 :install_packages
 

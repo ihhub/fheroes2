@@ -22,10 +22,17 @@
  ***************************************************************************/
 
 #include "interface_buttons.h"
+
+#include <cstddef>
+#include <vector>
+
 #include "dialog.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
+#include "kingdom.h"
+#include "localevent.h"
+#include "route.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"

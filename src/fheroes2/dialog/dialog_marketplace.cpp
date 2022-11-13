@@ -21,6 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstdint>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -29,8 +32,13 @@
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "players.h"
 #include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
@@ -38,6 +46,7 @@
 #include "ui_button.h"
 #include "ui_kingdom.h"
 #include "ui_scrollbar.h"
+#include "ui_tool.h"
 #include "world.h"
 
 namespace
@@ -470,6 +479,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 count_sell = 0;
                 count_buy = 0;
 
+                cursorFrom.show();
                 cursorFrom.setPosition( rect_from.x - 2, rect_from.y - 2 );
 
                 if ( resourceTo ) {
@@ -503,6 +513,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 count_sell = 0;
                 count_buy = 0;
 
+                cursorTo.show();
                 cursorTo.setPosition( rect_to.x - 2, rect_to.y - 2 );
 
                 if ( resourceFrom ) {
