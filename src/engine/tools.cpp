@@ -316,19 +316,20 @@ namespace fheroes2
         Point pt( from );
         res.push_back( pt );
 
+        const int32_t steps = ( to.x - from.x ) / step;
         const double x1 = from.x;
         const double y1 = from.y;
         const double dx = to.x - x1;
         const double dy = to.y - y1;
-        const double maxy = maxHeight - y1;
+        const double dh = maxHeight - y1;
 
-        const double a = -4 * maxy / dx / dx;
-        const double b = 4 * maxy * ( dx + 2 * x1 ) / dx / dx;
-        const double c = y1 - 4 * maxy * x1 * x1 / dx / dx - 4 * maxy * x1 / dx;
+        const double a = -4 * dh / dx / dx;
+        const double b = dy / dx - a  * ( dx + 2 * x1 );
+        const double c = y1 + a * x1 * ( dx + x1 )  - x1 * dy / dx;
 
-        for ( int32_t i = 1; i <= ( dx / step ); i++ ) {
+        for ( int32_t i = 1; i <= steps; i++ ) {
             pt.x = pt.x + step;
-            pt.y = static_cast<int32_t>( std::lround( a * pt.x * pt.x + b * pt.x + c + ( pt.x - x1 ) * dy / dx ) );
+            pt.y = static_cast<int32_t>( std::lround( a * pt.x * pt.x + b * pt.x + c ) );
             res.push_back( pt );
         }
 
