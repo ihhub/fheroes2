@@ -324,8 +324,8 @@ namespace fheroes2
         const double dh = maxHeight - y1;
 
         const double a = -4 * dh / dx / dx;
-        const double b = dy / dx - a  * ( dx + 2 * x1 );
-        const double c = y1 + a * x1 * ( dx + x1 )  - x1 * dy / dx;
+        const double b = dy / dx - a * ( dx + 2 * x1 );
+        const double c = y1 + a * x1 * ( dx + x1 ) - x1 * dy / dx;
 
         for ( int32_t i = 1; i <= steps; i++ ) {
             pt.x = pt.x + step;
