@@ -4010,15 +4010,15 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     // boulder animation
     fheroes2::Point pt1( 40, 290 );
     fheroes2::Point pt2 = Catapult::GetTargetPosition( target, hit );
-    const int32_t trajectoryHeight = 205;
+    const int32_t boulderArcHeight = 205;
+    const int32_t boulderArcStep = 12;
 
     pt1.x += area.x;
     pt2.x += area.x;
     pt1.y += area.y;
     pt2.y += area.y;
 
-    const fheroes2::Sprite & boulderFirstFrame = fheroes2::AGG::GetICN( ICN::BOULDER, 0 );
-    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, trajectoryHeight, boulderFirstFrame.width() );
+    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, boulderArcHeight, boulderArcStep );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     uint32_t boulderFrameId = 0;
