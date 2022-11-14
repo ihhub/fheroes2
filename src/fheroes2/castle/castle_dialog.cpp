@@ -265,9 +265,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // Fade screen.
-    const Settings & conf = Settings::Get();
-    if ( Settings::ExtGameUseFade() )
+    if ( Settings::ExtGameUseFade() ) {
         fheroes2::FadeDisplay();
+    }
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
@@ -457,7 +457,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 need_redraw = true;
             }
 
-            if ( conf.ExtCastleAllowGuardians() && !readOnly ) {
+            if ( !readOnly ) {
                 Army * army1 = nullptr;
                 Army * army2 = nullptr;
 

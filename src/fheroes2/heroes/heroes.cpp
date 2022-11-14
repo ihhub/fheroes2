@@ -1814,13 +1814,13 @@ Heroes * AllHeroes::GetGuest( const Castle & castle ) const
 
 Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 {
-    const_iterator it = Settings::Get().ExtCastleAllowGuardians() ? std::find_if( begin(), end(),
-                                                                                  [&castle]( const Heroes * hero ) {
-                                                                                      const fheroes2::Point & cpt = castle.GetCenter();
-                                                                                      const fheroes2::Point & hpt = hero->GetCenter();
-                                                                                      return cpt.x == hpt.x && cpt.y == hpt.y + 1 && hero->Modes( Heroes::GUARDIAN );
-                                                                                  } )
-                                                                  : end();
+    const_iterator it = std::find_if( begin(), end(), [&castle]( const Heroes * hero ) {
+        const fheroes2::Point & cpt = castle.GetCenter();
+        const fheroes2::Point & hpt = hero->GetCenter();
+
+        return cpt.x == hpt.x && cpt.y == hpt.y + 1 && hero->Modes( Heroes::GUARDIAN );
+    } );
+
     return end() != it ? *it : nullptr;
 }
 

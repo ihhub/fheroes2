@@ -826,11 +826,11 @@ bool Castle::AllowBuyHero( std::string * msg ) const
     CastleHeroes heroes = world.GetHeroes( *this );
 
     if ( heroes.Guest() ) {
-        // allow recruit with auto move guest to guard
-        if ( Settings::Get().ExtCastleAllowGuardians() && !heroes.Guard() ) {
+        // If we already have a guest hero, we still can hire a new hero if we can merge the garrison troops with the army of the guest hero
+        if ( heroes.Guard() == nullptr ) {
             if ( !heroes.Guest()->GetArmy().CanJoinTroops( army ) ) {
                 if ( msg )
-                    *msg = _( "Cannot recruit - guest to guard automove error." );
+                    *msg = _( "Cannot recruit - unable to combine the garrison troops with the army of the guest hero." );
                 return false;
             }
         }
@@ -864,8 +864,8 @@ Heroes * Castle::RecruitHero( Heroes * hero )
 
     CastleHeroes heroes = world.GetHeroes( *this );
     if ( heroes.Guest() ) {
-        if ( Settings::Get().ExtCastleAllowGuardians() && !heroes.Guard() ) {
-            // move guest to guard
+        if ( heroes.Guard() == nullptr ) {
+            // Make the guest hero a castle guardian
             SwapCastleHeroes( heroes );
         }
         else
@@ -2326,7 +2326,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     if ( heroes.Guest() ) {
         totalStrength += heroes.Guest()->GetArmy().GetStrength();
     }
-    if ( Settings::Get().ExtCastleAllowGuardians() && heroes.Guard() ) {
+    if ( heroes.Guard() ) {
         totalStrength += heroes.Guard()->GetArmy().GetStrength();
     }
     else {
