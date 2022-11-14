@@ -323,7 +323,7 @@ namespace fheroes2
         // Trajectory start point coordinates
         const double x1 = from.x;
         const double y1 = from.y;
-        
+
         // Distance to the destination point along the axes
         const double dx = to.x - x1;
         const double dy = to.y - y1;
