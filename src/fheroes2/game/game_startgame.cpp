@@ -931,7 +931,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar()
-             && ( le.MouseInsideRenderArea() || le.GetCurrentInputMode() != LocalEvent::INPUTMODE_TOUCH ) ) {
+             && le.GetCurrentInputMode() != LocalEvent::INPUTMODE_TOUCH ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
