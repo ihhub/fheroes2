@@ -162,7 +162,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
     states.push_back( Settings::HEROES_REMEMBER_MP_WHEN_RETREATING );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
-    states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
 
     std::sort( states.begin(), states.end(), []( uint32_t first, uint32_t second ) { return Settings::ExtName( first ) > Settings::ExtName( second ); } );

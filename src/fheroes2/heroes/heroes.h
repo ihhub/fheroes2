@@ -183,7 +183,9 @@ public:
         // Hero should remember his movement points when retreating or surrendering, related to Settings::HEROES_REMEMBER_MP_WHEN_RETREATING
         SAVEMP = 0x00000200,
         SLEEPER = 0x00000400,
-        GUARDIAN = 0x00000800,
+
+        // UNUSED = 0x00000800,
+
         NOTDEFAULTS = 0x00001000,
         NOTDISMISS = 0x00002000,
         VISIONS = 0x00004000,
@@ -657,8 +659,7 @@ struct AllHeroes : public VecHeroes
         std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
     }
 
-    Heroes * GetGuest( const Castle & ) const;
-    Heroes * GetGuard( const Castle & ) const;
+    Heroes * GetHero( const Castle & castle ) const;
     Heroes * GetFreeman( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t ) const;
 };

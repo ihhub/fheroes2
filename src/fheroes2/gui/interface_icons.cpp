@@ -230,13 +230,7 @@ void Interface::HeroesIcons::ActionCurrentDn()
 void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 {
     if ( item ) {
-        if ( item->Modes( Heroes::GUARDIAN ) ) {
-            Castle * castle = world.getCastle( item->GetCenter() );
-            if ( castle )
-                Game::OpenCastleDialog( *castle );
-        }
-        else
-            Game::OpenHeroesDialog( *item, false, true );
+        Game::OpenHeroesDialog( *item, false, true );
     }
 }
 

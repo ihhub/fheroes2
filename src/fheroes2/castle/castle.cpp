@@ -413,20 +413,17 @@ bool Castle::isPosition( const fheroes2::Point & pt ) const
 
 void Castle::EducateHeroes()
 {
-    // for learns new spells need 1 day
-    if ( GetLevelMageGuild() ) {
-        CastleHeroes heroes = world.GetHeroes( *this );
+    if ( GetLevelMageGuild() == 0 ) {
+        return;
+    }
 
-        if ( heroes.FullHouse() ) {
-            MageGuildEducateHero( *heroes.Guest() );
-            MageGuildEducateHero( *heroes.Guard() );
-        }
-        else if ( heroes.IsValid() )
-            MageGuildEducateHero( *heroes.GuestFirst() );
+    Heroes * hero = world.GetHero( *this );
+    if ( hero != nullptr ) {
+        MageGuildEducateHero( *hero );
+    }
 
-        // captain
-        if ( captain.isValid() )
-            MageGuildEducateHero( captain );
+    if ( captain.isValid() ) {
+        MageGuildEducateHero( captain );
     }
 }
 
@@ -823,34 +820,26 @@ const char * Castle::GetDescriptionBuilding( uint32_t build, int race )
 
 bool Castle::AllowBuyHero( std::string * msg ) const
 {
-    CastleHeroes heroes = world.GetHeroes( *this );
-
-    if ( heroes.Guest() ) {
-        // allow recruit with auto move guest to guard
-        if ( Settings::Get().ExtCastleAllowGuardians() && !heroes.Guard() ) {
-            if ( !heroes.Guest()->GetArmy().CanJoinTroops( army ) ) {
-                if ( msg )
-                    *msg = _( "Cannot recruit - guest to guard automove error." );
-                return false;
-            }
+    Heroes * hero = world.GetHero( *this );
+    if ( hero != nullptr ) {
+        if ( msg ) {
+            *msg = _( "Cannot recruit - you already have a Hero in this town." );
         }
-        else {
-            if ( msg )
-                *msg = _( "Cannot recruit - you already have a Hero in this town." );
-            return false;
-        }
+        return false;
     }
 
     const Kingdom & myKingdom = GetKingdom();
     if ( !myKingdom.AllowRecruitHero( false ) ) {
-        if ( msg )
+        if ( msg ) {
             *msg = _( "Cannot recruit - you have too many Heroes." );
+        }
         return false;
     }
 
     if ( !myKingdom.AllowRecruitHero( true ) ) {
-        if ( msg )
+        if ( msg ) {
             *msg = _( "Cannot afford a Hero" );
+        }
         return false;
     }
 
@@ -859,36 +848,30 @@ bool Castle::AllowBuyHero( std::string * msg ) const
 
 Heroes * Castle::RecruitHero( Heroes * hero )
 {
-    if ( !hero || !AllowBuyHero() )
+    if ( !hero || !AllowBuyHero() ) {
         return nullptr;
-
-    CastleHeroes heroes = world.GetHeroes( *this );
-    if ( heroes.Guest() ) {
-        if ( Settings::Get().ExtCastleAllowGuardians() && !heroes.Guard() ) {
-            // move guest to guard
-            SwapCastleHeroes( heroes );
-        }
-        else
-            return nullptr;
     }
 
-    // recruit
-    if ( !hero->Recruit( *this ) )
+    if ( world.GetHero( *this ) != nullptr ) {
         return nullptr;
+    }
+
+    if ( !hero->Recruit( *this ) ) {
+        return nullptr;
+    }
 
     Kingdom & currentKingdom = GetKingdom();
     currentKingdom.OddFundsResource( PaymentConditions::RecruitHero() );
 
-    // update spell book
-    if ( GetLevelMageGuild() )
+    if ( GetLevelMageGuild() ) {
         MageGuildEducateHero( *hero );
+    }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", recruit: " << hero->GetName() )
 
     return hero;
 }
 
-/* recruit monster from building to castle army */
 bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
 {
     if ( !troop.isValid() )
@@ -927,22 +910,21 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
 
     uint32_t count = troop.GetCount();
 
-    // fix count
-    if ( dwelling[dwellingIndex] < count )
+    if ( dwelling[dwellingIndex] < count ) {
         count = dwelling[dwellingIndex];
+    }
 
-    // buy
     const payment_t paymentCosts = troop.GetTotalCost();
     Kingdom & kingdom = GetKingdom();
 
-    if ( !kingdom.AllowPayment( paymentCosts ) )
+    if ( !kingdom.AllowPayment( paymentCosts ) ) {
         return false;
+    }
 
-    // first: guard army join
     if ( !GetArmy().JoinTroop( troop ) ) {
-        CastleHeroes heroes = world.GetHeroes( *this );
+        Heroes * hero = world.GetHero( *this );
 
-        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( troop ) ) {
+        if ( hero == nullptr || !hero->GetArmy().JoinTroop( troop ) ) {
             if ( showDialog ) {
                 Dialog::Message( "", _( "There is no room in the garrison for this army." ), Font::BIG, Dialog::OK );
             }
@@ -1993,9 +1975,9 @@ int Castle::GetICNBuilding( uint32_t build, int race )
     return ICN::UNKNOWN;
 }
 
-CastleHeroes Castle::GetHeroes() const
+Heroes * Castle::GetHero() const
 {
-    return world.GetHeroes( *this );
+    return world.GetHero( *this );
 }
 
 bool Castle::HaveNearlySea() const
@@ -2180,8 +2162,7 @@ bool Castle::PredicateIsBuildBuilding( const Castle * castle, const uint32_t bui
 std::string Castle::String() const
 {
     std::ostringstream os;
-    const CastleHeroes heroes = GetHeroes();
-    const Heroes * hero = nullptr;
+    const Heroes * hero = GetHero();
 
     os << "name and type   : " << name << " (" << Race::String( race ) << ")" << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
@@ -2204,12 +2185,8 @@ std::string Castle::String() const
        << "is castle       : " << ( isCastle() ? "yes" : "no" ) << " (" << getBuildingValue() << ")" << std::endl
        << "army            : " << army.String() << std::endl;
 
-    if ( nullptr != ( hero = heroes.Guard() ) ) {
-        os << "army guard      : " << hero->GetArmy().String() << std::endl;
-    }
-
-    if ( nullptr != ( hero = heroes.Guest() ) ) {
-        os << "army guest      : " << hero->GetArmy().String() << std::endl;
+    if ( hero != nullptr ) {
+        os << "hero army       : " << hero->GetArmy().String() << std::endl;
     }
 
     return os.str();
@@ -2294,27 +2271,23 @@ int Castle::GetLuckModificator( std::string * strs ) const
 
 const Army & Castle::GetArmy() const
 {
-    const CastleHeroes heroes = world.GetHeroes( *this );
-    return heroes.Guard() ? heroes.Guard()->GetArmy() : army;
+    return army;
 }
 
 Army & Castle::GetArmy()
 {
-    CastleHeroes heroes = world.GetHeroes( *this );
-    return heroes.Guard() ? heroes.Guard()->GetArmy() : army;
+    return army;
 }
 
 const Army & Castle::GetActualArmy() const
 {
-    CastleHeroes heroes = world.GetHeroes( *this );
-    const Heroes * hero = heroes.GuardFirst();
+    const Heroes * hero = world.GetHero( *this );
     return hero ? hero->GetArmy() : army;
 }
 
 Army & Castle::GetActualArmy()
 {
-    CastleHeroes heroes = world.GetHeroes( *this );
-    Heroes * hero = heroes.GuardFirst();
+    Heroes * hero = world.GetHero( *this );
     return hero ? hero->GetArmy() : army;
 }
 
@@ -2322,18 +2295,26 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 {
     double totalStrength = 0;
 
-    CastleHeroes heroes = world.GetHeroes( *this );
-    if ( heroes.Guest() ) {
-        totalStrength += heroes.Guest()->GetArmy().GetStrength();
+    Heroes * hero = world.GetHero( *this );
+
+    // If there is a hero in the castle, then some of the garrison troops can join his army if
+    // there is a place for them. Castle bonuses are applied to the resulting combined army.
+    if ( hero ) {
+        Army garrisonArmy;
+        garrisonArmy.Assign( army );
+
+        Army combinedArmy( hero );
+        combinedArmy.Assign( hero->GetArmy() );
+        combinedArmy.ArrangeForCastleDefense( garrisonArmy );
+
+        totalStrength += combinedArmy.GetStrength();
     }
-    if ( Settings::Get().ExtCastleAllowGuardians() && heroes.Guard() ) {
-        totalStrength += heroes.Guard()->GetArmy().GetStrength();
-    }
+    // Otherwise just use the garrison army strength. Castle bonuses are also applied.
     else {
         totalStrength += army.GetStrength();
     }
 
-    // Add castle bonus if there are any troops defending it
+    // Add castle bonuses if there are any troops defending the castle
     if ( isCastle() && totalStrength > 1 ) {
         const Battle::Tower tower( *this, Battle::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
         const double towerStr = tower.GetStrengthWithBonus( tower.GetBonus(), 0 );
@@ -2350,10 +2331,11 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
             totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
         }
         else {
-            // heavy penalty if no ballistics skill and army is melee infantry based
+            // Heavy penalty if the attacking hero does not have a ballistic skill, and his army is based on melee infantry
             totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
         }
     }
+
     return totalStrength;
 }
 
@@ -2487,9 +2469,7 @@ void Castle::JoinRNDArmy()
 
 void Castle::ActionPreBattle()
 {
-    CastleHeroes heroes = world.GetHeroes( *this );
-    Heroes * hero = heroes.GuardFirst();
-
+    Heroes * hero = world.GetHero( *this );
     if ( hero ) {
         hero->GetArmy().ArrangeForCastleDefense( army );
     }
@@ -2674,54 +2654,6 @@ StreamBase & operator>>( StreamBase & msg, AllCastles & castles )
     }
 
     return msg;
-}
-
-void Castle::SwapCastleHeroes( CastleHeroes & heroes )
-{
-    if ( heroes.Guest() && heroes.Guard() ) {
-        heroes.Guest()->SetModes( Heroes::GUARDIAN );
-        heroes.Guest()->ResetModes( Heroes::SLEEPER );
-        heroes.Guard()->ResetModes( Heroes::GUARDIAN );
-        heroes.Swap();
-
-        world.GetTiles( center.x, center.y ).SetHeroes( nullptr );
-
-        fheroes2::Point position( heroes.Guard()->GetCenter() );
-        position.y -= 1;
-        heroes.Guard()->SetCenter( position );
-        heroes.Guard()->GetPath().Reset();
-
-        position = heroes.Guest()->GetCenter();
-        position.y += 1;
-        heroes.Guest()->SetCenter( position );
-        heroes.Guest()->GetPath().Reset();
-
-        world.GetTiles( center.x, center.y ).SetHeroes( heroes.Guest() );
-    }
-    else if ( heroes.Guest() && !heroes.Guard() ) {
-        heroes.Guest()->SetModes( Heroes::GUARDIAN );
-        heroes.Guest()->ResetModes( Heroes::SLEEPER );
-        heroes.Swap();
-        heroes.Guard()->GetArmy().JoinTroops( army );
-
-        world.GetTiles( center.x, center.y ).SetHeroes( nullptr );
-
-        fheroes2::Point position( heroes.Guard()->GetCenter() );
-        position.y -= 1;
-        heroes.Guard()->SetCenter( position );
-        heroes.Guard()->GetPath().Reset();
-    }
-    else if ( !heroes.Guest() && heroes.Guard() ) {
-        heroes.Guard()->ResetModes( Heroes::GUARDIAN );
-        heroes.Swap();
-
-        fheroes2::Point position( heroes.Guest()->GetCenter() );
-        position.y += 1;
-        heroes.Guest()->SetCenter( position );
-        heroes.Guest()->GetPath().Reset();
-
-        world.GetTiles( center.x, center.y ).SetHeroes( heroes.Guest() );
-    }
 }
 
 std::string Castle::GetStringBuilding( uint32_t build ) const
