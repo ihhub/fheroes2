@@ -2321,39 +2321,61 @@ Army & Castle::GetActualArmy()
 double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 {
     double totalStrength = 0;
+    double castleStrength = 0;
 
     CastleHeroes heroes = world.GetHeroes( *this );
-    if ( heroes.Guest() ) {
-        totalStrength += heroes.Guest()->GetArmy().GetStrength();
-    }
+
+    // If the castle has a guardian hero, only his army will be directly involved in the castle defense.
+    // There will be a separate battle with the guest hero (if there is one) outside the castle walls,
+    // therefore, castle bonuses do not apply to his army.
     if ( heroes.Guard() ) {
-        totalStrength += heroes.Guard()->GetArmy().GetStrength();
+        if ( heroes.Guest() ) {
+            totalStrength += heroes.Guest()->GetArmy().GetStrength();
+        }
+
+        castleStrength += heroes.Guard()->GetArmy().GetStrength();
     }
+    // If there is a guest hero in the castle, then some of the garrison troops can join his army if
+    // there is a place for them. Castle bonuses are applied to the resulting combined army.
+    else if ( heroes.Guest() ) {
+        Army garrisonArmy;
+        garrisonArmy.Assign( army );
+
+        Army combinedArmy( heroes.Guest() );
+        combinedArmy.Assign( heroes.Guest()->GetArmy() );
+        combinedArmy.ArrangeForCastleDefense( garrisonArmy );
+
+        castleStrength += combinedArmy.GetStrength();
+    }
+    // Otherwise just use the garrison army strength. Castle bonuses are also applied.
     else {
-        totalStrength += army.GetStrength();
+        castleStrength += army.GetStrength();
     }
 
-    // Add castle bonus if there are any troops defending it
-    if ( isCastle() && totalStrength > 1 ) {
+    // Add castle bonuses if there are any troops defending the castle
+    if ( isCastle() && castleStrength > 1 ) {
         const Battle::Tower tower( *this, Battle::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
         const double towerStr = tower.GetStrengthWithBonus( tower.GetBonus(), 0 );
 
-        totalStrength += towerStr;
+        castleStrength += towerStr;
         if ( isBuild( BUILD_LEFTTURRET ) ) {
-            totalStrength += towerStr / 2;
+            castleStrength += towerStr / 2;
         }
         if ( isBuild( BUILD_RIGHTTURRET ) ) {
-            totalStrength += towerStr / 2;
+            castleStrength += towerStr / 2;
         }
 
         if ( attackingHero && ( !attackingHero->GetArmy().isMeleeDominantArmy() || attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) ) ) {
-            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
+            castleStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
         }
         else {
-            // heavy penalty if no ballistics skill and army is melee infantry based
-            totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
+            // Heavy penalty if the attacking hero does not have a ballistic skill, and his army is based on melee infantry
+            castleStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
         }
     }
+
+    totalStrength += castleStrength;
+
     return totalStrength;
 }
 
