@@ -109,22 +109,22 @@ struct HeroRow
     {
         hero = ptr;
 
-        armyBar.reset( new ArmyBar( &hero->GetArmy(), true, false ) );
+        armyBar = std::make_unique<ArmyBar>( &hero->GetArmy(), true, false );
         armyBar->SetBackground( { 41, 53 }, fheroes2::GetColorId( 72, 28, 0 ) );
         armyBar->setTableSize( { 5, 1 } );
         armyBar->setInBetweenItemsOffset( { -1, 0 } );
 
-        artifactsBar.reset( new ArtifactsBar( hero, true, false, false, true, nullptr ) );
+        artifactsBar = std::make_unique<ArtifactsBar>( hero, true, false, false, true, nullptr );
         artifactsBar->setTableSize( { 7, 2 } );
         artifactsBar->setInBetweenItemsOffset( { 1, 8 } );
         artifactsBar->SetContent( hero->GetBagArtifacts() );
 
-        secSkillsBar.reset( new SecondarySkillsBar( *hero ) );
+        secSkillsBar = std::make_unique<SecondarySkillsBar>( *hero );
         secSkillsBar->setTableSize( { 4, 2 } );
         secSkillsBar->setInBetweenItemsOffset( { -1, 8 } );
         secSkillsBar->SetContent( hero->GetSecondarySkills().ToVector() );
 
-        primSkillsBar.reset( new PrimarySkillsBar( ptr, true ) );
+        primSkillsBar = std::make_unique<PrimarySkillsBar>( ptr, true );
         primSkillsBar->setTableSize( { 4, 1 } );
         primSkillsBar->setInBetweenItemsOffset( { 2, 0 } );
         primSkillsBar->SetTextOff( 20, -13 );
@@ -255,19 +255,24 @@ bool StatsHeroesList::ActionListCursor( HeroRow & row, const fheroes2::Point & c
     const fheroes2::Point cursorPos( cursor.x, cursor.y );
 
     if ( ( row.armyBar->GetArea() & cursorPos ) && row.armyBar->QueueEventProcessing() ) {
-        if ( row.artifactsBar->isSelected() )
+        if ( row.artifactsBar->isSelected() ) {
             row.artifactsBar->ResetSelected();
+        }
         return true;
     }
-    else if ( ( row.artifactsBar->GetArea() & cursorPos ) && row.artifactsBar->QueueEventProcessing() ) {
-        if ( row.armyBar->isSelected() )
+
+    if ( ( row.artifactsBar->GetArea() & cursorPos ) && row.artifactsBar->QueueEventProcessing() ) {
+        if ( row.armyBar->isSelected() ) {
             row.armyBar->ResetSelected();
+        }
         return true;
     }
-    else if ( ( row.primSkillsBar->GetArea() & cursorPos ) && row.primSkillsBar->QueueEventProcessing() ) {
+
+    if ( ( row.primSkillsBar->GetArea() & cursorPos ) && row.primSkillsBar->QueueEventProcessing() ) {
         return true;
     }
-    else if ( ( row.secSkillsBar->GetArea() & cursorPos ) && row.secSkillsBar->QueueEventProcessing() ) {
+
+    if ( ( row.secSkillsBar->GetArea() & cursorPos ) && row.secSkillsBar->QueueEventProcessing() ) {
         return true;
     }
 
@@ -371,7 +376,7 @@ struct CstlRow
 
         const uint8_t fill = fheroes2::GetColorId( 40, 12, 0 );
 
-        garrisonArmyBar.reset( new ArmyBar( &castle->GetArmy(), true, false ) );
+        garrisonArmyBar = std::make_unique<ArmyBar>( &castle->GetArmy(), true, false );
         garrisonArmyBar->SetBackground( { 41, 41 }, fill );
         garrisonArmyBar->setTableSize( { 5, 1 } );
         garrisonArmyBar->setInBetweenItemsOffset( { -1, 0 } );
@@ -379,7 +384,7 @@ struct CstlRow
         Heroes * hero = world.GetHero( *castle );
 
         if ( hero ) {
-            heroArmyBar.reset( new ArmyBar( &hero->GetArmy(), true, false ) );
+            heroArmyBar = std::make_unique<ArmyBar>( &hero->GetArmy(), true, false );
             heroArmyBar->SetBackground( { 41, 41 }, fill );
             heroArmyBar->setTableSize( { 5, 1 } );
             heroArmyBar->setInBetweenItemsOffset( { -1, 0 } );
@@ -388,7 +393,7 @@ struct CstlRow
             heroArmyBar.reset();
         }
 
-        dwellingsBar.reset( new DwellingsBar( *castle, { 39, 52 } ) );
+        dwellingsBar = std::make_unique<DwellingsBar>( *castle, fheroes2::Size{ 39, 52 } );
         dwellingsBar->setTableSize( { 6, 1 } );
         dwellingsBar->setInBetweenItemsOffset( { 2, 0 } );
     }
@@ -512,21 +517,27 @@ bool StatsCastlesList::ActionListCursor( CstlRow & row, const fheroes2::Point & 
 
     if ( row.garrisonArmyBar && ( row.garrisonArmyBar->GetArea() & cursorPos )
          && ( row.heroArmyBar ? row.garrisonArmyBar->QueueEventProcessing( *row.heroArmyBar ) : row.garrisonArmyBar->QueueEventProcessing() ) ) {
-        if ( row.heroArmyBar && row.heroArmyBar->isSelected() )
+        if ( row.heroArmyBar && row.heroArmyBar->isSelected() ) {
             row.heroArmyBar->ResetSelected();
+        }
         return true;
     }
-    else if ( row.heroArmyBar && ( row.heroArmyBar->GetArea() & cursorPos )
-              && ( row.garrisonArmyBar ? row.heroArmyBar->QueueEventProcessing( *row.garrisonArmyBar ) : row.heroArmyBar->QueueEventProcessing() ) ) {
-        if ( row.garrisonArmyBar && row.garrisonArmyBar->isSelected() )
+
+    if ( row.heroArmyBar && ( row.heroArmyBar->GetArea() & cursorPos )
+         && ( row.garrisonArmyBar ? row.heroArmyBar->QueueEventProcessing( *row.garrisonArmyBar ) : row.heroArmyBar->QueueEventProcessing() ) ) {
+        if ( row.garrisonArmyBar && row.garrisonArmyBar->isSelected() ) {
             row.garrisonArmyBar->ResetSelected();
+        }
         return true;
     }
-    else if ( row.dwellingsBar && ( row.dwellingsBar->GetArea() & cursorPos ) && row.dwellingsBar->QueueEventProcessing() ) {
-        if ( row.heroArmyBar && row.heroArmyBar->isSelected() )
+
+    if ( row.dwellingsBar && ( row.dwellingsBar->GetArea() & cursorPos ) && row.dwellingsBar->QueueEventProcessing() ) {
+        if ( row.heroArmyBar && row.heroArmyBar->isSelected() ) {
             row.heroArmyBar->ResetSelected();
-        if ( row.garrisonArmyBar && row.garrisonArmyBar->isSelected() )
+        }
+        if ( row.garrisonArmyBar && row.garrisonArmyBar->isSelected() ) {
             row.garrisonArmyBar->ResetSelected();
+        }
         return true;
     }
 
