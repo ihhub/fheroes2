@@ -394,7 +394,7 @@ private:
     double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
     double _emulatedPointerPosX = 0;
     double _emulatedPointerPosY = 0;
-    
+
     inputmode_t _current_input_mode = INPUTMODE_KEYBOARD_MOUSE;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
