@@ -1175,22 +1175,26 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_KEYDOWN:
         case SDL_KEYUP:
             HandleKeyboardEvent( event.key );
+            _current_input_mode = INPUTMODE_KEYBOARD_MOUSE;
             break;
 
         // mouse motion
         case SDL_MOUSEMOTION:
             HandleMouseMotionEvent( event.motion );
+            _current_input_mode = INPUTMODE_KEYBOARD_MOUSE;
             break;
 
         // mouse button
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
             HandleMouseButtonEvent( event.button );
+            _current_input_mode = INPUTMODE_KEYBOARD_MOUSE;
             break;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         case SDL_MOUSEWHEEL:
             HandleMouseWheelEvent( event.wheel );
+            _current_input_mode = INPUTMODE_KEYBOARD_MOUSE;
             break;
         case SDL_CONTROLLERDEVICEREMOVED:
             if ( _gameController != nullptr ) {
@@ -1214,15 +1218,18 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             break;
         case SDL_CONTROLLERAXISMOTION:
             HandleControllerAxisEvent( event.caxis );
+            _current_input_mode = INPUTMODE_CONTROLLER;
             break;
         case SDL_CONTROLLERBUTTONDOWN:
         case SDL_CONTROLLERBUTTONUP:
             HandleControllerButtonEvent( event.cbutton );
+            _current_input_mode = INPUTMODE_CONTROLLER;
             break;
         case SDL_FINGERDOWN:
         case SDL_FINGERUP:
         case SDL_FINGERMOTION:
             HandleTouchEvent( event.tfinger );
+            _current_input_mode = INPUTMODE_TOUCH;
             break;
 #endif
 
