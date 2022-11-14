@@ -1748,6 +1748,7 @@ namespace AI
             const auto it = _priorityTargets.find( tileIndex );
             if ( it != _priorityTargets.end() ) {
                 if ( it->second == PriorityTask::DEFEND ) {
+                    // TODO: consider making this hero a castle guardian if possible
                     hero.SetModes( Heroes::SLEEPER );
                 }
 

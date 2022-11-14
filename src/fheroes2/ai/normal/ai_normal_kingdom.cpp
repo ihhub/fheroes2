@@ -217,7 +217,7 @@ namespace AI
 
         const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
         // check if we should leave some troops in the garrison
-        // TODO: amount of troops left could depend on region's safetyFactor
+        // TODO: amount of troops left could depend on region's safetyFactor as well as on the presence of a guardian hero (if supported)
         if ( castle.isCastle() && _regions[regionID].safetyFactor <= 100 && !garrison.isValid() ) {
             const Heroes::Role heroRole = hero.getAIRole();
             const bool isFigtherHero = ( heroRole == Heroes::Role::FIGHTER || heroRole == Heroes::Role::CHAMPION );
@@ -616,6 +616,7 @@ namespace AI
                 const int mapIndex = castle->GetIndex();
 
                 // Make sure there is no hero in castle already and we're not under threat while having other heroes.
+                // TODO: consider the ability to have both a guest and a guardian hero in the same castle.
                 if ( hero != nullptr || ( availableHeroCount > 0 && castlesInDanger.find( mapIndex ) != castlesInDanger.end() ) )
                     continue;
 
