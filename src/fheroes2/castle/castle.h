@@ -197,9 +197,9 @@ public:
     uint32_t getMonstersInDwelling( uint32_t ) const;
 
     // Returns the garrison strength estimation calculated as if the attacking hero really attacked this
-    // castle - including an estimate of the combined strength of the garrison and the army of the guest
-    // hero (if present), castle-specific bonuses from moat and towers and so on, relative to the attacking
-    // hero's abilities. See the implementation for details.
+    // castle - including an estimate of the strength of the combined army consisting of the garrison and
+    // the hero's troops (if present), castle-specific bonuses from moat, towers and so on, relative to
+    // the attacking hero's abilities. See the implementation for details.
     double GetGarrisonStrength( const Heroes * attackingHero ) const;
 
     // Returns the correct dwelling type available in the castle. BUILD_NOTHING is returned if this is not a dwelling.
