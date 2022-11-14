@@ -59,7 +59,6 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
-#include "route.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
