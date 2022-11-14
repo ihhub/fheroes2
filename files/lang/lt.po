@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 09:31+0000\n"
+"POT-Creation-Date: 2022-11-13 14:27+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -702,6 +702,9 @@ msgid "The %{name} fires with the strength of %{count} Archers"
 msgstr ""
 
 msgid "each with a +%{attack} bonus to their attack skill."
+msgstr ""
+
+msgid "The %{name} is destroyed."
 msgstr ""
 
 msgid ""
@@ -8792,9 +8795,6 @@ msgstr ""
 msgid "battle: allow soft wait for troops"
 msgstr ""
 
-msgid "battle: deterministic events"
-msgstr ""
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr ""
 
@@ -8866,9 +8866,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Moved %{monster}"
-#~ msgstr ""
-#~ "Keletas\n"
-#~ "%{monster}"

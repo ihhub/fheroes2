@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-10 10:28+0000\n"
-"PO-Revision-Date: 2022-11-13 19:27+0000\n"
+"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -721,6 +721,10 @@ msgstr "%{name} стреля със силата на %{count} стрелци"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "всеки получава +%{attack} бонус към своето умение за нападение."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Огледалният образ е унищожен!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -9758,9 +9762,6 @@ msgstr "герои: позволяват да избереш всяко осно
 msgid "battle: allow soft wait for troops"
 msgstr "битка: позволява меко изчакване за войски"
 
-msgid "battle: deterministic events"
-msgstr "битка: детерминистични събития"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "игра: автоматично запазване ще бъде направено в началото на деня"
 
@@ -9835,26 +9836,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
-#~ msgstr ""
-#~ " от лявата страна на главното меню.\n"
-#~ "\n"
-#~ "За да превключиш между режим на прозорец и цял екран,\n"
-#~ "натисни "
-
-#~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " клавиш на клавиатурата.\n"
-#~ "\n"
-#~ "Приятна игра!"
-
-#~ msgid "game: show system info"
-#~ msgstr "игра: показва информация за системата"

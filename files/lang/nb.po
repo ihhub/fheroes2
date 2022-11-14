@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-11-13 14:27+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -737,6 +737,10 @@ msgstr "Borgens %{name} skyter med styrken til %{count} bueskyttere"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "hver med en angrepsbonus på +%{attack}."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Speilbildet ble ødelagt!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -9944,9 +9948,6 @@ msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
 msgid "battle: allow soft wait for troops"
 msgstr "Kamp: Avvent styrke til rundens slutt"
 
-msgid "battle: deterministic events"
-msgstr "Kamp: Forutbestemte turer"
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "Parti: Autolagringen skjer ved begynnelsen av dagen"
 
@@ -10021,32 +10022,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
-#~ msgstr ""
-#~ " til venstre på hovedmenyen.\n"
-#~ "\n"
-#~ "For å bytte mellom vindus- og fullskjermsmodus\n"
-#~ "trykk på "
-
-#~ msgid "F4"
-#~ msgstr "F4"
-
-#~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ "-tasten på tastaturet\n"
-#~ "\n"
-#~ "Vi håper du nyter spillet!"
-
-#~ msgid "game: show system info"
-#~ msgstr "Parti: Vis systeminfo"
-
-#~ msgid "Moved %{monster}"
-#~ msgstr "Flyttet troppen med %{monster}"

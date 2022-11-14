@@ -128,21 +128,29 @@ namespace
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
+
         const fheroes2::Rect windowResolutionRoi( resolutionRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowModeRoi( modeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
 
-        drawResolution( windowResolutionRoi );
-        drawMode( windowModeRoi );
-        drawVSync( windowVSyncRoi );
-        drawSystemInfo( windowSystemInfoRoi );
+        auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi]() {
+            drawResolution( windowResolutionRoi );
+            drawMode( windowModeRoi );
+            drawVSync( windowVSyncRoi );
+            drawSystemInfo( windowSystemInfoRoi );
+        };
+
+        drawOptions();
 
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
         fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
         okayButton.draw();
 
         display.render();
+
+        bool fullScreen = fheroes2::engine().isFullScreen();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
@@ -183,6 +191,16 @@ namespace
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
+            }
+
+            // Fullscreen mode can be toggled using a hotkey, we need to properly reflect this change in the UI
+            if ( fullScreen != fheroes2::engine().isFullScreen() ) {
+                fullScreen = fheroes2::engine().isFullScreen();
+
+                emptyDialogRestorer.restore();
+                drawOptions();
+
+                display.render();
             }
         }
 

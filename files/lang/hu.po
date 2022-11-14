@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-11-13 14:27+0000\n"
 "PO-Revision-Date: 2022-10-25 08:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -751,6 +751,10 @@ msgstr ""
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr ""
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "A %{name} ellenáll a varázslatnak!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -9449,9 +9453,6 @@ msgstr ""
 msgid "battle: allow soft wait for troops"
 msgstr ""
 
-msgid "battle: deterministic events"
-msgstr ""
-
 msgid "game: autosave will be made at the beginning of the day"
 msgstr ""
 
@@ -9533,7 +9534,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Moved %{monster}"
-#~ msgstr "A %{monster} ide menjen."
