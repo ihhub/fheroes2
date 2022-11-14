@@ -387,22 +387,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
                     res = fheroes2::GameMode::HIGHSCORES_STANDARD;
-
-                    if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() ) {
-                        if ( Dialog::YES == Dialog::Message( "", _( "Do you wish to continue the game?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                            continueAfterVictory = true;
-
-                            // Game::HighScores() calls ResetResult()
-                            Game::DisplayHighScores( false );
-
-                            Interface::Basic & I = Interface::Basic::Get();
-
-                            I.ResetFocus( GameFocus::HEROES );
-                            I.SetRedraw( Interface::REDRAW_ALL );
-
-                            res = fheroes2::GameMode::CANCEL;
-                        }
-                    }
                 }
             }
             else {

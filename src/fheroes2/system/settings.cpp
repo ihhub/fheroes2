@@ -939,8 +939,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "game: use evil interface" );
     case Settings::GAME_HIDE_INTERFACE:
         return _( "game: hide interface" );
-    case Settings::GAME_CONTINUE_AFTER_VICTORY:
-        return _( "game: offer to continue the game after victory condition" );
     default:
         break;
     }
