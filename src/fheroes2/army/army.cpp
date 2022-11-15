@@ -460,9 +460,8 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool mo
     // Combine troops of the same type in one slot to leave more room for new troops to join
     MergeSameMonsterTroops();
 
-    if ( !moveAll )
-    {
-    assert( isValid() && from.isValid() );
+    if ( !moveAll ) {
+        assert( isValid() && from.isValid() );
     }
 
     if ( monsterIdToKeep != Monster::UNKNOWN ) {
