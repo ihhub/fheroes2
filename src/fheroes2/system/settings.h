@@ -61,7 +61,7 @@ public:
         // The following extended options do not affect the overall
         // game balance and are saved in the binary config file
         //
-        GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
+        // UNUSED = 0x10000010,
         // UNUSED = 0x10000020,
         // UNUSED = 0x10000040,
         // UNUSED = 0x10000100,
@@ -312,11 +312,6 @@ public:
     bool ExtGameContinueAfterVictory() const
     {
         return ExtModes( GAME_CONTINUE_AFTER_VICTORY );
-    }
-
-    bool ExtGameAutosaveBeginOfDay() const
-    {
-        return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
     }
 
     static bool ExtGameUseFade()
