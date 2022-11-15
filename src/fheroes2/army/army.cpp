@@ -453,14 +453,17 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( Troops & from, const int monsterIdToKeep )
+void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool moveAll )
 {
     assert( this != &from );
 
     // Combine troops of the same type in one slot to leave more room for new troops to join
     MergeSameMonsterTroops();
 
+    if ( !moveAll )
+    {
     assert( isValid() && from.isValid() );
+    }
 
     if ( monsterIdToKeep != Monster::UNKNOWN ) {
         // Find a troop stack in the destination stack set consisting of monsters we need to keep
