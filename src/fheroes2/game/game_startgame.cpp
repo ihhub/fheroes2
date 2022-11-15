@@ -1017,7 +1017,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         // gamearea
-        if( !gameArea.NeedScroll() && !isMovingHero ) {
+        if ( !gameArea.NeedScroll() && !isMovingHero ) {
             if ( !radar.isDragRadar() )
                 gameArea.QueueEventProcessing();
             else if ( !le.MousePressLeft() )
