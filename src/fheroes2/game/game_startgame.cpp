@@ -781,10 +781,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         ShowEventDayDialog();
-
-        if ( conf.ExtGameAutosaveBeginOfDay() ) {
-            Game::AutoSave();
-        }
     }
 
     GameOver::Result & gameResult = GameOver::Result::Get();
@@ -1176,9 +1172,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 }
             }
 
-            if ( !conf.ExtGameAutosaveBeginOfDay() ) {
-                Game::AutoSave();
-            }
+            Game::AutoSave();
         }
     }
 

@@ -933,8 +933,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
         return _( "battle: allow soft wait for troops" );
-    case Settings::GAME_AUTOSAVE_BEGIN_DAY:
-        return _( "game: autosave will be made at the beginning of the day" );
     case Settings::GAME_EVIL_INTERFACE:
         return _( "game: use evil interface" );
     case Settings::GAME_HIDE_INTERFACE:

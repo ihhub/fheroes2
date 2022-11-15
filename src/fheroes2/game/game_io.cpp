@@ -48,6 +48,8 @@
 
 namespace
 {
+    const std::string autoSaveName{ "AUTOSAVE" };
+
     const uint16_t SAV2ID2 = 0xFF02;
     const uint16_t SAV2ID3 = 0xFF03;
 
@@ -94,13 +96,13 @@ namespace
 
 bool Game::AutoSave()
 {
-    return Game::Save( System::ConcatePath( GetSaveDir(), "AUTOSAVE" + GetSaveFileExtension() ) );
+    return Game::Save( System::ConcatePath( GetSaveDir(), autoSaveName + GetSaveFileExtension() ), true );
 }
 
-bool Game::Save( const std::string & fn )
+bool Game::Save( const std::string & fn, const bool autoSave /* = false */ )
 {
     DEBUG_LOG( DBG_GAME, DBG_INFO, fn )
-    const bool autosave = ( System::GetBasename( fn ) == "AUTOSAVE" + GetSaveFileExtension() );
+
     const Settings & conf = Settings::Get();
 
     StreamFile fs;
@@ -112,8 +114,9 @@ bool Game::Save( const std::string & fn )
     }
 
     uint16_t loadver = GetLoadVersion();
-    if ( !autosave )
+    if ( !autoSave ) {
         Game::SetLastSavename( fn );
+    }
 
     // raw info content
     fs << static_cast<uint8_t>( SAV2ID3 >> 8 ) << static_cast<uint8_t>( SAV2ID3 & 0xFF ) << std::to_string( loadver ) << loadver

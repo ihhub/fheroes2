@@ -37,10 +37,10 @@ namespace Game
 {
     bool AutoSave();
 
-    bool Save( const std::string & );
+    bool Save( const std::string & fn, const bool autoSave = false );
 
     // Returns GameMode::CANCEL in case of failure.
-    fheroes2::GameMode Load( const std::string & fileName );
+    fheroes2::GameMode Load( const std::string & fn );
 
     bool LoadSAV2FileInfo( const std::string &, Maps::FileInfo & );
 
