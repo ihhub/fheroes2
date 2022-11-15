@@ -453,7 +453,7 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool castleMove )
+void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool castleMove, const bool fromGarrison )
 {
     assert( this != &from );
 
@@ -515,7 +515,7 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool ca
                 continue;
             }
 
-            if ( stacksLeft == 1 ) {
+            if ( stacksLeft == 1 && !fromGarrison ) {
                 // This is the last valid troop stack in the source stack set, try to join all but one monsters from this stack and
                 // then stop in any case
                 if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1, false ) ) {
@@ -525,7 +525,9 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool ca
                 break;
             }
 
-            assert( stacksLeft > 1 );
+            if ( !fromGarrison ) {
+                assert( stacksLeft > 1 );
+            }
 
             if ( JoinTroop( *troop ) ) {
                 troop->Reset();

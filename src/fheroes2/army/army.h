@@ -92,7 +92,7 @@ public:
 
     // Implements the necessary logic to move unit stacks from army to army using the arrow buttons in the
     // hero's meeting dialog
-    void MoveTroops( Troops & from, const int monsterIdToKeep, const bool castleMove );
+    void MoveTroops( Troops & from, const int monsterIdToKeep, const bool castleMove, const bool fromGarrison );
 
     void MergeSameMonsterTroops();
     Troops GetOptimized() const;
