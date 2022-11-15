@@ -471,12 +471,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             if ( heroes.Guest() && !readOnly ) {
                 // Move troops down.
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                    heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), keep ? keep->GetID() : Monster::UNKNOWN );
+                    heroes.Guest()->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     redrawAfterArmyAction = true;
                 }
                 // Move troops up.
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                    GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), keep ? keep->GetID() : Monster::UNKNOWN );
+                    GetArmy().MoveTroops( heroes.Guest()->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     redrawAfterArmyAction = true;
                 }
             }
