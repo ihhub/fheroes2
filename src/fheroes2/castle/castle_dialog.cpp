@@ -476,7 +476,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 }
                 // Move troops up.
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                    GetArmy().MoveTroops( heroes.Guest()->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN, false );
+                    GetArmy().MoveTroops( heroes.Guest()->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN, true );
                     redrawAfterArmyAction = true;
                 }
             }

@@ -453,14 +453,14 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool moveAll )
+void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool castleMove )
 {
     assert( this != &from );
 
     // Combine troops of the same type in one slot to leave more room for new troops to join
     MergeSameMonsterTroops();
 
-    if ( !moveAll ) {
+    if ( !castleMove ) {
         assert( isValid() && from.isValid() );
     }
 
