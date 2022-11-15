@@ -395,6 +395,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
     bool need_redraw = false;
+    bool redrawAfterArmyAction = false;
 
     // dialog menu loop
     Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
@@ -455,6 +456,39 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                         || ( le.MouseCursor( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
                  || ( !bottomArmyBar.isValid() && le.MouseCursor( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
                 need_redraw = true;
+            }
+
+            const ArmyTroop * keep = nullptr;
+
+            if ( topArmyBar.isSelected() ) {
+                keep = topArmyBar.GetSelectedItem();
+            }
+            else if ( bottomArmyBar.isSelected() ) {
+                keep = bottomArmyBar.GetSelectedItem();
+            }
+
+            // Actions with hero armies.
+            if ( heroes.Guest() && !readOnly ) {
+                // Move troops down.
+                if ( HotKeyPressEvent( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) ) {
+                    heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), keep ? keep->GetID() : Monster::UNKNOWN );
+                    redrawAfterArmyAction = true;
+                }
+                // Move troops up.
+                else if ( HotKeyPressEvent( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) ) {
+                    GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), keep ? keep->GetID() : Monster::UNKNOWN );
+                    redrawAfterArmyAction = true;
+                }
+            }
+            // Redraw and reset if any action modifying armies has been made.
+            if ( redrawAfterArmyAction ) {
+                if ( topArmyBar.isSelected() )
+                    topArmyBar.ResetSelected();
+                if ( bottomArmyBar.isSelected() )
+                    bottomArmyBar.ResetSelected();
+
+                need_redraw = true;
+                redrawAfterArmyAction = false;
             }
 
             if ( conf.ExtCastleAllowGuardians() && !readOnly ) {
