@@ -463,6 +463,12 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool ca
     if ( !castleMove ) {
         assert( isValid() && from.isValid() );
     }
+    else if ( castleMove && fromGarrison ) {
+        assert( isValid() );
+    }
+    else {
+        assert( from.isValid() );
+    }
 
     if ( monsterIdToKeep != Monster::UNKNOWN ) {
         // Find a troop stack in the destination stack set consisting of monsters we need to keep
