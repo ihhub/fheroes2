@@ -1006,14 +1006,6 @@ void LocalEvent::CloseVirtualKeyboard()
 #endif
 }
 
-bool LocalEvent::MouseInsideRenderArea() const
-{
-    const fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Size gameSurfaceRes( display.width(), display.height() );
-
-    return mouse_cu.x >= 0 && mouse_cu.y >= 0 && mouse_cu.x < gameSurfaceRes.width && mouse_cu.y < gameSurfaceRes.height;
-}
-
 namespace
 {
     class ColorCycling

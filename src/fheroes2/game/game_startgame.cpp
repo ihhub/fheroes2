@@ -1002,8 +1002,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 cursor.SetThemes( Cursor::POINTER );
             if ( !gameArea.isDragScroll() )
                 radar.QueueEventProcessing();
-            else if ( !le.MousePressLeft() )
-                gameArea.QueueEventProcessing();
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
@@ -1011,27 +1009,19 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 cursor.SetThemes( Cursor::POINTER );
             res = controlPanel.QueueEventProcessing();
         }
-        // cursor is over the game area
-        else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
-            if ( !radar.isDragRadar() )
-                gameArea.QueueEventProcessing();
-            else if ( !le.MousePressLeft() )
-                radar.QueueEventProcessing();
-        }
-        // cursor is somewhere else
-        else if ( !gameArea.NeedScroll() ) {
+        // cursor is somewhere else (expect gamearea)
+        else if ( !gameArea.NeedScroll() && !le.MouseCursor( gameArea.GetROI() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             gameArea.ResetCursorPosition();
         }
 
-        if ( !le.MouseInsideRenderArea() && !le.MousePressLeft() ) {
-            if ( gameArea.isDragScroll() ) {
+        // gamearea
+        if( !gameArea.NeedScroll() && !isMovingHero ) {
+            if ( !radar.isDragRadar() )
                 gameArea.QueueEventProcessing();
-            }
-            if ( radar.isDragRadar() ) {
+            else if ( !le.MousePressLeft() )
                 radar.QueueEventProcessing();
-            }
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {

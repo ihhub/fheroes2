@@ -299,8 +299,6 @@ public:
         }
     }
 
-    bool MouseInsideRenderArea() const;
-
     enum inputmode_t
     {
         INPUTMODE_KEYBOARD_MOUSE = 0x0001,
