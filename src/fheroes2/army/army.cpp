@@ -501,7 +501,7 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool ca
         }
     }
 
-    auto moveTroops = [this, &from, monsterIdToKeep]( const bool ignoreMonstersToKeep ) {
+    auto moveTroops = [this, &from, monsterIdToKeep, fromGarrison]( const bool ignoreMonstersToKeep ) {
         uint32_t stacksLeft = from.GetOccupiedSlotCount();
 
         for ( Troop * troop : from ) {
