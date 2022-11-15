@@ -470,12 +470,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             // Actions with hero armies.
             if ( heroes.Guest() && !readOnly ) {
                 // Move troops down.
-                if ( HotKeyPressEvent( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) ) {
+                if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
                     heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), keep ? keep->GetID() : Monster::UNKNOWN );
                     redrawAfterArmyAction = true;
                 }
                 // Move troops up.
-                else if ( HotKeyPressEvent( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) ) {
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
                     GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), keep ? keep->GetID() : Monster::UNKNOWN );
                     redrawAfterArmyAction = true;
                 }
