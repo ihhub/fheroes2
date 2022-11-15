@@ -609,19 +609,19 @@ msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Заклинание \"%{spell}\" наносит %{damage} урона всем живым существам."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "%{attacker}: в результате атаки противник (%{target}) ослеп!"
+msgstr "%{attacker}: атакованный противник \"%{target}\" ослеп!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "%{attacker}: противник (%{target}) обращён взглядом в камень!"
+msgstr "%{attacker}: противник \"%{target}\" обращён взглядом в камень!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "%{attacker}: противник (%{target}) проклят!"
+msgstr "%{attacker}: противник \"%{target}\" проклят!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "%{attacker}: противник (%{target}) парализован!"
+msgstr "%{attacker}: противник \"%{target}\" парализован!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "%{attacker}: рассеяны все положительные чары с противника (%{target})!"
+msgstr "%{attacker}: рассеяны все хорошие чары с противника \"%{target}\"!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
 msgstr "%{attacker} применяет \"%{spell}\" (цель: %{target})."
@@ -2839,7 +2839,7 @@ msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
 msgstr ""
-"Вертикальная синхронизация может быть включена для исключения мерцания "
+"Вертикальная синхронизация может быть включена для устранения мерцания "
 "изображения на некоторых мониторах."
 
 msgid "Show extra information such as FPS and current time."
@@ -3009,9 +3009,8 @@ msgstr "Выбор разрешения экрана:"
 msgid "Click to apply the selected resolution."
 msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
 
-# do not translate until Russian font generation is optimized
 msgid "MAX"
-msgstr "MAX"
+msgstr "МАКС"
 
 msgid "How many troops to move?"
 msgstr "Сколько существ перенести?"
