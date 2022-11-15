@@ -463,7 +463,7 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep, const bool ca
     if ( !castleMove ) {
         assert( isValid() && from.isValid() );
     }
-    else if ( castleMove && fromGarrison ) {
+    else if ( fromGarrison ) {
         assert( isValid() );
     }
     else {
