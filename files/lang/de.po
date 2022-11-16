@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"POT-Creation-Date: 2022-11-16 13:24+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -10005,10 +10005,6 @@ msgstr "Burg: Wächter zulassen"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helden: Kauf eines Zauberbuchs bei Schreinen erlauben"
 
-#, fuzzy
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr "Helden: Bewegungspunkte sind nach Rückzug/Aufgabe gespeihert"
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "Helden: in der Arena kann man jeder Primärfähigkeit wählen"
 
@@ -10089,3 +10085,7 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "heroes: remember movement points when retreating or surrendering"
+#~ msgstr "Helden: Bewegungspunkte sind nach Rückzug/Aufgabe gespeihert"
