@@ -440,13 +440,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             }
 
             // Actions with hero armies.
-            if ( hero.Guest() && !readOnly ) {
+            if ( hero && !readOnly ) {
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                    hero.Guest()->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
+                    hero->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                    GetArmy().MoveTroops( hero.Guest()->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
+                    GetArmy().MoveTroops( hero->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }
             }
