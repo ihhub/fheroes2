@@ -917,8 +917,6 @@ std::string Settings::ExtName( const uint32_t settingId )
     switch ( settingId ) {
     case Settings::GAME_BATTLE_SHOW_DAMAGE:
         return _( "battle: show damage info" );
-    case Settings::WORLD_SCOUTING_EXTENDED:
-        return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
         return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
