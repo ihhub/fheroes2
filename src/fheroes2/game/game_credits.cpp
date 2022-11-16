@@ -297,7 +297,7 @@ namespace
 
         int32_t offsetY = textInitialOffsetY;
 
-        TextBox title( _( "Support us at ), Font::BIG, textWidth );
+        TextBox title( _( "Support us at" ), Font::BIG, textWidth );
         TextBox name( _( "local-donation-platform|https://www.patreon.com/fheroes2" ), Font::YELLOW_BIG, textWidth );
         title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
