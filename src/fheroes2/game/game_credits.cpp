@@ -349,7 +349,6 @@ namespace
 
         const fheroes2::Sprite & vampireLord = fheroes2::AGG::GetICN( ICN::VAMPIRE2, 22 );
         fheroes2::Blit( vampireLord, output, ( textInitialOffsetX - vampireLord.width() ) / 2, offsetY );
-        offsetY += vampireLord.height();
 
         offsetY = textInitialOffsetY;
 
