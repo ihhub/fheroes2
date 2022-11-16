@@ -923,8 +923,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
         return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
-    case Settings::CASTLE_ALLOW_GUARDIANS:
-        return _( "castle: allow guardians" );
     case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
         return _( "heroes: allow buy a spellbook from Shrines" );
     case Settings::HEROES_ARENA_ANY_SKILLS:

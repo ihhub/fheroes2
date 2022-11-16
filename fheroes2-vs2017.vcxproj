@@ -464,7 +464,6 @@
     <ClInclude Include="src\fheroes2\castle\captain.h" />
     <ClInclude Include="src\fheroes2\castle\castle.h" />
     <ClInclude Include="src\fheroes2\castle\castle_building_info.h" />
-    <ClInclude Include="src\fheroes2\castle\castle_heroes.h" />
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_audio.h" />

@@ -96,7 +96,7 @@ public:
         // UNUSED = 0x20010000,
         // UNUSED = 0x20020000,
         // UNUSED = 0x20040000,
-        CASTLE_ALLOW_GUARDIANS = 0x20080000,
+        // UNUSED = 0x20080000,
         // UNUSED = 0x20800000,
         // UNUSED = 0x21000000,
 
@@ -287,11 +287,6 @@ public:
     bool ExtWorldExtObjectsCaptured() const
     {
         return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
-    }
-
-    bool ExtCastleAllowGuardians() const
-    {
-        return ExtModes( CASTLE_ALLOW_GUARDIANS );
     }
 
     bool ExtBattleShowDamage() const

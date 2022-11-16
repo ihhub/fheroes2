@@ -476,9 +476,9 @@ Heroes * World::FromJailHeroes( int32_t index )
     return vec_heroes.FromJail( index );
 }
 
-CastleHeroes World::GetHeroes( const Castle & castle ) const
+Heroes * World::GetHero( const Castle & castle ) const
 {
-    return CastleHeroes( vec_heroes.GetGuest( castle ), vec_heroes.GetGuard( castle ) );
+    return vec_heroes.GetHero( castle );
 }
 
 int World::GetDay() const
