@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"POT-Creation-Date: 2022-11-16 13:44+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1767,9 +1767,6 @@ msgstr "Каракстоўн"
 msgid "Sheltemburg"
 msgstr "Шэлтэмбург"
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr ""
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr ""
 
@@ -2170,14 +2167,6 @@ msgstr ""
 msgid "Show previous town"
 msgstr ""
 
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-
 msgid "This town may not be upgraded to a castle."
 msgstr ""
 
@@ -2192,12 +2181,6 @@ msgstr "Пакінуць горад"
 
 msgid "Show Income"
 msgstr "Паказаць прыбытак"
-
-msgid "Swap Heroes"
-msgstr ""
-
-msgid "Meeting Heroes"
-msgstr ""
 
 msgid "View Hero"
 msgstr "Даведацца аб героі"
@@ -3671,9 +3654,6 @@ msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
 
 msgid "%{color} player has been vanquished!"
-msgstr ""
-
-msgid "Do you wish to continue the game?"
 msgstr ""
 
 msgid "Scenario:"
@@ -8608,13 +8588,7 @@ msgstr ""
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
-msgid "castle: allow guardians"
-msgstr ""
-
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
@@ -8630,9 +8604,6 @@ msgid "game: use evil interface"
 msgstr ""
 
 msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
