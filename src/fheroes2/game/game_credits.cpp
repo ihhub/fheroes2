@@ -297,8 +297,8 @@ namespace
 
         int32_t offsetY = textInitialOffsetY;
 
-        TextBox title( _( "Support us at\nLineTest" ), Font::BIG, textWidth );
-        TextBox name( _( "local-donation-platform|" ), Font::YELLOW_BIG, textWidth );
+        TextBox title( _( "Support us at" ), Font::BIG, textWidth );
+        TextBox name( _( "local-donation-platform|https://www.patreon.com/fheroes2" ), Font::YELLOW_BIG, textWidth );
         title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
         offsetY += title.h() + name.h() + 5;
@@ -308,7 +308,7 @@ namespace
         offsetY += wizard.height();
 
         title.Set( _( "Connect with us at" ), Font::BIG, textWidth );
-        name.Set( _( "local-social-network|" ), Font::YELLOW_BIG, textWidth - 10 ); // special case to properly split the string
+        name.Set( _( "local-social-network|https://www.facebook.com/groups/fheroes2" ), Font::YELLOW_BIG, textWidth - 10 ); // special case to properly split the string
         title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
         offsetY += title.h() + name.h() + 10;
