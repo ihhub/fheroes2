@@ -216,14 +216,15 @@ namespace
         fheroes2::Blit( missile, output, websiteOffsetX + websiteInto.w() + website.w() + 10, offsetY + website.h() / 2 - missile.height() / 2, true );
 
         const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
-        fheroes2::Blit( goblin, output, columnStep + columnStep / 2 - 15, ( textInitialOffsetY + ( secondAuthorLayerY - textInitialOffsetY ) - goblin.height() ) / 2, true );
+        fheroes2::Blit( goblin, output, columnStep + columnStep / 2 - 15, ( textInitialOffsetY + ( secondAuthorLayerY - textInitialOffsetY ) - goblin.height() ) / 2,
+                        true );
 
         offsetY = secondAuthorLayerY;
 
         title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
         name.Set( "Ivan Shibanov", Font::BIG, textWidth );
         title.Blit( columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
-        name.Blit( columnStep +  ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
+        name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
         offsetY += title.h() + name.h() + 10;
 
         const fheroes2::Sprite & crusader = fheroes2::AGG::GetICN( ICN::PALADIN2, 23 );
