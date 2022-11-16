@@ -1486,9 +1486,7 @@ void Heroes::SetFreeman( int reason )
         SetModes( ACTION );
 
         if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-            if ( Settings::Get().ExtHeroRememberMovementPointsWhenRetreating() ) {
-                SetModes( SAVEMP );
-            }
+            SetModes( SAVEMP );
 
             if ( heroColor != Color::NONE ) {
                 kingdom.appendSurrenderedHero( *this );
