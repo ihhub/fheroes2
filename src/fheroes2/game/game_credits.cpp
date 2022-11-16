@@ -289,15 +289,15 @@ namespace
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY, output );
 
         std::string supporters( "William Hoskinson\n"
-                                  "Aleksei Mazur\n"
-                                  "Connor Townsend\n"
-                                  "Brandon Wright\n"
-                                  "Aimi Lindschouw\n"
-                                  "Kiril Lipatov\n"
-                                  "Matt Taylor\n"
-                                  "Andrew Szucs\n"
-                                  "Kresimir Condic\n"
-                                  "slvclw\n" );
+                                "Aleksei Mazur\n"
+                                "Connor Townsend\n"
+                                "Brandon Wright\n"
+                                "Aimi Lindschouw\n"
+                                "Kiril Lipatov\n"
+                                "Matt Taylor\n"
+                                "Andrew Szucs\n"
+                                "Kresimir Condic\n"
+                                "slvclw\n" );
 
         name.Set( supporters, Font::BIG, textWidth );
         const int32_t supportersHeight = name.h();
