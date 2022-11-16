@@ -48,8 +48,8 @@
 
 namespace
 {
-    const std::string autoSaveNameAtTheBeginningOfTheDay{ "AUTOTDAY" };
-    const std::string autoSaveNameAtTheEndOfTheDay{ "AUTOYDAY" };
+    const std::string autoSaveNameAtTheBeginningOfTheDay{ "AUTOTURN" };
+    const std::string autoSaveNameAtTheEndOfTheDay{ "AUTOSAVE" };
 
     const uint16_t SAV2ID2 = 0xFF02;
     const uint16_t SAV2ID3 = 0xFF03;
