@@ -573,12 +573,9 @@ namespace fheroes2
 
                     // clean the button
                     Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 2, 52, 14 );
-
-                    // add 'max'
-                    // Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), { 7, 3 }, { 6, 2 }, { 52, 16 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), { 6, 2 }, { 5, 3 }, { 54, 13 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
