@@ -126,30 +126,6 @@ namespace
         return msgStatus;
     }
 
-    class MeetingButton : public fheroes2::ButtonSprite
-    {
-    public:
-        MeetingButton( const int32_t px, const int32_t py )
-        {
-            const fheroes2::Sprite & sprite = fheroes2::getHeroExchangeImage();
-            setSprite( sprite, sprite );
-            setPosition( px, py );
-        }
-    };
-
-    class SwapButton : public fheroes2::ButtonSprite
-    {
-    public:
-        SwapButton( const int32_t px, const int32_t py )
-        {
-            const fheroes2::Sprite & in = fheroes2::getHeroExchangeImage();
-            fheroes2::Sprite sprite( in.height(), in.width() );
-            Transpose( in, sprite );
-            setSprite( sprite, sprite );
-            setPosition( px, py );
-        }
-    };
-
     void RedrawIcons( const Castle & castle, const Heroes * hero, const fheroes2::Point & pt )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
