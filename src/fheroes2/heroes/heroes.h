@@ -180,7 +180,7 @@ public:
         RECRUIT = 0x00000040,
         JAIL = 0x00000080,
         ACTION = 0x00000100,
-        // Hero should remember his movement points when retreating or surrendering, related to Settings::HEROES_REMEMBER_MP_WHEN_RETREATING
+        // Hero must retain his movement points if he retreated or surrendered and was then rehired on the same day
         SAVEMP = 0x00000200,
         SLEEPER = 0x00000400,
         GUARDIAN = 0x00000800,
