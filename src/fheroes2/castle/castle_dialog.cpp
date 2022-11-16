@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "army.h"
 #include "army_bar.h"
 #include "army_troop.h"
 #include "audio.h"
