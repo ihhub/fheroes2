@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"POT-Creation-Date: 2022-11-16 13:44+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -1910,9 +1910,6 @@ msgstr "Коракстоун"
 msgid "Sheltemburg"
 msgstr "Шелтембург"
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Найм невозможен. Герой в замке не может занять гарнизон."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Найм невозможен. В замке уже есть герой."
 
@@ -2324,16 +2321,6 @@ msgstr "Нажмите, чтобы показать предыдущий гор�
 msgid "Show previous town"
 msgstr "Предыдущий город"
 
-msgid "Army joining"
-msgstr "Гарнизон замка"
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-"Невозможно переместить героя в гарнизон замка. Освободите место в армии и "
-"попробуйте ещё раз."
-
 msgid "This town may not be upgraded to a castle."
 msgstr "В этом городе нельзя построить замок."
 
@@ -2348,12 +2335,6 @@ msgstr "Покинуть город"
 
 msgid "Show Income"
 msgstr "Показать доход"
-
-msgid "Swap Heroes"
-msgstr "Переставить героев"
-
-msgid "Meeting Heroes"
-msgstr "Встреча героев"
 
 msgid "View Hero"
 msgstr "Просмотреть героя"
@@ -3932,9 +3913,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} игрок побеждён!"
-
-msgid "Do you wish to continue the game?"
-msgstr "Вы хотите продолжить игру?"
 
 msgid "Scenario:"
 msgstr "Сценарий:"
@@ -9700,14 +9678,8 @@ msgstr ""
 "мир: возможность установить флаг на постройках: Водяная/Ветряная Мельница, "
 "Волшебный Сад"
 
-msgid "castle: allow guardians"
-msgstr "замок: разрешить защитников (как в H3)"
-
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "герои: разрешить покупку магической книги в святилищах"
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr "герои: при бегстве или капитуляции сохраняются очки передвижения"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: в постройке Арена можно получить любой первичный навык"
@@ -9723,9 +9695,6 @@ msgstr "игра: использовать серую тему интерфей�
 
 msgid "game: hide interface"
 msgstr "игра: выключить интерфейс (весь экран игровое поле)"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr "игра: после победы возможно продолжить игру"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Уникальный Артефакт - это %{name}."
@@ -9789,3 +9758,34 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "Найм невозможен. Герой в замке не может занять гарнизон."
+
+#~ msgid "Army joining"
+#~ msgstr "Гарнизон замка"
+
+#~ msgid ""
+#~ "Unable to merge two armies together. Rearrange monsters manually before "
+#~ "moving the hero to the garrison."
+#~ msgstr ""
+#~ "Невозможно переместить героя в гарнизон замка. Освободите место в армии и "
+#~ "попробуйте ещё раз."
+
+#~ msgid "Swap Heroes"
+#~ msgstr "Переставить героев"
+
+#~ msgid "Meeting Heroes"
+#~ msgstr "Встреча героев"
+
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Вы хотите продолжить игру?"
+
+#~ msgid "castle: allow guardians"
+#~ msgstr "замок: разрешить защитников (как в H3)"
+
+#~ msgid "heroes: remember movement points when retreating or surrendering"
+#~ msgstr "герои: при бегстве или капитуляции сохраняются очки передвижения"
+
+#~ msgid "game: offer to continue the game after victory condition"
+#~ msgstr "игра: после победы возможно продолжить игру"
