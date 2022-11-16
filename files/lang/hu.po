@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-11-16 13:44+0000\n"
 "PO-Revision-Date: 2022-10-25 08:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -751,6 +751,10 @@ msgstr ""
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr ""
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "A %{name} ellenáll a varázslatnak!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1908,10 +1912,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-#, fuzzy
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Nem lehet tobrozni - túl sok hősöd van."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Nem lehet tobrozni - van már hősöd ebben a városban.."
 
@@ -2332,14 +2332,6 @@ msgstr "Előző város mutatása"
 msgid "Show previous town"
 msgstr "Előző város mutatása"
 
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
 
@@ -2357,14 +2349,6 @@ msgstr "Város elhagyása"
 #, fuzzy
 msgid "Show Income"
 msgstr "Jövedelem:"
-
-#, fuzzy
-msgid "Swap Heroes"
-msgstr "Hősök mutatása"
-
-#, fuzzy
-msgid "Meeting Heroes"
-msgstr "Hősök mutatása"
 
 msgid "View Hero"
 msgstr "Hős mutatása"
@@ -3992,10 +3976,6 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} kiesett!"
-
-#, fuzzy
-msgid "Do you wish to continue the game?"
-msgstr "Szeretnél venni egyet?"
 
 msgid "Scenario:"
 msgstr "Küldetés:"
@@ -9434,22 +9414,13 @@ msgstr ""
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
-msgid "castle: allow guardians"
-msgstr ""
-
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 
 msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"
@@ -9459,9 +9430,6 @@ msgid "game: use evil interface"
 msgstr ""
 
 msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 #, fuzzy
@@ -9535,5 +9503,17 @@ msgstr ""
 "fheroes2/releases"
 
 #, fuzzy
-#~ msgid "Moved %{monster}"
-#~ msgstr "A %{monster} ide menjen."
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "Nem lehet tobrozni - túl sok hősöd van."
+
+#, fuzzy
+#~ msgid "Swap Heroes"
+#~ msgstr "Hősök mutatása"
+
+#, fuzzy
+#~ msgid "Meeting Heroes"
+#~ msgstr "Hősök mutatása"
+
+#, fuzzy
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Szeretnél venni egyet?"

@@ -36,7 +36,6 @@
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "dialog.h"
 #include "direction.h"
@@ -569,8 +568,7 @@ namespace AI
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " disable meeting" )
         }
         else {
-            const Castle * other_hero_castle = other_hero->inCastle();
-            if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
+            if ( other_hero->inCastle() ) {
                 AIToCastle( hero, dst_index );
                 return;
             }
@@ -620,20 +618,12 @@ namespace AI
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " disable visiting" )
         }
         else {
-            CastleHeroes heroes = castle->GetHeroes();
-
-            // first attack to guest hero
-            if ( heroes.FullHouse() ) {
-                AIToHeroes( hero, dst_index );
-                return;
-            }
-
             Army & army = castle->GetActualArmy();
 
             if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
                 DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() )
 
-                Heroes * defender = heroes.GuardFirst();
+                Heroes * defender = castle->GetHero();
                 castle->ActionPreBattle();
 
                 const bool playVanishingHeroSound = defender != nullptr && defender->isControlHuman();

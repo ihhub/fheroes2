@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 09:31+0000\n"
+"POT-Creation-Date: 2022-11-16 13:44+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -702,6 +702,9 @@ msgid "The %{name} fires with the strength of %{count} Archers"
 msgstr ""
 
 msgid "each with a +%{attack} bonus to their attack skill."
+msgstr ""
+
+msgid "The %{name} is destroyed."
 msgstr ""
 
 msgid ""
@@ -1795,9 +1798,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr ""
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr ""
 
@@ -2202,14 +2202,6 @@ msgstr "Rodyti ankstesnį miestą"
 msgid "Show previous town"
 msgstr "Rodyti ankstesnį miestą"
 
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-
 msgid "This town may not be upgraded to a castle."
 msgstr ""
 
@@ -2225,12 +2217,6 @@ msgid "Exit Town"
 msgstr "Išeiti iš miesto"
 
 msgid "Show Income"
-msgstr ""
-
-msgid "Swap Heroes"
-msgstr ""
-
-msgid "Meeting Heroes"
 msgstr ""
 
 msgid "View Hero"
@@ -3760,10 +3746,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr ""
-
-#, fuzzy
-msgid "Do you wish to continue the game?"
-msgstr "Ar norite nusipirkti vieną?"
 
 msgid "Scenario:"
 msgstr ""
@@ -8777,22 +8759,13 @@ msgstr ""
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
-msgid "castle: allow guardians"
-msgstr ""
-
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 
 msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"
@@ -8802,9 +8775,6 @@ msgid "game: use evil interface"
 msgstr ""
 
 msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
@@ -8868,7 +8838,5 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-#~ msgid "Moved %{monster}"
-#~ msgstr ""
-#~ "Keletas\n"
-#~ "%{monster}"
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Ar norite nusipirkti vieną?"

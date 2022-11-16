@@ -36,7 +36,6 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "game_over.h"
 #include "game_static.h"
@@ -71,13 +70,8 @@ namespace
     {
         assert( castle != nullptr );
 
-        const Heroes * castleGuest = castle->GetHeroes().Guest();
-        if ( castleGuest && castleGuest == world.GetHeroesCondWins() ) {
-            return true;
-        }
-
-        const Heroes * castleGuard = castle->GetHeroes().Guard();
-        if ( castleGuard && castleGuard == world.GetHeroesCondWins() ) {
+        const Heroes * hero = castle->GetHero();
+        if ( hero && hero == world.GetHeroesCondWins() ) {
             return true;
         }
 
@@ -129,7 +123,7 @@ namespace
         }
 
         if ( hero.GetColor() == castle->GetColor() ) {
-            return castle->GetHeroes().Guest() == nullptr;
+            return castle->GetHero() == nullptr;
         }
 
         if ( hero.isFriends( castle->GetColor() ) ) {
@@ -1560,7 +1554,7 @@ namespace AI
         bestTargetValue = lowestPossibleValue;
 
         for ( const Castle * castle : kingdom.GetCastles() ) {
-            if ( !castle || castle->GetHeroes().Guest() != nullptr )
+            if ( !castle || castle->GetHero() != nullptr )
                 continue;
 
             const int currentCastleIndex = castle->GetIndex();

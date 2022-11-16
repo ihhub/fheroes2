@@ -266,6 +266,7 @@ uint32_t Maps::Tiles::QuantityGold() const
         default:
             break;
         }
+        break;
 
     default:
         break;

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-11-16 13:44+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -737,6 +737,10 @@ msgstr "Borgens %{name} skyter med styrken til %{count} bueskyttere"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "hver med en angrepsbonus på +%{attack}."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Speilbildet ble ødelagt!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1943,10 +1947,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-# Ikke mulig å verve?
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Kan ikke verves. Feil ved flytting av besøkende til forsvarende."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Det kan ikke verves en helt fordi det befinner seg en i byen."
 
@@ -2374,16 +2374,6 @@ msgstr "Klikk for å vise forrige by."
 msgid "Show previous town"
 msgstr "Vis forrige by"
 
-msgid "Army joining"
-msgstr "Sammenslåing av hærer"
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-"Disse to hærene kunne ikke slås sammen. Omorganiser styrkene og forsøk å "
-"flytte helten din til garnisonen igjen."
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Denne byen kan ikke oppgraderes til borg."
 
@@ -2398,13 +2388,6 @@ msgstr "Forlat byen"
 
 msgid "Show Income"
 msgstr "Vis inntekt"
-
-msgid "Swap Heroes"
-msgstr "Bytt helter"
-
-# Hvilken funksjon? Overskrift for to helter som møtes?
-msgid "Meeting Heroes"
-msgstr "Møtende helter"
 
 msgid "View Hero"
 msgstr "Vis helt"
@@ -4020,9 +4003,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} spiller har blitt utslettet!"
-
-msgid "Do you wish to continue the game?"
-msgstr "Ønsker du å fortsette spillet?"
 
 msgid "Scenario:"
 msgstr "Brett:"
@@ -9929,23 +9909,14 @@ msgstr "Verden: Tillat å plassere voktere på objekter"
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget"
 
-msgid "castle: allow guardians"
-msgstr "Borg: Tillat helt som vokter"
-
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr "Helter: Husk skritt etter tilbaketrekking eller overgivelse."
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
 
 msgid "battle: allow soft wait for troops"
 msgstr "Kamp: Avvent styrke til rundens slutt"
-
-msgid "battle: deterministic events"
-msgstr "Kamp: Forutbestemte turer"
 
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "Parti: Autolagringen skjer ved begynnelsen av dagen"
@@ -9955,9 +9926,6 @@ msgstr "Parti: Bruk ondt grensesnitt"
 
 msgid "game: hide interface"
 msgstr "Parti: Skjul grensesnitt"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr "Parti: Tilby å fortsette partiet etter å ha vunnet"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Den sjeldneste skatten er faktisk %{name}."
@@ -10022,31 +9990,35 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
-#~ msgstr ""
-#~ " til venstre på hovedmenyen.\n"
-#~ "\n"
-#~ "For å bytte mellom vindus- og fullskjermsmodus\n"
-#~ "trykk på "
+# Ikke mulig å verve?
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "Kan ikke verves. Feil ved flytting av besøkende til forsvarende."
 
-#~ msgid "F4"
-#~ msgstr "F4"
+#~ msgid "Army joining"
+#~ msgstr "Sammenslåing av hærer"
 
 #~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
+#~ "Unable to merge two armies together. Rearrange monsters manually before "
+#~ "moving the hero to the garrison."
 #~ msgstr ""
-#~ "-tasten på tastaturet\n"
-#~ "\n"
-#~ "Vi håper du nyter spillet!"
+#~ "Disse to hærene kunne ikke slås sammen. Omorganiser styrkene og forsøk å "
+#~ "flytte helten din til garnisonen igjen."
 
-#~ msgid "game: show system info"
-#~ msgstr "Parti: Vis systeminfo"
+#~ msgid "Swap Heroes"
+#~ msgstr "Bytt helter"
 
-#~ msgid "Moved %{monster}"
-#~ msgstr "Flyttet troppen med %{monster}"
+# Hvilken funksjon? Overskrift for to helter som møtes?
+#~ msgid "Meeting Heroes"
+#~ msgstr "Møtende helter"
+
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Ønsker du å fortsette spillet?"
+
+#~ msgid "castle: allow guardians"
+#~ msgstr "Borg: Tillat helt som vokter"
+
+#~ msgid "heroes: remember movement points when retreating or surrendering"
+#~ msgstr "Helter: Husk skritt etter tilbaketrekking eller overgivelse."
+
+#~ msgid "game: offer to continue the game after victory condition"
+#~ msgstr "Parti: Tilby å fortsette partiet etter å ha vunnet"

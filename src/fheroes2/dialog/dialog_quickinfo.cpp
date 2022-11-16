@@ -35,7 +35,6 @@
 #include "artifact_ultimate.h"
 #include "captain.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -793,31 +792,10 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
         scoutSkillLevel = std::min( kingdom.GetCountThievesGuild(), static_cast<uint32_t>( Skill::Level::EXPERT ) );
     }
 
-    const Heroes * guardian = castle.GetHeroes().Guard();
-    const bool isGuardianVisible = guardian && scoutSkillLevel >= Skill::Level::ADVANCED;
-
-    // show guardian
-    if ( isGuardianVisible ) {
-        // hero name
-        text.set( guardian->GetName(), fheroes2::FontType::smallWhite() );
-        dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
-        dst_pt.y += castleIcon.height() + 5;
-        text.draw( dst_pt.x, dst_pt.y, display );
-
-        // hero avatar
-        const fheroes2::Sprite & port = guardian->GetPortrait( PORT_SMALL );
-        if ( !port.empty() ) {
-            dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
-            dst_pt.y += 15;
-            fheroes2::Blit( port, display, dst_pt.x, dst_pt.y );
-        }
-    }
-    else {
-        text.set( _( "Defenders:" ), fheroes2::FontType::smallWhite() );
-        dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
-        dst_pt.y += castleIcon.height() + 2;
-        text.draw( dst_pt.x, dst_pt.y, display );
-    }
+    text.set( _( "Defenders:" ), fheroes2::FontType::smallWhite() );
+    dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
+    dst_pt.y += castleIcon.height() + 2;
+    text.draw( dst_pt.x, dst_pt.y, display );
 
     const uint32_t count = castle.GetArmy().GetOccupiedSlotCount();
 
@@ -834,7 +812,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
         dst_pt.x = cur_rt.x - 1;
         dst_pt.y += 21;
 
-        Army::DrawMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, scoutSkillLevel, isGuardianVisible, isScouteView );
+        Army::DrawMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, scoutSkillLevel, false, isScouteView );
     }
     else {
         text.set( _( "Unknown" ), fheroes2::FontType::smallWhite() );
@@ -947,6 +925,8 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
         }
     }
 
+    dst_pt.y = cur_rt.y + 13;
+
     // color flags, except for neutral heroes
     if ( !isNeutralHero ) {
         uint32_t index = 0;
@@ -973,8 +953,6 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
         default:
             break;
         }
-
-        dst_pt.y = cur_rt.y + 13;
 
         const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
         dst_pt.x = cur_rt.x + ( cur_rt.width - 40 ) / 2 - l_flag.width();
