@@ -72,7 +72,7 @@ public:
         // UNUSED = 0x10008000,
         // UNUSED = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
-        GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
+        // UNUSED = 0x10200000,
 
         // The following extended options affect the overall game balance and
         // are saved both in the binary config file and in the savefile
@@ -297,11 +297,6 @@ public:
     bool ExtBattleSoftWait() const
     {
         return ExtModes( BATTLE_SOFT_WAITING );
-    }
-
-    bool ExtGameContinueAfterVictory() const
-    {
-        return ExtModes( GAME_CONTINUE_AFTER_VICTORY );
     }
 
     bool ExtGameAutosaveBeginOfDay() const
