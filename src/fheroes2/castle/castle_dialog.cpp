@@ -395,7 +395,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
     bool need_redraw = false;
-    bool redrawAfterArmyAction = false;
+    bool isArmyActionPerformed = false;
 
     // dialog menu loop
     Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
@@ -472,23 +472,23 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 // Move troops down.
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
                     heroes.Guest()->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
-                    redrawAfterArmyAction = true;
+                    isArmyActionPerformed = true;
                 }
                 // Move troops up.
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
                     GetArmy().MoveTroops( heroes.Guest()->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
-                    redrawAfterArmyAction = true;
+                    isArmyActionPerformed = true;
                 }
             }
             // Redraw and reset if any action modifying armies has been made.
-            if ( redrawAfterArmyAction ) {
+            if ( isArmyActionPerformed ) {
                 if ( topArmyBar.isSelected() )
                     topArmyBar.ResetSelected();
                 if ( bottomArmyBar.isSelected() )
                     bottomArmyBar.ResetSelected();
 
                 need_redraw = true;
-                redrawAfterArmyAction = false;
+                isArmyActionPerformed = false;
             }
 
             if ( conf.ExtCastleAllowGuardians() && !readOnly ) {
