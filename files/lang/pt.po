@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"POT-Creation-Date: 2022-11-16 13:44+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -1833,10 +1833,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-#, fuzzy
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Impossível recrutar - você tem muitos heróis."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Impossível recrutar - você já possui um herói na cidade."
 
@@ -2257,14 +2253,6 @@ msgstr "Mostrar cidade anterior"
 msgid "Show previous town"
 msgstr "Mostrar cidade anterior"
 
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Esta cidade não pode ser transformada em castelo."
 
@@ -2282,14 +2270,6 @@ msgstr "Sair da Cidade"
 #, fuzzy
 msgid "Show Income"
 msgstr "Renda:"
-
-#, fuzzy
-msgid "Swap Heroes"
-msgstr "Heróis"
-
-#, fuzzy
-msgid "Meeting Heroes"
-msgstr "Proximo Herói"
 
 msgid "View Hero"
 msgstr "Ver Herói"
@@ -3923,9 +3903,6 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} foi derrotado!"
-
-msgid "Do you wish to continue the game?"
-msgstr ""
 
 msgid "Scenario:"
 msgstr "Cenário:"
@@ -9079,13 +9056,7 @@ msgstr ""
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
-msgid "castle: allow guardians"
-msgstr ""
-
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
@@ -9101,9 +9072,6 @@ msgid "game: use evil interface"
 msgstr ""
 
 msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
@@ -9170,3 +9138,15 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "Impossível recrutar - você tem muitos heróis."
+
+#, fuzzy
+#~ msgid "Swap Heroes"
+#~ msgstr "Heróis"
+
+#, fuzzy
+#~ msgid "Meeting Heroes"
+#~ msgstr "Proximo Herói"

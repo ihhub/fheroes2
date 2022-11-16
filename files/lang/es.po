@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"POT-Creation-Date: 2022-11-16 13:44+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1909,10 +1909,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-#, fuzzy
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "No puedes reclutar, tienes demasiados Héroes."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "No puedes reclutar, ya tienes un Héroe en esta ciudad."
 
@@ -2350,14 +2346,6 @@ msgstr "Ver ciudad anterior"
 msgid "Show previous town"
 msgstr "Ver ciudad anterior"
 
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
@@ -2373,12 +2361,6 @@ msgstr "Salir de la ciudad"
 #, fuzzy
 msgid "Show Income"
 msgstr "Mostrar registros"
-
-msgid "Swap Heroes"
-msgstr "Intercambiar Héroes"
-
-msgid "Meeting Heroes"
-msgstr ""
 
 msgid "View Hero"
 msgstr "Ver Heroe"
@@ -4021,10 +4003,6 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player has been vanquished!"
 msgstr "¡%{color} ha sido derrotado!"
-
-#, fuzzy
-msgid "Do you wish to continue the game?"
-msgstr "¿Quiéres comprar uno?"
 
 msgid "Scenario:"
 msgstr "Escenario:"
@@ -9651,13 +9629,7 @@ msgstr "mundo: permitir establecer guardianes en objetos"
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
-msgid "castle: allow guardians"
-msgstr ""
-
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
@@ -9675,9 +9647,6 @@ msgstr "juego: usar interfaz maligna"
 
 msgid "game: hide interface"
 msgstr "juego: ocultar interfaz"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr ""
 
 #, fuzzy
 msgid "The ultimate artifact is really the %{name}."
@@ -9748,3 +9717,14 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "No puedes reclutar, tienes demasiados Héroes."
+
+#~ msgid "Swap Heroes"
+#~ msgstr "Intercambiar Héroes"
+
+#, fuzzy
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "¿Quiéres comprar uno?"

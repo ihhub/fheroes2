@@ -26,7 +26,6 @@
 #include "artifact.h"
 #include "artifact_info.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
@@ -289,12 +288,12 @@ namespace fheroes2
             description += _( "The nearest town is %{town}." );
             StringReplace( description, "%{town}", castle->GetName() );
 
-            const Heroes * townGuest = castle->GetHeroes().Guest();
-            if ( townGuest != nullptr ) {
+            const Heroes * townHero = castle->GetHero();
+            if ( townHero != nullptr ) {
                 description += "\n \n";
                 std::string extraLine = _( "This town is occupied by your hero %{hero}." );
                 StringReplace( extraLine, "%{town}", castle->GetName() );
-                StringReplace( extraLine, "%{hero}", townGuest->GetName() );
+                StringReplace( extraLine, "%{hero}", townHero->GetName() );
 
                 description += extraLine;
             }
