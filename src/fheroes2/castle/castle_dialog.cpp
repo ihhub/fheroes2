@@ -429,6 +429,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 need_redraw = true;
             }
 
+            // Preselecting of troop.
             const ArmyTroop * keep = nullptr;
 
             if ( topArmyBar.isSelected() ) {
@@ -439,15 +440,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             }
 
             // Actions with hero armies.
-            if ( heroes.Guest() && !readOnly ) {
-                // Move troops down.
+            if ( hero.Guest() && !readOnly ) {
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                    heroes.Guest()->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
+                    hero.Guest()->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }
-                // Move troops up.
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                    GetArmy().MoveTroops( heroes.Guest()->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
+                    GetArmy().MoveTroops( hero.Guest()->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }
             }
@@ -461,6 +460,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 need_redraw = true;
                 isArmyActionPerformed = false;
             }
+
             if ( !readOnly && hero && le.MouseClickLeft( rectSign2 ) ) {
                 // View hero.
                 openHeroDialog( topArmyBar, bottomArmyBar, *hero );
