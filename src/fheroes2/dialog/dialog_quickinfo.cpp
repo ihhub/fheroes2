@@ -31,7 +31,6 @@
 #include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
-#include "artifact.h"
 #include "artifact_ultimate.h"
 #include "captain.h"
 #include "castle.h"

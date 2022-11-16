@@ -28,7 +28,6 @@
 #include <cstdint>
 #include <functional>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "monster.h"

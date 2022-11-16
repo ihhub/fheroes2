@@ -30,6 +30,7 @@
 #include <ostream>
 #include <random>
 #include <set>
+#include <utility>
 
 #include "army.h"
 #include "army_troop.h"

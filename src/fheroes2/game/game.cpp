@@ -54,7 +54,6 @@
 #include "rand.h"
 #include "save_format_version.h"
 #include "settings.h"
-#include "skill.h"
 #include "tools.h"
 #include "world.h"
 

@@ -42,7 +42,6 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "skill.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
