@@ -90,10 +90,6 @@ public:
     void JoinTroops( Troops & );
     bool CanJoinTroops( const Troops & ) const;
 
-    // Implements the necessary logic to move unit stacks from army to army using the arrow buttons in the
-    // hero's meeting dialog
-    void MoveTroops( Troops & from, const int monsterIdToKeep, const bool castleMove, const bool fromGarrison );
-
     void MergeSameMonsterTroops();
     Troops GetOptimized() const;
 
@@ -220,6 +216,9 @@ public:
     std::string String() const;
 
     void JoinStrongestFromArmy( Army & giver );
+
+    // Implements the necessary logic to move unit stacks from army to army in the hero's meeting dialog and in the castle dialog
+    void MoveTroops( Army & from, const int monsterIdToKeep );
 
     void SetSpreadFormat( bool f )
     {

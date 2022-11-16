@@ -565,7 +565,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
                 keep = selectArmy2.GetSelectedItem();
             }
 
-            otherHero.GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN, false, false );
+            otherHero.GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
@@ -590,7 +590,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
                 keep = selectArmy2.GetSelectedItem();
             }
 
-            GetArmy().MoveTroops( otherHero.GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN, false, false );
+            GetArmy().MoveTroops( otherHero.GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
