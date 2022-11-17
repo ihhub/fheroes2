@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-17 15:35+0000\n"
+"POT-Creation-Date: 2022-11-17 16:30+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3615,7 +3615,13 @@ msgstr ""
 msgid "Support us at"
 msgstr ""
 
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
+
 msgid "Connect with us at"
+msgstr ""
+
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
 msgid "Need help with the game?"
