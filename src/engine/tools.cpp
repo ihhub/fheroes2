@@ -310,7 +310,7 @@ namespace fheroes2
         return res;
     }
 
-    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step )
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const double arcHeight, const int32_t step )
     {
         std::vector<Point> res;
         Point pt( from );
@@ -343,12 +343,12 @@ namespace fheroes2
         // parabola ('dy/dx' in 'b' constant and '-x1*dy/dx' in 'c' constant).
 
         // Calculation of the parabola equation coefficients
-        const double a = 4 * static_cast<double>( arcHeight ) / dx / dx;
+        const double a = 4 * arcHeight / dx / dx;
         const double b = dy / dx - a * ( dx + 2 * x1 );
         const double c = y1 + a * x1 * ( dx + x1 ) - x1 * dy / dx;
 
         for ( int32_t i = 1; i <= steps; ++i ) {
-            pt.x = pt.x + step;
+            pt.x += step;
             pt.y = static_cast<int32_t>( std::lround( a * pt.x * pt.x + b * pt.x + c ) );
             res.push_back( pt );
         }
