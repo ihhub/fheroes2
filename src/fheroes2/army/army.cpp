@@ -424,33 +424,6 @@ bool Troops::JoinTroop( const Troop & troop )
     return JoinTroop( troop.GetMonster(), troop.GetCount(), false );
 }
 
-bool Troops::CanJoinTroops( const Troops & troops2 ) const
-{
-    if ( this == &troops2 )
-        return false;
-
-    Troops troops1;
-    troops1.Insert( *this );
-
-    for ( const_iterator it = troops2.begin(); it != troops2.end(); ++it ) {
-        if ( ( *it )->isValid() && !troops1.JoinTroop( **it ) ) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-void Troops::JoinTroops( Troops & troops2 )
-{
-    if ( this == &troops2 )
-        return;
-
-    for ( iterator it = troops2.begin(); it != troops2.end(); ++it )
-        if ( ( *it )->isValid() ) {
-            JoinTroop( **it );
-            ( *it )->Reset();
-        }
 }
 
 bool Troops::AllTroopsAreTheSame() const

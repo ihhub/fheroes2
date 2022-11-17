@@ -87,9 +87,6 @@ public:
     bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
 
-    void JoinTroops( Troops & );
-    bool CanJoinTroops( const Troops & ) const;
-
     void MergeSameMonsterTroops();
     Troops GetOptimized() const;
 

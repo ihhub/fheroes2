@@ -56,8 +56,6 @@ namespace
 {
     struct RenderObjectInfo
     {
-        RenderObjectInfo() = default;
-
         RenderObjectInfo( fheroes2::Sprite in, const uint8_t value )
             : image( std::move( in ) )
             , alphaValue( value )
