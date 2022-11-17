@@ -87,9 +87,6 @@ public:
     bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
 
-    void JoinTroops( Troops & );
-    bool CanJoinTroops( const Troops & ) const;
-
     // Implements the necessary logic to move unit stacks from army to army using the arrow buttons in the
     // hero's meeting dialog
     void MoveTroops( Troops & from, const int monsterIdToKeep );
