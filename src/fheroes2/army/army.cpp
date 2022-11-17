@@ -424,7 +424,6 @@ bool Troops::JoinTroop( const Troop & troop )
     return JoinTroop( troop.GetMonster(), troop.GetCount(), false );
 }
 
-
 bool Troops::AllTroopsAreTheSame() const
 {
     int firstMonsterId = Monster::UNKNOWN;
