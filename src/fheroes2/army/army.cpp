@@ -1108,7 +1108,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
             const Troop & troop = capturedObject.GetTroop();
 
             if ( troop.isValid() ) {
-                ArrangeForBattle( troop.GetMonster(), troop.GetCount(), capturedObject.GetSplit() );
+                ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), false );
             }
         }
         else {
