@@ -35,8 +35,6 @@ namespace fheroes2
 
     void drawCastleName( const Castle & castle, Image & output, const Point & offset );
 
-    Sprite getHeroExchangeImage();
-
     void drawCastleDialogBuilding( const int32_t icnId, const uint32_t icnIndex, const Castle & castle, const Point & offset, const Rect & renderArea,
                                    const uint8_t alpha = 255 );
 }
