@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-17 15:35+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3485,6 +3485,9 @@ msgstr "Projektkoordination und Kernentwicklung"
 msgid "QA and Support"
 msgstr "QA und Unterstützung"
 
+msgid "Visit us at "
+msgstr "Besuchen Sie uns bei "
+
 msgid "Development"
 msgstr "Entwicklung"
 
@@ -3492,14 +3495,14 @@ msgstr "Entwicklung"
 msgid "Dev and Support"
 msgstr "QA und Unterstützung"
 
-msgid "Visit us at "
-msgstr "Besuchen Sie uns bei "
-
 msgid "Special Thanks to"
 msgstr "Besonderen Dank an"
 
 msgid "and many other contributors!"
 msgstr "und viele andere Mitwirkende!"
+
+msgid "and many-many other supporters!"
+msgstr "und viele, viele andere Unterstützer!"
 
 msgid "Support us at"
 msgstr "Unterstützen Sie uns bei"
@@ -3509,9 +3512,6 @@ msgstr "Verbinden Sie sich mit uns bei"
 
 msgid "Need help with the game?"
 msgstr "Brauchen Sie Hilfe beim Spiel?"
-
-msgid "and many-many other supporters!"
-msgstr "und viele, viele andere Unterstützer!"
 
 msgid "Original project before 0.7"
 msgstr "Ursprüngliches Projekt vor 0.7"

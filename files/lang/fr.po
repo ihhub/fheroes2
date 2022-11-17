@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-17 15:35+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3463,20 +3463,23 @@ msgstr "Coordination du projet et développement"
 msgid "QA and Support"
 msgstr "AQ et support"
 
+msgid "Visit us at "
+msgstr "Rendez-vous sur "
+
 msgid "Development"
 msgstr "Développement"
 
 msgid "Dev and Support"
 msgstr "Dév et support"
 
-msgid "Visit us at "
-msgstr "Rendez-vous sur "
-
 msgid "Special Thanks to"
 msgstr "Remerciements spéciaux à"
 
 msgid "and many other contributors!"
 msgstr "et aux nombreux autres contributeurs !"
+
+msgid "and many-many other supporters!"
+msgstr "et beaucoup, beaucoup d'autres supporteurs !"
 
 msgid "Support us at"
 msgstr "Soutenez-nous sur"
@@ -3486,9 +3489,6 @@ msgstr "Prenez contact avec nous sur"
 
 msgid "Need help with the game?"
 msgstr "Besoin d'aide avec le jeu ?"
-
-msgid "and many-many other supporters!"
-msgstr "et beaucoup, beaucoup d'autres supporteurs !"
 
 msgid "Original project before 0.7"
 msgstr "Projet original avant 0.7"
