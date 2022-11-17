@@ -27,6 +27,7 @@
 #include "castle.h"
 #include "color.h"
 #include "icn.h"
+#include "image.h"
 #include "logging.h"
 #include "race.h"
 #include "resource.h"

@@ -21,7 +21,6 @@
 
 #include <cstdint>
 
-#include "image.h"
 #include "math_base.h"
 
 class Castle;
@@ -29,6 +28,8 @@ class Funds;
 
 namespace fheroes2
 {
+    class Image;
+
     void drawCastleIcon( const Castle & castle, Image & output, const Point & offset );
 
     Rect drawResourcePanel( const Funds & kingdomTreasures, Image & output, const Point & offset );
