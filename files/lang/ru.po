@@ -3436,7 +3436,7 @@ msgstr "и многим другим участникам"
 msgid "Support us at"
 msgstr "Поддержите нас"
 
-msgid "local-donation-platfor|https://www.patreon.com/fheroes2"
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 "https://www.patreon.com/fheroes2\n"
 "https://boosty.to/fheroes2"
