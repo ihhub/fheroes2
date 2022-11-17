@@ -287,6 +287,7 @@ namespace
 
         TextBox name( contributors, Font::BIG, textWidth );
         const int32_t constributorsHeight = name.h();
+        const int32_t contributorCount = static_cast<int32_t>( name.row() );
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY, output );
 
         std::string supporters( "William Hoskinson\n"
@@ -302,7 +303,11 @@ namespace
 
         name.Set( supporters, Font::BIG, textWidth );
         const int32_t supportersHeight = name.h();
-        name.Blit( textInitialOffsetX + ( textInitialOffsetX - name.w() ) / 2, offsetY + ( constributorsHeight - supportersHeight ) / 2, output );
+        const int32_t supporterCount = static_cast<int32_t>( name.row() );
+        const int32_t countDifference = ( contributorCount - supporterCount );
+        const int32_t supportersOffset = ( countDifference / 2 ) * ( supportersHeight / supporterCount );
+
+        name.Blit( textInitialOffsetX + ( textInitialOffsetX - name.w() ) / 2, offsetY + supportersOffset, output );
 
         offsetY += constributorsHeight;
 
