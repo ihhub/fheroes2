@@ -27,6 +27,7 @@
 #include "castle.h"
 #include "color.h"
 #include "icn.h"
+#include "image.h"
 #include "logging.h"
 #include "race.h"
 #include "resource.h"
@@ -277,19 +278,6 @@ namespace fheroes2
 
         const fheroes2::Text text( castle.GetName(), fheroes2::FontType::smallWhite() );
         text.draw( offset.x + 320 - text.width() / 2, offset.y + 250, output );
-    }
-
-    Sprite getHeroExchangeImage()
-    {
-        const Sprite & sprite = fheroes2::AGG::GetICN( ICN::ADVMCO, 8 );
-
-        Sprite result( sprite.width() + 4, sprite.height() + 4 );
-        result.fill( 0 );
-
-        DrawBorder( result, fheroes2::GetColorId( 0xe0, 0xb4, 0 ) );
-        Blit( sprite, result, 2, 2 );
-
-        return result;
     }
 
     void drawCastleDialogBuilding( const int32_t icnId, const uint32_t icnIndex, const Castle & castle, const Point & offset, const Rect & renderArea,

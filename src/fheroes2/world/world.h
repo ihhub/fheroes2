@@ -34,7 +34,6 @@
 #include "army_troop.h"
 #include "artifact_ultimate.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
@@ -299,7 +298,7 @@ public:
     const Heroes * GetHeroesCondWins() const;
     const Heroes * GetHeroesCondLoss() const;
 
-    CastleHeroes GetHeroes( const Castle & ) const;
+    Heroes * GetHero( const Castle & ) const;
 
     const UltimateArtifact & GetUltimateArtifact() const;
     bool DiggingForUltimateArtifact( const fheroes2::Point & );

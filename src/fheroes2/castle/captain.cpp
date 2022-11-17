@@ -188,8 +188,6 @@ void Captain::ActionAfterBattle()
 
 void Captain::ActionPreBattle()
 {
-    SetSpellPoints( GetMaxSpellPoints() );
-
     spell_book.resetState();
 }
 

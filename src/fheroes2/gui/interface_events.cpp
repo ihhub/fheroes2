@@ -74,7 +74,7 @@
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
 {
-    if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) ) {
+    if ( hero == nullptr ) {
         return;
     }
 
@@ -105,8 +105,9 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx 
 
 void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, int32_t destinationIdx )
 {
-    if ( !hero || hero->Modes( Heroes::GUARDIAN ) )
+    if ( hero == nullptr ) {
         return;
+    }
 
     const Route::Path & path = hero->GetPath();
 

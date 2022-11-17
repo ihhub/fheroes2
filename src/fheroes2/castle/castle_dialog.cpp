@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "army.h"
 #include "army_bar.h"
 #include "army_troop.h"
 #include "audio.h"
@@ -36,7 +35,6 @@
 #include "captain.h"
 #include "castle.h"
 #include "castle_building_info.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -128,57 +126,27 @@ namespace
         return msgStatus;
     }
 
-    class MeetingButton : public fheroes2::ButtonSprite
-    {
-    public:
-        MeetingButton( const int32_t px, const int32_t py )
-        {
-            const fheroes2::Sprite & sprite = fheroes2::getHeroExchangeImage();
-            setSprite( sprite, sprite );
-            setPosition( px, py );
-        }
-    };
-
-    class SwapButton : public fheroes2::ButtonSprite
-    {
-    public:
-        SwapButton( const int32_t px, const int32_t py )
-        {
-            const fheroes2::Sprite & in = fheroes2::getHeroExchangeImage();
-            fheroes2::Sprite sprite( in.height(), in.width() );
-            Transpose( in, sprite );
-            setSprite( sprite, sprite );
-            setPosition( px, py );
-        }
-    };
-
-    void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const fheroes2::Point & pt )
+    void RedrawIcons( const Castle & castle, const Heroes * hero, const fheroes2::Point & pt )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const Heroes * hero1 = heroes.Guard();
-        const Heroes * hero2 = heroes.Guest();
-
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), display, pt.x, pt.y + 256 );
 
-        if ( hero1 ) {
-            fheroes2::Blit( hero1->GetPortrait( PORT_BIG ), display, pt.x + 5, pt.y + 262 );
-        }
-        else if ( castle.isBuild( BUILD_CAPTAIN ) ) {
+        if ( castle.isBuild( BUILD_CAPTAIN ) ) {
             fheroes2::Blit( castle.GetCaptain().GetPortrait( PORT_BIG ), display, pt.x + 5, pt.y + 262 );
         }
         else {
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( castle.GetColor() ) ), display, pt.x + 5, pt.y + 262 );
         }
 
-        if ( hero2 ) {
-            fheroes2::Blit( hero2->GetPortrait( PORT_BIG ), display, pt.x + 5, pt.y + 361 );
+        if ( hero ) {
+            fheroes2::Blit( hero->GetPortrait( PORT_BIG ), display, pt.x + 5, pt.y + 361 );
         }
         else {
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), display, pt.x + 5, pt.y + 361 );
         }
 
-        if ( !hero2 ) {
+        if ( hero == nullptr ) {
             const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::STRIP, 11 );
 
             fheroes2::Blit( backgroundImage, display, pt.x + 112, pt.y + 361 );
@@ -195,35 +163,22 @@ namespace
         return output;
     }
 
-    bool purchaseSpellBookIfNecessary( const Castle & castle, CastleHeroes & heroes )
+    bool purchaseSpellBookIfNecessary( const Castle & castle, Heroes * hero )
     {
-        bool spellBookPurchased = false;
-
-        auto purchaseSpellBookForHero = [&castle, &spellBookPurchased]( Heroes * hero ) {
-            assert( hero != nullptr );
-
-            if ( hero->IsFullBagArtifacts() ) {
-                Dialog::Message(
-                    hero->GetName(),
-                    _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                    Font::BIG, Dialog::OK );
-            }
-            else {
-                const bool purchased = hero->BuySpellBook( &castle );
-
-                spellBookPurchased = spellBookPurchased || purchased;
-            }
-        };
-
-        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
-            purchaseSpellBookForHero( heroes.Guard() );
+        if ( hero == nullptr || hero->HaveSpellBook() ) {
+            return false;
         }
 
-        if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
-            purchaseSpellBookForHero( heroes.Guest() );
+        if ( hero->IsFullBagArtifacts() ) {
+            Dialog::Message(
+                hero->GetName(),
+                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                Font::BIG, Dialog::OK );
+
+            return false;
         }
 
-        return spellBookPurchased;
+        return hero->BuySpellBook( &castle );
     }
 
     void openHeroDialog( ArmyBar & topArmyBar, ArmyBar & bottomArmyBar, Heroes & hero )
@@ -237,18 +192,20 @@ namespace
             bottomArmyBar.ResetSelected();
     }
 
-    void generateHeroImage( fheroes2::Image & image, CastleHeroes & heroes )
+    void generateHeroImage( fheroes2::Image & image, Heroes * hero )
     {
+        assert( hero != nullptr );
+
         if ( image.empty() ) {
             image.resize( 552, 105 );
             image.reset();
         }
 
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, image, 0, 0, 552, 107 );
-        const fheroes2::Sprite & port = heroes.Guest()->GetPortrait( PORT_BIG );
+        const fheroes2::Sprite & port = hero->GetPortrait( PORT_BIG );
         fheroes2::Blit( port, image, 5, 5 );
 
-        ArmyBar armyBar( &heroes.Guest()->GetArmy(), false, false );
+        ArmyBar armyBar( &hero->GetArmy(), false, false );
         armyBar.setTableSize( { 5, 1 } );
         armyBar.setRenderingOffset( { 112, 5 } );
         armyBar.setInBetweenItemsOffset( { 6, 0 } );
@@ -265,7 +222,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // Fade screen.
-    const Settings & conf = Settings::Get();
     if ( Settings::ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
@@ -276,7 +232,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     int alphaHero = 255;
     CastleDialog::FadeBuilding fadeBuilding;
 
-    CastleHeroes heroes = world.GetHeroes( *this );
+    Heroes * hero = world.GetHero( *this );
 
     fheroes2::Image surfaceHero;
 
@@ -297,9 +253,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
         }
 
         if ( townResult == ConstructionDialogResult::RecruitHero ) {
-            heroes = world.GetHeroes( *this );
+            hero = world.GetHero( *this );
 
-            generateHeroImage( surfaceHero, heroes );
+            generateHeroImage( surfaceHero, hero );
 
             AudioManager::PlaySound( M82::BUILDTWN );
             alphaHero = 0;
@@ -334,11 +290,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
     const fheroes2::Rect rectSign1( cur_pt.x + 5, cur_pt.y + 262, crest.width(), crest.height() );
 
-    RedrawIcons( *this, heroes, cur_pt );
+    RedrawIcons( *this, hero, cur_pt );
 
     // castle troops selector
     // castle army bar
-    ArmyBar topArmyBar( ( heroes.Guard() ? &heroes.Guard()->GetArmy() : &army ), false, readOnly );
+    ArmyBar topArmyBar( &army, false, readOnly );
     topArmyBar.setTableSize( { 5, 1 } );
     topArmyBar.setRenderingOffset( { cur_pt.x + 112, cur_pt.y + 262 } );
     topArmyBar.setInBetweenItemsOffset( { 6, 0 } );
@@ -353,8 +309,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     bottomArmyBar.setRenderingOffset( { cur_pt.x + 112, cur_pt.y + 361 } );
     bottomArmyBar.setInBetweenItemsOffset( { 6, 0 } );
 
-    if ( heroes.Guest() ) {
-        bottomArmyBar.SetArmy( &heroes.Guest()->GetArmy() );
+    if ( hero ) {
+        bottomArmyBar.SetArmy( &hero->GetArmy() );
 
         if ( alphaHero != 0 ) {
             // Draw bottom bar only if no hero fading animation is going.
@@ -368,15 +324,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     // resource
     const fheroes2::Rect & rectResource = fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
     const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
-
-    // button swap
-    SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 348 );
-    MeetingButton buttonMeeting( cur_pt.x + 88, cur_pt.y + 346 );
-
-    if ( heroes.Guest() && heroes.Guard() && !readOnly ) {
-        buttonSwap.draw();
-        buttonMeeting.draw();
-    }
 
     // fill cache buildings
     CastleDialog::CacheBuildings cacheBuildings( *this, cur_pt );
@@ -457,85 +404,17 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 need_redraw = true;
             }
 
-            if ( conf.ExtCastleAllowGuardians() && !readOnly ) {
-                Army * army1 = nullptr;
-                Army * army2 = nullptr;
-
-                // swap guest <-> guardian
-                if ( heroes.Guest() && heroes.Guard() ) {
-                    if ( le.MouseClickLeft( buttonSwap.area() ) ) {
-                        SwapCastleHeroes( heroes );
-                        army1 = &heroes.Guard()->GetArmy();
-                        army2 = &heroes.Guest()->GetArmy();
-                    }
-                    else if ( le.MouseClickLeft( buttonMeeting.area() ) ) {
-                        heroes.Guest()->MeetingDialog( *heroes.Guard() );
-                        need_redraw = true;
-                    }
-                }
-                else if ( heroes.Guest() && !heroes.Guard() && le.MouseClickLeft( rectSign1 ) ) {
-                    // Move hero to top army.
-                    if ( !heroes.Guest()->GetArmy().CanJoinTroops( army ) ) {
-                        Dialog::Message( _( "Army joining" ),
-                                         _( "Unable to merge two armies together. Rearrange monsters manually before moving the hero to the garrison." ), Font::BIG,
-                                         Dialog::OK );
-                    }
-                    else {
-                        SwapCastleHeroes( heroes );
-                        army1 = &heroes.Guard()->GetArmy();
-                    }
-                }
-                else if ( !heroes.Guest() && heroes.Guard() && le.MouseClickLeft( rectSign2 ) ) {
-                    // Move hero to bottom army.
-                    SwapCastleHeroes( heroes );
-                    army2 = &heroes.Guest()->GetArmy();
-                }
-
-                if ( army1 || army2 ) {
-                    if ( topArmyBar.isSelected() )
-                        topArmyBar.ResetSelected();
-                    if ( bottomArmyBar.isValid() && bottomArmyBar.isSelected() )
-                        bottomArmyBar.ResetSelected();
-
-                    if ( army1 && army2 ) {
-                        topArmyBar.SetArmy( army1 );
-                        bottomArmyBar.SetArmy( army2 );
-                    }
-                    else if ( army1 ) {
-                        topArmyBar.SetArmy( army1 );
-                        bottomArmyBar.SetArmy( nullptr );
-                    }
-                    else if ( army2 ) {
-                        topArmyBar.SetArmy( &army );
-                        bottomArmyBar.SetArmy( army2 );
-                    }
-
-                    RedrawIcons( *this, heroes, cur_pt );
-                    need_redraw = true;
-                }
-            }
-
-            if ( !readOnly && heroes.Guard() && le.MouseClickLeft( rectSign1 ) ) {
-                // View guardian.
-                openHeroDialog( topArmyBar, bottomArmyBar, *heroes.Guard() );
-                need_redraw = true;
-            }
-            else if ( !readOnly && heroes.Guest() && le.MouseClickLeft( rectSign2 ) ) {
+            if ( !readOnly && hero && le.MouseClickLeft( rectSign2 ) ) {
                 // View hero.
-                openHeroDialog( topArmyBar, bottomArmyBar, *heroes.Guest() );
+                openHeroDialog( topArmyBar, bottomArmyBar, *hero );
                 need_redraw = true;
             }
 
-            if ( le.MousePressRight( rectSign1 ) ) {
-                if ( heroes.Guard() ) {
-                    Dialog::QuickInfo( *heroes.Guard() );
-                }
-                else if ( isBuild( BUILD_CAPTAIN ) ) {
-                    Dialog::QuickInfo( GetCaptain() );
-                }
+            if ( isBuild( BUILD_CAPTAIN ) && le.MousePressRight( rectSign1 ) ) {
+                Dialog::QuickInfo( GetCaptain() );
             }
-            else if ( heroes.Guest() && le.MousePressRight( rectSign2 ) ) {
-                Dialog::QuickInfo( *heroes.Guest() );
+            else if ( hero && le.MousePressRight( rectSign2 ) ) {
+                Dialog::QuickInfo( *hero );
             }
 
             // Get pressed hotkey.
@@ -579,12 +458,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     else if ( isMagicGuild ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
-                        if ( purchaseSpellBookIfNecessary( *this, heroes ) ) {
-                            // At least one of the castle heroes purchased the spellbook, redraw the resource panel
+                        if ( purchaseSpellBookIfNecessary( *this, hero ) ) {
+                            // Guest hero purchased the spellbook, redraw the resource panel
                             need_redraw = true;
                         }
 
-                        OpenMageGuild( heroes );
+                        OpenMageGuild( hero );
                     }
                     else if ( isMonsterDwelling ) {
                         if ( !readOnly ) {
@@ -655,8 +534,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                         }
 
                         case BUILD_CASTLE: {
-                            const Heroes * prev = heroes.Guest();
-
                             uint32_t build = BUILD_NOTHING;
                             const ConstructionDialogResult townResult = openConstructionDialog( build );
 
@@ -674,20 +551,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                                 fadeBuilding.StartFadeBuilding( build );
                             }
 
-                            heroes = world.GetHeroes( *this );
+                            hero = world.GetHero( *this );
 
                             if ( townResult == ConstructionDialogResult::RecruitHero ) {
-                                if ( prev ) {
-                                    topArmyBar.SetArmy( &heroes.Guard()->GetArmy() );
-                                    bottomArmyBar.SetArmy( nullptr );
-
-                                    topArmyBar.Redraw( display );
-                                    RedrawIcons( *this, CastleHeroes( nullptr, heroes.Guard() ), cur_pt );
-                                }
                                 AudioManager::PlaySound( M82::BUILDTWN );
 
-                                bottomArmyBar.SetArmy( &heroes.Guest()->GetArmy() );
-                                generateHeroImage( surfaceHero, heroes );
+                                bottomArmyBar.SetArmy( &hero->GetArmy() );
+                                generateHeroImage( surfaceHero, hero );
 
                                 alphaHero = 0;
                                 need_redraw = true;
@@ -711,8 +581,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             break;
         }
 
-        const bool bothHeroesPresent = ( heroes.Guest() != nullptr ) && ( heroes.Guard() != nullptr );
-
         if ( alphaHero < 255 ) {
             if ( Game::validateAnimationDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
                 alphaHero += 10;
@@ -722,13 +590,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
                 fheroes2::AlphaBlit( surfaceHero, display, cur_pt.x, cur_pt.y + 356, static_cast<uint8_t>( alphaHero ) );
 
-                if ( bothHeroesPresent && !readOnly ) {
-                    buttonSwap.draw();
-                    buttonMeeting.draw();
-                }
-
-                if ( !need_redraw )
+                if ( !need_redraw ) {
                     display.render();
+                }
             }
         }
 
@@ -739,13 +603,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             fheroes2::drawCastleName( *this, display, cur_pt );
             fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
 
-            if ( bothHeroesPresent && !readOnly ) {
-                buttonSwap.draw();
-                buttonMeeting.draw();
+            if ( buttonExit.isPressed() ) {
+                buttonExit.draw();
             }
 
-            if ( buttonExit.isPressed() )
-                buttonExit.draw();
             display.render();
         }
 
@@ -771,13 +632,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
         else if ( buttonNextCastle.isEnabled() && le.MouseCursor( buttonNextCastle.area() ) ) {
             statusMessage = _( "Show next town" );
         }
-        else if ( bothHeroesPresent && le.MouseCursor( buttonSwap.area() ) ) {
-            statusMessage = _( "Swap Heroes" );
-        }
-        else if ( bothHeroesPresent && le.MouseCursor( buttonMeeting.area() ) ) {
-            statusMessage = _( "Meeting Heroes" );
-        }
-        else if ( ( heroes.Guard() && le.MouseCursor( rectSign1 ) ) || ( heroes.Guest() && le.MouseCursor( rectSign2 ) ) ) {
+        else if ( hero && le.MouseCursor( rectSign2 ) ) {
             statusMessage = _( "View Hero" );
         }
 
@@ -792,14 +647,19 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
         need_redraw = fadeBuilding.UpdateFadeBuilding();
         if ( fadeBuilding.IsFadeDone() ) {
             const uint32_t build = fadeBuilding.GetBuild();
+
             if ( build != BUILD_NOTHING ) {
                 BuyBuilding( build );
-                if ( BUILD_CAPTAIN == build )
-                    RedrawIcons( *this, heroes, cur_pt );
+                if ( BUILD_CAPTAIN == build ) {
+                    RedrawIcons( *this, hero, cur_pt );
+                }
+
                 fheroes2::drawCastleName( *this, display, cur_pt );
                 fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
+
                 display.render();
             }
+
             fadeBuilding.StopFadeBuilding();
         }
         // animation sprite

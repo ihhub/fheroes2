@@ -923,12 +923,8 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
         return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
-    case Settings::CASTLE_ALLOW_GUARDIANS:
-        return _( "castle: allow guardians" );
     case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
         return _( "heroes: allow buy a spellbook from Shrines" );
-    case Settings::HEROES_REMEMBER_MP_WHEN_RETREATING:
-        return _( "heroes: remember movement points when retreating or surrendering" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
@@ -939,8 +935,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "game: use evil interface" );
     case Settings::GAME_HIDE_INTERFACE:
         return _( "game: hide interface" );
-    case Settings::GAME_CONTINUE_AFTER_VICTORY:
-        return _( "game: offer to continue the game after victory condition" );
     default:
         break;
     }

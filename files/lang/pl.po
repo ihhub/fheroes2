@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"POT-Creation-Date: 2022-11-16 13:44+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -1908,9 +1908,6 @@ msgstr "Corackston"
 msgid "Sheltemburg"
 msgstr "Sheltemburg"
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Nie możesz rekrutować - ustawieni strażnicy."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Nie możesz rekrutować - w mieście jest już bohater."
 
@@ -2330,16 +2327,6 @@ msgstr "Kliknij aby przejść do poprzedniego miasta."
 msgid "Show previous town"
 msgstr "Pokaż poprzednie miasto"
 
-msgid "Army joining"
-msgstr "Łączenie armii"
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-"Nie można połączyć armii. Zmień pozycje stworzeń w bohaterze przed wejściem "
-"do garnizonu."
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Tego miasta nie można rozbudować do poziomu zamku."
 
@@ -2354,12 +2341,6 @@ msgstr "Wyjście z miasta"
 
 msgid "Show Income"
 msgstr "Pokaż przychód"
-
-msgid "Swap Heroes"
-msgstr "Zamień bohaterów"
-
-msgid "Meeting Heroes"
-msgstr "Spotkanie bohaterów"
 
 msgid "View Hero"
 msgstr "Pokaż bohatera"
@@ -3943,9 +3924,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} gracz zostaje wygnany!"
-
-msgid "Do you wish to continue the game?"
-msgstr "Czy chcesz kontynuować grę?"
 
 msgid "Scenario:"
 msgstr "Scenariusz:"
@@ -9778,16 +9756,8 @@ msgstr "świat: pozwól zostawiać strażników w obiektach"
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "świat: Wiatraki, Młyny wodne i Magiczne ogrody mogą być przejęte"
 
-msgid "castle: allow guardians"
-msgstr "zamek: zezwól na strażników"
-
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "bohaterowie: pozwól kupować Księgę Zaklęć w kaplicach"
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr ""
-"bohaterowie: zapamiętaj punkty ruchu przy obliczaniu rezultatu ucieczki oraz "
-"kapitulacji"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
@@ -9804,10 +9774,6 @@ msgstr "gra: użyj mrocznego interfejsu"
 
 msgid "game: hide interface"
 msgstr "gra: ukryj interfejs"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr ""
-"gra: zaproponuj kontynuację rozgrywki po spełnieniu warunków zwycięstwa"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "%{name} to naprawdę najpotężniejszy artefakt."
@@ -9872,3 +9838,37 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "Nie możesz rekrutować - ustawieni strażnicy."
+
+#~ msgid "Army joining"
+#~ msgstr "Łączenie armii"
+
+#~ msgid ""
+#~ "Unable to merge two armies together. Rearrange monsters manually before "
+#~ "moving the hero to the garrison."
+#~ msgstr ""
+#~ "Nie można połączyć armii. Zmień pozycje stworzeń w bohaterze przed "
+#~ "wejściem do garnizonu."
+
+#~ msgid "Swap Heroes"
+#~ msgstr "Zamień bohaterów"
+
+#~ msgid "Meeting Heroes"
+#~ msgstr "Spotkanie bohaterów"
+
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Czy chcesz kontynuować grę?"
+
+#~ msgid "castle: allow guardians"
+#~ msgstr "zamek: zezwól na strażników"
+
+#~ msgid "heroes: remember movement points when retreating or surrendering"
+#~ msgstr ""
+#~ "bohaterowie: zapamiętaj punkty ruchu przy obliczaniu rezultatu ucieczki "
+#~ "oraz kapitulacji"
+
+#~ msgid "game: offer to continue the game after victory condition"
+#~ msgstr ""
+#~ "gra: zaproponuj kontynuację rozgrywki po spełnieniu warunków zwycięstwa"
