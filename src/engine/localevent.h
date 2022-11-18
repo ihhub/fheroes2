@@ -312,7 +312,7 @@ private:
     static void ResumeSounds();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    static int GlobalFilterEvents( void *, SDL_Event * );
+    static int SDLCALL GlobalFilterEvents( void *, SDL_Event * );
 
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
@@ -322,7 +322,7 @@ private:
 
     static void OnSdl2WindowEvent( const SDL_Event & event );
 #else
-    static int GlobalFilterEvents( const SDL_Event * );
+    static int SDLCALL GlobalFilterEvents( const SDL_Event * );
 
     void OnActiveEvent( const SDL_Event & event );
 #endif

@@ -184,7 +184,11 @@ namespace
 
     // This is the callback function set by Mix_ChannelFinished(). As a rule, it is called from
     // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    void SDLCALL channelFinished( const int channelId )
+#else
     void channelFinished( const int channelId )
+#endif
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
@@ -506,7 +510,11 @@ namespace
 
     // This is the callback function set by Mix_HookMusicFinished(). As a rule, it is called from
     // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    void SDLCALL musicFinished()
+#else
     void musicFinished()
+#endif
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );

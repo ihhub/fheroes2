@@ -1743,9 +1743,9 @@ int LocalEvent::KeyMod() const
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-int LocalEvent::GlobalFilterEvents( void * /*userdata*/, SDL_Event * event )
+int SDLCALL LocalEvent::GlobalFilterEvents( void * /*userdata*/, SDL_Event * event )
 #else
-int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
+int SDLCALL LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 #endif
 {
     const LocalEvent & le = LocalEvent::Get();
