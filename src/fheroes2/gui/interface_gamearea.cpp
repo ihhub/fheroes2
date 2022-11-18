@@ -903,8 +903,9 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingInitiated = true;
         _startMouseDragPosition = mp;
     }
-    else if ( std::abs( _startMouseDragPosition.x - mp.x ) > minimalRequiredDraggingMovement
-              || std::abs( _startMouseDragPosition.y - mp.y ) > minimalRequiredDraggingMovement ) {
+    else if ( ( std::abs( _startMouseDragPosition.x - mp.x ) > minimalRequiredDraggingMovement
+              || std::abs( _startMouseDragPosition.y - mp.y ) > minimalRequiredDraggingMovement )
+              && isCursorOverGamearea ) {
         _mouseDraggingMovement = true;
     }
 
