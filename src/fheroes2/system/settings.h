@@ -72,7 +72,7 @@ public:
         // UNUSED = 0x10008000,
         // UNUSED = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
-        GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
+        // UNUSED = 0x10200000,
 
         // The following extended options affect the overall game balance and
         // are saved both in the binary config file and in the savefile
@@ -83,7 +83,7 @@ public:
         // UNUSED = 0x20000002,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
         // UNUSED = 0x20000020,
-        WORLD_SCOUTING_EXTENDED = 0x20000040,
+        // UNUSED = 0x20000040,
         // UNUSED = 0x20000080,
         // UNUSED = 0x20000100,
         HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
@@ -96,9 +96,9 @@ public:
         // UNUSED = 0x20010000,
         // UNUSED = 0x20020000,
         // UNUSED = 0x20040000,
-        CASTLE_ALLOW_GUARDIANS = 0x20080000,
+        // UNUSED = 0x20080000,
         // UNUSED = 0x20800000,
-        HEROES_REMEMBER_MP_WHEN_RETREATING = 0x21000000,
+        // UNUSED = 0x21000000,
 
         // UNUSED = 0x30000001,
         // UNUSED = 0x30000008,
@@ -269,19 +269,9 @@ public:
         return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
     }
 
-    bool ExtHeroRememberMovementPointsWhenRetreating() const
-    {
-        return ExtModes( HEROES_REMEMBER_MP_WHEN_RETREATING );
-    }
-
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtWorldScouteExtended() const
-    {
-        return ExtModes( WORLD_SCOUTING_EXTENDED );
     }
 
     bool ExtWorldAllowSetGuardian() const
@@ -294,11 +284,6 @@ public:
         return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
     }
 
-    bool ExtCastleAllowGuardians() const
-    {
-        return ExtModes( CASTLE_ALLOW_GUARDIANS );
-    }
-
     bool ExtBattleShowDamage() const
     {
         return ExtModes( GAME_BATTLE_SHOW_DAMAGE );
@@ -307,11 +292,6 @@ public:
     bool ExtBattleSoftWait() const
     {
         return ExtModes( BATTLE_SOFT_WAITING );
-    }
-
-    bool ExtGameContinueAfterVictory() const
-    {
-        return ExtModes( GAME_CONTINUE_AFTER_VICTORY );
     }
 
     bool ExtGameAutosaveBeginOfDay() const

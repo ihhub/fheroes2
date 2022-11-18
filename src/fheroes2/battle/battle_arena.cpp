@@ -45,7 +45,6 @@
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "ground.h"
 #include "heroes.h"
@@ -356,17 +355,9 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     _army1 = std::make_unique<Force>( a1, false, _randomGenerator, _uidGenerator );
     _army2 = std::make_unique<Force>( a2, true, _randomGenerator, _uidGenerator );
 
-    // init castle (interface ahead)
-    if ( castle ) {
-        CastleHeroes heroes = world.GetHeroes( *castle );
-
-        // skip if present guard and guest
-        if ( heroes.FullHouse() )
-            castle = nullptr;
-
-        // skip for town
-        if ( castle && !castle->isCastle() )
-            castle = nullptr;
+    // If this is a siege of a town, then there is in fact no castle
+    if ( castle && !castle->isCastle() ) {
+        castle = nullptr;
     }
 
     // init interface

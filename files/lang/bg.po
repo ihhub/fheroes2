@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1898,11 +1898,6 @@ msgstr "Коракстън"
 msgid "Sheltemburg"
 msgstr "Шелтембург"
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr ""
-"Не може да се наеме - грешка при автоматичното преместване на госта в "
-"охраната."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Не може да се наеме - вече имате герой в този град."
 
@@ -2328,16 +2323,6 @@ msgstr "Кликни, за да покажеш предишния град."
 msgid "Show previous town"
 msgstr "Покажи предишния град"
 
-msgid "Army joining"
-msgstr "Присъединяване към армията"
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-"Не можеш да обединиш двете армии. Пренареди чудовищата ръчно, преди да "
-"преместиш героя в гарнизона."
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Този град не може да бъде надграден до замък."
 
@@ -2352,12 +2337,6 @@ msgstr "Изход от Града"
 
 msgid "Show Income"
 msgstr "Покажи приходи"
-
-msgid "Swap Heroes"
-msgstr "Размени героите"
-
-msgid "Meeting Heroes"
-msgstr "Срещни герои"
 
 msgid "View Hero"
 msgstr "Виж герой"
@@ -2932,11 +2911,11 @@ msgstr "Налични сделки"
 msgid "n/a"
 msgstr "няма"
 
-msgid "guarded by "
-msgstr "охраняван от "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "охранявано от %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "охраняван от "
 
 msgid "(available: %{count})"
 msgstr "(наличен: %{count})"
@@ -3439,14 +3418,14 @@ msgstr "Координация на проекта и основно разви�
 msgid "QA and Support"
 msgstr "Гарантиране на качеството и поддръжка"
 
+msgid "Visit us at "
+msgstr "Посетете ни на "
+
 msgid "Development"
 msgstr "Разработка"
 
 msgid "Dev and Support"
 msgstr "Разработка и поддръжка"
-
-msgid "Visit us at "
-msgstr "Посетете ни на "
 
 msgid "Special Thanks to"
 msgstr "Специални благодарности на"
@@ -3454,17 +3433,23 @@ msgstr "Специални благодарности на"
 msgid "and many other contributors!"
 msgstr "и много други сътрудници!"
 
+msgid "and many-many other supporters!"
+msgstr "и много-много други поддръжници!"
+
 msgid "Support us at"
 msgstr "Подкрепете ни на"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Свържете се с нас на"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Нуждаете се от помощ с играта?"
-
-msgid "and many-many other supporters!"
-msgstr "и много-много други поддръжници!"
 
 msgid "Original project before 0.7"
 msgstr "Оригинален проект преди 0.7"
@@ -3952,9 +3937,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} играч е победен!"
-
-msgid "Do you wish to continue the game?"
-msgstr "Искаш ли да продължиш играта?"
 
 msgid "Scenario:"
 msgstr "Сценарий:"
@@ -9607,9 +9589,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "битка: показва информация за щетите"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "свят: Скаутските умения показват разширена информация за съдържанието"
-
 msgid "world: allow to set guardian to objects"
 msgstr "свят: позволява да се сложи пазител на обекти"
 
@@ -9618,15 +9597,8 @@ msgstr ""
 "свят: Вятърните мелници, водните колела и магическите градини могат да бъдат "
 "заснети"
 
-msgid "castle: allow guardians"
-msgstr "замък: позволи пазители"
-
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "герои: позволява да купите книга за заклинания от светилища"
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr ""
-"герои: запомни точките на движение, когато се оттегляте или се предавате"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: позволяват да избереш всяко основно умение от Арена"
@@ -9642,9 +9614,6 @@ msgstr "игра: използвайте зъл интерфейс"
 
 msgid "game: hide interface"
 msgstr "игра: скриване на интерфейса"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr "игра: предложение за продължаване на играта след условие за победа"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Върховният артефакт наистина е %{name}."
@@ -9708,3 +9677,41 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr ""
+#~ "свят: Скаутските умения показват разширена информация за съдържанието"
+
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr ""
+#~ "Не може да се наеме - грешка при автоматичното преместване на госта в "
+#~ "охраната."
+
+#~ msgid "Army joining"
+#~ msgstr "Присъединяване към армията"
+
+#~ msgid ""
+#~ "Unable to merge two armies together. Rearrange monsters manually before "
+#~ "moving the hero to the garrison."
+#~ msgstr ""
+#~ "Не можеш да обединиш двете армии. Пренареди чудовищата ръчно, преди да "
+#~ "преместиш героя в гарнизона."
+
+#~ msgid "Swap Heroes"
+#~ msgstr "Размени героите"
+
+#~ msgid "Meeting Heroes"
+#~ msgstr "Срещни герои"
+
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Искаш ли да продължиш играта?"
+
+#~ msgid "castle: allow guardians"
+#~ msgstr "замък: позволи пазители"
+
+#~ msgid "heroes: remember movement points when retreating or surrendering"
+#~ msgstr ""
+#~ "герои: запомни точките на движение, когато се оттегляте или се предавате"
+
+#~ msgid "game: offer to continue the game after victory condition"
+#~ msgstr "игра: предложение за продължаване на играта след условие за победа"

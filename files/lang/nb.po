@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1947,10 +1947,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-# Ikke mulig å verve?
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Kan ikke verves. Feil ved flytting av besøkende til forsvarende."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Det kan ikke verves en helt fordi det befinner seg en i byen."
 
@@ -2378,16 +2374,6 @@ msgstr "Klikk for å vise forrige by."
 msgid "Show previous town"
 msgstr "Vis forrige by"
 
-msgid "Army joining"
-msgstr "Sammenslåing av hærer"
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-"Disse to hærene kunne ikke slås sammen. Omorganiser styrkene og forsøk å "
-"flytte helten din til garnisonen igjen."
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Denne byen kan ikke oppgraderes til borg."
 
@@ -2402,13 +2388,6 @@ msgstr "Forlat byen"
 
 msgid "Show Income"
 msgstr "Vis inntekt"
-
-msgid "Swap Heroes"
-msgstr "Bytt helter"
-
-# Hvilken funksjon? Overskrift for to helter som møtes?
-msgid "Meeting Heroes"
-msgstr "Møtende helter"
 
 msgid "View Hero"
 msgstr "Vis helt"
@@ -2990,12 +2969,12 @@ msgstr "Mulige bytter"
 msgid "n/a"
 msgstr "n/a"
 
+msgid "guarded by %{count} %{monster}"
+msgstr "bevoktet av %{count} %{monster}"
+
 # fix english string?
 msgid "guarded by "
 msgstr "Bevoktet av "
-
-msgid "guarded by %{count} %{monster}"
-msgstr "bevoktet av %{count} %{monster}"
 
 msgid "(available: %{count})"
 msgstr "(tilgjengelig: %{count})"
@@ -3509,14 +3488,14 @@ msgstr ""
 msgid "QA and Support"
 msgstr "Kvalitetssikring og støtte"
 
+msgid "Visit us at "
+msgstr "Treff oss på "
+
 msgid "Development"
 msgstr "Programvareutvikling"
 
 msgid "Dev and Support"
 msgstr "Utvikling og støtte"
-
-msgid "Visit us at "
-msgstr "Treff oss på "
 
 msgid "Special Thanks to"
 msgstr "Spesielt takk til"
@@ -3524,17 +3503,23 @@ msgstr "Spesielt takk til"
 msgid "and many other contributors!"
 msgstr "og mange andre bidragsytere!"
 
+msgid "and many-many other supporters!"
+msgstr "og mange flere støttespillere!"
+
 msgid "Support us at"
 msgstr "Støtt oss på"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Kontakt oss på"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Behov for hjelp med spillet?"
-
-msgid "and many-many other supporters!"
-msgstr "og mange flere støttespillere!"
 
 msgid "Original project before 0.7"
 msgstr "Opprinnelig prosjekt før 0.7"
@@ -4024,9 +4009,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} spiller har blitt utslettet!"
-
-msgid "Do you wish to continue the game?"
-msgstr "Ønsker du å fortsette spillet?"
 
 msgid "Scenario:"
 msgstr "Brett:"
@@ -9924,23 +9906,14 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "Kamp: Vis skadeinfo"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "Verden: Speiding gir deg utvidet info"
-
 msgid "world: allow to set guardian to objects"
 msgstr "Verden: Tillat å plassere voktere på objekter"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget"
 
-msgid "castle: allow guardians"
-msgstr "Borg: Tillat helt som vokter"
-
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr "Helter: Husk skritt etter tilbaketrekking eller overgivelse."
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
@@ -9956,9 +9929,6 @@ msgstr "Parti: Bruk ondt grensesnitt"
 
 msgid "game: hide interface"
 msgstr "Parti: Skjul grensesnitt"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr "Parti: Tilby å fortsette partiet etter å ha vunnet"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Den sjeldneste skatten er faktisk %{name}."
@@ -10022,3 +9992,39 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr "Verden: Speiding gir deg utvidet info"
+
+# Ikke mulig å verve?
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "Kan ikke verves. Feil ved flytting av besøkende til forsvarende."
+
+#~ msgid "Army joining"
+#~ msgstr "Sammenslåing av hærer"
+
+#~ msgid ""
+#~ "Unable to merge two armies together. Rearrange monsters manually before "
+#~ "moving the hero to the garrison."
+#~ msgstr ""
+#~ "Disse to hærene kunne ikke slås sammen. Omorganiser styrkene og forsøk å "
+#~ "flytte helten din til garnisonen igjen."
+
+#~ msgid "Swap Heroes"
+#~ msgstr "Bytt helter"
+
+# Hvilken funksjon? Overskrift for to helter som møtes?
+#~ msgid "Meeting Heroes"
+#~ msgstr "Møtende helter"
+
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Ønsker du å fortsette spillet?"
+
+#~ msgid "castle: allow guardians"
+#~ msgstr "Borg: Tillat helt som vokter"
+
+#~ msgid "heroes: remember movement points when retreating or surrendering"
+#~ msgstr "Helter: Husk skritt etter tilbaketrekking eller overgivelse."
+
+#~ msgid "game: offer to continue the game after victory condition"
+#~ msgstr "Parti: Tilby å fortsette partiet etter å ha vunnet"

@@ -28,7 +28,6 @@
 
 #include "agg_image.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -152,7 +151,7 @@ bool RowSpells::QueueEventProcessing()
     return 0 <= index;
 }
 
-void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
+void Castle::OpenMageGuild( const Heroes * hero ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -181,10 +180,12 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
 
     // text bar
     Text text;
-    if ( ( !heroes.Guard() || !heroes.Guard()->HaveSpellBook() ) && ( !heroes.Guest() || !heroes.Guest()->HaveSpellBook() ) )
+    if ( hero == nullptr || !hero->HaveSpellBook() ) {
         text.Set( _( "The above spells are available here." ), Font::BIG );
-    else
+    }
+    else {
         text.Set( _( "The above spells have been added to your book." ), Font::BIG );
+    }
     text.Blit( cur_pt.x + 280 - text.w() / 2, cur_pt.y + 463 );
 
     const int level = GetLevelMageGuild();

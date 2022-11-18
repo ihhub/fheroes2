@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -1821,11 +1821,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr ""
-"Non puoi reclutare - errore in cambiamento automatico dall'ospite al "
-"guardiano."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Reclutamento impossibile. Eroe già presente in questa città."
 
@@ -2221,14 +2216,6 @@ msgstr "Clicca per andare alla città prec."
 msgid "Show previous town"
 msgstr "Vai alla città prec."
 
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-
 msgid "This town may not be upgraded to a castle."
 msgstr ""
 
@@ -2243,12 +2230,6 @@ msgstr "Esci dalla Città"
 
 msgid "Show Income"
 msgstr "Mostra Rendita"
-
-msgid "Swap Heroes"
-msgstr "Scambia Eroi"
-
-msgid "Meeting Heroes"
-msgstr "Eroi incontranti"
 
 msgid "View Hero"
 msgstr "Mostra Eroe"
@@ -2825,11 +2806,11 @@ msgstr "Scambi disponibili"
 msgid "n/a"
 msgstr "n/d"
 
-msgid "guarded by "
-msgstr "Protetto/a da "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "Protetto/a da %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "Protetto/a da "
 
 msgid "(available: %{count})"
 msgstr "(disponibiltà: %{count})"
@@ -3337,6 +3318,9 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
@@ -3346,25 +3330,28 @@ msgstr ""
 "Tele-\n"
 "trasporto"
 
-msgid "Visit us at "
-msgstr ""
-
 msgid "Special Thanks to"
 msgstr ""
 
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3816,9 +3803,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "Giocatore %{color} è stato sconfitto!"
-
-msgid "Do you wish to continue the game?"
-msgstr ""
 
 msgid "Scenario:"
 msgstr "Scenario:"
@@ -8891,22 +8875,13 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr ""
 
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
 msgid "world: allow to set guardian to objects"
 msgstr ""
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
-msgid "castle: allow guardians"
-msgstr ""
-
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
@@ -8922,9 +8897,6 @@ msgid "game: use evil interface"
 msgstr ""
 
 msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
@@ -8994,3 +8966,14 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr ""
+#~ "Non puoi reclutare - errore in cambiamento automatico dall'ospite al "
+#~ "guardiano."
+
+#~ msgid "Swap Heroes"
+#~ msgstr "Scambia Eroi"
+
+#~ msgid "Meeting Heroes"
+#~ msgstr "Eroi incontranti"

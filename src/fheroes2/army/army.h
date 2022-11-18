@@ -28,7 +28,6 @@
 #include <cstdint>
 #include <functional>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "monster.h"
@@ -86,9 +85,6 @@ public:
     bool JoinTroop( const Troop & troop );
     bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
-
-    void JoinTroops( Troops & );
-    bool CanJoinTroops( const Troops & ) const;
 
     // Implements the necessary logic to move unit stacks from army to army using the arrow buttons in the
     // hero's meeting dialog
@@ -158,8 +154,6 @@ public:
     static std::string SizeString( uint32_t );
     static std::string TroopSizeString( const Troop & );
 
-    static std::pair<uint32_t, uint32_t> SizeRange( const uint32_t count );
-
     // Comparison functions
     static bool WeakestTroop( const Troop *, const Troop * );
     static bool StrongestTroop( const Troop *, const Troop * );
@@ -170,9 +164,9 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
-    static void drawMiniMonsLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first = 0, uint32_t count = 0 );
-    static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact = true,
-                                  bool isScouteView = true );
+    static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width );
+    static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
+                                          const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
 
     explicit Army( HeroBase * s = nullptr );
     explicit Army( const Maps::Tiles & );

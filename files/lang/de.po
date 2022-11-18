@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-13 14:27+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1943,9 +1943,6 @@ msgstr "Corackston"
 msgid "Sheltemburg"
 msgstr "Sheltemburg"
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Kann nicht rekrutieren - guest to guard automove error."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Kann nicht rekrutieren - ein Held steht bereits in dieser Stadt."
 
@@ -2377,16 +2374,6 @@ msgstr "Tippe, um die vorherige Stadt anzuzeigen."
 msgid "Show previous town"
 msgstr "Vorherige Stadt anzeigen"
 
-msgid "Army joining"
-msgstr "Armeeneintritt"
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-"Zwei Armeen können nicht zusammengeführt werden. Ordnen Sie Monster manuell "
-"neu an, bevor Sie den Helden in die Garnison bringen."
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Diese Stadt darf nicht zu einer Burg ausgebaut werden."
 
@@ -2401,12 +2388,6 @@ msgstr "Stadt verlassen"
 
 msgid "Show Income"
 msgstr "Einkommen anzeigen"
-
-msgid "Swap Heroes"
-msgstr "Helden tauschen"
-
-msgid "Meeting Heroes"
-msgstr "Helden treffen lassen"
 
 msgid "View Hero"
 msgstr "Helden anzeigen"
@@ -2999,11 +2980,11 @@ msgstr "Verfügbarer Handel"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "guarded by "
-msgstr "beschützt von "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "bewacht von %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "beschützt von "
 
 msgid "(available: %{count})"
 msgstr "(vorhanden: %{count})"
@@ -3504,6 +3485,9 @@ msgstr "Projektkoordination und Kernentwicklung"
 msgid "QA and Support"
 msgstr "QA und Unterstützung"
 
+msgid "Visit us at "
+msgstr "Besuchen Sie uns bei "
+
 msgid "Development"
 msgstr "Entwicklung"
 
@@ -3511,26 +3495,29 @@ msgstr "Entwicklung"
 msgid "Dev and Support"
 msgstr "QA und Unterstützung"
 
-msgid "Visit us at "
-msgstr "Besuchen Sie uns bei "
-
 msgid "Special Thanks to"
 msgstr "Besonderen Dank an"
 
 msgid "and many other contributors!"
 msgstr "und viele andere Mitwirkende!"
 
+msgid "and many-many other supporters!"
+msgstr "und viele, viele andere Unterstützer!"
+
 msgid "Support us at"
 msgstr "Unterstützen Sie uns bei"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Verbinden Sie sich mit uns bei"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Brauchen Sie Hilfe beim Spiel?"
-
-msgid "and many-many other supporters!"
-msgstr "und viele, viele andere Unterstützer!"
 
 msgid "Original project before 0.7"
 msgstr "Ursprüngliches Projekt vor 0.7"
@@ -4033,9 +4020,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "Spieler %{color} wurde besiegt!"
-
-msgid "Do you wish to continue the game?"
-msgstr "Möchten Sie das Spiel fortsetzen?"
 
 msgid "Scenario:"
 msgstr "Szenario:"
@@ -9990,24 +9974,14 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "Kampf: Schadensinformationen anzeigen"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "Welt: Scouting-Skill zeigt erweiterte Inhaltsangaben"
-
 msgid "world: allow to set guardian to objects"
 msgstr "Welt: Wächter auf Objekte setzen lassen"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "Welt: Windmühlen, Wasserräder und Zaubergärten können erobert werden"
 
-msgid "castle: allow guardians"
-msgstr "Burg: Wächter zulassen"
-
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helden: Kauf eines Zauberbuchs bei Schreinen erlauben"
-
-#, fuzzy
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr "Helden: Bewegungspunkte sind nach Rückzug/Aufgabe gespeihert"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "Helden: in der Arena kann man jeder Primärfähigkeit wählen"
@@ -10023,9 +9997,6 @@ msgstr "Spiel: Böse Schnittstelle benutzen"
 
 msgid "game: hide interface"
 msgstr "Spiel: Schnittstelle verstecken"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr "Spiel: weiteres Spiel nach der Siegbedingung anbieten"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Das ultimative Artefakt ist eigentlich der %{name}."
@@ -10089,3 +10060,38 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr "Welt: Scouting-Skill zeigt erweiterte Inhaltsangaben"
+
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "Kann nicht rekrutieren - guest to guard automove error."
+
+#~ msgid "Army joining"
+#~ msgstr "Armeeneintritt"
+
+#~ msgid ""
+#~ "Unable to merge two armies together. Rearrange monsters manually before "
+#~ "moving the hero to the garrison."
+#~ msgstr ""
+#~ "Zwei Armeen können nicht zusammengeführt werden. Ordnen Sie Monster "
+#~ "manuell neu an, bevor Sie den Helden in die Garnison bringen."
+
+#~ msgid "Swap Heroes"
+#~ msgstr "Helden tauschen"
+
+#~ msgid "Meeting Heroes"
+#~ msgstr "Helden treffen lassen"
+
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Möchten Sie das Spiel fortsetzen?"
+
+#~ msgid "castle: allow guardians"
+#~ msgstr "Burg: Wächter zulassen"
+
+#, fuzzy
+#~ msgid "heroes: remember movement points when retreating or surrendering"
+#~ msgstr "Helden: Bewegungspunkte sind nach Rückzug/Aufgabe gespeihert"
+
+#~ msgid "game: offer to continue the game after victory condition"
+#~ msgstr "Spiel: weiteres Spiel nach der Siegbedingung anbieten"

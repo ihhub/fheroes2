@@ -41,7 +41,6 @@
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "dialog.h"
 #include "game.h"
@@ -805,8 +804,7 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable meeting" )
     }
     else {
-        const Castle * other_hero_castle = other_hero->inCastle();
-        if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
+        if ( other_hero->inCastle() ) {
             ActionToCastle( hero, dst_index );
             return;
         }
@@ -854,20 +852,12 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable visiting" )
     }
     else {
-        CastleHeroes heroes = castle->GetHeroes();
-
-        // first attack to guest hero
-        if ( heroes.FullHouse() ) {
-            ActionToHeroes( hero, dst_index );
-            return;
-        }
-
         Army & army = castle->GetActualArmy();
 
         if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() )
 
-            Heroes * defender = heroes.GuardFirst();
+            Heroes * defender = castle->GetHero();
             castle->ActionPreBattle();
 
             // new battle

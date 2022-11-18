@@ -917,18 +917,12 @@ std::string Settings::ExtName( const uint32_t settingId )
     switch ( settingId ) {
     case Settings::GAME_BATTLE_SHOW_DAMAGE:
         return _( "battle: show damage info" );
-    case Settings::WORLD_SCOUTING_EXTENDED:
-        return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
         return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
         return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
-    case Settings::CASTLE_ALLOW_GUARDIANS:
-        return _( "castle: allow guardians" );
     case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
         return _( "heroes: allow buy a spellbook from Shrines" );
-    case Settings::HEROES_REMEMBER_MP_WHEN_RETREATING:
-        return _( "heroes: remember movement points when retreating or surrendering" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
@@ -939,8 +933,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "game: use evil interface" );
     case Settings::GAME_HIDE_INTERFACE:
         return _( "game: hide interface" );
-    case Settings::GAME_CONTINUE_AFTER_VICTORY:
-        return _( "game: offer to continue the game after victory condition" );
     default:
         break;
     }
