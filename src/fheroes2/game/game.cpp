@@ -211,8 +211,8 @@ void Game::Init()
 
     // set global events
     LocalEvent & le = LocalEvent::Get();
-    le.SetGlobalFilterMouseEvents( Cursor::Redraw );
-    le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
+    le.SetMouseMotionGlobalHook( Cursor::Redraw );
+    le.SetKeyDownGlobalHook( Game::KeyDownGlobalHook );
 
     Game::AnimateDelaysInitialize();
 

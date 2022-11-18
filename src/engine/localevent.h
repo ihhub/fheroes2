@@ -29,7 +29,6 @@
 #include <string>
 
 #include <SDL_events.h>
-#include <SDL_stdinc.h>
 #include <SDL_version.h>
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -174,14 +173,14 @@ public:
     static LocalEvent & Get();
     static LocalEvent & GetClean(); // reset all previous event statuses and return a reference for events
 
-    void SetGlobalFilterMouseEvents( void ( *pf )( int32_t, int32_t ) )
+    void SetMouseMotionGlobalHook( void ( *pf )( int32_t, int32_t ) )
     {
-        redraw_cursor_func = pf;
+        mouse_motion_hook_func = pf;
     }
 
-    void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) )
+    void SetKeyDownGlobalHook( void ( *pf )( int, int ) )
     {
-        keyboard_filter_func = pf;
+        key_down_hook_func = pf;
     }
 
     static void SetStateDefaults();
@@ -313,8 +312,6 @@ private:
     static void ResumeSounds();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    static int SDLCALL GlobalFilterEvents( void *, SDL_Event * );
-
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
@@ -323,8 +320,6 @@ private:
 
     static void OnSdl2WindowEvent( const SDL_Event & event );
 #else
-    static int SDLCALL GlobalFilterEvents( const SDL_Event * );
-
     void OnActiveEvent( const SDL_Event & event );
 #endif
 
@@ -365,8 +360,8 @@ private:
 
     fheroes2::Point mouse_wm; // wheel movement
 
-    void ( *redraw_cursor_func )( int32_t, int32_t );
-    void ( *keyboard_filter_func )( int, int );
+    void ( *mouse_motion_hook_func )( int32_t, int32_t );
+    void ( *key_down_hook_func )( int, int );
 
     uint32_t loop_delay;
 
