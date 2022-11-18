@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-17 16:30+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2950,12 +2950,12 @@ msgstr "Échanges possibles"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "guarded by "
-msgstr "gardée par "
-
 # artifact is guarded by? (=gardé). A mine is guarded by? (=gardée). Ruins are guarded by? (=gardées).
 msgid "guarded by %{count} %{monster}"
 msgstr "gardé par %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "gardée par "
 
 # same "gardé/e/s problem as above.
 msgid "(available: %{count})"
@@ -9909,9 +9909,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "bataille : afficher les informations sur les dégâts"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "monde : reconnaissance affiche des infos supplémentaires"
-
 msgid "world: allow to set guardian to objects"
 msgstr "monde : autoriser le placement de gardiens pour certains lieux"
 
@@ -10002,6 +9999,9 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr "monde : reconnaissance affiche des infos supplémentaires"
 
 #~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr ""

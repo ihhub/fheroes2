@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-17 15:35+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2909,11 +2909,11 @@ msgstr "Доступно к обмену"
 msgid "n/a"
 msgstr "н/д"
 
-msgid "guarded by "
-msgstr "охраняемая "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "охраняет %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "охраняемая "
 
 msgid "(available: %{count})"
 msgstr "(Доступно: %{count})"
@@ -9677,9 +9677,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "битва: показывать урон"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "мир: навык разведки покажет дополнительную информацию"
-
 msgid "world: allow to set guardian to objects"
 msgstr "мир: разрешить охранников для дополнительных объектов"
 
@@ -9768,6 +9765,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr "мир: навык разведки покажет дополнительную информацию"
 
 #~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr "Найм невозможен. Герой в замке не может занять гарнизон."
