@@ -412,7 +412,7 @@ namespace fheroes2
                 basicInterface.Redraw( Interface::REDRAW_RADAR );
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
-               action = DialogAction::Open;
+                action = DialogAction::Open;
                 break;
             }
             case DialogAction::AudioSettings:
