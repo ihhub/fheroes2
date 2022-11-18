@@ -4008,9 +4008,9 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     }
 
     // boulder animation
-    fheroes2::Point pt1( 40, 290 );
+    fheroes2::Point pt1( 30, 290 );
     fheroes2::Point pt2 = Catapult::GetTargetPosition( target, hit );
-    const double boulderArcHeight = 0.55 * getDistance( pt1, pt2 );
+    const int32_t boulderArcHeight = ( target == 8 ) ? 300 : 210;
     const int32_t boulderArcStep = ( pt2.x - pt1.x ) / 30;
 
     pt1.x += area.x;

@@ -310,7 +310,7 @@ namespace fheroes2
         return res;
     }
 
-    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const double arcHeight, const int32_t step )
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step )
     {
         std::vector<Point> res;
         Point pt( from );
