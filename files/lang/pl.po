@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-17 16:30+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -2915,11 +2915,11 @@ msgstr "Oferta"
 msgid "n/a"
 msgstr "nd."
 
-msgid "guarded by "
-msgstr "strzeżone przez "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "Strażnicy: %{monster} (%{count})"
+
+msgid "guarded by "
+msgstr "strzeżone przez "
 
 msgid "(available: %{count})"
 msgstr "(dostępne: %{count})"
@@ -9752,10 +9752,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "walka: pokaż informacje o obrażeniach"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-"świat: umiejętność zwiedzania pokazuje dodatkowe informacje o zawartości"
-
 msgid "world: allow to set guardian to objects"
 msgstr "świat: pozwól zostawiać strażników w obiektach"
 
@@ -9844,6 +9840,10 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr ""
+#~ "świat: umiejętność zwiedzania pokazuje dodatkowe informacje o zawartości"
 
 #~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr "Nie możesz rekrutować - ustawieni strażnicy."

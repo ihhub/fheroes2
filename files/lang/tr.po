@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-17 16:30+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -2690,10 +2690,10 @@ msgstr ""
 msgid "n/a"
 msgstr ""
 
-msgid "guarded by "
+msgid "guarded by %{count} %{monster}"
 msgstr ""
 
-msgid "guarded by %{count} %{monster}"
+msgid "guarded by "
 msgstr ""
 
 msgid "(available: %{count})"
@@ -8546,9 +8546,6 @@ msgid ""
 msgstr ""
 
 msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Scouting skill shows extended content info"
 msgstr ""
 
 msgid "world: allow to set guardian to objects"
