@@ -299,18 +299,6 @@ public:
         }
     }
 
-    enum inputmode_t
-    {
-        INPUTMODE_KEYBOARD_MOUSE = 0x0001,
-        INPUTMODE_CONTROLLER = 0x0002,
-        INPUTMODE_TOUCH = 0x0004
-    };
-
-    inputmode_t GetCurrentInputMode() const
-    {
-        return _current_input_mode;
-    }
-
 private:
     LocalEvent();
 
@@ -392,8 +380,6 @@ private:
     double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
     double _emulatedPointerPosX = 0;
     double _emulatedPointerPosY = 0;
-
-    inputmode_t _current_input_mode = INPUTMODE_KEYBOARD_MOUSE;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
