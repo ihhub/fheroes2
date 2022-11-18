@@ -807,6 +807,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     int heroAnimationSpriteId = 0;
 
     bool isCursorOverButtons = false;
+    bool isCursorOverGamearea = false;
 
     const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
 
@@ -965,6 +966,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         const bool isHiddenInterface = conf.ExtGameHideInterface();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
+        isCursorOverGamearea = false;
 
         if ( isMovingHero ) {
             // hero is moving, set the appropriate cursor
@@ -1009,8 +1011,12 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 cursor.SetThemes( Cursor::POINTER );
             res = controlPanel.QueueEventProcessing();
         }
-        // cursor is somewhere else (expect gamearea)
-        else if ( !gameArea.NeedScroll() && !le.MouseCursor( gameArea.GetROI() ) ) {
+        // cursor is over the game area
+        else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
+            isCursorOverGamearea = true;
+        }
+        // cursor is somewhere else
+        else if ( !gameArea.NeedScroll() ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             gameArea.ResetCursorPosition();
@@ -1019,7 +1025,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         // gamearea
         if ( !gameArea.NeedScroll() && !isMovingHero ) {
             if ( !radar.isDragRadar() )
-                gameArea.QueueEventProcessing();
+                gameArea.QueueEventProcessing( isCursorOverGamearea );
             else if ( !le.MousePressLeft() )
                 radar.QueueEventProcessing();
         }

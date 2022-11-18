@@ -890,7 +890,7 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
-void Interface::GameArea::QueueEventProcessing()
+void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
@@ -917,7 +917,7 @@ void Interface::GameArea::QueueEventProcessing()
     int32_t index = GetValidTileIdFromPoint( mp );
 
     // change cursor if need
-    if ( updateCursor || index != _prevIndexPos ) {
+    if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
         Cursor::Get().SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
