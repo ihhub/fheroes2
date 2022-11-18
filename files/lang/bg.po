@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-17 16:30+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2911,11 +2911,11 @@ msgstr "Налични сделки"
 msgid "n/a"
 msgstr "няма"
 
-msgid "guarded by "
-msgstr "охраняван от "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "охранявано от %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "охраняван от "
 
 msgid "(available: %{count})"
 msgstr "(наличен: %{count})"
@@ -9589,9 +9589,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "битка: показва информация за щетите"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "свят: Скаутските умения показват разширена информация за съдържанието"
-
 msgid "world: allow to set guardian to objects"
 msgstr "свят: позволява да се сложи пазител на обекти"
 
@@ -9680,6 +9677,10 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr ""
+#~ "свят: Скаутските умения показват разширена информация за съдържанието"
 
 #~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr ""
