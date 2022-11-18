@@ -29,6 +29,7 @@
 #include <string>
 
 #include <SDL_events.h>
+#include <SDL_stdinc.h>
 #include <SDL_version.h>
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

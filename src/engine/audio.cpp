@@ -39,6 +39,7 @@
 #include <SDL_error.h>
 #include <SDL_mixer.h>
 #include <SDL_rwops.h>
+#include <SDL_stdinc.h>
 #include <SDL_version.h>
 
 #include "audio.h"
