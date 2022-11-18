@@ -343,7 +343,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
     bool need_redraw = false;
-    bool isArmyActionPerformed = false;
 
     // dialog menu loop
     Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
@@ -406,18 +405,20 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 need_redraw = true;
             }
 
-            // Preselecting of troop.
-            const ArmyTroop * keep = nullptr;
-
-            if ( topArmyBar.isSelected() ) {
-                keep = topArmyBar.GetSelectedItem();
-            }
-            else if ( bottomArmyBar.isSelected() ) {
-                keep = bottomArmyBar.GetSelectedItem();
-            }
-
             // Actions with hero armies.
             if ( hero && !readOnly ) {
+                bool isArmyActionPerformed = false;
+
+                // Preselecting of troop.
+                const ArmyTroop * keep = nullptr;
+
+                if ( topArmyBar.isSelected() ) {
+                    keep = topArmyBar.GetSelectedItem();
+                }
+                else if ( bottomArmyBar.isSelected() ) {
+                    keep = bottomArmyBar.GetSelectedItem();
+                }
+
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
                     hero->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
@@ -426,16 +427,18 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     GetArmy().MoveTroops( hero->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }
-            }
-            // Redraw and reset if any action modifying armies has been made.
-            if ( isArmyActionPerformed ) {
-                if ( topArmyBar.isSelected() )
-                    topArmyBar.ResetSelected();
-                if ( bottomArmyBar.isSelected() )
-                    bottomArmyBar.ResetSelected();
 
-                need_redraw = true;
-                isArmyActionPerformed = false;
+                // Redraw and reset if any action modifying armies has been made.
+                if ( isArmyActionPerformed ) {
+                    if ( topArmyBar.isSelected() ) {
+                        topArmyBar.ResetSelected();
+                    }
+                    if ( bottomArmyBar.isSelected() ) {
+                        bottomArmyBar.ResetSelected();
+                    }
+
+                    need_redraw = true;
+                }
             }
 
             if ( !readOnly && hero && le.MouseClickLeft( rectSign2 ) ) {
