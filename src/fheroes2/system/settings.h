@@ -83,7 +83,7 @@ public:
         // UNUSED = 0x20000002,
         // UNUSED = 0x20000008,
         // UNUSED = 0x20000020,
-        WORLD_SCOUTING_EXTENDED = 0x20000040,
+        // UNUSED = 0x20000040,
         // UNUSED = 0x20000080,
         // UNUSED = 0x20000100,
         HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
@@ -272,11 +272,6 @@ public:
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtWorldScouteExtended() const
-    {
-        return ExtModes( WORLD_SCOUTING_EXTENDED );
     }
 
     bool ExtWorldExtObjectsCaptured() const

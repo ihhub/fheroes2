@@ -156,7 +156,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
-    states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
