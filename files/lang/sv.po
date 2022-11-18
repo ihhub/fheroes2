@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2915,12 +2915,12 @@ msgstr "Tillgänglig handel"
 msgid "n/a"
 msgstr "Inga"
 
-msgid "guarded by "
-msgstr ""
-
 #, fuzzy
 msgid "guarded by %{count} %{monster}"
 msgstr "vaktas av %{count} %{monster}"
+
+msgid "guarded by "
+msgstr ""
 
 msgid "(available: %{count})"
 msgstr "(tillgängligt: %{count})"
@@ -3435,6 +3435,9 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
@@ -3442,25 +3445,28 @@ msgstr ""
 msgid "Dev and Support"
 msgstr "Teleportera"
 
-msgid "Visit us at "
-msgstr ""
-
 msgid "Special Thanks to"
 msgstr ""
 
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -9350,9 +9356,6 @@ msgstr ""
 #, fuzzy
 msgid "battle: show damage info"
 msgstr "spel: Visa systeminfo"
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
 
 msgid "world: allow to set guardian to objects"
 msgstr ""

@@ -937,8 +937,6 @@ bool Settings::ExtModes( uint32_t f ) const
 std::string Settings::ExtName( const uint32_t settingId )
 {
     switch ( settingId ) {
-    case Settings::WORLD_SCOUTING_EXTENDED:
-        return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
         return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:

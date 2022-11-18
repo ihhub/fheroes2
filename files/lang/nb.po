@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2969,12 +2969,12 @@ msgstr "Mulige bytter"
 msgid "n/a"
 msgstr "n/a"
 
+msgid "guarded by %{count} %{monster}"
+msgstr "bevoktet av %{count} %{monster}"
+
 # fix english string?
 msgid "guarded by "
 msgstr "Bevoktet av "
-
-msgid "guarded by %{count} %{monster}"
-msgstr "bevoktet av %{count} %{monster}"
 
 msgid "(available: %{count})"
 msgstr "(tilgjengelig: %{count})"
@@ -3488,14 +3488,14 @@ msgstr ""
 msgid "QA and Support"
 msgstr "Kvalitetssikring og støtte"
 
+msgid "Visit us at "
+msgstr "Treff oss på "
+
 msgid "Development"
 msgstr "Programvareutvikling"
 
 msgid "Dev and Support"
 msgstr "Utvikling og støtte"
-
-msgid "Visit us at "
-msgstr "Treff oss på "
 
 msgid "Special Thanks to"
 msgstr "Spesielt takk til"
@@ -3503,17 +3503,23 @@ msgstr "Spesielt takk til"
 msgid "and many other contributors!"
 msgstr "og mange andre bidragsytere!"
 
+msgid "and many-many other supporters!"
+msgstr "og mange flere støttespillere!"
+
 msgid "Support us at"
 msgstr "Støtt oss på"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Kontakt oss på"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Behov for hjelp med spillet?"
-
-msgid "and many-many other supporters!"
-msgstr "og mange flere støttespillere!"
 
 msgid "Original project before 0.7"
 msgstr "Opprinnelig prosjekt før 0.7"
@@ -9900,9 +9906,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "Kamp: Vis skadeinfo"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "Verden: Speiding gir deg utvidet info"
-
 msgid "world: allow to set guardian to objects"
 msgstr "Verden: Tillat å plassere voktere på objekter"
 
@@ -9989,6 +9992,9 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr "Verden: Speiding gir deg utvidet info"
 
 # Ikke mulig å verve?
 #~ msgid "Cannot recruit - guest to guard automove error."

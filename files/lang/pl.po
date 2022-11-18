@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -2915,11 +2915,11 @@ msgstr "Oferta"
 msgid "n/a"
 msgstr "nd."
 
-msgid "guarded by "
-msgstr "strzeżone przez "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "Strażnicy: %{monster} (%{count})"
+
+msgid "guarded by "
+msgstr "strzeżone przez "
 
 msgid "(available: %{count})"
 msgstr "(dostępne: %{count})"
@@ -3418,14 +3418,14 @@ msgstr "Koordynacja projektu i development"
 msgid "QA and Support"
 msgstr "QA i wsparcie"
 
+msgid "Visit us at "
+msgstr "Odwiedź nas "
+
 msgid "Development"
 msgstr "Development"
 
 msgid "Dev and Support"
 msgstr "Development i wsparcie"
-
-msgid "Visit us at "
-msgstr "Odwiedź nas "
 
 msgid "Special Thanks to"
 msgstr "Specjalnie podziękowania dla"
@@ -3433,17 +3433,23 @@ msgstr "Specjalnie podziękowania dla"
 msgid "and many other contributors!"
 msgstr "i wielu innych!"
 
+msgid "and many-many other supporters!"
+msgstr "i wielu, wielu innym!"
+
 msgid "Support us at"
 msgstr "Wesprzyj nas"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Odwiedź nas"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Potrzebujesz wsparcia?"
-
-msgid "and many-many other supporters!"
-msgstr "i wielu, wielu innym!"
 
 msgid "Original project before 0.7"
 msgstr "Przed wersją 0.7"
@@ -9746,10 +9752,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "walka: pokaż informacje o obrażeniach"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-"świat: umiejętność zwiedzania pokazuje dodatkowe informacje o zawartości"
-
 msgid "world: allow to set guardian to objects"
 msgstr "świat: pozwól zostawiać strażników w obiektach"
 
@@ -9838,6 +9840,10 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr ""
+#~ "świat: umiejętność zwiedzania pokazuje dodatkowe informacje o zawartości"
 
 #~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr "Nie możesz rekrutować - ustawieni strażnicy."
