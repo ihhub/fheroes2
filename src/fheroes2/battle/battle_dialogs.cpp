@@ -194,7 +194,15 @@ namespace
         int speed = conf.BattleSpeed();
         std::string str = _( "Speed: %{speed}" );
         StringReplace( str, "%{speed}", speed );
-        const fheroes2::Sprite & speedIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, ( speed < 5 ? 0 : ( speed < 8 ? 1 : 2 ) ) );
+        uint32_t speedIcnIndex = 0;
+        if ( speed >= 8 ) {
+            speedIcnIndex = 2;
+        }
+        else if ( speed >= 5 ) {
+            speedIcnIndex = 1;
+        }
+
+        const fheroes2::Sprite & speedIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, speedIcnIndex );
         fheroes2::drawOption( areas[0], speedIcon, _( "Speed" ), str );
 
         const bool isShowArmyOrderEnabled = conf.BattleShowArmyOrder();
@@ -391,7 +399,7 @@ void Battle::DialogBattleSettings()
 {
     // We should make file writing only once.
     bool saveConfiguration = false;
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     DialogAction action = DialogAction::Open;
 
