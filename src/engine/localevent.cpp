@@ -1564,7 +1564,7 @@ void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
         SetModes( KEY_HOLD );
 
         if ( key_down_hook_func ) {
-            ( *( key_down_hook_func ) )( event.keysym.sym, event.keysym.mod );
+            ( *key_down_hook_func )( event.keysym.sym, event.keysym.mod );
         }
     }
     else if ( event.type == SDL_KEYUP ) {
@@ -1584,7 +1584,7 @@ void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
     _emulatedPointerPosY = mouse_cu.y;
 
     if ( mouse_motion_hook_func ) {
-        ( *( mouse_motion_hook_func ) )( motion.x, motion.y );
+        ( *mouse_motion_hook_func )( motion.x, motion.y );
     }
 }
 
