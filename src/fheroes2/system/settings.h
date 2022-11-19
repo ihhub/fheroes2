@@ -81,7 +81,7 @@ public:
         //
         // UNUSED = 0x20000001,
         // UNUSED = 0x20000002,
-        WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
+        // UNUSED = 0x20000008,
         // UNUSED = 0x20000020,
         // UNUSED = 0x20000040,
         // UNUSED = 0x20000080,
@@ -273,11 +273,6 @@ public:
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtWorldAllowSetGuardian() const
-    {
-        return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
     }
 
     bool ExtWorldExtObjectsCaptured() const

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-19 08:52+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2837,12 +2837,6 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
-
-msgid "Set Guardian"
-msgstr "Установить охрану"
-
-msgid "Your army too big!"
-msgstr "Ваша армия слишком большая!"
 
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
@@ -9677,9 +9671,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "битва: показывать урон"
 
-msgid "world: allow to set guardian to objects"
-msgstr "мир: разрешить охранников для дополнительных объектов"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 "мир: возможность установить флаг на постройках: Водяная/Ветряная Мельница, "
@@ -9765,6 +9756,15 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Установить охрану"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Ваша армия слишком большая!"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "мир: разрешить охранников для дополнительных объектов"
 
 #~ msgid "world: Scouting skill shows extended content info"
 #~ msgstr "мир: навык разведки покажет дополнительную информацию"

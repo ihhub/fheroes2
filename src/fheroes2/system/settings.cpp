@@ -937,8 +937,6 @@ bool Settings::ExtModes( uint32_t f ) const
 std::string Settings::ExtName( const uint32_t settingId )
 {
     switch ( settingId ) {
-    case Settings::WORLD_ALLOW_SET_GUARDIAN:
-        return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
         return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
