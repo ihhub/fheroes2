@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-19 14:26+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2841,12 +2841,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Показване на допълнителна информация като FPS и текущо време."
 
-msgid "Set Guardian"
-msgstr "Задайте Пазител"
-
-msgid "Your army too big!"
-msgstr "Армията ти е твърде голяма!"
-
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
 
@@ -2911,11 +2905,11 @@ msgstr "Налични сделки"
 msgid "n/a"
 msgstr "няма"
 
-msgid "guarded by "
-msgstr "охраняван от "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "охранявано от %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "охраняван от "
 
 msgid "(available: %{count})"
 msgstr "(наличен: %{count})"
@@ -3418,14 +3412,14 @@ msgstr "Координация на проекта и основно разви�
 msgid "QA and Support"
 msgstr "Гарантиране на качеството и поддръжка"
 
+msgid "Visit us at "
+msgstr "Посетете ни на "
+
 msgid "Development"
 msgstr "Разработка"
 
 msgid "Dev and Support"
 msgstr "Разработка и поддръжка"
-
-msgid "Visit us at "
-msgstr "Посетете ни на "
 
 msgid "Special Thanks to"
 msgstr "Специални благодарности на"
@@ -3433,17 +3427,23 @@ msgstr "Специални благодарности на"
 msgid "and many other contributors!"
 msgstr "и много други сътрудници!"
 
+msgid "and many-many other supporters!"
+msgstr "и много-много други поддръжници!"
+
 msgid "Support us at"
 msgstr "Подкрепете ни на"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Свържете се с нас на"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Нуждаете се от помощ с играта?"
-
-msgid "and many-many other supporters!"
-msgstr "и много-много други поддръжници!"
 
 msgid "Original project before 0.7"
 msgstr "Оригинален проект преди 0.7"
@@ -4714,13 +4714,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"За съжаление нямаш магическа книга, в която да запишеш заклинанието."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4736,6 +4729,13 @@ msgstr ""
 "\n"
 "За съжаление вече имаш знания за това заклинание, така че няма на какво "
 "повече да те научат."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"За съжаление нямаш магическа книга, в която да запишеш заклинанието."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9583,19 +9583,10 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "битка: показва информация за щетите"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "свят: Скаутските умения показват разширена информация за съдържанието"
-
-msgid "world: allow to set guardian to objects"
-msgstr "свят: позволява да се сложи пазител на обекти"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 "свят: Вятърните мелници, водните колела и магическите градини могат да бъдат "
 "заснети"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "герои: позволява да купите книга за заклинания от светилища"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: позволяват да избереш всяко основно умение от Арена"
@@ -9674,6 +9665,22 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "heroes: allow buy a spellbook from Shrines"
+#~ msgstr "герои: позволява да купите книга за заклинания от светилища"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Задайте Пазител"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Армията ти е твърде голяма!"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "свят: позволява да се сложи пазител на обекти"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr ""
+#~ "свят: Скаутските умения показват разширена информация за съдържанието"
 
 #~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr ""

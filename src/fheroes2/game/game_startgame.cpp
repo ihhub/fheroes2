@@ -796,6 +796,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     int heroAnimationSpriteId = 0;
 
     bool isCursorOverButtons = false;
+    bool isCursorOverGamearea = false;
 
     const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
 
@@ -919,7 +920,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             break;
         }
 
-        if ( fheroes2::cursor().isFocusActive() ) {
+        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar() ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
@@ -954,6 +955,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         const bool isHiddenInterface = conf.ExtGameHideInterface();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
+        isCursorOverGamearea = false;
 
         if ( isMovingHero ) {
             // hero is moving, set the appropriate cursor
@@ -989,7 +991,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            radar.QueueEventProcessing();
+            if ( !gameArea.isDragScroll() )
+                radar.QueueEventProcessing();
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
@@ -999,13 +1002,21 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
         // cursor is over the game area
         else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
-            gameArea.QueueEventProcessing();
+            isCursorOverGamearea = true;
         }
         // cursor is somewhere else
         else if ( !gameArea.NeedScroll() ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             gameArea.ResetCursorPosition();
+        }
+
+        // gamearea
+        if ( !gameArea.NeedScroll() && !isMovingHero ) {
+            if ( !radar.isDragRadar() )
+                gameArea.QueueEventProcessing( isCursorOverGamearea );
+            else if ( !le.MousePressLeft() )
+                radar.QueueEventProcessing();
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
@@ -1112,10 +1123,11 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         // fast scroll
-        if ( gameArea.NeedScroll() && !isMovingHero ) {
+        if ( ( gameArea.NeedScroll() && !isMovingHero ) || gameArea.isDragScroll() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
-                if ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
-                     || isScrollBottom( le.GetMouseCursor() ) ) {
+                if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
+                       || isScrollBottom( le.GetMouseCursor() ) )
+                     && !gameArea.isDragScroll() ) {
                     cursor.SetThemes( gameArea.GetScrollCursor() );
                 }
 

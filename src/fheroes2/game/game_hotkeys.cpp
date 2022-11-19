@@ -365,7 +365,7 @@ void Game::HotKeySave()
     file.write( data.data(), data.size() );
 }
 
-void Game::KeyboardGlobalFilter( int sdlKey, int mod )
+void Game::KeyDownGlobalHook( int sdlKey, int mod )
 {
     if ( fheroes2::getKeyFromSDL( sdlKey ) == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key
          && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {

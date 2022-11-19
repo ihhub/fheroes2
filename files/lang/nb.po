@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-19 14:26+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2901,12 +2901,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Vis ekstra informasjon som bilder per sekund (FPS) og tid."
 
-msgid "Set Guardian"
-msgstr "Plasser vokter"
-
-msgid "Your army too big!"
-msgstr "Hæren din er for stor!"
-
 msgid "Hot Keys:"
 msgstr "Hurtigtaster:"
 
@@ -2969,12 +2963,12 @@ msgstr "Mulige bytter"
 msgid "n/a"
 msgstr "n/a"
 
+msgid "guarded by %{count} %{monster}"
+msgstr "bevoktet av %{count} %{monster}"
+
 # fix english string?
 msgid "guarded by "
 msgstr "Bevoktet av "
-
-msgid "guarded by %{count} %{monster}"
-msgstr "bevoktet av %{count} %{monster}"
 
 msgid "(available: %{count})"
 msgstr "(tilgjengelig: %{count})"
@@ -3488,14 +3482,14 @@ msgstr ""
 msgid "QA and Support"
 msgstr "Kvalitetssikring og støtte"
 
+msgid "Visit us at "
+msgstr "Treff oss på "
+
 msgid "Development"
 msgstr "Programvareutvikling"
 
 msgid "Dev and Support"
 msgstr "Utvikling og støtte"
-
-msgid "Visit us at "
-msgstr "Treff oss på "
 
 msgid "Special Thanks to"
 msgstr "Spesielt takk til"
@@ -3503,17 +3497,23 @@ msgstr "Spesielt takk til"
 msgid "and many other contributors!"
 msgstr "og mange andre bidragsytere!"
 
+msgid "and many-many other supporters!"
+msgstr "og mange flere støttespillere!"
+
 msgid "Support us at"
 msgstr "Støtt oss på"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Kontakt oss på"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Behov for hjelp med spillet?"
-
-msgid "and many-many other supporters!"
-msgstr "og mange flere støttespillere!"
 
 msgid "Original project before 0.7"
 msgstr "Opprinnelig prosjekt før 0.7"
@@ -4796,13 +4796,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Dessverre har du ingen tryllebok å notere ned trolldommen i."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4818,6 +4811,13 @@ msgstr ""
 "\n"
 "Dessverre kan du allerede denne trolldommen, så det er ingenting mer de kan "
 "lære deg."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Dessverre har du ingen tryllebok å notere ned trolldommen i."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9900,17 +9900,8 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "Kamp: Vis skadeinfo"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "Verden: Speiding gir deg utvidet info"
-
-msgid "world: allow to set guardian to objects"
-msgstr "Verden: Tillat å plassere voktere på objekter"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
@@ -9989,6 +9980,21 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "heroes: allow buy a spellbook from Shrines"
+#~ msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Plasser vokter"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Hæren din er for stor!"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "Verden: Tillat å plassere voktere på objekter"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr "Verden: Speiding gir deg utvidet info"
 
 # Ikke mulig å verve?
 #~ msgid "Cannot recruit - guest to guard automove error."
