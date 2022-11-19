@@ -1097,7 +1097,7 @@ Battle::Interface::Interface( Arena & a, int32_t center )
 
     // hexagon
     sf_hexagon = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
-    sf_cursor = DrawHexagonShadow( 2 );
+    sf_cursor = DrawHexagonShadow( 4 );
     sf_shadow = DrawHexagonShadow( 4 );
 
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
