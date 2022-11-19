@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -740,6 +740,10 @@ msgstr ""
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr ""
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "%{name} höjer din moral."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1896,10 +1900,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-#, fuzzy
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Kan inte rekrytera - du har för många hjältar."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Kan inte rekrytera - du har redan en hjälte i denna stad."
 
@@ -2311,14 +2311,6 @@ msgstr "Visa föregående stad"
 msgid "Show previous town"
 msgstr "Visa föregående stad"
 
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Denna stad kan inte uppgraderas till ett slott."
 
@@ -2333,12 +2325,6 @@ msgstr "Gå ut från staden"
 
 msgid "Show Income"
 msgstr "Visa inkomst"
-
-msgid "Swap Heroes"
-msgstr "Byt hjältar"
-
-msgid "Meeting Heroes"
-msgstr ""
 
 msgid "View Hero"
 msgstr "Visa hjälte"
@@ -2929,12 +2915,12 @@ msgstr "Tillgänglig handel"
 msgid "n/a"
 msgstr "Inga"
 
-msgid "guarded by "
-msgstr ""
-
 #, fuzzy
 msgid "guarded by %{count} %{monster}"
 msgstr "vaktas av %{count} %{monster}"
+
+msgid "guarded by "
+msgstr ""
 
 msgid "(available: %{count})"
 msgstr "(tillgängligt: %{count})"
@@ -3449,6 +3435,9 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
@@ -3456,25 +3445,28 @@ msgstr ""
 msgid "Dev and Support"
 msgstr "Teleportera"
 
-msgid "Visit us at "
-msgstr ""
-
 msgid "Special Thanks to"
 msgstr ""
 
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3966,10 +3958,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} har blivit besegrad!"
-
-#, fuzzy
-msgid "Do you wish to continue the game?"
-msgstr "Vill du köpa en?"
 
 msgid "Scenario:"
 msgstr "Scenario:"
@@ -9369,31 +9357,19 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "spel: Visa systeminfo"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
 msgid "world: allow to set guardian to objects"
 msgstr ""
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
-msgid "castle: allow guardians"
-msgstr "slott: tillåt väktare"
-
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 
 msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"
@@ -9404,9 +9380,6 @@ msgstr "spel: Använd ondskefullt gränssnitt"
 
 msgid "game: hide interface"
 msgstr "spel: Göm gränssnitt"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr "spel: erbjud att fortsätta spelet efter att spelaren har segrat"
 
 #, fuzzy
 msgid "The ultimate artifact is really the %{name}."
@@ -9478,9 +9451,19 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "game: show system info"
-#~ msgstr "spel: Visa systeminfo"
+#, fuzzy
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "Kan inte rekrytera - du har för många hjältar."
+
+#~ msgid "Swap Heroes"
+#~ msgstr "Byt hjältar"
 
 #, fuzzy
-#~ msgid "Moved %{monster}"
-#~ msgstr "Flytta %{monster} hit"
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Vill du köpa en?"
+
+#~ msgid "castle: allow guardians"
+#~ msgstr "slott: tillåt väktare"
+
+#~ msgid "game: offer to continue the game after victory condition"
+#~ msgstr "spel: erbjud att fortsätta spelet efter att spelaren har segrat"

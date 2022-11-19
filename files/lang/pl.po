@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -734,6 +734,10 @@ msgstr "%{name} strzela z siłą %{count} Łuczników"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "z których każdy ma +%{attack} premii do siły ataku."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Zniszczono lustrzane odbicie!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1904,9 +1908,6 @@ msgstr "Corackston"
 msgid "Sheltemburg"
 msgstr "Sheltemburg"
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Nie możesz rekrutować - ustawieni strażnicy."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Nie możesz rekrutować - w mieście jest już bohater."
 
@@ -2326,16 +2327,6 @@ msgstr "Kliknij aby przejść do poprzedniego miasta."
 msgid "Show previous town"
 msgstr "Pokaż poprzednie miasto"
 
-msgid "Army joining"
-msgstr "Łączenie armii"
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-"Nie można połączyć armii. Zmień pozycje stworzeń w bohaterze przed wejściem "
-"do garnizonu."
-
 msgid "This town may not be upgraded to a castle."
 msgstr "Tego miasta nie można rozbudować do poziomu zamku."
 
@@ -2350,12 +2341,6 @@ msgstr "Wyjście z miasta"
 
 msgid "Show Income"
 msgstr "Pokaż przychód"
-
-msgid "Swap Heroes"
-msgstr "Zamień bohaterów"
-
-msgid "Meeting Heroes"
-msgstr "Spotkanie bohaterów"
 
 msgid "View Hero"
 msgstr "Pokaż bohatera"
@@ -2930,11 +2915,11 @@ msgstr "Oferta"
 msgid "n/a"
 msgstr "nd."
 
-msgid "guarded by "
-msgstr "strzeżone przez "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "Strażnicy: %{monster} (%{count})"
+
+msgid "guarded by "
+msgstr "strzeżone przez "
 
 msgid "(available: %{count})"
 msgstr "(dostępne: %{count})"
@@ -3433,14 +3418,14 @@ msgstr "Koordynacja projektu i development"
 msgid "QA and Support"
 msgstr "QA i wsparcie"
 
+msgid "Visit us at "
+msgstr "Odwiedź nas "
+
 msgid "Development"
 msgstr "Development"
 
 msgid "Dev and Support"
 msgstr "Development i wsparcie"
-
-msgid "Visit us at "
-msgstr "Odwiedź nas "
 
 msgid "Special Thanks to"
 msgstr "Specjalnie podziękowania dla"
@@ -3448,17 +3433,23 @@ msgstr "Specjalnie podziękowania dla"
 msgid "and many other contributors!"
 msgstr "i wielu innych!"
 
+msgid "and many-many other supporters!"
+msgstr "i wielu, wielu innym!"
+
 msgid "Support us at"
 msgstr "Wesprzyj nas"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Odwiedź nas"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Potrzebujesz wsparcia?"
-
-msgid "and many-many other supporters!"
-msgstr "i wielu, wielu innym!"
 
 msgid "Original project before 0.7"
 msgstr "Przed wersją 0.7"
@@ -3939,9 +3930,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} gracz zostaje wygnany!"
-
-msgid "Do you wish to continue the game?"
-msgstr "Czy chcesz kontynuować grę?"
 
 msgid "Scenario:"
 msgstr "Scenariusz:"
@@ -9764,26 +9752,14 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "walka: pokaż informacje o obrażeniach"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-"świat: umiejętność zwiedzania pokazuje dodatkowe informacje o zawartości"
-
 msgid "world: allow to set guardian to objects"
 msgstr "świat: pozwól zostawiać strażników w obiektach"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "świat: Wiatraki, Młyny wodne i Magiczne ogrody mogą być przejęte"
 
-msgid "castle: allow guardians"
-msgstr "zamek: zezwól na strażników"
-
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "bohaterowie: pozwól kupować Księgę Zaklęć w kaplicach"
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr ""
-"bohaterowie: zapamiętaj punkty ruchu przy obliczaniu rezultatu ucieczki oraz "
-"kapitulacji"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
@@ -9791,9 +9767,6 @@ msgstr ""
 
 msgid "battle: allow soft wait for troops"
 msgstr "walka: pozwól na delikatne czekanie na jednostki"
-
-msgid "battle: deterministic events"
-msgstr "walka: deterministyczne zdarzenia"
 
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "gra: autozapis nastąpi na początku każdego dnia"
@@ -9803,10 +9776,6 @@ msgstr "gra: użyj mrocznego interfejsu"
 
 msgid "game: hide interface"
 msgstr "gra: ukryj interfejs"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr ""
-"gra: zaproponuj kontynuację rozgrywki po spełnieniu warunków zwycięstwa"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "%{name} to naprawdę najpotężniejszy artefakt."
@@ -9872,31 +9841,40 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
+#~ msgid "world: Scouting skill shows extended content info"
 #~ msgstr ""
-#~ " po lewej stronie menu.\n"
-#~ "\n"
-#~ "Aby zmienić tryb okienkowy na pełny ekran\n"
-#~ "naciśnij "
+#~ "świat: umiejętność zwiedzania pokazuje dodatkowe informacje o zawartości"
 
-#~ msgid "F4"
-#~ msgstr "F4"
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "Nie możesz rekrutować - ustawieni strażnicy."
+
+#~ msgid "Army joining"
+#~ msgstr "Łączenie armii"
 
 #~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
+#~ "Unable to merge two armies together. Rearrange monsters manually before "
+#~ "moving the hero to the garrison."
 #~ msgstr ""
-#~ " na klawiaturze.\n"
-#~ "\n"
-#~ "Przyjemnej zabawy!"
+#~ "Nie można połączyć armii. Zmień pozycje stworzeń w bohaterze przed "
+#~ "wejściem do garnizonu."
 
-#~ msgid "game: show system info"
-#~ msgstr "gra: pokaż informacje o systemie"
+#~ msgid "Swap Heroes"
+#~ msgstr "Zamień bohaterów"
 
-#~ msgid "Moved %{monster}"
-#~ msgstr "Przemieść jednostkę (%{monster}) tutaj."
+#~ msgid "Meeting Heroes"
+#~ msgstr "Spotkanie bohaterów"
+
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Czy chcesz kontynuować grę?"
+
+#~ msgid "castle: allow guardians"
+#~ msgstr "zamek: zezwól na strażników"
+
+#~ msgid "heroes: remember movement points when retreating or surrendering"
+#~ msgstr ""
+#~ "bohaterowie: zapamiętaj punkty ruchu przy obliczaniu rezultatu ucieczki "
+#~ "oraz kapitulacji"
+
+#~ msgid "game: offer to continue the game after victory condition"
+#~ msgstr ""
+#~ "gra: zaproponuj kontynuację rozgrywki po spełnieniu warunków zwycięstwa"

@@ -37,7 +37,6 @@
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "dialog.h"
 #include "difficulty.h"
 #include "direction.h"
@@ -841,18 +840,8 @@ Castle * Heroes::inCastleMutable() const
         return nullptr;
     }
 
-    if ( Modes( Heroes::GUARDIAN ) ) {
-        const fheroes2::Point & heroPoint = GetCenter();
-        const fheroes2::Point castlePoint( heroPoint.x, heroPoint.y + 1 );
-
-        Castle * castle = world.getCastleEntrance( castlePoint );
-
-        return castle && castle->GetHeroes() == this ? castle : nullptr;
-    }
-
     Castle * castle = world.getCastleEntrance( GetCenter() );
-
-    return castle && castle->GetHeroes() == this ? castle : nullptr;
+    return castle && castle->GetHero() == this ? castle : nullptr;
 }
 
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
@@ -1428,7 +1417,7 @@ void Heroes::ApplyPenaltyMovement( uint32_t penalty )
 
 bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const
 {
-    if ( Modes( GUARDIAN ) || isFreeman() ) {
+    if ( isFreeman() ) {
         return false;
     }
 
@@ -1445,7 +1434,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
 
 bool Heroes::MayCastAdventureSpells() const
 {
-    return !Modes( GUARDIAN ) && !isFreeman();
+    return !isFreeman();
 }
 
 bool Heroes::isValid() const
@@ -1486,9 +1475,7 @@ void Heroes::SetFreeman( int reason )
         SetModes( ACTION );
 
         if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-            if ( Settings::Get().ExtHeroRememberMovementPointsWhenRetreating() ) {
-                SetModes( SAVEMP );
-            }
+            SetModes( SAVEMP );
 
             if ( heroColor != Color::NONE ) {
                 kingdom.appendSurrenderedHero( *this );
@@ -1644,16 +1631,6 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
         return;
     }
 
-    if ( Modes( Heroes::GUARDIAN ) ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MISC6, 11 );
-        fheroes2::Image guardianBG( sprite.width(), sprite.height() );
-        guardianBG.fill( 0 );
-
-        fheroes2::Blit( guardianBG, dstsf, px + mp.x + 3, py + mp.y );
-        fheroes2::Blit( sprite, dstsf, px + mp.x + 3, py + mp.y );
-        mp.y = sprite.height();
-    }
-
     if ( Modes( Heroes::SLEEPER ) ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MISC4, 14 );
         fheroes2::Image sleeperBG( sprite.width() - 4, sprite.height() - 4 );
@@ -1805,22 +1782,9 @@ Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
     return end() != it ? *it : nullptr;
 }
 
-Heroes * AllHeroes::GetGuest( const Castle & castle ) const
+Heroes * AllHeroes::GetHero( const Castle & castle ) const
 {
-    const_iterator it
-        = std::find_if( begin(), end(), [&castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN ); } );
-    return end() != it ? *it : nullptr;
-}
-
-Heroes * AllHeroes::GetGuard( const Castle & castle ) const
-{
-    const_iterator it = Settings::Get().ExtCastleAllowGuardians() ? std::find_if( begin(), end(),
-                                                                                  [&castle]( const Heroes * hero ) {
-                                                                                      const fheroes2::Point & cpt = castle.GetCenter();
-                                                                                      const fheroes2::Point & hpt = hero->GetCenter();
-                                                                                      return cpt.x == hpt.x && cpt.y == hpt.y + 1 && hero->Modes( Heroes::GUARDIAN );
-                                                                                  } )
-                                                                  : end();
+    const_iterator it = std::find_if( begin(), end(), [&castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter(); } );
     return end() != it ? *it : nullptr;
 }
 

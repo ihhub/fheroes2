@@ -549,6 +549,12 @@ namespace fheroes2
 
             xOffset = ( maxWidth - correctedWidth ) / 2;
         }
+        else {
+            // This is a single-line message. Find its length and center it according to the maximum width.
+            correctedWidth = width();
+            assert( correctedWidth <= maxWidth );
+            xOffset = ( maxWidth - correctedWidth ) / 2;
+        }
 
         offsets.clear();
         render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x + xOffset, y, correctedWidth, output, _fontType, fontHeight,
@@ -758,6 +764,12 @@ namespace fheroes2
                 std::swap( offsets, tempOffsets );
             }
 
+            xOffset = ( maxWidth - correctedWidth ) / 2;
+        }
+        else {
+            // This is a single-line message. Find its length and center it according to the maximum width.
+            correctedWidth = width();
+            assert( correctedWidth <= maxWidth );
             xOffset = ( maxWidth - correctedWidth ) / 2;
         }
 

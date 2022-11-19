@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-11-18 13:02+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -731,6 +731,10 @@ msgstr "De %{name} vuurt met de kracht van %{count} Boogschutters"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "elk met een +%{attack} bonus voor hun aanvalsvaardigheid."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Het spiegelbeeld is vernietigd!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1916,9 +1920,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr ""
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr ""
 
@@ -2310,14 +2311,6 @@ msgstr ""
 msgid "Show previous town"
 msgstr ""
 
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-
 msgid "This town may not be upgraded to a castle."
 msgstr ""
 
@@ -2331,12 +2324,6 @@ msgid "Exit Town"
 msgstr ""
 
 msgid "Show Income"
-msgstr ""
-
-msgid "Swap Heroes"
-msgstr ""
-
-msgid "Meeting Heroes"
 msgstr ""
 
 msgid "View Hero"
@@ -2868,10 +2855,10 @@ msgstr ""
 msgid "n/a"
 msgstr ""
 
-msgid "guarded by "
+msgid "guarded by %{count} %{monster}"
 msgstr ""
 
-msgid "guarded by %{count} %{monster}"
+msgid "guarded by "
 msgstr ""
 
 msgid "(available: %{count})"
@@ -3350,13 +3337,13 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
 msgid "Dev and Support"
-msgstr ""
-
-msgid "Visit us at "
 msgstr ""
 
 msgid "Special Thanks to"
@@ -3365,16 +3352,22 @@ msgstr ""
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3808,9 +3801,6 @@ msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
 
 msgid "%{color} player has been vanquished!"
-msgstr ""
-
-msgid "Do you wish to continue the game?"
 msgstr ""
 
 msgid "Scenario:"
@@ -8724,31 +8714,19 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr ""
 
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
 msgid "world: allow to set guardian to objects"
 msgstr ""
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
-msgid "castle: allow guardians"
-msgstr ""
-
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 
 msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"
@@ -8758,9 +8736,6 @@ msgid "game: use evil interface"
 msgstr ""
 
 msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
