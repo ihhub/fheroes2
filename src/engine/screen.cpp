@@ -389,8 +389,9 @@ namespace
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
+            fheroes2::Cursor::update( image, offsetX, offsetY );
+
             if ( _emulation ) {
-                fheroes2::Cursor::update( image, offsetX, offsetY );
                 return;
             }
 
@@ -495,7 +496,7 @@ namespace
     private:
         SDL_Cursor * _cursor;
 
-        void clear()
+        void clear() override
         {
             if ( _cursor != nullptr ) {
                 SDL_FreeCursor( _cursor );
@@ -1413,6 +1414,7 @@ namespace fheroes2
 
         // deallocate engine resources
         _engine->clear();
+        _cursor->clear();
 
         _prevRoi = {};
 
@@ -1420,6 +1422,8 @@ namespace fheroes2
         if ( !_engine->allocate( width_, height_, isFullScreen ) ) {
             clear();
         }
+
+        _cursor->refresh();
 
         Image::resize( width_, height_ );
 
@@ -1509,7 +1513,7 @@ namespace fheroes2
     void Display::release()
     {
         _engine->clear();
-        _cursor.reset();
+        _cursor->clear();
         clear();
 
         _prevRoi = {};

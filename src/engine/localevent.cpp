@@ -51,6 +51,7 @@
 
 #include "audio.h"
 #include "localevent.h"
+#include "logging.h"
 #include "pal.h"
 #include "screen.h"
 
@@ -1252,6 +1253,21 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
             fheroes2::Display::instance().render();
             break;
+        case SDL_RENDER_DEVICE_RESET: {
+            // All textures has to be recreated. The only way to do it is to reset everything and render it back.
+            fheroes2::Display & display = fheroes2::Display::instance();
+            fheroes2::Image temp( display.width(), display.height() );
+            if ( display.singleLayer() ) {
+                temp._disableTransformLayer();
+            }
+
+            fheroes2::Copy( display, temp );
+            display.release();
+            display.resize( temp.width(), temp.height() );
+            fheroes2::Copy( temp, display );
+
+            break;
+        }
         case SDL_QUIT:
             if ( allowExit ) {
                 // Try to perform clear exit to catch all memory leaks, for example.
@@ -1908,8 +1924,7 @@ void LocalEvent::setEventProcessingStates()
     // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_SENSORUPDATE, false );
     setEventProcessingState( SDL_RENDER_TARGETS_RESET, true ); // supported from SDL 2.0.2
-    // TODO: handle this event in order to avoid possible crashes when a render device has been changed.
-    setEventProcessingState( SDL_RENDER_DEVICE_RESET, false ); // supported from SDL 2.0.4
+    setEventProcessingState( SDL_RENDER_DEVICE_RESET, true ); // supported from SDL 2.0.4
     // SDL_POLLSENTINEL is supported from SDL 2.0.?
     // We do not support custom user events as of now.
     setEventProcessingState( SDL_USEREVENT, false );
