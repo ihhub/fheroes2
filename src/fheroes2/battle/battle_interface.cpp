@@ -4019,6 +4019,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
         boulderArcHeight = 220;
         break;
     case Battle::CAT_WALL2:
+    case Battle::CAT_BRIDGE:
         boulderArcHeight = 216;
         break;
     case Battle::CAT_WALL3:
@@ -4028,13 +4029,8 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
         boulderArcHeight = 208;
         break;
     case Battle::CAT_TOWER1:
-        boulderArcHeight = 206;
-        break;
     case Battle::CAT_TOWER2:
         boulderArcHeight = 206;
-        break;
-    case Battle::CAT_BRIDGE:
-        boulderArcHeight = 216;
         break;
     case Battle::CAT_CENTRAL_TOWER:
         boulderArcHeight = 290;
