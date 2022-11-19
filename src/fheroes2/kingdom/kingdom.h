@@ -46,8 +46,6 @@ namespace Maps
     class Tiles;
 }
 
-struct CapturedObjects;
-
 struct KingdomCastles : public VecCastles
 {};
 
