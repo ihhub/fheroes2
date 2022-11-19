@@ -116,7 +116,7 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 
     if ( fheroes2::isHandheldDevice() ) {
-        // Due to the nature of Android devices having small screens in general it is good to make fullscreen option by default.
+        // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
         _optGlobal.SetModes( GLOBAL_FULLSCREEN );
     }
 
