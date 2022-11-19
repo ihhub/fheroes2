@@ -51,7 +51,6 @@
 
 #include "audio.h"
 #include "localevent.h"
-#include "logging.h"
 #include "pal.h"
 #include "screen.h"
 
@@ -1031,6 +1030,8 @@ void LocalEvent::OpenVirtualKeyboard()
 {
 #if defined( TARGET_PS_VITA )
     dpadInputActive = true;
+#elif defined( ANDROID )
+    // Here we should use SDL_StartTextInput() call to open a keyboard.
 #endif
 }
 
@@ -1038,6 +1039,8 @@ void LocalEvent::CloseVirtualKeyboard()
 {
 #if defined( TARGET_PS_VITA )
     dpadInputActive = false;
+#elif defined( ANDROID )
+    // Here we should use SDL_StopTextInput() call to close a keyboard.
 #endif
 }
 
@@ -1268,6 +1271,12 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
             break;
         }
+        case SDL_TEXTINPUT:
+            // Keyboard events on Android should be processed here. Use event.text.text to extract text input.
+            break;
+        case SDL_TEXTEDITING:
+            // An event when a user pressed a button on a keyboard. Not all buttons are supported. This event should be used mainly on Android devices.
+            break;
         case SDL_QUIT:
             if ( allowExit ) {
                 // Try to perform clear exit to catch all memory leaks, for example.
@@ -1305,8 +1314,10 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             HandleMouseButtonEvent( event.button );
             break;
         case SDL_QUIT:
-            if ( allowExit )
-                return false; // try to perform clear exit to catch all memory leaks, for example
+            if ( allowExit ) {
+                // Try to perform clear exit to catch all memory leaks, for example.
+                return false;
+            }
             break;
         default:
             if ( allowedEventTypes.count( event.type ) > 0 ) {
@@ -1866,9 +1877,9 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_SYSWMEVENT, false );
     setEventProcessingState( SDL_KEYDOWN, true );
     setEventProcessingState( SDL_KEYUP, true );
-    // TODO: we don't process this event. Add the logic.
+    // SDL_TEXTINPUT and SDL_TEXTEDITING are enabled and disabled by SDL_StartTextInput() and SDL_StopTextInput() functions.
+    // Do not enable them here.
     setEventProcessingState( SDL_TEXTEDITING, false );
-    // TODO: we don't process this event. Add the logic.
     setEventProcessingState( SDL_TEXTINPUT, false );
     setEventProcessingState( SDL_KEYMAPCHANGED, false ); // supported from SDL 2.0.4
     // SDL_TEXTEDITING_EXT is supported only from SDL 2.0.22
