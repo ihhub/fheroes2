@@ -65,10 +65,7 @@ namespace
 
     // Some resources are language dependent. These are mostly buttons with a text of them.
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
-    const std::set<int> languageDependentIcnId{ ICN::BTNCONFIG,
-                                                ICN::BATTLESKIP,
-                                                ICN::BATTLEWAIT,
-                                                ICN::BUYMAX,
+    const std::set<int> languageDependentIcnId{ ICN::BUYMAX,
                                                 ICN::BTNBATTLEONLY,
                                                 ICN::BTNGIFT_GOOD,
                                                 ICN::BTNGIFT_EVIL,
@@ -527,44 +524,6 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BATTLESKIP: {
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TEXTBAR, 4 + i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
-
-                    // add 'skip'
-                    // Blit( GetICN( ICN::TEXTBAR, i ), 3, 10, out, 3, 0, 43, 14 );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), { 3, 0 }, { 2, 0 }, { 52, 16 }, fheroes2::FontColor::WHITE );
-
-                break;
-            }
-            case ICN::BATTLEWAIT: {
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TEXTBAR, 4 + i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
-
-                    // add 'wait'
-                    // const Sprite wait = Crop( GetICN( ICN::ADVBTNS, 8 + i ), 5, 4, 28, 28 );
-                    // Image resizedWait( wait.width() / 2, wait.height() / 2 );
-                    // Resize( wait, resizedWait );
-
-                    // Blit( resizedWait, 0, 0, out, ( out.width() - 14 ) / 2, 0, 14, 14 );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "WAIT" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
-
-                break;
-            }
             case ICN::BUYMAX: {
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -576,20 +535,6 @@ namespace fheroes2
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), { 6, 2 }, { 5, 3 }, { 54, 13 }, fheroes2::FontColor::WHITE );
-
-                break;
-            }
-            case ICN::BTNCONFIG: {
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, i );
-
-                    // add 'config'
-                    // Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 31 - i, 20, out, 10 - i, 4, 77, 16 );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CONFIG" ), { 10, 4 }, { 9, 3 }, { 80, 18 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1036,9 +981,36 @@ namespace fheroes2
                     }
                 }
                 return true;
-            case ICN::BTNCONFIG:
             case ICN::BATTLESKIP:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TEXTBAR, 4 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
+
+                    // add 'skip'
+                    Blit( GetICN( ICN::TEXTBAR, i ), 3, 10, out, 3, 0, 43, 14 );
+                }
+                return true;
             case ICN::BATTLEWAIT:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TEXTBAR, 4 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 3, 8, out, 3, 1, 43, 14 );
+
+                    // add 'wait'
+                    const Sprite wait = Crop( GetICN( ICN::ADVBTNS, 8 + i ), 5, 4, 28, 28 );
+                    Image resizedWait( wait.width() / 2, wait.height() / 2 );
+                    Resize( wait, resizedWait );
+
+                    Blit( resizedWait, 0, 0, out, ( out.width() - 14 ) / 2, 0, 14, 14 );
+                }
+                return true;
             case ICN::BUYMAX:
             case ICN::BTNBATTLEONLY:
             case ICN::BTNGIFT_GOOD:
@@ -1052,6 +1024,16 @@ namespace fheroes2
             case ICN::BUTTON_DIFFICULTY_POL:
             case ICN::BUTTON_DIFFICULTY_ROLAND:
                 generateLanguageSpecificImages( id );
+                return true;
+            case ICN::BTNCONFIG:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, i );
+
+                    // add 'config'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 31 - i, 20, out, 10 - i, 4, 77, 16 );
+                }
                 return true;
             case ICN::PHOENIX:
                 LoadOriginalICN( id );
