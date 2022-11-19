@@ -1846,7 +1846,7 @@ void LocalEvent::setEventProcessingStates()
     // TODO: we don't process this event. Add the logic.
     setEventProcessingState( SDL_TEXTINPUT, false );
     setEventProcessingState( SDL_KEYMAPCHANGED, false );
-    setEventProcessingState( SDL_TEXTEDITING_EXT, false );
+    // SDL_TEXTEDITING_EXT is supported only from SDL 2.0.22
     setEventProcessingState( SDL_MOUSEMOTION, true );
     setEventProcessingState( SDL_MOUSEBUTTONDOWN, true );
     setEventProcessingState( SDL_MOUSEBUTTONUP, true );
