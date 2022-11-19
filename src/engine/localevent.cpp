@@ -51,7 +51,6 @@
 
 #include "audio.h"
 #include "localevent.h"
-#include "logging.h"
 #include "pal.h"
 #include "screen.h"
 
@@ -1188,7 +1187,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     ResetModes( MOUSE_WHEEL );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        while ( SDL_PollEvent( &event ) ) {
+    while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
         case SDL_WINDOWEVENT:
             if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
@@ -1269,7 +1268,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         }
     }
 #else
-        while ( SDL_PollEvent( &event ) ) {
+    while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
         case SDL_ACTIVEEVENT:
             OnActiveEvent( event.active );
