@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-19 08:52+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3025,13 +3025,6 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
-
-msgid "Set Guardian"
-msgstr ""
-
-#, fuzzy
-msgid "Your army too big!"
-msgstr "Ваша армія завелика!"
 
 msgid "Hot Keys:"
 msgstr ""
@@ -9401,9 +9394,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr ""
 
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
@@ -9487,6 +9477,10 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Your army too big!"
+#~ msgstr "Ваша армія завелика!"
 
 #~ msgid "castle: allow guardians"
 #~ msgstr "замок: дозволити захистників"
