@@ -1289,14 +1289,9 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             }
             break;
         default:
-            if ( allowedEventTypes.count( event.type ) > 0 ) {
-                // If this assertion blows up then we included an event type but we didn't add logic for it.
-                assert( 0 );
-            }
-            else {
-                // If this assertion blows up then SDL might be broken as we disabled this event type.
-                assert( disabledEventTypes.count( event.type ) == 0 );
-            }
+            // If this assertion blows up then we included an event type but we didn't add logic for it.
+            assert( eventTypeStatus.count( event.type ) == 0 );
+
             // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
             break;
         }
