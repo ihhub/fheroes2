@@ -53,6 +53,7 @@
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
@@ -1329,12 +1330,21 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
-    return msg << obj.objcol << obj.guardians << obj.split;
+    return msg << obj.objcol << obj.guardians;
 }
 
 StreamBase & operator>>( StreamBase & msg, CapturedObject & obj )
 {
-    return msg >> obj.objcol >> obj.guardians >> obj.split;
+    msg >> obj.objcol >> obj.guardians;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_1000_RELEASE ) {
+        int dummy;
+
+        msg >> dummy;
+    }
+
+    return msg;
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )

@@ -266,7 +266,6 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_gameinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_giftresources.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_graphics_settings.cpp" />
-    <ClCompile Include="src\fheroes2\dialog\dialog_guardian.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_hotkeys.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_language_selection.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_levelup.cpp" />

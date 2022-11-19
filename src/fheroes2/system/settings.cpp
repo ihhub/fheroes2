@@ -917,8 +917,6 @@ std::string Settings::ExtName( const uint32_t settingId )
     switch ( settingId ) {
     case Settings::GAME_BATTLE_SHOW_DAMAGE:
         return _( "battle: show damage info" );
-    case Settings::WORLD_ALLOW_SET_GUARDIAN:
-        return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
         return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
