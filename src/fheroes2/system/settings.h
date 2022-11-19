@@ -86,7 +86,7 @@ public:
         // UNUSED = 0x20000040,
         // UNUSED = 0x20000080,
         // UNUSED = 0x20000100,
-        HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
+        // UNUSED = 0x20000200,
         // UNUSED = 0x20000400,
         // UNUSED = 0x20000800,
         // UNUSED = 0x20001000,
@@ -263,11 +263,6 @@ public:
     void ExtSetModes( uint32_t );
     void ExtResetModes( uint32_t );
     static std::string ExtName( const uint32_t settingId );
-
-    bool ExtHeroBuySpellBookFromShrine() const
-    {
-        return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
-    }
 
     bool ExtHeroArenaCanChoiseAnySkills() const
     {

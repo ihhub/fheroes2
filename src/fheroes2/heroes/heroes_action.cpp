@@ -1240,14 +1240,6 @@ void ActionToShrine( Heroes & hero, int32_t dst_index )
 
     StringReplace( body, "%{spell}", spell.GetName() );
 
-    // check spell book
-    if ( !hero.HaveSpellBook() ) {
-        if ( !Settings::Get().ExtHeroBuySpellBookFromShrine() || !hero.BuySpellBook( nullptr, spell_level ) ) {
-            body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
-            Dialog::Message( head, body, Font::BIG, Dialog::OK );
-        }
-    }
-
     if ( hero.HaveSpellBook() ) {
         // check valid level spell and wisdom skill
         if ( 3 == spell_level && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
@@ -1268,6 +1260,10 @@ void ActionToShrine( Heroes & hero, int32_t dst_index )
             fheroes2::showMessage( fheroes2::Text( head, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                    { &spellUI } );
         }
+    }
+    else {
+        body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
+        Dialog::Message( head, body, Font::BIG, Dialog::OK );
     }
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
