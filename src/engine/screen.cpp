@@ -443,7 +443,9 @@ namespace
             if ( tempCursor == nullptr ) {
                 ERROR_LOG( "Failed to create a cursor. The error description: " << SDL_GetError() )
             }
-            SDL_SetCursor( tempCursor );
+            else {
+                SDL_SetCursor( tempCursor );
+            }
 
             const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
             if ( returnCode < 0 ) {

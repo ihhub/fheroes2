@@ -317,6 +317,8 @@ private:
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
     static void OnSdl2WindowEvent( const SDL_WindowEvent & event );
+
+    static void HandleRenderDeviceResetEvent();
 #else
     void OnActiveEvent( const SDL_ActiveEvent & event );
 #endif

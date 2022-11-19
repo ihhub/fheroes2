@@ -25,7 +25,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <map>
-#include <set>
 #include <utility>
 #include <vector>
 
@@ -679,34 +678,20 @@ namespace
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    std::set<uint32_t> allowedEventTypes;
-    std::set<uint32_t> disabledEventTypes;
+    std::map<uint32_t, bool> eventTypeStatus;
 
     void setEventProcessingState( const uint32_t eventType, const bool enable )
     {
-        if ( enable ) {
-            allowedEventTypes.emplace( eventType );
-            SDL_EventState( eventType, SDL_ENABLE );
-        }
-        else {
-            disabledEventTypes.emplace( eventType );
-            SDL_EventState( eventType, SDL_IGNORE );
-        }
+        eventTypeStatus[eventType] = enable;
+        SDL_EventState( eventType, ( enable ? SDL_ENABLE : SDL_IGNORE ) );
     }
 #else
-    std::set<uint8_t> allowedEventTypes;
-    std::set<uint8_t> disabledEventTypes;
+    std::map<uint8_t, bool> eventTypeStatus;
 
     void setEventProcessingState( const uint8_t eventType, const bool enable )
     {
-        if ( enable ) {
-            allowedEventTypes.emplace( eventType );
-            SDL_EventState( eventType, SDL_ENABLE );
-        }
-        else {
-            disabledEventTypes.emplace( eventType );
-            SDL_EventState( eventType, SDL_IGNORE );
-        }
+        eventTypeStatus[eventType] = enable;
+        SDL_EventState( eventType, ( enable ? SDL_ENABLE : SDL_IGNORE ));
     }
 #endif
 }
@@ -1257,21 +1242,9 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
             fheroes2::Display::instance().render();
             break;
-        case SDL_RENDER_DEVICE_RESET: {
-            // All textures has to be recreated. The only way to do it is to reset everything and render it back.
-            fheroes2::Display & display = fheroes2::Display::instance();
-            fheroes2::Image temp( display.width(), display.height() );
-            if ( display.singleLayer() ) {
-                temp._disableTransformLayer();
-            }
-
-            fheroes2::Copy( display, temp );
-            display.release();
-            display.resize( temp.width(), temp.height() );
-            fheroes2::Copy( temp, display );
-
+        case SDL_RENDER_DEVICE_RESET:
+            HandleRenderDeviceResetEvent();
             break;
-        }
         case SDL_TEXTINPUT:
             // Keyboard events on Android should be processed here. Use event.text.text to extract text input.
             break;
@@ -1285,14 +1258,9 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             }
             break;
         default:
-            if ( allowedEventTypes.count( event.type ) > 0 ) {
-                // If this assertion blows up then we included an event type but we didn't add logic for it.
-                assert( 0 );
-            }
-            else {
-                // If this assertion blows up then SDL might be broken as we disabled this event type.
-                assert( disabledEventTypes.count( event.type ) == 0 );
-            }
+            // If this assertion blows up then we included an event type but we didn't add logic for it.
+            assert( eventTypeStatus.count( event.type ) == 0 );
+
             // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
             break;
         }
@@ -1361,39 +1329,14 @@ void LocalEvent::ResumeSounds()
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-void LocalEvent::OnSdl2WindowEvent( const SDL_WindowEvent & event )
+void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 {
-    if ( event.event == SDL_WINDOWEVENT_FOCUS_LOST ) {
-        StopSounds();
-    }
-    else if ( event.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
-        // Force display rendering on app activation
-        fheroes2::Display::instance().render();
-
-        ResumeSounds();
-    }
-    else if ( event.event == SDL_WINDOWEVENT_RESIZED ) {
-        fheroes2::Display::instance().render();
-    }
+    SetModes( MOUSE_WHEEL );
+    mouse_rm = mouse_cu;
+    mouse_wm.x = wheel.x;
+    mouse_wm.y = wheel.y;
 }
-#else
-void LocalEvent::OnActiveEvent( const SDL_ActiveEvent & event )
-{
-    if ( event.state & SDL_APPINPUTFOCUS ) {
-        if ( 0 == event.gain ) {
-            StopSounds();
-        }
-        else {
-            // Force display rendering on app activation
-            fheroes2::Display::instance().render();
 
-            ResumeSounds();
-        }
-    }
-}
-#endif
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
     if ( event.touchId != 0 )
@@ -1633,6 +1576,52 @@ void LocalEvent::ProcessControllerAxisMotion()
         _controllerScrollActive = false;
     }
 }
+
+void LocalEvent::OnSdl2WindowEvent( const SDL_WindowEvent & event )
+{
+    if ( event.event == SDL_WINDOWEVENT_FOCUS_LOST ) {
+        StopSounds();
+    }
+    else if ( event.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
+        // Force display rendering on app activation
+        fheroes2::Display::instance().render();
+
+        ResumeSounds();
+    }
+    else if ( event.event == SDL_WINDOWEVENT_RESIZED ) {
+        fheroes2::Display::instance().render();
+    }
+}
+
+void LocalEvent::HandleRenderDeviceResetEvent()
+{
+    // All textures has to be recreated. The only way to do it is to reset everything and render it back.
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Image temp( display.width(), display.height() );
+    if ( display.singleLayer() ) {
+        temp._disableTransformLayer();
+    }
+
+    fheroes2::Copy( display, temp );
+    display.release();
+    display.resize( temp.width(), temp.height() );
+    fheroes2::Copy( temp, display );
+}
+#else
+void LocalEvent::OnActiveEvent( const SDL_ActiveEvent & event )
+{
+    if ( event.state & SDL_APPINPUTFOCUS ) {
+        if ( 0 == event.gain ) {
+            StopSounds();
+        }
+        else {
+            // Force display rendering on app activation
+            fheroes2::Display::instance().render();
+
+            ResumeSounds();
+        }
+    }
+}
 #endif
 
 bool LocalEvent::MousePressLeft() const
@@ -1754,16 +1743,6 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
             break;
         }
 }
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
-{
-    SetModes( MOUSE_WHEEL );
-    mouse_rm = mouse_cu;
-    mouse_wm.x = wheel.x;
-    mouse_wm.y = wheel.y;
-}
-#endif
 
 bool LocalEvent::MouseClickLeft()
 {
