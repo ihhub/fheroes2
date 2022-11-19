@@ -1911,7 +1911,7 @@ void LocalEvent::setEventProcessingStates()
     // TODO: handle this event in order to avoid possible crashes when a render device has been changed.
     setEventProcessingState( SDL_RENDER_DEVICE_RESET, false ); // supported from SDL 2.0.4
     // SDL_POLLSENTINEL is supported from SDL 2.0.?
-    // TODO: verify why disabled processing of this event.
+    // We do not support custom user events as of now.
     setEventProcessingState( SDL_USEREVENT, false );
 #else
     setEventProcessingState( SDL_ACTIVEEVENT, true );
@@ -1933,19 +1933,14 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_QUIT, true );
     // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_SYSWMEVENT, false );
-    // SDL_EVENT_RESERVEDA
-    // SDL_EVENT_RESERVEDB
+    // SDL_EVENT_RESERVEDA is not in use.
+    // SDL_EVENT_RESERVEDB is not in use.
     // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_VIDEORESIZE, false );
     // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_VIDEOEXPOSE, false );
-    // SDL_EVENT_RESERVED2
-    // SDL_EVENT_RESERVED3
-    // SDL_EVENT_RESERVED4
-    // SDL_EVENT_RESERVED5
-    // SDL_EVENT_RESERVED6
-    // SDL_EVENT_RESERVED7
-    // TODO: verify why disabled processing of this event.
+    // SDL_EVENT_RESERVED2 - SDL_EVENT_RESERVED7 are not in use.
+    // We do not support custom user events as of now.
     setEventProcessingState( SDL_USEREVENT, false );
 #endif
 }
