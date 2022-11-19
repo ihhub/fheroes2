@@ -1839,8 +1839,6 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_APP_DIDENTERFOREGROUND, false );
     // SDL_LOCALECHANGED is supported from SDL 2.0.14
     // TODO: we don't process this event. Add the logic.
-    setEventProcessingState( SDL_LOCALECHANGED, false );
-    // TODO: we don't process this event. Add the logic.
     setEventProcessingState( SDL_DISPLAYEVENT, false );
     setEventProcessingState( SDL_WINDOWEVENT, true );
     // TODO: verify why disabled processing of this event.
