@@ -1823,6 +1823,11 @@ int LocalEvent::KeyMod() const
 void LocalEvent::setEventProcessingStates()
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+// The list below is based on event types which require >= SDL 2.0.5. Is there a reason why you want to compile with an older SDL version?
+#if !SDL_VERSION_ATLEAST( 2, 0, 5 )
+#error Minimal suppported SDL version is 2.0.5.
+#endif
+
     // Full list of events and their requirements can be found at https://wiki.libsdl.org/SDL_EventType
     setEventProcessingState( SDL_QUIT, true );
     // TODO: we don't process this event. Add the logic.
