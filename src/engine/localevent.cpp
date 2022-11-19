@@ -25,6 +25,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <map>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -42,6 +43,7 @@
 #include <SDL_keycode.h>
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#define TOUCHSCREEN_SUPPORT
 #include <SDL_hints.h>
 #endif
 
@@ -49,6 +51,7 @@
 
 #include "audio.h"
 #include "localevent.h"
+#include "logging.h"
 #include "pal.h"
 #include "screen.h"
 
@@ -674,6 +677,38 @@ namespace
         currentCharIndex = 0;
     }
 #endif
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    std::set<uint32_t> allowedEventTypes;
+    std::set<uint32_t> disabledEventTypes;
+
+    void setEventProcessingState( const uint32_t eventType, const bool enable )
+    {
+        if ( enable ) {
+            allowedEventTypes.emplace( eventType );
+            SDL_EventState( eventType, SDL_ENABLE );
+        }
+        else {
+            disabledEventTypes.emplace( eventType );
+            SDL_EventState( eventType, SDL_IGNORE );
+        }
+    }
+#else
+    std::set<uint8_t> allowedEventTypes;
+    std::set<uint8_t> disabledEventTypes;
+
+    void setEventProcessingState( const uint8_t eventType, const bool enable )
+    {
+        if ( enable ) {
+            allowedEventTypes.emplace( eventType );
+            SDL_EventState( eventType, SDL_ENABLE );
+        }
+        else {
+            disabledEventTypes.emplace( eventType );
+            SDL_EventState( eventType, SDL_IGNORE );
+        }
+    }
+#endif
 }
 
 // Custom button mapping for Nintendo Switch
@@ -964,7 +999,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#if defined( TOUCHSCREEN_SUPPORT )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
@@ -1152,35 +1187,31 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     ResetModes( MOUSE_CLICKED );
     ResetModes( MOUSE_WHEEL );
 
-    while ( SDL_PollEvent( &event ) ) {
-        switch ( event.type ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        while ( SDL_PollEvent( &event ) ) {
+        switch ( event.type ) {
         case SDL_WINDOWEVENT:
-            OnSdl2WindowEvent( event );
+            if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
+                // A special case since we need to exit the loop.
+                if ( allowExit ) {
+                    // Try to perform clear exit to catch all memory leaks, for example.
+                    return false;
+                }
+                break;
+            }
+            OnSdl2WindowEvent( event.window );
             break;
-#else
-        case SDL_ACTIVEEVENT:
-            OnActiveEvent( event );
-            break;
-#endif
-        // keyboard
         case SDL_KEYDOWN:
         case SDL_KEYUP:
             HandleKeyboardEvent( event.key );
             break;
-
-        // mouse motion
         case SDL_MOUSEMOTION:
             HandleMouseMotionEvent( event.motion );
             break;
-
-        // mouse button
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
             HandleMouseButtonEvent( event.button );
             break;
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         case SDL_MOUSEWHEEL:
             HandleMouseWheelEvent( event.wheel );
             break;
@@ -1214,31 +1245,67 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_FINGERDOWN:
         case SDL_FINGERUP:
         case SDL_FINGERMOTION:
+#if defined( TOUCHSCREEN_SUPPORT )
             HandleTouchEvent( event.tfinger );
+#endif
             break;
-#endif
-
-        // exit
         case SDL_QUIT:
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        case SDL_WINDOWEVENT_CLOSE:
-#endif
+            if ( allowExit ) {
+                // Try to perform clear exit to catch all memory leaks, for example.
+                return false;
+            }
+            break;
+        default:
+            if ( allowedEventTypes.count( event.type ) > 0 ) {
+                // If this assertion blows up then we included an event type but we didn't add logic for it.
+                assert( 0 );
+            }
+            else {
+                // If this assertion blows up then SDL might be broken as we disabled this event type.
+                assert( disabledEventTypes.count( event.type ) == 0 );
+            }
+            // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
+            break;
+        }
+    }
+#else
+        while ( SDL_PollEvent( &event ) ) {
+        switch ( event.type ) {
+        case SDL_ACTIVEEVENT:
+            OnActiveEvent( event.active );
+            break;
+        case SDL_KEYDOWN:
+        case SDL_KEYUP:
+            HandleKeyboardEvent( event.key );
+            break;
+        case SDL_MOUSEMOTION:
+            HandleMouseMotionEvent( event.motion );
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+            HandleMouseButtonEvent( event.button );
+            break;
+        case SDL_QUIT:
             if ( allowExit )
                 return false; // try to perform clear exit to catch all memory leaks, for example
             break;
-
         default:
+            if ( allowedEventTypes.count( event.type ) > 0 ) {
+                // If this assertion blows up then we included an event type but we didn't add logic for it.
+                assert( 0 );
+            }
+            else {
+                // If this assertion blows up then SDL might be broken as we disabled this event type.
+                assert( disabledEventTypes.count( event.type ) == 0 );
+            }
+            // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
             break;
         }
 
-        // need for wheel up/down delay
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        // Use HandleMouseWheel instead
-#else
         if ( SDL_BUTTON_WHEELDOWN == event.button.button || SDL_BUTTON_WHEELUP == event.button.button )
             break;
-#endif
     }
+#endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( _gameController != nullptr ) {
@@ -1263,26 +1330,26 @@ void LocalEvent::ResumeSounds()
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-void LocalEvent::OnSdl2WindowEvent( const SDL_Event & event )
+void LocalEvent::OnSdl2WindowEvent( const SDL_WindowEvent & event )
 {
-    if ( event.window.event == SDL_WINDOWEVENT_FOCUS_LOST ) {
+    if ( event.event == SDL_WINDOWEVENT_FOCUS_LOST ) {
         StopSounds();
     }
-    else if ( event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
+    else if ( event.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
         // Force display rendering on app activation
         fheroes2::Display::instance().render();
 
         ResumeSounds();
     }
-    else if ( event.window.event == SDL_WINDOWEVENT_RESIZED ) {
+    else if ( event.event == SDL_WINDOWEVENT_RESIZED ) {
         fheroes2::Display::instance().render();
     }
 }
 #else
-void LocalEvent::OnActiveEvent( const SDL_Event & event )
+void LocalEvent::OnActiveEvent( const SDL_ActiveEvent & event )
 {
-    if ( event.active.state & SDL_APPINPUTFOCUS ) {
-        if ( 0 == event.active.gain ) {
+    if ( event.state & SDL_APPINPUTFOCUS ) {
+        if ( 0 == event.gain ) {
             StopSounds();
         }
         else {
@@ -1750,53 +1817,133 @@ int LocalEvent::KeyMod() const
     return SDL_GetModState();
 }
 
-void LocalEvent::SetState( const uint32_t type, const bool enable )
+void LocalEvent::setEventProcessingStates()
 {
-    // SDL 1 and SDL 2 have different input argument types for event state.
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    SDL_EventState( type, enable ? SDL_ENABLE : SDL_IGNORE );
+    setEventProcessingState( SDL_QUIT, true );
+    // TODO: we don't process this event. Add the logic.
+    setEventProcessingState( SDL_APP_TERMINATING, false );
+    // TODO: we don't process this event. Add the logic.
+    setEventProcessingState( SDL_APP_LOWMEMORY, false );
+    // TODO: we don't process this event. Add the logic.
+    setEventProcessingState( SDL_APP_WILLENTERBACKGROUND, false );
+    // TODO: we don't process this event. Add the logic.
+    setEventProcessingState( SDL_APP_DIDENTERBACKGROUND, false );
+    // TODO: we don't process this event. Add the logic.
+    setEventProcessingState( SDL_APP_WILLENTERFOREGROUND, false );
+    // TODO: we don't process this event. Add the logic.
+    setEventProcessingState( SDL_APP_DIDENTERFOREGROUND, false );
+    // TODO: we don't process this event. Add the logic.
+    setEventProcessingState( SDL_LOCALECHANGED, false );
+    // TODO: we don't process this event. Add the logic.
+    setEventProcessingState( SDL_DISPLAYEVENT, false );
+    setEventProcessingState( SDL_WINDOWEVENT, true );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_SYSWMEVENT, false );
+    setEventProcessingState( SDL_KEYDOWN, true );
+    setEventProcessingState( SDL_KEYUP, true );
+    // TODO: we don't process this event. Add the logic.
+    setEventProcessingState( SDL_TEXTEDITING, false );
+    // TODO: we don't process this event. Add the logic.
+    setEventProcessingState( SDL_TEXTINPUT, false );
+    setEventProcessingState( SDL_KEYMAPCHANGED, false );
+    setEventProcessingState( SDL_TEXTEDITING_EXT, false );
+    setEventProcessingState( SDL_MOUSEMOTION, true );
+    setEventProcessingState( SDL_MOUSEBUTTONDOWN, true );
+    setEventProcessingState( SDL_MOUSEBUTTONUP, true );
+    setEventProcessingState( SDL_MOUSEWHEEL, true );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYAXISMOTION, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYBALLMOTION, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYHATMOTION, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYBUTTONDOWN, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYBUTTONUP, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYDEVICEADDED, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYDEVICEREMOVED, false );
+    setEventProcessingState( SDL_CONTROLLERAXISMOTION, true );
+    setEventProcessingState( SDL_CONTROLLERBUTTONDOWN, true );
+    setEventProcessingState( SDL_CONTROLLERBUTTONUP, true );
+    setEventProcessingState( SDL_CONTROLLERDEVICEADDED, true );
+    setEventProcessingState( SDL_CONTROLLERDEVICEREMOVED, true );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_CONTROLLERDEVICEREMAPPED, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_CONTROLLERTOUCHPADDOWN, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_CONTROLLERTOUCHPADMOTION, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_CONTROLLERTOUCHPADUP, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_CONTROLLERSENSORUPDATE, false );
+    setEventProcessingState( SDL_FINGERDOWN, true );
+    setEventProcessingState( SDL_FINGERUP, true );
+    setEventProcessingState( SDL_FINGERMOTION, true );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_DOLLARGESTURE, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_DOLLARRECORD, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_MULTIGESTURE, false );
+    // We do not support clipboard within the engine.
+    setEventProcessingState( SDL_CLIPBOARDUPDATE, false );
+    // We do not support drag and drop capability for the application.
+    setEventProcessingState( SDL_DROPFILE, false );
+    setEventProcessingState( SDL_DROPTEXT, false );
+    setEventProcessingState( SDL_DROPBEGIN, false );
+    setEventProcessingState( SDL_DROPCOMPLETE, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_AUDIODEVICEADDED, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_AUDIODEVICEREMOVED, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_SENSORUPDATE, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_RENDER_TARGETS_RESET, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_RENDER_DEVICE_RESET, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_POLLSENTINEL, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_USEREVENT, false );
 #else
-    SDL_EventState( static_cast<uint8_t>( type ), enable ? SDL_ENABLE : SDL_IGNORE );
-#endif
-}
-
-void LocalEvent::SetStateDefaults()
-{
-    SetState( SDL_USEREVENT, true );
-    SetState( SDL_KEYDOWN, true );
-    SetState( SDL_KEYUP, true );
-    SetState( SDL_MOUSEMOTION, true );
-    SetState( SDL_MOUSEBUTTONDOWN, true );
-    SetState( SDL_MOUSEBUTTONUP, true );
-    SetState( SDL_QUIT, true );
-
-    SetState( SDL_JOYAXISMOTION, true );
-    SetState( SDL_JOYBUTTONUP, true );
-    SetState( SDL_JOYBUTTONDOWN, true );
-
-    SetState( SDL_JOYBALLMOTION, false );
-    SetState( SDL_JOYHATMOTION, false );
-    SetState( SDL_SYSWMEVENT, false );
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
-    SetState( SDL_FINGERDOWN, true );
-    SetState( SDL_FINGERUP, true );
-    SetState( SDL_FINGERMOTION, true );
-#else
-    SetState( SDL_FINGERDOWN, false );
-    SetState( SDL_FINGERUP, false );
-    SetState( SDL_FINGERMOTION, false );
-#endif
-#endif
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    SetState( SDL_WINDOWEVENT, true );
-#else
-    SetState( SDL_ACTIVEEVENT, true );
-
-    SetState( SDL_SYSWMEVENT, false );
-    SetState( SDL_VIDEORESIZE, false );
-    SetState( SDL_VIDEOEXPOSE, false );
+    setEventProcessingState( SDL_ACTIVEEVENT, true );
+    setEventProcessingState( SDL_KEYDOWN, true );
+    setEventProcessingState( SDL_KEYUP, true );
+    setEventProcessingState( SDL_MOUSEMOTION, true );
+    setEventProcessingState( SDL_MOUSEBUTTONDOWN, true );
+    setEventProcessingState( SDL_MOUSEBUTTONUP, true );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYAXISMOTION, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYBALLMOTION, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYHATMOTION, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYBUTTONDOWN, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_JOYBUTTONUP, false );
+    setEventProcessingState( SDL_QUIT, true );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_SYSWMEVENT, false );
+    // SDL_EVENT_RESERVEDA
+    // SDL_EVENT_RESERVEDB
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_VIDEORESIZE, false );
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_VIDEOEXPOSE, false );
+    // SDL_EVENT_RESERVED2
+    // SDL_EVENT_RESERVED3
+    // SDL_EVENT_RESERVED4
+    // SDL_EVENT_RESERVED5
+    // SDL_EVENT_RESERVED6
+    // SDL_EVENT_RESERVED7
+    // TODO: verify why disabled processing of this event.
+    setEventProcessingState( SDL_USEREVENT, false );
 #endif
 }
