@@ -389,9 +389,14 @@ namespace
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
-            fheroes2::Cursor::update( image, offsetX, offsetY );
+            if ( image.empty() ) {
+                // What are you trying to do? Set an invisible cursor? Use hide() method!
+                assert( 0 );
+                return;
+            }
 
             if ( _emulation ) {
+                fheroes2::Cursor::update( image, offsetX, offsetY );
                 return;
             }
 
@@ -435,6 +440,9 @@ namespace
             }
 
             SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, offsetX, offsetY );
+            if ( tempCursor == nullptr ) {
+                ERROR_LOG( "Failed to create a cursor. The error description: " << SDL_GetError() )
+            }
             SDL_SetCursor( tempCursor );
 
             const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
@@ -496,7 +504,7 @@ namespace
     private:
         SDL_Cursor * _cursor;
 
-        void clear() override
+        void clear()
         {
             if ( _cursor != nullptr ) {
                 SDL_FreeCursor( _cursor );
@@ -1414,7 +1422,6 @@ namespace fheroes2
 
         // deallocate engine resources
         _engine->clear();
-        _cursor->clear();
 
         _prevRoi = {};
 
@@ -1422,8 +1429,6 @@ namespace fheroes2
         if ( !_engine->allocate( width_, height_, isFullScreen ) ) {
             clear();
         }
-
-        _cursor->refresh();
 
         Image::resize( width_, height_ );
 
@@ -1513,7 +1518,7 @@ namespace fheroes2
     void Display::release()
     {
         _engine->clear();
-        _cursor->clear();
+        _cursor.reset();
         clear();
 
         _prevRoi = {};

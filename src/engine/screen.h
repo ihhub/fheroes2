@@ -250,16 +250,6 @@ namespace fheroes2
             , _show( false )
             , _cursorUpdater( nullptr )
         {}
-
-        virtual void clear()
-        {
-            // Do nothin;
-        }
-
-        void refresh()
-        {
-            update( _image, _image.x(), _image.y() );
-        }
     };
 
     BaseRenderEngine & engine();

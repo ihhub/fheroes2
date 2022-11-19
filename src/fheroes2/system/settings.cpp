@@ -317,7 +317,15 @@ bool Settings::Read( const std::string & filename )
     }
 
     if ( config.Exists( "monochrome cursor" ) ) {
-        setMonochromeCursor( config.StrParams( "monochrome cursor" ) == "on" );
+        // We cannot set cursor before initializing the system since we read a configuration file before initialization.
+        if ( config.StrParams( "monochrome cursor" ) == "on" ) {
+            _optGlobal.SetModes( GLOBAL_MONOCHROME_CURSOR );
+            Cursor::Get().setMonochromeCursor( true );
+        }
+        else {
+            _optGlobal.ResetModes( GLOBAL_MONOCHROME_CURSOR );
+            Cursor::Get().setMonochromeCursor( false );
+        }
     }
 
     if ( config.Exists( "3d audio" ) ) {
