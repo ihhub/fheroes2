@@ -4010,8 +4010,38 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     // boulder animation
     fheroes2::Point pt1( 30, 290 );
     fheroes2::Point pt2 = Catapult::GetTargetPosition( target, hit );
-    const int32_t boulderArcHeight = ( target == 8 ) ? 300 : 210;
     const int32_t boulderArcStep = ( pt2.x - pt1.x ) / 30;
+
+    // set the projectile arc height for each castle target and a formula for an unknown target
+    int32_t boulderArcHeight;
+    switch ( target ) {
+    case Battle::CAT_WALL1:
+        boulderArcHeight = 220;
+        break;
+    case Battle::CAT_WALL2:
+        boulderArcHeight = 216;
+        break;
+    case Battle::CAT_WALL3:
+        boulderArcHeight = 204;
+        break;
+    case Battle::CAT_WALL4:
+        boulderArcHeight = 208;
+        break;
+    case Battle::CAT_TOWER1:
+        boulderArcHeight = 206;
+        break;
+    case Battle::CAT_TOWER2:
+        boulderArcHeight = 206;
+        break;
+    case Battle::CAT_BRIDGE:
+        boulderArcHeight = 216;
+        break;
+    case Battle::CAT_CENTRAL_TOWER:
+        boulderArcHeight = 290;
+        break;
+    default:
+        boulderArcHeight = static_cast<int32_t>( std::lround( 0.55 * getDistance( pt1, pt2 ) ) );
+    }
 
     pt1.x += area.x;
     pt2.x += area.x;
