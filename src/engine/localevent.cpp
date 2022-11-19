@@ -50,6 +50,7 @@
 #endif
 
 #include "audio.h"
+#include "image.h"
 #include "localevent.h"
 #include "pal.h"
 #include "screen.h"
