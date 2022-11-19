@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-19 08:52+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2879,12 +2879,6 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
-
-msgid "Set Guardian"
-msgstr "Assigner gardien"
-
-msgid "Your army too big!"
-msgstr "Votre armée est trop grande !"
 
 msgid "Hot Keys:"
 msgstr "Raccourcis clavier :"
@@ -9909,9 +9903,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "bataille : afficher les informations sur les dégâts"
 
-msgid "world: allow to set guardian to objects"
-msgstr "monde : autoriser le placement de gardiens pour certains lieux"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 "monde : moulins, roues hydrauliques et jardins magiques peuvent être capturés"
@@ -9999,6 +9990,15 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Assigner gardien"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Votre armée est trop grande !"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "monde : autoriser le placement de gardiens pour certains lieux"
 
 #~ msgid "world: Scouting skill shows extended content info"
 #~ msgstr "monde : reconnaissance affiche des infos supplémentaires"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-19 08:52+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -2845,12 +2845,6 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
-
-msgid "Set Guardian"
-msgstr "Ustaw strażnika"
-
-msgid "Your army too big!"
-msgstr "Twoja armia jest za duża!"
 
 msgid "Hot Keys:"
 msgstr "Skróty klawiszowe:"
@@ -9752,9 +9746,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "walka: pokaż informacje o obrażeniach"
 
-msgid "world: allow to set guardian to objects"
-msgstr "świat: pozwól zostawiać strażników w obiektach"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "świat: Wiatraki, Młyny wodne i Magiczne ogrody mogą być przejęte"
 
@@ -9840,6 +9831,15 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Ustaw strażnika"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Twoja armia jest za duża!"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "świat: pozwól zostawiać strażników w obiektach"
 
 #~ msgid "world: Scouting skill shows extended content info"
 #~ msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-19 08:52+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2840,12 +2840,6 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr "Показване на допълнителна информация като FPS и текущо време."
-
-msgid "Set Guardian"
-msgstr "Задайте Пазител"
-
-msgid "Your army too big!"
-msgstr "Армията ти е твърде голяма!"
 
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
@@ -9589,9 +9583,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "битка: показва информация за щетите"
 
-msgid "world: allow to set guardian to objects"
-msgstr "свят: позволява да се сложи пазител на обекти"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 "свят: Вятърните мелници, водните колела и магическите градини могат да бъдат "
@@ -9677,6 +9668,15 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Задайте Пазител"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Армията ти е твърде голяма!"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "свят: позволява да се сложи пазител на обекти"
 
 #~ msgid "world: Scouting skill shows extended content info"
 #~ msgstr ""
