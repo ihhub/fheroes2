@@ -1845,7 +1845,7 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_TEXTEDITING, false );
     // TODO: we don't process this event. Add the logic.
     setEventProcessingState( SDL_TEXTINPUT, false );
-    setEventProcessingState( SDL_KEYMAPCHANGED, false );
+    setEventProcessingState( SDL_KEYMAPCHANGED, false ); // supported from SDL 2.0.4
     // SDL_TEXTEDITING_EXT is supported only from SDL 2.0.22
     setEventProcessingState( SDL_MOUSEMOTION, true );
     setEventProcessingState( SDL_MOUSEBUTTONDOWN, true );
@@ -1894,18 +1894,18 @@ void LocalEvent::setEventProcessingStates()
     // We do not support drag and drop capability for the application.
     setEventProcessingState( SDL_DROPFILE, false );
     setEventProcessingState( SDL_DROPTEXT, false );
-    setEventProcessingState( SDL_DROPBEGIN, false );
-    setEventProcessingState( SDL_DROPCOMPLETE, false );
+    setEventProcessingState( SDL_DROPBEGIN, false ); // supported from SDL 2.0.5
+    setEventProcessingState( SDL_DROPCOMPLETE, false ); // supported from SDL 2.0.5
     // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_AUDIODEVICEADDED, false );
+    setEventProcessingState( SDL_AUDIODEVICEADDED, false ); // supported from SDL 2.0.4
     // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_AUDIODEVICEREMOVED, false );
+    setEventProcessingState( SDL_AUDIODEVICEREMOVED, false ); // supported from SDL 2.0.4
     // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_SENSORUPDATE, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_RENDER_TARGETS_RESET, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_RENDER_DEVICE_RESET, false );
+    // TODO: handle this event in order to avoid possible crashes when a render device has been changed.
+    setEventProcessingState( SDL_RENDER_TARGETS_RESET, false ); // supported from SDL 2.0.2
+    // TODO: handle this event in order to avoid possible crashes when a render device has been changed.
+    setEventProcessingState( SDL_RENDER_DEVICE_RESET, false ); // supported from SDL 2.0.4
     // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_POLLSENTINEL, false );
     // TODO: verify why disabled processing of this event.
