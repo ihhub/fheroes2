@@ -1000,8 +1000,6 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     ResourceCount rc = tile.QuantityResourceCount();
-    bool cancapture = Settings::Get().ExtWorldExtObjectsCaptured();
-    bool showinvalid = cancapture && hero.GetColor() == tile.QuantityColor() ? false : true;
 
     std::string msg;
     const std::string & caption = MP2::StringObject( objectType );
@@ -1021,7 +1019,6 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
         break;
 
     case MP2::OBJ_LEANTO:
-        cancapture = false;
         msg = rc.isValid() ? _( "You've found an abandoned lean-to.\nPoking about, you discover some resources hidden nearby." )
                            : _( "The lean-to is long abandoned. There is nothing of value here." );
         break;
@@ -1035,7 +1032,6 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
         break;
 
     default:
-        cancapture = false;
         break;
     }
 
@@ -1058,16 +1054,9 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
                                        Dialog::OK, funds );
 
         hero.GetKingdom().AddFundsResource( funds );
-
-        if ( cancapture )
-            ActionToCaptureObject( hero, objectType, dst_index );
     }
     else {
-        if ( cancapture )
-            ActionToCaptureObject( hero, objectType, dst_index );
-
-        if ( showinvalid )
-            Dialog::Message( caption, msg, Font::BIG, Dialog::OK );
+        Dialog::Message( caption, msg, Font::BIG, Dialog::OK );
     }
 
     tile.QuantityReset();

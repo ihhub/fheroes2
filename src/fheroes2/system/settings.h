@@ -110,7 +110,7 @@ public:
         // UNUSED = 0x30000400,
         // UNUSED = 0x30000800,
         // UNUSED = 0x30001000,
-        WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
+        // UNUSED = 0x30004000,
         // UNUSED = 0x30008000,
 
         // UNUSED = 0x40004000,
@@ -267,11 +267,6 @@ public:
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtWorldExtObjectsCaptured() const
-    {
-        return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
     }
 
     bool ExtBattleShowDamage() const
