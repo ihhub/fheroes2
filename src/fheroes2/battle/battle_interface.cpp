@@ -485,9 +485,9 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
 
-    fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1}, colorId );
+    fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
     fheroes2::SetPixel( sf, r, 1, colorId );
-    fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1}, colorId );
+    fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
 
     fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
     fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
