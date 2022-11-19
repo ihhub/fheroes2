@@ -31,6 +31,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
+#include "core.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -114,10 +115,10 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 
-#if defined( ANDROID )
-    // Due to the nature of Android devices having small screens in general it is good to make fullscreen option by default.
-    _optGlobal.SetModes( GLOBAL_FULLSCREEN );
-#endif
+    if ( fheroes2::isHandheldDevice() ) {
+        // Due to the nature of Android devices having small screens in general it is good to make fullscreen option by default.
+        _optGlobal.SetModes( GLOBAL_FULLSCREEN );
+    }
 
     // The Price of Loyalty is not supported by default.
     EnablePriceOfLoyaltySupport( false );

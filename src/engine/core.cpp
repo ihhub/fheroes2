@@ -179,4 +179,13 @@ namespace fheroes2
     {
         return isComponentInitializedInternally( component );
     }
+
+    bool isHandheldDevice()
+    {
+#if defined( ANDROID )
+        return true;
+#else
+        return false;
+#endif
+    }
 }
