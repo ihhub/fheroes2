@@ -1248,6 +1248,10 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             HandleTouchEvent( event.tfinger );
 #endif
             break;
+        case SDL_RENDER_TARGETS_RESET:
+            // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
+            fheroes2::Display::instance().render();
+            break;
         case SDL_QUIT:
             if ( allowExit ) {
                 // Try to perform clear exit to catch all memory leaks, for example.
@@ -1819,6 +1823,7 @@ int LocalEvent::KeyMod() const
 void LocalEvent::setEventProcessingStates()
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    // Full list of events and their requirements can be found at https://wiki.libsdl.org/SDL_EventType
     setEventProcessingState( SDL_QUIT, true );
     // TODO: we don't process this event. Add the logic.
     setEventProcessingState( SDL_APP_TERMINATING, false );
@@ -1832,6 +1837,7 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_APP_WILLENTERFOREGROUND, false );
     // TODO: we don't process this event. Add the logic.
     setEventProcessingState( SDL_APP_DIDENTERFOREGROUND, false );
+    // SDL_LOCALECHANGED is supported from SDL 2.0.14
     // TODO: we don't process this event. Add the logic.
     setEventProcessingState( SDL_LOCALECHANGED, false );
     // TODO: we don't process this event. Add the logic.
@@ -1872,14 +1878,10 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_CONTROLLERDEVICEREMOVED, true );
     // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_CONTROLLERDEVICEREMAPPED, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_CONTROLLERTOUCHPADDOWN, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_CONTROLLERTOUCHPADMOTION, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_CONTROLLERTOUCHPADUP, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_CONTROLLERSENSORUPDATE, false );
+    // SDL_CONTROLLERTOUCHPADDOWN is supported from SDL 2.0.14
+    // SDL_CONTROLLERTOUCHPADMOTION is supported from SDL 2.0.14
+    // SDL_CONTROLLERTOUCHPADUP is supported from SDL 2.0.14
+    // SDL_CONTROLLERSENSORUPDATE is supported from SDL 2.0.14
     setEventProcessingState( SDL_FINGERDOWN, true );
     setEventProcessingState( SDL_FINGERUP, true );
     setEventProcessingState( SDL_FINGERMOTION, true );
@@ -1902,12 +1904,10 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_AUDIODEVICEREMOVED, false ); // supported from SDL 2.0.4
     // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_SENSORUPDATE, false );
-    // TODO: handle this event in order to avoid possible crashes when a render device has been changed.
-    setEventProcessingState( SDL_RENDER_TARGETS_RESET, false ); // supported from SDL 2.0.2
+    setEventProcessingState( SDL_RENDER_TARGETS_RESET, true ); // supported from SDL 2.0.2
     // TODO: handle this event in order to avoid possible crashes when a render device has been changed.
     setEventProcessingState( SDL_RENDER_DEVICE_RESET, false ); // supported from SDL 2.0.4
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_POLLSENTINEL, false );
+    // SDL_POLLSENTINEL is supported from SDL 2.0.?
     // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_USEREVENT, false );
 #else
