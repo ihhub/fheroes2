@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-19 14:26+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2880,12 +2880,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr "Assigner gardien"
-
-msgid "Your army too big!"
-msgstr "Votre armée est trop grande !"
-
 msgid "Hot Keys:"
 msgstr "Raccourcis clavier :"
 
@@ -2950,12 +2944,12 @@ msgstr "Échanges possibles"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "guarded by "
-msgstr "gardée par "
-
 # artifact is guarded by? (=gardé). A mine is guarded by? (=gardée). Ruins are guarded by? (=gardées).
 msgid "guarded by %{count} %{monster}"
 msgstr "gardé par %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "gardée par "
 
 # same "gardé/e/s problem as above.
 msgid "(available: %{count})"
@@ -3463,14 +3457,14 @@ msgstr "Coordination du projet et développement"
 msgid "QA and Support"
 msgstr "AQ et support"
 
+msgid "Visit us at "
+msgstr "Rendez-vous sur "
+
 msgid "Development"
 msgstr "Développement"
 
 msgid "Dev and Support"
 msgstr "Dév et support"
-
-msgid "Visit us at "
-msgstr "Rendez-vous sur "
 
 msgid "Special Thanks to"
 msgstr "Remerciements spéciaux à"
@@ -3478,17 +3472,23 @@ msgstr "Remerciements spéciaux à"
 msgid "and many other contributors!"
 msgstr "et aux nombreux autres contributeurs !"
 
+msgid "and many-many other supporters!"
+msgstr "et beaucoup, beaucoup d'autres supporteurs !"
+
 msgid "Support us at"
 msgstr "Soutenez-nous sur"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Prenez contact avec nous sur"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Besoin d'aide avec le jeu ?"
-
-msgid "and many-many other supporters!"
-msgstr "et beaucoup, beaucoup d'autres supporteurs !"
 
 msgid "Original project before 0.7"
 msgstr "Projet original avant 0.7"
@@ -4786,13 +4786,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Malheureusement, vous n'avez pas de grimoire pour enregistrer le sort."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4808,6 +4801,13 @@ msgstr ""
 "\n"
 "Malheureusement, vous connaissez déjà ce sort, il n'y a donc rien de plus à "
 "vous apprendre."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Malheureusement, vous n'avez pas de grimoire pour enregistrer le sort."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9903,18 +9903,9 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "bataille : afficher les informations sur les dégâts"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "monde : reconnaissance affiche des infos supplémentaires"
-
-msgid "world: allow to set guardian to objects"
-msgstr "monde : autoriser le placement de gardiens pour certains lieux"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 "monde : moulins, roues hydrauliques et jardins magiques peuvent être capturés"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "héros : permettre l'achat d'un grimoire dans les sanctuaires"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
@@ -9996,6 +9987,21 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "heroes: allow buy a spellbook from Shrines"
+#~ msgstr "héros : permettre l'achat d'un grimoire dans les sanctuaires"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Assigner gardien"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Votre armée est trop grande !"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "monde : autoriser le placement de gardiens pour certains lieux"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr "monde : reconnaissance affiche des infos supplémentaires"
 
 #~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr ""

@@ -821,7 +821,7 @@ const char * Castle::GetDescriptionBuilding( uint32_t build, int race )
 
 bool Castle::AllowBuyHero( std::string * msg ) const
 {
-    Heroes * hero = world.GetHero( *this );
+    const Heroes * hero = world.GetHero( *this );
     if ( hero != nullptr ) {
         if ( msg ) {
             *msg = _( "Cannot recruit - you already have a Hero in this town." );

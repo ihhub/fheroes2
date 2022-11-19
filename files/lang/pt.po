@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-19 14:26+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -2794,12 +2794,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr "Selecione o Guardião"
-
-msgid "Your army too big!"
-msgstr "Sua arma é muito grande!"
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -2866,10 +2860,10 @@ msgstr "Trocas Disponíveis"
 msgid "n/a"
 msgstr "n/d"
 
-msgid "guarded by "
+msgid "guarded by %{count} %{monster}"
 msgstr ""
 
-msgid "guarded by %{count} %{monster}"
+msgid "guarded by "
 msgstr ""
 
 msgid "(available: %{count})"
@@ -3393,13 +3387,13 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
 msgid "Dev and Support"
-msgstr ""
-
-msgid "Visit us at "
 msgstr ""
 
 msgid "Special Thanks to"
@@ -3408,16 +3402,22 @@ msgstr ""
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -4690,13 +4690,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Infelizmente, você não tem nenhum livro de magia para gravar com a magia."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4709,6 +4702,13 @@ msgid ""
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
 msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Infelizmente, você não tem nenhum livro de magia para gravar com a magia."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9047,16 +9047,7 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr ""
 
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
@@ -9138,6 +9129,12 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Set Guardian"
+#~ msgstr "Selecione o Guardião"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Sua arma é muito grande!"
 
 #, fuzzy
 #~ msgid "Cannot recruit - guest to guard automove error."

@@ -97,16 +97,9 @@ struct CapturedObject
 {
     ObjectColor objcol;
     Troop guardians;
-    int split;
 
-    CapturedObject()
-        : split( 1 )
-    {}
+    CapturedObject() = default;
 
-    int GetSplit() const
-    {
-        return split;
-    }
     int GetColor() const
     {
         return objcol.second;
@@ -123,10 +116,6 @@ struct CapturedObject
     void SetColor( int col )
     {
         objcol.second = col;
-    }
-    void SetSplit( int spl )
-    {
-        split = spl;
     }
 };
 

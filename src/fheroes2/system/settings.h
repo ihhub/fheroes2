@@ -81,12 +81,12 @@ public:
         //
         // UNUSED = 0x20000001,
         // UNUSED = 0x20000002,
-        WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
+        // UNUSED = 0x20000008,
         // UNUSED = 0x20000020,
-        WORLD_SCOUTING_EXTENDED = 0x20000040,
+        // UNUSED = 0x20000040,
         // UNUSED = 0x20000080,
         // UNUSED = 0x20000100,
-        HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
+        // UNUSED = 0x20000200,
         // UNUSED = 0x20000400,
         // UNUSED = 0x20000800,
         // UNUSED = 0x20001000,
@@ -264,24 +264,9 @@ public:
     void ExtResetModes( uint32_t );
     static std::string ExtName( const uint32_t settingId );
 
-    bool ExtHeroBuySpellBookFromShrine() const
-    {
-        return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
-    }
-
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtWorldScouteExtended() const
-    {
-        return ExtModes( WORLD_SCOUTING_EXTENDED );
-    }
-
-    bool ExtWorldAllowSetGuardian() const
-    {
-        return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
     }
 
     bool ExtWorldExtObjectsCaptured() const

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-19 14:26+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -2838,12 +2838,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr "Установить охрану"
-
-msgid "Your army too big!"
-msgstr "Ваша армия слишком большая!"
-
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
 
@@ -2909,11 +2903,11 @@ msgstr "Доступно к обмену"
 msgid "n/a"
 msgstr "н/д"
 
-msgid "guarded by "
-msgstr "охраняемая "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "охраняет %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "охраняемая "
 
 msgid "(available: %{count})"
 msgstr "(Доступно: %{count})"
@@ -3418,14 +3412,14 @@ msgstr "Координатор проекта и основной разрабо
 msgid "QA and Support"
 msgstr "Контроль качества и поддержка"
 
+msgid "Visit us at "
+msgstr "Посетите нас"
+
 msgid "Development"
 msgstr "Разработчик"
 
 msgid "Dev and Support"
 msgstr "Разработка и поддержка"
-
-msgid "Visit us at "
-msgstr "Посетите нас"
 
 msgid "Special Thanks to"
 msgstr "Особая благодарность"
@@ -3433,17 +3427,27 @@ msgstr "Особая благодарность"
 msgid "and many other contributors!"
 msgstr "и многим другим участникам"
 
+msgid "and many-many other supporters!"
+msgstr "и многим другим, кто поддерживает нас!"
+
 msgid "Support us at"
 msgstr "Поддержите нас"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
+"https://www.patreon.com/fheroes2\n"
+"https://boosty.to/fheroes2"
 
 msgid "Connect with us at"
 msgstr "Присоединяйтесь к нам"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+"https://vk.com/fheroes2\n"
+"https://www.facebook.com/groups/fheroes2"
+
 msgid "Need help with the game?"
 msgstr "Вам нужна помощь по игре?"
-
-msgid "and many-many other supporters!"
-msgstr "и многим другим, кто поддерживает нас!"
 
 msgid "Original project before 0.7"
 msgstr "Разработчик до 0.7"
@@ -4693,13 +4697,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"К сожалению, у Вас нет Волшебной Книги, чтобы записать заклинание в неё."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4715,6 +4712,13 @@ msgstr ""
 "\n"
 "К сожалению, Вам уже знакомо данное заклинание, так что им больше нечему Вас "
 "учить."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"К сожалению, у Вас нет Волшебной Книги, чтобы записать заклинание в неё."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9667,19 +9671,10 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "битва: показывать урон"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "мир: навык разведки покажет дополнительную информацию"
-
-msgid "world: allow to set guardian to objects"
-msgstr "мир: разрешить охранников для дополнительных объектов"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 "мир: возможность установить флаг на постройках: Водяная/Ветряная Мельница, "
 "Волшебный Сад"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "герои: разрешить покупку магической книги в святилищах"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: в постройке Арена можно получить любой первичный навык"
@@ -9758,6 +9753,21 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "heroes: allow buy a spellbook from Shrines"
+#~ msgstr "герои: разрешить покупку магической книги в святилищах"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Установить охрану"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Ваша армия слишком большая!"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "мир: разрешить охранников для дополнительных объектов"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr "мир: навык разведки покажет дополнительную информацию"
 
 #~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr "Найм невозможен. Герой в замке не может занять гарнизон."

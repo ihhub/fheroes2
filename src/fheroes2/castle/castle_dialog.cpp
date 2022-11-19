@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "army.h"
 #include "army_bar.h"
 #include "army_troop.h"
 #include "audio.h"
@@ -125,30 +126,6 @@ namespace
         StringReplace( msgStatus, "%{name}", Translation::StringLower( monster.GetMultiName() ) );
         return msgStatus;
     }
-
-    class MeetingButton : public fheroes2::ButtonSprite
-    {
-    public:
-        MeetingButton( const int32_t px, const int32_t py )
-        {
-            const fheroes2::Sprite & sprite = fheroes2::getHeroExchangeImage();
-            setSprite( sprite, sprite );
-            setPosition( px, py );
-        }
-    };
-
-    class SwapButton : public fheroes2::ButtonSprite
-    {
-    public:
-        SwapButton( const int32_t px, const int32_t py )
-        {
-            const fheroes2::Sprite & in = fheroes2::getHeroExchangeImage();
-            fheroes2::Sprite sprite( in.height(), in.width() );
-            Transpose( in, sprite );
-            setSprite( sprite, sprite );
-            setPosition( px, py );
-        }
-    };
 
     void RedrawIcons( const Castle & castle, const Heroes * hero, const fheroes2::Point & pt )
     {
@@ -426,6 +403,42 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                         || ( le.MouseCursor( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
                  || ( !bottomArmyBar.isValid() && le.MouseCursor( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
                 need_redraw = true;
+            }
+
+            // Actions with hero armies.
+            if ( hero && !readOnly ) {
+                bool isArmyActionPerformed = false;
+
+                // Preselecting of troop.
+                const ArmyTroop * keep = nullptr;
+
+                if ( topArmyBar.isSelected() ) {
+                    keep = topArmyBar.GetSelectedItem();
+                }
+                else if ( bottomArmyBar.isSelected() ) {
+                    keep = bottomArmyBar.GetSelectedItem();
+                }
+
+                if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
+                    hero->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
+                    isArmyActionPerformed = true;
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
+                    GetArmy().MoveTroops( hero->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
+                    isArmyActionPerformed = true;
+                }
+
+                // Redraw and reset if any action modifying armies has been made.
+                if ( isArmyActionPerformed ) {
+                    if ( topArmyBar.isSelected() ) {
+                        topArmyBar.ResetSelected();
+                    }
+                    if ( bottomArmyBar.isSelected() ) {
+                        bottomArmyBar.ResetSelected();
+                    }
+
+                    need_redraw = true;
+                }
             }
 
             if ( !readOnly && hero && le.MouseClickLeft( rectSign2 ) ) {

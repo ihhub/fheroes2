@@ -42,7 +42,6 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "skill.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -324,7 +323,7 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 
     if ( armies ) {
         const fheroes2::Rect & pos = GetArea();
-        Army::DrawMonsterLines( *armies, pos.x + 4, pos.y + 1 + oh, 138, Skill::Level::EXPERT );
+        Army::drawMultipleMonsterLines( *armies, pos.x + 4, pos.y + 1 + oh, 138, true, true );
     }
 }
 

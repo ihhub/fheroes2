@@ -155,6 +155,7 @@ Interface::Radar::Radar( Basic & basic )
     , radarType( RadarType::WorldMap )
     , interface( basic )
     , hide( true )
+    , _mouseDraggingMovement( false )
 {}
 
 Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
@@ -163,6 +164,7 @@ Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display 
     , interface( radar.interface )
     , spriteArea( radar.spriteArea )
     , hide( false )
+    , _mouseDraggingMovement( false )
 {}
 
 void Interface::Radar::SavePosition()
@@ -432,6 +434,11 @@ void Interface::Radar::QueueEventProcessing()
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Rect & rect = GetArea();
+    const fheroes2::Rect & borderArea = GetRect();
+
+    if ( !le.MouseCursor( borderArea ) || le.MouseCursor( rect ) ) {
+        _mouseDraggingMovement = false;
+    }
 
     // Move border window
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
@@ -441,6 +448,7 @@ void Interface::Radar::QueueEventProcessing()
     else if ( le.MouseCursor( rect ) ) {
         // move cursor
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
+            _mouseDraggingMovement = true;
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
