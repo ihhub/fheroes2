@@ -691,7 +691,7 @@ namespace
     void setEventProcessingState( const uint8_t eventType, const bool enable )
     {
         eventTypeStatus[eventType] = enable;
-        SDL_EventState( eventType, ( enable ? SDL_ENABLE : SDL_IGNORE ));
+        SDL_EventState( eventType, ( enable ? SDL_ENABLE : SDL_IGNORE ) );
     }
 #endif
 }
