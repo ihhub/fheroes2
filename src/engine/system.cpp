@@ -170,6 +170,15 @@ namespace
         return result;
     }
 #endif
+
+    std::string_view trimSeparator( std::string_view path )
+    {
+        while ( path.size() > 1 && path.back() == SEPARATOR ) {
+            path.remove_suffix( 1 );
+        }
+
+        return path;
+    }
 }
 
 bool System::isHandheldDevice()
@@ -262,11 +271,13 @@ std::string System::GetDataDirectory( const std::string & prog )
 #endif
 }
 
-std::string System::GetDirname( const std::string & path )
+std::string System::GetDirname( std::string_view path )
 {
     if ( path.empty() ) {
         return { "." };
     }
+
+    path = trimSeparator( path );
 
     const size_t pos = path.rfind( SEPARATOR );
 
@@ -276,27 +287,29 @@ std::string System::GetDirname( const std::string & path )
     if ( pos == 0 ) {
         return { std::initializer_list<char>{ SEPARATOR } };
     }
-    if ( pos == path.size() - 1 ) {
-        return GetDirname( path.substr( 0, path.size() - 1 ) );
-    }
-    return path.substr( 0, pos );
+
+    assert( pos != path.size() - 1 );
+
+    return std::string{ trimSeparator( path.substr( 0, pos ) ) };
 }
 
-std::string System::GetBasename( const std::string & path )
+std::string System::GetBasename( std::string_view path )
 {
     if ( path.empty() ) {
         return { "." };
     }
 
+    path = trimSeparator( path );
+
     const size_t pos = path.rfind( SEPARATOR );
 
     if ( pos == std::string::npos || ( pos == 0 && path.size() == 1 ) ) {
-        return path;
+        return std::string{ path };
     }
-    if ( pos == path.size() - 1 ) {
-        return GetBasename( path.substr( 0, path.size() - 1 ) );
-    }
-    return path.substr( pos + 1 );
+
+    assert( pos != path.size() - 1 );
+
+    return std::string{ path.substr( pos + 1 ) };
 }
 
 int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )

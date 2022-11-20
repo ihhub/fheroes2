@@ -39,8 +39,8 @@ namespace System
     std::string GetConfigDirectory( const std::string & prog );
     std::string GetDataDirectory( const std::string & prog );
 
-    std::string GetDirname( const std::string & path );
-    std::string GetBasename( const std::string & path );
+    std::string GetDirname( std::string_view path );
+    std::string GetBasename( std::string_view path );
 
     int GetCommandOptions( int argc, char * const argv[], const char * optstring );
     char * GetOptionsArgument();
