@@ -2088,7 +2088,7 @@ void Maps::Tiles::RemoveObjectSprite()
     }
     case MP2::OBJ_BARRIER:
         tilePassable = DIRECTION_ALL;
-        // fall-through
+        [[fallthrough]];
     default:
         // remove shadow sprite from left cell
         if ( Maps::isValidDirection( _index, Direction::LEFT ) )

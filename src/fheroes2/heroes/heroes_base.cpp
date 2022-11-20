@@ -28,7 +28,6 @@
 #include "army.h"
 #include "artifact_info.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
@@ -395,7 +394,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
         if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
             const KingdomCastles & castles = hero->GetKingdom().GetCastles();
-            bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && !castle->GetHeroes().Guest(); } );
+            bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
             if ( !hasCastles ) {
                 if ( res != nullptr ) {
                     *res = _( "You do not currently own any town or castle, so you can't cast the spell." );
@@ -415,12 +414,12 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 return false;
             }
 
-            const Heroes * townGuest = castle->GetHeroes().Guest();
-            if ( townGuest != nullptr ) {
+            const Heroes * townHero = castle->GetHero();
+            if ( townHero != nullptr ) {
                 if ( res != nullptr ) {
                     *res = _( "The nearest town is %{town}.\n \nThis town is occupied by your hero %{hero}." );
                     StringReplace( *res, "%{town}", castle->GetName() );
-                    StringReplace( *res, "%{hero}", townGuest->GetName() );
+                    StringReplace( *res, "%{hero}", townHero->GetName() );
                 }
                 return false;
             }

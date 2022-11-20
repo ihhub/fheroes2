@@ -38,7 +38,6 @@
 #include "audio.h"
 #include "audio_manager.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "game_interface.h"
 #include "ground.h"
@@ -612,7 +611,7 @@ namespace AI
         for ( const AICastle & entry : sortedCastleList ) {
             Castle * castle = entry.castle;
             if ( castle && castle->isCastle() ) {
-                const Heroes * hero = castle->GetHeroes().Guest();
+                const Heroes * hero = castle->GetHero();
                 const int mapIndex = castle->GetIndex();
 
                 // Make sure there is no hero in castle already and we're not under threat while having other heroes.

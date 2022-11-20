@@ -67,6 +67,11 @@ namespace Interface
         void QueueEventProcessing();
         bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const;
 
+        bool isDragRadar() const
+        {
+            return _mouseDraggingMovement;
+        }
+
     private:
         friend Basic;
 
@@ -92,6 +97,7 @@ namespace Interface
         fheroes2::MovableSprite cursorArea;
         fheroes2::Point offset;
         bool hide;
+        bool _mouseDraggingMovement;
     };
 }
 
