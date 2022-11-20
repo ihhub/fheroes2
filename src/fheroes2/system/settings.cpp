@@ -917,8 +917,6 @@ std::string Settings::ExtName( const uint32_t settingId )
     switch ( settingId ) {
     case Settings::GAME_BATTLE_SHOW_DAMAGE:
         return _( "battle: show damage info" );
-    case Settings::WORLD_EXT_OBJECTS_CAPTURED:
-        return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:

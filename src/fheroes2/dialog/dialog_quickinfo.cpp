@@ -492,15 +492,13 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_WAGON:
         case MP2::OBJ_SKELETON:
         case MP2::OBJ_LEANTO:
+        case MP2::OBJ_WINDMILL:
+        case MP2::OBJ_WATERWHEEL:
+        case MP2::OBJ_MAGICGARDEN:
             name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
         case MP2::OBJ_MAGELLANMAPS:
             name_object = showUniqueObjectVisitInfo( objectType, kingdom );
-            break;
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_WATERWHEEL:
-        case MP2::OBJ_MAGICGARDEN:
-            name_object = Settings::Get().ExtWorldExtObjectsCaptured() ? MP2::StringObject( objectType ) : ShowGlobalVisitInfo( tile, kingdom );
             break;
 
         case MP2::OBJ_CAMPFIRE:
