@@ -264,7 +264,6 @@ public:
     bool ExtModes( uint32_t ) const;
     void ExtSetModes( uint32_t );
     void ExtResetModes( uint32_t );
-    static std::string ExtName( const uint32_t settingId );
 
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
