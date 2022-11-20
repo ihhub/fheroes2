@@ -1200,7 +1200,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
                 }
                 break;
             }
-            OnSdl2WindowEvent( event.window );
+            HandleWindowEvent( event.window );
             break;
         case SDL_KEYDOWN:
         case SDL_KEYUP:
@@ -1278,7 +1278,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
         case SDL_ACTIVEEVENT:
-            OnActiveEvent( event.active );
+            HandleActiveEvent( event.active );
             break;
         case SDL_KEYDOWN:
         case SDL_KEYUP:
@@ -1622,7 +1622,7 @@ void LocalEvent::ProcessControllerAxisMotion()
     }
 }
 
-void LocalEvent::OnSdl2WindowEvent( const SDL_WindowEvent & event )
+void LocalEvent::HandleWindowEvent( const SDL_WindowEvent & event )
 {
     if ( event.event == SDL_WINDOWEVENT_FOCUS_LOST ) {
         StopSounds();
@@ -1653,7 +1653,7 @@ void LocalEvent::HandleRenderDeviceResetEvent()
     fheroes2::Copy( temp, display );
 }
 #else
-void LocalEvent::OnActiveEvent( const SDL_ActiveEvent & event )
+void LocalEvent::HandleActiveEvent( const SDL_ActiveEvent & event )
 {
     if ( event.state & SDL_APPINPUTFOCUS ) {
         if ( 0 == event.gain ) {

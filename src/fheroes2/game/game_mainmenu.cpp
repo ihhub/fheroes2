@@ -31,7 +31,6 @@
 #include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
-#include "core.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_game_settings.h"
@@ -51,6 +50,7 @@
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -198,7 +198,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     if ( isFirstGameRun ) {
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
-        if ( fheroes2::isHandheldDevice() ) {
+        if ( System::isHandheldDevice() ) {
             // Handheld devices should use the minimal game's resolution. Users on handheld devices aren't asked to choose resolution.
             fheroes2::showStandardTextMessage( _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!" ), Dialog::OK );
         }
