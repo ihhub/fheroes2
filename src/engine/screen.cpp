@@ -887,7 +887,7 @@ namespace
                 }
 
                 const fheroes2::Display & display = fheroes2::Display::instance();
-                 _createRenderer( display.width(), display.height() );
+                _createRenderer( display.width(), display.height() );
             }
         }
 
