@@ -319,8 +319,6 @@ private:
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
     static void OnSdl2WindowEvent( const SDL_Event & event );
-
-    void updateEmulatedMousePosition( const int32_t x, const int32_t y );
 #else
     void OnActiveEvent( const SDL_Event & event );
 #endif

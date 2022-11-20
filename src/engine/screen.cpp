@@ -775,7 +775,7 @@ namespace
                 SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
             }
 
-            updateScreenParameters();
+            _retrieveWindowInfo();
 
             _toggleMouseCaptureMode();
         }
@@ -845,11 +845,6 @@ namespace
         fheroes2::Rect getActiveWindowROI() const override
         {
             return _activeWindowROI;
-        }
-
-        fheroes2::Rect getRenderROI() const override
-        {
-            return _renderROI;
         }
 
         fheroes2::Size getCurrentScreenResolution() const override
@@ -1080,7 +1075,7 @@ namespace
                 return false;
             }
 
-            updateScreenParameters();
+            _retrieveWindowInfo();
 
             _toggleMouseCaptureMode();
 
@@ -1116,7 +1111,6 @@ namespace
         fheroes2::Point _prevWindowPos;
         fheroes2::Size _currentScreenResolution;
         fheroes2::Rect _activeWindowROI;
-        fheroes2::Rect _renderROI;
 
         fheroes2::Size _windowedSize;
 
@@ -1154,7 +1148,7 @@ namespace
             }
         }
 
-        void updateScreenParameters() override
+        void _retrieveWindowInfo()
         {
             const int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
             SDL_DisplayMode displayMode;
@@ -1174,10 +1168,6 @@ namespace
             SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
             SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
 #endif
-
-            SDL_Rect area;
-            SDL_RenderGetViewport( _renderer, &area );
-            _renderROI = { area.x, area.y, area.w, area.h };
         }
 
         void _toggleMouseCaptureMode()

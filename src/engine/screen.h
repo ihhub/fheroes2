@@ -86,11 +86,6 @@ namespace fheroes2
             // Do nothing.
         }
 
-        virtual void updateScreenParameters()
-        {
-            // Do nothing.
-        }
-
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
