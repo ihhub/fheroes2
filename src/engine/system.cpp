@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
+#include <initializer_list>
 #include <utility>
 
 #if defined( _WIN32 )
