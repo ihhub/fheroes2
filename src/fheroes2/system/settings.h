@@ -72,7 +72,7 @@ public:
         GAME_HIDE_INTERFACE = 0x10002000,
         // UNUSED = 0x10008000,
         // UNUSED = 0x10010000,
-        GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
+        // UNUSED = 0x10100000,
         // UNUSED = 0x10200000,
 
         // The following extended options affect the overall game balance and
@@ -239,6 +239,7 @@ public:
     bool isTextSupportModeEnabled() const;
     bool is3DAudioEnabled() const;
     bool isSystemInfoEnabled() const;
+    bool isBattleShowDamageInfoEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -268,11 +269,6 @@ public:
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtBattleShowDamage() const
-    {
-        return ExtModes( GAME_BATTLE_SHOW_DAMAGE );
     }
 
     bool ExtBattleSoftWait() const
@@ -338,6 +334,7 @@ public:
     void set3DAudio( const bool enable );
     void setVSync( const bool enable );
     void setSystemInfo( const bool enable );
+    void setBattleDamageInfo( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

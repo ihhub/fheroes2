@@ -51,7 +51,6 @@ namespace
         Open,
         ChangeInterfaceTheme,
         UpdateInterface,
-        SaveConfiguration,
         AudioSettings,
         HotKeys,
         CursorType,
@@ -197,7 +196,7 @@ namespace
         }
     }
 
-    DialogAction openSystemOptionsDialog()
+    DialogAction openSystemOptionsDialog( bool & saveConfiguration )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -248,8 +247,6 @@ namespace
         buttonOkay.draw();
 
         display.render();
-
-        bool saveConfig = false;
 
         // dialog menu loop
         LocalEvent & le = LocalEvent::Get();
@@ -355,7 +352,6 @@ namespace
             if ( le.MousePressRight( audioSettingsRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Audio" ), _( "Change the audio settings of the game." ), 0 );
             }
-
             else if ( le.MousePressRight( hotkeysRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );
             }
@@ -392,12 +388,8 @@ namespace
                 buttonOkay.draw();
                 display.render();
 
-                saveConfig = true;
+                saveConfiguration = true;
             }
-        }
-
-        if ( saveConfig ) {
-            return DialogAction::SaveConfiguration;
         }
 
         return DialogAction::Close;
@@ -410,16 +402,16 @@ namespace fheroes2
     {
         // We should make file writing only once.
         bool saveConfiguration = false;
+        Settings & conf = Settings::Get();
 
         DialogAction action = DialogAction::Open;
 
         while ( action != DialogAction::Close ) {
             switch ( action ) {
             case DialogAction::Open:
-                action = openSystemOptionsDialog();
+                action = openSystemOptionsDialog( saveConfiguration );
                 break;
             case DialogAction::ChangeInterfaceTheme: {
-                Settings & conf = Settings::Get();
                 conf.SetEvilInterface( !conf.ExtGameEvilInterface() );
                 saveConfiguration = true;
 
@@ -427,11 +419,10 @@ namespace fheroes2
                 basicInterface.Reset();
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
-                action = openSystemOptionsDialog();
+                action = DialogAction::Open;
                 break;
             }
             case DialogAction::UpdateInterface: {
-                Settings & conf = Settings::Get();
                 conf.SetHideInterface( !conf.ExtGameHideInterface() );
                 saveConfiguration = true;
 
@@ -442,12 +433,9 @@ namespace fheroes2
                 basicInterface.Redraw( Interface::REDRAW_RADAR );
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
-                action = openSystemOptionsDialog();
+                action = DialogAction::Open;
                 break;
             }
-            case DialogAction::SaveConfiguration:
-                Settings::Get().Save( Settings::configFileName );
-                return;
             case DialogAction::AudioSettings:
                 Dialog::openAudioSettingsDialog( true );
                 action = DialogAction::Open;
@@ -457,7 +445,6 @@ namespace fheroes2
                 action = DialogAction::Open;
                 break;
             case DialogAction::CursorType: {
-                Settings & conf = Settings::Get();
                 conf.setMonochromeCursor( !conf.isMonochromeCursorEnabled() );
                 saveConfiguration = true;
                 action = DialogAction::Open;
@@ -469,7 +456,7 @@ namespace fheroes2
         }
 
         if ( saveConfiguration ) {
-            Settings::Get().Save( Settings::configFileName );
+            conf.Save( Settings::configFileName );
         }
     }
 }

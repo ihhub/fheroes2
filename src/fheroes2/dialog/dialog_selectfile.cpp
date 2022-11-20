@@ -319,7 +319,11 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     buttonCancel.draw();
 
     display.render();
-    le.OpenVirtualKeyboard();
+
+    if ( isEditing ) {
+        // Show keyboard only when editing file name.
+        le.OpenVirtualKeyboard();
+    }
 
     std::string result;
     bool is_limit = false;
@@ -423,7 +427,9 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         display.render();
     }
 
-    le.CloseVirtualKeyboard();
+    if ( isEditing ) {
+        le.CloseVirtualKeyboard();
+    }
 
     return result;
 }

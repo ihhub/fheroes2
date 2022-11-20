@@ -183,7 +183,7 @@ public:
         key_down_hook_func = pf;
     }
 
-    static void SetStateDefaults();
+    static void setEventProcessingStates();
 
     bool HandleEvents( bool delay = true, bool allowExit = false );
 
@@ -302,8 +302,6 @@ public:
 private:
     LocalEvent();
 
-    static void SetState( const uint32_t type, const bool enable );
-
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
     void HandleKeyboardEvent( const SDL_KeyboardEvent & );
@@ -318,9 +316,11 @@ private:
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
-    static void OnSdl2WindowEvent( const SDL_Event & event );
+    static void OnSdl2WindowEvent( const SDL_WindowEvent & event );
+
+    static void HandleRenderDeviceResetEvent();
 #else
-    void OnActiveEvent( const SDL_Event & event );
+    void OnActiveEvent( const SDL_ActiveEvent & event );
 #endif
 
     enum flag_t

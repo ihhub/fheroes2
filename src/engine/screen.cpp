@@ -389,6 +389,12 @@ namespace
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
+            if ( image.empty() ) {
+                // What are you trying to do? Set an invisible cursor? Use hide() method!
+                assert( 0 );
+                return;
+            }
+
             if ( _emulation ) {
                 fheroes2::Cursor::update( image, offsetX, offsetY );
                 return;
@@ -434,7 +440,12 @@ namespace
             }
 
             SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, offsetX, offsetY );
-            SDL_SetCursor( tempCursor );
+            if ( tempCursor == nullptr ) {
+                ERROR_LOG( "Failed to create a cursor. The error description: " << SDL_GetError() )
+            }
+            else {
+                SDL_SetCursor( tempCursor );
+            }
 
             const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
             if ( returnCode < 0 ) {
@@ -442,8 +453,10 @@ namespace
             }
             SDL_FreeSurface( surface );
 
-            clear();
-            std::swap( _cursor, tempCursor );
+            if ( tempCursor != nullptr ) {
+                clear();
+                std::swap( _cursor, tempCursor );
+            }
         }
 
         void enableSoftwareEmulation( const bool enable ) override

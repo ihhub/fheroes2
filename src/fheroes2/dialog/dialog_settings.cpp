@@ -153,7 +153,6 @@ void Dialog::ExtSettings( bool readonly )
     std::vector<uint32_t> states;
     states.reserve( 16 );
 
-    states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
