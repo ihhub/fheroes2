@@ -161,7 +161,7 @@ namespace Game
 
     std::vector<Game::HotKeyEvent> getAllHotKeyEvents();
 
-    void KeyDownGlobalHook( int sdlKey, int mod );
+    void globalKeyboardEvent( const fheroes2::Key key, const int32_t modifier );
 
     void HotKeysLoad( const std::string & filename );
 

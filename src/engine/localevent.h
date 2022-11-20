@@ -26,6 +26,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <string>
 
 #include <SDL_events.h>
@@ -158,13 +159,22 @@ namespace fheroes2
         LAST_KEY
     };
 
+    // Key modifier is used for key combination detection.
+    enum KeyModifier : int32_t
+    {
+        KEY_MODIFIER_NONE = 0,
+        KEY_MODIFIER_CTRL = 0x1,
+        KEY_MODIFIER_SHIFT = 0x2,
+        KEY_MODIFIER_ALT = 0x4,
+        KEY_MODIFIER_CAPS = 0x8,
+        KEY_MODIFIER_NUM = 0x10
+    };
+
     const char * KeySymGetName( const Key key );
 
     bool PressIntKey( uint32_t max, uint32_t & result );
 
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod );
-
-    Key getKeyFromSDL( const int sdlKey );
 }
 
 class LocalEvent
@@ -178,9 +188,9 @@ public:
         mouse_motion_hook_func = pf;
     }
 
-    void SetKeyDownGlobalHook( void ( *pf )( int, int ) )
+    void setGlobalKeyboardEventHook( std::function<void (const fheroes2::Key, const int32_t)> hook )
     {
-        key_down_hook_func = pf;
+        _globalKeyboardEventHook = std::move( hook );
     }
 
     static void SetStateDefaults();
@@ -273,7 +283,7 @@ public:
         return key_value;
     }
 
-    int KeyMod() const;
+    static int32_t getCurrentKeyModifiers();
 
     static void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr );
 
@@ -361,7 +371,8 @@ private:
     fheroes2::Point mouse_wm; // wheel movement
 
     void ( *mouse_motion_hook_func )( int32_t, int32_t );
-    void ( *key_down_hook_func )( int, int );
+
+    std::function<void (const fheroes2::Key, const int32_t)> _globalKeyboardEventHook;
 
     uint32_t loop_delay;
 
