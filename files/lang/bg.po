@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 05:41+0000\n"
+"POT-Creation-Date: 2022-11-20 09:50+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -223,14 +223,20 @@ msgstr ""
 "Ровът намалява с -%{count} умението за защита на всяка единица и забавя "
 "наполовина скоростта на движение."
 
-msgid "Speed"
-msgstr "Скорост"
-
 msgid "Speed: %{speed}"
 msgstr "Скорост: %{speed}"
 
+msgid "Speed"
+msgstr "Скорост"
+
 msgid "Army Order"
 msgstr "Армейска заповед"
+
+msgid "Off"
+msgstr "Изкл"
+
+msgid "On"
+msgstr "Вкл"
 
 msgid "Auto Spell Casting"
 msgstr "Автоматично заклинание"
@@ -244,11 +250,21 @@ msgstr "Движение на сенките"
 msgid "Shadow Cursor"
 msgstr "Курсор в сянка"
 
-msgid "Off"
-msgstr "Изкл"
+msgid "Audio"
+msgstr "Звукови"
 
-msgid "On"
-msgstr "Вкл"
+msgid "Settings"
+msgstr "Настойки"
+
+msgid "Configure"
+msgstr "Настрой"
+
+msgid "Hot Keys"
+msgstr "Бързи клавиши"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Щети"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Задай скоростта на бойните действия и анимациите."
@@ -285,6 +301,22 @@ msgid ""
 msgstr ""
 "Включи или изключи сянка, показваща текущото шестнадесетично местоположение "
 "на курсора на мишката."
+
+msgid "Change the audio settings of the game."
+msgstr "Промени звуковите настройки на играта."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Провери и конфигурирай всички горещи клавиши в играта."
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr "Превключи за показване на армейския ред по време на битката."
+
+msgid "Exit this menu."
+msgstr "Излез от това меню."
+
+msgid "Okay"
+msgstr "Добре"
 
 msgid "The enemy has surrendered!"
 msgstr "Врагът се предаде!"
@@ -2308,9 +2340,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Изход"
 
-msgid "Exit this menu."
-msgstr "Излез от това меню."
-
 msgid "Click to show next town."
 msgstr "Кликни, за да покажеш следващия град."
 
@@ -2596,9 +2625,6 @@ msgstr "Промени вида на музиката."
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "Превключване на 3D ефекти на звуци на преден план."
 
-msgid "Okay"
-msgstr "Добре"
-
 msgid "Build a new ship:"
 msgstr "Изгради нов кораб:"
 
@@ -2644,20 +2670,8 @@ msgstr "Език"
 msgid "Graphics"
 msgstr "Графика"
 
-msgid "Settings"
-msgstr "Настойки"
-
 msgid "Experimental"
 msgstr "Пробни"
-
-msgid "Audio"
-msgstr "Звукови"
-
-msgid "Configure"
-msgstr "Настрой"
-
-msgid "Hot Keys"
-msgstr "Бързи клавиши"
 
 msgid "Black & White"
 msgstr "Черно-бял"
@@ -2701,17 +2715,11 @@ msgstr "Език на играта"
 msgid "Change the graphics settings of the game."
 msgstr "Промени графичните настройки на играта."
 
-msgid "Change the audio settings of the game."
-msgstr "Промени звуковите настройки на играта."
-
 msgid "Experimental game settings."
 msgstr "Експериментални настройки на играта."
 
 msgid "Toggle instant battle mode."
 msgstr "Превключи режима на незабавна битка."
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr "Провери и конфигурирай всички горещи клавиши в играта."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Превключи типа на интерфейса, който искаш да използваш."
@@ -9580,9 +9588,6 @@ msgstr ""
 "Това заклинание контролира до\n"
 "%{hp} живот."
 
-msgid "battle: show damage info"
-msgstr "битка: показва информация за щетите"
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: позволяват да избереш всяко основно умение от Арена"
 
@@ -9660,6 +9665,9 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "battle: show damage info"
+#~ msgstr "битка: показва информация за щетите"
 
 #~ msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 #~ msgstr ""

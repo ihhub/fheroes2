@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 05:41+0000\n"
+"POT-Creation-Date: 2022-11-20 09:50+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -227,14 +227,20 @@ msgstr ""
 "Ров уменьшает на -%{count} навыки обороны любого подразделения и замедляет "
 "его до половины скорости движения."
 
-msgid "Speed"
-msgstr "Скорость"
-
 msgid "Speed: %{speed}"
 msgstr "Скорость: %{speed}"
 
+msgid "Speed"
+msgstr "Скорость"
+
 msgid "Army Order"
 msgstr "Порядок действий"
+
+msgid "Off"
+msgstr "Выкл."
+
+msgid "On"
+msgstr "Вкл."
 
 msgid "Auto Spell Casting"
 msgstr "Магия в автобитве"
@@ -248,11 +254,21 @@ msgstr "Затенение сетки"
 msgid "Shadow Cursor"
 msgstr "Курсор с тенью"
 
-msgid "Off"
-msgstr "Выкл."
+msgid "Audio"
+msgstr "Звук"
 
-msgid "On"
-msgstr "Вкл."
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Configure"
+msgstr "Настроить"
+
+msgid "Hot Keys"
+msgstr "Горячие клавиши"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Урон"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Установить скорость действий и анимации существ в бою."
@@ -287,6 +303,22 @@ msgid ""
 "cursor."
 msgstr ""
 "Включить/выключить отрисовку тени под курсором на гексагональной сетке."
+
+msgid "Change the audio settings of the game."
+msgstr "Настроить параметры аудио."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Проверить и настроить все горячие клавиши, имеющиеся в игре."
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr "Включить/выключить показ порядка действий отрядов в бою."
+
+msgid "Exit this menu."
+msgstr "Выход из меню."
+
+msgid "Okay"
+msgstr "Принять"
 
 msgid "The enemy has surrendered!"
 msgstr "Враг капитулировал!"
@@ -2306,9 +2338,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Закрыть"
 
-msgid "Exit this menu."
-msgstr "Выход из меню."
-
 msgid "Click to show next town."
 msgstr "Нажмите, чтобы показать следующий город."
 
@@ -2590,9 +2619,6 @@ msgstr "Изменить тип музыки."
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "3D эффекты для звуков переднего плана."
 
-msgid "Okay"
-msgstr "Принять"
-
 msgid "Build a new ship:"
 msgstr "Построить новый корабль:"
 
@@ -2638,20 +2664,8 @@ msgstr "Язык"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Настройки"
-
 msgid "Experimental"
 msgstr "Расширенные"
-
-msgid "Audio"
-msgstr "Звук"
-
-msgid "Configure"
-msgstr "Настроить"
-
-msgid "Hot Keys"
-msgstr "Горячие клавиши"
 
 msgid "Black & White"
 msgstr "Чёрно-белый"
@@ -2696,17 +2710,11 @@ msgstr "Выберите язык игры:"
 msgid "Change the graphics settings of the game."
 msgstr "Настроить параметры аудио."
 
-msgid "Change the audio settings of the game."
-msgstr "Настроить параметры аудио."
-
 msgid "Experimental game settings."
 msgstr "Вы можете настроить игру по своему усмотрению."
 
 msgid "Toggle instant battle mode."
 msgstr "Режим мгновенного боя."
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr "Проверить и настроить все горячие клавиши, имеющиеся в игре."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Переключить тип интерфейса, который Вы хотите использовать."
@@ -9668,9 +9676,6 @@ msgstr ""
 "суммарное здоровье которого не превышает\n"
 "%{hp} здоровья."
 
-msgid "battle: show damage info"
-msgstr "битва: показывать урон"
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: в постройке Арена можно получить любой первичный навык"
 
@@ -9748,6 +9753,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "battle: show damage info"
+#~ msgstr "битва: показывать урон"
 
 #~ msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 #~ msgstr ""
