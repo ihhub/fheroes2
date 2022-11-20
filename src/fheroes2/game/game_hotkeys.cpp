@@ -359,8 +359,8 @@ void Game::HotKeySave()
 
 void Game::globalKeyboardEvent( const fheroes2::Key key, const int32_t modifier )
 {
-    if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key
-         && !( modifier & fheroes2::KeyModifier::KEY_MODIFIER_ALT ) && !( modifier & fheroes2::KeyModifier::KEY_MODIFIER_CTRL ) ) {
+    if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key && !( modifier & fheroes2::KeyModifier::KEY_MODIFIER_ALT )
+         && !( modifier & fheroes2::KeyModifier::KEY_MODIFIER_CTRL ) ) {
         Settings & conf = Settings::Get();
         conf.setFullScreen( !fheroes2::engine().isFullScreen() );
         conf.Save( Settings::configFileName );

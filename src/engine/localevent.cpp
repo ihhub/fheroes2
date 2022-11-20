@@ -554,7 +554,8 @@ namespace
 
     char GetCurrentDPadChar()
     {
-        return getCharacterFromPressedKey( dPadKeys[currentCharIndex], currentUpper ? fheroes2::KeyModifier::KEY_MODIFIER_CAPS : fheroes2::KeyModifier::KEY_MODIFIER_NONE );
+        return getCharacterFromPressedKey( dPadKeys[currentCharIndex],
+                                           currentUpper ? fheroes2::KeyModifier::KEY_MODIFIER_CAPS : fheroes2::KeyModifier::KEY_MODIFIER_NONE );
     }
 
     fheroes2::Key KeySymFromChar( const char c )
