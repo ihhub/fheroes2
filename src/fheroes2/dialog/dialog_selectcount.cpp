@@ -301,7 +301,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
         if ( le.KeyPress() ) {
             if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE )
-                charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), le.KeyMod() );
+                charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
             redraw = true;
         }
 

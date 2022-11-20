@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-19 14:26+0000\n"
+"POT-Creation-Date: 2022-11-20 09:50+0000\n"
 "PO-Revision-Date: 2022-10-25 08:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -226,14 +226,20 @@ msgstr ""
 "A Várárok bármelyik egység védekező képességet csökkenti -%{name}-el és "
 "felezi a mozgási sebességét."
 
-msgid "Speed"
-msgstr "Sebesség"
-
 msgid "Speed: %{speed}"
 msgstr "Sebesség: %{speed}"
 
+msgid "Speed"
+msgstr "Sebesség"
+
 msgid "Army Order"
 msgstr ""
+
+msgid "Off"
+msgstr "Ki"
+
+msgid "On"
+msgstr "Be"
 
 msgid "Auto Spell Casting"
 msgstr "Automata varázslás"
@@ -247,11 +253,21 @@ msgstr "Árnyék mozgás"
 msgid "Shadow Cursor"
 msgstr ""
 
-msgid "Off"
-msgstr "Ki"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Be"
+msgid "Settings"
+msgstr "Beállítások"
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Sebzés"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Állítsd be a harci cselekmények és animációk gyorsaságát."
@@ -278,6 +294,21 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+msgid "Exit this menu."
+msgstr ""
+
+msgid "Okay"
+msgstr "Ok"
 
 msgid "The enemy has surrendered!"
 msgstr "Az ellenség feladta!"
@@ -2315,9 +2346,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Város elhagyása"
 
-msgid "Exit this menu."
-msgstr ""
-
 #, fuzzy
 msgid "Click to show next town."
 msgstr "Következő város mutatása"
@@ -2619,9 +2647,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "Ok"
-
 msgid "Build a new ship:"
 msgstr "Új hajó építése:"
 
@@ -2670,21 +2695,9 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Beállítások"
-
 #, fuzzy
 msgid "Experimental"
 msgstr "Elemi Gyűrű"
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
 
 #, fuzzy
 msgid "Black & White"
@@ -2734,17 +2747,11 @@ msgstr "Kiválasztott Leírás"
 msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Change the audio settings of the game."
-msgstr ""
-
 #, fuzzy
 msgid "Experimental game settings."
 msgstr "FHeroes2 játék beállítások."
 
 msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
@@ -9400,12 +9407,6 @@ msgstr ""
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
-
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"

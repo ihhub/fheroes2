@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-19 14:26+0000\n"
+"POT-Creation-Date: 2022-11-20 09:50+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -228,14 +228,21 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Veloc."
-
 msgid "Speed: %{speed}"
 msgstr "Rapidez: %{speed}"
 
+msgid "Speed"
+msgstr "Veloc."
+
 msgid "Army Order"
 msgstr ""
+
+#, fuzzy
+msgid "Off"
+msgstr "off"
+
+msgid "On"
+msgstr "Ligado"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -250,12 +257,22 @@ msgstr "Continuar a Andar"
 msgid "Shadow Cursor"
 msgstr "Sombra do cursor"
 
-#, fuzzy
-msgid "Off"
-msgstr "off"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Ligado"
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Configure"
+msgstr ""
+
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Hot Seat"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Dano"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -282,6 +299,23 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+#, fuzzy
+msgid "Change the audio settings of the game."
+msgstr "Mudar a resolução do jogo."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Passar a vez desta criatura"
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "The enemy has surrendered!"
 msgstr "O inimigo desistiu!"
@@ -2236,10 +2270,6 @@ msgid "Exit"
 msgstr "Sair da Cidade"
 
 #, fuzzy
-msgid "Exit this menu."
-msgstr "Passar a vez desta criatura"
-
-#, fuzzy
 msgid "Click to show next town."
 msgstr "Mostrar proxima cidade"
 
@@ -2540,9 +2570,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "OK"
-
 msgid "Build a new ship:"
 msgstr "Construir um novo banrco:"
 
@@ -2590,21 +2617,8 @@ msgstr "Idioma"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Configurações"
-
 msgid "Experimental"
 msgstr "Experimental"
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-#, fuzzy
-msgid "Hot Keys"
-msgstr "Hot Seat"
 
 #, fuzzy
 msgid "Black & White"
@@ -2652,17 +2666,10 @@ msgstr "Selecione o idioma do jogo"
 msgid "Change the graphics settings of the game."
 msgstr "Mudar a resolução do jogo."
 
-#, fuzzy
-msgid "Change the audio settings of the game."
-msgstr "Mudar a resolução do jogo."
-
 msgid "Experimental game settings."
 msgstr "Configurações experimentais do jogo."
 
 msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
@@ -9042,12 +9049,6 @@ msgstr ""
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
-
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"

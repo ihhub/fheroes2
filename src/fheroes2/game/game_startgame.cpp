@@ -920,7 +920,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             break;
         }
 
-        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar() ) {
+        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
