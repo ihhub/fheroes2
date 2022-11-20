@@ -43,7 +43,7 @@
 #include <SDL_keycode.h>
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( ANDROID )
-#define TOUCHSCREEN_SUPPORT
+#define TOUCH_SUPPORT
 #include <SDL_hints.h>
 #endif
 
@@ -997,7 +997,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
-#if defined( TOUCHSCREEN_SUPPORT )
+#if defined( TOUCH_SUPPORT )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
@@ -1247,7 +1247,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_FINGERDOWN:
         case SDL_FINGERUP:
         case SDL_FINGERMOTION:
-#if defined( TOUCHSCREEN_SUPPORT )
+#if defined( TOUCH_SUPPORT )
             HandleTouchEvent( event.tfinger );
 #endif
             break;
