@@ -395,6 +395,7 @@ private:
 
     SDL_GameController * _gameController = nullptr;
     SDL_FingerID _firstFingerId = 0;
+    SDL_FingerID _secondFingerId = 0;
     fheroes2::Time _controllerTimer;
     int16_t _controllerLeftXAxis = 0;
     int16_t _controllerLeftYAxis = 0;
