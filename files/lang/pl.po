@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 05:41+0000\n"
+"POT-Creation-Date: 2022-11-20 09:50+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -232,14 +232,20 @@ msgstr ""
 "Fosa zmniejsza współczynnik obrony o -%{count} oraz spowalnia jednostki o "
 "połowę."
 
-msgid "Speed"
-msgstr "Szybkość"
-
 msgid "Speed: %{speed}"
 msgstr "Szybkość: %{speed}"
 
+msgid "Speed"
+msgstr "Szybkość"
+
 msgid "Army Order"
 msgstr "Kolejność jednostek"
+
+msgid "Off"
+msgstr "Wyłączone"
+
+msgid "On"
+msgstr "Włączone"
 
 msgid "Auto Spell Casting"
 msgstr "Auto. czary"
@@ -253,11 +259,21 @@ msgstr "Cieniowanie pola"
 msgid "Shadow Cursor"
 msgstr "Cieniowanie kursora"
 
-msgid "Off"
-msgstr "Wyłączone"
+msgid "Audio"
+msgstr "Dźwięk"
 
-msgid "On"
-msgstr "Włączone"
+msgid "Settings"
+msgstr "Ustawienia"
+
+msgid "Configure"
+msgstr "Dostosuj"
+
+msgid "Hot Keys"
+msgstr "Skróty klaw."
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Obrażenia"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
@@ -295,6 +311,24 @@ msgid ""
 msgstr ""
 "Włączenie/wyłączenie systemu cieniowania zaznaczającego pola, nad którymi "
 "znajduje się kursor."
+
+msgid "Change the audio settings of the game."
+msgstr "Zmień ustawienia dźwiękowe gry."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Zobacz i skonfiguruj wszystkie skróty klawiszowe gry."
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+"Ukrycie lub pokazanie kolejności wykonywania akcji przez stwory w czasie "
+"walki."
+
+msgid "Exit this menu."
+msgstr "Wyjdź z tego menu."
+
+msgid "Okay"
+msgstr "Ok"
 
 msgid "The enemy has surrendered!"
 msgstr "Przeciwnik się poddał!"
@@ -2312,9 +2346,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Wyjście"
 
-msgid "Exit this menu."
-msgstr "Wyjdź z tego menu."
-
 msgid "Click to show next town."
 msgstr "Kliknij aby przejść do następnego miasta."
 
@@ -2599,9 +2630,6 @@ msgstr "Zmień rodzaj muzyki."
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "Włącz lub wyłącz efekty dźwiękowe 3D."
 
-msgid "Okay"
-msgstr "Ok"
-
 msgid "Build a new ship:"
 msgstr "Zbuduj nowy statek:"
 
@@ -2647,20 +2675,8 @@ msgstr "Język"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Ustawienia"
-
 msgid "Experimental"
 msgstr "Eksperymentalne"
-
-msgid "Audio"
-msgstr "Dźwięk"
-
-msgid "Configure"
-msgstr "Dostosuj"
-
-msgid "Hot Keys"
-msgstr "Skróty klaw."
 
 msgid "Black & White"
 msgstr "Czarno-biały"
@@ -2705,17 +2721,11 @@ msgstr "Wybierz język gry"
 msgid "Change the graphics settings of the game."
 msgstr "Zmień ustawienia dźwiękowe gry."
 
-msgid "Change the audio settings of the game."
-msgstr "Zmień ustawienia dźwiękowe gry."
-
 msgid "Experimental game settings."
 msgstr "Zmień eksperymentalne ustawienia gry."
 
 msgid "Toggle instant battle mode."
 msgstr "Zmień tryb błyskawicznej walki."
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr "Zobacz i skonfiguruj wszystkie skróty klawiszowe gry."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Zmień typ interfejsu."
@@ -9743,9 +9753,6 @@ msgstr ""
 "Zaklęcie kontroluje do\n"
 "%{hp} punktów życia."
 
-msgid "battle: show damage info"
-msgstr "walka: pokaż informacje o obrażeniach"
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 "bohaterowie: pozwól na wybór dowolnej umiejętności podstawowej na arenie"
@@ -9825,6 +9832,9 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "battle: show damage info"
+#~ msgstr "walka: pokaż informacje o obrażeniach"
 
 #~ msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 #~ msgstr "świat: Wiatraki, Młyny wodne i Magiczne ogrody mogą być przejęte"
