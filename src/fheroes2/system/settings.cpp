@@ -369,7 +369,7 @@ bool Settings::Save( const std::string & filename ) const
         return false;
     }
 
-    const std::string cfgFilename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), filename );
+    const std::string cfgFilename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), filename );
 
     std::fstream file;
     file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );
@@ -511,7 +511,7 @@ bool Settings::setGameLanguage( const std::string & language )
 #if defined( MACOS_APP_BUNDLE )
     const ListFiles translations = Settings::FindFiles( "translations", fileName, false );
 #else
-    const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
+    const ListFiles translations = Settings::FindFiles( System::concatPath( "files", "lang" ), fileName, false );
 #endif
 
     if ( !translations.empty() ) {
@@ -593,7 +593,7 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
     ListFiles res;
 
     for ( const std::string & dir : GetRootDirs() ) {
-        const std::string path = !prefixDir.empty() ? System::ConcatePath( dir, prefixDir ) : dir;
+        const std::string path = !prefixDir.empty() ? System::concatPath( dir, prefixDir ) : dir;
 
         if ( System::IsDirectory( path ) ) {
             if ( exactMatch ) {
@@ -613,8 +613,8 @@ bool Settings::findFile( const std::string & internalDirectory, const std::strin
     std::string tempPath;
 
     for ( const std::string & rootDir : Settings::GetRootDirs() ) {
-        tempPath = System::ConcatePath( rootDir, internalDirectory );
-        tempPath = System::ConcatePath( tempPath, fileName );
+        tempPath = System::concatPath( rootDir, internalDirectory );
+        tempPath = System::concatPath( tempPath, fileName );
         if ( System::IsFile( tempPath ) ) {
             fullPath.swap( tempPath );
             return true;
@@ -1028,7 +1028,7 @@ void Settings::ExtResetModes( uint32_t f )
 
 void Settings::BinarySave() const
 {
-    const std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
+    const std::string fname = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1041,7 +1041,7 @@ void Settings::BinarySave() const
 
 void Settings::BinaryLoad()
 {
-    std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
+    std::string fname = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
 
     if ( !System::IsFile( fname ) ) {
         fname = GetLastFile( "", "fheroes2.bin" );

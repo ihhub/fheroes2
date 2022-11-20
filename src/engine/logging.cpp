@@ -123,7 +123,7 @@ namespace Logging
         logFile.open( "fheroes2.log", std::ofstream::out );
 #elif defined( _WIN32 )
         const std::scoped_lock<std::mutex> lock( logMutex );
-        const std::string logPath( System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.log" ) );
+        const std::string logPath( System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.log" ) );
 
         logFile.open( logPath, std::ofstream::out );
 #elif defined( MACOS_APP_BUNDLE )

@@ -119,8 +119,8 @@ namespace
         if ( dataDir.empty() )
             return;
 
-        const std::string dataFiles = System::ConcatePath( dataDir, "files" );
-        const std::string dataFilesSave = System::ConcatePath( dataFiles, "save" );
+        const std::string dataFiles = System::concatPath( dataDir, "files" );
+        const std::string dataFilesSave = System::concatPath( dataFiles, "save" );
 
         if ( !System::IsDirectory( dataDir ) )
             System::MakeDirectory( dataDir );
@@ -292,8 +292,8 @@ int main( int argc, char ** argv )
 
         ListFiles midiSoundFonts;
 
-        midiSoundFonts.Append( Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf2", false ) );
-        midiSoundFonts.Append( Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf3", false ) );
+        midiSoundFonts.Append( Settings::FindFiles( System::concatPath( "files", "soundfonts" ), ".sf2", false ) );
+        midiSoundFonts.Append( Settings::FindFiles( System::concatPath( "files", "soundfonts" ), ".sf3", false ) );
 
 #ifdef WITH_DEBUG
         for ( const std::string & file : midiSoundFonts ) {
