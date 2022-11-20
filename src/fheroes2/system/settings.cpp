@@ -362,6 +362,7 @@ bool Settings::Read( const std::string & filename )
         }
         else {
             _optGlobal.ResetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+            fheroes2::cursor().enableSoftwareEmulation( false );
         }
     }
 
