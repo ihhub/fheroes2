@@ -28,6 +28,6 @@ namespace fheroes2
 {
     class Image;
 
-    void drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact,
-                           bool isScouteView, Image & output );
+    void drawMiniMonsters( const Troops & troops, int32_t cx, const int32_t cy, const uint32_t width, uint32_t first, uint32_t count, const bool isCompact,
+                           const bool isDetailedView, const bool isGarrisonView, const uint32_t thievesGuildsCount, Image & output );
 }

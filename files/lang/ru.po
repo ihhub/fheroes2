@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 09:31+0000\n"
+"POT-Creation-Date: 2022-11-20 05:41+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -735,6 +735,10 @@ msgstr "%{name} стреляет силой %{count} лучников"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "каждый с бонусом +%{attack} к своему навыку атаки."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Фантомный отряд уничтожен!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1906,9 +1910,6 @@ msgstr "Коракстоун"
 msgid "Sheltemburg"
 msgstr "Шелтембург"
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Найм невозможен. Герой в замке не может занять гарнизон."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Найм невозможен. В замке уже есть герой."
 
@@ -2320,16 +2321,6 @@ msgstr "Нажмите, чтобы показать предыдущий гор�
 msgid "Show previous town"
 msgstr "Предыдущий город"
 
-msgid "Army joining"
-msgstr "Гарнизон замка"
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-"Невозможно переместить героя в гарнизон замка. Освободите место в армии и "
-"попробуйте ещё раз."
-
 msgid "This town may not be upgraded to a castle."
 msgstr "В этом городе нельзя построить замок."
 
@@ -2344,12 +2335,6 @@ msgstr "Покинуть город"
 
 msgid "Show Income"
 msgstr "Показать доход"
-
-msgid "Swap Heroes"
-msgstr "Переставить героев"
-
-msgid "Meeting Heroes"
-msgstr "Встреча героев"
 
 msgid "View Hero"
 msgstr "Просмотреть героя"
@@ -2853,12 +2838,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr "Установить охрану"
-
-msgid "Your army too big!"
-msgstr "Ваша армия слишком большая!"
-
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
 
@@ -2924,11 +2903,11 @@ msgstr "Доступно к обмену"
 msgid "n/a"
 msgstr "н/д"
 
-msgid "guarded by "
-msgstr "охраняемая "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "охраняет %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "охраняемая "
 
 msgid "(available: %{count})"
 msgstr "(Доступно: %{count})"
@@ -3433,14 +3412,14 @@ msgstr "Координатор проекта и основной разрабо
 msgid "QA and Support"
 msgstr "Контроль качества и поддержка"
 
+msgid "Visit us at "
+msgstr "Посетите нас"
+
 msgid "Development"
 msgstr "Разработчик"
 
 msgid "Dev and Support"
 msgstr "Разработка и поддержка"
-
-msgid "Visit us at "
-msgstr "Посетите нас"
 
 msgid "Special Thanks to"
 msgstr "Особая благодарность"
@@ -3448,17 +3427,27 @@ msgstr "Особая благодарность"
 msgid "and many other contributors!"
 msgstr "и многим другим участникам"
 
+msgid "and many-many other supporters!"
+msgstr "и многим другим, кто поддерживает нас!"
+
 msgid "Support us at"
 msgstr "Поддержите нас"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
+"https://www.patreon.com/fheroes2\n"
+"https://boosty.to/fheroes2"
 
 msgid "Connect with us at"
 msgstr "Присоединяйтесь к нам"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+"https://vk.com/fheroes2\n"
+"https://www.facebook.com/groups/fheroes2"
+
 msgid "Need help with the game?"
 msgstr "Вам нужна помощь по игре?"
-
-msgid "and many-many other supporters!"
-msgstr "и многим другим, кто поддерживает нас!"
 
 msgid "Original project before 0.7"
 msgstr "Разработчик до 0.7"
@@ -3928,9 +3917,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} игрок побеждён!"
-
-msgid "Do you wish to continue the game?"
-msgstr "Вы хотите продолжить игру?"
 
 msgid "Scenario:"
 msgstr "Сценарий:"
@@ -4711,13 +4697,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"К сожалению, у Вас нет Волшебной Книги, чтобы записать заклинание в неё."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4733,6 +4712,13 @@ msgstr ""
 "\n"
 "К сожалению, Вам уже знакомо данное заклинание, так что им больше нечему Вас "
 "учить."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"К сожалению, у Вас нет Волшебной Книги, чтобы записать заклинание в неё."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9685,34 +9671,11 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr "битва: показывать урон"
 
-msgid "world: Scouting skill shows extended content info"
-msgstr "мир: навык разведки покажет дополнительную информацию"
-
-msgid "world: allow to set guardian to objects"
-msgstr "мир: разрешить охранников для дополнительных объектов"
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-"мир: возможность установить флаг на постройках: Водяная/Ветряная Мельница, "
-"Волшебный Сад"
-
-msgid "castle: allow guardians"
-msgstr "замок: разрешить защитников (как в H3)"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "герои: разрешить покупку магической книги в святилищах"
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr "герои: при бегстве или капитуляции сохраняются очки передвижения"
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: в постройке Арена можно получить любой первичный навык"
 
 msgid "battle: allow soft wait for troops"
 msgstr "битва: использовать альтернативный пропуск хода (как в H3)"
-
-msgid "battle: deterministic events"
-msgstr "битва: детерминированные события"
 
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "игра: автосохранение в начале дня"
@@ -9722,9 +9685,6 @@ msgstr "игра: использовать серую тему интерфей�
 
 msgid "game: hide interface"
 msgstr "игра: выключить интерфейс (весь экран игровое поле)"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr "игра: после победы возможно продолжить игру"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Уникальный Артефакт - это %{name}."
@@ -9789,31 +9749,53 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
+#~ msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 #~ msgstr ""
-#~ " на левой стороне основного меню.\n"
-#~ "\n"
-#~ "Для переключения между оконным и полноэкранным режимом\n"
-#~ "нажмите клавишу "
+#~ "мир: возможность установить флаг на постройках: Водяная/Ветряная "
+#~ "Мельница, Волшебный Сад"
 
-#~ msgid "F4"
-#~ msgstr "F4"
+#~ msgid "heroes: allow buy a spellbook from Shrines"
+#~ msgstr "герои: разрешить покупку магической книги в святилищах"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Установить охрану"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Ваша армия слишком большая!"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "мир: разрешить охранников для дополнительных объектов"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr "мир: навык разведки покажет дополнительную информацию"
+
+#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgstr "Найм невозможен. Герой в замке не может занять гарнизон."
+
+#~ msgid "Army joining"
+#~ msgstr "Гарнизон замка"
 
 #~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
+#~ "Unable to merge two armies together. Rearrange monsters manually before "
+#~ "moving the hero to the garrison."
 #~ msgstr ""
-#~ " на клавиатуре.\n"
-#~ "\n"
-#~ "Наслаждайтесь игрой!"
+#~ "Невозможно переместить героя в гарнизон замка. Освободите место в армии и "
+#~ "попробуйте ещё раз."
 
-#~ msgid "game: show system info"
-#~ msgstr "игра: показать информационную строку (время, память и т.п.)"
+#~ msgid "Swap Heroes"
+#~ msgstr "Переставить героев"
 
-#~ msgid "Moved %{monster}"
-#~ msgstr "%{monster} переместились"
+#~ msgid "Meeting Heroes"
+#~ msgstr "Встреча героев"
+
+#~ msgid "Do you wish to continue the game?"
+#~ msgstr "Вы хотите продолжить игру?"
+
+#~ msgid "castle: allow guardians"
+#~ msgstr "замок: разрешить защитников (как в H3)"
+
+#~ msgid "heroes: remember movement points when retreating or surrendering"
+#~ msgstr "герои: при бегстве или капитуляции сохраняются очки передвижения"
+
+#~ msgid "game: offer to continue the game after victory condition"
+#~ msgstr "игра: после победы возможно продолжить игру"

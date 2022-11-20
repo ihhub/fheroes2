@@ -1,6 +1,7 @@
 Checks: >-
   -*,
   bugprone-*,
+  -bugprone-easily-swappable-parameters,
   cppcoreguidelines-*,
   -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-avoid-non-const-global-variables,

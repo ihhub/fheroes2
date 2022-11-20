@@ -936,8 +936,8 @@ LocalEvent::LocalEvent()
     : modes( 0 )
     , key_value( fheroes2::Key::NONE )
     , mouse_button( 0 )
-    , redraw_cursor_func( nullptr )
-    , keyboard_filter_func( nullptr )
+    , mouse_motion_hook_func( nullptr )
+    , key_down_hook_func( nullptr )
     , loop_delay( 1 )
 {}
 
@@ -1341,7 +1341,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         SetModes( MOUSE_MOTION );
 
         if ( redraw_cursor_func ) {
-            ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
+            ( *mouse_motion_hook_func )( mouse_cu.x, mouse_cu.y );
         }
 
         if ( event.type == SDL_FINGERDOWN ) {
@@ -1549,8 +1549,8 @@ void LocalEvent::ProcessControllerAxisMotion()
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
-        if ( redraw_cursor_func ) {
-            ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
+        if ( mouse_motion_hook_func ) {
+            ( *mouse_motion_hook_func )( mouse_cu.x, mouse_cu.y );
         }
     }
 
@@ -1600,6 +1600,10 @@ void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
     if ( event.type == SDL_KEYDOWN ) {
         SetModes( KEY_PRESSED );
         SetModes( KEY_HOLD );
+
+        if ( key_down_hook_func ) {
+            ( *key_down_hook_func )( event.keysym.sym, event.keysym.mod );
+        }
     }
     else if ( event.type == SDL_KEYUP ) {
         ResetModes( KEY_PRESSED );
@@ -1616,6 +1620,10 @@ void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
     mouse_cu.y = motion.y;
     _emulatedPointerPosX = mouse_cu.x;
     _emulatedPointerPosY = mouse_cu.y;
+
+    if ( mouse_motion_hook_func ) {
+        ( *mouse_motion_hook_func )( motion.x, motion.y );
+    }
 }
 
 void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
@@ -1780,30 +1788,6 @@ int LocalEvent::KeyMod() const
     return SDL_GetModState();
 }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-int LocalEvent::GlobalFilterEvents( void * /*userdata*/, SDL_Event * event )
-#else
-int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
-#endif
-{
-    const LocalEvent & le = LocalEvent::Get();
-
-    if ( SDL_MOUSEMOTION == event->type ) {
-        // Redraw cursor.
-        if ( le.redraw_cursor_func ) {
-            ( *( le.redraw_cursor_func ) )( event->motion.x, event->motion.y );
-        }
-    }
-    else if ( SDL_KEYDOWN == event->type ) {
-        // Process key press event.
-        if ( le.keyboard_filter_func ) {
-            ( *( le.keyboard_filter_func ) )( event->key.keysym.sym, event->key.keysym.mod );
-        }
-    }
-
-    return 1;
-}
-
 void LocalEvent::SetState( const uint32_t type, const bool enable )
 {
     // SDL 1 and SDL 2 have different input argument types for event state.
@@ -1846,15 +1830,11 @@ void LocalEvent::SetStateDefaults()
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SetState( SDL_WINDOWEVENT, true );
-
-    SDL_SetEventFilter( GlobalFilterEvents, nullptr );
 #else
     SetState( SDL_ACTIVEEVENT, true );
 
     SetState( SDL_SYSWMEVENT, false );
     SetState( SDL_VIDEORESIZE, false );
     SetState( SDL_VIDEOEXPOSE, false );
-
-    SDL_SetEventFilter( GlobalFilterEvents );
 #endif
 }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-11-20 05:41+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -712,6 +712,10 @@ msgstr ""
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr ""
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "%{name} incrementa il morale delle tue truppe."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1817,11 +1821,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr ""
-"Non puoi reclutare - errore in cambiamento automatico dall'ospite al "
-"guardiano."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Reclutamento impossibile. Eroe già presente in questa città."
 
@@ -2217,14 +2216,6 @@ msgstr "Clicca per andare alla città prec."
 msgid "Show previous town"
 msgstr "Vai alla città prec."
 
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-
 msgid "This town may not be upgraded to a castle."
 msgstr ""
 
@@ -2239,12 +2230,6 @@ msgstr "Esci dalla Città"
 
 msgid "Show Income"
 msgstr "Mostra Rendita"
-
-msgid "Swap Heroes"
-msgstr "Scambia Eroi"
-
-msgid "Meeting Heroes"
-msgstr "Eroi incontranti"
 
 msgid "View Hero"
 msgstr "Mostra Eroe"
@@ -2754,12 +2739,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr ""
-
-msgid "Your army too big!"
-msgstr "Il tuo esercito è troppo grande"
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -2821,11 +2800,11 @@ msgstr "Scambi disponibili"
 msgid "n/a"
 msgstr "n/d"
 
-msgid "guarded by "
-msgstr "Protetto/a da "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "Protetto/a da %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "Protetto/a da "
 
 msgid "(available: %{count})"
 msgstr "(disponibiltà: %{count})"
@@ -3333,6 +3312,9 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
@@ -3342,25 +3324,28 @@ msgstr ""
 "Tele-\n"
 "trasporto"
 
-msgid "Visit us at "
-msgstr ""
-
 msgid "Special Thanks to"
 msgstr ""
 
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3812,9 +3797,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "Giocatore %{color} è stato sconfitto!"
-
-msgid "Do you wish to continue the game?"
-msgstr ""
 
 msgid "Scenario:"
 msgstr "Scenario:"
@@ -4543,11 +4525,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4556,6 +4533,11 @@ msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 
 msgid ""
@@ -8887,31 +8869,10 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr ""
 
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "castle: allow guardians"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr ""
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 
 msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "battle: deterministic events"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"
@@ -8921,9 +8882,6 @@ msgid "game: use evil interface"
 msgstr ""
 
 msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
@@ -8994,28 +8952,16 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
+#~ msgid "Your army too big!"
+#~ msgstr "Il tuo esercito è troppo grande"
+
+#~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr ""
-#~ " sul lato sinistro della schermata principale. \n"
-#~ "\n"
-#~ "Per andare da modalità finestra a schermo intero\n"
-#~ "premi il tasto "
+#~ "Non puoi reclutare - errore in cambiamento automatico dall'ospite al "
+#~ "guardiano."
 
-#~ msgid "F4"
-#~ msgstr "F4"
+#~ msgid "Swap Heroes"
+#~ msgstr "Scambia Eroi"
 
-#~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " sulla tastiera.\n"
-#~ "\n"
-#~ "Divertiti!"
-
-#~ msgid "Moved %{monster}"
-#~ msgstr "Spostato %{monster}"
+#~ msgid "Meeting Heroes"
+#~ msgstr "Eroi incontranti"
