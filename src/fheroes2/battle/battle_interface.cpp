@@ -5299,7 +5299,7 @@ void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker,
         return;
     }
 
-    if ( !Settings::Get().ExtBattleShowDamage() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
+    if ( !Settings::Get().isBattleShowDamageInfoEnabled() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
         return;
     }
 
