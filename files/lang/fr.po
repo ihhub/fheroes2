@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 09:50+0000\n"
+"POT-Creation-Date: 2022-11-20 10:34+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3269,6 +3269,20 @@ msgstr "Masquer"
 msgid "Enemy Speed"
 msgstr "Vitesse IA"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Lourdeur collective"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Très rapide"
+
 msgid "Scroll Speed"
 msgstr "Défilement"
 
@@ -3419,9 +3433,6 @@ msgstr ""
 
 msgid "Easy"
 msgstr "Facile"
-
-msgid "Normal"
-msgstr "Normal"
 
 msgid "Hard"
 msgstr "Difficile"

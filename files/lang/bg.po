@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 09:50+0000\n"
+"POT-Creation-Date: 2022-11-20 10:34+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3225,6 +3225,19 @@ msgstr "Не показвай"
 msgid "Enemy Speed"
 msgstr "Скорост на Противник"
 
+msgid "Slow"
+msgstr ""
+
+msgid "Normal"
+msgstr "Нормлано"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Мн. бърза"
+
 msgid "Scroll Speed"
 msgstr "Скорост на Превъртане"
 
@@ -3374,9 +3387,6 @@ msgstr ""
 
 msgid "Easy"
 msgstr "Лесно"
-
-msgid "Normal"
-msgstr "Нормлано"
 
 msgid "Hard"
 msgstr "Трудно"
