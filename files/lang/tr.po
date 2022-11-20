@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-19 14:26+0000\n"
+"POT-Creation-Date: 2022-11-20 05:41+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -8540,9 +8540,6 @@ msgid ""
 msgstr ""
 
 msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
