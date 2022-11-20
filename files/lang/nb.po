@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-20 11:54+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -223,16 +223,22 @@ msgstr ""
 "Vollgraven reduserer forsvarsevnen til krigere som befinner seg i den med "
 "%{count} og halverer skrittene deres."
 
-msgid "Speed"
-msgstr "Hurtighet"
-
 msgid "Speed: %{speed}"
 msgstr "Hurtighet : %{speed}"
+
+msgid "Speed"
+msgstr "Hurtighet"
 
 msgid "Army Order"
 msgstr ""
 "Tur-\n"
 "rekkefølge"
+
+msgid "Off"
+msgstr "Av"
+
+msgid "On"
+msgstr "På"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -252,11 +258,21 @@ msgstr ""
 "Rute-\n"
 "markør"
 
-msgid "Off"
-msgstr "Av"
+msgid "Audio"
+msgstr "Lyd"
 
-msgid "On"
-msgstr "På"
+msgid "Settings"
+msgstr "Innstillinger"
+
+msgid "Configure"
+msgstr "Konfigurer"
+
+msgid "Hot Keys"
+msgstr "Hurtigtaster"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Skade"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Juster hastigheten til handlingene og animasjonene i kamp."
@@ -293,6 +309,23 @@ msgid ""
 msgstr ""
 "Velg om den ruten du peker på med markøren din skal utheves ved å gjøres "
 "mørkere."
+
+msgid "Change the audio settings of the game."
+msgstr "Endre lydinnstillingene til spillet."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Kontroller og endre alle hurtigtastene i spillet."
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+"Skru på denne innstillingen for å vise rekkefølgen av krigernes tur i kamp."
+
+msgid "Exit this menu."
+msgstr "Forlat denne menyen."
+
+msgid "Okay"
+msgstr "Bekreft"
 
 msgid "The enemy has surrendered!"
 msgstr "Fienden overga seg!"
@@ -2359,9 +2392,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Gå ut"
 
-msgid "Exit this menu."
-msgstr "Forlat denne menyen."
-
 msgid "Click to show next town."
 msgstr "Klikk for å vise neste by."
 
@@ -2648,9 +2678,6 @@ msgstr "Skift typen musikk."
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "Skru 3D-effekten av bakgrunnslyder på eller av."
 
-msgid "Okay"
-msgstr "Bekreft"
-
 msgid "Build a new ship:"
 msgstr "Bygg et nytt skip:"
 
@@ -2698,22 +2725,10 @@ msgstr ""
 "Bilde-\n"
 "innstillinger"
 
-msgid "Settings"
-msgstr "Innstillinger"
-
 msgid "Experimental"
 msgstr ""
 "Under\n"
 "utvikling"
-
-msgid "Audio"
-msgstr "Lyd"
-
-msgid "Configure"
-msgstr "Konfigurer"
-
-msgid "Hot Keys"
-msgstr "Hurtigtaster"
 
 msgid "Black & White"
 msgstr "Svart-hvit"
@@ -2757,17 +2772,11 @@ msgstr "Velg spillspråk"
 msgid "Change the graphics settings of the game."
 msgstr "Endre bildeinnstillingene til spillet."
 
-msgid "Change the audio settings of the game."
-msgstr "Endre lydinnstillingene til spillet."
-
 msgid "Experimental game settings."
 msgstr "Innstillinger for spillet. Disse er fortsatt under utvikling."
 
 msgid "Toggle instant battle mode."
 msgstr "Skift modus for hurtigkamp."
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr "Kontroller og endre alle hurtigtastene i spillet."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Velg den typen grensesnitt du ønsker."
@@ -2900,12 +2909,6 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr "Vis ekstra informasjon som bilder per sekund (FPS) og tid."
-
-msgid "Set Guardian"
-msgstr "Plasser vokter"
-
-msgid "Your army too big!"
-msgstr "Hæren din er for stor!"
 
 msgid "Hot Keys:"
 msgstr "Hurtigtaster:"
@@ -3283,6 +3286,20 @@ msgstr "Skjul"
 msgid "Enemy Speed"
 msgstr "Fiendefart"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Traffikkork"
+
+msgid "Normal"
+msgstr "Middels"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Rask"
+
 # Kan ikke deles i to for øyeblikket.
 msgid "Scroll Speed"
 msgstr ""
@@ -3438,9 +3455,6 @@ msgstr ""
 
 msgid "Easy"
 msgstr "Enkel"
-
-msgid "Normal"
-msgstr "Middels"
 
 msgid "Hard"
 msgstr "Vanskelig"
@@ -3729,6 +3743,12 @@ msgstr "fheroes2 Resurrection Team presenterer"
 
 msgid "Greetings!"
 msgstr "Heisann!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Velkommen til Heroes of Might and Magic II drevet av fheroes2 spillmotoren! "
+"Vennligst velg skjermoppløsning før du begynner."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4802,13 +4822,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Dessverre har du ingen tryllebok å notere ned trolldommen i."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4824,6 +4837,13 @@ msgstr ""
 "\n"
 "Dessverre kan du allerede denne trolldommen, så det er ingenting mer de kan "
 "lære deg."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Dessverre har du ingen tryllebok å notere ned trolldommen i."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9903,18 +9923,6 @@ msgstr ""
 "Denne trolldommen gir deg kontroll over\n"
 "opptil %{hp} liv."
 
-msgid "battle: show damage info"
-msgstr "Kamp: Vis skadeinfo"
-
-msgid "world: allow to set guardian to objects"
-msgstr "Verden: Tillat å plassere voktere på objekter"
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
 
@@ -9992,6 +10000,24 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "battle: show damage info"
+#~ msgstr "Kamp: Vis skadeinfo"
+
+#~ msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
+#~ msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget"
+
+#~ msgid "heroes: allow buy a spellbook from Shrines"
+#~ msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Plasser vokter"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Hæren din er for stor!"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "Verden: Tillat å plassere voktere på objekter"
 
 #~ msgid "world: Scouting skill shows extended content info"
 #~ msgstr "Verden: Speiding gir deg utvidet info"

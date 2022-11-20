@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-20 11:54+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -229,13 +229,19 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Hastighet"
-
 msgid "Speed: %{speed}"
 msgstr "Hastighet: %{speed}"
 
+msgid "Speed"
+msgstr "Hastighet"
+
 msgid "Army Order"
+msgstr ""
+
+msgid "Off"
+msgstr "Av"
+
+msgid "On"
 msgstr ""
 
 #, fuzzy
@@ -252,11 +258,22 @@ msgstr "Fortsätt förflyttning"
 msgid "Shadow Cursor"
 msgstr ""
 
-msgid "Off"
-msgstr "Av"
-
-msgid "On"
+msgid "Audio"
 msgstr ""
+
+msgid "Settings"
+msgstr "Inställningar"
+
+msgid "Configure"
+msgstr ""
+
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Heta stolen"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Skada"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -283,6 +300,22 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Vänta denna enhet"
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "The enemy has surrendered!"
 msgstr "Fienden har kapitulerat!"
@@ -2294,10 +2327,6 @@ msgid "Exit"
 msgstr "Gå ut från staden"
 
 #, fuzzy
-msgid "Exit this menu."
-msgstr "Vänta denna enhet"
-
-#, fuzzy
 msgid "Click to show next town."
 msgstr "Visa nästa stad"
 
@@ -2589,9 +2618,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "OK"
-
 msgid "Build a new ship:"
 msgstr "Bygg ett nytt skepp:"
 
@@ -2639,22 +2665,9 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Inställningar"
-
 #, fuzzy
 msgid "Experimental"
 msgstr "Luftelement"
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-#, fuzzy
-msgid "Hot Keys"
-msgstr "Heta stolen"
 
 #, fuzzy
 msgid "Black & White"
@@ -2703,17 +2716,11 @@ msgstr "Vald beskrivning"
 msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Change the audio settings of the game."
-msgstr ""
-
 #, fuzzy
 msgid "Experimental game settings."
 msgstr "Spelinställningar för FHeroes2."
 
 msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
@@ -2843,12 +2850,6 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
-
-msgid "Set Guardian"
-msgstr "Ange beskyddare"
-
-msgid "Your army too big!"
-msgstr "Din armé är för stor!"
 
 msgid "Hot Keys:"
 msgstr ""
@@ -3241,6 +3242,20 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr "Hastighet"
 
+msgid "Slow"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Riktigt snabb"
+
 msgid "Scroll Speed"
 msgstr "Hastighet för skrollning"
 
@@ -3385,10 +3400,6 @@ msgstr ""
 
 msgid "Easy"
 msgstr ""
-
-#, fuzzy
-msgid "Normal"
-msgstr "Normal"
 
 msgid "Hard"
 msgstr ""
@@ -3688,6 +3699,10 @@ msgstr ""
 #, fuzzy
 msgid "Greetings!"
 msgstr "Inställningar"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr "Avsluta fheroes2 och återgå till operativsystemet."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4730,13 +4745,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Tyvärr har du ingen magibok att anteckna besvärjelsen med."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4751,6 +4759,13 @@ msgstr ""
 "\n"
 "Tyvärr har du redan lärt dig denna besvärjelse. De kan inte lära dig "
 "någonting mer."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Tyvärr har du ingen magibok att anteckna besvärjelsen med."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9353,19 +9368,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-#, fuzzy
-msgid "battle: show damage info"
-msgstr "spel: Visa systeminfo"
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 
@@ -9450,6 +9452,16 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "battle: show damage info"
+#~ msgstr "spel: Visa systeminfo"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Ange beskyddare"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Din armé är för stor!"
 
 #, fuzzy
 #~ msgid "Cannot recruit - guest to guard automove error."

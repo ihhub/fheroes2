@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-20 11:54+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -232,14 +232,20 @@ msgstr ""
 "Fosa zmniejsza współczynnik obrony o -%{count} oraz spowalnia jednostki o "
 "połowę."
 
-msgid "Speed"
-msgstr "Szybkość"
-
 msgid "Speed: %{speed}"
 msgstr "Szybkość: %{speed}"
 
+msgid "Speed"
+msgstr "Szybkość"
+
 msgid "Army Order"
 msgstr "Kolejność jednostek"
+
+msgid "Off"
+msgstr "Wyłączone"
+
+msgid "On"
+msgstr "Włączone"
 
 msgid "Auto Spell Casting"
 msgstr "Auto. czary"
@@ -253,11 +259,21 @@ msgstr "Cieniowanie pola"
 msgid "Shadow Cursor"
 msgstr "Cieniowanie kursora"
 
-msgid "Off"
-msgstr "Wyłączone"
+msgid "Audio"
+msgstr "Dźwięk"
 
-msgid "On"
-msgstr "Włączone"
+msgid "Settings"
+msgstr "Ustawienia"
+
+msgid "Configure"
+msgstr "Dostosuj"
+
+msgid "Hot Keys"
+msgstr "Skróty klaw."
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Obrażenia"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
@@ -295,6 +311,24 @@ msgid ""
 msgstr ""
 "Włączenie/wyłączenie systemu cieniowania zaznaczającego pola, nad którymi "
 "znajduje się kursor."
+
+msgid "Change the audio settings of the game."
+msgstr "Zmień ustawienia dźwiękowe gry."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Zobacz i skonfiguruj wszystkie skróty klawiszowe gry."
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+"Ukrycie lub pokazanie kolejności wykonywania akcji przez stwory w czasie "
+"walki."
+
+msgid "Exit this menu."
+msgstr "Wyjdź z tego menu."
+
+msgid "Okay"
+msgstr "Ok"
 
 msgid "The enemy has surrendered!"
 msgstr "Przeciwnik się poddał!"
@@ -2312,9 +2346,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Wyjście"
 
-msgid "Exit this menu."
-msgstr "Wyjdź z tego menu."
-
 msgid "Click to show next town."
 msgstr "Kliknij aby przejść do następnego miasta."
 
@@ -2599,9 +2630,6 @@ msgstr "Zmień rodzaj muzyki."
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "Włącz lub wyłącz efekty dźwiękowe 3D."
 
-msgid "Okay"
-msgstr "Ok"
-
 msgid "Build a new ship:"
 msgstr "Zbuduj nowy statek:"
 
@@ -2647,20 +2675,8 @@ msgstr "Język"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Ustawienia"
-
 msgid "Experimental"
 msgstr "Eksperymentalne"
-
-msgid "Audio"
-msgstr "Dźwięk"
-
-msgid "Configure"
-msgstr "Dostosuj"
-
-msgid "Hot Keys"
-msgstr "Skróty klaw."
 
 msgid "Black & White"
 msgstr "Czarno-biały"
@@ -2705,17 +2721,11 @@ msgstr "Wybierz język gry"
 msgid "Change the graphics settings of the game."
 msgstr "Zmień ustawienia dźwiękowe gry."
 
-msgid "Change the audio settings of the game."
-msgstr "Zmień ustawienia dźwiękowe gry."
-
 msgid "Experimental game settings."
 msgstr "Zmień eksperymentalne ustawienia gry."
 
 msgid "Toggle instant battle mode."
 msgstr "Zmień tryb błyskawicznej walki."
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr "Zobacz i skonfiguruj wszystkie skróty klawiszowe gry."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Zmień typ interfejsu."
@@ -2845,12 +2855,6 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
-
-msgid "Set Guardian"
-msgstr "Ustaw strażnika"
-
-msgid "Your army too big!"
-msgstr "Twoja armia jest za duża!"
 
 msgid "Hot Keys:"
 msgstr "Skróty klawiszowe:"
@@ -3222,6 +3226,20 @@ msgstr "Nie pokazuj"
 msgid "Enemy Speed"
 msgstr "Szybk. wroga"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Grupowe Spowolnienie"
+
+msgid "Normal"
+msgstr "Normalna"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Bardzo duża"
+
 msgid "Scroll Speed"
 msgstr "Prędkość przewijania"
 
@@ -3371,9 +3389,6 @@ msgstr ""
 
 msgid "Easy"
 msgstr "Łatwa"
-
-msgid "Normal"
-msgstr "Normalna"
 
 msgid "Hard"
 msgstr "Trudna"
@@ -3657,6 +3672,12 @@ msgstr "fheroes2 Resurrection Team prezentuje"
 
 msgid "Greetings!"
 msgstr "Witaj!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Witamy w grze Heroes of Might and Magic II na silniku fheroes2! Przed "
+"rozpoczęciem wybierz rozdzielczość gry."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4711,13 +4732,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Niestety nie masz Księgi Zaklęć, w której można zapisać zaklęcie."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4733,6 +4747,13 @@ msgstr ""
 "\n"
 "Niestety, masz już wiedzę o tym zaklęciu, więc nie możesz nauczyć się go "
 "ponownie."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Niestety nie masz Księgi Zaklęć, w której można zapisać zaklęcie."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9749,18 +9770,6 @@ msgstr ""
 "Zaklęcie kontroluje do\n"
 "%{hp} punktów życia."
 
-msgid "battle: show damage info"
-msgstr "walka: pokaż informacje o obrażeniach"
-
-msgid "world: allow to set guardian to objects"
-msgstr "świat: pozwól zostawiać strażników w obiektach"
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr "świat: Wiatraki, Młyny wodne i Magiczne ogrody mogą być przejęte"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "bohaterowie: pozwól kupować Księgę Zaklęć w kaplicach"
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 "bohaterowie: pozwól na wybór dowolnej umiejętności podstawowej na arenie"
@@ -9840,6 +9849,24 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "battle: show damage info"
+#~ msgstr "walka: pokaż informacje o obrażeniach"
+
+#~ msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
+#~ msgstr "świat: Wiatraki, Młyny wodne i Magiczne ogrody mogą być przejęte"
+
+#~ msgid "heroes: allow buy a spellbook from Shrines"
+#~ msgstr "bohaterowie: pozwól kupować Księgę Zaklęć w kaplicach"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Ustaw strażnika"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Twoja armia jest za duża!"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "świat: pozwól zostawiać strażników w obiektach"
 
 #~ msgid "world: Scouting skill shows extended content info"
 #~ msgstr ""

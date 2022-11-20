@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-20 11:54+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -229,14 +229,20 @@ msgstr ""
 "De Moat verminderd by -%{count} de verdedgings vaardigheid van een eenheid "
 "en versloomt naar de helft van de bewegings snelheid"
 
-msgid "Speed"
-msgstr "Snelheid"
-
 msgid "Speed: %{speed}"
 msgstr "Snelheid: %{speed}"
 
+msgid "Speed"
+msgstr "Snelheid"
+
 msgid "Army Order"
 msgstr "Legerorde"
+
+msgid "Off"
+msgstr "Uit"
+
+msgid "On"
+msgstr "Aan"
 
 msgid "Auto Spell Casting"
 msgstr "Automatisch spreuk uitroepen"
@@ -250,11 +256,20 @@ msgstr "Schaduw Beweging"
 msgid "Shadow Cursor"
 msgstr "Schaduw Cursor"
 
-msgid "Off"
-msgstr "Uit"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Aan"
+msgid "Settings"
+msgstr ""
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+msgid "Damage Info"
+msgstr ""
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Zet de snelheid van gevechts acties en animaties."
@@ -292,6 +307,22 @@ msgid ""
 msgstr ""
 "Schakel aan of uit een schaduw die de huidige hex-locatie van de muiscursor "
 "toont."
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr "Schakel om het legerorde weer te geven tijdens het gevecht."
+
+msgid "Exit this menu."
+msgstr ""
+
+msgid "Okay"
+msgstr ""
 
 msgid "The enemy has surrendered!"
 msgstr "De vijand heeft zich overgegeven!"
@@ -2296,9 +2327,6 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-msgid "Exit this menu."
-msgstr ""
-
 msgid "Click to show next town."
 msgstr ""
 
@@ -2559,9 +2587,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr ""
-
 msgid "Build a new ship:"
 msgstr ""
 
@@ -2607,19 +2632,7 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr ""
-
 msgid "Experimental"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
 msgstr ""
 
 msgid "Black & White"
@@ -2664,16 +2677,10 @@ msgstr ""
 msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Change the audio settings of the game."
-msgstr ""
-
 msgid "Experimental game settings."
 msgstr ""
 
 msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
@@ -2789,12 +2796,6 @@ msgid ""
 msgstr ""
 
 msgid "Show extra information such as FPS and current time."
-msgstr ""
-
-msgid "Set Guardian"
-msgstr ""
-
-msgid "Your army too big!"
 msgstr ""
 
 msgid "Hot Keys:"
@@ -3149,6 +3150,18 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr ""
 
+msgid "Slow"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
 msgid "Scroll Speed"
 msgstr ""
 
@@ -3290,9 +3303,6 @@ msgid ""
 msgstr ""
 
 msgid "Easy"
-msgstr ""
-
-msgid "Normal"
 msgstr ""
 
 msgid "Hard"
@@ -3569,6 +3579,9 @@ msgid "fheroes2 Resurrection Team presents"
 msgstr ""
 
 msgid "Greetings!"
+msgstr ""
+
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 
 msgid ""
@@ -4498,11 +4511,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4511,6 +4519,11 @@ msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 
 msgid ""
@@ -8709,18 +8722,6 @@ msgstr ""
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
-
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"

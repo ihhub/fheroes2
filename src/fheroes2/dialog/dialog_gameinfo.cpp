@@ -116,11 +116,7 @@ void Dialog::GameInfo()
     text.draw( pt.x + 130, pt.y + 398, 272, display );
 
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );
-    fheroes2::ButtonSprite buttonCfg
-        = fheroes2::makeButtonWithShadow( pt.x + 50, pt.y + 426, fheroes2::AGG::GetICN( ICN::BTNCONFIG, 0 ), fheroes2::AGG::GetICN( ICN::BTNCONFIG, 1 ), display );
-
     buttonOk.draw();
-    buttonCfg.draw();
 
     display.render();
 
@@ -129,20 +125,12 @@ void Dialog::GameInfo()
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        le.MousePressLeft( buttonCfg.area() ) ? buttonCfg.drawOnPress() : buttonCfg.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() )
             break;
 
-        if ( le.MouseClickLeft( buttonCfg.area() ) ) {
-            Dialog::ExtSettings( true );
-            display.render();
-        }
-        else if ( le.MousePressRight( buttonOk.area() ) ) {
-            fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-            fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
-
-            fheroes2::showMessage( header, body, 0 );
+        if ( le.MousePressRight( buttonOk.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
         }
         else {
             playersInfo.readOnlyEventProcessing();

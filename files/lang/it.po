@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-20 11:54+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -222,14 +222,20 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Velocità"
-
 msgid "Speed: %{speed}"
 msgstr "Velocità: %{speed}"
 
+msgid "Speed"
+msgstr "Velocità"
+
 msgid "Army Order"
 msgstr ""
+
+msgid "Off"
+msgstr "No"
+
+msgid "On"
+msgstr "Sì"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -245,11 +251,21 @@ msgstr "Movimento Ombra"
 msgid "Shadow Cursor"
 msgstr "Cursore Ombra"
 
-msgid "Off"
-msgstr "No"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Sì"
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Danni"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -276,6 +292,21 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr "Cambia le impostazioni dell'audio del gioco."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+msgid "Exit this menu."
+msgstr "Lascia questo menù."
+
+msgid "Okay"
+msgstr "Okay"
 
 msgid "The enemy has surrendered!"
 msgstr "Il nemico si è ceduto!"
@@ -2201,9 +2232,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Esci"
 
-msgid "Exit this menu."
-msgstr "Lascia questo menù."
-
 msgid "Click to show next town."
 msgstr "Clicca per andare alla città succ."
 
@@ -2487,9 +2515,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "Okay"
-
 msgid "Build a new ship:"
 msgstr "Costruisci una nave:"
 
@@ -2536,20 +2561,8 @@ msgstr "Lingua"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Impostazioni"
-
 msgid "Experimental"
 msgstr "Sperimentale"
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
 
 #, fuzzy
 msgid "Black & White"
@@ -2599,16 +2612,10 @@ msgstr "Scegli lingua del gioco"
 msgid "Change the graphics settings of the game."
 msgstr "Cambia le impostazioni dell'audio del gioco."
 
-msgid "Change the audio settings of the game."
-msgstr "Cambia le impostazioni dell'audio del gioco."
-
 msgid "Experimental game settings."
 msgstr "Impostazioni sperimentali del gioco."
 
 msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
@@ -2738,12 +2745,6 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
-
-msgid "Set Guardian"
-msgstr ""
-
-msgid "Your army too big!"
-msgstr "Il tuo esercito è troppo grande"
 
 msgid "Hot Keys:"
 msgstr ""
@@ -3127,6 +3128,21 @@ msgstr "Nascondi"
 msgid "Enemy Speed"
 msgstr "Velocità Nemica"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Pianissimo"
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Velocissima"
+
 msgid "Scroll Speed"
 msgstr "Velocità dello Scorrimento"
 
@@ -3269,10 +3285,6 @@ msgstr ""
 
 msgid "Easy"
 msgstr ""
-
-#, fuzzy
-msgid "Normal"
-msgstr "Normale"
 
 msgid "Hard"
 msgstr ""
@@ -3559,6 +3571,12 @@ msgstr "Il Team di fheroes2 Resurrection presenta"
 
 msgid "Greetings!"
 msgstr "Saluti!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
+"risoluzione per il gioco."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4531,11 +4549,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4544,6 +4557,11 @@ msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 
 msgid ""
@@ -8872,18 +8890,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 
@@ -8966,6 +8972,9 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Il tuo esercito è troppo grande"
 
 #~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr ""
