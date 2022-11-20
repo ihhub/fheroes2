@@ -315,99 +315,135 @@ namespace
         return SDLK_UNKNOWN;
     }
 
-    enum KeyMod
+    fheroes2::Key getKeyFromSDL( int sdlKey )
     {
-        MOD_NONE = KMOD_NONE,
-        MOD_CTRL = KMOD_CTRL,
-        MOD_SHIFT = KMOD_SHIFT,
-        MOD_ALT = KMOD_ALT,
-        MOD_CAPS = KMOD_CAPS,
-        MOD_NUM = KMOD_NUM
-    };
+        // SDL interprets keyboard Numpad Enter as a separate key. However, in the game we should handle it in the same way as the normal Enter.
+        if ( sdlKey == SDLK_KP_ENTER ) {
+            sdlKey = SDLK_RETURN;
+        }
+
+        static std::map<int, fheroes2::Key> sdlValueToKey;
+        if ( sdlValueToKey.empty() ) {
+            // The map is empty let's populate it.
+            for ( int32_t i = static_cast<int32_t>( fheroes2::Key::NONE ); i < static_cast<int32_t>( fheroes2::Key::LAST_KEY ); ++i ) {
+                const fheroes2::Key key = static_cast<fheroes2::Key>( i );
+                sdlValueToKey.emplace( getSDLKey( key ), key );
+            }
+        }
+
+        auto iter = sdlValueToKey.find( sdlKey );
+        if ( iter == sdlValueToKey.end() ) {
+            return fheroes2::Key::NONE;
+        }
+
+        return iter->second;
+    }
+
+    int32_t getKeyModifierFromSDL( const int sdlModifier )
+    {
+        int32_t modifier = fheroes2::KeyModifier::KEY_MODIFIER_NONE;
+        if ( sdlModifier & KMOD_CTRL ) {
+            modifier |= fheroes2::KeyModifier::KEY_MODIFIER_CTRL;
+        }
+        if ( sdlModifier & KMOD_SHIFT ) {
+            modifier |= fheroes2::KeyModifier::KEY_MODIFIER_SHIFT;
+        }
+        if ( sdlModifier & KMOD_ALT ) {
+            modifier |= fheroes2::KeyModifier::KEY_MODIFIER_ALT;
+        }
+        if ( sdlModifier & KMOD_CAPS ) {
+            modifier |= fheroes2::KeyModifier::KEY_MODIFIER_CAPS;
+        }
+        if ( sdlModifier & KMOD_NUM ) {
+            modifier |= fheroes2::KeyModifier::KEY_MODIFIER_NUM;
+        }
+
+        return modifier;
+    }
 
     char getCharacterFromPressedKey( const fheroes2::Key key, const int32_t mod )
     {
         switch ( key ) {
         case fheroes2::Key::KEY_1:
-            return ( MOD_SHIFT & mod ? '!' : '1' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '!' : '1' );
         case fheroes2::Key::KEY_2:
-            return ( MOD_SHIFT & mod ? '@' : '2' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '@' : '2' );
         case fheroes2::Key::KEY_3:
-            return ( MOD_SHIFT & mod ? '#' : '3' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '#' : '3' );
         case fheroes2::Key::KEY_4:
-            return ( MOD_SHIFT & mod ? '$' : '4' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '$' : '4' );
         case fheroes2::Key::KEY_5:
-            return ( MOD_SHIFT & mod ? '%' : '5' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '%' : '5' );
         case fheroes2::Key::KEY_6:
-            return ( MOD_SHIFT & mod ? '^' : '6' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '^' : '6' );
         case fheroes2::Key::KEY_7:
-            return ( MOD_SHIFT & mod ? '&' : '7' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '&' : '7' );
         case fheroes2::Key::KEY_8:
-            return ( MOD_SHIFT & mod ? '*' : '8' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '*' : '8' );
         case fheroes2::Key::KEY_9:
-            return ( MOD_SHIFT & mod ? '(' : '9' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '(' : '9' );
         case fheroes2::Key::KEY_0:
-            return ( MOD_SHIFT & mod ? ')' : '0' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? ')' : '0' );
         case fheroes2::Key::KEY_KP_0:
-            if ( MOD_NUM & mod )
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '0';
             break;
         case fheroes2::Key::KEY_KP_1:
-            if ( MOD_NUM & mod )
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '1';
             break;
         case fheroes2::Key::KEY_KP_2:
-            if ( MOD_NUM & mod )
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '2';
             break;
         case fheroes2::Key::KEY_KP_3:
-            if ( MOD_NUM & mod )
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '3';
             break;
         case fheroes2::Key::KEY_KP_4:
-            if ( MOD_NUM & mod )
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '4';
             break;
         case fheroes2::Key::KEY_KP_5:
-            if ( MOD_NUM & mod )
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '5';
             break;
         case fheroes2::Key::KEY_KP_6:
-            if ( MOD_NUM & mod )
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '6';
             break;
         case fheroes2::Key::KEY_KP_7:
-            if ( MOD_NUM & mod )
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '7';
             break;
         case fheroes2::Key::KEY_KP_8:
-            if ( MOD_NUM & mod )
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '8';
             break;
         case fheroes2::Key::KEY_KP_9:
-            if ( MOD_NUM & mod )
+            if ( fheroes2::KeyModifier::KEY_MODIFIER_NUM & mod )
                 return '9';
             break;
         case fheroes2::Key::KEY_MINUS:
-            return ( MOD_SHIFT & mod ? '_' : '-' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '_' : '-' );
         case fheroes2::Key::KEY_EQUALS:
-            return ( MOD_SHIFT & mod ? '+' : '=' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '+' : '=' );
         case fheroes2::Key::KEY_BACKSLASH:
-            return ( MOD_SHIFT & mod ? '|' : '\\' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '|' : '\\' );
         case fheroes2::Key::KEY_LEFT_BRACKET:
-            return ( MOD_SHIFT & mod ? '{' : '[' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '{' : '[' );
         case fheroes2::Key::KEY_RIGHT_BRACKET:
-            return ( MOD_SHIFT & mod ? '}' : ']' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '}' : ']' );
         case fheroes2::Key::KEY_SEMICOLON:
-            return ( MOD_SHIFT & mod ? ':' : ';' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? ':' : ';' );
         case fheroes2::Key::KEY_QUOTE:
-            return ( MOD_SHIFT & mod ? '"' : '\'' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '"' : '\'' );
         case fheroes2::Key::KEY_COMMA:
-            return ( MOD_SHIFT & mod ? '<' : ',' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '<' : ',' );
         case fheroes2::Key::KEY_PERIOD:
-            return ( MOD_SHIFT & mod ? '>' : '.' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '>' : '.' );
         case fheroes2::Key::KEY_SLASH:
-            return ( MOD_SHIFT & mod ? '?' : '/' );
+            return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '?' : '/' );
         case fheroes2::Key::KEY_EXCLAIM:
             return '!';
         case fheroes2::Key::KEY_AT:
@@ -443,57 +479,57 @@ namespace
         case fheroes2::Key::KEY_SPACE:
             return ' ';
         case fheroes2::Key::KEY_A:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'A' : 'a' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'A' : 'a' );
         case fheroes2::Key::KEY_B:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'B' : 'b' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'B' : 'b' );
         case fheroes2::Key::KEY_C:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'C' : 'c' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'C' : 'c' );
         case fheroes2::Key::KEY_D:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'D' : 'd' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'D' : 'd' );
         case fheroes2::Key::KEY_E:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'E' : 'e' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'E' : 'e' );
         case fheroes2::Key::KEY_F:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'F' : 'f' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'F' : 'f' );
         case fheroes2::Key::KEY_G:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'G' : 'g' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'G' : 'g' );
         case fheroes2::Key::KEY_H:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'H' : 'h' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'H' : 'h' );
         case fheroes2::Key::KEY_I:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'I' : 'i' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'I' : 'i' );
         case fheroes2::Key::KEY_J:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'J' : 'j' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'J' : 'j' );
         case fheroes2::Key::KEY_K:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'K' : 'k' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'K' : 'k' );
         case fheroes2::Key::KEY_L:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'L' : 'l' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'L' : 'l' );
         case fheroes2::Key::KEY_M:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'M' : 'm' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'M' : 'm' );
         case fheroes2::Key::KEY_N:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'N' : 'n' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'N' : 'n' );
         case fheroes2::Key::KEY_O:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'O' : 'o' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'O' : 'o' );
         case fheroes2::Key::KEY_P:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'P' : 'p' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'P' : 'p' );
         case fheroes2::Key::KEY_Q:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Q' : 'q' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'Q' : 'q' );
         case fheroes2::Key::KEY_R:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'R' : 'r' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'R' : 'r' );
         case fheroes2::Key::KEY_S:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'S' : 's' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'S' : 's' );
         case fheroes2::Key::KEY_T:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'T' : 't' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'T' : 't' );
         case fheroes2::Key::KEY_U:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'U' : 'u' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'U' : 'u' );
         case fheroes2::Key::KEY_V:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'V' : 'v' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'V' : 'v' );
         case fheroes2::Key::KEY_W:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'W' : 'w' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'W' : 'w' );
         case fheroes2::Key::KEY_X:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'X' : 'x' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'X' : 'x' );
         case fheroes2::Key::KEY_Y:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Y' : 'y' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'Y' : 'y' );
         case fheroes2::Key::KEY_Z:
-            return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Z' : 'z' );
+            return ( ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) & mod ? 'Z' : 'z' );
         default:
             break;
         }
@@ -521,7 +557,8 @@ namespace
 
     char GetCurrentDPadChar()
     {
-        return getCharacterFromPressedKey( dPadKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
+        return getCharacterFromPressedKey( dPadKeys[currentCharIndex],
+                                           currentUpper ? fheroes2::KeyModifier::KEY_MODIFIER_CAPS : fheroes2::KeyModifier::KEY_MODIFIER_NONE );
     }
 
     fheroes2::Key KeySymFromChar( const char c )
@@ -926,30 +963,6 @@ namespace fheroes2
 
         return pos;
     }
-
-    Key getKeyFromSDL( int sdlKey )
-    {
-        // SDL interprets keyboard Numpad Enter as a separate key. However, in the game we should handle it in the same way as the normal Enter.
-        if ( sdlKey == SDLK_KP_ENTER ) {
-            sdlKey = SDLK_RETURN;
-        }
-
-        static std::map<int, Key> sdlValueToKey;
-        if ( sdlValueToKey.empty() ) {
-            // The map is empty let's populate it.
-            for ( int32_t i = static_cast<int32_t>( Key::NONE ); i < static_cast<int32_t>( Key::LAST_KEY ); ++i ) {
-                const Key key = static_cast<Key>( i );
-                sdlValueToKey.emplace( getSDLKey( key ), key );
-            }
-        }
-
-        auto iter = sdlValueToKey.find( sdlKey );
-        if ( iter == sdlValueToKey.end() ) {
-            return Key::NONE;
-        }
-
-        return iter->second;
-    }
 }
 
 LocalEvent::LocalEvent()
@@ -957,7 +970,6 @@ LocalEvent::LocalEvent()
     , key_value( fheroes2::Key::NONE )
     , mouse_button( 0 )
     , mouse_motion_hook_func( nullptr )
-    , key_down_hook_func( nullptr )
     , loop_delay( 1 )
 {}
 
@@ -1637,7 +1649,7 @@ bool LocalEvent::MousePressRight() const
 
 void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 {
-    const fheroes2::Key key = fheroes2::getKeyFromSDL( event.keysym.sym );
+    const fheroes2::Key key = getKeyFromSDL( event.keysym.sym );
     if ( key == fheroes2::Key::NONE ) {
         return;
     }
@@ -1646,8 +1658,8 @@ void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
         SetModes( KEY_PRESSED );
         SetModes( KEY_HOLD );
 
-        if ( key_down_hook_func ) {
-            ( *key_down_hook_func )( event.keysym.sym, event.keysym.mod );
+        if ( _globalKeyDownEventHook ) {
+            _globalKeyDownEventHook( key, getKeyModifierFromSDL( event.keysym.mod ) );
         }
     }
     else if ( event.type == SDL_KEYUP ) {
@@ -1818,9 +1830,9 @@ bool LocalEvent::MouseWheelDn() const
 #endif
 }
 
-int LocalEvent::KeyMod() const
+int32_t LocalEvent::getCurrentKeyModifiers()
 {
-    return SDL_GetModState();
+    return getKeyModifierFromSDL( SDL_GetModState() );
 }
 
 void LocalEvent::setEventProcessingStates()
