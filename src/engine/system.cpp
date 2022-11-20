@@ -135,6 +135,15 @@ namespace
 }
 #endif
 
+bool System::isHandheldDevice()
+{
+#if defined( ANDROID )
+    return true;
+#else
+    return false;
+#endif
+}
+
 int System::MakeDirectory( const std::string & path )
 {
 #if defined( _WIN32 )

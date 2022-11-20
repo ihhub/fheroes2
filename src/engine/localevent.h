@@ -324,14 +324,14 @@ private:
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
-    void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
-    static void OnSdl2WindowEvent( const SDL_WindowEvent & event );
-
+    static void HandleWindowEvent( const SDL_WindowEvent & event );
     static void HandleRenderDeviceResetEvent();
+
+    void ProcessControllerAxisMotion();
 #else
-    void OnActiveEvent( const SDL_ActiveEvent & event );
+    static void HandleActiveEvent( const SDL_ActiveEvent & event );
 #endif
 
     enum flag_t

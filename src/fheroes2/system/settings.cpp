@@ -31,7 +31,6 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
-#include "core.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -115,7 +114,7 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 
-    if ( fheroes2::isHandheldDevice() ) {
+    if ( System::isHandheldDevice() ) {
         // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
         _optGlobal.SetModes( GLOBAL_FULLSCREEN );
 
