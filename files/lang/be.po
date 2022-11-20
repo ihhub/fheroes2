@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 05:41+0000\n"
+"POT-Creation-Date: 2022-11-20 09:50+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -220,14 +220,20 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Хуткасць"
-
 msgid "Speed: %{speed}"
 msgstr "Хуткасць: %{speed}"
 
+msgid "Speed"
+msgstr "Хуткасць"
+
 msgid "Army Order"
 msgstr "Парадак войску"
+
+msgid "Off"
+msgstr "Выкл"
+
+msgid "On"
+msgstr "Укл"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -241,11 +247,21 @@ msgstr ""
 msgid "Shadow Cursor"
 msgstr ""
 
-msgid "Off"
-msgstr "Выкл"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Укл"
+msgid "Settings"
+msgstr ""
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Урон"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Усталяваць хуткасць баявых дзеянняў і анімацый."
@@ -272,6 +288,21 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+msgid "Exit this menu."
+msgstr "Выйсці з меню"
+
+msgid "Okay"
+msgstr "Ок"
 
 msgid "The enemy has surrendered!"
 msgstr "Вораг здаўся!"
@@ -2152,9 +2183,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Выхад"
 
-msgid "Exit this menu."
-msgstr "Выйсці з меню"
-
 msgid "Click to show next town."
 msgstr ""
 
@@ -2415,9 +2443,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "Ок"
-
 msgid "Build a new ship:"
 msgstr ""
 
@@ -2463,19 +2488,7 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr ""
-
 msgid "Experimental"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
 msgstr ""
 
 msgid "Black & White"
@@ -2520,16 +2533,10 @@ msgstr ""
 msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Change the audio settings of the game."
-msgstr ""
-
 msgid "Experimental game settings."
 msgstr ""
 
 msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
@@ -8574,9 +8581,6 @@ msgstr ""
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
-
-msgid "battle: show damage info"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"

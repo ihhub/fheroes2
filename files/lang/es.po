@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 05:41+0000\n"
+"POT-Creation-Date: 2022-11-20 09:50+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -228,13 +228,20 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Velocidad"
-
 msgid "Speed: %{speed}"
 msgstr "Velocidad: %{speed}"
 
+msgid "Speed"
+msgstr "Velocidad"
+
 msgid "Army Order"
+msgstr ""
+
+#, fuzzy
+msgid "Off"
+msgstr "apagado"
+
+msgid "On"
 msgstr ""
 
 #, fuzzy
@@ -251,12 +258,22 @@ msgstr "Continuar movimento"
 msgid "Shadow Cursor"
 msgstr ""
 
-#, fuzzy
-msgid "Off"
-msgstr "apagado"
-
-msgid "On"
+msgid "Audio"
 msgstr ""
+
+msgid "Settings"
+msgstr "Ajustes"
+
+msgid "Configure"
+msgstr ""
+
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Asiento caliente."
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Daño"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -283,6 +300,22 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Esta unidad espera"
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "The enemy has surrendered!"
 msgstr "¡El enemigo se ha rendido!"
@@ -2329,10 +2362,6 @@ msgid "Exit"
 msgstr "Salir de la ciudad"
 
 #, fuzzy
-msgid "Exit this menu."
-msgstr "Esta unidad espera"
-
-#, fuzzy
 msgid "Click to show next town."
 msgstr "Ver ciudad siguiente"
 
@@ -2631,9 +2660,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "OK"
-
 msgid "Build a new ship:"
 msgstr "Construir un nuevo barco:"
 
@@ -2682,22 +2708,9 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Ajustes"
-
 #, fuzzy
 msgid "Experimental"
 msgstr "Elemental del Aire"
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-#, fuzzy
-msgid "Hot Keys"
-msgstr "Asiento caliente."
 
 #, fuzzy
 msgid "Black & White"
@@ -2747,17 +2760,11 @@ msgstr "Descripción seleccionada"
 msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Change the audio settings of the game."
-msgstr ""
-
 #, fuzzy
 msgid "Experimental game settings."
 msgstr "Configuración del juego FHeroes2"
 
 msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
@@ -9615,10 +9622,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-#, fuzzy
-msgid "battle: show damage info"
-msgstr "juego: mostrar información del sistema"
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 
@@ -9704,6 +9707,10 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "battle: show damage info"
+#~ msgstr "juego: mostrar información del sistema"
 
 #~ msgid "Set Guardian"
 #~ msgstr "Establecer Guardián"
