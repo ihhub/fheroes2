@@ -277,9 +277,34 @@ namespace
         }
     }
 
-    void getCustomNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const bool isEvilInterface, int32_t width )
+    fheroes2::Image resizeButton( const fheroes2::Image & original, const int32_t width )
+    {
+        fheroes2::Image output;
+        output.resize( width, original.height() );
+        output.reset();
+
+        if ( original.width() >= width ) {
+            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, output.height() );
+            fheroes2::Copy( original, original.width() - width / 2, 0, output, output.width() - width / 2, 0, width - width / 2, output.height() );
+        }
+        else {
+            output = fheroes2::Stretch( original, 0, 0, original.width(), original.height(), width, original.height() );
+        }
+
+        return output;
+    }
+
+    // The width of text area is only 16 pixels.
+    void getCustomNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const bool isEvilInterface, int32_t width, fheroes2::Point & releasedOffset,
+                                fheroes2::Point & pressedOffset)
     {
         assert( width > 0 );
+
+        releasedOffset = { 7, 5 };
+        pressedOffset = { 6, 6 };
+
+        // Actual button sprite is by 10 pixel longer.
+        width += 10;
 
         const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
         const int32_t minimumButtonSize = 16;
@@ -289,29 +314,22 @@ namespace
         const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( icnId, 0 );
         const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( icnId, 1 );
 
-        released.resize( width, originalReleased.height() );
-        released.reset();
+        const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
+
+        fheroes2::Image temp = resizeButton( originalReleased, width );
+        released.resize( temp.width(), temp.height() );
+        assert( background.width() >= temp.width() && background.height() >= temp.height() );
+        fheroes2::Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
+        fheroes2::Blit( temp, released );
         released.setPosition( originalReleased.x(), originalReleased.y() );
 
-        if ( originalReleased.width() >= width ) {
-            fheroes2::Copy( originalReleased, 0, 0, released, 0, 0, width / 2, released.height() );
-            fheroes2::Copy( originalReleased, originalReleased.width() - width / 2, 0, released, released.width() - width / 2, 0, width - width / 2, released.height() );
-        }
-        else {
-            released = fheroes2::Stretch( originalReleased, 0, 0, originalReleased.width(), originalReleased.height(), width, originalReleased.height() );
-        }
-
-        pressed.resize( width, originalPressed.height() );
-        pressed.reset();
+        temp = resizeButton( originalPressed, width );
+        pressed.resize( temp.width(), temp.height() );
+        assert( background.width() >= temp.width() && background.height() >= temp.height() );
+        fheroes2::Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
+        fheroes2::Blit( temp, pressed );
         pressed.setPosition( originalPressed.x(), originalPressed.y() );
-
-        if ( originalPressed.width() >= width ) {
-            fheroes2::Copy( originalPressed, 0, 0, pressed, 0, 0, width / 2, pressed.height() );
-            fheroes2::Copy( originalPressed, originalPressed.width() - width / 2, 0, pressed, pressed.width() - width / 2, 0, width - width / 2, pressed.height() );
-        }
-        else {
-            pressed = fheroes2::Stretch( originalPressed, 0, 0, originalPressed.width(), originalPressed.height(), width, originalPressed.height() );
-        }
     }
 
     uint8_t getButtonFillingColor( const bool isReleasedState, const bool isGoodInterface = true )
@@ -474,31 +492,25 @@ namespace fheroes2
             }
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
                 _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
-                    // clean the button.
-                    const int32_t pixelPosition = 13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) );
-                    if ( pixelPosition < ( out.width() * out.height() ) ) {
-                        Fill( out, 13 + 2 * i, 3 + 2 * i, 129 - 2 * i, 16, out.image()[pixelPosition] );
-                    }
-                }
+                int32_t textWidth = 140;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], true, textWidth, releasedOffset, pressedOffset );
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 11, 5 }, { 12, 6 }, { 131, 17 },
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), releasedOffset, pressedOffset, { textWidth, 16 },
                                     fheroes2::FontColor::GRAY );
 
                 break;
             }
             case ICN::BUTTON_DIFFICULTY_ROLAND: {
                 _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::GOOD_CAMPAIGN_BUTTONS, 0 + i );
-                    // clean the button.
-                    Fill( out, 13, 4 + i, 127, 15, getButtonFillingColor( i == 0 ) );
-                }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 13, 5 }, { 12, 6 }, { 131, 16 },
+                int32_t textWidth = 140;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), releasedOffset, pressedOffset, { textWidth, 16 },
                                     fheroes2::FontColor::WHITE );
 
                 break;
