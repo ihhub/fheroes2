@@ -198,15 +198,14 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     if ( isFirstGameRun ) {
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
-        std::string resolutionText = _( " Before starting the game please choose game resolution." );
-        std::string greetingsText = _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!" );
-
         if ( fheroes2::isHandheldDevice() ) {
             // Handheld devices should use the minimal game's resolution. Users on handheld devices aren't asked to choose resolution.
-            fheroes2::showStandardTextMessage( _( "Greetings!" ), greetingsText, Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Greetings!" ), "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!", Dialog::OK );
         }
         else {
-            fheroes2::showStandardTextMessage( _( "Greetings!" ), greetingsText + resolutionText, Dialog::OK );
+            fheroes2::showStandardTextMessage(
+                _( "Greetings!" ), "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before starting the game please choose game resolution.",
+                Dialog::OK );
             const bool isResolutionChanged = Dialog::SelectResolution();
             if ( isResolutionChanged ) {
                 fheroes2::drawMainMenuScreen();

@@ -3708,15 +3708,11 @@ msgid "Greetings!"
 msgstr "Salutations !"
 
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! "
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
 "Bienvenue sur Heroes of Might and Magic II (amélioré par le moteur "
-"fheroes2) ! "
-
-msgid ""
-"Before starting the game please choose game resolution."
-msgstr ""
-"Avant de commencer le jeu choisissez la résolution du jeu."
+"fheroes2) ! Avant de commencer le jeu choisissez la résolution du jeu."
 
 msgid "Please Remember"
 msgstr "N'oubliez pas"
