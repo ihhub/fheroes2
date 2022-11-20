@@ -36,12 +36,13 @@
 
 class StreamBase;
 
-enum : int
+enum AdventureMapScrollSpeed : int
 {
-    SCROLL_SLOW = 1,
-    SCROLL_NORMAL = 2,
-    SCROLL_FAST1 = 3,
-    SCROLL_FAST2 = 4
+    SCROLL_SPEED_NONE = 0,
+    SCROLL_SPEED_SLOW = 1,
+    SCROLL_SPEED_NORMAL = 2,
+    SCROLL_SPEED_FAST = 3,
+    SCROLL_SPEED_VERY_FAST = 4
 };
 
 enum MusicSource
