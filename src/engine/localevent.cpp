@@ -1574,7 +1574,6 @@ void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
 {
     SetModes( MOUSE_MOTION );
-
     mouse_cu.x = motion.x;
     mouse_cu.y = motion.y;
     _emulatedPointerPosX = mouse_cu.x;

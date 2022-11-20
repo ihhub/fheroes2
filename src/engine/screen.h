@@ -71,11 +71,6 @@ namespace fheroes2
             return {};
         }
 
-        virtual fheroes2::Rect getRenderROI() const
-        {
-            return {};
-        }
-
         virtual fheroes2::Size getCurrentScreenResolution() const
         {
             return {};
