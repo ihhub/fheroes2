@@ -86,7 +86,7 @@ public:
         // UNUSED = 0x20000040,
         // UNUSED = 0x20000080,
         // UNUSED = 0x20000100,
-        HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
+        // UNUSED = 0x20000200,
         // UNUSED = 0x20000400,
         // UNUSED = 0x20000800,
         // UNUSED = 0x20001000,
@@ -110,7 +110,7 @@ public:
         // UNUSED = 0x30000400,
         // UNUSED = 0x30000800,
         // UNUSED = 0x30001000,
-        WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
+        // UNUSED = 0x30004000,
         // UNUSED = 0x30008000,
 
         // UNUSED = 0x40004000,
@@ -265,19 +265,9 @@ public:
     void ExtResetModes( uint32_t );
     static std::string ExtName( const uint32_t settingId );
 
-    bool ExtHeroBuySpellBookFromShrine() const
-    {
-        return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
-    }
-
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtWorldExtObjectsCaptured() const
-    {
-        return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
     }
 
     bool ExtBattleSoftWait() const

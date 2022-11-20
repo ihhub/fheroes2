@@ -1003,10 +1003,6 @@ bool MP2::isCaptureObject( const MapObjectType objectType )
     case OBJ_LIGHTHOUSE:
     case OBJ_CASTLE:
         return true;
-    case OBJ_WATERWHEEL:
-    case OBJ_WINDMILL:
-    case OBJ_MAGICGARDEN:
-        return Settings::Get().ExtWorldExtObjectsCaptured();
     default:
         break;
     }

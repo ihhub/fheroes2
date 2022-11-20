@@ -31,6 +31,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
+#include "core.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -113,6 +114,11 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+
+    if ( fheroes2::isHandheldDevice() ) {
+        // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
+        _optGlobal.SetModes( GLOBAL_FULLSCREEN );
+    }
 
     // The Price of Loyalty is not supported by default.
     EnablePriceOfLoyaltySupport( false );
@@ -937,10 +943,6 @@ bool Settings::ExtModes( uint32_t f ) const
 std::string Settings::ExtName( const uint32_t settingId )
 {
     switch ( settingId ) {
-    case Settings::WORLD_EXT_OBJECTS_CAPTURED:
-        return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
-    case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
-        return _( "heroes: allow buy a spellbook from Shrines" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:

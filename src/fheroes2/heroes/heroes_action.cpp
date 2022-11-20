@@ -1000,8 +1000,6 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     ResourceCount rc = tile.QuantityResourceCount();
-    bool cancapture = Settings::Get().ExtWorldExtObjectsCaptured();
-    bool showinvalid = cancapture && hero.GetColor() == tile.QuantityColor() ? false : true;
 
     std::string msg;
     const std::string & caption = MP2::StringObject( objectType );
@@ -1021,7 +1019,6 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
         break;
 
     case MP2::OBJ_LEANTO:
-        cancapture = false;
         msg = rc.isValid() ? _( "You've found an abandoned lean-to.\nPoking about, you discover some resources hidden nearby." )
                            : _( "The lean-to is long abandoned. There is nothing of value here." );
         break;
@@ -1035,7 +1032,6 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
         break;
 
     default:
-        cancapture = false;
         break;
     }
 
@@ -1058,16 +1054,9 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
                                        Dialog::OK, funds );
 
         hero.GetKingdom().AddFundsResource( funds );
-
-        if ( cancapture )
-            ActionToCaptureObject( hero, objectType, dst_index );
     }
     else {
-        if ( cancapture )
-            ActionToCaptureObject( hero, objectType, dst_index );
-
-        if ( showinvalid )
-            Dialog::Message( caption, msg, Font::BIG, Dialog::OK );
+        Dialog::Message( caption, msg, Font::BIG, Dialog::OK );
     }
 
     tile.QuantityReset();
@@ -1240,14 +1229,6 @@ void ActionToShrine( Heroes & hero, int32_t dst_index )
 
     StringReplace( body, "%{spell}", spell.GetName() );
 
-    // check spell book
-    if ( !hero.HaveSpellBook() ) {
-        if ( !Settings::Get().ExtHeroBuySpellBookFromShrine() || !hero.BuySpellBook( nullptr, spell_level ) ) {
-            body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
-            Dialog::Message( head, body, Font::BIG, Dialog::OK );
-        }
-    }
-
     if ( hero.HaveSpellBook() ) {
         // check valid level spell and wisdom skill
         if ( 3 == spell_level && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
@@ -1268,6 +1249,10 @@ void ActionToShrine( Heroes & hero, int32_t dst_index )
             fheroes2::showMessage( fheroes2::Text( head, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                    { &spellUI } );
         }
+    }
+    else {
+        body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
+        Dialog::Message( head, body, Font::BIG, Dialog::OK );
     }
 
     hero.SetVisited( dst_index, Visit::GLOBAL );

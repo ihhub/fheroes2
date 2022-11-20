@@ -51,4 +51,6 @@ namespace fheroes2
     };
 
     bool isComponentInitialized( const SystemInitializationComponent component );
+
+    bool isHandheldDevice();
 }
