@@ -1324,6 +1324,9 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
     if ( isFirstFinger || isSecondFinger ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
+
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+        // TODO: verify where it is even needed to do such weird woodoo magic for these targets.
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Size gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
@@ -1332,6 +1335,10 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             = static_cast<double>( screenResolution.width * event.x - windowRect.x ) * ( static_cast<double>( gameSurfaceRes.width ) / windowRect.width );
         _emulatedPointerPosY
             = static_cast<double>( screenResolution.height * event.y - windowRect.y ) * ( static_cast<double>( gameSurfaceRes.height ) / windowRect.height );
+#else
+        _emulatedPointerPosX = static_cast<double>( event.x ) * display.width();
+        _emulatedPointerPosY = static_cast<double>( event.y ) * display.height();
+#endif
 
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
@@ -1340,7 +1347,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     if ( isFirstFinger ) {
         SetModes( MOUSE_MOTION );
 
-        if ( redraw_cursor_func ) {
+        if ( mouse_motion_hook_func ) {
             ( *mouse_motion_hook_func )( mouse_cu.x, mouse_cu.y );
         }
 
@@ -1364,8 +1371,8 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             // Only the second finger is pressing.
             SetModes( MOUSE_MOTION );
 
-            if ( redraw_cursor_func ) {
-                ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
+            if ( mouse_motion_hook_func ) {
+                ( *mouse_motion_hook_func )( mouse_cu.x, mouse_cu.y );
             }
         }
 
