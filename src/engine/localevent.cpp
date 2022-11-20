@@ -1330,10 +1330,8 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
 
-        _emulatedPointerPosX
-            = static_cast<double>( screenResolution.width * event.x - windowRect.x ) * ( static_cast<double>( display.width() ) / windowRect.width );
-        _emulatedPointerPosY
-            = static_cast<double>( screenResolution.height * event.y - windowRect.y ) * ( static_cast<double>( display.height() ) / windowRect.height );
+        _emulatedPointerPosX = static_cast<double>( screenResolution.width * event.x - windowRect.x ) * ( static_cast<double>( display.width() ) / windowRect.width );
+        _emulatedPointerPosY = static_cast<double>( screenResolution.height * event.y - windowRect.y ) * ( static_cast<double>( display.height() ) / windowRect.height );
 #else
         _emulatedPointerPosX = static_cast<double>( event.x ) * display.width();
         _emulatedPointerPosY = static_cast<double>( event.y ) * display.height();
