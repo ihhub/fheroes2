@@ -97,7 +97,7 @@ Settings::Settings()
     , _controllerPointerSpeed( 10 )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
-    , scroll_speed( SCROLL_NORMAL )
+    , scroll_speed( SCROLL_SPEED_NORMAL )
     , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )
     , preferably_count_players( 0 )
@@ -118,6 +118,9 @@ Settings::Settings()
     if ( fheroes2::isHandheldDevice() ) {
         // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
         _optGlobal.SetModes( GLOBAL_FULLSCREEN );
+
+        // Adventure Map scrolling is disabled by default for handheld devices as it is very hard to navigate on small screens. Use drag and move logic.
+        scroll_speed = SCROLL_SPEED_NONE;
     }
 
     // The Price of Loyalty is not supported by default.
@@ -405,7 +408,7 @@ std::string Settings::String() const
     os << std::endl << "# battle speed: 1 - 10" << std::endl;
     os << "battle speed = " << battle_speed << std::endl;
 
-    os << std::endl << "# scroll speed: 1 - 4" << std::endl;
+    os << std::endl << "# Adventure Map scrolling speed: 0 - 4. 0 means no scrolling" << std::endl;
     os << "scroll speed = " << scroll_speed << std::endl;
 
     os << std::endl << "# show battle grid: on/off" << std::endl;
@@ -719,10 +722,9 @@ void Settings::setSystemInfo( const bool enable )
     }
 }
 
-/* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
-    scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SLOW ), static_cast<int>( SCROLL_FAST2 ) );
+    scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SPEED_NONE ), static_cast<int>( SCROLL_SPEED_VERY_FAST ) );
 }
 
 bool Settings::isPriceOfLoyaltySupported() const

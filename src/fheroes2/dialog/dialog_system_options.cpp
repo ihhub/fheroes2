@@ -123,19 +123,40 @@ namespace
 
         // Scrolling speed.
         const int scrollSpeed = conf.ScrollSpeed();
-        uint32_t scrollSpeedIconId = 7;
-        if ( scrollSpeed < SCROLL_NORMAL ) {
-            scrollSpeedIconId = 4;
+        int32_t scrollSpeedIconIcn = ICN::UNKNOWN;
+        uint32_t scrollSpeedIconId = 0;
+        std::string scrollSpeedName;
+
+        if ( scrollSpeed == SCROLL_SPEED_NONE ) {
+            scrollSpeedName = _( "Off" );
+            scrollSpeedIconIcn = ICN::SPANEL;
+            scrollSpeedIconId = 9;
         }
-        else if ( scrollSpeed < SCROLL_FAST1 ) {
-            scrollSpeedIconId = 5;
+        else if ( scrollSpeed == SCROLL_SPEED_SLOW ) {
+            scrollSpeedName = _( "Slow" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 0;
         }
-        else if ( scrollSpeed < SCROLL_FAST2 ) {
-            scrollSpeedIconId = 6;
+        else if ( scrollSpeed == SCROLL_SPEED_NORMAL ) {
+            scrollSpeedName = _( "Normal" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 0;
+        }
+        else if ( scrollSpeed == SCROLL_SPEED_FAST ) {
+            scrollSpeedName = _( "Fast" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 1;
+        }
+        else if ( scrollSpeed == SCROLL_SPEED_VERY_FAST ) {
+            scrollSpeedName = _( "Very Fast" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 2;
         }
 
-        const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( ICN::SPANEL, scrollSpeedIconId );
-        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), std::to_string( scrollSpeed ) );
+        assert( scrollSpeedIconIcn != ICN::UNKNOWN );
+
+        const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( scrollSpeedIconIcn, scrollSpeedIconId );
+        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), scrollSpeedName );
 
         // Interface theme.
         const bool isEvilInterface = conf.ExtGameEvilInterface();
@@ -291,7 +312,7 @@ namespace
             // set scroll speed
             bool saveScrollSpeed = false;
             if ( le.MouseClickLeft( scrollSpeedRoi ) ) {
-                conf.SetScrollSpeed( conf.ScrollSpeed() % SCROLL_FAST2 + 1 );
+                conf.SetScrollSpeed( ( conf.ScrollSpeed() + 1 ) % ( SCROLL_SPEED_VERY_FAST + 1 ) );
                 saveScrollSpeed = true;
             }
             else if ( le.MouseWheelUp( scrollSpeedRoi ) ) {

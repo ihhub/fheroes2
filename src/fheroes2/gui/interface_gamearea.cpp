@@ -773,7 +773,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
 void Interface::GameArea::Scroll()
 {
-    const int32_t shift = 2 << Settings::Get().ScrollSpeed();
+    const int32_t scrollSpeed = Settings::Get().ScrollSpeed();
+    if ( scrollSpeed == SCROLL_SPEED_NONE ) {
+        // No scrolling.
+        scrollDirection = SCROLL_NONE;
+        return;
+    }
+
+    const int32_t shift = 2 << scrollSpeed;
     fheroes2::Point offset;
 
     if ( scrollDirection & SCROLL_LEFT ) {
@@ -792,7 +799,7 @@ void Interface::GameArea::Scroll()
 
     ShiftCenter( offset );
 
-    scrollDirection = 0;
+    scrollDirection = SCROLL_NONE;
 }
 
 void Interface::GameArea::SetRedraw() const
