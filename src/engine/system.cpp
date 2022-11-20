@@ -264,16 +264,16 @@ std::string System::GetDataDirectory( const std::string & prog )
 std::string System::GetDirname( const std::string & path )
 {
     if ( path.empty() ) {
-        return path;
+        return { "." };
     }
 
-    size_t pos = path.rfind( SEPARATOR );
+    const size_t pos = path.rfind( SEPARATOR );
 
     if ( pos == std::string::npos ) {
-        return std::string( "." );
+        return { "." };
     }
     if ( pos == 0 ) {
-        return std::string( "./" );
+        return { std::initializer_list<char>{ SEPARATOR } };
     }
     if ( pos == path.size() - 1 ) {
         return GetDirname( path.substr( 0, path.size() - 1 ) );
@@ -284,12 +284,12 @@ std::string System::GetDirname( const std::string & path )
 std::string System::GetBasename( const std::string & path )
 {
     if ( path.empty() ) {
-        return path;
+        return { "." };
     }
 
-    size_t pos = path.rfind( SEPARATOR );
+    const size_t pos = path.rfind( SEPARATOR );
 
-    if ( pos == std::string::npos || pos == 0 ) {
+    if ( pos == std::string::npos || ( pos == 0 && path.size() == 1 ) ) {
         return path;
     }
     if ( pos == path.size() - 1 ) {
