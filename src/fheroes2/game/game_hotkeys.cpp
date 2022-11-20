@@ -357,7 +357,7 @@ void Game::HotKeySave()
     file.write( data.data(), data.size() );
 }
 
-void Game::globalKeyboardEvent( const fheroes2::Key key, const int32_t modifier )
+void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
 {
     if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key && !( modifier & fheroes2::KeyModifier::KEY_MODIFIER_ALT )
          && !( modifier & fheroes2::KeyModifier::KEY_MODIFIER_CTRL ) ) {

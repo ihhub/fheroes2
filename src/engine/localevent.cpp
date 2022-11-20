@@ -1575,8 +1575,8 @@ void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
         SetModes( KEY_PRESSED );
         SetModes( KEY_HOLD );
 
-        if ( _globalKeyboardEventHook ) {
-            _globalKeyboardEventHook( key, getKeyModifierFromSDL( event.keysym.mod ) );
+        if ( _globalKeyDownEventHook ) {
+            _globalKeyDownEventHook( key, getKeyModifierFromSDL( event.keysym.mod ) );
         }
     }
     else if ( event.type == SDL_KEYUP ) {

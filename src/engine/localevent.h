@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <functional>
 #include <string>
+#include <utility>
 
 #include <SDL_events.h>
 #include <SDL_version.h>
@@ -188,9 +189,9 @@ public:
         mouse_motion_hook_func = pf;
     }
 
-    void setGlobalKeyboardEventHook( std::function<void( const fheroes2::Key, const int32_t )> hook )
+    void setGlobalKeyDownEventHook( std::function<void( const fheroes2::Key, const int32_t )> hook )
     {
-        _globalKeyboardEventHook = std::move( hook );
+        _globalKeyDownEventHook = std::move( hook );
     }
 
     static void SetStateDefaults();
@@ -372,7 +373,7 @@ private:
 
     void ( *mouse_motion_hook_func )( int32_t, int32_t );
 
-    std::function<void( const fheroes2::Key, const int32_t )> _globalKeyboardEventHook;
+    std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
 
     uint32_t loop_delay;
 
