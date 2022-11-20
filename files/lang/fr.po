@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-19 14:26+0000\n"
+"POT-Creation-Date: 2022-11-20 09:50+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -226,14 +226,20 @@ msgstr ""
 "Le Fossé réduit de -%{count} la caractéristique de défense de n'importe "
 "quelle créature et ralentit sa capacité de mouvement de moitié."
 
-msgid "Speed"
-msgstr "Vitesse"
-
 msgid "Speed: %{speed}"
 msgstr "Vitesse : %{speed}"
 
+msgid "Speed"
+msgstr "Vitesse"
+
 msgid "Army Order"
 msgstr "Ordre de jeu"
+
+msgid "Off"
+msgstr "Désactivé"
+
+msgid "On"
+msgstr "Activé"
 
 msgid "Auto Spell Casting"
 msgstr "Sorts auto"
@@ -247,11 +253,23 @@ msgstr "Ombre de portée"
 msgid "Shadow Cursor"
 msgstr "Ombre du curseur"
 
-msgid "Off"
-msgstr "Désactivé"
+msgid "Audio"
+msgstr "Audio"
 
-msgid "On"
-msgstr "Activé"
+msgid "Settings"
+msgstr "Paramètres"
+
+msgid "Configure"
+msgstr "Configurer"
+
+msgid "Hot Keys"
+msgstr ""
+"Raccourcis\n"
+"clavier"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Dégâts"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Définir la vitesse des actions et animations de combat."
@@ -289,6 +307,24 @@ msgid ""
 msgstr ""
 "Activer ou désactiver l'ombre montrant l'hexagone où est situé le curseur de "
 "la souris."
+
+msgid "Change the audio settings of the game."
+msgstr "Changer les paramètres du son du jeu."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Verifier et configurer les raccourcis clavier du jeu."
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+"Activer ou désactiver l'affichage de l'ordre de jeu des créatures pendant le "
+"combat."
+
+msgid "Exit this menu."
+msgstr "Quitter ce menu."
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "The enemy has surrendered!"
 msgstr "L'ennemi s'est rendu !"
@@ -2338,9 +2374,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Quitter"
 
-msgid "Exit this menu."
-msgstr "Quitter ce menu."
-
 msgid "Click to show next town."
 msgstr "Cliquez pour afficher le village suivant."
 
@@ -2627,9 +2660,6 @@ msgstr "Change de type de musique."
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "Basculer les effets 3D des sons au premier plan"
 
-msgid "Okay"
-msgstr "OK"
-
 msgid "Build a new ship:"
 msgstr "Construire un nouveau navire :"
 
@@ -2675,24 +2705,10 @@ msgstr "Langue"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Paramètres"
-
 msgid "Experimental"
 msgstr ""
 "Expéri-\n"
 "mentaux"
-
-msgid "Audio"
-msgstr "Audio"
-
-msgid "Configure"
-msgstr "Configurer"
-
-msgid "Hot Keys"
-msgstr ""
-"Raccourcis\n"
-"clavier"
 
 msgid "Black & White"
 msgstr "Noir et blanc"
@@ -2737,17 +2753,11 @@ msgstr "Choix de la langue"
 msgid "Change the graphics settings of the game."
 msgstr "Changer les paramètres du son du jeu."
 
-msgid "Change the audio settings of the game."
-msgstr "Changer les paramètres du son du jeu."
-
 msgid "Experimental game settings."
 msgstr "Paramètres de jeu expérimentaux."
 
 msgid "Toggle instant battle mode."
 msgstr "Change les modes de combat instantané."
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr "Verifier et configurer les raccourcis clavier du jeu."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Bascule le type d'interface que vous voulez utiliser."
@@ -9900,13 +9910,6 @@ msgstr ""
 "Ce sort contrôle jusqu'à\n"
 "%{hp} PV."
 
-msgid "battle: show damage info"
-msgstr "bataille : afficher les informations sur les dégâts"
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-"monde : moulins, roues hydrauliques et jardins magiques peuvent être capturés"
-
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 "héros : permettre le choix parmi toutes les compétences primaires dans "
@@ -9987,6 +9990,14 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "battle: show damage info"
+#~ msgstr "bataille : afficher les informations sur les dégâts"
+
+#~ msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
+#~ msgstr ""
+#~ "monde : moulins, roues hydrauliques et jardins magiques peuvent être "
+#~ "capturés"
 
 #~ msgid "heroes: allow buy a spellbook from Shrines"
 #~ msgstr "héros : permettre l'achat d'un grimoire dans les sanctuaires"

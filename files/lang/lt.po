@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-19 14:26+0000\n"
+"POT-Creation-Date: 2022-11-20 09:50+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -213,13 +213,19 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Greitis"
-
 msgid "Speed: %{speed}"
 msgstr ""
 
+msgid "Speed"
+msgstr "Greitis"
+
 msgid "Army Order"
+msgstr ""
+
+msgid "Off"
+msgstr ""
+
+msgid "On"
 msgstr ""
 
 msgid "Auto Spell Casting"
@@ -234,10 +240,19 @@ msgstr ""
 msgid "Shadow Cursor"
 msgstr ""
 
-msgid "Off"
+msgid "Audio"
 msgstr ""
 
-msgid "On"
+msgid "Settings"
+msgstr ""
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+msgid "Damage Info"
 msgstr ""
 
 msgid "Set the speed of combat actions and animations."
@@ -265,6 +280,22 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Šis karys palauks"
+
+msgid "Okay"
+msgstr "Gerai"
 
 msgid "The enemy has surrendered!"
 msgstr "Priešas pasidavė!"
@@ -2185,10 +2216,6 @@ msgid "Exit"
 msgstr "Išeiti iš miesto"
 
 #, fuzzy
-msgid "Exit this menu."
-msgstr "Šis karys palauks"
-
-#, fuzzy
 msgid "Click to show next town."
 msgstr "Rodyti kitą miestą"
 
@@ -2462,9 +2489,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "Gerai"
-
 msgid "Build a new ship:"
 msgstr "Statyti naują laivą:"
 
@@ -2511,19 +2535,7 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr ""
-
 msgid "Experimental"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
 msgstr ""
 
 #, fuzzy
@@ -2569,16 +2581,10 @@ msgstr ""
 msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Change the audio settings of the game."
-msgstr ""
-
 msgid "Experimental game settings."
 msgstr ""
 
 msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
@@ -8745,12 +8751,6 @@ msgstr ""
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
-
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"

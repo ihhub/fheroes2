@@ -316,24 +316,6 @@ void CapturedObjects::ResetColor( int color )
     }
 }
 
-void CapturedObjects::tributeCapturedObjects( const int playerColorId, const MP2::MapObjectType objectType, Funds & funds, int & objectCount )
-{
-    funds = Funds();
-    objectCount = 0;
-
-    for ( iterator it = begin(); it != end(); ++it ) {
-        const ObjectColor & objcol = ( *it ).second.objcol;
-
-        if ( objcol.isObject( objectType ) && objcol.isColor( playerColorId ) ) {
-            Maps::Tiles & tile = world.GetTiles( ( *it ).first );
-
-            funds += Funds( tile.QuantityResourceCount() );
-            ++objectCount;
-            tile.QuantityReset();
-        }
-    }
-}
-
 World & world = World::Get();
 
 World & World::Get()
@@ -582,13 +564,6 @@ void World::NewWeek()
                 tile.QuantityUpdate( false );
             }
         }
-    }
-
-    // add events
-    if ( Settings::Get().ExtWorldExtObjectsCaptured() ) {
-        vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WATERWHEEL );
-        vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WINDMILL );
-        vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
     }
 
     // Reset RECRUIT mode for all heroes at once

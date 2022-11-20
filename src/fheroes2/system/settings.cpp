@@ -31,6 +31,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
+#include "core.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -71,7 +72,7 @@ namespace
         // UNUSED = 0x00040000,
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
-        // UNUSED = 0x00200000,
+        GLOBAL_BATTLE_SHOW_DAMAGE = 0x00200000,
         GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
@@ -96,7 +97,7 @@ Settings::Settings()
     , _controllerPointerSpeed( 10 )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
-    , scroll_speed( SCROLL_NORMAL )
+    , scroll_speed( SCROLL_SPEED_NORMAL )
     , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )
     , preferably_count_players( 0 )
@@ -113,6 +114,14 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+
+    if ( fheroes2::isHandheldDevice() ) {
+        // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
+        _optGlobal.SetModes( GLOBAL_FULLSCREEN );
+
+        // Adventure Map scrolling is disabled by default for handheld devices as it is very hard to navigate on small screens. Use drag and move logic.
+        scroll_speed = SCROLL_SPEED_NONE;
+    }
 
     // The Price of Loyalty is not supported by default.
     EnablePriceOfLoyaltySupport( false );
@@ -252,6 +261,10 @@ bool Settings::Read( const std::string & filename )
         SetBattleMouseShaded( config.StrParams( "battle shadow cursor" ) == "on" );
     }
 
+    if ( config.Exists( "battle show damage" ) ) {
+        setBattleDamageInfo( config.StrParams( "battle show damage" ) == "on" );
+    }
+
     if ( config.Exists( "auto resolve battles" ) ) {
         setBattleAutoResolve( config.StrParams( "auto resolve battles" ) == "on" );
     }
@@ -317,7 +330,15 @@ bool Settings::Read( const std::string & filename )
     }
 
     if ( config.Exists( "monochrome cursor" ) ) {
-        setMonochromeCursor( config.StrParams( "monochrome cursor" ) == "on" );
+        // We cannot set cursor before initializing the system since we read a configuration file before initialization.
+        if ( config.StrParams( "monochrome cursor" ) == "on" ) {
+            _optGlobal.SetModes( GLOBAL_MONOCHROME_CURSOR );
+            Cursor::Get().setMonochromeCursor( true );
+        }
+        else {
+            _optGlobal.ResetModes( GLOBAL_MONOCHROME_CURSOR );
+            Cursor::Get().setMonochromeCursor( false );
+        }
     }
 
     if ( config.Exists( "3d audio" ) ) {
@@ -399,7 +420,7 @@ std::string Settings::String() const
     os << std::endl << "# battle speed: 1 - 10" << std::endl;
     os << "battle speed = " << battle_speed << std::endl;
 
-    os << std::endl << "# scroll speed: 1 - 4" << std::endl;
+    os << std::endl << "# Adventure Map scrolling speed: 0 - 4. 0 means no scrolling" << std::endl;
     os << "scroll speed = " << scroll_speed << std::endl;
 
     os << std::endl << "# show battle grid: on/off" << std::endl;
@@ -410,6 +431,9 @@ std::string Settings::String() const
 
     os << std::endl << "# show battle shadow cursor: on/off" << std::endl;
     os << "battle shadow cursor = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# show battle damage information: on/off" << std::endl;
+    os << "battle show damage = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_DAMAGE ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# auto resolve battles: on/off" << std::endl;
     os << "auto resolve battles = " << ( _optGlobal.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
@@ -713,10 +737,19 @@ void Settings::setSystemInfo( const bool enable )
     }
 }
 
-/* set scroll speed: 1 - 4 */
+void Settings::setBattleDamageInfo( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_DAMAGE );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_DAMAGE );
+    }
+}
+
 void Settings::SetScrollSpeed( int speed )
 {
-    scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SLOW ), static_cast<int>( SCROLL_FAST2 ) );
+    scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SPEED_NONE ), static_cast<int>( SCROLL_SPEED_VERY_FAST ) );
 }
 
 bool Settings::isPriceOfLoyaltySupported() const
@@ -742,6 +775,11 @@ bool Settings::is3DAudioEnabled() const
 bool Settings::isSystemInfoEnabled() const
 {
     return _optGlobal.Modes( GLOBAL_SYSTEM_INFO );
+}
+
+bool Settings::isBattleShowDamageInfoEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_DAMAGE );
 }
 
 bool Settings::ShowControlPanel() const
@@ -915,10 +953,6 @@ bool Settings::ExtModes( uint32_t f ) const
 std::string Settings::ExtName( const uint32_t settingId )
 {
     switch ( settingId ) {
-    case Settings::GAME_BATTLE_SHOW_DAMAGE:
-        return _( "battle: show damage info" );
-    case Settings::WORLD_EXT_OBJECTS_CAPTURED:
-        return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
