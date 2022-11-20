@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 10:34+0000\n"
+"POT-Creation-Date: 2022-11-20 11:54+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3669,6 +3669,12 @@ msgstr "fheroes2 Отбор възкрeсяване представя"
 
 msgid "Greetings!"
 msgstr "Поздравления!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2! "
+"Преди да започнеш играта, моля избери разделителна способност на играта."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
