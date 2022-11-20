@@ -296,7 +296,7 @@ namespace
 
     // The width of text area is only 16 pixels.
     void getCustomNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const bool isEvilInterface, int32_t width, fheroes2::Point & releasedOffset,
-                                fheroes2::Point & pressedOffset)
+                                fheroes2::Point & pressedOffset )
     {
         assert( width > 0 );
 
