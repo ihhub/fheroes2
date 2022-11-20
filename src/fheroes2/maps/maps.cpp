@@ -36,11 +36,9 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
-#include "pairs.h"
 #include "players.h"
 #include "race.h"
 #include "resource.h"
-#include "serialize.h"
 #include "translations.h"
 #include "world.h"
 
