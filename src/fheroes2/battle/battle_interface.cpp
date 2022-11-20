@@ -485,14 +485,16 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
 
-    fheroes2::DrawLine( sf, { r, 0 }, { 0, l }, colorId );
-    fheroes2::DrawLine( sf, { r, 0 }, { w, l }, colorId );
+    fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
+    fheroes2::SetPixel( sf, r, 1, colorId );
+    fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
 
     fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
     fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
 
-    fheroes2::DrawLine( sf, { r, h }, { 0, h - l }, colorId );
-    fheroes2::DrawLine( sf, { r, h }, { w, h - l }, colorId );
+    fheroes2::DrawLine( sf, { r - 1, h }, { 0, h - l }, colorId );
+    fheroes2::SetPixel( sf, r, h, colorId );
+    fheroes2::DrawLine( sf, { r + 1, h }, { w, h - l }, colorId );
 
     return sf;
 }
@@ -505,17 +507,17 @@ fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
 
     fheroes2::Image sf( w, h );
     sf.reset();
-    fheroes2::Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
+    fheroes2::Rect rt( 2, l - 1, w - 3, 2 * l + 4 );
     for ( int i = 0; i < w / 2; i += 2 ) {
-        --rt.y;
-        rt.height += 2;
-        rt.x += 2;
-        rt.width -= 4;
         for ( int x = 0; x < rt.width; ++x ) {
             for ( int y = 0; y < rt.height; ++y ) {
                 fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
             }
         }
+        --rt.y;
+        rt.height += 2;
+        rt.x += ( i == 0 ) ? 1 : 2;
+        rt.width -= ( i == 0 ) ? 2 : 4;
     }
 
     return sf;
