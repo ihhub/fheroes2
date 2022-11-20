@@ -288,6 +288,7 @@ std::string System::GetDirname( std::string_view path )
         return { std::initializer_list<char>{ SEPARATOR } };
     }
 
+    // Path separators should already be trimmed from the end
     assert( pos != path.size() - 1 );
 
     return std::string{ trimSeparator( path.substr( 0, pos ) ) };
@@ -307,6 +308,7 @@ std::string System::GetBasename( std::string_view path )
         return std::string{ path };
     }
 
+    // Path separators should already be trimmed from the end
     assert( pos != path.size() - 1 );
 
     return std::string{ path.substr( pos + 1 ) };
