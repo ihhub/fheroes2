@@ -1000,7 +1000,6 @@ void LocalEvent::OpenTouchpad()
 #if defined( TOUCHSCREEN_SUPPORT )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
-        _touchpadAvailable = true;
         fheroes2::cursor().enableSoftwareEmulation( true );
 #if SDL_VERSION_ATLEAST( 2, 0, 10 )
         SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
@@ -1223,9 +1222,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
                 if ( removedController == _gameController ) {
                     SDL_GameControllerClose( _gameController );
                     _gameController = nullptr;
-                    if ( !_touchpadAvailable ) {
-                        fheroes2::cursor().enableSoftwareEmulation( false );
-                    }
                 }
             }
             break;
