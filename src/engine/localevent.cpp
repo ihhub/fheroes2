@@ -25,6 +25,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <map>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -678,19 +679,19 @@ namespace
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    std::map<uint32_t, bool> eventTypeStatus;
+    std::set<uint32_t> eventTypeStatus;
 
     void setEventProcessingState( const uint32_t eventType, const bool enable )
     {
-        eventTypeStatus[eventType] = enable;
+        eventTypeStatus.emplace( eventType );
         SDL_EventState( eventType, ( enable ? SDL_ENABLE : SDL_IGNORE ) );
     }
 #else
-    std::map<uint8_t, bool> eventTypeStatus;
+    std::set<uint8_t> eventTypeStatus;
 
     void setEventProcessingState( const uint8_t eventType, const bool enable )
     {
-        eventTypeStatus[eventType] = enable;
+        eventTypeStatus.emplace( eventType );
         SDL_EventState( eventType, ( enable ? SDL_ENABLE : SDL_IGNORE ) );
     }
 #endif

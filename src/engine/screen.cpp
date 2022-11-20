@@ -453,8 +453,10 @@ namespace
             }
             SDL_FreeSurface( surface );
 
-            clear();
-            std::swap( _cursor, tempCursor );
+            if ( tempCursor != nullptr ) {
+                clear();
+                std::swap( _cursor, tempCursor );
+            }
         }
 
         void enableSoftwareEmulation( const bool enable ) override
