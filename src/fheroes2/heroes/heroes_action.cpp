@@ -150,7 +150,7 @@ void ActionToBoat( Heroes & hero, int32_t dst_index );
 void ActionToCoast( Heroes & hero, int32_t dst_index );
 void ActionToWagon( Heroes & hero, int32_t dst_index );
 void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
-void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
+void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToFlotSam( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToArtifact( Heroes & hero, int32_t dst_index );
@@ -996,7 +996,7 @@ void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objec
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
 
-void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     ResourceCount rc = tile.QuantityResourceCount();
