@@ -612,7 +612,7 @@ bool Settings::findFile( const std::string & internalDirectory, const std::strin
 {
     std::string tempPath;
 
-    for ( const std::string & rootDir : Settings::GetRootDirs() ) {
+    for ( const std::string & rootDir : GetRootDirs() ) {
         tempPath = System::concatPath( rootDir, internalDirectory );
         tempPath = System::concatPath( tempPath, fileName );
         if ( System::IsFile( tempPath ) ) {
