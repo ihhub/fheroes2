@@ -94,7 +94,7 @@ namespace Battle
     {
         TR_RESPONDED = 0x00000001,
         TR_MOVED = 0x00000002,
-        TR_HARDSKIP = 0x00000004,
+        TR_SKIP = 0x00000004,
 
         // UNUSED = 0x00000008,
 

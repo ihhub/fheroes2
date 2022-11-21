@@ -429,7 +429,7 @@ void Battle::Unit::NewTurn()
 
     ResetModes( TR_RESPONDED );
     ResetModes( TR_MOVED );
-    ResetModes( TR_HARDSKIP );
+    ResetModes( TR_SKIP );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
@@ -671,7 +671,7 @@ void Battle::Unit::PostKilledAction()
     }
 
     ResetModes( TR_RESPONDED );
-    ResetModes( TR_HARDSKIP );
+    ResetModes( TR_SKIP );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );

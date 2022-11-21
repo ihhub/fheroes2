@@ -512,7 +512,7 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
 
     if ( unit && unit->isValid() ) {
         if ( !unit->Modes( TR_MOVED ) ) {
-            unit->SetModes( TR_HARDSKIP );
+            unit->SetModes( TR_SKIP );
             unit->SetModes( TR_MOVED );
 
             if ( _interface ) {
