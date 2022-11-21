@@ -910,7 +910,6 @@ namespace ICN
         YELLOW_FONT,
         YELLOW_SMALLFONT,
         BATTLESKIP,
-        BATTLEWAIT,
         BUYMAX,
         BTNBATTLEONLY,
         BTNGIFT_GOOD,

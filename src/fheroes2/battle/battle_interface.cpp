@@ -1117,19 +1117,8 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     btn_auto.setPosition( area.x, area.y + area.height - settingsRect.height - autoRect.height );
     btn_settings.setPosition( area.x, area.y + area.height - settingsRect.height );
 
-    if ( conf.ExtBattleSoftWait() ) {
-        btn_wait.setICNInfo( ICN::BATTLEWAIT, 0, 1 );
-        btn_skip.setICNInfo( ICN::BATTLESKIP, 0, 1 );
-
-        const fheroes2::Rect waitRect = btn_wait.area();
-        const fheroes2::Rect skipRect = btn_skip.area();
-        btn_wait.setPosition( area.x + area.width - waitRect.width, area.y + area.height - skipRect.height - waitRect.height );
-        btn_skip.setPosition( area.x + area.width - skipRect.width, area.y + area.height - skipRect.height );
-    }
-    else {
-        btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
-        btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
-    }
+    btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
+    btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
 
     status.SetPosition( area.x + settingsRect.width, btn_auto.area().y );
 
@@ -1242,15 +1231,10 @@ void Battle::Interface::RedrawPartialFinish()
 
 void Battle::Interface::RedrawInterface()
 {
-    const Settings & conf = Settings::Get();
-
     status.Redraw( fheroes2::Display::instance() );
 
     btn_auto.draw();
     btn_settings.draw();
-
-    if ( conf.ExtBattleSoftWait() )
-        btn_wait.draw();
     btn_skip.draw();
 
     popup.Redraw();
@@ -2431,12 +2415,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     if ( le.KeyPress() ) {
         // Skip the turn
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
-            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), true );
-            humanturn_exit = true;
-        }
-        // Soft skip (wait)
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_WAIT ) ) {
-            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), !conf.ExtBattleSoftWait() );
+            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID() );
             humanturn_exit = true;
         }
         // Battle options
@@ -2526,16 +2505,6 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 
         if ( le.MousePressRight() ) {
             Dialog::Message( _( "System Options" ), _( "Allows you to customize the combat screen." ), Font::BIG );
-        }
-    }
-    else if ( conf.ExtBattleSoftWait() && le.MouseCursor( btn_wait.area() ) ) {
-        cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Wait this unit" );
-        ButtonWaitAction( a );
-
-        if ( le.MousePressRight() ) {
-            Dialog::Message( _( "Wait" ), _( "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn." ),
-                             Font::BIG );
         }
     }
     else if ( le.MouseCursor( btn_skip.area() ) ) {
@@ -2822,18 +2791,6 @@ void Battle::Interface::ButtonSettingsAction()
     }
 }
 
-void Battle::Interface::ButtonWaitAction( Actions & a )
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    le.MousePressLeft( btn_wait.area() ) ? btn_wait.drawOnPress() : btn_wait.drawOnRelease();
-
-    if ( le.MouseClickLeft( btn_wait.area() ) && _currentUnit ) {
-        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID(), false );
-        humanturn_exit = true;
-    }
-}
-
 void Battle::Interface::ButtonSkipAction( Actions & a )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -2841,7 +2798,7 @@ void Battle::Interface::ButtonSkipAction( Actions & a )
     le.MousePressLeft( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_skip.area() ) && _currentUnit ) {
-        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID(), true );
+        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID() );
         humanturn_exit = true;
     }
 }
@@ -2991,15 +2948,9 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 
 void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 {
-    std::string msg;
-    if ( attacker.Modes( TR_HARDSKIP ) ) {
-        msg = _( "%{name} skip their turn." );
-    }
-    else {
-        msg = _( "%{name} wait their turn." );
-    }
-
+    std::string msg = _( "%{name} skip their turn." );
     StringReplace( msg, "%{name}", attacker.GetName() );
+
     status.SetMessage( msg, true );
 }
 

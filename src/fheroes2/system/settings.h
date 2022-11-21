@@ -116,7 +116,7 @@ public:
 
         // UNUSED = 0x40004000,
         // UNUSED = 0x40008000,
-        BATTLE_SOFT_WAITING = 0x40010000,
+        // UNUSED = 0x40010000,
         // UNUSED = 0x40020000
     };
 
@@ -268,11 +268,6 @@ public:
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtBattleSoftWait() const
-    {
-        return ExtModes( BATTLE_SOFT_WAITING );
     }
 
     bool ExtGameAutosaveBeginOfDay() const
