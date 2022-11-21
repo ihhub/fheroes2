@@ -279,22 +279,47 @@ namespace
 
     fheroes2::Image resizeButton( const fheroes2::Image & original, const int32_t width )
     {
+        const int32_t height = original.height();
+        assert( height > 0 );
+
         fheroes2::Image output;
-        output.resize( width, original.height() );
+        output.resize( width, height );
         output.reset();
 
-        if ( original.width() >= width ) {
-            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, output.height() );
-            fheroes2::Copy( original, original.width() - width / 2, 0, output, output.width() - width / 2, 0, width - width / 2, output.height() );
+        const int32_t originalWidth = original.width();
+        if ( originalWidth >= width ) {
+            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height );
+            fheroes2::Copy( original, originalWidth - width / 2, 0, output, output.width() - width / 2, 0, width - width / 2, height );
         }
         else {
-            output = fheroes2::Stretch( original, 0, 0, original.width(), original.height(), width, original.height() );
+            const int32_t middleWidth = originalWidth / 3;
+            const int32_t startMiddleX = middleWidth;
+            const int32_t overallMiddleWidth = width - middleWidth * 2;
+            const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
+            const int32_t middleLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
+
+            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, height );
+            int32_t offsetX = middleWidth;
+            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, height );
+                offsetX += middleWidth;
+            }
+
+            if ( middleLeftOver > 0 ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleLeftOver, height );
+                offsetX += middleLeftOver;
+            }
+
+            const int32_t rightPartWidth = originalWidth - 2 * middleWidth;
+            assert( offsetX + rightPartWidth == width );
+
+            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, height );
         }
 
         return output;
     }
 
-    // The width of text area is only 16 pixels.
+    // The height of text area is only 16 pixels.
     void getCustomNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const bool isEvilInterface, int32_t width, fheroes2::Point & releasedOffset,
                                 fheroes2::Point & pressedOffset )
     {
