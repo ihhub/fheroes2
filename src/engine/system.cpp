@@ -30,9 +30,21 @@
 #if defined( _WIN32 )
 #include <clocale>
 #include <map>
-#endif
 
-#include "system.h"
+#include <direct.h>
+#include <io.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
+#include <dirent.h>
+#include <unistd.h>
+
+#if defined( TARGET_PS_VITA )
+#include <psp2/io/stat.h>
+#else
+#include <sys/stat.h>
+#endif
+#endif
 
 #if defined( _WIN32 ) || defined( ANDROID )
 #include "logging.h"
@@ -52,30 +64,7 @@
 #include <SDL_stdinc.h>
 #endif
 
-#if defined( _WIN32 )
-#define WIN32_LEAN_AND_MEAN
-// clang-format off
-// shellapi.h must be included after windows.h
-#include <windows.h>
-#include <shellapi.h>
-// clang-format on
-#else
-#include <dirent.h>
-#endif
-
-#if defined( _WIN32 )
-#include <direct.h>
-#include <io.h>
-#else
-
-#if defined( TARGET_PS_VITA )
-#include <psp2/io/stat.h>
-#else
-#include <sys/stat.h>
-#endif
-
-#include <unistd.h>
-#endif
+#include "system.h"
 
 #if defined( _WIN32 )
 #define SEPARATOR '\\'
