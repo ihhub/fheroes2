@@ -171,7 +171,7 @@ namespace
     }
 #endif
 
-    std::string_view trimSeparator( std::string_view path )
+    std::string_view trimTrailingSeparators( std::string_view path )
     {
         while ( path.size() > 1 && path.back() == SEPARATOR ) {
             path.remove_suffix( 1 );
@@ -277,7 +277,7 @@ std::string System::GetDirname( std::string_view path )
         return { "." };
     }
 
-    path = trimSeparator( path );
+    path = trimTrailingSeparators( path );
 
     const size_t pos = path.rfind( SEPARATOR );
 
@@ -288,10 +288,10 @@ std::string System::GetDirname( std::string_view path )
         return { std::initializer_list<char>{ SEPARATOR } };
     }
 
-    // Path separators should already be trimmed from the end
+    // Trailing separators should already be trimmed
     assert( pos != path.size() - 1 );
 
-    return std::string{ trimSeparator( path.substr( 0, pos ) ) };
+    return std::string{ trimTrailingSeparators( path.substr( 0, pos ) ) };
 }
 
 std::string System::GetBasename( std::string_view path )
@@ -300,7 +300,7 @@ std::string System::GetBasename( std::string_view path )
         return { "." };
     }
 
-    path = trimSeparator( path );
+    path = trimTrailingSeparators( path );
 
     const size_t pos = path.rfind( SEPARATOR );
 
@@ -308,7 +308,7 @@ std::string System::GetBasename( std::string_view path )
         return std::string{ path };
     }
 
-    // Path separators should already be trimmed from the end
+    // Trailing separators should already be trimmed
     assert( pos != path.size() - 1 );
 
     return std::string{ path.substr( pos + 1 ) };
