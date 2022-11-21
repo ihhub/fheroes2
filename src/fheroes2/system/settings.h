@@ -298,8 +298,6 @@ public:
         return video_mode;
     }
 
-    static void SetDebug( int debug );
-
     void EnablePriceOfLoyaltySupport( const bool set );
 
     void SetGameDifficulty( const int difficulty )
@@ -511,6 +509,8 @@ private:
 
     void BinarySave() const;
     void BinaryLoad();
+
+    static void setDebug( int debug );
 
     // Global game options (GLOBAL_), they are saved in the text config file
     BitModes _optGlobal;

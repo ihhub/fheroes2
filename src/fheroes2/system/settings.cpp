@@ -149,7 +149,7 @@ bool Settings::Read( const std::string & filename )
 
     // debug
     if ( config.Exists( "debug" ) ) {
-        SetDebug( config.IntParams( "debug" ) );
+        setDebug( config.IntParams( "debug" ) );
     }
 
     // game language
@@ -801,7 +801,7 @@ bool Settings::BattleShowArmyOrder() const
     return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
 }
 
-void Settings::SetDebug( int debug )
+void Settings::setDebug( int debug )
 {
     switch ( debug ) {
     case 0:
