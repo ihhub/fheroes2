@@ -293,7 +293,6 @@ namespace
         }
         else {
             const int32_t middleWidth = originalWidth / 3;
-            const int32_t startMiddleX = middleWidth;
             const int32_t overallMiddleWidth = width - middleWidth * 2;
             const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
             const int32_t middleLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
