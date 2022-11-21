@@ -262,9 +262,8 @@ msgstr "Настрой"
 msgid "Hot Keys"
 msgstr "Бързи клавиши"
 
-#, fuzzy
 msgid "Damage Info"
-msgstr "Щети"
+msgstr "Инфо за щетите"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Задай скоростта на бойните действия и анимациите."
@@ -308,9 +307,8 @@ msgstr "Промени звуковите настройки на играта."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Провери и конфигурирай всички горещи клавиши в играта."
 
-#, fuzzy
 msgid "Toggle to display damage information during the battle."
-msgstr "Превключи за показване на армейския ред по време на битката."
+msgstr "Превключи за показване на информация за щетите по време на битката."
 
 msgid "Exit this menu."
 msgstr "Излез от това меню."
@@ -3188,17 +3186,16 @@ msgid "Enemy Speed"
 msgstr "Скорост на Противник"
 
 msgid "Slow"
-msgstr ""
+msgstr "Бавно"
 
 msgid "Normal"
 msgstr "Нормлано"
 
 msgid "Fast"
-msgstr ""
+msgstr "Бързо"
 
-#, fuzzy
 msgid "Very Fast"
-msgstr "Мн. бърза"
+msgstr "Мн. бързo"
 
 msgid "Scroll Speed"
 msgstr "Скорост на Превъртане"
@@ -3659,11 +3656,9 @@ msgstr "fheroes2 Отбор възкрeсяване представя"
 msgid "Greetings!"
 msgstr "Поздравления!"
 
-#, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
-"Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2! "
-"Преди да започнеш играта, моля избери разделителна способност на играта."
+"Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2!"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
