@@ -134,26 +134,21 @@ namespace
             return result;
         }
 
-        size_t pos = path.find( delimiter, 0 );
-        while ( pos != std::string::npos ) { // while found delimiter
-            const size_t nextPos = path.find( delimiter, pos + 1 );
-            if ( nextPos != std::string::npos ) { // if found next delimiter
-                if ( pos + 1 < nextPos ) { // have what to append
-                    result.push_back( path.substr( pos + 1, nextPos - pos - 1 ) );
-                }
-            }
-            else { // if no more delimiter present
-                if ( pos + 1 < path.length() ) { // if not a postfix delimiter
-                    result.push_back( path.substr( pos + 1 ) );
-                }
+        size_t pos = 0;
+
+        while ( pos < path.size() ) {
+            const size_t nextPos = path.find( delimiter, pos );
+
+            if ( nextPos == std::string::npos ) {
+                result.push_back( path.substr( pos ) );
+
                 break;
             }
+            if ( pos < nextPos ) {
+                result.push_back( path.substr( pos, nextPos - pos ) );
+            }
 
-            pos = path.find( delimiter, pos + 1 );
-        }
-
-        if ( result.empty() ) { // if delimiter not present
-            result.push_back( path );
+            pos = nextPos + delimiter.size();
         }
 
         return result;
