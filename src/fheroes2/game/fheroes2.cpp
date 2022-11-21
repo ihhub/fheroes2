@@ -78,17 +78,6 @@ namespace
         return std::string( "fheroes2 engine, version: " + Settings::GetVersion() );
     }
 
-    int PrintHelp( const char * basename )
-    {
-        COUT( "Usage: " << basename << " [OPTIONS]" )
-#ifdef WITH_DEBUG
-        COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" )
-#endif
-        COUT( "  -h\t\tprint this help message and exit" )
-
-        return EXIT_SUCCESS;
-    }
-
     void ReadConfigs()
     {
         const std::string configurationFileName( Settings::configFileName );
@@ -240,6 +229,8 @@ int main( int argc, char ** argv )
     assert( argc == __argc );
 
     argv = __argv;
+#else
+    (void)argc;
 #endif
 
     try {
@@ -254,26 +245,6 @@ int main( int argc, char ** argv )
         InitConfigDir();
         InitDataDir();
         ReadConfigs();
-
-        // getopt
-        {
-            int opt;
-
-            while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
-                switch ( opt ) {
-#ifdef WITH_DEBUG
-                case 'd':
-                    conf.SetDebug( System::GetOptionsArgument() ? GetInt( System::GetOptionsArgument() ) : 0 );
-                    break;
-#endif
-                case '?':
-                case 'h':
-                    return PrintHelp( argv[0] );
-
-                default:
-                    break;
-                }
-        }
 
         std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
                                                                           fheroes2::SystemInitializationComponent::Video };

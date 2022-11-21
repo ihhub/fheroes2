@@ -314,27 +314,6 @@ std::string System::GetBasename( std::string_view path )
     return std::string{ path.substr( pos + 1 ) };
 }
 
-int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )
-{
-#if defined( _WIN32 )
-    (void)argc;
-    (void)argv;
-    (void)optstring;
-    return -1;
-#else
-    return getopt( argc, argv, optstring );
-#endif
-}
-
-char * System::GetOptionsArgument()
-{
-#if defined( _WIN32 )
-    return nullptr;
-#else
-    return optarg;
-#endif
-}
-
 bool System::IsFile( const std::string & path, bool writable )
 {
     if ( path.empty() ) {

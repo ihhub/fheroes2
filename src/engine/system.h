@@ -43,9 +43,6 @@ namespace System
     std::string GetDirname( std::string_view path );
     std::string GetBasename( std::string_view path );
 
-    int GetCommandOptions( int argc, char * const argv[], const char * optstring );
-    char * GetOptionsArgument();
-
     bool IsFile( const std::string & path, bool writable = false );
     bool IsDirectory( const std::string & path, bool writable = false );
     bool Unlink( const std::string & path );
