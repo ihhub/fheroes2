@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 11:54+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -2535,9 +2535,6 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Experimental"
-msgstr ""
-
 #, fuzzy
 msgid "Black & White"
 msgstr "Tiltas"
@@ -2551,27 +2548,6 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
-msgid "Interface Type"
-msgstr ""
-
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "autoBattle|Manual"
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2579,15 +2555,6 @@ msgid "Select Game Language"
 msgstr ""
 
 msgid "Change the graphics settings of the game."
-msgstr ""
-
-msgid "Experimental game settings."
-msgstr ""
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
@@ -3062,9 +3029,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "Experimental Game Settings"
-msgstr ""
-
 msgid "Jump"
 msgstr ""
 
@@ -3094,6 +3058,15 @@ msgstr ""
 msgid "Scroll Speed"
 msgstr ""
 
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Interface Type"
+msgstr ""
+
 msgid "Hide"
 msgstr ""
 
@@ -3101,6 +3074,18 @@ msgid "Show"
 msgstr ""
 
 msgid "Interface"
+msgstr ""
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
+msgid "autoBattle|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3114,7 +3099,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -8763,21 +8754,6 @@ msgstr ""
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
