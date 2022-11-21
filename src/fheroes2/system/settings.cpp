@@ -31,7 +31,6 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
-#include "core.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -69,7 +68,7 @@ namespace
         GLOBAL_FULLSCREEN = 0x00008000,
         GLOBAL_3D_AUDIO = 0x00010000,
         GLOBAL_SYSTEM_INFO = 0x00020000,
-        // UNUSED = 0x00040000,
+        GLOBAL_CURSOR_SOFT_EMULATION = 0x00040000,
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
         GLOBAL_BATTLE_SHOW_DAMAGE = 0x00200000,
@@ -115,7 +114,7 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 
-    if ( fheroes2::isHandheldDevice() ) {
+    if ( System::isHandheldDevice() ) {
         // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
         _optGlobal.SetModes( GLOBAL_FULLSCREEN );
 
@@ -349,6 +348,16 @@ bool Settings::Read( const std::string & filename )
         setSystemInfo( config.StrParams( "system info" ) == "on" );
     }
 
+    if ( config.Exists( "cursor soft rendering" ) ) {
+        if ( config.StrParams( "cursor soft rendering" ) == "on" ) {
+            _optGlobal.SetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+            fheroes2::cursor().enableSoftwareEmulation( true );
+        }
+        else {
+            _optGlobal.ResetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+        }
+    }
+
     BinaryLoad();
 
     return true;
@@ -470,6 +479,9 @@ std::string Settings::String() const
 
     os << std::endl << "# display system information: on/off" << std::endl;
     os << "system info = " << ( _optGlobal.Modes( GLOBAL_SYSTEM_INFO ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# enable cursor software rendering" << std::endl;
+    os << "cursor soft rendering = " << ( _optGlobal.Modes( GLOBAL_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
@@ -948,24 +960,6 @@ bool Settings::ExtModes( uint32_t f ) const
     }
 
     return false;
-}
-
-std::string Settings::ExtName( const uint32_t settingId )
-{
-    switch ( settingId ) {
-    case Settings::HEROES_ARENA_ANY_SKILLS:
-        return _( "heroes: allow to choose any primary skill in Arena" );
-    case Settings::BATTLE_SOFT_WAITING:
-        return _( "battle: allow soft wait for troops" );
-    case Settings::GAME_EVIL_INTERFACE:
-        return _( "game: use evil interface" );
-    case Settings::GAME_HIDE_INTERFACE:
-        return _( "game: hide interface" );
-    default:
-        break;
-    }
-
-    return std::string();
 }
 
 void Settings::ExtSetModes( uint32_t f )

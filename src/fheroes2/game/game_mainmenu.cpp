@@ -50,6 +50,7 @@
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -197,13 +198,18 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     if ( isFirstGameRun ) {
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
-        Dialog::Message( _( "Greetings!" ),
-                         _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before starting the game please choose game resolution." ), Font::BIG,
-                         Dialog::OK );
-
-        bool isResolutionChanged = Dialog::SelectResolution();
-        if ( isResolutionChanged ) {
-            fheroes2::drawMainMenuScreen();
+        if ( System::isHandheldDevice() ) {
+            // Handheld devices should use the minimal game's resolution. Users on handheld devices aren't asked to choose resolution.
+            fheroes2::showStandardTextMessage( _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!" ), Dialog::OK );
+        }
+        else {
+            fheroes2::showStandardTextMessage(
+                _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before starting the game please choose game resolution." ),
+                Dialog::OK );
+            const bool isResolutionChanged = Dialog::SelectResolution();
+            if ( isResolutionChanged ) {
+                fheroes2::drawMainMenuScreen();
+            }
         }
 
         fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );

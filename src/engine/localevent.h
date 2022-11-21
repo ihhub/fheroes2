@@ -324,14 +324,14 @@ private:
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
-    void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
-    static void OnSdl2WindowEvent( const SDL_WindowEvent & event );
-
+    static void HandleWindowEvent( const SDL_WindowEvent & event );
     static void HandleRenderDeviceResetEvent();
+
+    void ProcessControllerAxisMotion();
 #else
-    void OnActiveEvent( const SDL_ActiveEvent & event );
+    static void HandleActiveEvent( const SDL_ActiveEvent & event );
 #endif
 
     enum flag_t
@@ -395,13 +395,13 @@ private:
 
     SDL_GameController * _gameController = nullptr;
     SDL_FingerID _firstFingerId = 0;
+    SDL_FingerID _secondFingerId = 0;
     fheroes2::Time _controllerTimer;
     int16_t _controllerLeftXAxis = 0;
     int16_t _controllerLeftYAxis = 0;
     int16_t _controllerRightXAxis = 0;
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
-    bool _touchpadAvailable = false;
     int16_t _numTouches = 0;
 #endif
 };

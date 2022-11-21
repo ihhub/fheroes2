@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 09:50+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2561,9 +2561,6 @@ msgstr "Lingua"
 msgid "Graphics"
 msgstr ""
 
-msgid "Experimental"
-msgstr "Sperimentale"
-
 #, fuzzy
 msgid "Black & White"
 msgstr "Ponte"
@@ -2581,27 +2578,6 @@ msgstr ""
 "Tele-\n"
 "trasporto"
 
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
-
-msgid "Evil"
-msgstr "Cattivo"
-
-msgid "Good"
-msgstr "Buono"
-
-msgid "Auto Resolve"
-msgstr "Auto-Risolva"
-
-msgid "Auto, No Spells"
-msgstr "Auto, Senza Magie"
-
-msgid "autoBattle|Manual"
-msgstr "Manuali"
-
-msgid "Battles"
-msgstr "Battaglie"
-
 msgid "Change the language of the game."
 msgstr "Cambia la lingua del gioco."
 
@@ -2611,15 +2587,6 @@ msgstr "Scegli lingua del gioco"
 #, fuzzy
 msgid "Change the graphics settings of the game."
 msgstr "Cambia le impostazioni dell'audio del gioco."
-
-msgid "Experimental game settings."
-msgstr "Impostazioni sperimentali del gioco."
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -3113,9 +3080,6 @@ msgstr "La descrizione della mappa scelta attualmente."
 msgid "Accept the choice made."
 msgstr "Accetta la scelta."
 
-msgid "Experimental Game Settings"
-msgstr "Impostazioni Sperimentali"
-
 msgid "Jump"
 msgstr "Salta"
 
@@ -3128,8 +3092,32 @@ msgstr "Nascondi"
 msgid "Enemy Speed"
 msgstr "Velocità Nemica"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Pianissimo"
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Velocissima"
+
 msgid "Scroll Speed"
 msgstr "Velocità dello Scorrimento"
+
+msgid "Evil"
+msgstr "Cattivo"
+
+msgid "Good"
+msgstr "Buono"
+
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
 
 msgid "Hide"
 msgstr "Nascondi"
@@ -3139,6 +3127,18 @@ msgstr "Mostra"
 
 msgid "Interface"
 msgstr "Interfaccia"
+
+msgid "Auto Resolve"
+msgstr "Auto-Risolva"
+
+msgid "Auto, No Spells"
+msgstr "Auto, Senza Magie"
+
+msgid "Battles"
+msgstr "Battaglie"
+
+msgid "autoBattle|Manual"
+msgstr "Manuali"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3151,7 +3151,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3270,10 +3276,6 @@ msgstr ""
 
 msgid "Easy"
 msgstr ""
-
-#, fuzzy
-msgid "Normal"
-msgstr "Normale"
 
 msgid "Hard"
 msgstr ""
@@ -3560,6 +3562,12 @@ msgstr "Il Team di fheroes2 Resurrection presenta"
 
 msgid "Greetings!"
 msgstr "Saluti!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
+"risoluzione per il gioco."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -8873,21 +8881,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Ho sentito che l'Estremo Artefatto è in verità il/la %{name}."
 
@@ -8955,6 +8948,15 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Experimental"
+#~ msgstr "Sperimentale"
+
+#~ msgid "Experimental game settings."
+#~ msgstr "Impostazioni sperimentali del gioco."
+
+#~ msgid "Experimental Game Settings"
+#~ msgstr "Impostazioni Sperimentali"
 
 #~ msgid "Your army too big!"
 #~ msgstr "Il tuo esercito è troppo grande"
