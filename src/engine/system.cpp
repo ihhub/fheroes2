@@ -87,7 +87,7 @@ namespace
         const char * storagePath = SDL_AndroidGetExternalStoragePath();
         if ( storagePath == nullptr ) {
             ERROR_LOG( "Failed to obtain the path to external storage. The error: " << SDL_GetError() )
-            return {};
+            return { "." };
         }
 
         VERBOSE_LOG( "Application storage path is " << storagePath )
@@ -101,7 +101,7 @@ namespace
             return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), prog );
         }
 
-        return {};
+        return { "." };
 #endif
 
         if ( homeEnvPath != nullptr ) {
@@ -113,15 +113,18 @@ namespace
             return System::concatPath( dataEnvPath, prog );
         }
 
-        std::string res;
 #if SDL_VERSION_ATLEAST( 2, 0, 1 )
         char * path = SDL_GetPrefPath( "", prog.c_str() );
         if ( path ) {
-            res = path;
+            const std::string result{ path };
+
             SDL_free( path );
+
+            return result;
         }
 #endif
-        return res;
+
+        return { "." };
     }
 #endif
 
@@ -223,7 +226,7 @@ std::string System::GetConfigDirectory( const std::string & prog )
         return System::concatPath( System::concatPath( homeEnv, ".config" ), prog );
     }
 
-    return std::string();
+    return { "." };
 #else
     return GetHomeDirectory( prog );
 #endif
@@ -242,14 +245,14 @@ std::string System::GetDataDirectory( const std::string & prog )
         return System::concatPath( System::concatPath( homeEnv, ".local/share" ), prog );
     }
 
-    return {};
+    return { "." };
 #elif defined( MACOS_APP_BUNDLE )
     const char * homeEnv = getenv( "HOME" );
     if ( homeEnv ) {
         return System::concatPath( System::concatPath( homeEnv, "Library/Application Support" ), prog );
     }
 
-    return {};
+    return { "." };
 #else
     return GetHomeDirectory( prog );
 #endif
