@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 09:50+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -2675,9 +2675,6 @@ msgstr "Język"
 msgid "Graphics"
 msgstr ""
 
-msgid "Experimental"
-msgstr "Eksperymentalne"
-
 msgid "Black & White"
 msgstr "Czarno-biały"
 
@@ -2690,27 +2687,6 @@ msgstr "Kolor"
 msgid "Text Support"
 msgstr "Dodatkowe informacje"
 
-msgid "Interface Type"
-msgstr "Typ interfejsu"
-
-msgid "Evil"
-msgstr "Zły"
-
-msgid "Good"
-msgstr "Dobry"
-
-msgid "Auto Resolve"
-msgstr "Automatyczna"
-
-msgid "Auto, No Spells"
-msgstr "Auto, bez zaklęć"
-
-msgid "autoBattle|Manual"
-msgstr "Ręczna"
-
-msgid "Battles"
-msgstr "Walki"
-
 msgid "Change the language of the game."
 msgstr "Zmień język gry."
 
@@ -2720,15 +2696,6 @@ msgstr "Wybierz język gry"
 #, fuzzy
 msgid "Change the graphics settings of the game."
 msgstr "Zmień ustawienia dźwiękowe gry."
-
-msgid "Experimental game settings."
-msgstr "Zmień eksperymentalne ustawienia gry."
-
-msgid "Toggle instant battle mode."
-msgstr "Zmień tryb błyskawicznej walki."
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Zmień typ interfejsu."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -3211,9 +3178,6 @@ msgstr "Opis aktualnie wybranej mapy."
 msgid "Accept the choice made."
 msgstr "Zastosuj wprowadzone zmiany."
 
-msgid "Experimental Game Settings"
-msgstr "Eksperymentalne ustawienia gry:"
-
 msgid "Jump"
 msgstr "Skok"
 
@@ -3226,8 +3190,31 @@ msgstr "Nie pokazuj"
 msgid "Enemy Speed"
 msgstr "Szybk. wroga"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Grupowe Spowolnienie"
+
+msgid "Normal"
+msgstr "Normalna"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Bardzo duża"
+
 msgid "Scroll Speed"
 msgstr "Prędkość przewijania"
+
+msgid "Evil"
+msgstr "Zły"
+
+msgid "Good"
+msgstr "Dobry"
+
+msgid "Interface Type"
+msgstr "Typ interfejsu"
 
 msgid "Hide"
 msgstr "Ukryj"
@@ -3237,6 +3224,18 @@ msgstr "Pokaż"
 
 msgid "Interface"
 msgstr "Interfejs"
+
+msgid "Auto Resolve"
+msgstr "Automatyczna"
+
+msgid "Auto, No Spells"
+msgstr "Auto, bez zaklęć"
+
+msgid "Battles"
+msgstr "Walki"
+
+msgid "autoBattle|Manual"
+msgstr "Ręczna"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Zmień szybkość z jaką poruszają się twoi bohaterowie na ekranie."
@@ -3251,8 +3250,14 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Zmień prędkość przewijania okna."
 
+msgid "Toggle the type of interface you want to use."
+msgstr "Zmień typ interfejsu."
+
 msgid "Toggle interface visibility."
 msgstr "Zmień widoczność interfejsu."
+
+msgid "Toggle instant battle mode."
+msgstr "Zmień tryb błyskawicznej walki."
 
 msgid "Att."
 msgstr "Atk."
@@ -3375,9 +3380,6 @@ msgstr ""
 
 msgid "Easy"
 msgstr "Łatwa"
-
-msgid "Normal"
-msgstr "Normalna"
 
 msgid "Hard"
 msgstr "Trudna"
@@ -3661,6 +3663,12 @@ msgstr "fheroes2 Resurrection Team prezentuje"
 
 msgid "Greetings!"
 msgstr "Witaj!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Witamy w grze Heroes of Might and Magic II na silniku fheroes2! Przed "
+"rozpoczęciem wybierz rozdzielczość gry."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -9753,22 +9761,6 @@ msgstr ""
 "Zaklęcie kontroluje do\n"
 "%{hp} punktów życia."
 
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-"bohaterowie: pozwól na wybór dowolnej umiejętności podstawowej na arenie"
-
-msgid "battle: allow soft wait for troops"
-msgstr "walka: pozwól na delikatne czekanie na jednostki"
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "gra: autozapis nastąpi na początku każdego dnia"
-
-msgid "game: use evil interface"
-msgstr "gra: użyj mrocznego interfejsu"
-
-msgid "game: hide interface"
-msgstr "gra: ukryj interfejs"
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr "%{name} to naprawdę najpotężniejszy artefakt."
 
@@ -9832,6 +9824,31 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Experimental"
+#~ msgstr "Eksperymentalne"
+
+#~ msgid "Experimental game settings."
+#~ msgstr "Zmień eksperymentalne ustawienia gry."
+
+#~ msgid "Experimental Game Settings"
+#~ msgstr "Eksperymentalne ustawienia gry:"
+
+#~ msgid "heroes: allow to choose any primary skill in Arena"
+#~ msgstr ""
+#~ "bohaterowie: pozwól na wybór dowolnej umiejętności podstawowej na arenie"
+
+#~ msgid "battle: allow soft wait for troops"
+#~ msgstr "walka: pozwól na delikatne czekanie na jednostki"
+
+#~ msgid "game: autosave will be made at the beginning of the day"
+#~ msgstr "gra: autozapis nastąpi na początku każdego dnia"
+
+#~ msgid "game: use evil interface"
+#~ msgstr "gra: użyj mrocznego interfejsu"
+
+#~ msgid "game: hide interface"
+#~ msgstr "gra: ukryj interfejs"
 
 #~ msgid "battle: show damage info"
 #~ msgstr "walka: pokaż informacje o obrażeniach"

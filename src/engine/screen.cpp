@@ -873,6 +873,22 @@ namespace
         void setVSync( const bool enable ) override
         {
             _isVSyncEnabled = enable;
+
+            if ( _window != nullptr ) {
+                // We do not need to rebuild window but renderer only.
+                if ( _texture != nullptr ) {
+                    SDL_DestroyTexture( _texture );
+                    _texture = nullptr;
+                }
+
+                if ( _renderer != nullptr ) {
+                    SDL_DestroyRenderer( _renderer );
+                    _renderer = nullptr;
+                }
+
+                const fheroes2::Display & display = fheroes2::Display::instance();
+                _createRenderer( display.width(), display.height() );
+            }
         }
 
     protected:
@@ -1037,19 +1053,6 @@ namespace
                 }
             }
 
-            const uint32_t renderingFlags = renderFlags();
-            if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
-                ERROR_LOG( "Chosen rendering driver does not support all rendering flags" )
-            }
-
-            // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-            _renderer = SDL_CreateRenderer( _window, -1, renderingFlags );
-            if ( _renderer == nullptr ) {
-                ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
             _surface = SDL_CreateRGBSurface( 0, width_, height_, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
             if ( _surface == nullptr ) {
                 ERROR_LOG( "Failed to create a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
@@ -1063,36 +1066,8 @@ namespace
             }
 
             _createPalette();
-            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
-            }
 
-            // Setting this hint prevents the window to regain focus after loosing it in fullscreen mode.
-            // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
-            if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
-            }
-
-            returnCode = SDL_RenderSetLogicalSize( _renderer, width_, height_ );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to create logical size of " << width_ << " x " << height_ << " size. The error value: " << returnCode
-                                                               << ", description: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
-            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
-            if ( _texture == nullptr ) {
-                ERROR_LOG( "Failed to create a texture from a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
-            _retrieveWindowInfo();
-
-            _toggleMouseCaptureMode();
-
-            return true;
+            return _createRenderer( width_, height_ );
         }
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
@@ -1176,7 +1151,7 @@ namespace
 
 #if defined( TARGET_NINTENDO_SWITCH )
             // On a Nintendo Switch the game is always fullscreen
-            _activeWindowROI = fheroes2::Rect( 0, 0, _currentScreenResolution.width, _currentScreenResolution.height );
+            _activeWindowROI = { 0, 0, _currentScreenResolution.width, _currentScreenResolution.height };
 #else
             SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
             SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
@@ -1193,6 +1168,59 @@ namespace
             else {
                 SDL_SetWindowGrab( _window, SDL_FALSE );
             }
+        }
+
+        bool _createRenderer( const int32_t width_, const int32_t height_ )
+        {
+            SDL_RendererInfo rendererInfo;
+            int returnCode = SDL_GetRenderDriverInfo( 0, &rendererInfo );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
+            }
+
+            const uint32_t renderingFlags = renderFlags();
+            if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
+                ERROR_LOG( "Chosen rendering driver does not support all rendering flags" )
+            }
+
+            // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
+            _renderer = SDL_CreateRenderer( _window, -1, renderingFlags );
+            if ( _renderer == nullptr ) {
+                ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
+            }
+
+            // Setting this hint prevents the window to regain focus after losing it in fullscreen mode.
+            // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
+            if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
+            }
+
+            returnCode = SDL_RenderSetLogicalSize( _renderer, width_, height_ );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to create logical size of " << width_ << " x " << height_ << " size. The error value: " << returnCode
+                                                               << ", description: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
+            if ( _texture == nullptr ) {
+                ERROR_LOG( "Failed to create a texture from a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            _retrieveWindowInfo();
+
+            _toggleMouseCaptureMode();
+
+            return true;
         }
     };
 #else

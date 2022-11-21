@@ -42,8 +42,8 @@
 #include <SDL_gamecontroller.h>
 #include <SDL_keycode.h>
 
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
-#define TOUCHSCREEN_SUPPORT
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( ANDROID )
+#define TOUCH_SUPPORT
 #include <SDL_hints.h>
 #endif
 
@@ -997,10 +997,9 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
-#if defined( TOUCHSCREEN_SUPPORT )
+#if defined( TOUCH_SUPPORT )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
-        _touchpadAvailable = true;
         fheroes2::cursor().enableSoftwareEmulation( true );
 #if SDL_VERSION_ATLEAST( 2, 0, 10 )
         SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
@@ -1201,7 +1200,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
                 }
                 break;
             }
-            OnSdl2WindowEvent( event.window );
+            HandleWindowEvent( event.window );
             break;
         case SDL_KEYDOWN:
         case SDL_KEYUP:
@@ -1223,9 +1222,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
                 if ( removedController == _gameController ) {
                     SDL_GameControllerClose( _gameController );
                     _gameController = nullptr;
-                    if ( !_touchpadAvailable ) {
-                        fheroes2::cursor().enableSoftwareEmulation( false );
-                    }
                 }
             }
             break;
@@ -1247,7 +1243,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_FINGERDOWN:
         case SDL_FINGERUP:
         case SDL_FINGERMOTION:
-#if defined( TOUCHSCREEN_SUPPORT )
+#if defined( TOUCH_SUPPORT )
             HandleTouchEvent( event.tfinger );
 #endif
             break;
@@ -1282,7 +1278,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
         case SDL_ACTIVEEVENT:
-            OnActiveEvent( event.active );
+            HandleActiveEvent( event.active );
             break;
         case SDL_KEYDOWN:
         case SDL_KEYUP:
@@ -1347,36 +1343,52 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
-    if ( event.touchId != 0 )
+    if ( _numTouches == 2 && _firstFingerId != event.fingerId && _secondFingerId != event.fingerId ) {
+        // We do not support more than 2 fingers.
         return;
+    }
 
     if ( event.type == SDL_FINGERDOWN ) {
-        ++_numTouches;
-        if ( _numTouches == 1 ) {
+        if ( _numTouches == 0 ) {
             _firstFingerId = event.fingerId;
+            ++_numTouches;
+        }
+        else if ( _numTouches == 1 ) {
+            _secondFingerId = event.fingerId;
+            ++_numTouches;
         }
     }
     else if ( event.type == SDL_FINGERUP ) {
         --_numTouches;
     }
 
-    if ( _firstFingerId == event.fingerId ) {
+    // Ignore first finger movement if the second finger is pressed.
+    const bool isFirstFinger = ( _numTouches < 2 && _firstFingerId == event.fingerId );
+    const bool isSecondFinger = ( _secondFingerId == event.fingerId );
+
+    if ( isFirstFinger || isSecondFinger ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
+
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+        // TODO: verify where it is even needed to do such weird woodoo magic for these targets.
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
-        const fheroes2::Size gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
         const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
 
-        SetModes( MOUSE_MOTION );
-
-        _emulatedPointerPosX
-            = static_cast<double>( screenResolution.width * event.x - windowRect.x ) * ( static_cast<double>( gameSurfaceRes.width ) / windowRect.width );
-        _emulatedPointerPosY
-            = static_cast<double>( screenResolution.height * event.y - windowRect.y ) * ( static_cast<double>( gameSurfaceRes.height ) / windowRect.height );
+        _emulatedPointerPosX = static_cast<double>( screenResolution.width * event.x - windowRect.x ) * ( static_cast<double>( display.width() ) / windowRect.width );
+        _emulatedPointerPosY = static_cast<double>( screenResolution.height * event.y - windowRect.y ) * ( static_cast<double>( display.height() ) / windowRect.height );
+#else
+        _emulatedPointerPosX = static_cast<double>( event.x ) * display.width();
+        _emulatedPointerPosY = static_cast<double>( event.y ) * display.height();
+#endif
 
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
+    }
 
-        if ( ( modes & MOUSE_MOTION ) && mouse_motion_hook_func ) {
+    if ( isFirstFinger ) {
+        SetModes( MOUSE_MOTION );
+
+        if ( mouse_motion_hook_func ) {
             ( *mouse_motion_hook_func )( mouse_cu.x, mouse_cu.y );
         }
 
@@ -1394,6 +1406,31 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         }
 
         mouse_button = SDL_BUTTON_LEFT;
+    }
+    else if ( isSecondFinger ) {
+        if ( _numTouches < 2 ) {
+            // Only the second finger is pressing.
+            SetModes( MOUSE_MOTION );
+
+            if ( mouse_motion_hook_func ) {
+                ( *mouse_motion_hook_func )( mouse_cu.x, mouse_cu.y );
+            }
+        }
+
+        if ( event.type == SDL_FINGERDOWN ) {
+            mouse_pr = mouse_cu;
+
+            SetModes( MOUSE_PRESSED );
+        }
+        else if ( event.type == SDL_FINGERUP ) {
+            mouse_rr = mouse_cu;
+
+            ResetModes( MOUSE_PRESSED );
+            SetModes( MOUSE_RELEASED );
+            SetModes( MOUSE_CLICKED );
+        }
+
+        mouse_button = SDL_BUTTON_RIGHT;
     }
 }
 
@@ -1560,7 +1597,7 @@ void LocalEvent::ProcessControllerAxisMotion()
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
-        if ( ( modes & MOUSE_MOTION ) && mouse_motion_hook_func ) {
+        if ( mouse_motion_hook_func ) {
             ( *mouse_motion_hook_func )( mouse_cu.x, mouse_cu.y );
         }
     }
@@ -1585,7 +1622,7 @@ void LocalEvent::ProcessControllerAxisMotion()
     }
 }
 
-void LocalEvent::OnSdl2WindowEvent( const SDL_WindowEvent & event )
+void LocalEvent::HandleWindowEvent( const SDL_WindowEvent & event )
 {
     if ( event.event == SDL_WINDOWEVENT_FOCUS_LOST ) {
         StopSounds();
@@ -1616,7 +1653,7 @@ void LocalEvent::HandleRenderDeviceResetEvent()
     fheroes2::Copy( temp, display );
 }
 #else
-void LocalEvent::OnActiveEvent( const SDL_ActiveEvent & event )
+void LocalEvent::HandleActiveEvent( const SDL_ActiveEvent & event )
 {
     if ( event.state & SDL_APPINPUTFOCUS ) {
         if ( 0 == event.gain ) {

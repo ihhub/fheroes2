@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 09:50+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2725,11 +2725,6 @@ msgstr ""
 "Bilde-\n"
 "innstillinger"
 
-msgid "Experimental"
-msgstr ""
-"Under\n"
-"utvikling"
-
 msgid "Black & White"
 msgstr "Svart-hvit"
 
@@ -2742,27 +2737,6 @@ msgstr "Farget"
 msgid "Text Support"
 msgstr "Tekstmodus"
 
-msgid "Interface Type"
-msgstr "Grensesnitt"
-
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Auto Resolve"
-msgstr "Datastyrt"
-
-msgid "Auto, No Spells"
-msgstr "Data, ingen magi"
-
-msgid "autoBattle|Manual"
-msgstr "Manuell"
-
-msgid "Battles"
-msgstr "Kampstyring"
-
 msgid "Change the language of the game."
 msgstr "Endre språket til spillet."
 
@@ -2771,15 +2745,6 @@ msgstr "Velg spillspråk"
 
 msgid "Change the graphics settings of the game."
 msgstr "Endre bildeinnstillingene til spillet."
-
-msgid "Experimental game settings."
-msgstr "Innstillinger for spillet. Disse er fortsatt under utvikling."
-
-msgid "Toggle instant battle mode."
-msgstr "Skift modus for hurtigkamp."
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Velg den typen grensesnitt du ønsker."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr "Skru farget markør av eller på. Dette valget er kun for smak og behag."
@@ -3271,9 +3236,6 @@ msgstr "Beskrivelse av det utvalgte brettet."
 msgid "Accept the choice made."
 msgstr "Bekreft valget og gå videre."
 
-msgid "Experimental Game Settings"
-msgstr "Eksperimentelle innstillinger"
-
 msgid "Jump"
 msgstr "Sprang"
 
@@ -3286,11 +3248,34 @@ msgstr "Skjul"
 msgid "Enemy Speed"
 msgstr "Fiendefart"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Traffikkork"
+
+msgid "Normal"
+msgstr "Middels"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Rask"
+
 # Kan ikke deles i to for øyeblikket.
 msgid "Scroll Speed"
 msgstr ""
 "Panorerings-\n"
 "fart"
+
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
+
+msgid "Interface Type"
+msgstr "Grensesnitt"
 
 msgid "Hide"
 msgstr "Løs"
@@ -3300,6 +3285,18 @@ msgstr "Bundet"
 
 msgid "Interface"
 msgstr "Grensesnitt"
+
+msgid "Auto Resolve"
+msgstr "Datastyrt"
+
+msgid "Auto, No Spells"
+msgstr "Data, ingen magi"
+
+msgid "Battles"
+msgstr "Kampstyring"
+
+msgid "autoBattle|Manual"
+msgstr "Manuell"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Skift hastigheten heltene dine flytter seg på brettet."
@@ -3314,8 +3311,14 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Setter farten du panorerer rundt brettet på."
 
+msgid "Toggle the type of interface you want to use."
+msgstr "Velg den typen grensesnitt du ønsker."
+
 msgid "Toggle interface visibility."
 msgstr "Skift synlighet for grensesnittet."
+
+msgid "Toggle instant battle mode."
+msgstr "Skift modus for hurtigkamp."
 
 msgid "Att."
 msgstr "Ang."
@@ -3441,9 +3444,6 @@ msgstr ""
 
 msgid "Easy"
 msgstr "Enkel"
-
-msgid "Normal"
-msgstr "Middels"
 
 msgid "Hard"
 msgstr "Vanskelig"
@@ -3732,6 +3732,12 @@ msgstr "fheroes2 Resurrection Team presenterer"
 
 msgid "Greetings!"
 msgstr "Heisann!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Velkommen til Heroes of Might and Magic II drevet av fheroes2 spillmotoren! "
+"Vennligst velg skjermoppløsning før du begynner."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -9906,21 +9912,6 @@ msgstr ""
 "Denne trolldommen gir deg kontroll over\n"
 "opptil %{hp} liv."
 
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
-
-msgid "battle: allow soft wait for troops"
-msgstr "Kamp: Avvent styrke til rundens slutt"
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "Parti: Autolagringen skjer ved begynnelsen av dagen"
-
-msgid "game: use evil interface"
-msgstr "Parti: Bruk ondt grensesnitt"
-
-msgid "game: hide interface"
-msgstr "Parti: Skjul grensesnitt"
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Den sjeldneste skatten er faktisk %{name}."
 
@@ -9983,6 +9974,32 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Experimental"
+#~ msgstr ""
+#~ "Under\n"
+#~ "utvikling"
+
+#~ msgid "Experimental game settings."
+#~ msgstr "Innstillinger for spillet. Disse er fortsatt under utvikling."
+
+#~ msgid "Experimental Game Settings"
+#~ msgstr "Eksperimentelle innstillinger"
+
+#~ msgid "heroes: allow to choose any primary skill in Arena"
+#~ msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
+
+#~ msgid "battle: allow soft wait for troops"
+#~ msgstr "Kamp: Avvent styrke til rundens slutt"
+
+#~ msgid "game: autosave will be made at the beginning of the day"
+#~ msgstr "Parti: Autolagringen skjer ved begynnelsen av dagen"
+
+#~ msgid "game: use evil interface"
+#~ msgstr "Parti: Bruk ondt grensesnitt"
+
+#~ msgid "game: hide interface"
+#~ msgstr "Parti: Skjul grensesnitt"
 
 #~ msgid "battle: show damage info"
 #~ msgstr "Kamp: Vis skadeinfo"
