@@ -962,26 +962,6 @@ bool Settings::ExtModes( uint32_t f ) const
     return false;
 }
 
-std::string Settings::ExtName( const uint32_t settingId )
-{
-    switch ( settingId ) {
-    case Settings::HEROES_ARENA_ANY_SKILLS:
-        return _( "heroes: allow to choose any primary skill in Arena" );
-    case Settings::BATTLE_SOFT_WAITING:
-        return _( "battle: allow soft wait for troops" );
-    case Settings::GAME_AUTOSAVE_BEGIN_DAY:
-        return _( "game: autosave will be made at the beginning of the day" );
-    case Settings::GAME_EVIL_INTERFACE:
-        return _( "game: use evil interface" );
-    case Settings::GAME_HIDE_INTERFACE:
-        return _( "game: hide interface" );
-    default:
-        break;
-    }
-
-    return std::string();
-}
-
 void Settings::ExtSetModes( uint32_t f )
 {
     const uint32_t mask = 0x0FFFFFFF;
