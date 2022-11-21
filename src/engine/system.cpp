@@ -382,9 +382,6 @@ bool System::Unlink( const std::string & path )
 }
 
 #if !defined( _WIN32 ) && !defined( ANDROID )
-// TODO: Android filesystem is case-sensitive so it should use the code below.
-//       However, in Android an application has access only to a specific path on the system.
-
 // based on: https://github.com/OneSadCookie/fcaseopen
 bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
 {
