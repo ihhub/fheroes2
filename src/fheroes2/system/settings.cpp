@@ -122,6 +122,12 @@ Settings::Settings()
         scroll_speed = SCROLL_SPEED_NONE;
     }
 
+    // SDL 1 uses cursor software emulation by default as it does not support anything else. SDL 2 supports 'hardware' mode and software emulation.
+    // It is observed that on small resolutions with a resized window the cursor remains the same in size within the game.
+    // In order to avoid this we set cursor software emulation by default.
+    _optGlobal.SetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+    fheroes2::cursor().enableSoftwareEmulation( true );
+
     // The Price of Loyalty is not supported by default.
     EnablePriceOfLoyaltySupport( false );
 }
@@ -355,6 +361,7 @@ bool Settings::Read( const std::string & filename )
         }
         else {
             _optGlobal.ResetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+            fheroes2::cursor().enableSoftwareEmulation( false );
         }
     }
 
