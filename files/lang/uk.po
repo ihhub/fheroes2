@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 11:54+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2857,9 +2857,6 @@ msgstr "Мова"
 msgid "Graphics"
 msgstr ""
 
-msgid "Experimental"
-msgstr ""
-
 msgid "Black & White"
 msgstr ""
 
@@ -2872,28 +2869,6 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
-#, fuzzy
-msgid "Interface Type"
-msgstr "Тип Інтерфейсу"
-
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "autoBattle|Manual"
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr "Змінити мову гри."
 
@@ -2903,15 +2878,6 @@ msgstr "Обрати мову гри"
 #, fuzzy
 msgid "Change the graphics settings of the game."
 msgstr "Змінити мову гри."
-
-msgid "Experimental game settings."
-msgstr ""
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -3387,9 +3353,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "Experimental Game Settings"
-msgstr ""
-
 msgid "Jump"
 msgstr ""
 
@@ -3418,6 +3381,16 @@ msgstr ""
 msgid "Scroll Speed"
 msgstr ""
 
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Тип Інтерфейсу"
+
 msgid "Hide"
 msgstr ""
 
@@ -3425,6 +3398,18 @@ msgid "Show"
 msgstr ""
 
 msgid "Interface"
+msgstr ""
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
+msgid "autoBattle|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3438,7 +3423,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -9412,21 +9403,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "гра: автозберігати на початку дня"
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr ""
 
@@ -9489,6 +9465,9 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: autosave will be made at the beginning of the day"
+#~ msgstr "гра: автозберігати на початку дня"
 
 #~ msgid "heroes: allow buy a spellbook from Shrines"
 #~ msgstr "герої: дозволити придбати книгу чарів з Святинь"

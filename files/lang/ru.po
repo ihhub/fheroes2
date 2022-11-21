@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 11:54+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2664,9 +2664,6 @@ msgstr "Язык"
 msgid "Graphics"
 msgstr ""
 
-msgid "Experimental"
-msgstr "Расширенные"
-
 msgid "Black & White"
 msgstr "Чёрно-белый"
 
@@ -2679,27 +2676,6 @@ msgstr "Цветной"
 msgid "Text Support"
 msgstr "Текстовое сопровождение"
 
-msgid "Interface Type"
-msgstr "Интерфейс"
-
-msgid "Evil"
-msgstr "Злой"
-
-msgid "Good"
-msgstr "Добрый"
-
-msgid "Auto Resolve"
-msgstr "Авто, с магией"
-
-msgid "Auto, No Spells"
-msgstr "Авто, без магии"
-
-msgid "autoBattle|Manual"
-msgstr "Вручную"
-
-msgid "Battles"
-msgstr "Битвы"
-
 msgid "Change the language of the game."
 msgstr "Изменить язык интерфейса."
 
@@ -2709,15 +2685,6 @@ msgstr "Выберите язык игры:"
 #, fuzzy
 msgid "Change the graphics settings of the game."
 msgstr "Настроить параметры аудио."
-
-msgid "Experimental game settings."
-msgstr "Вы можете настроить игру по своему усмотрению."
-
-msgid "Toggle instant battle mode."
-msgstr "Режим мгновенного боя."
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Переключить тип интерфейса, который Вы хотите использовать."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr "Включить или выключить цветной курсор. Это эстетический выбор."
@@ -3209,9 +3176,6 @@ msgstr "Расширенное описание выбранной карты."
 msgid "Accept the choice made."
 msgstr "Принять изменения."
 
-msgid "Experimental Game Settings"
-msgstr "Настройки игры"
-
 msgid "Jump"
 msgstr "Прыжком"
 
@@ -3241,6 +3205,15 @@ msgstr "Шустрая"
 msgid "Scroll Speed"
 msgstr "Скор. прокрутки"
 
+msgid "Evil"
+msgstr "Злой"
+
+msgid "Good"
+msgstr "Добрый"
+
+msgid "Interface Type"
+msgstr "Интерфейс"
+
 msgid "Hide"
 msgstr "Скрыть"
 
@@ -3249,6 +3222,18 @@ msgstr "Показать"
 
 msgid "Interface"
 msgstr "Интерфейс"
+
+msgid "Auto Resolve"
+msgstr "Авто, с магией"
+
+msgid "Auto, No Spells"
+msgstr "Авто, без магии"
+
+msgid "Battles"
+msgstr "Битвы"
+
+msgid "autoBattle|Manual"
+msgstr "Вручную"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3264,8 +3249,14 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Устанавливает скорость прокрутки окна на карте мира."
 
+msgid "Toggle the type of interface you want to use."
+msgstr "Переключить тип интерфейса, который Вы хотите использовать."
+
 msgid "Toggle interface visibility."
 msgstr "Показать/скрыть интерфейс."
+
+msgid "Toggle instant battle mode."
+msgstr "Режим мгновенного боя."
 
 msgid "Att."
 msgstr "Атк."
@@ -9693,21 +9684,6 @@ msgstr ""
 "суммарное здоровье которого не превышает\n"
 "%{hp} здоровья."
 
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "герои: в постройке Арена можно получить любой первичный навык"
-
-msgid "battle: allow soft wait for troops"
-msgstr "битва: использовать альтернативный пропуск хода (как в H3)"
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "игра: автосохранение в начале дня"
-
-msgid "game: use evil interface"
-msgstr "игра: использовать серую тему интерфейса"
-
-msgid "game: hide interface"
-msgstr "игра: выключить интерфейс (весь экран игровое поле)"
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Уникальный Артефакт - это %{name}."
 
@@ -9770,6 +9746,30 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Experimental"
+#~ msgstr "Расширенные"
+
+#~ msgid "Experimental game settings."
+#~ msgstr "Вы можете настроить игру по своему усмотрению."
+
+#~ msgid "Experimental Game Settings"
+#~ msgstr "Настройки игры"
+
+#~ msgid "heroes: allow to choose any primary skill in Arena"
+#~ msgstr "герои: в постройке Арена можно получить любой первичный навык"
+
+#~ msgid "battle: allow soft wait for troops"
+#~ msgstr "битва: использовать альтернативный пропуск хода (как в H3)"
+
+#~ msgid "game: autosave will be made at the beginning of the day"
+#~ msgstr "игра: автосохранение в начале дня"
+
+#~ msgid "game: use evil interface"
+#~ msgstr "игра: использовать серую тему интерфейса"
+
+#~ msgid "game: hide interface"
+#~ msgstr "игра: выключить интерфейс (весь экран игровое поле)"
 
 #~ msgid "battle: show damage info"
 #~ msgstr "битва: показывать урон"

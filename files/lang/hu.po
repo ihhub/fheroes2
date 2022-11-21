@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 11:54+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-10-25 08:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2696,10 +2696,6 @@ msgid "Graphics"
 msgstr ""
 
 #, fuzzy
-msgid "Experimental"
-msgstr "Elemi Gyűrű"
-
-#, fuzzy
 msgid "Black & White"
 msgstr "Híd"
 
@@ -2714,29 +2710,6 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teleportálás"
 
-#, fuzzy
-msgid "Interface Type"
-msgstr "Kezelőfelület"
-
-msgid "Evil"
-msgstr "Gonosz"
-
-msgid "Good"
-msgstr "Jó"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "autoBattle|Manual"
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Üveg"
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2745,16 +2718,6 @@ msgid "Select Game Language"
 msgstr "Kiválasztott Leírás"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
-
-#, fuzzy
-msgid "Experimental game settings."
-msgstr "FHeroes2 játék beállítások."
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
@@ -3257,10 +3220,6 @@ msgstr "A kiválasztott térkép leírása."
 msgid "Accept the choice made."
 msgstr "A választás elfogadása."
 
-#, fuzzy
-msgid "Experimental Game Settings"
-msgstr "FHeroes2 játék beállítások."
-
 msgid "Jump"
 msgstr ""
 
@@ -3291,6 +3250,16 @@ msgstr ""
 msgid "Scroll Speed"
 msgstr ""
 
+msgid "Evil"
+msgstr "Gonosz"
+
+msgid "Good"
+msgstr "Jó"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Kezelőfelület"
+
 #, fuzzy
 msgid "Hide"
 msgstr "50-99"
@@ -3301,6 +3270,19 @@ msgstr "Hó"
 
 msgid "Interface"
 msgstr "Kezelőfelület"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+#, fuzzy
+msgid "Battles"
+msgstr "Üveg"
+
+msgid "autoBattle|Manual"
+msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3313,7 +3295,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -9423,21 +9411,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
 #, fuzzy
 msgid "The ultimate artifact is really the %{name}."
 msgstr "A Múmiák átka lesújt a(z) %{name}!"
@@ -9507,6 +9480,18 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Experimental"
+#~ msgstr "Elemi Gyűrű"
+
+#, fuzzy
+#~ msgid "Experimental game settings."
+#~ msgstr "FHeroes2 játék beállítások."
+
+#, fuzzy
+#~ msgid "Experimental Game Settings"
+#~ msgstr "FHeroes2 játék beállítások."
 
 #~ msgid "Your army too big!"
 #~ msgstr "A sereged túl nagy!"

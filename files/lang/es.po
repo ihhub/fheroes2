@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 11:54+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2709,10 +2709,6 @@ msgid "Graphics"
 msgstr ""
 
 #, fuzzy
-msgid "Experimental"
-msgstr "Elemental del Aire"
-
-#, fuzzy
 msgid "Black & White"
 msgstr "Puente"
 
@@ -2727,29 +2723,6 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teletransporte"
 
-#, fuzzy
-msgid "Interface Type"
-msgstr "Interfaz"
-
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "autoBattle|Manual"
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Botella"
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2758,16 +2731,6 @@ msgid "Select Game Language"
 msgstr "Descripción seleccionada"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
-
-#, fuzzy
-msgid "Experimental game settings."
-msgstr "Configuración del juego FHeroes2"
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
@@ -3268,10 +3231,6 @@ msgstr "La descripción del mapa actualmente elegido."
 msgid "Accept the choice made."
 msgstr "Aceptar la elección realizada."
 
-#, fuzzy
-msgid "Experimental Game Settings"
-msgstr "Configuración del juego FHeroes2"
-
 msgid "Jump"
 msgstr ""
 
@@ -3303,6 +3262,16 @@ msgstr "Muy rápida"
 msgid "Scroll Speed"
 msgstr "Velocidad de desplazamiento"
 
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Interfaz"
+
 msgid "Hide"
 msgstr ""
 
@@ -3311,6 +3280,19 @@ msgstr ""
 
 msgid "Interface"
 msgstr "Interfaz"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+#, fuzzy
+msgid "Battles"
+msgstr "Botella"
+
+msgid "autoBattle|Manual"
+msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3323,7 +3305,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -9637,22 +9625,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-#, fuzzy
-msgid "battle: allow soft wait for troops"
-msgstr "batalla: espera de tropa fluido"
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr "juego: usar interfaz maligna"
-
-msgid "game: hide interface"
-msgstr "juego: ocultar interfaz"
-
 #, fuzzy
 msgid "The ultimate artifact is really the %{name}."
 msgstr "¡La maldición de la Momia cae sobre %{name}!"
@@ -9722,6 +9694,28 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Experimental"
+#~ msgstr "Elemental del Aire"
+
+#, fuzzy
+#~ msgid "Experimental game settings."
+#~ msgstr "Configuración del juego FHeroes2"
+
+#, fuzzy
+#~ msgid "Experimental Game Settings"
+#~ msgstr "Configuración del juego FHeroes2"
+
+#, fuzzy
+#~ msgid "battle: allow soft wait for troops"
+#~ msgstr "batalla: espera de tropa fluido"
+
+#~ msgid "game: use evil interface"
+#~ msgstr "juego: usar interfaz maligna"
+
+#~ msgid "game: hide interface"
+#~ msgstr "juego: ocultar interfaz"
 
 #, fuzzy
 #~ msgid "battle: show damage info"
