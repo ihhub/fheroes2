@@ -36,7 +36,7 @@
 
 namespace
 {
-    int debugLevel = DBG_NONE;
+    int debugLevel = DBG_ALL_WARN;
     bool textSupportMode = false;
 
 #if defined( _WIN32 )

@@ -27,8 +27,6 @@
 
 enum
 {
-    DBG_NONE = 0x0000,
-
     DBG_WARN = 0x0001,
     DBG_INFO = 0x0002,
     DBG_TRACE = 0x0003,
