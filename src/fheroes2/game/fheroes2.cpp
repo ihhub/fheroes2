@@ -65,9 +65,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#ifdef WITH_DEBUG
-#include "tools.h"
-#endif
 #include "ui_tool.h"
 #include "zzlib.h"
 
