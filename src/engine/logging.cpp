@@ -125,6 +125,8 @@ namespace Logging
         const std::scoped_lock<std::mutex> lock( logMutex );
         const std::string logPath( System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.log" ) );
 
+        System::MakeDirectory( System::GetDirname( logPath ) );
+
         logFile.open( logPath, std::ofstream::out );
 #elif defined( MACOS_APP_BUNDLE )
         openlog( "fheroes2", LOG_CONS | LOG_NDELAY, LOG_USER );
