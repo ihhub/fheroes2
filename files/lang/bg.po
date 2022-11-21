@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 11:54+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2670,9 +2670,6 @@ msgstr "Език"
 msgid "Graphics"
 msgstr "Графика"
 
-msgid "Experimental"
-msgstr "Пробни"
-
 msgid "Black & White"
 msgstr "Черно-бял"
 
@@ -2685,27 +2682,6 @@ msgstr "Цветен"
 msgid "Text Support"
 msgstr "Доп. информация"
 
-msgid "Interface Type"
-msgstr "Интерфейс"
-
-msgid "Evil"
-msgstr "Зъл"
-
-msgid "Good"
-msgstr "Добър"
-
-msgid "Auto Resolve"
-msgstr "Авто"
-
-msgid "Auto, No Spells"
-msgstr "Авто, без магий"
-
-msgid "autoBattle|Manual"
-msgstr "Вручную"
-
-msgid "Battles"
-msgstr "Сражения"
-
 msgid "Change the language of the game."
 msgstr "Промяна на езика на играта."
 
@@ -2714,15 +2690,6 @@ msgstr "Език на играта"
 
 msgid "Change the graphics settings of the game."
 msgstr "Промени графичните настройки на играта."
-
-msgid "Experimental game settings."
-msgstr "Експериментални настройки на играта."
-
-msgid "Toggle instant battle mode."
-msgstr "Превключи режима на незабавна битка."
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -3210,9 +3177,6 @@ msgstr "Описание на избраната в момента карта."
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
 
-msgid "Experimental Game Settings"
-msgstr "Пробни настройки на играта"
-
 msgid "Jump"
 msgstr "Скок"
 
@@ -3241,6 +3205,15 @@ msgstr "Мн. бърза"
 msgid "Scroll Speed"
 msgstr "Скорост на Превъртане"
 
+msgid "Evil"
+msgstr "Зъл"
+
+msgid "Good"
+msgstr "Добър"
+
+msgid "Interface Type"
+msgstr "Интерфейс"
+
 msgid "Hide"
 msgstr "Скрий"
 
@@ -3249,6 +3222,18 @@ msgstr "Покажи"
 
 msgid "Interface"
 msgstr "Интерфейс"
+
+msgid "Auto Resolve"
+msgstr "Авто"
+
+msgid "Auto, No Spells"
+msgstr "Авто, без магий"
+
+msgid "Battles"
+msgstr "Сражения"
+
+msgid "autoBattle|Manual"
+msgstr "Вручную"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Промени скоростта, с която твоите герои се движат на главния екран."
@@ -3263,8 +3248,14 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Задава скоростта, с която превърташ прозореца."
 
+msgid "Toggle the type of interface you want to use."
+msgstr "Превключи типа на интерфейса, който искаш да използваш."
+
 msgid "Toggle interface visibility."
 msgstr "Превключва видимостта на интерфейса."
+
+msgid "Toggle instant battle mode."
+msgstr "Превключи режима на незабавна битка."
 
 msgid "Att."
 msgstr "Атак."
@@ -9604,21 +9595,6 @@ msgstr ""
 "Това заклинание контролира до\n"
 "%{hp} живот."
 
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "герои: позволяват да избереш всяко основно умение от Арена"
-
-msgid "battle: allow soft wait for troops"
-msgstr "битка: позволява меко изчакване за войски"
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "игра: автоматично запазване ще бъде направено в началото на деня"
-
-msgid "game: use evil interface"
-msgstr "игра: използвайте зъл интерфейс"
-
-msgid "game: hide interface"
-msgstr "игра: скриване на интерфейса"
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Върховният артефакт наистина е %{name}."
 
@@ -9681,6 +9657,30 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Experimental"
+#~ msgstr "Пробни"
+
+#~ msgid "Experimental game settings."
+#~ msgstr "Експериментални настройки на играта."
+
+#~ msgid "Experimental Game Settings"
+#~ msgstr "Пробни настройки на играта"
+
+#~ msgid "heroes: allow to choose any primary skill in Arena"
+#~ msgstr "герои: позволяват да избереш всяко основно умение от Арена"
+
+#~ msgid "battle: allow soft wait for troops"
+#~ msgstr "битка: позволява меко изчакване за войски"
+
+#~ msgid "game: autosave will be made at the beginning of the day"
+#~ msgstr "игра: автоматично запазване ще бъде направено в началото на деня"
+
+#~ msgid "game: use evil interface"
+#~ msgstr "игра: използвайте зъл интерфейс"
+
+#~ msgid "game: hide interface"
+#~ msgstr "игра: скриване на интерфейса"
 
 #~ msgid "battle: show damage info"
 #~ msgstr "битка: показва информация за щетите"

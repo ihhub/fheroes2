@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 11:54+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2705,11 +2705,6 @@ msgstr "Langue"
 msgid "Graphics"
 msgstr ""
 
-msgid "Experimental"
-msgstr ""
-"Expéri-\n"
-"mentaux"
-
 msgid "Black & White"
 msgstr "Noir et blanc"
 
@@ -2722,27 +2717,6 @@ msgstr "Couleur"
 msgid "Text Support"
 msgstr "Mode texte"
 
-msgid "Interface Type"
-msgstr "Interface"
-
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-msgid "Auto Resolve"
-msgstr "Combat auto"
-
-msgid "Auto, No Spells"
-msgstr "Auto sans magie"
-
-msgid "autoBattle|Manual"
-msgstr "Manuelles"
-
-msgid "Battles"
-msgstr "Batailles"
-
 msgid "Change the language of the game."
 msgstr "Changer la langue du jeu."
 
@@ -2752,15 +2726,6 @@ msgstr "Choix de la langue"
 #, fuzzy
 msgid "Change the graphics settings of the game."
 msgstr "Changer les paramètres du son du jeu."
-
-msgid "Experimental game settings."
-msgstr "Paramètres de jeu expérimentaux."
-
-msgid "Toggle instant battle mode."
-msgstr "Change les modes de combat instantané."
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Bascule le type d'interface que vous voulez utiliser."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -3254,9 +3219,6 @@ msgstr "La description de la carte actuellement sélectionnée."
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
 
-msgid "Experimental Game Settings"
-msgstr "Paramètres de jeu expérimentaux"
-
 msgid "Jump"
 msgstr "Immédiat"
 
@@ -3286,6 +3248,15 @@ msgstr "Très rapide"
 msgid "Scroll Speed"
 msgstr "Défilement"
 
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
+
+msgid "Interface Type"
+msgstr "Interface"
+
 msgid "Hide"
 msgstr "Libre"
 
@@ -3294,6 +3265,18 @@ msgstr "Attachée"
 
 msgid "Interface"
 msgstr "Interface"
+
+msgid "Auto Resolve"
+msgstr "Combat auto"
+
+msgid "Auto, No Spells"
+msgstr "Auto sans magie"
+
+msgid "Battles"
+msgstr "Batailles"
+
+msgid "autoBattle|Manual"
+msgstr "Manuelles"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3309,8 +3292,14 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Définit la vitesse à laquelle vous faites défiler la fenêtre."
 
+msgid "Toggle the type of interface you want to use."
+msgstr "Bascule le type d'interface que vous voulez utiliser."
+
 msgid "Toggle interface visibility."
 msgstr "Visibilité d'interface."
+
+msgid "Toggle instant battle mode."
+msgstr "Change les modes de combat instantané."
 
 msgid "Att."
 msgstr "Att."
@@ -9927,23 +9916,6 @@ msgstr ""
 "Ce sort contrôle jusqu'à\n"
 "%{hp} PV."
 
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-"héros : permettre le choix parmi toutes les compétences primaires dans "
-"l'arène"
-
-msgid "battle: allow soft wait for troops"
-msgstr "combat : permettre aux créatures d'attendre au cours du combat"
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "jeu : sauvegarde auto en début de journée"
-
-msgid "game: use evil interface"
-msgstr "jeu : utiliser l'interface maléfique"
-
-msgid "game: hide interface"
-msgstr "jeu : cacher l'interface"
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr "L'ultime artéfact est vraiment le %{name}."
 
@@ -10007,6 +9979,34 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Experimental"
+#~ msgstr ""
+#~ "Expéri-\n"
+#~ "mentaux"
+
+#~ msgid "Experimental game settings."
+#~ msgstr "Paramètres de jeu expérimentaux."
+
+#~ msgid "Experimental Game Settings"
+#~ msgstr "Paramètres de jeu expérimentaux"
+
+#~ msgid "heroes: allow to choose any primary skill in Arena"
+#~ msgstr ""
+#~ "héros : permettre le choix parmi toutes les compétences primaires dans "
+#~ "l'arène"
+
+#~ msgid "battle: allow soft wait for troops"
+#~ msgstr "combat : permettre aux créatures d'attendre au cours du combat"
+
+#~ msgid "game: autosave will be made at the beginning of the day"
+#~ msgstr "jeu : sauvegarde auto en début de journée"
+
+#~ msgid "game: use evil interface"
+#~ msgstr "jeu : utiliser l'interface maléfique"
+
+#~ msgid "game: hide interface"
+#~ msgstr "jeu : cacher l'interface"
 
 #~ msgid "battle: show damage info"
 #~ msgstr "bataille : afficher les informations sur les dégâts"
