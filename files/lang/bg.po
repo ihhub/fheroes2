@@ -320,7 +320,7 @@ msgid "The enemy has surrendered!"
 msgstr "Врагът се предаде!"
 
 msgid "The enemy has fled!"
-msgstr "Врагът е избягал!"
+msgstr "Врагът побягва!"
 
 msgid "A glorious victory!"
 msgstr "Славна победа!"
@@ -504,7 +504,7 @@ msgid "View Ballista info"
 msgstr "Виж информация за Катапулт"
 
 msgid "Ballista"
-msgstr "Катапулт"
+msgstr "Катапулта"
 
 msgid "Enable auto combat"
 msgstr "Включи на автоматична битка"
@@ -641,7 +641,7 @@ msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{target} са парализирани от %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "%{attacker} разсейва всички добри заклинания на вашия %{target}!"
+msgstr "%{attacker} разсейва всички добри заклинания на твоя %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
 msgstr "%{attacker} направи %{spell} на %{target}!"
@@ -2268,7 +2268,7 @@ msgstr ""
 "същества на седмица."
 
 msgid "The Statue increases your town's income by %{count} per day."
-msgstr "Статуята увеличава приходите на вашия град с %{count} на ден."
+msgstr "Статуята увеличава приходите на твоя град с %{count} на ден."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr ""
@@ -2913,7 +2913,7 @@ msgid "Road"
 msgstr "Път"
 
 msgid "(digging ok)"
-msgstr "(копае добре)"
+msgstr "(добра за копаене)"
 
 msgid "(no digging)"
 msgstr "(без копаене)"
@@ -4406,7 +4406,7 @@ msgid "Rebecca"
 msgstr "Ребека"
 
 msgid "Troyan"
-msgstr "Троян"
+msgstr "Траяна"
 
 msgid "Vatawna"
 msgstr "Ватуна"
@@ -5036,7 +5036,7 @@ msgid ""
 "you all that I know to aid you in your travels.\""
 msgstr ""
 "На стъпалата на беседката се появява стар рицар. \"Господарю мой, ще те "
-"науча на всичко, което знам, за да ти помагам в пътуванията ти.\""
+"науча на всичко, което знам, за да ти помага в пътуванията ти.\""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
@@ -6308,7 +6308,7 @@ msgstr ""
 
 msgid "%{skill} increases your hero's movement points by %{count} percent."
 msgstr ""
-"%{skill} увеличава точките за движение на вашия герой с %{count} процента."
+"%{skill} увеличава точките за движение на твоя герой с %{count} процента."
 
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
@@ -6658,85 +6658,85 @@ msgid "speed|Instant"
 msgstr "Мигновена"
 
 msgid "week|Squirrel"
-msgstr "Катерица"
+msgstr "Катерицата"
 
 msgid "week|Rabbit"
-msgstr "Заек"
+msgstr "Заека"
 
 msgid "week|Gopher"
-msgstr "Гризач"
+msgstr "Гризача"
 
 msgid "week|Badger"
-msgstr "Язовец"
+msgstr "Язовеца"
 
 msgid "week|Rat"
-msgstr "Плъх"
+msgstr "Плъха"
 
 msgid "week|Eagle"
-msgstr "Орел"
+msgstr "Орела"
 
 msgid "week|Weasel"
-msgstr "Невестулка"
+msgstr "Невестулката"
 
 msgid "week|Raven"
-msgstr "Гарван"
+msgstr "Гарвана"
 
 msgid "week|Mongoose"
-msgstr "Мангуста"
+msgstr "Мангустата"
 
 msgid "week|Dog"
-msgstr "Куче"
+msgstr "Кучето"
 
 msgid "week|Aardvark"
-msgstr "Мравояд"
+msgstr "Мравояда"
 
 msgid "week|Lizard"
-msgstr "Гущер"
+msgstr "Гущера"
 
 msgid "week|Tortoise"
-msgstr "Костенурка"
+msgstr "Костенурката"
 
 msgid "week|Hedgehog"
-msgstr "Таралеж"
+msgstr "Таралежа"
 
 msgid "week|Condor"
-msgstr "Кондор"
+msgstr "Кондора"
 
 msgid "week|Ant"
-msgstr "Мравка"
+msgstr "Мравката"
 
 msgid "week|Grasshopper"
-msgstr "Скакалец"
+msgstr "Скакалеца"
 
 msgid "week|Dragonfly"
-msgstr "Водно конче"
+msgstr "Водното конче"
 
 msgid "week|Spider"
-msgstr "Паяк"
+msgstr "Паяка"
 
 msgid "week|Butterfly"
-msgstr "Пеперуда"
+msgstr "Пеперудата"
 
 msgid "week|Bumblebee"
-msgstr "Земна пчела"
+msgstr "Земната пчела"
 
 msgid "week|Locust"
-msgstr "Скакалец"
+msgstr "Ненаситника"
 
 msgid "week|Earthworm"
-msgstr "Земен червей"
+msgstr "Земения червей"
 
 msgid "week|Hornet"
-msgstr "Стършел"
+msgstr "Стършела"
 
 msgid "week|Beetle"
-msgstr "Бръмбар"
+msgstr "Бръмбара"
 
 msgid "week|PLAGUE"
-msgstr "ЧУМА"
+msgstr "ЧУМАТА"
 
 msgid "week|Unnamed"
-msgstr "Безименен"
+msgstr "Безимения"
 
 msgid "Desert"
 msgstr "Пустиня"
@@ -8487,7 +8487,7 @@ msgstr ""
 "със затворени очи."
 
 msgid "Kinetic Pendant"
-msgstr "Кинетична медальон"
+msgstr "Кинетичен медальон"
 
 msgid "The %{name} makes all your troops immune to paralyze spells."
 msgstr "%{name} прави всичките ти войски имунизирани срещу парализиращи магии."
