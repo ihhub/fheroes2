@@ -142,11 +142,6 @@ public:
         return current_maps_file._version == GameVersion::PRICE_OF_LOYALTY;
     }
 
-    int Debug() const
-    {
-        return debug;
-    }
-
     int HeroesMoveSpeed() const
     {
         return heroes_speed;
@@ -303,7 +298,8 @@ public:
         return video_mode;
     }
 
-    void SetDebug( int );
+    static void SetDebug( int debug );
+
     void EnablePriceOfLoyaltySupport( const bool set );
 
     void SetGameDifficulty( const int difficulty )
@@ -361,7 +357,6 @@ public:
         return _musicType;
     }
 
-    /* check game type */
     bool IsGameType( int type ) const
     {
         return ( game_type & type ) != 0;
@@ -504,9 +499,7 @@ public:
     static const std::vector<std::string> & GetRootDirs();
 
     static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
-
     static bool findFile( const std::string & internalDirectory, const std::string & fileName, std::string & fullPath );
-
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
 private:
@@ -530,7 +523,6 @@ private:
     BitModes _optExtBalance3; // Options with codes starting with 0x3
     BitModes _optExtBalance4; // Options with codes starting with 0x4
 
-    int debug;
     fheroes2::Size video_mode;
     int game_difficulty;
 

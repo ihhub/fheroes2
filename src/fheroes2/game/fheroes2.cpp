@@ -287,7 +287,6 @@ int main( int argc, char ** argv )
         DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() )
 
         const DisplayInitializer displayInitializer;
-
         const DataInitializer dataInitializer;
 
         ListFiles midiSoundFonts;

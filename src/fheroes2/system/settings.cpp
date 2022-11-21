@@ -87,8 +87,7 @@ std::string Settings::GetVersion()
 }
 
 Settings::Settings()
-    : debug( 0 )
-    , video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
+    : video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
@@ -143,62 +142,15 @@ bool Settings::Read( const std::string & filename )
     TinyConfig config( '=', '#' );
 
     std::string sval;
-    int ival;
 
-    if ( !config.Load( filename ) )
+    if ( !config.Load( filename ) ) {
         return false;
-
-    // debug
-    ival = config.IntParams( "debug" );
-
-    switch ( ival ) {
-    case 0:
-        debug = DBG_ALL_WARN;
-        break;
-    case 1:
-        debug = DBG_ALL_INFO;
-        break;
-    case 2:
-        debug = DBG_ALL_TRACE;
-        break;
-    case 3:
-        debug = DBG_ENGINE_TRACE;
-        break;
-    case 4:
-        debug = DBG_GAME_INFO | DBG_BATTLE_INFO | DBG_AI_INFO;
-        break;
-    case 5:
-        debug = DBG_GAME_TRACE | DBG_AI_INFO | DBG_BATTLE_INFO;
-        break;
-    case 6:
-        debug = DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
-        break;
-    case 7:
-        debug = DBG_BATTLE_TRACE | DBG_AI_INFO | DBG_GAME_INFO;
-        break;
-    case 8:
-        debug = DBG_DEVEL | DBG_GAME_TRACE;
-        break;
-    case 9:
-        debug = DBG_DEVEL | DBG_AI_INFO | DBG_BATTLE_INFO | DBG_GAME_INFO;
-        break;
-    case 10:
-        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
-        break;
-    case 11:
-        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_TRACE | DBG_GAME_INFO;
-        break;
-    default:
-        debug = ival;
-        break;
     }
 
-#ifndef WITH_DEBUG
-    // reset devel
-    debug &= ~DBG_DEVEL;
-#endif
-
-    Logging::SetDebugLevel( debug );
+    // debug
+    if ( config.Exists( "debug" ) ) {
+        SetDebug( config.IntParams( "debug" ) );
+    }
 
     // game language
     sval = config.StrParams( "lang" );
@@ -418,7 +370,7 @@ std::string Settings::String() const
     os << "fullscreen = " << ( _optGlobal.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
-    os << "debug = " << debug << std::endl;
+    os << "debug = " << Logging::getDebugLevel() << std::endl;
 
     os << std::endl << "# heroes movement speed: 1 - 10" << std::endl;
     os << "heroes speed = " << heroes_speed << std::endl;
@@ -849,10 +801,54 @@ bool Settings::BattleShowArmyOrder() const
     return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
 }
 
-void Settings::SetDebug( int d )
+void Settings::SetDebug( int debug )
 {
-    debug = d;
-    Logging::SetDebugLevel( debug );
+    switch ( debug ) {
+    case 0:
+        debug = DBG_ALL_WARN;
+        break;
+    case 1:
+        debug = DBG_ALL_INFO;
+        break;
+    case 2:
+        debug = DBG_ALL_TRACE;
+        break;
+    case 3:
+        debug = DBG_ENGINE_TRACE;
+        break;
+    case 4:
+        debug = DBG_GAME_INFO | DBG_BATTLE_INFO | DBG_AI_INFO;
+        break;
+    case 5:
+        debug = DBG_GAME_TRACE | DBG_AI_INFO | DBG_BATTLE_INFO;
+        break;
+    case 6:
+        debug = DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 7:
+        debug = DBG_BATTLE_TRACE | DBG_AI_INFO | DBG_GAME_INFO;
+        break;
+    case 8:
+        debug = DBG_DEVEL | DBG_GAME_TRACE;
+        break;
+    case 9:
+        debug = DBG_DEVEL | DBG_AI_INFO | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 10:
+        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 11:
+        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_TRACE | DBG_GAME_INFO;
+        break;
+    default:
+        break;
+    }
+
+#ifndef WITH_DEBUG
+    debug &= ~DBG_DEVEL;
+#endif
+
+    Logging::setDebugLevel( debug );
 }
 
 void Settings::SetSoundVolume( int v )
@@ -1087,24 +1083,20 @@ void Settings::resetFirstGameRun()
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf._optExtBalance2
-        << conf._optExtBalance4 << conf._optExtBalance3 << conf.players;
-
-    return msg;
+    return msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf._optExtBalance2
+               << conf._optExtBalance4 << conf._optExtBalance3 << conf.players;
 }
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    msg >> conf._loadedFileLanguage;
+    msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players;
 
-    int debug;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_1000_RELEASE ) {
+        int dummy;
 
-    msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> conf._optExtBalance2 >> conf._optExtBalance4
-        >> conf._optExtBalance3 >> conf.players;
+        msg >> dummy;
+    }
 
-#ifndef WITH_DEBUG
-    conf.debug = debug;
-#endif
-
-    return msg;
+    return msg >> conf._optExtBalance2 >> conf._optExtBalance4 >> conf._optExtBalance3 >> conf.players;
 }

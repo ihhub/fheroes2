@@ -27,6 +27,8 @@
 
 enum
 {
+    DBG_NONE = 0x0000,
+
     DBG_WARN = 0x0001,
     DBG_INFO = 0x0002,
     DBG_TRACE = 0x0003,
@@ -88,10 +90,10 @@ namespace Logging
     // Initialize logging. Some systems require writing logging information into a file.
     void InitLog();
 
-    void SetDebugLevel( const int debugLevel );
+    void setDebugLevel( const int level );
+    int getDebugLevel();
 
     void setTextSupportMode( const bool enableTextSupportMode );
-
     bool isTextSupportModeEnabled();
 }
 
