@@ -859,46 +859,6 @@ void Kingdoms::AddCastles( const AllCastles & castles )
     }
 }
 
-void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType )
-{
-    for ( Kingdom & kingdom : kingdoms ) {
-        if ( kingdom.isPlay() ) {
-            const int color = kingdom.GetColor();
-            Funds funds;
-            int objectCount = 0;
-
-            captureobj.tributeCapturedObjects( color, objectType, funds, objectCount );
-            if ( objectCount == 0 ) {
-                continue;
-            }
-
-            // for show dialogs
-            if ( funds.GetValidItemsCount() && kingdom.isControlHuman() ) {
-                EventDate event;
-
-                event.computer = true;
-                event.first = day;
-                event.colors = color;
-                event.resource = funds;
-
-                if ( objectCount > 1 ) {
-                    event.title = std::to_string( objectCount );
-                    event.title += ' ';
-                    event.title += MP2::StringObject( objectType, objectCount );
-                }
-                else {
-                    event.title = MP2::StringObject( objectType );
-                }
-
-                world.AddEventDate( event );
-            }
-            else {
-                kingdom.AddFundsResource( funds );
-            }
-        }
-    }
-}
-
 std::set<Heroes *> Kingdoms::resetRecruits()
 {
     std::set<Heroes *> remainingRecruits;

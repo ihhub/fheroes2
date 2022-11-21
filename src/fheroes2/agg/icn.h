@@ -912,7 +912,6 @@ namespace ICN
         BATTLESKIP,
         BATTLEWAIT,
         BUYMAX,
-        BTNCONFIG,
         BTNBATTLEONLY,
         BTNGIFT_GOOD,
         BTNGIFT_EVIL,

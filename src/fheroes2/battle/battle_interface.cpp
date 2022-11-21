@@ -485,14 +485,16 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
 
-    fheroes2::DrawLine( sf, { r, 0 }, { 0, l }, colorId );
-    fheroes2::DrawLine( sf, { r, 0 }, { w, l }, colorId );
+    fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
+    fheroes2::SetPixel( sf, r, 1, colorId );
+    fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
 
     fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
     fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
 
-    fheroes2::DrawLine( sf, { r, h }, { 0, h - l }, colorId );
-    fheroes2::DrawLine( sf, { r, h }, { w, h - l }, colorId );
+    fheroes2::DrawLine( sf, { r - 1, h }, { 0, h - l }, colorId );
+    fheroes2::SetPixel( sf, r, h, colorId );
+    fheroes2::DrawLine( sf, { r + 1, h }, { w, h - l }, colorId );
 
     return sf;
 }
@@ -505,17 +507,17 @@ fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
 
     fheroes2::Image sf( w, h );
     sf.reset();
-    fheroes2::Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
+    fheroes2::Rect rt( 2, l - 1, w - 3, 2 * l + 4 );
     for ( int i = 0; i < w / 2; i += 2 ) {
-        --rt.y;
-        rt.height += 2;
-        rt.x += 2;
-        rt.width -= 4;
         for ( int x = 0; x < rt.width; ++x ) {
             for ( int y = 0; y < rt.height; ++y ) {
                 fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
             }
         }
+        --rt.y;
+        rt.height += 2;
+        rt.x += ( i == 0 ) ? 1 : 2;
+        rt.width -= ( i == 0 ) ? 2 : 4;
     }
 
     return sf;
@@ -3998,7 +4000,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     AudioManager::PlaySound( M82::CATSND00 );
 
     // catapult animation
-    while ( le.HandleEvents( false ) && catapult_frame < 6 ) {
+    while ( le.HandleEvents( false ) && catapult_frame < 5 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_DELAY ) ) {
@@ -4008,19 +4010,43 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     }
 
     // boulder animation
-    fheroes2::Point pt1( 90, 220 );
+    fheroes2::Point pt1( 30, 290 );
     fheroes2::Point pt2 = Catapult::GetTargetPosition( target, hit );
-    fheroes2::Point max( 300, 20 );
+    const int32_t boulderArcStep = ( pt2.x - pt1.x ) / 30;
+
+    // set the projectile arc height for each castle target and a formula for an unknown target
+    int32_t boulderArcHeight;
+    switch ( target ) {
+    case Battle::CAT_WALL1:
+        boulderArcHeight = 220;
+        break;
+    case Battle::CAT_WALL2:
+    case Battle::CAT_BRIDGE:
+        boulderArcHeight = 216;
+        break;
+    case Battle::CAT_WALL3:
+        boulderArcHeight = 204;
+        break;
+    case Battle::CAT_WALL4:
+        boulderArcHeight = 208;
+        break;
+    case Battle::CAT_TOWER1:
+    case Battle::CAT_TOWER2:
+        boulderArcHeight = 206;
+        break;
+    case Battle::CAT_CENTRAL_TOWER:
+        boulderArcHeight = 290;
+        break;
+    default:
+        boulderArcHeight = static_cast<int32_t>( std::lround( 0.55 * getDistance( pt1, pt2 ) ) );
+    }
 
     pt1.x += area.x;
     pt2.x += area.x;
-    max.x += area.x;
     pt1.y += area.y;
     pt2.y += area.y;
-    max.y += area.y;
 
-    const fheroes2::Sprite & boulderFirstFrame = fheroes2::AGG::GetICN( ICN::BOULDER, 0 );
-    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, max, boulderFirstFrame.width() );
+    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, boulderArcHeight, boulderArcStep );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     uint32_t boulderFrameId = 0;
@@ -5273,7 +5299,7 @@ void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker,
         return;
     }
 
-    if ( !Settings::Get().ExtBattleShowDamage() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
+    if ( !Settings::Get().isBattleShowDamageInfoEnabled() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
         return;
     }
 

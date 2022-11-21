@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -260,16 +260,24 @@ msgstr ""
 "сповільнює його вдвічі."
 
 #, fuzzy
-msgid "Speed"
-msgstr "Швидкість"
-
-#, fuzzy
 msgid "Speed: %{speed}"
 msgstr "Швидкість: %{speed}"
 
 #, fuzzy
+msgid "Speed"
+msgstr "Швидкість"
+
+#, fuzzy
 msgid "Army Order"
 msgstr "Черговість армій"
+
+#, fuzzy
+msgid "Off"
+msgstr "Вимк."
+
+#, fuzzy
+msgid "On"
+msgstr "Увімк."
 
 #, fuzzy
 msgid "Auto Spell Casting"
@@ -287,13 +295,20 @@ msgstr "Тінь під час руху"
 msgid "Shadow Cursor"
 msgstr "Тінь курсора"
 
-#, fuzzy
-msgid "Off"
-msgstr "Вимк."
+msgid "Audio"
+msgstr ""
 
-#, fuzzy
-msgid "On"
-msgstr "Увімк."
+msgid "Settings"
+msgstr ""
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+msgid "Damage Info"
+msgstr ""
 
 #, fuzzy
 msgid "Set the speed of combat actions and animations."
@@ -330,6 +345,25 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr "Чи підсвічувати клітину, над якою знаходиться курсор миші."
+
+#, fuzzy
+msgid "Change the audio settings of the game."
+msgstr "Змінити мову гри."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr "Чи показувати черговість армій під час битви."
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Вийти з цього меню."
+
+#, fuzzy
+msgid "Okay"
+msgstr "Окєй"
 
 #, fuzzy
 msgid "The enemy has surrendered!"
@@ -2485,10 +2519,6 @@ msgid "Exit"
 msgstr "Вийти"
 
 #, fuzzy
-msgid "Exit this menu."
-msgstr "Вийти з цього меню."
-
-#, fuzzy
 msgid "Click to show next town."
 msgstr "Натисніть щоб побачити наступне місто."
 
@@ -2773,10 +2803,6 @@ msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
 #, fuzzy
-msgid "Okay"
-msgstr "Окєй"
-
-#, fuzzy
 msgid "Build a new ship:"
 msgstr "Побудувати новий корабель:"
 
@@ -2831,21 +2857,6 @@ msgstr "Мова"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr ""
-
-msgid "Experimental"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
-
 msgid "Black & White"
 msgstr ""
 
@@ -2858,28 +2869,6 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
-#, fuzzy
-msgid "Interface Type"
-msgstr "Тип Інтерфейсу"
-
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "autoBattle|Manual"
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr "Змінити мову гри."
 
@@ -2889,22 +2878,6 @@ msgstr "Обрати мову гри"
 #, fuzzy
 msgid "Change the graphics settings of the game."
 msgstr "Змінити мову гри."
-
-#, fuzzy
-msgid "Change the audio settings of the game."
-msgstr "Змінити мову гри."
-
-msgid "Experimental game settings."
-msgstr ""
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -3026,13 +2999,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr ""
-
-#, fuzzy
-msgid "Your army too big!"
-msgstr "Ваша армія завелика!"
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -3092,10 +3058,10 @@ msgstr ""
 msgid "n/a"
 msgstr ""
 
-msgid "guarded by "
+msgid "guarded by %{count} %{monster}"
 msgstr ""
 
-msgid "guarded by %{count} %{monster}"
+msgid "guarded by "
 msgstr ""
 
 msgid "(available: %{count})"
@@ -3387,9 +3353,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "Experimental Game Settings"
-msgstr ""
-
 msgid "Jump"
 msgstr ""
 
@@ -3402,8 +3365,31 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr ""
 
+msgid "Slow"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Звичайна"
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
 msgid "Scroll Speed"
 msgstr ""
+
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Тип Інтерфейсу"
 
 msgid "Hide"
 msgstr ""
@@ -3412,6 +3398,18 @@ msgid "Show"
 msgstr ""
 
 msgid "Interface"
+msgstr ""
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
+msgid "autoBattle|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3425,7 +3423,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3547,10 +3551,6 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
-#, fuzzy
-msgid "Normal"
-msgstr "Звичайна"
-
 msgid "Hard"
 msgstr ""
 
@@ -3593,14 +3593,14 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 #, fuzzy
 msgid "Development"
 msgstr "Розробка"
 
 msgid "Dev and Support"
-msgstr ""
-
-msgid "Visit us at "
 msgstr ""
 
 msgid "Special Thanks to"
@@ -3609,16 +3609,22 @@ msgstr ""
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3829,6 +3835,11 @@ msgstr ""
 
 msgid "Greetings!"
 msgstr ""
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Залишити Heroes of Might and Magic II і повернутися до операційної системи."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4762,11 +4773,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4775,6 +4781,11 @@ msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 
 msgid ""
@@ -9392,36 +9403,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "герої: дозволити придбати книгу чарів з Святинь"
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "гра: автозберігати на початку дня"
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr ""
 
@@ -9484,6 +9465,16 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: autosave will be made at the beginning of the day"
+#~ msgstr "гра: автозберігати на початку дня"
+
+#~ msgid "heroes: allow buy a spellbook from Shrines"
+#~ msgstr "герої: дозволити придбати книгу чарів з Святинь"
+
+#, fuzzy
+#~ msgid "Your army too big!"
+#~ msgstr "Ваша армія завелика!"
 
 #~ msgid "castle: allow guardians"
 #~ msgstr "замок: дозволити захистників"

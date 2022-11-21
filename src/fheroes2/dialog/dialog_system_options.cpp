@@ -51,7 +51,6 @@ namespace
         Open,
         ChangeInterfaceTheme,
         UpdateInterface,
-        SaveConfiguration,
         AudioSettings,
         HotKeys,
         CursorType,
@@ -123,19 +122,40 @@ namespace
 
         // Scrolling speed.
         const int scrollSpeed = conf.ScrollSpeed();
-        uint32_t scrollSpeedIconId = 7;
-        if ( scrollSpeed < SCROLL_NORMAL ) {
-            scrollSpeedIconId = 4;
+        int32_t scrollSpeedIconIcn = ICN::UNKNOWN;
+        uint32_t scrollSpeedIconId = 0;
+        std::string scrollSpeedName;
+
+        if ( scrollSpeed == SCROLL_SPEED_NONE ) {
+            scrollSpeedName = _( "Off" );
+            scrollSpeedIconIcn = ICN::SPANEL;
+            scrollSpeedIconId = 9;
         }
-        else if ( scrollSpeed < SCROLL_FAST1 ) {
-            scrollSpeedIconId = 5;
+        else if ( scrollSpeed == SCROLL_SPEED_SLOW ) {
+            scrollSpeedName = _( "Slow" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 0;
         }
-        else if ( scrollSpeed < SCROLL_FAST2 ) {
-            scrollSpeedIconId = 6;
+        else if ( scrollSpeed == SCROLL_SPEED_NORMAL ) {
+            scrollSpeedName = _( "Normal" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 0;
+        }
+        else if ( scrollSpeed == SCROLL_SPEED_FAST ) {
+            scrollSpeedName = _( "Fast" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 1;
+        }
+        else if ( scrollSpeed == SCROLL_SPEED_VERY_FAST ) {
+            scrollSpeedName = _( "Very Fast" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 2;
         }
 
-        const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( ICN::SPANEL, scrollSpeedIconId );
-        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), std::to_string( scrollSpeed ) );
+        assert( scrollSpeedIconIcn != ICN::UNKNOWN );
+
+        const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( scrollSpeedIconIcn, scrollSpeedIconId );
+        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), scrollSpeedName );
 
         // Interface theme.
         const bool isEvilInterface = conf.ExtGameEvilInterface();
@@ -176,7 +196,7 @@ namespace
         }
     }
 
-    DialogAction openSystemOptionsDialog()
+    DialogAction openSystemOptionsDialog( bool & saveConfiguration )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -227,8 +247,6 @@ namespace
         buttonOkay.draw();
 
         display.render();
-
-        bool saveConfig = false;
 
         // dialog menu loop
         LocalEvent & le = LocalEvent::Get();
@@ -291,7 +309,7 @@ namespace
             // set scroll speed
             bool saveScrollSpeed = false;
             if ( le.MouseClickLeft( scrollSpeedRoi ) ) {
-                conf.SetScrollSpeed( conf.ScrollSpeed() % SCROLL_FAST2 + 1 );
+                conf.SetScrollSpeed( ( conf.ScrollSpeed() + 1 ) % ( SCROLL_SPEED_VERY_FAST + 1 ) );
                 saveScrollSpeed = true;
             }
             else if ( le.MouseWheelUp( scrollSpeedRoi ) ) {
@@ -334,7 +352,6 @@ namespace
             if ( le.MousePressRight( audioSettingsRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Audio" ), _( "Change the audio settings of the game." ), 0 );
             }
-
             else if ( le.MousePressRight( hotkeysRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );
             }
@@ -371,12 +388,8 @@ namespace
                 buttonOkay.draw();
                 display.render();
 
-                saveConfig = true;
+                saveConfiguration = true;
             }
-        }
-
-        if ( saveConfig ) {
-            return DialogAction::SaveConfiguration;
         }
 
         return DialogAction::Close;
@@ -389,16 +402,16 @@ namespace fheroes2
     {
         // We should make file writing only once.
         bool saveConfiguration = false;
+        Settings & conf = Settings::Get();
 
         DialogAction action = DialogAction::Open;
 
         while ( action != DialogAction::Close ) {
             switch ( action ) {
             case DialogAction::Open:
-                action = openSystemOptionsDialog();
+                action = openSystemOptionsDialog( saveConfiguration );
                 break;
             case DialogAction::ChangeInterfaceTheme: {
-                Settings & conf = Settings::Get();
                 conf.SetEvilInterface( !conf.ExtGameEvilInterface() );
                 saveConfiguration = true;
 
@@ -406,11 +419,10 @@ namespace fheroes2
                 basicInterface.Reset();
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
-                action = openSystemOptionsDialog();
+                action = DialogAction::Open;
                 break;
             }
             case DialogAction::UpdateInterface: {
-                Settings & conf = Settings::Get();
                 conf.SetHideInterface( !conf.ExtGameHideInterface() );
                 saveConfiguration = true;
 
@@ -421,12 +433,9 @@ namespace fheroes2
                 basicInterface.Redraw( Interface::REDRAW_RADAR );
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
-                action = openSystemOptionsDialog();
+                action = DialogAction::Open;
                 break;
             }
-            case DialogAction::SaveConfiguration:
-                Settings::Get().Save( Settings::configFileName );
-                return;
             case DialogAction::AudioSettings:
                 Dialog::openAudioSettingsDialog( true );
                 action = DialogAction::Open;
@@ -436,7 +445,6 @@ namespace fheroes2
                 action = DialogAction::Open;
                 break;
             case DialogAction::CursorType: {
-                Settings & conf = Settings::Get();
                 conf.setMonochromeCursor( !conf.isMonochromeCursorEnabled() );
                 saveConfiguration = true;
                 action = DialogAction::Open;
@@ -448,7 +456,7 @@ namespace fheroes2
         }
 
         if ( saveConfiguration ) {
-            Settings::Get().Save( Settings::configFileName );
+            conf.Save( Settings::configFileName );
         }
     }
 }

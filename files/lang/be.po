@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -220,14 +220,20 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Хуткасць"
-
 msgid "Speed: %{speed}"
 msgstr "Хуткасць: %{speed}"
 
+msgid "Speed"
+msgstr "Хуткасць"
+
 msgid "Army Order"
 msgstr "Парадак войску"
+
+msgid "Off"
+msgstr "Выкл"
+
+msgid "On"
+msgstr "Укл"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -241,11 +247,21 @@ msgstr ""
 msgid "Shadow Cursor"
 msgstr ""
 
-msgid "Off"
-msgstr "Выкл"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Укл"
+msgid "Settings"
+msgstr ""
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Урон"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Усталяваць хуткасць баявых дзеянняў і анімацый."
@@ -272,6 +288,21 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+msgid "Exit this menu."
+msgstr "Выйсці з меню"
+
+msgid "Okay"
+msgstr "Ок"
 
 msgid "The enemy has surrendered!"
 msgstr "Вораг здаўся!"
@@ -2152,9 +2183,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Выхад"
 
-msgid "Exit this menu."
-msgstr "Выйсці з меню"
-
 msgid "Click to show next town."
 msgstr ""
 
@@ -2415,9 +2443,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "Ок"
-
 msgid "Build a new ship:"
 msgstr ""
 
@@ -2463,21 +2488,6 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr ""
-
-msgid "Experimental"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
-
 msgid "Black & White"
 msgstr ""
 
@@ -2490,27 +2500,6 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
-msgid "Interface Type"
-msgstr ""
-
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "autoBattle|Manual"
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2518,21 +2507,6 @@ msgid "Select Game Language"
 msgstr ""
 
 msgid "Change the graphics settings of the game."
-msgstr ""
-
-msgid "Change the audio settings of the game."
-msgstr ""
-
-msgid "Experimental game settings."
-msgstr ""
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
@@ -2645,12 +2619,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr ""
-
-msgid "Your army too big!"
-msgstr ""
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -2709,10 +2677,10 @@ msgstr ""
 msgid "n/a"
 msgstr ""
 
-msgid "guarded by "
+msgid "guarded by %{count} %{monster}"
 msgstr ""
 
-msgid "guarded by %{count} %{monster}"
+msgid "guarded by "
 msgstr ""
 
 msgid "(available: %{count})"
@@ -2988,9 +2956,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "Experimental Game Settings"
-msgstr ""
-
 msgid "Jump"
 msgstr ""
 
@@ -3003,7 +2968,30 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr ""
 
+msgid "Slow"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Звычайная"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Шпаркая"
+
 msgid "Scroll Speed"
+msgstr ""
+
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Interface Type"
 msgstr ""
 
 msgid "Hide"
@@ -3013,6 +3001,18 @@ msgid "Show"
 msgstr ""
 
 msgid "Interface"
+msgstr ""
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
+msgid "autoBattle|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3026,7 +3026,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3145,10 +3151,6 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
-#, fuzzy
-msgid "Normal"
-msgstr "Звычайная"
-
 msgid "Hard"
 msgstr "Цяжкая"
 
@@ -3191,13 +3193,13 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
 msgid "Dev and Support"
-msgstr ""
-
-msgid "Visit us at "
 msgstr ""
 
 msgid "Special Thanks to"
@@ -3206,16 +3208,22 @@ msgstr ""
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3419,6 +3427,10 @@ msgstr "fheroes2 Resurrection Team прадстаўляе"
 
 msgid "Greetings!"
 msgstr ""
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr "Выйсці з Heroes of Might and Magic II."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4352,11 +4364,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4365,6 +4372,11 @@ msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 
 msgid ""
@@ -8574,36 +8586,6 @@ msgstr ""
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
-
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."

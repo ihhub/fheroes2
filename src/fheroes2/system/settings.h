@@ -36,12 +36,13 @@
 
 class StreamBase;
 
-enum : int
+enum AdventureMapScrollSpeed : int
 {
-    SCROLL_SLOW = 1,
-    SCROLL_NORMAL = 2,
-    SCROLL_FAST1 = 3,
-    SCROLL_FAST2 = 4
+    SCROLL_SPEED_NONE = 0,
+    SCROLL_SPEED_SLOW = 1,
+    SCROLL_SPEED_NORMAL = 2,
+    SCROLL_SPEED_FAST = 3,
+    SCROLL_SPEED_VERY_FAST = 4
 };
 
 enum MusicSource
@@ -71,7 +72,7 @@ public:
         GAME_HIDE_INTERFACE = 0x10002000,
         // UNUSED = 0x10008000,
         // UNUSED = 0x10010000,
-        GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
+        // UNUSED = 0x10100000,
         // UNUSED = 0x10200000,
 
         // The following extended options affect the overall game balance and
@@ -81,12 +82,12 @@ public:
         //
         // UNUSED = 0x20000001,
         // UNUSED = 0x20000002,
-        WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
+        // UNUSED = 0x20000008,
         // UNUSED = 0x20000020,
-        WORLD_SCOUTING_EXTENDED = 0x20000040,
+        // UNUSED = 0x20000040,
         // UNUSED = 0x20000080,
         // UNUSED = 0x20000100,
-        HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
+        // UNUSED = 0x20000200,
         // UNUSED = 0x20000400,
         // UNUSED = 0x20000800,
         // UNUSED = 0x20001000,
@@ -110,7 +111,7 @@ public:
         // UNUSED = 0x30000400,
         // UNUSED = 0x30000800,
         // UNUSED = 0x30001000,
-        WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
+        // UNUSED = 0x30004000,
         // UNUSED = 0x30008000,
 
         // UNUSED = 0x40004000,
@@ -238,6 +239,7 @@ public:
     bool isTextSupportModeEnabled() const;
     bool is3DAudioEnabled() const;
     bool isSystemInfoEnabled() const;
+    bool isBattleShowDamageInfoEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -262,36 +264,10 @@ public:
     bool ExtModes( uint32_t ) const;
     void ExtSetModes( uint32_t );
     void ExtResetModes( uint32_t );
-    static std::string ExtName( const uint32_t settingId );
-
-    bool ExtHeroBuySpellBookFromShrine() const
-    {
-        return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
-    }
 
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtWorldScouteExtended() const
-    {
-        return ExtModes( WORLD_SCOUTING_EXTENDED );
-    }
-
-    bool ExtWorldAllowSetGuardian() const
-    {
-        return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
-    }
-
-    bool ExtWorldExtObjectsCaptured() const
-    {
-        return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
-    }
-
-    bool ExtBattleShowDamage() const
-    {
-        return ExtModes( GAME_BATTLE_SHOW_DAMAGE );
     }
 
     bool ExtBattleSoftWait() const
@@ -357,6 +333,7 @@ public:
     void set3DAudio( const bool enable );
     void setVSync( const bool enable );
     void setSystemInfo( const bool enable );
+    void setBattleDamageInfo( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

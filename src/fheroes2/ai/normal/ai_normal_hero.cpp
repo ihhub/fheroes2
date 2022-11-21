@@ -237,21 +237,10 @@ namespace
         case MP2::OBJ_WAGON:
         case MP2::OBJ_LEANTO:
         case MP2::OBJ_SKELETON:
-            return tile.QuantityIsValid();
-
         case MP2::OBJ_MAGICGARDEN:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_WINDMILL:
-            if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.isCaptureObjectProtected() ) {
-                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
-                }
-
-                return true;
-            }
-            else if ( tile.QuantityIsValid() )
-                return true;
-            break;
+            return tile.QuantityIsValid();
 
         case MP2::OBJ_ARTIFACT: {
             const uint32_t variants = tile.QuantityVariant();

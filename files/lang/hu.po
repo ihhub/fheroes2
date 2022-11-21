@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-10-25 08:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -226,14 +226,20 @@ msgstr ""
 "A Várárok bármelyik egység védekező képességet csökkenti -%{name}-el és "
 "felezi a mozgási sebességét."
 
-msgid "Speed"
-msgstr "Sebesség"
-
 msgid "Speed: %{speed}"
 msgstr "Sebesség: %{speed}"
 
+msgid "Speed"
+msgstr "Sebesség"
+
 msgid "Army Order"
 msgstr ""
+
+msgid "Off"
+msgstr "Ki"
+
+msgid "On"
+msgstr "Be"
 
 msgid "Auto Spell Casting"
 msgstr "Automata varázslás"
@@ -247,11 +253,21 @@ msgstr "Árnyék mozgás"
 msgid "Shadow Cursor"
 msgstr ""
 
-msgid "Off"
-msgstr "Ki"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Be"
+msgid "Settings"
+msgstr "Beállítások"
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Sebzés"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Állítsd be a harci cselekmények és animációk gyorsaságát."
@@ -278,6 +294,21 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+msgid "Exit this menu."
+msgstr ""
+
+msgid "Okay"
+msgstr "Ok"
 
 msgid "The enemy has surrendered!"
 msgstr "Az ellenség feladta!"
@@ -2315,9 +2346,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Város elhagyása"
 
-msgid "Exit this menu."
-msgstr ""
-
 #, fuzzy
 msgid "Click to show next town."
 msgstr "Következő város mutatása"
@@ -2619,9 +2647,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "Ok"
-
 msgid "Build a new ship:"
 msgstr "Új hajó építése:"
 
@@ -2670,22 +2695,6 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Beállítások"
-
-#, fuzzy
-msgid "Experimental"
-msgstr "Elemi Gyűrű"
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
-
 #, fuzzy
 msgid "Black & White"
 msgstr "Híd"
@@ -2701,29 +2710,6 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teleportálás"
 
-#, fuzzy
-msgid "Interface Type"
-msgstr "Kezelőfelület"
-
-msgid "Evil"
-msgstr "Gonosz"
-
-msgid "Good"
-msgstr "Jó"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "autoBattle|Manual"
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Üveg"
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2732,22 +2718,6 @@ msgid "Select Game Language"
 msgstr "Kiválasztott Leírás"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
-
-msgid "Change the audio settings of the game."
-msgstr ""
-
-#, fuzzy
-msgid "Experimental game settings."
-msgstr "FHeroes2 játék beállítások."
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
@@ -2879,12 +2849,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr ""
-
-msgid "Your army too big!"
-msgstr "A sereged túl nagy!"
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -2947,12 +2911,12 @@ msgstr ""
 msgid "n/a"
 msgstr "n/a"
 
-msgid "guarded by "
-msgstr ""
-
 #, fuzzy
 msgid "guarded by %{count} %{monster}"
 msgstr "%{count} %{monster} őrzi."
+
+msgid "guarded by "
+msgstr ""
 
 msgid "(available: %{count})"
 msgstr "(elérhető: %{count})"
@@ -3256,10 +3220,6 @@ msgstr "A kiválasztott térkép leírása."
 msgid "Accept the choice made."
 msgstr "A választás elfogadása."
 
-#, fuzzy
-msgid "Experimental Game Settings"
-msgstr "FHeroes2 játék beállítások."
-
 msgid "Jump"
 msgstr ""
 
@@ -3274,8 +3234,31 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr "Sebesség"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Teljes Lassítás"
+
+msgid "Normal"
+msgstr "Normál"
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
 msgid "Scroll Speed"
 msgstr ""
+
+msgid "Evil"
+msgstr "Gonosz"
+
+msgid "Good"
+msgstr "Jó"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Kezelőfelület"
 
 #, fuzzy
 msgid "Hide"
@@ -3288,6 +3271,19 @@ msgstr "Hó"
 msgid "Interface"
 msgstr "Kezelőfelület"
 
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+#, fuzzy
+msgid "Battles"
+msgstr "Üveg"
+
+msgid "autoBattle|Manual"
+msgstr ""
+
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
@@ -3299,7 +3295,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3423,9 +3425,6 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
-msgid "Normal"
-msgstr "Normál"
-
 msgid "Hard"
 msgstr ""
 
@@ -3471,6 +3470,9 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
@@ -3478,25 +3480,28 @@ msgstr ""
 msgid "Dev and Support"
 msgstr "Teleportálás"
 
-msgid "Visit us at "
-msgstr ""
-
 msgid "Special Thanks to"
 msgstr ""
 
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3716,6 +3721,10 @@ msgstr ""
 #, fuzzy
 msgid "Greetings!"
 msgstr "Beállítások"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4727,13 +4736,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Szerencsétlenségedre, nincs varázskönyved, amibe a varázslatot beírhatnád."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4746,6 +4748,13 @@ msgid ""
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
 msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Szerencsétlenségedre, nincs varázskönyved, amibe a varázslatot beírhatnád."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9402,36 +9411,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
 #, fuzzy
 msgid "The ultimate artifact is really the %{name}."
 msgstr "A Múmiák átka lesújt a(z) %{name}!"
@@ -9501,6 +9480,21 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Experimental"
+#~ msgstr "Elemi Gyűrű"
+
+#, fuzzy
+#~ msgid "Experimental game settings."
+#~ msgstr "FHeroes2 játék beállítások."
+
+#, fuzzy
+#~ msgid "Experimental Game Settings"
+#~ msgstr "FHeroes2 játék beállítások."
+
+#~ msgid "Your army too big!"
+#~ msgstr "A sereged túl nagy!"
 
 #, fuzzy
 #~ msgid "Cannot recruit - guest to guard automove error."

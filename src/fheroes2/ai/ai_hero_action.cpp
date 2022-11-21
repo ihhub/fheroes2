@@ -892,7 +892,6 @@ namespace AI
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        // capture object
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
             bool capture = true;
 
@@ -929,7 +928,7 @@ namespace AI
             }
         }
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( objectType ) )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
     }
 
     void AIToFlotSam( const Heroes & hero, int32_t dst_index )

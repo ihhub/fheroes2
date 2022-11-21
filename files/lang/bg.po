@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-11-21 04:05+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -223,14 +223,20 @@ msgstr ""
 "Ровът намалява с -%{count} умението за защита на всяка единица и забавя "
 "наполовина скоростта на движение."
 
-msgid "Speed"
-msgstr "Скорост"
-
 msgid "Speed: %{speed}"
 msgstr "Скорост: %{speed}"
 
+msgid "Speed"
+msgstr "Скорост"
+
 msgid "Army Order"
 msgstr "Армейска заповед"
+
+msgid "Off"
+msgstr "Изкл"
+
+msgid "On"
+msgstr "Вкл"
 
 msgid "Auto Spell Casting"
 msgstr "Автоматично заклинание"
@@ -244,11 +250,21 @@ msgstr "Движение на сенките"
 msgid "Shadow Cursor"
 msgstr "Курсор в сянка"
 
-msgid "Off"
-msgstr "Изкл"
+msgid "Audio"
+msgstr "Звукови"
 
-msgid "On"
-msgstr "Вкл"
+msgid "Settings"
+msgstr "Настойки"
+
+msgid "Configure"
+msgstr "Настрой"
+
+msgid "Hot Keys"
+msgstr "Бързи клавиши"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Щети"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Задай скоростта на бойните действия и анимациите."
@@ -285,6 +301,22 @@ msgid ""
 msgstr ""
 "Включи или изключи сянка, показваща текущото шестнадесетично местоположение "
 "на курсора на мишката."
+
+msgid "Change the audio settings of the game."
+msgstr "Промени звуковите настройки на играта."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Провери и конфигурирай всички горещи клавиши в играта."
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr "Превключи за показване на армейския ред по време на битката."
+
+msgid "Exit this menu."
+msgstr "Излез от това меню."
+
+msgid "Okay"
+msgstr "Добре"
 
 msgid "The enemy has surrendered!"
 msgstr "Врагът се предаде!"
@@ -2307,9 +2339,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Изход"
 
-msgid "Exit this menu."
-msgstr "Излез от това меню."
-
 msgid "Click to show next town."
 msgstr "Кликни, за да покажеш следващия град."
 
@@ -2595,9 +2624,6 @@ msgstr "Промени вида на музиката."
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "Превключване на 3D ефекти на звуци на преден план."
 
-msgid "Okay"
-msgstr "Добре"
-
 msgid "Build a new ship:"
 msgstr "Изгради нов кораб:"
 
@@ -2643,21 +2669,6 @@ msgstr "Език"
 msgid "Graphics"
 msgstr "Графика"
 
-msgid "Settings"
-msgstr "Настойки"
-
-msgid "Experimental"
-msgstr "Пробни"
-
-msgid "Audio"
-msgstr "Звукови"
-
-msgid "Configure"
-msgstr "Настрой"
-
-msgid "Hot Keys"
-msgstr "Бързи клавиши"
-
 msgid "Black & White"
 msgstr "Черно-бял"
 
@@ -2670,27 +2681,6 @@ msgstr "Цветен"
 msgid "Text Support"
 msgstr "Доп. информация"
 
-msgid "Interface Type"
-msgstr "Интерфейс"
-
-msgid "Evil"
-msgstr "Зъл"
-
-msgid "Good"
-msgstr "Добър"
-
-msgid "Auto Resolve"
-msgstr "Авто"
-
-msgid "Auto, No Spells"
-msgstr "Авто, без магий"
-
-msgid "autoBattle|Manual"
-msgstr "Вручную"
-
-msgid "Battles"
-msgstr "Сражения"
-
 msgid "Change the language of the game."
 msgstr "Промяна на езика на играта."
 
@@ -2699,21 +2689,6 @@ msgstr "Език на играта"
 
 msgid "Change the graphics settings of the game."
 msgstr "Промени графичните настройки на играта."
-
-msgid "Change the audio settings of the game."
-msgstr "Промени звуковите настройки на играта."
-
-msgid "Experimental game settings."
-msgstr "Експериментални настройки на играта."
-
-msgid "Toggle instant battle mode."
-msgstr "Превключи режима на незабавна битка."
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr "Провери и конфигурирай всички горещи клавиши в играта."
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -2840,12 +2815,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Показване на допълнителна информация като FPS и текущо време."
 
-msgid "Set Guardian"
-msgstr "Задайте Пазител"
-
-msgid "Your army too big!"
-msgstr "Армията ти е твърде голяма!"
-
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
 
@@ -2909,11 +2878,11 @@ msgstr "Налични сделки"
 msgid "n/a"
 msgstr "без"
 
-msgid "guarded by "
-msgstr "охраняван от "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "охранявано от %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "охраняван от "
 
 msgid "(available: %{count})"
 msgstr "(наличен: %{count})"
@@ -3206,9 +3175,6 @@ msgstr "Описание на избраната в момента карта."
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
 
-msgid "Experimental Game Settings"
-msgstr "Пробни настройки на играта"
-
 msgid "Jump"
 msgstr "Скок"
 
@@ -3221,8 +3187,30 @@ msgstr "Не показвай"
 msgid "Enemy Speed"
 msgstr "Скорост на Противник"
 
+msgid "Slow"
+msgstr ""
+
+msgid "Normal"
+msgstr "Нормлано"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Мн. бърза"
+
 msgid "Scroll Speed"
 msgstr "Скорост на Превъртане"
+
+msgid "Evil"
+msgstr "Зъл"
+
+msgid "Good"
+msgstr "Добър"
+
+msgid "Interface Type"
+msgstr "Интерфейс"
 
 msgid "Hide"
 msgstr "Скрий"
@@ -3232,6 +3220,18 @@ msgstr "Покажи"
 
 msgid "Interface"
 msgstr "Интерфейс"
+
+msgid "Auto Resolve"
+msgstr "Авто"
+
+msgid "Auto, No Spells"
+msgstr "Авто, без магий"
+
+msgid "Battles"
+msgstr "Сражения"
+
+msgid "autoBattle|Manual"
+msgstr "Вручную"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Промени скоростта, с която твоите герои се движат на главния екран."
@@ -3246,8 +3246,14 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Задава скоростта, с която превърташ прозореца."
 
+msgid "Toggle the type of interface you want to use."
+msgstr "Превключи типа на интерфейса, който искаш да използваш."
+
 msgid "Toggle interface visibility."
 msgstr "Превключва видимостта на интерфейса."
+
+msgid "Toggle instant battle mode."
+msgstr "Превключи режима на незабавна битка."
 
 msgid "Att."
 msgstr "Атак."
@@ -3371,9 +3377,6 @@ msgstr ""
 msgid "Easy"
 msgstr "Лесно"
 
-msgid "Normal"
-msgstr "Нормлано"
-
 msgid "Hard"
 msgstr "Трудно"
 
@@ -3416,14 +3419,14 @@ msgstr "Координация на проекта и основно разви�
 msgid "QA and Support"
 msgstr "Гарантиране на качеството и поддръжка"
 
+msgid "Visit us at "
+msgstr "Посетете ни на "
+
 msgid "Development"
 msgstr "Разработка"
 
 msgid "Dev and Support"
 msgstr "Разработка и поддръжка"
-
-msgid "Visit us at "
-msgstr "Посетете ни на "
 
 msgid "Special Thanks to"
 msgstr "Специални благодарности на"
@@ -3431,17 +3434,23 @@ msgstr "Специални благодарности на"
 msgid "and many other contributors!"
 msgstr "и много други сътрудници!"
 
+msgid "and many-many other supporters!"
+msgstr "и много-много други поддръжници!"
+
 msgid "Support us at"
 msgstr "Подкрепете ни на"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Свържете се с нас на"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Нуждаете се от помощ с играта?"
-
-msgid "and many-many other supporters!"
-msgstr "и много-много други поддръжници!"
 
 msgid "Original project before 0.7"
 msgstr "Оригинален проект преди 0.7"
@@ -3649,6 +3658,12 @@ msgstr "fheroes2 Отбор възкрeсяване представя"
 
 msgid "Greetings!"
 msgstr "Поздравления!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2! "
+"Преди да започнеш играта, моля избери разделителна способност на играта."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4712,13 +4727,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"За съжаление нямаш магическа книга, в която да запишеш заклинанието."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4734,6 +4742,13 @@ msgstr ""
 "\n"
 "За съжаление вече имаш знания за това заклинание, така че няма на какво "
 "повече да те научат."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"За съжаление нямаш магическа книга, в която да запишеш заклинанието."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9707,38 +9722,6 @@ msgstr ""
 "Това заклинание контролира до\n"
 "%{hp} живот."
 
-msgid "battle: show damage info"
-msgstr "битка: показва информация за щетите"
-
-msgid "world: Scouting skill shows extended content info"
-msgstr "свят: Скаутските умения показват разширена информация за съдържанието"
-
-msgid "world: allow to set guardian to objects"
-msgstr "свят: позволява да се сложи пазител на обекти"
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-"свят: Вятърните мелници, водните колела и магическите градини могат да бъдат "
-"заснети"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "герои: позволява да купите книга за заклинания от светилища"
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "герои: позволяват да избереш всяко основно умение от Арена"
-
-msgid "battle: allow soft wait for troops"
-msgstr "битка: позволява меко изчакване за войски"
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "игра: автоматично запазване ще бъде направено в началото на деня"
-
-msgid "game: use evil interface"
-msgstr "игра: използвайте зъл интерфейс"
-
-msgid "game: hide interface"
-msgstr "игра: скриване на интерфейса"
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Върховният артефакт наистина е %{name}."
 
@@ -9801,6 +9784,54 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Experimental"
+#~ msgstr "Пробни"
+
+#~ msgid "Experimental game settings."
+#~ msgstr "Експериментални настройки на играта."
+
+#~ msgid "Experimental Game Settings"
+#~ msgstr "Пробни настройки на играта"
+
+#~ msgid "heroes: allow to choose any primary skill in Arena"
+#~ msgstr "герои: позволяват да избереш всяко основно умение от Арена"
+
+#~ msgid "battle: allow soft wait for troops"
+#~ msgstr "битка: позволява меко изчакване за войски"
+
+#~ msgid "game: autosave will be made at the beginning of the day"
+#~ msgstr "игра: автоматично запазване ще бъде направено в началото на деня"
+
+#~ msgid "game: use evil interface"
+#~ msgstr "игра: използвайте зъл интерфейс"
+
+#~ msgid "game: hide interface"
+#~ msgstr "игра: скриване на интерфейса"
+
+#~ msgid "battle: show damage info"
+#~ msgstr "битка: показва информация за щетите"
+
+#~ msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
+#~ msgstr ""
+#~ "свят: Вятърните мелници, водните колела и магическите градини могат да "
+#~ "бъдат заснети"
+
+#~ msgid "heroes: allow buy a spellbook from Shrines"
+#~ msgstr "герои: позволява да купите книга за заклинания от светилища"
+
+#~ msgid "Set Guardian"
+#~ msgstr "Задайте Пазител"
+
+#~ msgid "Your army too big!"
+#~ msgstr "Армията ти е твърде голяма!"
+
+#~ msgid "world: allow to set guardian to objects"
+#~ msgstr "свят: позволява да се сложи пазител на обекти"
+
+#~ msgid "world: Scouting skill shows extended content info"
+#~ msgstr ""
+#~ "свят: Скаутските умения показват разширена информация за съдържанието"
 
 #~ msgid "Cannot recruit - guest to guard automove error."
 #~ msgstr ""
