@@ -26,8 +26,5 @@ need to press anywhere on the adventure map and slide around to change where you
 Note that text input is not yet implemented.
 
 ## Android specific notes
-
-Pointer movement speed can be changed with 'gamepad_pointer_speed' parameter in "ux0:data/fheroes2/fheroes2.cfg".
-
 Fullscreen is enabled by default. To have the info bar with the clock visible you can disable fullscreen mode within the
 main menu settings under "Graphics".
