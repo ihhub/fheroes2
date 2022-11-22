@@ -55,7 +55,7 @@ namespace
         DIALOG_SHADOW_OFFSET_X = 16,
         DIALOG_SHADOW_OFFSET_Y = 4,
         DIALOG_BORDER_WIDTH = 18,
-        // CALCULATED
+        // The following values are calculated using the previous values.
         SCENARIO_INFO_ROW_OFFSET = DIALOG_BORDER_WIDTH + SCENARIO_INFO_ROW_LEFT_MARGIN,
         SCENARIO_MAP_DIFFICULTY_OFFSET = SCENARIO_INFO_ROW_OFFSET,
         SCENARIO_GAME_DIFFICULTY_OFFSET = SCENARIO_INFO_ROW_OFFSET + SCENARIO_INFO_VALUES_BOX_WIDTH + SCENARIO_INFO_BOX_RIGHT_MARGIN,
@@ -81,10 +81,10 @@ void Dialog::GameInfo()
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
-    fheroes2::Point dp( ( display.width() - box.width() ) / 2, ( ( display.height() - box.height() ) / 2 ) );
+    const fheroes2::Point dp( ( display.width() - box.width() ) / 2, ( ( display.height() - box.height() ) / 2 ) );
     fheroes2::Blit( box, display, dp.x, dp.y );
 
-    fheroes2::Point pt( dp.x + DIALOG_SHADOW_OFFSET_X, dp.y );
+    const fheroes2::Point pt( dp.x + DIALOG_SHADOW_OFFSET_X, dp.y );
     fheroes2::Text text;
 
     text.set( conf.MapsName(), fheroes2::FontType::normalWhite() );

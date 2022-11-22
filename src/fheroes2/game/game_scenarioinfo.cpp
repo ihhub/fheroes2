@@ -141,14 +141,14 @@ namespace
         }
     }
 
-    fheroes2::Rect RedrawRatingInfo( int32_t x_, int32_t y_, int32_t width_ )
+    fheroes2::Rect RedrawRatingInfo( const fheroes2::Point & offset, int32_t width_ )
     {
         std::string str( _( "Rating %{rating}%" ) );
         StringReplace( str, "%{rating}", Game::GetRating() );
 
-        fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
-        const int32_t x = TextUtils::GetCenteredTextXCoordinate( x_, width_, text.width() );
-        const int32_t y = y_ + 385;
+        const fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
+        const int32_t x = TextUtils::GetCenteredTextXCoordinate( offset.x(), width_, text.width() );
+        const int32_t y = offset.y() + 385;
         text.draw( x, y, fheroes2::Display::instance() );
 
         return { x, y, text.width(), text.height() };
@@ -225,7 +225,7 @@ namespace
 
         playersInfo.RedrawInfo( false );
 
-        fheroes2::Rect rating = RedrawRatingInfo( rectPanel.x, rectPanel.y, rectPanel.width );
+        fheroes2::Rect ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
 
         fheroes2::MovableSprite levelCursor( ngextra );
 
@@ -293,7 +293,7 @@ namespace
                     RedrawDifficultyInfo( pointDifficultyInfo );
                     playersInfo.resetSelection();
                     playersInfo.RedrawInfo( false );
-                    rating = RedrawRatingInfo( rectPanel.x, rectPanel.y, rectPanel.width );
+                    rating = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
                     buttonOk.draw();
                     buttonCancel.draw();
@@ -318,7 +318,8 @@ namespace
                     levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
-                    rating = RedrawRatingInfo( rectPanel.x, rectPanel.y + 383, rectPanel.width );
+                    rectPanel.y =+ 383;
+                    rating = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     display.render();
                 }
                 // playersInfo
@@ -328,7 +329,7 @@ namespace
                     RedrawDifficultyInfo( pointDifficultyInfo );
 
                     playersInfo.RedrawInfo( false );
-                    rating = RedrawRatingInfo( rectPanel.x, rectPanel.y, rectPanel.width );
+                    rating = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     buttonOk.draw();
                     buttonCancel.draw();
                     display.render();
@@ -343,7 +344,7 @@ namespace
                     RedrawDifficultyInfo( pointDifficultyInfo );
 
                     playersInfo.RedrawInfo( false );
-                    rating = RedrawRatingInfo( rectPanel.x, rectPanel.y, rectPanel.width );
+                    rating = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     buttonOk.draw();
                     buttonCancel.draw();
                     display.render();

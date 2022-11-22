@@ -42,6 +42,7 @@ namespace Race
     };
 
     std::string String( int );
+    std::string DoubledLinedString( int );
     int Rand();
 }
 

@@ -339,8 +339,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         fheroes2::Blit( classIcon, display, info.classRoi.x, info.classRoi.y );
 
         const int32_t maxClassNameTextWidth = classIcon.width() + 10;
-        const std::string & className = _( "playerInfo|" + Race::String( info.player->GetRace() ) );
-        fheroes2::Text text( className, fheroes2::FontType::smallWhite() );
+        const fheroes2::Text text( Race::DoubleLinedString( info.player->GetRace() ), fheroes2::FontType::smallWhite() );
 
         text.draw( TextUtils::GetCenteredTextXCoordinate( info.classRoi.x - 10, info.classRoi.width + 20, maxClassNameTextWidth ),
                    info.classRoi.y + info.classRoi.height + 4, maxClassNameTextWidth, display );

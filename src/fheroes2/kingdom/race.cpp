@@ -53,6 +53,34 @@ std::string Race::String( int race )
     return _( "race|Neutral" );
 }
 
+std::string Race::DoubleLinedString( int race )
+{
+    switch ( race ) {
+    case Race::KNGT:
+        return _( "doubleLined|Knight" );
+    case Race::BARB:
+        return _( "doubleLined|Barbarian" );
+    case Race::SORC:
+        return _( "doubleLined|Sorceress" );
+    case Race::WRLK:
+        return _( "doubleLined|Warlock" );
+    case Race::WZRD:
+        return _( "doubleLined|Wizard" );
+    case Race::NECR:
+        return _( "doubleLined|Necro-\nmancer" );
+    case Race::MULT:
+        return _( "doubleLinedRace|Multi" );
+    case Race::RAND:
+        return _( "doubleLinedRace|Random" );
+    case Race::NONE:
+        return _( "doubleLinedRace|Neutral" );
+    default:
+        break;
+    }
+
+    return _( "doubleLinedRace|Neutral" );
+}
+
 int Race::Rand()
 {
     switch ( Rand::Get( 1, 6 ) ) {
