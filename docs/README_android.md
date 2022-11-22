@@ -6,11 +6,10 @@ do this.
 
 fheroes2 requires the data files from the original Heroes of Might and Magic II.
 
-Copy HEROES2.AGG and HEROES2X.AGG (if you own the Price of Loyalty expansion) from the original game's "DATA" folder into
-"internalStorage:Android/data/org.fheroes2/files/data/" and everything from "MAPS" folder into
-"internalStorage:Android/data/org.fheroes2/files/maps/".
+Copy the the contents of the original game's "DATA" folder into the "internalStorage:Android/data/org.fheroes2/files/data/"
+folder and everything from the "MAPS" folder into "internalStorage:Android/data/org.fheroes2/files/maps/".
 
-The music files should be placed in the "internalStorage:Android/data/org.fheroes2/files/maps/" folder.
+The music files should be placed in the "internalStorage:Android/data/org.fheroes2/files/music/" folder.
 
 fheroes2 supports the ingame cinematics. This is necessary for full campaign support. To play the intro and the other
 videos, make sure that all of the "*.SMK" files are placed in the "internalStorage:Android/data/org.fheroes2/files/anim/"
