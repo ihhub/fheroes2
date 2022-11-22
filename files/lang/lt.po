@@ -8816,9 +8816,3 @@ msgid ""
 "fheroes2/releases"
 msgstr ""
 
-#~ msgid "Your army too big!"
-#~ msgstr "Jūsų armija per didelė!"
-
-#, fuzzy
-#~ msgid "Do you wish to continue the game?"
-#~ msgstr "Ar norite nusipirkti vieną?"

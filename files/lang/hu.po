@@ -9481,33 +9481,3 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#, fuzzy
-#~ msgid "Experimental"
-#~ msgstr "Elemi Gyűrű"
-
-#, fuzzy
-#~ msgid "Experimental game settings."
-#~ msgstr "FHeroes2 játék beállítások."
-
-#, fuzzy
-#~ msgid "Experimental Game Settings"
-#~ msgstr "FHeroes2 játék beállítások."
-
-#~ msgid "Your army too big!"
-#~ msgstr "A sereged túl nagy!"
-
-#, fuzzy
-#~ msgid "Cannot recruit - guest to guard automove error."
-#~ msgstr "Nem lehet tobrozni - túl sok hősöd van."
-
-#, fuzzy
-#~ msgid "Swap Heroes"
-#~ msgstr "Hősök mutatása"
-
-#, fuzzy
-#~ msgid "Meeting Heroes"
-#~ msgstr "Hősök mutatása"
-
-#, fuzzy
-#~ msgid "Do you wish to continue the game?"
-#~ msgstr "Szeretnél venni egyet?"

@@ -9466,15 +9466,3 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "game: autosave will be made at the beginning of the day"
-#~ msgstr "гра: автозберігати на початку дня"
-
-#~ msgid "heroes: allow buy a spellbook from Shrines"
-#~ msgstr "герої: дозволити придбати книгу чарів з Святинь"
-
-#, fuzzy
-#~ msgid "Your army too big!"
-#~ msgstr "Ваша армія завелика!"
-
-#~ msgid "castle: allow guardians"
-#~ msgstr "замок: дозволити захистників"

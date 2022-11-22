@@ -8799,10 +8799,3 @@ msgid ""
 "fheroes2/releases"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Swap Heroes"
-#~ msgstr "Hrdinové"
-
-#, fuzzy
-#~ msgid "Meeting Heroes"
-#~ msgstr "Hrdinové"
