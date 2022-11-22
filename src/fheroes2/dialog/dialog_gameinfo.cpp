@@ -53,8 +53,8 @@ void Dialog::GameInfo()
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
-    // This is a shadow offset from the original ICN::SCENIBKG image.
-    const fheroes2::Point shadowOffset( -16, 16 );
+    // This is a shadow offset from the modified ICN::SCENIBKG image.
+    const fheroes2::Point shadowOffset( -16, 4 + 12 );
 
     fheroes2::Point pt( ( display.width() - box.width() + shadowOffset.x ) / 2, ( ( display.height() - box.height() + shadowOffset.y ) / 2 ) );
     fheroes2::ImageRestorer back( display, pt.x, pt.y, box.width(), box.height() );
