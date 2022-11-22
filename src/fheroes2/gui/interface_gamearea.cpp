@@ -22,7 +22,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <bits/utility.h>
 #include <cassert>
 #include <cstdlib>
 #include <deque>
