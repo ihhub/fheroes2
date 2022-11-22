@@ -8949,25 +8949,3 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "Experimental"
-#~ msgstr "Sperimentale"
-
-#~ msgid "Experimental game settings."
-#~ msgstr "Impostazioni sperimentali del gioco."
-
-#~ msgid "Experimental Game Settings"
-#~ msgstr "Impostazioni Sperimentali"
-
-#~ msgid "Your army too big!"
-#~ msgstr "Il tuo esercito è troppo grande"
-
-#~ msgid "Cannot recruit - guest to guard automove error."
-#~ msgstr ""
-#~ "Non puoi reclutare - errore in cambiamento automatico dall'ospite al "
-#~ "guardiano."
-
-#~ msgid "Swap Heroes"
-#~ msgstr "Scambia Eroi"
-
-#~ msgid "Meeting Heroes"
-#~ msgstr "Eroi incontranti"

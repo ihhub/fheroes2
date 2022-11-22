@@ -9120,26 +9120,3 @@ msgid ""
 "fheroes2/releases"
 msgstr ""
 
-#~ msgid "Experimental"
-#~ msgstr "Experimental"
-
-#~ msgid "Experimental game settings."
-#~ msgstr "Configurações experimentais do jogo."
-
-#~ msgid "Set Guardian"
-#~ msgstr "Selecione o Guardião"
-
-#~ msgid "Your army too big!"
-#~ msgstr "Sua arma é muito grande!"
-
-#, fuzzy
-#~ msgid "Cannot recruit - guest to guard automove error."
-#~ msgstr "Impossível recrutar - você tem muitos heróis."
-
-#, fuzzy
-#~ msgid "Swap Heroes"
-#~ msgstr "Heróis"
-
-#, fuzzy
-#~ msgid "Meeting Heroes"
-#~ msgstr "Proximo Herói"
