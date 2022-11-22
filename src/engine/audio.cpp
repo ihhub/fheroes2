@@ -899,12 +899,16 @@ int Mixer::setVolume( const int channelId, const int volumePercentage )
 
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
+    const int logvol = volumePercentage / 10;
+
+    const int arr[] = {0, 2, 3, 5, 8, 12, 20, 32, 50, 80, 128};
+
     if ( !isInitialized ) {
         return 0;
     }
 
     if ( !isMuted ) {
-        return normalizeFromSDLVolume( Mix_Volume( channelId, volume ) );
+        return normalizeFromSDLVolume( Mix_Volume( channelId, arr[logvol] ) );
     }
 
     if ( channelId < 0 ) {
