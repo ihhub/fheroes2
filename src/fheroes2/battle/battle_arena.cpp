@@ -203,29 +203,27 @@ namespace
         orderOfUnits.clear();
         orderOfUnits.insert( orderOfUnits.end(), orderHistory.begin(), orderHistory.end() );
 
-        {
-            Battle::Units units1( army1.getUnits(), true );
-            Battle::Units units2( army2.getUnits(), true );
+        Battle::Units units1( army1.getUnits(), true );
+        Battle::Units units2( army2.getUnits(), true );
 
-            units1.SortFastest();
-            units2.SortFastest();
+        units1.SortFastest();
+        units2.SortFastest();
 
-            while ( true ) {
-                Battle::Unit * unit = GetCurrentUnit( units1, units2, preferredColor != army2.GetColor(), true );
-                if ( unit == nullptr ) {
-                    break;
-                }
-
-                assert( unit->isValid() );
-
-                if ( unit == currentUnit ) {
-                    continue;
-                }
-
-                preferredColor = ( unit->GetArmyColor() == army1.GetColor() ) ? army2.GetColor() : army1.GetColor();
-
-                orderOfUnits.push_back( unit );
+        while ( true ) {
+            Battle::Unit * unit = GetCurrentUnit( units1, units2, preferredColor != army2.GetColor(), true );
+            if ( unit == nullptr ) {
+                break;
             }
+
+            assert( unit->isValid() );
+
+            if ( unit == currentUnit ) {
+                continue;
+            }
+
+            preferredColor = ( unit->GetArmyColor() == army1.GetColor() ) ? army2.GetColor() : army1.GetColor();
+
+            orderOfUnits.push_back( unit );
         }
     }
 }
