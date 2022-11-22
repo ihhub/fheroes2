@@ -318,7 +318,7 @@ namespace
                     levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
-                    rectPanel.y =+ 383;
+                    rectPanel.y = +383;
                     rating = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     display.render();
                 }
