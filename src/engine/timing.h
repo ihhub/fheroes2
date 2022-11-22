@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <chrono.h>
+#include <chrono>
 #include <cstdint>
 
 namespace fheroes2

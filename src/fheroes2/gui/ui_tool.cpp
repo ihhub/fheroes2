@@ -20,7 +20,7 @@
 
 #include "ui_tool.h"
 
-#include <bits/chrono.h>
+#include <chrono>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
