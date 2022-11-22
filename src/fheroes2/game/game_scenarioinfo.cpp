@@ -147,8 +147,8 @@ namespace
         StringReplace( str, "%{rating}", Game::GetRating() );
 
         const fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
-        const int32_t x = TextUtils::GetCenteredTextXCoordinate( offset.x(), width_, text.width() );
-        const int32_t y = offset.y() + 385;
+        const int32_t x = TextUtils::GetCenteredTextXCoordinate( offset.x, width_, text.width() );
+        const int32_t y = offset.y + 385;
         text.draw( x, y, fheroes2::Display::instance() );
 
         return { x, y, text.width(), text.height() };
@@ -293,7 +293,7 @@ namespace
                     RedrawDifficultyInfo( pointDifficultyInfo );
                     playersInfo.resetSelection();
                     playersInfo.RedrawInfo( false );
-                    rating = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
                     buttonOk.draw();
                     buttonCancel.draw();
@@ -318,8 +318,7 @@ namespace
                     levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
-                    rectPanel.y = +383;
-                    rating = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+                    ratingRoi = RedrawRatingInfo( { rectPanel.x, rectPanel.y + 383 }, rectPanel.width );
                     display.render();
                 }
                 // playersInfo
@@ -329,7 +328,7 @@ namespace
                     RedrawDifficultyInfo( pointDifficultyInfo );
 
                     playersInfo.RedrawInfo( false );
-                    rating = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     buttonOk.draw();
                     buttonCancel.draw();
                     display.render();
@@ -344,7 +343,7 @@ namespace
                     RedrawDifficultyInfo( pointDifficultyInfo );
 
                     playersInfo.RedrawInfo( false );
-                    rating = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     buttonOk.draw();
                     buttonCancel.draw();
                     display.render();
@@ -359,7 +358,7 @@ namespace
                         _( "Game Difficulty" ),
                         _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
                         Font::BIG );
-                else if ( le.MousePressRight( rating ) )
+                else if ( le.MousePressRight( ratingRoi ) )
                     Dialog::
                         Message( _( "Difficulty Rating" ),
                                  _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
