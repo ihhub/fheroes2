@@ -901,7 +901,7 @@ int Mixer::setVolume( const int channelId, const int volumePercentage )
 
     const int logvol = volumePercentage / 10;
 
-    const int arr[] = {0, 2, 3, 5, 8, 12, 20, 32, 50, 80, 128};
+    const int arr[] = { 0, 2, 3, 5, 8, 12, 20, 32, 50, 80, 128 };
 
     if ( !isInitialized ) {
         return 0;
