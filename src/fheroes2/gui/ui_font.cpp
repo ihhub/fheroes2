@@ -4207,9 +4207,9 @@ namespace
         fheroes2::DrawLine( released[183], { offset + 0, offset + 0 }, { offset + 2, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[183], { offset + 6, offset + 0 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[183], { offset + 1, offset + 1 }, { offset + 1, offset + 5 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[183], { offset + 7, offset + 1 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[183], { offset + 6, offset + 2 }, { offset + 5, offset + 6 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[183], { offset + 5, offset + 10 }, { offset + 8, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[183], { offset + 7, offset + 1 }, { offset + 7, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[183], { offset + 2, offset + 6 }, { offset + 5, offset + 6 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[183], { offset + 5, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[183], offset + 6, offset + 5, buttonGoodReleasedColor );
 
         // b, Cyrillic hard sign
