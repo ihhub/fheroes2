@@ -484,7 +484,7 @@ std::string System::FileNameToUTF8( const std::string & name )
         return name;
     }
 
-    static std::map<std::string, std::string> acpToUtf8;
+    thread_local std::map<std::string, std::string> acpToUtf8;
 
     const auto iter = acpToUtf8.find( name );
     if ( iter != acpToUtf8.end() ) {
