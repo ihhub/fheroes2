@@ -28,6 +28,11 @@ all: $(patsubst %.po, %.mo, $(wildcard *.po))
 merge: ../../src/dist/fheroes2.pot
 	for i in $(wildcard *.po); do msgmerge -U --no-location $$i $<; done
 
+# In French, accented characters are mapped to unused ASCII characters
+# Non-mapped characters are replaced by their non-accented equivalents
+fr.mo: fr.po
+	sed -e 'y/àâçéèêîïôùûüÇÉÊÀ/@*^~`|><#&$$uCEEA/; s/œ/oe/g' $< | msgfmt - -o $@
+
 # Czech, Hungarian and Polish versions use CP1250
 cs.mo hu.mo pl.mo: %.mo: %.po
 	$(call MSGFMT,CP1250)
@@ -39,7 +44,7 @@ be.mo bg.mo ru.mo uk.mo: %.mo: %.po
 	$(call MSGFMT,CP1251)
 
 # German, French, Italian, Dutch, Norwegian, Portuguese, Spanish and Swedish translations use CP1252
-de.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
+de.mo es.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
 	$(call MSGFMT,CP1252)
 
 # Turkish uses CP1254
