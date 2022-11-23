@@ -26,30 +26,30 @@
 
 #include <ctime>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace System
 {
-    int MakeDirectory( const std::string & );
-    std::string ConcatePath( const std::string &, const std::string & );
+    bool isHandheldDevice();
+
+    bool MakeDirectory( const std::string & path );
+    std::string concatPath( const std::string & left, const std::string & right );
 
     void appendOSSpecificDirectories( std::vector<std::string> & directories );
     std::string GetConfigDirectory( const std::string & prog );
     std::string GetDataDirectory( const std::string & prog );
 
-    std::string GetDirname( const std::string & );
-    std::string GetBasename( const std::string & );
+    std::string GetDirname( std::string_view path );
+    std::string GetBasename( std::string_view path );
 
-    int GetCommandOptions( int argc, char * const argv[], const char * optstring );
-    char * GetOptionsArgument();
-
-    bool IsFile( const std::string & name, bool writable = false );
-    bool IsDirectory( const std::string & name, bool writable = false );
-    int Unlink( const std::string & );
+    bool IsFile( const std::string & path, bool writable = false );
+    bool IsDirectory( const std::string & path, bool writable = false );
+    bool Unlink( const std::string & path );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 
-    std::string FileNameToUTF8( const std::string & str );
+    std::string FileNameToUTF8( const std::string & name );
 
     tm GetTM( const time_t time );
 }

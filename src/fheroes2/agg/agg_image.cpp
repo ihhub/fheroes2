@@ -1025,16 +1025,6 @@ namespace fheroes2
             case ICN::BUTTON_DIFFICULTY_ROLAND:
                 generateLanguageSpecificImages( id );
                 return true;
-            case ICN::BTNCONFIG:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, i );
-
-                    // add 'config'
-                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 31 - i, 20, out, 10 - i, 4, 77, 16 );
-                }
-                return true;
             case ICN::PHOENIX:
                 LoadOriginalICN( id );
                 // First sprite has cropped shadow. We copy missing part from another 'almost' identical frame

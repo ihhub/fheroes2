@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 13:02+0000\n"
+"POT-Creation-Date: 2022-11-22 07:19+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -227,14 +227,20 @@ msgstr ""
 "Ров уменьшает на -%{count} навыки обороны любого подразделения и замедляет "
 "его до половины скорости движения."
 
-msgid "Speed"
-msgstr "Скорость"
-
 msgid "Speed: %{speed}"
 msgstr "Скорость: %{speed}"
 
+msgid "Speed"
+msgstr "Скорость"
+
 msgid "Army Order"
 msgstr "Порядок действий"
+
+msgid "Off"
+msgstr "Выкл."
+
+msgid "On"
+msgstr "Вкл."
 
 msgid "Auto Spell Casting"
 msgstr "Магия в автобитве"
@@ -248,11 +254,21 @@ msgstr "Затенение сетки"
 msgid "Shadow Cursor"
 msgstr "Курсор с тенью"
 
-msgid "Off"
-msgstr "Выкл."
+msgid "Audio"
+msgstr "Звук"
 
-msgid "On"
-msgstr "Вкл."
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Configure"
+msgstr "Настроить"
+
+msgid "Hot Keys"
+msgstr "Горячие клавиши"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Урон"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Установить скорость действий и анимации существ в бою."
@@ -287,6 +303,22 @@ msgid ""
 "cursor."
 msgstr ""
 "Включить/выключить отрисовку тени под курсором на гексагональной сетке."
+
+msgid "Change the audio settings of the game."
+msgstr "Настроить параметры аудио."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Проверить и настроить все горячие клавиши, имеющиеся в игре."
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr "Включить/выключить показ порядка действий отрядов в бою."
+
+msgid "Exit this menu."
+msgstr "Выход из меню."
+
+msgid "Okay"
+msgstr "Принять"
 
 msgid "The enemy has surrendered!"
 msgstr "Враг капитулировал!"
@@ -2306,9 +2338,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Закрыть"
 
-msgid "Exit this menu."
-msgstr "Выход из меню."
-
 msgid "Click to show next town."
 msgstr "Нажмите, чтобы показать следующий город."
 
@@ -2590,9 +2619,6 @@ msgstr "Изменить тип музыки."
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "3D эффекты для звуков переднего плана."
 
-msgid "Okay"
-msgstr "Принять"
-
 msgid "Build a new ship:"
 msgstr "Построить новый корабль:"
 
@@ -2638,21 +2664,6 @@ msgstr "Язык"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Настройки"
-
-msgid "Experimental"
-msgstr "Расширенные"
-
-msgid "Audio"
-msgstr "Звук"
-
-msgid "Configure"
-msgstr "Настроить"
-
-msgid "Hot Keys"
-msgstr "Горячие клавиши"
-
 msgid "Black & White"
 msgstr "Чёрно-белый"
 
@@ -2665,27 +2676,6 @@ msgstr "Цветной"
 msgid "Text Support"
 msgstr "Текстовое сопровождение"
 
-msgid "Interface Type"
-msgstr "Интерфейс"
-
-msgid "Evil"
-msgstr "Злой"
-
-msgid "Good"
-msgstr "Добрый"
-
-msgid "Auto Resolve"
-msgstr "Авто, с магией"
-
-msgid "Auto, No Spells"
-msgstr "Авто, без магии"
-
-msgid "autoBattle|Manual"
-msgstr "Вручную"
-
-msgid "Battles"
-msgstr "Битвы"
-
 msgid "Change the language of the game."
 msgstr "Изменить язык интерфейса."
 
@@ -2695,21 +2685,6 @@ msgstr "Выберите язык игры:"
 #, fuzzy
 msgid "Change the graphics settings of the game."
 msgstr "Настроить параметры аудио."
-
-msgid "Change the audio settings of the game."
-msgstr "Настроить параметры аудио."
-
-msgid "Experimental game settings."
-msgstr "Вы можете настроить игру по своему усмотрению."
-
-msgid "Toggle instant battle mode."
-msgstr "Режим мгновенного боя."
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr "Проверить и настроить все горячие клавиши, имеющиеся в игре."
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Переключить тип интерфейса, который Вы хотите использовать."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr "Включить или выключить цветной курсор. Это эстетический выбор."
@@ -2837,12 +2812,6 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
-
-msgid "Set Guardian"
-msgstr "Установить охрану"
-
-msgid "Your army too big!"
-msgstr "Ваша армия слишком большая!"
 
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
@@ -3207,9 +3176,6 @@ msgstr "Расширенное описание выбранной карты."
 msgid "Accept the choice made."
 msgstr "Принять изменения."
 
-msgid "Experimental Game Settings"
-msgstr "Настройки игры"
-
 msgid "Jump"
 msgstr "Прыжком"
 
@@ -3222,8 +3188,31 @@ msgstr "Скрыть"
 msgid "Enemy Speed"
 msgstr "Скор. врагов"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Общее замедление"
+
+msgid "Normal"
+msgstr "Обычная"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Шустрая"
+
 msgid "Scroll Speed"
 msgstr "Скор. прокрутки"
+
+msgid "Evil"
+msgstr "Злой"
+
+msgid "Good"
+msgstr "Добрый"
+
+msgid "Interface Type"
+msgstr "Интерфейс"
 
 msgid "Hide"
 msgstr "Скрыть"
@@ -3233,6 +3222,18 @@ msgstr "Показать"
 
 msgid "Interface"
 msgstr "Интерфейс"
+
+msgid "Auto Resolve"
+msgstr "Авто, с магией"
+
+msgid "Auto, No Spells"
+msgstr "Авто, без магии"
+
+msgid "Battles"
+msgstr "Битвы"
+
+msgid "autoBattle|Manual"
+msgstr "Вручную"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3248,8 +3249,14 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Устанавливает скорость прокрутки окна на карте мира."
 
+msgid "Toggle the type of interface you want to use."
+msgstr "Переключить тип интерфейса, который Вы хотите использовать."
+
 msgid "Toggle interface visibility."
 msgstr "Показать/скрыть интерфейс."
+
+msgid "Toggle instant battle mode."
+msgstr "Режим мгновенного боя."
 
 msgid "Att."
 msgstr "Атк."
@@ -3372,9 +3379,6 @@ msgstr ""
 
 msgid "Easy"
 msgstr "Лёгкая"
-
-msgid "Normal"
-msgstr "Обычная"
 
 msgid "Hard"
 msgstr "Тяжёлая"
@@ -3657,6 +3661,12 @@ msgstr "Команда fheroes2 Resurrection представляет"
 
 msgid "Greetings!"
 msgstr "Добро пожаловать!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Добро пожаловать в Heroes of Might and Magic II на движке fheroes2! Перед "
+"началом игры, пожалуйста, выберите разрешение экрана."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4703,13 +4713,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"К сожалению, у Вас нет Волшебной Книги, чтобы записать заклинание в неё."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4725,6 +4728,13 @@ msgstr ""
 "\n"
 "К сожалению, Вам уже знакомо данное заклинание, так что им больше нечему Вас "
 "учить."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"К сожалению, у Вас нет Волшебной Книги, чтобы записать заклинание в неё."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -9674,35 +9684,6 @@ msgstr ""
 "суммарное здоровье которого не превышает\n"
 "%{hp} здоровья."
 
-msgid "battle: show damage info"
-msgstr "битва: показывать урон"
-
-msgid "world: allow to set guardian to objects"
-msgstr "мир: разрешить охранников для дополнительных объектов"
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-"мир: возможность установить флаг на постройках: Водяная/Ветряная Мельница, "
-"Волшебный Сад"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "герои: разрешить покупку магической книги в святилищах"
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "герои: в постройке Арена можно получить любой первичный навык"
-
-msgid "battle: allow soft wait for troops"
-msgstr "битва: использовать альтернативный пропуск хода (как в H3)"
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "игра: автосохранение в начале дня"
-
-msgid "game: use evil interface"
-msgstr "игра: использовать серую тему интерфейса"
-
-msgid "game: hide interface"
-msgstr "игра: выключить интерфейс (весь экран игровое поле)"
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Уникальный Артефакт - это %{name}."
 
@@ -9765,37 +9746,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "world: Scouting skill shows extended content info"
-#~ msgstr "мир: навык разведки покажет дополнительную информацию"
-
-#~ msgid "Cannot recruit - guest to guard automove error."
-#~ msgstr "Найм невозможен. Герой в замке не может занять гарнизон."
-
-#~ msgid "Army joining"
-#~ msgstr "Гарнизон замка"
-
-#~ msgid ""
-#~ "Unable to merge two armies together. Rearrange monsters manually before "
-#~ "moving the hero to the garrison."
-#~ msgstr ""
-#~ "Невозможно переместить героя в гарнизон замка. Освободите место в армии и "
-#~ "попробуйте ещё раз."
-
-#~ msgid "Swap Heroes"
-#~ msgstr "Переставить героев"
-
-#~ msgid "Meeting Heroes"
-#~ msgstr "Встреча героев"
-
-#~ msgid "Do you wish to continue the game?"
-#~ msgstr "Вы хотите продолжить игру?"
-
-#~ msgid "castle: allow guardians"
-#~ msgstr "замок: разрешить защитников (как в H3)"
-
-#~ msgid "heroes: remember movement points when retreating or surrendering"
-#~ msgstr "герои: при бегстве или капитуляции сохраняются очки передвижения"
-
-#~ msgid "game: offer to continue the game after victory condition"
-#~ msgstr "игра: после победы возможно продолжить игру"

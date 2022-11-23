@@ -94,7 +94,7 @@ namespace
 
 bool Game::AutoSave()
 {
-    return Game::Save( System::ConcatePath( GetSaveDir(), "AUTOSAVE" + GetSaveFileExtension() ) );
+    return Game::Save( System::concatPath( GetSaveDir(), "AUTOSAVE" + GetSaveFileExtension() ) );
 }
 
 bool Game::Save( const std::string & fn )
@@ -317,7 +317,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 
 std::string Game::GetSaveDir()
 {
-    return System::ConcatePath( System::ConcatePath( System::GetDataDirectory( "fheroes2" ), "files" ), "save" );
+    return System::concatPath( System::concatPath( System::GetDataDirectory( "fheroes2" ), "files" ), "save" );
 }
 
 std::string Game::GetSaveFileBaseName()
@@ -359,5 +359,5 @@ std::string Game::GetSaveFileExtension( const int gameType )
 
 bool Game::SaveCompletedCampaignScenario()
 {
-    return Save( System::ConcatePath( GetSaveDir(), GetSaveFileBaseName() ) + "_Complete" + GetSaveFileExtension() );
+    return Save( System::concatPath( GetSaveDir(), GetSaveFileBaseName() ) + "_Complete" + GetSaveFileExtension() );
 }

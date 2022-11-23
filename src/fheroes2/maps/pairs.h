@@ -52,8 +52,6 @@ public:
     }
 };
 
-StreamBase & operator>>( StreamBase &, IndexObject & );
-
 class ObjectColor : public std::pair<int, int>
 {
 public:
@@ -65,18 +63,11 @@ public:
         : std::pair<int, int>( object, color )
     {}
 
-    bool isObject( int object ) const
-    {
-        return object == first;
-    }
-
     bool isColor( int colors ) const
     {
         return ( colors & second ) != 0;
     }
 };
-
-StreamBase & operator>>( StreamBase &, ObjectColor & );
 
 class ResourceCount : public std::pair<int, uint32_t>
 {
