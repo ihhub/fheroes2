@@ -16,8 +16,10 @@ videos, make sure that all of the "*.SMK" files are placed in the "internalStora
 folder.
 
 ## Controls
-To simulate a right click to get info on various items, you need to first touch and keep touching anywhere on the screen
-and then touch on the item of interest. You can slide away while maintaining the touch to keep viewing the info on the item.
+To simulate a right-click to get info on various items, you need to first touch and keep touching anywhere on the screen
+and then touch on the item of interest. You can slide the touch away while maintaining it to keep viewing the info on the
+item. It is recommended to place the first touch outside the rendered game area to avoid performing a left-click after
+the simulated right-click is ended.
 
 By default normal adventure map scrolling on the borders of the screen is disabled. To pane the viewing area around you
 need to press anywhere on the adventure map and slide around to change where you are viewing.
