@@ -244,7 +244,7 @@ namespace Battle
     class Interface
     {
     public:
-        Interface( Arena &, int32_t );
+        Interface( Arena & battleArena, const int32_t tileIndex );
         Interface( const Interface & ) = delete;
 
         ~Interface();
