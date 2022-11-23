@@ -32,6 +32,11 @@ jobs:
           os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON }
+        - name: Linux ARM64 SDL2 Debug
+          os: ubuntu-latest
+          arch: arm64
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 gettext
+          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
         - name: macOS SDL1
           os: macos-11
           dependencies: sdl sdl_mixer
@@ -64,6 +69,7 @@ jobs:
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
+        test ${{ matrix.config.arch }} = "arm64" && sudo dpkg --add-architecture amd64
         sudo apt-get -y update
         sudo apt-get -y install ${{ matrix.config.dependencies }}
     - name: Install dependencies (macOS)
