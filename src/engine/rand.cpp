@@ -28,9 +28,10 @@
 
 std::mt19937 & Rand::CurrentThreadRandomDevice()
 {
-    thread_local std::random_device s_rd;
-    thread_local std::mt19937 s_gen( s_rd() );
-    return s_gen;
+    thread_local std::random_device rd;
+    thread_local std::mt19937 gen( rd() );
+
+    return gen;
 }
 
 uint32_t Rand::Get( uint32_t from, uint32_t to )
