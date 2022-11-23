@@ -69,7 +69,7 @@ jobs:
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
-        test ${{ matrix.config.arch }} = "arm64" && sudo dpkg --add-architecture amd64 && sudo sh -c 'echo deb [arch=arm64] http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse > /etc/apt/sources.list.d/arm64.list'
+        test ${{ matrix.config.arch }} = "arm64" && sudo dpkg --add-architecture arm64
         sudo apt-get -y update
         sudo apt-get -y install ${{ matrix.config.dependencies }}
     - name: Install dependencies (macOS)
