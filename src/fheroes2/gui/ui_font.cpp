@@ -4167,10 +4167,10 @@ namespace
         released[175].resize( 9 + offset * 2, 10 + offset * 2 );
         released[175].reset();
         fheroes2::DrawLine( released[175], { offset + 0, offset + 0 }, { offset + 9, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[175], { offset + 1, offset + 1 }, { offset + 1, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[175], { offset + 8, offset + 1 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[175], { offset + 0, offset + 10 }, { offset + 2, offset + 10 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[175], { offset + 7, offset + 10 }, { offset + 9, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[175], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[175], { offset + 8, offset + 1 }, { offset + 8, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[175], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[175], { offset + 7, offset + 9 }, { offset + 9, offset + 9 }, buttonGoodReleasedColor );
 
         // P
         released[176] = released[48];
