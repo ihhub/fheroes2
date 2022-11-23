@@ -3564,6 +3564,8 @@ namespace
 
             letter.setPosition( buttonFontOffset.x, buttonFontOffset.y );
         }
+        // Decrease letter A's spacing to nearby letters.
+        released[33].setPosition( -1, buttonFontOffset.y );
 
         // -
         released[13].resize( 6 + offset * 2, 6 + offset * 2 );
@@ -3614,8 +3616,6 @@ namespace
         fheroes2::SetPixel( released[33], offset + 5, offset + 2, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[33], offset + 6, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[33], offset + 6, offset + 0, buttonGoodReleasedColor );
-        // Decrease spacing to nearby letters.
-        released[33].setPosition( -1, buttonFontOffset.y );
 
         // B
         released[34].resize( 11 + offset * 2, 10 + offset * 2 );
