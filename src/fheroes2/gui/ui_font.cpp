@@ -4190,6 +4190,12 @@ namespace
         fheroes2::DrawLine( released[179], { offset + 2, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[179], offset + 4, offset + 5, buttonGoodReleasedColor );
 
+        // O with vertical bar, Cyrillic EF
+        released[180].resize( 11 + offset * 2, 10 + offset * 2 );
+        released[180].reset();
+        fheroes2::Copy( released[47], 0, 0, released[180], 0, 3, released[47].width(), released[47].height() );
+        fheroes2::DrawLine( released[180], { offset + 5, offset + 0 }, { offset + 5, offset + 10 }, buttonGoodReleasedColor );
+
         // X
         released[181] = released[56];
 
