@@ -4195,9 +4195,9 @@ namespace
         // O with vertical bar, Cyrillic EF
         released[180].resize( 11 + offset * 2, 10 + offset * 2 );
         released[180].reset();
-        fheroes2::Copy( released[47], 0, 0, released[180], 0, 1, released[47].width(), 5 );
-        fheroes2::Copy( released[47], 0, 10, released[180], 0, 6, released[47].width(), 4 );
-        // fheroes2::DrawLine( released[180], { offset + 4, offset + 0 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::Copy( released[47], 0, 0, released[180], 0, 1, released[47].width(), 8 );
+        fheroes2::Copy( released[47], 0, 10, released[180], 0, 9, released[47].width(), 4 );
+        fheroes2::DrawLine( released[180], { offset + 4, offset + 0 }, { offset + 4, offset + 10 }, buttonGoodReleasedColor );
 
         // X
         released[181] = released[56];
