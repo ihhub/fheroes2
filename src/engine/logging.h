@@ -88,10 +88,10 @@ namespace Logging
     // Initialize logging. Some systems require writing logging information into a file.
     void InitLog();
 
-    void SetDebugLevel( const int debugLevel );
+    void setDebugLevel( const int level );
+    int getDebugLevel();
 
     void setTextSupportMode( const bool enableTextSupportMode );
-
     bool isTextSupportModeEnabled();
 }
 

@@ -24,14 +24,27 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
+#include <initializer_list>
 #include <utility>
 
 #if defined( _WIN32 )
 #include <clocale>
 #include <map>
-#endif
 
-#include "system.h"
+#include <direct.h>
+#include <io.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
+#include <dirent.h>
+#include <unistd.h>
+
+#if defined( TARGET_PS_VITA )
+#include <psp2/io/stat.h>
+#else
+#include <sys/stat.h>
+#endif
+#endif
 
 #if defined( _WIN32 ) || defined( ANDROID )
 #include "logging.h"
@@ -51,29 +64,7 @@
 #include <SDL_stdinc.h>
 #endif
 
-#if defined( _WIN32 )
-#define WIN32_LEAN_AND_MEAN
-// clang-format off
-// shellapi.h must be included after windows.h
-#include <windows.h>
-#include <shellapi.h>
-// clang-format on
-#else
-#include <dirent.h>
-#endif
-
-#if defined( _WIN32 )
-#include <io.h>
-#else
-
-#if defined( TARGET_PS_VITA )
-#include <psp2/io/stat.h>
-#else
-#include <sys/stat.h>
-#endif
-
-#include <unistd.h>
-#endif
+#include "system.h"
 
 #if defined( _WIN32 )
 #define SEPARATOR '\\'
@@ -81,22 +72,22 @@
 #define SEPARATOR '/'
 #endif
 
-#if !defined( __linux__ ) || defined( ANDROID )
 namespace
 {
+#if !defined( __linux__ ) || defined( ANDROID )
     std::string GetHomeDirectory( const std::string & prog )
     {
 #if defined( TARGET_PS_VITA )
-        return System::ConcatePath( "ux0:data", prog );
+        return System::concatPath( "ux0:data", prog );
 #elif defined( TARGET_NINTENDO_SWITCH )
-        return System::ConcatePath( "/switch", prog );
+        return System::concatPath( "/switch", prog );
 #elif defined( ANDROID )
         (void)prog;
 
         const char * storagePath = SDL_AndroidGetExternalStoragePath();
         if ( storagePath == nullptr ) {
             ERROR_LOG( "Failed to obtain the path to external storage. The error: " << SDL_GetError() )
-            return {};
+            return { "." };
         }
 
         VERBOSE_LOG( "Application storage path is " << storagePath )
@@ -107,33 +98,75 @@ namespace
 
 #if defined( MACOS_APP_BUNDLE )
         if ( homeEnvPath != nullptr ) {
-            return System::ConcatePath( System::ConcatePath( homeEnvPath, "Library/Preferences" ), prog );
+            return System::concatPath( System::concatPath( homeEnvPath, "Library/Preferences" ), prog );
         }
 
-        return {};
+        return { "." };
 #endif
 
         if ( homeEnvPath != nullptr ) {
-            return System::ConcatePath( homeEnvPath, std::string( "." ).append( prog ) );
+            return System::concatPath( homeEnvPath, std::string( "." ).append( prog ) );
         }
 
         const char * dataEnvPath = getenv( "APPDATA" );
         if ( dataEnvPath != nullptr ) {
-            return System::ConcatePath( dataEnvPath, prog );
+            return System::concatPath( dataEnvPath, prog );
         }
 
-        std::string res;
 #if SDL_VERSION_ATLEAST( 2, 0, 1 )
         char * path = SDL_GetPrefPath( "", prog.c_str() );
         if ( path ) {
-            res = path;
+            const std::string result{ path };
+
             SDL_free( path );
+
+            return result;
         }
 #endif
-        return res;
+
+        return { "." };
+    }
+#endif
+
+#if !defined( _WIN32 ) && !defined( ANDROID )
+    std::vector<std::string> splitUnixPath( const std::string & path, const std::string & delimiter )
+    {
+        std::vector<std::string> result;
+
+        if ( path.empty() ) {
+            return result;
+        }
+
+        size_t pos = 0;
+
+        while ( pos < path.size() ) {
+            const size_t nextPos = path.find( delimiter, pos );
+
+            if ( nextPos == std::string::npos ) {
+                result.push_back( path.substr( pos ) );
+
+                break;
+            }
+            if ( pos < nextPos ) {
+                result.push_back( path.substr( pos, nextPos - pos ) );
+            }
+
+            pos = nextPos + delimiter.size();
+        }
+
+        return result;
+    }
+#endif
+
+    std::string_view trimTrailingSeparators( std::string_view path )
+    {
+        while ( path.size() > 1 && path.back() == SEPARATOR ) {
+            path.remove_suffix( 1 );
+        }
+
+        return path;
     }
 }
-#endif
 
 bool System::isHandheldDevice()
 {
@@ -144,26 +177,26 @@ bool System::isHandheldDevice()
 #endif
 }
 
-int System::MakeDirectory( const std::string & path )
+bool System::MakeDirectory( const std::string & path )
 {
 #if defined( _WIN32 )
-    return CreateDirectoryA( path.c_str(), nullptr );
+    return _mkdir( path.c_str() ) == 0;
 #elif defined( TARGET_PS_VITA )
-    return sceIoMkdir( path.c_str(), 0777 );
+    return sceIoMkdir( path.c_str(), 0777 ) == 0;
 #else
-    return mkdir( path.c_str(), S_IRWXU );
+    return mkdir( path.c_str(), S_IRWXU ) == 0;
 #endif
 }
 
-std::string System::ConcatePath( const std::string & str1, const std::string & str2 )
+std::string System::concatPath( const std::string & left, const std::string & right )
 {
     // Avoid memory allocation while concatenating string. Allocate needed size at once.
     std::string temp;
-    temp.reserve( str1.size() + 1 + str2.size() );
+    temp.reserve( left.size() + 1 + right.size() );
 
-    temp += str1;
+    temp += left;
     temp += SEPARATOR;
-    temp += str2;
+    temp += right;
 
     return temp;
 }
@@ -185,15 +218,15 @@ std::string System::GetConfigDirectory( const std::string & prog )
 #if defined( __linux__ ) && !defined( ANDROID )
     const char * configEnv = getenv( "XDG_CONFIG_HOME" );
     if ( configEnv ) {
-        return System::ConcatePath( configEnv, prog );
+        return System::concatPath( configEnv, prog );
     }
 
     const char * homeEnv = getenv( "HOME" );
     if ( homeEnv ) {
-        return System::ConcatePath( System::ConcatePath( homeEnv, ".config" ), prog );
+        return System::concatPath( System::concatPath( homeEnv, ".config" ), prog );
     }
 
-    return std::string();
+    return { "." };
 #else
     return GetHomeDirectory( prog );
 #endif
@@ -204,91 +237,79 @@ std::string System::GetDataDirectory( const std::string & prog )
 #if defined( __linux__ ) && !defined( ANDROID )
     const char * dataEnv = getenv( "XDG_DATA_HOME" );
     if ( dataEnv ) {
-        return System::ConcatePath( dataEnv, prog );
+        return System::concatPath( dataEnv, prog );
     }
 
     const char * homeEnv = getenv( "HOME" );
     if ( homeEnv ) {
-        return System::ConcatePath( System::ConcatePath( homeEnv, ".local/share" ), prog );
+        return System::concatPath( System::concatPath( homeEnv, ".local/share" ), prog );
     }
 
-    return {};
+    return { "." };
 #elif defined( MACOS_APP_BUNDLE )
     const char * homeEnv = getenv( "HOME" );
     if ( homeEnv ) {
-        return System::ConcatePath( System::ConcatePath( homeEnv, "Library/Application Support" ), prog );
+        return System::concatPath( System::concatPath( homeEnv, "Library/Application Support" ), prog );
     }
 
-    return {};
+    return { "." };
 #else
     return GetHomeDirectory( prog );
 #endif
 }
 
-std::string System::GetDirname( const std::string & str )
+std::string System::GetDirname( std::string_view path )
 {
-    if ( !str.empty() ) {
-        size_t pos = str.rfind( SEPARATOR );
-
-        if ( std::string::npos == pos )
-            return std::string( "." );
-        else if ( pos == 0 )
-            return std::string( "./" );
-        else if ( pos == str.size() - 1 )
-            return GetDirname( str.substr( 0, str.size() - 1 ) );
-        else
-            return str.substr( 0, pos );
+    if ( path.empty() ) {
+        return { "." };
     }
 
-    return str;
-}
+    path = trimTrailingSeparators( path );
 
-std::string System::GetBasename( const std::string & str )
-{
-    if ( !str.empty() ) {
-        size_t pos = str.rfind( SEPARATOR );
+    const size_t pos = path.rfind( SEPARATOR );
 
-        if ( std::string::npos == pos || pos == 0 )
-            return str;
-        else if ( pos == str.size() - 1 )
-            return GetBasename( str.substr( 0, str.size() - 1 ) );
-        else
-            return str.substr( pos + 1 );
+    if ( pos == std::string::npos ) {
+        return { "." };
+    }
+    if ( pos == 0 ) {
+        return { std::initializer_list<char>{ SEPARATOR } };
     }
 
-    return str;
+    // Trailing separators should already be trimmed
+    assert( pos != path.size() - 1 );
+
+    return std::string{ trimTrailingSeparators( path.substr( 0, pos ) ) };
 }
 
-int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )
+std::string System::GetBasename( std::string_view path )
 {
-#if defined( _WIN32 )
-    (void)argc;
-    (void)argv;
-    (void)optstring;
-    return -1;
-#else
-    return getopt( argc, argv, optstring );
-#endif
+    if ( path.empty() ) {
+        return { "." };
+    }
+
+    path = trimTrailingSeparators( path );
+
+    const size_t pos = path.rfind( SEPARATOR );
+
+    if ( pos == std::string::npos || ( pos == 0 && path.size() == 1 ) ) {
+        return std::string{ path };
+    }
+
+    // Trailing separators should already be trimmed
+    assert( pos != path.size() - 1 );
+
+    return std::string{ path.substr( pos + 1 ) };
 }
 
-char * System::GetOptionsArgument()
+bool System::IsFile( const std::string & path, bool writable )
 {
-#if defined( _WIN32 )
-    return nullptr;
-#else
-    return optarg;
-#endif
-}
-
-bool System::IsFile( const std::string & name, bool writable )
-{
-    if ( name.empty() ) {
+    if ( path.empty() ) {
         // An empty path cannot be a file.
         return false;
     }
 
 #if defined( _WIN32 )
-    const DWORD fileAttributes = GetFileAttributes( name.c_str() );
+    const DWORD fileAttributes = GetFileAttributes( path.c_str() );
     if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
         // This path doesn't exist.
         return false;
@@ -299,13 +320,13 @@ bool System::IsFile( const std::string & name, bool writable )
         return false;
     }
 
-    return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
+    return writable ? ( 0 == _access( path.c_str(), 06 ) ) : ( 0 == _access( path.c_str(), 04 ) );
 #elif defined( TARGET_PS_VITA ) || defined( ANDROID )
     // TODO: check if it is really a file.
-    return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
+    return writable ? 0 == access( path.c_str(), W_OK ) : 0 == access( path.c_str(), R_OK );
 #else
     std::string correctedPath;
-    if ( !GetCaseInsensitivePath( name, correctedPath ) )
+    if ( !GetCaseInsensitivePath( path, correctedPath ) )
         return false;
 
     struct stat fs;
@@ -317,15 +338,15 @@ bool System::IsFile( const std::string & name, bool writable )
 #endif
 }
 
-bool System::IsDirectory( const std::string & name, bool writable )
+bool System::IsDirectory( const std::string & path, bool writable )
 {
-    if ( name.empty() ) {
+    if ( path.empty() ) {
         // An empty path cannot be a directory.
         return false;
     }
 
 #if defined( _WIN32 )
-    const DWORD fileAttributes = GetFileAttributes( name.c_str() );
+    const DWORD fileAttributes = GetFileAttributes( path.c_str() );
     if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
         // This path doesn't exist.
         return false;
@@ -336,13 +357,13 @@ bool System::IsDirectory( const std::string & name, bool writable )
         return false;
     }
 
-    return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 00 ) );
+    return writable ? ( 0 == _access( path.c_str(), 06 ) ) : ( 0 == _access( path.c_str(), 00 ) );
 #elif defined( TARGET_PS_VITA ) || defined( ANDROID )
     // TODO: check if it is really a directory.
-    return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
+    return writable ? 0 == access( path.c_str(), W_OK ) : 0 == access( path.c_str(), R_OK );
 #else
     std::string correctedPath;
-    if ( !GetCaseInsensitivePath( name, correctedPath ) )
+    if ( !GetCaseInsensitivePath( path, correctedPath ) )
         return false;
 
     struct stat fs;
@@ -354,53 +375,16 @@ bool System::IsDirectory( const std::string & name, bool writable )
 #endif
 }
 
-int System::Unlink( const std::string & file )
+bool System::Unlink( const std::string & path )
 {
 #if defined( _WIN32 )
-    return _unlink( file.c_str() );
+    return _unlink( path.c_str() ) == 0;
 #else
-    return unlink( file.c_str() );
+    return unlink( path.c_str() ) == 0;
 #endif
 }
 
 #if !defined( _WIN32 ) && !defined( ANDROID )
-// TODO: Android filesystem is case-sensitive so it should use the code below.
-//       However, in Android an application has access only to a specific path on the system.
-
-// splitUnixPath - function for splitting strings by delimiter
-std::vector<std::string> splitUnixPath( const std::string & path, const std::string & delimiter )
-{
-    std::vector<std::string> result;
-
-    if ( path.empty() ) {
-        return result;
-    }
-
-    size_t pos = path.find( delimiter, 0 );
-    while ( pos != std::string::npos ) { // while found delimiter
-        const size_t nextPos = path.find( delimiter, pos + 1 );
-        if ( nextPos != std::string::npos ) { // if found next delimiter
-            if ( pos + 1 < nextPos ) { // have what to append
-                result.push_back( path.substr( pos + 1, nextPos - pos - 1 ) );
-            }
-        }
-        else { // if no more delimiter present
-            if ( pos + 1 < path.length() ) { // if not a postfix delimiter
-                result.push_back( path.substr( pos + 1 ) );
-            }
-            break;
-        }
-
-        pos = path.find( delimiter, pos + 1 );
-    }
-
-    if ( result.empty() ) { // if delimiter not present
-        result.push_back( path );
-    }
-
-    return result;
-}
-
 // based on: https://github.com/OneSadCookie/fcaseopen
 bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
 {
@@ -493,22 +477,22 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 }
 #endif
 
-std::string System::FileNameToUTF8( const std::string & str )
+std::string System::FileNameToUTF8( const std::string & name )
 {
 #if defined( _WIN32 )
-    if ( str.empty() ) {
-        return str;
+    if ( name.empty() ) {
+        return name;
     }
 
-    static std::map<std::string, std::string> acpToUtf8;
+    thread_local std::map<std::string, std::string> acpToUtf8;
 
-    const auto iter = acpToUtf8.find( str );
+    const auto iter = acpToUtf8.find( name );
     if ( iter != acpToUtf8.end() ) {
         return iter->second;
     }
 
     // In case of any issues, the original string will be returned, so let's put it to the cache right away
-    acpToUtf8[str] = str;
+    acpToUtf8[name] = name;
 
     auto getLastErrorStr = []() {
         LPTSTR msgBuf;
@@ -526,26 +510,26 @@ std::string System::FileNameToUTF8( const std::string & str )
         return std::string( "FormatMessage() failed: " ) + std::to_string( GetLastError() );
     };
 
-    const int wLen = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, nullptr, 0 );
+    const int wLen = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, name.c_str(), -1, nullptr, 0 );
     if ( wLen <= 0 ) {
         ERROR_LOG( getLastErrorStr() )
 
-        return str;
+        return name;
     }
 
     const std::unique_ptr<wchar_t[]> wStr( new wchar_t[wLen] );
 
-    if ( MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, wStr.get(), wLen ) != wLen ) {
+    if ( MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, name.c_str(), -1, wStr.get(), wLen ) != wLen ) {
         ERROR_LOG( getLastErrorStr() )
 
-        return str;
+        return name;
     }
 
     const int uLen = WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, nullptr, 0, nullptr, nullptr );
     if ( uLen <= 0 ) {
         ERROR_LOG( getLastErrorStr() )
 
-        return str;
+        return name;
     }
 
     const std::unique_ptr<char[]> uStr( new char[uLen] );
@@ -553,17 +537,17 @@ std::string System::FileNameToUTF8( const std::string & str )
     if ( WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, uStr.get(), uLen, nullptr, nullptr ) != uLen ) {
         ERROR_LOG( getLastErrorStr() )
 
-        return str;
+        return name;
     }
 
     const std::string result( uStr.get() );
 
     // Put the final result to the cache
-    acpToUtf8[str] = result;
+    acpToUtf8[name] = result;
 
     return result;
 #else
-    return str;
+    return name;
 #endif
 }
 
