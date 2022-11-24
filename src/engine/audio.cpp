@@ -630,10 +630,10 @@ namespace
         constexpr auto volumeTable = []() constexpr
         {
             const int maxVolume = 10;
-            const double range = 0 - 10 * std::log10( MIX_MAX_VOLUME);
+            const double range = 0 - 10 * std::log10( MIX_MAX_VOLUME );
             const double a = std::pow( 10.0, range / 20.0 );
             const double b = std::log10( 1.0 / a ) / maxVolume;
-            std::array<int, maxVolume + 1> result{0};
+            std::array<int, maxVolume + 1> result{ 0 };
             result[maxVolume] = MIX_MAX_VOLUME;
             for ( int i = 1; i < maxVolume; i++ )
                 result[i] = static_cast<int>( a * std::pow( 10.0, i * b ) * MIX_MAX_VOLUME + 0.5 );
