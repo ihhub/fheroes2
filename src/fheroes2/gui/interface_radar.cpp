@@ -245,7 +245,7 @@ void Interface::Radar::SetRedraw() const
 void Interface::Radar::Redraw()
 {
     const Settings & conf = Settings::Get();
-    const bool hideInterface = conf.ExtGameHideInterface();
+    const bool hideInterface = conf.isHideInterfaceEnabled();
 
     if ( hideInterface && conf.ShowRadar() ) {
         BorderWindow::Redraw();
@@ -255,7 +255,7 @@ void Interface::Radar::Redraw()
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Rect & rect = GetArea();
         if ( hide ) {
-            fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.isEvilInterfaceEnabled() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
         }
         else {
             cursorArea.hide();
@@ -401,7 +401,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nullptr */ )
 {
     const Settings & conf = Settings::Get();
-    if ( conf.ExtGameHideInterface() && !conf.ShowRadar() && radarType != RadarType::ViewWorld ) {
+    if ( conf.isHideInterfaceEnabled() && !conf.ShowRadar() && radarType != RadarType::ViewWorld ) {
         return;
     }
 

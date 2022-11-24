@@ -653,7 +653,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
 
     // castle icon
     const Settings & conf = Settings::Get();
-    const fheroes2::Sprite & castleIcon = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, 23 );
+    const fheroes2::Sprite & castleIcon = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 23 );
 
     dst_pt.x = cur_rt.x + ( cur_rt.width - castleIcon.width() ) / 2;
     dst_pt.y += 10;

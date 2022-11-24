@@ -225,7 +225,7 @@ bool Dialog::SelectCount( const std::string & header, uint32_t min, uint32_t max
 
 bool Dialog::InputString( const std::string & header, std::string & res, const std::string & title, const size_t charLimit )
 {
-    const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+    const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -238,7 +238,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     TextBox titlebox( title, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
     const uint32_t titleHeight = title.empty() ? 0 : titlebox.h() + 10;
     FrameBox box( 10 + titleHeight + textbox.h() + 10 + sprite.height(), true );
@@ -397,7 +397,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     btnGroups.draw();
 
     const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
     fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 

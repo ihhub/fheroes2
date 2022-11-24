@@ -69,8 +69,8 @@ namespace
         GLOBAL_3D_AUDIO = 0x00010000,
         GLOBAL_SYSTEM_INFO = 0x00020000,
         GLOBAL_CURSOR_SOFT_EMULATION = 0x00040000,
-        // UNUSED = 0x00080000,
-        // UNUSED = 0x00100000,
+        GLOBAL_EVIL_INTERFACE = 0x00080000,
+        GLOBAL_HIDE_INTERFACE = 0x00100000,
         GLOBAL_BATTLE_SHOW_DAMAGE = 0x00200000,
         GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
@@ -226,6 +226,14 @@ bool Settings::Read( const std::string & filename )
 
     if ( config.Exists( "battle army order" ) ) {
         setBattleShowArmyOrder( config.StrParams( "battle army order" ) == "on" );
+    }
+
+    if ( config.Exists( "use evil interface" ) ) {
+        setEvilInterface( config.StrParams( "use evil interface" ) == "on" );
+    }
+
+    if ( config.Exists( "hide interface" ) ) {
+        setHideInterface( config.StrParams( "hide interface" ) == "on" );
     }
 
     // videomode
@@ -404,6 +412,12 @@ std::string Settings::String() const
 
     os << std::endl << "# show army order during battle: on/off" << std::endl;
     os << "battle army order = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# use evil interface style: on/off" << std::endl;
+    os << "use evil interface = " << ( _optGlobal.Modes( GLOBAL_EVIL_INTERFACE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
+    os << "hide interface = " << ( _optGlobal.Modes( GLOBAL_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
@@ -711,6 +725,26 @@ void Settings::setBattleDamageInfo( const bool enable )
     }
 }
 
+void Settings::setHideInterface( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_HIDE_INTERFACE );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_HIDE_INTERFACE );
+    }
+}
+
+void Settings::setEvilInterface( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_EVIL_INTERFACE );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_EVIL_INTERFACE );
+    }
+}
+
 void Settings::SetScrollSpeed( int speed )
 {
     scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SPEED_NONE ), static_cast<int>( SCROLL_SPEED_VERY_FAST ) );
@@ -744,6 +778,16 @@ bool Settings::isSystemInfoEnabled() const
 bool Settings::isBattleShowDamageInfoEnabled() const
 {
     return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_DAMAGE );
+}
+
+bool Settings::isHideInterfaceEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_HIDE_INTERFACE );
+}
+
+bool Settings::isEvilInterfaceEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_EVIL_INTERFACE );
 }
 
 bool Settings::ShowControlPanel() const
@@ -881,16 +925,6 @@ void Settings::EnablePriceOfLoyaltySupport( const bool set )
         if ( _musicType == MUSIC_MIDI_EXPANSION )
             _musicType = MUSIC_MIDI_ORIGINAL;
     }
-}
-
-void Settings::SetEvilInterface( bool f )
-{
-    f ? ExtSetModes( GAME_EVIL_INTERFACE ) : ExtResetModes( GAME_EVIL_INTERFACE );
-}
-
-void Settings::SetHideInterface( bool f )
-{
-    f ? ExtSetModes( GAME_HIDE_INTERFACE ) : ExtResetModes( GAME_HIDE_INTERFACE );
 }
 
 void Settings::SetBattleGrid( bool f )

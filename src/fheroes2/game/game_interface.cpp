@@ -56,7 +56,7 @@ void Interface::Basic::Reset()
     const fheroes2::Display & display = fheroes2::Display::instance();
 
     Settings & conf = Settings::Get();
-    const bool isHideInterface = conf.ExtGameHideInterface();
+    const bool isHideInterface = conf.isHideInterfaceEnabled();
 
     if ( isHideInterface ) {
         conf.SetShowPanel( true );
@@ -115,7 +115,7 @@ void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
     const Settings & conf = Settings::Get();
 
     const uint32_t combinedRedraw = redraw | force;
-    const bool hideInterface = conf.ExtGameHideInterface();
+    const bool hideInterface = conf.isHideInterfaceEnabled();
 
     if ( combinedRedraw & REDRAW_GAMEAREA ) {
         gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
@@ -159,8 +159,8 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const Settings & conf = Settings::Get();
-    const bool isEvilInterface = conf.ExtGameEvilInterface();
-    const bool isHideInterface = conf.ExtGameHideInterface();
+    const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+    const bool isHideInterface = conf.isHideInterfaceEnabled();
 
     const fheroes2::Rect & radarRect = radar.GetRect();
     const fheroes2::Rect & radarArea = radar.GetArea();

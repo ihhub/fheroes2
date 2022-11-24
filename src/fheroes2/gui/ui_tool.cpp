@@ -209,17 +209,17 @@ namespace fheroes2
 
     GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const bool isEvilInterface_ )
         : isEvilInterface( isEvilInterface_ )
-        , isOriginalEvilInterface( Settings::Get().ExtGameEvilInterface() )
+        , isOriginalEvilInterface( Settings::Get().isEvilInterfaceEnabled() )
     {
         if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().SetEvilInterface( isEvilInterface );
+            Settings::Get().setEvilInterface( isEvilInterface );
         }
     }
 
     GameInterfaceTypeRestorer::~GameInterfaceTypeRestorer()
     {
         if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().SetEvilInterface( isOriginalEvilInterface );
+            Settings::Get().setEvilInterface( isOriginalEvilInterface );
         }
     }
 

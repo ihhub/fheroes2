@@ -68,8 +68,8 @@ public:
         // UNUSED = 0x10000100,
         // UNUSED = 0x10000200,
         // UNUSED = 0x10000400,
-        GAME_EVIL_INTERFACE = 0x10001000,
-        GAME_HIDE_INTERFACE = 0x10002000,
+        // UNUSED = 0x10001000,
+        // UNUSED = 0x10002000,
         // UNUSED = 0x10008000,
         // UNUSED = 0x10010000,
         // UNUSED = 0x10100000,
@@ -235,6 +235,8 @@ public:
     bool is3DAudioEnabled() const;
     bool isSystemInfoEnabled() const;
     bool isBattleShowDamageInfoEnabled() const;
+    bool isHideInterfaceEnabled() const;
+    bool isEvilInterfaceEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -277,16 +279,6 @@ public:
         return false;
     }
 
-    bool ExtGameEvilInterface() const
-    {
-        return ExtModes( GAME_EVIL_INTERFACE );
-    }
-
-    bool ExtGameHideInterface() const
-    {
-        return ExtModes( GAME_HIDE_INTERFACE );
-    }
-
     const fheroes2::Size & VideoMode() const
     {
         return video_mode;
@@ -299,8 +291,6 @@ public:
         game_difficulty = difficulty;
     }
 
-    void SetEvilInterface( bool );
-    void SetHideInterface( bool );
     void SetBattleGrid( bool );
     void SetBattleMovementShaded( bool );
     void SetBattleMouseShaded( bool );
@@ -323,6 +313,8 @@ public:
     void setVSync( const bool enable );
     void setSystemInfo( const bool enable );
     void setBattleDamageInfo( const bool enable );
+    void setHideInterface( const bool enable );
+    void setEvilInterface( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

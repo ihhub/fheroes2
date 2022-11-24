@@ -85,7 +85,7 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int system = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
     // setup cursor

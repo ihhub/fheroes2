@@ -956,7 +956,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
-        const bool isHiddenInterface = conf.ExtGameHideInterface();
+        const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
         isCursorOverGamearea = false;

@@ -57,7 +57,7 @@ void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
 {
     BorderWindow::SetPosition( ox, oy );
 
-    const int icnbtn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
+    const int icnbtn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
     buttonNextHero.setICNInfo( icnbtn, 0, 1 );
     buttonMovement.setICNInfo( icnbtn, 2, 3 );
@@ -106,8 +106,8 @@ void Interface::ButtonsArea::Redraw()
 {
     const Settings & conf = Settings::Get();
 
-    if ( !conf.ExtGameHideInterface() || conf.ShowButtons() ) {
-        if ( conf.ExtGameHideInterface() )
+    if ( !conf.isHideInterfaceEnabled() || conf.ShowButtons() ) {
+        if ( conf.isHideInterfaceEnabled() )
             BorderWindow::Redraw();
 
         SetButtonStatus();
