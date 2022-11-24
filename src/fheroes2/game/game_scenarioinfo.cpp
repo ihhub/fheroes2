@@ -148,7 +148,7 @@ namespace
 
         const fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
         const int32_t y = offset.y + 385;
-        text.draw( offset.x, y, width_ , fheroes2::Display::instance() );
+        text.draw( offset.x, y, width_, fheroes2::Display::instance() );
 
         const int32_t textX = ( width_ > text.width() ) ? offset.x + ( width_ - text.width() ) / 2 : 0;
 
