@@ -123,6 +123,78 @@ namespace
         return false;
     }
 
+    int AISelectSkillFromArena( const Heroes & hero )
+    {
+        switch ( hero.GetRace() ) {
+        case Race::KNGT:
+            if ( hero.GetDefense() < 5 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            if ( hero.GetAttack() < 5 ) {
+                return Skill::Primary::ATTACK;
+            }
+            if ( hero.GetPower() < 3 ) {
+                return Skill::Primary::POWER;
+            }
+            break;
+
+        case Race::BARB:
+            if ( hero.GetAttack() < 5 ) {
+                return Skill::Primary::ATTACK;
+            }
+            if ( hero.GetDefense() < 5 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            if ( hero.GetPower() < 3 ) {
+                return Skill::Primary::POWER;
+            }
+            break;
+
+        case Race::SORC:
+        case Race::WZRD:
+            if ( hero.GetPower() < 5 ) {
+                return Skill::Primary::POWER;
+            }
+            if ( hero.GetDefense() < 3 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            if ( hero.GetAttack() < 3 ) {
+                return Skill::Primary::ATTACK;
+            }
+            break;
+
+        case Race::WRLK:
+        case Race::NECR:
+            if ( hero.GetPower() < 5 ) {
+                return Skill::Primary::POWER;
+            }
+            if ( hero.GetAttack() < 3 ) {
+                return Skill::Primary::ATTACK;
+            }
+            if ( hero.GetDefense() < 3 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        switch ( Rand::Get( 1, 3 ) ) {
+        case 1:
+            return Skill::Primary::ATTACK;
+        case 2:
+            return Skill::Primary::DEFENSE;
+        case 3:
+            return Skill::Primary::POWER;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return Skill::Primary::UNKNOWN;
+    }
+
     bool canMonsterJoinHero( const Troop & troop, Heroes & hero )
     {
         if ( hero.GetArmy().HasMonster( troop.GetID() ) ) {
@@ -193,79 +265,6 @@ namespace AI
     void AIToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex );
     void AIToAlchemistTower( Heroes & hero );
     void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex );
-
-    int AISelectPrimarySkill( const Heroes & hero )
-    {
-        switch ( hero.GetRace() ) {
-        case Race::KNGT: {
-            if ( 5 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            if ( 5 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            if ( 3 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            if ( 3 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            break;
-        }
-
-        case Race::BARB: {
-            if ( 5 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            if ( 5 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            if ( 3 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            if ( 3 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            break;
-        }
-
-        case Race::SORC:
-        case Race::WZRD: {
-            if ( 5 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            if ( 5 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            if ( 3 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            if ( 3 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            break;
-        }
-
-        case Race::WRLK:
-        case Race::NECR: {
-            if ( 5 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            if ( 5 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            if ( 3 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            if ( 3 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            break;
-        }
-
-        default:
-            break;
-        }
-
-        switch ( Rand::Get( 1, 4 ) ) {
-        case 1:
-            return Skill::Primary::ATTACK;
-        case 2:
-            return Skill::Primary::DEFENSE;
-        case 3:
-            return Skill::Primary::POWER;
-        case 4:
-            return Skill::Primary::KNOWLEDGE;
-        default:
-            break;
-        }
-
-        return Skill::Primary::UNKNOWN;
-    }
 
     void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, const fheroes2::Point * centerOn = nullptr, const bool playSound = false )
     {
@@ -1048,22 +1047,8 @@ namespace AI
             skill = Skill::Primary::POWER;
             break;
         case MP2::OBJ_ARENA:
-            if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() )
-                skill = AISelectPrimarySkill( hero );
-            else {
-                switch ( Rand::Get( 1, 3 ) ) {
-                case 1:
-                case 2:
-                    skill = Rand::Get( 1 ) ? Skill::Primary::ATTACK : Skill::Primary::DEFENSE;
-                    break;
-
-                default:
-                    skill = Skill::Primary::POWER;
-                    break;
-                }
-            }
+            skill = AISelectSkillFromArena( hero );
             break;
-
         default:
             break;
         }

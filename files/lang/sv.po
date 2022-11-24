@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-21 04:05+0000\n"
+"POT-Creation-Date: 2022-11-22 07:19+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -9425,51 +9425,3 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Experimental"
-#~ msgstr "Luftelement"
-
-#, fuzzy
-#~ msgid "Experimental game settings."
-#~ msgstr "Spelinställningar för FHeroes2."
-
-#, fuzzy
-#~ msgid "Experimental Game Settings"
-#~ msgstr "Spelinställningar för FHeroes2."
-
-#~ msgid "game: autosave will be made at the beginning of the day"
-#~ msgstr "spel: automatisk sparning kommer att utföras i början på dagen"
-
-#~ msgid "game: use evil interface"
-#~ msgstr "spel: Använd ondskefullt gränssnitt"
-
-#~ msgid "game: hide interface"
-#~ msgstr "spel: Göm gränssnitt"
-
-#, fuzzy
-#~ msgid "battle: show damage info"
-#~ msgstr "spel: Visa systeminfo"
-
-#~ msgid "Set Guardian"
-#~ msgstr "Ange beskyddare"
-
-#~ msgid "Your army too big!"
-#~ msgstr "Din armé är för stor!"
-
-#, fuzzy
-#~ msgid "Cannot recruit - guest to guard automove error."
-#~ msgstr "Kan inte rekrytera - du har för många hjältar."
-
-#~ msgid "Swap Heroes"
-#~ msgstr "Byt hjältar"
-
-#, fuzzy
-#~ msgid "Do you wish to continue the game?"
-#~ msgstr "Vill du köpa en?"
-
-#~ msgid "castle: allow guardians"
-#~ msgstr "slott: tillåt väktare"
-
-#~ msgid "game: offer to continue the game after victory condition"
-#~ msgstr "spel: erbjud att fortsätta spelet efter att spelaren har segrat"

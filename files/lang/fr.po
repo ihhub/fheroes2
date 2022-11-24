@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-21 04:05+0000\n"
+"POT-Creation-Date: 2022-11-22 07:19+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -9979,87 +9979,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Experimental"
-#~ msgstr ""
-#~ "Expéri-\n"
-#~ "mentaux"
-
-#~ msgid "Experimental game settings."
-#~ msgstr "Paramètres de jeu expérimentaux."
-
-#~ msgid "Experimental Game Settings"
-#~ msgstr "Paramètres de jeu expérimentaux"
-
-#~ msgid "heroes: allow to choose any primary skill in Arena"
-#~ msgstr ""
-#~ "héros : permettre le choix parmi toutes les compétences primaires dans "
-#~ "l'arène"
-
-#~ msgid "battle: allow soft wait for troops"
-#~ msgstr "combat : permettre aux créatures d'attendre au cours du combat"
-
-#~ msgid "game: autosave will be made at the beginning of the day"
-#~ msgstr "jeu : sauvegarde auto en début de journée"
-
-#~ msgid "game: use evil interface"
-#~ msgstr "jeu : utiliser l'interface maléfique"
-
-#~ msgid "game: hide interface"
-#~ msgstr "jeu : cacher l'interface"
-
-#~ msgid "battle: show damage info"
-#~ msgstr "bataille : afficher les informations sur les dégâts"
-
-#~ msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-#~ msgstr ""
-#~ "monde : moulins, roues hydrauliques et jardins magiques peuvent être "
-#~ "capturés"
-
-#~ msgid "heroes: allow buy a spellbook from Shrines"
-#~ msgstr "héros : permettre l'achat d'un grimoire dans les sanctuaires"
-
-#~ msgid "Set Guardian"
-#~ msgstr "Assigner gardien"
-
-#~ msgid "Your army too big!"
-#~ msgstr "Votre armée est trop grande !"
-
-#~ msgid "world: allow to set guardian to objects"
-#~ msgstr "monde : autoriser le placement de gardiens pour certains lieux"
-
-#~ msgid "world: Scouting skill shows extended content info"
-#~ msgstr "monde : reconnaissance affiche des infos supplémentaires"
-
-#~ msgid "Cannot recruit - guest to guard automove error."
-#~ msgstr ""
-#~ "Impossible de recruter - place du capitaine de la garnison déjà prise."
-
-#~ msgid "Army joining"
-#~ msgstr "Armée à joindre"
-
-#~ msgid ""
-#~ "Unable to merge two armies together. Rearrange monsters manually before "
-#~ "moving the hero to the garrison."
-#~ msgstr ""
-#~ "Impossible de fusionner deux armées ensemble. Réorganisez les monstres "
-#~ "manuellement avant de déplacer le héros vers la garnison."
-
-#~ msgid "Swap Heroes"
-#~ msgstr "Echanger héros"
-
-#~ msgid "Meeting Heroes"
-#~ msgstr "Rencontre"
-
-#~ msgid "Do you wish to continue the game?"
-#~ msgstr "Voulez-vous continuer le jeu ?"
-
-#~ msgid "castle: allow guardians"
-#~ msgstr "château : les héros peuvent remplacer le capitaine"
-
-#~ msgid "heroes: remember movement points when retreating or surrendering"
-#~ msgstr ""
-#~ "héros : les points de mouvement sont mémorisés après la retraite/reddition"
-
-#~ msgid "game: offer to continue the game after victory condition"
-#~ msgstr "jeu : offre de continuer le jeu après la victoire"

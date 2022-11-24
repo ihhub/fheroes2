@@ -87,8 +87,7 @@ std::string Settings::GetVersion()
 }
 
 Settings::Settings()
-    : debug( 0 )
-    , video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
+    : video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
@@ -143,62 +142,15 @@ bool Settings::Read( const std::string & filename )
     TinyConfig config( '=', '#' );
 
     std::string sval;
-    int ival;
 
-    if ( !config.Load( filename ) )
+    if ( !config.Load( filename ) ) {
         return false;
-
-    // debug
-    ival = config.IntParams( "debug" );
-
-    switch ( ival ) {
-    case 0:
-        debug = DBG_ALL_WARN;
-        break;
-    case 1:
-        debug = DBG_ALL_INFO;
-        break;
-    case 2:
-        debug = DBG_ALL_TRACE;
-        break;
-    case 3:
-        debug = DBG_ENGINE_TRACE;
-        break;
-    case 4:
-        debug = DBG_GAME_INFO | DBG_BATTLE_INFO | DBG_AI_INFO;
-        break;
-    case 5:
-        debug = DBG_GAME_TRACE | DBG_AI_INFO | DBG_BATTLE_INFO;
-        break;
-    case 6:
-        debug = DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
-        break;
-    case 7:
-        debug = DBG_BATTLE_TRACE | DBG_AI_INFO | DBG_GAME_INFO;
-        break;
-    case 8:
-        debug = DBG_DEVEL | DBG_GAME_TRACE;
-        break;
-    case 9:
-        debug = DBG_DEVEL | DBG_AI_INFO | DBG_BATTLE_INFO | DBG_GAME_INFO;
-        break;
-    case 10:
-        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
-        break;
-    case 11:
-        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_TRACE | DBG_GAME_INFO;
-        break;
-    default:
-        debug = ival;
-        break;
     }
 
-#ifndef WITH_DEBUG
-    // reset devel
-    debug &= ~DBG_DEVEL;
-#endif
-
-    Logging::SetDebugLevel( debug );
+    // debug
+    if ( config.Exists( "debug" ) ) {
+        setDebug( config.IntParams( "debug" ) );
+    }
 
     // game language
     sval = config.StrParams( "lang" );
@@ -369,7 +321,7 @@ bool Settings::Save( const std::string & filename ) const
         return false;
     }
 
-    const std::string cfgFilename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), filename );
+    const std::string cfgFilename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), filename );
 
     std::fstream file;
     file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );
@@ -418,7 +370,7 @@ std::string Settings::String() const
     os << "fullscreen = " << ( _optGlobal.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
-    os << "debug = " << debug << std::endl;
+    os << "debug = " << Logging::getDebugLevel() << std::endl;
 
     os << std::endl << "# heroes movement speed: 1 - 10" << std::endl;
     os << "heroes speed = " << heroes_speed << std::endl;
@@ -511,7 +463,7 @@ bool Settings::setGameLanguage( const std::string & language )
 #if defined( MACOS_APP_BUNDLE )
     const ListFiles translations = Settings::FindFiles( "translations", fileName, false );
 #else
-    const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
+    const ListFiles translations = Settings::FindFiles( System::concatPath( "files", "lang" ), fileName, false );
 #endif
 
     if ( !translations.empty() ) {
@@ -593,7 +545,7 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
     ListFiles res;
 
     for ( const std::string & dir : GetRootDirs() ) {
-        const std::string path = !prefixDir.empty() ? System::ConcatePath( dir, prefixDir ) : dir;
+        const std::string path = !prefixDir.empty() ? System::concatPath( dir, prefixDir ) : dir;
 
         if ( System::IsDirectory( path ) ) {
             if ( exactMatch ) {
@@ -612,9 +564,9 @@ bool Settings::findFile( const std::string & internalDirectory, const std::strin
 {
     std::string tempPath;
 
-    for ( const std::string & rootDir : Settings::GetRootDirs() ) {
-        tempPath = System::ConcatePath( rootDir, internalDirectory );
-        tempPath = System::ConcatePath( tempPath, fileName );
+    for ( const std::string & rootDir : GetRootDirs() ) {
+        tempPath = System::concatPath( rootDir, internalDirectory );
+        tempPath = System::concatPath( tempPath, fileName );
         if ( System::IsFile( tempPath ) ) {
             fullPath.swap( tempPath );
             return true;
@@ -849,10 +801,54 @@ bool Settings::BattleShowArmyOrder() const
     return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
 }
 
-void Settings::SetDebug( int d )
+void Settings::setDebug( int debug )
 {
-    debug = d;
-    Logging::SetDebugLevel( debug );
+    switch ( debug ) {
+    case 0:
+        debug = DBG_ALL_WARN;
+        break;
+    case 1:
+        debug = DBG_ALL_INFO;
+        break;
+    case 2:
+        debug = DBG_ALL_TRACE;
+        break;
+    case 3:
+        debug = DBG_ENGINE_TRACE;
+        break;
+    case 4:
+        debug = DBG_GAME_INFO | DBG_BATTLE_INFO | DBG_AI_INFO;
+        break;
+    case 5:
+        debug = DBG_GAME_TRACE | DBG_AI_INFO | DBG_BATTLE_INFO;
+        break;
+    case 6:
+        debug = DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 7:
+        debug = DBG_BATTLE_TRACE | DBG_AI_INFO | DBG_GAME_INFO;
+        break;
+    case 8:
+        debug = DBG_DEVEL | DBG_GAME_TRACE;
+        break;
+    case 9:
+        debug = DBG_DEVEL | DBG_AI_INFO | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 10:
+        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 11:
+        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_TRACE | DBG_GAME_INFO;
+        break;
+    default:
+        break;
+    }
+
+#ifndef WITH_DEBUG
+    debug &= ~DBG_DEVEL;
+#endif
+
+    Logging::setDebugLevel( debug );
 }
 
 void Settings::SetSoundVolume( int v )
@@ -1008,7 +1004,7 @@ void Settings::ExtResetModes( uint32_t f )
 
 void Settings::BinarySave() const
 {
-    const std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
+    const std::string fname = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1021,7 +1017,7 @@ void Settings::BinarySave() const
 
 void Settings::BinaryLoad()
 {
-    std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
+    std::string fname = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
 
     if ( !System::IsFile( fname ) ) {
         fname = GetLastFile( "", "fheroes2.bin" );
@@ -1067,24 +1063,20 @@ void Settings::resetFirstGameRun()
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf._optExtBalance2
-        << conf._optExtBalance4 << conf._optExtBalance3 << conf.players;
-
-    return msg;
+    return msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf._optExtBalance2
+               << conf._optExtBalance4 << conf._optExtBalance3 << conf.players;
 }
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    msg >> conf._loadedFileLanguage;
+    msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players;
 
-    int debug;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_1000_RELEASE ) {
+        int dummy;
 
-    msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> conf._optExtBalance2 >> conf._optExtBalance4
-        >> conf._optExtBalance3 >> conf.players;
+        msg >> dummy;
+    }
 
-#ifndef WITH_DEBUG
-    conf.debug = debug;
-#endif
-
-    return msg;
+    return msg >> conf._optExtBalance2 >> conf._optExtBalance4 >> conf._optExtBalance3 >> conf.players;
 }

@@ -1312,8 +1312,8 @@ StreamBase & operator>>( StreamBase & msg, CapturedObject & obj )
 {
     msg >> obj.objcol >> obj.guardians;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_1000_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE1_1000_RELEASE ) {
         int dummy;
 
         msg >> dummy;
