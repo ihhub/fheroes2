@@ -79,9 +79,9 @@ void Interface::Basic::Reset()
         else {
             radar.SetPos( 0, 0 );
             // It's OK to use display.width() for the X coordinate here, panel will be docked to the right edge
-            iconsPanel.SetPos( display.width(), radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
-            buttonsArea.SetPos( display.width(), iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
-            statusWindow.SetPos( display.width(), buttonsArea.GetArea().y + buttonsArea.GetArea().height );
+            iconsPanel.SetPos( display.width(), radar.GetRect().y + radar.GetRect().height );
+            buttonsArea.SetPos( display.width(), iconsPanel.GetRect().y + iconsPanel.GetRect().height );
+            statusWindow.SetPos( display.width(), buttonsArea.GetRect().y + buttonsArea.GetRect().height );
         }
     }
     else {
