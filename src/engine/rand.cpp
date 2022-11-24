@@ -28,8 +28,8 @@
 
 std::mt19937 & Rand::CurrentThreadRandomDevice()
 {
-    thread_local static std::random_device s_rd;
-    thread_local static std::mt19937 s_gen( s_rd() );
+    thread_local std::random_device s_rd;
+    thread_local std::mt19937 s_gen( s_rd() );
     return s_gen;
 }
 
