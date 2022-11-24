@@ -73,10 +73,10 @@ jobs:
         then
           sudo sed -i -e 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
           sudo dpkg --add-architecture arm64
-          sudo sh -c 'echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal main restricted universe multiverse > /etc/apt/sources.list.d/arm64.list'
-          sudo sh -c 'echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main restricted universe multiverse >> /etc/apt/sources.list.d/arm64.list'
-          sudo sh -c 'echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-security main restricted universe multiverse >> /etc/apt/sources.list.d/arm64.list'
-          sudo sh -c 'echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-backports main restricted universe multiverse >> /etc/apt/sources.list.d/arm64.list'
+          sudo sh -c 'echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy main restricted universe multiverse > /etc/apt/sources.list.d/arm64.list'
+          sudo sh -c 'echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted universe multiverse >> /etc/apt/sources.list.d/arm64.list'
+          sudo sh -c 'echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted universe multiverse >> /etc/apt/sources.list.d/arm64.list'
+          sudo sh -c 'echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse >> /etc/apt/sources.list.d/arm64.list'
         fi
         sudo apt-get -y update
         sudo apt-get -y install ${{ matrix.config.dependencies }}
