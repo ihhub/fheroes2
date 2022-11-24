@@ -129,7 +129,7 @@ namespace
 #endif
 
 #if !defined( _WIN32 ) && !defined( ANDROID )
-    std::vector<std::string> splitUnixPath( const std::string & path, const std::string & delimiter )
+    std::vector<std::string> splitUnixPath( const std::string & path, const std::string_view delimiter )
     {
         std::vector<std::string> result;
 
@@ -188,7 +188,7 @@ bool System::MakeDirectory( const std::string & path )
 #endif
 }
 
-std::string System::concatPath( const std::string & left, const std::string & right )
+std::string System::concatPath( const std::string_view left, const std::string_view right )
 {
     // Avoid memory allocation while concatenating string. Allocate needed size at once.
     std::string temp;
