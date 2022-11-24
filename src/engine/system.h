@@ -34,7 +34,7 @@ namespace System
     bool isHandheldDevice();
 
     bool MakeDirectory( const std::string & path );
-    std::string concatPath( const std::string & left, const std::string & right );
+    std::string concatPath( const std::string_view left, const std::string_view right );
 
     void appendOSSpecificDirectories( std::vector<std::string> & directories );
     std::string GetConfigDirectory( const std::string & prog );
