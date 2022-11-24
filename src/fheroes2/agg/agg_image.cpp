@@ -309,7 +309,7 @@ namespace
                 offsetX += middleLeftOver;
             }
 
-            const int32_t rightPartWidth = originalWidth - 2 * middleWidth;
+            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
             assert( offsetX + rightPartWidth == width );
 
             fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, height );
@@ -327,12 +327,12 @@ namespace
         releasedOffset = { 7, 5 };
         pressedOffset = { 6, 6 };
 
-        // Actual button sprite is by 10 pixel longer.
+        // The actual button sprite is 10 pixels longer.
         width += 10;
 
         const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
         const int32_t minimumButtonSize = 16;
-        const int32_t maximumButtonSize = 200; // no idea why you need that big button.
+        const int32_t maximumButtonSize = 200; // Why is such a wide button needed?
         width = std::clamp( width, minimumButtonSize, maximumButtonSize );
 
         const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( icnId, 0 );
