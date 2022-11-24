@@ -991,6 +991,9 @@ namespace ICN
         BUTTON_DIFFICULTY_ROLAND,
         BUTTON_DIFFICULTY_POL,
 
+        EMPTY_GOOD_BUTTON,
+        EMPTY_EVIL_BUTTON,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
