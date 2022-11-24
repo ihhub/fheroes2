@@ -1973,10 +1973,10 @@ msgid "Upg. Jousting Arena"
 msgstr "Надс. арена"
 
 msgid "Cathedral"
-msgstr "Катедралата"
+msgstr "Катедрала"
 
 msgid "Upg. Cathedral"
-msgstr "Надс. катедралата"
+msgstr "Надс. катедрала"
 
 msgid "Coliseum"
 msgstr "Колизеум"
@@ -6721,7 +6721,7 @@ msgid "week|Bumblebee"
 msgstr "Земната пчела"
 
 msgid "week|Locust"
-msgstr "Ненаситника"
+msgstr "Скакалеца"
 
 msgid "week|Earthworm"
 msgstr "Земения червей"
