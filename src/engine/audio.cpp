@@ -636,7 +636,7 @@ namespace
             std::array<int, maxVolume + 1> result{ 0 };
             result[maxVolume] = MIX_MAX_VOLUME;
             for ( int i = 1; i < maxVolume; i++ )
-                result[i] = static_cast<int>( a * std::pow( 10.0, i * b ) * MIX_MAX_VOLUME + 0.5 );
+                result[i] = round( a * std::pow( 10.0, i * b ) * MIX_MAX_VOLUME );
             return result;
         }
         ();
