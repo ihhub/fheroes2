@@ -337,10 +337,10 @@ bool Battle::Arena::isAnyTowerPresent()
     return std::any_of( arena->_towers.begin(), arena->_towers.end(), []( const auto & twr ) { return twr && twr->isValid(); } );
 }
 
-Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
+Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::DeterministicRandomGenerator & randomGenerator )
     : current_color( Color::NONE )
     , _lastActiveUnitArmyColor( -1 ) // Be aware of unknown color
-    , castle( world.getCastleEntrance( Maps::GetPoint( index ) ) )
+    , castle( world.getCastleEntrance( Maps::GetPoint( tileIndex ) ) )
     , _isTown( castle != nullptr )
     , icn_covr( ICN::UNKNOWN )
     , current_turn( 0 )
@@ -352,8 +352,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     assert( arena == nullptr );
     arena = this;
 
-    _army1 = std::make_unique<Force>( a1, false, _randomGenerator, _uidGenerator );
-    _army2 = std::make_unique<Force>( a2, true, _randomGenerator, _uidGenerator );
+    _army1 = std::make_unique<Force>( army1, false, _randomGenerator, _uidGenerator );
+    _army2 = std::make_unique<Force>( army2, true, _randomGenerator, _uidGenerator );
 
     // If this is a siege of a town, then there is in fact no castle
     if ( castle && !castle->isCastle() ) {
@@ -361,8 +361,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     }
 
     // init interface
-    if ( local ) {
-        _interface = std::make_unique<Interface>( *this, index );
+    if ( isShowInterface ) {
+        _interface = std::make_unique<Interface>( *this, tileIndex );
         board.SetArea( _interface->GetArea() );
 
         _orderOfUnits = std::make_shared<Units>();
@@ -371,11 +371,11 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     }
     else {
         // no interface - force auto battle mode for human player
-        if ( a1.isControlHuman() ) {
-            _autoBattleColors |= a1.GetColor();
+        if ( army1.isControlHuman() ) {
+            _autoBattleColors |= army1.GetColor();
         }
-        if ( a2.isControlHuman() ) {
-            _autoBattleColors |= a2.GetColor();
+        if ( army2.isControlHuman() ) {
+            _autoBattleColors |= army2.GetColor();
         }
     }
 
@@ -420,14 +420,14 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     else
     // set obstacles
     {
-        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( index ) );
+        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
-        icn_covr = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( index ).GetGround(), seededGen ) : ICN::UNKNOWN;
+        icn_covr = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
 
         if ( icn_covr != ICN::UNKNOWN )
             board.SetCovrObjects( icn_covr );
         else
-            board.SetCobjObjects( world.GetTiles( index ), seededGen );
+            board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
     }
 
     AI::Get().battleBegins();
