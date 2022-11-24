@@ -904,6 +904,26 @@ namespace fheroes2
                     std::swap( imageArray[220], imageArray[222] );
                     imageArray.erase( imageArray.begin() + 221, imageArray.end() );
                 }
+                // French version has its own special encoding but should conform to CP1252 too
+                verifiedFontWidth = ( id == ICN::FONT ) ? 9 : 5;
+                if ( imageArray.size() == 96 && imageArray[3].width() == verifiedFontWidth ) {
+                    imageArray.insert( imageArray.begin() + 96, 160 - 32, imageArray[0] );
+                    imageArray[244 - 32] = imageArray[3];
+                    imageArray[251 - 32] = imageArray[4];
+                    imageArray[249 - 32] = imageArray[6];
+                    imageArray[226 - 32] = imageArray[10];
+                    imageArray[239 - 32] = imageArray[28];
+                    imageArray[238 - 32] = imageArray[30];
+                    imageArray[224 - 32] = imageArray[32];
+                    imageArray[231 - 32] = imageArray[62];
+                    imageArray[232 - 32] = imageArray[64];
+                    imageArray[239 - 32] = imageArray[91];
+                    imageArray[234 - 32] = imageArray[92];
+                    imageArray[238 - 32] = imageArray[93];
+                    imageArray[233 - 32] = imageArray[94];
+                    imageArray[238 - 32] = imageArray[95];
+                    imageArray.erase( imageArray.begin() + 251 - 32, imageArray.end() );
+                }
                 return true;
             }
             case ICN::YELLOW_FONT:
