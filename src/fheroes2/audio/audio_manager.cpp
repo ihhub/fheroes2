@@ -66,7 +66,7 @@ namespace
     {
         std::vector<std::string> directories;
         for ( const std::string & dir : Settings::GetRootDirs() ) {
-            std::string fullDirectoryPath = System::ConcatePath( dir, externalMusicDirectory );
+            std::string fullDirectoryPath = System::concatPath( dir, externalMusicDirectory );
             if ( System::IsDirectory( fullDirectoryPath ) ) {
                 directories.emplace_back( std::move( fullDirectoryPath ) );
             }
@@ -84,7 +84,7 @@ namespace
                 continue;
             }
 
-            std::string correctFilePath = System::ConcatePath( dir, fileName );
+            std::string correctFilePath = System::concatPath( dir, fileName );
             correctFilePath = StringLower( correctFilePath );
 
             for ( std::string & path : musicFilePaths ) {

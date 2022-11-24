@@ -344,7 +344,7 @@ void Game::HotKeysLoad( const std::string & filename )
 void Game::HotKeySave()
 {
     // Save the latest information into the file.
-    const std::string filename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
+    const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
 
     std::fstream file( filename.data(), std::fstream::out | std::fstream::trunc );
     if ( !file ) {

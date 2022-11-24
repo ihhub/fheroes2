@@ -65,9 +65,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#ifdef WITH_DEBUG
-#include "tools.h"
-#endif
 #include "ui_tool.h"
 #include "zzlib.h"
 
@@ -76,17 +73,6 @@ namespace
     std::string GetCaption()
     {
         return std::string( "fheroes2 engine, version: " + Settings::GetVersion() );
-    }
-
-    int PrintHelp( const char * basename )
-    {
-        COUT( "Usage: " << basename << " [OPTIONS]" )
-#ifdef WITH_DEBUG
-        COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" )
-#endif
-        COUT( "  -h\t\tprint this help message and exit" )
-
-        return EXIT_SUCCESS;
     }
 
     void ReadConfigs()
@@ -119,8 +105,8 @@ namespace
         if ( dataDir.empty() )
             return;
 
-        const std::string dataFiles = System::ConcatePath( dataDir, "files" );
-        const std::string dataFilesSave = System::ConcatePath( dataFiles, "save" );
+        const std::string dataFiles = System::concatPath( dataDir, "files" );
+        const std::string dataFilesSave = System::concatPath( dataFiles, "save" );
 
         if ( !System::IsDirectory( dataDir ) )
             System::MakeDirectory( dataDir );
@@ -240,6 +226,8 @@ int main( int argc, char ** argv )
     assert( argc == __argc );
 
     argv = __argv;
+#else
+    (void)argc;
 #endif
 
     try {
@@ -255,26 +243,6 @@ int main( int argc, char ** argv )
         InitDataDir();
         ReadConfigs();
 
-        // getopt
-        {
-            int opt;
-
-            while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
-                switch ( opt ) {
-#ifdef WITH_DEBUG
-                case 'd':
-                    conf.SetDebug( System::GetOptionsArgument() ? GetInt( System::GetOptionsArgument() ) : 0 );
-                    break;
-#endif
-                case '?':
-                case 'h':
-                    return PrintHelp( argv[0] );
-
-                default:
-                    break;
-                }
-        }
-
         std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
                                                                           fheroes2::SystemInitializationComponent::Video };
 
@@ -287,13 +255,12 @@ int main( int argc, char ** argv )
         DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() )
 
         const DisplayInitializer displayInitializer;
-
         const DataInitializer dataInitializer;
 
         ListFiles midiSoundFonts;
 
-        midiSoundFonts.Append( Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf2", false ) );
-        midiSoundFonts.Append( Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf3", false ) );
+        midiSoundFonts.Append( Settings::FindFiles( System::concatPath( "files", "soundfonts" ), ".sf2", false ) );
+        midiSoundFonts.Append( Settings::FindFiles( System::concatPath( "files", "soundfonts" ), ".sf3", false ) );
 
 #ifdef WITH_DEBUG
         for ( const std::string & file : midiSoundFonts ) {

@@ -227,7 +227,7 @@ std::string Dialog::SelectFileSave()
 {
     std::ostringstream os;
 
-    os << System::ConcatePath( Game::GetSaveDir(), Game::GetSaveFileBaseName() ) << '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay()
+    os << System::concatPath( Game::GetSaveDir(), Game::GetSaveFileBaseName() ) << '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay()
        << Game::GetSaveFileExtension();
 
     return SelectFileListSimple( _( "File to Save:" ), os.str(), true );
@@ -341,7 +341,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
              || listbox.isDoubleClicked() ) {
             if ( !filename.empty() )
-                result = System::ConcatePath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
+                result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
             else if ( isListboxSelected )
                 result = listbox.GetCurrent().file;
         }
