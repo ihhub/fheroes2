@@ -4164,7 +4164,7 @@ namespace
         released[174] = released[47];
 
         // Cyrillic PE
-        released[175].resize( 9 + offset * 2, 10 + offset * 2 );
+        released[175].resize( 10 + offset * 2, 10 + offset * 2 );
         released[175].reset();
         fheroes2::DrawLine( released[175], { offset + 0, offset + 0 }, { offset + 9, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[175], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
@@ -4193,7 +4193,7 @@ namespace
         fheroes2::SetPixel( released[179], offset + 4, offset + 5, buttonGoodReleasedColor );
 
         // O with vertical bar, Cyrillic EF
-        released[180].resize( 11 + offset * 2, 10 + offset * 2 );
+        released[180].resize( 10 + offset * 2, 10 + offset * 2 );
         released[180].reset();
         fheroes2::DrawLine( released[180], { offset + 2, offset + 1 }, { offset + 6, offset + 1 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[180], { offset + 0, offset + 3 }, { offset + 0, offset + 6 }, buttonGoodReleasedColor );
