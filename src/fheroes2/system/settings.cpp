@@ -125,11 +125,6 @@ Settings::Settings()
     EnablePriceOfLoyaltySupport( false );
 }
 
-Settings::~Settings()
-{
-    BinarySave();
-}
-
 Settings & Settings::Get()
 {
     static Settings conf;
@@ -236,6 +231,22 @@ bool Settings::Read( const std::string & filename )
         setHideInterface( config.StrParams( "hide interface" ) == "on" );
     }
 
+    if ( config.Exists( "radar window position" ) ) {
+        pos_radr = config.PointParams( "radar window position", { -1, -1 } );
+    }
+
+    if ( config.Exists( "buttons window position" ) ) {
+        pos_bttn = config.PointParams( "buttons window position", { -1, -1 } );
+    }
+
+    if ( config.Exists( "icons window position" ) ) {
+        pos_icon = config.PointParams( "icons window position", { -1, -1 } );
+    }
+
+    if ( config.Exists( "status window position" ) ) {
+        pos_stat = config.PointParams( "status window position", { -1, -1 } );
+    }
+
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
@@ -318,8 +329,6 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
-    BinaryLoad();
-
     return true;
 }
 
@@ -339,8 +348,6 @@ bool Settings::Save( const std::string & filename ) const
 
     const std::string & data = String();
     file.write( data.data(), data.size() );
-
-    BinarySave();
 
     return true;
 }
@@ -419,6 +426,18 @@ std::string Settings::String() const
     os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
     os << "hide interface = " << ( _optGlobal.Modes( GLOBAL_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# position of the radar window on the adventure map" << std::endl;
+    os << "radar window position = [ " << pos_radr.x << ", " << pos_radr.y << " ]" << std::endl;
+
+    os << std::endl << "# position of the buttons window on the adventure map" << std::endl;
+    os << "buttons window position = [ " << pos_bttn.x << ", " << pos_bttn.y << " ]" << std::endl;
+
+    os << std::endl << "# position of the icons window on the adventure map" << std::endl;
+    os << "icons window position = [ " << pos_icon.x << ", " << pos_icon.y << " ]" << std::endl;
+
+    os << std::endl << "# position of the status window on the adventure map" << std::endl;
+    os << "status window position = [ " << pos_stat.x << ", " << pos_stat.y << " ]" << std::endl;
+
     os << std::endl << "# game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
 
@@ -452,7 +471,6 @@ std::string Settings::String() const
     return os.str();
 }
 
-/* read maps info */
 void Settings::SetCurrentFileInfo( const Maps::FileInfo & fi )
 {
     current_maps_file = fi;
@@ -596,19 +614,16 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
     return files.empty() ? name : files.back();
 }
 
-/* set ai speed: 0 (don't show) - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
     ai_speed = std::clamp( speed, 0, 10 );
 }
 
-/* set hero speed: 1 - 10 */
 void Settings::SetHeroesMoveSpeed( int speed )
 {
     heroes_speed = std::clamp( speed, 1, 10 );
 }
 
-/* set battle speed: 1 - 10 */
 void Settings::SetBattleSpeed( int speed )
 {
     battle_speed = std::clamp( speed, 1, 10 );
@@ -1033,40 +1048,6 @@ void Settings::ExtResetModes( uint32_t f )
         break;
     default:
         break;
-    }
-}
-
-void Settings::BinarySave() const
-{
-    const std::string fname = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
-
-    StreamFile fs;
-    fs.setbigendian( true );
-
-    if ( fs.open( fname, "wb" ) ) {
-        fs << static_cast<uint16_t>( CURRENT_FORMAT_VERSION ) << _optExtGame << _optExtBalance2 << _optExtBalance4 << _optExtBalance3 << pos_radr << pos_bttn << pos_icon
-           << pos_stat;
-    }
-}
-
-void Settings::BinaryLoad()
-{
-    std::string fname = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
-
-    if ( !System::IsFile( fname ) ) {
-        fname = GetLastFile( "", "fheroes2.bin" );
-    }
-    if ( !System::IsFile( fname ) ) {
-        return;
-    }
-
-    StreamFile fs;
-    fs.setbigendian( true );
-
-    if ( fs.open( fname, "rb" ) ) {
-        uint16_t version = 0;
-
-        fs >> version >> _optExtGame >> _optExtBalance2 >> _optExtBalance4 >> _optExtBalance3 >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
     }
 }
 

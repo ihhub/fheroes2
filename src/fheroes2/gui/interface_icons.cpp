@@ -309,7 +309,10 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
 
 void Interface::IconsPanel::SavePosition()
 {
-    Settings::Get().SetPosIcons( GetRect().getPosition() );
+    Settings & conf = Settings::Get();
+
+    conf.SetPosIcons( GetRect().getPosition() );
+    conf.Save( Settings::configFileName );
 }
 
 void Interface::IconsPanel::SetRedraw( const icons_t type ) const

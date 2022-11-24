@@ -169,7 +169,10 @@ Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display 
 
 void Interface::Radar::SavePosition()
 {
-    Settings::Get().SetPosRadar( GetRect().getPosition() );
+    Settings & conf = Settings::Get();
+
+    conf.SetPosRadar( GetRect().getPosition() );
+    conf.Save( Settings::configFileName );
 }
 
 void Interface::Radar::SetPos( int32_t ox, int32_t oy )

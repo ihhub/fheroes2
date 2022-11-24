@@ -124,6 +124,8 @@ public:
 
     Settings & operator=( const Settings & ) = delete;
 
+    ~Settings() = default;
+
     static Settings & Get();
 
     bool Read( const std::string & );
@@ -299,9 +301,12 @@ public:
     void SetShowIcons( bool );
     void SetShowButtons( bool );
     void SetShowStatus( bool );
+    // Sets the speed of AI-controlled heroes in the range 0 - 10, 0 means "don't show"
     void SetAIMoveSpeed( int );
     void SetScrollSpeed( int );
+    // Sets the speed of human-controlled heroes in the range 1 - 10
     void SetHeroesMoveSpeed( int );
+    // Sets the animation speed of units during combat in the range 1 - 10
     void SetBattleSpeed( int );
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
@@ -491,10 +496,6 @@ private:
     friend StreamBase & operator>>( StreamBase &, Settings & );
 
     Settings();
-    ~Settings();
-
-    void BinarySave() const;
-    void BinaryLoad();
 
     static void setDebug( int debug );
 

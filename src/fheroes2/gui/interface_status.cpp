@@ -71,7 +71,10 @@ void Interface::StatusWindow::Reset()
 
 void Interface::StatusWindow::SavePosition()
 {
-    Settings::Get().SetPosStatus( GetRect().getPosition() );
+    Settings & conf = Settings::Get();
+
+    conf.SetPosStatus( GetRect().getPosition() );
+    conf.Save( Settings::configFileName );
 }
 
 void Interface::StatusWindow::SetRedraw() const

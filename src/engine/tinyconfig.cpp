@@ -22,8 +22,11 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cctype>
+#include <charconv>
 #include <cstddef>
+#include <regex>
 #include <utility>
 #include <vector>
 
@@ -93,6 +96,42 @@ std::string TinyConfig::StrParams( const std::string & key ) const
 {
     const_iterator it = find( ModifyKey( key ) );
     return it != end() ? it->second : "";
+}
+
+fheroes2::Point TinyConfig::PointParams( const std::string & key, const fheroes2::Point & fallbackValue ) const
+{
+    const_iterator it = find( ModifyKey( key ) );
+    if ( it == end() ) {
+        return fallbackValue;
+    }
+
+    const std::string & value = it->second;
+    const std::regex pointRegex( "^\\[ *(-?[0-9]+) *, *(-?[0-9]+) *]$", std::regex_constants::extended );
+
+    std::smatch pointRegexMatch;
+
+    if ( !std::regex_match( value, pointRegexMatch, pointRegex ) ) {
+        return fallbackValue;
+    }
+
+    assert( pointRegexMatch.size() == 3 );
+
+    auto convertToInt = []( const std::string & str, auto & value ) {
+        auto [ptr, ec] = std::from_chars( str.data(), str.data() + str.size(), value );
+
+        return ec == std::errc();
+    };
+
+    fheroes2::Point result;
+
+    if ( !convertToInt( pointRegexMatch[1].str(), result.x ) ) {
+        return fallbackValue;
+    }
+    if ( !convertToInt( pointRegexMatch[2].str(), result.y ) ) {
+        return fallbackValue;
+    }
+
+    return result;
 }
 
 bool TinyConfig::Exists( const std::string & key ) const

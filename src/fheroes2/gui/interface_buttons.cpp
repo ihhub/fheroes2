@@ -45,7 +45,10 @@ Interface::ButtonsArea::ButtonsArea( Basic & basic )
 
 void Interface::ButtonsArea::SavePosition()
 {
-    Settings::Get().SetPosButtons( GetRect().getPosition() );
+    Settings & conf = Settings::Get();
+
+    conf.SetPosButtons( GetRect().getPosition() );
+    conf.Save( Settings::configFileName );
 }
 
 void Interface::ButtonsArea::SetRedraw() const
