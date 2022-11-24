@@ -69,6 +69,11 @@ jobs:
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
+        sudo apt-get -y update
+        sudo apt-get -y install ${{ matrix.config.dependencies }}
+    - name: Install dependencies (Linux) ARM64
+      if: ${{ matrix.config.os == 'ubuntu-22.04' }}
+      run: |
         if test ${{ matrix.config.arch }} = "arm64"
         then
           sudo sed -i -e 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
