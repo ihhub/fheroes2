@@ -37,7 +37,7 @@ namespace
 #if defined( MACOS_APP_BUNDLE )
         return Settings::findFile( "h2d", fileName, path );
 #else
-        return Settings::findFile( System::ConcatePath( "files", "data" ), fileName, path );
+        return Settings::findFile( System::concatPath( "files", "data" ), fileName, path );
 #endif
     }
 }

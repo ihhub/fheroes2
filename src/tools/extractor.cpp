@@ -84,7 +84,7 @@ int main( int argc, char ** argv )
 
     for ( std::map<std::string, aggfat_t>::const_iterator it = maps.begin(); it != maps.end(); ++it ) {
         const aggfat_t & fat = ( *it ).second;
-        const std::string & fn = System::ConcatePath( argv[2], ( *it ).first );
+        const std::string & fn = System::concatPath( argv[2], ( *it ).first );
         sf1.seek( fat.offset );
         std::vector<uint8_t> buf = sf1.getRaw( fat.size );
 

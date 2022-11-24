@@ -1007,8 +1007,8 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
     }
 }
 
-Battle::Interface::Interface( Arena & a, int32_t center )
-    : arena( a )
+Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
+    : arena( battleArena )
     , _surfaceInnerArea( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , _mainSurface( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , icn_cbkg( ICN::UNKNOWN )
@@ -1021,6 +1021,7 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     , _interruptAutoBattleForColor( 0 )
     , _contourColor( 110 )
     , _brightLandType( false )
+    , _contourCycle( 0 )
     , _currentUnit( nullptr )
     , _movingUnit( nullptr )
     , _flyingUnit( nullptr )
@@ -1044,8 +1045,8 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     popup.setBattleUIRect( _interfacePosition );
 
     // cover
-    const bool trees = !Maps::ScanAroundObject( center, MP2::OBJ_TREES ).empty();
-    const Maps::Tiles & tile = world.GetTiles( center );
+    const bool trees = !Maps::ScanAroundObject( tileIndex, MP2::OBJ_TREES ).empty();
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
     const int groundType = tile.GetGround();
     _brightLandType

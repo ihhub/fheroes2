@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-21 04:05+0000\n"
+"POT-Creation-Date: 2022-11-22 07:19+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -8948,26 +8948,3 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Experimental"
-#~ msgstr "Sperimentale"
-
-#~ msgid "Experimental game settings."
-#~ msgstr "Impostazioni sperimentali del gioco."
-
-#~ msgid "Experimental Game Settings"
-#~ msgstr "Impostazioni Sperimentali"
-
-#~ msgid "Your army too big!"
-#~ msgstr "Il tuo esercito è troppo grande"
-
-#~ msgid "Cannot recruit - guest to guard automove error."
-#~ msgstr ""
-#~ "Non puoi reclutare - errore in cambiamento automatico dall'ospite al "
-#~ "guardiano."
-
-#~ msgid "Swap Heroes"
-#~ msgstr "Scambia Eroi"
-
-#~ msgid "Meeting Heroes"
-#~ msgstr "Eroi incontranti"

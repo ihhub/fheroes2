@@ -36,8 +36,7 @@
 
 namespace
 {
-    int g_debug = DBG_ALL_WARN + DBG_ALL_INFO;
-
+    int debugLevel = DBG_ALL_WARN;
     bool textSupportMode = false;
 
 #if defined( _WIN32 )
@@ -123,7 +122,9 @@ namespace Logging
         logFile.open( "fheroes2.log", std::ofstream::out );
 #elif defined( _WIN32 )
         const std::scoped_lock<std::mutex> lock( logMutex );
-        const std::string logPath( System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.log" ) );
+        const std::string logPath( System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.log" ) );
+
+        System::MakeDirectory( System::GetDirname( logPath ) );
 
         logFile.open( logPath, std::ofstream::out );
 #elif defined( MACOS_APP_BUNDLE )
@@ -132,9 +133,14 @@ namespace Logging
 #endif
     }
 
-    void SetDebugLevel( const int debugLevel )
+    void setDebugLevel( const int level )
     {
-        g_debug = debugLevel;
+        debugLevel = level;
+    }
+
+    int getDebugLevel()
+    {
+        return debugLevel;
     }
 
     void setTextSupportMode( const bool enableTextSupportMode )
@@ -150,7 +156,7 @@ namespace Logging
 
 bool IS_DEBUG( const int name, const int level )
 {
-    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & g_debug ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & g_debug ) >> 4 ) >= level )
-           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & g_debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & g_debug ) >> 8 ) >= level )
-           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & g_debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & g_debug ) >> 12 ) >= level );
+    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & debugLevel ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & debugLevel ) >> 4 ) >= level )
+           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & debugLevel ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & debugLevel ) >> 8 ) >= level )
+           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & debugLevel ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & debugLevel ) >> 12 ) >= level );
 }
