@@ -97,12 +97,12 @@ namespace
 
 bool Game::AutoSaveAtTheBeginningOfTheDay()
 {
-    return Game::Save( System::ConcatPath( GetSaveDir(), autoSaveNameAtTheBeginningOfTheDay + GetSaveFileExtension() ), true );
+    return Game::Save( System::concatPath( GetSaveDir(), autoSaveNameAtTheBeginningOfTheDay + GetSaveFileExtension() ), true );
 }
 
 bool Game::AutoSaveAtTheEndOfTheDay()
 {
-    return Game::Save( System::ConcatPath( GetSaveDir(), autoSaveNameAtTheEndOfTheDay + GetSaveFileExtension() ), true );
+    return Game::Save( System::concatPath( GetSaveDir(), autoSaveNameAtTheEndOfTheDay + GetSaveFileExtension() ), true );
 }
 
 bool Game::Save( const std::string & fn, const bool autoSave /* = false */ )
