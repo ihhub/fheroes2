@@ -4195,11 +4195,15 @@ namespace
         // O with vertical bar, Cyrillic EF
         released[180].resize( 11 + offset * 2, 10 + offset * 2 );
         released[180].reset();
-        fheroes2::Copy( released[47], 0, 0, released[180], 0, 1, released[47].width() - 5, 8 );
-        fheroes2::Copy( released[47], released[47].width() - 5, 0, released[180], released[47].width() - 5, 1, 4, 8 );
-        fheroes2::Copy( released[47], 0, 10, released[180], 0, 9, released[47].width() - 5, 4 );
-        fheroes2::Copy( released[47], released[47].width() - 5, 10, released[180], released[47].width() - 5, 9, 4, 4 );
+        fheroes2::DrawLine( released[180], { offset + 2, offset + 1 }, { offset + 6, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[180], { offset + 0, offset + 3 }, { offset + 0, offset + 6 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[180], { offset + 2, offset + 8 }, { offset + 6, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[180], { offset + 8, offset + 3 }, { offset + 8, offset + 6 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[180], { offset + 4, offset + 0 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[180], offset + 1, offset + 2, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[180], offset + 7, offset + 2, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[180], offset + 1, offset + 7, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[180], offset + 7, offset + 7, buttonGoodReleasedColor );
 
         // X
         released[181] = released[56];
