@@ -627,8 +627,7 @@ namespace
             return MIX_MAX_VOLUME;
         }
 
-        const auto volumeTable = []()
-        {
+        const auto volumeTable = []() {
             const int maxVolume = 10;
             const double range = 0 - 10 * std::log10( MIX_MAX_VOLUME );
             const double a = std::pow( 10.0, range / 20.0 );
@@ -638,8 +637,7 @@ namespace
             for ( int i = 1; i < maxVolume; i++ )
                 result[i] = static_cast<int>( round( a * std::pow( 10.0, i * b ) * MIX_MAX_VOLUME ) );
             return result;
-        }
-        ();
+        }();
         return volumeTable[volumePercentage / 10];
     }
 
