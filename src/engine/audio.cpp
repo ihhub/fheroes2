@@ -22,11 +22,13 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <atomic>
 #include <cassert>
 #include <cstddef>
 #include <list>
 #include <map>
+#include <math.h>
 #include <memory>
 #include <mutex>
 #include <numeric>
@@ -625,7 +627,19 @@ namespace
             return MIX_MAX_VOLUME;
         }
 
-        return volumePercentage * MIX_MAX_VOLUME / 100;
+        constexpr auto volumeTable = []() constexpr {
+            const int maxVolume = 10;
+            const double range = 0 - 10 * std::log10( MIX_MAX_VOLUME),
+                         a = std::pow( 10.0, range / 20.0 ),
+                         b = std::log10( 1.0 / a ) / maxVolume;
+            std::array<int, maxVolume + 1> result{};
+            result[0] = 0;
+            result[maxVolume] = MIX_MAX_VOLUME;
+            for(int i = 1; i < maxVolume; i++)
+                result[i] = a * std::pow(10.0, i * b) * MIX_MAX_VOLUME;
+            return result;
+        }();
+        return volumeTable[volumePercentage / 10];
     }
 
     int normalizeFromSDLVolume( const int volume )
