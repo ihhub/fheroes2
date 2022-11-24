@@ -74,7 +74,7 @@ int main( int argc, char ** argv )
     int total_size = sf.getLE32();
 
     inputFileName.replace( inputFileName.find( ".icn" ), 4, "" );
-    prefix = System::ConcatePath( prefix, inputFileName );
+    prefix = System::concatPath( prefix, inputFileName );
 
     if ( 0 != System::MakeDirectory( prefix ) ) {
         std::cout << "error mkdir: " << prefix << std::endl;
@@ -101,7 +101,7 @@ int main( int argc, char ** argv )
             std::ostringstream os;
             os << std::setw( 3 ) << std::setfill( '0' ) << ii;
 
-            std::string dstfile = System::ConcatePath( prefix, os.str() );
+            std::string dstfile = System::concatPath( prefix, os.str() );
 
             if ( fheroes2::isPNGFormatSupported() ) {
                 dstfile += ".png";
