@@ -104,23 +104,23 @@ namespace
 
         // text scenario
         fheroes2::Text text( _( "Scenario:" ), normalWhiteFont );
-        text.draw( TextUtils::GetCenteredTextXCoordinate( rt.x, rt.width, text.width() ), rt.y + 25, display );
+        text.draw( rt.x, rt.y + 25, rt.width, display );
 
         // maps name
         text.set( conf.MapsName(), normalWhiteFont );
-        text.draw( TextUtils::GetCenteredTextXCoordinate( rt.x, rt.width, text.width() ), rt.y + 48, display );
+        text.draw( rt.x, rt.y + 48, rt.width, display );
 
         // text game difficulty
         text.set( _( "Game Difficulty:" ), normalWhiteFont );
-        text.draw( TextUtils::GetCenteredTextXCoordinate( rt.x, rt.width, text.width() ), rt.y + 75, display );
+        text.draw( rt.x, rt.y + 75, rt.width, display );
 
         // text opponents
         text.set( _( "Opponents:" ), normalWhiteFont );
-        text.draw( TextUtils::GetCenteredTextXCoordinate( rt.x, rt.width, text.width() ), rt.y + 180, display );
+        text.draw( rt.x, rt.y + 180, rt.width, display );
 
         // text class
         text.set( _( "Class:" ), normalWhiteFont );
-        text.draw( TextUtils::GetCenteredTextXCoordinate( rt.x, rt.width, text.width() ), rt.y + 264, display );
+        text.draw( rt.x, rt.y + 264, rt.width, display );
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
@@ -147,11 +147,12 @@ namespace
         StringReplace( str, "%{rating}", Game::GetRating() );
 
         const fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
-        const int32_t x = TextUtils::GetCenteredTextXCoordinate( offset.x, width_, text.width() );
         const int32_t y = offset.y + 385;
-        text.draw( x, y, fheroes2::Display::instance() );
+        text.draw( offset.x, y, width_ , fheroes2::Display::instance() );
 
-        return { x, y, text.width(), text.height() };
+        const int32_t textX = ( width_ > text.width() ) ? offset.x + ( width_ - text.width() ) / 2 : 0;
+
+        return { textX, y, text.width(), text.height() };
     }
 
     fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists )
