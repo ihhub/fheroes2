@@ -60,11 +60,11 @@ namespace
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
         GLOBAL_MONOCHROME_CURSOR = 0x00000020,
-        GLOBAL_SHOWCPANEL = 0x00000040,
-        GLOBAL_SHOWRADAR = 0x00000080,
-        GLOBAL_SHOWICONS = 0x00000100,
-        GLOBAL_SHOWBUTTONS = 0x00000200,
-        GLOBAL_SHOWSTATUS = 0x00000400,
+        GLOBAL_SHOW_CPANEL = 0x00000040,
+        GLOBAL_SHOW_RADAR = 0x00000080,
+        GLOBAL_SHOW_ICONS = 0x00000100,
+        GLOBAL_SHOW_BUTTONS = 0x00000200,
+        GLOBAL_SHOW_STATUS = 0x00000400,
         GLOBAL_FULLSCREEN = 0x00008000,
         GLOBAL_3D_AUDIO = 0x00010000,
         GLOBAL_SYSTEM_INFO = 0x00020000,
@@ -103,10 +103,10 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_FIRST_RUN );
     _optGlobal.SetModes( GLOBAL_SHOW_INTRO );
 
-    _optGlobal.SetModes( GLOBAL_SHOWRADAR );
-    _optGlobal.SetModes( GLOBAL_SHOWICONS );
-    _optGlobal.SetModes( GLOBAL_SHOWBUTTONS );
-    _optGlobal.SetModes( GLOBAL_SHOWSTATUS );
+    _optGlobal.SetModes( GLOBAL_SHOW_RADAR );
+    _optGlobal.SetModes( GLOBAL_SHOW_ICONS );
+    _optGlobal.SetModes( GLOBAL_SHOW_BUTTONS );
+    _optGlobal.SetModes( GLOBAL_SHOW_STATUS );
 
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
@@ -748,27 +748,27 @@ bool Settings::isBattleShowDamageInfoEnabled() const
 
 bool Settings::ShowControlPanel() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWCPANEL );
+    return _optGlobal.Modes( GLOBAL_SHOW_CPANEL );
 }
 
 bool Settings::ShowRadar() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWRADAR );
+    return _optGlobal.Modes( GLOBAL_SHOW_RADAR );
 }
 
 bool Settings::ShowIcons() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWICONS );
+    return _optGlobal.Modes( GLOBAL_SHOW_ICONS );
 }
 
 bool Settings::ShowButtons() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWBUTTONS );
+    return _optGlobal.Modes( GLOBAL_SHOW_BUTTONS );
 }
 
 bool Settings::ShowStatus() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWSTATUS );
+    return _optGlobal.Modes( GLOBAL_SHOW_STATUS );
 }
 
 bool Settings::BattleShowGrid() const
@@ -910,27 +910,27 @@ void Settings::SetBattleMouseShaded( bool f )
 
 void Settings::SetShowPanel( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWCPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOWCPANEL );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_CPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CPANEL );
 }
 
 void Settings::SetShowRadar( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWRADAR ) : _optGlobal.ResetModes( GLOBAL_SHOWRADAR );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_RADAR ) : _optGlobal.ResetModes( GLOBAL_SHOW_RADAR );
 }
 
 void Settings::SetShowIcons( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWICONS ) : _optGlobal.ResetModes( GLOBAL_SHOWICONS );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_ICONS ) : _optGlobal.ResetModes( GLOBAL_SHOW_ICONS );
 }
 
 void Settings::SetShowButtons( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWBUTTONS ) : _optGlobal.ResetModes( GLOBAL_SHOWBUTTONS );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_BUTTONS ) : _optGlobal.ResetModes( GLOBAL_SHOW_BUTTONS );
 }
 
 void Settings::SetShowStatus( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWSTATUS ) : _optGlobal.ResetModes( GLOBAL_SHOWSTATUS );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_STATUS ) : _optGlobal.ResetModes( GLOBAL_SHOW_STATUS );
 }
 
 bool Settings::CanChangeInGame( uint32_t f ) const
