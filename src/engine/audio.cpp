@@ -627,7 +627,7 @@ namespace
             return MIX_MAX_VOLUME;
         }
 
-        constexpr auto volumeTable = []() constexpr
+        const auto volumeTable = []()
         {
             const int maxVolume = 10;
             const double range = 0 - 10 * std::log10( MIX_MAX_VOLUME );
