@@ -3690,7 +3690,7 @@ namespace
         fheroes2::SetPixel( released[39], offset + 8, offset + 8, buttonGoodReleasedColor );
 
         // H
-        released[40].resize( 14 + offset * 2, 10 + offset * 2 );
+        released[40].resize( 13 + offset * 2, 10 + offset * 2 );
         released[40].reset();
         fheroes2::DrawLine( released[40], { offset + 0, offset + 0 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[40], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
@@ -4164,7 +4164,7 @@ namespace
         released[174] = released[47];
 
         // Cyrillic PE
-        released[175].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[175].resize( 9 + offset * 2, 10 + offset * 2 );
         released[175].reset();
         fheroes2::DrawLine( released[175], { offset + 0, offset + 0 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[175], { offset + 1, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
@@ -4207,7 +4207,7 @@ namespace
         released[181] = released[56];
 
         // Cyrillic CHE
-        released[183].resize( 11 + offset * 2, 10 + offset * 2 );
+        released[183].resize( 9 + offset * 2, 10 + offset * 2 );
         released[183].reset();
         fheroes2::DrawLine( released[183], { offset + 0, offset + 0 }, { offset + 2, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[183], { offset + 6, offset + 0 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
