@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-22 07:19+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -531,18 +531,6 @@ msgid "System Options"
 msgstr "Opções do Sistema"
 
 #, fuzzy
-msgid "Wait this unit"
-msgstr "Passar a vez desta criatura"
-
-msgid "Wait"
-msgstr ""
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-
-#, fuzzy
 msgid "Skip this unit"
 msgstr "Passar a vez desta criatura"
 
@@ -585,10 +573,6 @@ msgstr "Tem certeza de que quer a retirada?"
 
 #, fuzzy
 msgid "%{name} skip their turn."
-msgstr "%{name} a %{race}."
-
-#, fuzzy
-msgid "%{name} wait their turn."
 msgstr "%{name} a %{race}."
 
 #, fuzzy
@@ -9119,3 +9103,11 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Wait this unit"
+#~ msgstr "Passar a vez desta criatura"
+
+#, fuzzy
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} a %{race}."

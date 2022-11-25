@@ -116,7 +116,6 @@ namespace Game
         BATTLE_AUTO_FINISH,
         BATTLE_OPTIONS,
         BATTLE_SKIP,
-        BATTLE_WAIT,
 
         SPLIT_STACK_BY_HALF,
         SPLIT_STACK_BY_ONE,

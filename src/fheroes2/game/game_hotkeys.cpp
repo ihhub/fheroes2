@@ -171,7 +171,6 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_AUTO_FINISH )] = { HotKeyCategory::BATTLE, "finish the battle in auto mode", fheroes2::Key::KEY_Q };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_OPTIONS )] = { HotKeyCategory::BATTLE, "battle options", fheroes2::Key::KEY_O };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SKIP )] = { HotKeyCategory::BATTLE, "skip turn in battle", fheroes2::Key::KEY_SPACE };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_WAIT )] = { HotKeyCategory::BATTLE, "wait in battle", fheroes2::Key::KEY_W };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SAVE_GAME )] = { HotKeyCategory::WORLD_MAP, "save game", fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEXT_HERO )] = { HotKeyCategory::WORLD_MAP, "next hero", fheroes2::Key::KEY_H };
