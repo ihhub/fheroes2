@@ -132,13 +132,13 @@ Settings & Settings::Get()
     return conf;
 }
 
-bool Settings::Read( const std::string & filename )
+bool Settings::Read( const std::string & filePath )
 {
     TinyConfig config( '=', '#' );
 
     std::string sval;
 
-    if ( !config.Load( filename ) ) {
+    if ( !config.Load( filePath ) ) {
         return false;
     }
 
@@ -332,13 +332,13 @@ bool Settings::Read( const std::string & filename )
     return true;
 }
 
-bool Settings::Save( const std::string & filename ) const
+bool Settings::Save( const std::string_view fileName ) const
 {
-    if ( filename.empty() ) {
+    if ( fileName.empty() ) {
         return false;
     }
 
-    const std::string cfgFilename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), filename );
+    const std::string cfgFilename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), fileName );
 
     std::fstream file;
     file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );

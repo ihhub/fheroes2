@@ -26,6 +26,7 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "bitmodes.h"
@@ -128,8 +129,8 @@ public:
 
     static Settings & Get();
 
-    bool Read( const std::string & );
-    bool Save( const std::string & ) const;
+    bool Read( const std::string & filePath );
+    bool Save( const std::string_view fileName ) const;
 
     std::string String() const;
     void SetCurrentFileInfo( const Maps::FileInfo & );
