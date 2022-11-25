@@ -37,7 +37,7 @@ jobs:
           arch: arm64
           dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 gettext libpng-dev:arm64
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
-          package_name: fheroes2_ubuntu_x64_SDL2.zip
+          package_name: fheroes2_ubuntu_arm64_SDL2.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
