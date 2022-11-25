@@ -307,7 +307,7 @@ public:
     void SetScrollSpeed( int );
     // Sets the speed of human-controlled heroes in the range 1 - 10
     void SetHeroesMoveSpeed( int );
-    // Sets the animation speed of units during combat in the range 1 - 10
+    // Sets the animation speed during combat in the range 1 - 10
     void SetBattleSpeed( int );
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
