@@ -775,7 +775,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         ShowEventDayDialog();
 
-        Game::AutoSaveAtTheBeginningOfTheDay();
+        if ( conf.isAutoSaveAtBeginingOfTurnEnabled() ) {
+            Game::AutoSave();
+        }
     }
 
     GameOver::Result & gameResult = GameOver::Result::Get();
@@ -1179,7 +1181,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 }
             }
 
-            Game::AutoSaveAtTheEndOfTheDay();
+            if ( !conf.isAutoSaveAtBeginingOfTurnEnabled() ) {
+                Game::AutoSave();
+            }
         }
     }
 

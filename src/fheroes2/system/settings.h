@@ -234,6 +234,7 @@ public:
     bool isTextSupportModeEnabled() const;
     bool is3DAudioEnabled() const;
     bool isSystemInfoEnabled() const;
+    bool isAutoSaveAtBeginingOfTurnEnabled() const;
     bool isBattleShowDamageInfoEnabled() const;
 
     bool LoadedGameVersion() const
@@ -312,6 +313,7 @@ public:
     void set3DAudio( const bool enable );
     void setVSync( const bool enable );
     void setSystemInfo( const bool enable );
+    void setAutoSaveAtBeginningOfTurn( const bool enable );
     void setBattleDamageInfo( const bool enable );
 
     void SetSoundVolume( int v );

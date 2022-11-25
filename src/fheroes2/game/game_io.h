@@ -35,9 +35,7 @@ namespace Maps
 
 namespace Game
 {
-    bool AutoSaveAtTheBeginningOfTheDay();
-    bool AutoSaveAtTheEndOfTheDay();
-
+    bool AutoSave();
     bool Save( const std::string & fn, const bool autoSave = false );
 
     // Returns GameMode::CANCEL in case of failure.

@@ -48,8 +48,7 @@
 
 namespace
 {
-    const std::string autoSaveNameAtTheBeginningOfTheDay{ "AUTOTURN" };
-    const std::string autoSaveNameAtTheEndOfTheDay{ "AUTOSAVE" };
+    const std::string autoSaveName{ "AUTOSAVE" };
 
     const uint16_t SAV2ID2 = 0xFF02;
     const uint16_t SAV2ID3 = 0xFF03;
@@ -95,14 +94,9 @@ namespace
     }
 }
 
-bool Game::AutoSaveAtTheBeginningOfTheDay()
+bool Game::AutoSave()
 {
-    return Game::Save( System::concatPath( GetSaveDir(), autoSaveNameAtTheBeginningOfTheDay + GetSaveFileExtension() ), true );
-}
-
-bool Game::AutoSaveAtTheEndOfTheDay()
-{
-    return Game::Save( System::concatPath( GetSaveDir(), autoSaveNameAtTheEndOfTheDay + GetSaveFileExtension() ), true );
+    return Game::Save( System::concatPath( GetSaveDir(), autoSaveName + GetSaveFileExtension() ), true );
 }
 
 bool Game::Save( const std::string & fn, const bool autoSave /* = false */ )
