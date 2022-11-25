@@ -68,6 +68,7 @@ namespace
     const std::set<int> languageDependentIcnId{ ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
+                                                ICN::BUTTON_LARGE_CONFIG,
                                                 ICN::BUTTON_LARGE_CANCEL,
                                                 ICN::BTNBATTLEONLY,
                                                 ICN::BTNGIFT_GOOD,
@@ -540,6 +541,19 @@ namespace fheroes2
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MULTI-\nPLAYER\nGAME" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
                                     fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_LARGE_CONFIG: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CONFIG" ), { 12, 5 }, { 11, 6 }, { 117, 47 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1127,6 +1141,7 @@ namespace fheroes2
             case ICN::BUTTON_STANDARD_GAME:
             case ICN::BUTTON_CAMPAIGN_GAME:
             case ICN::BUTTON_MULTIPLAYER_GAME:
+            case ICN::BUTTON_LARGE_CONFIG:
             case ICN::BUTTON_LARGE_CANCEL:
             case ICN::BTNBATTLEONLY:
             case ICN::BTNGIFT_GOOD:
