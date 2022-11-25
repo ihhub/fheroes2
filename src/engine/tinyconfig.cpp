@@ -27,6 +27,7 @@
 #include <charconv>
 #include <cstddef>
 #include <regex>
+#include <system_error>
 #include <utility>
 #include <vector>
 
