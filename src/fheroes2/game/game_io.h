@@ -36,12 +36,12 @@ namespace Maps
 namespace Game
 {
     bool AutoSave();
-    bool Save( const std::string & fn, const bool autoSave = false );
+    bool Save( const std::string & filePath, const bool autoSave = false );
 
     // Returns GameMode::CANCEL in case of failure.
-    fheroes2::GameMode Load( const std::string & fn );
+    fheroes2::GameMode Load( const std::string & filePath );
 
-    bool LoadSAV2FileInfo( const std::string &, Maps::FileInfo & );
+    bool LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & fileInfo );
 
     bool SaveCompletedCampaignScenario();
 }

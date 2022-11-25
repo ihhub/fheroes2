@@ -99,23 +99,23 @@ bool Game::AutoSave()
     return Game::Save( System::concatPath( GetSaveDir(), autoSaveName + GetSaveFileExtension() ), true );
 }
 
-bool Game::Save( const std::string & fn, const bool autoSave /* = false */ )
+bool Game::Save( const std::string & filePath, const bool autoSave /* = false */ )
 {
-    DEBUG_LOG( DBG_GAME, DBG_INFO, fn )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
     const Settings & conf = Settings::Get();
 
     StreamFile fs;
     fs.setbigendian( true );
 
-    if ( !fs.open( fn, "wb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" )
+    if ( !fs.open( filePath, "wb" ) ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, filePath << ", error open" )
         return false;
     }
 
     uint16_t loadver = GetLoadVersion();
     if ( !autoSave ) {
-        Game::SetLastSavename( fn );
+        Game::SetLastSavename( filePath );
     }
 
     // raw info content
@@ -134,18 +134,18 @@ bool Game::Save( const std::string & fn, const bool autoSave /* = false */ )
 
     fz << SAV2ID3; // eof marker
 
-    return !fz.fail() && fz.write( fn, true );
+    return !fz.fail() && fz.write( filePath, true );
 }
 
-fheroes2::GameMode Game::Load( const std::string & fn )
+fheroes2::GameMode Game::Load( const std::string & filePath )
 {
-    DEBUG_LOG( DBG_GAME, DBG_INFO, fn )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
     StreamFile fs;
     fs.setbigendian( true );
 
-    if ( !fs.open( fn, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" )
+    if ( !fs.open( filePath, "rb" ) ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, filePath << ", error open" )
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -156,7 +156,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", incorrect SAV2ID" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, filePath << ", incorrect SAV2ID" )
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -188,7 +188,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     ZStreamFile fz;
     fz.setbigendian( true );
 
-    if ( !fz.read( fn, offset ) ) {
+    if ( !fz.read( filePath, offset ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, ", uncompress: error" )
         return fheroes2::GameMode::CANCEL;
     }
@@ -255,13 +255,13 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     fz >> end_check;
 
     if ( fz.fail() || ( end_check != SAV2ID2 && end_check != SAV2ID3 ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid load file: " << fn )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid load file: " << filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
     SetLoadVersion( CURRENT_FORMAT_VERSION );
 
-    Game::SetLastSavename( fn );
+    Game::SetLastSavename( filePath );
     conf.SetGameType( conf.GameType() | Game::TYPE_LOADFILE );
 
     if ( returnValue != fheroes2::GameMode::START_GAME ) {
@@ -271,15 +271,15 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     return returnValue;
 }
 
-bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
+bool Game::LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & fileInfo )
 {
-    DEBUG_LOG( DBG_GAME, DBG_INFO, fn )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
     StreamFile fs;
     fs.setbigendian( true );
 
-    if ( !fs.open( fn, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" )
+    if ( !fs.open( filePath, "rb" ) ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, filePath << ", error open" )
         return false;
     }
 
@@ -290,7 +290,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", incorrect SAV2ID" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, filePath << ", incorrect SAV2ID" )
         return false;
     }
 
@@ -312,8 +312,8 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
     if ( ( Settings::Get().GameType() & fileGameType ) == 0 )
         return false;
 
-    finfo = header.info;
-    finfo.file = fn;
+    fileInfo = header.info;
+    fileInfo.file = filePath;
 
     return true;
 }
