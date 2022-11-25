@@ -56,7 +56,6 @@ namespace Battle
         Unit * FindMode( uint32_t mod ) const;
         Unit * FindUID( uint32_t pid ) const;
 
-        void SortSlowest();
         void SortFastest();
         void SortArchers();
     };
