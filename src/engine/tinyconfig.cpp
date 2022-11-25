@@ -109,12 +109,11 @@ fheroes2::Point TinyConfig::PointParams( const std::string & key, const fheroes2
         return fallbackValue;
     }
 
-    const std::string & value = it->second;
     const std::regex pointRegex( "^\\[ *(-?[0-9]+) *, *(-?[0-9]+) *]$", std::regex_constants::extended );
 
     std::smatch pointRegexMatch;
 
-    if ( !std::regex_match( value, pointRegexMatch, pointRegex ) ) {
+    if ( !std::regex_match( it->second, pointRegexMatch, pointRegex ) ) {
         return fallbackValue;
     }
 
