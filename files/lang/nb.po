@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-22 07:19+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -535,19 +535,6 @@ msgstr "Lar deg skreddersy kampvinduet."
 msgid "System Options"
 msgstr "Systeminnstillinger"
 
-msgid "Wait this unit"
-msgstr "Avvent denne stryken"
-
-msgid "Wait"
-msgstr "Avvent"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Lar den nåværende skapningen vente. Den nåværende skapningen utsetter turen "
-"sin til etter alle andre skapninger har gjort turen sin."
-
 msgid "Skip this unit"
 msgstr "Hopp over denne styrken"
 
@@ -590,9 +577,6 @@ msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
 
 msgid "%{name} skip their turn."
 msgstr "Troppen med %{name} hoppet over turen sin."
-
-msgid "%{name} wait their turn."
-msgstr "Troppen med %{name} avventet turen sin."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -9971,3 +9955,19 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Wait this unit"
+#~ msgstr "Avvent denne stryken"
+
+#~ msgid "Wait"
+#~ msgstr "Avvent"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Lar den nåværende skapningen vente. Den nåværende skapningen utsetter "
+#~ "turen sin til etter alle andre skapninger har gjort turen sin."
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "Troppen med %{name} avventet turen sin."

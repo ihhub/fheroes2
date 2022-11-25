@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-22 07:19+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -511,19 +511,6 @@ msgstr "Permette di modificare la schermata del combattimento."
 msgid "System Options"
 msgstr "Opzioni Sistema"
 
-msgid "Wait this unit"
-msgstr "Aspetta questa unità"
-
-msgid "Wait"
-msgstr "Salta"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Fa aspettare questa unità. L'unità rimanda il suo turno per dopo che tutte "
-"le altre unità hanno finito i loro turni."
-
 msgid "Skip this unit"
 msgstr "Salta questa unità"
 
@@ -569,9 +556,6 @@ msgstr "Sei sicuro di voler congedare queste forze?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} salta il suo turno."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} rimanda il suo turno."
 
 #, fuzzy
 msgid "%{attacker} does %{damage} damage."
@@ -8948,3 +8932,19 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Wait this unit"
+#~ msgstr "Aspetta questa unità"
+
+#~ msgid "Wait"
+#~ msgstr "Salta"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Fa aspettare questa unità. L'unità rimanda il suo turno per dopo che "
+#~ "tutte le altre unità hanno finito i loro turni."
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} rimanda il suo turno."
