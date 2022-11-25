@@ -426,16 +426,16 @@ std::string Settings::String() const
     os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
     os << "hide interface = " << ( _optGlobal.Modes( GLOBAL_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# position of the radar window on the adventure map when the interface is hidden" << std::endl;
+    os << std::endl << "# position of the radar window on the adventure map when interface elements are hidden" << std::endl;
     os << "radar window position = [ " << pos_radr.x << ", " << pos_radr.y << " ]" << std::endl;
 
-    os << std::endl << "# position of the buttons window on the adventure map when the interface is hidden" << std::endl;
+    os << std::endl << "# position of the buttons window on the adventure map when interface elements are hidden" << std::endl;
     os << "buttons window position = [ " << pos_bttn.x << ", " << pos_bttn.y << " ]" << std::endl;
 
-    os << std::endl << "# position of the icons window on the adventure map when the interface is hidden" << std::endl;
+    os << std::endl << "# position of the icons window on the adventure map when interface elements are hidden" << std::endl;
     os << "icons window position = [ " << pos_icon.x << ", " << pos_icon.y << " ]" << std::endl;
 
-    os << std::endl << "# position of the status window on the adventure map when the interface is hidden" << std::endl;
+    os << std::endl << "# position of the status window on the adventure map when interface elements are hidden" << std::endl;
     os << "status window position = [ " << pos_stat.x << ", " << pos_stat.y << " ]" << std::endl;
 
     os << std::endl << "# game language (an empty value means English)" << std::endl;
