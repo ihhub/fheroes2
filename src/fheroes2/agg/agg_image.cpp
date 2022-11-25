@@ -70,7 +70,7 @@ namespace
 	                                            ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
-                                                ICN::BUTTON_CANCEL,
+                                                ICN::BUTTON_LARGE_CANCEL,
                                                 ICN::BTNBATTLEONLY,
                                                 ICN::BTNGIFT_GOOD,
                                                 ICN::BTNGIFT_EVIL,
@@ -1128,11 +1128,10 @@ namespace fheroes2
                 }
                 return true;
             case ICN::BUYMAX:
-            case ICN::MAIN_MENU1:
-            case ICN::MAIN_MENU2:
-            case ICN::MAIN_MENU3:
-            case ICN::MAIN_MENU4:
-            case ICN::MAIN_MENU5:
+            case ICN::BUTTON_STANDARD_GAME:
+            case ICN::BUTTON_CAMPAIGN_GAME:
+            case ICN::BUTTON_MULTIPLAYER_GAME:
+            case ICN::BUTTON_LARGE_CANCEL:
             case ICN::BTNBATTLEONLY:
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL:
