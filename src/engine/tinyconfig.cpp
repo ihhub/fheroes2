@@ -104,7 +104,7 @@ std::string TinyConfig::StrParams( const std::string & key ) const
 
 fheroes2::Point TinyConfig::PointParams( const std::string & key, const fheroes2::Point & fallbackValue ) const
 {
-    const_iterator it = find( ModifyKey( key ) );
+    const const_iterator it = find( ModifyKey( key ) );
     if ( it == end() ) {
         return fallbackValue;
     }
