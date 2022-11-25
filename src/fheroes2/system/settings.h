@@ -62,7 +62,7 @@ public:
         // The following extended options do not affect the overall
         // game balance and are saved in the binary config file
         //
-        GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
+        // UNUSED = 0x10000010,
         // UNUSED = 0x10000020,
         // UNUSED = 0x10000040,
         // UNUSED = 0x10000100,
@@ -234,6 +234,7 @@ public:
     bool isTextSupportModeEnabled() const;
     bool is3DAudioEnabled() const;
     bool isSystemInfoEnabled() const;
+    bool isAutoSaveAtBeginingOfTurnEnabled() const;
     bool isBattleShowDamageInfoEnabled() const;
 
     bool LoadedGameVersion() const
@@ -259,11 +260,6 @@ public:
     bool ExtModes( uint32_t ) const;
     void ExtSetModes( uint32_t );
     void ExtResetModes( uint32_t );
-
-    bool ExtGameAutosaveBeginOfDay() const
-    {
-        return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
-    }
 
     static bool ExtGameUseFade()
     {
@@ -317,6 +313,7 @@ public:
     void set3DAudio( const bool enable );
     void setVSync( const bool enable );
     void setSystemInfo( const bool enable );
+    void setAutoSaveAtBeginningOfTurn( const bool enable );
     void setBattleDamageInfo( const bool enable );
 
     void SetSoundVolume( int v );
