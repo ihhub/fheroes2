@@ -60,11 +60,6 @@ Battle::Units::Units( const Units & units, const bool filter )
     }
 }
 
-void Battle::Units::SortSlowest()
-{
-    std::stable_sort( begin(), end(), Army::SlowestTroop );
-}
-
 void Battle::Units::SortFastest()
 {
     std::stable_sort( begin(), end(), Army::FastestTroop );

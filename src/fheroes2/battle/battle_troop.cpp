@@ -427,10 +427,9 @@ void Battle::Unit::NewTurn()
     if ( isRegenerating() )
         hp = ArmyTroop::GetHitPoints();
 
-    ResetModes( TR_RESPONSED );
+    ResetModes( TR_RESPONDED );
     ResetModes( TR_MOVED );
-    ResetModes( TR_HARDSKIP );
-    ResetModes( TR_SKIPMOVE );
+    ResetModes( TR_SKIP );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
@@ -627,7 +626,7 @@ uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
 
         // clean paralyze or stone magic
         if ( Modes( IS_PARALYZE_MAGIC ) ) {
-            SetModes( TR_RESPONSED );
+            SetModes( TR_RESPONDED );
             SetModes( TR_MOVED );
             ResetModes( IS_PARALYZE_MAGIC );
             affected.RemoveMode( IS_PARALYZE_MAGIC );
@@ -671,9 +670,8 @@ void Battle::Unit::PostKilledAction()
         mirror = nullptr;
     }
 
-    ResetModes( TR_RESPONSED );
-    ResetModes( TR_HARDSKIP );
-    ResetModes( TR_SKIPMOVE );
+    ResetModes( TR_RESPONDED );
+    ResetModes( TR_SKIP );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
@@ -978,12 +976,12 @@ std::string Battle::Unit::String( bool more ) const
 bool Battle::Unit::AllowResponse() const
 {
     return ( !Modes( SP_BLIND ) || blindanswer ) && !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE )
-           && ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) || !Modes( TR_RESPONSED ) );
+           && ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) || !Modes( TR_RESPONDED ) );
 }
 
 void Battle::Unit::SetResponse()
 {
-    SetModes( TR_RESPONSED );
+    SetModes( TR_RESPONDED );
 }
 
 void Battle::Unit::PostAttackAction()
@@ -1092,7 +1090,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
     // Monster special abilities
     auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) );
     if ( foundAbility != abilities.end() ) {
-        if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
+        if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONDED ) ) {
             attackerThreat *= 2;
         }
         else {
