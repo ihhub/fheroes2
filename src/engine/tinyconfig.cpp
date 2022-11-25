@@ -120,7 +120,7 @@ fheroes2::Point TinyConfig::PointParams( const std::string & key, const fheroes2
     assert( pointRegexMatch.size() == 3 );
 
     auto convertToInt = []( const std::string & str, auto & intValue ) {
-        auto [ptr, ec] = std::from_chars( str.data(), str.data() + str.size(), intValue );
+        const auto [ptr, ec] = std::from_chars( str.data(), str.data() + str.size(), intValue );
 
         return ec == std::errc();
     };
