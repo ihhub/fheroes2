@@ -35,22 +35,25 @@
 #include "tinyconfig.h"
 #include "tools.h"
 
-bool SpaceCompare( char a, char b )
+namespace
 {
-    return std::isspace( a ) && std::isspace( b );
-}
+    bool SpaceCompare( char a, char b )
+    {
+        return std::isspace( a ) && std::isspace( b );
+    }
 
-std::string ModifyKey( const std::string & str )
-{
-    std::string key = StringTrim( StringLower( str ) );
+    std::string ModifyKey( const std::string & str )
+    {
+        std::string key = StringTrim( StringLower( str ) );
 
-    // remove multiple space
-    key.erase( std::unique( key.begin(), key.end(), SpaceCompare ), key.end() );
+        // remove multiple space
+        key.erase( std::unique( key.begin(), key.end(), SpaceCompare ), key.end() );
 
-    // change space
-    std::replace_if( key.begin(), key.end(), ::isspace, '\x20' );
+        // change space
+        std::replace_if( key.begin(), key.end(), ::isspace, '\x20' );
 
-    return key;
+        return key;
+    }
 }
 
 TinyConfig::TinyConfig( char sep, char com )

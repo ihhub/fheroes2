@@ -29,7 +29,7 @@
 
 #include "math_base.h"
 
-class TinyConfig : protected std::multimap<std::string, std::string>
+class TinyConfig : private std::multimap<std::string, std::string>
 {
 public:
     TinyConfig( char sep = '=', char com = ';' );
@@ -44,7 +44,7 @@ public:
     // In case of any error, the fallback value is returned.
     fheroes2::Point PointParams( const std::string & key, const fheroes2::Point & fallbackValue ) const;
 
-protected:
+private:
     char separator;
     char comment;
 };
