@@ -910,7 +910,6 @@ namespace ICN
         YELLOW_FONT,
         YELLOW_SMALLFONT,
         BATTLESKIP,
-        BATTLEWAIT,
         BUYMAX,
         BTNBATTLEONLY,
         BTNGIFT_GOOD,
@@ -991,6 +990,9 @@ namespace ICN
         BUTTON_DIFFICULTY_ROLAND,
         BUTTON_DIFFICULTY_POL,
 
+        EMPTY_GOOD_BUTTON,
+        EMPTY_EVIL_BUTTON,
+        
         BUTTON_STANDARD_GAME,
         BUTTON_CAMPAIGN_GAME,
         BUTTON_MULTIPLAYER_GAME,
