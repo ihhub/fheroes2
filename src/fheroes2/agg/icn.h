@@ -992,7 +992,7 @@ namespace ICN
 
         EMPTY_GOOD_BUTTON,
         EMPTY_EVIL_BUTTON,
-        
+
         BUTTON_STANDARD_GAME,
         BUTTON_CAMPAIGN_GAME,
         BUTTON_MULTIPLAYER_GAME,
