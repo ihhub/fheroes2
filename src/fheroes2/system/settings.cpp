@@ -808,6 +808,11 @@ bool Settings::isSystemInfoEnabled() const
     return _optGlobal.Modes( GLOBAL_SYSTEM_INFO );
 }
 
+bool Settings::isAutoSaveAtBeginningOfTurnEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+}
+
 bool Settings::isBattleShowDamageInfoEnabled() const
 {
     return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_DAMAGE );
@@ -1000,75 +1005,6 @@ void Settings::SetShowStatus( bool f )
     f ? _optGlobal.SetModes( GLOBAL_SHOW_STATUS ) : _optGlobal.ResetModes( GLOBAL_SHOW_STATUS );
 }
 
-bool Settings::CanChangeInGame( uint32_t f ) const
-{
-    return ( f >> 28 ) == 0x01;
-}
-
-bool Settings::ExtModes( uint32_t f ) const
-{
-    const uint32_t mask = 0x0FFFFFFF;
-
-    switch ( f >> 28 ) {
-    case 0x01:
-        return _optExtGame.Modes( f & mask );
-    case 0x02:
-        return _optExtBalance2.Modes( f & mask );
-    case 0x03:
-        return _optExtBalance3.Modes( f & mask );
-    case 0x04:
-        return _optExtBalance4.Modes( f & mask );
-    default:
-        break;
-    }
-
-    return false;
-}
-
-void Settings::ExtSetModes( uint32_t f )
-{
-    const uint32_t mask = 0x0FFFFFFF;
-
-    switch ( f >> 28 ) {
-    case 0x01:
-        _optExtGame.SetModes( f & mask );
-        break;
-    case 0x02:
-        _optExtBalance2.SetModes( f & mask );
-        break;
-    case 0x03:
-        _optExtBalance3.SetModes( f & mask );
-        break;
-    case 0x04:
-        _optExtBalance4.SetModes( f & mask );
-        break;
-    default:
-        break;
-    }
-}
-
-void Settings::ExtResetModes( uint32_t f )
-{
-    const uint32_t mask = 0x0FFFFFFF;
-
-    switch ( f >> 28 ) {
-    case 0x01:
-        _optExtGame.ResetModes( f & mask );
-        break;
-    case 0x02:
-        _optExtBalance2.ResetModes( f & mask );
-        break;
-    case 0x03:
-        _optExtBalance3.ResetModes( f & mask );
-        break;
-    case 0x04:
-        _optExtBalance4.ResetModes( f & mask );
-        break;
-    default:
-        break;
-    }
-}
-
 bool Settings::FullScreen() const
 {
     return _optGlobal.Modes( GLOBAL_FULLSCREEN );
@@ -1096,8 +1032,7 @@ void Settings::resetFirstGameRun()
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    return msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf._optExtBalance2
-               << conf._optExtBalance4 << conf._optExtBalance3 << conf.players;
+    return msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.players;
 }
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
@@ -1111,5 +1046,12 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
         msg >> dummy;
     }
 
-    return msg >> conf._optExtBalance2 >> conf._optExtBalance4 >> conf._optExtBalance3 >> conf.players;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE3_1000_RELEASE ) {
+        BitModes dummy;
+
+        msg >> dummy >> dummy >> dummy;
+    }
+
+    return msg >> conf.players;
 }

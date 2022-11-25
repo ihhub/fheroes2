@@ -229,7 +229,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    bool needFade = Settings::ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+    bool needFade = Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize();
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
@@ -737,7 +737,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    if ( Settings::ExtGameUseFade() )
+    if ( Settings::isFadeEffectEnabled() )
         fheroes2::FadeDisplay();
 
     return res;
@@ -775,7 +775,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         ShowEventDayDialog();
 
-        if ( conf.isAutoSaveAtBeginingOfTurnEnabled() ) {
+        if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
         }
     }
@@ -1181,7 +1181,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 }
             }
 
-            if ( !conf.isAutoSaveAtBeginingOfTurnEnabled() ) {
+            if ( !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
                 Game::AutoSave();
             }
         }

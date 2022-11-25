@@ -58,69 +58,6 @@ class Settings
 public:
     static constexpr const char * configFileName = "fheroes2.cfg";
 
-    enum : uint32_t
-    {
-        // The following extended options do not affect the overall
-        // game balance and are saved in the binary config file
-        //
-        // UNUSED = 0x10000010,
-        // UNUSED = 0x10000020,
-        // UNUSED = 0x10000040,
-        // UNUSED = 0x10000100,
-        // UNUSED = 0x10000200,
-        // UNUSED = 0x10000400,
-        // UNUSED = 0x10001000,
-        // UNUSED = 0x10002000,
-        // UNUSED = 0x10008000,
-        // UNUSED = 0x10010000,
-        // UNUSED = 0x10100000,
-        // UNUSED = 0x10200000,
-
-        // The following extended options affect the overall game balance and
-        // are saved both in the binary config file and in the savefile
-        //
-        // TODO: combine them all into one bitset
-        //
-        // UNUSED = 0x20000001,
-        // UNUSED = 0x20000002,
-        // UNUSED = 0x20000008,
-        // UNUSED = 0x20000020,
-        // UNUSED = 0x20000040,
-        // UNUSED = 0x20000080,
-        // UNUSED = 0x20000100,
-        // UNUSED = 0x20000200,
-        // UNUSED = 0x20000400,
-        // UNUSED = 0x20000800,
-        // UNUSED = 0x20001000,
-        // UNUSED = 0x20002000,
-        // UNUSED = 0x20004000,
-        // UNUSED = 0x20008000,
-        // UNUSED = 0x20010000,
-        // UNUSED = 0x20020000,
-        // UNUSED = 0x20040000,
-        // UNUSED = 0x20080000,
-        // UNUSED = 0x20800000,
-        // UNUSED = 0x21000000,
-
-        // UNUSED = 0x30000001,
-        // UNUSED = 0x30000008,
-        // UNUSED = 0x30000010,
-        // UNUSED = 0x30000020,
-        // UNUSED = 0x30000080,
-        // UNUSED = 0x30000100,
-        // UNUSED = 0x30000200,
-        // UNUSED = 0x30000400,
-        // UNUSED = 0x30000800,
-        // UNUSED = 0x30001000,
-        // UNUSED = 0x30004000,
-        // UNUSED = 0x30008000,
-
-        // UNUSED = 0x40004000,
-        // UNUSED = 0x40008000,
-        // UNUSED = 0x40010000,
-        // UNUSED = 0x40020000
-    };
-
     Settings( const Settings & ) = delete;
 
     Settings & operator=( const Settings & ) = delete;
@@ -237,10 +174,17 @@ public:
     bool isTextSupportModeEnabled() const;
     bool is3DAudioEnabled() const;
     bool isSystemInfoEnabled() const;
-    bool isAutoSaveAtBeginingOfTurnEnabled() const;
+    bool isAutoSaveAtBeginningOfTurnEnabled() const;
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
+
+    static bool isFadeEffectEnabled()
+    {
+        // TODO: fix fading effect for the original resolution (640 x 480) and enable back this option.
+        // return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+        return false;
+    }
 
     bool LoadedGameVersion() const
     {
@@ -260,18 +204,6 @@ public:
 
     bool isFirstGameRun() const;
     void resetFirstGameRun();
-
-    bool CanChangeInGame( uint32_t ) const;
-    bool ExtModes( uint32_t ) const;
-    void ExtSetModes( uint32_t );
-    void ExtResetModes( uint32_t );
-
-    static bool ExtGameUseFade()
-    {
-        // TODO: fix fading effect for the original resolution (640 x 480) and enable back this option.
-        // return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-        return false;
-    }
 
     const fheroes2::Size & VideoMode() const
     {
@@ -492,16 +424,8 @@ private:
 
     static void setDebug( int debug );
 
-    // Global game options (GLOBAL_), they are saved in the text config file
+    // Global game options (GLOBAL_)
     BitModes _optGlobal;
-    // Extended options that do not affect the overall game balance (GAME_),
-    // they are saved in the binary config file
-    BitModes _optExtGame;
-    // Extended options that affect the overall game balance, they are saved
-    // both in the binary config file and in the savefile
-    BitModes _optExtBalance2; // Options with codes starting with 0x2
-    BitModes _optExtBalance3; // Options with codes starting with 0x3
-    BitModes _optExtBalance4; // Options with codes starting with 0x4
 
     fheroes2::Size video_mode;
     int game_difficulty;
