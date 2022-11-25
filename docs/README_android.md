@@ -6,14 +6,15 @@ do this.
 
 fheroes2 requires the data files from the original Heroes of Might and Magic II.
 
-Copy the the contents of the original game's "DATA" folder into the "internalStorage:Android/data/org.fheroes2/files/data/"
-folder and everything from the "MAPS" folder into "internalStorage:Android/data/org.fheroes2/files/maps/".
+From your original Heroes 2 installation copy the directories named "DATA", "MAPS", "ANIM" and "MUSIC" into the
+"internalStorage:Android/data/org.fheroes2/files/" folder.
 
-The music files should be placed in the "internalStorage:Android/data/org.fheroes2/files/music/" folder.
+Depending on your version of Heroes 2, the music files that need to be placed in the "MUSIC" directory can either be on your
+original CD or in the installation folder (GOG and Ubisoft).
 
-fheroes2 supports the ingame cinematics. This is necessary for full campaign support. To play the intro and the other
-videos, make sure that all of the "*.SMK" files are placed in the "internalStorage:Android/data/org.fheroes2/files/anim/"
-folder.
+Ingame cinematics are supported by fheroes2 and for these to be supported it is necessary to have them in the "ANIM" folder.
+Depending on your original version of Heroes 2 they can either be found on your CD, disc image or in a folder named "anim" in
+your Heroes 2 installation directory.
 
 ## Controls
 To simulate a right-click to get info on various items, you need to first touch and keep touching anywhere on the screen
