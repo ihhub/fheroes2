@@ -244,7 +244,7 @@ namespace Battle
     class Interface
     {
     public:
-        Interface( Arena &, int32_t );
+        Interface( Arena & battleArena, const int32_t tileIndex );
         Interface( const Interface & ) = delete;
 
         ~Interface();
@@ -359,7 +359,6 @@ namespace Battle
         void ButtonAutoAction( const Unit &, Actions & );
         void ButtonSettingsAction();
         void ButtonSkipAction( Actions & );
-        void ButtonWaitAction( Actions & );
         void MouseLeftClickBoardAction( int themes, const Cell & cell, Actions & a );
         void MousePressRightBoardAction( const Cell & cell ) const;
 
@@ -382,7 +381,6 @@ namespace Battle
         fheroes2::Button btn_auto;
         fheroes2::Button btn_settings;
         fheroes2::Button btn_skip;
-        fheroes2::Button btn_wait;
         Status status;
 
         OpponentSprite * opponent1;
