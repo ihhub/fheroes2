@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-22 07:19+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -498,17 +498,6 @@ msgstr ""
 msgid "System Options"
 msgstr ""
 
-msgid "Wait this unit"
-msgstr "Šis karys palauks"
-
-msgid "Wait"
-msgstr ""
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-
 msgid "Skip this unit"
 msgstr "Šis karys praleis ėjimą"
 
@@ -550,9 +539,6 @@ msgstr ""
 "Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
 
 msgid "%{name} skip their turn."
-msgstr ""
-
-msgid "%{name} wait their turn."
 msgstr ""
 
 msgid "%{attacker} does %{damage} damage."
@@ -8815,3 +8801,6 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Wait this unit"
+#~ msgstr "Šis karys palauks"

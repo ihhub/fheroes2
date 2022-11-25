@@ -361,7 +361,7 @@ namespace AI
 
         // no action was taken - skip
         if ( actions.size() == actionsSize ) {
-            actions.emplace_back( CommandType::MSG_BATTLE_SKIP, currentUnit.GetUID(), true );
+            actions.emplace_back( CommandType::MSG_BATTLE_SKIP, currentUnit.GetUID() );
         }
 
         return actions;
@@ -862,7 +862,7 @@ namespace AI
 
         // There is no reachable unit in sight, skip the turn
         if ( targetInfo.cell == -1 ) {
-            actions.emplace_back( CommandType::MSG_BATTLE_SKIP, currentUnitUID, true );
+            actions.emplace_back( CommandType::MSG_BATTLE_SKIP, currentUnitUID );
 
             return actions;
         }

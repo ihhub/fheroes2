@@ -359,7 +359,6 @@ namespace Battle
         void ButtonAutoAction( const Unit &, Actions & );
         void ButtonSettingsAction();
         void ButtonSkipAction( Actions & );
-        void ButtonWaitAction( Actions & );
         void MouseLeftClickBoardAction( int themes, const Cell & cell, Actions & a );
         void MousePressRightBoardAction( const Cell & cell ) const;
 
@@ -382,7 +381,6 @@ namespace Battle
         fheroes2::Button btn_auto;
         fheroes2::Button btn_settings;
         fheroes2::Button btn_skip;
-        fheroes2::Button btn_wait;
         Status status;
 
         OpponentSprite * opponent1;
