@@ -519,13 +519,13 @@ fheroes2::GameMode Game::NewGame()
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();
 
-    fheroes2::Button buttonStandartGame( buttonPos.x, buttonPos.y, ICN::BTNNEWGM, 0, 1 );
-    fheroes2::ButtonSprite buttonCampainGame( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BTNNEWGM, 2 ),
-                                              fheroes2::AGG::GetICN( ICN::BTNNEWGM, 3 ), fheroes2::AGG::GetICN( ICN::NEW_CAMPAIGN_DISABLED_BUTTON, 0 ) );
-    fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNNEWGM, 4, 5 );
+    fheroes2::Button buttonStandartGame( buttonPos.x, buttonPos.y, ICN::BUTTON_STANDARD_GAME, 0, 1 );
+    fheroes2::ButtonSprite buttonCampainGame( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 0 ),
+                                              fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 1 ), fheroes2::AGG::GetICN( ICN::NEW_CAMPAIGN_DISABLED_BUTTON, 0 ) );
+    fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
     fheroes2::Button buttonBattleGame( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
     fheroes2::Button buttonSettings( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BTNDCCFG, 4, 5 );
-    fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
+    fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 6, 7 );
 
     if ( !isSuccessionWarsCampaignPresent() ) {
         buttonCampainGame.disable();

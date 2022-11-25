@@ -991,6 +991,11 @@ namespace ICN
         BUTTON_DIFFICULTY_ROLAND,
         BUTTON_DIFFICULTY_POL,
 
+        BUTTON_STANDARD_GAME,
+        BUTTON_CAMPAIGN_GAME,
+        BUTTON_MULTIPLAYER_GAME,
+        BUTTON_LARGE_CANCEL,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

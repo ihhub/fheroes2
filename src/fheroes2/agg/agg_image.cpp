@@ -65,7 +65,11 @@ namespace
 
     // Some resources are language dependent. These are mostly buttons with a text of them.
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
-    const std::set<int> languageDependentIcnId{ ICN::BTNBATTLEONLY,
+    const std::set<int> languageDependentIcnId{ ICN::BUTTON_STANDARD_GAME,
+                                                ICN::BUTTON_CAMPAIGN_GAME,
+                                                ICN::BUTTON_MULTIPLAYER_GAME,
+                                                ICN::BUTTON_CANCEL,
+                                                ICN::BTNBATTLEONLY,
                                                 ICN::BTNGIFT_GOOD,
                                                 ICN::BTNGIFT_EVIL,
                                                 ICN::UNIFORM_EVIL_MAX_BUTTON,
@@ -414,6 +418,62 @@ namespace fheroes2
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE\nONLY" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_STANDARD_GAME: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "STANDARD\nGAME" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_CAMPAIGN_GAME: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CAMPAIGN\nGAME" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_MULTIPLAYER_GAME: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MULTI-\nPLAYER\nGAME" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_LARGE_CANCEL: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
                                     fheroes2::FontColor::WHITE );
 
                 break;
@@ -1009,6 +1069,11 @@ namespace fheroes2
                     Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
                 }
                 return true;
+            case ICN::MAIN_MENU1:
+            case ICN::MAIN_MENU2:
+            case ICN::MAIN_MENU3:
+            case ICN::MAIN_MENU4:
+            case ICN::MAIN_MENU5:
             case ICN::BTNBATTLEONLY:
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL:
