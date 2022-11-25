@@ -4227,13 +4227,12 @@ namespace
         fheroes2::DrawLine( released[184], { offset + 0, offset + 0 }, { offset + 2, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[184], { offset + 4, offset + 0 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[184], { offset + 8, offset + 0 }, { offset + 10, offset + 0 }, buttonGoodReleasedColor );
-        
+
         // Cyrillic SHCHA
         released[185].resize( 11 + offset * 2, 11 + offset * 2 );
         released[185].reset();
         fheroes2::Copy( released[184], 0, 0, released[185], 0, 0, released[184].width(), released[184].height() );
         fheroes2::DrawLine( released[185], { offset + 10, offset + 9 }, { offset + 10, offset + 10 }, buttonGoodReleasedColor );
-        
 
         // b, Cyrillic hard sign
         released[186].resize( 11 + offset * 2, 10 + offset * 2 );
