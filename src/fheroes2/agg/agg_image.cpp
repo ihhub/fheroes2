@@ -859,10 +859,11 @@ namespace fheroes2
 
                 auto & imageArray = _icnVsSprite[id];
 
+                const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
+                const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
+
                 if ( id == ICN::SMALFONT ) {
                     // Small font in official Polish GoG version has all letters to be shifted by 1 pixel lower.
-                    const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
-                    const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
                     if ( crc32 == 0xE9EC7A63 ) {
                         for ( Sprite & letter : imageArray ) {
                             letter.setPosition( letter.x(), letter.y() - 1 );
@@ -905,8 +906,7 @@ namespace fheroes2
                     imageArray.erase( imageArray.begin() + 221, imageArray.end() );
                 }
                 // French version has its own special encoding but should conform to CP1252 too
-                verifiedFontWidth = ( id == ICN::FONT ) ? 9 : 5;
-                if ( imageArray.size() == 96 && imageArray[3].width() == verifiedFontWidth ) {
+                if ( crc32 == 0x0B0AAE3E  ) {
                     imageArray.insert( imageArray.begin() + 96, 160 - 32, imageArray[0] );
                     imageArray[244 - 32] = imageArray[3];
                     imageArray[251 - 32] = imageArray[4];
