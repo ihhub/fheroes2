@@ -339,6 +339,17 @@ namespace
 
         return imageMap.try_emplace( passable, std::move( sf ) ).first->second;
     }
+
+    const fheroes2::Image & getDebugFogImage()
+    {
+        static fheroes2::Image fog;
+        if ( fog.empty() ) {
+            fog.resize( 32, 32 );
+            fheroes2::FillTransform( fog, 0, 0, fog.width(), fog.height(), 2 );
+        }
+
+        return fog;
+    }
 #endif
 
     bool isShortObject( const MP2::MapObjectType objectType )
@@ -1202,15 +1213,19 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point 
     }
 }
 
-void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const
 {
 #ifdef WITH_DEBUG
+    if ( isFog( friendColors ) ) {
+        area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( _index ), false, 255 );
+    }
     if ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) {
         area.BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, Maps::GetPoint( _index ), false, 255 );
     }
 #else
     (void)dst;
     (void)area;
+    (void)friendColors;
 #endif
 }
 
