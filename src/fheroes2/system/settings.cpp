@@ -60,17 +60,17 @@ namespace
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
         GLOBAL_MONOCHROME_CURSOR = 0x00000020,
-        GLOBAL_SHOWCPANEL = 0x00000040,
-        GLOBAL_SHOWRADAR = 0x00000080,
-        GLOBAL_SHOWICONS = 0x00000100,
-        GLOBAL_SHOWBUTTONS = 0x00000200,
-        GLOBAL_SHOWSTATUS = 0x00000400,
+        GLOBAL_SHOW_CPANEL = 0x00000040,
+        GLOBAL_SHOW_RADAR = 0x00000080,
+        GLOBAL_SHOW_ICONS = 0x00000100,
+        GLOBAL_SHOW_BUTTONS = 0x00000200,
+        GLOBAL_SHOW_STATUS = 0x00000400,
         GLOBAL_FULLSCREEN = 0x00008000,
         GLOBAL_3D_AUDIO = 0x00010000,
         GLOBAL_SYSTEM_INFO = 0x00020000,
         GLOBAL_CURSOR_SOFT_EMULATION = 0x00040000,
-        // UNUSED = 0x00080000,
-        // UNUSED = 0x00100000,
+        GLOBAL_EVIL_INTERFACE = 0x00080000,
+        GLOBAL_HIDE_INTERFACE = 0x00100000,
         GLOBAL_BATTLE_SHOW_DAMAGE = 0x00200000,
         GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
@@ -104,10 +104,10 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_FIRST_RUN );
     _optGlobal.SetModes( GLOBAL_SHOW_INTRO );
 
-    _optGlobal.SetModes( GLOBAL_SHOWRADAR );
-    _optGlobal.SetModes( GLOBAL_SHOWICONS );
-    _optGlobal.SetModes( GLOBAL_SHOWBUTTONS );
-    _optGlobal.SetModes( GLOBAL_SHOWSTATUS );
+    _optGlobal.SetModes( GLOBAL_SHOW_RADAR );
+    _optGlobal.SetModes( GLOBAL_SHOW_ICONS );
+    _optGlobal.SetModes( GLOBAL_SHOW_BUTTONS );
+    _optGlobal.SetModes( GLOBAL_SHOW_STATUS );
 
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
@@ -126,11 +126,6 @@ Settings::Settings()
     EnablePriceOfLoyaltySupport( false );
 }
 
-Settings::~Settings()
-{
-    BinarySave();
-}
-
 Settings & Settings::Get()
 {
     static Settings conf;
@@ -138,13 +133,13 @@ Settings & Settings::Get()
     return conf;
 }
 
-bool Settings::Read( const std::string & filename )
+bool Settings::Read( const std::string & filePath )
 {
     TinyConfig config( '=', '#' );
 
     std::string sval;
 
-    if ( !config.Load( filename ) ) {
+    if ( !config.Load( filePath ) ) {
         return false;
     }
 
@@ -227,6 +222,30 @@ bool Settings::Read( const std::string & filename )
 
     if ( config.Exists( "battle army order" ) ) {
         setBattleShowArmyOrder( config.StrParams( "battle army order" ) == "on" );
+    }
+
+    if ( config.Exists( "use evil interface" ) ) {
+        setEvilInterface( config.StrParams( "use evil interface" ) == "on" );
+    }
+
+    if ( config.Exists( "hide interface" ) ) {
+        setHideInterface( config.StrParams( "hide interface" ) == "on" );
+    }
+
+    if ( config.Exists( "radar window position" ) ) {
+        pos_radr = config.PointParams( "radar window position", { -1, -1 } );
+    }
+
+    if ( config.Exists( "buttons window position" ) ) {
+        pos_bttn = config.PointParams( "buttons window position", { -1, -1 } );
+    }
+
+    if ( config.Exists( "icons window position" ) ) {
+        pos_icon = config.PointParams( "icons window position", { -1, -1 } );
+    }
+
+    if ( config.Exists( "status window position" ) ) {
+        pos_stat = config.PointParams( "status window position", { -1, -1 } );
     }
 
     // videomode
@@ -316,18 +335,16 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
-    BinaryLoad();
-
     return true;
 }
 
-bool Settings::Save( const std::string & filename ) const
+bool Settings::Save( const std::string_view fileName ) const
 {
-    if ( filename.empty() ) {
+    if ( fileName.empty() ) {
         return false;
     }
 
-    const std::string cfgFilename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), filename );
+    const std::string cfgFilename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), fileName );
 
     std::fstream file;
     file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );
@@ -337,8 +354,6 @@ bool Settings::Save( const std::string & filename ) const
 
     const std::string & data = String();
     file.write( data.data(), data.size() );
-
-    BinarySave();
 
     return true;
 }
@@ -411,6 +426,24 @@ std::string Settings::String() const
     os << std::endl << "# show army order during battle: on/off" << std::endl;
     os << "battle army order = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# use evil interface style: on/off" << std::endl;
+    os << "use evil interface = " << ( _optGlobal.Modes( GLOBAL_EVIL_INTERFACE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
+    os << "hide interface = " << ( _optGlobal.Modes( GLOBAL_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# position of the radar window on the adventure map when interface elements are hidden" << std::endl;
+    os << "radar window position = [ " << pos_radr.x << ", " << pos_radr.y << " ]" << std::endl;
+
+    os << std::endl << "# position of the buttons window on the adventure map when interface elements are hidden" << std::endl;
+    os << "buttons window position = [ " << pos_bttn.x << ", " << pos_bttn.y << " ]" << std::endl;
+
+    os << std::endl << "# position of the icons window on the adventure map when interface elements are hidden" << std::endl;
+    os << "icons window position = [ " << pos_icon.x << ", " << pos_icon.y << " ]" << std::endl;
+
+    os << std::endl << "# position of the status window on the adventure map when interface elements are hidden" << std::endl;
+    os << "status window position = [ " << pos_stat.x << ", " << pos_stat.y << " ]" << std::endl;
+
     os << std::endl << "# game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
 
@@ -447,7 +480,6 @@ std::string Settings::String() const
     return os.str();
 }
 
-/* read maps info */
 void Settings::SetCurrentFileInfo( const Maps::FileInfo & fi )
 {
     current_maps_file = fi;
@@ -591,19 +623,16 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
     return files.empty() ? name : files.back();
 }
 
-/* set ai speed: 0 (don't show) - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
     ai_speed = std::clamp( speed, 0, 10 );
 }
 
-/* set hero speed: 1 - 10 */
 void Settings::SetHeroesMoveSpeed( int speed )
 {
     heroes_speed = std::clamp( speed, 1, 10 );
 }
 
-/* set battle speed: 1 - 10 */
 void Settings::SetBattleSpeed( int speed )
 {
     battle_speed = std::clamp( speed, 1, 10 );
@@ -730,6 +759,26 @@ void Settings::setBattleDamageInfo( const bool enable )
     }
 }
 
+void Settings::setHideInterface( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_HIDE_INTERFACE );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_HIDE_INTERFACE );
+    }
+}
+
+void Settings::setEvilInterface( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_EVIL_INTERFACE );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_EVIL_INTERFACE );
+    }
+}
+
 void Settings::SetScrollSpeed( int speed )
 {
     scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SPEED_NONE ), static_cast<int>( SCROLL_SPEED_VERY_FAST ) );
@@ -760,39 +809,49 @@ bool Settings::isSystemInfoEnabled() const
     return _optGlobal.Modes( GLOBAL_SYSTEM_INFO );
 }
 
+bool Settings::isAutoSaveAtBeginningOfTurnEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+}
+
 bool Settings::isBattleShowDamageInfoEnabled() const
 {
     return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_DAMAGE );
 }
 
-bool Settings::isAutoSaveAtBeginingOfTurnEnabled() const
+bool Settings::isHideInterfaceEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+    return _optGlobal.Modes( GLOBAL_HIDE_INTERFACE );
+}
+
+bool Settings::isEvilInterfaceEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_EVIL_INTERFACE );
 }
 
 bool Settings::ShowControlPanel() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWCPANEL );
+    return _optGlobal.Modes( GLOBAL_SHOW_CPANEL );
 }
 
 bool Settings::ShowRadar() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWRADAR );
+    return _optGlobal.Modes( GLOBAL_SHOW_RADAR );
 }
 
 bool Settings::ShowIcons() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWICONS );
+    return _optGlobal.Modes( GLOBAL_SHOW_ICONS );
 }
 
 bool Settings::ShowButtons() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWBUTTONS );
+    return _optGlobal.Modes( GLOBAL_SHOW_BUTTONS );
 }
 
 bool Settings::ShowStatus() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWSTATUS );
+    return _optGlobal.Modes( GLOBAL_SHOW_STATUS );
 }
 
 bool Settings::BattleShowGrid() const
@@ -907,16 +966,6 @@ void Settings::EnablePriceOfLoyaltySupport( const bool set )
     }
 }
 
-void Settings::SetEvilInterface( bool f )
-{
-    f ? ExtSetModes( GAME_EVIL_INTERFACE ) : ExtResetModes( GAME_EVIL_INTERFACE );
-}
-
-void Settings::SetHideInterface( bool f )
-{
-    f ? ExtSetModes( GAME_HIDE_INTERFACE ) : ExtResetModes( GAME_HIDE_INTERFACE );
-}
-
 void Settings::SetBattleGrid( bool f )
 {
     f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_GRID );
@@ -934,130 +983,27 @@ void Settings::SetBattleMouseShaded( bool f )
 
 void Settings::SetShowPanel( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWCPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOWCPANEL );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_CPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CPANEL );
 }
 
 void Settings::SetShowRadar( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWRADAR ) : _optGlobal.ResetModes( GLOBAL_SHOWRADAR );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_RADAR ) : _optGlobal.ResetModes( GLOBAL_SHOW_RADAR );
 }
 
 void Settings::SetShowIcons( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWICONS ) : _optGlobal.ResetModes( GLOBAL_SHOWICONS );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_ICONS ) : _optGlobal.ResetModes( GLOBAL_SHOW_ICONS );
 }
 
 void Settings::SetShowButtons( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWBUTTONS ) : _optGlobal.ResetModes( GLOBAL_SHOWBUTTONS );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_BUTTONS ) : _optGlobal.ResetModes( GLOBAL_SHOW_BUTTONS );
 }
 
 void Settings::SetShowStatus( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWSTATUS ) : _optGlobal.ResetModes( GLOBAL_SHOWSTATUS );
-}
-
-bool Settings::CanChangeInGame( uint32_t f ) const
-{
-    return ( f >> 28 ) == 0x01;
-}
-
-bool Settings::ExtModes( uint32_t f ) const
-{
-    const uint32_t mask = 0x0FFFFFFF;
-
-    switch ( f >> 28 ) {
-    case 0x01:
-        return _optExtGame.Modes( f & mask );
-    case 0x02:
-        return _optExtBalance2.Modes( f & mask );
-    case 0x03:
-        return _optExtBalance3.Modes( f & mask );
-    case 0x04:
-        return _optExtBalance4.Modes( f & mask );
-    default:
-        break;
-    }
-
-    return false;
-}
-
-void Settings::ExtSetModes( uint32_t f )
-{
-    const uint32_t mask = 0x0FFFFFFF;
-
-    switch ( f >> 28 ) {
-    case 0x01:
-        _optExtGame.SetModes( f & mask );
-        break;
-    case 0x02:
-        _optExtBalance2.SetModes( f & mask );
-        break;
-    case 0x03:
-        _optExtBalance3.SetModes( f & mask );
-        break;
-    case 0x04:
-        _optExtBalance4.SetModes( f & mask );
-        break;
-    default:
-        break;
-    }
-}
-
-void Settings::ExtResetModes( uint32_t f )
-{
-    const uint32_t mask = 0x0FFFFFFF;
-
-    switch ( f >> 28 ) {
-    case 0x01:
-        _optExtGame.ResetModes( f & mask );
-        break;
-    case 0x02:
-        _optExtBalance2.ResetModes( f & mask );
-        break;
-    case 0x03:
-        _optExtBalance3.ResetModes( f & mask );
-        break;
-    case 0x04:
-        _optExtBalance4.ResetModes( f & mask );
-        break;
-    default:
-        break;
-    }
-}
-
-void Settings::BinarySave() const
-{
-    const std::string fname = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
-
-    StreamFile fs;
-    fs.setbigendian( true );
-
-    if ( fs.open( fname, "wb" ) ) {
-        fs << static_cast<uint16_t>( CURRENT_FORMAT_VERSION ) << _optExtGame << _optExtBalance2 << _optExtBalance4 << _optExtBalance3 << pos_radr << pos_bttn << pos_icon
-           << pos_stat;
-    }
-}
-
-void Settings::BinaryLoad()
-{
-    std::string fname = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
-
-    if ( !System::IsFile( fname ) ) {
-        fname = GetLastFile( "", "fheroes2.bin" );
-    }
-    if ( !System::IsFile( fname ) ) {
-        return;
-    }
-
-    StreamFile fs;
-    fs.setbigendian( true );
-
-    if ( fs.open( fname, "rb" ) ) {
-        uint16_t version = 0;
-
-        fs >> version >> _optExtGame >> _optExtBalance2 >> _optExtBalance4 >> _optExtBalance3 >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
-    }
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_STATUS ) : _optGlobal.ResetModes( GLOBAL_SHOW_STATUS );
 }
 
 bool Settings::FullScreen() const
@@ -1087,8 +1033,7 @@ void Settings::resetFirstGameRun()
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    return msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf._optExtBalance2
-               << conf._optExtBalance4 << conf._optExtBalance3 << conf.players;
+    return msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.players;
 }
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
@@ -1102,5 +1047,12 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
         msg >> dummy;
     }
 
-    return msg >> conf._optExtBalance2 >> conf._optExtBalance4 >> conf._optExtBalance3 >> conf.players;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE3_1000_RELEASE ) {
+        BitModes dummy;
+
+        msg >> dummy >> dummy >> dummy;
+    }
+
+    return msg >> conf.players;
 }

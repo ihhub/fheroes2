@@ -427,7 +427,7 @@ namespace
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         LocalEvent & le = LocalEvent::Get();
 
         for ( const Castle * castle : kingdom.GetCastles() ) {

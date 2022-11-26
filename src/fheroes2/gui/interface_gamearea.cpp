@@ -934,7 +934,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
 
     const Settings & conf = Settings::Get();
-    if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
 
     const fheroes2::Point tileOffset = _topLeftTileOffset + mp - _windowROI.getPosition();
