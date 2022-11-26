@@ -553,7 +553,9 @@ fheroes2::Image DrawRainbow( const std::vector<double> & rainbowArc, const int32
     rainbow.reset();
     std::vector<double>::const_iterator pnt = rainbowArc.begin();
 
-    uint8_t colorRed = 0, colorGreen = 0, colorBlue = 0;
+    uint8_t colorRed = 0;
+    uint8_t colorGreen = 0;
+    uint8_t colorBlue = 0;
 
     // draw rainbow image for each 'x' coordinate
     for ( int32_t x = 0; pnt != rainbowArc.end(); ++x, ++pnt ) {
@@ -3932,29 +3934,33 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         const int32_t drawStep = 9;
 
         // declare rainbow generation parameters
-        int32_t pow1, pow2, pow3, pow4, rainbowLength, rainbowAscend, rainbowDescend, rainbowTop, drawOffset;
-        double pow2ratio, pow4ratio;
+        // rainbow arc parameters for: y = (1-pow2ratio)*k1*(x-x0)^pow1+pow2ratio*k2*(x-x0)^pow2
+        // pow3, pow4, pow4ratio is the same as pow1, pow2, pow2ratio, but for the second part of the arc
+        int32_t pow1;
+        int32_t pow2;
+        int32_t pow3;
+        int32_t pow4;
+        // the length from the start to the end of the rainbow in direction of animation (in pixels)
+        int32_t rainbowLength;
+        // the length from the start to the end (the 'lucky' creature) of the rainbow orthogonal to the direction of animation (in pixels)
+        int32_t rainbowAscend;
+        // the length from the top to the end (the 'lucky' creature) of the rainbow orthogonal to the direction of animation (in pixels)
+        int32_t rainbowDescend;
+        // the coordinate where the rainbow arc changes its direction
+        int32_t rainbowTop;
+        // offset from zero coordinates of battlefield of rainbow image to 'fall' onto the 'lucky' creature
+        int32_t drawOffset;
+        double pow2ratio;
+        double pow4ratio;
 
         // set rainbow generation parameters
         if ( isVerticalRainbow ) {
-            // rainbow arc parameters for: y = (1-pow2ratio)*k1*(x-x0)^pow1+pow2ratio*k2*(x-x0)^pow2
-            // pow3, pow4, pow4ratio is the same as pow1, pow2, pow2ratio, but for the second part of the arc
             pow1 = 2, pow2 = 10, pow3 = 2, pow4 = 2;
             pow2ratio = 0.16, pow4ratio = 0.77;
-
-            // the length from the start to the end of the rainbow in direction of animation (in pixels)
             rainbowLength = rainbowDescendPoint.y;
-
-            // the length from the start to the end (the 'lucky' creature) of the rainbow orthogonal to the direction of animation (in pixels)
             rainbowAscend = std::min( borderDistance + rainbowThickness / 2, static_cast<int32_t>( 0.4845 * rainbowLength + 156.2 ) );
-
-            // the length from the top to the end (the 'lucky' creature) of the rainbow orthogonal to the direction of animation (in pixels)
             rainbowDescend = std::max( 1, static_cast<int32_t>( 0.0342 * rainbowLength - 4.868 ) );
-
-            // the coordinate where the rainbow arc changes its direction
             rainbowTop = static_cast<int32_t>( 0.8524 * rainbowLength + 17.7 );
-
-            // offset from zero coordinates of battlefield of rainbow image to 'fall' onto the 'lucky' creature
             drawOffset = isRainbowFromRight ? rainbowDescendPoint.x - rainbowDescend - rainbowThickness / 2 : rainbowDescendPoint.x - rainbowDescend - rainbowAscend;
         }
         else {
@@ -3974,7 +3980,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         GetHalfArc( rainbowArc, -rainbowArcBegin.width, rainbowArcBegin.height, pow1, pow2, pow2ratio );
         GetHalfArc( rainbowArc, rainbowArcEnd.width, rainbowArcEnd.height, pow3, pow4, pow4ratio );
 
-        fheroes2::Image luckSprite = fheroes2::Flip( DrawRainbow( rainbowArc, rainbowThickness, isVerticalRainbow ), isRainbowFromRight, 0 );
+        fheroes2::Image luckSprite = fheroes2::Flip( DrawRainbow( rainbowArc, rainbowThickness, isVerticalRainbow ), isRainbowFromRight, false );
 
         AudioManager::PlaySound( M82::GOODLUCK );
 
