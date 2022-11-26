@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId 'org.fheroes2'
 
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 31
 
         // These paths are set relative to the android project directory
