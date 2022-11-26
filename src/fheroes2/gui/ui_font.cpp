@@ -4086,7 +4086,6 @@ namespace
         fheroes2::SetPixel( released[160], offset + 8, offset + 7, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[160], offset + 1, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[160], offset + 9, offset + 8, buttonGoodReleasedColor );
-        released[160] = released[33];
 
         // r with small circle, Cyrillic BE
         released[161].resize( 10 + offset * 2, 10 + offset * 2 );
@@ -4327,6 +4326,8 @@ namespace
         fheroes2::DrawLine( released[33], { offset + 4, offset + 1 }, { offset + 4, offset + 2 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[33], { offset + 6, offset + 1 }, { offset + 6, offset + 2 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[33], { offset + 3, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[33], { offset + 2, offset + 6 }, { offset + 2, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[33], { offset + 8, offset + 6 }, { offset + 8, offset + 7 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[33], offset + 1, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[33], offset + 9, offset + 8, buttonGoodReleasedColor );
 
