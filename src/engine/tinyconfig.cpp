@@ -28,6 +28,7 @@
 #include <cstddef>
 #include <regex>
 #include <system_error>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -126,6 +127,9 @@ fheroes2::Point TinyConfig::PointParams( const std::string & key, const fheroes2
     };
 
     fheroes2::Point result;
+
+    static_assert( std::is_integral<decltype( result.x )>::value && std::is_integral<decltype( result.y )>::value,
+                   "The type of result fields is not integer, check the logic of this method" );
 
     if ( !convertToInt( pointRegexMatch[1].str(), result.x ) ) {
         return fallbackValue;
