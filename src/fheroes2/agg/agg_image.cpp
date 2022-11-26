@@ -906,8 +906,12 @@ namespace fheroes2
                     imageArray.erase( imageArray.begin() + 221, imageArray.end() );
                 }
                 // French version has its own special encoding but should conform to CP1252 too
-                if ( crc32 == 0x0B0AAE3E  ) {
+                if ( crc32 == 0x0B0AAE3E ) {
                     imageArray.insert( imageArray.begin() + 96, 160 - 32, imageArray[0] );
+                    imageArray[192 - 32] = imageArray[33];
+                    imageArray[199 - 32] = imageArray[35];
+                    imageArray[201 - 32] = imageArray[37];
+                    imageArray[202 - 32] = imageArray[37];
                     imageArray[244 - 32] = imageArray[3];
                     imageArray[251 - 32] = imageArray[4];
                     imageArray[249 - 32] = imageArray[6];
