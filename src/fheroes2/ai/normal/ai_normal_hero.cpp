@@ -693,7 +693,7 @@ namespace
     const double freeMonsterUpgradeModifier = 3;
 
     const double dangerousTaskPenalty = 20000.0;
-    const double fogDiscoveryBaseValue = -20000.0;
+    const double fogDiscoveryBaseValue = -10000.0;
 
     double ScaleWithDistance( double value, uint32_t distance )
     {
@@ -706,6 +706,8 @@ namespace
     double getFogDiscoveryValue( const Heroes & hero )
     {
         switch ( hero.getAIRole() ) {
+        case Heroes::Role::SCOUT:
+            return 0;
         case Heroes::Role::HUNTER:
             return fogDiscoveryBaseValue;
         case Heroes::Role::COURIER:
@@ -729,8 +731,8 @@ namespace AI
 
     double Normal::getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
-        // Hunter has almost equal priorities to all kind of objects.
-        assert( hero.getAIRole() == Heroes::Role::HUNTER );
+        // Hunter has almost equal priorities to all kind of objects. Scout posseses the same priorities but has much higher priority to discover fog.
+        assert( ( hero.getAIRole() == Heroes::Role::HUNTER ) || ( hero.getAIRole() == Heroes::Role::SCOUT ) );
 
         // In the future these hardcoded values could be configured by the mod
         // 1 tile distance is 100.0 value approximately
@@ -1482,6 +1484,7 @@ namespace AI
     {
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
+        case Heroes::Role::SCOUT:
             return getHunterObjectValue( hero, index, valueToIgnore, distanceToObject );
         case Heroes::Role::CHAMPION:
         case Heroes::Role::FIGHTER:
