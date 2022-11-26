@@ -863,7 +863,7 @@ namespace fheroes2
                 const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
 
                 if ( id == ICN::SMALFONT ) {
-                    // Small font in official Polish GoG version has all letters to be shifted by 1 pixel lower.
+                    // Small font in official Polish GoG version has all letters shifted 1 pixel down.
                     if ( crc32 == 0xE9EC7A63 ) {
                         for ( Sprite & letter : imageArray ) {
                             letter.setPosition( letter.x(), letter.y() - 1 );
@@ -881,8 +881,7 @@ namespace fheroes2
                 }
 
                 // Some checks that we really have CP1251 font
-                int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
-                if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
+                if ( crc32 == 0xE9EC7A63 ) {
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
                     // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
@@ -893,8 +892,7 @@ namespace fheroes2
                     imageArray.erase( imageArray.begin() + 192 );
                 }
                 // German version uses CP1252
-                verifiedFontWidth = ( id == ICN::FONT ) ? 10 : 7;
-                if ( imageArray.size() == 103 && imageArray[99].width() == verifiedFontWidth ) {
+                if ( crc32 == 0x4C758F2F ) {
                     imageArray.insert( imageArray.begin() + 96, 124, imageArray[0] );
                     std::swap( imageArray[164], imageArray[224] );
                     std::swap( imageArray[182], imageArray[225] );
