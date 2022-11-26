@@ -77,7 +77,8 @@ namespace
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
-        GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000
+        GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
+        GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000
     };
 }
 
@@ -300,6 +301,10 @@ bool Settings::Read( const std::string & filename )
         setSystemInfo( config.StrParams( "system info" ) == "on" );
     }
 
+    if ( config.Exists( "auto save at the beginning of the turn" ) ) {
+        setAutoSaveAtBeginningOfTurn( config.StrParams( "auto save at the beginning of the turn" ) == "on" );
+    }
+
     if ( config.Exists( "cursor soft rendering" ) ) {
         if ( config.StrParams( "cursor soft rendering" ) == "on" ) {
             _optGlobal.SetModes( GLOBAL_CURSOR_SOFT_EMULATION );
@@ -431,6 +436,9 @@ std::string Settings::String() const
 
     os << std::endl << "# display system information: on/off" << std::endl;
     os << "system info = " << ( _optGlobal.Modes( GLOBAL_SYSTEM_INFO ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# should auto save be performed at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
+    os << "auto save at the beginning of the turn = " << ( _optGlobal.Modes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# enable cursor software rendering" << std::endl;
     os << "cursor soft rendering = " << ( _optGlobal.Modes( GLOBAL_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
@@ -701,6 +709,16 @@ void Settings::setSystemInfo( const bool enable )
     }
 }
 
+void Settings::setAutoSaveAtBeginningOfTurn( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+    }
+}
+
 void Settings::setBattleDamageInfo( const bool enable )
 {
     if ( enable ) {
@@ -744,6 +762,11 @@ bool Settings::isSystemInfoEnabled() const
 bool Settings::isBattleShowDamageInfoEnabled() const
 {
     return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_DAMAGE );
+}
+
+bool Settings::isAutoSaveAtBeginingOfTurnEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
 }
 
 bool Settings::ShowControlPanel() const

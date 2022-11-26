@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-22 07:19+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -532,17 +532,6 @@ msgstr ""
 msgid "System Options"
 msgstr "Systemalternativ"
 
-msgid "Wait this unit"
-msgstr "Vänta denna enhet"
-
-msgid "Wait"
-msgstr ""
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-
 msgid "Skip this unit"
 msgstr "Hoppa över denna enhet"
 
@@ -585,9 +574,6 @@ msgstr "Är du säker på att du vill avskeda denna armé?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} hoppar över rundan."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} inväntar runda."
 
 #, fuzzy
 msgid "%{attacker} does %{damage} damage."
@@ -9425,3 +9411,9 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Wait this unit"
+#~ msgstr "Vänta denna enhet"
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} inväntar runda."

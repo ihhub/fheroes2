@@ -507,21 +507,17 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 void Battle::Arena::ApplyActionSkip( Command & cmd )
 {
     const uint32_t uid = cmd.GetValue();
-    const int32_t hard = cmd.GetValue();
 
     Unit * unit = GetTroopUID( uid );
 
     if ( unit && unit->isValid() ) {
         if ( !unit->Modes( TR_MOVED ) ) {
-            if ( hard || unit->Modes( TR_SKIPMOVE ) ) {
-                unit->SetModes( TR_HARDSKIP );
-                unit->SetModes( TR_MOVED );
-            }
+            unit->SetModes( TR_SKIP );
+            unit->SetModes( TR_MOVED );
 
-            unit->SetModes( TR_SKIPMOVE );
-
-            if ( _interface )
+            if ( _interface ) {
                 _interface->RedrawActionSkipStatus( *unit );
+            }
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
         }
@@ -545,9 +541,6 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
     if ( unit ) {
         if ( !unit->Modes( TR_MOVED ) ) {
             unit->SetModes( TR_MOVED );
-
-            if ( unit->Modes( TR_SKIPMOVE ) && _interface )
-                _interface->RedrawActionSkipStatus( *unit );
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
         }
@@ -589,8 +582,7 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
     }
     // Bad morale
     else {
-        // A bad morale event cannot happen when a waiting unit gets its turn
-        if ( !unit->Modes( MORALE_BAD ) || unit->Modes( TR_MOVED | TR_SKIPMOVE ) ) {
+        if ( !unit->Modes( MORALE_BAD ) || unit->Modes( TR_MOVED ) ) {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unit is in an invalid state: " << unit->String( true ) )
 
             return;

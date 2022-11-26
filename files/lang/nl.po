@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-21 04:05+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -535,19 +535,6 @@ msgstr "Hiermee kan je het gevechts scherm aanpassen"
 msgid "System Options"
 msgstr "Systeem Instellingen"
 
-msgid "Wait this unit"
-msgstr "Wacht deze eenheid"
-
-msgid "Wait"
-msgstr "Wacht"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Wacht op het huidige schepsel. Het huidige schepsel stelt zijn beurt uit tot "
-"alle andere schepsels aan de beurt zijn geweest."
-
 msgid "Skip this unit"
 msgstr "Deze eenheid overslaan"
 
@@ -591,9 +578,6 @@ msgstr ""
 
 msgid "%{name} skip their turn."
 msgstr "%{name} slaat zijn beurt over."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} wacht op hun beurt"
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -8774,3 +8758,19 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Wait this unit"
+#~ msgstr "Wacht deze eenheid"
+
+#~ msgid "Wait"
+#~ msgstr "Wacht"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Wacht op het huidige schepsel. Het huidige schepsel stelt zijn beurt uit "
+#~ "tot alle andere schepsels aan de beurt zijn geweest."
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} wacht op hun beurt"

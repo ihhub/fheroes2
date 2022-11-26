@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-22 07:19+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -524,19 +524,6 @@ msgstr "Позволява ти да персонализираш бойния �
 msgid "System Options"
 msgstr "Системни настройки"
 
-msgid "Wait this unit"
-msgstr "Нека тази единица да изчака"
-
-msgid "Wait"
-msgstr "Изчакай"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Изчаква текущото създание. Текущото създание отлага реда си, докато не дойде "
-"редът на всички други същества."
-
 msgid "Skip this unit"
 msgstr "Пропусни тази единица"
 
@@ -579,9 +566,6 @@ msgstr "Сигурен ли си че искаш да презапишеш за�
 
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускат своя ред."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} чакат своя ред."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -9779,3 +9763,19 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Wait this unit"
+#~ msgstr "Нека тази единица да изчака"
+
+#~ msgid "Wait"
+#~ msgstr "Изчакай"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Изчаква текущото създание. Текущото създание отлага реда си, докато не "
+#~ "дойде редът на всички други същества."
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} чакат своя ред."

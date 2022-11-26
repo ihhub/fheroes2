@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-21 04:05+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -528,19 +528,6 @@ msgstr "Savaş ekranını özelleştirmenizi sağlar."
 msgid "System Options"
 msgstr "Sistem Seçenekleri"
 
-msgid "Wait this unit"
-msgstr "Bu birimi bekle"
-
-msgid "Wait"
-msgstr "Bekle"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Mevcut yaratığı bekletir. Mevcut yaratık, diğer tüm yaratıkların sırası "
-"gelene kadar sırasını erteler."
-
 msgid "Skip this unit"
 msgstr "Bu birimi geç"
 
@@ -583,9 +570,6 @@ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} sırasını geçti."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} sırasını bekledi."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -8608,3 +8592,19 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Wait this unit"
+#~ msgstr "Bu birimi bekle"
+
+#~ msgid "Wait"
+#~ msgstr "Bekle"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Mevcut yaratığı bekletir. Mevcut yaratık, diğer tüm yaratıkların sırası "
+#~ "gelene kadar sırasını erteler."
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} sırasını bekledi."
