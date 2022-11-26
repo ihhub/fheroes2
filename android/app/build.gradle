@@ -74,7 +74,7 @@ android {
 
 dependencies {
     implementation project(':sdl2')
-    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
 }
 
 task copyH2D(type: Copy) {
