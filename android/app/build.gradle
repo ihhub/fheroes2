@@ -74,6 +74,7 @@ android {
 
 dependencies {
     implementation project(':sdl2')
+    // Versions 2.9.0+ do not work on devices with API level 23 (Android 6.0)
     implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
 }
 
