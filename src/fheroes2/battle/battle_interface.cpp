@@ -499,7 +499,7 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     return sf;
 }
 
-fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
+fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const uint8_t horizSpace )
 {
     const int l = 13;
     const int w = CELLW;
@@ -507,7 +507,7 @@ fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
 
     fheroes2::Image sf( w, h );
     sf.reset();
-    fheroes2::Rect rt( 2, l - 1, w - 3, 2 * l + 4 );
+    fheroes2::Rect rt( horizSpace, l - 1, w + 1 - horizSpace * 2, h - l * 2 + 4 );
     for ( int i = 0; i < w / 2; i += 2 ) {
         for ( int x = 0; x < rt.width; ++x ) {
             for ( int y = 0; y < rt.height; ++y ) {
@@ -1098,8 +1098,12 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     // hexagon
     sf_hexagon = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
-    sf_cursor = DrawHexagonShadow( 2 );
-    sf_shadow = DrawHexagonShadow( 4 );
+    // Shadow under the cursor: the first parameter is the shadow strength (smaller is stronger), the second is the distance between the hexagonal shadows.
+    sf_cursor = DrawHexagonShadow( 2, 1 );
+    // Hexagon shadow for the case when grid is disabled.
+    sf_shadow = DrawHexagonShadow( 4, 2 );
+    // Shadow that fits the hexagon grid.
+    sf_shadow_grid = DrawHexagonShadow( 4, 1 );
 
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
@@ -1908,7 +1912,12 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( const Cell & cell : board ) {
             if ( cell.isReachableForHead() || cell.isReachableForTail() ) {
-                fheroes2::Blit( sf_shadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+                if ( conf.BattleShowGrid() ) { // shadow for 'grid on'
+                    fheroes2::Blit( sf_shadow_grid, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+                }
+                else {
+                    fheroes2::Blit( sf_shadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+                }
             }
         }
     }

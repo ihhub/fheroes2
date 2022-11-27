@@ -373,6 +373,7 @@ namespace Battle
         fheroes2::Image _mainSurface;
         fheroes2::Image sf_hexagon;
         fheroes2::Image sf_shadow;
+        fheroes2::Image sf_shadow_grid;
         fheroes2::Image sf_cursor;
 
         int icn_cbkg;
