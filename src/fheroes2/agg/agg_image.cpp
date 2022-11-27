@@ -924,7 +924,7 @@ namespace fheroes2
                     imageArray[238 - 32] = imageArray[93];
                     imageArray[233 - 32] = imageArray[94];
                     imageArray[238 - 32] = imageArray[95];
-                    imageArray.erase( imageArray.begin() + 251 - 32, imageArray.end() );
+                    imageArray.erase( imageArray.begin() + 252 - 32, imageArray.end() );
                 }
                 return true;
             }
