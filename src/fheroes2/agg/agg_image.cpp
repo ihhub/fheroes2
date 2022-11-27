@@ -881,7 +881,7 @@ namespace fheroes2
                 }
 
                 // Polish version uses CP1251
-                if ( crc32 == ( 0xE9EC7A63 || 0x88774771 ) ) {
+                if ( crc32 == 0xE9EC7A63 || crc32 == 0x88774771 ) {
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
                     // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
@@ -892,7 +892,7 @@ namespace fheroes2
                     imageArray.erase( imageArray.begin() + 192 );
                 }
                 // German version uses CP1252
-                if ( crc32 == ( 0x04745D1D || 0xD0F0D852 ) ) {
+                if ( crc32 == 0x04745D1D || crc32 == 0xD0F0D852 ) {
                     imageArray.insert( imageArray.begin() + 96, 124, imageArray[0] );
                     std::swap( imageArray[164], imageArray[224] );
                     std::swap( imageArray[182], imageArray[225] );
@@ -904,7 +904,7 @@ namespace fheroes2
                     imageArray.erase( imageArray.begin() + 221, imageArray.end() );
                 }
                 // French version has its own special encoding but should conform to CP1252 too
-                if ( crc32 == ( 0xD9556567 || 0x406967B9 ) ) {
+                if ( crc32 == 0xD9556567 || crc32 == 0x406967B9 ) {
                     imageArray.insert( imageArray.begin() + 96, 160 - 32, imageArray[0] );
                     imageArray[192 - 32] = imageArray[33];
                     imageArray[199 - 32] = imageArray[35];
