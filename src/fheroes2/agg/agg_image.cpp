@@ -926,6 +926,23 @@ namespace fheroes2
                     imageArray[238 - 32] = imageArray[95];
                     imageArray.erase( imageArray.begin() + 252 - 32, imageArray.end() );
                 }
+                // Italian version uses CP1252
+                if ( crc32 == 0x219B3124 || crc32 == 0x1F3C3C74 ) {
+                    imageArray.insert( imageArray.begin() + 96, 160 - 32, imageArray[0] );
+                    imageArray[192 - 32] = imageArray[33];
+                    imageArray[200 - 32] = imageArray[37];
+                    imageArray[201 - 32] = imageArray[37];
+                    imageArray[204 - 32] = imageArray[41];
+                    imageArray[210 - 32] = imageArray[47];
+                    imageArray[217 - 32] = imageArray[53];
+                    imageArray[224 - 32] = imageArray[96];
+                    imageArray[232 - 32] = imageArray[97];
+                    imageArray[233 - 32] = imageArray[69];
+                    imageArray[236 - 32] = imageArray[98];
+                    imageArray[242 - 32] = imageArray[99];
+                    imageArray[249 - 32] = imageArray[100];
+                    imageArray.erase( imageArray.begin() + 250 - 32, imageArray.end() );
+                }
                 return true;
             }
             case ICN::YELLOW_FONT:
