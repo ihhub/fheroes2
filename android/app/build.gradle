@@ -23,6 +23,13 @@ android {
         }
     }
 
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     externalNativeBuild {
         ndkBuild {
             path 'jni/Android.mk'
@@ -73,9 +80,10 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
+
     implementation project(':sdl2')
-    // Versions 2.9.0+ do not work on devices with API level 23 (Android 6.0)
-    implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 }
 
 task copyH2D(type: Copy) {
