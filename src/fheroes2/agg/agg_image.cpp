@@ -929,7 +929,7 @@ namespace fheroes2
                 }
                 // Italian version uses CP1252
                 if ( crc32 == 0x219B3124 || crc32 == 0x1F3C3C74 ) {
-                    imageArray.insert( imageArray.begin() + 96, 160 - 32, imageArray[0] );
+                    imageArray.insert( imageArray.begin() + 101, 155 - 32, imageArray[0] );
                     imageArray[192 - 32] = imageArray[33];
                     imageArray[200 - 32] = imageArray[37];
                     imageArray[201 - 32] = imageArray[37];
