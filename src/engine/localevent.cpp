@@ -39,8 +39,8 @@
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 
-#include <SDL_hints.h>
 #include <SDL_gamecontroller.h>
+#include <SDL_hints.h>
 #include <SDL_keycode.h>
 
 #endif
