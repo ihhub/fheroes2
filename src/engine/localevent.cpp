@@ -39,13 +39,9 @@
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 
+#include <SDL_hints.h>
 #include <SDL_gamecontroller.h>
 #include <SDL_keycode.h>
-
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( ANDROID )
-#define TOUCH_SUPPORT
-#include <SDL_hints.h>
-#endif
 
 #endif
 
@@ -997,7 +993,6 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
-#if defined( TOUCH_SUPPORT )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         fheroes2::cursor().enableSoftwareEmulation( true );
@@ -1005,7 +1000,6 @@ void LocalEvent::OpenTouchpad()
         SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
 #endif
     }
-#endif
 }
 
 #else
@@ -1243,9 +1237,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_FINGERDOWN:
         case SDL_FINGERUP:
         case SDL_FINGERMOTION:
-#if defined( TOUCH_SUPPORT )
             HandleTouchEvent( event.tfinger );
-#endif
             break;
         case SDL_RENDER_TARGETS_RESET:
             // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
