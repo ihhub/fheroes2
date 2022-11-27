@@ -342,11 +342,11 @@ namespace
 
     const fheroes2::Image & getDebugFogImage()
     {
-        static fheroes2::Image fog;
-        if ( fog.empty() ) {
-            fog.resize( 32, 32 );
-            fheroes2::FillTransform( fog, 0, 0, fog.width(), fog.height(), 2 );
-        }
+        static const fheroes2::Image fog = []() {
+            fheroes2::Image temp( 32, 32 );
+            fheroes2::FillTransform( temp, 0, 0, temp.width(), temp.height(), 2 );
+            return temp;
+        }();
 
         return fog;
     }
