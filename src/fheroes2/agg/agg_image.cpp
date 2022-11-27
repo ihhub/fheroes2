@@ -880,8 +880,9 @@ namespace fheroes2
                     modifyBaseNormalFont( _icnVsSprite[id] );
                 }
 
-                // Polish version uses CP1251
-                if ( crc32 == 0xE9EC7A63 || crc32 == 0x88774771 ) {
+                // Some checks that we really have CP1251 font
+                int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
+                if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
                     // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
