@@ -22,7 +22,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <array>
 #include <atomic>
 #include <cassert>
 #include <cmath>
@@ -627,23 +626,7 @@ namespace
             return MIX_MAX_VOLUME;
         }
 
-        const auto volumeTable = []() {
-            const int maxVolume = 10;
-            const double range = 0 - 10 * std::log10( MIX_MAX_VOLUME );
-            const double a = std::pow( 10.0, range / 20.0 );
-            const double b = std::log10( 1.0 / a ) / maxVolume;
-            std::array<int, maxVolume + 1> result{ 0 };
-            result[maxVolume] = MIX_MAX_VOLUME;
-            for ( int i = 1; i < maxVolume; i++ )
-                result[i] = static_cast<int>( round( a * std::pow( 10.0, i * b ) * MIX_MAX_VOLUME ) );
-            return result;
-        }();
-        return volumeTable[volumePercentage / 10];
-    }
-
-    int normalizeFromSDLVolume( const int volume )
-    {
-        return volume * 100 / MIX_MAX_VOLUME;
+        return ( std::exp( std::log( 10 + 1 ) * volumePercentage / 100 ) - 1 ) / 10 * MIX_MAX_VOLUME;
     }
 }
 
@@ -906,42 +889,31 @@ int Mixer::applySoundEffect( const int channelId, const int16_t angle, const uin
     return channelId;
 }
 
-int Mixer::setVolume( const int channelId, const int volumePercentage )
+void Mixer::setVolume( const int channelId, const int volumePercentage )
 {
     const int volume = normalizeToSDLVolume( volumePercentage );
 
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
-        return 0;
+        return;
     }
 
     if ( !isMuted ) {
-        return normalizeFromSDLVolume( Mix_Volume( channelId, volume ) );
+        Mix_Volume( channelId, volume );
+        return;
     }
 
     if ( channelId < 0 ) {
-        if ( savedMixerVolumes.empty() ) {
-            return 0;
-        }
-
-        // return the average volume
-        const int prevVolume = std::accumulate( savedMixerVolumes.begin(), savedMixerVolumes.end(), 0 ) / static_cast<int>( savedMixerVolumes.size() );
         std::fill( savedMixerVolumes.begin(), savedMixerVolumes.end(), volume );
-
-        return normalizeFromSDLVolume( prevVolume );
+        return;
     }
 
     const size_t channel = static_cast<size_t>( channelId );
 
-    if ( channel >= savedMixerVolumes.size() ) {
-        return 0;
+    if ( channel < savedMixerVolumes.size() ) {
+        savedMixerVolumes[channel] = volume;
     }
-
-    const int prevVolume = savedMixerVolumes[channel];
-    savedMixerVolumes[channel] = volume;
-
-    return normalizeFromSDLVolume( prevVolume );
 }
 
 void Mixer::Pause( const int channelId /* = -1 */ )
@@ -1049,25 +1021,22 @@ void Music::SetFadeInMs( const int timeMs )
     musicFadeInMs = timeMs;
 }
 
-int Music::setVolume( const int volumePercentage )
+void Music::setVolume( const int volumePercentage )
 {
     const int volume = normalizeToSDLVolume( volumePercentage );
 
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
-        return 0;
+        return;
     }
 
     if ( isMuted ) {
-        const int prevVolume = savedMusicVolume;
-
         savedMusicVolume = volume;
-
-        return normalizeFromSDLVolume( prevVolume );
+        return;
     }
 
-    return normalizeFromSDLVolume( Mix_VolumeMusic( volume ) );
+    Mix_VolumeMusic( volume );
 }
 
 void Music::Stop()
