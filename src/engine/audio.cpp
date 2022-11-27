@@ -626,7 +626,7 @@ namespace
             return MIX_MAX_VOLUME;
         }
 
-        return ( std::exp( std::log( 10 + 1 ) * volumePercentage / 100 ) - 1 ) / 10 * MIX_MAX_VOLUME;
+        return ( static_cast<int>( std::exp( std::log( 10 + 1 ) * volumePercentage / 100 ) - 1 ) / 10 * MIX_MAX_VOLUME );
     }
 }
 
