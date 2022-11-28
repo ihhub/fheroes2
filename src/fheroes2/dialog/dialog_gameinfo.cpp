@@ -83,7 +83,7 @@ void Dialog::GameInfo()
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
     const fheroes2::Point dialogOffset( ( display.width() - window.width() - DIALOG_SHADOW_OFFSET_X ) / 2, ( ( display.height() - window.height() ) / 2 ) );
-    const fheroes2::Point shadowOffset( dialogOffset.x - DIALOG_SHADOW_OFFSET_X, dialogOffset.y );
+    const fheroes2::Point shadowOffset( dialogOffset.x, dialogOffset.y );
 
     fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, window.width(), window.height() );
 
