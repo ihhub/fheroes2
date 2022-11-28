@@ -48,7 +48,7 @@ namespace
     enum GameInfoCoordinates
     {
         SCENARIO_INFO_VALUES_BOX_WIDTH = 80,
-        DIALOG_CONTENT_WIDTH = 420,
+        DIALOG_CONTENT_WIDTH = 350,
         SCENARIO_INFO_BOX_RIGHT_MARGIN = 11,
         SCENARIO_INFO_ROW_LEFT_MARGIN = 16,
         // This is a shadow offset from the original ICN::SCENIBKG image.
