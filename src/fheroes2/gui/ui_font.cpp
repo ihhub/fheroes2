@@ -4038,10 +4038,10 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        released[109].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
-        released[136].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
-        released[143].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
-        released[169].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[109].setPosition( buttonFontOffset.x, -3 );
+        released[136].setPosition( buttonFontOffset.x, -3 );
+        released[143].setPosition( buttonFontOffset.x, -3 );
+        released[169].setPosition( buttonFontOffset.x, -3 );
         // Offset A to remove space to other letters.
         released[160].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
 
