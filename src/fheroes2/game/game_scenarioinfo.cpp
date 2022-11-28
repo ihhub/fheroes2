@@ -319,7 +319,7 @@ namespace
                     levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
-                    ratingRoi = RedrawRatingInfo( { rectPanel.x, rectPanel.y + 383 }, rectPanel.width );
+                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     display.render();
                 }
                 // playersInfo
