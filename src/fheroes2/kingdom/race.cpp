@@ -25,7 +25,7 @@
 #include "rand.h"
 #include "translations.h"
 
-std::string Race::String( int race )
+const char * Race::String( int race )
 {
     switch ( race ) {
     case Race::KNGT:
@@ -53,7 +53,7 @@ std::string Race::String( int race )
     return _( "race|Neutral" );
 }
 
-std::string Race::DoubleLinedString( int race )
+const char * Race::DoubleLinedString( int race )
 {
     switch ( race ) {
     case Race::KNGT:
@@ -75,10 +75,10 @@ std::string Race::DoubleLinedString( int race )
     case Race::NONE:
         return _( "doubleLinedRace|Neutral" );
     default:
+        // You are calling a race that doesn't exist.
+        assert ( 0 );
         break;
     }
-
-    return _( "doubleLinedRace|Neutral" );
 }
 
 int Race::Rand()
