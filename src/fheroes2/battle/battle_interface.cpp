@@ -3907,9 +3907,9 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         // Declare rainbow generation parameters:
         // Rainbow arc parameters for: y = (1-pow2ratio)*k1*(x-x0)^pow1+pow2ratio*k2*(x-x0)^pow2.
         // Parametars pow3, pow4, pow4ratio are the same as pow1, pow2, pow2ratio, but for the second part of the arc.
-        int32_t pow1 = 2;
+        const int32_t pow1 = 2;
         int32_t pow2;
-        int32_t pow3 = 2;
+        const int32_t pow3 = 2;
         int32_t pow4;
         // The distance from the start to the end of the rainbow in direction of animation (in pixels).
         int32_t rainbowLength;
@@ -3964,7 +3964,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         GetHalfArc( rainbowArc, -rainbowArcBegin.width, rainbowArcBegin.height, pow1, pow2, pow2ratio );
         GetHalfArc( rainbowArc, rainbowArcEnd.width, rainbowArcEnd.height, pow3, pow4, pow4ratio );
 
-        fheroes2::Sprite luckSprite = DrawRainbow( rainbowArc, rainbowThickness, isVerticalRainbow, isRainbowFromRight );
+        const fheroes2::Sprite luckSprite = DrawRainbow( rainbowArc, rainbowThickness, isVerticalRainbow, isRainbowFromRight );
 
         // Rainbow animation draw step (in original game it is random and about 7-11 pixels).
         // We set the constant animation time for all rainbows: rainbowLength/30 fits the rainbow sound duration on '1' speed.
