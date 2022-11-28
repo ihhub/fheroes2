@@ -4036,10 +4036,10 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        released[109].setPosition( buttonFontOffset.x, -3 );
-        released[136].setPosition( buttonFontOffset.x, -3 );
-        released[143].setPosition( buttonFontOffset.x, -3 );
-        released[169].setPosition( buttonFontOffset.x, -3 );
+        released[109].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[136].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[143].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[169].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
 
         // K with acute, Cyrillic KJE. Needs to have upper right arm adjusted.
         released[109].resize( released[43].width(), released[43].height() + 4 );
@@ -4087,6 +4087,7 @@ namespace
         fheroes2::SetPixel( released[160], offset + 8, offset + 7, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[160], offset + 1, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[160], offset + 9, offset + 8, buttonGoodReleasedColor );
+        released[160].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
 
         // r with small circle, Cyrillic BE
         released[161].resize( 10 + offset * 2, 10 + offset * 2 );
@@ -4206,6 +4207,7 @@ namespace
         fheroes2::DrawLine( released[179], { offset + 5, offset + 5 }, { offset + 5, offset + 8 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[179], { offset + 2, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[179], offset + 4, offset + 5, buttonGoodReleasedColor );
+        released[179].setPosition( buttonFontOffset.x + 2, buttonFontOffset.y );
 
         // O with vertical bar, Cyrillic EF
         released[180].resize( 10 + offset * 2, 10 + offset * 2 );
