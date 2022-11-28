@@ -3565,7 +3565,7 @@ namespace
             letter.setPosition( buttonFontOffset.x, buttonFontOffset.y );
         }
         // Decrease letter A's spacing to nearby letters.
-        released[33].setPosition( -1, buttonFontOffset.y );
+        released[33].setPosition( -3, buttonFontOffset.y );
 
         // -
         released[13].resize( 6 + offset * 2, 6 + offset * 2 );
@@ -4337,6 +4337,7 @@ namespace
         fheroes2::DrawLine( released[33], { offset + 8, offset + 6 }, { offset + 8, offset + 7 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[33], offset + 1, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[33], offset + 9, offset + 8, buttonGoodReleasedColor );
+        released[33].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y);
 
         // A with circle on top
         released[197 - 32].resize( 13 + offset * 2, 12 + offset * 2 );
