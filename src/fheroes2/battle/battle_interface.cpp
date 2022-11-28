@@ -3973,10 +3973,10 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         AudioManager::PlaySound( M82::GOODLUCK );
 
         double x = 0;
-        while ( le.HandleEvents() && ( Mixer::isPlaying( -1 ) || x <= rainbowLength ) ) {
+        while ( le.HandleEvents() && ( Mixer::isPlaying( -1 ) || x < rainbowLength ) ) {
             CheckGlobalEvents( le );
 
-            if ( Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( x < rainbowLength && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
                 x += drawStep;
