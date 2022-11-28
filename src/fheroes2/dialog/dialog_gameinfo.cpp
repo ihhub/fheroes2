@@ -48,12 +48,12 @@ namespace
     enum GameInfoCoordinates
     {
         SCENARIO_INFO_VALUES_BOX_WIDTH = 80,
-        DIALOG_CONTENT_WIDTH = 350,
+        DIALOG_CONTENT_WIDTH = 420,
         SCENARIO_INFO_BOX_RIGHT_MARGIN = 11,
         SCENARIO_INFO_ROW_LEFT_MARGIN = 16,
         // This is a shadow offset from the original ICN::SCENIBKG image.
         DIALOG_SHADOW_OFFSET_X = 16,
-        DIALOG_SHADOW_OFFSET_Y = 4 + 12,
+        DIALOG_SHADOW_OFFSET_Y = 4 + 12, // The ICN has been modified with a wider shadow
         DIALOG_BORDER_WIDTH = 18,
         // The following values are calculated using the previous values.
         SCENARIO_INFO_ROW_OFFSET = DIALOG_BORDER_WIDTH + SCENARIO_INFO_ROW_LEFT_MARGIN,
@@ -61,6 +61,7 @@ namespace
         SCENARIO_GAME_DIFFICULTY_OFFSET = SCENARIO_INFO_ROW_OFFSET + SCENARIO_INFO_VALUES_BOX_WIDTH + SCENARIO_INFO_BOX_RIGHT_MARGIN,
         SCENARIO_RATING_OFFSET = SCENARIO_INFO_ROW_OFFSET + SCENARIO_INFO_VALUES_BOX_WIDTH * 2 + SCENARIO_INFO_BOX_RIGHT_MARGIN * 2,
         SCENARIO_MAP_SIZE_OFFSET = SCENARIO_INFO_ROW_OFFSET + SCENARIO_INFO_VALUES_BOX_WIDTH * 3 + SCENARIO_INFO_BOX_RIGHT_MARGIN * 3,
+        SCENARIO_DESCRIPTION_WIDTH = 350,
         PLAYER_INFO_ROW_OFFSET = DIALOG_BORDER_WIDTH + 5,
         CONDITION_LABEL_OFFSET = DIALOG_BORDER_WIDTH + 5,
         CONDITION_LABEL_WIDTH = 80,
@@ -81,12 +82,12 @@ void Dialog::GameInfo()
 
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
-    const fheroes2::Point dialogOffset( ( display.width() - window.width() ) / 2, ( ( display.height() - window.height() ) / 2 ) );
+    const fheroes2::Point dialogOffset( ( display.width() - window.width() - DIALOG_SHADOW_OFFSET_X ) / 2, ( ( display.height() - window.height() ) / 2 ) );
     const fheroes2::Point shadowOffset( dialogOffset.x - DIALOG_SHADOW_OFFSET_X, dialogOffset.y );
 
-    fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, window.width() + DIALOG_SHADOW_OFFSET_X, window.height() + DIALOG_SHADOW_OFFSET_Y );
+    fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, window.width(), window.height() );
 
-    fheroes2::Blit( window, display, dialogOffset.x, dialogOffset.y );
+    fheroes2::Blit( window, display, shadowOffset.x, shadowOffset.y );
 
     fheroes2::Text text( conf.MapsName(), fheroes2::FontType::normalWhite() );
     text.draw( shadowOffset.x, shadowOffset.y + 32, DIALOG_CONTENT_WIDTH, display );
@@ -116,7 +117,7 @@ void Dialog::GameInfo()
     text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( conf.MapsDescription(), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x, shadowOffset.y + 107, DIALOG_CONTENT_WIDTH, display );
+    text.draw( shadowOffset.x, shadowOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Opponents" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x, shadowOffset.y + 152, DIALOG_CONTENT_WIDTH, display );
