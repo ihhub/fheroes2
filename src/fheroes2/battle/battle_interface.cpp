@@ -556,7 +556,7 @@ fheroes2::Image DrawRainbow( const std::vector<int32_t> & rainbowArc, const int3
     std::vector<int32_t>::const_iterator pnt = rainbowArc.begin();
 
     // Get the original good luck sprite, since it has a rainbow image which will be used to get line.
-    fheroes2::Sprite luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
+    fheroes2::Image luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
     
     // Declare an image for a single rainbow line from the center of the luckSprite.
     fheroes2::Image rainbowLine;
@@ -3938,7 +3938,8 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
             }
             rainbowDescend = std::max( 1, static_cast<int32_t>( 0.0342 * rainbowLength - 4.868 ) );
             rainbowTop = static_cast<int32_t>( 0.8524 * rainbowLength + 17.7 );
-            drawOffset = isRainbowFromRight ? ( rainbowDescendPoint.x - rainbowDescend - rainbowThickness / 2 ) : ( rainbowDescendPoint.x - rainbowDescend - rainbowAscend );
+            drawOffset
+                = isRainbowFromRight ? ( rainbowDescendPoint.x - rainbowDescend - rainbowThickness / 2 ) : ( rainbowDescendPoint.x - rainbowDescend - rainbowAscend );
         }
         else {
             pow2 = 0;
