@@ -30,7 +30,6 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include <numeric>
 #include <ostream>
 #include <type_traits>
 #include <utility>
