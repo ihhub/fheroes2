@@ -85,6 +85,7 @@ void Dialog::GameInfo()
     fheroes2::Blit( box, display, dp.x, dp.y );
 
     const fheroes2::Point pt( dp.x + DIALOG_SHADOW_OFFSET_X, dp.y );
+    fheroes2::ImageRestorer back( display, pt.x - ( DIALOG_SHADOW_OFFSET_X / 2 ), pt.y - ( DIALOG_SHADOW_OFFSET_X / 2 ), box.width(), box.height() );
     fheroes2::Text text;
 
     text.set( conf.MapsName(), fheroes2::FontType::normalWhite() );
