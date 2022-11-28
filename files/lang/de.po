@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-22 07:19+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -539,19 +539,6 @@ msgstr "Ermöglicht es Ihnen, den Kampfbildschirm anzupassen."
 msgid "System Options"
 msgstr "System-Optionen"
 
-msgid "Wait this unit"
-msgstr "Auf diesen Zug warten"
-
-msgid "Wait"
-msgstr "Warten"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Wartet die aktuelle Kreatur. Die aktuelle Kreatur verzögert ihren Zug, bis "
-"alle anderen Kreaturen dran waren."
-
 msgid "Skip this unit"
 msgstr "Diesen Zug aussetzen"
 
@@ -595,9 +582,6 @@ msgstr "Sind Sie sicher, dass Sie diese Armee entlassen wollen?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} setzt den Zug aus."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} wartet auf den Zug."
 
 #, fuzzy
 msgid "%{attacker} does %{damage} damage."
@@ -10043,3 +10027,19 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Wait this unit"
+#~ msgstr "Auf diesen Zug warten"
+
+#~ msgid "Wait"
+#~ msgstr "Warten"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Wartet die aktuelle Kreatur. Die aktuelle Kreatur verzögert ihren Zug, "
+#~ "bis alle anderen Kreaturen dran waren."
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} wartet auf den Zug."

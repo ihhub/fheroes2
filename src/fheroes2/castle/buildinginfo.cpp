@@ -406,7 +406,7 @@ void BuildingInfo::Redraw() const
 
         // build image
         if ( BUILD_NOTHING == building ) {
-            const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+            const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
             fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 ), display, area.x, area.y );
             return;
         }
@@ -476,7 +476,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
+    const int system = ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM );
 
     // setup cursor
     const CursorRestorer cursorRestorer( buttons, Cursor::POINTER );

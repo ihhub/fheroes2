@@ -158,7 +158,7 @@ namespace
         fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), scrollSpeedName );
 
         // Interface theme.
-        const bool isEvilInterface = conf.ExtGameEvilInterface();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
         const fheroes2::Sprite & interfaceThemeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
         if ( isEvilInterface ) {
             value = _( "Evil" );
@@ -170,7 +170,7 @@ namespace
         fheroes2::drawOption( rects[6], interfaceThemeIcon, _( "Interface Type" ), value );
 
         // Interface show/hide state.
-        const bool isHiddenInterface = conf.ExtGameHideInterface();
+        const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const fheroes2::Sprite & interfaceStateIcon
             = isHiddenInterface ? fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ) : fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
         if ( isHiddenInterface ) {
@@ -201,7 +201,7 @@ namespace
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.ExtGameEvilInterface();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -412,7 +412,7 @@ namespace fheroes2
                 action = openSystemOptionsDialog( saveConfiguration );
                 break;
             case DialogAction::ChangeInterfaceTheme: {
-                conf.SetEvilInterface( !conf.ExtGameEvilInterface() );
+                conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
                 saveConfiguration = true;
 
                 Interface::Basic & basicInterface = Interface::Basic::Get();
@@ -423,7 +423,7 @@ namespace fheroes2
                 break;
             }
             case DialogAction::UpdateInterface: {
-                conf.SetHideInterface( !conf.ExtGameHideInterface() );
+                conf.setHideInterface( !conf.isHideInterfaceEnabled() );
                 saveConfiguration = true;
 
                 Interface::Basic & basicInterface = Interface::Basic::Get();

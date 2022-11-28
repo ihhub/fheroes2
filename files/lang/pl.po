@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-22 07:19+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -539,19 +539,6 @@ msgstr "Pozwala na zmianę wyglądu ekranu walki."
 msgid "System Options"
 msgstr "Opcje systemowe"
 
-msgid "Wait this unit"
-msgstr "Zatrzymaj tę jednostkę"
-
-msgid "Wait"
-msgstr "Czekaj"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Aktualna jednostka czeka. Aktualna jednostka wstrzymuje się dopóki wszystkie "
-"inne jednostki nie ruszą się."
-
 msgid "Skip this unit"
 msgstr "Pomiń tę jednostkę"
 
@@ -594,9 +581,6 @@ msgstr "Czy na pewno chcesz dokończyć walkę w trybie automatycznym?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} pomija turę."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} czeka na swoją kolej."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -9824,3 +9808,19 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Wait this unit"
+#~ msgstr "Zatrzymaj tę jednostkę"
+
+#~ msgid "Wait"
+#~ msgstr "Czekaj"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Aktualna jednostka czeka. Aktualna jednostka wstrzymuje się dopóki "
+#~ "wszystkie inne jednostki nie ruszą się."
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} czeka na swoją kolej."

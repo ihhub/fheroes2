@@ -264,7 +264,7 @@ namespace
         while ( true ) {
             if ( !le.HandleEvents( true, true ) ) {
                 if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                    if ( Settings::ExtGameUseFade() ) {
+                    if ( Settings::isFadeEffectEnabled() ) {
                         fheroes2::FadeDisplay();
                     }
                     return fheroes2::GameMode::QUIT_GAME;
@@ -383,7 +383,7 @@ namespace
         Settings & conf = Settings::Get();
 
         conf.GetPlayers().SetStartGame();
-        if ( Settings::ExtGameUseFade() ) {
+        if ( Settings::isFadeEffectEnabled() ) {
             fheroes2::FadeDisplay();
         }
 

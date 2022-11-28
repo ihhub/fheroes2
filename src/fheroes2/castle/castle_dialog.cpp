@@ -223,7 +223,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // Fade screen.
-    if ( Settings::ExtGameUseFade() )
+    if ( Settings::isFadeEffectEnabled() )
         fheroes2::FadeDisplay();
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );

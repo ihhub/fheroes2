@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-21 04:05+0000\n"
+"POT-Creation-Date: 2022-11-25 12:00+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -536,19 +536,6 @@ msgstr "Îți permite să personalizezi ecranul de luptă."
 msgid "System Options"
 msgstr "System Options"
 
-msgid "Wait this unit"
-msgstr "Așteaptă această unitate"
-
-msgid "Wait"
-msgstr "Așteaptă"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Așteaptă creatura curentă. Creatura curentă își amână rândul până după ce "
-"toate celelalte creaturi și-au avut rândul."
-
 msgid "Skip this unit"
 msgstr "Sari peste această unitate"
 
@@ -591,9 +578,6 @@ msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} și-a sărit rândul."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} își așteaptă rândul."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -8672,3 +8656,19 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Wait this unit"
+#~ msgstr "Așteaptă această unitate"
+
+#~ msgid "Wait"
+#~ msgstr "Așteaptă"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Așteaptă creatura curentă. Creatura curentă își amână rândul până după ce "
+#~ "toate celelalte creaturi și-au avut rândul."
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} își așteaptă rândul."

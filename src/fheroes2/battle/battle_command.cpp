@@ -91,7 +91,7 @@ Battle::Command::Command( const CommandType cmd, const int param1, const int par
         break;
 
     case CommandType::MSG_BATTLE_SKIP:
-        *this << param2 << param1; // hard_skip, uid
+        *this << param1; // uid
         break;
 
     case CommandType::MSG_BATTLE_MOVE:
