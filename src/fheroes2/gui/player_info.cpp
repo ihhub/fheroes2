@@ -340,7 +340,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
 
         const int32_t maxClassNameTextWidth = classIcon.width() + 10;
         const fheroes2::Text text( Race::DoubleLinedString( info.player->GetRace() ), fheroes2::FontType::smallWhite() );
-        text.draw( info.classRoi.x - 10, info.classRoi.y + info.classRoi.height + 4, maxClassNameTextWidth, display );
+        text.draw( info.classRoi.x - 5, info.classRoi.y + info.classRoi.height + 4, maxClassNameTextWidth, display );
 
         // Display a handicap icon.
         uint32_t handicapIcnIndex = 0;
