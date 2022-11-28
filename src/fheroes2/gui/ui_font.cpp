@@ -3565,7 +3565,7 @@ namespace
             letter.setPosition( buttonFontOffset.x, buttonFontOffset.y );
         }
         // Decrease letter A's spacing to nearby letters.
-        released[33].setPosition( -3, buttonFontOffset.y );
+        released[33].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
 
         // -
         released[13].resize( 6 + offset * 2, 6 + offset * 2 );
@@ -3618,7 +3618,6 @@ namespace
         fheroes2::DrawLine( released[33], { offset + 8, offset + 6 }, { offset + 8, offset + 7 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[33], offset + 1, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[33], offset + 9, offset + 8, buttonGoodReleasedColor );
-        released[33].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
 
         // B
         released[34].resize( 11 + offset * 2, 10 + offset * 2 );
@@ -4043,6 +4042,8 @@ namespace
         released[136].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[143].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[169].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        // Offset A to remove space to other letters.
+        released[160].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
 
         // K with acute, Cyrillic KJE. Needs to have upper right arm adjusted.
         released[109].resize( released[43].width(), released[43].height() + 4 );
@@ -4090,7 +4091,6 @@ namespace
         fheroes2::SetPixel( released[160], offset + 8, offset + 7, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[160], offset + 1, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[160], offset + 9, offset + 8, buttonGoodReleasedColor );
-        released[160].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
 
         // r with small circle, Cyrillic BE
         released[161].resize( 10 + offset * 2, 10 + offset * 2 );
