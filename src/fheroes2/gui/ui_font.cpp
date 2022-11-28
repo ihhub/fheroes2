@@ -4277,11 +4277,17 @@ namespace
         fheroes2::DrawLine( released[188], { offset + 3, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[188], { offset + 9, offset + 6 }, { offset + 9, offset + 8 }, buttonGoodReleasedColor );
 
-        // Backwards C with line inside, Cyrillic E
-        released[189].resize( 10 + offset * 2, 10 + offset * 2 );
+        // Flipped C with line inside, Cyrillic E
+        released[189].resize( 8 + offset * 2, 10 + offset * 2 );
         released[189].reset();
-        fheroes2::Flip( released[35], 0, 0, released[189], 0, 0, released[35].width(), released[35].height(), true, false );
-        fheroes2::DrawLine( released[189], { offset + 4, offset + 4 }, { offset + 9, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[189], { offset + 1, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[189], { offset + 7, offset + 2 }, { offset + 7, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[189], { offset + 1, offset + 9 }, { offset + 6, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[189], { offset + 0, offset + 1 }, { offset + 0, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[189], { offset + 0, offset + 7 }, { offset + 0, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[189], { offset + 3, offset + 5 }, { offset + 6, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[189], offset + 1, offset + 2, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[189], offset + 6, offset + 1, buttonGoodReleasedColor );
 
         // IO, Cyrillic YU
         released[190].resize( released[41].width() + released[47].width(), 10 + offset * 2 );
