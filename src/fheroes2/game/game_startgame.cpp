@@ -178,7 +178,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             const bool openConstructionWindow
                 = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
 
-            result = ( *it )->OpenDialog( false, openConstructionWindow );
+            result = ( *it )->OpenDialog( openConstructionWindow );
 
             if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
                 if ( it == myCastles.begin() )
@@ -192,8 +192,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             }
         }
     }
-    else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        castle.OpenDialog( true, false );
+    else {
+        assert( 0 );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
