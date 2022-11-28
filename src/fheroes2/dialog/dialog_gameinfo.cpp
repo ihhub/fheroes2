@@ -49,8 +49,8 @@ namespace
     {
         SCENARIO_INFO_VALUES_BOX_WIDTH = 80,
         DIALOG_CONTENT_WIDTH = 420,
-        SCENARIO_INFO_BOX_RIGHT_MARGIN = 11,
-        SCENARIO_INFO_ROW_LEFT_MARGIN = 16,
+        SCENARIO_INFO_BOX_INNER_MARGIN = 11,
+        SCENARIO_INFO_ROW_OUTER_MARGIN = 16,
         // This is a shadow offset from the original ICN::SCENIBKG image.
         DIALOG_SHADOW_OFFSET_X = 16,
         DIALOG_SHADOW_OFFSET_Y = 4 + 12, // The ICN has been modified with a wider shadow
@@ -83,17 +83,17 @@ void Dialog::GameInfo()
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
     const fheroes2::Point dialogOffset( ( display.width() - window.width() - DIALOG_SHADOW_OFFSET_X ) / 2, ( ( display.height() - window.height() ) / 2 ) );
-    const fheroes2::Point shadowOffset( dialogOffset.x, dialogOffset.y );
+    const fheroes2::Point shadowOffset( dialogOffset.x + DIALOG_SHADOW_OFFSET_X, dialogOffset.y );
 
     fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, window.width(), window.height() );
 
-    fheroes2::Blit( window, display, shadowOffset.x, shadowOffset.y );
+    fheroes2::Blit( window, display, dialogOffset.x, shadowOffset.y );
 
     fheroes2::Text text( conf.MapsName(), fheroes2::FontType::normalWhite() );
     text.draw( shadowOffset.x, shadowOffset.y + 32, DIALOG_CONTENT_WIDTH, display );
 
     text.set( _( "Map\nDifficulty" ), fheroes2::FontType::smallWhite() );
-    text.draw( dialogOffset.x + SCENARIO_MAP_DIFFICULTY_OFFSET, dialogOffset.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
+    text.draw( dialogOffset.x + SCENARIO_INFO_ROW_OUTER_MARGIN + SCENARIO_MAP_DIFFICULTY_OFFSET, dialogOffset.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( _( "Game\nDifficulty" ), fheroes2::FontType::smallWhite() );
     text.draw( dialogOffset.x + SCENARIO_GAME_DIFFICULTY_OFFSET, dialogOffset.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
