@@ -4287,7 +4287,7 @@ namespace
         fheroes2::DrawLine( released[189], { offset + 1, offset + 9 }, { offset + 6, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[189], { offset + 0, offset + 1 }, { offset + 0, offset + 2 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[189], { offset + 0, offset + 7 }, { offset + 0, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[189], { offset + 3, offset + 5 }, { offset + 6, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[189], { offset + 3, offset + 5 }, { offset + 6, offset + 5 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[189], offset + 1, offset + 2, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[189], offset + 6, offset + 1, buttonGoodReleasedColor );
 
