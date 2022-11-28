@@ -253,6 +253,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
     const Maps::FileInfo & fi = conf.CurrentFileInfo();
 
     const uint32_t humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+
     // We need to render icon shadows and since shadows are drawn on left side from images we have to render images from right to left.
     for ( auto iter = crbegin(); iter != crend(); ++iter ) {
         const PlayerInfo & info = *iter;
