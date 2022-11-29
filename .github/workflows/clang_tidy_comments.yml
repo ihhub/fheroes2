@@ -10,6 +10,9 @@ jobs:
     name: Clang-Tidy comments
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - name: Download analysis results
