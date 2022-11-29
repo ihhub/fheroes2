@@ -342,7 +342,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         int32_t maxClassNameTextWidth;
         const int32_t iconWidth = classIcon.width();
         const char * raceName;
-        const int32_t classNameOffsetX = 0;
+        int32_t classNameOffsetX = 0;
 
         if ( playerCount > 4 ) {
             raceName = Race::DoubleLinedString( info.player->GetRace() );
