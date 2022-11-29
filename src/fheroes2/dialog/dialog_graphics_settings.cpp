@@ -66,13 +66,13 @@ namespace
         const fheroes2::Display & display = fheroes2::Display::instance();
         std::string resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().ExtGameEvilInterface() ? 17 : 16 ), _( "Resolution" ),
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), _( "Resolution" ),
                               std::move( resolutionName ) );
     }
 
     void drawMode( const fheroes2::Rect & optionRoi )
     {
-        const fheroes2::Sprite & originalIcon = fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().ExtGameEvilInterface() ? 17 : 16 );
+        const fheroes2::Sprite & originalIcon = fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 );
 
         if ( fheroes2::engine().isFullScreen() ) {
             fheroes2::Sprite icon = originalIcon;
@@ -114,7 +114,7 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.ExtGameEvilInterface();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
         const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::ESPANBKG_EVIL : ICN::ESPANBKG ), 0 );
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 

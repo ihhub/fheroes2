@@ -178,7 +178,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             const bool openConstructionWindow
                 = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
 
-            result = ( *it )->OpenDialog( false, openConstructionWindow );
+            result = ( *it )->OpenDialog( openConstructionWindow );
 
             if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
                 if ( it == myCastles.begin() )
@@ -192,8 +192,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             }
         }
     }
-    else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        castle.OpenDialog( true, false );
+    else {
+        assert( 0 );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
@@ -229,7 +229,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    bool needFade = Settings::ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+    bool needFade = Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize();
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
@@ -737,7 +737,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    if ( Settings::ExtGameUseFade() )
+    if ( Settings::isFadeEffectEnabled() )
         fheroes2::FadeDisplay();
 
     return res;
@@ -775,7 +775,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         ShowEventDayDialog();
 
-        if ( conf.ExtGameAutosaveBeginOfDay() ) {
+        if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
         }
     }
@@ -956,7 +956,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
-        const bool isHiddenInterface = conf.ExtGameHideInterface();
+        const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
         isCursorOverGamearea = false;
@@ -1181,7 +1181,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 }
             }
 
-            if ( !conf.ExtGameAutosaveBeginOfDay() ) {
+            if ( !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
                 Game::AutoSave();
             }
         }
