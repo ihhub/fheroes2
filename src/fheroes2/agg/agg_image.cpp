@@ -67,7 +67,7 @@ namespace
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
 
     const std::set<int> languageDependentIcnId{ ICN::BUYMAX,
-	                                            ICN::BUTTON_STANDARD_GAME,
+                                                ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
                                                 ICN::BUTTON_LARGE_CONFIG,
