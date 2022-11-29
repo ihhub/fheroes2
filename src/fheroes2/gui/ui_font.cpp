@@ -4041,7 +4041,7 @@ namespace
         released[109].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[136].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[143].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
-        released[160].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
+        released[160].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[169].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
 
         // K with acute, Cyrillic KJE. Needs to have upper right arm adjusted.
