@@ -8,12 +8,12 @@ on:
 jobs:
   comment:
     name: Clang-Tidy comments
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
       run:
         shell: bash
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - name: Download analysis results
       uses: actions/github-script@v6
