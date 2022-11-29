@@ -252,7 +252,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
     fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::FileInfo & fi = conf.CurrentFileInfo();
 
-    const uint32_t playerCount = conf.GetPlayers().GetActualColors();
+    const int32_t playerCount = conf.GetPlayers().GetColors();
     const uint32_t humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
     // We need to render icon shadows and since shadows are drawn on left side from images we have to render images from right to left.
@@ -339,15 +339,17 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         fheroes2::Blit( classIconShadow, display, info.classRoi.x - 5, info.classRoi.y + 3 );
         fheroes2::Blit( classIcon, display, info.classRoi.x, info.classRoi.y );
 
-        const int32_t maxClassNameTextWidth = classIcon.width() + 10;
-
+        int32_t maxClassNameTextWidth;
+        const int32_t iconWidth = classIcon.width();
         const char * raceName;
 
         if ( playerCount > 4 ) {
             raceName = Race::DoubleLinedString( info.player->GetRace() );
+            maxClassNameTextWidth = iconWidth + 10;
         }
         else {
             raceName = Race::String( info.player->GetRace() );
+            maxClassNameTextWidth = iconWidth + 60;
         }
         const fheroes2::Text text( raceName, fheroes2::FontType::smallWhite() );
         text.draw( info.classRoi.x - 5, info.classRoi.y + info.classRoi.height + 4, maxClassNameTextWidth, display );
