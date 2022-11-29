@@ -23,8 +23,6 @@
 #ifndef H2RACE_H
 #define H2RACE_H
 
-#include <string>
-
 namespace Race
 {
     enum
