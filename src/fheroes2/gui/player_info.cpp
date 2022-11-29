@@ -295,7 +295,6 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
 
         const int32_t maximumTextWidth = playerIcon.width() - 4;
         const int32_t fitWidth = Text::getFitWidth( info.player->GetName(), Font::SMALL, maximumTextWidth );
-
         name.Blit( info.playerTypeRoi.x + 2 + ( maximumTextWidth - fitWidth ) / 2, info.playerTypeRoi.y + info.playerTypeRoi.height - 1, maximumTextWidth );
 
         // 2. redraw class

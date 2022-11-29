@@ -48,6 +48,8 @@ const char * Race::String( int race )
     case Race::NONE:
         return _( "race|Neutral" );
     default:
+        // Did you add a new race? Add the logic above!
+        assert( 0 );
         break;
     }
 
@@ -76,7 +78,7 @@ const char * Race::DoubleLinedString( int race )
     case Race::NONE:
         return _( "doubleLinedRace|Neutral" );
     default:
-        // You are calling a race that doesn't exist.
+        // Did you add a new race? Add the logic above!
         assert( 0 );
         break;
     }
