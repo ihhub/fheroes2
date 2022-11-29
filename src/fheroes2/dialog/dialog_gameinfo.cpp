@@ -96,58 +96,58 @@ void Dialog::GameInfo()
     text.draw( shadowOffset.x, shadowOffset.y + 32, DIALOG_CONTENT_WIDTH, display );
 
     text.set( _( "Map\nDifficulty" ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + SCENARIO_MAP_DIFFICULTY_OFFSET, dialogOffset.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
+    text.draw( shadowOffset.x + SCENARIO_MAP_DIFFICULTY_OFFSET, shadowOffset.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( _( "Game\nDifficulty" ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + SCENARIO_GAME_DIFFICULTY_OFFSET, dialogOffset.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
+    text.draw( shadowOffset.x + SCENARIO_GAME_DIFFICULTY_OFFSET, shadowOffset.y + 56, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( _( "Rating" ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + SCENARIO_RATING_OFFSET, dialogOffset.y + 78 - text.height( SCENARIO_INFO_VALUES_BOX_WIDTH ), SCENARIO_INFO_VALUES_BOX_WIDTH, display );
+    text.draw( shadowOffset.x + SCENARIO_RATING_OFFSET, shadowOffset.y + 78 - text.height( SCENARIO_INFO_VALUES_BOX_WIDTH ), SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( _( "Map Size" ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, dialogOffset.y + 78 - text.height( SCENARIO_INFO_VALUES_BOX_WIDTH ), SCENARIO_INFO_VALUES_BOX_WIDTH, display );
+    text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, shadowOffset.y + 78 - text.height( SCENARIO_INFO_VALUES_BOX_WIDTH ), SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( Difficulty::String( conf.MapsDifficulty() ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + SCENARIO_MAP_DIFFICULTY_OFFSET, dialogOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
+    text.draw( shadowOffset.x + SCENARIO_MAP_DIFFICULTY_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( Difficulty::String( Game::getDifficulty() ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + SCENARIO_GAME_DIFFICULTY_OFFSET, dialogOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
+    text.draw( shadowOffset.x + SCENARIO_GAME_DIFFICULTY_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( std::to_string( Game::GetRating() ) + " %", fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + SCENARIO_RATING_OFFSET, dialogOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
+    text.draw( shadowOffset.x + SCENARIO_RATING_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( Maps::SizeString( conf.MapsSize().width ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, dialogOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
+    text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( conf.MapsDescription(), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, dialogOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
+    text.draw( shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, shadowOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Opponents" ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x, dialogOffset.y + 152, DIALOG_CONTENT_WIDTH, display );
+    text.draw( shadowOffset.x, shadowOffset.y + 152, DIALOG_CONTENT_WIDTH, display );
 
     text.set( _( "Class" ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x, dialogOffset.y + 229, DIALOG_CONTENT_WIDTH, display );
+    text.draw( shadowOffset.x, shadowOffset.y + 229, DIALOG_CONTENT_WIDTH, display );
 
     Interface::PlayersInfo playersInfo;
 
-    playersInfo.UpdateInfo( conf.GetPlayers(), fheroes2::Point( shadowOffset.x + PLAYER_INFO_ROW_OFFSET, dialogOffset.y + 165 ),
-                            fheroes2::Point( shadowOffset.x + PLAYER_INFO_ROW_OFFSET, dialogOffset.y + 240 ) );
+    playersInfo.UpdateInfo( conf.GetPlayers(), fheroes2::Point( shadowOffset.x + PLAYER_INFO_ROW_OFFSET, shadowOffset.y + 165 ),
+                            fheroes2::Point( shadowOffset.x + PLAYER_INFO_ROW_OFFSET, shadowOffset.y + 240 ) );
     playersInfo.RedrawInfo( true );
 
     text.set( _( "Victory\nConditions" ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, dialogOffset.y + 347, CONDITION_LABEL_WIDTH, display );
+    text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 347, CONDITION_LABEL_WIDTH, display );
 
     text.set( GameOver::GetActualDescription( conf.ConditionWins() ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, dialogOffset.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
+    text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Loss\nConditions" ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, dialogOffset.y + 392, CONDITION_LABEL_WIDTH, display );
+    text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 392, CONDITION_LABEL_WIDTH, display );
 
     text.set( GameOver::GetActualDescription( conf.ConditionLoss() ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, dialogOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
+    text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
 
     const int buttonOkIcnId = ICN::REQUESTS;
-    fheroes2::Button buttonOk( shadowOffset.x + OK_BUTTON_OFFSET - fheroes2::AGG::GetICN( buttonOkIcnId, 1 ).width() / 2, dialogOffset.y + 426, buttonOkIcnId, 1, 2 );
+    fheroes2::Button buttonOk( shadowOffset.x + OK_BUTTON_OFFSET - fheroes2::AGG::GetICN( buttonOkIcnId, 1 ).width() / 2, shadowOffset.y + 426, buttonOkIcnId, 1, 2 );
     buttonOk.draw();
 
     display.render();
