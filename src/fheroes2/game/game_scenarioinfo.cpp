@@ -322,6 +322,7 @@ namespace
                     Game::saveDifficulty( index );
                     playersInfo.RedrawInfo( false );
                     ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+                    buttonOk.draw();
                     display.render();
                 }
                 // playersInfo
