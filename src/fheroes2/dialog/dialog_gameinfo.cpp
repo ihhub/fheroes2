@@ -65,10 +65,10 @@ namespace
         SCENARIO_MAP_SIZE_OFFSET = SCENARIO_INFO_ROW_OFFSET + SCENARIO_INFO_VALUES_BOX_WIDTH * 3 + SCENARIO_INFO_BOX_INNER_MARGIN * 3,
         SCENARIO_DESCRIPTION_OFFSET = DIALOG_BORDER_WIDTH + SCENARIO_DESCRIPTION_OUTER_MARGIN + SCENARIO_DESCRIPTION_INNER_MARGIN,
         SCENARIO_DESCRIPTION_WIDTH = 350,
-        PLAYER_INFO_ROW_OFFSET = DIALOG_BORDER_WIDTH,
+        PLAYER_INFO_ROW_OFFSET = DIALOG_BORDER_WIDTH + 7,
         CONDITION_LABEL_OFFSET = DIALOG_BORDER_WIDTH,
         CONDITION_LABEL_WIDTH = 93,
-        CONDITION_DESCRIPTION_OFFSET = CONDITION_LABEL_OFFSET + CONDITION_LABEL_WIDTH + 10,
+        CONDITION_DESCRIPTION_OFFSET = CONDITION_LABEL_OFFSET + CONDITION_LABEL_WIDTH,
         CONDITION_DESCRIPTION_WIDTH = 278,
         CONFIG_BUTTON_OFFSET = CONDITION_LABEL_OFFSET,
         OK_BUTTON_OFFSET = DIALOG_CONTENT_WIDTH / 2,
@@ -120,7 +120,7 @@ void Dialog::GameInfo()
     text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, dialogOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( conf.MapsDescription(), fheroes2::FontType::smallWhite() );
-    text.draw( dialogOffset.x + SCENARIO_DESCRIPTION_OFFSET, dialogOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
+    text.draw( shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, dialogOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Opponents" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x, dialogOffset.y + 152, DIALOG_CONTENT_WIDTH, display );
@@ -147,7 +147,7 @@ void Dialog::GameInfo()
     text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, dialogOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
 
     const int buttonOkIcnId = ICN::REQUESTS;
-    fheroes2::Button buttonOk( shadowOffset.x + ( OK_BUTTON_OFFSET - fheroes2::AGG::GetICN( buttonOkIcnId, 1 ).width() ) / 2, dialogOffset.y + 426, buttonOkIcnId, 1, 2 );
+    fheroes2::Button buttonOk( shadowOffset.x + fheroes2::AGG::GetICN( buttonOkIcnId, 1 ).width() / 2, dialogOffset.y + 426, buttonOkIcnId, 1, 2 );
     buttonOk.draw();
 
     display.render();
