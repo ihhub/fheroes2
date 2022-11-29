@@ -4142,10 +4142,10 @@ namespace
         fheroes2::DrawLine( released[167], { offset + 1, offset + 0 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[167], { offset + 7, offset + 1 }, { offset + 7, offset + 3 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[167], { offset + 2, offset + 4 }, { offset + 6, offset + 4 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[167], { offset + 7, offset + 5 }, { offset + 7, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[167], { offset + 1, offset + 8 }, { offset + 6, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[167], { offset + 7, offset + 5 }, { offset + 7, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[167], { offset + 1, offset + 9 }, { offset + 6, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[167], offset + 0, offset + 1, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[167], offset + 0, offset + 7, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[167], offset + 0, offset + 8, buttonGoodReleasedColor );
 
         // Mirrored N, Cyrillic I
         released[168].resize( released[46].width(), released[46].height() );
