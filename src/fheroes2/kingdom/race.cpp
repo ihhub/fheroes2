@@ -76,7 +76,7 @@ const char * Race::DoubleLinedString( int race )
         return _( "doubleLinedRace|Neutral" );
     default:
         // You are calling a race that doesn't exist.
-        assert ( 0 );
+        assert( 0 );
         break;
     }
 }
