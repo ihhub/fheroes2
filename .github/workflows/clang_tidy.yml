@@ -37,7 +37,6 @@ jobs:
         mkdir clang-tidy-result
     - name: Analyze
       run: |
-        set -o pipefail
         git diff -U0 HEAD^ | clang-tidy-diff -p1 -path build -export-fixes clang-tidy-result/fixes.yml
     - name: Save PR metadata
       run: |
