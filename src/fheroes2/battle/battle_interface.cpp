@@ -507,7 +507,7 @@ fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const uint8_t horiz
 
     fheroes2::Image sf( w, h );
     sf.reset();
-    fheroes2::Rect rt( horizSpace, l - 1, w + 1 - horizSpace * 2, h - l * 2 + 4 );
+    fheroes2::Rect rt( horizSpace, l - 1, w + 1 - horizSpace * 2, 2 * l + 4 );
     for ( int i = 0; i < w / 2; i += 2 ) {
         for ( int x = 0; x < rt.width; ++x ) {
             for ( int y = 0; y < rt.height; ++y ) {
