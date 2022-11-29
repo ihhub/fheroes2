@@ -4043,7 +4043,6 @@ namespace
         released[143].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[160].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[169].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
-        released[179].setPosition( buttonFontOffset.x + 1, buttonFontOffset.y );
 
         // K with acute, Cyrillic KJE. Needs to have upper right arm adjusted.
         released[109].resize( released[43].width(), released[43].height() + 4 );
