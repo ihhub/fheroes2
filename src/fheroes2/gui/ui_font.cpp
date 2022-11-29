@@ -3604,7 +3604,7 @@ namespace
         fheroes2::SetPixel( released[19], offset + 0, offset + 8, buttonGoodReleasedColor );
 
         // A
-        released[33].resize( 12 + offset * 2, 10 + offset * 2 );
+        released[33].resize( 11 + offset * 2, 10 + offset * 2 );
         released[33].reset();
         fheroes2::DrawLine( released[33], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[33], { offset + 8, offset + 9 }, { offset + 10, offset + 9 }, buttonGoodReleasedColor );
