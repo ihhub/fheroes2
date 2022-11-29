@@ -316,6 +316,7 @@ namespace
 
                 // select difficulty
                 if ( 0 <= index ) {
+                    RedrawScenarioStaticInfo( rectPanel );
                     levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
