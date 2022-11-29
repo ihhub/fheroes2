@@ -146,7 +146,7 @@ void Dialog::GameInfo()
     text.set( GameOver::GetActualDescription( conf.ConditionLoss() ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, dialogOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
 
-    const int32_t buttonOkIcnId = ICN::REQUESTS;
+    const int buttonOkIcnId = ICN::REQUESTS;
     fheroes2::Button buttonOk( shadowOffset.x + ( OK_BUTTON_OFFSET - fheroes2::AGG::GetICN( buttonOkIcnId, 1 ).width() ) / 2, dialogOffset.y + 426, buttonOkIcnId, 1, 2 );
     buttonOk.draw();
 
