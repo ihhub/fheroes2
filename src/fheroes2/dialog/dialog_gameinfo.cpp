@@ -126,7 +126,7 @@ void Dialog::GameInfo()
     text.draw( shadowOffset.x, dialogOffset.y + 152, DIALOG_CONTENT_WIDTH, display );
 
     text.set( _( "Class" ), fheroes2::FontType::smallWhite() );
-    text.draw( shadowOffset.xX, dialogOffset.y + 229, DIALOG_CONTENT_WIDTH, display );
+    text.draw( shadowOffset.x, dialogOffset.y + 229, DIALOG_CONTENT_WIDTH, display );
 
     Interface::PlayersInfo playersInfo;
 
