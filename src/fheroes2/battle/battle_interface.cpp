@@ -1912,7 +1912,8 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( const Cell & cell : board ) {
             if ( cell.isReachableForHead() || cell.isReachableForTail() ) {
-                if ( conf.BattleShowGrid() ) { // shadow for 'grid on'
+                if ( conf.BattleShowGrid() ) {
+                    // When the grid is enabled in the settings - use the shadow that suits it.
                     fheroes2::Blit( sf_shadow_grid, _mainSurface, cell.GetPos().x, cell.GetPos().y );
                 }
                 else {
