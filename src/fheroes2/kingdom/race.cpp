@@ -77,8 +77,10 @@ const char * Race::DoubleLinedString( int race )
     default:
         // You are calling a race that doesn't exist.
         assert( 0 );
-        return;
+        break;
     }
+
+    return _( "doubleLinedRace|Neutral" );
 }
 
 int Race::Rand()
