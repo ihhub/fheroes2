@@ -53,9 +53,9 @@ namespace
         SCENARIO_INFO_ROW_OUTER_MARGIN = 16,
         DESCRIPTION_INNER_MARGIN = 6,
         SCENARIO_DESCRIPTION_OUTER_MARGIN = 11,
-        // This is a shadow offset from the original ICN::SCENIBKG image.
+        // This is the shadow offset from the original ICN::SCENIBKG image.
         DIALOG_SHADOW_OFFSET_X = 16,
-        DIALOG_SHADOW_OFFSET_Y = 4 + 12, // This ICN has been modified with a larger shadow
+        DIALOG_SHADOW_OFFSET_Y = 4 + 12, // This ICN has been modified with a 12 px larger shadow.
         DIALOG_BORDER_WIDTH = 18,
         // The following values are calculated using the previous values.
         SCENARIO_INFO_ROW_OFFSET = DIALOG_BORDER_WIDTH + SCENARIO_INFO_ROW_OUTER_MARGIN,
