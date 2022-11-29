@@ -4037,12 +4037,12 @@ namespace
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
 
-        // Offset letters with diacritics above them.
-        released[109].setPosition( buttonFontOffset.x, -3 );
-        released[136].setPosition( buttonFontOffset.x, -3 );
-        released[143].setPosition( buttonFontOffset.x, -3 );
-        released[169].setPosition( buttonFontOffset.x, -3 );
-        // Offset A to remove space to other letters.
+        // Offset symbols that either have diacritics or need less space to neighboring symbols.
+        released[109].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[136].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[143].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[160].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
+        released[169].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
 
         // K with acute, Cyrillic KJE. Needs to have upper right arm adjusted.
         released[109].resize( released[43].width(), released[43].height() + 4 );
