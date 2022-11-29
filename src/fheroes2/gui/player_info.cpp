@@ -252,7 +252,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
     fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::FileInfo & fi = conf.CurrentFileInfo();
 
-    const int32_t playerCount = conf.GetPlayers().GetColors();
+    const int playerCount = 5;
     const uint32_t humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
     // We need to render icon shadows and since shadows are drawn on left side from images we have to render images from right to left.
