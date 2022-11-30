@@ -2,29 +2,29 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)..\..\src\engine;$(MSBuildThisFileDirectory)..\..\src\fheroes2\gui;$(MSBuildThisFileDirectory)..\..\src\fheroes2\maps;$(MSBuildThisFileDirectory)..\..\src\fheroes2\kingdom;$(MSBuildThisFileDirectory)..\..\src\fheroes2\campaign;$(MSBuildThisFileDirectory)..\..\src\fheroes2\game;$(MSBuildThisFileDirectory)..\..\src\fheroes2\dialog;$(MSBuildThisFileDirectory)..\..\src\fheroes2\system;$(MSBuildThisFileDirectory)..\..\src\fheroes2\spell;$(MSBuildThisFileDirectory)..\..\src\fheroes2\monster;$(MSBuildThisFileDirectory)..\..\src\fheroes2\castle;$(MSBuildThisFileDirectory)..\..\src\fheroes2\agg;$(MSBuildThisFileDirectory)..\..\src\fheroes2\heroes;$(MSBuildThisFileDirectory)..\..\src\fheroes2\resource;$(MSBuildThisFileDirectory)..\..\src\fheroes2\ai;$(MSBuildThisFileDirectory)..\..\src\fheroes2\army;$(MSBuildThisFileDirectory)..\..\src\fheroes2\battle;$(MSBuildThisFileDirectory)..\..\src\fheroes2\h2d;$(MSBuildThisFileDirectory)..\..\src\fheroes2\objects;$(MSBuildThisFileDirectory)..\..\src\fheroes2\world;$(MSBuildThisFileDirectory)..\..\src\fheroes2\audio;$(MSBuildThisFileDirectory)..\..\src\fheroes2\image;$(MSBuildThisFileDirectory)..\..\src\thirdparty\libsmacker;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\engine;src\fheroes2\gui;src\fheroes2\maps;src\fheroes2\kingdom;src\fheroes2\campaign;src\fheroes2\game;src\fheroes2\dialog;src\fheroes2\system;src\fheroes2\spell;src\fheroes2\monster;src\fheroes2\castle;src\fheroes2\agg;src\fheroes2\heroes;src\fheroes2\resource;src\fheroes2\ai;src\fheroes2\army;src\fheroes2\battle;src\fheroes2\h2d;src\fheroes2\objects;src\fheroes2\world;src\fheroes2\audio;src\fheroes2\image;src\thirdparty\libsmacker;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(FHEROES2_BUILD_NUMBER)'!=''">BUILD_VERSION=$(FHEROES2_BUILD_NUMBER);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)..\..\src\fheroes2\system;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\fheroes2\system;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(FHEROES2_BUILD_NUMBER)'!=''">BUILD_VERSION=$(FHEROES2_BUILD_NUMBER);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist "$(MSBuildThisFileDirectory)..\..\data" (
+      <Command>if exist data (
     if not exist "$(OutDir)data" (
-        xcopy /Y /S /Q "$(MSBuildThisFileDirectory)..\..\data" "$(OutDir)data\"
+        xcopy /Y /S /Q data "$(OutDir)data\"
     )
 )
 
-if exist "$(MSBuildThisFileDirectory)..\..\maps" (
+if exist maps (
     if not exist "$(OutDir)maps" (
-        xcopy /Y /S /Q "$(MSBuildThisFileDirectory)..\..\maps" "$(OutDir)maps\"
+        xcopy /Y /S /Q maps "$(OutDir)maps\"
     )
 )
 
-xcopy /Y /S /Q "$(MSBuildThisFileDirectory)..\..\files\data" "$(OutDir)files\data\"
-xcopy /Y /Q "$(MSBuildThisFileDirectory)..\..\files\lang\*.mo" "$(OutDir)files\lang\"
-xcopy /Y /S /Q "$(MSBuildThisFileDirectory)..\..\files\soundfonts" "$(OutDir)files\soundfonts\"
+xcopy /Y /S /Q files\data "$(OutDir)files\data\"
+xcopy /Y /Q files\lang\*.mo "$(OutDir)files\lang\"
+xcopy /Y /S /Q files\soundfonts "$(OutDir)files\soundfonts\"
 
 %(Command)</Command>
     </PostBuildEvent>
