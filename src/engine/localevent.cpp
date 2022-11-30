@@ -1658,11 +1658,7 @@ bool LocalEvent::HandleWindowEvent( const SDL_WindowEvent & event )
         return true;
     }
 
-    if ( event.event == SDL_WINDOWEVENT_RESIZED ) {
-        return true;
-    }
-
-    return false;
+    return ( event.event == SDL_WINDOWEVENT_RESIZED );
 }
 
 void LocalEvent::HandleRenderDeviceResetEvent()
