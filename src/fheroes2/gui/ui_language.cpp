@@ -179,7 +179,7 @@ namespace fheroes2
         case SupportedLanguage::Hungarian:
             return _( "Hungarian" );
         case SupportedLanguage::Danish:
-            return _( "Hungarian" );
+            return _( "Danish" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
