@@ -1257,6 +1257,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, bool allowE
             break;
         case SDL_RENDER_DEVICE_RESET:
             HandleRenderDeviceResetEvent();
+            renderRoi = { 0, 0, display.width(), display.height() };
             break;
         case SDL_TEXTINPUT:
             // Keyboard events on Android should be processed here. Use event.text.text to extract text input.
