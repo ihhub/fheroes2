@@ -55,8 +55,6 @@
 #include "pal.h"
 #include "screen.h"
 
-#include "logging.h"
-
 namespace
 {
     const uint32_t globalLoopSleepTime{ 1 };
