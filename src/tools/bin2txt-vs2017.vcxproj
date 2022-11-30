@@ -50,7 +50,8 @@
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\VisualStudio\common.props" />
-    <Import Project="..\..\VisualStudio\tools\common.props" />
+    <Import Project="..\..\VisualStudio\tools\bin2txt\common.props" />
+    <Import Project="..\..\VisualStudio\tools\bin2txt\sources.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)'=='Debug-SDL1'" Label="PropertySheets">
     <Import Project="..\..\VisualStudio\Debug.props" />
@@ -64,8 +65,5 @@
   <ImportGroup Condition="'$(Configuration)'=='Release-SDL2'" Label="PropertySheets">
     <Import Project="..\..\VisualStudio\Release.props" />
   </ImportGroup>
-  <ItemGroup>
-    <ClCompile Include="bin2txt.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
