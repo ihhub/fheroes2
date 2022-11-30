@@ -5,7 +5,6 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>Full</Optimization>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>

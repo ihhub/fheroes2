@@ -5,7 +5,6 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WITH_DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

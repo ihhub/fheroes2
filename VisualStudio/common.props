@@ -12,6 +12,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatSpecificWarningsAsErrors>4018;4028;4100;4114;4189;4245;4267;4309;4319;4389;4552;4456;4458;4459;4554;4457;4592;4701;4702;4706;4715;4800;4834</TreatSpecificWarningsAsErrors>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
   </ItemDefinitionGroup>
 </Project>
