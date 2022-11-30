@@ -36,7 +36,7 @@ namespace fheroes2
         void reset();
 
         // Returns time in seconds.
-        double get() const;
+        double getS() const;
 
         // Returns rounded time in milliseconds.
         uint64_t getMs() const;

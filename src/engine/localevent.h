@@ -196,7 +196,7 @@ public:
 
     static void setEventProcessingStates();
 
-    bool HandleEvents( const bool sleepAfterEventProcessing = true, bool allowExit = false );
+    bool HandleEvents( const bool sleepAfterEventProcessing = true, const bool allowExit = false );
 
     bool MouseMotion() const
     {
@@ -380,7 +380,6 @@ private:
     fheroes2::Point mouse_wm; // wheel movement
 
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
-
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
 
     fheroes2::Rect _mouseCursorRenderArea;

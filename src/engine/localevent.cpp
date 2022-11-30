@@ -1162,7 +1162,7 @@ LocalEvent & LocalEvent::GetClean()
     return le;
 }
 
-bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, bool allowExit )
+bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool allowExit /* = false */ )
 {
     // Event processing might be computationally heavy.
     // We want to make sure that we do not slow down by going into sleep mode when it is not needed.
@@ -1332,6 +1332,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, bool allowE
 
         // Make sure not to delay any further if the processing time within this function was more than the expected waiting time.
         if ( eventProcessingTimer.getMs() < globalLoopSleepTime ) {
+            static_assert( globalLoopSleepTime == 1, "Make sure that you sleep for the difference between times since you change the sleep time." );
             SDL_Delay( globalLoopSleepTime );
         }
     }
@@ -1654,7 +1655,6 @@ bool LocalEvent::HandleWindowEvent( const SDL_WindowEvent & event )
 
     if ( event.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
         ResumeSounds();
-
         return true;
     }
 
