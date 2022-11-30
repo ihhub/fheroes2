@@ -35,6 +35,9 @@ jobs:
     name: CMake (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies (Linux)
