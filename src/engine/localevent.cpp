@@ -1165,11 +1165,13 @@ LocalEvent & LocalEvent::GetClean()
 bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, bool allowExit )
 {
     // Event processing might be computationally heavy.
-    // We want to make sure that we do not slow down the same by going into sleep mode when it is not needed.
+    // We want to make sure that we do not slow down by going into sleep mode when it is not needed.
     const fheroes2::Time eventProcessingTimer;
 
-    // We can have more than one event which requires rendering. We must render only once.
+    // We can have more than one event which requires rendering. We must render only once and only when sleeping is excepted.
     fheroes2::Rect renderRoi;
+
+    // Mouse area must be updated only once so we will use only the latest area for rendering.
     _mouseCursorRenderArea = {};
 
     fheroes2::Display & display = fheroes2::Display::instance();
