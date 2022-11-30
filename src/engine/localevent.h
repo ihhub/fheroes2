@@ -196,7 +196,7 @@ public:
 
     static void setEventProcessingStates();
 
-    bool HandleEvents( bool delay = true, bool allowExit = false );
+    bool HandleEvents( bool sleepAfterEventProcessing = true, bool allowExit = false );
 
     bool MouseMotion() const
     {
@@ -374,8 +374,6 @@ private:
     void ( *mouse_motion_hook_func )( int32_t, int32_t );
 
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
-
-    uint32_t loop_delay;
 
     enum
     {

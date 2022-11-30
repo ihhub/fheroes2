@@ -55,8 +55,12 @@
 #include "pal.h"
 #include "screen.h"
 
+#include "logging.h"
+
 namespace
 {
+    const uint32_t globalLoopSleepTime{ 1 };
+
     int getSDLKey( const fheroes2::Key key )
     {
         switch ( key ) {
@@ -970,7 +974,6 @@ LocalEvent::LocalEvent()
     , key_value( fheroes2::Key::NONE )
     , mouse_button( 0 )
     , mouse_motion_hook_func( nullptr )
-    , loop_delay( 1 )
 {}
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1161,22 +1164,15 @@ LocalEvent & LocalEvent::GetClean()
     return le;
 }
 
-bool LocalEvent::HandleEvents( bool delay, bool allowExit )
+bool LocalEvent::HandleEvents( bool sleepAfterEventProcessing, bool allowExit )
 {
-    if ( colorCycling.isRedrawRequired() ) {
-        // Looks like there is no explicit rendering so the code for color cycling was executed here.
-        if ( delay ) {
-            fheroes2::Time timeCheck;
-            fheroes2::Display::instance().render();
+    // Event processing might be computationally heavy.
+    // We want to make sure that we do not slow down the same by going into sleep mode when it is not needed.
+    const fheroes2::Time eventProcessingTimer;
 
-            if ( timeCheck.getMs() > loop_delay ) {
-                // Since rendering took more than waiting time so we should not wait.
-                delay = false;
-            }
-        }
-        else {
-            fheroes2::Display::instance().render();
-        }
+    if ( colorCycling.isRedrawRequired() ) {
+        // To maintain color cycling animation we need to render a frame with an updated palette.
+        fheroes2::Display::instance().render();
     }
 
     SDL_Event event;
@@ -1316,8 +1312,12 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     }
 #endif
 
-    if ( delay )
-        SDL_Delay( loop_delay );
+    if ( sleepAfterEventProcessing ) {
+        // Make sure not to delay any further if the processing time within this function was more than the expected waiting time.
+        if ( eventProcessingTimer.getMs() < globalLoopSleepTime ) {
+            SDL_Delay( globalLoopSleepTime );
+        }
+    }
 
     return true;
 }
