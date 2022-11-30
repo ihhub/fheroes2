@@ -382,7 +382,7 @@ namespace
 
         double getCurrentTrackPosition() const
         {
-            return _currentTrackTimer.get();
+            return _currentTrackTimer.getS();
         }
 
         void updateCurrentTrack( const uint64_t musicUID, const Music::PlaybackMode trackPlaybackMode )
