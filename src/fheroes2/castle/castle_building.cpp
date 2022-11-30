@@ -410,9 +410,7 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
         const fheroes2::Sprite & rightCaptainQuarters = fheroes2::AGG::GetICN( ICN::TWNBCAPT, 0 );
         const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
         fheroes2::drawCastleDialogBuilding( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle,
-                                            { dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width(),
-                                              dst_pt.y + rightCaptainQuarters.y() },
-                                            max, alpha );
+                                            { dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width(), dst_pt.y + rightCaptainQuarters.y() }, max, alpha );
     }
 }
 
