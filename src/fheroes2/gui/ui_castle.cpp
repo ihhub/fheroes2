@@ -194,7 +194,7 @@ namespace fheroes2
             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" )
         }
 
-        const Sprite & castleImage = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
+        const Sprite & castleImage = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
         fheroes2::Blit( castleImage, output, offset.x, offset.y );
 
         // Draw castle's marker.

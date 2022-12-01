@@ -101,7 +101,7 @@ namespace
 int Dialog::SelectSkillFromArena()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+    const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

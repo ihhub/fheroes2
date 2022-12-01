@@ -109,7 +109,7 @@ namespace Dialog
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.ExtGameEvilInterface();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         fheroes2::Display & display = fheroes2::Display::instance();
 

@@ -99,7 +99,7 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
     if ( showButtons )
         height += buttonHeight;
 
-    const bool evil = Settings::Get().ExtGameEvilInterface();
+    const bool evil = Settings::Get().isEvilInterfaceEnabled();
     _middleFragmentCount = ( height <= 2 * activeAreaHeight ? 0 : 1 + ( height - 2 * activeAreaHeight ) / activeAreaHeight );
     _middleFragmentHeight = height <= 2 * activeAreaHeight ? 0 : height - 2 * activeAreaHeight;
     const int32_t height_top_bottom = topHeight( evil ) + bottomHeight( evil );
@@ -127,7 +127,7 @@ Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool show
 
 void Dialog::NonFixedFrameBox::redraw()
 {
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int buybuild = isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD;
 
     const int32_t overallLeftWidth = leftWidth( isEvilInterface );

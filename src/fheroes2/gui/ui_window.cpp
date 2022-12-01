@@ -50,7 +50,7 @@ namespace fheroes2
 
     void StandardWindow::render()
     {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
         const fheroes2::Image renderedImage
             = fheroes2::Stretch( sprite, borderSize, 0, sprite.width() - borderSize, sprite.height() - borderSize, _windowArea.width, _windowArea.height );
         fheroes2::Blit( renderedImage, _output, _windowArea.x, _windowArea.y );

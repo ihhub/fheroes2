@@ -184,9 +184,9 @@ public:
     static LocalEvent & Get();
     static LocalEvent & GetClean(); // reset all previous event statuses and return a reference for events
 
-    void SetMouseMotionGlobalHook( void ( *pf )( int32_t, int32_t ) )
+    void setGlobalMouseMotionEventHook( std::function<fheroes2::Rect( const int32_t, const int32_t )> hook )
     {
-        mouse_motion_hook_func = pf;
+        _globalMouseMotionEventHook = std::move( hook );
     }
 
     void setGlobalKeyDownEventHook( std::function<void( const fheroes2::Key, const int32_t )> hook )
@@ -196,7 +196,7 @@ public:
 
     static void setEventProcessingStates();
 
-    bool HandleEvents( bool delay = true, bool allowExit = false );
+    bool HandleEvents( const bool sleepAfterEventProcessing = true, const bool allowExit = false );
 
     bool MouseMotion() const
     {
@@ -326,12 +326,14 @@ private:
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 
-    static void HandleWindowEvent( const SDL_WindowEvent & event );
+    // Returns true if frame rendering is required.
+    static bool HandleWindowEvent( const SDL_WindowEvent & event );
     static void HandleRenderDeviceResetEvent();
 
     void ProcessControllerAxisMotion();
 #else
-    static void HandleActiveEvent( const SDL_ActiveEvent & event );
+    // Returns true if frame rendering is required.
+    static bool HandleActiveEvent( const SDL_ActiveEvent & event );
 #endif
 
     enum flag_t
@@ -343,6 +345,12 @@ private:
         MOUSE_CLICKED = 0x0010, // mouse button has been clicked
         MOUSE_WHEEL = 0x0020, // mouse wheel has been rotated
         KEY_HOLD = 0x0040 // key on the keyboard is currently being held down
+    };
+
+    enum
+    {
+        CONTROLLER_L_DEADZONE = 4000,
+        CONTROLLER_R_DEADZONE = 25000
     };
 
     void SetModes( flag_t f )
@@ -371,17 +379,10 @@ private:
 
     fheroes2::Point mouse_wm; // wheel movement
 
-    void ( *mouse_motion_hook_func )( int32_t, int32_t );
-
+    std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
 
-    uint32_t loop_delay;
-
-    enum
-    {
-        CONTROLLER_L_DEADZONE = 4000,
-        CONTROLLER_R_DEADZONE = 25000
-    };
+    fheroes2::Rect _mouseCursorRenderArea;
 
     // used to convert user-friendly pointer speed values into more useable ones
     const double CONTROLLER_SPEED_MOD = 2000000.0;

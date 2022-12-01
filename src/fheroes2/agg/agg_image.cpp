@@ -1005,10 +1005,11 @@ namespace fheroes2
 
                 auto & imageArray = _icnVsSprite[id];
 
+                const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
+                const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
+
                 if ( id == ICN::SMALFONT ) {
-                    // Small font in official Polish GoG version has all letters to be shifted by 1 pixel lower.
-                    const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
-                    const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
+                    // Small font in official Polish GoG version has all letters shifted 1 pixel down.
                     if ( crc32 == 0xE9EC7A63 ) {
                         for ( Sprite & letter : imageArray ) {
                             letter.setPosition( letter.x(), letter.y() - 1 );
@@ -1026,7 +1027,7 @@ namespace fheroes2
                 }
 
                 // Some checks that we really have CP1251 font
-                int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
+                const int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
                 if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
@@ -1038,8 +1039,7 @@ namespace fheroes2
                     imageArray.erase( imageArray.begin() + 192 );
                 }
                 // German version uses CP1252
-                verifiedFontWidth = ( id == ICN::FONT ) ? 10 : 7;
-                if ( imageArray.size() == 103 && imageArray[99].width() == verifiedFontWidth ) {
+                if ( crc32 == 0x04745D1D || crc32 == 0xD0F0D852 ) {
                     imageArray.insert( imageArray.begin() + 96, 124, imageArray[0] );
                     std::swap( imageArray[164], imageArray[224] );
                     std::swap( imageArray[182], imageArray[225] );
@@ -1049,6 +1049,46 @@ namespace fheroes2
                     std::swap( imageArray[214], imageArray[221] );
                     std::swap( imageArray[220], imageArray[222] );
                     imageArray.erase( imageArray.begin() + 221, imageArray.end() );
+                }
+                // French version has its own special encoding but should conform to CP1252 too
+                if ( crc32 == 0xD9556567 || crc32 == 0x406967B9 ) {
+                    imageArray.insert( imageArray.begin() + 96, 160 - 32, imageArray[0] );
+                    imageArray[192 - 32] = imageArray[33];
+                    imageArray[199 - 32] = imageArray[35];
+                    imageArray[201 - 32] = imageArray[37];
+                    imageArray[202 - 32] = imageArray[37];
+                    imageArray[244 - 32] = imageArray[3];
+                    imageArray[251 - 32] = imageArray[4];
+                    imageArray[249 - 32] = imageArray[6];
+                    imageArray[226 - 32] = imageArray[10];
+                    imageArray[239 - 32] = imageArray[28];
+                    imageArray[238 - 32] = imageArray[30];
+                    imageArray[224 - 32] = imageArray[32];
+                    imageArray[231 - 32] = imageArray[62];
+                    imageArray[232 - 32] = imageArray[64];
+                    imageArray[239 - 32] = imageArray[91];
+                    imageArray[234 - 32] = imageArray[92];
+                    imageArray[238 - 32] = imageArray[93];
+                    imageArray[233 - 32] = imageArray[94];
+                    imageArray[238 - 32] = imageArray[95];
+                    imageArray.erase( imageArray.begin() + 252 - 32, imageArray.end() );
+                }
+                // Italian version uses CP1252
+                if ( crc32 == 0x219B3124 || crc32 == 0x1F3C3C74 ) {
+                    imageArray.insert( imageArray.begin() + 101, 155 - 32, imageArray[0] );
+                    imageArray[192 - 32] = imageArray[33];
+                    imageArray[200 - 32] = imageArray[37];
+                    imageArray[201 - 32] = imageArray[37];
+                    imageArray[204 - 32] = imageArray[41];
+                    imageArray[210 - 32] = imageArray[47];
+                    imageArray[217 - 32] = imageArray[53];
+                    imageArray[224 - 32] = imageArray[96];
+                    imageArray[232 - 32] = imageArray[97];
+                    imageArray[233 - 32] = imageArray[69];
+                    imageArray[236 - 32] = imageArray[98];
+                    imageArray[242 - 32] = imageArray[99];
+                    imageArray[249 - 32] = imageArray[100];
+                    imageArray.erase( imageArray.begin() + 250 - 32, imageArray.end() );
                 }
                 return true;
             }

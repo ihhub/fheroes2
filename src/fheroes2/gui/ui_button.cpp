@@ -232,7 +232,7 @@ namespace fheroes2
 
     ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )
     {
-        const int icnId = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+        const int icnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
 
         Point offset;
 

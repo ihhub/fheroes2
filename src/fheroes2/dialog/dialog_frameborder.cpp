@@ -114,7 +114,7 @@ const fheroes2::Rect & Dialog::FrameBorder::GetArea() const
 
 void Dialog::FrameBorder::RenderRegular( const fheroes2::Rect & dstrt )
 {
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
     const fheroes2::Image renderedImage
         = fheroes2::Stretch( sprite, SHADOWWIDTH, 0, sprite.width() - SHADOWWIDTH, sprite.height() - SHADOWWIDTH, dstrt.width, dstrt.height );
     fheroes2::Blit( renderedImage, fheroes2::Display::instance(), dstrt.x, dstrt.y );

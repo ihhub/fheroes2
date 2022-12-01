@@ -455,16 +455,16 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
     if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
         const int tileColor = tile.QuantityColor();
-        if ( Players::isFriends( color, tileColor ) ) {
-            // false only if alliance castles can't be visited
-            return color == tileColor;
-        }
-        return true;
+
+        // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
+        return color == tileColor || !Players::isFriends( color, tileColor );
     }
 
     // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
     if ( objectType == MP2::OBJ_HEROES ) {
         const Heroes * hero = tile.GetHeroes();
+
+        // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)
         return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
     }
 

@@ -134,7 +134,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 {
     // The active size of the window is 520 by 256 pixels
     fheroes2::Display & display = fheroes2::Display::instance();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const int viewarmy = isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY;
     const fheroes2::Sprite & sprite_dialog = fheroes2::AGG::GetICN( viewarmy, 0 );
