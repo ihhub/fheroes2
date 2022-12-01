@@ -3,7 +3,7 @@
 set -e
 
 PKG_FILE="android.zip"
-PKG_FILE_SHA256="f33350acc50d23d4c7a7d8c34ed57fb0198f27861e1f7fcc70542868a92eee6f"
+PKG_FILE_SHA256="7fdfbffbe6f97f0adce25dbfd638d43be672b6811bdd289d33ddce412d45971f"
 PKG_URL="https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/android-deps/$PKG_FILE"
 
 TMP_DIR="$(mktemp -d)"

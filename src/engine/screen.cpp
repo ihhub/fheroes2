@@ -1522,6 +1522,11 @@ namespace fheroes2
         _prevRoi = temp;
     }
 
+    void Display::updateNextRenderRoi( const Rect & roi )
+    {
+        _prevRoi = getBoundaryRect( _prevRoi, roi );
+    }
+
     void Display::_renderFrame( const Rect & roi ) const
     {
         bool updateImage = true;
