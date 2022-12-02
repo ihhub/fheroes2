@@ -81,6 +81,16 @@ namespace fheroes2
             // Do nothing.
         }
 
+        void setLinearScaling( const bool enable )
+        {
+            _linearScaling = enable;
+        }
+
+        bool isLinearScaling() const
+        {
+            return _linearScaling;
+        }
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
@@ -118,6 +128,8 @@ namespace fheroes2
 
     private:
         bool _isFullScreen;
+
+        bool _linearScaling;
     };
 
     class Display : public Image

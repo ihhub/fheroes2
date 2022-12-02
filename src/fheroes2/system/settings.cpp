@@ -78,7 +78,8 @@ namespace
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
         GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
-        GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000
+        GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
+        GLOBAL_SCREEN_LINEAR_SCALING = 0x20000000
     };
 }
 
@@ -335,6 +336,10 @@ bool Settings::Read( const std::string & filePath )
         }
     }
 
+    if ( config.Exists( "screen scaling type" ) ) {
+        setAutoSaveAtBeginningOfTurn( config.StrParams( "screen scaling type" ) == "linear" );
+    }
+
     return true;
 }
 
@@ -476,6 +481,9 @@ std::string Settings::String() const
 
     os << std::endl << "# enable cursor software rendering" << std::endl;
     os << "cursor soft rendering = " << ( _optGlobal.Modes( GLOBAL_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# scaling type: nearest (default) or linear" << std::endl;
+    os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_LINEAR_SCALING ) ? "linear" : "nearest" ) << std::endl;
 
     return os.str();
 }
@@ -776,6 +784,18 @@ void Settings::setEvilInterface( const bool enable )
     }
     else {
         _optGlobal.ResetModes( GLOBAL_EVIL_INTERFACE );
+    }
+}
+
+void Settings::setScreenLinearScaling( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_SCREEN_LINEAR_SCALING );
+        fheroes2::engine().setLinearScaling( true );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_SCREEN_LINEAR_SCALING );
+        fheroes2::engine().setLinearScaling( false );
     }
 }
 
