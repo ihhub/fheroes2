@@ -483,7 +483,7 @@ std::string Settings::String() const
     os << "cursor soft rendering = " << ( _optGlobal.Modes( GLOBAL_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
-    os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_NEAREST_SCALING ) ? "linear" : "nearest" ) << std::endl;
+    os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_NEAREST_SCALING ) ? "nearest" : "linear" ) << std::endl;
 
     return os.str();
 }
