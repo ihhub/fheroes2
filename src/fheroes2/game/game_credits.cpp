@@ -39,6 +39,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_text.h"
 
@@ -614,7 +615,10 @@ namespace
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Basso Vocal" ), "Reid Bruton" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Soprano Vocal" ), "Karin Meshagin" );
 
-        title.set( _( "Recorded at Green Street Studios" ), titleFontType );
+        std::string recordedString = _( "Recorded at %{recordingStudio}" );
+        StringReplace( recordedString, "%{recordingStudio}", "Green Street Studios" );
+
+        title.set( recordedString, titleFontType );
         title.draw( offsetX, offsetY, textWidth, output );
 
         return output;
