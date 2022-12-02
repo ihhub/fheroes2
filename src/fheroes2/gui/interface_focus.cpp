@@ -179,22 +179,22 @@ void Interface::Basic::RedrawFocus()
         if ( const auto phero = player->GetFocus<Heroes *>() ) {
             if ( !iconsPanel.IsSelected( ICON_HEROES ) ) {
                 iconsPanel.Select( *phero );
-                iconsPanel.SetRedraw( ICON_HEROES );            
             }
             if ( iconsPanel.IsSelected( ICON_CASTLES ) ) {
                 iconsPanel.ResetIcons( ICON_CASTLES );
                 iconsPanel.SetRedraw( ICON_CASTLES );
             }        
+            iconsPanel.SetRedraw( ICON_HEROES );
         }
         else if ( const auto pcastle = player->GetFocus<Castle *>() ) {
             if ( !iconsPanel.IsSelected( ICON_CASTLES ) ) {
                 iconsPanel.Select( *pcastle );
-                iconsPanel.SetRedraw( ICON_CASTLES );
             }
             if ( iconsPanel.IsSelected( ICON_HEROES ) ) {
                 iconsPanel.ResetIcons( ICON_HEROES );
                 iconsPanel.SetRedraw( ICON_HEROES );
             }                
+            iconsPanel.SetRedraw( ICON_CASTLES );
         }
         else {
             if ( iconsPanel.IsSelected( ICON_HEROES ) ) {
