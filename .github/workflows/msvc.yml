@@ -49,6 +49,13 @@ jobs:
         script/windows/install_packages.bat
         choco.exe install cygwin cyg-get -y
         cyg-get.bat make libiconv libunistring5 gettext-devel
+    - name: Download MSVC Redistributable package
+      run: |
+        $ErrorActionPreference = "Stop"
+        [void](New-Item -Path ".vcredist" -ItemType "directory")
+        # This should be a permanent link
+        Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vc_redist.${{ matrix.config.platform }}.exe" -OutFile ".vcredist\vcredist.exe"
+      shell: pwsh
     - uses: microsoft/setup-msbuild@v1
     - name: Generate version information
       run: |
