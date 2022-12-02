@@ -39,7 +39,6 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>fheroes2</RootNamespace>
     <TargetName>fheroes2</TargetName>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">
