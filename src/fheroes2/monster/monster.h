@@ -25,6 +25,7 @@
 #define H2MONSTER_H
 
 #include <cstdint>
+#include <set>
 
 #include "monster_info.h"
 #include "payment.h"
@@ -296,7 +297,7 @@ public:
         return fheroes2::getMonsterData( id ).icnId;
     }
 
-    static Monster Rand( const LevelType type );
+    static Monster Rand( const LevelType type, const std::set<int32_t> & bannedMonsterIDs );
 
     static uint32_t GetCountFromHitPoints( const Monster &, uint32_t );
 

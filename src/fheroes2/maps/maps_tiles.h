@@ -397,7 +397,7 @@ namespace Maps
 
         void SetTerrain( uint32_t sprite_index, uint32_t shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
 
-        static void UpdateMonsterInfo( Tiles & );
+        static void setNeutralMonster( Tiles & tile );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
         static void UpdateMonsterPopulation( Tiles & );
         static void UpdateRNDArtifactSprite( Tiles & );

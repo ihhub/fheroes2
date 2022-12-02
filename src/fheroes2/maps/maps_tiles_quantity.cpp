@@ -22,9 +22,13 @@
  ***************************************************************************/
 
 #include <cstdint>
+#include <set>
 
 #include "army_troop.h"
 #include "artifact.h"
+#include "campaign_data.h"
+#include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "color.h"
 #include "maps_tiles.h"
 #include "monster.h"
@@ -32,10 +36,43 @@
 #include "pairs.h"
 #include "rand.h"
 #include "resource.h"
+#include "settings.h"
 #include "skill.h"
 #include "spell.h"
 #include "week.h"
 #include "world.h"
+
+namespace
+{
+    std::set<int32_t> getBannedMonsters()
+    {
+        if ( !Settings::Get().isCampaignGameType() ) {
+            return {};
+        }
+
+        const auto & campaignData = Campaign::CampaignSaveData::Get();
+        if ( campaignData.getDifficulty() < Campaign::CampaignDifficulty::Hard ) {
+            // This only work for Hard difficulty to make player's life very difficult.
+            return {};
+        }
+
+        const Campaign::ScenarioInfoId & scenarioInfo = campaignData.getCurrentScenarioInfoId();
+        if ( !( scenarioInfo.campaignId == Campaign::CampaignID::ROLAND_CAMPAIGN && scenarioInfo.scenarioId == 6 ) &&
+             !( scenarioInfo.campaignId == Campaign::CampaignID::ARCHIBALD_CAMPAIGN && scenarioInfo.scenarioId == 9 ) ) {
+            return {};
+        }
+
+        std::set<int32_t> bannedMonsters;
+
+        for ( const auto & award : campaignData.getObtainedCampaignAwards() ) {
+            if ( award._type == Campaign::CampaignAwardData::AwardType::TYPE_CREATURE_ALLIANCE && award._subType == Monster::GREEN_DRAGON ) {
+                return { Monster::GREEN_DRAGON, Monster::RED_DRAGON, Monster::BLACK_DRAGON };
+            }
+        }
+
+        return bannedMonsters;
+    }
+}
 
 bool Maps::Tiles::QuantityIsValid() const
 {
@@ -688,7 +725,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_TREASURECHEST:
         if ( isWater() ) {
             SetObject( MP2::OBJ_WATERCHEST );
-            QuantityUpdate();
+            QuantityUpdate( isFirstLoad );
         }
         else {
             Rand::Queue percents( 4 );
@@ -846,20 +883,22 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_RNDARTIFACT3:
         // modify rnd artifact sprite
         UpdateRNDArtifactSprite( *this );
-        QuantityUpdate();
+        QuantityUpdate( isFirstLoad );
         break;
 
     case MP2::OBJ_RNDRESOURCE:
         // modify rnd resource sprite
         UpdateRNDResourceSprite( *this );
-        QuantityUpdate();
+        QuantityUpdate( isFirstLoad );
         break;
 
     case MP2::OBJ_MONSTER:
-        if ( world.CountWeek() > 1 )
+        if ( world.CountWeek() > 1 ) {
             UpdateMonsterPopulation( *this );
-        else
-            UpdateMonsterInfo( *this );
+        }
+        else {
+            setNeutralMonster( *this );
+        }
         break;
 
     case MP2::OBJ_RNDMONSTER:
@@ -867,8 +906,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_RNDMONSTER2:
     case MP2::OBJ_RNDMONSTER3:
     case MP2::OBJ_RNDMONSTER4:
-        // modify rnd monster sprite
-        UpdateMonsterInfo( *this );
+        // Replace random monster object by a real one.
+        setNeutralMonster( *this );
         break;
 
     case MP2::OBJ_ANCIENTLAMP:
@@ -968,29 +1007,31 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
     }
 }
 
-void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
+void Maps::Tiles::setNeutralMonster( Tiles & tile )
 {
     Monster mons;
 
     if ( MP2::OBJ_MONSTER == tile.GetObject() ) {
-        mons = Monster( tile.objectIndex + 1 ); // ICN::MONS32 start from PEASANT
+        // ICN::MONS32 start from PEASANT.
+        static_assert( Monster::PEASANT == 1, "Peasants must have an ID of 1." );
+        mons = Monster( tile.objectIndex + 1 );
     }
     else {
         switch ( tile.GetObject() ) {
         case MP2::OBJ_RNDMONSTER:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_ANY ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_ANY, getBannedMonsters() ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER1:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_1 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_1, getBannedMonsters() ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER2:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_2 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_2, getBannedMonsters() ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER3:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_3 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_3, getBannedMonsters() ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER4:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_4 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_4, getBannedMonsters() ).GetID();
             break;
         default:
             break;

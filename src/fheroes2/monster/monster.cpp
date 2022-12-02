@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <vector>
 
 #include "castle.h"
@@ -80,15 +81,15 @@ Monster::Monster( const int m )
         id = m;
     }
     else if ( MONSTER_RND1 == m )
-        id = Rand( LevelType::LEVEL_1 ).GetID();
+        id = Rand( LevelType::LEVEL_1, {} ).GetID();
     else if ( MONSTER_RND2 == m )
-        id = Rand( LevelType::LEVEL_2 ).GetID();
+        id = Rand( LevelType::LEVEL_2, {} ).GetID();
     else if ( MONSTER_RND3 == m )
-        id = Rand( LevelType::LEVEL_3 ).GetID();
+        id = Rand( LevelType::LEVEL_3, {} ).GetID();
     else if ( MONSTER_RND4 == m )
-        id = Rand( LevelType::LEVEL_4 ).GetID();
+        id = Rand( LevelType::LEVEL_4, {} ).GetID();
     else if ( MONSTER_RND == m )
-        id = Rand( LevelType::LEVEL_ANY ).GetID();
+        id = Rand( LevelType::LEVEL_ANY, {} ).GetID();
 }
 
 Monster::Monster( const Spell & sp )
@@ -590,10 +591,29 @@ Monster Monster::FromDwelling( int race, uint32_t dwelling )
     return Monster( UNKNOWN );
 }
 
-Monster Monster::Rand( const LevelType type )
+Monster Monster::Rand( const LevelType type, const std::set<int32_t> & bannedMonsterIDs )
 {
-    if ( type == LevelType::LEVEL_ANY )
-        return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
+    if ( type == LevelType::LEVEL_ANY ) {
+        if ( bannedMonsterIDs.empty() ) {
+            return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
+        }
+
+        std::vector<int32_t> allowedIds;
+        for ( int32_t id = PEASANT; id <= WATER_ELEMENT; ++id ) {
+            if ( bannedMonsterIDs.count( id ) == 0 ) {
+                allowedIds.emplace_back( id );
+            }
+        }
+
+        if ( allowedIds.empty() ) {
+            // Why did you ban all monsters?
+            assert( 0 );
+            return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
+        }
+
+        return Rand::Get( allowedIds );
+    }
+
     static std::vector<Monster> monstersVec[static_cast<int>( LevelType::LEVEL_4 )];
     if ( monstersVec[0].empty() ) {
         for ( uint32_t i = PEASANT; i <= WATER_ELEMENT; ++i ) {
@@ -602,6 +622,26 @@ Monster Monster::Rand( const LevelType type )
                 monstersVec[static_cast<int>( monster.GetRandomUnitLevel() ) - 1].push_back( monster );
         }
     }
+
+    if ( bannedMonsterIDs.empty() ) {
+        const std::vector<Monster> & requiredLevelMonsters = monstersVec[static_cast<int>( type ) - 1];
+
+        std::vector<Monster> monsters;
+        for ( const Monster & monster : requiredLevelMonsters ) {
+            if ( bannedMonsterIDs.count( monster.GetID() ) == 0 ) {
+                monsters.emplace_back( monster );
+            }
+        }
+
+        if ( monsters.empty() ) {
+            // Why did you ban all monsters?
+            assert( 0 );
+        }
+        else {
+            return Rand::Get( monsters );
+        }
+    }
+
     return Rand::Get( monstersVec[static_cast<int>( type ) - 1] );
 }
 
