@@ -59,10 +59,16 @@ jobs:
       env:
         # Permalink URL from https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
         VCREDIST_URL: https://aka.ms/vs/17/release/vc_redist.${{ matrix.config.platform }}.exe
-    - uses: microsoft/setup-msbuild@v1
+    - name: Verify MSVC Redistributable package
+      run: |
+        "%SIGNTOOL_DIR%\signtool.exe" verify /v /d /all /pa /r "Microsoft Root Certificate Authority" .vcredist\vcredist.exe
+      shell: cmd
+      env:
+        SIGNTOOL_DIR: C:\Program Files (x86)\Windows Kits\10\bin\x64
     - name: Generate version information
       run: |
         echo "FHEROES2_APP_VERSION=$(cat version.txt)" >> "$GITHUB_ENV"
+    - uses: microsoft/setup-msbuild@v1
     - name: Build
       run: |
         MSBuild.exe fheroes2-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
