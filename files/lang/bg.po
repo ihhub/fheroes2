@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-01 00:05+0000\n"
+"POT-Creation-Date: 2022-12-02 22:36+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3493,9 +3493,6 @@ msgstr "Сценарии"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Екип на Heroes of Might and Magic II: The Price of Loyalty"
 
-msgid "Cyberlore Studios"
-msgstr "Студия Cyberlore"
-
 msgid "Design Lead"
 msgstr "Ръководител дизайн"
 
@@ -3510,9 +3507,6 @@ msgstr "Ръководител Арт"
 
 msgid "Playtesters"
 msgstr "Тестери на играта"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr "Дизайнер"
@@ -3541,7 +3535,8 @@ msgstr "Басов вокал"
 msgid "Soprano Vocal"
 msgstr "Сопрано вокал"
 
-msgid "Recorded at Green Street Studios"
+#, fuzzy
+msgid "Recorded at %{recordingStudio}"
 msgstr "Записано в Green Street Studios"
 
 msgid "credits|Manual"
@@ -9767,6 +9762,9 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Cyberlore Studios"
+#~ msgstr "Студия Cyberlore"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Нека тази единица да изчака"

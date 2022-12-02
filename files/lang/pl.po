@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-01 00:05+0000\n"
+"POT-Creation-Date: 2022-12-02 22:36+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -3501,9 +3501,6 @@ msgstr "Scenariusze"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Zespół gry Heroes of Might and Magic II: The Price of Loyalty"
 
-msgid "Cyberlore Studios"
-msgstr "Cyberlore Studios"
-
 msgid "Design Lead"
 msgstr "Kierownik projektowania"
 
@@ -3518,9 +3515,6 @@ msgstr "Kierownik artystów"
 
 msgid "Playtesters"
 msgstr "Testerzy gry"
-
-msgid "New World Computing"
-msgstr "New World Computing"
 
 msgid "Designer"
 msgstr "Projektant"
@@ -3549,7 +3543,8 @@ msgstr "Bas (partie wokalne)"
 msgid "Soprano Vocal"
 msgstr "Sopran (partie wokalne)"
 
-msgid "Recorded at Green Street Studios"
+#, fuzzy
+msgid "Recorded at %{recordingStudio}"
 msgstr "Nagrano w Green Street Studios"
 
 msgid "credits|Manual"
@@ -9812,6 +9807,12 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Cyberlore Studios"
+#~ msgstr "Cyberlore Studios"
+
+#~ msgid "New World Computing"
+#~ msgstr "New World Computing"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Zatrzymaj tę jednostkę"
