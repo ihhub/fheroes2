@@ -337,7 +337,7 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "screen scaling type" ) ) {
-        setAutoSaveAtBeginningOfTurn( config.StrParams( "screen scaling type" ) == "linear" );
+        setScreenLinearScaling( config.StrParams( "screen scaling type" ) == "linear" );
     }
 
     return true;
