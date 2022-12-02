@@ -658,8 +658,8 @@ namespace
 
             if ( width_ != VITA_FULLSCREEN_WIDTH || height_ != VITA_FULLSCREEN_HEIGHT ) {
                 if ( isFullScreen ) {
-                    vita2d_texture_set_filters( _texBuffer, isLinearScaling() ? SCE_GXM_TEXTURE_FILTER_LINEAR : SCE_GXM_TEXTURE_FILTER_POINT,
-                                                isLinearScaling() ? SCE_GXM_TEXTURE_FILTER_LINEAR : SCE_GXM_TEXTURE_FILTER_POINT );
+                    vita2d_texture_set_filters( _texBuffer, isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR,
+                                                isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR );
                     if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
                         const float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
                         _destRect.width = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
@@ -1199,7 +1199,7 @@ namespace
                 return false;
             }
 
-            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isLinearScaling() ? "linear" : " nearest" ) ) == SDL_FALSE ) {
+            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? " nearest" : "linear" ) ) == SDL_FALSE ) {
                 ERROR_LOG( "Failed to set a linear scale hint for rendering." )
             }
 
