@@ -229,6 +229,69 @@ namespace
         }
         */
     }
+
+    void GetHalfArc( std::vector<int32_t> & arc, int32_t width, const int32_t height, const int32_t pow1, const int32_t pow2, const double pow2Ratio )
+    {
+        // For positive width the arc will start from y = 0, for negative it will end at y = 0.
+        const int32_t x0 = ( width < 0 ) ? width : 0;
+
+        // For positive height the arc top will be y = 0, for negative - arc will be flipped for 'y' coordinate.
+        // TODO: consider height offset from previous arc part.
+        const int32_t y0 = ( height < 0 ) ? height : 0;
+
+        // Coefficients for multipliers of 'pow1' and 'pow2' degrees.
+        const double k1 = ( height * ( 1 - pow2Ratio ) ) / std::pow( width, pow1 );
+        const double k2 = ( height * pow2Ratio ) / std::pow( width, pow2 );
+
+        width = std::abs( width );
+        // Calculate 'y' coordinates for the arc: y = k1*(x-x0)^pow1+k2*(x-x0)^pow2 and push it to the 'arc' vector.
+        for ( int32_t x = 0; x < width; ++x ) {
+            arc.push_back( static_cast<int32_t>( k1 * std::pow( ( x + x0 ), pow1 ) + k2 * std::pow( ( x + x0 ), pow2 ) - y0 ) );
+        }
+    }
+
+    fheroes2::Image DrawRainbow( const std::vector<int32_t> & rainbowArc, const int32_t rainbowThickness, const bool isVertical, const bool flipHorizontally )
+    {
+        // Rainbow image size should include the arc size plus the thickness of the rainbow.
+        const int32_t rainbowWidth = static_cast<int32_t>( rainbowArc.size() );
+        const int32_t rainbowHeight = static_cast<int32_t>( *std::max_element( rainbowArc.begin(), rainbowArc.end() ) ) + rainbowThickness;
+
+        // If the rainbow is vertical - swap width and height.
+        const int32_t rainbowImgWidth = isVertical ? rainbowHeight : rainbowWidth;
+        const int32_t rainbowImgHeight = isVertical ? rainbowWidth : rainbowHeight;
+        fheroes2::Image rainbow( rainbowImgWidth, rainbowImgHeight );
+        rainbow.reset();
+        std::vector<int32_t>::const_iterator pnt = rainbowArc.begin();
+
+        // Get the original good luck sprite, since it has a rainbow image which will be used to get line.
+        const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
+
+        // Get a single rainbow line from the center of the luckSprite.
+        fheroes2::Image croppedRainbow = fheroes2::Crop( luckSprite, luckSprite.width() / 2, 0, 1, rainbowThickness );
+        fheroes2::Image rainbowLine;
+        if ( isVertical ) {
+            rainbowLine = fheroes2::Image( croppedRainbow.height(), croppedRainbow.width() );
+            // For a vertical rainbow orientation the line needs to be transposed.
+            fheroes2::Transpose( croppedRainbow, rainbowLine );
+            if ( !flipHorizontally ) {
+                rainbowLine = fheroes2::Flip( rainbowLine, true, false );
+            }
+        }
+        else {
+            rainbowLine = std::move( croppedRainbow );
+        }
+
+        // Draw a rainbow image for each 'x' coordinate and corresponding '*pnt' value.
+        for ( int32_t x = 0; pnt != rainbowArc.end(); ++x, ++pnt ) {
+            // Set the 'x' and 'y' coordinates of the current rainbow pixel in the resulting rainbow image according to the rainbow direction.
+            const int32_t imgX = isVertical ? ( flipHorizontally ? *pnt : rainbowImgWidth - *pnt - rainbowThickness ) : ( flipHorizontally ? rainbowImgWidth - x : x );
+            const int32_t imgY = isVertical ? x : *pnt;
+
+            // Insert a rainbow line at the current arc position.
+            fheroes2::Copy( rainbowLine, 0, 0, rainbow, imgX, imgY, rainbowLine.width(), rainbowLine.height() );
+        }
+        return rainbow;
+    }
 }
 
 namespace Battle
@@ -521,67 +584,6 @@ fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
     }
 
     return sf;
-}
-
-void GetHalfArc( std::vector<int32_t> & arc, int32_t width, const int32_t height, const int32_t pow1, const int32_t pow2, const double pow2Ratio )
-{
-    // For positive width the arc will start from y = 0, for negative it will end at y = 0.
-    const int32_t x0 = ( width < 0 ) ? width : 0;
-
-    // For positive height the arc top will be y = 0, for negative - arc will be flipped for 'y' coordinate. (todo: consider height offset from previous arc part)
-    const int32_t y0 = ( height < 0 ) ? height : 0;
-
-    // Coefficients for multipliers of 'pow1' and 'pow2' degrees.
-    const double k1 = ( height * ( 1 - pow2Ratio ) ) / std::pow( width, pow1 );
-    const double k2 = ( height * pow2Ratio ) / std::pow( width, pow2 );
-
-    width = std::abs( width );
-    // Calculate 'y' coordinates for the arc: y = k1*(x-x0)^pow1+k2*(x-x0)^pow2 and push it to the 'arc' vector.
-    for ( int32_t x = 0; x < width; ++x ) {
-        arc.push_back( static_cast<int32_t>( k1 * std::pow( ( x + x0 ), pow1 ) + k2 * std::pow( ( x + x0 ), pow2 ) - y0 ) );
-    }
-}
-
-fheroes2::Sprite DrawRainbow( const std::vector<int32_t> & rainbowArc, const int32_t rainbowThickness, const bool isVertical, const bool flipHorizontally )
-{
-    // Rainbow image size should include the arc size plus the thickness of the rainbow.
-    const int32_t rainbowWidth = static_cast<int32_t>( rainbowArc.size() );
-    const int32_t rainbowHeight = static_cast<int32_t>( *std::max_element( rainbowArc.begin(), rainbowArc.end() ) ) + rainbowThickness;
-
-    // If the rainbow is vertical - swap width and height.
-    const int32_t rainbowImgWidth = isVertical ? rainbowHeight : rainbowWidth;
-    const int32_t rainbowImgHeight = isVertical ? rainbowWidth : rainbowHeight;
-    fheroes2::Sprite rainbow( rainbowImgWidth, rainbowImgHeight );
-    rainbow.reset();
-    std::vector<int32_t>::const_iterator pnt = rainbowArc.begin();
-
-    // Get the original good luck sprite, since it has a rainbow image which will be used to get line.
-    const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
-
-    // Declare an image for a single rainbow line from the center of the luckSprite.
-    fheroes2::Sprite rainbowLine;
-    if ( isVertical ) {
-        rainbowLine = fheroes2::Sprite( rainbowThickness, 1 );
-        // For a vertical rainbow orientation the line needs to be transposed.
-        fheroes2::Transpose( fheroes2::Crop( luckSprite, luckSprite.width() / 2, 0, 1, rainbowThickness ), rainbowLine );
-        if ( !flipHorizontally ) {
-            rainbowLine = fheroes2::Flip( rainbowLine, true, false );
-        }
-    }
-    else {
-        rainbowLine = fheroes2::Crop( luckSprite, luckSprite.width() / 2, 0, 1, rainbowThickness );
-    }
-
-    // Draw a rainbow image for each 'x' coordinate and corresponding '*pnt' value.
-    for ( int32_t x = 0; pnt != rainbowArc.end(); ++x, ++pnt ) {
-        // Set the 'x' and 'y' coordinates of the current rainbow pixel in the resulting rainbow image according to the rainbow direction.
-        const int32_t imgX = isVertical ? ( flipHorizontally ? *pnt : rainbowImgWidth - *pnt - rainbowThickness ) : ( flipHorizontally ? rainbowImgWidth - x : x );
-        const int32_t imgY = isVertical ? x : *pnt;
-
-        // Insert a rainbow line at the current arc position.
-        fheroes2::Blit( rainbowLine, rainbow, imgX, imgY );
-    }
-    return rainbow;
 }
 
 bool Battle::TargetInfo::isFinishAnimFrame( const TargetInfo & info )
@@ -3947,11 +3949,8 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
             pow2ratio = 0.0;
             pow4ratio = 0.5;
             rainbowLength = borderDistance;
-            // Formula for rainbowAscend corresponding to the original game was: 82.05 - 0.014 * rainbowLength.
             rainbowAscend = 75;
-            // Formula for rainbowDescend corresponding to the original game was: 0.158 * rainbowLength - 18.25.
             rainbowDescend = std::max( 1, static_cast<int32_t>( 0.1233 * rainbowLength + 0.7555 ) );
-            // Formula for rainbowTop corresponding to the original game was: 0.616 * rainbowLength + 31.5.
             rainbowTop = static_cast<int32_t>( 0.6498 * rainbowLength + 11.167 );
             drawOffset = std::max( 10, rainbowDescendPoint.y - rainbowDescend );
         }
@@ -3964,7 +3963,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         GetHalfArc( rainbowArc, -rainbowArcBegin.width, rainbowArcBegin.height, pow1, pow2, pow2ratio );
         GetHalfArc( rainbowArc, rainbowArcEnd.width, rainbowArcEnd.height, pow3, pow4, pow4ratio );
 
-        const fheroes2::Sprite luckSprite = DrawRainbow( rainbowArc, rainbowThickness, isVerticalRainbow, isRainbowFromRight );
+        const fheroes2::Image luckSprite = DrawRainbow( rainbowArc, rainbowThickness, isVerticalRainbow, isRainbowFromRight );
 
         // Rainbow animation draw step (in original game it is random and about 7-11 pixels).
         // We set the constant animation time for all rainbows: rainbowLength/30 fits the rainbow sound duration on '1' speed.
