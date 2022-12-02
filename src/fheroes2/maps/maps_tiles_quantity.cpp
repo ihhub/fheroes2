@@ -57,8 +57,8 @@ namespace
         }
 
         const Campaign::ScenarioInfoId & scenarioInfo = campaignData.getCurrentScenarioInfoId();
-        if ( !( scenarioInfo.campaignId == Campaign::CampaignID::ROLAND_CAMPAIGN && scenarioInfo.scenarioId == 6 ) &&
-             !( scenarioInfo.campaignId == Campaign::CampaignID::ARCHIBALD_CAMPAIGN && scenarioInfo.scenarioId == 9 ) ) {
+        if ( !( scenarioInfo.campaignId == Campaign::CampaignID::ROLAND_CAMPAIGN && scenarioInfo.scenarioId == 6 )
+             && !( scenarioInfo.campaignId == Campaign::CampaignID::ARCHIBALD_CAMPAIGN && scenarioInfo.scenarioId == 9 ) ) {
             return {};
         }
 
