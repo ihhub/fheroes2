@@ -267,7 +267,8 @@ namespace
         const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
 
         // Get a single rainbow line from the center of the luckSprite.
-        fheroes2::Image croppedRainbow = fheroes2::Crop( luckSprite, luckSprite.width() / 2, 0, 1, rainbowThickness );
+        fheroes2::Image croppedRainbow( 1, rainbowThickness );
+        fheroes2::Copy( luckSprite, luckSprite.width() / 2, 0, croppedRainbow, 0, 0, 1, rainbowThickness );
         fheroes2::Image rainbowLine;
         if ( isVertical ) {
             rainbowLine = fheroes2::Image( croppedRainbow.height(), croppedRainbow.width() );
