@@ -371,10 +371,10 @@ namespace Battle
         fheroes2::Rect _interfacePosition;
         fheroes2::Rect _surfaceInnerArea;
         fheroes2::Image _mainSurface;
-        fheroes2::Image sf_hexagon;
-        fheroes2::Image sf_shadow;
-        fheroes2::Image sf_shadow_grid;
-        fheroes2::Image sf_cursor;
+        fheroes2::Image _hexagonGrid;
+        fheroes2::Image _hexagonShadow;
+        fheroes2::Image _hexagonGridShadow;
+        fheroes2::Image _hexagonCursorShadow;
 
         int icn_cbkg;
         int icn_frng;

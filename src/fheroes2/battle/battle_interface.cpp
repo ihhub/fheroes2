@@ -499,7 +499,7 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     return sf;
 }
 
-fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const uint8_t horizSpace )
+fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horizSpace )
 {
     const int l = 13;
     const int w = CELLW;
@@ -1097,13 +1097,13 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     }
 
     // hexagon
-    sf_hexagon = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
+    _hexagonGrid = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
     // Shadow under the cursor: the first parameter is the shadow strength (smaller is stronger), the second is the distance between the hexagonal shadows.
-    sf_cursor = DrawHexagonShadow( 2, 1 );
+    _hexagonCursorShadow = DrawHexagonShadow( 2, 1 );
     // Hexagon shadow for the case when grid is disabled.
-    sf_shadow = DrawHexagonShadow( 4, 2 );
+    _hexagonShadow = DrawHexagonShadow( 4, 2 );
     // Shadow that fits the hexagon grid.
-    sf_shadow_grid = DrawHexagonShadow( 4, 1 );
+    _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
@@ -1830,7 +1830,7 @@ void Battle::Interface::RedrawCover()
             }
 
             if ( isApplicable ) {
-                fheroes2::Blit( sf_cursor, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+                fheroes2::Blit( _hexagonCursorShadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
             }
         }
     }
@@ -1892,9 +1892,11 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
         }
     }
 
-    if ( conf.BattleShowGrid() ) { // grid
+    const bool isGridEnabled = conf.BattleShowGrid();
+
+    if ( isGridEnabled ) { // grid
         for ( const Cell & cell : board ) {
-            fheroes2::Blit( sf_hexagon, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+            fheroes2::Blit( _hexagonGrid, _mainSurface, cell.GetPos().x, cell.GetPos().y );
         }
     }
 
@@ -1910,15 +1912,10 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
     }
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
+        const fheroes2::Image & shadowImage = isGridEnabled ? _hexagonGridShadow : _hexagonShadow;
         for ( const Cell & cell : board ) {
             if ( cell.isReachableForHead() || cell.isReachableForTail() ) {
-                if ( conf.BattleShowGrid() ) {
-                    // When the grid is enabled in the settings - use the shadow that suits it.
-                    fheroes2::Blit( sf_shadow_grid, _mainSurface, cell.GetPos().x, cell.GetPos().y );
-                }
-                else {
-                    fheroes2::Blit( sf_shadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
-                }
+                fheroes2::Blit( shadowImage, _mainSurface, cell.GetPos().x, cell.GetPos().y );
             }
         }
     }
