@@ -234,17 +234,13 @@ void Game::EnvironmentSoundMixer()
     fheroes2::Point center;
     fheroes2::Point tilePixelOffset;
 
-    Player * player = Settings::Get().GetPlayers().GetCurrent();
-    if ( player != nullptr ) {
-        Focus & focus = player->GetFocus();
-
-        const Heroes * hero = focus.GetHeroes();
-        if ( hero != nullptr ) {
-            center = hero->GetCenter();
-            tilePixelOffset = hero->getCurrentPixelOffset();
+    if ( const Player * player = Settings::Get().GetPlayers().GetCurrent() ) {
+        if ( const auto phero = player->GetFocus<Heroes *>() ) {
+            center = ( *phero )->GetCenter();
+            tilePixelOffset = ( *phero )->getCurrentPixelOffset();
         }
-        else if ( focus.GetCastle() ) {
-            center = focus.GetCastle()->GetCenter();
+        else if ( const auto pcastle = player->GetFocus<Castle *>() ) {
+            center = ( *pcastle )->GetCenter();
         }
         else {
             center = { world.w() / 2, world.h() / 2 };

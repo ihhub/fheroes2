@@ -753,7 +753,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     const KingdomCastles & myCastles = myKingdom.GetCastles();
 
     if ( isload ) {
-        updateFocus();
+        UpdateFocus();
     }
     else {
         ResetFocus( GameFocus::FIRSTHERO );

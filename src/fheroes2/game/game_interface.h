@@ -150,11 +150,11 @@ namespace Interface
             return controlPanel;
         }
 
-        void SetFocus( Heroes * );
-        void SetFocus( Castle * );
-        void ResetFocus( int );
+        void SetFocus( Heroes * hero );
+        void SetFocus( Castle * castle );
+        void ResetFocus( const int priority );
         void RedrawFocus();
-        void updateFocus();
+        void UpdateFocus();
 
         void EventSwitchHeroSleeping();
         fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );

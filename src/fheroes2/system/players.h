@@ -32,6 +32,7 @@
 
 #include "bitmodes.h"
 #include "color.h"
+#include <variant>
 
 class StreamBase;
 
@@ -61,38 +62,6 @@ enum
     FOCUS_UNSEL = 0,
     FOCUS_HEROES = 1,
     FOCUS_CASTLE = 2
-};
-
-struct Focus : std::pair<int, void *>
-{
-    Focus()
-        : std::pair<int, void *>( FOCUS_UNSEL, nullptr )
-    {}
-
-    void Reset()
-    {
-        first = FOCUS_UNSEL;
-        second = nullptr;
-    }
-    void Set( Castle * ptr )
-    {
-        first = FOCUS_CASTLE;
-        second = ptr;
-    }
-    void Set( Heroes * ptr )
-    {
-        first = FOCUS_HEROES;
-        second = ptr;
-    }
-
-    Castle * GetCastle()
-    {
-        return first == FOCUS_CASTLE && second ? static_cast<Castle *>( second ) : nullptr;
-    }
-    Heroes * GetHeroes()
-    {
-        return first == FOCUS_HEROES && second ? static_cast<Heroes *>( second ) : nullptr;
-    }
 };
 
 struct Control
@@ -172,9 +141,21 @@ public:
 
     std::string GetPersonalityString() const;
 
-    Focus & GetFocus()
+    template <class T>
+    T const * GetFocus() const
     {
-        return focus;
+        return std::get_if<T>( &focus );
+    }
+
+    template <class T>
+    void SetFocus( T object )
+    {
+        focus = object;
+    }
+
+    void ResetFocus()
+    {
+        focus = std::monostate{};
     }
 
     HandicapStatus getHandicapStatus() const
@@ -202,7 +183,7 @@ protected:
     int friends;
     std::string name;
     uint32_t id;
-    Focus focus;
+    std::variant<std::monostate, Heroes*, Castle*> focus;
     std::shared_ptr<AI::Base> _ai;
     HandicapStatus _handicapStatus;
 
