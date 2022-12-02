@@ -1199,7 +1199,7 @@ namespace
                 return false;
             }
 
-            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? " nearest" : "linear" ) ) == SDL_FALSE ) {
+            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
                 ERROR_LOG( "Failed to set a linear scale hint for rendering." )
             }
 
