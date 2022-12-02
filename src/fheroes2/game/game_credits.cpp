@@ -524,7 +524,7 @@ namespace
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
-        title.set( _( "Cyberlore Studios" ), titleFontType );
+        title.set( "Cyberlore Studios", titleFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;
@@ -575,7 +575,7 @@ namespace
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
-        title.set( _( "New World Computing" ), titleFontType );
+        title.set( "New World Computing", titleFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;
@@ -632,7 +632,7 @@ namespace
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
-        title.set( _( "New World Computing" ), titleFontType );
+        title.set( "New World Computing", titleFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;
