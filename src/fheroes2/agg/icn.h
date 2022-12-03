@@ -998,6 +998,9 @@ namespace ICN
         BUTTON_MULTIPLAYER_GAME,
         BUTTON_LARGE_CANCEL,
         BUTTON_LARGE_CONFIG,
+        BUTTON_ORIGINAL_CAMPAIGN,
+        BUTTON_EXPANSION_CAMPAIGN,
+        BUTTON_HOT_SEAT,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

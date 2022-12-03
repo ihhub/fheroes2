@@ -102,7 +102,7 @@ fheroes2::GameMode Game::LoadMulti()
 
     fheroes2::Button buttonHotSeat( buttonXPos, buttonYPos, ICN::BTNMP, 0, 1 );
     fheroes2::Button buttonNetwork( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNMP, 2, 3 );
-    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNMP, 8, 9 );
+    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     buttonHotSeat.draw();
     buttonCancelGame.draw();
@@ -170,10 +170,10 @@ fheroes2::GameMode Game::LoadGame()
     std::vector<fheroes2::Button> buttons( 4 );
     const size_t buttonCount = buttons.size();
 
-    buttons[0].setICNInfo( ICN::BTNNEWGM, 0, 1 );
-    buttons[1].setICNInfo( ICN::BTNNEWGM, 2, 3 );
-    buttons[2].setICNInfo( ICN::BTNNEWGM, 4, 5 );
-    buttons[3].setICNInfo( ICN::BTNNEWGM, 6, 7 );
+    buttons[0].setICNInfo( ICN::BUTTON_STANDARD_GAME, 0, 1 );
+    buttons[1].setICNInfo( ICN::BUTTON_CAMPAIGN_GAME, 0, 1 );
+    buttons[2].setICNInfo( ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
+    buttons[3].setICNInfo( ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
     const int32_t buttonYPos = 46;
