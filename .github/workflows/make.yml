@@ -12,7 +12,7 @@ jobs:
           os: ubuntu-latest
           dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
-          package_name: fheroes2_ubuntu_x64_SDL1.zip
+          package_name: fheroes2_ubuntu_amd64_SDL1.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-sdl1_dev
@@ -24,7 +24,7 @@ jobs:
           os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
-          package_name: fheroes2_ubuntu_x64_SDL2.zip
+          package_name: fheroes2_ubuntu_amd64_SDL2.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
@@ -33,8 +33,7 @@ jobs:
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON }
         - name: Linux ARM64 SDL2 Release
-          os: ubuntu-22.04
-          arch: arm64
+          os: ubuntu-latest
           dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 gettext libpng-dev:arm64
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
           package_name: fheroes2_ubuntu_arm64_SDL2.zip
@@ -42,8 +41,7 @@ jobs:
           release_name: Ubuntu (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux ARM64 SDL2 Debug
-          os: ubuntu-22.04
-          arch: arm64
+          os: ubuntu-latest
           dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 gettext libpng-dev:arm64
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
         - name: macOS SDL1
@@ -78,12 +76,7 @@ jobs:
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
-        sudo apt-get -y update
-        sudo apt-get -y install ${{ matrix.config.dependencies }}
-    - name: Install dependencies (Linux) ARM64
-      if: ${{ matrix.config.os == 'ubuntu-22.04' }}
-      run: |
-        if test ${{ matrix.config.arch }} = "arm64"
+        if [[ ${{ matrix.config.name }} = *ARM64* ]]
         then
           sudo sed -i -e 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
           sudo dpkg --add-architecture arm64

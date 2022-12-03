@@ -75,10 +75,15 @@ endif
 ifeq ($(OS),Darwin)
 PLATFORM := osx
 endif
+ifeq ($(OS),Linux)
+PLATFORM := all
 endif
-ifdef PLATFORM
+ifeq ($(OS),Haiku)
+PLATFORM := all
+endif
+endif
+
 include Makefile.$(PLATFORM)
-endif
 
 #
 # Build options for third-party libraries
