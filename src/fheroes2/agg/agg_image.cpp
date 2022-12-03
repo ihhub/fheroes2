@@ -507,6 +507,11 @@ namespace fheroes2
             case ICN::BUTTON_STANDARD_GAME: {
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish )
+                    {
+                        _icnVsSprite[id][i] = GetICN( ICN::BTNNEWGM, i );
+                        continue;
+                    }
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
                     // clean button.
