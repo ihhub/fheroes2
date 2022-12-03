@@ -3897,22 +3897,6 @@ namespace
         released[108].setPosition( buttonFontOffset.x, -3 );
         released[166].setPosition( buttonFontOffset.x, -3 );
 
-        // A
-        released[33].resize( 11 + offset * 2, 10 + offset * 2 );
-        released[33].reset();
-        fheroes2::DrawLine( released[33], { offset + 0, offset + 9 }, { offset + 2, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 8, offset + 9 }, { offset + 10, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 3, offset + 5 }, { offset + 7, offset + 5 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 3, offset + 3 }, { offset + 3, offset + 4 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 7, offset + 3 }, { offset + 7, offset + 4 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 4, offset + 1 }, { offset + 4, offset + 2 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 6, offset + 1 }, { offset + 6, offset + 2 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 3, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 2, offset + 6 }, { offset + 2, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 8, offset + 6 }, { offset + 8, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[33], offset + 1, offset + 8, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[33], offset + 9, offset + 8, buttonGoodReleasedColor );
-
         // S with caron. Only copied from S.
         released[106] = released[51];
 
@@ -4338,22 +4322,6 @@ namespace
         // Offset letters with diacritics above them.
         released[197 - 32].setPosition( buttonFontOffset.x, -2 );
         released[201 - 32].setPosition( buttonFontOffset.x, -3 );
-
-        // A
-        released[33].resize( 13 + offset * 2, 10 + offset * 2 );
-        released[33].reset();
-        fheroes2::DrawLine( released[33], { offset + 0, offset + 9 }, { offset + 3, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 9, offset + 9 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 5, offset + 5 }, { offset + 7, offset + 5 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 4, offset + 3 }, { offset + 4, offset + 5 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 8, offset + 3 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 5, offset + 1 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 7, offset + 1 }, { offset + 7, offset + 2 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 4, offset + 0 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 3, offset + 6 }, { offset + 3, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[33], { offset + 9, offset + 6 }, { offset + 9, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[33], offset + 2, offset + 8, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[33], offset + 10, offset + 8, buttonGoodReleasedColor );
 
         // A with circle on top
         released[197 - 32].resize( 13 + offset * 2, 12 + offset * 2 );
