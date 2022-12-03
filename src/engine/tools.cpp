@@ -310,23 +310,48 @@ namespace fheroes2
         return res;
     }
 
-    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const Point & max, const int32_t step )
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step )
     {
         std::vector<Point> res;
+        Point pt( from );
+        // The first projectile point is "from"
+        res.push_back( pt );
 
-        Point tempPoint( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
-        std::vector<Point> points = GetLinePoints( from, tempPoint, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        // Calculate the number of projectile trajectory points
+        const int32_t steps = ( to.x - from.x ) / step;
 
-        points = GetLinePoints( tempPoint, max, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        // Trajectory start point coordinates
+        const double x1 = from.x;
+        const double y1 = from.y;
 
-        tempPoint = { max.x + std::abs( to.x - max.x ) / 2, to.y - std::abs( to.y - max.y ) * 3 / 4 };
-        points = GetLinePoints( max, tempPoint, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        // Distance to the destination point along the axes
+        const double dx = to.x - x1;
+        const double dy = to.y - y1;
 
-        points = GetLinePoints( tempPoint, to, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        // The movement of the projectile is determined according to the parabolic
+        // throwing approximation. The first two parabola points are "from" and
+        // "to" with an exception that the second ("to") point is at the same
+        // height as the start point. The parabola third point "y" coordinate is
+        // set using the "arcHeight" parameter, which determines the height of the
+        // parabola arc. And its "x" coordinate is taken equal to half the path
+        // from the start point to the end point. Using this three point
+        // coordinates, a system of three linear equations (y=a*x*x+b*x+c) in
+        // three variables is solved by substituting these points "x" and "y".
+        // Considering that on an isometric battlefield, the target location above
+        // or below corresponds to a simple turn of the shooter to the left or
+        // right, a linear movement from point "from" to point "to" is added to the
+        // parabola ('dy/dx' in 'b' constant and '-x1*dy/dx' in 'c' constant).
+
+        // Calculation of the parabola equation coefficients
+        const double a = 4 * arcHeight / dx / dx;
+        const double b = dy / dx - a * ( dx + 2 * x1 );
+        const double c = y1 + a * x1 * ( dx + x1 ) - x1 * dy / dx;
+
+        for ( int32_t i = 1; i <= steps; ++i ) {
+            pt.x += step;
+            pt.y = static_cast<int32_t>( std::lround( a * pt.x * pt.x + b * pt.x + c ) );
+            res.push_back( pt );
+        }
 
         return res;
     }
@@ -343,6 +368,14 @@ namespace fheroes2
 
     Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 )
     {
+        if ( rt2.width == 0 && rt2.height == 0 ) {
+            return rt1;
+        }
+
+        if ( rt1.width == 0 && rt1.height == 0 ) {
+            return rt2;
+        }
+
         const int32_t x = std::min( rt1.x, rt2.x );
         const int32_t y = std::min( rt1.y, rt2.y );
         const int32_t width = std::max( rt1.x + rt1.width, rt2.x + rt2.width ) - x;

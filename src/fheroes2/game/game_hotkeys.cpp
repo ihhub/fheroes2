@@ -33,14 +33,6 @@
 #include <type_traits>
 #include <utility>
 
-#include <SDL_version.h>
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#include <SDL_keycode.h>
-#else
-#include <SDL_keysym.h>
-#endif
-
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -179,7 +171,6 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_AUTO_FINISH )] = { HotKeyCategory::BATTLE, "finish the battle in auto mode", fheroes2::Key::KEY_Q };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_OPTIONS )] = { HotKeyCategory::BATTLE, "battle options", fheroes2::Key::KEY_O };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SKIP )] = { HotKeyCategory::BATTLE, "skip turn in battle", fheroes2::Key::KEY_SPACE };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_WAIT )] = { HotKeyCategory::BATTLE, "wait in battle", fheroes2::Key::KEY_W };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SAVE_GAME )] = { HotKeyCategory::WORLD_MAP, "save game", fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEXT_HERO )] = { HotKeyCategory::WORLD_MAP, "next hero", fheroes2::Key::KEY_H };
@@ -353,7 +344,7 @@ void Game::HotKeysLoad( const std::string & filename )
 void Game::HotKeySave()
 {
     // Save the latest information into the file.
-    const std::string filename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
+    const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
 
     std::fstream file( filename.data(), std::fstream::out | std::fstream::trunc );
     if ( !file ) {
@@ -365,10 +356,10 @@ void Game::HotKeySave()
     file.write( data.data(), data.size() );
 }
 
-void Game::KeyboardGlobalFilter( int sdlKey, int mod )
+void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
 {
-    if ( fheroes2::getKeyFromSDL( sdlKey ) == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key
-         && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
+    if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key && !( modifier & fheroes2::KeyModifier::KEY_MODIFIER_ALT )
+         && !( modifier & fheroes2::KeyModifier::KEY_MODIFIER_CTRL ) ) {
         Settings & conf = Settings::Get();
         conf.setFullScreen( !fheroes2::engine().isFullScreen() );
         conf.Save( Settings::configFileName );

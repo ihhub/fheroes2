@@ -483,7 +483,14 @@ namespace
     {
         if ( next.GetObject() == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( next.GetCenter() );
-            return castle && !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
+            if ( castle == nullptr ) {
+                return false;
+            }
+
+            // If this is an allied castle, then we shouldn't be here at all
+            assert( hero.GetColor() == castle->GetColor() || !hero.isFriends( castle->GetColor() ) );
+
+            return !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
         }
         if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST ) {
             return true;

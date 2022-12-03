@@ -55,7 +55,7 @@ namespace
 bool Interface::IconsBar::IsVisible()
 {
     const Settings & conf = Settings::Get();
-    return !conf.ExtGameHideInterface() || conf.ShowIcons();
+    return !conf.isHideInterfaceEnabled() || conf.ShowIcons();
 }
 
 int32_t Interface::IconsBar::GetItemWidth()
@@ -80,7 +80,7 @@ void Interface::RedrawHeroesIcon( const Heroes & hero, int32_t sx, int32_t sy )
 
 void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fheroes2::Point & offset, const int32_t validItemCount ) const
 {
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
     fheroes2::Rect srcrt( icnadv.width() - RADARWIDTH - BORDERWIDTH, RADARWIDTH + 2 * BORDERWIDTH, RADARWIDTH / 2, 32 );
@@ -174,7 +174,7 @@ void Interface::CastleIcons::SetPos( int32_t px, int32_t py )
 {
     Castle * selectedCastle = isSelected() ? GetCurrent() : nullptr;
 
-    const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
+    const int icnscroll = Settings::Get().isEvilInterfaceEnabled() ? ICN::SCROLLE : ICN::SCROLL;
 
     _topLeftCorner = fheroes2::Point( px, py );
     SetTopLeft( _topLeftCorner );
@@ -230,13 +230,7 @@ void Interface::HeroesIcons::ActionCurrentDn()
 void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 {
     if ( item ) {
-        if ( item->Modes( Heroes::GUARDIAN ) ) {
-            Castle * castle = world.getCastle( item->GetCenter() );
-            if ( castle )
-                Game::OpenCastleDialog( *castle );
-        }
-        else
-            Game::OpenHeroesDialog( *item, false, true );
+        Game::OpenHeroesDialog( *item, false, true );
     }
 }
 
@@ -274,7 +268,7 @@ void Interface::HeroesIcons::SetPos( int32_t px, int32_t py )
 {
     Heroes * selectedHero = isSelected() ? GetCurrent() : nullptr;
 
-    const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
+    const int icnscroll = Settings::Get().isEvilInterfaceEnabled() ? ICN::SCROLLE : ICN::SCROLL;
 
     _topLeftCorner = fheroes2::Point( px, py );
     SetTopLeft( _topLeftCorner );
@@ -315,7 +309,10 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
 
 void Interface::IconsPanel::SavePosition()
 {
-    Settings::Get().SetPosIcons( GetRect().getPosition() );
+    Settings & conf = Settings::Get();
+
+    conf.SetPosIcons( GetRect().getPosition() );
+    conf.Save( Settings::configFileName );
 }
 
 void Interface::IconsPanel::SetRedraw( const icons_t type ) const
@@ -346,7 +343,7 @@ void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
 {
     int32_t iconsCount = 0;
 
-    if ( Settings::Get().ExtGameHideInterface() ) {
+    if ( Settings::Get().isHideInterfaceEnabled() ) {
         iconsCount = 2;
     }
     else {
@@ -370,7 +367,7 @@ void Interface::IconsPanel::Redraw()
     // is visible
     if ( IconsBar::IsVisible() ) {
         // redraw border
-        if ( Settings::Get().ExtGameHideInterface() )
+        if ( Settings::Get().isHideInterfaceEnabled() )
             BorderWindow::Redraw();
 
         heroesIcons.Redraw();
@@ -417,7 +414,7 @@ void Interface::IconsPanel::ResetIcons( const icons_t type )
     Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     if ( !kingdom.isControlAI() ) {
-        const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
+        const int icnscroll = Settings::Get().isEvilInterfaceEnabled() ? ICN::SCROLLE : ICN::SCROLL;
 
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
 

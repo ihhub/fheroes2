@@ -30,6 +30,7 @@
 #include <ostream>
 #include <random>
 #include <set>
+#include <utility>
 
 #include "army.h"
 #include "army_troop.h"
@@ -171,39 +172,6 @@ std::string Army::SizeString( uint32_t size )
     }
 
     return {};
-}
-
-std::pair<uint32_t, uint32_t> Army::SizeRange( const uint32_t count )
-{
-    if ( count < ARMY_SEVERAL ) {
-        return { ARMY_FEW, ARMY_SEVERAL };
-    }
-    if ( count < ARMY_PACK ) {
-        return { ARMY_SEVERAL, ARMY_PACK };
-    }
-    if ( count < ARMY_LOTS ) {
-        return { ARMY_PACK, ARMY_LOTS };
-    }
-    if ( count < ARMY_HORDE ) {
-        return { ARMY_LOTS, ARMY_HORDE };
-    }
-    if ( count < ARMY_THRONG ) {
-        return { ARMY_HORDE, ARMY_THRONG };
-    }
-    if ( count < ARMY_SWARM ) {
-        return { ARMY_THRONG, ARMY_SWARM };
-    }
-    if ( count < ARMY_ZOUNDS ) {
-        return { ARMY_SWARM, ARMY_ZOUNDS };
-    }
-    if ( count < ARMY_LEGION ) {
-        return { ARMY_ZOUNDS, ARMY_LEGION };
-    }
-    if ( count < 5000 ) {
-        return { ARMY_LEGION, 5000 };
-    }
-
-    return { 5000, UINT32_MAX };
 }
 
 Troops::Troops( const Troops & troops )
@@ -422,122 +390,6 @@ bool Troops::JoinTroop( const Troop & troop )
     }
 
     return JoinTroop( troop.GetMonster(), troop.GetCount(), false );
-}
-
-bool Troops::CanJoinTroops( const Troops & troops2 ) const
-{
-    if ( this == &troops2 )
-        return false;
-
-    Troops troops1;
-    troops1.Insert( *this );
-
-    for ( const_iterator it = troops2.begin(); it != troops2.end(); ++it ) {
-        if ( ( *it )->isValid() && !troops1.JoinTroop( **it ) ) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-void Troops::JoinTroops( Troops & troops2 )
-{
-    if ( this == &troops2 )
-        return;
-
-    for ( iterator it = troops2.begin(); it != troops2.end(); ++it )
-        if ( ( *it )->isValid() ) {
-            JoinTroop( **it );
-            ( *it )->Reset();
-        }
-}
-
-void Troops::MoveTroops( Troops & from, const int monsterIdToKeep )
-{
-    assert( this != &from );
-
-    // Combine troops of the same type in one slot to leave more room for new troops to join
-    MergeSameMonsterTroops();
-
-    assert( isValid() && from.isValid() );
-
-    if ( monsterIdToKeep != Monster::UNKNOWN ) {
-        // Find a troop stack in the destination stack set consisting of monsters we need to keep
-        const auto keepIter = std::find_if( begin(), end(), [monsterIdToKeep]( const Troop * troop ) {
-            assert( troop != nullptr );
-
-            return troop->isValid() && troop->GetID() == monsterIdToKeep;
-        } );
-
-        // Find a troop stack in the source stack set consisting of monsters of a different type than the monster we need to keep
-        const auto xchgIter = std::find_if( from.begin(), from.end(), [monsterIdToKeep]( const Troop * troop ) {
-            assert( troop != nullptr );
-
-            return troop->isValid() && troop->GetID() != monsterIdToKeep;
-        } );
-
-        // If we found both, then exchange the monster to keep in the destination stack set with the found troop stack in the
-        // source stack set to concentrate all the monsters to keep in the source stack set
-        if ( keepIter != end() && xchgIter != from.end() ) {
-            Troop * keep = *keepIter;
-            Troop * xchg = *xchgIter;
-
-            const uint32_t count = keep->GetCount();
-
-            keep->Reset();
-
-            if ( !JoinTroop( *xchg ) ) {
-                assert( 0 );
-            }
-
-            xchg->Reset();
-
-            if ( !from.JoinTroop( Monster( monsterIdToKeep ), count, false ) ) {
-                assert( 0 );
-            }
-        }
-    }
-
-    auto moveTroops = [this, &from, monsterIdToKeep]( const bool ignoreMonstersToKeep ) {
-        uint32_t stacksLeft = from.GetOccupiedSlotCount();
-
-        for ( Troop * troop : from ) {
-            assert( troop != nullptr );
-
-            if ( troop->isEmpty() ) {
-                continue;
-            }
-
-            if ( ignoreMonstersToKeep && troop->GetID() == monsterIdToKeep ) {
-                continue;
-            }
-
-            if ( stacksLeft == 1 ) {
-                // This is the last valid troop stack in the source stack set, try to join all but one monsters from this stack and
-                // then stop in any case
-                if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1, false ) ) {
-                    troop->SetCount( 1 );
-                }
-
-                break;
-            }
-
-            assert( stacksLeft > 1 );
-
-            if ( JoinTroop( *troop ) ) {
-                troop->Reset();
-
-                --stacksLeft;
-            }
-        }
-    };
-
-    // First of all, try to move all the troop stacks except the stacks of monsters that we need to keep
-    moveTroops( true );
-
-    // Then, try to move as much of monsters to keep as we can (except the last one), if there is still a place for them
-    moveTroops( false );
 }
 
 bool Troops::AllTroopsAreTheSame() const
@@ -1137,7 +989,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
             const Troop & troop = capturedObject.GetTroop();
 
             if ( troop.isValid() ) {
-                ArrangeForBattle( troop.GetMonster(), troop.GetCount(), capturedObject.GetSplit() );
+                ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), false );
             }
         }
         else {
@@ -1381,6 +1233,102 @@ void Army::JoinStrongestFromArmy( Army & giver )
     JoinStrongest( giver, saveLast );
 }
 
+void Army::MoveTroops( Army & from, const int monsterIdToKeep )
+{
+    assert( this != &from );
+
+    // Combine troops of the same type in one slot to leave more room for new troops to join
+    MergeSameMonsterTroops();
+
+    // Heroes need to have at least one occupied slot in their army, while garrisons do not need this
+    const bool fromHero = from.GetCommander() && from.GetCommander()->isHeroes();
+#ifndef NDEBUG
+    const bool toHero = GetCommander() && GetCommander()->isHeroes();
+#endif
+
+    assert( ( !fromHero || from.isValid() ) && ( !toHero || isValid() ) );
+
+    if ( monsterIdToKeep != Monster::UNKNOWN ) {
+        // Find a troop stack in the destination stack set consisting of monsters we need to keep
+        const auto keepIter = std::find_if( begin(), end(), [monsterIdToKeep]( const Troop * troop ) {
+            assert( troop != nullptr );
+
+            return troop->isValid() && troop->GetID() == monsterIdToKeep;
+        } );
+
+        // Find a troop stack in the source stack set consisting of monsters of a different type than the monster we need to keep
+        const auto xchgIter = std::find_if( from.begin(), from.end(), [monsterIdToKeep]( const Troop * troop ) {
+            assert( troop != nullptr );
+
+            return troop->isValid() && troop->GetID() != monsterIdToKeep;
+        } );
+
+        // If we found both, then exchange the monster to keep in the destination stack set with the found troop stack in the
+        // source stack set to concentrate all the monsters to keep in the source stack set
+        if ( keepIter != end() && xchgIter != from.end() ) {
+            Troop * keep = *keepIter;
+            Troop * xchg = *xchgIter;
+
+            const uint32_t count = keep->GetCount();
+
+            keep->Reset();
+
+            if ( !JoinTroop( *xchg ) ) {
+                assert( 0 );
+            }
+
+            xchg->Reset();
+
+            if ( !from.JoinTroop( Monster( monsterIdToKeep ), count, false ) ) {
+                assert( 0 );
+            }
+        }
+    }
+
+    auto moveTroops = [this, &from, monsterIdToKeep, fromHero]( const bool ignoreMonstersToKeep ) {
+        uint32_t stacksLeft = from.GetOccupiedSlotCount();
+
+        for ( Troop * troop : from ) {
+            assert( troop != nullptr );
+
+            if ( troop->isEmpty() ) {
+                continue;
+            }
+
+            if ( ignoreMonstersToKeep && troop->GetID() == monsterIdToKeep ) {
+                continue;
+            }
+
+            if ( fromHero ) {
+                // If the source stack set belongs to a hero and this is the last valid troop stack in it,
+                // then try to join all but one monsters from this stack and then stop in any case
+                if ( stacksLeft == 1 ) {
+                    if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1, false ) ) {
+                        troop->SetCount( 1 );
+                    }
+
+                    break;
+                }
+
+                assert( stacksLeft > 1 );
+            }
+
+            if ( JoinTroop( *troop ) ) {
+                troop->Reset();
+
+                --stacksLeft;
+            }
+        }
+    };
+
+    // First of all, try to move all the troop stacks except the stacks of monsters that we need to keep
+    moveTroops( true );
+
+    // Then, try to move as much of monsters to keep as we can (except the last one, if we are moving them
+    // from the stack set that belongs to a hero), if there is still a place for them
+    moveTroops( false );
+}
+
 uint32_t Army::ActionToSirens() const
 {
     uint32_t experience = 0;
@@ -1443,30 +1391,33 @@ bool Army::isMeleeDominantArmy() const
     return meleeInfantry > other;
 }
 
-// draw MONS32 sprite in line, first valid = 0, count = 0
-void Army::drawMiniMonsLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count )
+void Army::drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width )
 {
-    fheroes2::drawMiniMonsters( troops, cx, cy, width, first, count, Skill::Level::EXPERT, false, true, fheroes2::Display::instance() );
+    fheroes2::drawMiniMonsters( troops, cx, cy, width, 0, 0, false, true, false, 0, fheroes2::Display::instance() );
 }
 
-void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact, bool isScouteView )
+void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
+                                     const bool isGarrisonView /* = false */, const uint32_t thievesGuildsCount /* = 0 */ )
 {
     const uint32_t count = troops.GetOccupiedSlotCount();
     const int offsetX = lineWidth / 6;
-    const int offsetY = compact ? 31 : 49;
+    const int offsetY = isCompact ? 31 : 49;
 
     fheroes2::Image & output = fheroes2::Display::instance();
 
     if ( count < 3 ) {
-        fheroes2::drawMiniMonsters( troops, posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView, output );
+        fheroes2::drawMiniMonsters( troops, posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, isCompact, isDetailedView, isGarrisonView,
+                                    thievesGuildsCount, output );
     }
     else {
         const int firstLineTroopCount = 2;
         const int secondLineTroopCount = count - firstLineTroopCount;
         const int secondLineWidth = secondLineTroopCount == 2 ? lineWidth * 2 / 3 : lineWidth;
 
-        fheroes2::drawMiniMonsters( troops, posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, drawType, compact, isScouteView, output );
-        fheroes2::drawMiniMonsters( troops, posX, posY + offsetY, secondLineWidth, firstLineTroopCount, secondLineTroopCount, drawType, compact, isScouteView, output );
+        fheroes2::drawMiniMonsters( troops, posX + offsetX, posY, lineWidth * 2 / 3, 0, firstLineTroopCount, isCompact, isDetailedView, isGarrisonView,
+                                    thievesGuildsCount, output );
+        fheroes2::drawMiniMonsters( troops, posX, posY + offsetY, secondLineWidth, firstLineTroopCount, secondLineTroopCount, isCompact, isDetailedView, isGarrisonView,
+                                    thievesGuildsCount, output );
     }
 }
 

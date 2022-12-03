@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 #include <deque>
 #include <list>
 #include <map>
@@ -54,10 +55,10 @@
 
 namespace
 {
+    const int32_t minimalRequiredDraggingMovement = 10;
+
     struct RenderObjectInfo
     {
-        RenderObjectInfo() = default;
-
         RenderObjectInfo( fheroes2::Sprite in, const uint8_t value )
             : image( std::move( in ) )
             , alphaValue( value )
@@ -328,6 +329,8 @@ Interface::GameArea::GameArea( Basic & basic )
     , _prevIndexPos( 0 )
     , scrollDirection( 0 )
     , updateCursor( false )
+    , _mouseDraggingInitiated( false )
+    , _mouseDraggingMovement( false )
 {
     // Do nothing.
 }
@@ -736,7 +739,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( flag & LEVEL_ALL ) {
             for ( int32_t y = minY; y < maxY; ++y ) {
                 for ( int32_t x = minX; x < maxX; ++x ) {
-                    world.GetTiles( x, y ).RedrawPassable( dst, *this );
+                    world.GetTiles( x, y ).RedrawPassable( dst, friendColors, *this );
                 }
             }
         }
@@ -770,7 +773,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
 void Interface::GameArea::Scroll()
 {
-    const int32_t shift = 2 << Settings::Get().ScrollSpeed();
+    const int32_t scrollSpeed = Settings::Get().ScrollSpeed();
+    if ( scrollSpeed == SCROLL_SPEED_NONE ) {
+        // No scrolling.
+        scrollDirection = SCROLL_NONE;
+        return;
+    }
+
+    const int32_t shift = 2 << scrollSpeed;
     fheroes2::Point offset;
 
     if ( scrollDirection & SCROLL_LEFT ) {
@@ -789,7 +799,7 @@ void Interface::GameArea::Scroll()
 
     ShiftCenter( offset );
 
-    scrollDirection = 0;
+    scrollDirection = SCROLL_NONE;
 }
 
 void Interface::GameArea::SetRedraw() const
@@ -885,15 +895,35 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
-void Interface::GameArea::QueueEventProcessing()
+void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
 
+    if ( !le.MousePressLeft() ) {
+        _mouseDraggingInitiated = false;
+        _mouseDraggingMovement = false;
+    }
+    else if ( !_mouseDraggingInitiated ) {
+        _mouseDraggingInitiated = true;
+        _startMouseDragPosition = mp;
+    }
+    else if ( ( std::abs( _startMouseDragPosition.x - mp.x ) > minimalRequiredDraggingMovement
+                || std::abs( _startMouseDragPosition.y - mp.y ) > minimalRequiredDraggingMovement )
+              && isCursorOverGamearea ) {
+        _mouseDraggingMovement = true;
+    }
+
+    if ( _mouseDraggingMovement ) {
+        SetCenterInPixels( getCurrentCenterInPixels() + _startMouseDragPosition - mp );
+        _startMouseDragPosition = mp;
+        return;
+    }
+
     int32_t index = GetValidTileIdFromPoint( mp );
 
-    // change cusor if need
-    if ( updateCursor || index != _prevIndexPos ) {
+    // change cursor if need
+    if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
         Cursor::Get().SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
@@ -904,7 +934,7 @@ void Interface::GameArea::QueueEventProcessing()
         return;
 
     const Settings & conf = Settings::Get();
-    if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
 
     const fheroes2::Point tileOffset = _topLeftTileOffset + mp - _windowROI.getPosition();

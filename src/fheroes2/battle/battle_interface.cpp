@@ -485,19 +485,21 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
 
-    fheroes2::DrawLine( sf, { r, 0 }, { 0, l }, colorId );
-    fheroes2::DrawLine( sf, { r, 0 }, { w, l }, colorId );
+    fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
+    fheroes2::SetPixel( sf, r, 1, colorId );
+    fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
 
     fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
     fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
 
-    fheroes2::DrawLine( sf, { r, h }, { 0, h - l }, colorId );
-    fheroes2::DrawLine( sf, { r, h }, { w, h - l }, colorId );
+    fheroes2::DrawLine( sf, { r - 1, h }, { 0, h - l }, colorId );
+    fheroes2::SetPixel( sf, r, h, colorId );
+    fheroes2::DrawLine( sf, { r + 1, h }, { w, h - l }, colorId );
 
     return sf;
 }
 
-fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
+fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horizSpace )
 {
     const int l = 13;
     const int w = CELLW;
@@ -505,17 +507,17 @@ fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
 
     fheroes2::Image sf( w, h );
     sf.reset();
-    fheroes2::Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
+    fheroes2::Rect rt( horizSpace, l - 1, w + 1 - horizSpace * 2, 2 * l + 4 );
     for ( int i = 0; i < w / 2; i += 2 ) {
-        --rt.y;
-        rt.height += 2;
-        rt.x += 2;
-        rt.width -= 4;
         for ( int x = 0; x < rt.width; ++x ) {
             for ( int y = 0; y < rt.height; ++y ) {
                 fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
             }
         }
+        --rt.y;
+        rt.height += 2;
+        rt.x += ( i == 0 ) ? 1 : 2;
+        rt.width -= ( i == 0 ) ? 2 : 4;
     }
 
     return sf;
@@ -1005,8 +1007,8 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
     }
 }
 
-Battle::Interface::Interface( Arena & a, int32_t center )
-    : arena( a )
+Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
+    : arena( battleArena )
     , _surfaceInnerArea( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , _mainSurface( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , icn_cbkg( ICN::UNKNOWN )
@@ -1019,6 +1021,7 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     , _interruptAutoBattleForColor( 0 )
     , _contourColor( 110 )
     , _brightLandType( false )
+    , _contourCycle( 0 )
     , _currentUnit( nullptr )
     , _movingUnit( nullptr )
     , _flyingUnit( nullptr )
@@ -1042,8 +1045,8 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     popup.setBattleUIRect( _interfacePosition );
 
     // cover
-    const bool trees = !Maps::ScanAroundObject( center, MP2::OBJ_TREES ).empty();
-    const Maps::Tiles & tile = world.GetTiles( center );
+    const bool trees = !Maps::ScanAroundObject( tileIndex, MP2::OBJ_TREES ).empty();
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
     const int groundType = tile.GetGround();
     _brightLandType
@@ -1094,9 +1097,13 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     }
 
     // hexagon
-    sf_hexagon = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
-    sf_cursor = DrawHexagonShadow( 2 );
-    sf_shadow = DrawHexagonShadow( 4 );
+    _hexagonGrid = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
+    // Shadow under the cursor: the first parameter is the shadow strength (smaller is stronger), the second is the distance between the hexagonal shadows.
+    _hexagonCursorShadow = DrawHexagonShadow( 2, 1 );
+    // Hexagon shadow for the case when grid is disabled.
+    _hexagonShadow = DrawHexagonShadow( 4, 2 );
+    // Shadow that fits the hexagon grid.
+    _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
@@ -1115,19 +1122,8 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     btn_auto.setPosition( area.x, area.y + area.height - settingsRect.height - autoRect.height );
     btn_settings.setPosition( area.x, area.y + area.height - settingsRect.height );
 
-    if ( conf.ExtBattleSoftWait() ) {
-        btn_wait.setICNInfo( ICN::BATTLEWAIT, 0, 1 );
-        btn_skip.setICNInfo( ICN::BATTLESKIP, 0, 1 );
-
-        const fheroes2::Rect waitRect = btn_wait.area();
-        const fheroes2::Rect skipRect = btn_skip.area();
-        btn_wait.setPosition( area.x + area.width - waitRect.width, area.y + area.height - skipRect.height - waitRect.height );
-        btn_skip.setPosition( area.x + area.width - skipRect.width, area.y + area.height - skipRect.height );
-    }
-    else {
-        btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
-        btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
-    }
+    btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
+    btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
 
     status.SetPosition( area.x + settingsRect.width, btn_auto.area().y );
 
@@ -1240,15 +1236,10 @@ void Battle::Interface::RedrawPartialFinish()
 
 void Battle::Interface::RedrawInterface()
 {
-    const Settings & conf = Settings::Get();
-
     status.Redraw( fheroes2::Display::instance() );
 
     btn_auto.draw();
     btn_settings.draw();
-
-    if ( conf.ExtBattleSoftWait() )
-        btn_wait.draw();
     btn_skip.draw();
 
     popup.Redraw();
@@ -1839,7 +1830,7 @@ void Battle::Interface::RedrawCover()
             }
 
             if ( isApplicable ) {
-                fheroes2::Blit( sf_cursor, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+                fheroes2::Blit( _hexagonCursorShadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
             }
         }
     }
@@ -1901,9 +1892,11 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
         }
     }
 
-    if ( conf.BattleShowGrid() ) { // grid
+    const bool isGridEnabled = conf.BattleShowGrid();
+
+    if ( isGridEnabled ) { // grid
         for ( const Cell & cell : board ) {
-            fheroes2::Blit( sf_hexagon, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+            fheroes2::Blit( _hexagonGrid, _mainSurface, cell.GetPos().x, cell.GetPos().y );
         }
     }
 
@@ -1919,9 +1912,10 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
     }
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
+        const fheroes2::Image & shadowImage = isGridEnabled ? _hexagonGridShadow : _hexagonShadow;
         for ( const Cell & cell : board ) {
             if ( cell.isReachableForHead() || cell.isReachableForTail() ) {
-                fheroes2::Blit( sf_shadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+                fheroes2::Blit( shadowImage, _mainSurface, cell.GetPos().x, cell.GetPos().y );
             }
         }
     }
@@ -2429,12 +2423,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     if ( le.KeyPress() ) {
         // Skip the turn
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
-            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), true );
-            humanturn_exit = true;
-        }
-        // Soft skip (wait)
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_WAIT ) ) {
-            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), !conf.ExtBattleSoftWait() );
+            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID() );
             humanturn_exit = true;
         }
         // Battle options
@@ -2524,16 +2513,6 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 
         if ( le.MousePressRight() ) {
             Dialog::Message( _( "System Options" ), _( "Allows you to customize the combat screen." ), Font::BIG );
-        }
-    }
-    else if ( conf.ExtBattleSoftWait() && le.MouseCursor( btn_wait.area() ) ) {
-        cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Wait this unit" );
-        ButtonWaitAction( a );
-
-        if ( le.MousePressRight() ) {
-            Dialog::Message( _( "Wait" ), _( "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn." ),
-                             Font::BIG );
         }
     }
     else if ( le.MouseCursor( btn_skip.area() ) ) {
@@ -2820,18 +2799,6 @@ void Battle::Interface::ButtonSettingsAction()
     }
 }
 
-void Battle::Interface::ButtonWaitAction( Actions & a )
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    le.MousePressLeft( btn_wait.area() ) ? btn_wait.drawOnPress() : btn_wait.drawOnRelease();
-
-    if ( le.MouseClickLeft( btn_wait.area() ) && _currentUnit ) {
-        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID(), false );
-        humanturn_exit = true;
-    }
-}
-
 void Battle::Interface::ButtonSkipAction( Actions & a )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -2839,7 +2806,7 @@ void Battle::Interface::ButtonSkipAction( Actions & a )
     le.MousePressLeft( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_skip.area() ) && _currentUnit ) {
-        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID(), true );
+        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID() );
         humanturn_exit = true;
     }
 }
@@ -2989,15 +2956,9 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 
 void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 {
-    std::string msg;
-    if ( attacker.Modes( TR_HARDSKIP ) ) {
-        msg = _( "%{name} skip their turn." );
-    }
-    else {
-        msg = _( "%{name} wait their turn." );
-    }
-
+    std::string msg = _( "%{name} skip their turn." );
     StringReplace( msg, "%{name}", attacker.GetName() );
+
     status.SetMessage( msg, true );
 }
 
@@ -3998,7 +3959,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     AudioManager::PlaySound( M82::CATSND00 );
 
     // catapult animation
-    while ( le.HandleEvents( false ) && catapult_frame < 6 ) {
+    while ( le.HandleEvents( false ) && catapult_frame < 5 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_DELAY ) ) {
@@ -4008,19 +3969,43 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     }
 
     // boulder animation
-    fheroes2::Point pt1( 90, 220 );
+    fheroes2::Point pt1( 30, 290 );
     fheroes2::Point pt2 = Catapult::GetTargetPosition( target, hit );
-    fheroes2::Point max( 300, 20 );
+    const int32_t boulderArcStep = ( pt2.x - pt1.x ) / 30;
+
+    // set the projectile arc height for each castle target and a formula for an unknown target
+    int32_t boulderArcHeight;
+    switch ( target ) {
+    case Battle::CAT_WALL1:
+        boulderArcHeight = 220;
+        break;
+    case Battle::CAT_WALL2:
+    case Battle::CAT_BRIDGE:
+        boulderArcHeight = 216;
+        break;
+    case Battle::CAT_WALL3:
+        boulderArcHeight = 204;
+        break;
+    case Battle::CAT_WALL4:
+        boulderArcHeight = 208;
+        break;
+    case Battle::CAT_TOWER1:
+    case Battle::CAT_TOWER2:
+        boulderArcHeight = 206;
+        break;
+    case Battle::CAT_CENTRAL_TOWER:
+        boulderArcHeight = 290;
+        break;
+    default:
+        boulderArcHeight = static_cast<int32_t>( std::lround( 0.55 * getDistance( pt1, pt2 ) ) );
+    }
 
     pt1.x += area.x;
     pt2.x += area.x;
-    max.x += area.x;
     pt1.y += area.y;
     pt2.y += area.y;
-    max.y += area.y;
 
-    const fheroes2::Sprite & boulderFirstFrame = fheroes2::AGG::GetICN( ICN::BOULDER, 0 );
-    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, max, boulderFirstFrame.width() );
+    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, boulderArcHeight, boulderArcStep );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     uint32_t boulderFrameId = 0;
@@ -5273,7 +5258,7 @@ void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker,
         return;
     }
 
-    if ( !Settings::Get().ExtBattleShowDamage() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
+    if ( !Settings::Get().isBattleShowDamageInfoEnabled() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
         return;
     }
 

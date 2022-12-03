@@ -38,7 +38,6 @@
 #include "audio.h"
 #include "audio_manager.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "game_interface.h"
 #include "ground.h"
@@ -126,9 +125,15 @@ namespace
                 heroList.erase( heroList.begin() );
             }
 
-            // Assign the role and remove them so they aren't counted towards the median strength
+            // Assign the courier role and remove them so they aren't counted towards the median strength
             heroList.back().hero->setAIRole( Heroes::Role::COURIER );
             heroList.pop_back();
+
+            if ( heroList.size() > 2 ) {
+                // We still have a plenty of heroes. In this case lets create a Scout hero to uncover the fog.
+                heroList.back().hero->setAIRole( Heroes::Role::SCOUT );
+                heroList.pop_back();
+            }
         }
 
         assert( !heroList.empty() );
@@ -612,7 +617,7 @@ namespace AI
         for ( const AICastle & entry : sortedCastleList ) {
             Castle * castle = entry.castle;
             if ( castle && castle->isCastle() ) {
-                const Heroes * hero = castle->GetHeroes().Guest();
+                const Heroes * hero = castle->GetHero();
                 const int mapIndex = castle->GetIndex();
 
                 // Make sure there is no hero in castle already and we're not under threat while having other heroes.

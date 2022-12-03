@@ -60,7 +60,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // fade
-    if ( fade && Settings::ExtGameUseFade() )
+    if ( fade && Settings::isFadeEffectEnabled() )
         fheroes2::FadeDisplay();
 
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -80,7 +80,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
-    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
 
     // portrait
     dst_pt.x = cur_pt.x + 49;

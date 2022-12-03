@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-12-02 22:36+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -223,16 +223,22 @@ msgstr ""
 "Vollgraven reduserer forsvarsevnen til krigere som befinner seg i den med "
 "%{count} og halverer skrittene deres."
 
-msgid "Speed"
-msgstr "Hurtighet"
-
 msgid "Speed: %{speed}"
 msgstr "Hurtighet : %{speed}"
+
+msgid "Speed"
+msgstr "Hurtighet"
 
 msgid "Army Order"
 msgstr ""
 "Tur-\n"
 "rekkefølge"
+
+msgid "Off"
+msgstr "Av"
+
+msgid "On"
+msgstr "På"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -252,11 +258,21 @@ msgstr ""
 "Rute-\n"
 "markør"
 
-msgid "Off"
-msgstr "Av"
+msgid "Audio"
+msgstr "Lyd"
 
-msgid "On"
-msgstr "På"
+msgid "Settings"
+msgstr "Innstillinger"
+
+msgid "Configure"
+msgstr "Konfigurer"
+
+msgid "Hot Keys"
+msgstr "Hurtigtaster"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Skade"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Juster hastigheten til handlingene og animasjonene i kamp."
@@ -293,6 +309,23 @@ msgid ""
 msgstr ""
 "Velg om den ruten du peker på med markøren din skal utheves ved å gjøres "
 "mørkere."
+
+msgid "Change the audio settings of the game."
+msgstr "Endre lydinnstillingene til spillet."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Kontroller og endre alle hurtigtastene i spillet."
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+"Skru på denne innstillingen for å vise rekkefølgen av krigernes tur i kamp."
+
+msgid "Exit this menu."
+msgstr "Forlat denne menyen."
+
+msgid "Okay"
+msgstr "Bekreft"
 
 msgid "The enemy has surrendered!"
 msgstr "Fienden overga seg!"
@@ -502,19 +535,6 @@ msgstr "Lar deg skreddersy kampvinduet."
 msgid "System Options"
 msgstr "Systeminnstillinger"
 
-msgid "Wait this unit"
-msgstr "Avvent denne stryken"
-
-msgid "Wait"
-msgstr "Avvent"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Lar den nåværende skapningen vente. Den nåværende skapningen utsetter turen "
-"sin til etter alle andre skapninger har gjort turen sin."
-
 msgid "Skip this unit"
 msgstr "Hopp over denne styrken"
 
@@ -552,15 +572,11 @@ msgstr "Kamplogg"
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser en logg over alle krigernes trekk."
 
-# Avskjedige
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
 
 msgid "%{name} skip their turn."
 msgstr "Troppen med %{name} hoppet over turen sin."
-
-msgid "%{name} wait their turn."
-msgstr "Troppen med %{name} avventet turen sin."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -737,6 +753,10 @@ msgstr "Borgens %{name} skyter med styrken til %{count} bueskyttere"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "hver med en angrepsbonus på +%{attack}."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Speilbildet ble ødelagt!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1943,10 +1963,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-# Ikke mulig å verve?
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "Kan ikke verves. Feil ved flytting av besøkende til forsvarende."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Det kan ikke verves en helt fordi det befinner seg en i byen."
 
@@ -1972,7 +1988,6 @@ msgstr "Stråtekt hytte"
 msgid "Archery Range"
 msgstr "Skytebane"
 
-# Liten eller stor bokstav på bygningnavn?
 msgid "Upg. Archery Range"
 msgstr "Oppg. skytebane"
 
@@ -2245,7 +2260,8 @@ msgstr "Telt"
 msgid "Captain's Quarters"
 msgstr "Kapteinens kvarter"
 
-# Første nivå uten forkortelse ser både bedre ut og gjør at man vet hva forkortelsen er for senere uten å måtte høyre klikke osv.
+# Første nivå uten forkortelse ser både bedre ut og gjør at man vet hva forkortelsen er for senere uten å måtte
+# høyre klikke osv.
 msgid "Mage Guild, Level 1"
 msgstr "Magikerlaug"
 
@@ -2359,9 +2375,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Gå ut"
 
-msgid "Exit this menu."
-msgstr "Forlat denne menyen."
-
 msgid "Click to show next town."
 msgstr "Klikk for å vise neste by."
 
@@ -2373,16 +2386,6 @@ msgstr "Klikk for å vise forrige by."
 
 msgid "Show previous town"
 msgstr "Vis forrige by"
-
-msgid "Army joining"
-msgstr "Sammenslåing av hærer"
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
-"Disse to hærene kunne ikke slås sammen. Omorganiser styrkene og forsøk å "
-"flytte helten din til garnisonen igjen."
 
 msgid "This town may not be upgraded to a castle."
 msgstr "Denne byen kan ikke oppgraderes til borg."
@@ -2398,13 +2401,6 @@ msgstr "Forlat byen"
 
 msgid "Show Income"
 msgstr "Vis inntekt"
-
-msgid "Swap Heroes"
-msgstr "Bytt helter"
-
-# Hvilken funksjon? Overskrift for to helter som møtes?
-msgid "Meeting Heroes"
-msgstr "Møtende helter"
 
 msgid "View Hero"
 msgstr "Vis helt"
@@ -2665,9 +2661,6 @@ msgstr "Skift typen musikk."
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "Skru 3D-effekten av bakgrunnslyder på eller av."
 
-msgid "Okay"
-msgstr "Bekreft"
-
 msgid "Build a new ship:"
 msgstr "Bygg et nytt skip:"
 
@@ -2715,23 +2708,6 @@ msgstr ""
 "Bilde-\n"
 "innstillinger"
 
-msgid "Settings"
-msgstr "Innstillinger"
-
-msgid "Experimental"
-msgstr ""
-"Under\n"
-"utvikling"
-
-msgid "Audio"
-msgstr "Lyd"
-
-msgid "Configure"
-msgstr "Konfigurer"
-
-msgid "Hot Keys"
-msgstr "Hurtigtaster"
-
 msgid "Black & White"
 msgstr "Svart-hvit"
 
@@ -2744,27 +2720,6 @@ msgstr "Farget"
 msgid "Text Support"
 msgstr "Tekstmodus"
 
-msgid "Interface Type"
-msgstr "Grensesnitt"
-
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Auto Resolve"
-msgstr "Datastyrt"
-
-msgid "Auto, No Spells"
-msgstr "Data, ingen magi"
-
-msgid "autoBattle|Manual"
-msgstr "Manuell"
-
-msgid "Battles"
-msgstr "Kampstyring"
-
 msgid "Change the language of the game."
 msgstr "Endre språket til spillet."
 
@@ -2773,21 +2728,6 @@ msgstr "Velg spillspråk"
 
 msgid "Change the graphics settings of the game."
 msgstr "Endre bildeinnstillingene til spillet."
-
-msgid "Change the audio settings of the game."
-msgstr "Endre lydinnstillingene til spillet."
-
-msgid "Experimental game settings."
-msgstr "Innstillinger for spillet. Disse er fortsatt under utvikling."
-
-msgid "Toggle instant battle mode."
-msgstr "Skift modus for hurtigkamp."
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr "Kontroller og endre alle hurtigtastene i spillet."
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Velg den typen grensesnitt du ønsker."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr "Skru farget markør av eller på. Dette valget er kun for smak og behag."
@@ -2832,7 +2772,8 @@ msgstr ""
 "størrelse"
 
 # Evt Spillere
-# Motspillere og motstandere høres ut som dine egne motspillere og motstandere. Evt Konkurrenter men det høres feil setting ut. Motspillere osv passer dårlig når du har lagkamerater blant dem.
+# Motspillere og motstandere høres ut som dine egne motspillere og motstandere. Evt Konkurrenter men
+# det høres feil setting ut. Motspillere osv passer dårlig når du har allierte blant dem.
 msgid "Opponents"
 msgstr "Deltakere"
 
@@ -2918,12 +2859,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Vis ekstra informasjon som bilder per sekund (FPS) og tid."
 
-msgid "Set Guardian"
-msgstr "Plasser vokter"
-
-msgid "Your army too big!"
-msgstr "Hæren din er for stor!"
-
 msgid "Hot Keys:"
 msgstr "Hurtigtaster:"
 
@@ -2986,12 +2921,11 @@ msgstr "Mulige bytter"
 msgid "n/a"
 msgstr "n/a"
 
-# fix english string?
-msgid "guarded by "
-msgstr "Bevoktet av "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "bevoktet av %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "Bevoktet av "
 
 msgid "(available: %{count})"
 msgstr "(tilgjengelig: %{count})"
@@ -3002,7 +2936,6 @@ msgstr "(tom)"
 msgid "already learned"
 msgstr "allerede lært"
 
-# funksjon?
 msgid "already knows this skill"
 msgstr "kan allerede denne ferdigheten"
 
@@ -3285,9 +3218,6 @@ msgstr "Beskrivelse av det utvalgte brettet."
 msgid "Accept the choice made."
 msgstr "Bekreft valget og gå videre."
 
-msgid "Experimental Game Settings"
-msgstr "Eksperimentelle innstillinger"
-
 msgid "Jump"
 msgstr "Sprang"
 
@@ -3300,11 +3230,33 @@ msgstr "Skjul"
 msgid "Enemy Speed"
 msgstr "Fiendefart"
 
-# Kan ikke deles i to for øyeblikket.
+#, fuzzy
+msgid "Slow"
+msgstr "Traffikkork"
+
+msgid "Normal"
+msgstr "Middels"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Rask"
+
 msgid "Scroll Speed"
 msgstr ""
 "Panorerings-\n"
 "fart"
+
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
+
+msgid "Interface Type"
+msgstr "Grensesnitt"
 
 msgid "Hide"
 msgstr "Løs"
@@ -3314,6 +3266,18 @@ msgstr "Bundet"
 
 msgid "Interface"
 msgstr "Grensesnitt"
+
+msgid "Auto Resolve"
+msgstr "Datastyrt"
+
+msgid "Auto, No Spells"
+msgstr "Data, ingen magi"
+
+msgid "Battles"
+msgstr "Kampstyring"
+
+msgid "autoBattle|Manual"
+msgstr "Manuell"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Skift hastigheten heltene dine flytter seg på brettet."
@@ -3328,8 +3292,14 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Setter farten du panorerer rundt brettet på."
 
+msgid "Toggle the type of interface you want to use."
+msgstr "Velg den typen grensesnitt du ønsker."
+
 msgid "Toggle interface visibility."
 msgstr "Skift synlighet for grensesnittet."
+
+msgid "Toggle instant battle mode."
+msgstr "Skift modus for hurtigkamp."
 
 msgid "Att."
 msgstr "Ang."
@@ -3400,7 +3370,6 @@ msgstr "Inntekt:"
 msgid "Best Hero:"
 msgstr "Beste helt:"
 
-# heltetall eller helteegenskaper.
 msgid "Best Hero Stats:"
 msgstr "Beste helteevner:"
 
@@ -3456,9 +3425,6 @@ msgstr ""
 msgid "Easy"
 msgstr "Enkel"
 
-msgid "Normal"
-msgstr "Middels"
-
 msgid "Hard"
 msgstr "Vanskelig"
 
@@ -3505,14 +3471,14 @@ msgstr ""
 msgid "QA and Support"
 msgstr "Kvalitetssikring og støtte"
 
+msgid "Visit us at "
+msgstr "Treff oss på "
+
 msgid "Development"
 msgstr "Programvareutvikling"
 
 msgid "Dev and Support"
 msgstr "Utvikling og støtte"
-
-msgid "Visit us at "
-msgstr "Treff oss på "
 
 msgid "Special Thanks to"
 msgstr "Spesielt takk til"
@@ -3520,17 +3486,23 @@ msgstr "Spesielt takk til"
 msgid "and many other contributors!"
 msgstr "og mange andre bidragsytere!"
 
+msgid "and many-many other supporters!"
+msgstr "og mange flere støttespillere!"
+
 msgid "Support us at"
 msgstr "Støtt oss på"
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Kontakt oss på"
 
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
 msgid "Need help with the game?"
 msgstr "Behov for hjelp med spillet?"
-
-msgid "and many-many other supporters!"
-msgstr "og mange flere støttespillere!"
 
 msgid "Original project before 0.7"
 msgstr "Opprinnelig prosjekt før 0.7"
@@ -3593,9 +3565,6 @@ msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr ""
 "Det opprinnelige Heroes of Might and Magic II: The Price of Loyalty-teamet"
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr "Hoveddesigner"
 
@@ -3610,9 +3579,6 @@ msgstr "Artistisk leder"
 
 msgid "Playtesters"
 msgstr "Spilltestere"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr "Designer"
@@ -3641,7 +3607,8 @@ msgstr "Bass"
 msgid "Soprano Vocal"
 msgstr "Sopran"
 
-msgid "Recorded at Green Street Studios"
+#, fuzzy
+msgid "Recorded at %{recordingStudio}"
 msgstr "Opptak gjort ved Green Street Studios"
 
 msgid "credits|Manual"
@@ -3668,7 +3635,6 @@ msgstr "Standard"
 msgid "View High Scores for Standard Maps."
 msgstr "Vis rekordtavle for vanlige brett."
 
-# Kampanje?
 msgid "Campaign"
 msgstr "Felttog"
 
@@ -3740,6 +3706,12 @@ msgstr "fheroes2 Resurrection Team presenterer"
 
 msgid "Greetings!"
 msgstr "Heisann!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Velkommen til Heroes of Might and Magic II drevet av fheroes2 spillmotoren! "
+"Vennligst velg skjermoppløsning før du begynner."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4020,9 +3992,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} spiller har blitt utslettet!"
-
-msgid "Do you wish to continue the game?"
-msgstr "Ønsker du å fortsette spillet?"
 
 msgid "Scenario:"
 msgstr "Brett:"
@@ -4418,6 +4387,9 @@ msgstr ""
 msgid "Hungarian"
 msgstr ""
 
+msgid "Danish"
+msgstr ""
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -4720,7 +4692,6 @@ msgstr ""
 msgid "The lean-to is long abandoned. There is nothing of value here."
 msgstr "Gapahuken er for lengst forlatt. Det fins ingenting av verdi her."
 
-# leprechaun
 msgid ""
 "You catch a leprechaun foolishly sleeping amidst a cluster of magic "
 "mushrooms.\n"
@@ -4816,13 +4787,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Dessverre har du ingen tryllebok å notere ned trolldommen i."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4838,6 +4802,13 @@ msgstr ""
 "\n"
 "Dessverre kan du allerede denne trolldommen, så det er ingenting mer de kan "
 "lære deg."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Dessverre har du ingen tryllebok å notere ned trolldommen i."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -5003,7 +4974,6 @@ msgstr ""
 msgid "\"Go 'way!\", the witch doctor barks, \"you know all I know.\""
 msgstr "\"Gå vekk!\", bjeffer heksedoktoren, \"du kan alt jeg kan.\""
 
-# berike?fordype?
 msgid ""
 "An Orcish witch doctor living in the hut deepens your knowledge of magic by "
 "showing you how to cast stones, read portents, and decipher the intricacies "
@@ -6737,7 +6707,8 @@ msgstr "Ridder"
 msgid "Barbarian"
 msgstr "Barbar"
 
-# Heks brukes allerede som Witch i witch hut. Trollkvinne er best men passer ikke med formatet og bestemtformsbøyningen til de andre rasene. Feks. Trollkvinne(en) "heltenavn".
+# Heks brukes allerede som Witch i witch hut. Trollkvinne er best men passer ikke med formatet og bestemtformsbøyningen til
+# de andre rasene. Feks. Trollkvinne(en) "heltenavn".
 msgid "Sorceress"
 msgstr "Trollkjerring"
 
@@ -6747,7 +6718,10 @@ msgstr "Trollmann"
 # Magiker blir allerede brukt om mage:
 # Wizard kommer av wise og betegner en som har studert mye for å bli flink.
 # Vurder vismann og visdame når det blir mulig med tittel for hvert kjønn. Slaget/tilhørigheten kan kalles visfolk.
-# Alternativer: Allviter (kjønnsnøytral), trolldomslærd fortryller, vismenneske, filosof, tryllemester, lærd, tryllelærd, alkymist (siden de lager golemer), magilærd, trylleviter, Magiviter, trolldomsviter (litt mange slag med trolldom i navnet.) Hvitkunstner siden de er på den gode siden og slags motsetning til sortekunstnerne. Merk: Tryllekunstner er profesjonen som gjør synsbedrageri osv.
+# Alternativer: Allviter (kjønnsnøytral), trolldomslærd fortryller, vismenneske, filosof, tryllemester, lærd, tryllelærd,
+# alkymist (siden de lager golemer), magilærd, trylleviter, Magiviter, trolldomsviter (litt mange slag med trolldom i navnet.)
+# Hvitkunstner siden de er på den gode siden og en slags motsetning til sortekunstnerne. Merk: Tryllekunstner er profesjonen
+# som gjør synsbedrageri osv.
 msgid "Wizard"
 msgstr "Magimester"
 
@@ -6785,6 +6759,7 @@ msgstr "Middels"
 msgid "speed|Fast"
 msgstr "Grei"
 
+# Veldig rask blir for langt
 msgid "speed|Very Fast"
 msgstr "Rask"
 
@@ -7030,7 +7005,7 @@ msgstr "Forlatt gruve"
 msgid "Tree of Knowledge"
 msgstr "Kunnskapstre"
 
-# Sjaman?
+# Sjaman? Det er vel en ork.
 # Kvinnelig
 msgid "Witch Doctor's Hut"
 msgstr "Heksedoktorens hytte"
@@ -7572,7 +7547,6 @@ msgstr "Stålgolem"
 msgid "Steel Golems"
 msgstr "Stålgolemer"
 
-# bedre enn rokkuke eller rukkuke eller rukhuke. Rukher høres ut som kuruker.
 msgid "Roc"
 msgstr "Rokh"
 
@@ -7642,7 +7616,8 @@ msgstr "Vampyrgreve"
 msgid "Vampire Lords"
 msgstr "Vampyrgrever"
 
-# Ser ut som konger og kommer fra mausoleum/kongegrav. Bedre enn hekselik som virker litt kvinnelig. Konge beholder det som hankjønn. Lich betyr lik opprinnelig.
+# Ser ut som konger og kommer fra mausoleum/kongegrav. Bedre enn hekselik som virker litt kvinnelig.
+# Konge beholder det som hankjønn. Lich betyr lik opprinnelig.
 msgid "Lich"
 msgstr "Heksekonge"
 
@@ -9863,7 +9838,6 @@ msgstr ""
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr "Du har ingen tryllebok og kan derfor ikke bruke magi."
 
-# Used on adventure map. Plural is right for norwegian.
 msgid "No spell to cast."
 msgstr "Ingen trolldommer tilgjengelige."
 
@@ -9916,48 +9890,6 @@ msgid ""
 msgstr ""
 "Denne trolldommen gir deg kontroll over\n"
 "opptil %{hp} liv."
-
-msgid "battle: show damage info"
-msgstr "Kamp: Vis skadeinfo"
-
-msgid "world: Scouting skill shows extended content info"
-msgstr "Verden: Speiding gir deg utvidet info"
-
-msgid "world: allow to set guardian to objects"
-msgstr "Verden: Tillat å plassere voktere på objekter"
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget"
-
-msgid "castle: allow guardians"
-msgstr "Borg: Tillat helt som vokter"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr "Helter: Husk skritt etter tilbaketrekking eller overgivelse."
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
-
-msgid "battle: allow soft wait for troops"
-msgstr "Kamp: Avvent styrke til rundens slutt"
-
-msgid "battle: deterministic events"
-msgstr "Kamp: Forutbestemte turer"
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "Parti: Autolagringen skjer ved begynnelsen av dagen"
-
-msgid "game: use evil interface"
-msgstr "Parti: Bruk ondt grensesnitt"
-
-msgid "game: hide interface"
-msgstr "Parti: Skjul grensesnitt"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr "Parti: Tilby å fortsette partiet etter å ha vunnet"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Den sjeldneste skatten er faktisk %{name}."
@@ -10022,31 +9954,18 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid ""
-#~ " on the left side of main menu.\n"
-#~ "\n"
-#~ "To switch between windowed and full screen modes\n"
-#~ "press "
-#~ msgstr ""
-#~ " til venstre på hovedmenyen.\n"
-#~ "\n"
-#~ "For å bytte mellom vindus- og fullskjermsmodus\n"
-#~ "trykk på "
+#~ msgid "Wait this unit"
+#~ msgstr "Avvent denne stryken"
 
-#~ msgid "F4"
-#~ msgstr "F4"
+#~ msgid "Wait"
+#~ msgstr "Avvent"
 
 #~ msgid ""
-#~ " key on the keyboard.\n"
-#~ "\n"
-#~ "Enjoy the game!"
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
 #~ msgstr ""
-#~ "-tasten på tastaturet\n"
-#~ "\n"
-#~ "Vi håper du nyter spillet!"
+#~ "Lar den nåværende skapningen vente. Den nåværende skapningen utsetter "
+#~ "turen sin til etter alle andre skapninger har gjort turen sin."
 
-#~ msgid "game: show system info"
-#~ msgstr "Parti: Vis systeminfo"
-
-#~ msgid "Moved %{monster}"
-#~ msgstr "Flyttet troppen med %{monster}"
+#~ msgid "%{name} wait their turn."
+#~ msgstr "Troppen med %{name} avventet turen sin."

@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
-#include <limits>
 #include <memory>
 #include <ostream>
 #include <string>
@@ -233,8 +232,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         }
     }
 
-    const uint32_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 )
-                                                                               : Rand::Get( std::numeric_limits<uint32_t>::max() );
+    const uint32_t battleSeed = computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 );
 
     bool isBattleOver = false;
     while ( !isBattleOver ) {

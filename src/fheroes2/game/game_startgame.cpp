@@ -178,7 +178,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             const bool openConstructionWindow
                 = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
 
-            result = ( *it )->OpenDialog( false, openConstructionWindow );
+            result = ( *it )->OpenDialog( openConstructionWindow );
 
             if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
                 if ( it == myCastles.begin() )
@@ -192,8 +192,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             }
         }
     }
-    else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        castle.OpenDialog( true, false );
+    else {
+        assert( 0 );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
@@ -229,7 +229,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    bool needFade = Settings::ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+    bool needFade = Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize();
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
@@ -459,10 +459,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
     switch ( tile.GetObject() ) {
     case MP2::OBJ_MONSTER:
-        if ( from_hero.Modes( Heroes::GUARDIAN ) )
-            return Cursor::POINTER;
-        else
-            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
@@ -480,7 +477,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                                                    from_hero.getNumOfTravelDays( tile.GetIndex() ) );
                 }
             }
-            else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() ) {
+            else if ( from_hero.GetIndex() == castle->GetIndex() ) {
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
             }
             else if ( from_hero.GetColor() == castle->GetColor() ) {
@@ -503,10 +500,9 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         const Heroes * to_hero = tile.GetHeroes();
 
         if ( nullptr != to_hero ) {
-            if ( from_hero.Modes( Heroes::GUARDIAN ) )
-                return from_hero.GetColor() == to_hero->GetColor() ? Cursor::HEROES : Cursor::POINTER;
-            else if ( to_hero->GetCenter() == from_hero.GetCenter() )
+            if ( to_hero->GetCenter() == from_hero.GetCenter() ) {
                 return Cursor::HEROES;
+            }
             else if ( from_hero.GetColor() == to_hero->GetColor() ) {
                 int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
                 return newcur != Cursor::POINTER ? newcur : Cursor::HEROES;
@@ -521,14 +517,11 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     }
 
     case MP2::OBJ_BOAT:
-        return from_hero.Modes( Heroes::GUARDIAN ) ? Cursor::POINTER
-                                                   : Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
     case MP2::OBJ_BARRIER:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
     default:
-        if ( from_hero.Modes( Heroes::GUARDIAN ) )
-            return Cursor::POINTER;
-        else if ( MP2::isActionObject( tile.GetObject() ) ) {
+        if ( MP2::isActionObject( tile.GetObject() ) ) {
             bool protection = false;
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
                 protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
@@ -744,7 +737,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    if ( Settings::ExtGameUseFade() )
+    if ( Settings::isFadeEffectEnabled() )
         fheroes2::FadeDisplay();
 
     return res;
@@ -782,7 +775,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         ShowEventDayDialog();
 
-        if ( conf.ExtGameAutosaveBeginOfDay() ) {
+        if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
         }
     }
@@ -807,6 +800,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     int heroAnimationSpriteId = 0;
 
     bool isCursorOverButtons = false;
+    bool isCursorOverGamearea = false;
 
     const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
 
@@ -930,7 +924,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             break;
         }
 
-        if ( fheroes2::cursor().isFocusActive() ) {
+        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
@@ -962,9 +956,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
-        const bool isHiddenInterface = conf.ExtGameHideInterface();
+        const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
+        isCursorOverGamearea = false;
 
         if ( isMovingHero ) {
             // hero is moving, set the appropriate cursor
@@ -1000,7 +995,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            radar.QueueEventProcessing();
+            if ( !gameArea.isDragScroll() )
+                radar.QueueEventProcessing();
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
@@ -1010,13 +1006,21 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
         // cursor is over the game area
         else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
-            gameArea.QueueEventProcessing();
+            isCursorOverGamearea = true;
         }
         // cursor is somewhere else
         else if ( !gameArea.NeedScroll() ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             gameArea.ResetCursorPosition();
+        }
+
+        // gamearea
+        if ( !gameArea.NeedScroll() && !isMovingHero ) {
+            if ( !radar.isDragRadar() )
+                gameArea.QueueEventProcessing( isCursorOverGamearea );
+            else if ( !le.MousePressLeft() )
+                radar.QueueEventProcessing();
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
@@ -1123,10 +1127,11 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         // fast scroll
-        if ( gameArea.NeedScroll() && !isMovingHero ) {
+        if ( ( gameArea.NeedScroll() && !isMovingHero ) || gameArea.isDragScroll() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
-                if ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
-                     || isScrollBottom( le.GetMouseCursor() ) ) {
+                if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
+                       || isScrollBottom( le.GetMouseCursor() ) )
+                     && !gameArea.isDragScroll() ) {
                     cursor.SetThemes( gameArea.GetScrollCursor() );
                 }
 
@@ -1176,7 +1181,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 }
             }
 
-            if ( !conf.ExtGameAutosaveBeginOfDay() ) {
+            if ( !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
                 Game::AutoSave();
             }
         }
