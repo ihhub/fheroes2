@@ -44,7 +44,7 @@
 
 namespace
 {
-    void drawDialog( const std::vector<fheroes2::Rect> & rects )
+    void drawDialog( const std::vector<fheroes2::Rect> & rects, const int32_t iconTextMaxWidth )
     {
         assert( rects.size() == 4 );
 
@@ -60,7 +60,7 @@ namespace
             value = _( "off" );
         }
 
-        fheroes2::drawOption( rects[0], musicVolumeIcon, _( "Music" ), value );
+        fheroes2::drawOption( rects[0], musicVolumeIcon, _( "Music" ), value, iconTextMaxWidth );
 
         // Sound volume.
         const fheroes2::Sprite & soundVolumeOption = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 3 : 2 );
@@ -71,7 +71,7 @@ namespace
             value = _( "off" );
         }
 
-        fheroes2::drawOption( rects[1], soundVolumeOption, _( "Effects" ), value );
+        fheroes2::drawOption( rects[1], soundVolumeOption, _( "Effects" ), value, iconTextMaxWidth );
 
         // Music Type.
         const MusicSource musicType = conf.MusicType();
@@ -86,7 +86,7 @@ namespace
             value = _( "External" );
         }
 
-        fheroes2::drawOption( rects[2], musicTypeIcon, _( "Music Type" ), value );
+        fheroes2::drawOption( rects[2], musicTypeIcon, _( "Music Type" ), value, iconTextMaxWidth );
 
         // 3D Audio.
         const bool is3DAudioEnabled = conf.is3DAudioEnabled();
@@ -98,7 +98,7 @@ namespace
             value = _( "Off" );
         }
 
-        fheroes2::drawOption( rects[3], interfaceStateIcon, _( "3D Audio" ), value );
+        fheroes2::drawOption( rects[3], interfaceStateIcon, _( "3D Audio" ), value, iconTextMaxWidth );
     }
 }
 
@@ -129,6 +129,7 @@ namespace Dialog
         const fheroes2::Sprite & optionSprite = fheroes2::AGG::GetICN( ICN::SPANEL, 0 );
         const fheroes2::Point optionOffset( 69 + dialogArea.x, 47 + dialogArea.y );
         const fheroes2::Point optionStep( 118, 110 );
+        const int32_t iconTextMaxWidth = optionStep.x - 5;
 
         std::vector<fheroes2::Rect> roi;
         roi.reserve( 4 );
@@ -142,7 +143,7 @@ namespace Dialog
         const fheroes2::Rect & musicTypeRoi = roi[2];
         const fheroes2::Rect & audio3D = roi[3];
 
-        drawDialog( roi );
+        drawDialog( roi, iconTextMaxWidth );
 
         const fheroes2::Point buttonOffset( 112 + dialogArea.x, 252 + dialogArea.y );
         fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
@@ -240,7 +241,7 @@ namespace Dialog
             if ( saveMusicVolume || saveSoundVolume || saveMusicType ) {
                 // redraw
                 fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
-                drawDialog( roi );
+                drawDialog( roi, iconTextMaxWidth );
                 buttonOkay.draw();
                 display.render();
 

@@ -57,7 +57,7 @@ namespace
         Close
     };
 
-    void drawDialog( const std::vector<fheroes2::Rect> & rects )
+    void drawDialog( const std::vector<fheroes2::Rect> & rects, const int32_t iconTextMaxWidth )
     {
         assert( rects.size() == 9 );
 
@@ -65,16 +65,16 @@ namespace
 
         // Audio settings.
         const fheroes2::Sprite & audioSettingsIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 1 );
-        fheroes2::drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "Settings" ) );
+        fheroes2::drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "Settings" ), iconTextMaxWidth );
 
         // Hot keys.
         const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, 5 );
-        fheroes2::drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ) );
+        fheroes2::drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ), iconTextMaxWidth );
 
         // Cursor Type.
         const bool isMonoCursor = Settings::Get().isMonochromeCursorEnabled();
         const fheroes2::Sprite & cursorTypeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isMonoCursor ? 20 : 21 );
-        fheroes2::drawOption( rects[2], cursorTypeIcon, _( "Mouse Cursor" ), isMonoCursor ? _( "Black & White" ) : _( "Color" ) );
+        fheroes2::drawOption( rects[2], cursorTypeIcon, _( "Mouse Cursor" ), isMonoCursor ? _( "Black & White" ) : _( "Color" ), iconTextMaxWidth );
 
         // Hero's movement speed.
         const int heroSpeed = conf.HeroesMoveSpeed();
@@ -95,7 +95,7 @@ namespace
             value = std::to_string( heroSpeed );
         }
 
-        fheroes2::drawOption( rects[3], heroSpeedIcon, _( "Hero Speed" ), value );
+        fheroes2::drawOption( rects[3], heroSpeedIcon, _( "Hero Speed" ), value, iconTextMaxWidth );
 
         // AI's movement speed.
         const int aiSpeed = conf.AIMoveSpeed();
@@ -118,7 +118,7 @@ namespace
             value = std::to_string( aiSpeed );
         }
 
-        fheroes2::drawOption( rects[4], aiSpeedIcon, _( "Enemy Speed" ), value );
+        fheroes2::drawOption( rects[4], aiSpeedIcon, _( "Enemy Speed" ), value, iconTextMaxWidth );
 
         // Scrolling speed.
         const int scrollSpeed = conf.ScrollSpeed();
@@ -155,7 +155,7 @@ namespace
         assert( scrollSpeedIconIcn != ICN::UNKNOWN );
 
         const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( scrollSpeedIconIcn, scrollSpeedIconId );
-        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), scrollSpeedName );
+        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), scrollSpeedName, iconTextMaxWidth );
 
         // Interface theme.
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
@@ -167,7 +167,7 @@ namespace
             value = _( "Good" );
         }
 
-        fheroes2::drawOption( rects[6], interfaceThemeIcon, _( "Interface Type" ), value );
+        fheroes2::drawOption( rects[6], interfaceThemeIcon, _( "Interface Type" ), value, iconTextMaxWidth );
 
         // Interface show/hide state.
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
@@ -180,7 +180,7 @@ namespace
             value = _( "Show" );
         }
 
-        fheroes2::drawOption( rects[7], interfaceStateIcon, _( "Interface" ), value );
+        fheroes2::drawOption( rects[7], interfaceStateIcon, _( "Interface" ), value, iconTextMaxWidth );
 
         // Auto-battles.
         if ( conf.BattleAutoResolve() ) {
@@ -188,11 +188,11 @@ namespace
             value = spellcast ? _( "Auto Resolve" ) : _( "Auto, No Spells" );
 
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, spellcast ? 7 : 6 );
-            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), value );
+            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), value, iconTextMaxWidth );
         }
         else {
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 18 );
-            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "autoBattle|Manual" ) );
+            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "autoBattle|Manual" ), iconTextMaxWidth );
         }
     }
 
@@ -221,6 +221,7 @@ namespace
         const fheroes2::Sprite & optionSprite = fheroes2::AGG::GetICN( ICN::SPANEL, 0 );
         const fheroes2::Point optionOffset( 36 + dialogArea.x, 47 + dialogArea.y );
         const fheroes2::Point optionStep( 92, 110 );
+        const int32_t iconTextMaxWidth = optionStep.x - 5;
 
         std::vector<fheroes2::Rect> roi;
 
@@ -240,7 +241,7 @@ namespace
         const fheroes2::Rect & interfaceStateRoi = roi[7];
         const fheroes2::Rect & battleResolveRoi = roi[8];
 
-        drawDialog( roi );
+        drawDialog( roi, iconTextMaxWidth );
 
         const fheroes2::Point buttonOffset( 112 + dialogArea.x, 362 + dialogArea.y );
         fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
@@ -384,7 +385,7 @@ namespace
             if ( saveHeroSpeed || saveAISpeed || saveScrollSpeed || saveAutoBattle ) {
                 // redraw
                 fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
-                drawDialog( roi );
+                drawDialog( roi, iconTextMaxWidth );
                 buttonOkay.draw();
                 display.render();
 

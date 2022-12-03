@@ -185,7 +185,7 @@ namespace
         Close
     };
 
-    void RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas )
+    void RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas, const int32_t iconTextMaxWidth )
     {
         assert( areas.size() == 9 );
 
@@ -203,37 +203,37 @@ namespace
         }
 
         const fheroes2::Sprite & speedIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, speedIcnIndex );
-        fheroes2::drawOption( areas[0], speedIcon, _( "Speed" ), str );
+        fheroes2::drawOption( areas[0], speedIcon, _( "Speed" ), str, iconTextMaxWidth );
 
         const bool isShowArmyOrderEnabled = conf.BattleShowArmyOrder();
         const fheroes2::Sprite & armyOrderIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowArmyOrderEnabled ? 4 : 3 );
-        fheroes2::drawOption( areas[1], armyOrderIcon, _( "Army Order" ), isShowArmyOrderEnabled ? _( "On" ) : _( "Off" ) );
+        fheroes2::drawOption( areas[1], armyOrderIcon, _( "Army Order" ), isShowArmyOrderEnabled ? _( "On" ) : _( "Off" ), iconTextMaxWidth );
 
         const bool isBattleAudoSpellCastEnabled = conf.BattleAutoSpellcast();
         const fheroes2::Sprite & battleAutoSpellCastIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isBattleAudoSpellCastEnabled ? 7 : 6 );
-        fheroes2::drawOption( areas[2], battleAutoSpellCastIcon, _( "Auto Spell Casting" ), isBattleAudoSpellCastEnabled ? _( "On" ) : _( "Off" ) );
+        fheroes2::drawOption( areas[2], battleAutoSpellCastIcon, _( "Auto Spell Casting" ), isBattleAudoSpellCastEnabled ? _( "On" ) : _( "Off" ), iconTextMaxWidth );
 
         const bool isShowBattleGridEnabled = conf.BattleShowGrid();
         const fheroes2::Sprite & battleGridIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowBattleGridEnabled ? 9 : 8 );
-        fheroes2::drawOption( areas[3], battleGridIcon, _( "Grid" ), isShowBattleGridEnabled ? _( "On" ) : _( "Off" ) );
+        fheroes2::drawOption( areas[3], battleGridIcon, _( "Grid" ), isShowBattleGridEnabled ? _( "On" ) : _( "Off" ), iconTextMaxWidth );
 
         const bool isShowMoveShadowEnabled = conf.BattleShowMoveShadow();
         const fheroes2::Sprite & moveShadowIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowMoveShadowEnabled ? 11 : 10 );
-        fheroes2::drawOption( areas[4], moveShadowIcon, _( "Shadow Movement" ), isShowMoveShadowEnabled ? _( "On" ) : _( "Off" ) );
+        fheroes2::drawOption( areas[4], moveShadowIcon, _( "Shadow Movement" ), isShowMoveShadowEnabled ? _( "On" ) : _( "Off" ), iconTextMaxWidth );
 
         const bool isShowMouseShadowEnabled = conf.BattleShowMouseShadow();
         const fheroes2::Sprite & mouseShadowIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowMouseShadowEnabled ? 13 : 12 );
-        fheroes2::drawOption( areas[5], mouseShadowIcon, _( "Shadow Cursor" ), isShowMouseShadowEnabled ? _( "On" ) : _( "Off" ) );
+        fheroes2::drawOption( areas[5], mouseShadowIcon, _( "Shadow Cursor" ), isShowMouseShadowEnabled ? _( "On" ) : _( "Off" ), iconTextMaxWidth );
 
         const fheroes2::Sprite & audioSettingsIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 1 );
-        fheroes2::drawOption( areas[6], audioSettingsIcon, _( "Audio" ), _( "Settings" ) );
+        fheroes2::drawOption( areas[6], audioSettingsIcon, _( "Audio" ), _( "Settings" ), iconTextMaxWidth );
 
         const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, 5 );
-        fheroes2::drawOption( areas[7], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ) );
+        fheroes2::drawOption( areas[7], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ), iconTextMaxWidth );
 
         const bool isShowBattleDamageInfoEnabled = conf.isBattleShowDamageInfoEnabled();
         const fheroes2::Sprite & damageInfoIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowBattleDamageInfoEnabled ? 4 : 3 );
-        fheroes2::drawOption( areas[8], damageInfoIcon, _( "Damage Info" ), isShowBattleDamageInfoEnabled ? _( "On" ) : _( "Off" ) );
+        fheroes2::drawOption( areas[8], damageInfoIcon, _( "Damage Info" ), isShowBattleDamageInfoEnabled ? _( "On" ) : _( "Off" ), iconTextMaxWidth );
     }
 
     DialogAction openBattleOptionDialog( bool & saveConfiguration )
@@ -266,6 +266,7 @@ namespace
 
         const fheroes2::Point optionOffset( 36 + pos_rt.x, 47 + pos_rt.y );
         const fheroes2::Point optionStep( 92, 110 );
+        const int32_t iconTextMaxWidth = optionStep.x - 5;
 
         std::vector<fheroes2::Rect> optionAreas;
         optionAreas.reserve( 9 );
@@ -280,7 +281,7 @@ namespace
         fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
         buttonOkay.draw();
 
-        RedrawBattleSettings( optionAreas );
+        RedrawBattleSettings( optionAreas, iconTextMaxWidth );
 
         display.render();
 
@@ -378,7 +379,7 @@ namespace
 
             if ( redrawScreen ) {
                 fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
-                RedrawBattleSettings( optionAreas );
+                RedrawBattleSettings( optionAreas, iconTextMaxWidth );
                 display.render();
 
                 saveConfiguration = true;

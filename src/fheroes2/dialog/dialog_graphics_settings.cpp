@@ -55,6 +55,7 @@ namespace
     const fheroes2::Size offsetBetweenOptions{ 118, 110 };
     const fheroes2::Point optionOffset{ 69, 47 };
     const int32_t optionWindowSize{ 65 };
+    const int32_t iconTextMaxWidth = offsetBetweenOptions.width - 5;
 
     const fheroes2::Rect resolutionRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect modeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
@@ -67,7 +68,7 @@ namespace
         std::string resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
 
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), _( "Resolution" ),
-                              std::move( resolutionName ) );
+                              std::move( resolutionName ), iconTextMaxWidth );
     }
 
     void drawMode( const fheroes2::Rect & optionRoi )
@@ -78,10 +79,10 @@ namespace
             fheroes2::Sprite icon = originalIcon;
             fheroes2::Resize( originalIcon, 6, 6, 53, 53, icon, 2, 2, 61, 61 );
 
-            fheroes2::drawOption( optionRoi, icon, _( "window|Mode" ), _( "Fullscreen" ) );
+            fheroes2::drawOption( optionRoi, icon, _( "window|Mode" ), _( "Fullscreen" ), iconTextMaxWidth );
         }
         else {
-            fheroes2::drawOption( optionRoi, originalIcon, _( "window|Mode" ), _( "Windowed" ) );
+            fheroes2::drawOption( optionRoi, originalIcon, _( "window|Mode" ), _( "Windowed" ), iconTextMaxWidth );
         }
     }
 
@@ -89,7 +90,7 @@ namespace
     {
         const bool isVSyncEnabled = Settings::Get().isVSyncEnabled();
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "on" ) : _( "off" ) );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "on" ) : _( "off" ), iconTextMaxWidth );
     }
 
     void drawSystemInfo( const fheroes2::Rect & optionRoi )
@@ -106,7 +107,7 @@ namespace
         }
         info.draw( ( image.width() - info.width() ) / 2, ( image.height() - info.height() ) / 2, image );
 
-        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ) );
+        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), iconTextMaxWidth );
     }
 
     SelectedWindow showConfigurationWindow()
