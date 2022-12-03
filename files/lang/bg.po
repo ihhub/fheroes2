@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-03 01:14+0000\n"
-"PO-Revision-Date: 2022-11-08 16:44+0000\n"
+"PO-Revision-Date: 2022-12-03 03:34+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -6608,36 +6608,31 @@ msgid "race|Neutral"
 msgstr "Неутрален"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Рицар"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Варварин"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
 msgstr "Магьосница"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Магьосник"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Вълшебник"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
 msgstr "Некромант"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Комбинация"
 
-#, fuzzy
 msgid "doubleLinedRace|Random"
 msgstr "Случаен"
 
-#, fuzzy
 msgid "doubleLinedRace|Neutral"
 msgstr "Неутрален"
 
