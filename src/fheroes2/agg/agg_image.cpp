@@ -505,10 +505,9 @@ namespace fheroes2
                 break;
             }
             case ICN::BUTTON_STANDARD_GAME: {
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish
-                         && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
-                        _icnVsSprite[id] = _icnVsSprite[ICN::BTNNEWGM];
-                        break;
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id] = _icnVsSprite[ICN::BTNNEWGM];
+                    break;
                 }
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
