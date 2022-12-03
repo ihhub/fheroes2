@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 22:36+0000\n"
+"POT-Creation-Date: 2022-12-03 01:14+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4179,9 +4179,6 @@ msgstr ""
 "кралство и показва датата. Щракни с левия бутон тук, за да преминеш през "
 "тези прозорци."
 
-msgid "Necroman"
-msgstr "Некромант"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -6608,6 +6605,40 @@ msgid "race|Random"
 msgstr "Случаен"
 
 msgid "race|Neutral"
+msgstr "Неутрален"
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Варварин"
+
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Магьосница"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Некромант"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLinedRace|Random"
+msgstr "Случаен"
+
+#, fuzzy
+msgid "doubleLinedRace|Neutral"
 msgstr "Неутрален"
 
 msgid "speed|Standing"
@@ -9762,6 +9793,9 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Некромант"
 
 #~ msgid "Cyberlore Studios"
 #~ msgstr "Студия Cyberlore"
