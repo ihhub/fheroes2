@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 01:14+0000\n"
+"POT-Creation-Date: 2022-12-01 00:05+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.2\n"
 
@@ -26,6 +26,28 @@ msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr "БИТВА"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CONFIG"
+msgstr "НАСТРОЙКИ"
+
+msgid "CANCEL"
+msgstr "ОТМЕНА"
 
 msgid "GIFT"
 msgstr "ОТДАТЬ"
@@ -3505,6 +3527,9 @@ msgstr "Разработка карт"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Разработчики Heroes of Might and Magic II: The Price of Loyalty"
 
+msgid "Cyberlore Studios"
+msgstr ""
+
 msgid "Design Lead"
 msgstr "Ведущий дизайнер"
 
@@ -3519,6 +3544,9 @@ msgstr "Художественный руководитель"
 
 msgid "Playtesters"
 msgstr "Тестеры игры"
+
+msgid "New World Computing"
+msgstr ""
 
 msgid "Designer"
 msgstr "Дизайнер"
@@ -3547,8 +3575,7 @@ msgstr "Басс вокал"
 msgid "Soprano Vocal"
 msgstr "Сопрано вокал"
 
-#, fuzzy
-msgid "Recorded at %{recordingStudio}"
+msgid "Recorded at Green Street Studios"
 msgstr "Записано на Green Street Studios"
 
 msgid "credits|Manual"
@@ -4174,6 +4201,9 @@ msgstr ""
 "Это окно сообщает информацию о состоянии Вашего героя или королевства, а "
 "также показывает календарь. Щёлкните мышью, чтобы просмотреть всю доступную "
 "информацию."
+
+msgid "Necroman"
+msgstr "Некромант"
 
 msgid ""
 "This lets you change player starting positions and colors. A particular "
@@ -6587,40 +6617,6 @@ msgid "race|Random"
 msgstr "Случайно"
 
 msgid "race|Neutral"
-msgstr "Нейтральный"
-
-msgid "doubleLined|Knight"
-msgstr ""
-
-#, fuzzy
-msgid "doubleLined|Barbarian"
-msgstr "Варвар"
-
-#, fuzzy
-msgid "doubleLined|Sorceress"
-msgstr "Колдунья"
-
-msgid "doubleLined|Warlock"
-msgstr ""
-
-msgid "doubleLined|Wizard"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"doubleLined|Necro-\n"
-"mancer"
-msgstr "Некромант"
-
-msgid "doubleLinedRace|Multi"
-msgstr ""
-
-#, fuzzy
-msgid "doubleLinedRace|Random"
-msgstr "Случайно"
-
-#, fuzzy
-msgid "doubleLinedRace|Neutral"
 msgstr "Нейтральный"
 
 msgid "speed|Standing"
@@ -9762,9 +9758,6 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Некромант"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Подождать"
