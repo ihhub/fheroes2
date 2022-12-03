@@ -2414,6 +2414,9 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
+    // Reset the cursor position to avoid forcing the cursor shadow to be drawn at the last position of the previous turn.
+    index_pos = -1;
+
     cursor.SetThemes( Cursor::WAR_POINTER );
     _currentUnit = &b;
     humanturn_redraw = false;
