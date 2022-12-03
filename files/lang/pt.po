@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-01 00:05+0000\n"
+"POT-Creation-Date: 2022-12-02 22:36+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3476,9 +3476,6 @@ msgstr "Cenário"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Sair do Jogo & retornar ao sistema operacional."
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3494,9 +3491,6 @@ msgstr ""
 #, fuzzy
 msgid "Playtesters"
 msgstr "2 Jogadores"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr ""
@@ -3525,7 +3519,7 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 msgid "credits|Manual"

@@ -39,6 +39,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_text.h"
 
@@ -524,7 +525,7 @@ namespace
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
-        title.set( _( "Cyberlore Studios" ), titleFontType );
+        title.set( "Cyberlore Studios", titleFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;
@@ -575,7 +576,7 @@ namespace
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
-        title.set( _( "New World Computing" ), titleFontType );
+        title.set( "New World Computing", titleFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;
@@ -614,7 +615,10 @@ namespace
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Basso Vocal" ), "Reid Bruton" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Soprano Vocal" ), "Karin Meshagin" );
 
-        title.set( _( "Recorded at Green Street Studios" ), titleFontType );
+        std::string recordedString = _( "Recorded at %{recordingStudio}" );
+        StringReplace( recordedString, "%{recordingStudio}", "Green Street Studios" );
+
+        title.set( recordedString, titleFontType );
         title.draw( offsetX, offsetY, textWidth, output );
 
         return output;
@@ -632,7 +636,7 @@ namespace
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
-        title.set( _( "New World Computing" ), titleFontType );
+        title.set( "New World Computing", titleFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;

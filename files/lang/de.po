@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-01 00:05+0000\n"
+"POT-Creation-Date: 2022-12-02 22:36+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3569,9 +3569,6 @@ msgstr "Szenarien"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Original Heroes of Might and Magic II Team"
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3588,9 +3585,6 @@ msgstr ""
 #, fuzzy
 msgid "Playtesters"
 msgstr "2 Spieler"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr ""
@@ -3623,7 +3617,7 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 #, fuzzy
@@ -5622,8 +5616,8 @@ msgid ""
 "Recognizing you, the butler refuses to admit you. \"The master,\" he says, "
 "\"will not see the same student twice.\""
 msgstr ""
-"Als der Butler Sie erkennt, weigert er sich, Sie einzulassen. \"Der Meister"
-"\", sagt er, \"will denselben Schüler nicht zweimal sehen.\""
+"Als der Butler Sie erkennt, weigert er sich, Sie einzulassen. \"Der "
+"Meister\", sagt er, \"will denselben Schüler nicht zweimal sehen.\""
 
 msgid ""
 "The butler admits you to see the master of the house. He trains you in the "

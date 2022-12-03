@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-01 00:05+0000\n"
+"POT-Creation-Date: 2022-12-02 22:36+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && n"
-"%100<=19) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && "
+"n%100<=19) ? 1 : 2);\n"
 "X-Generator: Poedit 3.1.1\n"
 
 msgid ""
@@ -3301,9 +3301,6 @@ msgstr ""
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr ""
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3317,9 +3314,6 @@ msgid "Art Lead"
 msgstr ""
 
 msgid "Playtesters"
-msgstr ""
-
-msgid "New World Computing"
 msgstr ""
 
 msgid "Designer"
@@ -3349,7 +3343,7 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 msgid "credits|Manual"
