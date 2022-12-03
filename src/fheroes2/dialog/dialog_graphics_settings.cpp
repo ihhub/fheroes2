@@ -90,7 +90,8 @@ namespace
     {
         const bool isVSyncEnabled = Settings::Get().isVSyncEnabled();
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "on" ) : _( "off" ), iconTextMaxWidth );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "on" ) : _( "off" ),
+                              iconTextMaxWidth );
     }
 
     void drawSystemInfo( const fheroes2::Rect & optionRoi )
