@@ -18,6 +18,8 @@ OutputDir={#BuildDir}
 #if Platform == 'x64'
 ArchitecturesInstallIn64BitMode=x64
 #endif
+; Do not request a system reboot when vcredist.exe queues up some DLLs to replace their older versions on the next reboot
+RestartIfNeededByRun=no
 
 [Files]
 Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
