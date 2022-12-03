@@ -373,8 +373,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_BG;
         else if ( str == "ca" || str == "catalan" )
             current->locale = LocaleType::LOCALE_CA;
-        else if ( str == "da" || str == "danish" )
-            current->locale = LocaleType::LOCALE_DA;
+        else if ( str == "dk" || str == "danish" )
+            current->locale = LocaleType::LOCALE_DK;
         else if ( str == "de" || str == "german" )
             current->locale = LocaleType::LOCALE_DE;
         else if ( str == "el" || str == "greek" )
@@ -458,8 +458,8 @@ namespace Translation
             switch ( current->locale ) {
             case LocaleType::LOCALE_AF:
             case LocaleType::LOCALE_BG:
-            case LocaleType::LOCALE_DA:
             case LocaleType::LOCALE_DE:
+            case LocaleType::LOCALE_DK:
             case LocaleType::LOCALE_ES:
             case LocaleType::LOCALE_ET:
             case LocaleType::LOCALE_EU:
