@@ -603,8 +603,8 @@ namespace fheroes2
             case ICN::BUTTON_ORIGINAL_CAMPAIGN: {
                 _icnVsSprite[id].resize( 2 );
                 if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::BTNMP, 6 );
-                    _icnVsSprite[id][1] = GetICN( ICN::BTNMP, 7 );
+                    _icnVsSprite[id][0] = GetICN( ICN::X_LOADCM, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::X_LOADCM, 1 );
                     break;
                 }
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -622,8 +622,8 @@ namespace fheroes2
             case ICN::BUTTON_EXPANSION_CAMPAIGN: {
                 _icnVsSprite[id].resize( 2 );
                 if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::BTNMP, 6 );
-                    _icnVsSprite[id][1] = GetICN( ICN::BTNMP, 7 );
+                    _icnVsSprite[id][0] = GetICN( ICN::X_LOADCM, 2 );
+                    _icnVsSprite[id][1] = GetICN( ICN::X_LOADCM, 3 );
                     break;
                 }
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -641,8 +641,8 @@ namespace fheroes2
             case ICN::BUTTON_HOT_SEAT: {
                 _icnVsSprite[id].resize( 2 );
                 if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::BTNMP, 6 );
-                    _icnVsSprite[id][1] = GetICN( ICN::BTNMP, 7 );
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNMP, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNMP, 1 );
                     break;
                 }
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
