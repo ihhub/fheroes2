@@ -49,6 +49,19 @@ msgstr "VALG"
 msgid "CANCEL"
 msgstr "AVBRYT"
 
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr "KRIGEN\nOM\nTRONEN"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr "PRISEN\nFOR\nTROFASTHET"
+
+msgid "HOT SEAT"
+msgstr "RUNDGANG"
+
 msgid "GIFT"
 msgstr "SEND"
 
