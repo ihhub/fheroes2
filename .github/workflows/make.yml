@@ -76,7 +76,7 @@ jobs:
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
-        if [[ ${{ matrix.config.name }} = *ARM64* ]]
+        if [[ "${{ matrix.config.name }}" = *ARM64* ]]
         then
           sudo sed -i -e 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
           sudo dpkg --add-architecture arm64
