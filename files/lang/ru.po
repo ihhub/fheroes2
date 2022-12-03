@@ -27,28 +27,6 @@ msgid ""
 "ONLY"
 msgstr "БИТВА"
 
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr ""
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-
-msgid "CONFIG"
-msgstr ""
-
-msgid "CANCEL"
-msgstr "ОТМЕНА"
-
 msgid "GIFT"
 msgstr "ОТДАТЬ"
 
