@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 22:36+0000\n"
+"POT-Creation-Date: 2022-12-03 01:14+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4257,9 +4257,6 @@ msgstr ""
 "ditt, i tillegg til dagens dato. Venstre-klikk her for å bla gjennom de "
 "forskjellige informasjonsvinduene."
 
-msgid "Necroman"
-msgstr "Sortekunstner"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -6735,6 +6732,42 @@ msgid "race|Random"
 msgstr "Tilfeldig"
 
 msgid "race|Neutral"
+msgstr "Nøytral"
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Barbar"
+
+# Heks brukes allerede som Witch i witch hut. Trollkvinne er best men passer ikke med formatet og bestemtformsbøyningen til
+# de andre rasene. Feks. Trollkvinne(en) "heltenavn".
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Trollkjerring"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Sortekunstner"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLinedRace|Random"
+msgstr "Tilfeldig"
+
+#, fuzzy
+msgid "doubleLinedRace|Neutral"
 msgstr "Nøytral"
 
 # Stillestående (for lang), bomstille.
@@ -9953,6 +9986,9 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Sortekunstner"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Avvent denne stryken"

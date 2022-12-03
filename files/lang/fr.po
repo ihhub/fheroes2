@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 22:36+0000\n"
+"POT-Creation-Date: 2022-12-03 01:14+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4241,9 +4241,6 @@ msgstr ""
 "royaume, et affiche la date. Faites un clic gauche ici pour passer d'une "
 "fenêtre à l'autre."
 
-msgid "Necroman"
-msgstr "Nécroman"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -6746,6 +6743,40 @@ msgid "race|Random"
 msgstr "Aléatoire"
 
 msgid "race|Neutral"
+msgstr "Neutre"
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Barbare"
+
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Sorcière"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Nécromant"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLinedRace|Random"
+msgstr "Aléatoire"
+
+#, fuzzy
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutre"
 
 msgid "speed|Standing"
@@ -9960,6 +9991,9 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Nécroman"
 
 #~ msgid "Cyberlore Studios"
 #~ msgstr "Cyberlore Studios"

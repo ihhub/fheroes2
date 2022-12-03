@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 22:36+0000\n"
+"POT-Creation-Date: 2022-12-03 01:14+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4276,9 +4276,6 @@ msgstr ""
 "und zeigt das Datum an. Klicken Sie hier mit der linken Maustaste, um durch "
 "diese Fenster zu ziehen."
 
-msgid "Necroman"
-msgstr "Totenbesc"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -6782,6 +6779,40 @@ msgid "race|Random"
 msgstr "Zufällig"
 
 msgid "race|Neutral"
+msgstr "Neutral"
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Barbar"
+
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Zauberin"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Totenbeschwörer"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLinedRace|Random"
+msgstr "Zufällig"
+
+#, fuzzy
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
 
 msgid "speed|Standing"
@@ -10024,6 +10055,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Totenbesc"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Auf diesen Zug warten"
