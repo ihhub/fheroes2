@@ -1004,30 +1004,34 @@ namespace fheroes2
         {
             assert( isLanguageDependentIcnId( id ) );
 
+            const fheroes2::SupportedLanguage resourceLanguage = fheroes2::getResourceLanguage();
+
             // Language-specific image generators, may fail
-            switch ( fheroes2::getResourceLanguage() ) {
-            case fheroes2::SupportedLanguage::German:
-                if ( generateGermanSpecificImages( id ) ) {
-                    return;
+            if ( fheroes2::getCurrentLanguage() == resourceLanguage ) {
+                switch ( resourceLanguage ) {
+                case fheroes2::SupportedLanguage::German:
+                    if ( generateGermanSpecificImages( id ) ) {
+                        return;
+                    }
+                    break;
+                case fheroes2::SupportedLanguage::French:
+                    if ( generateFrenchSpecificImages( id ) ) {
+                        return;
+                    }
+                    break;
+                case fheroes2::SupportedLanguage::Polish:
+                    if ( generatePolishSpecificImages( id ) ) {
+                        return;
+                    }
+                    break;
+                case fheroes2::SupportedLanguage::Italian:
+                    if ( generateItalianSpecificImages( id ) ) {
+                        return;
+                    }
+                    break;
+                default:
+                    break;
                 }
-                break;
-            case fheroes2::SupportedLanguage::French:
-                if ( generateFrenchSpecificImages( id ) ) {
-                    return;
-                }
-                break;
-            case fheroes2::SupportedLanguage::Polish:
-                if ( generatePolishSpecificImages( id ) ) {
-                    return;
-                }
-                break;
-            case fheroes2::SupportedLanguage::Italian:
-                if ( generateItalianSpecificImages( id ) ) {
-                    return;
-                }
-                break;
-            default:
-                break;
             }
             // Image generator of a last resort, must provide the generation of the "default" variant
             // for all image ids for which this function can be called, and must not fail.
