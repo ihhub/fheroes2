@@ -81,9 +81,20 @@ namespace fheroes2
             // Do nothing.
         }
 
+        void setNearestScaling( const bool enable )
+        {
+            _nearestScaling = enable;
+        }
+
+        bool isNearestScaling() const
+        {
+            return _nearestScaling;
+        }
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
+            , _nearestScaling( false )
         {
             // Do nothing.
         }
@@ -118,6 +129,8 @@ namespace fheroes2
 
     private:
         bool _isFullScreen;
+
+        bool _nearestScaling;
     };
 
     class Display : public Image
