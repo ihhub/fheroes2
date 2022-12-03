@@ -20,12 +20,13 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include <cassert>
 
 #include "race.h"
 #include "rand.h"
 #include "translations.h"
 
-std::string Race::String( int race )
+const char * Race::String( int race )
 {
     switch ( race ) {
     case Race::KNGT:
@@ -47,10 +48,42 @@ std::string Race::String( int race )
     case Race::NONE:
         return _( "race|Neutral" );
     default:
+        // Did you add a new race? Add the logic above!
+        assert( 0 );
         break;
     }
 
     return _( "race|Neutral" );
+}
+
+const char * Race::DoubleLinedString( int race )
+{
+    switch ( race ) {
+    case Race::KNGT:
+        return _( "doubleLined|Knight" );
+    case Race::BARB:
+        return _( "doubleLined|Barbarian" );
+    case Race::SORC:
+        return _( "doubleLined|Sorceress" );
+    case Race::WRLK:
+        return _( "doubleLined|Warlock" );
+    case Race::WZRD:
+        return _( "doubleLined|Wizard" );
+    case Race::NECR:
+        return _( "doubleLined|Necro-\nmancer" );
+    case Race::MULT:
+        return _( "doubleLinedRace|Multi" );
+    case Race::RAND:
+        return _( "doubleLinedRace|Random" );
+    case Race::NONE:
+        return _( "doubleLinedRace|Neutral" );
+    default:
+        // Did you add a new race? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return _( "doubleLinedRace|Neutral" );
 }
 
 int Race::Rand()

@@ -23,8 +23,6 @@
 #ifndef H2RACE_H
 #define H2RACE_H
 
-#include <string>
-
 namespace Race
 {
     enum
@@ -41,7 +39,8 @@ namespace Race
         ALL = KNGT | BARB | SORC | WRLK | WZRD | NECR
     };
 
-    std::string String( int );
+    const char * String( int );
+    const char * DoubleLinedString( int );
     int Rand();
 }
 

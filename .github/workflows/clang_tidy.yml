@@ -14,6 +14,9 @@ jobs:
     name: Clang-Tidy
     runs-on: ubuntu-22.04
     timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v3
       with:
@@ -34,7 +37,6 @@ jobs:
         mkdir clang-tidy-result
     - name: Analyze
       run: |
-        set -o pipefail
         git diff -U0 HEAD^ | clang-tidy-diff -p1 -path build -export-fixes clang-tidy-result/fixes.yml
     - name: Save PR metadata
       run: |

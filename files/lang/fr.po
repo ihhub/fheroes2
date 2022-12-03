@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-25 12:00+0000\n"
+"POT-Creation-Date: 2022-12-03 01:14+0000\n"
 "PO-Revision-Date: 2022-10-24 12:26+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3543,9 +3543,6 @@ msgstr "Scénarios"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "L'équipe de Heroes of Might and Magic II: The Price of Loyalty"
 
-msgid "Cyberlore Studios"
-msgstr "Cyberlore Studios"
-
 msgid "Design Lead"
 msgstr "Chef du design"
 
@@ -3560,9 +3557,6 @@ msgstr "Responsable artistique"
 
 msgid "Playtesters"
 msgstr "Testeurs"
-
-msgid "New World Computing"
-msgstr "New World Computing"
 
 msgid "Designer"
 msgstr "Concepteur"
@@ -3591,7 +3585,8 @@ msgstr "Basse (Voix)"
 msgid "Soprano Vocal"
 msgstr "Soprano (Voix)"
 
-msgid "Recorded at Green Street Studios"
+#, fuzzy
+msgid "Recorded at %{recordingStudio}"
 msgstr "Enregistrée aux Green Street Studios"
 
 msgid "credits|Manual"
@@ -4246,9 +4241,6 @@ msgstr ""
 "royaume, et affiche la date. Faites un clic gauche ici pour passer d'une "
 "fenêtre à l'autre."
 
-msgid "Necroman"
-msgstr "Nécroman"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4378,6 +4370,9 @@ msgstr ""
 #, fuzzy
 msgid "Hungarian"
 msgstr "Bulgare"
+
+msgid "Danish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS : "
@@ -6750,6 +6745,40 @@ msgstr "Aléatoire"
 msgid "race|Neutral"
 msgstr "Neutre"
 
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Barbare"
+
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Sorcière"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Nécromant"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLinedRace|Random"
+msgstr "Aléatoire"
+
+#, fuzzy
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutre"
+
 msgid "speed|Standing"
 msgstr "Immobile"
 
@@ -8724,8 +8753,8 @@ msgid ""
 msgstr ""
 "Vous faites une pause pour aider un diplomate dont l'essieu est cassé. Pour "
 "montrer sa gratitude, il vous donne une plume qui possède des propriétés "
-"magiques qui, selon lui, \"Aideront les gens à voir les choses à votre façon"
-"\"."
+"magiques qui, selon lui, \"Aideront les gens à voir les choses à votre "
+"façon\"."
 
 msgid "Wizard's Hat"
 msgstr "Le chapeau du sorcier"
@@ -9962,6 +9991,15 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Nécroman"
+
+#~ msgid "Cyberlore Studios"
+#~ msgstr "Cyberlore Studios"
+
+#~ msgid "New World Computing"
+#~ msgstr "New World Computing"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Ce peloton attend"

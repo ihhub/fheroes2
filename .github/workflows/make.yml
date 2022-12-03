@@ -59,6 +59,9 @@ jobs:
     name: Make (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies (Linux)
@@ -107,6 +110,9 @@ jobs:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies
@@ -176,8 +182,11 @@ jobs:
   make-switch:
     name: Make (Nintendo Switch)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     container: devkitpro/devkita64:latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies

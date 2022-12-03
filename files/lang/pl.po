@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-25 12:00+0000\n"
+"POT-Creation-Date: 2022-12-03 01:14+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -3501,9 +3501,6 @@ msgstr "Scenariusze"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Zespół gry Heroes of Might and Magic II: The Price of Loyalty"
 
-msgid "Cyberlore Studios"
-msgstr "Cyberlore Studios"
-
 msgid "Design Lead"
 msgstr "Kierownik projektowania"
 
@@ -3518,9 +3515,6 @@ msgstr "Kierownik artystów"
 
 msgid "Playtesters"
 msgstr "Testerzy gry"
-
-msgid "New World Computing"
-msgstr "New World Computing"
 
 msgid "Designer"
 msgstr "Projektant"
@@ -3549,7 +3543,8 @@ msgstr "Bas (partie wokalne)"
 msgid "Soprano Vocal"
 msgstr "Sopran (partie wokalne)"
 
-msgid "Recorded at Green Street Studios"
+#, fuzzy
+msgid "Recorded at %{recordingStudio}"
 msgstr "Nagrano w Green Street Studios"
 
 msgid "credits|Manual"
@@ -4186,9 +4181,6 @@ msgstr ""
 "królestwa, a także aktualna data. Kliknij tu lewym przyciskiem, aby "
 "przejrzeć kolejne informacje."
 
-msgid "Necroman"
-msgstr "Nekromanta"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4316,6 +4308,10 @@ msgstr ""
 #, fuzzy
 msgid "Hungarian"
 msgstr "Bułgarski"
+
+#, fuzzy
+msgid "Danish"
+msgstr "Hiszpański"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -6623,6 +6619,40 @@ msgid "race|Random"
 msgstr "Losowo"
 
 msgid "race|Neutral"
+msgstr "Neutralny"
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Barbarzyńca"
+
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Czarodziejka"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Nekromanta"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLinedRace|Random"
+msgstr "Losowo"
+
+#, fuzzy
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutralny"
 
 msgid "speed|Standing"
@@ -9808,6 +9838,15 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Nekromanta"
+
+#~ msgid "Cyberlore Studios"
+#~ msgstr "Cyberlore Studios"
+
+#~ msgid "New World Computing"
+#~ msgstr "New World Computing"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Zatrzymaj tę jednostkę"

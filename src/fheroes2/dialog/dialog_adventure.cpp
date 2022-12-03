@@ -39,7 +39,7 @@
 int Dialog::AdventureOptions( bool enabledig )
 {
     // preload
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int apanbkg = isEvilInterface ? ICN::APANBKGE : ICN::APANBKG;
     const int apanel = isEvilInterface ? ICN::APANELE : ICN::APANEL;
 

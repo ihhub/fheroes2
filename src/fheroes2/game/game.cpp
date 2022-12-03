@@ -207,7 +207,7 @@ void Game::Init()
 {
     // set global events
     LocalEvent & le = LocalEvent::Get();
-    le.SetMouseMotionGlobalHook( Cursor::Redraw );
+    le.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
     le.setGlobalKeyDownEventHook( Game::globalKeyDownEvent );
 
     Game::AnimateDelaysInitialize();

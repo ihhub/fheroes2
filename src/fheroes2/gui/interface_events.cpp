@@ -491,7 +491,7 @@ void Interface::Basic::EventSwitchShowRadar() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowRadar() ) {
             conf.SetShowRadar( false );
             gameArea.SetRedraw();
@@ -507,7 +507,7 @@ void Interface::Basic::EventSwitchShowButtons() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowButtons() ) {
             conf.SetShowButtons( false );
             gameArea.SetRedraw();
@@ -523,7 +523,7 @@ void Interface::Basic::EventSwitchShowStatus() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowStatus() ) {
             conf.SetShowStatus( false );
             gameArea.SetRedraw();
@@ -539,7 +539,7 @@ void Interface::Basic::EventSwitchShowIcons() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowIcons() ) {
             conf.SetShowIcons( false );
             gameArea.SetRedraw();
@@ -555,7 +555,7 @@ void Interface::Basic::EventSwitchShowControlPanel() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         conf.SetShowPanel( !conf.ShowControlPanel() );
         gameArea.SetRedraw();
     }
