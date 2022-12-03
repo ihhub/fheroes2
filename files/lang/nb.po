@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-03 01:14+0000\n"
-"PO-Revision-Date: 2022-11-09 01:17+0100\n"
+"PO-Revision-Date: 2022-12-03 03:24+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -6735,38 +6735,37 @@ msgid "race|Neutral"
 msgstr "Nøytral"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Ridder"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Barbar"
 
 # Heks brukes allerede som Witch i witch hut. Trollkvinne er best men passer ikke med formatet og bestemtformsbøyningen til
 # de andre rasene. Feks. Trollkvinne(en) "heltenavn".
-#, fuzzy
 msgid "doubleLined|Sorceress"
-msgstr "Trollkjerring"
+msgstr ""
+"Troll-\n"
+"kjerring"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Trollmann"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Magimester"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Sortekunstner"
+msgstr ""
+"Sorte-\n"
+"kunstner"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Flere"
 
-#, fuzzy
 msgid "doubleLinedRace|Random"
 msgstr "Tilfeldig"
 
-#, fuzzy
 msgid "doubleLinedRace|Neutral"
 msgstr "Nøytral"
 
