@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-03 01:14+0000\n"
-"PO-Revision-Date: 2022-09-23 16:01+0200\n"
+"PO-Revision-Date: 2022-12-03 03:29+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.1.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 msgid ""
@@ -5855,23 +5855,20 @@ msgid "race|Neutral"
 msgstr ""
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Рыцар"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Варвар"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
 msgstr "Чараўніца"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Вядзьмак"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Чарадзей"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
