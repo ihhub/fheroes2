@@ -993,12 +993,6 @@ namespace ICN
         EMPTY_GOOD_BUTTON,
         EMPTY_EVIL_BUTTON,
 
-        BUTTON_STANDARD_GAME,
-        BUTTON_CAMPAIGN_GAME,
-        BUTTON_MULTIPLAYER_GAME,
-        BUTTON_LARGE_CANCEL,
-        BUTTON_LARGE_CONFIG,
-
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
