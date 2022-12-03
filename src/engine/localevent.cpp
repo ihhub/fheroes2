@@ -42,6 +42,7 @@
 #include <SDL_gamecontroller.h>
 #include <SDL_hints.h>
 #include <SDL_keycode.h>
+#include <SDL_touch.h>
 
 #endif
 
