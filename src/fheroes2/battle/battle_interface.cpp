@@ -3907,33 +3907,28 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         // The rainbow thickness in pixels: it must be 15 pixels to match the rainbow thickness from original sprite 'ICN::EXPMRL'.
         const int32_t rainbowThickness = 15;
 
-        // Declare rainbow generation parameters:
+        // Declare rainbow generation parameters and set default values:
         // Rainbow arc parameters for: y = (1-pow2ratio)*k1*(x-x0)^pow1+pow2ratio*k2*(x-x0)^pow2.
         // Parametars pow3, pow4, pow4ratio are the same as pow1, pow2, pow2ratio, but for the second part of the arc.
-        const int32_t pow1 = 2;
-        int32_t pow2;
-        const int32_t pow3 = 2;
-        int32_t pow4;
+        const int32_t pow1{ 2 };
+        int32_t pow2{ 10 };
+        double pow2ratio{ 0.16 };
+        const int32_t pow3{ 2 };
+        int32_t pow4{ 2 };
+        double pow4ratio{ 0.77 };
         // The distance from the start to the end of the rainbow in direction of animation (in pixels).
-        int32_t rainbowLength;
+        int32_t rainbowLength{ rainbowDescendPoint.y };
         // The distance from the start to the end (the 'lucky' creature) of the rainbow orthogonal to the direction of animation (in pixels).
-        int32_t rainbowAscend;
+        int32_t rainbowAscend{ 75 };
         // The distance from the top to the end (the 'lucky' creature) of the rainbow orthogonal to the direction of animation (in pixels).
-        int32_t rainbowDescend;
+        int32_t rainbowDescend{ 10 };
         // The coordinate where the rainbow arc changes its direction.
-        int32_t rainbowTop;
+        int32_t rainbowTop{ 50 };
         // Rainbow image offset from battlefield zero coordinates to "fall" onto the 'lucky' creature.
-        int32_t drawOffset;
-        double pow2ratio;
-        double pow4ratio;
+        int32_t drawOffset{ 10 };
 
         // Set rainbow generation parameters.
         if ( isVerticalRainbow ) {
-            pow2 = 10;
-            pow4 = 2;
-            pow2ratio = 0.16;
-            pow4ratio = 0.77;
-            rainbowLength = rainbowDescendPoint.y;
             rainbowAscend = static_cast<int32_t>( 0.4845 * rainbowLength + 156.2 );
             // If the rainbow doesn't fit on the screen, then change its horizontal direction.
             if ( ( borderDistance + rainbowThickness / 2 ) < rainbowAscend ) {
@@ -3950,7 +3945,6 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
             pow2ratio = 0.0;
             pow4ratio = 0.5;
             rainbowLength = borderDistance;
-            rainbowAscend = 75;
             rainbowDescend = std::max( 1, static_cast<int32_t>( 0.1233 * rainbowLength + 0.7555 ) );
             rainbowTop = static_cast<int32_t>( 0.6498 * rainbowLength + 11.167 );
             drawOffset = std::max( 10, rainbowDescendPoint.y - rainbowDescend );
