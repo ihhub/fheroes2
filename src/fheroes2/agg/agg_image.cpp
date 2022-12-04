@@ -675,7 +675,8 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "2 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "2 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -693,7 +694,8 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "3 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "3 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -711,7 +713,8 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "4 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "4 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -729,7 +732,8 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "5 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "5 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -747,7 +751,8 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "6 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "6 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1373,11 +1378,11 @@ namespace fheroes2
             case ICN::BUTTON_ORIGINAL_CAMPAIGN:
             case ICN::BUTTON_EXPANSION_CAMPAIGN:
             case ICN::BUTTON_HOT_SEAT:
-            case ICN::BUTTON_2_PLAYERS,
-            case ICN::BUTTON_3_PLAYERS,
-            case ICN::BUTTON_4_PLAYERS,
-            case ICN::BUTTON_5_PLAYERS,
-            case ICN::BUTTON_6_PLAYERS,
+            case ICN::BUTTON_2_PLAYERS:
+            case ICN::BUTTON_3_PLAYERS:
+            case ICN::BUTTON_4_PLAYERS:
+            case ICN::BUTTON_5_PLAYERS:
+            case ICN::BUTTON_6_PLAYERS:
             case ICN::BTNBATTLEONLY:
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL:
