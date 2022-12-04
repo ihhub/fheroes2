@@ -259,7 +259,7 @@ namespace
 
         assert( !iter->second.empty() );
 
-        for ( auto & info : iter->second ) {
+        for ( const auto & info : iter->second ) {
             area.BlitOnTile( output, fheroes2::AGG::GetICN( info.icnId, info.icnIndex ), info.area, info.imageOffset.x, info.imageOffset.y, offset, info.isFlipped,
                              info.alphaValue );
         }
