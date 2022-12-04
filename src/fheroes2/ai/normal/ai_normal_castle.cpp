@@ -202,12 +202,14 @@ namespace AI
     void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
     {
         if ( defensiveStrategy ) {
-            const Troops possibleReinforcement = castle.getAvailableArmy( castle.GetKingdom().GetFunds() );
+            Troops possibleReinforcement = castle.getAvailableArmy( castle.GetKingdom().GetFunds() );
+            double possibleReinforcementStrength = possibleReinforcement.GetStrength();
 
             // A very rough estimation of strength.
             const Battle::Tower tower( castle, Battle::TWR_RIGHT, Rand::DeterministicRandomGenerator( 0 ), 0 );
-            const double towerStrength = tower.GetStrength();
-            if ( possibleReinforcement.GetStrength() > towerStrength ) {
+            const Troop towerMonster( Monster::ARCHER, tower.GetCount() );
+            const double towerStrength = towerMonster.GetStrength();
+            if ( possibleReinforcementStrength > towerStrength ) {
                 castle.recruitBestAvailable( castle.GetKingdom().GetFunds() );
                 OptimizeTroopsOrder( castle.GetArmy() );
             }

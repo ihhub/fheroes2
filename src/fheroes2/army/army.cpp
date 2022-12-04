@@ -182,6 +182,7 @@ Troops::Troops( const Troops & troops )
 
 Troops & Troops::operator=( const Troops & rhs )
 {
+    clear();
     reserve( rhs.size() );
     for ( const_iterator it = rhs.begin(); it != rhs.end(); ++it )
         push_back( new Troop( **it ) );
