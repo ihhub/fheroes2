@@ -202,7 +202,10 @@ namespace AI
     void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
     {
         if ( defensiveStrategy ) {
-            Troops possibleReinforcement = castle.getAvailableArmy( castle.GetKingdom().GetFunds() );
+            // TODO: add logic to build monster dwellings as they might add more monsters for defence.
+            const Kingdom & kingdom = castle.GetKingdom();
+
+            Troops possibleReinforcement = castle.getAvailableArmy( kingdom.GetFunds() );
             double possibleReinforcementStrength = possibleReinforcement.GetStrength();
 
             // A very rough estimation of strength.
@@ -210,7 +213,7 @@ namespace AI
             const Troop towerMonster( Monster::ARCHER, tower.GetCount() );
             const double towerStrength = towerMonster.GetStrength();
             if ( possibleReinforcementStrength > towerStrength ) {
-                castle.recruitBestAvailable( castle.GetKingdom().GetFunds() );
+                castle.recruitBestAvailable( kingdom.GetFunds() );
                 OptimizeTroopsOrder( castle.GetArmy() );
             }
 
@@ -218,7 +221,7 @@ namespace AI
                 Build( castle, GetDefensiveStructures() );
             }
 
-            castle.recruitBestAvailable( castle.GetKingdom().GetFunds() );
+            castle.recruitBestAvailable( kingdom.GetFunds() );
             OptimizeTroopsOrder( castle.GetArmy() );
 
             if ( castle.GetActualArmy().getTotalCount() > 0 ) {
