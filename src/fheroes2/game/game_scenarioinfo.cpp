@@ -320,6 +320,7 @@ namespace
                     levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
+                    RedrawDifficultyInfo( pointDifficultyInfo );
                     playersInfo.RedrawInfo( false );
                     ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     buttonOk.draw();
