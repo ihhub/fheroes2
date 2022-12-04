@@ -661,7 +661,7 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_2_Players: {
+            case ICN::BUTTON_2_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
                 if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 0 );
@@ -680,7 +680,7 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_3_Players: {
+            case ICN::BUTTON_3_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
                 if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 2 );
@@ -699,7 +699,7 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_4_Players: {
+            case ICN::BUTTON_4_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
                 if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 4 );
@@ -718,7 +718,7 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_5_Players: {
+            case ICN::BUTTON_5_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
                 if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 6 );
@@ -737,7 +737,7 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_6_Players: {
+            case ICN::BUTTON_6_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
                 if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 8 );
