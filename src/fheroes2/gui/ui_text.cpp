@@ -426,32 +426,30 @@ namespace
 
         int32_t maxWidth = 1;
 
-        // If there are more than 50 characters in 'data', then we have a long sentence with a large number of words
-        // and there is no need to analyze the word width - there should already be enough space for such a phrase.
-        if ( size < 51 ) {
-            const CharValidator validator( fontType.size );
+        const CharValidator validator( fontType.size );
 
-            int32_t width = 0;
+        int32_t width = 0;
 
-            const uint8_t * dataEnd = data + size;
-            while ( data != dataEnd ) {
-                if ( *data == lineSeparator || isSpaceChar( *data ) ) {
-                    // If it is the end of line ("\n") or a space (""), then the word has ended.
-                    if ( width > maxWidth )
-                        maxWidth = width;
-                    width = 0;
+        const uint8_t * dataEnd = data + size;
+        while ( data != dataEnd ) {
+            if ( *data == lineSeparator || isSpaceChar( *data ) ) {
+                // If it is the end of line ("\n") or a space (""), then the word has ended.
+                if ( maxWidth < width ) {
+                    maxWidth = width;
                 }
-                else if ( validator.isValid( *data ) ) {
-                    width += getCharWidth( *data, fontType );
-                }
-                else {
-                    width += getCharWidth( invalidChar, fontType );
-                }
-                ++data;
+                width = 0;
             }
+            else if ( validator.isValid( *data ) ) {
+                width += getCharWidth( *data, fontType );
+            }
+            else {
+                width += getCharWidth( invalidChar, fontType );
+            }
+            ++data;
+        }
 
-            if ( width > maxWidth )
-                maxWidth = width;
+        if ( maxWidth < width ) {
+            maxWidth = width;
         }
 
         return maxWidth;
@@ -782,6 +780,13 @@ namespace fheroes2
         if ( offsets.size() > 1 ) {
             // This is a multi-line message. Optimize it to fit the text evenly.
             int32_t startWidth = 1;
+            for ( const Text & text : _texts ) {
+                const int32_t maxWordWidth
+                    = getMaxWordWidth( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), text._fontType );
+                if ( startWidth < maxWordWidth ) {
+                    startWidth = maxWordWidth;
+                }
+            }
             int32_t endWidth = maxWidth;
             while ( startWidth + 1 < endWidth ) {
                 const int32_t currentWidth = ( endWidth + startWidth ) / 2;
