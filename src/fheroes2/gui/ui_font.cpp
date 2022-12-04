@@ -3565,6 +3565,10 @@ namespace
             letter.setPosition( buttonFontOffset.x, buttonFontOffset.y );
         }
 
+        // Space
+        released[0].resize( 7 + offset * 2, 1 + offset * 2 );
+        released[0].reset();
+
         // -
         released[13].resize( 6 + offset * 2, 6 + offset * 2 );
         released[13].reset();
