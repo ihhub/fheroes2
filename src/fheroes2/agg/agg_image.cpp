@@ -75,6 +75,11 @@ namespace
                                                 ICN::BUTTON_ORIGINAL_CAMPAIGN,
                                                 ICN::BUTTON_EXPANSION_CAMPAIGN,
                                                 ICN::BUTTON_HOT_SEAT,
+                                                ICN::BUTTON_2_PLAYERS,
+                                                ICN::BUTTON_3_PLAYERS,
+                                                ICN::BUTTON_4_PLAYERS,
+                                                ICN::BUTTON_5_PLAYERS,
+                                                ICN::BUTTON_6_PLAYERS,
                                                 ICN::BTNBATTLEONLY,
                                                 ICN::BTNGIFT_GOOD,
                                                 ICN::BTNGIFT_EVIL,
@@ -652,7 +657,97 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HOT SEAT" ), { 12, 5 }, { 11, 6 }, { 117, 47 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HOT SEAT" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_2_Players: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 1 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "2 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_3_Players: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 2 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 3 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "3 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_4_Players: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 4 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 5 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "4 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_5_Players: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 6 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 7 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "5 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_6_Players: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 8 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 9 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "6 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1278,6 +1373,11 @@ namespace fheroes2
             case ICN::BUTTON_ORIGINAL_CAMPAIGN:
             case ICN::BUTTON_EXPANSION_CAMPAIGN:
             case ICN::BUTTON_HOT_SEAT:
+            case ICN::BUTTON_2_PLAYERS,
+            case ICN::BUTTON_3_PLAYERS,
+            case ICN::BUTTON_4_PLAYERS,
+            case ICN::BUTTON_5_PLAYERS,
+            case ICN::BUTTON_6_PLAYERS,
             case ICN::BTNBATTLEONLY:
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL:

@@ -1001,6 +1001,11 @@ namespace ICN
         BUTTON_ORIGINAL_CAMPAIGN,
         BUTTON_EXPANSION_CAMPAIGN,
         BUTTON_HOT_SEAT,
+        BUTTON_2_PLAYERS,
+        BUTTON_3_PLAYERS,
+        BUTTON_4_PLAYERS,
+        BUTTON_5_PLAYERS,
+        BUTTON_6_PLAYERS,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

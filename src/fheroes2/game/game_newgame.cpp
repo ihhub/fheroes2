@@ -640,12 +640,12 @@ uint32_t Game::SelectCountPlayers()
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();
 
-    fheroes2::Button button2Players( buttonPos.x, buttonPos.y, ICN::BTNHOTST, 0, 1 );
-    fheroes2::Button button3Players( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNHOTST, 2, 3 );
-    fheroes2::Button button4Players( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNHOTST, 4, 5 );
-    fheroes2::Button button5Players( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BTNHOTST, 6, 7 );
-    fheroes2::Button button6Players( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BTNHOTST, 8, 9 );
-    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
+    fheroes2::Button button2Players( buttonPos.x, buttonPos.y, ICN::BUTTON_2_PLAYERS, 0, 1 );
+    fheroes2::Button button3Players( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_3_PLAYERS, 0, 1 );
+    fheroes2::Button button4Players( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BUTTON_4_PLAYERS, 0, 1 );
+    fheroes2::Button button5Players( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BUTTON_5_PLAYERS, 0, 1 );
+    fheroes2::Button button6Players( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BUTTON_6_PLAYERS, 0, 1 );
+    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     button2Players.draw();
     button3Players.draw();
