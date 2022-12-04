@@ -59,6 +59,8 @@ namespace fheroes2
 
         ObjectRenderingInfo( ObjectRenderingInfo && ) = default;
 
+        ~ObjectRenderingInfo() = default;
+
         ObjectRenderingInfo & operator=( const ObjectRenderingInfo & ) = default;
 
         ObjectRenderingInfo & operator=( ObjectRenderingInfo && ) = default;
