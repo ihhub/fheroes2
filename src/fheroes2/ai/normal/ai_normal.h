@@ -251,7 +251,7 @@ namespace AI
         // In order to avoid extra computations during AI turn it is important to keep cache of monster strength but update it when an action on a monster is taken.
         std::map<int32_t, double> _neutralMonsterStrengthCache;
 
-        void CastleTurn( Castle & castle, bool defensive );
+        void CastleTurn( Castle & castle, const bool defensiveStrategy );
         bool HeroesTurn( VecHeroes & heroes );
 
         double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;

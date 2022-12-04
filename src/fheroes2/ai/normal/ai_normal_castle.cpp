@@ -24,6 +24,7 @@
 
 #include "ai.h"
 #include "ai_normal.h"
+#include "battle_tower.h"
 #include "castle.h"
 #include "kingdom.h"
 #include "maps_tiles.h"
@@ -57,8 +58,14 @@ namespace AI
 
     const std::vector<BuildOrder> & GetDefensiveStructures()
     {
-        static const std::vector<BuildOrder> defensive = { { BUILD_LEFTTURRET, 1 }, { BUILD_RIGHTTURRET, 1 }, { BUILD_MOAT, 1 },  { BUILD_CAPTAIN, 1 },
-                                                           { BUILD_MAGEGUILD1, 1 }, { BUILD_SPEC, 2 },        { BUILD_TAVERN, 1 } };
+        static const std::vector<BuildOrder> defensive = { { BUILD_LEFTTURRET, 1 }, { BUILD_RIGHTTURRET, 1 }, { BUILD_MOAT, 1 }, { BUILD_CAPTAIN, 1 } };
+
+        return defensive;
+    }
+
+    const std::vector<BuildOrder> & GetSupportingDefensiveStructures()
+    {
+        static const std::vector<BuildOrder> defensive = { { BUILD_MAGEGUILD1, 1 }, { BUILD_SPEC, 2 }, { BUILD_TAVERN, 1 } };
 
         return defensive;
     }
@@ -176,20 +183,45 @@ namespace AI
             }
         }
 
-        // Call internally checks if it's valid (space/resources) to buy one
-        if ( castle.GetKingdom().GetFunds() >= PaymentConditions::BuyBoat() * ( islandOrPeninsula ? 2 : 4 ) )
+        // Call internally checks if it's valid (space/resources) to buy one.
+        const Kingdom & kingdom = castle.GetKingdom();
+        if ( !kingdom.GetHeroes().empty() && kingdom.GetFunds() >= PaymentConditions::BuyBoat() * ( islandOrPeninsula ? 2 : 4 ) ) {
             castle.BuyBoat();
+        }
 
-        return Build( castle, GetDefensiveStructures(), 10 );
+        if ( Build( castle, GetDefensiveStructures(), 10 ) ) {
+            return true;
+        }
+
+        return Build( castle, GetSupportingDefensiveStructures(), 10 );
     }
+}
 
-    void Normal::CastleTurn( Castle & castle, bool defensive )
+namespace AI
+{
+    void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
     {
-        if ( defensive ) {
-            Build( castle, GetDefensiveStructures() );
+        if ( defensiveStrategy ) {
+            const Troops possibleReinforcement = castle.getAvailableArmy( castle.GetKingdom().GetFunds() );
+
+            // A very rough estimation of strength.
+            const Battle::Tower tower( castle, Battle::TWR_RIGHT, Rand::DeterministicRandomGenerator( 0 ), 0 );
+            const double towerStrength = tower.GetStrength();
+            if ( possibleReinforcement.GetStrength() > towerStrength ) {
+                castle.recruitBestAvailable( castle.GetKingdom().GetFunds() );
+                OptimizeTroopsOrder( castle.GetArmy() );
+            }
+
+            if ( castle.GetActualArmy().getTotalCount() > 0 ) {
+                Build( castle, GetDefensiveStructures() );
+            }
 
             castle.recruitBestAvailable( castle.GetKingdom().GetFunds() );
             OptimizeTroopsOrder( castle.GetArmy() );
+
+            if ( castle.GetActualArmy().getTotalCount() > 0 ) {
+                Build( castle, GetSupportingDefensiveStructures() );
+            }
         }
         else {
             const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
