@@ -285,6 +285,7 @@ namespace Battle
         void RedrawActionTowerPart1( const Tower &, const Unit & );
         void RedrawActionTowerPart2( const Tower &, const TargetInfo & );
         void RedrawActionCatapult( int target, bool hit );
+        void RedrawAfterDemolitionSmoke( int target );
         void RedrawActionTeleportSpell( Unit &, int32_t );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
         void RedrawActionSummonElementalSpell( Unit & target );

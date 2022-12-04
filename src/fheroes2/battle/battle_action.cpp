@@ -1000,6 +1000,10 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
 
                 if ( hit ) {
                     SetCastleTargetValue( target, GetCastleTargetValue( target ) - damage );
+                    if ( _interface ) {
+                        // Continue animating the smoke cloud after changing the "health" of the building.
+                        _interface->RedrawAfterDemolitionSmoke( target );
+                    }
                 }
 
                 DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << target << ", damage: " << damage << ", hit: " << hit )

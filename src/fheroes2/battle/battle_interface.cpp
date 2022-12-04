@@ -4173,19 +4173,31 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     }
 
     // draw cloud
-    const int icn = hit ? ICN::LICHCLOD : ICN::SMALCLOD;
+    const int32_t icn = hit ? ICN::LICHCLOD : ICN::SMALCLOD;
     uint32_t frame = 0;
+    // If the building is hit, end the animation on the 5th frame to change the building state (when the smoke cloud is largest).
+    uint32_t maxFrame = hit ? 5 : fheroes2::AGG::GetICNCount( icn );
+    const bool isBridgeDestroyed = hit && ( target == Battle::CAT_BRIDGE );
+    // If the bridge is destroyed - prepare parameters for the second smoke cloud.
+    if ( isBridgeDestroyed ) {
+        pt1.x = pt2.x - 45;
+        pt1.y = pt2.y + 65;
+        // Increase maxFrame to get bigger second smoke cloud.
+        maxFrame = 6;
+    }
 
     AudioManager::PlaySound( M82::CATSND02 );
 
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents() && frame < maxFrame ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_CLOUD_DELAY ) ) {
-            if ( catapult_frame < 9 )
-                ++catapult_frame;
-
             RedrawPartialStart();
+            // Start animation of the second smoke cloud only for the bridge and after 2 frames of the first smoke cloud.
+            if ( isBridgeDestroyed && frame > 1 ) {
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame - 2 );
+                fheroes2::Blit( sprite, _mainSurface, pt1.x + sprite.x(), pt1.y + sprite.y() );
+            }
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame );
             fheroes2::Blit( sprite, _mainSurface, pt2.x + sprite.x(), pt2.y + sprite.y() );
             RedrawPartialFinish();
@@ -4194,6 +4206,58 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
         }
     }
 
+    if ( !hit ) {
+        catapult_frame = 0;
+    }
+}
+
+void Battle::Interface::RedrawAfterDemolitionSmoke( int target )
+{
+    // finish the smoke cloud animation after the building's state has changed and it draws as demolished.
+
+    LocalEvent & le = LocalEvent::Get();
+
+    fheroes2::Point pt1 = Catapult::GetTargetPosition( target, true );
+    fheroes2::Point pt2;
+    const fheroes2::Rect & area = GetArea();
+    pt1.x += area.x;
+    pt1.y += area.y;
+
+    // Contionue the smoke cloud animation from the 6th frame.
+    uint32_t frame = 5;
+    const uint32_t maxFrame = fheroes2::AGG::GetICNCount( ICN::LICHCLOD );
+    uint32_t maxAnimationFrame = maxFrame;
+    const bool isBridgeDestroyed = ( target == Battle::CAT_BRIDGE );
+    // If the bridge is destroyed - prepare parameters for the second smoke cloud.
+    if ( isBridgeDestroyed ) {
+        pt2.x = pt1.x - 45;
+        pt2.y = pt1.y + 65;
+        // Increase maxAnimationFrame to finish the second smoke animation.
+        maxAnimationFrame += 2;
+        // Bridge smoke animation should contionue from the 7th frame.
+        frame = 6;
+    }
+
+    while ( le.HandleEvents() && frame < maxAnimationFrame ) {
+        CheckGlobalEvents( le );
+
+        if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_CLOUD_DELAY ) ) {
+            RedrawPartialStart();
+            // Draw animation of the second smoke cloud only for the bridge.
+            if ( isBridgeDestroyed ) {
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, frame - 2 );
+                fheroes2::Blit( sprite, _mainSurface, pt2.x + sprite.x(), pt2.y + sprite.y() );
+            }
+            // Don't draw the smoke cloud after its animation has ended (in case the second smoke cloud is still animating).
+            if ( frame <= maxFrame ) {
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, frame );
+                fheroes2::Blit( sprite, _mainSurface, pt1.x + sprite.x(), pt1.y + sprite.y() );
+            }
+            RedrawPartialFinish();
+
+            ++frame;
+        }
+    }
     catapult_frame = 0;
 }
 
