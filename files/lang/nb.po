@@ -57,7 +57,7 @@ msgstr "KRIGEN\nOM\nTRONEN"
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
-msgstr "PRISEN\nFOR\nTROFASTHET"
+msgstr "PRISEN\nFOR TRO-\nFASTHET"
 
 msgid "HOT SEAT"
 msgstr "RUNDGANG"
