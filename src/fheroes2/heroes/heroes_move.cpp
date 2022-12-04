@@ -567,7 +567,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroSpritesPerTile() const
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, 255 );
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, static_cast<uint8_t>( 255 ) );
     }
 
     outputSquareInfo.clear();
@@ -585,7 +585,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroSpritesPerTile() const
     assert( outputSquareInfo.size() == outputImageInfo.size() );
 
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, 255 );
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, static_cast<uint8_t>( 255 ) );
     }
 
     outputSquareInfo.clear();
@@ -601,7 +601,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroSpritesPerTile() const
         fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, reflect, outputSquareInfo, outputImageInfo );
 
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, 255 );
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, static_cast<uint8_t>( 255 ) );
         }
     }
 
@@ -637,7 +637,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroShadowSpritesPerTile()
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, 255 );
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, static_cast<uint8_t>( 255 ) );
     }
 
     return objectInfo;

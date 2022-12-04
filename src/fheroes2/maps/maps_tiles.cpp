@@ -1379,7 +1379,8 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.first, false, 255 );
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.first, false,
+                                 static_cast<uint8_t>( 255 ) );
     }
 
     outputSquareInfo.clear();
@@ -1394,7 +1395,8 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.second, false, 255 );
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.second, false,
+                                     static_cast<uint8_t>( 255 ) );
         }
     }
 
@@ -1420,7 +1422,8 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.first, false, 255 );
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.first, false,
+                                 static_cast<uint8_t>( 255 ) );
     }
 
     outputSquareInfo.clear();
@@ -1435,7 +1438,8 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.second, false, 255 );
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.second, false,
+                                     static_cast<uint8_t>( 255 ) );
         }
     }
 
@@ -1465,7 +1469,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getBoatSpritesPerTile() 
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, isReflected, 255 );
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, isReflected, static_cast<uint8_t>( 255 ) );
     }
 
     return objectInfo;
@@ -1492,7 +1496,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getBoatShadowSpritesPerT
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, 255 );
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, static_cast<uint8_t>( 255 ) );
     }
 
     return objectInfo;
@@ -1524,7 +1528,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMineGuardianSpritesPe
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, 255 );
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, static_cast<uint8_t>( 255 ) );
         }
         break;
     }
