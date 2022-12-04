@@ -261,8 +261,8 @@ namespace
         icnIndex = icnIndex + ( heroMovementIndex % heroFrameCountPerTile );
     }
 
-    void getFlagSpriteInfo( const Heroes & hero, const int heroMovementIndex, const bool isHeroChangingDirection, fheroes2::Point & flagOffset,
-                            int & icnId, uint32_t & icnIndex )
+    void getFlagSpriteInfo( const Heroes & hero, const int heroMovementIndex, const bool isHeroChangingDirection, fheroes2::Point & flagOffset, int & icnId,
+                            uint32_t & icnIndex )
     {
         icnId = ICN::UNKNOWN;
 
@@ -580,7 +580,6 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroSpritesPerTile() const
     const fheroes2::Point flagSpriteOffset( offset.x + ( reflect ? ( TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() ) : spriteFlag.x() + flagOffset.x ),
                                             offset.y + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
-
     fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, reflect, outputSquareInfo, outputImageInfo );
 
     assert( outputSquareInfo.size() == outputImageInfo.size() );
@@ -638,7 +637,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroShadowSpritesPerTile()
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false , 255 );
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, 255 );
     }
 
     return objectInfo;

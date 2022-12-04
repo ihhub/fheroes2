@@ -45,8 +45,8 @@
 #include "route.h"
 #include "skill.h"
 #include "spell.h"
-#include "visit.h"
 #include "ui_object_rendering.h"
+#include "visit.h"
 
 class Castle;
 class StreamBase;

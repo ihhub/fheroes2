@@ -361,15 +361,15 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
 }
 
 void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, const fheroes2::Rect & srcRoi, int32_t ox, int32_t oy,
-                                        const fheroes2::Point & mp, bool flip, uint8_t alpha ) const
+                                      const fheroes2::Point & mp, bool flip, uint8_t alpha ) const
 {
     const fheroes2::Point tileOffset = GetRelativeTilePosition( mp );
 
     const fheroes2::Rect imageRoi{ tileOffset.x + ox, tileOffset.y + oy, srcRoi.width, srcRoi.height };
     const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
 
-    fheroes2::AlphaBlit( src, srcRoi.x + overlappedRoi.x - imageRoi.x, srcRoi.y + overlappedRoi.y - imageRoi.y, dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width,
-                         overlappedRoi.height, alpha, flip );
+    fheroes2::AlphaBlit( src, srcRoi.x + overlappedRoi.x - imageRoi.x, srcRoi.y + overlappedRoi.y - imageRoi.y, dst, overlappedRoi.x, overlappedRoi.y,
+                         overlappedRoi.width, overlappedRoi.height, alpha, flip );
 }
 
 void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image & src, const fheroes2::Point & mp ) const

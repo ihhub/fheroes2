@@ -1573,7 +1573,6 @@ namespace fheroes2
                     outputImageInfo.emplace_back( fheroes2::Point( intersection.x - roi.x, intersection.y - roi.y ),
                                                   fheroes2::Rect( intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width,
                                                                   intersection.height ) );
-
                 }
             }
         }

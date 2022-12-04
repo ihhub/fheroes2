@@ -34,7 +34,7 @@ namespace fheroes2
 
         int icnId{ -1 };
 
-        uint32_t icnIndex { 0 };
+        uint32_t icnIndex{ 0 };
 
         bool isFlipped{ false };
 
@@ -42,8 +42,8 @@ namespace fheroes2
 
         ObjectRenderingInfo() = default;
 
-        ObjectRenderingInfo( const Point & tileOffset_, const Point & imageOffset_, const Rect & area_, const int icnId_, const uint32_t icnIndex_,
-                              const bool isFlipped_, const uint8_t alphaValue_ )
+        ObjectRenderingInfo( const Point & tileOffset_, const Point & imageOffset_, const Rect & area_, const int icnId_, const uint32_t icnIndex_, const bool isFlipped_,
+                             const uint8_t alphaValue_ )
             : tileOffset( tileOffset_ )
             , imageOffset( imageOffset_ )
             , area( area_ )
