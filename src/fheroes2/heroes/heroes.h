@@ -46,6 +46,7 @@
 #include "skill.h"
 #include "spell.h"
 #include "visit.h"
+#include "ui_object_rendering.h"
 
 class Castle;
 class StreamBase;
@@ -466,8 +467,8 @@ public:
     bool MayCastAdventureSpells() const;
 
     // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
-    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getHeroSpritesPerTile() const;
-    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getHeroShadowSpritesPerTile() const;
+    std::vector<fheroes2::ObjectRenderingInfo> getHeroSpritesPerTile() const;
+    std::vector<fheroes2::ObjectRenderingInfo> getHeroShadowSpritesPerTile() const;
 
     void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
 

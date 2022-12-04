@@ -790,7 +790,7 @@ namespace fheroes2
         const uint8_t * gamePalette = getGamePalette();
 
         if ( flip ) {
-            const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
+            const int32_t offsetInY = inY * widthIn + width - 1 + inX;
             const uint8_t * imageInY = in.image() + offsetInY;
             const uint8_t * transformInY = in.transform() + offsetInY;
 
@@ -993,7 +993,7 @@ namespace fheroes2
         const int32_t widthOut = out.width();
 
         if ( flip ) {
-            const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
+            const int32_t offsetInY = inY * widthIn + width - 1 + inX;
             const uint8_t * imageInY = in.image() + offsetInY;
             const uint8_t * transformInY = in.transform() + offsetInY;
 
@@ -1525,8 +1525,8 @@ namespace fheroes2
         DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
-    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, const bool flip,
-                               std::vector<std::pair<Point, Sprite>> & output )
+    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, const bool flip, std::vector<Point> & outputSquareId,
+                               std::vector<std::pair<Point, Rect>> & outputImageInfo )
     {
         if ( original.empty() ) {
             return;
@@ -1562,22 +1562,18 @@ namespace fheroes2
                 assert( intersection.width > 0 && intersection.height > 0 );
 
                 if ( flip ) {
-                    Sprite cropped( intersection.width, intersection.height );
-                    Flip( original, original.width() - intersection.x + spriteRelativeOffset.x - intersection.width, intersection.y - spriteRelativeOffset.y, cropped, 0,
-                          0, intersection.width, intersection.height, true, false );
-
-                    assert( !cropped.empty() );
-                    cropped.setPosition( intersection.x - roi.x, intersection.y - roi.y );
-
-                    output.emplace_back( offset + Point( x, y ), std::move( cropped ) );
+                    outputSquareId.emplace_back( offset + Point( x, y ) );
+                    outputImageInfo.emplace_back( fheroes2::Point( intersection.x - roi.x, intersection.y - roi.y ),
+                                                  fheroes2::Rect( original.width() - intersection.x + spriteRelativeOffset.x - intersection.width,
+                                                                  intersection.y - spriteRelativeOffset.y, intersection.width, intersection.height ) );
                 }
                 else {
-                    Sprite cropped
-                        = Crop( original, intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width, intersection.height );
-                    assert( !cropped.empty() );
-                    cropped.setPosition( intersection.x - roi.x, intersection.y - roi.y );
+                    outputSquareId.emplace_back( offset + Point( x, y ) );
 
-                    output.emplace_back( offset + Point( x, y ), std::move( cropped ) );
+                    outputImageInfo.emplace_back( fheroes2::Point( intersection.x - roi.x, intersection.y - roi.y ),
+                                                  fheroes2::Rect( intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width,
+                                                                  intersection.height ) );
+
                 }
             }
         }

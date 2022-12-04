@@ -333,6 +333,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_kingdom.h" />
     <ClInclude Include="src\fheroes2\gui\ui_language.h" />
     <ClInclude Include="src\fheroes2\gui\ui_monster.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_object_rendering.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
     <ClInclude Include="src\fheroes2\gui\ui_option_item.h" />
     <ClInclude Include="src\fheroes2\gui\ui_text.h" />

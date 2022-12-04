@@ -38,6 +38,7 @@
 #include "pairs.h"
 #include "resource.h"
 #include "skill.h"
+#include "ui_object_rendering.h"
 #include "world_regions.h"
 
 class Heroes;
@@ -256,11 +257,11 @@ namespace Maps
 
         void drawByIcnId( fheroes2::Image & output, const Interface::GameArea & area, const int32_t icnId ) const;
 
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterShadowSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatShadowSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMineGuardianSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile() const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );
