@@ -585,7 +585,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroSpritesPerTile() const
     assert( outputSquareInfo.size() == outputImageInfo.size() );
 
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect , 255 );
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, 255 );
     }
 
     outputSquareInfo.clear();

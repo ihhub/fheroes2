@@ -54,5 +54,13 @@ namespace fheroes2
         {
             // Do nothing.
         }
+
+        ObjectRenderingInfo( const ObjectRenderingInfo & ) = default;
+
+        ObjectRenderingInfo( ObjectRenderingInfo && ) = default;
+
+        ObjectRenderingInfo & operator=( const ObjectRenderingInfo & ) = default;
+
+        ObjectRenderingInfo & operator=( ObjectRenderingInfo && ) = default;
     };
 }
