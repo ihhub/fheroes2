@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-16 13:44+0000\n"
-"PO-Revision-Date: 2022-12-03 09:40+0100\n"
+"PO-Revision-Date: 2022-12-03 11:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dansk\n"
 "Language: da\n"
@@ -8018,25 +8018,25 @@ msgid "Invalid Artifact"
 msgstr ""
 
 msgid "Wood"
-msgstr ""
+msgstr "Træ"
 
 msgid "Mercury"
-msgstr ""
+msgstr "Kviksølv"
 
 msgid "Ore"
-msgstr ""
+msgstr "Malm"
 
 msgid "Sulfur"
-msgstr ""
+msgstr "Svovl"
 
 msgid "Crystal"
-msgstr ""
+msgstr "Krystal"
 
 msgid "Gems"
-msgstr ""
+msgstr "Juveler"
 
 msgid "Gold"
-msgstr ""
+msgstr "Guld"
 
 msgid ""
 "There are seven resources in Heroes 2, used to build and improves castles, "
@@ -8052,10 +8052,10 @@ msgid ""
 msgstr ""
 
 msgid "Fireball"
-msgstr ""
+msgstr "Ildkugle"
 
 msgid "Fireblast"
-msgstr ""
+msgstr "Flammebrag"
 
 msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
@@ -8066,10 +8066,10 @@ msgid "Causes a bolt of electrical energy to strike the selected creature."
 msgstr ""
 
 msgid "Lightning Bolt"
-msgstr ""
+msgstr "Lynkile"
 
 msgid "Chain Lightning"
-msgstr ""
+msgstr "Lynkæde"
 
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
@@ -8079,14 +8079,14 @@ msgid ""
 msgstr ""
 
 msgid "Teleport"
-msgstr ""
+msgstr "Teleport"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
 msgstr ""
 
 msgid "Cure"
-msgstr ""
+msgstr "Kur"
 
 msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
@@ -8094,7 +8094,7 @@ msgid ""
 msgstr ""
 
 msgid "Mass Cure"
-msgstr ""
+msgstr "Massekur"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
@@ -8102,19 +8102,19 @@ msgid ""
 msgstr ""
 
 msgid "Resurrect"
-msgstr ""
+msgstr "Genoplivelse"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
 
 msgid "Resurrect True"
-msgstr ""
+msgstr "Sand Genoplivelse"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
 msgstr ""
 
 msgid "Haste"
-msgstr ""
+msgstr "Forhastning"
 
 msgid "Increases the speed of any creature by %{count}."
 msgstr ""
@@ -8123,16 +8123,16 @@ msgid "Increases the speed of all of your creatures by %{count}."
 msgstr ""
 
 msgid "Mass Haste"
-msgstr ""
+msgstr "Masseforhastning"
 
 msgid "Slows target to half movement rate."
 msgstr ""
 
 msgid "spell|Slow"
-msgstr ""
+msgstr "spell|Sløvning"
 
 msgid "Mass Slow"
-msgstr ""
+msgstr "Masseforsløvning"
 
 msgid "Slows all enemies to half movement rate."
 msgstr ""
@@ -8141,10 +8141,10 @@ msgid "Clouds the affected creatures' eyes, preventing them from moving."
 msgstr ""
 
 msgid "spell|Blind"
-msgstr ""
+msgstr "spell|Blinding"
 
 msgid "Bless"
-msgstr ""
+msgstr "Velsignelse"
 
 msgid "Causes the selected creatures to inflict maximum damage."
 msgstr ""
@@ -8153,13 +8153,13 @@ msgid "Causes all of your units to inflict maximum damage."
 msgstr ""
 
 msgid "Mass Bless"
-msgstr ""
+msgstr "Massevelsignelse"
 
 msgid "Magically increases the defense skill of the selected creatures."
 msgstr ""
 
 msgid "Stoneskin"
-msgstr ""
+msgstr "Stenskind"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
@@ -8167,47 +8167,47 @@ msgid ""
 msgstr ""
 
 msgid "Steelskin"
-msgstr ""
+msgstr "Stålskind"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr ""
 
 msgid "Curse"
-msgstr ""
+msgstr "Forbandelse"
 
 msgid "Causes all enemy troops to inflict minimum damage."
 msgstr ""
 
 msgid "Mass Curse"
-msgstr ""
+msgstr "Masseforbandelse"
 
 msgid "Damages all undead in the battle."
 msgstr ""
 
 msgid "Holy Word"
-msgstr ""
+msgstr "Helligt Ord"
 
 msgid ""
 "Damages all undead in the battle.  This is an improved version of Holy Word."
 msgstr ""
 
 msgid "Holy Shout"
-msgstr ""
+msgstr "Helligt Råb"
 
 msgid "Anti-Magic"
-msgstr ""
+msgstr "Anti-magi"
 
 msgid "Prevents harmful magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"
-msgstr ""
+msgstr "Magiophævelse"
 
 msgid "Removes all magic spells from a single target."
 msgstr ""
 
 msgid "Mass Dispel"
-msgstr ""
+msgstr "Masseophævelse"
 
 msgid "Removes all magic spells from all creatures."
 msgstr ""
@@ -8216,23 +8216,23 @@ msgid "Causes a magic arrow to strike the selected target."
 msgstr ""
 
 msgid "Magic Arrow"
-msgstr ""
+msgstr "Magisk Pil"
 
 msgid "Berserker"
-msgstr ""
+msgstr "Berserker"
 
 msgid "Causes a creature to attack its nearest neighbor."
 msgstr ""
 
 msgid "Armageddon"
-msgstr ""
+msgstr "Ragnarok"
 
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
 
 msgid "Elemental Storm"
-msgstr ""
+msgstr "Elemental Storm"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr ""
@@ -8243,16 +8243,16 @@ msgid ""
 msgstr ""
 
 msgid "Meteor Shower"
-msgstr ""
+msgstr "Meteorregn"
 
 msgid "Paralyze"
-msgstr ""
+msgstr "Paralyse"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
 msgstr ""
 
 msgid "Hypnotize"
-msgstr ""
+msgstr "Hypnose"
 
 msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
@@ -8260,13 +8260,13 @@ msgid ""
 msgstr ""
 
 msgid "Cold Ray"
-msgstr ""
+msgstr "Kold Stråle"
 
 msgid "Drains body heat from a single enemy unit."
 msgstr ""
 
 msgid "Cold Ring"
-msgstr ""
+msgstr "Kold Ring"
 
 msgid ""
 "Drains body heat from all units surrounding the center point, but not "
@@ -8274,7 +8274,7 @@ msgid ""
 msgstr ""
 
 msgid "Disrupting Ray"
-msgstr ""
+msgstr "Forstyrrende Stråle"
 
 msgid "Reduces the defense rating of an enemy unit by three."
 msgstr ""
@@ -8283,10 +8283,10 @@ msgid "Damages all living (non-undead) units in the battle."
 msgstr ""
 
 msgid "Death Ripple"
-msgstr ""
+msgstr "Dødskrusning"
 
 msgid "Death Wave"
-msgstr ""
+msgstr "Dødsbølge"
 
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
@@ -8294,25 +8294,25 @@ msgid ""
 msgstr ""
 
 msgid "Dragon Slayer"
-msgstr ""
+msgstr "Drage Dræber"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
 msgstr ""
 
 msgid "Blood Lust"
-msgstr ""
+msgstr "Blodlyst"
 
 msgid "Increases a unit's attack skill."
 msgstr ""
 
 msgid "Animate Dead"
-msgstr ""
+msgstr "Animer døde"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
 
 msgid "Mirror Image"
-msgstr ""
+msgstr "Spejlbillede"
 
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units.  "
@@ -8324,34 +8324,34 @@ msgid "Halves damage received from ranged attacks for a single unit."
 msgstr ""
 
 msgid "Shield"
-msgstr ""
+msgstr "Skærmning"
 
 msgid "Halves damage received from ranged attacks for all of your units."
 msgstr ""
 
 msgid "Mass Shield"
-msgstr ""
+msgstr "Masseskærmning"
 
 msgid "Summon Earth Elemental"
-msgstr ""
+msgstr "Hidkald Jord-elemental"
 
 msgid "Summons Earth Elementals to fight for your army."
 msgstr ""
 
 msgid "Summon Air Elemental"
-msgstr ""
+msgstr "Hidkald Luft-elemental"
 
 msgid "Summons Air Elementals to fight for your army."
 msgstr ""
 
 msgid "Summon Fire Elemental"
-msgstr ""
+msgstr "Hidkald Ild-elemental"
 
 msgid "Summons Fire Elementals to fight for your army."
 msgstr ""
 
 msgid "Summon Water Elemental"
-msgstr ""
+msgstr "Hidkald Vand-elemental"
 
 msgid "Summons Water Elementals to fight for your army."
 msgstr ""
@@ -8360,52 +8360,52 @@ msgid "Damages castle walls."
 msgstr ""
 
 msgid "Earthquake"
-msgstr ""
+msgstr "Jordskælv"
 
 msgid "Causes all mines across the land to become visible."
 msgstr ""
 
 msgid "View Mines"
-msgstr ""
+msgstr "Se Miner"
 
 msgid "Causes all resources across the land to become visible."
 msgstr ""
 
 msgid "View Resources"
-msgstr ""
+msgstr "Se Resurser"
 
 msgid "Causes all artifacts across the land to become visible."
 msgstr ""
 
 msgid "View Artifacts"
-msgstr ""
+msgstr "Se Artefakter"
 
 msgid "Causes all towns and castles across the land to become visible."
 msgstr ""
 
 msgid "View Towns"
-msgstr ""
+msgstr "Se Byer"
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr ""
 
 msgid "View Heroes"
-msgstr ""
+msgstr "Se Helte"
 
 msgid "Causes the entire land to become visible."
 msgstr ""
 
 msgid "View All"
-msgstr ""
+msgstr "Se Alt"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
 
 msgid "Identify Hero"
-msgstr ""
+msgstr "Identificer Helt"
 
 msgid "Summon Boat"
-msgstr ""
+msgstr "Hidkald Båd"
 
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore "
@@ -8417,13 +8417,13 @@ msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
 
 msgid "Dimension Door"
-msgstr ""
+msgstr "Dimensionsdør"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
 
 msgid "Town Gate"
-msgstr ""
+msgstr "Byportal"
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -8431,14 +8431,14 @@ msgid ""
 msgstr ""
 
 msgid "Visions"
-msgstr ""
+msgstr "Visioner"
 
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
 
 msgid "Haunt"
-msgstr ""
+msgstr "Besæt"
 
 msgid ""
 "Haunts a mine you control with Ghosts.  This mine stops producing "
@@ -8446,31 +8446,31 @@ msgid ""
 msgstr ""
 
 msgid "Set Earth Guardian"
-msgstr ""
+msgstr "Sæt Jord-bevogter"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Set Air Guardian"
-msgstr ""
+msgstr "Sæt Luft-bevogter"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Set Fire Guardian"
-msgstr ""
+msgstr "Set Ild-bevogter"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Set Water Guardian"
-msgstr ""
+msgstr "Sæt Vand-bevogter"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Petrification"
-msgstr ""
+msgstr "Forstening"
 
 msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
@@ -8478,31 +8478,31 @@ msgid ""
 msgstr ""
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "Du har ingen Magibog, så du kan ikke kaste magi."
 
 msgid "No spell to cast."
-msgstr ""
+msgstr "Ingen magi at kaste."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr ""
+msgstr "Din helt har %{point} magipoint tilbage."
 
 msgid "View Adventure Spells"
-msgstr ""
+msgstr "Se eventyrmagi"
 
 msgid "View Combat Spells"
-msgstr ""
+msgstr "Se kampmagi"
 
 msgid "View previous page"
-msgstr ""
+msgstr "Se forrige side"
 
 msgid "View next page"
-msgstr ""
+msgstr "Se næste side"
 
 msgid "Close Spellbook"
-msgstr ""
+msgstr "Luk magibog"
 
 msgid "View %{spell}"
-msgstr ""
+msgstr "Se %{spell}"
 
 msgid "This spell does %{damage} points of damage."
 msgstr ""
@@ -8566,55 +8566,58 @@ msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr ""
 
 msgid "north-west"
-msgstr ""
+msgstr "Nordvest"
 
 msgid "north"
-msgstr ""
+msgstr "Nord"
 
 msgid "north-east"
-msgstr ""
+msgstr "Nordøst"
 
 msgid "west"
-msgstr ""
+msgstr "Vest"
 
 msgid "center"
-msgstr ""
+msgstr "Centrum"
 
 msgid "east"
-msgstr ""
+msgstr "Øst"
 
 msgid "south-west"
-msgstr ""
+msgstr "Sydvest"
 
 msgid "south"
-msgstr ""
+msgstr "Syd"
 
 msgid "south-east"
-msgstr ""
+msgstr "Sydøst"
 
 msgid "The truth is out there."
-msgstr ""
+msgstr "Sandheden er derude."
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "Den mørke side er stærkere."
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "Verdens ende er nær."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
 msgstr ""
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "En sortdrage kan til enhver tid klare en titan."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 
 msgid "An unknown force is being resurrected..."
-msgstr ""
+msgstr "En ukendt styrke er ved at genopstå..."
 
 msgid ""
 "Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+"Check den nyeste version af spillet på\n"
+"https://github.com/ihhub/\n"
+"fheroes2/releases"
