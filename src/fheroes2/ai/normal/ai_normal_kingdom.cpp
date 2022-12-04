@@ -359,7 +359,18 @@ namespace AI
             if ( !left.underThreat && !right.underThreat ) {
                 return left.safetyFactor > right.safetyFactor;
             }
-            return left.buildingValue > right.buildingValue;
+
+            if ( left.underThreat && !right.underThreat ) {
+                return true;
+            }
+
+            if ( !left.underThreat && right.underThreat ) {
+                return false;
+            }
+
+            // We have building value of a castle and safety factor. The higher safety factor the lower priority to defend the castle.
+            // Since we compare 2 castles we need to use safety factor of the opposite castle.
+            return left.buildingValue * right.safetyFactor > right.buildingValue * left.safetyFactor;
         } );
 
         return sortedCastleList;
