@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-03 01:14+0000\n"
-"PO-Revision-Date: 2022-11-08 16:44+0000\n"
+"PO-Revision-Date: 2022-12-04 16:52+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -3535,7 +3535,6 @@ msgstr "Басов вокал"
 msgid "Soprano Vocal"
 msgstr "Сопрано вокал"
 
-#, fuzzy
 msgid "Recorded at %{recordingStudio}"
 msgstr "Записано в Green Street Studios"
 
@@ -4306,9 +4305,8 @@ msgstr "Холандски"
 msgid "Hungarian"
 msgstr "Унгарски"
 
-#, fuzzy
 msgid "Danish"
-msgstr "Испански"
+msgstr "Датски"
 
 msgid ", FPS: "
 msgstr ""
@@ -6599,7 +6597,7 @@ msgid "Necromancer"
 msgstr "Некромант"
 
 msgid "Multi"
-msgstr "Комбинация"
+msgstr "Смесен"
 
 msgid "race|Random"
 msgstr "Случаен"
@@ -6608,38 +6606,43 @@ msgid "race|Neutral"
 msgstr "Неутрален"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Рицар"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Варварин"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
-msgstr "Магьосница"
+msgstr ""
+"Магьос\n"
+"ница"
 
 msgid "doubleLined|Warlock"
 msgstr ""
+"Магьос\n"
+"ник"
 
 msgid "doubleLined|Wizard"
 msgstr ""
+"Вълшеб\n"
+"ник"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Некромант"
+msgstr ""
+"Некро\n"
+"мант"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Смесен"
 
-#, fuzzy
 msgid "doubleLinedRace|Random"
 msgstr "Случаен"
 
-#, fuzzy
 msgid "doubleLinedRace|Neutral"
-msgstr "Неутрален"
+msgstr ""
+"Неут\n"
+"рален"
 
 msgid "speed|Standing"
 msgstr "Стояща"
