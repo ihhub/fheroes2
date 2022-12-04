@@ -3615,7 +3615,7 @@ namespace
         released[20].resize( 8 + offset * 2, 10 + offset * 2 );
         released[20].reset();
         fheroes2::DrawLine( released[20], { offset + 0, offset + 4 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::DrawLi19ne( released[20], { offset + 5, offset + 0 }, { offset + 5, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[20], { offset + 5, offset + 0 }, { offset + 5, offset + 4 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[20], { offset + 5, offset + 6 }, { offset + 5, offset + 8 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[20], { offset + 0, offset + 5 }, { offset + 7, offset + 5 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[20], { offset + 3, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
