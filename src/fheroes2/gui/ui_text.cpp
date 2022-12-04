@@ -433,7 +433,7 @@ namespace
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
             if ( *data == lineSeparator || isSpaceChar( *data ) ) {
-                // If it is the end of line ("\n") or a space (""), then the word has ended.
+                // If it is the end of line ("\n") or a space (" "), then the word has ended.
                 if ( maxWidth < width ) {
                     maxWidth = width;
                 }
