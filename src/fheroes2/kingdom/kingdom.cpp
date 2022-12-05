@@ -309,7 +309,7 @@ void Kingdom::RemoveHeroes( const Heroes * hero )
         }
 
         if ( Player * player = Players::Get( GetColor() ) )
-            if ( const auto phero = player->GetFocus<Heroes>(); phero && *phero == hero )
+            if ( const auto * const phero = player->GetFocus<Heroes>(); phero && *phero == hero )
                 player->ResetFocus();
 
         assert( hero != nullptr );
@@ -349,7 +349,7 @@ void Kingdom::RemoveCastle( const Castle * castle )
         }
 
         if ( Player * player = Players::Get( GetColor() ) )
-            if ( const auto pcastle = player->GetFocus<Castle>(); pcastle && *pcastle == castle )
+            if ( const auto * const pcastle = player->GetFocus<Castle>(); pcastle && *pcastle == castle )
                 player->ResetFocus();
 
         assert( castle != nullptr );
