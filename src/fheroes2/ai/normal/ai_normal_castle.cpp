@@ -24,11 +24,15 @@
 
 #include "ai.h"
 #include "ai_normal.h"
+#include "army.h"
+#include "army_troop.h"
 #include "battle_tower.h"
 #include "castle.h"
 #include "kingdom.h"
 #include "maps_tiles.h"
+#include "monster.h"
 #include "payment.h"
+#include "rand.h"
 #include "race.h"
 #include "resource.h"
 #include "world.h"
@@ -208,7 +212,7 @@ namespace AI
             Troops possibleReinforcement = castle.getAvailableArmy( kingdom.GetFunds() );
             double possibleReinforcementStrength = possibleReinforcement.GetStrength();
 
-            // A very rough estimation of strength.
+            // A very rough estimation of strength. We measure the strength of possible army to hire with the strength of purchasing a turret.
             const Battle::Tower tower( castle, Battle::TWR_RIGHT, Rand::DeterministicRandomGenerator( 0 ), 0 );
             const Troop towerMonster( Monster::ARCHER, tower.GetCount() );
             const double towerStrength = towerMonster.GetStrength();
