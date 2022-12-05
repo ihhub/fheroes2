@@ -790,7 +790,7 @@ namespace fheroes2
         const uint8_t * gamePalette = getGamePalette();
 
         if ( flip ) {
-            const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
+            const int32_t offsetInY = inY * widthIn + inX + width - 1;
             const uint8_t * imageInY = in.image() + offsetInY;
             const uint8_t * transformInY = in.transform() + offsetInY;
 
@@ -993,7 +993,7 @@ namespace fheroes2
         const int32_t widthOut = out.width();
 
         if ( flip ) {
-            const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
+            const int32_t offsetInY = inY * widthIn + inX + width - 1;
             const uint8_t * imageInY = in.image() + offsetInY;
             const uint8_t * transformInY = in.transform() + offsetInY;
 

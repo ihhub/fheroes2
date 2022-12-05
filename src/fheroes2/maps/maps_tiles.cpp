@@ -1240,7 +1240,10 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
     // - check the main object which is on the tile
 
     // Some addons must be rendered after the main object on the tile. This applies for flags.
-    std::vector<const TilesAddon *> postRenderingAddon;
+    // Since this method is called intensively during rendering we have to avoid memory allocation on heap.
+    const size_t maxPostRenderAddons = 16;
+    std::array<const TilesAddon *, maxPostRenderAddons> postRenderingAddon;
+    size_t postRenderAddonCount = 0;
 
     for ( const TilesAddon & addon : addons_level1 ) {
         if ( ( addon.level & 0x03 ) != level ) {
@@ -1253,7 +1256,11 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
 
         const int icn = MP2::GetICNObject( addon.object );
         if ( icn == ICN::FLAG32 ) {
-            postRenderingAddon.emplace_back( &addon );
+            // Based on logically thinking it is impossible to have more than 16 flags on a single tile.
+            assert( postRenderAddonCount < maxPostRenderAddons );
+
+            postRenderingAddon[postRenderAddonCount] = &addon;
+            ++postRenderAddonCount;
             continue;
         }
 
@@ -1264,10 +1271,10 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
         renderMainObject( dst, area, mp );
     }
 
-    for ( const TilesAddon * addon : postRenderingAddon ) {
-        assert( addon != nullptr );
+    for ( size_t i = 0; i < postRenderAddonCount; ++i ) {
+        assert( postRenderingAddon[i] != nullptr );
 
-        renderAddonObject( dst, area, mp, *addon );
+        renderAddonObject( dst, area, mp, *postRenderingAddon[i] );
     }
 }
 
