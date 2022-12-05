@@ -37,6 +37,7 @@
 #include "maps_tiles.h"
 #include "mus.h"
 #include "players.h"
+#include "settings.h"
 #include "world.h"
 
 void Interface::Basic::SetFocus( Heroes * hero )

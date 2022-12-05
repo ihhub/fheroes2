@@ -25,6 +25,7 @@
 #define H2GAMEINTERFACE_H
 
 #include <cstdint>
+#include <type_traits>
 
 #include "game_mode.h"
 #include "gamedefs.h"

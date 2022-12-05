@@ -72,6 +72,8 @@
 #include "view_world.h"
 #include "world.h"
 
+class Castle;
+
 void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
 {
     if ( hero == nullptr ) {

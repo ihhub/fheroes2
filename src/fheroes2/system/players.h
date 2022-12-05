@@ -27,12 +27,12 @@
 #include <cstdint>
 #include <memory>
 #include <string>
-#include <utility>
+#include <type_traits>
+#include <variant>
 #include <vector>
 
 #include "bitmodes.h"
 #include "color.h"
-#include <variant>
 
 class StreamBase;
 
