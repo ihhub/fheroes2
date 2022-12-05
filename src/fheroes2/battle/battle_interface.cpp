@@ -254,7 +254,7 @@ namespace
     {
         // Rainbow image size should include the arc size plus the thickness of the rainbow.
         const int32_t rainbowWidth = static_cast<int32_t>( rainbowArc.size() );
-        const int32_t rainbowHeight = static_cast<int32_t>( *std::max_element( rainbowArc.begin(), rainbowArc.end() ) ) + rainbowThickness;
+        const int32_t rainbowHeight = *std::max_element( rainbowArc.begin(), rainbowArc.end() ) + rainbowThickness;
 
         // If the rainbow is vertical - swap width and height.
         const int32_t rainbowImgWidth = isVertical ? rainbowHeight : rainbowWidth;
