@@ -3566,7 +3566,7 @@ namespace
         }
 
         // Space
-        released[0].resize( 7 + offset * 2, 1 + offset * 2 );
+        released[0].resize( 1 + offset * 2, 1 + offset * 2 );
         released[0].reset();
 
         // -
@@ -3638,7 +3638,7 @@ namespace
         released[22].resize( 7 + offset * 2, 10 + offset * 2 );
         released[22].reset();
         fheroes2::DrawLine( released[22], { offset + 1, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[22], { offset + 0, offset + 1 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[22], { offset + 0, offset + 1 }, { offset + 0, offset + 8 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[22], { offset + 1, offset + 4 }, { offset + 5, offset + 4 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[22], { offset + 6, offset + 5 }, { offset + 6, offset + 8 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[22], { offset + 1, offset + 9 }, { offset + 5, offset + 9 }, buttonGoodReleasedColor );
