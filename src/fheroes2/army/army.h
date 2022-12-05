@@ -51,7 +51,7 @@ public:
     Troops() = default;
     Troops( const Troops & troops );
     virtual ~Troops();
-    Troops & operator=( const Troops & rhs );
+    Troops & operator=( const Troops & rhs ) = delete;
 
     void Assign( const Troop *, const Troop * );
     void Assign( const Troops & );
