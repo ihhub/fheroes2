@@ -1242,7 +1242,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
     // Some addons must be rendered after the main object on the tile. This applies for flags.
     // Since this method is called intensively during rendering we have to avoid memory allocation on heap.
     const size_t maxPostRenderAddons = 16;
-    std::array<const TilesAddon *, maxPostRenderAddons> postRenderingAddon;
+    std::array<const TilesAddon *, maxPostRenderAddons> postRenderingAddon{ nullptr };
     size_t postRenderAddonCount = 0;
 
     for ( const TilesAddon & addon : addons_level1 ) {
