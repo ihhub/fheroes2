@@ -23,45 +23,6 @@ msgid ""
 "ONLY"
 msgstr "KAMP"
 
-msgid ""
-"STANDARD\n"
-"GAME"
-msgstr ""
-"ENKELT\n"
-"PARTI"
-
-msgid ""
-"CAMPAIGN\n"
-"GAME"
-msgstr "FELTTOG"
-
-msgid ""
-"MULTI-\n"
-"PLAYER\n"
-"GAME"
-msgstr ""
-"FLER-\n"
-"SPILLER"
-
-msgid "CONFIG"
-msgstr "VALG"
-
-msgid "CANCEL"
-msgstr "AVBRYT"
-
-msgid ""
-"ORIGINAL\n"
-"CAMPAIGN"
-msgstr "KRIGEN\nOM\nTRONEN"
-
-msgid ""
-"EXPANSION\n"
-"CAMPAIGN"
-msgstr "PRISEN\nFOR TRO-\nFASTHET"
-
-msgid "HOT SEAT"
-msgstr "RUNDGANG"
-
 msgid "GIFT"
 msgstr "SEND"
 
