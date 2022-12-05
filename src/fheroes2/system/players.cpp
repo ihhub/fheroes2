@@ -192,17 +192,18 @@ void Player::setAIAutoControlMode( const bool enable )
 
 StreamBase & operator<<( StreamBase & msg, const std::variant<std::monostate, Heroes *, Castle *> & focus )
 {
-    if ( const auto phero = std::get_if<Heroes *>( &focus ) ) {
-        msg << FOCUS_HEROES;
-        msg << static_cast<Heroes *>( *phero )->GetIndex();
-    }
-    else if ( const auto pcastle = std::get_if<Castle *>( &focus ) ) {
-        msg << FOCUS_CASTLE;
-        msg << static_cast<Castle *>( *pcastle )->GetIndex();
-    }
-    else {
-        msg << FOCUS_UNSEL;
+    const int type = static_cast<int>( focus.index() );
+    msg << type;
+    switch ( type ) {
+    case FOCUS_HEROES:
+        msg << std::get<Heroes *>( focus )->GetIndex();
+        break;
+    case FOCUS_CASTLE:
+        msg << std::get<Castle *>( focus )->GetIndex();
+        break;
+    default:
         msg << static_cast<int32_t>( -1 );
+        break;
     }
 
     return msg;
