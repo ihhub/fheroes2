@@ -92,6 +92,9 @@ namespace
 
     const int32_t armyOrderMonsterIconSize = 43; // in both directions.
 
+    // Bridge demolition second smoke cloud offset from the first one after the catapult attack.
+    const fheroes2::Point bridgeDemolitionSmokeOffset( -45, 65 );
+
     struct LightningPoint
     {
         explicit LightningPoint( const fheroes2::Point & p = fheroes2::Point(), uint32_t thick = 1 )
@@ -4093,7 +4096,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     _movingUnit = nullptr;
 }
 
-void Battle::Interface::RedrawActionCatapult( int target, bool hit )
+void Battle::Interface::RedrawActionCatapultPart1( const int target, const bool hit )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -4180,8 +4183,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     const bool isBridgeDestroyed = hit && ( target == Battle::CAT_BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
-        pt1.x = pt2.x - 45;
-        pt1.y = pt2.y + 65;
+        pt1 = pt2 + bridgeDemolitionSmokeOffset;
         // Increase maxFrame to get bigger second smoke cloud.
         maxFrame = 6;
     }
@@ -4211,27 +4213,24 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     }
 }
 
-void Battle::Interface::RedrawAfterDemolitionSmoke( int target )
+void Battle::Interface::RedrawActionCatapultPart2( const int target )
 {
-    // finish the smoke cloud animation after the building's state has changed and it draws as demolished.
+    // Finish the smoke cloud animation after the building's state has changed after the hit and it is drawed as demolished.
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Point pt1 = Catapult::GetTargetPosition( target, true );
+    const fheroes2::Point pt1 = Catapult::GetTargetPosition( target, true ) + GetArea().getPosition();
     fheroes2::Point pt2;
-    const fheroes2::Rect & area = GetArea();
-    pt1.x += area.x;
-    pt1.y += area.y;
 
-    // Contionue the smoke cloud animation from the 6th frame.
+    // Continue the smoke cloud animation from the 6th frame.
+    const int32_t icnId = ICN::LICHCLOD;
     uint32_t frame = 5;
-    const uint32_t maxFrame = fheroes2::AGG::GetICNCount( ICN::LICHCLOD );
+    const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icnId );
     uint32_t maxAnimationFrame = maxFrame;
     const bool isBridgeDestroyed = ( target == Battle::CAT_BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
-        pt2.x = pt1.x - 45;
-        pt2.y = pt1.y + 65;
+        pt2 = pt1 + bridgeDemolitionSmokeOffset;
         // Increase maxAnimationFrame to finish the second smoke animation.
         maxAnimationFrame += 2;
         // Bridge smoke animation should contionue from the 7th frame.
@@ -4245,12 +4244,12 @@ void Battle::Interface::RedrawAfterDemolitionSmoke( int target )
             RedrawPartialStart();
             // Draw animation of the second smoke cloud only for the bridge.
             if ( isBridgeDestroyed ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, frame - 2 );
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnId, frame - 2 );
                 fheroes2::Blit( sprite, _mainSurface, pt2.x + sprite.x(), pt2.y + sprite.y() );
             }
             // Don't draw the smoke cloud after its animation has ended (in case the second smoke cloud is still animating).
             if ( frame <= maxFrame ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, frame );
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnId, frame );
                 fheroes2::Blit( sprite, _mainSurface, pt1.x + sprite.x(), pt1.y + sprite.y() );
             }
             RedrawPartialFinish();
