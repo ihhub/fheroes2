@@ -36,7 +36,6 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "game_over.h"
 #include "game_static.h"
@@ -71,13 +70,8 @@ namespace
     {
         assert( castle != nullptr );
 
-        const Heroes * castleGuest = castle->GetHeroes().Guest();
-        if ( castleGuest && castleGuest == world.GetHeroesCondWins() ) {
-            return true;
-        }
-
-        const Heroes * castleGuard = castle->GetHeroes().Guard();
-        if ( castleGuard && castleGuard == world.GetHeroesCondWins() ) {
+        const Heroes * hero = castle->GetHero();
+        if ( hero && hero == world.GetHeroesCondWins() ) {
             return true;
         }
 
@@ -129,7 +123,7 @@ namespace
         }
 
         if ( hero.GetColor() == castle->GetColor() ) {
-            return castle->GetHeroes().Guest() == nullptr;
+            return castle->GetHero() == nullptr;
         }
 
         if ( hero.isFriends( castle->GetColor() ) ) {
@@ -243,21 +237,10 @@ namespace
         case MP2::OBJ_WAGON:
         case MP2::OBJ_LEANTO:
         case MP2::OBJ_SKELETON:
-            return tile.QuantityIsValid();
-
         case MP2::OBJ_MAGICGARDEN:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_WINDMILL:
-            if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.isCaptureObjectProtected() ) {
-                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
-                }
-
-                return true;
-            }
-            else if ( tile.QuantityIsValid() )
-                return true;
-            break;
+            return tile.QuantityIsValid();
 
         case MP2::OBJ_ARTIFACT: {
             const uint32_t variants = tile.QuantityVariant();
@@ -710,7 +693,7 @@ namespace
     const double freeMonsterUpgradeModifier = 3;
 
     const double dangerousTaskPenalty = 20000.0;
-    const double fogDiscoveryBaseValue = -20000.0;
+    const double fogDiscoveryBaseValue = -10000.0;
 
     double ScaleWithDistance( double value, uint32_t distance )
     {
@@ -723,6 +706,8 @@ namespace
     double getFogDiscoveryValue( const Heroes & hero )
     {
         switch ( hero.getAIRole() ) {
+        case Heroes::Role::SCOUT:
+            return 0;
         case Heroes::Role::HUNTER:
             return fogDiscoveryBaseValue;
         case Heroes::Role::COURIER:
@@ -746,8 +731,8 @@ namespace AI
 
     double Normal::getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
-        // Hunter has almost equal priorities to all kind of objects.
-        assert( hero.getAIRole() == Heroes::Role::HUNTER );
+        // Hunter has almost equal priorities to all kind of objects. Scout posseses the same priorities but has much higher priority to discover fog.
+        assert( ( hero.getAIRole() == Heroes::Role::HUNTER ) || ( hero.getAIRole() == Heroes::Role::SCOUT ) );
 
         // In the future these hardcoded values could be configured by the mod
         // 1 tile distance is 100.0 value approximately
@@ -1499,6 +1484,7 @@ namespace AI
     {
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
+        case Heroes::Role::SCOUT:
             return getHunterObjectValue( hero, index, valueToIgnore, distanceToObject );
         case Heroes::Role::CHAMPION:
         case Heroes::Role::FIGHTER:
@@ -1560,7 +1546,7 @@ namespace AI
         bestTargetValue = lowestPossibleValue;
 
         for ( const Castle * castle : kingdom.GetCastles() ) {
-            if ( !castle || castle->GetHeroes().Guest() != nullptr )
+            if ( !castle || castle->GetHero() != nullptr )
                 continue;
 
             const int currentCastleIndex = castle->GetIndex();

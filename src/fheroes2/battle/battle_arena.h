@@ -85,7 +85,7 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::DeterministicRandomGenerator & randomGenerator );
         Arena( const Arena & ) = delete;
         Arena( Arena && ) = delete;
 

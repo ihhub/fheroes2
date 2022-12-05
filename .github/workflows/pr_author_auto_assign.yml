@@ -9,6 +9,9 @@ jobs:
     name: PR author auto assign
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: toshimaru/auto-author-assign@v1.6.1
       with:

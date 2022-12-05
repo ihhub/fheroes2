@@ -34,7 +34,6 @@
 #include "army_troop.h"
 #include "artifact_ultimate.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
@@ -98,16 +97,9 @@ struct CapturedObject
 {
     ObjectColor objcol;
     Troop guardians;
-    int split;
 
-    CapturedObject()
-        : split( 1 )
-    {}
+    CapturedObject() = default;
 
-    int GetSplit() const
-    {
-        return split;
-    }
     int GetColor() const
     {
         return objcol.second;
@@ -125,10 +117,6 @@ struct CapturedObject
     {
         objcol.second = col;
     }
-    void SetSplit( int spl )
-    {
-        split = spl;
-    }
 };
 
 struct CapturedObjects : std::map<int32_t, CapturedObject>
@@ -139,8 +127,6 @@ struct CapturedObjects : std::map<int32_t, CapturedObject>
     void ResetColor( int );
 
     CapturedObject & Get( int32_t );
-
-    void tributeCapturedObjects( const int playerColorId, const MP2::MapObjectType objectType, Funds & funds, int & objectCount );
 
     uint32_t GetCount( int, int ) const;
     uint32_t GetCountMines( int, int ) const;
@@ -299,7 +285,7 @@ public:
     const Heroes * GetHeroesCondWins() const;
     const Heroes * GetHeroesCondLoss() const;
 
-    CastleHeroes GetHeroes( const Castle & ) const;
+    Heroes * GetHero( const Castle & ) const;
 
     const UltimateArtifact & GetUltimateArtifact() const;
     bool DiggingForUltimateArtifact( const fheroes2::Point & );

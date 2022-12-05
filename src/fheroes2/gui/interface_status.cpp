@@ -42,7 +42,6 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "skill.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -72,7 +71,10 @@ void Interface::StatusWindow::Reset()
 
 void Interface::StatusWindow::SavePosition()
 {
-    Settings::Get().SetPosStatus( GetRect().getPosition() );
+    Settings & conf = Settings::Get();
+
+    conf.SetPosStatus( GetRect().getPosition() );
+    conf.Save( Settings::configFileName );
 }
 
 void Interface::StatusWindow::SetRedraw() const
@@ -85,7 +87,7 @@ void Interface::StatusWindow::SetPos( int32_t ox, int32_t oy )
     uint32_t ow = 144;
     uint32_t oh = 72;
 
-    if ( !Settings::Get().ExtGameHideInterface() ) {
+    if ( !Settings::Get().isHideInterfaceEnabled() ) {
         oh = fheroes2::Display::instance().height() - oy - BORDERWIDTH;
     }
 
@@ -105,14 +107,14 @@ void Interface::StatusWindow::SetState( const StatusType status )
 void Interface::StatusWindow::Redraw() const
 {
     const Settings & conf = Settings::Get();
-    if ( conf.ExtGameHideInterface() && !conf.ShowStatus() ) {
+    if ( conf.isHideInterfaceEnabled() && !conf.ShowStatus() ) {
         // The window is hidden.
         return;
     }
 
     const fheroes2::Rect & pos = GetArea();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         fheroes2::Fill( fheroes2::Display::instance(), pos.x, pos.y, pos.width, pos.height, fheroes2::GetColorId( 0x51, 0x31, 0x18 ) );
         BorderWindow::Redraw();
     }
@@ -126,7 +128,7 @@ void Interface::StatusWindow::Redraw() const
     }
 
     // draw info: Day and Funds and Army
-    const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+    const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
     const int32_t stonHeight = ston.height();
 
     if ( StatusType::STATUS_AITURN == _state ) {
@@ -193,7 +195,7 @@ void Interface::StatusWindow::Redraw() const
 void Interface::StatusWindow::NextState()
 {
     const int32_t areaHeight = GetArea().height;
-    const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+    const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
     const int32_t stonHeight = ston.height();
 
     const bool skipDayStatus = areaHeight >= ( stonHeight * 2 + 15 ) && areaHeight < ( stonHeight * 3 + 15 );
@@ -266,7 +268,7 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
     const int dayOfWeek = world.GetDay();
     const int weekOfMonth = world.GetWeek();
     const uint32_t month = world.GetMonth();
-    const int icnType = Settings::Get().ExtGameEvilInterface() ? ICN::SUNMOONE : ICN::SUNMOON;
+    const int icnType = Settings::Get().isEvilInterfaceEnabled() ? ICN::SUNMOONE : ICN::SUNMOON;
 
     uint32_t icnId = dayOfWeek > 1 ? 0 : ( ( weekOfMonth - 1 ) % 4 ) + 1;
     // Special case
@@ -324,7 +326,7 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 
     if ( armies ) {
         const fheroes2::Rect & pos = GetArea();
-        Army::DrawMonsterLines( *armies, pos.x + 4, pos.y + 1 + oh, 138, Skill::Level::EXPERT );
+        Army::drawMultipleMonsterLines( *armies, pos.x + 4, pos.y + 1 + oh, 138, true, true );
     }
 }
 
@@ -387,10 +389,10 @@ void Interface::StatusWindow::DrawAITurns() const
 void Interface::StatusWindow::DrawBackground() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+    const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
     const fheroes2::Rect & pos = GetArea();
 
-    if ( !Settings::Get().ExtGameHideInterface() && display.height() - BORDERWIDTH - icnston.height() > pos.y ) {
+    if ( !Settings::Get().isHideInterfaceEnabled() && display.height() - BORDERWIDTH - icnston.height() > pos.y ) {
         // top
         const int32_t startY = 11;
         const int32_t copyHeight = 46;
@@ -432,7 +434,7 @@ void Interface::StatusWindow::QueueEventProcessing()
         SetRedraw();
     }
     if ( le.MousePressRight( GetRect() ) ) {
-        const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+        const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONBACK, 0 );
         const fheroes2::Rect & pos = GetArea();
         const bool isFullInfo = StatusType::STATUS_UNKNOWN != _state && pos.height >= ( ston.height() * 3 + 15 );
         if ( isFullInfo ) {

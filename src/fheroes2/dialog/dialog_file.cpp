@@ -44,7 +44,7 @@
 fheroes2::GameMode Dialog::FileOptions()
 {
     // preload
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
     const int cpanel = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
 

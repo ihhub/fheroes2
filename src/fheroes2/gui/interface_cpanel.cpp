@@ -54,7 +54,7 @@ Interface::ControlPanel::ControlPanel( Basic & basic )
 
 void Interface::ControlPanel::ResetTheme()
 {
-    const int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
+    const int icn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
     _buttons.reset( new Buttons( fheroes2::AGG::GetICN( icn, 4 ), fheroes2::AGG::GetICN( icn, 0 ), fheroes2::AGG::GetICN( icn, 12 ), fheroes2::AGG::GetICN( icn, 10 ),
                                  fheroes2::AGG::GetICN( icn, 8 ) ) );

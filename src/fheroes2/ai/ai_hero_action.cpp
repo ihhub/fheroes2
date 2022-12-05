@@ -36,7 +36,6 @@
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "dialog.h"
 #include "direction.h"
@@ -124,6 +123,78 @@ namespace
         return false;
     }
 
+    int AISelectSkillFromArena( const Heroes & hero )
+    {
+        switch ( hero.GetRace() ) {
+        case Race::KNGT:
+            if ( hero.GetDefense() < 5 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            if ( hero.GetAttack() < 5 ) {
+                return Skill::Primary::ATTACK;
+            }
+            if ( hero.GetPower() < 3 ) {
+                return Skill::Primary::POWER;
+            }
+            break;
+
+        case Race::BARB:
+            if ( hero.GetAttack() < 5 ) {
+                return Skill::Primary::ATTACK;
+            }
+            if ( hero.GetDefense() < 5 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            if ( hero.GetPower() < 3 ) {
+                return Skill::Primary::POWER;
+            }
+            break;
+
+        case Race::SORC:
+        case Race::WZRD:
+            if ( hero.GetPower() < 5 ) {
+                return Skill::Primary::POWER;
+            }
+            if ( hero.GetDefense() < 3 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            if ( hero.GetAttack() < 3 ) {
+                return Skill::Primary::ATTACK;
+            }
+            break;
+
+        case Race::WRLK:
+        case Race::NECR:
+            if ( hero.GetPower() < 5 ) {
+                return Skill::Primary::POWER;
+            }
+            if ( hero.GetAttack() < 3 ) {
+                return Skill::Primary::ATTACK;
+            }
+            if ( hero.GetDefense() < 3 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        switch ( Rand::Get( 1, 3 ) ) {
+        case 1:
+            return Skill::Primary::ATTACK;
+        case 2:
+            return Skill::Primary::DEFENSE;
+        case 3:
+            return Skill::Primary::POWER;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return Skill::Primary::UNKNOWN;
+    }
+
     bool canMonsterJoinHero( const Troop & troop, Heroes & hero )
     {
         if ( hero.GetArmy().HasMonster( troop.GetID() ) ) {
@@ -194,79 +265,6 @@ namespace AI
     void AIToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex );
     void AIToAlchemistTower( Heroes & hero );
     void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex );
-
-    int AISelectPrimarySkill( const Heroes & hero )
-    {
-        switch ( hero.GetRace() ) {
-        case Race::KNGT: {
-            if ( 5 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            if ( 5 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            if ( 3 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            if ( 3 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            break;
-        }
-
-        case Race::BARB: {
-            if ( 5 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            if ( 5 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            if ( 3 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            if ( 3 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            break;
-        }
-
-        case Race::SORC:
-        case Race::WZRD: {
-            if ( 5 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            if ( 5 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            if ( 3 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            if ( 3 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            break;
-        }
-
-        case Race::WRLK:
-        case Race::NECR: {
-            if ( 5 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            if ( 5 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            if ( 3 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            if ( 3 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            break;
-        }
-
-        default:
-            break;
-        }
-
-        switch ( Rand::Get( 1, 4 ) ) {
-        case 1:
-            return Skill::Primary::ATTACK;
-        case 2:
-            return Skill::Primary::DEFENSE;
-        case 3:
-            return Skill::Primary::POWER;
-        case 4:
-            return Skill::Primary::KNOWLEDGE;
-        default:
-            break;
-        }
-
-        return Skill::Primary::UNKNOWN;
-    }
 
     void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, const fheroes2::Point * centerOn = nullptr, const bool playSound = false )
     {
@@ -569,8 +567,7 @@ namespace AI
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " disable meeting" )
         }
         else {
-            const Castle * other_hero_castle = other_hero->inCastle();
-            if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
+            if ( other_hero->inCastle() ) {
                 AIToCastle( hero, dst_index );
                 return;
             }
@@ -620,20 +617,12 @@ namespace AI
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " disable visiting" )
         }
         else {
-            CastleHeroes heroes = castle->GetHeroes();
-
-            // first attack to guest hero
-            if ( heroes.FullHouse() ) {
-                AIToHeroes( hero, dst_index );
-                return;
-            }
-
             Army & army = castle->GetActualArmy();
 
             if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
                 DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() )
 
-                Heroes * defender = heroes.GuardFirst();
+                Heroes * defender = castle->GetHero();
                 castle->ActionPreBattle();
 
                 const bool playVanishingHeroSound = defender != nullptr && defender->isControlHuman();
@@ -902,7 +891,6 @@ namespace AI
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        // capture object
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
             bool capture = true;
 
@@ -939,7 +927,7 @@ namespace AI
             }
         }
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( objectType ) )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
     }
 
     void AIToFlotSam( const Heroes & hero, int32_t dst_index )
@@ -1059,22 +1047,8 @@ namespace AI
             skill = Skill::Primary::POWER;
             break;
         case MP2::OBJ_ARENA:
-            if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() )
-                skill = AISelectPrimarySkill( hero );
-            else {
-                switch ( Rand::Get( 1, 3 ) ) {
-                case 1:
-                case 2:
-                    skill = Rand::Get( 1 ) ? Skill::Primary::ATTACK : Skill::Primary::DEFENSE;
-                    break;
-
-                default:
-                    skill = Skill::Primary::POWER;
-                    break;
-                }
-            }
+            skill = AISelectSkillFromArena( hero );
             break;
-
         default:
             break;
         }

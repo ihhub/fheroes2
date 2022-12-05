@@ -25,6 +25,7 @@ Precompiled binaries of the release version are currently available for the foll
   * [**Homebrew**](#homebrew-linux)
   * [**Flatpak**](#flatpak-linux)
   * [**Linux ZIP archive**](#linux-zip-archive)
+* [**Android**](#android)
 * [**PlayStation Vita**](#playstation-vita)
 * [**Nintendo Switch**](#nintendo-switch)
 
@@ -244,6 +245,13 @@ You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the 
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the `download_demo_version.sh` script supplied in the ZIP archive.
+
+<a name="android"></a>
+## Android
+
+* Download the [**Android ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_android.zip).
+
+* Follow the [**instructions**](README_android.md).
 
 <a name="playstation-vita"></a>
 ## PlayStation Vita

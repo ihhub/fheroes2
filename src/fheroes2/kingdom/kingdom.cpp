@@ -455,16 +455,16 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
     if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
         const int tileColor = tile.QuantityColor();
-        if ( Players::isFriends( color, tileColor ) ) {
-            // false only if alliance castles can't be visited
-            return color == tileColor;
-        }
-        return true;
+
+        // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
+        return color == tileColor || !Players::isFriends( color, tileColor );
     }
 
     // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
     if ( objectType == MP2::OBJ_HEROES ) {
         const Heroes * hero = tile.GetHeroes();
+
+        // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)
         return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
     }
 
@@ -856,46 +856,6 @@ void Kingdoms::AddCastles( const AllCastles & castles )
         // skip gray color
         if ( castle->GetColor() )
             GetKingdom( castle->GetColor() ).AddCastle( castle );
-    }
-}
-
-void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType )
-{
-    for ( Kingdom & kingdom : kingdoms ) {
-        if ( kingdom.isPlay() ) {
-            const int color = kingdom.GetColor();
-            Funds funds;
-            int objectCount = 0;
-
-            captureobj.tributeCapturedObjects( color, objectType, funds, objectCount );
-            if ( objectCount == 0 ) {
-                continue;
-            }
-
-            // for show dialogs
-            if ( funds.GetValidItemsCount() && kingdom.isControlHuman() ) {
-                EventDate event;
-
-                event.computer = true;
-                event.first = day;
-                event.colors = color;
-                event.resource = funds;
-
-                if ( objectCount > 1 ) {
-                    event.title = std::to_string( objectCount );
-                    event.title += ' ';
-                    event.title += MP2::StringObject( objectType, objectCount );
-                }
-                else {
-                    event.title = MP2::StringObject( objectType );
-                }
-
-                world.AddEventDate( event );
-            }
-            else {
-                kingdom.AddFundsResource( funds );
-            }
-        }
     }
 }
 

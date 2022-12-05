@@ -116,7 +116,6 @@ namespace Game
         BATTLE_AUTO_FINISH,
         BATTLE_OPTIONS,
         BATTLE_SKIP,
-        BATTLE_WAIT,
 
         SPLIT_STACK_BY_HALF,
         SPLIT_STACK_BY_ONE,
@@ -161,7 +160,7 @@ namespace Game
 
     std::vector<Game::HotKeyEvent> getAllHotKeyEvents();
 
-    void KeyboardGlobalFilter( int sdlKey, int mod );
+    void globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier );
 
     void HotKeysLoad( const std::string & filename );
 

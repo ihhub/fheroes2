@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-12-03 01:14+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -228,13 +228,20 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Velocidad"
-
 msgid "Speed: %{speed}"
 msgstr "Velocidad: %{speed}"
 
+msgid "Speed"
+msgstr "Velocidad"
+
 msgid "Army Order"
+msgstr ""
+
+#, fuzzy
+msgid "Off"
+msgstr "apagado"
+
+msgid "On"
 msgstr ""
 
 #, fuzzy
@@ -251,12 +258,22 @@ msgstr "Continuar movimento"
 msgid "Shadow Cursor"
 msgstr ""
 
-#, fuzzy
-msgid "Off"
-msgstr "apagado"
-
-msgid "On"
+msgid "Audio"
 msgstr ""
+
+msgid "Settings"
+msgstr "Ajustes"
+
+msgid "Configure"
+msgstr ""
+
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Asiento caliente."
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Daño"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -283,6 +300,22 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Esta unidad espera"
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "The enemy has surrendered!"
 msgstr "¡El enemigo se ha rendido!"
@@ -503,17 +536,6 @@ msgstr ""
 msgid "System Options"
 msgstr "Opciones del Sistema"
 
-msgid "Wait this unit"
-msgstr "Esta unidad espera"
-
-msgid "Wait"
-msgstr ""
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-
 msgid "Skip this unit"
 msgstr "Saltar el turno de esta unidad"
 
@@ -557,10 +579,6 @@ msgstr "¿Estás seguro de que desea descartar este ejército?"
 #, fuzzy
 msgid "%{name} skip their turn."
 msgstr "%{name} pasa turno."
-
-#, fuzzy
-msgid "%{name} wait their turn."
-msgstr "%{name} esperando turno."
 
 #, fuzzy
 msgid "%{attacker} does %{damage} damage."
@@ -763,6 +781,10 @@ msgstr ""
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr ""
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "El %{nombre} incrementa tu moral."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1905,10 +1927,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-#, fuzzy
-msgid "Cannot recruit - guest to guard automove error."
-msgstr "No puedes reclutar, tienes demasiados Héroes."
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "No puedes reclutar, ya tienes un Héroe en esta ciudad."
 
@@ -2329,10 +2347,6 @@ msgid "Exit"
 msgstr "Salir de la ciudad"
 
 #, fuzzy
-msgid "Exit this menu."
-msgstr "Esta unidad espera"
-
-#, fuzzy
 msgid "Click to show next town."
 msgstr "Ver ciudad siguiente"
 
@@ -2345,14 +2359,6 @@ msgstr "Ver ciudad anterior"
 
 msgid "Show previous town"
 msgstr "Ver ciudad anterior"
-
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
 
 msgid "This town may not be upgraded to a castle."
 msgstr "Este pueblo no se puede actualizar a castillo."
@@ -2369,12 +2375,6 @@ msgstr "Salir de la ciudad"
 #, fuzzy
 msgid "Show Income"
 msgstr "Mostrar registros"
-
-msgid "Swap Heroes"
-msgstr "Intercambiar Héroes"
-
-msgid "Meeting Heroes"
-msgstr ""
 
 msgid "View Hero"
 msgstr "Ver Heroe"
@@ -2645,9 +2645,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "OK"
-
 msgid "Build a new ship:"
 msgstr "Construir un nuevo barco:"
 
@@ -2696,23 +2693,6 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Ajustes"
-
-#, fuzzy
-msgid "Experimental"
-msgstr "Elemental del Aire"
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-#, fuzzy
-msgid "Hot Keys"
-msgstr "Asiento caliente."
-
 #, fuzzy
 msgid "Black & White"
 msgstr "Puente"
@@ -2728,29 +2708,6 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teletransporte"
 
-#, fuzzy
-msgid "Interface Type"
-msgstr "Interfaz"
-
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "autoBattle|Manual"
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Botella"
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2759,22 +2716,6 @@ msgid "Select Game Language"
 msgstr "Descripción seleccionada"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
-
-msgid "Change the audio settings of the game."
-msgstr ""
-
-#, fuzzy
-msgid "Experimental game settings."
-msgstr "Configuración del juego FHeroes2"
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
@@ -2904,12 +2845,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr "Establecer Guardián"
-
-msgid "Your army too big!"
-msgstr "¡Tu ejército es demasiado grande!"
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -2976,12 +2911,12 @@ msgstr "Tratos Disponibles"
 msgid "n/a"
 msgstr "No disponible"
 
-msgid "guarded by "
-msgstr ""
-
 #, fuzzy
 msgid "guarded by %{count} %{monster}"
 msgstr "protegido por %{count} %{monster}"
+
+msgid "guarded by "
+msgstr ""
 
 msgid "(available: %{count})"
 msgstr "(disponibles: %{count})"
@@ -3281,10 +3216,6 @@ msgstr "La descripción del mapa actualmente elegido."
 msgid "Accept the choice made."
 msgstr "Aceptar la elección realizada."
 
-#, fuzzy
-msgid "Experimental Game Settings"
-msgstr "Configuración del juego FHeroes2"
-
 msgid "Jump"
 msgstr ""
 
@@ -3298,8 +3229,33 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr "Velocidad"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Ralentizar en Masas"
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Muy rápida"
+
 msgid "Scroll Speed"
 msgstr "Velocidad de desplazamiento"
+
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Interfaz"
 
 msgid "Hide"
 msgstr ""
@@ -3309,6 +3265,19 @@ msgstr ""
 
 msgid "Interface"
 msgstr "Interfaz"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+#, fuzzy
+msgid "Battles"
+msgstr "Botella"
+
+msgid "autoBattle|Manual"
+msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3321,7 +3290,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3443,10 +3418,6 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
-#, fuzzy
-msgid "Normal"
-msgstr "Normal"
-
 msgid "Hard"
 msgstr ""
 
@@ -3492,6 +3463,9 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
@@ -3499,25 +3473,28 @@ msgstr ""
 msgid "Dev and Support"
 msgstr "Teletransporte"
 
-msgid "Visit us at "
-msgstr ""
-
 msgid "Special Thanks to"
 msgstr ""
 
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3585,9 +3562,6 @@ msgstr "Escenarios"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Salir del juego y volver al sistema operativo."
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3603,9 +3577,6 @@ msgstr ""
 #, fuzzy
 msgid "Playtesters"
 msgstr "2 jugadores"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr ""
@@ -3636,7 +3607,7 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 msgid "credits|Manual"
@@ -3738,6 +3709,10 @@ msgstr ""
 #, fuzzy
 msgid "Greetings!"
 msgstr "Ajustes"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr "Salir del juego y volver al sistema operativo."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4018,10 +3993,6 @@ msgstr ""
 msgid "%{color} player has been vanquished!"
 msgstr "¡%{color} ha sido derrotado!"
 
-#, fuzzy
-msgid "Do you wish to continue the game?"
-msgstr "¿Quiéres comprar uno?"
-
 msgid "Scenario:"
 msgstr "Escenario:"
 
@@ -4286,9 +4257,6 @@ msgstr ""
 "muestra la fecha. Cliquea en el botón izquierdo para alternar entre las "
 "ventanas."
 
-msgid "Necroman"
-msgstr "Nigromante"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4414,6 +4382,10 @@ msgstr ""
 #, fuzzy
 msgid "Hungarian"
 msgstr "Bárbaro"
+
+#, fuzzy
+msgid "Danish"
+msgstr "Español"
 
 msgid ", FPS: "
 msgstr ""
@@ -4812,14 +4784,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Desafortunadamente, no tienes un Libro de Hechizos donde registrar este "
-"hechizo."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4835,6 +4799,14 @@ msgstr ""
 "\n"
 "Desafortunadamente, ya conocías ese hechizo, así que no hay nada más que te "
 "pueda enseñar."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Desafortunadamente, no tienes un Libro de Hechizos donde registrar este "
+"hechizo."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -6722,6 +6694,38 @@ msgid "race|Random"
 msgstr ""
 
 msgid "race|Neutral"
+msgstr ""
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Bárbaro"
+
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Hechicera"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Nigromante"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+msgid "doubleLinedRace|Random"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -9634,51 +9638,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "battle: show damage info"
-msgstr "juego: mostrar información del sistema"
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-#, fuzzy
-msgid "world: allow to set guardian to objects"
-msgstr "mundo: permitir establecer guardianes en objetos"
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "castle: allow guardians"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-#, fuzzy
-msgid "battle: allow soft wait for troops"
-msgstr "batalla: espera de tropa fluido"
-
-msgid "battle: deterministic events"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr "juego: usar interfaz maligna"
-
-msgid "game: hide interface"
-msgstr "juego: ocultar interfaz"
-
-msgid "game: offer to continue the game after victory condition"
-msgstr ""
-
-#, fuzzy
 msgid "The ultimate artifact is really the %{name}."
 msgstr "¡La maldición de la Momia cae sobre %{name}!"
 
@@ -9748,9 +9707,12 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "game: show system info"
-#~ msgstr "juego: mostrar información del sistema"
+#~ msgid "Necroman"
+#~ msgstr "Nigromante"
+
+#~ msgid "Wait this unit"
+#~ msgstr "Esta unidad espera"
 
 #, fuzzy
-#~ msgid "Moved %{monster}"
-#~ msgstr "Mover a %{monster} aquí."
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} esperando turno."

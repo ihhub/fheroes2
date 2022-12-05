@@ -41,7 +41,6 @@
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "dialog.h"
 #include "game.h"
@@ -151,7 +150,7 @@ void ActionToBoat( Heroes & hero, int32_t dst_index );
 void ActionToCoast( Heroes & hero, int32_t dst_index );
 void ActionToWagon( Heroes & hero, int32_t dst_index );
 void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
-void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
+void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToFlotSam( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToArtifact( Heroes & hero, int32_t dst_index );
@@ -805,8 +804,7 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable meeting" )
     }
     else {
-        const Castle * other_hero_castle = other_hero->inCastle();
-        if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
+        if ( other_hero->inCastle() ) {
             ActionToCastle( hero, dst_index );
             return;
         }
@@ -854,20 +852,12 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable visiting" )
     }
     else {
-        CastleHeroes heroes = castle->GetHeroes();
-
-        // first attack to guest hero
-        if ( heroes.FullHouse() ) {
-            ActionToHeroes( hero, dst_index );
-            return;
-        }
-
         Army & army = castle->GetActualArmy();
 
         if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() )
 
-            Heroes * defender = heroes.GuardFirst();
+            Heroes * defender = castle->GetHero();
             castle->ActionPreBattle();
 
             // new battle
@@ -1006,12 +996,10 @@ void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objec
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
 
-void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     ResourceCount rc = tile.QuantityResourceCount();
-    bool cancapture = Settings::Get().ExtWorldExtObjectsCaptured();
-    bool showinvalid = cancapture && hero.GetColor() == tile.QuantityColor() ? false : true;
 
     std::string msg;
     const std::string & caption = MP2::StringObject( objectType );
@@ -1031,7 +1019,6 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
         break;
 
     case MP2::OBJ_LEANTO:
-        cancapture = false;
         msg = rc.isValid() ? _( "You've found an abandoned lean-to.\nPoking about, you discover some resources hidden nearby." )
                            : _( "The lean-to is long abandoned. There is nothing of value here." );
         break;
@@ -1045,7 +1032,6 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
         break;
 
     default:
-        cancapture = false;
         break;
     }
 
@@ -1068,16 +1054,9 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
                                        Dialog::OK, funds );
 
         hero.GetKingdom().AddFundsResource( funds );
-
-        if ( cancapture )
-            ActionToCaptureObject( hero, objectType, dst_index );
     }
     else {
-        if ( cancapture )
-            ActionToCaptureObject( hero, objectType, dst_index );
-
-        if ( showinvalid )
-            Dialog::Message( caption, msg, Font::BIG, Dialog::OK );
+        Dialog::Message( caption, msg, Font::BIG, Dialog::OK );
     }
 
     tile.QuantityReset();
@@ -1250,14 +1229,6 @@ void ActionToShrine( Heroes & hero, int32_t dst_index )
 
     StringReplace( body, "%{spell}", spell.GetName() );
 
-    // check spell book
-    if ( !hero.HaveSpellBook() ) {
-        if ( !Settings::Get().ExtHeroBuySpellBookFromShrine() || !hero.BuySpellBook( nullptr, spell_level ) ) {
-            body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
-            Dialog::Message( head, body, Font::BIG, Dialog::OK );
-        }
-    }
-
     if ( hero.HaveSpellBook() ) {
         // check valid level spell and wisdom skill
         if ( 3 == spell_level && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
@@ -1278,6 +1249,10 @@ void ActionToShrine( Heroes & hero, int32_t dst_index )
             fheroes2::showMessage( fheroes2::Text( head, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                    { &spellUI } );
         }
+    }
+    else {
+        body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
+        Dialog::Message( head, body, Font::BIG, Dialog::OK );
     }
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -2172,6 +2147,7 @@ void ActionToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, 
 void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
+
     std::string header;
     std::string body;
     int32_t resource = Resource::UNKNOWN;
@@ -2233,7 +2209,6 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
         break;
     }
 
-    // capture object
     if ( !hero.isFriends( tile.QuantityColor() ) ) {
         bool capture = true;
 
@@ -2264,32 +2239,22 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
             if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
                 Maps::Tiles::UpdateAbandonedMineSprite( tile );
                 hero.SetMapsObject( MP2::OBJ_MINES );
-                world.CaptureObject( dst_index, hero.GetColor() );
-                Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
             }
 
-            if ( resource == Resource::UNKNOWN )
-                Dialog::Message( header, body, Font::BIG, Dialog::OK );
-            else
-                DialogCaptureResourceObject( header, body, resource );
-
             tile.QuantitySetColor( hero.GetColor() );
+
+            Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
+
+            if ( resource == Resource::UNKNOWN ) {
+                Dialog::Message( header, body, Font::BIG, Dialog::OK );
+            }
+            else {
+                DialogCaptureResourceObject( header, body, resource );
+            }
         }
     }
-    // set guardians
-    else if ( Settings::Get().ExtWorldAllowSetGuardian() ) {
-        CapturedObject & co = world.GetCapturedObject( dst_index );
-        Troop & troop = co.GetTroop();
-        Troop new_troop = troop;
 
-        // check if it is already guarded by a spell
-        const bool readonly = ( Maps::getSpellIdFromTile( tile ) != Spell::NONE );
-
-        if ( Dialog::SetGuardian( hero, new_troop, co, readonly ) )
-            troop.Set( new_troop.GetMonster(), new_troop.GetCount() );
-    }
-
-    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( objectType ) )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
 }
 
 void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )

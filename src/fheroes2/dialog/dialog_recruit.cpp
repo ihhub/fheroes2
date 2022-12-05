@@ -538,7 +538,7 @@ void Dialog::DwellingInfo( const Monster & monster, uint32_t available )
     // setup cursor
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int icnId = isEvilInterface ? ICN::RECR2BKG_EVIL : ICN::RECR2BKG;
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( icnId, 0 );

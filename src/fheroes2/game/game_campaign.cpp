@@ -782,7 +782,7 @@ namespace
         const fheroes2::StandardWindow frameborder( 234, 270 );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
-        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int buttonIcnId = isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN;
         const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
 
@@ -1368,7 +1368,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
-            if ( Settings::ExtGameUseFade() )
+            if ( Settings::isFadeEffectEnabled() )
                 fheroes2::FadeDisplay();
 
             conf.SetGameType( Game::TYPE_CAMPAIGN );
