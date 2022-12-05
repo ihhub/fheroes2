@@ -188,7 +188,7 @@ protected:
     int friends;
     std::string name;
     uint32_t id;
-    std::variant<std::monostate, Heroes*, Castle*> focus;
+    std::variant<std::monostate, Heroes *, Castle *> focus;
     std::shared_ptr<AI::Base> _ai;
     HandicapStatus _handicapStatus;
 
