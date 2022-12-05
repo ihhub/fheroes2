@@ -554,10 +554,10 @@ int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
 
     switch ( GetFocusType() ) {
     case GameFocus::HEROES:
-        return GetCursorFocusHeroes( *GetFocusHeroes(), tile );
+        return GetCursorFocusHeroes( *GetFocus<Heroes>(), tile );
 
     case GameFocus::CASTLE:
-        return GetCursorFocusCastle( *GetFocusCastle(), tile );
+        return GetCursorFocusCastle( *GetFocus<Castle>(), tile );
 
     default:
         break;
@@ -1033,7 +1033,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         // animation of the hero's movement
         if ( Game::validateAnimationDelay( Game::CURRENT_HERO_DELAY ) ) {
-            Heroes * hero = GetFocusHeroes();
+            Heroes * hero = GetFocus<Heroes>();
 
             if ( hero ) {
                 bool resetHeroSprite = false;
@@ -1161,8 +1161,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     }
 
     if ( res == fheroes2::GameMode::END_TURN ) {
-        if ( GetFocusHeroes() ) {
-            GetFocusHeroes()->ShowPath( false );
+        if ( GetFocus<Heroes>() ) {
+            GetFocus<Heroes>()->ShowPath( false );
 
             SetRedraw( REDRAW_GAMEAREA );
         }
@@ -1192,7 +1192,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
 void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
 {
-    Heroes * from_hero = GetFocusHeroes();
+    Heroes * from_hero = GetFocus<Heroes>();
     const Maps::Tiles & tile = world.GetTiles( index_maps );
 
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
@@ -1223,7 +1223,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
         if ( to_castle == nullptr )
             break;
 
-        const Castle * from_castle = GetFocusCastle();
+        const Castle * from_castle = GetFocus<Castle>();
         if ( !from_castle || from_castle != to_castle ) {
             SetFocus( to_castle );
             RedrawFocus();
@@ -1259,7 +1259,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
 
 void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
 {
-    Heroes * hero = GetFocusHeroes();
+    Heroes * hero = GetFocus<Heroes>();
 
     // stop hero
     if ( hero && hero->isMoveEnabled() ) {

@@ -37,13 +37,12 @@
 #include "maps_tiles.h"
 #include "mus.h"
 #include "players.h"
-#include "settings.h"
 #include "world.h"
 
 void Interface::Basic::SetFocus( Heroes * hero )
 {
     if ( Player * player = Settings::Get().GetPlayers().GetCurrent() ) {
-        if ( const auto phero = player->GetFocus<Heroes*>(); phero && ( *phero ) != hero ) {
+        if ( const auto phero = player->GetFocus<Heroes>(); phero && ( *phero ) != hero ) {
             ( *phero )->SetMove( false );
             ( *phero )->ShowPath( false );
         }
@@ -68,7 +67,7 @@ void Interface::Basic::SetFocus( Heroes * hero )
 void Interface::Basic::SetFocus( Castle * castle )
 {
     if ( Player * player = Settings::Get().GetPlayers().GetCurrent() ) {
-        if ( const auto phero = player->GetFocus<Heroes*>() ) {
+        if ( const auto phero = player->GetFocus<Heroes>() ) {
             ( *phero )->SetMove( false );
             ( *phero )->ShowPath( false );
         }
@@ -89,9 +88,9 @@ void Interface::Basic::SetFocus( Castle * castle )
 void Interface::Basic::UpdateFocus()
 {
     if ( const Player * player = Settings::Get().GetPlayers().GetCurrent() )
-        if ( const auto pcastle = player->GetFocus<Castle *>() )
+        if ( const auto pcastle = player->GetFocus<Castle>() )
             SetFocus( *pcastle );
-        else if ( const auto phero = player->GetFocus<Heroes *>() )
+        else if ( const auto phero = player->GetFocus<Heroes>() )
             SetFocus( *phero );
 }
 
@@ -115,7 +114,7 @@ void Interface::Basic::ResetFocus( const int priority )
         }
 
         case GameFocus::HEROES:
-            if ( const auto phero = player->GetFocus<Heroes *>(); phero && ( *phero )->GetColor() == player->GetColor() )
+            if ( const auto phero = player->GetFocus<Heroes>(); phero && ( *phero )->GetColor() == player->GetColor() )
                 SetFocus( *phero );
             else if ( !myKingdom.GetHeroes().empty() )
                 SetFocus( myKingdom.GetHeroes().front() );
@@ -128,7 +127,7 @@ void Interface::Basic::ResetFocus( const int priority )
             break;
 
         case GameFocus::CASTLE:
-            if ( const auto pcastle = player->GetFocus<Castle *>(); pcastle && ( *pcastle )->GetColor() == player->GetColor() )
+            if ( const auto pcastle = player->GetFocus<Castle>(); pcastle && ( *pcastle )->GetColor() == player->GetColor() )
                 SetFocus( *pcastle );
             else if ( !myKingdom.GetCastles().empty() )
                 SetFocus( myKingdom.GetCastles().front() );
@@ -149,51 +148,32 @@ void Interface::Basic::ResetFocus( const int priority )
 
 int Interface::GetFocusType()
 {
-    if ( Player * player = Settings::Get().GetPlayers().GetCurrent() )
-        if ( player->GetFocus<Heroes *>() )
-            return GameFocus::HEROES;
-        else if ( player->GetFocus<Castle *>() )
-            return GameFocus::CASTLE;
-    return GameFocus::UNSEL;
-}
-
-Castle * Interface::GetFocusCastle()
-{
-    if (const Player * player = Settings::Get().GetPlayers().GetCurrent() )
-        if ( const auto obj = player->GetFocus<Castle *>() )
-            return *obj;
-    return nullptr;
-}
-
-Heroes * Interface::GetFocusHeroes()
-{
     if ( const Player * player = Settings::Get().GetPlayers().GetCurrent() )
-        if ( const auto obj = player->GetFocus<Heroes *>() )
-            return *obj;
-    return nullptr;
+        return player->GetFocusType();
+    return GameFocus::UNSEL;
 }
 
 void Interface::Basic::RedrawFocus()
 {
     if ( Player * player = Settings::Get().GetPlayers().GetCurrent() ) {
-        if ( const auto phero = player->GetFocus<Heroes *>() ) {
+        if ( const auto phero = player->GetFocus<Heroes>() ) {
             if ( !iconsPanel.IsSelected( ICON_HEROES ) ) {
                 iconsPanel.Select( *phero );
             }
             if ( iconsPanel.IsSelected( ICON_CASTLES ) ) {
                 iconsPanel.ResetIcons( ICON_CASTLES );
                 iconsPanel.SetRedraw( ICON_CASTLES );
-            }        
+            }
             iconsPanel.SetRedraw( ICON_HEROES );
         }
-        else if ( const auto pcastle = player->GetFocus<Castle *>() ) {
+        else if ( const auto pcastle = player->GetFocus<Castle>() ) {
             if ( !iconsPanel.IsSelected( ICON_CASTLES ) ) {
                 iconsPanel.Select( *pcastle );
             }
             if ( iconsPanel.IsSelected( ICON_HEROES ) ) {
                 iconsPanel.ResetIcons( ICON_HEROES );
                 iconsPanel.SetRedraw( ICON_HEROES );
-            }                
+            }
             iconsPanel.SetRedraw( ICON_CASTLES );
         }
         else {

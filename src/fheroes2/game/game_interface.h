@@ -37,6 +37,7 @@
 #include "math_base.h"
 #include "players.h"
 #include "screen.h"
+#include "settings.h"
 
 class Castle;
 class Heroes;
@@ -73,8 +74,14 @@ namespace Interface
         REDRAW_ALL = 0xFF
     };
 
-    Castle * GetFocusCastle();
-    Heroes * GetFocusHeroes();
+    template <class T, typename std::enable_if<std::is_same<T, Heroes>::value || std::is_same<T, Castle>::value, bool>::type = true>
+    T * GetFocus()
+    {
+        if ( const Player * player = Settings::Get().GetPlayers().GetCurrent() )
+            if ( const auto obj = player->GetFocus<T>() )
+                return *obj;
+        return nullptr;
+    }
     int GetFocusType();
 
     class Basic

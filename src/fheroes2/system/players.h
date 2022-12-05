@@ -141,14 +141,14 @@ public:
 
     std::string GetPersonalityString() const;
 
-    template <class T>
-    T const * GetFocus() const
+    template <class T, typename std::enable_if<std::is_same<T, Heroes>::value || std::is_same<T, Castle>::value, bool>::type = true>
+    T * const * GetFocus() const
     {
-        return std::get_if<T>( &focus );
+        return std::get_if<T *>( &focus );
     }
 
-    template <class T>
-    void SetFocus( T object )
+    template <class T, typename std::enable_if<std::is_same<T, Heroes>::value || std::is_same<T, Castle>::value, bool>::type = true>
+    void SetFocus( T * object )
     {
         focus = object;
     }
@@ -156,6 +156,11 @@ public:
     void ResetFocus()
     {
         focus = std::monostate{};
+    }
+
+    int GetFocusType() const
+    {
+        return static_cast<int>( focus.index() );
     }
 
     HandicapStatus getHandicapStatus() const

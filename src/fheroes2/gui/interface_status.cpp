@@ -216,7 +216,7 @@ void Interface::StatusWindow::NextState()
         _state = StatusType::STATUS_ARMY;
 
     if ( _state == StatusType::STATUS_ARMY ) {
-        const Castle * castle = GetFocusCastle();
+        const Castle * castle = GetFocus<Castle>();
 
         // skip empty army for castle
         if ( castle && !castle->GetArmy().isValid() )
@@ -319,10 +319,10 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 {
     const Army * armies = nullptr;
 
-    if ( GetFocusHeroes() )
-        armies = &GetFocusHeroes()->GetArmy();
-    else if ( GetFocusCastle() )
-        armies = &GetFocusCastle()->GetArmy();
+    if ( GetFocus<Heroes>() )
+        armies = &GetFocus<Heroes>()->GetArmy();
+    else if ( GetFocus<Castle>() )
+        armies = &GetFocus<Castle>()->GetArmy();
 
     if ( armies ) {
         const fheroes2::Rect & pos = GetArea();
