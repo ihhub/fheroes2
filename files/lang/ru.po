@@ -266,9 +266,8 @@ msgstr "Настроить"
 msgid "Hot Keys"
 msgstr "Горячие клавиши"
 
-#, fuzzy
 msgid "Damage Info"
-msgstr "Урон"
+msgstr "Информация об уроне"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Установить скорость действий и анимации существ в бою."
@@ -310,9 +309,8 @@ msgstr "Настроить параметры аудио."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Проверить и настроить все горячие клавиши, имеющиеся в игре."
 
-#, fuzzy
 msgid "Toggle to display damage information during the battle."
-msgstr "Включить/выключить показ порядка действий отрядов в бою."
+msgstr "Включить/выключить отображение информации об уроне во время битвы."
 
 msgid "Exit this menu."
 msgstr "Выход из меню."
@@ -601,10 +599,10 @@ msgid "The %{name} resist the spell!"
 msgstr "%{name} защитился от магии!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr "%{name} применяет \"%{spell}\" (цель: %{troop})."
+msgstr "%{name}: применение \"%{spell}\" на цель: %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr "%{name} применил \"%{spell}\"."
+msgstr "%{name}: применение \"%{spell}\"."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
 msgstr "Заклинание \"%{spell}\" наносит %{damage} урона одной нежити."
@@ -749,9 +747,8 @@ msgstr "%{name} стреляет силой %{count} лучников"
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "каждый с бонусом +%{attack} к своему навыку атаки."
 
-#, fuzzy
 msgid "The %{name} is destroyed."
-msgstr "Фантомный отряд уничтожен!"
+msgstr "%{name} уничтожена!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -3167,22 +3164,20 @@ msgstr "Скрыть"
 msgid "Enemy Speed"
 msgstr "Скор. врагов"
 
-#, fuzzy
 msgid "Slow"
-msgstr "Общее замедление"
+msgstr "Медленная"
 
 msgid "Normal"
 msgstr "Обычная"
 
 msgid "Fast"
-msgstr ""
+msgstr "Быстрая"
 
-#, fuzzy
 msgid "Very Fast"
-msgstr "Шустрая"
+msgstr "Очень быстрая"
 
 msgid "Scroll Speed"
-msgstr "Скор. прокрутки"
+msgstr "Скорость прокрутки"
 
 msgid "Evil"
 msgstr "Злой"
@@ -3540,9 +3535,8 @@ msgstr "Басс вокал"
 msgid "Soprano Vocal"
 msgstr "Сопрано вокал"
 
-#, fuzzy
 msgid "Recorded at %{recordingStudio}"
-msgstr "Записано на Green Street Studios"
+msgstr "Записано на %{recordingStudio}"
 
 msgid "credits|Manual"
 msgstr "Руководство по игре"
@@ -3636,11 +3630,9 @@ msgstr "Команда fheroes2 Resurrection представляет"
 msgid "Greetings!"
 msgstr "Добро пожаловать!"
 
-#, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
-"Добро пожаловать в Heroes of Might and Magic II на движке fheroes2! Перед "
-"началом игры, пожалуйста, выберите разрешение экрана."
+"Добро пожаловать в Heroes of Might and Magic II на движке fheroes2!"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4294,9 +4286,8 @@ msgstr "Голландский"
 msgid "Hungarian"
 msgstr "Венгерский"
 
-#, fuzzy
 msgid "Danish"
-msgstr "Испанский"
+msgstr "Датский"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -6003,7 +5994,7 @@ msgid "Town Portal"
 msgstr "Портал города"
 
 msgid "Select town to port to."
-msgstr "Выберите город для телепортации."
+msgstr "Выберите, куда перенестись."
 
 msgid "%{spell} failed!!!"
 msgstr "Неудачный вызов %{spell}!"
