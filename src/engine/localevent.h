@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <optional>
 #include <string>
 #include <utility>
 
@@ -395,15 +396,13 @@ private:
     const double CONTROLLER_AXIS_SPEEDUP = 1.03;
 
     SDL_GameController * _gameController = nullptr;
-    SDL_FingerID _firstFingerId = 0;
-    SDL_FingerID _secondFingerId = 0;
+    std::pair<std::optional<SDL_FingerID>, std::optional<SDL_FingerID>> _fingerIds;
     fheroes2::Time _controllerTimer;
     int16_t _controllerLeftXAxis = 0;
     int16_t _controllerLeftYAxis = 0;
     int16_t _controllerRightXAxis = 0;
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
-    int16_t _numTouches = 0;
 #endif
 };
 

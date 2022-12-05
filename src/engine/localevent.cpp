@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <map>
 #include <set>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -41,6 +42,7 @@
 
 #include <SDL_gamecontroller.h>
 #include <SDL_keycode.h>
+#include <SDL_touch.h>
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( ANDROID )
 #define TOUCH_SUPPORT
@@ -1367,30 +1369,36 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
-    if ( _numTouches == 2 && _firstFingerId != event.fingerId && _secondFingerId != event.fingerId ) {
-        // We do not support more than 2 fingers.
+    switch ( event.type ) {
+    case SDL_FINGERDOWN:
+        if ( !_fingerIds.first ) {
+            _fingerIds.first = event.fingerId;
+        }
+        else if ( !_fingerIds.second ) {
+            _fingerIds.second = event.fingerId;
+        }
+        else {
+            // Gestures of more than two fingers are not supported, ignore
+            return;
+        }
+
+        break;
+    case SDL_FINGERUP:
+    case SDL_FINGERMOTION:
+        if ( !std::apply( [&event]( const auto... fingerId ) { return ( ( fingerId && event.fingerId == *fingerId ) || ... ); }, _fingerIds ) ) {
+            // An event from an unknown finger, ignore
+            return;
+        }
+
+        break;
+    default:
+        // Unknown event, this should never happen
+        assert( 0 );
         return;
     }
 
-    if ( event.type == SDL_FINGERDOWN ) {
-        if ( _numTouches == 0 ) {
-            _firstFingerId = event.fingerId;
-            ++_numTouches;
-        }
-        else if ( _numTouches == 1 ) {
-            _secondFingerId = event.fingerId;
-            ++_numTouches;
-        }
-    }
-    else if ( event.type == SDL_FINGERUP ) {
-        --_numTouches;
-    }
-
-    // Ignore first finger movement if the second finger is pressed.
-    const bool isFirstFinger = ( _numTouches < 2 && _firstFingerId == event.fingerId );
-    const bool isSecondFinger = ( _secondFingerId == event.fingerId );
-
-    if ( isFirstFinger || isSecondFinger ) {
+    // Single-finger gesture, simulate the mouse movement and the left mouse button operation
+    if ( _fingerIds.first && event.fingerId == _fingerIds.first && !_fingerIds.second ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
@@ -1407,9 +1415,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
-    }
 
-    if ( isFirstFinger ) {
         SetModes( MOUSE_MOTION );
 
         if ( _globalMouseMotionEventHook ) {
@@ -1431,16 +1437,10 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
         mouse_button = SDL_BUTTON_LEFT;
     }
-    else if ( isSecondFinger ) {
-        if ( _numTouches < 2 ) {
-            // Only the second finger is pressing.
-            SetModes( MOUSE_MOTION );
-
-            if ( _globalMouseMotionEventHook ) {
-                _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
-            }
-        }
-
+    // Two-finger gesture, simulate the right mouse button operation in the coordinates of the last single-finger gesture.
+    // This gesture will continue to be processed as long as the second finger touches the screen, even if the first finger
+    // is no longer doing so.
+    else if ( _fingerIds.second && event.fingerId == _fingerIds.second ) {
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pr = mouse_cu;
 
@@ -1455,6 +1455,20 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         }
 
         mouse_button = SDL_BUTTON_RIGHT;
+    }
+
+    // The finger no longer touches the screen, reset its state
+    if ( event.type == SDL_FINGERUP ) {
+        if ( event.fingerId == *_fingerIds.first ) {
+            _fingerIds.first.reset();
+        }
+        else if ( event.fingerId == *_fingerIds.second ) {
+            _fingerIds.second.reset();
+        }
+        else {
+            // An event from an unknown finger, this should never happen
+            assert( 0 );
+        }
     }
 }
 
