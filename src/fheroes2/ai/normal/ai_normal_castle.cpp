@@ -38,7 +38,7 @@
 #include "world.h"
 #include "world_regions.h"
 
-namespace AI
+namespace
 {
     struct BuildOrder
     {
@@ -52,26 +52,15 @@ namespace AI
         {}
     };
 
+    const std::vector<BuildOrder> defensiveStructures = { { BUILD_LEFTTURRET, 1 }, { BUILD_RIGHTTURRET, 1 }, { BUILD_MOAT, 1 }, { BUILD_CAPTAIN, 1 } };
+    const std::vector<BuildOrder> supportingDefensiveStructure = { { BUILD_MAGEGUILD1, 1 }, { BUILD_SPEC, 2 }, { BUILD_TAVERN, 1 } };
+
     const std::vector<BuildOrder> & GetIncomeStructures( int type )
     {
         static const std::vector<BuildOrder> standard = { { BUILD_CASTLE, 1 }, { BUILD_STATUE, 1 } };
         static const std::vector<BuildOrder> warlock = { { BUILD_CASTLE, 1 }, { BUILD_STATUE, 1 }, { BUILD_SPEC, 1 } };
 
         return ( type == Race::WRLK ) ? warlock : standard;
-    }
-
-    const std::vector<BuildOrder> & GetDefensiveStructures()
-    {
-        static const std::vector<BuildOrder> defensive = { { BUILD_LEFTTURRET, 1 }, { BUILD_RIGHTTURRET, 1 }, { BUILD_MOAT, 1 }, { BUILD_CAPTAIN, 1 } };
-
-        return defensive;
-    }
-
-    const std::vector<BuildOrder> & GetSupportingDefensiveStructures()
-    {
-        static const std::vector<BuildOrder> defensive = { { BUILD_MAGEGUILD1, 1 }, { BUILD_SPEC, 2 }, { BUILD_TAVERN, 1 } };
-
-        return defensive;
     }
 
     const std::vector<BuildOrder> & GetBuildOrder( int type )
@@ -139,7 +128,10 @@ namespace AI
 
         return genericBuildOrder;
     }
+}
 
+namespace AI
+{
     bool Build( Castle & castle, const std::vector<BuildOrder> & buildOrderList, int multiplier = 1 )
     {
         for ( std::vector<BuildOrder>::const_iterator it = buildOrderList.begin(); it != buildOrderList.end(); ++it ) {
@@ -193,16 +185,13 @@ namespace AI
             castle.BuyBoat();
         }
 
-        if ( Build( castle, GetDefensiveStructures(), 10 ) ) {
+        if ( Build( castle, defensiveStructures, 10 ) ) {
             return true;
         }
 
-        return Build( castle, GetSupportingDefensiveStructures(), 10 );
+        return Build( castle, supportingDefensiveStructure, 10 );
     }
-}
 
-namespace AI
-{
     void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
     {
         if ( defensiveStrategy ) {
@@ -222,14 +211,14 @@ namespace AI
             }
 
             if ( castle.GetActualArmy().getTotalCount() > 0 ) {
-                Build( castle, GetDefensiveStructures() );
+                Build( castle, defensiveStructures );
             }
 
             castle.recruitBestAvailable( kingdom.GetFunds() );
             OptimizeTroopsOrder( castle.GetArmy() );
 
             if ( castle.GetActualArmy().getTotalCount() > 0 ) {
-                Build( castle, GetSupportingDefensiveStructures() );
+                Build( castle, supportingDefensiveStructure );
             }
         }
         else {
