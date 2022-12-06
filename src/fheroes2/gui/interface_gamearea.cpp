@@ -466,7 +466,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     TileUnfitRenderObjectInfo tileUnfit;
 
-    const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
+    const Heroes * currentHero = drawHeroes ? GetFocus<Heroes>() : nullptr;
 
     // TODO: Dragon City with tilset 164 (OBJNMUL2.ICN) and object index 46 is a bottom layer sprite.
     // TODO: When a hero standing besides this turns a part of the hero is visible. This can be fixed only by some hack.

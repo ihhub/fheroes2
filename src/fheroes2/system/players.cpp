@@ -57,7 +57,7 @@ namespace
 void PlayerFocusReset( Player * player )
 {
     if ( player )
-        player->GetFocus().Reset();
+        player->ResetFocus();
 }
 
 void PlayerFixMultiControl( Player * player )
@@ -190,16 +190,16 @@ void Player::setAIAutoControlMode( const bool enable )
     _isAIAutoControlMode = enable;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Focus & focus )
+StreamBase & operator<<( StreamBase & msg, const std::variant<std::monostate, Heroes *, Castle *> & focus )
 {
-    msg << focus.first;
-
-    switch ( focus.first ) {
+    const int type = static_cast<int>( focus.index() );
+    msg << type;
+    switch ( type ) {
     case FOCUS_HEROES:
-        msg << static_cast<Heroes *>( focus.second )->GetIndex();
+        msg << std::get<Heroes *>( focus )->GetIndex();
         break;
     case FOCUS_CASTLE:
-        msg << static_cast<Castle *>( focus.second )->GetIndex();
+        msg << std::get<Castle *>( focus )->GetIndex();
         break;
     default:
         msg << static_cast<int32_t>( -1 );
@@ -209,20 +209,21 @@ StreamBase & operator<<( StreamBase & msg, const Focus & focus )
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & msg, Focus & focus )
+StreamBase & operator>>( StreamBase & msg, std::variant<std::monostate, Heroes *, Castle *> & focus )
 {
+    int type;
     int32_t index;
-    msg >> focus.first >> index;
+    msg >> type >> index;
 
-    switch ( focus.first ) {
+    switch ( type ) {
     case FOCUS_HEROES:
-        focus.second = world.GetHeroes( Maps::GetPoint( index ) );
+        focus = world.GetHeroes( Maps::GetPoint( index ) );
         break;
     case FOCUS_CASTLE:
-        focus.second = world.getCastle( Maps::GetPoint( index ) );
+        focus = world.getCastle( Maps::GetPoint( index ) );
         break;
     default:
-        focus.second = nullptr;
+        focus = std::monostate{};
         break;
     }
 

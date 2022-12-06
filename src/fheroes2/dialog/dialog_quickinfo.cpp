@@ -462,7 +462,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
 
     std::string name_object;
 
-    const Heroes * from_hero = Interface::GetFocusHeroes();
+    const Heroes * from_hero = Interface::GetFocus<Heroes>();
     const Kingdom & kingdom = world.GetKingdom( settings.CurrentColor() );
 
     const bool isVisibleFromCrystalBall = kingdom.IsTileVisibleFromCrystalBall( tile.GetIndex() );

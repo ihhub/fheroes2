@@ -234,17 +234,13 @@ void Game::EnvironmentSoundMixer()
     fheroes2::Point center;
     fheroes2::Point tilePixelOffset;
 
-    Player * player = Settings::Get().GetPlayers().GetCurrent();
-    if ( player != nullptr ) {
-        Focus & focus = player->GetFocus();
-
-        const Heroes * hero = focus.GetHeroes();
-        if ( hero != nullptr ) {
-            center = hero->GetCenter();
-            tilePixelOffset = hero->getCurrentPixelOffset();
+    if ( const Player * player = Settings::Get().GetPlayers().GetCurrent() ) {
+        if ( const auto * const phero = player->GetFocus<Heroes>() ) {
+            center = ( *phero )->GetCenter();
+            tilePixelOffset = ( *phero )->getCurrentPixelOffset();
         }
-        else if ( focus.GetCastle() ) {
-            center = focus.GetCastle()->GetCenter();
+        else if ( const auto * const pcastle = player->GetFocus<Castle>() ) {
+            center = ( *pcastle )->GetCenter();
         }
         else {
             center = { world.w() / 2, world.h() / 2 };
@@ -356,7 +352,7 @@ void Game::restoreSoundsForCurrentFocus()
 
     switch ( Interface::GetFocusType() ) {
     case GameFocus::HEROES: {
-        const Heroes * focusedHero = Interface::GetFocusHeroes();
+        const Heroes * focusedHero = Interface::GetFocus<Heroes>();
         assert( focusedHero != nullptr );
 
         const int heroIndexPos = focusedHero->GetIndex();
@@ -368,7 +364,7 @@ void Game::restoreSoundsForCurrentFocus()
     }
 
     case GameFocus::CASTLE: {
-        const Castle * focusedCastle = Interface::GetFocusCastle();
+        const Castle * focusedCastle = Interface::GetFocus<Castle>();
         assert( focusedCastle != nullptr );
 
         Game::EnvironmentSoundMixer();

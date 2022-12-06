@@ -72,6 +72,8 @@
 #include "view_world.h"
 #include "world.h"
 
+class Castle;
+
 void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
 {
     if ( hero == nullptr ) {
@@ -158,8 +160,8 @@ void Interface::Basic::EventNextHero()
     if ( myHeroes.empty() )
         return;
 
-    if ( GetFocusHeroes() ) {
-        KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), GetFocusHeroes() );
+    if ( GetFocus<Heroes>() ) {
+        KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), GetFocus<Heroes>() );
         KingdomHeroes::const_iterator currentHero = it;
         do {
             ++it;
@@ -186,7 +188,7 @@ void Interface::Basic::EventNextHero()
 
 void Interface::Basic::EventContinueMovement() const
 {
-    Heroes * hero = GetFocusHeroes();
+    Heroes * hero = GetFocus<Heroes>();
 
     if ( hero && hero->GetPath().isValid() && hero->MayStillMove( false, true ) ) {
         hero->SetMove( true );
@@ -203,7 +205,7 @@ void Interface::Basic::EventKingdomInfo() const
 
 void Interface::Basic::EventCastSpell()
 {
-    Heroes * hero = GetFocusHeroes();
+    Heroes * hero = GetFocus<Heroes>();
     if ( hero == nullptr ) {
         return;
     }
@@ -227,8 +229,8 @@ fheroes2::GameMode Interface::Basic::EventEndTurn() const
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
-    if ( GetFocusHeroes() )
-        GetFocusHeroes()->SetMove( false );
+    if ( GetFocus<Heroes>() )
+        GetFocus<Heroes>()->SetMove( false );
 
     if ( !myKingdom.HeroesMayStillMove()
          || Dialog::YES == Dialog::Message( "", _( "One or more heroes may still move, are you sure you want to end your turn?" ), Font::BIG, Dialog::YES | Dialog::NO ) )
@@ -290,8 +292,8 @@ void Interface::Basic::EventNextTown()
     KingdomCastles & myCastles = myKingdom.GetCastles();
 
     if ( !myCastles.empty() ) {
-        if ( GetFocusCastle() ) {
-            KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), GetFocusCastle() );
+        if ( GetFocus<Castle>() ) {
+            KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), GetFocus<Castle>() );
             ++it;
             if ( it == myCastles.end() )
                 it = myCastles.begin();
@@ -373,7 +375,7 @@ fheroes2::GameMode Interface::Basic::EventScenarioInformation()
 
 void Interface::Basic::EventSwitchHeroSleeping()
 {
-    Heroes * hero = GetFocusHeroes();
+    Heroes * hero = GetFocus<Heroes>();
 
     if ( hero ) {
         hero->Modes( Heroes::SLEEPER ) ? hero->ResetModes( Heroes::SLEEPER ) : hero->SetModes( Heroes::SLEEPER );
@@ -385,7 +387,7 @@ void Interface::Basic::EventSwitchHeroSleeping()
 
 fheroes2::GameMode Interface::Basic::EventDigArtifact()
 {
-    Heroes * hero = GetFocusHeroes();
+    Heroes * hero = GetFocus<Heroes>();
 
     if ( hero ) {
         if ( hero->isShipMaster() ) {
@@ -451,7 +453,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
 
 fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMode gameMode )
 {
-    Heroes * hero = GetFocusHeroes();
+    Heroes * hero = GetFocus<Heroes>();
 
     if ( hero ) {
         // 1. action object
@@ -471,9 +473,9 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
             }
         }
     }
-    else if ( GetFocusCastle() ) {
+    else if ( GetFocus<Castle>() ) {
         // 2. town dialog
-        Game::OpenCastleDialog( *GetFocusCastle() );
+        Game::OpenCastleDialog( *GetFocus<Castle>() );
     }
 
     return gameMode;
@@ -481,10 +483,10 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
 
 void Interface::Basic::EventOpenFocus() const
 {
-    if ( GetFocusHeroes() )
-        Game::OpenHeroesDialog( *GetFocusHeroes(), true, true );
-    else if ( GetFocusCastle() )
-        Game::OpenCastleDialog( *GetFocusCastle() );
+    if ( GetFocus<Heroes>() )
+        Game::OpenHeroesDialog( *GetFocus<Heroes>(), true, true );
+    else if ( GetFocus<Castle>() )
+        Game::OpenCastleDialog( *GetFocus<Castle>() );
 }
 
 void Interface::Basic::EventSwitchShowRadar() const
@@ -563,7 +565,7 @@ void Interface::Basic::EventSwitchShowControlPanel() const
 
 void Interface::Basic::EventKeyArrowPress( int dir )
 {
-    Heroes * hero = GetFocusHeroes();
+    Heroes * hero = GetFocus<Heroes>();
 
     // move hero
     if ( hero )
