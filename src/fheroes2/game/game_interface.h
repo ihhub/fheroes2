@@ -91,6 +91,12 @@ namespace Interface
                 _basic._lockRedraw = true;
             }
 
+            RedrawLocker( const RedrawLocker & ) = delete;
+            RedrawLocker( RedrawLocker && ) = delete;
+
+            RedrawLocker & operator=( const RedrawLocker & ) = delete;
+            RedrawLocker & operator=( RedrawLocker && ) = delete;
+
             ~RedrawLocker()
             {
                 _basic._lockRedraw = false;
