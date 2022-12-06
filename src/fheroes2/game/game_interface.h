@@ -85,7 +85,7 @@ namespace Interface
         class RedrawLocker
         {
         public:
-            RedrawLocker( Basic & basic )
+            explicit RedrawLocker( Basic & basic )
                 : _basic( basic )
             {
                 _basic._lockRedraw = true;
