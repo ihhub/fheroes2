@@ -1385,7 +1385,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         break;
     case SDL_FINGERUP:
     case SDL_FINGERMOTION:
-        if ( !std::apply( [&event]( const auto... fingerId ) { return ( ( fingerId && event.fingerId == *fingerId ) || ... ); }, _fingerIds ) ) {
+        if ( !std::apply( [&event]( const auto... fingerId ) { return ( ( event.fingerId == fingerId ) || ... ); }, _fingerIds ) ) {
             // An event from an unknown finger, ignore
             return;
         }
@@ -1398,7 +1398,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     }
 
     // Single-finger gesture, simulate the mouse movement and the left mouse button operation
-    if ( _fingerIds.first && event.fingerId == _fingerIds.first && !_fingerIds.second ) {
+    if ( event.fingerId == _fingerIds.first && !_fingerIds.second ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
@@ -1440,7 +1440,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     // Two-finger gesture, simulate the right mouse button operation in the coordinates of the last single-finger gesture.
     // This gesture will continue to be processed as long as the second finger touches the screen, even if the first finger
     // is no longer doing so.
-    else if ( _fingerIds.second && event.fingerId == _fingerIds.second ) {
+    else if ( event.fingerId == _fingerIds.second ) {
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pr = mouse_cu;
 
@@ -1459,10 +1459,10 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
     // The finger no longer touches the screen, reset its state
     if ( event.type == SDL_FINGERUP ) {
-        if ( event.fingerId == *_fingerIds.first ) {
+        if ( event.fingerId == _fingerIds.first ) {
             _fingerIds.first.reset();
         }
-        else if ( event.fingerId == *_fingerIds.second ) {
+        else if ( event.fingerId == _fingerIds.second ) {
             _fingerIds.second.reset();
         }
         else {
