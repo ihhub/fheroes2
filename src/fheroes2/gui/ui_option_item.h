@@ -25,6 +25,12 @@
 
 #include "math_base.h"
 
+enum : int32_t
+{
+    TWO_ELEMENT_ROW_TEXT_WIDTH = 113,
+    THREE_ELEMENT_ROW_TEXT_WIDTH = 87
+};
+
 namespace fheroes2
 {
     class Sprite;

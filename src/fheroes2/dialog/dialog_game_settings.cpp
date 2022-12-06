@@ -50,7 +50,6 @@ namespace
 
     const fheroes2::Point optionOffset{ 36, 47 };
     const int32_t optionWindowSize{ 65 };
-    const int32_t iconTextMaxWidth = offsetBetweenOptions.width - 5;
 
     const fheroes2::Rect languageRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect graphicsRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
@@ -65,41 +64,42 @@ namespace
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
         fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ), iconTextMaxWidth );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ),
+                              THREE_ELEMENT_ROW_TEXT_WIDTH );
     }
 
     void drawGraphics( const fheroes2::Rect & optionRoi )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 15 ), _( "Graphics" ), _( "Settings" ), iconTextMaxWidth );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 15 ), _( "Graphics" ), _( "Settings" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
     }
 
     void drawAudioOptions( const fheroes2::Rect & optionRoi )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), iconTextMaxWidth );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
     }
 
     void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 5 ), _( "Hot Keys" ), _( "Configure" ), iconTextMaxWidth );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 5 ), _( "Hot Keys" ), _( "Configure" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
     }
 
     void drawCursorTypeOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isMonochromeCursorEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 20 ), _( "Mouse Cursor" ), _( "Black & White" ), iconTextMaxWidth );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 20 ), _( "Mouse Cursor" ), _( "Black & White" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ), iconTextMaxWidth );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
         }
     }
 
     void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isTextSupportModeEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ), iconTextMaxWidth );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ), iconTextMaxWidth );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
         }
     }
 
