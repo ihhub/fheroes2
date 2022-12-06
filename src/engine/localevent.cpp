@@ -1371,10 +1371,18 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     switch ( event.type ) {
     case SDL_FINGERDOWN:
         if ( !_fingerIds.first ) {
+            // As soon as the two-finger gesture processing has started, ignore all new touches, even if only
+            // the second finger touches the screen
+            if ( _fingerIds.second ) {
+                return;
+            }
+
             _fingerIds.first = event.fingerId;
         }
         else if ( !_fingerIds.second ) {
             _fingerIds.second = event.fingerId;
+            // As soon as the two-finger gesture processing has started, ignore all events related to the first finger
+            _fingerIds.first.reset();
         }
         else {
             // Gestures of more than two fingers are not supported, ignore
@@ -1396,8 +1404,11 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         return;
     }
 
+    // These states should be mutually exclusive
+    assert( !_fingerIds.first != !_fingerIds.second );
+
     // Single-finger gesture, simulate the mouse movement and the left mouse button operation
-    if ( event.fingerId == _fingerIds.first && !_fingerIds.second ) {
+    if ( event.fingerId == _fingerIds.first ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
