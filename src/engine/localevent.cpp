@@ -26,7 +26,6 @@
 #include <cstdlib>
 #include <map>
 #include <set>
-#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -1385,7 +1384,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         break;
     case SDL_FINGERUP:
     case SDL_FINGERMOTION:
-        if ( !std::apply( [&event]( const auto... fingerId ) { return ( ( event.fingerId == fingerId ) || ... ); }, _fingerIds ) ) {
+        if ( event.fingerId != _fingerIds.first && event.fingerId != _fingerIds.second ) {
             // An event from an unknown finger, ignore
             return;
         }
