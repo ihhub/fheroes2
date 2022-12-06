@@ -4224,8 +4224,6 @@ void Battle::Interface::RedrawActionCatapultPart2( const int catapultTargetId )
 {
     // Finish the smoke cloud animation after the building's state has changed after the hit and it is drawed as demolished.
 
-    LocalEvent & le = LocalEvent::Get();
-
     const fheroes2::Point pt1 = Catapult::GetTargetPosition( catapultTargetId, true ) + GetArea().getPosition();
     fheroes2::Point pt2;
 
@@ -4243,6 +4241,8 @@ void Battle::Interface::RedrawActionCatapultPart2( const int catapultTargetId )
         // Bridge smoke animation should contionue from the 7th frame.
         frame = bridgeDestroyFrame;
     }
+
+    LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() && frame < maxAnimationFrame ) {
         CheckGlobalEvents( le );
