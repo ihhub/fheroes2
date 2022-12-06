@@ -80,6 +80,26 @@ namespace Interface
     class Basic
     {
     public:
+        // This class is used to lock rendering of Basic class. This is useful when we have to generate only a single frame.
+        // Use this class ONLY when you are going to call rendering after all other operations.
+        class RedrawLocker
+        {
+        public:
+            RedrawLocker( Basic & basic )
+                : _basic( basic )
+            {
+                _basic._lockRedraw = true;
+            }
+
+            ~RedrawLocker()
+            {
+                _basic._lockRedraw = false;
+            }
+
+        private:
+            Basic & _basic;
+        };
+
         static Basic & Get();
 
         bool NeedRedraw() const
@@ -212,6 +232,8 @@ namespace Interface
         ControlPanel controlPanel;
 
         uint32_t redraw;
+
+        bool _lockRedraw;
     };
 }
 
