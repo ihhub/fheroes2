@@ -1371,18 +1371,10 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     switch ( event.type ) {
     case SDL_FINGERDOWN:
         if ( !_fingerIds.first ) {
-            // As soon as the two-finger gesture processing has started, ignore all new touches, even if only
-            // the second finger touches the screen
-            if ( _fingerIds.second ) {
-                return;
-            }
-
             _fingerIds.first = event.fingerId;
         }
         else if ( !_fingerIds.second ) {
             _fingerIds.second = event.fingerId;
-            // As soon as the two-finger gesture processing has started, ignore all events related to the first finger
-            _fingerIds.first.reset();
         }
         else {
             // Gestures of more than two fingers are not supported, ignore
@@ -1404,10 +1396,6 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         return;
     }
 
-    // These states should be mutually exclusive
-    assert( !_fingerIds.first != !_fingerIds.second );
-
-    // Single-finger gesture, simulate the mouse movement and the left mouse button operation
     if ( event.fingerId == _fingerIds.first ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -1432,29 +1420,35 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
         }
 
-        if ( event.type == SDL_FINGERDOWN ) {
-            mouse_pl = mouse_cu;
+        // If there is a two-finger gesture in progress, the first finger is only used to move the cursor.
+        // The operation of the left mouse button is not simulated.
+        if ( !_isTwoFingerGestureInProgress ) {
+            if ( event.type == SDL_FINGERDOWN ) {
+                mouse_pl = mouse_cu;
 
-            SetModes( MOUSE_PRESSED );
+                SetModes( MOUSE_PRESSED );
+            }
+            else if ( event.type == SDL_FINGERUP ) {
+                mouse_rl = mouse_cu;
+
+                ResetModes( MOUSE_PRESSED );
+                SetModes( MOUSE_RELEASED );
+                SetModes( MOUSE_CLICKED );
+            }
+
+            mouse_button = SDL_BUTTON_LEFT;
         }
-        else if ( event.type == SDL_FINGERUP ) {
-            mouse_rl = mouse_cu;
-
-            ResetModes( MOUSE_PRESSED );
-            SetModes( MOUSE_RELEASED );
-            SetModes( MOUSE_CLICKED );
-        }
-
-        mouse_button = SDL_BUTTON_LEFT;
     }
-    // Two-finger gesture, simulate the right mouse button operation in the coordinates of the last single-finger gesture.
-    // This gesture will continue to be processed as long as the second finger touches the screen, even if the first finger
-    // is no longer doing so.
     else if ( event.fingerId == _fingerIds.second ) {
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pr = mouse_cu;
 
             SetModes( MOUSE_PRESSED );
+
+            // When the second finger touches the screen, the two-finger gesture processing begins. This
+            // gesture simulates the operation of the right mouse button and ends when both fingers are
+            // removed from the screen.
+            _isTwoFingerGestureInProgress = true;
         }
         else if ( event.type == SDL_FINGERUP ) {
             mouse_rr = mouse_cu;
@@ -1478,6 +1472,11 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         else {
             // An event from an unknown finger, this should never happen
             assert( 0 );
+        }
+
+        // Both fingers are removed from the screen, cancel the two-finger gesture
+        if ( !_fingerIds.first && !_fingerIds.second ) {
+            _isTwoFingerGestureInProgress = false;
         }
     }
 }
