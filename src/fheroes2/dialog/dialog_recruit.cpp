@@ -505,6 +505,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
                 buttonOk.draw();
             }
 
+            buttonCancel.draw();
+
             if ( buttonMax.isEnabled() || max == 0 )
                 buttonMax.draw();
             if ( buttonMin.isEnabled() )
