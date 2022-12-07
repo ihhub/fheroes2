@@ -11,7 +11,7 @@ msgstr ""
 "PO-Revision-Date: 2022-12-03 11:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dansk\n"
-"Language: da\n"
+"Language: dk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -727,7 +727,7 @@ msgstr ""
 "Artefaktet %{artifact} er i kraft, hvilket deaktiverer brug af %{spell} "
 "magien."
 
-# In danish these terms are spelled the same, no matter whether we are dealing with raising dead in singularis or pluralis
+In danish these terms are spelled the same, no matter whether we are dealing with raising dead in singularis or pluralis
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} rejser sig fra de døde!"
@@ -6371,7 +6371,8 @@ msgstr "Bueskytte"
 msgid "Archers"
 msgstr "Bueskytter"
 
-# We don't have a proper word for a military trained "ranger" in danish...
+We don't have a proper word for a military trained "ranger" in danish...
+
 msgid "Ranger"
 msgstr "Skovridder"
 
