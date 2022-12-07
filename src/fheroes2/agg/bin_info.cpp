@@ -158,6 +158,17 @@ namespace Bin_Info
             }
         }
 
+        if ( monsterID == Monster::DWARF || monsterID == Monster::BATTLE_DWARF ) {
+            // Dwarves and Battle Dwarves have incorrect death animation.
+            if ( animationFrames[DEATH].size() == 8 ) {
+                animationFrames[DEATH].clear();
+
+                for ( int frameId = 49; frameId <= 55; ++frameId ) {
+                    animationFrames[DEATH].push_back( frameId );
+                }
+            }
+        }
+
         // Modify AnimInfo for upgraded monsters without own FRM file
         int speedDiff = 0;
         switch ( monsterID ) {
