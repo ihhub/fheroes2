@@ -910,9 +910,7 @@ namespace ICN
         YELLOW_FONT,
         YELLOW_SMALLFONT,
         BATTLESKIP,
-        BATTLEWAIT,
         BUYMAX,
-        BTNCONFIG,
         BTNBATTLEONLY,
         BTNGIFT_GOOD,
         BTNGIFT_EVIL,
@@ -991,6 +989,9 @@ namespace ICN
         BUTTON_DIFFICULTY_ARCHIBALD,
         BUTTON_DIFFICULTY_ROLAND,
         BUTTON_DIFFICULTY_POL,
+
+        EMPTY_GOOD_BUTTON,
+        EMPTY_EVIL_BUTTON,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

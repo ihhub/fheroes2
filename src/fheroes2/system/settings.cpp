@@ -60,24 +60,26 @@ namespace
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
         GLOBAL_MONOCHROME_CURSOR = 0x00000020,
-        GLOBAL_SHOWCPANEL = 0x00000040,
-        GLOBAL_SHOWRADAR = 0x00000080,
-        GLOBAL_SHOWICONS = 0x00000100,
-        GLOBAL_SHOWBUTTONS = 0x00000200,
-        GLOBAL_SHOWSTATUS = 0x00000400,
+        GLOBAL_SHOW_CPANEL = 0x00000040,
+        GLOBAL_SHOW_RADAR = 0x00000080,
+        GLOBAL_SHOW_ICONS = 0x00000100,
+        GLOBAL_SHOW_BUTTONS = 0x00000200,
+        GLOBAL_SHOW_STATUS = 0x00000400,
         GLOBAL_FULLSCREEN = 0x00008000,
         GLOBAL_3D_AUDIO = 0x00010000,
         GLOBAL_SYSTEM_INFO = 0x00020000,
-        // UNUSED = 0x00040000,
-        // UNUSED = 0x00080000,
-        // UNUSED = 0x00100000,
-        // UNUSED = 0x00200000,
+        GLOBAL_CURSOR_SOFT_EMULATION = 0x00040000,
+        GLOBAL_EVIL_INTERFACE = 0x00080000,
+        GLOBAL_HIDE_INTERFACE = 0x00100000,
+        GLOBAL_BATTLE_SHOW_DAMAGE = 0x00200000,
         GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
-        GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000
+        GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
+        GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
+        GLOBAL_SCREEN_NEAREST_SCALING = 0x20000000
     };
 }
 
@@ -87,8 +89,7 @@ std::string Settings::GetVersion()
 }
 
 Settings::Settings()
-    : debug( 0 )
-    , video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
+    : video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
@@ -96,7 +97,7 @@ Settings::Settings()
     , _controllerPointerSpeed( 10 )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
-    , scroll_speed( SCROLL_NORMAL )
+    , scroll_speed( SCROLL_SPEED_NORMAL )
     , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )
     , preferably_count_players( 0 )
@@ -104,23 +105,26 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_FIRST_RUN );
     _optGlobal.SetModes( GLOBAL_SHOW_INTRO );
 
-    _optGlobal.SetModes( GLOBAL_SHOWRADAR );
-    _optGlobal.SetModes( GLOBAL_SHOWICONS );
-    _optGlobal.SetModes( GLOBAL_SHOWBUTTONS );
-    _optGlobal.SetModes( GLOBAL_SHOWSTATUS );
+    _optGlobal.SetModes( GLOBAL_SHOW_RADAR );
+    _optGlobal.SetModes( GLOBAL_SHOW_ICONS );
+    _optGlobal.SetModes( GLOBAL_SHOW_BUTTONS );
+    _optGlobal.SetModes( GLOBAL_SHOW_STATUS );
 
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 
+    if ( System::isHandheldDevice() ) {
+        // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
+        _optGlobal.SetModes( GLOBAL_FULLSCREEN );
+
+        // Adventure Map scrolling is disabled by default for handheld devices as it is very hard to navigate on small screens. Use drag and move logic.
+        scroll_speed = SCROLL_SPEED_NONE;
+    }
+
     // The Price of Loyalty is not supported by default.
     EnablePriceOfLoyaltySupport( false );
-}
-
-Settings::~Settings()
-{
-    BinarySave();
 }
 
 Settings & Settings::Get()
@@ -130,67 +134,20 @@ Settings & Settings::Get()
     return conf;
 }
 
-bool Settings::Read( const std::string & filename )
+bool Settings::Read( const std::string & filePath )
 {
     TinyConfig config( '=', '#' );
 
     std::string sval;
-    int ival;
 
-    if ( !config.Load( filename ) )
+    if ( !config.Load( filePath ) ) {
         return false;
-
-    // debug
-    ival = config.IntParams( "debug" );
-
-    switch ( ival ) {
-    case 0:
-        debug = DBG_ALL_WARN;
-        break;
-    case 1:
-        debug = DBG_ALL_INFO;
-        break;
-    case 2:
-        debug = DBG_ALL_TRACE;
-        break;
-    case 3:
-        debug = DBG_ENGINE_TRACE;
-        break;
-    case 4:
-        debug = DBG_GAME_INFO | DBG_BATTLE_INFO | DBG_AI_INFO;
-        break;
-    case 5:
-        debug = DBG_GAME_TRACE | DBG_AI_INFO | DBG_BATTLE_INFO;
-        break;
-    case 6:
-        debug = DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
-        break;
-    case 7:
-        debug = DBG_BATTLE_TRACE | DBG_AI_INFO | DBG_GAME_INFO;
-        break;
-    case 8:
-        debug = DBG_DEVEL | DBG_GAME_TRACE;
-        break;
-    case 9:
-        debug = DBG_DEVEL | DBG_AI_INFO | DBG_BATTLE_INFO | DBG_GAME_INFO;
-        break;
-    case 10:
-        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
-        break;
-    case 11:
-        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_TRACE | DBG_GAME_INFO;
-        break;
-    default:
-        debug = ival;
-        break;
     }
 
-#ifndef WITH_DEBUG
-    // reset devel
-    debug &= ~DBG_DEVEL;
-#endif
-
-    Logging::SetDebugLevel( debug );
+    // debug
+    if ( config.Exists( "debug" ) ) {
+        setDebug( config.IntParams( "debug" ) );
+    }
 
     // game language
     sval = config.StrParams( "lang" );
@@ -252,6 +209,10 @@ bool Settings::Read( const std::string & filename )
         SetBattleMouseShaded( config.StrParams( "battle shadow cursor" ) == "on" );
     }
 
+    if ( config.Exists( "battle show damage" ) ) {
+        setBattleDamageInfo( config.StrParams( "battle show damage" ) == "on" );
+    }
+
     if ( config.Exists( "auto resolve battles" ) ) {
         setBattleAutoResolve( config.StrParams( "auto resolve battles" ) == "on" );
     }
@@ -262,6 +223,30 @@ bool Settings::Read( const std::string & filename )
 
     if ( config.Exists( "battle army order" ) ) {
         setBattleShowArmyOrder( config.StrParams( "battle army order" ) == "on" );
+    }
+
+    if ( config.Exists( "use evil interface" ) ) {
+        setEvilInterface( config.StrParams( "use evil interface" ) == "on" );
+    }
+
+    if ( config.Exists( "hide interface" ) ) {
+        setHideInterface( config.StrParams( "hide interface" ) == "on" );
+    }
+
+    if ( config.Exists( "radar window position" ) ) {
+        pos_radr = config.PointParams( "radar window position", { -1, -1 } );
+    }
+
+    if ( config.Exists( "buttons window position" ) ) {
+        pos_bttn = config.PointParams( "buttons window position", { -1, -1 } );
+    }
+
+    if ( config.Exists( "icons window position" ) ) {
+        pos_icon = config.PointParams( "icons window position", { -1, -1 } );
+    }
+
+    if ( config.Exists( "status window position" ) ) {
+        pos_stat = config.PointParams( "status window position", { -1, -1 } );
     }
 
     // videomode
@@ -317,7 +302,15 @@ bool Settings::Read( const std::string & filename )
     }
 
     if ( config.Exists( "monochrome cursor" ) ) {
-        setMonochromeCursor( config.StrParams( "monochrome cursor" ) == "on" );
+        // We cannot set cursor before initializing the system since we read a configuration file before initialization.
+        if ( config.StrParams( "monochrome cursor" ) == "on" ) {
+            _optGlobal.SetModes( GLOBAL_MONOCHROME_CURSOR );
+            Cursor::Get().setMonochromeCursor( true );
+        }
+        else {
+            _optGlobal.ResetModes( GLOBAL_MONOCHROME_CURSOR );
+            Cursor::Get().setMonochromeCursor( false );
+        }
     }
 
     if ( config.Exists( "3d audio" ) ) {
@@ -328,18 +321,35 @@ bool Settings::Read( const std::string & filename )
         setSystemInfo( config.StrParams( "system info" ) == "on" );
     }
 
-    BinaryLoad();
+    if ( config.Exists( "auto save at the beginning of the turn" ) ) {
+        setAutoSaveAtBeginningOfTurn( config.StrParams( "auto save at the beginning of the turn" ) == "on" );
+    }
+
+    if ( config.Exists( "cursor soft rendering" ) ) {
+        if ( config.StrParams( "cursor soft rendering" ) == "on" ) {
+            _optGlobal.SetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+            fheroes2::cursor().enableSoftwareEmulation( true );
+        }
+        else {
+            _optGlobal.ResetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+            fheroes2::cursor().enableSoftwareEmulation( false );
+        }
+    }
+
+    if ( config.Exists( "screen scaling type" ) ) {
+        setNearestLinearScaling( config.StrParams( "screen scaling type" ) == "nearest" );
+    }
 
     return true;
 }
 
-bool Settings::Save( const std::string & filename ) const
+bool Settings::Save( const std::string_view fileName ) const
 {
-    if ( filename.empty() ) {
+    if ( fileName.empty() ) {
         return false;
     }
 
-    const std::string cfgFilename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), filename );
+    const std::string cfgFilename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), fileName );
 
     std::fstream file;
     file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );
@@ -349,8 +359,6 @@ bool Settings::Save( const std::string & filename ) const
 
     const std::string & data = String();
     file.write( data.data(), data.size() );
-
-    BinarySave();
 
     return true;
 }
@@ -388,7 +396,7 @@ std::string Settings::String() const
     os << "fullscreen = " << ( _optGlobal.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
-    os << "debug = " << debug << std::endl;
+    os << "debug = " << Logging::getDebugLevel() << std::endl;
 
     os << std::endl << "# heroes movement speed: 1 - 10" << std::endl;
     os << "heroes speed = " << heroes_speed << std::endl;
@@ -399,7 +407,7 @@ std::string Settings::String() const
     os << std::endl << "# battle speed: 1 - 10" << std::endl;
     os << "battle speed = " << battle_speed << std::endl;
 
-    os << std::endl << "# scroll speed: 1 - 4" << std::endl;
+    os << std::endl << "# Adventure Map scrolling speed: 0 - 4. 0 means no scrolling" << std::endl;
     os << "scroll speed = " << scroll_speed << std::endl;
 
     os << std::endl << "# show battle grid: on/off" << std::endl;
@@ -411,6 +419,9 @@ std::string Settings::String() const
     os << std::endl << "# show battle shadow cursor: on/off" << std::endl;
     os << "battle shadow cursor = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# show battle damage information: on/off" << std::endl;
+    os << "battle show damage = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_DAMAGE ) ? "on" : "off" ) << std::endl;
+
     os << std::endl << "# auto resolve battles: on/off" << std::endl;
     os << "auto resolve battles = " << ( _optGlobal.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
 
@@ -419,6 +430,24 @@ std::string Settings::String() const
 
     os << std::endl << "# show army order during battle: on/off" << std::endl;
     os << "battle army order = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# use evil interface style: on/off" << std::endl;
+    os << "use evil interface = " << ( _optGlobal.Modes( GLOBAL_EVIL_INTERFACE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
+    os << "hide interface = " << ( _optGlobal.Modes( GLOBAL_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# position of the radar window on the adventure map when interface elements are hidden" << std::endl;
+    os << "radar window position = [ " << pos_radr.x << ", " << pos_radr.y << " ]" << std::endl;
+
+    os << std::endl << "# position of the buttons window on the adventure map when interface elements are hidden" << std::endl;
+    os << "buttons window position = [ " << pos_bttn.x << ", " << pos_bttn.y << " ]" << std::endl;
+
+    os << std::endl << "# position of the icons window on the adventure map when interface elements are hidden" << std::endl;
+    os << "icons window position = [ " << pos_icon.x << ", " << pos_icon.y << " ]" << std::endl;
+
+    os << std::endl << "# position of the status window on the adventure map when interface elements are hidden" << std::endl;
+    os << "status window position = [ " << pos_stat.x << ", " << pos_stat.y << " ]" << std::endl;
 
     os << std::endl << "# game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
@@ -447,10 +476,18 @@ std::string Settings::String() const
     os << std::endl << "# display system information: on/off" << std::endl;
     os << "system info = " << ( _optGlobal.Modes( GLOBAL_SYSTEM_INFO ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# should auto save be performed at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
+    os << "auto save at the beginning of the turn = " << ( _optGlobal.Modes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# enable cursor software rendering" << std::endl;
+    os << "cursor soft rendering = " << ( _optGlobal.Modes( GLOBAL_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
+    os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_NEAREST_SCALING ) ? "nearest" : "linear" ) << std::endl;
+
     return os.str();
 }
 
-/* read maps info */
 void Settings::SetCurrentFileInfo( const Maps::FileInfo & fi )
 {
     current_maps_file = fi;
@@ -475,7 +512,7 @@ bool Settings::setGameLanguage( const std::string & language )
 #if defined( MACOS_APP_BUNDLE )
     const ListFiles translations = Settings::FindFiles( "translations", fileName, false );
 #else
-    const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
+    const ListFiles translations = Settings::FindFiles( System::concatPath( "files", "lang" ), fileName, false );
 #endif
 
     if ( !translations.empty() ) {
@@ -557,7 +594,7 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
     ListFiles res;
 
     for ( const std::string & dir : GetRootDirs() ) {
-        const std::string path = !prefixDir.empty() ? System::ConcatePath( dir, prefixDir ) : dir;
+        const std::string path = !prefixDir.empty() ? System::concatPath( dir, prefixDir ) : dir;
 
         if ( System::IsDirectory( path ) ) {
             if ( exactMatch ) {
@@ -576,9 +613,9 @@ bool Settings::findFile( const std::string & internalDirectory, const std::strin
 {
     std::string tempPath;
 
-    for ( const std::string & rootDir : Settings::GetRootDirs() ) {
-        tempPath = System::ConcatePath( rootDir, internalDirectory );
-        tempPath = System::ConcatePath( tempPath, fileName );
+    for ( const std::string & rootDir : GetRootDirs() ) {
+        tempPath = System::concatPath( rootDir, internalDirectory );
+        tempPath = System::concatPath( tempPath, fileName );
         if ( System::IsFile( tempPath ) ) {
             fullPath.swap( tempPath );
             return true;
@@ -594,19 +631,16 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
     return files.empty() ? name : files.back();
 }
 
-/* set ai speed: 0 (don't show) - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
     ai_speed = std::clamp( speed, 0, 10 );
 }
 
-/* set hero speed: 1 - 10 */
 void Settings::SetHeroesMoveSpeed( int speed )
 {
     heroes_speed = std::clamp( speed, 1, 10 );
 }
 
-/* set battle speed: 1 - 10 */
 void Settings::SetBattleSpeed( int speed )
 {
     battle_speed = std::clamp( speed, 1, 10 );
@@ -713,10 +747,61 @@ void Settings::setSystemInfo( const bool enable )
     }
 }
 
-/* set scroll speed: 1 - 4 */
+void Settings::setAutoSaveAtBeginningOfTurn( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+    }
+}
+
+void Settings::setBattleDamageInfo( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_DAMAGE );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_DAMAGE );
+    }
+}
+
+void Settings::setHideInterface( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_HIDE_INTERFACE );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_HIDE_INTERFACE );
+    }
+}
+
+void Settings::setEvilInterface( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_EVIL_INTERFACE );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_EVIL_INTERFACE );
+    }
+}
+
+void Settings::setNearestLinearScaling( const bool enable )
+{
+    if ( enable ) {
+        _optGlobal.SetModes( GLOBAL_SCREEN_NEAREST_SCALING );
+        fheroes2::engine().setNearestScaling( true );
+    }
+    else {
+        _optGlobal.ResetModes( GLOBAL_SCREEN_NEAREST_SCALING );
+        fheroes2::engine().setNearestScaling( false );
+    }
+}
+
 void Settings::SetScrollSpeed( int speed )
 {
-    scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SLOW ), static_cast<int>( SCROLL_FAST2 ) );
+    scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SPEED_NONE ), static_cast<int>( SCROLL_SPEED_VERY_FAST ) );
 }
 
 bool Settings::isPriceOfLoyaltySupported() const
@@ -744,29 +829,49 @@ bool Settings::isSystemInfoEnabled() const
     return _optGlobal.Modes( GLOBAL_SYSTEM_INFO );
 }
 
+bool Settings::isAutoSaveAtBeginningOfTurnEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+}
+
+bool Settings::isBattleShowDamageInfoEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_DAMAGE );
+}
+
+bool Settings::isHideInterfaceEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_HIDE_INTERFACE );
+}
+
+bool Settings::isEvilInterfaceEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_EVIL_INTERFACE );
+}
+
 bool Settings::ShowControlPanel() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWCPANEL );
+    return _optGlobal.Modes( GLOBAL_SHOW_CPANEL );
 }
 
 bool Settings::ShowRadar() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWRADAR );
+    return _optGlobal.Modes( GLOBAL_SHOW_RADAR );
 }
 
 bool Settings::ShowIcons() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWICONS );
+    return _optGlobal.Modes( GLOBAL_SHOW_ICONS );
 }
 
 bool Settings::ShowButtons() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWBUTTONS );
+    return _optGlobal.Modes( GLOBAL_SHOW_BUTTONS );
 }
 
 bool Settings::ShowStatus() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOWSTATUS );
+    return _optGlobal.Modes( GLOBAL_SHOW_STATUS );
 }
 
 bool Settings::BattleShowGrid() const
@@ -799,10 +904,54 @@ bool Settings::BattleShowArmyOrder() const
     return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
 }
 
-void Settings::SetDebug( int d )
+void Settings::setDebug( int debug )
 {
-    debug = d;
-    Logging::SetDebugLevel( debug );
+    switch ( debug ) {
+    case 0:
+        debug = DBG_ALL_WARN;
+        break;
+    case 1:
+        debug = DBG_ALL_INFO;
+        break;
+    case 2:
+        debug = DBG_ALL_TRACE;
+        break;
+    case 3:
+        debug = DBG_ENGINE_TRACE;
+        break;
+    case 4:
+        debug = DBG_GAME_INFO | DBG_BATTLE_INFO | DBG_AI_INFO;
+        break;
+    case 5:
+        debug = DBG_GAME_TRACE | DBG_AI_INFO | DBG_BATTLE_INFO;
+        break;
+    case 6:
+        debug = DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 7:
+        debug = DBG_BATTLE_TRACE | DBG_AI_INFO | DBG_GAME_INFO;
+        break;
+    case 8:
+        debug = DBG_DEVEL | DBG_GAME_TRACE;
+        break;
+    case 9:
+        debug = DBG_DEVEL | DBG_AI_INFO | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 10:
+        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_INFO | DBG_GAME_INFO;
+        break;
+    case 11:
+        debug = DBG_DEVEL | DBG_AI_TRACE | DBG_BATTLE_TRACE | DBG_GAME_INFO;
+        break;
+    default:
+        break;
+    }
+
+#ifndef WITH_DEBUG
+    debug &= ~DBG_DEVEL;
+#endif
+
+    Logging::setDebugLevel( debug );
 }
 
 void Settings::SetSoundVolume( int v )
@@ -837,16 +986,6 @@ void Settings::EnablePriceOfLoyaltySupport( const bool set )
     }
 }
 
-void Settings::SetEvilInterface( bool f )
-{
-    f ? ExtSetModes( GAME_EVIL_INTERFACE ) : ExtResetModes( GAME_EVIL_INTERFACE );
-}
-
-void Settings::SetHideInterface( bool f )
-{
-    f ? ExtSetModes( GAME_HIDE_INTERFACE ) : ExtResetModes( GAME_HIDE_INTERFACE );
-}
-
 void Settings::SetBattleGrid( bool f )
 {
     f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_GRID );
@@ -864,160 +1003,27 @@ void Settings::SetBattleMouseShaded( bool f )
 
 void Settings::SetShowPanel( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWCPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOWCPANEL );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_CPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CPANEL );
 }
 
 void Settings::SetShowRadar( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWRADAR ) : _optGlobal.ResetModes( GLOBAL_SHOWRADAR );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_RADAR ) : _optGlobal.ResetModes( GLOBAL_SHOW_RADAR );
 }
 
 void Settings::SetShowIcons( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWICONS ) : _optGlobal.ResetModes( GLOBAL_SHOWICONS );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_ICONS ) : _optGlobal.ResetModes( GLOBAL_SHOW_ICONS );
 }
 
 void Settings::SetShowButtons( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWBUTTONS ) : _optGlobal.ResetModes( GLOBAL_SHOWBUTTONS );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_BUTTONS ) : _optGlobal.ResetModes( GLOBAL_SHOW_BUTTONS );
 }
 
 void Settings::SetShowStatus( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOWSTATUS ) : _optGlobal.ResetModes( GLOBAL_SHOWSTATUS );
-}
-
-bool Settings::CanChangeInGame( uint32_t f ) const
-{
-    return ( f >> 28 ) == 0x01;
-}
-
-bool Settings::ExtModes( uint32_t f ) const
-{
-    const uint32_t mask = 0x0FFFFFFF;
-
-    switch ( f >> 28 ) {
-    case 0x01:
-        return _optExtGame.Modes( f & mask );
-    case 0x02:
-        return _optExtBalance2.Modes( f & mask );
-    case 0x03:
-        return _optExtBalance3.Modes( f & mask );
-    case 0x04:
-        return _optExtBalance4.Modes( f & mask );
-    default:
-        break;
-    }
-
-    return false;
-}
-
-std::string Settings::ExtName( const uint32_t settingId )
-{
-    switch ( settingId ) {
-    case Settings::GAME_BATTLE_SHOW_DAMAGE:
-        return _( "battle: show damage info" );
-    case Settings::WORLD_SCOUTING_EXTENDED:
-        return _( "world: Scouting skill shows extended content info" );
-    case Settings::WORLD_ALLOW_SET_GUARDIAN:
-        return _( "world: allow to set guardian to objects" );
-    case Settings::WORLD_EXT_OBJECTS_CAPTURED:
-        return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
-    case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
-        return _( "heroes: allow buy a spellbook from Shrines" );
-    case Settings::HEROES_ARENA_ANY_SKILLS:
-        return _( "heroes: allow to choose any primary skill in Arena" );
-    case Settings::BATTLE_SOFT_WAITING:
-        return _( "battle: allow soft wait for troops" );
-    case Settings::GAME_AUTOSAVE_BEGIN_DAY:
-        return _( "game: autosave will be made at the beginning of the day" );
-    case Settings::GAME_EVIL_INTERFACE:
-        return _( "game: use evil interface" );
-    case Settings::GAME_HIDE_INTERFACE:
-        return _( "game: hide interface" );
-    default:
-        break;
-    }
-
-    return std::string();
-}
-
-void Settings::ExtSetModes( uint32_t f )
-{
-    const uint32_t mask = 0x0FFFFFFF;
-
-    switch ( f >> 28 ) {
-    case 0x01:
-        _optExtGame.SetModes( f & mask );
-        break;
-    case 0x02:
-        _optExtBalance2.SetModes( f & mask );
-        break;
-    case 0x03:
-        _optExtBalance3.SetModes( f & mask );
-        break;
-    case 0x04:
-        _optExtBalance4.SetModes( f & mask );
-        break;
-    default:
-        break;
-    }
-}
-
-void Settings::ExtResetModes( uint32_t f )
-{
-    const uint32_t mask = 0x0FFFFFFF;
-
-    switch ( f >> 28 ) {
-    case 0x01:
-        _optExtGame.ResetModes( f & mask );
-        break;
-    case 0x02:
-        _optExtBalance2.ResetModes( f & mask );
-        break;
-    case 0x03:
-        _optExtBalance3.ResetModes( f & mask );
-        break;
-    case 0x04:
-        _optExtBalance4.ResetModes( f & mask );
-        break;
-    default:
-        break;
-    }
-}
-
-void Settings::BinarySave() const
-{
-    const std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
-
-    StreamFile fs;
-    fs.setbigendian( true );
-
-    if ( fs.open( fname, "wb" ) ) {
-        fs << static_cast<uint16_t>( CURRENT_FORMAT_VERSION ) << _optExtGame << _optExtBalance2 << _optExtBalance4 << _optExtBalance3 << pos_radr << pos_bttn << pos_icon
-           << pos_stat;
-    }
-}
-
-void Settings::BinaryLoad()
-{
-    std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
-
-    if ( !System::IsFile( fname ) ) {
-        fname = GetLastFile( "", "fheroes2.bin" );
-    }
-    if ( !System::IsFile( fname ) ) {
-        return;
-    }
-
-    StreamFile fs;
-    fs.setbigendian( true );
-
-    if ( fs.open( fname, "rb" ) ) {
-        uint16_t version = 0;
-
-        fs >> version >> _optExtGame >> _optExtBalance2 >> _optExtBalance4 >> _optExtBalance3 >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
-    }
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_STATUS ) : _optGlobal.ResetModes( GLOBAL_SHOW_STATUS );
 }
 
 bool Settings::FullScreen() const
@@ -1047,24 +1053,26 @@ void Settings::resetFirstGameRun()
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf._optExtBalance2
-        << conf._optExtBalance4 << conf._optExtBalance3 << conf.players;
-
-    return msg;
+    return msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.players;
 }
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    msg >> conf._loadedFileLanguage;
+    msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players;
 
-    int debug;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_1000_RELEASE ) {
+        int dummy;
 
-    msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> conf._optExtBalance2 >> conf._optExtBalance4
-        >> conf._optExtBalance3 >> conf.players;
+        msg >> dummy;
+    }
 
-#ifndef WITH_DEBUG
-    conf.debug = debug;
-#endif
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE3_1000_RELEASE ) {
+        BitModes dummy;
 
-    return msg;
+        msg >> dummy >> dummy >> dummy;
+    }
+
+    return msg >> conf.players;
 }

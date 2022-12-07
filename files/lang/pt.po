@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-12-03 01:14+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -228,14 +228,21 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Veloc."
-
 msgid "Speed: %{speed}"
 msgstr "Rapidez: %{speed}"
 
+msgid "Speed"
+msgstr "Veloc."
+
 msgid "Army Order"
 msgstr ""
+
+#, fuzzy
+msgid "Off"
+msgstr "off"
+
+msgid "On"
+msgstr "Ligado"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -250,12 +257,22 @@ msgstr "Continuar a Andar"
 msgid "Shadow Cursor"
 msgstr "Sombra do cursor"
 
-#, fuzzy
-msgid "Off"
-msgstr "off"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Ligado"
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Configure"
+msgstr ""
+
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Hot Seat"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Dano"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -282,6 +299,23 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+#, fuzzy
+msgid "Change the audio settings of the game."
+msgstr "Mudar a resolução do jogo."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Passar a vez desta criatura"
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "The enemy has surrendered!"
 msgstr "O inimigo desistiu!"
@@ -497,18 +531,6 @@ msgid "System Options"
 msgstr "Opções do Sistema"
 
 #, fuzzy
-msgid "Wait this unit"
-msgstr "Passar a vez desta criatura"
-
-msgid "Wait"
-msgstr ""
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-
-#, fuzzy
 msgid "Skip this unit"
 msgstr "Passar a vez desta criatura"
 
@@ -551,10 +573,6 @@ msgstr "Tem certeza de que quer a retirada?"
 
 #, fuzzy
 msgid "%{name} skip their turn."
-msgstr "%{name} a %{race}."
-
-#, fuzzy
-msgid "%{name} wait their turn."
 msgstr "%{name} a %{race}."
 
 #, fuzzy
@@ -2236,10 +2254,6 @@ msgid "Exit"
 msgstr "Sair da Cidade"
 
 #, fuzzy
-msgid "Exit this menu."
-msgstr "Passar a vez desta criatura"
-
-#, fuzzy
 msgid "Click to show next town."
 msgstr "Mostrar proxima cidade"
 
@@ -2540,9 +2554,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "OK"
-
 msgid "Build a new ship:"
 msgstr "Construir um novo banrco:"
 
@@ -2590,22 +2601,6 @@ msgstr "Idioma"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Configurações"
-
-msgid "Experimental"
-msgstr "Experimental"
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-#, fuzzy
-msgid "Hot Keys"
-msgstr "Hot Seat"
-
 #, fuzzy
 msgid "Black & White"
 msgstr "Ponte"
@@ -2620,28 +2615,6 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
-#, fuzzy
-msgid "Interface Type"
-msgstr "Aparência"
-
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bom"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "autoBattle|Manual"
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr "Mudar o idioma do jogo."
 
@@ -2651,22 +2624,6 @@ msgstr "Selecione o idioma do jogo"
 #, fuzzy
 msgid "Change the graphics settings of the game."
 msgstr "Mudar a resolução do jogo."
-
-#, fuzzy
-msgid "Change the audio settings of the game."
-msgstr "Mudar a resolução do jogo."
-
-msgid "Experimental game settings."
-msgstr "Configurações experimentais do jogo."
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -2794,12 +2751,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr "Selecione o Guardião"
-
-msgid "Your army too big!"
-msgstr "Sua arma é muito grande!"
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -2866,10 +2817,10 @@ msgstr "Trocas Disponíveis"
 msgid "n/a"
 msgstr "n/d"
 
-msgid "guarded by "
+msgid "guarded by %{count} %{monster}"
 msgstr ""
 
-msgid "guarded by %{count} %{monster}"
+msgid "guarded by "
 msgstr ""
 
 msgid "(available: %{count})"
@@ -3179,9 +3130,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr "Aceitar a escolha feita."
 
-msgid "Experimental Game Settings"
-msgstr ""
-
 msgid "Jump"
 msgstr ""
 
@@ -3196,8 +3144,30 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr "Veloc."
 
+msgid "Slow"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
 msgid "Scroll Speed"
 msgstr ""
+
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bom"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Aparência"
 
 #, fuzzy
 msgid "Hide"
@@ -3210,6 +3180,18 @@ msgstr "Neve"
 msgid "Interface"
 msgstr "Aparência"
 
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
+msgid "autoBattle|Manual"
+msgstr ""
+
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
@@ -3221,7 +3203,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3345,9 +3333,6 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
-msgid "Normal"
-msgstr ""
-
 msgid "Hard"
 msgstr ""
 
@@ -3393,13 +3378,13 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
 msgid "Dev and Support"
-msgstr ""
-
-msgid "Visit us at "
 msgstr ""
 
 msgid "Special Thanks to"
@@ -3408,16 +3393,22 @@ msgstr ""
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3485,9 +3476,6 @@ msgstr "Cenário"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Sair do Jogo & retornar ao sistema operacional."
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3503,9 +3491,6 @@ msgstr ""
 #, fuzzy
 msgid "Playtesters"
 msgstr "2 Jogadores"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr ""
@@ -3534,7 +3519,7 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 msgid "credits|Manual"
@@ -3632,6 +3617,10 @@ msgstr ""
 
 msgid "Greetings!"
 msgstr ""
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr "Sair do Jogo & retornar ao sistema operacional."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4164,9 +4153,6 @@ msgstr ""
 "Esta janela fornece informações sobre o status do seu herói ou reino, e "
 "mostra a data. Clique o botão esquerdo para alternar as janelas."
 
-msgid "Necroman"
-msgstr "Necromante:"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4286,6 +4272,9 @@ msgid "Dutch"
 msgstr ""
 
 msgid "Hungarian"
+msgstr ""
+
+msgid "Danish"
 msgstr ""
 
 msgid ", FPS: "
@@ -4690,13 +4679,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Infelizmente, você não tem nenhum livro de magia para gravar com a magia."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4709,6 +4691,13 @@ msgid ""
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
 msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Infelizmente, você não tem nenhum livro de magia para gravar com a magia."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -6289,6 +6278,35 @@ msgid "race|Random"
 msgstr ""
 
 msgid "race|Neutral"
+msgstr ""
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+msgid "doubleLined|Barbarian"
+msgstr ""
+
+msgid "doubleLined|Sorceress"
+msgstr ""
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+msgid "doubleLinedRace|Random"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -9044,36 +9062,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr ""
 
@@ -9139,14 +9127,13 @@ msgid ""
 "fheroes2/releases"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Cannot recruit - guest to guard automove error."
-#~ msgstr "Impossível recrutar - você tem muitos heróis."
+#~ msgid "Necroman"
+#~ msgstr "Necromante:"
 
 #, fuzzy
-#~ msgid "Swap Heroes"
-#~ msgstr "Heróis"
+#~ msgid "Wait this unit"
+#~ msgstr "Passar a vez desta criatura"
 
 #, fuzzy
-#~ msgid "Meeting Heroes"
-#~ msgstr "Proximo Herói"
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} a %{race}."

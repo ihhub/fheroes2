@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-12-03 01:14+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -222,14 +222,20 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Velocità"
-
 msgid "Speed: %{speed}"
 msgstr "Velocità: %{speed}"
 
+msgid "Speed"
+msgstr "Velocità"
+
 msgid "Army Order"
 msgstr ""
+
+msgid "Off"
+msgstr "No"
+
+msgid "On"
+msgstr "Sì"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -245,11 +251,21 @@ msgstr "Movimento Ombra"
 msgid "Shadow Cursor"
 msgstr "Cursore Ombra"
 
-msgid "Off"
-msgstr "No"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Sì"
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Danni"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -276,6 +292,21 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr "Cambia le impostazioni dell'audio del gioco."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+msgid "Exit this menu."
+msgstr "Lascia questo menù."
+
+msgid "Okay"
+msgstr "Okay"
 
 msgid "The enemy has surrendered!"
 msgstr "Il nemico si è ceduto!"
@@ -480,19 +511,6 @@ msgstr "Permette di modificare la schermata del combattimento."
 msgid "System Options"
 msgstr "Opzioni Sistema"
 
-msgid "Wait this unit"
-msgstr "Aspetta questa unità"
-
-msgid "Wait"
-msgstr "Salta"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Fa aspettare questa unità. L'unità rimanda il suo turno per dopo che tutte "
-"le altre unità hanno finito i loro turni."
-
 msgid "Skip this unit"
 msgstr "Salta questa unità"
 
@@ -538,9 +556,6 @@ msgstr "Sei sicuro di voler congedare queste forze?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} salta il suo turno."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} rimanda il suo turno."
 
 #, fuzzy
 msgid "%{attacker} does %{damage} damage."
@@ -2201,9 +2216,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Esci"
 
-msgid "Exit this menu."
-msgstr "Lascia questo menù."
-
 msgid "Click to show next town."
 msgstr "Clicca per andare alla città succ."
 
@@ -2487,9 +2499,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "Okay"
-
 msgid "Build a new ship:"
 msgstr "Costruisci una nave:"
 
@@ -2536,21 +2545,6 @@ msgstr "Lingua"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Impostazioni"
-
-msgid "Experimental"
-msgstr "Sperimentale"
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
-
 #, fuzzy
 msgid "Black & White"
 msgstr "Ponte"
@@ -2568,27 +2562,6 @@ msgstr ""
 "Tele-\n"
 "trasporto"
 
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
-
-msgid "Evil"
-msgstr "Cattivo"
-
-msgid "Good"
-msgstr "Buono"
-
-msgid "Auto Resolve"
-msgstr "Auto-Risolva"
-
-msgid "Auto, No Spells"
-msgstr "Auto, Senza Magie"
-
-msgid "autoBattle|Manual"
-msgstr "Manuali"
-
-msgid "Battles"
-msgstr "Battaglie"
-
 msgid "Change the language of the game."
 msgstr "Cambia la lingua del gioco."
 
@@ -2598,21 +2571,6 @@ msgstr "Scegli lingua del gioco"
 #, fuzzy
 msgid "Change the graphics settings of the game."
 msgstr "Cambia le impostazioni dell'audio del gioco."
-
-msgid "Change the audio settings of the game."
-msgstr "Cambia le impostazioni dell'audio del gioco."
-
-msgid "Experimental game settings."
-msgstr "Impostazioni sperimentali del gioco."
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -2739,12 +2697,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr ""
-
-msgid "Your army too big!"
-msgstr "Il tuo esercito è troppo grande"
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -2806,11 +2758,11 @@ msgstr "Scambi disponibili"
 msgid "n/a"
 msgstr "n/d"
 
-msgid "guarded by "
-msgstr "Protetto/a da "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "Protetto/a da %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "Protetto/a da "
 
 msgid "(available: %{count})"
 msgstr "(disponibiltà: %{count})"
@@ -3112,9 +3064,6 @@ msgstr "La descrizione della mappa scelta attualmente."
 msgid "Accept the choice made."
 msgstr "Accetta la scelta."
 
-msgid "Experimental Game Settings"
-msgstr "Impostazioni Sperimentali"
-
 msgid "Jump"
 msgstr "Salta"
 
@@ -3127,8 +3076,32 @@ msgstr "Nascondi"
 msgid "Enemy Speed"
 msgstr "Velocità Nemica"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Pianissimo"
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Velocissima"
+
 msgid "Scroll Speed"
 msgstr "Velocità dello Scorrimento"
+
+msgid "Evil"
+msgstr "Cattivo"
+
+msgid "Good"
+msgstr "Buono"
+
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
 
 msgid "Hide"
 msgstr "Nascondi"
@@ -3138,6 +3111,18 @@ msgstr "Mostra"
 
 msgid "Interface"
 msgstr "Interfaccia"
+
+msgid "Auto Resolve"
+msgstr "Auto-Risolva"
+
+msgid "Auto, No Spells"
+msgstr "Auto, Senza Magie"
+
+msgid "Battles"
+msgstr "Battaglie"
+
+msgid "autoBattle|Manual"
+msgstr "Manuali"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3150,7 +3135,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3270,10 +3261,6 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
-#, fuzzy
-msgid "Normal"
-msgstr "Normale"
-
 msgid "Hard"
 msgstr ""
 
@@ -3318,6 +3305,9 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
@@ -3327,25 +3317,28 @@ msgstr ""
 "Tele-\n"
 "trasporto"
 
-msgid "Visit us at "
-msgstr ""
-
 msgid "Special Thanks to"
 msgstr ""
 
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3410,9 +3403,6 @@ msgstr ""
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Esci da fheroes2."
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3428,9 +3418,6 @@ msgstr ""
 #, fuzzy
 msgid "Playtesters"
 msgstr "Icona dei Giocatori"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr ""
@@ -3461,7 +3448,7 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 msgid "credits|Manual"
@@ -3553,6 +3540,12 @@ msgstr "Il Team di fheroes2 Resurrection presenta"
 
 msgid "Greetings!"
 msgstr "Saluti!"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
+"risoluzione per il gioco."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4039,9 +4032,6 @@ msgid ""
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
 
-msgid "Necroman"
-msgstr "Negromante"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4157,6 +4147,9 @@ msgstr ""
 #, fuzzy
 msgid "Hungarian"
 msgstr "Barbaro"
+
+msgid "Danish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -4525,11 +4518,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4538,6 +4526,11 @@ msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 
 msgid ""
@@ -6078,6 +6071,40 @@ msgid "race|Random"
 msgstr "Random"
 
 msgid "race|Neutral"
+msgstr "Neutro"
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Barbaro"
+
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Strega"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Negromante"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLinedRace|Random"
+msgstr "Random"
+
+#, fuzzy
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutro"
 
 msgid "speed|Standing"
@@ -8866,36 +8893,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Ho sentito che l'Estremo Artefatto è in verità il/la %{name}."
 
@@ -8964,13 +8961,21 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "Cannot recruit - guest to guard automove error."
+#~ msgid "Necroman"
+#~ msgstr "Negromante"
+
+#~ msgid "Wait this unit"
+#~ msgstr "Aspetta questa unità"
+
+#~ msgid "Wait"
+#~ msgstr "Salta"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
 #~ msgstr ""
-#~ "Non puoi reclutare - errore in cambiamento automatico dall'ospite al "
-#~ "guardiano."
+#~ "Fa aspettare questa unità. L'unità rimanda il suo turno per dopo che "
+#~ "tutte le altre unità hanno finito i loro turni."
 
-#~ msgid "Swap Heroes"
-#~ msgstr "Scambia Eroi"
-
-#~ msgid "Meeting Heroes"
-#~ msgstr "Eroi incontranti"
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} rimanda il suo turno."

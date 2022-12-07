@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId 'org.fheroes2'
 
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 31
 
         // These paths are set relative to the android project directory
@@ -21,6 +21,13 @@ android {
                 arguments '-j4'
             }
         }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     externalNativeBuild {
@@ -73,6 +80,8 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
+
     implementation project(':sdl2')
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 }

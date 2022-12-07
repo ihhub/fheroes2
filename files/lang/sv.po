@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 13:44+0000\n"
+"POT-Creation-Date: 2022-12-03 01:14+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -229,13 +229,19 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Hastighet"
-
 msgid "Speed: %{speed}"
 msgstr "Hastighet: %{speed}"
 
+msgid "Speed"
+msgstr "Hastighet"
+
 msgid "Army Order"
+msgstr ""
+
+msgid "Off"
+msgstr "Av"
+
+msgid "On"
 msgstr ""
 
 #, fuzzy
@@ -252,11 +258,22 @@ msgstr "Fortsätt förflyttning"
 msgid "Shadow Cursor"
 msgstr ""
 
-msgid "Off"
-msgstr "Av"
-
-msgid "On"
+msgid "Audio"
 msgstr ""
+
+msgid "Settings"
+msgstr "Inställningar"
+
+msgid "Configure"
+msgstr ""
+
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Heta stolen"
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Skada"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -283,6 +300,22 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Vänta denna enhet"
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "The enemy has surrendered!"
 msgstr "Fienden har kapitulerat!"
@@ -499,17 +532,6 @@ msgstr ""
 msgid "System Options"
 msgstr "Systemalternativ"
 
-msgid "Wait this unit"
-msgstr "Vänta denna enhet"
-
-msgid "Wait"
-msgstr ""
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-
 msgid "Skip this unit"
 msgstr "Hoppa över denna enhet"
 
@@ -552,9 +574,6 @@ msgstr "Är du säker på att du vill avskeda denna armé?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} hoppar över rundan."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} inväntar runda."
 
 #, fuzzy
 msgid "%{attacker} does %{damage} damage."
@@ -2294,10 +2313,6 @@ msgid "Exit"
 msgstr "Gå ut från staden"
 
 #, fuzzy
-msgid "Exit this menu."
-msgstr "Vänta denna enhet"
-
-#, fuzzy
 msgid "Click to show next town."
 msgstr "Visa nästa stad"
 
@@ -2589,9 +2604,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "OK"
-
 msgid "Build a new ship:"
 msgstr "Bygg ett nytt skepp:"
 
@@ -2639,23 +2651,6 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr "Inställningar"
-
-#, fuzzy
-msgid "Experimental"
-msgstr "Luftelement"
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-#, fuzzy
-msgid "Hot Keys"
-msgstr "Heta stolen"
-
 #, fuzzy
 msgid "Black & White"
 msgstr "Bro"
@@ -2670,29 +2665,6 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teleportera"
 
-#, fuzzy
-msgid "Interface Type"
-msgstr "Gränssnitt"
-
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "autoBattle|Manual"
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Flaska"
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2701,22 +2673,6 @@ msgid "Select Game Language"
 msgstr "Vald beskrivning"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
-
-msgid "Change the audio settings of the game."
-msgstr ""
-
-#, fuzzy
-msgid "Experimental game settings."
-msgstr "Spelinställningar för FHeroes2."
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
@@ -2844,12 +2800,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr "Ange beskyddare"
-
-msgid "Your army too big!"
-msgstr "Din armé är för stor!"
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -2915,12 +2865,12 @@ msgstr "Tillgänglig handel"
 msgid "n/a"
 msgstr "Inga"
 
-msgid "guarded by "
-msgstr ""
-
 #, fuzzy
 msgid "guarded by %{count} %{monster}"
 msgstr "vaktas av %{count} %{monster}"
+
+msgid "guarded by "
+msgstr ""
 
 msgid "(available: %{count})"
 msgstr "(tillgängligt: %{count})"
@@ -3223,10 +3173,6 @@ msgstr "Den valda kartans beskrivning."
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
 
-#, fuzzy
-msgid "Experimental Game Settings"
-msgstr "Spelinställningar för FHeroes2."
-
 msgid "Jump"
 msgstr ""
 
@@ -3241,8 +3187,32 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr "Hastighet"
 
+msgid "Slow"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Riktigt snabb"
+
 msgid "Scroll Speed"
 msgstr "Hastighet för skrollning"
+
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Gränssnitt"
 
 msgid "Hide"
 msgstr ""
@@ -3252,6 +3222,19 @@ msgstr ""
 
 msgid "Interface"
 msgstr "Gränssnitt"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+#, fuzzy
+msgid "Battles"
+msgstr "Flaska"
+
+msgid "autoBattle|Manual"
+msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3264,7 +3247,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3386,10 +3375,6 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
-#, fuzzy
-msgid "Normal"
-msgstr "Normal"
-
 msgid "Hard"
 msgstr ""
 
@@ -3435,6 +3420,9 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
@@ -3442,25 +3430,28 @@ msgstr ""
 msgid "Dev and Support"
 msgstr "Teleportera"
 
-msgid "Visit us at "
-msgstr ""
-
 msgid "Special Thanks to"
 msgstr ""
 
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3529,9 +3520,6 @@ msgstr "Scenario"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Avsluta fheroes2 och återgå till operativsystemet."
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3547,9 +3535,6 @@ msgstr ""
 #, fuzzy
 msgid "Playtesters"
 msgstr "2 Spelare"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr ""
@@ -3580,7 +3565,7 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 msgid "credits|Manual"
@@ -3682,6 +3667,10 @@ msgstr ""
 #, fuzzy
 msgid "Greetings!"
 msgstr "Inställningar"
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr "Avsluta fheroes2 och återgå till operativsystemet."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4209,9 +4198,6 @@ msgstr ""
 "Detta fönster ger information om din hjältes eller kungarikes status, och "
 "visar datumet. Vänsterklicka här för att bläddra genom dessa fönster."
 
-msgid "Necroman"
-msgstr ""
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4333,6 +4319,9 @@ msgstr ""
 #, fuzzy
 msgid "Hungarian"
 msgstr "Barbar"
+
+msgid "Danish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -4724,13 +4713,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-"\n"
-"Tyvärr har du ingen magibok att anteckna besvärjelsen med."
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4745,6 +4727,13 @@ msgstr ""
 "\n"
 "Tyvärr har du redan lärt dig denna besvärjelse. De kan inte lära dig "
 "någonting mer."
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+"\n"
+"Tyvärr har du ingen magibok att anteckna besvärjelsen med."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -6513,6 +6502,38 @@ msgid "race|Random"
 msgstr ""
 
 msgid "race|Neutral"
+msgstr ""
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Barbar"
+
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Häxa"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Svartkonstnär"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+msgid "doubleLinedRace|Random"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -9348,37 +9369,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "battle: show damage info"
-msgstr "spel: Visa systeminfo"
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "spel: automatisk sparning kommer att utföras i början på dagen"
-
-msgid "game: use evil interface"
-msgstr "spel: Använd ondskefullt gränssnitt"
-
-msgid "game: hide interface"
-msgstr "spel: Göm gränssnitt"
-
-#, fuzzy
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Mumiens förbannelse har drabbat %{name}!"
 
@@ -9448,19 +9438,8 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#, fuzzy
-#~ msgid "Cannot recruit - guest to guard automove error."
-#~ msgstr "Kan inte rekrytera - du har för många hjältar."
+#~ msgid "Wait this unit"
+#~ msgstr "Vänta denna enhet"
 
-#~ msgid "Swap Heroes"
-#~ msgstr "Byt hjältar"
-
-#, fuzzy
-#~ msgid "Do you wish to continue the game?"
-#~ msgstr "Vill du köpa en?"
-
-#~ msgid "castle: allow guardians"
-#~ msgstr "slott: tillåt väktare"
-
-#~ msgid "game: offer to continue the game after victory condition"
-#~ msgstr "spel: erbjud att fortsätta spelet efter att spelaren har segrat"
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} inväntar runda."

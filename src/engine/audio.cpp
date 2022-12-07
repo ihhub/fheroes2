@@ -39,6 +39,7 @@
 #include <SDL_error.h>
 #include <SDL_mixer.h>
 #include <SDL_rwops.h>
+#include <SDL_stdinc.h>
 #include <SDL_version.h>
 
 #include "audio.h"
@@ -184,7 +185,11 @@ namespace
 
     // This is the callback function set by Mix_ChannelFinished(). As a rule, it is called from
     // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    void SDLCALL channelFinished( const int channelId )
+#else
     void channelFinished( const int channelId )
+#endif
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
@@ -377,7 +382,7 @@ namespace
 
         double getCurrentTrackPosition() const
         {
-            return _currentTrackTimer.get();
+            return _currentTrackTimer.getS();
         }
 
         void updateCurrentTrack( const uint64_t musicUID, const Music::PlaybackMode trackPlaybackMode )
@@ -506,7 +511,11 @@ namespace
 
     // This is the callback function set by Mix_HookMusicFinished(). As a rule, it is called from
     // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    void SDLCALL musicFinished()
+#else
     void musicFinished()
+#endif
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );

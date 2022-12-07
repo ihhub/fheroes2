@@ -3,7 +3,7 @@
 set DST_DIR=%~dp0\..\..\android
 
 set PKG_FILE=android.zip
-set PKG_FILE_SHA256=F33350ACC50D23D4C7A7D8C34ED57FB0198F27861E1F7FCC70542868A92EEE6F
+set PKG_FILE_SHA256=187E2A8E09DEEED8EFBBC30E738A3192BF45D1D8644DA85D53C487C0D27033A0
 set PKG_URL=https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/android-deps/%PKG_FILE%
 set PKG_TLS=[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 

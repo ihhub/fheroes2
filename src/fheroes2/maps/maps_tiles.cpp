@@ -339,6 +339,17 @@ namespace
 
         return imageMap.try_emplace( passable, std::move( sf ) ).first->second;
     }
+
+    const fheroes2::Image & getDebugFogImage()
+    {
+        static const fheroes2::Image fog = []() {
+            fheroes2::Image temp( 32, 32 );
+            fheroes2::FillTransform( temp, 0, 0, temp.width(), temp.height(), 2 );
+            return temp;
+        }();
+
+        return fog;
+    }
 #endif
 
     bool isShortObject( const MP2::MapObjectType objectType )
@@ -1202,15 +1213,19 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point 
     }
 }
 
-void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const
 {
 #ifdef WITH_DEBUG
+    if ( isFog( friendColors ) ) {
+        area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( _index ), false, 255 );
+    }
     if ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) {
         area.BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, Maps::GetPoint( _index ), false, 255 );
     }
 #else
     (void)dst;
     (void)area;
+    (void)friendColors;
 #endif
 }
 
@@ -1225,7 +1240,10 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
     // - check the main object which is on the tile
 
     // Some addons must be rendered after the main object on the tile. This applies for flags.
-    std::vector<const TilesAddon *> postRenderingAddon;
+    // Since this method is called intensively during rendering we have to avoid memory allocation on heap.
+    const size_t maxPostRenderAddons = 16;
+    std::array<const TilesAddon *, maxPostRenderAddons> postRenderingAddon{};
+    size_t postRenderAddonCount = 0;
 
     for ( const TilesAddon & addon : addons_level1 ) {
         if ( ( addon.level & 0x03 ) != level ) {
@@ -1238,7 +1256,11 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
 
         const int icn = MP2::GetICNObject( addon.object );
         if ( icn == ICN::FLAG32 ) {
-            postRenderingAddon.emplace_back( &addon );
+            // Based on logically thinking it is impossible to have more than 16 flags on a single tile.
+            assert( postRenderAddonCount < maxPostRenderAddons );
+
+            postRenderingAddon[postRenderAddonCount] = &addon;
+            ++postRenderAddonCount;
             continue;
         }
 
@@ -1249,10 +1271,10 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
         renderMainObject( dst, area, mp );
     }
 
-    for ( const TilesAddon * addon : postRenderingAddon ) {
-        assert( addon != nullptr );
+    for ( size_t i = 0; i < postRenderAddonCount; ++i ) {
+        assert( postRenderingAddon[i] != nullptr );
 
-        renderAddonObject( dst, area, mp, *addon );
+        renderAddonObject( dst, area, mp, *postRenderingAddon[i] );
     }
 }
 
