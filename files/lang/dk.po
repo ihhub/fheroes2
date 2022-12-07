@@ -1,4 +1,4 @@
-# Dutch translation for fheroes2
+# Danish translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2022
@@ -727,7 +727,8 @@ msgstr ""
 "Artefaktet %{artifact} er i kraft, hvilket deaktiverer brug af %{spell} "
 "magien."
 
-In danish these terms are spelled the same, no matter whether we are dealing with raising dead in singularis or pluralis
+# In danish these terms are spelled the same, no matter whether we are dealing with raising dead in singularis or pluralis
+
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} rejser sig fra de døde!"
@@ -6371,7 +6372,7 @@ msgstr "Bueskytte"
 msgid "Archers"
 msgstr "Bueskytter"
 
-We don't have a proper word for a military trained "ranger" in danish...
+# We don't have a proper word for a military trained "ranger" in danish...
 
 msgid "Ranger"
 msgstr "Skovridder"
