@@ -1699,7 +1699,7 @@ namespace AI
             const bool hideAIMovements = ( conf.AIMoveSpeed() == 0 );
             const bool noMovementAnimation = ( conf.AIMoveSpeed() == 10 );
 
-            const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY };
+            const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY, Game::MAPS_DELAY };
 
             while ( LocalEvent::Get().HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
 #if defined( WITH_DEBUG )
@@ -1779,14 +1779,19 @@ namespace AI
                         }
                     }
 
-                    basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
-                    fheroes2::Display::instance().render();
+                    basicInterface.SetRedraw( Interface::REDRAW_GAMEAREA );
                 }
 
                 if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                     // will be animated in hero loop
                     uint32_t & frame = Game::MapsAnimationFrame();
                     ++frame;
+                    gameArea.SetRedraw();
+                }
+
+                if ( basicInterface.NeedRedraw() ) {
+                    basicInterface.Redraw();
+                    fheroes2::Display::instance().render();
                 }
             }
 
