@@ -3150,6 +3150,8 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
         if ( !vec_eyes.empty() ) {
             Interface::Basic & I = Interface::Basic::Get();
 
+            const std::vector<Game::DelayType> delayTypes = { Game::MAPS_DELAY };
+
             for ( const int32_t eyeIndex : vec_eyes ) {
                 Maps::ClearFog( eyeIndex, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
 
@@ -3160,9 +3162,13 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
 
                 LocalEvent & le = LocalEvent::Get();
                 int delay = 0;
-                while ( le.HandleEvents() && delay < 7 ) {
+
+                while ( le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) && delay < 7 ) {
                     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                         ++delay;
+                        uint32_t & frame = Game::MapsAnimationFrame();
+                        ++frame;
+                        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
                     }
                 }
             }
