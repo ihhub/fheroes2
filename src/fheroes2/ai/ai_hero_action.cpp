@@ -1779,7 +1779,7 @@ namespace AI
                         }
                     }
 
-                    basicInterface.SetRedraw( Interface::REDRAW_GAMEAREA );
+                    gameArea.SetRedraw();
                 }
 
                 if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
