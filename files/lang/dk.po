@@ -1,4 +1,4 @@
-# Danish translation for fheroes2
+# Dutch translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2022
@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-16 13:44+0000\n"
-"PO-Revision-Date: 2022-12-03 11:29+0100\n"
+"PO-Revision-Date: 2022-12-07 11:42+0100\n"
 "Last-Translator: \n"
-"Language-Team: Dansk\n"
-"Language: dk\n"
+"Language-Team: Danish\n"
+"Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -267,7 +267,7 @@ msgid ""
 "way, nor does it affect quick combat.)"
 msgstr ""
 "Vælg om computerens evne til selv at kaste magi for dig skal være aktiv "
-"eller ej, når autokamp er slået til. (Note: Dette påvirker hverken AI-"
+"eller ej, når Autokamp er slået til. (Note: Dette påvirker hverken AI-"
 "spillere eller kvikkamp på nogen måde.)"
 
 msgid ""
@@ -300,7 +300,7 @@ msgid "A glorious victory!"
 msgstr "En gloværdig sejr!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr "For at udvise tapperhed i kamp, får %{name} %{exp} erfaringspoint. "
+msgstr "For at udvise tapperhed i kamp, får %{name} %{exp} erfaringspoint."
 
 msgid "The cowardly %{name} flees from battle."
 msgstr "Den kujonagtige %{name} flygter fra kampen."
@@ -344,7 +344,7 @@ msgstr ""
 "fjendens døde genopstå under din tjeneste som %{monster}."
 
 msgid "%{name} the %{race}"
-msgstr "%{race}en %{name} "
+msgstr "%{race}en %{name}"
 
 msgid "Captain of %{name}"
 msgstr "Kaptajn af %{name}"
@@ -414,30 +414,32 @@ msgstr ""
 "igen at rekruttere din helt samt tilhørende overlevende væsener."
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr ""
+msgstr "Åbn Helteskærm for at se fuld information om helten."
 
 msgid "Return to the battle."
-msgstr ""
+msgstr "Vend tilbage til kampen."
 
 msgid "Not enough gold (%{gold})"
-msgstr ""
+msgstr "Ikke nok guld (%{gold})"
 
 msgid "%{name} states:"
-msgstr ""
+msgstr "%{name} erklærer:"
 
 msgid "Captain of %{name} states:"
-msgstr ""
+msgstr "Kaptajnen af %{name} erklærer:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
+"\"Jeg modtager gerne din overgivelse og giver Dem og Deres tropper fri lejde "
+"til en pris på %{price} guld.\""
 
 msgid "View %{monster} info"
-msgstr ""
+msgstr "Se info om %{monster}"
 
 msgid "Shoot %{monster}"
-msgstr ""
+msgstr "Skyd %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
@@ -445,110 +447,114 @@ msgstr[0] "(1 skud tilbage)"
 msgstr[1] "(%{count} skud tilbage)"
 
 msgid "Attack %{monster}"
-msgstr ""
+msgstr "Angrib %{monster}"
 
 msgid "Fly %{monster} here"
-msgstr ""
+msgstr "Flyv %{monster} hertil"
 
 msgid "Move %{monster} here"
-msgstr ""
+msgstr "Flyt %{monster} hertil"
 
 msgid "Turn %{turn}"
-msgstr ""
+msgstr "Runde %{turn}"
 
 msgid "Teleport here"
-msgstr ""
+msgstr "Teleporter hertil"
 
 msgid "Invalid teleport destination"
-msgstr ""
+msgstr "Ugyldig teleportationsmål"
 
 msgid "Cast %{spell} on %{monster}"
-msgstr ""
+msgstr "Kast %{spell} på %{monster}"
 
 msgid "Cast %{spell}"
-msgstr ""
+msgstr "Kast %{spell}"
 
 msgid "Select spell target"
-msgstr ""
+msgstr "Vælg magiens mål"
 
 msgid "View Ballista info"
-msgstr ""
+msgstr "Se Ballistens info"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Ballist"
 
 msgid "Enable auto combat"
-msgstr ""
+msgstr "Aktiver Autokamp"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Tillader computeren at udkæmpe kampen for dig."
 
 msgid "Auto Combat"
-msgstr ""
+msgstr "Autokamp"
 
 msgid "Customize system options"
-msgstr ""
+msgstr "Tilpas systemindstillinger"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Tillader dig tilpasning af Kampskærmen."
 
 msgid "System Options"
-msgstr ""
+msgstr "Systemindstillinger"
 
 msgid "Wait this unit"
-msgstr ""
+msgstr "Vent med denne enhed"
 
 msgid "Wait"
-msgstr ""
+msgstr "Vent"
 
 msgid ""
 "Waits the current creature. The current creature delays its turn until after "
 "all other creatures have had their turn."
 msgstr ""
+"Dette lader nuværende enhed vente med at udspille sin tur, indtil alle andre "
+"enheder har spillet deres tur."
 
 msgid "Skip this unit"
-msgstr ""
+msgstr "Skip denne enhed"
 
 msgid "Skip"
-msgstr ""
+msgstr "Skip"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Skipper nuværende enheds tur. Denne enhed slutter sin tur og kan intet gøre "
+"før sin tur i næste runde."
 
 msgid "View Captain's options"
-msgstr ""
+msgstr "Se Kaptajns muligheder"
 
 msgid "View Hero's options"
-msgstr ""
+msgstr "Se Helts muligheder"
 
 msgid "View opposing Captain"
-msgstr ""
+msgstr "Se modstanders Kaptajn"
 
 msgid "View opposing Hero"
-msgstr ""
+msgstr "Se modstanders Helt"
 
 msgid "Hide logs"
-msgstr ""
+msgstr "Skjul log"
 
 msgid "Show logs"
-msgstr ""
+msgstr "Vis log"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Beskedlinje"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Viser resultater for individuelle monstres handlinger."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr ""
+msgstr "Er du sikker på du vil færdiggøre denne kamp automatisk?"
 
 msgid "%{name} skip their turn."
-msgstr ""
+msgstr "%{name} skipper deres tur."
 
 msgid "%{name} wait their turn."
-msgstr ""
+msgstr "%{name} venter med deres tur."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -566,159 +572,161 @@ msgstr[0] "1 %{defender} omkommer."
 msgstr[1] "%{count} %{defender} omkommer."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr ""
+msgstr "Flyttede %{monster}: fra [%{src}] til [%{dst}]."
 
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "Troppen med %{name} modstod magien!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr ""
+msgstr "%{name} kaster %{spell} på %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr ""
+msgstr "%{name} kaster %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr ""
+msgstr "%{spell} giver %{damage} i skade til én udød enhed."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr ""
+msgstr "%{spell} giver %{damage} i skade til alle udøde enheder."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr ""
+msgstr "%{spell} giver %{damage} i skade, %{count} væsener omkommer."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr ""
+msgstr "%{spell} giver %{damage} i skade."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr ""
+msgstr "%{spell} giver %{damage} i skade på én levende enhed."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr ""
+msgstr "%{spell} giver %{damage} i skade til alle levende enheder."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgstr "Angrebet af %{attacker} blænder %{target}!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgstr "Det skarpe blik fra %{attacker} forvandler %{target} til sten!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr ""
+msgstr "En forbandelse falder på %{target} forårsaget af %{attacker}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgstr "Troppen med %{target} paralyseres af %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "Troppen med %{attacker} fordriver alt det gode magi fra din %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgstr "Troppen med %{attacker} kaster %{spell} på %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "Sort uheld sænker sig over troppen med %{attacker}."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "Held og lykke skinner på troppen med %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "Høj morale gør det muligt for troppen med %{monster} at angribe igen."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr ""
+msgstr "Lav morale vækker frysende panik i troppen med %{monster}."
 
 msgid "%{tower} does %{damage} damage."
-msgstr ""
+msgstr "Borgens %{tower} giver %{damage} i skade."
 
 msgid "The mirror image is created."
-msgstr ""
+msgstr "Spejlbilledet er skabt."
 
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "Spejlbilledet er ødelagt!"
 
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr ""
+msgstr "Er du sikker på, at du vil afbryde autokampen?"
 
 msgid "Error"
-msgstr ""
+msgstr "Fejl"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Ingen magi at kaste."
 
 msgid "Are you sure you want to retreat?"
-msgstr ""
+msgstr "Er du sikker på, at du vil flygte?"
 
 msgid "Retreat disabled"
-msgstr ""
+msgstr "Flugt slået fra"
 
 msgid "Surrender disabled"
-msgstr ""
+msgstr "Overgivelse slået fra"
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Skade: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Skade: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Dræber: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Dræber: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
+"Med sine ørneøjne observerer %{name} magien %{spell} og lærer den selv at "
+"kende."
 
 msgid "Human"
-msgstr ""
+msgstr "Menneske"
 
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Vælg venligst en anden helt."
 
 msgid "Set Attack Skill"
-msgstr ""
+msgstr "Indstil angrebsevne"
 
 msgid "Set Defense Skill"
-msgstr ""
+msgstr "Indstil forsvarsevne"
 
 msgid "Set Power Skill"
-msgstr ""
+msgstr "Indstil magisk evne"
 
 msgid "Set Knowledge Skill"
-msgstr ""
+msgstr "Indstil kundskabsevne"
 
 msgid "%{race1} %{name1}"
-msgstr ""
+msgstr "%{race1} %{name1}"
 
 msgid "vs"
-msgstr ""
+msgstr "vs"
 
 msgid "%{race2} %{name2}"
-msgstr ""
+msgstr "%{race2} %{name2}"
 
 msgid "Monsters"
-msgstr ""
+msgstr "Monstre"
 
 msgid "N/A"
-msgstr ""
+msgstr "Ingen"
 
 msgid "Left Turret"
-msgstr ""
+msgstr "Venstre tårn"
 
 msgid "Right Turret"
-msgstr ""
+msgstr "Højre tårn"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "Borgens %{name} med en styrke af %{count} Bueskyttere"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "hver med en +%{attack} bonus til deres angrebsevne."
 
 msgid "The %{name} is destroyed."
-msgstr ""
+msgstr "Borgens %{name} er ødelagt."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -726,8 +734,6 @@ msgid ""
 msgstr ""
 "Artefaktet %{artifact} er i kraft, hvilket deaktiverer brug af %{spell} "
 "magien."
-
-# In danish these terms are spelled the same, no matter whether we are dealing with raising dead in singularis or pluralis
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -1763,205 +1769,205 @@ msgid "There is no room in the garrison for this army."
 msgstr ""
 
 msgid "Fortifications"
-msgstr ""
+msgstr "Fortifikationer"
 
 msgid "Farm"
-msgstr ""
+msgstr "Mark"
 
 msgid "Thatched Hut"
-msgstr ""
+msgstr "Stråtækt hytte"
 
 msgid "Archery Range"
-msgstr ""
+msgstr "Bueskydningsbane"
 
 msgid "Upg. Archery Range"
-msgstr ""
+msgstr "Opg. Bueskydningsbane"
 
 msgid "Blacksmith"
-msgstr ""
+msgstr "Grovsmedje"
 
 msgid "Upg. Blacksmith"
-msgstr ""
+msgstr "Opg. Grovsmedje"
 
 msgid "Armory"
-msgstr ""
+msgstr "Våbensmedje"
 
 msgid "Upg. Armory"
-msgstr ""
+msgstr "Opg. Våbensmedje"
 
 msgid "Jousting Arena"
-msgstr ""
+msgstr "Dystningsarena"
 
 msgid "Upg. Jousting Arena"
-msgstr ""
+msgstr "Opg. Dystningsarena"
 
 msgid "Cathedral"
-msgstr ""
+msgstr "Katedral"
 
 msgid "Upg. Cathedral"
-msgstr ""
+msgstr "Opg. Katedral"
 
 msgid "Coliseum"
-msgstr ""
+msgstr "Colosseum"
 
 msgid "Garbage Heap"
-msgstr ""
+msgstr "Affaldsbunke"
 
 msgid "Hut"
-msgstr ""
+msgstr "Hytte"
 
 msgid "Stick Hut"
-msgstr ""
+msgstr "Pindehytte"
 
 msgid "Upg. Stick Hut"
-msgstr ""
+msgstr "Opg. Pindehytte"
 
 msgid "Den"
-msgstr ""
+msgstr "Hule"
 
 msgid "Adobe"
-msgstr ""
+msgstr "Adobehus"
 
 msgid "Upg. Adobe"
-msgstr ""
+msgstr "Opg. Adobehus"
 
 msgid "Bridge"
-msgstr ""
+msgstr "Bro"
 
 msgid "Upg. Bridge"
-msgstr ""
+msgstr "Opg. Bro"
 
 msgid "Pyramid"
-msgstr ""
+msgstr "Pyramide"
 
 msgid "Rainbow"
-msgstr ""
+msgstr "Regnbue"
 
 msgid "Crystal Garden"
-msgstr ""
+msgstr "Krystalhave"
 
 msgid "Treehouse"
-msgstr ""
+msgstr "Træhus"
 
 msgid "Cottage"
-msgstr ""
+msgstr "Kottage"
 
 msgid "Upg. Cottage"
-msgstr ""
+msgstr "Opg. Kottage"
 
 msgid "Stonehenge"
-msgstr ""
+msgstr "Stenkreds"
 
 msgid "Upg. Stonehenge"
-msgstr ""
+msgstr "Opg. Stenkreds"
 
 msgid "Fenced Meadow"
-msgstr ""
+msgstr "Indhegnet eng"
 
 msgid "sorceress|Red Tower"
-msgstr ""
+msgstr "Rødt tårn"
 
 msgid "Dungeon"
-msgstr ""
+msgstr "Fangehul"
 
 msgid "Waterfall"
-msgstr ""
+msgstr "Vandfald"
 
 msgid "Cave"
-msgstr ""
+msgstr "Grotte"
 
 msgid "Crypt"
-msgstr ""
+msgstr "Krypt"
 
 msgid "Nest"
-msgstr ""
+msgstr "Rede"
 
 msgid "Maze"
-msgstr ""
+msgstr "Labyrint"
 
 msgid "Upg. Maze"
-msgstr ""
+msgstr "Opg. Labyrint"
 
 msgid "Swamp"
-msgstr ""
+msgstr "Sump"
 
 msgid "Green Tower"
-msgstr ""
+msgstr "Grønt Tårn"
 
 msgid "warlock|Red Tower"
-msgstr ""
+msgstr "Rødt tårn"
 
 msgid "Black Tower"
-msgstr ""
+msgstr "Sort Tårn"
 
 msgid "Library"
-msgstr ""
+msgstr "Bibliotek"
 
 msgid "Orchard"
-msgstr ""
+msgstr "Frugthave"
 
 msgid "Habitat"
-msgstr ""
+msgstr "Habitat"
 
 msgid "Pen"
-msgstr ""
+msgstr "Svinesti"
 
 msgid "Foundry"
-msgstr ""
+msgstr "Støberi"
 
 msgid "Upg. Foundry"
-msgstr ""
+msgstr "Opg. Støberi"
 
 msgid "Cliff Nest"
-msgstr ""
+msgstr "Klipperede"
 
 msgid "Ivory Tower"
-msgstr ""
+msgstr "Elfenbenstårn"
 
 msgid "Upg. Ivory Tower"
-msgstr ""
+msgstr "Opg. Elfenbenstårn"
 
 msgid "Cloud Castle"
-msgstr ""
+msgstr "Skyslot"
 
 msgid "Upg. Cloud Castle"
-msgstr ""
+msgstr "Opg. Skyslot"
 
 msgid "Storm"
-msgstr ""
+msgstr "Storm"
 
 msgid "Skull Pile"
-msgstr ""
+msgstr "Kraniebunke"
 
 msgid "Excavation"
-msgstr ""
+msgstr "Udgravning"
 
 msgid "Graveyard"
-msgstr ""
+msgstr "Kirkegård"
 
 msgid "Upg. Graveyard"
-msgstr ""
+msgstr "Opg. Kirkegård"
 
 msgid "Upg. Pyramid"
-msgstr ""
+msgstr "Opg. Pyramide"
 
 msgid "Mansion"
-msgstr ""
+msgstr "Palæ"
 
 msgid "Upg. Mansion"
-msgstr ""
+msgstr "Opg. Palæ"
 
 msgid "Mausoleum"
-msgstr ""
+msgstr "Mausoleum"
 
 msgid "Upg. Mausoleum"
-msgstr ""
+msgstr "Opg. Mausoleum"
 
 msgid "Laboratory"
-msgstr ""
+msgstr "Laboratorium"
 
 msgid "Shrine"
-msgstr ""
+msgstr "Helligdom"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -2007,49 +2013,49 @@ msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 
 msgid "Thieves' Guild"
-msgstr ""
+msgstr "Tyvelaug"
 
 msgid "Tavern"
-msgstr ""
+msgstr "Værtshus"
 
 msgid "Shipyard"
-msgstr ""
+msgstr "Skipsvært"
 
 msgid "Well"
-msgstr ""
+msgstr "Brønd"
 
 msgid "Statue"
-msgstr ""
+msgstr "Statue"
 
 msgid "Marketplace"
-msgstr ""
+msgstr "Markedsplads"
 
 msgid "Moat"
-msgstr ""
+msgstr "Voldgrav"
 
 msgid "Castle"
-msgstr ""
+msgstr "Borg"
 
 msgid "Tent"
-msgstr ""
+msgstr "Telt"
 
 msgid "Captain's Quarters"
-msgstr ""
+msgstr "Kaptajnens kvarter"
 
 msgid "Mage Guild, Level 1"
-msgstr ""
+msgstr "Magikerlaug, Niveau 1"
 
 msgid "Mage Guild, Level 2"
-msgstr ""
+msgstr "Magikerlaug, Niveau 2"
 
 msgid "Mage Guild, Level 3"
-msgstr ""
+msgstr "Magikerlaug, Niveau 3"
 
 msgid "Mage Guild, Level 4"
-msgstr ""
+msgstr "Magikerlaug, Niveau 4"
 
 msgid "Mage Guild, Level 5"
-msgstr ""
+msgstr "Magikerlaug, Niveau 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
@@ -6370,10 +6376,9 @@ msgid "Archer"
 msgstr "Bueskytte"
 
 msgid "Archers"
-msgstr "Bueskytter"
+msgstr "Bueskyttere"
 
 # We don't have a proper word for a military trained "ranger" in danish...
-
 msgid "Ranger"
 msgstr "Skovridder"
 
@@ -8568,31 +8573,31 @@ msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr ""
 
 msgid "north-west"
-msgstr "Nordvest"
+msgstr "nordvest"
 
 msgid "north"
-msgstr "Nord"
+msgstr "nord"
 
 msgid "north-east"
-msgstr "Nordøst"
+msgstr "nordøst"
 
 msgid "west"
-msgstr "Vest"
+msgstr "vest"
 
 msgid "center"
-msgstr "Centrum"
+msgstr "centrum"
 
 msgid "east"
-msgstr "Øst"
+msgstr "øst"
 
 msgid "south-west"
-msgstr "Sydvest"
+msgstr "sydvest"
 
 msgid "south"
-msgstr "Syd"
+msgstr "syd"
 
 msgid "south-east"
-msgstr "Sydøst"
+msgstr "sydøst"
 
 msgid "The truth is out there."
 msgstr "Sandheden er derude."
