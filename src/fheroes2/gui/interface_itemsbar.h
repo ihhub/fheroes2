@@ -456,7 +456,6 @@ namespace Interface
 
             if ( le.MouseReleaseLeft( iterPos1.second ) ) {
                 if ( ActionBarLeftMouseRelease( **iterPos1.first, *otherItemPress ) ) {
-                    le.ResetPressLeft();
                     other.ResetSelected();
                 }
 

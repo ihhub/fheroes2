@@ -214,11 +214,6 @@ public:
         return mouse_pl;
     }
 
-    void ResetPressLeft()
-    {
-        mouse_pl = { -1, -1 };
-    }
-
     bool MouseClickLeft();
     bool MouseClickMiddle();
     bool MouseClickRight();
