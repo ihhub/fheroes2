@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -6555,30 +6555,31 @@ msgid "race|Neutral"
 msgstr ""
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Riddare"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Barbar"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
 msgstr "Häxa"
 
 msgid "doubleLined|Warlock"
 msgstr ""
+"Krigs-\n"
+"trollkarl"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Trollkarl"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Svartkonstnär"
+msgstr ""
+"Svart-\n"
+"konstnär"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Flera"
 
 msgid "doubleLinedRace|Random"
 msgstr ""

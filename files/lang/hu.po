@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-08 06:50+0000\n"
-"PO-Revision-Date: 2022-10-25 08:55+0200\n"
+"PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -6584,30 +6584,29 @@ msgid "race|Neutral"
 msgstr ""
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Lovag"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Barbár"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
-msgstr "Varázslónő"
+msgstr "Varázsló-\nnő"
 
 msgid "doubleLined|Warlock"
 msgstr ""
+"Boszor-\n"
+"kánymester"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Varázsló"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Hullamágus"
+msgstr "Nekro-\nmanta"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Több-\nszörös"
 
 msgid "doubleLinedRace|Random"
 msgstr ""

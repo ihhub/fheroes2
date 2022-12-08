@@ -6785,38 +6785,41 @@ msgid "race|Neutral"
 msgstr "Nøytral"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Ridder"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Barbar"
 
 # Heks brukes allerede som Witch i witch hut. Trollkvinne er best men passer ikke med formatet og bestemtformsbøyningen til
 # de andre rasene. Feks. Trollkvinne(en) "heltenavn".
-#, fuzzy
 msgid "doubleLined|Sorceress"
-msgstr "Trollkjerring"
+msgstr ""
+"Troll-\n"
+"kjerring"
 
 msgid "doubleLined|Warlock"
 msgstr ""
+"Troll-\n"
+"mann"
 
 msgid "doubleLined|Wizard"
 msgstr ""
+"Magi-\n"
+"mester"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Sortekunstner"
+msgstr ""
+"Sorte-\n"
+"kunstner"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Flere"
 
-#, fuzzy
 msgid "doubleLinedRace|Random"
 msgstr "Tilfeldig"
 
-#, fuzzy
 msgid "doubleLinedRace|Neutral"
 msgstr "Nøytral"
 

@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -6658,38 +6658,33 @@ msgid "race|Neutral"
 msgstr "Неутрален"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Рицар"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Варварин"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
-msgstr "Магьосница"
+msgstr "Магьос-\nница"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Магьос-\nник"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Вълшеб-\nник"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Некромант"
+msgstr "Некро-\nмант"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Комбина-\nция"
 
-#, fuzzy
 msgid "doubleLinedRace|Random"
 msgstr "Случаен"
 
-#, fuzzy
 msgid "doubleLinedRace|Neutral"
-msgstr "Неутрален"
+msgstr "Неутра-\nлен"
 
 msgid "speed|Standing"
 msgstr "Стояща"

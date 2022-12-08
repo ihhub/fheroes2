@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-08 06:50+0000\n"
-"PO-Revision-Date: 2022-09-23 16:14+0200\n"
+"PO-Revision-Date: 2022-12-03 03:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -5663,8 +5663,8 @@ msgid ""
 "Recognizing you, the butler refuses to admit you. \"The master,\" he says, "
 "\"will not see the same student twice.\""
 msgstr ""
-"Als der Butler Sie erkennt, weigert er sich, Sie einzulassen. \"Der "
-"Meister\", sagt er, \"will denselben Schüler nicht zweimal sehen.\""
+"Als der Butler Sie erkennt, weigert er sich, Sie einzulassen. \"Der Meister"
+"\", sagt er, \"will denselben Schüler nicht zweimal sehen.\""
 
 msgid ""
 "The butler admits you to see the master of the house. He trains you in the "
@@ -6832,36 +6832,33 @@ msgid "race|Neutral"
 msgstr "Neutral"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Ritter"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Barbar"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
 msgstr "Zauberin"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Hexer"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Zauberer"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Totenbeschwörer"
+msgstr ""
+"Totenbe-\n"
+"schwörer"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Verschied"
 
-#, fuzzy
 msgid "doubleLinedRace|Random"
 msgstr "Zufällig"
 
-#, fuzzy
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
 

@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -6672,36 +6672,31 @@ msgid "race|Neutral"
 msgstr "Neutralny"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Rycerz"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
-msgstr "Barbarzyńca"
+msgstr "Barba-\nrzyńca"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
-msgstr "Czarodziejka"
+msgstr "Czaro-\ndziejka"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Czarno-\nksiężnik"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Czarodziej"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Nekromanta"
+msgstr "Nekro-\nmanta"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Różne"
 
-#, fuzzy
 msgid "doubleLinedRace|Random"
 msgstr "Losowo"
 
-#, fuzzy
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutralny"
 
