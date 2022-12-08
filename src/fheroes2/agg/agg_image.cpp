@@ -605,7 +605,7 @@ namespace fheroes2
                     out = GetICN( baseIcnId, i );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "FILE" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "INFO" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
 
                 break;
             }
