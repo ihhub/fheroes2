@@ -5549,4 +5549,3 @@ void Battle::PopupDamageInfo::Redraw()
     damageText.Blit( leftTextBorder, borderRect.y + borderWidth );
     killedText.Blit( leftTextBorder, borderRect.y + borderRect.height / 2 );
 }
-
