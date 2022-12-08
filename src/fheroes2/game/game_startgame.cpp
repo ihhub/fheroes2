@@ -887,21 +887,21 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SLEEP_HERO ) )
                 EventSwitchHeroSleeping();
             // hero movement control
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_LEFT ) )
                 EventKeyArrowPress( Direction::LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_RIGHT ) )
                 EventKeyArrowPress( Direction::RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_TOP ) )
                 EventKeyArrowPress( Direction::TOP );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_BOTTOM ) )
                 EventKeyArrowPress( Direction::BOTTOM );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_TOP_LEFT ) )
                 EventKeyArrowPress( Direction::TOP_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_TOP_RIGHT ) )
                 EventKeyArrowPress( Direction::TOP_RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_BOTTOM_LEFT ) )
                 EventKeyArrowPress( Direction::BOTTOM_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_BOTTOM_RIGHT ) )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
             // map scrolling control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SCROLL_LEFT ) )
