@@ -588,7 +588,7 @@ namespace fheroes2
                 break;
             }
             case ICN::BUTTON_INFO_EVIL:
-            case ICN::BUTTON_INFO_GOOD:{
+            case ICN::BUTTON_INFO_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isGoodInterface = ( id == ICN::BUTTON_INFO_GOOD );
