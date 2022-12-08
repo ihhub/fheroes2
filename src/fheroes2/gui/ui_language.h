@@ -79,4 +79,6 @@ namespace fheroes2
     SupportedLanguage getLanguageFromAbbreviation( const std::string & abbreviation );
 
     void updateAlphabet( const std::string & abbreviation );
+
+    SupportedLanguage getCurrentLanguage();
 }
