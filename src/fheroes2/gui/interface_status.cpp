@@ -470,10 +470,9 @@ void Interface::StatusWindow::TimerEventProcessing()
     SetRedraw();
 }
 
-void Interface::StatusWindow::RedrawTurnProgress( uint32_t v )
+void Interface::StatusWindow::SetToRedrawTurnProgress( const uint32_t progressValue )
 {
-    turn_progress = v;
+    turn_progress = progressValue;
 
     interface.Redraw( REDRAW_STATUS );
-    fheroes2::Display::instance().render( GetArea() );
 }

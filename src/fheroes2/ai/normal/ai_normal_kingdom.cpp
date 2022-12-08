@@ -414,7 +414,7 @@ namespace AI
 
         // reset indicator
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
-        status.RedrawTurnProgress( 0 );
+        status.SetToRedrawTurnProgress( 0 );
 
         AudioManager::PlayMusicAsync( MUS::COMPUTER_TURN, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
@@ -536,7 +536,7 @@ namespace AI
 
         DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" )
 
-        status.RedrawTurnProgress( 1 );
+        status.SetToRedrawTurnProgress( 1 );
 
         uint32_t progressStatus = 6;
 
@@ -553,21 +553,21 @@ namespace AI
             setHeroRoles( heroes );
 
             if ( progressStatus == 6 ) {
-                status.RedrawTurnProgress( 6 );
+                status.SetToRedrawTurnProgress( 6 );
                 ++progressStatus;
             }
             else {
-                status.RedrawTurnProgress( 8 );
+                status.SetToRedrawTurnProgress( 8 );
             }
 
             castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
             sortedCastleList = getSortedCastleList( castles, castlesInDanger );
 
             if ( progressStatus == 7 ) {
-                status.RedrawTurnProgress( 7 );
+                status.SetToRedrawTurnProgress( 7 );
             }
             else {
-                status.RedrawTurnProgress( 8 );
+                status.SetToRedrawTurnProgress( 8 );
             }
 
             const bool moreTaskForHeroes = HeroesTurn( heroes );
@@ -579,7 +579,7 @@ namespace AI
             ++availableHeroCount;
         }
 
-        status.RedrawTurnProgress( 9 );
+        status.SetToRedrawTurnProgress( 9 );
 
         // sync up castle list (if conquered new ones during the turn)
         if ( castles.size() != sortedCastleList.size() ) {

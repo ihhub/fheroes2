@@ -63,7 +63,7 @@ namespace Interface
 
         void SetState( const StatusType status );
         void SetResource( int, uint32_t );
-        void RedrawTurnProgress( uint32_t );
+        void SetToRedrawTurnProgress( const uint32_t progressValue );
         void QueueEventProcessing();
         void TimerEventProcessing();
 
