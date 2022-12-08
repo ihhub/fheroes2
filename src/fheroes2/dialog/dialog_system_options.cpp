@@ -65,16 +65,17 @@ namespace
 
         // Audio settings.
         const fheroes2::Sprite & audioSettingsIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 1 );
-        fheroes2::drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "Settings" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
+        fheroes2::drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Hot keys.
         const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, 5 );
-        fheroes2::drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
+        fheroes2::drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Cursor Type.
         const bool isMonoCursor = Settings::Get().isMonochromeCursorEnabled();
         const fheroes2::Sprite & cursorTypeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isMonoCursor ? 20 : 21 );
-        fheroes2::drawOption( rects[2], cursorTypeIcon, _( "Mouse Cursor" ), isMonoCursor ? _( "Black & White" ) : _( "Color" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
+        fheroes2::drawOption( rects[2], cursorTypeIcon, _( "Mouse Cursor" ), isMonoCursor ? _( "Black & White" ) : _( "Color" ),
+                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Hero's movement speed.
         const int heroSpeed = conf.HeroesMoveSpeed();
@@ -95,7 +96,7 @@ namespace
             value = std::to_string( heroSpeed );
         }
 
-        fheroes2::drawOption( rects[3], heroSpeedIcon, _( "Hero Speed" ), value, THREE_ELEMENT_ROW_TEXT_WIDTH );
+        fheroes2::drawOption( rects[3], heroSpeedIcon, _( "Hero Speed" ), value, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // AI's movement speed.
         const int aiSpeed = conf.AIMoveSpeed();
@@ -118,7 +119,7 @@ namespace
             value = std::to_string( aiSpeed );
         }
 
-        fheroes2::drawOption( rects[4], aiSpeedIcon, _( "Enemy Speed" ), value, THREE_ELEMENT_ROW_TEXT_WIDTH );
+        fheroes2::drawOption( rects[4], aiSpeedIcon, _( "Enemy Speed" ), value, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Scrolling speed.
         const int scrollSpeed = conf.ScrollSpeed();
@@ -155,7 +156,7 @@ namespace
         assert( scrollSpeedIconIcn != ICN::UNKNOWN );
 
         const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( scrollSpeedIconIcn, scrollSpeedIconId );
-        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), scrollSpeedName, THREE_ELEMENT_ROW_TEXT_WIDTH );
+        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), scrollSpeedName, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Interface theme.
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
@@ -167,7 +168,7 @@ namespace
             value = _( "Good" );
         }
 
-        fheroes2::drawOption( rects[6], interfaceThemeIcon, _( "Interface Type" ), value, THREE_ELEMENT_ROW_TEXT_WIDTH );
+        fheroes2::drawOption( rects[6], interfaceThemeIcon, _( "Interface Type" ), value, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Interface show/hide state.
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
@@ -180,7 +181,7 @@ namespace
             value = _( "Show" );
         }
 
-        fheroes2::drawOption( rects[7], interfaceStateIcon, _( "Interface" ), value, THREE_ELEMENT_ROW_TEXT_WIDTH );
+        fheroes2::drawOption( rects[7], interfaceStateIcon, _( "Interface" ), value, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Auto-battles.
         if ( conf.BattleAutoResolve() ) {
@@ -188,11 +189,11 @@ namespace
             value = spellcast ? _( "Auto Resolve" ) : _( "Auto, No Spells" );
 
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, spellcast ? 7 : 6 );
-            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), value, THREE_ELEMENT_ROW_TEXT_WIDTH );
+            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), value, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 18 );
-            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "autoBattle|Manual" ), THREE_ELEMENT_ROW_TEXT_WIDTH );
+            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "autoBattle|Manual" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
 

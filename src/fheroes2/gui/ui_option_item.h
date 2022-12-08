@@ -25,14 +25,14 @@
 
 #include "math_base.h"
 
-enum : int32_t
-{
-    TWO_ELEMENT_ROW_TEXT_WIDTH = 113,
-    THREE_ELEMENT_ROW_TEXT_WIDTH = 87
-};
-
 namespace fheroes2
 {
+    enum UiOptionTextWidth : int32_t
+    {
+        TWO_ELEMENTS_ROW = 113,
+        THREE_ELEMENTS_ROW = 87
+    };
+
     class Sprite;
 
     void drawOption( const Rect & optionRoi, const Sprite & icon, std::string titleText, std::string valueText, const int32_t textMaxWidth );

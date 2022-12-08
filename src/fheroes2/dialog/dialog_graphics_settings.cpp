@@ -67,7 +67,7 @@ namespace
         std::string resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
 
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), _( "Resolution" ),
-                              std::move( resolutionName ), TWO_ELEMENT_ROW_TEXT_WIDTH );
+                              std::move( resolutionName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawMode( const fheroes2::Rect & optionRoi )
@@ -78,10 +78,10 @@ namespace
             fheroes2::Sprite icon = originalIcon;
             fheroes2::Resize( originalIcon, 6, 6, 53, 53, icon, 2, 2, 61, 61 );
 
-            fheroes2::drawOption( optionRoi, icon, _( "window|Mode" ), _( "Fullscreen" ), TWO_ELEMENT_ROW_TEXT_WIDTH );
+            fheroes2::drawOption( optionRoi, icon, _( "window|Mode" ), _( "Fullscreen" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, originalIcon, _( "window|Mode" ), _( "Windowed" ), TWO_ELEMENT_ROW_TEXT_WIDTH );
+            fheroes2::drawOption( optionRoi, originalIcon, _( "window|Mode" ), _( "Windowed" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
         }
     }
 
@@ -90,7 +90,7 @@ namespace
         const bool isVSyncEnabled = Settings::Get().isVSyncEnabled();
 
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "on" ) : _( "off" ),
-                              TWO_ELEMENT_ROW_TEXT_WIDTH );
+                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawSystemInfo( const fheroes2::Rect & optionRoi )
@@ -107,7 +107,7 @@ namespace
         }
         info.draw( ( image.width() - info.width() ) / 2, ( image.height() - info.height() ) / 2, image );
 
-        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), TWO_ELEMENT_ROW_TEXT_WIDTH );
+        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     SelectedWindow showConfigurationWindow()
