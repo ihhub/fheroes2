@@ -17,10 +17,9 @@ Depending on your original version of Heroes 2 they can either be found on your 
 your Heroes 2 installation directory.
 
 ## Controls
-To simulate a right-click to get info on various items, you need to first touch and keep touching anywhere on the screen
-and then touch on the item of interest. You can slide the touch away while maintaining it to keep viewing the info on the
-item. It is recommended that you place the first touch outside the rendered game area to avoid an accidental left-click
-when you end the simulated right-click.
+To simulate a right-click to get info on various items, you need to first touch and keep touching on the item of interest
+and then touch anywhere else on the screen. You can then remove your first finger from the screen and keep viewing the info
+on the item.
 
 By default normal adventure map scrolling on the borders of the screen is disabled. To pane the viewing area around you
 need to press anywhere on the adventure map and slide around to change where you are viewing.

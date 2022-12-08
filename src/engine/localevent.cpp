@@ -41,6 +41,7 @@
 
 #include <SDL_gamecontroller.h>
 #include <SDL_keycode.h>
+#include <SDL_touch.h>
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( ANDROID )
 #define TOUCH_SUPPORT
@@ -1367,30 +1368,35 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
-    if ( _numTouches == 2 && _firstFingerId != event.fingerId && _secondFingerId != event.fingerId ) {
-        // We do not support more than 2 fingers.
+    switch ( event.type ) {
+    case SDL_FINGERDOWN:
+        if ( !_fingerIds.first ) {
+            _fingerIds.first = event.fingerId;
+        }
+        else if ( !_fingerIds.second ) {
+            _fingerIds.second = event.fingerId;
+        }
+        else {
+            // Gestures of more than two fingers are not supported, ignore
+            return;
+        }
+
+        break;
+    case SDL_FINGERUP:
+    case SDL_FINGERMOTION:
+        if ( event.fingerId != _fingerIds.first && event.fingerId != _fingerIds.second ) {
+            // An event from an unknown finger, ignore
+            return;
+        }
+
+        break;
+    default:
+        // Unknown event, this should never happen
+        assert( 0 );
         return;
     }
 
-    if ( event.type == SDL_FINGERDOWN ) {
-        if ( _numTouches == 0 ) {
-            _firstFingerId = event.fingerId;
-            ++_numTouches;
-        }
-        else if ( _numTouches == 1 ) {
-            _secondFingerId = event.fingerId;
-            ++_numTouches;
-        }
-    }
-    else if ( event.type == SDL_FINGERUP ) {
-        --_numTouches;
-    }
-
-    // Ignore first finger movement if the second finger is pressed.
-    const bool isFirstFinger = ( _numTouches < 2 && _firstFingerId == event.fingerId );
-    const bool isSecondFinger = ( _secondFingerId == event.fingerId );
-
-    if ( isFirstFinger || isSecondFinger ) {
+    if ( event.fingerId == _fingerIds.first ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
@@ -1407,44 +1413,42 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
-    }
 
-    if ( isFirstFinger ) {
         SetModes( MOUSE_MOTION );
 
         if ( _globalMouseMotionEventHook ) {
             _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
         }
 
-        if ( event.type == SDL_FINGERDOWN ) {
-            mouse_pl = mouse_cu;
+        // If there is a two-finger gesture in progress, the first finger is only used to move the cursor.
+        // The operation of the left mouse button is not simulated.
+        if ( !_isTwoFingerGestureInProgress ) {
+            if ( event.type == SDL_FINGERDOWN ) {
+                mouse_pl = mouse_cu;
 
-            SetModes( MOUSE_PRESSED );
-        }
-        else if ( event.type == SDL_FINGERUP ) {
-            mouse_rl = mouse_cu;
-
-            ResetModes( MOUSE_PRESSED );
-            SetModes( MOUSE_RELEASED );
-            SetModes( MOUSE_CLICKED );
-        }
-
-        mouse_button = SDL_BUTTON_LEFT;
-    }
-    else if ( isSecondFinger ) {
-        if ( _numTouches < 2 ) {
-            // Only the second finger is pressing.
-            SetModes( MOUSE_MOTION );
-
-            if ( _globalMouseMotionEventHook ) {
-                _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
+                SetModes( MOUSE_PRESSED );
             }
-        }
+            else if ( event.type == SDL_FINGERUP ) {
+                mouse_rl = mouse_cu;
 
+                ResetModes( MOUSE_PRESSED );
+                SetModes( MOUSE_RELEASED );
+                SetModes( MOUSE_CLICKED );
+            }
+
+            mouse_button = SDL_BUTTON_LEFT;
+        }
+    }
+    else if ( event.fingerId == _fingerIds.second ) {
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pr = mouse_cu;
 
             SetModes( MOUSE_PRESSED );
+
+            // When the second finger touches the screen, the two-finger gesture processing begins. This
+            // gesture simulates the operation of the right mouse button and ends when both fingers are
+            // removed from the screen.
+            _isTwoFingerGestureInProgress = true;
         }
         else if ( event.type == SDL_FINGERUP ) {
             mouse_rr = mouse_cu;
@@ -1455,6 +1459,25 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         }
 
         mouse_button = SDL_BUTTON_RIGHT;
+    }
+
+    // The finger no longer touches the screen, reset its state
+    if ( event.type == SDL_FINGERUP ) {
+        if ( event.fingerId == _fingerIds.first ) {
+            _fingerIds.first.reset();
+        }
+        else if ( event.fingerId == _fingerIds.second ) {
+            _fingerIds.second.reset();
+        }
+        else {
+            // An event from an unknown finger, this should never happen
+            assert( 0 );
+        }
+
+        // Both fingers are removed from the screen, cancel the two-finger gesture
+        if ( !_fingerIds.first && !_fingerIds.second ) {
+            _isTwoFingerGestureInProgress = false;
+        }
     }
 }
 
