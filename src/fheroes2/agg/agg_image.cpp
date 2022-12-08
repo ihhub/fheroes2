@@ -2675,6 +2675,33 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::EMPTY_GOOD_MEDIUM_BUTTON:
+            case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {
+                const int32_t originalId = ( id == ICN::EMPTY_GOOD_MEDIUM_BUTTON ) ? ICN::APANEL : ICN::APANELE;
+                LoadOriginalICN( originalId );
+
+                _icnVsSprite[id].resize( 2 );
+
+                if ( _icnVsSprite[originalId].size() < 10 ) {
+                    // Invalid game resources!
+                    assert( 0 );
+                    break;
+                }
+
+                Sprite & released = _icnVsSprite[id][0];
+                Sprite & pressed = _icnVsSprite[id][1];
+
+                released = _icnVsSprite[originalId][2];
+                pressed = _icnVsSprite[originalId][3];
+
+                if ( released.width() > 2 && released.height() > 2 && pressed.width() > 2 && pressed.height() > 2 ) {
+                    // Clean the buttons.
+                    Fill( released, 29, 16, 42, 27, getButtonFillingColor( false ) );
+                    Fill( pressed, 28, 17, 42, 27, getButtonFillingColor( true ) );
+                }
+
+                break;
+            }
             default:
                 break;
             }
