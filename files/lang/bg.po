@@ -6614,27 +6614,27 @@ msgid "doubleLined|Barbarian"
 msgstr "Варварин"
 
 msgid "doubleLined|Sorceress"
-msgstr "Магьосница"
+msgstr "Магьос-\nница"
 
 msgid "doubleLined|Warlock"
-msgstr "Магьосник"
+msgstr "Магьос-\nник"
 
 msgid "doubleLined|Wizard"
-msgstr "Вълшебник"
+msgstr "Вълшеб-\nник"
 
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Некромант"
+msgstr "Некро-\nмант"
 
 msgid "doubleLinedRace|Multi"
-msgstr "Комбинация"
+msgstr "Комбина-\nция"
 
 msgid "doubleLinedRace|Random"
 msgstr "Случаен"
 
 msgid "doubleLinedRace|Neutral"
-msgstr "Неутрален"
+msgstr "Неутра-\nлен"
 
 msgid "speed|Standing"
 msgstr "Стояща"

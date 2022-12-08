@@ -6607,10 +6607,10 @@ msgstr "Волшебник"
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Некромант"
+msgstr "Некро-\nмант"
 
 msgid "doubleLinedRace|Multi"
-msgstr "По сценарию"
+msgstr "По\nсценарию"
 
 msgid "doubleLinedRace|Random"
 msgstr "Случайно"
