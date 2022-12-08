@@ -57,7 +57,7 @@ int Dialog::AdventureOptions( bool enabledig )
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Button buttonWorld( rb.x + 62, rb.y + 30, apanel, 0, 1 );
+    fheroes2::Button buttonWorld( rb.x + 62, rb.y + 30, isEvilInterface ? ICN::BUTTON_INFO_EVIL : ICN::BUTTON_INFO_GOOD, 0, 1 );
     fheroes2::Button buttonPuzzle( rb.x + 195, rb.y + 30, apanel, 2, 3 );
     fheroes2::Button buttonInfo( rb.x + 62, rb.y + 107, apanel, 4, 5 );
     fheroes2::Button buttonDig( rb.x + 195, rb.y + 107, apanel, 6, 7 );

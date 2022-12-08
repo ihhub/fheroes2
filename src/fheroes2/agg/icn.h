@@ -1011,10 +1011,14 @@ namespace ICN
 
         BUTTON_NEW_GAME_GOOD,
         BUTTON_NEW_GAME_EVIL,
-        BUTTON_SAVE_GAME,
-        BUTTON_LOAD_GAME,
-        BUTTON_INFO,
-        BUTTON_QUIT,
+        BUTTON_SAVE_GAME_GOOD,
+        BUTTON_SAVE_GAME_EVIL,
+        BUTTON_LOAD_GAME_GOOD,
+        BUTTON_LOAD_GAME_EVIL,
+        BUTTON_INFO_GOOD,
+        BUTTON_INFO_EVIL,
+        BUTTON_QUIT_GOOD,
+        BUTTON_QUIT_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
