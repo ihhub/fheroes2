@@ -366,12 +366,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 break;
             }
             if ( buttonPrevCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
+                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
                 result = CastleDialogReturnValue::PreviousCastle;
                 break;
             }
             if ( buttonNextCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
+                 && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
                 result = CastleDialogReturnValue::NextCastle;
                 break;
             }
@@ -416,11 +416,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                     keep = bottomArmyBar.GetSelectedItem();
                 }
 
-                if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
+                if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DOWN ) ) {
                     hero->GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_UP ) ) {
                     GetArmy().MoveTroops( hero->GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
                     isArmyActionPerformed = true;
                 }
