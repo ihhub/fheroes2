@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 01:14+0000\n"
+"POT-Creation-Date: 2022-12-08 06:50+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.2\n"
 
@@ -26,6 +26,56 @@ msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr "БИТВА"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
 
 msgid "GIFT"
 msgstr "ОТДАТЬ"
@@ -6590,36 +6640,31 @@ msgid "race|Neutral"
 msgstr "Нейтральный"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Рыцарь"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Варвар"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
 msgstr "Колдунья"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Чародей"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Волшебник"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Некромант"
+msgstr "Некро-\nмант"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "По\nсценарию"
 
-#, fuzzy
 msgid "doubleLinedRace|Random"
 msgstr "Случайно"
 
-#, fuzzy
 msgid "doubleLinedRace|Neutral"
 msgstr "Нейтральный"
 

@@ -1064,10 +1064,15 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                     if ( resetHeroSprite ) {
                         hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
                     }
+
                     if ( hero->isMoveEnabled() ) {
                         if ( hero->Move( 10 == conf.HeroesMoveSpeed() ) ) {
+                            // Do not generate a frame as we are going to do it later.
+                            Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+
                             gameArea.SetCenter( hero->GetCenter() );
                             ResetFocus( GameFocus::HEROES );
+
                             RedrawFocus();
 
                             if ( stopHero ) {
@@ -1079,6 +1084,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                         else {
                             const fheroes2::Point movement( hero->MovementDirection() );
                             if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
+                                // Do not generate a frame as we are going to do it later.
+                                Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+
                                 const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
 
                                 heroAnimationOffset = movement;
