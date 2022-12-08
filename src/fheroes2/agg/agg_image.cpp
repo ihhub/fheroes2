@@ -66,7 +66,13 @@ namespace
     // Some resources are language dependent. These are mostly buttons with a text of them.
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
 
-    const std::set<int> languageDependentIcnId{ ICN::BUTTON_STANDARD_GAME,
+    const std::set<int> languageDependentIcnId{ ICN::BUTTON_NEW_GAME_GOOD,
+                                                ICN::BUTTON_NEW_GAME_EVIL,
+                                                ICN::BUTTON_SAVE_GAME,
+                                                ICN::BUTTON_LOAD_GAME,
+                                                ICN::BUTTON_INFO,
+                                                ICN::BUTTON_QUIT,
+                                                ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
                                                 ICN::BUTTON_LARGE_CANCEL,
@@ -511,6 +517,32 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_NEW_GAME_EVIL:
+            case ICN::BUTTON_NEW_GAME_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isGoodInterface = ( id == ICN::BUTTON_NEW_GAME_GOOD );
+                const int baseIcnId = isGoodInterface ? ICN::EMPTY_GOOD_MEDIUM_BUTTON : ICN::EMPTY_EVIL_MEDIUM_BUTTON;
+                const fheroes2::FontColor buttonFontColor = isGoodInterface ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
+
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::CPANEL, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::CPANEL, 1 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, i );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nGAME" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_SAVE_GAME:
+            case ICN::BUTTON_LOAD_GAME:
+            case ICN::BUTTON_INFO:
+            case ICN::BUTTON_QUIT:
             case ICN::BUTTON_STANDARD_GAME: {
                 _icnVsSprite[id].resize( 2 );
                 if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
@@ -1367,6 +1399,12 @@ namespace fheroes2
                     Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
                 }
                 return true;
+            case ICN::BUTTON_NEW_GAME_GOOD:
+            case ICN::BUTTON_NEW_GAME_EVIL:
+            case ICN::BUTTON_SAVE_GAME:
+            case ICN::BUTTON_LOAD_GAME:
+            case ICN::BUTTON_INFO:
+            case ICN::BUTTON_QUIT:
             case ICN::BUTTON_STANDARD_GAME:
             case ICN::BUTTON_CAMPAIGN_GAME:
             case ICN::BUTTON_MULTIPLAYER_GAME:
@@ -2677,7 +2715,8 @@ namespace fheroes2
             }
             case ICN::EMPTY_GOOD_MEDIUM_BUTTON:
             case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {
-                const int32_t originalId = ( id == ICN::EMPTY_GOOD_MEDIUM_BUTTON ) ? ICN::APANEL : ICN::APANELE;
+                const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_MEDIUM_BUTTON );
+                const int32_t originalId = isGoodInterface ? ICN::APANEL : ICN::APANELE;
                 LoadOriginalICN( originalId );
 
                 _icnVsSprite[id].resize( 2 );
@@ -2696,8 +2735,8 @@ namespace fheroes2
 
                 if ( released.width() > 2 && released.height() > 2 && pressed.width() > 2 && pressed.height() > 2 ) {
                     // Clean the buttons.
-                    Fill( released, 29, 16, 42, 27, getButtonFillingColor( false ) );
-                    Fill( pressed, 28, 17, 42, 27, getButtonFillingColor( true ) );
+                    Fill( released, 28, 15, 42, 27, getButtonFillingColor( true, isGoodInterface ) );
+                    Fill( pressed, 27, 16, 42, 27, getButtonFillingColor( false, isGoodInterface ) );
                 }
 
                 break;

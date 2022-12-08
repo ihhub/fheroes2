@@ -1009,6 +1009,13 @@ namespace ICN
         BUTTON_5_PLAYERS,
         BUTTON_6_PLAYERS,
 
+        BUTTON_NEW_GAME_GOOD,
+        BUTTON_NEW_GAME_EVIL,
+        BUTTON_SAVE_GAME,
+        BUTTON_LOAD_GAME,
+        BUTTON_INFO,
+        BUTTON_QUIT,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

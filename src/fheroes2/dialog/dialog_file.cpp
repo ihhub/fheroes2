@@ -63,7 +63,7 @@ fheroes2::GameMode Dialog::FileOptions()
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, cpanel, 0, 1 );
+    fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, isEvilInterface ? ICN::BUTTON_NEW_GAME_EVIL : ICN::BUTTON_NEW_GAME_GOOD, 0, 1 );
     fheroes2::Button buttonLoad( rb.x + 195, rb.y + 31, cpanel, 2, 3 );
     fheroes2::Button buttonSave( rb.x + 62, rb.y + 107, cpanel, 4, 5 );
     fheroes2::Button buttonQuit( rb.x + 195, rb.y + 107, cpanel, 6, 7 );
