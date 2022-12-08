@@ -207,7 +207,6 @@ Funds & Funds::operator=( const cost_t & cost )
     return *this;
 }
 
-// operator Funds +
 Funds Funds::operator+( const Funds & pm ) const
 {
     Funds res;
@@ -236,7 +235,6 @@ Funds & Funds::operator+=( const Funds & pm )
     return *this;
 }
 
-// operator Funds -
 Funds Funds::operator-( const Funds & pm ) const
 {
     Funds res;
@@ -307,7 +305,6 @@ int Funds::getLowestQuotient( const Funds & divisor ) const
     return result;
 }
 
-// operator Funds *
 Funds Funds::operator*( uint32_t mul ) const
 {
     Funds res;
@@ -354,7 +351,6 @@ Funds & Funds::operator/=( const int32_t div )
     return *this;
 }
 
-// operator Funds >=
 bool Funds::operator>=( const Funds & pm ) const
 {
     return wood >= pm.wood && mercury >= pm.mercury && ore >= pm.ore && sulfur >= pm.sulfur && crystal >= pm.crystal && gems >= pm.gems && gold >= pm.gold;
