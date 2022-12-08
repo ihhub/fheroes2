@@ -6625,13 +6625,13 @@ msgid "doubleLined|Knight"
 msgstr "Rycerz"
 
 msgid "doubleLined|Barbarian"
-msgstr "Barbarzyńca"
+msgstr "Barba-\nrzyńca"
 
 msgid "doubleLined|Sorceress"
-msgstr "Czarodziejka"
+msgstr "Czaro-\ndziejka"
 
 msgid "doubleLined|Warlock"
-msgstr "Czarnoksiężnik"
+msgstr "Czarno-\nksiężnik"
 
 msgid "doubleLined|Wizard"
 msgstr "Czarodziej"
@@ -6639,7 +6639,7 @@ msgstr "Czarodziej"
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Nekromanta"
+msgstr "Nekro-\nmanta"
 
 msgid "doubleLinedRace|Multi"
 msgstr "Różne"

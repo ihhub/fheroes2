@@ -6540,12 +6540,12 @@ msgid "doubleLined|Barbarian"
 msgstr "Barbár"
 
 msgid "doubleLined|Sorceress"
-msgstr "Varázslónő"
+msgstr "Varázsló-\nnő"
 
 msgid "doubleLined|Warlock"
 msgstr ""
-"Boszorkány-\n"
-"mester"
+"Boszor-\n"
+"kánymester"
 
 msgid "doubleLined|Wizard"
 msgstr "Varázsló"
@@ -6553,10 +6553,10 @@ msgstr "Varázsló"
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Hullamágus"
+msgstr "Nekro-\nmanta"
 
 msgid "doubleLinedRace|Multi"
-msgstr "Többszörös"
+msgstr "Több-\nszörös"
 
 msgid "doubleLinedRace|Random"
 msgstr ""
