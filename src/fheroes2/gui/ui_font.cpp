@@ -3820,7 +3820,7 @@ namespace
         fheroes2::DrawLine( released[48], { offset + 10, offset + 1 }, { offset + 10, offset + 4 }, buttonGoodReleasedColor );
 
         // Q
-        released[49].resize( 13 + offset * 2, 11 + offset * 2 );
+        released[49].resize( 11 + offset * 2, 11 + offset * 2 );
         released[49].reset();
         fheroes2::DrawLine( released[49], { offset + 2, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[49], { offset + 0, offset + 2 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
