@@ -24,6 +24,16 @@ As an alternative to the previous step, you can manually copy the subdirectories
 'DATA', 'MAPS' and 'MUSIC' (some of them may be missing depending on the version of the
 original game) from the original game directory to the fheroes2 installation directory.
 
+If you are running fheroes2 on Windows and see complaints about missing DLLs, then you
+may need to install the Microsoft Visual C++ redistributable package. You can download
+it using the following URLs:
+
+https://aka.ms/vs/17/release/vc_redist.x86.exe - for 32-bit x86 fheroes2 builds;
+https://aka.ms/vs/17/release/vc_redist.x64.exe - for 64-bit x64 fheroes2 builds.
+
+Or you can install the game using the installer, in this case, this package will be
+installed automatically.
+
 --- License ---
 This project is under GNU General Public License v2.0. Refer to file LICENSE for more
 details.

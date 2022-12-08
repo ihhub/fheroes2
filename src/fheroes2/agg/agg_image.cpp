@@ -65,7 +65,21 @@ namespace
 
     // Some resources are language dependent. These are mostly buttons with a text of them.
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
-    const std::set<int> languageDependentIcnId{ ICN::BTNBATTLEONLY,
+
+    const std::set<int> languageDependentIcnId{ ICN::BUTTON_STANDARD_GAME,
+                                                ICN::BUTTON_CAMPAIGN_GAME,
+                                                ICN::BUTTON_MULTIPLAYER_GAME,
+                                                ICN::BUTTON_LARGE_CANCEL,
+                                                ICN::BUTTON_LARGE_CONFIG,
+                                                ICN::BUTTON_ORIGINAL_CAMPAIGN,
+                                                ICN::BUTTON_EXPANSION_CAMPAIGN,
+                                                ICN::BUTTON_HOT_SEAT,
+                                                ICN::BUTTON_2_PLAYERS,
+                                                ICN::BUTTON_3_PLAYERS,
+                                                ICN::BUTTON_4_PLAYERS,
+                                                ICN::BUTTON_5_PLAYERS,
+                                                ICN::BUTTON_6_PLAYERS,
+                                                ICN::BTNBATTLEONLY,
                                                 ICN::BTNGIFT_GOOD,
                                                 ICN::BTNGIFT_EVIL,
                                                 ICN::UNIFORM_EVIL_MAX_BUTTON,
@@ -497,6 +511,250 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_STANDARD_GAME: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 1 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "STANDARD\nGAME" ), { 12, 5 }, { 11, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_CAMPAIGN_GAME: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 2 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 3 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CAMPAIGN\nGAME" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_MULTIPLAYER_GAME: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 4 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 5 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MULTI-\nPLAYER\nGAME" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_LARGE_CANCEL: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 6 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 7 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 12, 5 }, { 11, 6 }, { 117, 47 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_LARGE_CONFIG: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNDCCFG, 4 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNDCCFG, 5 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CONFIG" ), { 12, 5 }, { 11, 6 }, { 117, 47 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_ORIGINAL_CAMPAIGN: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::X_LOADCM, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::X_LOADCM, 1 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ORIGINAL\nCAMPAIGN" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_EXPANSION_CAMPAIGN: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::X_LOADCM, 2 );
+                    _icnVsSprite[id][1] = GetICN( ICN::X_LOADCM, 3 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXPANSION\nCAMPAIGN" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_HOT_SEAT: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNMP, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNMP, 1 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HOT SEAT" ), { 11, 5 }, { 10, 6 }, { 120, 47 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_2_PLAYERS: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 1 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "2 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_3_PLAYERS: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 2 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 3 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "3 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_4_PLAYERS: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 4 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 5 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "4 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_5_PLAYERS: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 6 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 7 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "5 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_6_PLAYERS: {
+                _icnVsSprite[id].resize( 2 );
+                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 8 );
+                    _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 9 );
+                    break;
+                }
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // clean button.
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "6 PLAYERS" ), { 11, 5 }, { 10, 6 }, { 120, 47 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL: {
                 _icnVsSprite[id].resize( 2 );
@@ -890,30 +1148,34 @@ namespace fheroes2
         {
             assert( isLanguageDependentIcnId( id ) );
 
+            const fheroes2::SupportedLanguage resourceLanguage = fheroes2::getResourceLanguage();
+
             // Language-specific image generators, may fail
-            switch ( fheroes2::getResourceLanguage() ) {
-            case fheroes2::SupportedLanguage::German:
-                if ( generateGermanSpecificImages( id ) ) {
-                    return;
+            if ( fheroes2::getCurrentLanguage() == resourceLanguage ) {
+                switch ( resourceLanguage ) {
+                case fheroes2::SupportedLanguage::German:
+                    if ( generateGermanSpecificImages( id ) ) {
+                        return;
+                    }
+                    break;
+                case fheroes2::SupportedLanguage::French:
+                    if ( generateFrenchSpecificImages( id ) ) {
+                        return;
+                    }
+                    break;
+                case fheroes2::SupportedLanguage::Polish:
+                    if ( generatePolishSpecificImages( id ) ) {
+                        return;
+                    }
+                    break;
+                case fheroes2::SupportedLanguage::Italian:
+                    if ( generateItalianSpecificImages( id ) ) {
+                        return;
+                    }
+                    break;
+                default:
+                    break;
                 }
-                break;
-            case fheroes2::SupportedLanguage::French:
-                if ( generateFrenchSpecificImages( id ) ) {
-                    return;
-                }
-                break;
-            case fheroes2::SupportedLanguage::Polish:
-                if ( generatePolishSpecificImages( id ) ) {
-                    return;
-                }
-                break;
-            case fheroes2::SupportedLanguage::Italian:
-                if ( generateItalianSpecificImages( id ) ) {
-                    return;
-                }
-                break;
-            default:
-                break;
             }
             // Image generator of a last resort, must provide the generation of the "default" variant
             // for all image ids for which this function can be called, and must not fail.
@@ -1105,6 +1367,19 @@ namespace fheroes2
                     Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
                 }
                 return true;
+            case ICN::BUTTON_STANDARD_GAME:
+            case ICN::BUTTON_CAMPAIGN_GAME:
+            case ICN::BUTTON_MULTIPLAYER_GAME:
+            case ICN::BUTTON_LARGE_CANCEL:
+            case ICN::BUTTON_LARGE_CONFIG:
+            case ICN::BUTTON_ORIGINAL_CAMPAIGN:
+            case ICN::BUTTON_EXPANSION_CAMPAIGN:
+            case ICN::BUTTON_HOT_SEAT:
+            case ICN::BUTTON_2_PLAYERS:
+            case ICN::BUTTON_3_PLAYERS:
+            case ICN::BUTTON_4_PLAYERS:
+            case ICN::BUTTON_5_PLAYERS:
+            case ICN::BUTTON_6_PLAYERS:
             case ICN::BTNBATTLEONLY:
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL:
