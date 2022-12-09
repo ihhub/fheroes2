@@ -80,6 +80,8 @@ namespace
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
                                                 ICN::BUTTON_LARGE_CANCEL,
+                                                ICN::BUTTON_SMALL_CANCEL_GOOD,
+                                                ICN::BUTTON_SMALL_CANCEL_EVIL,
                                                 ICN::BUTTON_LARGE_CONFIG,
                                                 ICN::BUTTON_ORIGINAL_CAMPAIGN,
                                                 ICN::BUTTON_EXPANSION_CAMPAIGN,
@@ -726,6 +728,30 @@ namespace fheroes2
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 12, 5 }, { 11, 6 }, { 117, 47 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_CANCEL_GOOD:
+            case ICN::BUTTON_SMALL_CANCEL_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_CANCEL_EVIL );
+
+                if ( isPolishLanguageAndResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 8 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 9 );
+                    break;
+                }
+
+                int32_t textWidth = 86;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    buttonFontColor );
 
                 break;
             }
@@ -1542,6 +1568,8 @@ namespace fheroes2
             case ICN::BUTTON_CAMPAIGN_GAME:
             case ICN::BUTTON_MULTIPLAYER_GAME:
             case ICN::BUTTON_LARGE_CANCEL:
+            case ICN::BUTTON_SMALL_CANCEL_GOOD:
+            case ICN::BUTTON_SMALL_CANCEL_EVIL:
             case ICN::BUTTON_LARGE_CONFIG:
             case ICN::BUTTON_ORIGINAL_CAMPAIGN:
             case ICN::BUTTON_EXPANSION_CAMPAIGN:
