@@ -531,7 +531,7 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isGoodInterface = ( id == ICN::BUTTON_NEW_GAME_GOOD );
-                
+
                 if ( isPolishLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 0 );
                     _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 1 );
@@ -555,7 +555,7 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isGoodInterface = ( id == ICN::BUTTON_SAVE_GAME_GOOD );
-                
+
                 if ( isPolishLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 4 );
                     _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 5 );
@@ -579,7 +579,7 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isGoodInterface = ( id == ICN::BUTTON_LOAD_GAME_GOOD );
-                
+
                 if ( isPolishLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 2 );
                     _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 3 );
