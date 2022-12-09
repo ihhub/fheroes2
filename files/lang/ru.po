@@ -2808,7 +2808,7 @@ msgid "Windowed"
 msgstr "В окне"
 
 msgid "V-Sync"
-msgstr "Вертикальная синхрониз."
+msgstr "Вертикальная синхронизация"
 
 msgid "on"
 msgstr "вкл."
