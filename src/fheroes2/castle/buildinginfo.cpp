@@ -476,8 +476,6 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int system = ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM );
-
     // setup cursor
     const CursorRestorer cursorRestorer( buttons, Cursor::POINTER );
 
@@ -523,13 +521,19 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     fheroes2::Point dst_pt;
 
+    const int system = ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
     dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
-    fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
+    const int buttonCancelIcnID = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).height();
+    fheroes2::Button button2( dst_pt.x, dst_pt.y, buttonCancelIcnID, 0, 1 );
 
     dst_pt.x = box_rt.x + ( box_rt.width - window_icons.width() ) / 2;
     dst_pt.y = box_rt.y + space;

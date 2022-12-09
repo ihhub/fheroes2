@@ -234,6 +234,10 @@ namespace fheroes2
     {
         const int icnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
 
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        const int buttonCancelIcnID = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+
         Point offset;
 
         switch ( buttonTypes ) {
@@ -252,9 +256,9 @@ namespace fheroes2
             offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
             createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
 
-            offset.x = area.x + area.width - AGG::GetICN( icnId, 3 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
-            createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            offset.x = area.x + area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width();
+            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
 
         case Dialog::OK:
@@ -264,9 +268,9 @@ namespace fheroes2
             break;
 
         case Dialog::CANCEL:
-            offset.x = area.x + ( area.width - AGG::GetICN( icnId, 3 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
-            createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            offset.x = area.x + ( area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width() ) / 2;
+            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
 
         default:

@@ -294,7 +294,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
 
     dst_pt.x = pos.x + 187;
     dst_pt.y = pos.y + 249;
-    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, ICN::RECRUIT, 6, 7 );
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 229;
     dst_pt.y = pos.y + 156;

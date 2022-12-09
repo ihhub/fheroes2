@@ -64,8 +64,6 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     if ( !hero )
         return Dialog::CANCEL;
 
-    const int system = ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM );
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
@@ -124,6 +122,10 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     rbs.SetPos( dst_pt.x, dst_pt.y + heroDescriptionText.h() + spacer );
     rbs.Redraw();
 
+    const int system = ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
     dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
@@ -132,9 +134,11 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
         button1.disable();
     }
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
-    fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
+    const int cancelButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
+    fheroes2::Button button2( dst_pt.x, dst_pt.y, cancelButtonIcnID, 0, 1 );
 
     button1.draw();
     button2.draw();

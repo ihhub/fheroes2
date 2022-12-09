@@ -225,8 +225,6 @@ bool Dialog::SelectCount( const std::string & header, uint32_t min, uint32_t max
 
 bool Dialog::InputString( const std::string & header, std::string & res, const std::string & title, const size_t charLimit )
 {
-    const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
@@ -238,7 +236,10 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     TextBox titlebox( title, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
     const uint32_t titleHeight = title.empty() ? 0 : titlebox.h() + 10;
     FrameBox box( 10 + titleHeight + textbox.h() + 10 + sprite.height(), true );
@@ -262,13 +263,17 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
     text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
 
+    const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
+
     dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
-    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, system, 3, 4 );
+    const int cancelIcnId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( cancelIcnId, 0 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelIcnId, 0 ).height();
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, cancelIcnId, 0, 1 );
 
     if ( res.empty() )
         buttonOk.disable();
