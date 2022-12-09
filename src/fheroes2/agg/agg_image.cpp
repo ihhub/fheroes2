@@ -633,7 +633,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 7 );
                     break;
                 }
-                
+
                 const int baseIcnId = isGoodInterface ? ICN::EMPTY_GOOD_MEDIUM_BUTTON : ICN::EMPTY_EVIL_MEDIUM_BUTTON;
                 const fheroes2::FontColor buttonFontColor = isGoodInterface ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
 
