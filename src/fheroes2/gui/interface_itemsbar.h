@@ -438,7 +438,7 @@ namespace Interface
 
         bool ActionCrossItemBarDrag( const fheroes2::Point & cursor, ItemsActionBar<Item> & other )
         {
-            LocalEvent & le = LocalEvent::Get();
+            const LocalEvent & le = LocalEvent::Get();
             Item * otherItemPress = other.GetItem( le.GetMousePressLeft() );
 
             // already did check for this before we go here, maybe not necessary?
