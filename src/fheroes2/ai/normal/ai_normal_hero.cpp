@@ -1867,9 +1867,13 @@ namespace AI
 
             // The size of heroes can be increased if a new hero is released from Jail.
             const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
-            const size_t progressValue = ( endProgressValue - startProgressValue ) * ( maxHeroCount - availableHeroes.size() ) / maxHeroCount + startProgressValue;
 
-            status.RedrawStatusIfNeeded( static_cast<uint32_t>( progressValue ) );
+            if ( maxHeroCount > 0 ) {
+                // At least one hero still exist in the kingdom.
+                const size_t progressValue = ( endProgressValue - startProgressValue ) * ( maxHeroCount - availableHeroes.size() ) / maxHeroCount + startProgressValue;
+
+                status.RedrawStatusIfNeeded( static_cast<uint32_t>( progressValue ) );
+            }
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
