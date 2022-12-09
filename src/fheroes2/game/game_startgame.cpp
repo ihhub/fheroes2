@@ -887,21 +887,21 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SLEEP_HERO ) )
                 EventSwitchHeroSleeping();
             // hero movement control
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_LEFT ) )
                 EventKeyArrowPress( Direction::LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_RIGHT ) )
                 EventKeyArrowPress( Direction::RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_TOP ) )
                 EventKeyArrowPress( Direction::TOP );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_BOTTOM ) )
                 EventKeyArrowPress( Direction::BOTTOM );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_TOP_LEFT ) )
                 EventKeyArrowPress( Direction::TOP_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_TOP_RIGHT ) )
                 EventKeyArrowPress( Direction::TOP_RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_BOTTOM_LEFT ) )
                 EventKeyArrowPress( Direction::BOTTOM_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_HERO_BOTTOM_RIGHT ) )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
             // map scrolling control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SCROLL_LEFT ) )
@@ -1064,10 +1064,15 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                     if ( resetHeroSprite ) {
                         hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
                     }
+
                     if ( hero->isMoveEnabled() ) {
                         if ( hero->Move( 10 == conf.HeroesMoveSpeed() ) ) {
+                            // Do not generate a frame as we are going to do it later.
+                            Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+
                             gameArea.SetCenter( hero->GetCenter() );
                             ResetFocus( GameFocus::HEROES );
+
                             RedrawFocus();
 
                             if ( stopHero ) {
@@ -1079,6 +1084,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                         else {
                             const fheroes2::Point movement( hero->MovementDirection() );
                             if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
+                                // Do not generate a frame as we are going to do it later.
+                                Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+
                                 const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
 
                                 heroAnimationOffset = movement;

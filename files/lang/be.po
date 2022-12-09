@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 01:14+0000\n"
+"POT-Creation-Date: 2022-12-08 09:56+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -17,12 +17,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 msgid ""
 "BATTLE\n"
 "ONLY"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
 msgstr ""
 
 msgid "GIFT"
@@ -5855,27 +5905,28 @@ msgid "race|Neutral"
 msgstr ""
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Рыцар"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Варвар"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
-msgstr "Чараўніца"
+msgstr ""
+"Чараў-\n"
+"ніца"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Вядзьмак"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Чарадзей"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Некрамант"
+msgstr ""
+"Некра-\n"
+"мант"
 
 msgid "doubleLinedRace|Multi"
 msgstr ""

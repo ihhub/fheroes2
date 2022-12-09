@@ -259,4 +259,9 @@ namespace fheroes2
 
         AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
     }
+
+    SupportedLanguage getCurrentLanguage()
+    {
+        return fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
+    }
 }

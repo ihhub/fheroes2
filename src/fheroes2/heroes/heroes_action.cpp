@@ -3160,9 +3160,13 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
 
                 LocalEvent & le = LocalEvent::Get();
                 int delay = 0;
-                while ( le.HandleEvents() && delay < 7 ) {
+
+                while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) && delay < 7 ) {
                     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                         ++delay;
+                        uint32_t & frame = Game::MapsAnimationFrame();
+                        ++frame;
+                        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
                     }
                 }
             }

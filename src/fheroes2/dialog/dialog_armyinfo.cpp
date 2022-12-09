@@ -711,6 +711,9 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
     posy += text.h() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
 
+    const fheroes2::Text goldText( std::to_string( gold ), fheroes2::FontType::smallWhite() );
+    goldText.draw( pos.x + ( pos.width - goldText.width() ) / 2, posy + sprite.height() + 5, display );
+
     fheroes2::ButtonGroup btnGroup( pos, buttons );
     btnGroup.draw();
 
