@@ -439,12 +439,9 @@ namespace Interface
         bool ActionCrossItemBarDrag( const fheroes2::Point & cursor, ItemsActionBar<Item> & other )
         {
             const LocalEvent & le = LocalEvent::Get();
-            Item * otherItemPress = other.GetItem( le.GetMousePressLeft() );
 
-            // already did check for this before we go here, maybe not necessary?
-            if ( !otherItemPress ) {
-                return false;
-            }
+            Item * otherItemPress = other.GetItem( le.GetMousePressLeft() );
+            assert( otherItemPress != nullptr );
 
             ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
             if ( iterPos1.first == ItemsBar<Item>::GetEndItemIter() )
