@@ -5484,8 +5484,6 @@ void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker,
 void Battle::PopupDamageInfo::Reset()
 {
     if ( _redraw ) {
-        restorer.restore();
-
         _redraw = false;
         _cell = nullptr;
         _attacker = nullptr;
@@ -5533,24 +5531,21 @@ void Battle::PopupDamageInfo::Redraw()
     Text killedText( str, Font::SMALL );
 
     const fheroes2::Rect & cellRect = _cell->GetPos();
+
+    // Get the border width and set the popup parameters.
+    const int borderWidth = BorderWidth();
+    const int x = _battleUIRect.x + cellRect.x + cellRect.width;
     const int y = _battleUIRect.y + cellRect.y;
-    const int w = std::max( damageText.w(), killedText.w() );
-    const int h = damageText.h() + killedText.h();
+    const int w = std::max( damageText.w(), killedText.w() ) + 2 * borderWidth;
+    const int h = damageText.h() + killedText.h() + 2 * borderWidth;
 
-    SetPosition( _battleUIRect.x + cellRect.x + cellRect.width, y, w, h );
-
-    const fheroes2::Rect & borderRect = GetRect();
-    const fheroes2::Display & display = fheroes2::Display::instance();
-
-    // If the damage info popup doesn't fit on the screen, then try to place it on the other side of the cell
-    if ( ( fheroes2::Rect( 0, 0, display.width(), display.height() ) ^ borderRect ) != borderRect ) {
-        SetPosition( _battleUIRect.x + cellRect.x - borderRect.width, y, w, h );
-    }
+    // If the damage info popup doesn't fit the battlefield draw surface, then try to place it on the left side of the cell
+    const bool isLeftSidePopup = ( cellRect.x + cellRect.width + w ) > _battleUIRect.width;
+    const fheroes2::Rect borderRect( isLeftSidePopup ? ( x - w - cellRect.width - borderWidth ) : x, y, w, h );
 
     Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), borderRect );
 
-    const fheroes2::Rect & borderArea = GetArea();
-
-    damageText.Blit( borderArea.x, borderArea.y );
-    killedText.Blit( borderArea.x, borderArea.y + borderArea.height / 2 );
+    const int leftTextBorder = borderRect.x + borderWidth;
+    damageText.Blit( leftTextBorder, borderRect.y + borderWidth );
+    killedText.Blit( leftTextBorder, borderRect.y + borderRect.height / 2 );
 }
