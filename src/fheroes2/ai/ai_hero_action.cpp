@@ -1701,7 +1701,8 @@ namespace AI
 
             const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY, Game::MAPS_DELAY };
 
-            while ( LocalEvent::Get().HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
+            LocalEvent & le = LocalEvent::Get();
+            while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
 #if defined( WITH_DEBUG )
                 if ( HotKeyPressEvent( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
                     if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
@@ -1783,7 +1784,7 @@ namespace AI
                 }
 
                 if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                    // will be animated in hero loop
+                    // Update Adventure Map objects' animation.
                     uint32_t & frame = Game::MapsAnimationFrame();
                     ++frame;
                     gameArea.SetRedraw();

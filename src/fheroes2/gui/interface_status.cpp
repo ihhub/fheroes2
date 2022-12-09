@@ -29,6 +29,8 @@
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
+#include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "gamedefs.h"
 #include "heroes.h"
@@ -470,9 +472,22 @@ void Interface::StatusWindow::TimerEventProcessing()
     SetRedraw();
 }
 
-void Interface::StatusWindow::SetToRedrawTurnProgress( const uint32_t progressValue )
+void Interface::StatusWindow::RedrawStatusIfNeeded( const uint32_t progressValue )
 {
     turn_progress = progressValue;
 
     interface.Redraw( REDRAW_STATUS );
+
+    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+        // Process events if any before rendering a frame. For instance, updating a mouse cursor position.
+        LocalEvent::Get().HandleEvents( false );
+
+        uint32_t & frame = Game::MapsAnimationFrame();
+        ++frame;
+
+        interface.GetGameArea().SetRedraw();
+
+        interface.Redraw();
+        fheroes2::Display::instance().render();
+    }
 }

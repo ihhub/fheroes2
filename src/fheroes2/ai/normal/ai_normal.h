@@ -252,7 +252,7 @@ namespace AI
         std::map<int32_t, double> _neutralMonsterStrengthCache;
 
         void CastleTurn( Castle & castle, bool defensive );
-        bool HeroesTurn( VecHeroes & heroes );
+        bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
 
         double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
