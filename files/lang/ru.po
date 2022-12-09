@@ -316,9 +316,8 @@ msgstr "Настроить"
 msgid "Hot Keys"
 msgstr "Горячие клавиши"
 
-#, fuzzy
 msgid "Damage Info"
-msgstr "Урон"
+msgstr "Информация об уроне"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Установить скорость действий и анимации существ в бою."
@@ -360,9 +359,8 @@ msgstr "Настроить параметры аудио."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Проверить и настроить все горячие клавиши, имеющиеся в игре."
 
-#, fuzzy
 msgid "Toggle to display damage information during the battle."
-msgstr "Включить/выключить показ порядка действий отрядов в бою."
+msgstr "Включить/выключить отображение информации об уроне во время битвы."
 
 msgid "Exit this menu."
 msgstr "Выход из меню."
@@ -603,7 +601,7 @@ msgid "View Hero's options"
 msgstr "Посмотреть возможности героя"
 
 msgid "View opposing Captain"
-msgstr "Посмотреть капитана соперника"
+msgstr "Посмотреть вражеского капитана"
 
 msgid "View opposing Hero"
 msgstr "Просмотреть вражеского героя"
@@ -651,10 +649,10 @@ msgid "The %{name} resist the spell!"
 msgstr "%{name} защитился от магии!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr "%{name} применяет \"%{spell}\" (цель: %{troop})."
+msgstr "%{name}: применение \"%{spell}\" на цель: %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr "%{name} применил \"%{spell}\"."
+msgstr "%{name}: применение \"%{spell}\"."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
 msgstr "Заклинание \"%{spell}\" наносит %{damage} урона одной нежити."
@@ -676,25 +674,20 @@ msgstr ""
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Заклинание \"%{spell}\" наносит %{damage} урона всем живым существам."
 
-#, fuzzy
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "%{name} ослеплены единорогами!"
+msgstr "%{attacker}: противник \"%{target}\" ослеп!"
 
-#, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "%{name} обращены в камень взглядом медузы!"
+msgstr "%{attacker}: противник \"%{target}\" окаменел!"
 
-#, fuzzy
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "%{name} прокляты мумиями!"
+msgstr "%{attacker}: противник \"%{target}\" проклят!"
 
-#, fuzzy
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "%{name} парализованы циклопами!"
+msgstr "%{attacker}: противник \"%{target}\" парализован!"
 
-#, fuzzy
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "Архимаги рассеяли хорошую магию с отряда %{name}!"
+msgstr "Сняты хорошие чары с противника \"%{target}\"!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
 msgstr "%{attacker} применяет \"%{spell}\" (цель: %{target})."
@@ -804,21 +797,19 @@ msgstr "%{name} стреляет силой %{count} лучников"
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "каждый с бонусом +%{attack} к своему навыку атаки."
 
-#, fuzzy
 msgid "The %{name} is destroyed."
-msgstr "Фантомный отряд уничтожен!"
+msgstr "%{name} уничтожена!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr "%{artifact} запрещает использовать \"%{spell}\"."
 
-#, fuzzy
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] "%{count} %{name} воскресли из мёртвых!"
-msgstr[1] "%{count} %{name} воскресли из мёртвых!"
-msgstr[2] "%{count} %{name} воскресли из мёртвых!"
+msgstr[0] "%{count} %{name} воскресает из мёртвых!"
+msgstr[1] "%{count} %{name} воскресают из мёртвых!"
+msgstr[2] "%{count} %{name} воскресают из мёртвых!"
 
 msgid "Dwarven Alliance"
 msgstr "Альянс гномов"
@@ -1222,7 +1213,7 @@ msgid ""
 "Your rival, the Kingdom of Harondale, is attacking weak towns on your "
 "border! Recover from their first strike and crush them completely!"
 msgstr ""
-"Ваш соперник, Королевство Харондейл, атакует слабые города на Вашей границе! "
+"Ваш противник, Королевство Харондейл, атакует слабые города на Вашей границе! "
 "Оправитесь от их первого удара и сокрушите их полностью!"
 
 msgid ""
@@ -1284,7 +1275,7 @@ msgid ""
 "rivals."
 msgstr ""
 "Ваша миссия - разгромить воинствующих магов на волшебных Окутанных островах. "
-"Это увеличит Ваши шансы в борьбе с соперниками."
+"Это увеличит Ваши шансы в борьбе с противниками."
 
 msgid ""
 "The location of the great library has been discovered! You must make your "
@@ -1301,7 +1292,7 @@ msgid ""
 msgstr ""
 "Найдите Сферу Отрицания, которая, как говорят, похоронена в этой земле. На "
 "каменных обелисках начертаны подсказки, которые помогут Вам найти её. "
-"Найдите сферу до первого дня шестого месяца, иначе Ваши соперники наверняка "
+"Найдите сферу до первого дня шестого месяца, иначе Ваши противники наверняка "
 "доберутся до источника раньше Вас."
 
 msgid ""
@@ -2698,7 +2689,7 @@ msgid "Language"
 msgstr "Язык"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Графика"
 
 msgid "Black & White"
 msgstr "Чёрно-белый"
@@ -2718,9 +2709,8 @@ msgstr "Изменить язык интерфейса."
 msgid "Select Game Language"
 msgstr "Выберите язык игры:"
 
-#, fuzzy
 msgid "Change the graphics settings of the game."
-msgstr "Настроить параметры аудио."
+msgstr "Настроить параметры графики."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr "Включить или выключить цветной курсор. Это эстетический выбор."
@@ -2809,28 +2799,25 @@ msgid "Resolution"
 msgstr "Разрешение"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Полноэкранный"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Режим"
 
 msgid "Windowed"
-msgstr ""
+msgstr "В окне"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "Вертикальная синхронизация"
 
-#, fuzzy
 msgid "on"
-msgstr "1"
+msgstr "вкл."
 
-#, fuzzy
 msgid "FPS"
-msgstr ", FPS: "
+msgstr "FPS"
 
-#, fuzzy
 msgid "System Info"
-msgstr "Параметры системы"
+msgstr "Системная информация"
 
 msgid "Change the resolution of the game."
 msgstr "Изменить разрешение экрана."
@@ -2839,15 +2826,19 @@ msgid "Select Game Resolution"
 msgstr "Выбор разрешения экрана"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Переключение между полноэкранным и оконным режимами."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
 msgstr ""
+"Вертикальная синхронизация может быть включена для устранения мерцания "
+"изображения на некоторых мониторах."
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
+"Показать дополнительную информацию, такую как FPS (количество отображаемых "
+"кадров в секунду) и текущее время."
 
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
@@ -2855,9 +2846,8 @@ msgstr "Горячие клавиши:"
 msgid "Select Game Language:"
 msgstr "Выберите язык игры:"
 
-#, fuzzy
 msgid "Click to choose the selected language."
-msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
+msgstr "Нажмите, чтобы применить выбранный язык интерфейса игры."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} получает уровень."
@@ -3224,22 +3214,20 @@ msgstr "Скрыть"
 msgid "Enemy Speed"
 msgstr "Скор. врагов"
 
-#, fuzzy
 msgid "Slow"
-msgstr "Общее замедление"
+msgstr "Медленная"
 
 msgid "Normal"
 msgstr "Обычная"
 
 msgid "Fast"
-msgstr ""
+msgstr "Быстрая"
 
-#, fuzzy
 msgid "Very Fast"
-msgstr "Шустрая"
+msgstr "Очень быстрая"
 
 msgid "Scroll Speed"
-msgstr "Скор. прокрутки"
+msgstr "Скорость прокрутки"
 
 msgid "Evil"
 msgstr "Злой"
@@ -3597,9 +3585,8 @@ msgstr "Басс вокал"
 msgid "Soprano Vocal"
 msgstr "Сопрано вокал"
 
-#, fuzzy
 msgid "Recorded at %{recordingStudio}"
-msgstr "Записано на Green Street Studios"
+msgstr "Записано на %{recordingStudio}"
 
 msgid "credits|Manual"
 msgstr "Руководство по игре"
@@ -3693,11 +3680,9 @@ msgstr "Команда fheroes2 Resurrection представляет"
 msgid "Greetings!"
 msgstr "Добро пожаловать!"
 
-#, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
-"Добро пожаловать в Heroes of Might and Magic II на движке fheroes2! Перед "
-"началом игры, пожалуйста, выберите разрешение экрана."
+"Добро пожаловать в Heroes of Might and Magic II на движке fheroes2!"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -3720,6 +3705,9 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
+" на левой стороне основного меню или нажав на кнопку настройки игры.\n"
+"\n"
+"Наслаждайтесь игрой!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Завершить игру Heroes of Might and Magic II и вернуться в систему."
@@ -3906,12 +3894,11 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Не успеть вовремя."
 
-#, fuzzy
 msgid "You must defeat the enemy %{enemies}."
 msgid_plural "You must defeat the enemy alliance of %{enemies}."
-msgstr[0] "Победить героя '%{name}'."
-msgstr[1] "Победить героя '%{name}'."
-msgstr[2] "Победить героя '%{name}'."
+msgstr[0] "Ваш единственный противник - %{enemies}. Одолейте его и победа будет Ваша!"
+msgstr[1] "%{enemies} в союзе против Вас. Победите всех Ваших противников."
+msgstr[2] "%{enemies} в союзе против Вас. Победите всех Ваших противников."
 
 msgid ""
 "The alliance consisting of %{allies} and you must defeat the enemy "
@@ -3919,9 +3906,9 @@ msgid ""
 msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%{allies} на Вашей стороне, а %{enemies} - против Вас. Одолейте Вашего противника."
+msgstr[1] "%{allies} на Вашей стороне, а %{enemies} - против Вас. Одолейте вражеский альянс."
+msgstr[2] "%{allies} на Вашей стороне, а %{enemies} - против Вас. Одолейте вражеский альянс."
 
 msgid "Capture the castle '%{name}'."
 msgstr "Захватить замок '%{name}'."
@@ -4344,15 +4331,13 @@ msgid "Turkish"
 msgstr "Турецкий"
 
 msgid "Dutch"
-msgstr ""
+msgstr "Голландский"
 
-#, fuzzy
 msgid "Hungarian"
-msgstr "Варвар"
+msgstr "Венгерский"
 
-#, fuzzy
 msgid "Danish"
-msgstr "Испанский"
+msgstr "Датский"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -6059,7 +6044,7 @@ msgid "Town Portal"
 msgstr "Портал города"
 
 msgid "Select town to port to."
-msgstr "Выберите город для телепортации."
+msgstr "Выберите, куда перенестись."
 
 msgid "%{spell} failed!!!"
 msgstr "Неудачный вызов %{spell}!"
@@ -6873,8 +6858,8 @@ msgstr "Маяк"
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Водяное колесо"
-msgstr[1] "Водяные колёса"
-msgstr[2] "Водяные колёса"
+msgstr[1] "Водяных колеса"
+msgstr[2] "Водяных колёс"
 
 msgid "Mines"
 msgstr "Шахты"
@@ -6900,8 +6885,8 @@ msgstr "Вагоны"
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Ветряная мельница"
-msgstr[1] "Ветряная мельница"
-msgstr[2] "Ветряная мельница"
+msgstr[1] "Ветряные мельницы"
+msgstr[2] "Ветряных мельниц"
 
 msgid "Random Town"
 msgstr "Случайный город"
