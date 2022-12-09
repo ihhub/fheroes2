@@ -261,7 +261,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     const fheroes2::Rect enter_field( rt.x + 42, rt.y + 286, 260, 16 );
 
     fheroes2::Button buttonOk( rt.x + 34, rt.y + 315, ICN::REQUEST, 1, 2 );
-    fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::REQUEST, 3, 4 );
+    fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
     MapsFileInfoList lists = GetSortedMapsFileInfoList();
     FileInfoListBox listbox( rt.getPosition() );
