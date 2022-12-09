@@ -60,7 +60,7 @@ namespace
             value = _( "off" );
         }
 
-        fheroes2::drawOption( rects[0], musicVolumeIcon, _( "Music" ), value );
+        fheroes2::drawOption( rects[0], musicVolumeIcon, _( "Music" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
 
         // Sound volume.
         const fheroes2::Sprite & soundVolumeOption = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 3 : 2 );
@@ -71,7 +71,7 @@ namespace
             value = _( "off" );
         }
 
-        fheroes2::drawOption( rects[1], soundVolumeOption, _( "Effects" ), value );
+        fheroes2::drawOption( rects[1], soundVolumeOption, _( "Effects" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
 
         // Music Type.
         const MusicSource musicType = conf.MusicType();
@@ -86,7 +86,7 @@ namespace
             value = _( "External" );
         }
 
-        fheroes2::drawOption( rects[2], musicTypeIcon, _( "Music Type" ), value );
+        fheroes2::drawOption( rects[2], musicTypeIcon, _( "Music Type" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
 
         // 3D Audio.
         const bool is3DAudioEnabled = conf.is3DAudioEnabled();
@@ -98,7 +98,7 @@ namespace
             value = _( "Off" );
         }
 
-        fheroes2::drawOption( rects[3], interfaceStateIcon, _( "3D Audio" ), value );
+        fheroes2::drawOption( rects[3], interfaceStateIcon, _( "3D Audio" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 }
 

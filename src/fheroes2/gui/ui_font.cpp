@@ -3566,6 +3566,8 @@ namespace
         }
         // Address symbols that should have even less space to neighboring symbols.
         released[33].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
+        released[54].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
+        released[57].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
 
         // -
         released[13].resize( 6 + offset * 2, 6 + offset * 2 );
@@ -3818,7 +3820,7 @@ namespace
         fheroes2::DrawLine( released[48], { offset + 10, offset + 1 }, { offset + 10, offset + 4 }, buttonGoodReleasedColor );
 
         // Q
-        released[49].resize( 13 + offset * 2, 11 + offset * 2 );
+        released[49].resize( 11 + offset * 2, 11 + offset * 2 );
         released[49].reset();
         fheroes2::DrawLine( released[49], { offset + 2, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[49], { offset + 0, offset + 2 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
