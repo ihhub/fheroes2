@@ -1891,17 +1891,6 @@ namespace fheroes2
                 // fix transparent corners
                 CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
                 return true;
-            case ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON:
-                _icnVsSprite[id].resize( 2 );
-                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRE, 6 ), 4, 0, 96, 25 );
-                _icnVsSprite[id][0].setPosition( 0, 0 );
-
-                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 7 );
-                _icnVsSprite[id][1].setPosition( 0, 0 );
-
-                // fix transparent corners
-                CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
-                return true;
             case ICN::NON_UNIFORM_EVIL_RESTART_BUTTON:
                 _icnVsSprite[id].resize( 2 );
                 _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRE, 2 ), 4, 0, 108, 25 );
