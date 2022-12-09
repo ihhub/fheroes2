@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-25 12:00+0000\n"
+"POT-Creation-Date: 2022-12-08 09:56+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -28,6 +28,56 @@ msgid ""
 msgstr ""
 "TYLKO\n"
 "WALKA"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
 
 msgid "GIFT"
 msgstr "WYŚLIJ"
@@ -3501,9 +3551,6 @@ msgstr "Scenariusze"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Zespół gry Heroes of Might and Magic II: The Price of Loyalty"
 
-msgid "Cyberlore Studios"
-msgstr "Cyberlore Studios"
-
 msgid "Design Lead"
 msgstr "Kierownik projektowania"
 
@@ -3518,9 +3565,6 @@ msgstr "Kierownik artystów"
 
 msgid "Playtesters"
 msgstr "Testerzy gry"
-
-msgid "New World Computing"
-msgstr "New World Computing"
 
 msgid "Designer"
 msgstr "Projektant"
@@ -3549,7 +3593,8 @@ msgstr "Bas (partie wokalne)"
 msgid "Soprano Vocal"
 msgstr "Sopran (partie wokalne)"
 
-msgid "Recorded at Green Street Studios"
+#, fuzzy
+msgid "Recorded at %{recordingStudio}"
 msgstr "Nagrano w Green Street Studios"
 
 msgid "credits|Manual"
@@ -4186,9 +4231,6 @@ msgstr ""
 "królestwa, a także aktualna data. Kliknij tu lewym przyciskiem, aby "
 "przejrzeć kolejne informacje."
 
-msgid "Necroman"
-msgstr "Nekromanta"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4316,6 +4358,10 @@ msgstr ""
 #, fuzzy
 msgid "Hungarian"
 msgstr "Bułgarski"
+
+#, fuzzy
+msgid "Danish"
+msgstr "Hiszpański"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -6623,6 +6669,43 @@ msgid "race|Random"
 msgstr "Losowo"
 
 msgid "race|Neutral"
+msgstr "Neutralny"
+
+msgid "doubleLined|Knight"
+msgstr "Rycerz"
+
+msgid "doubleLined|Barbarian"
+msgstr ""
+"Barba-\n"
+"rzyńca"
+
+msgid "doubleLined|Sorceress"
+msgstr ""
+"Czaro-\n"
+"dziejka"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+"Czarno-\n"
+"księżnik"
+
+msgid "doubleLined|Wizard"
+msgstr "Czarodziej"
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+"Nekro-\n"
+"manta"
+
+msgid "doubleLinedRace|Multi"
+msgstr "Różne"
+
+msgid "doubleLinedRace|Random"
+msgstr "Losowo"
+
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutralny"
 
 msgid "speed|Standing"
@@ -9808,6 +9891,15 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Nekromanta"
+
+#~ msgid "Cyberlore Studios"
+#~ msgstr "Cyberlore Studios"
+
+#~ msgid "New World Computing"
+#~ msgstr "New World Computing"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Zatrzymaj tę jednostkę"

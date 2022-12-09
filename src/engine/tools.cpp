@@ -368,6 +368,14 @@ namespace fheroes2
 
     Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 )
     {
+        if ( rt2.width == 0 && rt2.height == 0 ) {
+            return rt1;
+        }
+
+        if ( rt1.width == 0 && rt1.height == 0 ) {
+            return rt2;
+        }
+
         const int32_t x = std::min( rt1.x, rt2.x );
         const int32_t y = std::min( rt1.y, rt2.y );
         const int32_t width = std::max( rt1.x + rt1.width, rt2.x + rt2.width ) - x;

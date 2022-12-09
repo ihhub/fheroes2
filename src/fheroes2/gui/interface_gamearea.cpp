@@ -494,6 +494,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 populateHeroObjectInfo( tileUnfit, tile.GetHeroes() );
 
+                // Update object type as it could be an object under the hero.
+                objectType = tile.GetObject( false );
+
                 break;
             }
 
@@ -531,10 +534,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             default:
                 break;
-            }
-
-            if ( objectType == MP2::OBJ_HEROES ) {
-                objectType = tile.GetObject( false );
             }
 
             switch ( objectType ) {
@@ -739,7 +738,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( flag & LEVEL_ALL ) {
             for ( int32_t y = minY; y < maxY; ++y ) {
                 for ( int32_t x = minX; x < maxX; ++x ) {
-                    world.GetTiles( x, y ).RedrawPassable( dst, *this );
+                    world.GetTiles( x, y ).RedrawPassable( dst, friendColors, *this );
                 }
             }
         }

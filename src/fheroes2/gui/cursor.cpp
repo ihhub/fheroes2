@@ -95,14 +95,16 @@ void Cursor::setCustomImage( const fheroes2::Image & image, const fheroes2::Poin
     Move( currentPos.x, currentPos.y );
 }
 
-void Cursor::Redraw( int32_t x, int32_t y )
+fheroes2::Rect Cursor::updateCursorPosition( const int32_t x, const int32_t y )
 {
     if ( fheroes2::cursor().isSoftwareEmulation() ) {
         Cursor::Get().Move( x, y );
         if ( fheroes2::cursor().isVisible() ) {
-            fheroes2::Display::instance().render( { x, y, 1, 1 } );
+            return { x, y, 1, 1 };
         }
     }
+
+    return {};
 }
 
 void Cursor::Move( int32_t x, int32_t y ) const

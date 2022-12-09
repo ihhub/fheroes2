@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-25 12:00+0000\n"
+"POT-Creation-Date: 2022-12-08 09:56+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -24,6 +24,56 @@ msgid ""
 msgstr ""
 "САМО\n"
 "БИТКА"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
 
 msgid "GIFT"
 msgstr "ДАРИ"
@@ -3493,9 +3543,6 @@ msgstr "Сценарии"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Екип на Heroes of Might and Magic II: The Price of Loyalty"
 
-msgid "Cyberlore Studios"
-msgstr "Студия Cyberlore"
-
 msgid "Design Lead"
 msgstr "Ръководител дизайн"
 
@@ -3510,9 +3557,6 @@ msgstr "Ръководител Арт"
 
 msgid "Playtesters"
 msgstr "Тестери на играта"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr "Дизайнер"
@@ -3541,7 +3585,8 @@ msgstr "Басов вокал"
 msgid "Soprano Vocal"
 msgstr "Сопрано вокал"
 
-msgid "Recorded at Green Street Studios"
+#, fuzzy
+msgid "Recorded at %{recordingStudio}"
 msgstr "Записано в Green Street Studios"
 
 msgid "credits|Manual"
@@ -4184,9 +4229,6 @@ msgstr ""
 "кралство и показва датата. Щракни с левия бутон тук, за да преминеш през "
 "тези прозорци."
 
-msgid "Necroman"
-msgstr "Некромант"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4313,6 +4355,10 @@ msgstr "Холандски"
 
 msgid "Hungarian"
 msgstr "Унгарски"
+
+#, fuzzy
+msgid "Danish"
+msgstr "Испански"
 
 msgid ", FPS: "
 msgstr ""
@@ -6610,6 +6656,47 @@ msgstr "Случаен"
 
 msgid "race|Neutral"
 msgstr "Неутрален"
+
+msgid "doubleLined|Knight"
+msgstr "Рицар"
+
+msgid "doubleLined|Barbarian"
+msgstr "Варварин"
+
+msgid "doubleLined|Sorceress"
+msgstr ""
+"Магьос-\n"
+"ница"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+"Магьос-\n"
+"ник"
+
+msgid "doubleLined|Wizard"
+msgstr ""
+"Вълшеб-\n"
+"ник"
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+"Некро-\n"
+"мант"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+"Комбина-\n"
+"ция"
+
+msgid "doubleLinedRace|Random"
+msgstr "Случаен"
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+"Неутра-\n"
+"лен"
 
 msgid "speed|Standing"
 msgstr "Стояща"
@@ -9763,6 +9850,12 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Некромант"
+
+#~ msgid "Cyberlore Studios"
+#~ msgstr "Студия Cyberlore"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Нека тази единица да изчака"

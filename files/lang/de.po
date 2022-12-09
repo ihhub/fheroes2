@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-25 12:00+0000\n"
-"PO-Revision-Date: 2022-09-23 16:14+0200\n"
+"POT-Creation-Date: 2022-12-08 09:56+0000\n"
+"PO-Revision-Date: 2022-12-03 03:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,11 +16,61 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
 "ONLY"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
 msgstr ""
 
 msgid "GIFT"
@@ -3569,9 +3619,6 @@ msgstr "Szenarien"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Original Heroes of Might and Magic II Team"
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3588,9 +3635,6 @@ msgstr ""
 #, fuzzy
 msgid "Playtesters"
 msgstr "2 Spieler"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr ""
@@ -3623,7 +3667,7 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 #, fuzzy
@@ -4282,9 +4326,6 @@ msgstr ""
 "und zeigt das Datum an. Klicken Sie hier mit der linken Maustaste, um durch "
 "diese Fenster zu ziehen."
 
-msgid "Necroman"
-msgstr "Totenbesc"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4406,6 +4447,9 @@ msgstr ""
 #, fuzzy
 msgid "Hungarian"
 msgstr "Bulgarisch"
+
+msgid "Danish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -5619,8 +5663,8 @@ msgid ""
 "Recognizing you, the butler refuses to admit you. \"The master,\" he says, "
 "\"will not see the same student twice.\""
 msgstr ""
-"Als der Butler Sie erkennt, weigert er sich, Sie einzulassen. \"Der Meister"
-"\", sagt er, \"will denselben Schüler nicht zweimal sehen.\""
+"Als der Butler Sie erkennt, weigert er sich, Sie einzulassen. \"Der "
+"Meister\", sagt er, \"will denselben Schüler nicht zweimal sehen.\""
 
 msgid ""
 "The butler admits you to see the master of the house. He trains you in the "
@@ -6785,6 +6829,37 @@ msgid "race|Random"
 msgstr "Zufällig"
 
 msgid "race|Neutral"
+msgstr "Neutral"
+
+msgid "doubleLined|Knight"
+msgstr "Ritter"
+
+msgid "doubleLined|Barbarian"
+msgstr "Barbar"
+
+msgid "doubleLined|Sorceress"
+msgstr "Zauberin"
+
+msgid "doubleLined|Warlock"
+msgstr "Hexer"
+
+msgid "doubleLined|Wizard"
+msgstr "Zauberer"
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+"Totenbe-\n"
+"schwörer"
+
+msgid "doubleLinedRace|Multi"
+msgstr "Verschied"
+
+msgid "doubleLinedRace|Random"
+msgstr "Zufällig"
+
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
 
 msgid "speed|Standing"
@@ -10027,6 +10102,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Totenbesc"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Auf diesen Zug warten"

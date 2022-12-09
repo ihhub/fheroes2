@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-25 12:00+0000\n"
-"PO-Revision-Date: 2022-09-23 16:14+0200\n"
+"POT-Creation-Date: 2022-12-08 06:50+0000\n"
+"PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
 "Language: it\n"
@@ -17,11 +17,61 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2021-10-08 00:00+0800\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
 "ONLY"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
 msgstr ""
 
 msgid "GIFT"
@@ -3403,9 +3453,6 @@ msgstr ""
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Esci da fheroes2."
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3421,9 +3468,6 @@ msgstr ""
 #, fuzzy
 msgid "Playtesters"
 msgstr "Icona dei Giocatori"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr ""
@@ -3454,7 +3498,7 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 msgid "credits|Manual"
@@ -4038,9 +4082,6 @@ msgid ""
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
 
-msgid "Necroman"
-msgstr "Negromante"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4156,6 +4197,9 @@ msgstr ""
 #, fuzzy
 msgid "Hungarian"
 msgstr "Barbaro"
+
+msgid "Danish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -6074,9 +6118,40 @@ msgid "Multi"
 msgstr "Multiplo"
 
 msgid "race|Random"
-msgstr "Random"
+msgstr "Casuale"
 
 msgid "race|Neutral"
+msgstr "Neutro"
+
+msgid "doubleLined|Knight"
+msgstr "Cavaliere"
+
+msgid "doubleLined|Barbarian"
+msgstr "Barbaro"
+
+msgid "doubleLined|Sorceress"
+msgstr "Strega"
+
+msgid "doubleLined|Warlock"
+msgstr "Guerriero"
+
+msgid "doubleLined|Wizard"
+msgstr "Mago"
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+"Negro-\n"
+"mante"
+
+msgid "doubleLinedRace|Multi"
+msgstr "Multiplo"
+
+msgid "doubleLinedRace|Random"
+msgstr "Casuale"
+
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutro"
 
 msgid "speed|Standing"
@@ -8932,6 +9007,9 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Negromante"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Aspetta questa unità"

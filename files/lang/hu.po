@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-25 12:00+0000\n"
-"PO-Revision-Date: 2022-10-25 08:55+0200\n"
+"POT-Creation-Date: 2022-12-08 09:56+0000\n"
+"PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -25,6 +25,56 @@ msgid ""
 msgstr ""
 "HARC\n"
 "SORÁN"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
 
 msgid "GIFT"
 msgstr "AJÁNDÉK"
@@ -3555,9 +3605,6 @@ msgstr "Küldetés"
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3573,9 +3620,6 @@ msgstr ""
 #, fuzzy
 msgid "Playtesters"
 msgstr "2 játékos"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr ""
@@ -3606,7 +3650,7 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
 
 msgid "credits|Manual"
@@ -4214,9 +4258,6 @@ msgid ""
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
 
-msgid "Necroman"
-msgstr "Nekromanta"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4336,6 +4377,9 @@ msgstr ""
 
 msgid "Hungarian"
 msgstr "Magyar nyelv"
+
+msgid "Danish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -6537,6 +6581,43 @@ msgid "race|Random"
 msgstr ""
 
 msgid "race|Neutral"
+msgstr ""
+
+msgid "doubleLined|Knight"
+msgstr "Lovag"
+
+msgid "doubleLined|Barbarian"
+msgstr "Barbár"
+
+msgid "doubleLined|Sorceress"
+msgstr ""
+"Varázsló-\n"
+"nő"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+"Boszor-\n"
+"kánymester"
+
+msgid "doubleLined|Wizard"
+msgstr "Varázsló"
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+"Nekro-\n"
+"manta"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+"Több-\n"
+"szörös"
+
+msgid "doubleLinedRace|Random"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -9465,6 +9546,9 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Nekromanta"
 
 #, fuzzy
 #~ msgid "%{name} wait their turn."

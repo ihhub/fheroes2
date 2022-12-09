@@ -47,6 +47,7 @@ Interface::Basic::Basic()
     , statusWindow( *this )
     , controlPanel( *this )
     , redraw( 0 )
+    , _lockRedraw( false )
 {
     Reset();
 }
@@ -112,6 +113,11 @@ Interface::Basic & Interface::Basic::Get()
 
 void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
 {
+    if ( _lockRedraw ) {
+        SetRedraw( force );
+        return;
+    }
+
     const Settings & conf = Settings::Get();
 
     const uint32_t combinedRedraw = redraw | force;

@@ -573,7 +573,6 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
 
         if ( isTroopPressValid && ( !troop.isValid() || troop.GetID() == troopPress->GetID() ) ) {
             RedistributeArmy( *troopPress, troop, _army );
-            le.ResetPressLeft();
 
             if ( isSelected() )
                 ResetSelected();

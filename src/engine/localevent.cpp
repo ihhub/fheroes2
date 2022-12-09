@@ -51,9 +51,12 @@
 #include "localevent.h"
 #include "pal.h"
 #include "screen.h"
+#include "tools.h"
 
 namespace
 {
+    const uint32_t globalLoopSleepTime{ 1 };
+
     int getSDLKey( const fheroes2::Key key )
     {
         switch ( key ) {
@@ -966,8 +969,6 @@ LocalEvent::LocalEvent()
     : modes( 0 )
     , key_value( fheroes2::Key::NONE )
     , mouse_button( 0 )
-    , mouse_motion_hook_func( nullptr )
-    , loop_delay( 1 )
 {}
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1156,22 +1157,23 @@ LocalEvent & LocalEvent::GetClean()
     return le;
 }
 
-bool LocalEvent::HandleEvents( bool delay, bool allowExit )
+bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool allowExit /* = false */ )
 {
-    if ( colorCycling.isRedrawRequired() ) {
-        // Looks like there is no explicit rendering so the code for color cycling was executed here.
-        if ( delay ) {
-            fheroes2::Time timeCheck;
-            fheroes2::Display::instance().render();
+    // Event processing might be computationally heavy.
+    // We want to make sure that we do not slow down by going into sleep mode when it is not needed.
+    const fheroes2::Time eventProcessingTimer;
 
-            if ( timeCheck.getMs() > loop_delay ) {
-                // Since rendering took more than waiting time so we should not wait.
-                delay = false;
-            }
-        }
-        else {
-            fheroes2::Display::instance().render();
-        }
+    // We can have more than one event which requires rendering. We must render only once and only when sleeping is excepted.
+    fheroes2::Rect renderRoi;
+
+    // Mouse area must be updated only once so we will use only the latest area for rendering.
+    _mouseCursorRenderArea = {};
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    if ( colorCycling.isRedrawRequired() ) {
+        // To maintain color cycling animation we need to render the whole frame with an updated palette.
+        renderRoi = { 0, 0, display.width(), display.height() };
     }
 
     SDL_Event event;
@@ -1195,7 +1197,9 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
                 }
                 break;
             }
-            HandleWindowEvent( event.window );
+            if ( HandleWindowEvent( event.window ) ) {
+                renderRoi = { 0, 0, display.width(), display.height() };
+            }
             break;
         case SDL_KEYDOWN:
         case SDL_KEYUP:
@@ -1242,10 +1246,11 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             break;
         case SDL_RENDER_TARGETS_RESET:
             // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
-            fheroes2::Display::instance().render();
+            renderRoi = { 0, 0, display.width(), display.height() };
             break;
         case SDL_RENDER_DEVICE_RESET:
             HandleRenderDeviceResetEvent();
+            renderRoi = { 0, 0, display.width(), display.height() };
             break;
         case SDL_TEXTINPUT:
             // Keyboard events on Android should be processed here. Use event.text.text to extract text input.
@@ -1271,7 +1276,9 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
         case SDL_ACTIVEEVENT:
-            HandleActiveEvent( event.active );
+            if ( HandleActiveEvent( event.active ) ) {
+                renderRoi = { 0, 0, display.width(), display.height() };
+            }
             break;
         case SDL_KEYDOWN:
         case SDL_KEYUP:
@@ -1309,8 +1316,25 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     }
 #endif
 
-    if ( delay )
-        SDL_Delay( loop_delay );
+    renderRoi = fheroes2::getBoundaryRect( renderRoi, _mouseCursorRenderArea );
+
+    if ( sleepAfterEventProcessing ) {
+        if ( renderRoi != fheroes2::Rect() ) {
+            display.render( renderRoi );
+        }
+
+        // Make sure not to delay any further if the processing time within this function was more than the expected waiting time.
+        if ( eventProcessingTimer.getMs() < globalLoopSleepTime ) {
+            static_assert( globalLoopSleepTime == 1, "Make sure that you sleep for the difference between times since you change the sleep time." );
+            SDL_Delay( globalLoopSleepTime );
+        }
+    }
+    else {
+        // Since rendering is going to be just after the call of this method we need to update rendering area only.
+        if ( renderRoi != fheroes2::Rect() ) {
+            display.updateNextRenderRoi( renderRoi );
+        }
+    }
 
     return true;
 }
@@ -1336,30 +1360,35 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
-    if ( _numTouches == 2 && _firstFingerId != event.fingerId && _secondFingerId != event.fingerId ) {
-        // We do not support more than 2 fingers.
+    switch ( event.type ) {
+    case SDL_FINGERDOWN:
+        if ( !_fingerIds.first ) {
+            _fingerIds.first = event.fingerId;
+        }
+        else if ( !_fingerIds.second ) {
+            _fingerIds.second = event.fingerId;
+        }
+        else {
+            // Gestures of more than two fingers are not supported, ignore
+            return;
+        }
+
+        break;
+    case SDL_FINGERUP:
+    case SDL_FINGERMOTION:
+        if ( event.fingerId != _fingerIds.first && event.fingerId != _fingerIds.second ) {
+            // An event from an unknown finger, ignore
+            return;
+        }
+
+        break;
+    default:
+        // Unknown event, this should never happen
+        assert( 0 );
         return;
     }
 
-    if ( event.type == SDL_FINGERDOWN ) {
-        if ( _numTouches == 0 ) {
-            _firstFingerId = event.fingerId;
-            ++_numTouches;
-        }
-        else if ( _numTouches == 1 ) {
-            _secondFingerId = event.fingerId;
-            ++_numTouches;
-        }
-    }
-    else if ( event.type == SDL_FINGERUP ) {
-        --_numTouches;
-    }
-
-    // Ignore first finger movement if the second finger is pressed.
-    const bool isFirstFinger = ( _numTouches < 2 && _firstFingerId == event.fingerId );
-    const bool isSecondFinger = ( _secondFingerId == event.fingerId );
-
-    if ( isFirstFinger || isSecondFinger ) {
+    if ( event.fingerId == _fingerIds.first ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
@@ -1376,44 +1405,42 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
-    }
 
-    if ( isFirstFinger ) {
         SetModes( MOUSE_MOTION );
 
-        if ( mouse_motion_hook_func ) {
-            ( *mouse_motion_hook_func )( mouse_cu.x, mouse_cu.y );
+        if ( _globalMouseMotionEventHook ) {
+            _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
         }
 
-        if ( event.type == SDL_FINGERDOWN ) {
-            mouse_pl = mouse_cu;
+        // If there is a two-finger gesture in progress, the first finger is only used to move the cursor.
+        // The operation of the left mouse button is not simulated.
+        if ( !_isTwoFingerGestureInProgress ) {
+            if ( event.type == SDL_FINGERDOWN ) {
+                mouse_pl = mouse_cu;
 
-            SetModes( MOUSE_PRESSED );
-        }
-        else if ( event.type == SDL_FINGERUP ) {
-            mouse_rl = mouse_cu;
-
-            ResetModes( MOUSE_PRESSED );
-            SetModes( MOUSE_RELEASED );
-            SetModes( MOUSE_CLICKED );
-        }
-
-        mouse_button = SDL_BUTTON_LEFT;
-    }
-    else if ( isSecondFinger ) {
-        if ( _numTouches < 2 ) {
-            // Only the second finger is pressing.
-            SetModes( MOUSE_MOTION );
-
-            if ( mouse_motion_hook_func ) {
-                ( *mouse_motion_hook_func )( mouse_cu.x, mouse_cu.y );
+                SetModes( MOUSE_PRESSED );
             }
-        }
+            else if ( event.type == SDL_FINGERUP ) {
+                mouse_rl = mouse_cu;
 
+                ResetModes( MOUSE_PRESSED );
+                SetModes( MOUSE_RELEASED );
+                SetModes( MOUSE_CLICKED );
+            }
+
+            mouse_button = SDL_BUTTON_LEFT;
+        }
+    }
+    else if ( event.fingerId == _fingerIds.second ) {
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pr = mouse_cu;
 
             SetModes( MOUSE_PRESSED );
+
+            // When the second finger touches the screen, the two-finger gesture processing begins. This
+            // gesture simulates the operation of the right mouse button and ends when both fingers are
+            // removed from the screen.
+            _isTwoFingerGestureInProgress = true;
         }
         else if ( event.type == SDL_FINGERUP ) {
             mouse_rr = mouse_cu;
@@ -1424,6 +1451,25 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         }
 
         mouse_button = SDL_BUTTON_RIGHT;
+    }
+
+    // The finger no longer touches the screen, reset its state
+    if ( event.type == SDL_FINGERUP ) {
+        if ( event.fingerId == _fingerIds.first ) {
+            _fingerIds.first.reset();
+        }
+        else if ( event.fingerId == _fingerIds.second ) {
+            _fingerIds.second.reset();
+        }
+        else {
+            // An event from an unknown finger, this should never happen
+            assert( 0 );
+        }
+
+        // Both fingers are removed from the screen, cancel the two-finger gesture
+        if ( !_fingerIds.first && !_fingerIds.second ) {
+            _isTwoFingerGestureInProgress = false;
+        }
     }
 }
 
@@ -1563,7 +1609,7 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
 
 void LocalEvent::ProcessControllerAxisMotion()
 {
-    const double deltaTime = _controllerTimer.get() * 1000.0;
+    const double deltaTime = _controllerTimer.getS() * 1000.0;
     _controllerTimer.reset();
 
     if ( _controllerLeftXAxis != 0 || _controllerLeftYAxis != 0 ) {
@@ -1590,8 +1636,8 @@ void LocalEvent::ProcessControllerAxisMotion()
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
-        if ( mouse_motion_hook_func ) {
-            ( *mouse_motion_hook_func )( mouse_cu.x, mouse_cu.y );
+        if ( _globalMouseMotionEventHook ) {
+            _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
         }
     }
 
@@ -1615,20 +1661,19 @@ void LocalEvent::ProcessControllerAxisMotion()
     }
 }
 
-void LocalEvent::HandleWindowEvent( const SDL_WindowEvent & event )
+bool LocalEvent::HandleWindowEvent( const SDL_WindowEvent & event )
 {
     if ( event.event == SDL_WINDOWEVENT_FOCUS_LOST ) {
         StopSounds();
+        return false;
     }
-    else if ( event.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
-        // Force display rendering on app activation
-        fheroes2::Display::instance().render();
 
+    if ( event.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
         ResumeSounds();
+        return true;
     }
-    else if ( event.event == SDL_WINDOWEVENT_RESIZED ) {
-        fheroes2::Display::instance().render();
-    }
+
+    return ( event.event == SDL_WINDOWEVENT_RESIZED );
 }
 
 void LocalEvent::HandleRenderDeviceResetEvent()
@@ -1646,19 +1691,20 @@ void LocalEvent::HandleRenderDeviceResetEvent()
     fheroes2::Copy( temp, display );
 }
 #else
-void LocalEvent::HandleActiveEvent( const SDL_ActiveEvent & event )
+bool LocalEvent::HandleActiveEvent( const SDL_ActiveEvent & event )
 {
     if ( event.state & SDL_APPINPUTFOCUS ) {
         if ( 0 == event.gain ) {
             StopSounds();
         }
         else {
-            // Force display rendering on app activation
-            fheroes2::Display::instance().render();
-
             ResumeSounds();
+
+            return true;
         }
     }
+
+    return false;
 }
 #endif
 
@@ -1708,8 +1754,8 @@ void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
     _emulatedPointerPosX = mouse_cu.x;
     _emulatedPointerPosY = mouse_cu.y;
 
-    if ( mouse_motion_hook_func ) {
-        ( *mouse_motion_hook_func )( motion.x, motion.y );
+    if ( _globalMouseMotionEventHook ) {
+        _mouseCursorRenderArea = _globalMouseMotionEventHook( motion.x, motion.y );
     }
 }
 

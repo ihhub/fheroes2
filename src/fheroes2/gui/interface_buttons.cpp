@@ -143,8 +143,6 @@ void Interface::ButtonsArea::ResetButtons()
     buttonAdventure.drawOnRelease();
     buttonFile.drawOnRelease();
     buttonSystem.drawOnRelease();
-
-    LocalEvent::Get().ResetPressLeft();
 }
 
 fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
