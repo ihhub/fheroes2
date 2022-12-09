@@ -456,7 +456,6 @@ namespace Interface
 
             if ( le.MouseReleaseLeft( iterPos1.second ) ) {
                 if ( ActionBarLeftMouseRelease( **iterPos1.first, *otherItemPress ) ) {
-                    le.ResetPressLeft();
                     other.ResetSelected();
                 }
 
@@ -538,7 +537,8 @@ namespace Interface
                 return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
             }
 
-            // let ActionCrossItemBarDrag handle MousePressRelease instead
+            // Let the ActionCrossItemBarDrag() handle the case of MouseReleaseLeft()
+
             if ( le.MouseClickRight( iterPos1.second ) ) {
                 ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
                 other.ResetSelected();
