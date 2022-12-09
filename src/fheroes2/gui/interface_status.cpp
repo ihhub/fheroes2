@@ -475,20 +475,18 @@ void Interface::StatusWindow::TimerEventProcessing()
 
 void Interface::StatusWindow::RedrawStatusIfNeeded( const uint32_t progressValue )
 {
+    // Process events if any before rendering a frame. For instance, updating a mouse cursor position.
+    LocalEvent::Get().HandleEvents( false );
+
     turn_progress = progressValue;
 
     interface.Redraw( REDRAW_STATUS );
 
     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-        // Process events if any before rendering a frame. For instance, updating a mouse cursor position.
-        LocalEvent::Get().HandleEvents( false );
-
         uint32_t & frame = Game::MapsAnimationFrame();
         ++frame;
 
-        interface.GetGameArea().SetRedraw();
-
-        interface.Redraw();
+        interface.Redraw( REDRAW_GAMEAREA );
         fheroes2::Display::instance().render();
     }
 }
