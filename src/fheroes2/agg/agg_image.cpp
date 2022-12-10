@@ -108,9 +108,10 @@ namespace
     }
 #endif
 
-    bool isPolishLanguageAndResources()
+    bool isPolishOrRussianLanguageAndResources()
     {
-        return fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish;
+        return ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish )
+               || ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Russian && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Russian );
     }
 
     bool IsValidICNId( int id )
@@ -532,7 +533,7 @@ namespace fheroes2
 
                 const bool isGoodInterface = ( id == ICN::BUTTON_NEW_GAME_GOOD );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 0 );
                     _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 1 );
                     break;
@@ -556,7 +557,7 @@ namespace fheroes2
 
                 const bool isGoodInterface = ( id == ICN::BUTTON_SAVE_GAME_GOOD );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 4 );
                     _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 5 );
                     break;
@@ -580,7 +581,7 @@ namespace fheroes2
 
                 const bool isGoodInterface = ( id == ICN::BUTTON_LOAD_GAME_GOOD );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 2 );
                     _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 3 );
                     break;
@@ -604,7 +605,7 @@ namespace fheroes2
 
                 const bool isGoodInterface = ( id == ICN::BUTTON_INFO_GOOD );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::APANEL : ICN::APANELE, 4 );
                     _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::APANEL : ICN::APANELE, 5 );
                     break;
@@ -628,7 +629,7 @@ namespace fheroes2
 
                 const bool isGoodInterface = ( id == ICN::BUTTON_QUIT_GOOD );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 6 );
                     _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 7 );
                     break;
@@ -649,7 +650,7 @@ namespace fheroes2
             case ICN::BUTTON_STANDARD_GAME: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 0 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 1 );
                     break;
@@ -670,7 +671,7 @@ namespace fheroes2
             case ICN::BUTTON_CAMPAIGN_GAME: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 2 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 3 );
                     break;
@@ -691,7 +692,7 @@ namespace fheroes2
             case ICN::BUTTON_MULTIPLAYER_GAME: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 4 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 5 );
                     break;
@@ -712,7 +713,7 @@ namespace fheroes2
             case ICN::BUTTON_LARGE_CANCEL: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 6 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 7 );
                     break;
@@ -732,7 +733,7 @@ namespace fheroes2
             case ICN::BUTTON_LARGE_CONFIG: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNDCCFG, 4 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNDCCFG, 5 );
                     break;
@@ -752,7 +753,7 @@ namespace fheroes2
             case ICN::BUTTON_ORIGINAL_CAMPAIGN: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::X_LOADCM, 0 );
                     _icnVsSprite[id][1] = GetICN( ICN::X_LOADCM, 1 );
                     break;
@@ -773,7 +774,7 @@ namespace fheroes2
             case ICN::BUTTON_EXPANSION_CAMPAIGN: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::X_LOADCM, 2 );
                     _icnVsSprite[id][1] = GetICN( ICN::X_LOADCM, 3 );
                     break;
@@ -794,7 +795,7 @@ namespace fheroes2
             case ICN::BUTTON_HOT_SEAT: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNMP, 0 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNMP, 1 );
                     break;
@@ -814,7 +815,7 @@ namespace fheroes2
             case ICN::BUTTON_2_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 0 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 1 );
                     break;
@@ -835,7 +836,7 @@ namespace fheroes2
             case ICN::BUTTON_3_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 2 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 3 );
                     break;
@@ -856,7 +857,7 @@ namespace fheroes2
             case ICN::BUTTON_4_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 4 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 5 );
                     break;
@@ -877,7 +878,7 @@ namespace fheroes2
             case ICN::BUTTON_5_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 6 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 7 );
                     break;
@@ -898,7 +899,7 @@ namespace fheroes2
             case ICN::BUTTON_6_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( isPolishOrRussianLanguageAndResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 8 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 9 );
                     break;
