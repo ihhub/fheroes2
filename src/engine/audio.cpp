@@ -825,7 +825,7 @@ void Mixer::SetChannels( const int num )
     }
 
     if ( isMuted ) {
-        savedMixerVolumes.resize( static_cast<size_t>( mixerChannelCount ), 0 );
+        savedMixerVolumes.resize( static_cast<size_t>( mixerChannelCount ), MIX_MAX_VOLUME );
 
         Mix_Volume( -1, 0 );
     }
