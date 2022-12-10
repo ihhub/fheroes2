@@ -147,13 +147,13 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN )]
             = { HotKeyCategory::MAIN_MENU, "choose the expansion campaign", fheroes2::Key::KEY_E };
 
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_NEW_ROLAND )] = { HotKeyCategory::CAMPAIGN, "roland campaign", fheroes2::Key::KEY_1 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_NEW_ARCHIBALD )] = { HotKeyCategory::CAMPAIGN, "archibald campaign", fheroes2::Key::KEY_2 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_NEW_PRICE_OF_LOYALTY )]
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )] = { HotKeyCategory::CAMPAIGN, "roland campaign", fheroes2::Key::KEY_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ARCHIBALD )] = { HotKeyCategory::CAMPAIGN, "archibald campaign", fheroes2::Key::KEY_2 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_PRICE_OF_LOYALTY )]
             = { HotKeyCategory::CAMPAIGN, "the price of loyalty campaign", fheroes2::Key::KEY_1 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_NEW_VOYAGE_HOME )] = { HotKeyCategory::CAMPAIGN, "voyage home campaign", fheroes2::Key::KEY_2 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_NEW_WIZARDS_ISLE )] = { HotKeyCategory::CAMPAIGN, "wizard's isle campaign", fheroes2::Key::KEY_3 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_NEW_DESCENDANTS )] = { HotKeyCategory::CAMPAIGN, "descendants campaign", fheroes2::Key::KEY_4 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_VOYAGE_HOME )] = { HotKeyCategory::CAMPAIGN, "voyage home campaign", fheroes2::Key::KEY_2 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_WIZARDS_ISLE )] = { HotKeyCategory::CAMPAIGN, "wizard's isle campaign", fheroes2::Key::KEY_3 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_DESCENDANTS )] = { HotKeyCategory::CAMPAIGN, "descendants campaign", fheroes2::Key::KEY_4 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS )]
             = { HotKeyCategory::CAMPAIGN, "select first campaign bonus", fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS )]
