@@ -472,7 +472,7 @@ void Interface::StatusWindow::TimerEventProcessing()
     SetRedraw();
 }
 
-void Interface::StatusWindow::RedrawStatusIfNeeded( const uint32_t progressValue )
+void Interface::StatusWindow::DrawAITurnProgress( const uint32_t progressValue )
 {
     // Process events if any before rendering a frame. For instance, updating a mouse cursor position.
     LocalEvent::Get().HandleEvents( false );

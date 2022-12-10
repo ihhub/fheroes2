@@ -1872,7 +1872,7 @@ namespace AI
                 // At least one hero still exist in the kingdom.
                 const size_t progressValue = ( endProgressValue - startProgressValue ) * ( maxHeroCount - availableHeroes.size() ) / maxHeroCount + startProgressValue;
 
-                status.RedrawStatusIfNeeded( static_cast<uint32_t>( progressValue ) );
+                status.DrawAITurnProgress( static_cast<uint32_t>( progressValue ) );
             }
         }
 
@@ -1881,7 +1881,7 @@ namespace AI
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
         _pathfinder.setSpellPointReserve( 0.5 );
 
-        status.RedrawStatusIfNeeded( endProgressValue );
+        status.DrawAITurnProgress( endProgressValue );
 
         return allHeroesMoved;
     }
