@@ -217,12 +217,12 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SKIP )] = { HotKeyCategory::BATTLE, "skip turn in battle", fheroes2::Key::KEY_SPACE };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_CAST_SPELL )] = { HotKeyCategory::BATTLE, "cast battle spell", fheroes2::Key::KEY_C };
 
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 )] = { HotKeyCategory::TOWN, "town dwelling level 1", fheroes2::Key::KEY_1 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_2 )] = { HotKeyCategory::TOWN, "town dwelling level 2", fheroes2::Key::KEY_2 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_3 )] = { HotKeyCategory::TOWN, "town dwelling level 3", fheroes2::Key::KEY_3 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_4 )] = { HotKeyCategory::TOWN, "town dwelling level 4", fheroes2::Key::KEY_4 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_5 )] = { HotKeyCategory::TOWN, "town dwelling level 5", fheroes2::Key::KEY_5 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_6 )] = { HotKeyCategory::TOWN, "town dwelling level 6", fheroes2::Key::KEY_6 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 )] = { HotKeyCategory::TOWN, "dwelling level 1", fheroes2::Key::KEY_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_2 )] = { HotKeyCategory::TOWN, "dwelling level 2", fheroes2::Key::KEY_2 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_3 )] = { HotKeyCategory::TOWN, "dwelling level 3", fheroes2::Key::KEY_3 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_4 )] = { HotKeyCategory::TOWN, "dwelling level 4", fheroes2::Key::KEY_4 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_5 )] = { HotKeyCategory::TOWN, "dwelling level 5", fheroes2::Key::KEY_5 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_6 )] = { HotKeyCategory::TOWN, "dwelling level 6", fheroes2::Key::KEY_6 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_WELL )] = { HotKeyCategory::TOWN, "well", fheroes2::Key::KEY_W };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MAGE_GUILD )] = { HotKeyCategory::TOWN, "mage guild", fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MARKETPLACE )] = { HotKeyCategory::TOWN, "marketplace", fheroes2::Key::KEY_M };
