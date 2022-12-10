@@ -368,7 +368,7 @@ namespace AI
                 return false;
             }
 
-            // We have building a value of a castle and its safety factor. The higher safety factor the lower priority to defend the castle.
+            // We have a building value of a castle and its safety factor. The higher safety factor the lower priority to defend the castle.
             // Since we compare 2 castles we need to use safety factor of the opposite castle.
             return left.buildingValue * right.safetyFactor > right.buildingValue * left.safetyFactor;
         } );
