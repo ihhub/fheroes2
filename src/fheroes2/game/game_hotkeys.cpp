@@ -172,11 +172,14 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_MOVE_HERO_BOTTOM )] = { HotKeyCategory::WORLD_MAP, "move hero bottom", fheroes2::Key::KEY_KP_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_MOVE_HERO_TOP_LEFT )] = { HotKeyCategory::WORLD_MAP, "move hero top left", fheroes2::Key::KEY_KP_7 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_MOVE_HERO_TOP_RIGHT )] = { HotKeyCategory::WORLD_MAP, "move hero top right", fheroes2::Key::KEY_KP_9 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_MOVE_HERO_BOTTOM_LEFT )] = { HotKeyCategory::WORLD_MAP, "move hero bottom left", fheroes2::Key::KEY_KP_1 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_MOVE_HERO_BOTTOM_RIGHT )] = { HotKeyCategory::WORLD_MAP, "move hero bottom right", fheroes2::Key::KEY_KP_3 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_MOVE_HERO_BOTTOM_LEFT )]
+            = { HotKeyCategory::WORLD_MAP, "move hero bottom left", fheroes2::Key::KEY_KP_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_MOVE_HERO_BOTTOM_RIGHT )]
+            = { HotKeyCategory::WORLD_MAP, "move hero bottom right", fheroes2::Key::KEY_KP_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SAVE_GAME )] = { HotKeyCategory::WORLD_MAP, "save game", fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_HERO )] = { HotKeyCategory::WORLD_MAP, "next hero", fheroes2::Key::KEY_H };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_CONTINUE_HERO_MOVEMENT )] = { HotKeyCategory::WORLD_MAP, "continue hero movement", fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_CONTINUE_HERO_MOVEMENT )]
+            = { HotKeyCategory::WORLD_MAP, "continue hero movement", fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_CAST_SPELL )] = { HotKeyCategory::WORLD_MAP, "cast adventure spell", fheroes2::Key::KEY_C };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SLEEP_HERO )] = { HotKeyCategory::WORLD_MAP, "put hero to sleep", fheroes2::Key::KEY_Z };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_TOWN )] = { HotKeyCategory::WORLD_MAP, "next town", fheroes2::Key::KEY_T };
@@ -202,7 +205,8 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SCROLL_DOWN )] = { HotKeyCategory::WORLD_MAP, "scroll down", fheroes2::Key::KEY_DOWN };
 
 #if defined( WITH_DEBUG )
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )] = { HotKeyCategory::WORLD_MAP, "transfer control to ai", fheroes2::Key::KEY_F8 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )]
+            = { HotKeyCategory::WORLD_MAP, "transfer control to ai", fheroes2::Key::KEY_F8 };
 #endif
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_RETREAT )] = { HotKeyCategory::BATTLE, "retreat from battle", fheroes2::Key::KEY_R };
