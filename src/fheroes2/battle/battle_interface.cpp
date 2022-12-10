@@ -4826,7 +4826,9 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const int strength )
     cursor.SetThemes( Cursor::WAR_POINTER );
 
     const fheroes2::Image original( _mainSurface );
-    const fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, strength );
+    fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, strength );
+    // Make the spell effect darker by setting its 'transform' layer.
+    fheroes2::ApplyTransform( blurred, 0, 0, blurred.width(), blurred.height(), 4 );
 
     _currentUnit = nullptr;
     AudioManager::PlaySound( M82::MASSCURS );
