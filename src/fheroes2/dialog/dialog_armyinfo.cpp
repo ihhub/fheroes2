@@ -229,7 +229,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
             // upgrade
-            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::UPGRADE_TROOP ) ) ) {
+            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
                     const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
                     fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
@@ -245,7 +245,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 }
             }
             // dismiss
-            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DISMISS_TROOP ) )
+            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) )
                  && Dialog::YES
                         == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
                                             Dialog::YES | Dialog::NO ) ) {

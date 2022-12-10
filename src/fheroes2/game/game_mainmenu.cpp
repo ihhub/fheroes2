@@ -87,7 +87,8 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES ) << " to show High Scores." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CREDITS ) << " to show Credits." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to Quit the game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_QUIT ) << " or " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL )
+                       << " to Quit the game." )
     }
 }
 
@@ -329,7 +330,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             return fheroes2::GameMode::CREDITS;
         }
 
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 return fheroes2::GameMode::QUIT_GAME;
             }
