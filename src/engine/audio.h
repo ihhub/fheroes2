@@ -95,7 +95,6 @@ namespace Music
     // A music track with the specified UID should not already be present in the database.
     void Play( const uint64_t musicUID, const std::string & file, const PlaybackMode playbackMode );
 
-    // Returns the previous volume percentage value.
     void setVolume( const int volumePercentage );
 
     void SetFadeInMs( const int timeMs );
