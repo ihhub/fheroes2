@@ -955,7 +955,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             fastScrollRepeatCount = 0;
         }
 
-        const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
@@ -968,6 +967,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             }
 
             // if the hero is currently moving, pressing any mouse button should stop him
+            const fheroes2::Rect displayArea{ 0, 0, display.width(), display.height() };
             if ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) {
                 stopHero = true;
             }
