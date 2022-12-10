@@ -3375,7 +3375,6 @@ void Battle::Interface::SetHeroAnimationReactionToTroopDeath( const int32_t deat
     }
 }
 
-
 void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 {
     Indexes::const_iterator dst = path.begin();
@@ -4751,6 +4750,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     // A death wave parameter that limits the curve to one cosine period.
     const double waveLimit = waveLength / M_PI / 2;
     std::vector<int32_t> deathWaveCurve;
+    deathWaveCurve.reserve( waveLength );
 
     for ( int32_t posX = 0; posX < waveLength; ++posX ) {
         deathWaveCurve.push_back( static_cast<int32_t>( std::round( strength * ( cos( posX / waveLimit ) / 2 - 0.5 ) ) ) - 1 );
@@ -5202,8 +5202,8 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     if ( wnce ) {
         int32_t deathColor = Color::UNUSED;
 
-        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-            Unit * defender = it->defender;
+        for ( const auto & target : targets ) {
+            Unit * defender = target.defender;
             if ( defender == nullptr ) {
                 continue;
             }
@@ -5226,7 +5226,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                 deathColor = defender->GetArmyColor();
             }
             // If the creature is damaged but is still alive set its wince animation.
-            else if ( it->damage ) {
+            else if ( target.damage ) {
                 defender->SwitchAnimation( Monster_Info::WNCE );
                 AudioManager::PlaySound( defender->M82Wnce() );
             }
@@ -5236,7 +5236,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     }
 
     // For certain spells reflect the spell sprite if the creature is reflected.
-    const bool isReflectICN = ( icn == ICN::SHIELD || icn == ICN::REDDEATH || ICN::MAGIC08 );
+    const bool isReflectICN = ( icn == ICN::SHIELD || icn == ICN::REDDEATH || icn == ICN::MAGIC08 );
     // Set the defender wince animation state.
     bool isDefenderAnimatimg = wnce;
     const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn );
@@ -5253,11 +5253,11 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
             RedrawPartialStart();
 
             if ( frame < maxFrame ) {
-                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                    if ( ( *it ).defender && ( *it ).damage ) {
-                        const bool reflect = ( isReflectICN && ( *it ).defender->isReflect() );
+                for ( const auto & target : targets ) {
+                    if ( target.defender && target.damage ) {
+                        const bool reflect = ( isReflectICN && target.defender->isReflect() );
                         const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-                        const fheroes2::Point & pos = CalculateSpellPosition( *it->defender, icn, spellSprite );
+                        const fheroes2::Point & pos = CalculateSpellPosition( *target.defender, icn, spellSprite );
                         fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
                     }
                 }
@@ -5267,23 +5267,23 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
             isDefenderAnimatimg = false;
 
             if ( wnce ) {
-                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                    if ( ( *it ).defender == nullptr ) {
+                for ( const auto & target : targets ) {
+                    if ( target.defender == nullptr ) {
                         continue;
                     }
 
                     // Fully animate creature death.
-                    if ( !( *it ).defender->isValid() ) {
-                        ( *it ).defender->IncreaseAnimFrame( false );
+                    if ( !target.defender->isValid() ) {
+                        target.defender->IncreaseAnimFrame( false );
                     }
-                    else if ( ( *it ).damage ) {
+                    else if ( target.damage ) {
                         // Check if the animation will not be finished with the next frame, then set the defender wince animation state.
-                        isDefenderAnimatimg |= !( *it ).defender->isFinishAnimFrame();
+                        isDefenderAnimatimg |= !target.defender->isFinishAnimFrame();
 
                         // Animate only 2 wince frames at the start of the spell animation to get the maximum wince effect
                         // and continue it only after spell animation ends.
                         if ( frame < 2 || frame >= maxFrame ) {
-                            ( *it ).defender->IncreaseAnimFrame( false );
+                            target.defender->IncreaseAnimFrame( false );
                         }
                     }
                 }
@@ -5295,18 +5295,17 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     }
 
     if ( wnce ) {
-        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-            if ( ( *it ).defender && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
-                ( *it ).defender->SwitchAnimation( Monster_Info::STATIC );
+        for ( const auto & target : targets ) {
+            if ( target.defender && target.defender->GetAnimationState() == Monster_Info::WNCE ) {
+                target.defender->SwitchAnimation( Monster_Info::STATIC );
                 _currentUnit = nullptr;
             }
         }
-        
+
         // Fade away animation for destroyed mirror images
         if ( !mirrorImages.empty() ) {
             RedrawActionRemoveMirrorImage( mirrorImages );
         }
-
     }
 }
 

@@ -247,8 +247,8 @@ namespace fheroes2
         const std::vector<int32_t>::const_iterator endX = deathWaveCurve.end() - ( x > width ? x - width : 0 );
 
         for ( ; pntX != endX; ++pntX, ++outImageX, ++inImageX ) {
-            const uint8_t * outImageYEnd = outImageX + ( height + *pntX ) * width;
-            const uint8_t * inImageY = inImageX - ( *pntX + 1 ) * width;
+            const uint8_t * outImageYEnd = outImageX + static_cast<int64_t>( height + *pntX ) * width;
+            const uint8_t * inImageY = inImageX - static_cast<int64_t>( *pntX + 1 ) * width;
 
             // A loop to shift all horizontal pixels vertically.
             uint8_t * outImageY = outImageX;
