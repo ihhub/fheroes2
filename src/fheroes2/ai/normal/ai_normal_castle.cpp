@@ -179,7 +179,7 @@ namespace AI
             }
         }
 
-        // Call internally checks if it's valid (space/resources) to buy one.
+        // Check if the kingdom has at least one hero and enough resources to buy a boat.
         const Kingdom & kingdom = castle.GetKingdom();
         if ( !kingdom.GetHeroes().empty() && kingdom.GetFunds() >= PaymentConditions::BuyBoat() * ( islandOrPeninsula ? 2 : 4 ) ) {
             castle.BuyBoat();
