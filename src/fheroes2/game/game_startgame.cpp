@@ -887,21 +887,21 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SLEEP_HERO ) )
                 EventSwitchHeroSleeping();
             // hero movement control
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_LEFT ) )
                 EventKeyArrowPress( Direction::LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_RIGHT ) )
                 EventKeyArrowPress( Direction::RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_TOP ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP ) )
                 EventKeyArrowPress( Direction::TOP );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_BOTTOM ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN ) )
                 EventKeyArrowPress( Direction::BOTTOM );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_TOP_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP_LEFT ) )
                 EventKeyArrowPress( Direction::TOP_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_TOP_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP_RIGHT ) )
                 EventKeyArrowPress( Direction::TOP_RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_BOTTOM_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN_LEFT ) )
                 EventKeyArrowPress( Direction::BOTTOM_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_MOVE_HERO_BOTTOM_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN_RIGHT ) )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
             // map scrolling control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) )
