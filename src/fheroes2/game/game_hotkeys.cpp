@@ -46,6 +46,7 @@ namespace
     enum class HotKeyCategory : uint8_t
     {
         DEFAULT_ACTIONS,
+        SYSTEM,
         MAIN_MENU,
         CAMPAIGN,
         WORLD_MAP,
@@ -59,6 +60,8 @@ namespace
         switch ( category ) {
         case HotKeyCategory::DEFAULT_ACTIONS:
             return "Default actions";
+        case HotKeyCategory::SYSTEM:
+            return "System";
         case HotKeyCategory::MAIN_MENU:
             return "Main Menu";
         case HotKeyCategory::CAMPAIGN:
@@ -122,7 +125,8 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_RIGHT )] = { HotKeyCategory::DEFAULT_ACTIONS, "default right", fheroes2::Key::KEY_RIGHT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_UP )] = { HotKeyCategory::DEFAULT_ACTIONS, "default up", fheroes2::Key::KEY_UP };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_DOWN )] = { HotKeyCategory::DEFAULT_ACTIONS, "default down", fheroes2::Key::KEY_DOWN };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SYSTEM_FULLSCREEN )] = { HotKeyCategory::DEFAULT_ACTIONS, "toggle fullscreen", fheroes2::Key::KEY_F4 };
+
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SYSTEM_FULLSCREEN )] = { HotKeyCategory::SYSTEM, "toggle fullscreen", fheroes2::Key::KEY_F4 };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_GAME )] = { HotKeyCategory::MAIN_MENU, "new game", fheroes2::Key::KEY_N };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME )] = { HotKeyCategory::MAIN_MENU, "load game", fheroes2::Key::KEY_L };
@@ -184,23 +188,23 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_END_TURN )] = { HotKeyCategory::WORLD_MAP, "end turn", fheroes2::Key::KEY_E };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_FILE_OPTIONS )] = { HotKeyCategory::WORLD_MAP, "file options", fheroes2::Key::KEY_F };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_ADVENTURE_OPTIONS )] = { HotKeyCategory::WORLD_MAP, "adventure options", fheroes2::Key::KEY_A };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SYSTEM_OPTIONS )] = { HotKeyCategory::WORLD_MAP, "system options", fheroes2::Key::KEY_O };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_PUZZLE_MAP )] = { HotKeyCategory::WORLD_MAP, "puzzle map", fheroes2::Key::KEY_P };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION )] = { HotKeyCategory::WORLD_MAP, "scenario information", fheroes2::Key::KEY_I };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_DIG_ARTIFACT )] = { HotKeyCategory::WORLD_MAP, "dig for artifact", fheroes2::Key::KEY_D };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_KINGDOM_SUMMARY )] = { HotKeyCategory::WORLD_MAP, "kingdom summary", fheroes2::Key::KEY_K };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_VIEW_WORLD )] = { HotKeyCategory::WORLD_MAP, "view world", fheroes2::Key::KEY_V };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_KINGDOM_SUMMARY )] = { HotKeyCategory::WORLD_MAP, "kingdom summary", fheroes2::Key::KEY_K };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_DEFAULT_ACTION )] = { HotKeyCategory::WORLD_MAP, "default action", fheroes2::Key::KEY_SPACE };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_OPEN_FOCUS )] = { HotKeyCategory::WORLD_MAP, "open focus", fheroes2::Key::KEY_ENTER };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SYSTEM_OPTIONS )] = { HotKeyCategory::WORLD_MAP, "system options", fheroes2::Key::KEY_O };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SCROLL_LEFT )] = { HotKeyCategory::WORLD_MAP, "scroll left", fheroes2::Key::KEY_LEFT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SCROLL_RIGHT )] = { HotKeyCategory::WORLD_MAP, "scroll right", fheroes2::Key::KEY_RIGHT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SCROLL_UP )] = { HotKeyCategory::WORLD_MAP, "scroll up", fheroes2::Key::KEY_UP };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SCROLL_DOWN )] = { HotKeyCategory::WORLD_MAP, "scroll down", fheroes2::Key::KEY_DOWN };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_TOGGLE_CONTROL_PANEL )] = { HotKeyCategory::WORLD_MAP, "toggle control panel", fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_TOGGLE_RADAR )] = { HotKeyCategory::WORLD_MAP, "toggle radar", fheroes2::Key::KEY_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_TOGGLE_BUTTONS )] = { HotKeyCategory::WORLD_MAP, "toggle buttons", fheroes2::Key::KEY_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_TOGGLE_STATUS )] = { HotKeyCategory::WORLD_MAP, "toggle status", fheroes2::Key::KEY_4 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_TOGGLE_ICONS )] = { HotKeyCategory::WORLD_MAP, "toggle icons", fheroes2::Key::KEY_5 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SCROLL_LEFT )] = { HotKeyCategory::WORLD_MAP, "scroll left", fheroes2::Key::KEY_LEFT };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SCROLL_RIGHT )] = { HotKeyCategory::WORLD_MAP, "scroll right", fheroes2::Key::KEY_RIGHT };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SCROLL_UP )] = { HotKeyCategory::WORLD_MAP, "scroll up", fheroes2::Key::KEY_UP };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SCROLL_DOWN )] = { HotKeyCategory::WORLD_MAP, "scroll down", fheroes2::Key::KEY_DOWN };
 
 #if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )]
@@ -222,14 +226,13 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_5 )] = { HotKeyCategory::TOWN, "dwelling level 5", fheroes2::Key::KEY_5 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_6 )] = { HotKeyCategory::TOWN, "dwelling level 6", fheroes2::Key::KEY_6 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_WELL )] = { HotKeyCategory::TOWN, "well", fheroes2::Key::KEY_W };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MAGE_GUILD )] = { HotKeyCategory::TOWN, "mage guild", fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MARKETPLACE )] = { HotKeyCategory::TOWN, "marketplace", fheroes2::Key::KEY_M };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_THIEVES_GUILD )] = { HotKeyCategory::TOWN, "thieves guild", fheroes2::Key::KEY_T };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MAGE_GUILD )] = { HotKeyCategory::TOWN, "mage guild", fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_SHIPYARD )] = { HotKeyCategory::TOWN, "shipyard", fheroes2::Key::KEY_N };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_THIEVES_GUILD )] = { HotKeyCategory::TOWN, "thieves guild", fheroes2::Key::KEY_T };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_TAVERN )] = { HotKeyCategory::TOWN, "tavern", fheroes2::Key::KEY_R };
-        // It is also used to build castle in a town.
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_JUMP_TO_BUILD_SELECTION )] = { HotKeyCategory::TOWN, "castle construction", fheroes2::Key::KEY_B };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_WELL_BUY_ALL_CREATURES )] = { HotKeyCategory::TOWN, "buy all monsters in well", fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_CONSTRUCTION )] = { HotKeyCategory::TOWN, "construction screen", fheroes2::Key::KEY_B };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_WELL_BUY_ALL )] = { HotKeyCategory::TOWN, "buy all monsters in well", fheroes2::Key::KEY_M };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF )] = { HotKeyCategory::ARMY, "split stack by half", fheroes2::Key::KEY_SHIFT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_ONE )] = { HotKeyCategory::ARMY, "split stack by one", fheroes2::Key::KEY_CONTROL };

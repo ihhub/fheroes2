@@ -41,6 +41,7 @@ namespace Game
         DEFAULT_RIGHT,
         DEFAULT_UP,
         DEFAULT_DOWN,
+
         SYSTEM_FULLSCREEN,
 
         MAIN_MENU_NEW_GAME,
@@ -76,7 +77,7 @@ namespace Game
         CAMPAIGN_SELECT_DIFFICULTY,
         CAMPAIGN_RESTART_SCENARIO,
 
-        // These events can be used to scroll the adventure map when no hero is selected
+        // Move the hero if there is a selected one, otherwise scroll the adventure map.
         WORLD_LEFT,
         WORLD_RIGHT,
         WORLD_UP,
@@ -103,10 +104,12 @@ namespace Game
         WORLD_DEFAULT_ACTION,
         WORLD_OPEN_FOCUS,
         WORLD_SYSTEM_OPTIONS,
+        // Scroll the adventure map regardless of the selected object.
         WORLD_SCROLL_LEFT,
         WORLD_SCROLL_RIGHT,
         WORLD_SCROLL_UP,
         WORLD_SCROLL_DOWN,
+        //
         WORLD_TOGGLE_CONTROL_PANEL,
         WORLD_TOGGLE_RADAR,
         WORLD_TOGGLE_BUTTONS,
@@ -138,8 +141,9 @@ namespace Game
         TOWN_SHIPYARD,
         TOWN_THIEVES_GUILD,
         TOWN_TAVERN,
-        TOWN_JUMP_TO_BUILD_SELECTION,
-        TOWN_WELL_BUY_ALL_CREATURES,
+        // Also used to build a castle in the town.
+        TOWN_CONSTRUCTION,
+        TOWN_WELL_BUY_ALL,
 
         ARMY_SPLIT_STACK_BY_HALF,
         ARMY_SPLIT_STACK_BY_ONE,
