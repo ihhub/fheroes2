@@ -332,9 +332,9 @@ namespace Battle
         void RedrawActionColdRingSpell( int32_t, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell();
-        void RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength );
+        void RedrawActionHolyShoutSpell( const int strength );
         void RedrawActionResurrectSpell( Unit &, const Spell & );
-        void RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength );
+        void RedrawActionDeathWaveSpell( const int strength );
         void RedrawActionLightningBoltSpell( const Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
         void RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi ); // helper function
@@ -351,6 +351,7 @@ namespace Battle
         void ResetIdleTroopAnimation() const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
+        void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor );
 
         void ProcessingHeroDialogResult( int, Actions & );
 

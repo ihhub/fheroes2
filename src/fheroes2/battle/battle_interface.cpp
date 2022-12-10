@@ -3278,19 +3278,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         }
     }
 
-    if ( deathColor != Color::UNUSED ) {
-        const bool attackersTurn = deathColor == arena.GetArmy2Color();
-        OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
-        OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
-        // 60% of joyful animation
-        if ( attackingHero && Rand::Get( 1, 5 ) < 4 ) {
-            attackingHero->SetAnimation( OP_JOY );
-        }
-        // 80% of sorrow animation otherwise
-        else if ( defendingHero && Rand::Get( 1, 5 ) < 5 ) {
-            defendingHero->SetAnimation( OP_SORROW );
-        }
-    }
+    SetHeroAnimationReactionToTroopDeath( deathColor );
 
     // targets damage animation loop
     bool finishedAnimation = false;
@@ -3369,6 +3357,24 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
     if ( !mirrorImages.empty() )
         RedrawActionRemoveMirrorImage( mirrorImages );
 }
+
+void Battle::Interface::SetHeroAnimationReactionToTroopDeath( const int32_t deathColor )
+{
+    if ( deathColor != Color::UNUSED ) {
+        const bool attackersTurn = deathColor == arena.GetArmy2Color();
+        OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
+        OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
+        // 60% of joyful animation
+        if ( attackingHero && Rand::Get( 1, 5 ) < 4 ) {
+            attackingHero->SetAnimation( OP_JOY );
+        }
+        // 80% of sorrow animation otherwise
+        else if ( defendingHero && Rand::Get( 1, 5 ) < 5 ) {
+            defendingHero->SetAnimation( OP_SORROW );
+        }
+    }
+}
+
 
 void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 {
@@ -3640,17 +3646,17 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
         break;
 
     case Spell::DEATHRIPPLE:
-        RedrawActionDeathWaveSpell( targets, 10 );
+        RedrawActionDeathWaveSpell( 7 );
         break;
     case Spell::DEATHWAVE:
-        RedrawActionDeathWaveSpell( targets, 15 );
+        RedrawActionDeathWaveSpell( 14 );
         break;
 
     case Spell::HOLYWORD:
-        RedrawActionHolyShoutSpell( targets, 2 );
+        RedrawActionHolyShoutSpell( 2 );
         break;
     case Spell::HOLYSHOUT:
-        RedrawActionHolyShoutSpell( targets, 4 );
+        RedrawActionHolyShoutSpell( 4 );
         break;
 
     case Spell::ELEMENTALSTORM:
@@ -3773,7 +3779,21 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
         }
 
         // targets damage animation
-        RedrawActionWincesKills( targets );
+        switch ( spell.GetID() ) {
+            // For some spells the damage animation is done during the flame animation after the spell animation.
+        case Spell::DEATHRIPPLE:
+        case Spell::DEATHWAVE:
+            RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::UNKNOWN, true );
+            break;
+
+        case Spell::HOLYWORD:
+        case Spell::HOLYSHOUT:
+            RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::UNKNOWN, true );
+            break;
+        default:
+            RedrawActionWincesKills( targets );
+            break;
+        }
 
         if ( totalDamage > 0 ) {
             assert( damagedMonsters > 0 );
@@ -4714,7 +4734,7 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
     b_current_sprite = nullptr;
 }
 
-void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength )
+void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -4722,26 +4742,33 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     cursor.SetThemes( Cursor::WAR_POINTER );
 
     fheroes2::Rect area = GetArea();
+    // Cut out the battle log image so we don't use it in the death wave effect.
     area.height -= 36;
 
     const fheroes2::Sprite & copy = fheroes2::Crop( _mainSurface, area.x, area.y, area.width, area.height );
-    const int waveLength = strength * 2 + 10;
+    // The death wave horizontal length in pixels.
+    const int32_t waveLength = 38;
+    // A death wave parameter that limits the curve to one cosine period.
+    const double waveLimit = waveLength / M_PI / 2;
+    std::vector<int32_t> deathWaveCurve;
+
+    for ( int32_t posX = 0; posX < waveLength; ++posX ) {
+        deathWaveCurve.push_back( static_cast<int32_t>( std::round( strength * ( cos( posX / waveLimit ) / 2 - 0.5 ) ) ) - 1 );
+    }
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
-    int position = 10;
+    int32_t position = 0;
     while ( le.HandleEvents() && position < area.width + waveLength ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, waveLength, strength ), _mainSurface );
+            fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, waveLength, deathWaveCurve ), _mainSurface );
             RedrawPartialFinish();
 
-            position += 3;
+            position += 5;
         }
     }
-
-    RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::UNKNOWN, true );
 }
 
 void Battle::Interface::RedrawActionColdRingSpell( int32_t dst, const TargetsInfo & targets )
@@ -4791,7 +4818,7 @@ void Battle::Interface::RedrawActionColdRingSpell( int32_t dst, const TargetsInf
         }
 }
 
-void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength )
+void Battle::Interface::RedrawActionHolyShoutSpell( const int strength )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -4823,8 +4850,6 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
             ++frame;
         }
     }
-
-    RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::UNKNOWN, true );
 }
 
 void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & targets )
@@ -5165,50 +5190,122 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 {
     LocalEvent & le = LocalEvent::Get();
 
-    uint32_t frame = 0;
+    // A vector for creatures made by Mirror Image spell which will be destroyed by current spell.
+    std::vector<Unit *> mirrorImages;
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = nullptr;
 
-    if ( wnce )
-        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-            if ( ( *it ).defender && ( *it ).damage )
-                ( *it ).defender->SwitchAnimation( Monster_Info::WNCE );
+    if ( wnce ) {
+        int32_t deathColor = Color::UNUSED;
+
+        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
+            Unit * defender = it->defender;
+            if ( defender == nullptr ) {
+                continue;
+            }
+
+            if ( defender->isModes( CAP_MIRRORIMAGE ) ) {
+                mirrorImages.push_back( defender );
+            }
+
+            // If the creature was killed set its death animation.
+            if ( !defender->isValid() ) {
+                // Destroy linked mirror to a dead creature.
+                if ( defender->isModes( CAP_MIRROROWNER ) ) {
+                    mirrorImages.push_back( defender->GetMirror() );
+                }
+
+                defender->SwitchAnimation( Monster_Info::KILL );
+                AudioManager::PlaySound( defender->M82Kill() );
+
+                // Set the color of the dead creature to tell heroes about it.
+                deathColor = defender->GetArmyColor();
+            }
+            // If the creature is damaged but is still alive set its wince animation.
+            else if ( it->damage ) {
+                defender->SwitchAnimation( Monster_Info::WNCE );
+                AudioManager::PlaySound( defender->M82Wnce() );
+            }
+
+            SetHeroAnimationReactionToTroopDeath( deathColor );
+        }
+    }
+
+    // For certain spells reflect the spell sprite if the creature is reflected.
+    const bool isReflectICN = ( icn == ICN::SHIELD || icn == ICN::REDDEATH || ICN::MAGIC08 );
+    // Set the defender wince animation state.
+    bool isDefenderAnimatimg = wnce;
+    const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn );
+    uint32_t frame = 0;
 
     AudioManager::PlaySound( m82 );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents() && ( frame < maxFrame || isDefenderAnimatimg ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-                if ( ( *it ).defender ) {
-                    const bool reflect = ( icn == ICN::SHIELD && it->defender->isReflect() );
-                    const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-                    const fheroes2::Point & pos = CalculateSpellPosition( *it->defender, icn, spellSprite );
-                    fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
+            if ( frame < maxFrame ) {
+                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
+                    if ( ( *it ).defender && ( *it ).damage ) {
+                        const bool reflect = ( isReflectICN && ( *it ).defender->isReflect() );
+                        const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
+                        const fheroes2::Point & pos = CalculateSpellPosition( *it->defender, icn, spellSprite );
+                        fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
+                    }
                 }
-            RedrawPartialFinish();
+            }
 
-            if ( wnce )
-                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-                    if ( ( *it ).defender && ( *it ).damage )
+            // Reset the defender wince animation state.
+            isDefenderAnimatimg = false;
+
+            if ( wnce ) {
+                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
+                    if ( ( *it ).defender == nullptr ) {
+                        continue;
+                    }
+
+                    // Fully animate creature death.
+                    if ( !( *it ).defender->isValid() ) {
                         ( *it ).defender->IncreaseAnimFrame( false );
+                    }
+                    else if ( ( *it ).damage ) {
+                        // Check if the animation will not be finished with the next frame, then set the defender wince animation state.
+                        isDefenderAnimatimg |= !( *it ).defender->isFinishAnimFrame();
+
+                        // Animate only 2 wince frames at the start of the spell animation to get the maximum wince effect
+                        // and continue it only after spell animation ends.
+                        if ( frame < 2 || frame >= maxFrame ) {
+                            ( *it ).defender->IncreaseAnimFrame( false );
+                        }
+                    }
+                }
+            }
+
+            RedrawPartialFinish();
             ++frame;
         }
     }
 
-    if ( wnce )
-        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-            if ( ( *it ).defender ) {
+    if ( wnce ) {
+        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
+            if ( ( *it ).defender && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
                 ( *it ).defender->SwitchAnimation( Monster_Info::STATIC );
                 _currentUnit = nullptr;
             }
+        }
+        
+        // Fade away animation for destroyed mirror images
+        if ( !mirrorImages.empty() ) {
+            RedrawActionRemoveMirrorImage( mirrorImages );
+        }
+
+    }
 }
 
 void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation )
