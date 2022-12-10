@@ -135,7 +135,6 @@ namespace Game
         TOWN_MAGE_GUILD,
         TOWN_SHIPYARD,
         TOWN_THIEVES_GUILD,
-        // town screen exclusive, not applied to build screen!
         TOWN_TAVERN,
         TOWN_JUMP_TO_BUILD_SELECTION,
         TOWN_WELL_BUY_ALL_CREATURES,
