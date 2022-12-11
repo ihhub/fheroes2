@@ -93,12 +93,12 @@ jobs:
           sudo sed -i -e 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
           sudo dpkg --add-architecture arm64
           sudo sh -c '. /etc/os-release;
-cat << EOF > /etc/apt/sources.list.d/arm64.list
-deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME} main restricted universe multiverse
-deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-updates main restricted universe multiverse
-deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-security main restricted universe multiverse
-deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-backports main restricted universe multiverse
-EOF'
+          cat << EOF > /etc/apt/sources.list.d/arm64.list
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME} main restricted universe multiverse
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-updates main restricted universe multiverse
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-security main restricted universe multiverse
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-backports main restricted universe multiverse
+          EOF'
         fi
         sudo apt-get -y update
         sudo apt-get -y install ${{ matrix.config.dependencies }}
