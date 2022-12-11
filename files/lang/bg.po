@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 01:14+0000\n"
+"POT-Creation-Date: 2022-12-08 09:56+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -24,6 +24,56 @@ msgid ""
 msgstr ""
 "САМО\n"
 "БИТКА"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
 
 msgid "GIFT"
 msgstr "ДАРИ"
@@ -6608,38 +6658,45 @@ msgid "race|Neutral"
 msgstr "Неутрален"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Рицар"
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Варварин"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
-msgstr "Магьосница"
+msgstr ""
+"Магьос-\n"
+"ница"
 
 msgid "doubleLined|Warlock"
 msgstr ""
+"Магьос-\n"
+"ник"
 
 msgid "doubleLined|Wizard"
 msgstr ""
+"Вълшеб-\n"
+"ник"
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Некромант"
+msgstr ""
+"Некро-\n"
+"мант"
 
 msgid "doubleLinedRace|Multi"
 msgstr ""
+"Комбина-\n"
+"ция"
 
-#, fuzzy
 msgid "doubleLinedRace|Random"
 msgstr "Случаен"
 
-#, fuzzy
 msgid "doubleLinedRace|Neutral"
-msgstr "Неутрален"
+msgstr ""
+"Неутра-\n"
+"лен"
 
 msgid "speed|Standing"
 msgstr "Стояща"

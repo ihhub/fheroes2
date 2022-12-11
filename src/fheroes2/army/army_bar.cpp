@@ -566,17 +566,15 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
 {
     if ( !read_only ) {
         // drag drop - redistribute troops
-        LocalEvent & le = LocalEvent::Get();
-        ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
-
+        ArmyTroop * troopPress = GetItem( LocalEvent::Get().GetMousePressLeft() );
         const bool isTroopPressValid = troopPress && troopPress->isValid();
 
         if ( isTroopPressValid && ( !troop.isValid() || troop.GetID() == troopPress->GetID() ) ) {
             RedistributeArmy( *troopPress, troop, _army );
-            le.ResetPressLeft();
 
-            if ( isSelected() )
+            if ( isSelected() ) {
                 ResetSelected();
+            }
         }
     }
 

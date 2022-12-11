@@ -37,11 +37,13 @@
 #include "artifact.h"
 #include "castle.h"
 #include "color.h"
+#include "game_interface.h"
 #include "game_over.h"
 #include "game_static.h"
 #include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
+#include "interface_status.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
@@ -1744,7 +1746,7 @@ namespace AI
         }
     }
 
-    bool Normal::HeroesTurn( VecHeroes & heroes )
+    bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
     {
         if ( heroes.empty() ) {
             // No heroes so we indicate that all heroes moved.
@@ -1761,6 +1763,8 @@ namespace AI
 
         const int monsterStrengthMultiplierCount = 2;
         const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
+
+        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
@@ -1862,12 +1866,24 @@ namespace AI
 
             _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
             _pathfinder.setSpellPointReserve( 0.5 );
+
+            // The size of heroes can be increased if a new hero is released from Jail.
+            const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
+
+            if ( maxHeroCount > 0 ) {
+                // At least one hero still exist in the kingdom.
+                const size_t progressValue = ( endProgressValue - startProgressValue ) * ( maxHeroCount - availableHeroes.size() ) / maxHeroCount + startProgressValue;
+
+                status.DrawAITurnProgress( static_cast<uint32_t>( progressValue ) );
+            }
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
 
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
         _pathfinder.setSpellPointReserve( 0.5 );
+
+        status.DrawAITurnProgress( endProgressValue );
 
         return allHeroesMoved;
     }
