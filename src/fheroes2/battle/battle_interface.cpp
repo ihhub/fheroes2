@@ -4740,6 +4740,10 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     _currentUnit = nullptr;
     cursor.SetThemes( Cursor::WAR_POINTER );
 
+    // Reset the idle animation for all troops and redraw the '_mainSurface'.
+    ResetIdleTroopAnimation();
+    RedrawPartialFinish();
+
     fheroes2::Rect area = GetArea();
     // Cut out the battle log image so we don't use it in the death wave effect.
     area.height -= 36;
@@ -4824,6 +4828,10 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const int strength )
     LocalEvent & le = LocalEvent::Get();
 
     cursor.SetThemes( Cursor::WAR_POINTER );
+
+    // Reset the idle animation for all troops and redraw the '_mainSurface'.
+    ResetIdleTroopAnimation();
+    RedrawPartialFinish();
 
     const fheroes2::Image original( _mainSurface );
     fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, strength );
