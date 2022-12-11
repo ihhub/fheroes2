@@ -1682,14 +1682,20 @@ fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fhe
         if ( _movingUnit->animation.animationLength() ) {
             const int32_t cx = _movingPos.x - rt.x;
             const int32_t cy = _movingPos.y - rt.y;
+            const double movementProgress = _movingUnit->animation.movementProgress();
 
             // TODO: use offset X from bin file for ground movement
             // cx/cy is sprite size
             // Frame count: one tile of movement goes through all stages of animation
             // sp is sprite drawing offset
-            sp.y += static_cast<int32_t>( _movingUnit->animation.movementProgress() * cy );
-            if ( 0 != Sign( cy ) )
+            sp.y += static_cast<int32_t>( movementProgress * cy );
+            // If it is a slowed flying creature, then it should smoothly move horizontally.
+            if ( _movingUnit->isAbilityPresent( fheroes2::MonsterAbilityType::FLYING ) ) {
+                sp.x += static_cast<int32_t>( movementProgress * cx );
+            }
+            else if ( 0 != Sign( cy ) ) {
                 sp.x -= Sign( cx ) * ox / 2;
+            }
         }
     }
     else if ( _flyingUnit == &unit ) {
@@ -3392,6 +3398,20 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     _currentUnit = nullptr;
     _movingUnit = &unit;
 
+    // If it is a flying creature that acts like walking one when it is under the Slow spell.
+    const bool canFly = unit.isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
+
+    // Slowed flying creature has to fly off.
+    if ( canFly && dst == path.begin() ) {
+        // The destination of fly off is same as the current creature position.
+        const fheroes2::Rect & pos1 = unit.GetRectPosition();
+        _movingPos = fheroes2::Point( pos1.x, pos1.y );
+        unit.SwitchAnimation( Monster_Info::FLY_UP );
+        AudioManager::PlaySound( unit.M82Tkof() );
+        // Take off animation is 30% length on average (original value).
+        AnimateUnitWithDelay( unit, frameDelay * 3 / 10 );
+    }
+
     while ( dst != path.end() ) {
         const Cell * cell = Board::GetCell( *dst );
         _movingPos = cell->GetPos().getPosition();
@@ -3431,6 +3451,16 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
 
         ++dst;
+    }
+
+    // Slowed flying creature has to land.
+    if ( canFly ) {
+        std::vector<int32_t> landAnim;
+        landAnim.push_back( Monster_Info::FLY_LAND );
+        landAnim.push_back( Monster_Info::STATIC );
+        unit.SwitchAnimation( landAnim );
+        AudioManager::PlaySound( unit.M82Land() );
+        AnimateUnitWithDelay( unit, frameDelay );
     }
 
     // restore
