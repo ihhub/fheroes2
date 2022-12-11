@@ -108,10 +108,12 @@ namespace
     }
 #endif
 
-    bool isPolishOrRussianLanguageAndResources()
+    bool useOriginalResources()
     {
-        return ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish )
-               || ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Russian && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Russian );
+        const fheroes2::SupportedLanguage currentLanguage = fheroes2::getCurrentLanguage();
+        const fheroes2::SupportedLanguage resourceLanguage = fheroes2::getResourceLanguage();
+        return ( currentLanguage == fheroes2::SupportedLanguage::Polish && resourceLanguage == fheroes2::SupportedLanguage::Polish )
+               || ( currentLanguage == fheroes2::SupportedLanguage::Russian && resourceLanguage == fheroes2::SupportedLanguage::Russian );
     }
 
     bool IsValidICNId( int id )
