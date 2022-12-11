@@ -5493,7 +5493,7 @@ void Battle::PopupDamageInfo::Reset()
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
 }
 
-void Battle::PopupDamageInfo::Redraw()
+void Battle::PopupDamageInfo::Redraw() const
 {
     if ( !_redraw ) {
         return;
