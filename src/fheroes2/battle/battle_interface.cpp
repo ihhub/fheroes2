@@ -1280,6 +1280,8 @@ void Battle::Interface::RedrawPartialStart()
 {
     RedrawCover();
     RedrawArmies();
+    // Animate idle for all troops on the battlefield with every redraw start.
+    IdleTroopsAnimation();
 }
 
 void Battle::Interface::RedrawPartialFinish()
