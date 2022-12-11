@@ -5183,6 +5183,16 @@ fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellIC
         // bottom center point
         result.x += pos.width / 2;
         break;
+    case ICN::REDDEATH:
+        // Position shifts for the Death Row spell to be closer to OG.
+        result.x += pos.width / 2 + ( target.isReflect() ? 26 : -4 );
+        result.y -= pos.height - 4;
+        break;
+    case ICN::MAGIC08:
+        // Position shifts for the Holy Shout spell to be closer to OG.
+        result.x += pos.width / 2 + ( target.isReflect() ? 12 : 0 );
+        result.y += unitSprite.y() / 2 - 1;
+        break;
     default:
         // center point of the unit
         result.x += pos.width / 2;
