@@ -1280,8 +1280,6 @@ void Battle::Interface::RedrawPartialStart()
 {
     RedrawCover();
     RedrawArmies();
-    // Animate idle for all troops on the battlefield with every redraw start.
-    IdleTroopsAnimation();
 }
 
 void Battle::Interface::RedrawPartialFinish()
@@ -1337,6 +1335,9 @@ void Battle::Interface::RedrawArmies()
     if ( castle == nullptr ) {
         RedrawKilled();
     }
+
+    // Continue the idle animation for all troops on the battlefield.
+    IdleTroopsAnimation();
 
     for ( int32_t cellRowId = 0; cellRowId < ARENAH; ++cellRowId ) {
         // Redraw objects.
