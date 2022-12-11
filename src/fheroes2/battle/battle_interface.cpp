@@ -5264,7 +5264,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
             if ( frame < maxFrame ) {
                 for ( const auto & target : targets ) {
-                    if ( target.defender && target.damage ) {
+                    if ( target.defender ) {
                         const bool reflect = ( isReflectICN && target.defender->isReflect() );
                         const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
                         const fheroes2::Point & pos = CalculateSpellPosition( *target.defender, icn, spellSprite );
