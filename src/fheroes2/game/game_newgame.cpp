@@ -450,7 +450,9 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         }
     }
 
+    // Update the frame but do not render it.
     display.fill( 0 );
+    display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
 
     return gameChoice;
 }
