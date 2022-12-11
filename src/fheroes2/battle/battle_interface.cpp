@@ -3910,9 +3910,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
         const fheroes2::Rect & battleArea = border.GetArea();
-        const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( unit.GetMonsterSprite(), unit.GetFrame() );
-        const int32_t unitCenter = ( unitSprite.width() / CELLW + 1 ) * CELLW / 2;
-        const fheroes2::Point rainbowDescendPoint( pos.x + unitCenter, pos.y - unitSprite.height() / 2 );
+        const fheroes2::Point rainbowDescendPoint( pos.x + pos.width / 2, pos.y - pos.height / 2 );
 
         // If the creature is low on the battleboard - the rainbow will be from the top (in the original game the threshold is about 140 pixels).
         const bool isVerticalRainbow = ( rainbowDescendPoint.y > 140 );
