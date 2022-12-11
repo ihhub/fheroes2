@@ -5145,7 +5145,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
 fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
 {
     const fheroes2::Rect & pos = target.GetRectPosition();
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
+
+    // Get the sprite for the first frame, so its center not shift if the creature is animating (instead of target.GetFrame()).
+    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.animation.firstFrame() );
 
     // Bottom-left corner (default) position with spell offset applied
     fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.height + cellYOffset + spellSprite.y() );
