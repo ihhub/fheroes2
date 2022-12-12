@@ -530,7 +530,7 @@ namespace
         }
     }
 
-    Heroes * getHeroForScenarioBonus( const Campaign::ScenarioInfoId & scenarioInfoId, const Kingdom & kingdom )
+    Heroes * getHeroForScenarioBonusOrCampaignAwards( const Campaign::ScenarioInfoId & scenarioInfoId, const Kingdom & kingdom )
     {
         static const std::map<std::pair<int, int>, int> targetHeroes = { // Defender
                                                                          { { Campaign::ROLAND_CAMPAIGN, 5 }, Heroes::HALTON },
@@ -560,11 +560,11 @@ namespace
             }
 
             DEBUG_LOG( DBG_GAME, DBG_WARN,
-                       "the hero to whom the bonus should be applied has not been found"
+                       "the hero to whom bonuses or awards should be applied has not been found"
                            << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
         }
 
-        // By default, the scenario bonus is applied to the best hero of the kingdom
+        // By default, bonuses and awards are applied to the best hero of the kingdom
         return kingdom.GetBestHero();
     }
 
@@ -588,7 +588,7 @@ namespace
 
                 break;
             case Campaign::ScenarioBonusData::ARTIFACT: {
-                Heroes * hero = getHeroForScenarioBonus( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -598,7 +598,7 @@ namespace
                 break;
             }
             case Campaign::ScenarioBonusData::TROOP: {
-                Heroes * hero = getHeroForScenarioBonus( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -608,7 +608,7 @@ namespace
                 break;
             }
             case Campaign::ScenarioBonusData::SPELL: {
-                Heroes * hero = getHeroForScenarioBonus( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -623,7 +623,7 @@ namespace
 
                 break;
             case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY: {
-                Heroes * hero = getHeroForScenarioBonus( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -633,18 +633,19 @@ namespace
                 break;
             }
             case Campaign::ScenarioBonusData::SKILL_PRIMARY: {
-                Heroes * hero = getHeroForScenarioBonus( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
-                    for ( int32_t i = 0; i < scenarioBonus._amount; ++i )
+                    for ( int32_t i = 0; i < scenarioBonus._amount; ++i ) {
                         hero->IncreasePrimarySkill( scenarioBonus._subType );
+                    }
                 }
 
                 break;
             }
             case Campaign::ScenarioBonusData::SKILL_SECONDARY: {
-                Heroes * hero = getHeroForScenarioBonus( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -659,12 +660,6 @@ namespace
         }
     }
 
-    Heroes * getHeroForCampaignAwards( const Campaign::ScenarioInfoId & /* scenarioInfoId */, const Kingdom & kingdom )
-    {
-        // By default, campaign awards are awarded to the best hero of the kingdom
-        return kingdom.GetBestHero();
-    }
-
     // apply only the ones that are applied at the start (artifact, spell, carry-over troops)
     // the rest will be applied based on the situation required
     void applyObtainedCampaignAwards( const Campaign::ScenarioInfoId & currentScenarioInfoId, const std::vector<Campaign::CampaignAwardData> & awards )
@@ -673,24 +668,29 @@ namespace
         Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
-            if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID )
+            if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID ) {
                 continue;
+            }
 
             switch ( awards[i]._type ) {
             case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT: {
-                Heroes * hero = getHeroForCampaignAwards( currentScenarioInfoId, humanKingdom );
+                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( currentScenarioInfoId, humanKingdom );
                 assert( hero != nullptr );
 
-                hero->PickupArtifact( Artifact( awards[i]._subType ) );
+                if ( hero != nullptr ) {
+                    hero->PickupArtifact( Artifact( awards[i]._subType ) );
+                }
 
                 break;
             }
             case Campaign::CampaignAwardData::TYPE_GET_SPELL: {
-                Heroes * hero = getHeroForCampaignAwards( currentScenarioInfoId, humanKingdom );
+                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( currentScenarioInfoId, humanKingdom );
                 assert( hero != nullptr );
 
-                hero->SpellBookActivate();
-                hero->AppendSpellToBook( awards[i]._subType, true );
+                if ( hero != nullptr ) {
+                    hero->SpellBookActivate();
+                    hero->AppendSpellToBook( awards[i]._subType, true );
+                }
 
                 break;
             }
@@ -711,10 +711,12 @@ namespace
 
                 break;
             case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES: {
-                Heroes * hero = getHeroForCampaignAwards( currentScenarioInfoId, humanKingdom );
+                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( currentScenarioInfoId, humanKingdom );
                 assert( hero != nullptr );
 
-                replaceArmy( hero->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+                if ( hero != nullptr ) {
+                    replaceArmy( hero->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+                }
 
                 break;
             }
