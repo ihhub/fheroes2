@@ -532,65 +532,28 @@ namespace
 
     Heroes * getHeroForScenarioBonus( const Campaign::ScenarioInfoId & scenarioInfoId, const Kingdom & kingdom )
     {
-        // The "special" kingdom heroes may have the ID of another hero, but a custom name and portrait,
-        // so the search should be performed by the portrait ID
-        auto findHero = [&scenarioInfoId, &kingdom]( const int targetHeroId ) -> Heroes * {
+        static const std::map<std::pair<int, int>, int> targetHeroes = { // Defender
+                                                                         { { Campaign::ROLAND_CAMPAIGN, 5 }, Heroes::HALTON },
+                                                                         // King and Country
+                                                                         { { Campaign::VOYAGE_HOME_CAMPAIGN, 2 }, Heroes::GALLAVANT },
+                                                                         // Blood is Thicker
+                                                                         { { Campaign::VOYAGE_HOME_CAMPAIGN, 3 }, Heroes::GALLAVANT } };
+
+        const auto iter = targetHeroes.find( { scenarioInfoId.campaignId, scenarioInfoId.scenarioId } );
+        if ( iter != targetHeroes.end() ) {
+            // The "special" kingdom heroes may have the ID of another hero, but a custom name and portrait,
+            // so the search should be performed by the portrait ID
             for ( Heroes * hero : kingdom.GetHeroes() ) {
                 assert( hero != nullptr );
 
-                if ( hero->getPortraitId() == targetHeroId ) {
+                if ( hero->getPortraitId() == iter->second ) {
                     return hero;
                 }
             }
 
-#ifdef WITH_DEBUG
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "the hero to whom the bonus should be applied has not been found"
                            << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
-#else
-            (void)scenarioInfoId;
-#endif
-
-            return nullptr;
-        };
-
-        switch ( scenarioInfoId.campaignId ) {
-        case Campaign::ROLAND_CAMPAIGN:
-            switch ( scenarioInfoId.scenarioId ) {
-            // Defender
-            case 5: {
-                Heroes * hero = findHero( Heroes::HALTON );
-                if ( hero ) {
-                    return hero;
-                }
-
-                break;
-            }
-            default:
-                break;
-            }
-
-            break;
-        case Campaign::VOYAGE_HOME_CAMPAIGN:
-            switch ( scenarioInfoId.scenarioId ) {
-            // King and Country
-            case 2:
-            // Blood is Thicker
-            case 3: {
-                Heroes * hero = findHero( Heroes::GALLAVANT );
-                if ( hero ) {
-                    return hero;
-                }
-
-                break;
-            }
-            default:
-                break;
-            }
-
-            break;
-        default:
-            break;
         }
 
         // By default, the scenario bonus is applied to the best hero of the kingdom
