@@ -382,11 +382,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
             }
 
             attacker->UpdateDirection();
-
-            // Restore direction only for the living defender and don't flip the corpse of a dead defender horizontally.
-            if ( !defender->GetDead() ) {
-                defender->UpdateDirection();
-            }
+            defender->UpdateDirection();
         }
         else {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << attacker->String( true ) << " and " << defender->String( true ) )
