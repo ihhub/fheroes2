@@ -543,9 +543,13 @@ namespace
                 }
             }
 
+#ifdef WITH_DEBUG
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "the hero to whom the bonus should be applied has not been found"
                            << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
+#else
+            (void)scenarioInfoId;
+#endif
 
             return nullptr;
         };
