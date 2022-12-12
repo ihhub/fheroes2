@@ -537,7 +537,6 @@ namespace fheroes2
 
                 const bool isGoodInterface = ( id == ICN::BUTTON_NEW_GAME_GOOD );
 
-
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 0 );
                     _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 1 );
