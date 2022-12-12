@@ -992,6 +992,8 @@ namespace ICN
 
         EMPTY_GOOD_BUTTON,
         EMPTY_EVIL_BUTTON,
+        EMPTY_GOOD_MEDIUM_BUTTON,
+        EMPTY_EVIL_MEDIUM_BUTTON,
 
         BUTTON_STANDARD_GAME,
         BUTTON_CAMPAIGN_GAME,
@@ -1006,6 +1008,17 @@ namespace ICN
         BUTTON_4_PLAYERS,
         BUTTON_5_PLAYERS,
         BUTTON_6_PLAYERS,
+
+        BUTTON_NEW_GAME_GOOD,
+        BUTTON_NEW_GAME_EVIL,
+        BUTTON_SAVE_GAME_GOOD,
+        BUTTON_SAVE_GAME_EVIL,
+        BUTTON_LOAD_GAME_GOOD,
+        BUTTON_LOAD_GAME_EVIL,
+        BUTTON_INFO_GOOD,
+        BUTTON_INFO_EVIL,
+        BUTTON_QUIT_GOOD,
+        BUTTON_QUIT_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
