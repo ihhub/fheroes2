@@ -538,6 +538,10 @@ namespace
                                                                          { { Campaign::ROLAND_CAMPAIGN, 9 }, Heroes::ROLAND },
                                                                          // Apocalypse
                                                                          { { Campaign::ARCHIBALD_CAMPAIGN, 10 }, Heroes::ARCHIBALD },
+                                                                         // The Wayward Son, Rogar the Barbarian
+                                                                         { { Campaign::DESCENDANTS_CAMPAIGN, 2 }, Heroes::ERGON },
+                                                                         // The Epic Battle, Jarkonas VI the Wizard
+                                                                         { { Campaign::DESCENDANTS_CAMPAIGN, 7 }, Heroes::ELDERIAN },
                                                                          // King and Country
                                                                          { { Campaign::VOYAGE_HOME_CAMPAIGN, 2 }, Heroes::GALLAVANT },
                                                                          // Blood is Thicker
@@ -608,6 +612,7 @@ namespace
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
+                    hero->SpellBookActivate();
                     hero->AppendSpellToBook( scenarioBonus._subType, true );
                 }
 
@@ -684,6 +689,7 @@ namespace
                 Heroes * hero = getHeroForCampaignAwards( currentScenarioInfoId, humanKingdom );
                 assert( hero != nullptr );
 
+                hero->SpellBookActivate();
                 hero->AppendSpellToBook( awards[i]._subType, true );
 
                 break;
