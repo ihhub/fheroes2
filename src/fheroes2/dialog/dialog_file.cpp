@@ -86,13 +86,13 @@ fheroes2::GameMode Dialog::FileOptions()
         le.MousePressLeft( buttonQuit.area() ) ? buttonQuit.drawOnPress() : buttonQuit.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonNew.area() ) ) {
+        if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
             if ( Interface::Basic::Get().EventNewGame() == fheroes2::GameMode::NEW_GAME ) {
                 result = fheroes2::GameMode::NEW_GAME;
                 break;
             }
         }
-        else if ( le.MouseClickLeft( buttonLoad.area() ) ) {
+        else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
             if ( ListFiles::IsEmpty( Game::GetSaveDir(), Game::GetSaveFileExtension(), false ) ) {
                 fheroes2::showMessage( fheroes2::Text( _( "Load Game" ), fheroes2::FontType::normalYellow() ),
                                        fheroes2::Text( _( "No save files to load." ), fheroes2::FontType::normalWhite() ), Dialog::OK );
@@ -102,13 +102,13 @@ fheroes2::GameMode Dialog::FileOptions()
                 break;
             }
         }
-        else if ( le.MouseClickLeft( buttonSave.area() ) ) {
+        else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
             // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
             back.restore();
 
             return Interface::Basic::Get().EventSaveGame();
         }
-        else if ( le.MouseClickLeft( buttonQuit.area() ) ) {
+        else if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 result = fheroes2::GameMode::QUIT_GAME;
                 break;

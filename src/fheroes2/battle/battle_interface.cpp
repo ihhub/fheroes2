@@ -2516,7 +2516,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             EventAutoFinish( a );
         }
         // Cast the spell
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::CAST_SPELL ) ) {
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) ) {
             ProcessingHeroDialogResult( 1, a );
         }
         // Retreat

@@ -252,7 +252,7 @@ void Castle::OpenWell()
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
-        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::WELL_BUY_ALL_CREATURES ) ) {
+        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::TOWN_WELL_BUY_ALL ) ) {
             const Troops & currentArmy = GetArmy();
             recruitCastleMax( currentArmy, allDwellings );
         }
