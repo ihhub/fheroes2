@@ -766,7 +766,7 @@ namespace fheroes2
 
                 const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_OKAY_EVIL );
 
-                if ( isPolishLanguageAndResources() ) {
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 1 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 2 );
                     break;
