@@ -536,6 +536,8 @@ namespace
                                                                          { { Campaign::ROLAND_CAMPAIGN, 5 }, Heroes::HALTON },
                                                                          // Final Justice
                                                                          { { Campaign::ROLAND_CAMPAIGN, 9 }, Heroes::ROLAND },
+                                                                         // Apocalypse
+                                                                         { { Campaign::ARCHIBALD_CAMPAIGN, 10 }, Heroes::ARCHIBALD },
                                                                          // King and Country
                                                                          { { Campaign::VOYAGE_HOME_CAMPAIGN, 2 }, Heroes::GALLAVANT },
                                                                          // Blood is Thicker
