@@ -122,7 +122,7 @@ bool World::LoadMapMP2( const std::string & filename )
 
     StreamFile fs;
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_WARN, "file not found " << filename.c_str() )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "file not found " << filename.c_str() )
         return false;
     }
 

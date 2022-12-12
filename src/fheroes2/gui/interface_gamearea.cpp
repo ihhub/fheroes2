@@ -809,7 +809,7 @@ void Interface::GameArea::SetRedraw() const
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Ultimate artifact is not found on index " << index )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Ultimate artifact is not found on index " << index )
         return fheroes2::Image();
     }
 
