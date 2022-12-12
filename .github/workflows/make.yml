@@ -34,7 +34,7 @@ jobs:
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON }
         - name: Linux ARM64 SDL1 Release
           os: ubuntu-latest
-          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl1.2-dev:arm64 libsdl1.2-mixer-dev:arm64 gettext
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl1.2-dev:arm64 libsdl-mixer1.2-dev:arm64 gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
           package_name: fheroes2_ubuntu_arm64_SDL1.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
@@ -42,7 +42,7 @@ jobs:
           release_tag: fheroes2-linux-arm-sdl1_dev
         - name: Linux ARM64 SDL1 Debug
           os: ubuntu-latest
-          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl1.2-dev:arm64 libsdl1.2-mixer-dev:arm64 gettext
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl1.2-dev:arm64 libsdl-mixer1.2-dev:arm64 gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
         - name: Linux ARM64 SDL2 Release
           os: ubuntu-latest
