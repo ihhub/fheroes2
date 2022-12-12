@@ -530,7 +530,7 @@ namespace
         }
     }
 
-    Heroes * getHeroForScenarioBonusOrCampaignAwards( const Campaign::ScenarioInfoId & scenarioInfoId, const Kingdom & kingdom )
+    Heroes * getHeroToApplyBonusOrAwards( const Campaign::ScenarioInfoId & scenarioInfoId, const Kingdom & kingdom )
     {
         static const std::map<std::pair<int, int>, int> targetHeroes = { // Defender
                                                                          { { Campaign::ROLAND_CAMPAIGN, 5 }, Heroes::HALTON },
@@ -588,7 +588,7 @@ namespace
 
                 break;
             case Campaign::ScenarioBonusData::ARTIFACT: {
-                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -598,7 +598,7 @@ namespace
                 break;
             }
             case Campaign::ScenarioBonusData::TROOP: {
-                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -608,7 +608,7 @@ namespace
                 break;
             }
             case Campaign::ScenarioBonusData::SPELL: {
-                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -623,7 +623,7 @@ namespace
 
                 break;
             case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY: {
-                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -633,7 +633,7 @@ namespace
                 break;
             }
             case Campaign::ScenarioBonusData::SKILL_PRIMARY: {
-                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -645,7 +645,7 @@ namespace
                 break;
             }
             case Campaign::ScenarioBonusData::SKILL_SECONDARY: {
-                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( scenarioInfoId, kingdom );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -674,7 +674,7 @@ namespace
 
             switch ( awards[i]._type ) {
             case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT: {
-                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( currentScenarioInfoId, humanKingdom );
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -684,7 +684,7 @@ namespace
                 break;
             }
             case Campaign::CampaignAwardData::TYPE_GET_SPELL: {
-                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( currentScenarioInfoId, humanKingdom );
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
@@ -711,7 +711,7 @@ namespace
 
                 break;
             case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES: {
-                Heroes * hero = getHeroForScenarioBonusOrCampaignAwards( currentScenarioInfoId, humanKingdom );
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
