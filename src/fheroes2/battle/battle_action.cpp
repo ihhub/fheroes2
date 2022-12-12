@@ -379,14 +379,16 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "double attack" )
                     BattleProcess( *attacker, *defender, dst, dir );
                 }
-
-                // Reflect defender only if he is alive.
-                defender->UpdateDirection();
             }
 
             // Reflect attacker only if he is alive.
             if ( attacker->isValid() ) {
                 attacker->UpdateDirection();
+            }
+
+            // Reflect defender only if he is alive.
+            if ( defender->isValid() ) {
+                defender->UpdateDirection();
             }
         }
         else {
