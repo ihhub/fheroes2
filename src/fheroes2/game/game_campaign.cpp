@@ -1399,6 +1399,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             playPreviosScenarioVideo();
             playCurrentScenarioVideo();
 
+            restorer.restore();
+            display.render();
+
             playCampaignMusic( chosenCampaignID );
         }
         else if ( le.MousePressRight( areaDaysSpent ) ) {
