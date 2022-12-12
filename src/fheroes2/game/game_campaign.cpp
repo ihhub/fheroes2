@@ -555,6 +555,22 @@ namespace
         };
 
         switch ( scenarioInfoId.campaignId ) {
+        case Campaign::ROLAND_CAMPAIGN:
+            switch ( scenarioInfoId.scenarioId ) {
+            // Defender
+            case 5: {
+                Heroes * hero = findHero( Heroes::HALTON );
+                if ( hero ) {
+                    return hero;
+                }
+
+                break;
+            }
+            default:
+                break;
+            }
+
+            break;
         case Campaign::VOYAGE_HOME_CAMPAIGN:
             switch ( scenarioInfoId.scenarioId ) {
             // King and Country
@@ -621,12 +637,11 @@ namespace
                 break;
             }
             case Campaign::ScenarioBonusData::SPELL: {
-                KingdomHeroes & heroes = kingdom.GetHeroes();
-                assert( !heroes.empty() );
+                Heroes * hero = getHeroForScenarioBonus( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
 
-                if ( !heroes.empty() ) {
-                    // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
-                    heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
+                if ( hero != nullptr ) {
+                    hero->AppendSpellToBook( scenarioBonus._subType, true );
                 }
 
                 break;
