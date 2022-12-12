@@ -1550,8 +1550,10 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 // Move hero to a new position. This function applies no action and no penalty
 void Heroes::Move2Dest( const int32_t dstIndex )
 {
-    if ( dstIndex != GetIndex() ) {
-        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
+    const int32_t currentIndex = GetIndex();
+
+    if ( dstIndex != currentIndex ) {
+        world.GetTiles( currentIndex ).SetHeroes( nullptr );
         SetIndex( dstIndex );
         Scoute( dstIndex );
         world.GetTiles( dstIndex ).SetHeroes( this );
