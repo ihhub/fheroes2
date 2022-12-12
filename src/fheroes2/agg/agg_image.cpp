@@ -82,6 +82,8 @@ namespace
                                                 ICN::BUTTON_LARGE_CANCEL,
                                                 ICN::BUTTON_SMALL_CANCEL_GOOD,
                                                 ICN::BUTTON_SMALL_CANCEL_EVIL,
+                                                ICN::BUTTON_SMALL_OKAY_GOOD,
+                                                ICN::BUTTON_SMALL_OKAY_EVIL,
                                                 ICN::BUTTON_LARGE_CONFIG,
                                                 ICN::BUTTON_ORIGINAL_CAMPAIGN,
                                                 ICN::BUTTON_EXPANSION_CAMPAIGN,
@@ -754,6 +756,30 @@ namespace fheroes2
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_OKAY_GOOD:
+            case ICN::BUTTON_SMALL_OKAY_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_OKAY_EVIL );
+
+                if ( isPolishLanguageAndResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 1 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 2 );
+                    break;
+                }
+
+                int32_t textWidth = 86;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ), releasedOffset, pressedOffset, { textWidth, 16 },
                                     buttonFontColor );
 
                 break;
@@ -1573,6 +1599,8 @@ namespace fheroes2
             case ICN::BUTTON_LARGE_CANCEL:
             case ICN::BUTTON_SMALL_CANCEL_GOOD:
             case ICN::BUTTON_SMALL_CANCEL_EVIL:
+            case ICN::BUTTON_SMALL_OKAY_GOOD:
+            case ICN::BUTTON_SMALL_OKAY_EVIL:
             case ICN::BUTTON_LARGE_CONFIG:
             case ICN::BUTTON_ORIGINAL_CAMPAIGN:
             case ICN::BUTTON_EXPANSION_CAMPAIGN:
