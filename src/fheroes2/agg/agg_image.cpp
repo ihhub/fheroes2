@@ -66,7 +66,17 @@ namespace
     // Some resources are language dependent. These are mostly buttons with a text of them.
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
 
-    const std::set<int> languageDependentIcnId{ ICN::BUTTON_STANDARD_GAME,
+    const std::set<int> languageDependentIcnId{ ICN::BUTTON_NEW_GAME_GOOD,
+                                                ICN::BUTTON_NEW_GAME_EVIL,
+                                                ICN::BUTTON_SAVE_GAME_GOOD,
+                                                ICN::BUTTON_SAVE_GAME_EVIL,
+                                                ICN::BUTTON_LOAD_GAME_GOOD,
+                                                ICN::BUTTON_LOAD_GAME_EVIL,
+                                                ICN::BUTTON_INFO_GOOD,
+                                                ICN::BUTTON_INFO_EVIL,
+                                                ICN::BUTTON_QUIT_GOOD,
+                                                ICN::BUTTON_QUIT_EVIL,
+                                                ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
                                                 ICN::BUTTON_LARGE_CANCEL,
@@ -97,6 +107,14 @@ namespace
         return languageDependentIcnId.count( id ) > 0;
     }
 #endif
+
+    bool useOriginalResources()
+    {
+        const fheroes2::SupportedLanguage currentLanguage = fheroes2::getCurrentLanguage();
+        const fheroes2::SupportedLanguage resourceLanguage = fheroes2::getResourceLanguage();
+        return ( currentLanguage == fheroes2::SupportedLanguage::Polish && resourceLanguage == fheroes2::SupportedLanguage::Polish )
+               || ( currentLanguage == fheroes2::SupportedLanguage::Russian && resourceLanguage == fheroes2::SupportedLanguage::Russian );
+    }
 
     bool IsValidICNId( int id )
     {
@@ -511,13 +529,135 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_NEW_GAME_EVIL:
+            case ICN::BUTTON_NEW_GAME_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isGoodInterface = ( id == ICN::BUTTON_NEW_GAME_GOOD );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 0 );
+                    _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 1 );
+                    break;
+                }
+
+                const int baseIcnId = isGoodInterface ? ICN::EMPTY_GOOD_MEDIUM_BUTTON : ICN::EMPTY_EVIL_MEDIUM_BUTTON;
+                const fheroes2::FontColor buttonFontColor = isGoodInterface ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, i );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NEW\nGAME" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_SAVE_GAME_EVIL:
+            case ICN::BUTTON_SAVE_GAME_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isGoodInterface = ( id == ICN::BUTTON_SAVE_GAME_GOOD );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 4 );
+                    _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 5 );
+                    break;
+                }
+
+                const int baseIcnId = isGoodInterface ? ICN::EMPTY_GOOD_MEDIUM_BUTTON : ICN::EMPTY_EVIL_MEDIUM_BUTTON;
+                const fheroes2::FontColor buttonFontColor = isGoodInterface ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, i );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SAVE\nGAME" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_LOAD_GAME_EVIL:
+            case ICN::BUTTON_LOAD_GAME_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isGoodInterface = ( id == ICN::BUTTON_LOAD_GAME_GOOD );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 2 );
+                    _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 3 );
+                    break;
+                }
+
+                const int baseIcnId = isGoodInterface ? ICN::EMPTY_GOOD_MEDIUM_BUTTON : ICN::EMPTY_EVIL_MEDIUM_BUTTON;
+                const fheroes2::FontColor buttonFontColor = isGoodInterface ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, i );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LOAD\nGAME" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_INFO_EVIL:
+            case ICN::BUTTON_INFO_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isGoodInterface = ( id == ICN::BUTTON_INFO_GOOD );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::APANEL : ICN::APANELE, 4 );
+                    _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::APANEL : ICN::APANELE, 5 );
+                    break;
+                }
+
+                const int baseIcnId = isGoodInterface ? ICN::EMPTY_GOOD_MEDIUM_BUTTON : ICN::EMPTY_EVIL_MEDIUM_BUTTON;
+                const fheroes2::FontColor buttonFontColor = isGoodInterface ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, i );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "INFO" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_QUIT_EVIL:
+            case ICN::BUTTON_QUIT_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isGoodInterface = ( id == ICN::BUTTON_QUIT_GOOD );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 6 );
+                    _icnVsSprite[id][1] = GetICN( isGoodInterface ? ICN::CPANEL : ICN::CPANELE, 7 );
+                    break;
+                }
+
+                const int baseIcnId = isGoodInterface ? ICN::EMPTY_GOOD_MEDIUM_BUTTON : ICN::EMPTY_EVIL_MEDIUM_BUTTON;
+                const fheroes2::FontColor buttonFontColor = isGoodInterface ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, i );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "QUIT" ), { 7, 5 }, { 6, 6 }, { 86, 48 }, buttonFontColor );
+
+                break;
+            }
             case ICN::BUTTON_STANDARD_GAME: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 0 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 1 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -532,11 +672,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_CAMPAIGN_GAME: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 2 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 3 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -551,11 +693,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_MULTIPLAYER_GAME: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 4 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 5 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -570,11 +714,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_LARGE_CANCEL: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNNEWGM, 6 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNNEWGM, 7 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -588,11 +734,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_LARGE_CONFIG: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNDCCFG, 4 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNDCCFG, 5 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -606,11 +754,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_ORIGINAL_CAMPAIGN: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::X_LOADCM, 0 );
                     _icnVsSprite[id][1] = GetICN( ICN::X_LOADCM, 1 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -625,11 +775,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_EXPANSION_CAMPAIGN: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::X_LOADCM, 2 );
                     _icnVsSprite[id][1] = GetICN( ICN::X_LOADCM, 3 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -644,11 +796,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_HOT_SEAT: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNMP, 0 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNMP, 1 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -662,11 +816,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_2_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 0 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 1 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -681,11 +837,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_3_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 2 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 3 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -700,11 +858,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_4_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 4 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 5 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -719,11 +879,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_5_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 6 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 7 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -738,11 +900,13 @@ namespace fheroes2
             }
             case ICN::BUTTON_6_PLAYERS: {
                 _icnVsSprite[id].resize( 2 );
-                if ( fheroes2::getCurrentLanguage() == fheroes2::SupportedLanguage::Polish && fheroes2::getResourceLanguage() == fheroes2::SupportedLanguage::Polish ) {
+
+                if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::BTNHOTST, 8 );
                     _icnVsSprite[id][1] = GetICN( ICN::BTNHOTST, 9 );
                     break;
                 }
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -1367,6 +1531,16 @@ namespace fheroes2
                     Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
                 }
                 return true;
+            case ICN::BUTTON_NEW_GAME_GOOD:
+            case ICN::BUTTON_NEW_GAME_EVIL:
+            case ICN::BUTTON_SAVE_GAME_GOOD:
+            case ICN::BUTTON_SAVE_GAME_EVIL:
+            case ICN::BUTTON_LOAD_GAME_GOOD:
+            case ICN::BUTTON_LOAD_GAME_EVIL:
+            case ICN::BUTTON_INFO_GOOD:
+            case ICN::BUTTON_INFO_EVIL:
+            case ICN::BUTTON_QUIT_GOOD:
+            case ICN::BUTTON_QUIT_EVIL:
             case ICN::BUTTON_STANDARD_GAME:
             case ICN::BUTTON_CAMPAIGN_GAME:
             case ICN::BUTTON_MULTIPLAYER_GAME:
@@ -2643,13 +2817,11 @@ namespace fheroes2
                 const int32_t originalId = ( id == ICN::EMPTY_GOOD_BUTTON ) ? ICN::SYSTEM : ICN::SYSTEME;
                 LoadOriginalICN( originalId );
 
-                _icnVsSprite[id].resize( 2 );
-
                 if ( _icnVsSprite[originalId].size() < 13 ) {
-                    // Invalid game resources!
-                    assert( 0 );
                     break;
                 }
+
+                _icnVsSprite[id].resize( 2 );
 
                 Sprite & released = _icnVsSprite[id][0];
                 Sprite & pressed = _icnVsSprite[id][1];
@@ -2671,6 +2843,32 @@ namespace fheroes2
                     FillTransform( pressed, pressed.width() - 5, pressed.height() - 1, 3, 1, 1 );
                     FillTransform( pressed, pressed.width() - 4, pressed.height() - 2, 2, 1, 1 );
                     FillTransform( pressed, pressed.width() - 3, pressed.height() - 3, 1, 1, 1 );
+                }
+
+                break;
+            }
+            case ICN::EMPTY_GOOD_MEDIUM_BUTTON:
+            case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {
+                const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_MEDIUM_BUTTON );
+                const int32_t originalId = isGoodInterface ? ICN::APANEL : ICN::APANELE;
+                LoadOriginalICN( originalId );
+
+                if ( _icnVsSprite[originalId].size() < 10 ) {
+                    break;
+                }
+
+                _icnVsSprite[id].resize( 2 );
+
+                Sprite & released = _icnVsSprite[id][0];
+                Sprite & pressed = _icnVsSprite[id][1];
+
+                released = _icnVsSprite[originalId][2];
+                pressed = _icnVsSprite[originalId][3];
+
+                if ( released.width() > 2 && released.height() > 2 && pressed.width() > 2 && pressed.height() > 2 ) {
+                    // Clean the buttons.
+                    Fill( released, 28, 15, 42, 27, getButtonFillingColor( true, isGoodInterface ) );
+                    Fill( pressed, 27, 16, 42, 27, getButtonFillingColor( false, isGoodInterface ) );
                 }
 
                 break;

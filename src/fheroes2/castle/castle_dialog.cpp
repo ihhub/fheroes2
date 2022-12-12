@@ -107,7 +107,7 @@ namespace
         if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_TAVERN ) ) {
             return BUILD_TAVERN;
         }
-        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_JUMP_TO_BUILD_SELECTION ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_CONSTRUCTION ) ) {
             return BUILD_CASTLE;
         }
 
