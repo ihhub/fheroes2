@@ -1336,6 +1336,9 @@ void Battle::Interface::RedrawArmies()
         RedrawKilled();
     }
 
+    // Continue the idle animation for all troops on the battlefield.
+    IdleTroopsAnimation();
+
     for ( int32_t cellRowId = 0; cellRowId < ARENAH; ++cellRowId ) {
         // Redraw objects.
         for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
