@@ -166,6 +166,8 @@ namespace
         const MP2::MapObjectType objectType = tile.GetObject();
 
         if ( !MP2::isActionObject( objectType ) ) {
+            // TODO: add logic to verify if all parts of puzzle are opened and the location is known.
+            // TODO: once it is done, check if the tile does not have a hole. If it does not mark it as a valid object.
             return false;
         }
 
