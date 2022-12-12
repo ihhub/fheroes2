@@ -532,36 +532,56 @@ namespace
 
     Heroes * getHeroToApplyBonusOrAwards( const Campaign::ScenarioInfoId & scenarioInfoId, const Kingdom & kingdom )
     {
-        static const std::map<std::pair<int, int>, int> targetHeroes = { // Defender
-                                                                         { { Campaign::ROLAND_CAMPAIGN, 5 }, Heroes::HALTON },
-                                                                         // Final Justice
-                                                                         { { Campaign::ROLAND_CAMPAIGN, 9 }, Heroes::ROLAND },
-                                                                         // Apocalypse
-                                                                         { { Campaign::ARCHIBALD_CAMPAIGN, 10 }, Heroes::ARCHIBALD },
-                                                                         // The Wayward Son, Rogar the Barbarian
-                                                                         { { Campaign::DESCENDANTS_CAMPAIGN, 2 }, Heroes::ERGON },
-                                                                         // The Epic Battle, Jarkonas VI the Wizard
-                                                                         { { Campaign::DESCENDANTS_CAMPAIGN, 7 }, Heroes::ELDERIAN },
-                                                                         // King and Country
-                                                                         { { Campaign::VOYAGE_HOME_CAMPAIGN, 2 }, Heroes::GALLAVANT },
-                                                                         // Blood is Thicker
-                                                                         { { Campaign::VOYAGE_HOME_CAMPAIGN, 3 }, Heroes::GALLAVANT } };
+        {
+            static const std::map<std::pair<int, int>, int> targetHeroes = { // Final Justice
+                                                                             { { Campaign::ROLAND_CAMPAIGN, 9 }, Heroes::ROLAND },
+                                                                             // Apocalypse
+                                                                             { { Campaign::ARCHIBALD_CAMPAIGN, 10 }, Heroes::ARCHIBALD },
+                                                                             // King and Country
+                                                                             { { Campaign::VOYAGE_HOME_CAMPAIGN, 2 }, Heroes::GALLAVANT },
+                                                                             // Blood is Thicker
+                                                                             { { Campaign::VOYAGE_HOME_CAMPAIGN, 3 }, Heroes::GALLAVANT } };
 
-        const auto iter = targetHeroes.find( { scenarioInfoId.campaignId, scenarioInfoId.scenarioId } );
-        if ( iter != targetHeroes.end() ) {
-            // The "special" kingdom heroes may have the ID of another hero, but a custom name and portrait,
-            // so the search should be performed by the portrait ID
-            for ( Heroes * hero : kingdom.GetHeroes() ) {
-                assert( hero != nullptr );
+            const auto iter = targetHeroes.find( { scenarioInfoId.campaignId, scenarioInfoId.scenarioId } );
+            if ( iter != targetHeroes.end() ) {
+                // The "special" kingdom heroes may have the ID of another hero, but a custom name and portrait,
+                // so the search should be performed by the portrait ID
+                for ( Heroes * hero : kingdom.GetHeroes() ) {
+                    assert( hero != nullptr );
 
-                if ( hero->getPortraitId() == iter->second ) {
-                    return hero;
+                    if ( hero->getPortraitId() == iter->second ) {
+                        return hero;
+                    }
                 }
-            }
 
-            DEBUG_LOG( DBG_GAME, DBG_WARN,
-                       "the hero to whom bonuses or awards should be applied has not been found"
-                           << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
+                DEBUG_LOG( DBG_GAME, DBG_WARN,
+                           "the hero to whom bonuses or awards should be applied has not been found"
+                               << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
+            }
+        }
+
+        {
+            static const std::map<std::pair<int, int>, int> targetRaces = { // Defender
+                                                                            { { Campaign::ROLAND_CAMPAIGN, 5 }, Race::SORC },
+                                                                            // The Wayward Son
+                                                                            { { Campaign::DESCENDANTS_CAMPAIGN, 2 }, Race::SORC },
+                                                                            // The Epic Battle
+                                                                            { { Campaign::DESCENDANTS_CAMPAIGN, 7 }, Race::SORC } };
+
+            const auto iter = targetRaces.find( { scenarioInfoId.campaignId, scenarioInfoId.scenarioId } );
+            if ( iter != targetRaces.end() ) {
+                for ( Heroes * hero : kingdom.GetHeroes() ) {
+                    assert( hero != nullptr );
+
+                    if ( hero->GetRace() == iter->second ) {
+                        return hero;
+                    }
+                }
+
+                DEBUG_LOG( DBG_GAME, DBG_WARN,
+                           "the hero to whom bonuses or awards should be applied has not been found"
+                               << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
+            }
         }
 
         // By default, bonuses and awards are applied to the best hero of the kingdom
