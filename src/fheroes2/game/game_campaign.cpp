@@ -534,7 +534,7 @@ namespace
     {
         // The "special" kingdom heroes may have the ID of another hero, but a custom name and portrait,
         // so the search should be performed by the portrait ID
-        auto findHero = [&kingdom]( const int targetHeroId ) -> Heroes * {
+        auto findHero = [&scenarioInfoId, &kingdom]( const int targetHeroId ) -> Heroes * {
             for ( Heroes * hero : kingdom.GetHeroes() ) {
                 assert( hero != nullptr );
 
@@ -542,6 +542,10 @@ namespace
                     return hero;
                 }
             }
+
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       "the hero to whom the bonus should be applied has not been found"
+                           << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
 
             return nullptr;
         };
@@ -557,10 +561,6 @@ namespace
                 if ( hero ) {
                     return hero;
                 }
-
-                DEBUG_LOG( DBG_GAME, DBG_WARN,
-                           "the hero to whom the bonus should be applied has not been found"
-                               << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
 
                 break;
             }
