@@ -55,8 +55,7 @@ namespace Mixer
 
     int applySoundEffect( const int channelId, const int16_t angle, const uint8_t volumePercentage );
 
-    // Returns the previous volume percentage value.
-    int setVolume( const int channelId, const int volumePercentage );
+    void setVolume( const int channelId, const int volumePercentage );
 
     void Pause( const int channelId = -1 );
     void Resume( const int channelId = -1 );
@@ -96,8 +95,7 @@ namespace Music
     // A music track with the specified UID should not already be present in the database.
     void Play( const uint64_t musicUID, const std::string & file, const PlaybackMode playbackMode );
 
-    // Returns the previous volume percentage value.
-    int setVolume( const int volumePercentage );
+    void setVolume( const int volumePercentage );
 
     void SetFadeInMs( const int timeMs );
 

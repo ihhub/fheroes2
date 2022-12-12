@@ -177,15 +177,10 @@ std::string Army::SizeString( uint32_t size )
 Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
 {
-    *this = troops;
-}
-
-Troops & Troops::operator=( const Troops & rhs )
-{
-    reserve( rhs.size() );
-    for ( const_iterator it = rhs.begin(); it != rhs.end(); ++it )
-        push_back( new Troop( **it ) );
-    return *this;
+    reserve( troops.size() );
+    for ( const auto & troop : troops ) {
+        push_back( new Troop( *troop ) );
+    }
 }
 
 Troops::~Troops()
