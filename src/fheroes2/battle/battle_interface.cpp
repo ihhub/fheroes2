@@ -4834,9 +4834,12 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const int strength )
     RedrawPartialFinish();
 
     const fheroes2::Image original( _mainSurface );
-    fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, strength );
-    // Make the spell effect darker by setting its 'transform' layer.
-    fheroes2::ApplyTransform( blurred, 0, 0, blurred.width(), blurred.height(), 4 );
+    fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, 3 );
+
+    // Make the spell effect more dark-red.
+    fheroes2::Image blurredRed( blurred );
+    fheroes2::ApplyPalette( blurredRed, PAL::GetPalette( PAL::PaletteType::RED ) );
+    fheroes2::AlphaBlit( blurredRed, blurred, static_cast<uint8_t>( 10 * strength ) );
 
     _currentUnit = nullptr;
     AudioManager::PlaySound( M82::MASSCURS );
