@@ -5225,7 +5225,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     if ( wnce ) {
         int32_t deathColor = Color::UNUSED;
 
-        for ( const auto & target : targets ) {
+        for ( const TargetInfo & target : targets ) {
             Unit * defender = target.defender;
             if ( defender == nullptr ) {
                 continue;
@@ -5250,7 +5250,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
             }
             // If the creature is damaged but is still alive set its wince animation.
             else if ( target.damage ) {
-                defender->SwitchAnimation( Monster_Info::WNCE );
+                defender->SwitchAnimation( Monster_Info::WNCE_UP );
                 AudioManager::PlaySound( defender->M82Wnce() );
             }
 
@@ -5290,7 +5290,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
             isDefenderAnimatimg = false;
 
             if ( wnce ) {
-                for ( const auto & target : targets ) {
+                for ( const TargetInfo & target : targets ) {
                     if ( target.defender == nullptr ) {
                         continue;
                     }
@@ -5300,12 +5300,21 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                         target.defender->IncreaseAnimFrame( false );
                     }
                     else if ( target.damage ) {
-                        // Check if the animation will not be finished with the next frame, then set the defender wince animation state.
-                        isDefenderAnimatimg |= !target.defender->isFinishAnimFrame();
+                        // Check if the current animation is finished.
+                        const bool isFinishAnim = target.defender->isFinishAnimFrame();
+                        if ( target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN && isFinishAnim ) {
+                            target.defender->SwitchAnimation( Monster_Info::STATIC );
+                        }
 
-                        // Animate only 2 wince frames at the start of the spell animation to get the maximum wince effect
-                        // and continue it only after spell animation ends.
-                        if ( frame < 2 || frame >= maxFrame ) {
+                        // If the main spell sprite animation and WNCE_UP are finised then switch unit animation to WNCE_DOWN.
+                        if ( frame >= maxFrame && isFinishAnim && target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) {
+                            target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
+                        }
+
+                        // If not all damaged units are set to STATIC animation then set isDefenderAnimatimg.
+                        isDefenderAnimatimg |= !( target.defender->GetAnimationState() == Monster_Info::STATIC );
+
+                        if ( !target.defender->isFinishAnimFrame() ) {
                             target.defender->IncreaseAnimFrame( false );
                         }
                     }
@@ -5317,18 +5326,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
         }
     }
 
-    if ( wnce ) {
-        for ( const auto & target : targets ) {
-            if ( target.defender && target.defender->GetAnimationState() == Monster_Info::WNCE ) {
-                target.defender->SwitchAnimation( Monster_Info::STATIC );
-                _currentUnit = nullptr;
-            }
-        }
-
+    if ( wnce && !mirrorImages.empty() ) {
         // Fade away animation for destroyed mirror images
-        if ( !mirrorImages.empty() ) {
-            RedrawActionRemoveMirrorImage( mirrorImages );
-        }
+        RedrawActionRemoveMirrorImage( mirrorImages );
     }
 }
 
