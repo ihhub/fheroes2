@@ -3404,8 +3404,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     // Slowed flying creature has to fly off.
     if ( canFly && dst == path.begin() ) {
         // The destination of fly off is same as the current creature position.
-        const fheroes2::Rect & pos1 = unit.GetRectPosition();
-        _movingPos = fheroes2::Point( pos1.x, pos1.y );
+        _movingPos = unit.GetRectPosition().getPosition();
         unit.SwitchAnimation( Monster_Info::FLY_UP );
         AudioManager::PlaySound( unit.M82Tkof() );
         // Take off animation is 30% length on average (original value).
@@ -3483,11 +3482,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     if ( unit.GetPosition().contains( destIndex ) )
         return;
 
-    const fheroes2::Rect & pos1 = unit.GetRectPosition();
-    const fheroes2::Rect & pos2 = Board::GetCell( destIndex )->GetPos();
-
-    fheroes2::Point destPos( pos1.x, pos1.y );
-    fheroes2::Point targetPos( pos2.x, pos2.y );
+    const fheroes2::Point destPos = unit.GetRectPosition().getPosition();
+    fheroes2::Point targetPos = Board::GetCell( destIndex )->GetPos().getPosition();
 
     if ( unit.isWide() && targetPos.x > destPos.x ) {
         targetPos.x -= CELLW; // this is needed to avoid extra cell shifting upon landing when we move to right side
