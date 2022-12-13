@@ -178,7 +178,7 @@ Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
 {
     reserve( troops.size() );
-    for ( const auto & troop : troops ) {
+    for ( const Troop * troop : troops ) {
         push_back( new Troop( *troop ) );
     }
 }
