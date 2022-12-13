@@ -178,7 +178,10 @@ Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
 {
     reserve( troops.size() );
+
     for ( const Troop * troop : troops ) {
+        assert( troop != nullptr );
+
         push_back( new Troop( *troop ) );
     }
 }
