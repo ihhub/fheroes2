@@ -5187,8 +5187,8 @@ fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellIC
         result.x += pos.width / 2;
         break;
     case ICN::REDDEATH:
-        // Position shifts for the Death Row spell to be closer to OG.
-        result.x += pos.width / 2 + ( target.isReflect() ? 26 : -4 );
+        // Shift spell sprite position for wide ceature to its head.
+        result.x += pos.width / 2 + ( target.isReflect() ? 1 - spellSprite.width() - 2 * spellSprite.x() - pos.width / 8 : pos.width / 8 );
         result.y -= pos.height - 4;
         break;
     case ICN::MAGIC08:
