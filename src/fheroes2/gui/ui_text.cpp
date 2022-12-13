@@ -250,6 +250,11 @@ namespace
                     if ( lineLength == lastWordLength ) {
                         offset->x += getLineWidth( line, lineLength, fontType );
                         ++character;
+
+                        // It could be a case when the next character is line separator symbol. In this case we have to skip it.
+                        if ( character != characterEnd && *character == lineSeparator ) {
+                            ++character;
+                        }
                     }
                     else {
                         offset->x += getLineWidth( line, lineLength - lastWordLength, fontType );
@@ -385,6 +390,11 @@ namespace
                         // Looks like a word is bigger than line width.
                         renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
                         ++character;
+
+                        // It could be a case when the next character is line separator symbol. In this case we have to skip it.
+                        if ( character != characterEnd && *character == lineSeparator ) {
+                            ++character;
+                        }
                     }
                     else {
                         renderLine( line, lineLength - lastWordLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
