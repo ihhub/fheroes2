@@ -3397,35 +3397,81 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     _currentUnit = nullptr;
     _movingUnit = &unit;
-
     // If it is a flying creature that acts like walking one when it is under the Slow spell.
     const bool canFly = unit.isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
+    // If it is a wide creature (cache this boolean to use in the loop).
+    const bool isWide = unit.isWide();
+    Indexes::const_iterator pathEnd = path.end();
 
     // Slowed flying creature has to fly off.
-    if ( canFly && dst == path.begin() ) {
+    if ( canFly ) {
+        // Check if the bridge needs to open during the movement.
+        if ( bridge ) {
+            const Position startPosition = unit.GetPosition();
+            while ( dst != pathEnd ) {
+                if ( bridge->NeedDown( unit, *dst ) ) {
+                    // Restore the initial creature position before rendering the animation.
+                    unit.SetPosition( startPosition );
+                    bridge->ForceAction( true );
+                    break;
+                }
+
+                // Fix for wide flyers - go the whole path with reflections to check the bridge.
+                if ( isWide ) {
+                    if ( unit.GetTailIndex() == *dst ) {
+                        unit.SetReflection( !unit.isReflect() );
+                    }
+                }
+                unit.SetPosition( *dst );
+
+                ++dst;
+            }
+
+            // If there was no bridge on the path then restore the initial creature position.
+            if ( dst == pathEnd ) {
+                unit.SetPosition( startPosition );
+            }
+
+            // Restore the initial path pointer state.
+            dst = path.begin();
+        }
+
         // The destination of fly off is same as the current creature position.
         _movingPos = unit.GetRectPosition().getPosition();
+        const bool isFromRightArmy = unit.isReflect();
+        const bool isFlyToRight = ( _movingPos.x < Board::GetCell( *dst )->GetPos().x );
+
+        // Reflect the creature if it has to fly back.
+        unit.SetReflection( !isFlyToRight );
         unit.SwitchAnimation( Monster_Info::FLY_UP );
         AudioManager::PlaySound( unit.M82Tkof() );
         // Take off animation is 30% length on average (original value).
         AnimateUnitWithDelay( unit, frameDelay * 3 / 10 );
+        // If a wide flyer returns back it should skip one path position (its head bocomes its tail - it is already one move).
+        if ( isWide && ( isFlyToRight == isFromRightArmy ) ) {
+            ++dst;
+        }
     }
 
-    while ( dst != path.end() ) {
+    while ( dst != pathEnd ) {
         const Cell * cell = Board::GetCell( *dst );
         _movingPos = cell->GetPos().getPosition();
         bool show_anim = false;
 
-        if ( bridge && bridge->NeedDown( unit, *dst ) ) {
+        if ( !canFly && bridge && bridge->NeedDown( unit, *dst ) ) {
             _movingUnit = nullptr;
             unit.SwitchAnimation( Monster_Info::STATIC );
             bridge->Action( unit, *dst );
             _movingUnit = &unit;
         }
 
-        if ( unit.isWide() ) {
-            if ( unit.GetTailIndex() == *dst )
-                unit.SetReflection( !unit.isReflect() );
+        if ( isWide ) {
+            if ( unit.GetTailIndex() == *dst ) {
+                // We must not reflect the flyers at the and of the path (just before the landing).
+                if ( !canFly || ( pathEnd != ( dst + 1 ) ) ) {
+                    unit.SetReflection( !unit.isReflect() );
+                }
+            }
             else
                 show_anim = true;
         }
@@ -3435,14 +3481,18 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
 
         if ( show_anim ) {
+            // If a wide flyer is flying to the left its horizontal position should be shifted to the left by one cell.
+            if ( canFly && isWide && !unit.isReflect() ) {
+                _movingPos.x -= CELLW;
+            }
             AudioManager::PlaySound( unit.M82Move() );
             unit.SwitchAnimation( Monster_Info::MOVING );
             AnimateUnitWithDelay( unit, frameDelay );
             unit.SetPosition( *dst );
         }
 
-        // check for possible bridge close action, after unit's end of movement
-        if ( bridge && bridge->AllowUp() ) {
+        // Check for possible bridge close action, after land unit's end of movement.
+        if ( !canFly && bridge && bridge->AllowUp() ) {
             _movingUnit = nullptr;
             unit.SwitchAnimation( Monster_Info::STATIC );
             bridge->Action( unit, *dst );
@@ -3460,6 +3510,11 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         unit.SwitchAnimation( landAnim );
         AudioManager::PlaySound( unit.M82Land() );
         AnimateUnitWithDelay( unit, frameDelay );
+
+        // Close the bridge only after the creature lands.
+        if ( bridge && bridge->AllowUp() ) {
+            bridge->ForceAction( false );
+        }
     }
 
     // restore
