@@ -80,7 +80,6 @@ namespace GameOver
 
         int colors;
         uint32_t result;
-        bool continueAfterVictory;
     };
 
     StreamBase & operator<<( StreamBase &, const Result & );
