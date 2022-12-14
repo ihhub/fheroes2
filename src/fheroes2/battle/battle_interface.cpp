@@ -4630,6 +4630,9 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
     LocalEvent & le = LocalEvent::Get();
 
     if ( !target.isValid() ) {
+        // Restore direction of the creature, since it could be killed when it was reflected.
+        target.UpdateDirection();
+
         Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
         while ( le.HandleEvents() && !target.isFinishAnimFrame() ) {
