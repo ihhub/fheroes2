@@ -4756,6 +4756,9 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     std::vector<int32_t> deathWaveCurve;
     deathWaveCurve.reserve( waveLength );
 
+    // Calculate the "Death Wave" curve as one period of cosine, which starts from 0 with an amlutude of 1/2 and shifted down by 0.5.
+    // So we get a smooth hill, which is the multiplied with 'strength' and shifted after that by -1px.
+    // (The "Death Wave" curve has to shift the image and cosine starts from 0 so we add extra 1px).
     for ( int32_t posX = 0; posX < waveLength; ++posX ) {
         deathWaveCurve.push_back( static_cast<int32_t>( std::round( strength * ( cos( posX / waveLimit ) / 2 - 0.5 ) ) ) - 1 );
     }
@@ -4822,7 +4825,7 @@ void Battle::Interface::RedrawActionColdRingSpell( int32_t dst, const TargetsInf
         }
 }
 
-void Battle::Interface::RedrawActionHolyShoutSpell( const int strength )
+void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -4839,7 +4842,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const int strength )
     // Make the spell effect more dark-red.
     fheroes2::Image blurredRed( blurred );
     fheroes2::ApplyPalette( blurredRed, PAL::GetPalette( PAL::PaletteType::RED ) );
-    fheroes2::AlphaBlit( blurredRed, blurred, static_cast<uint8_t>( 10 * strength ) );
+    fheroes2::AlphaBlit( blurredRed, blurred, ( 10 * strength ) );
 
     _currentUnit = nullptr;
     AudioManager::PlaySound( M82::MASSCURS );
@@ -5188,7 +5191,7 @@ fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellIC
         break;
     case ICN::REDDEATH:
         // Shift spell sprite position for wide ceature to its head.
-        result.x += pos.width / 2 + ( target.isReflect() ? 1 - spellSprite.width() - 2 * spellSprite.x() - pos.width / 8 : pos.width / 8 );
+        result.x += pos.width / 2 + ( target.isReflect() ? ( 1 - spellSprite.width() - 2 * spellSprite.x() - pos.width / 8 ) : ( pos.width / 8 ) );
         result.y -= pos.height - 4;
         break;
     case ICN::MAGIC08:
@@ -5261,7 +5264,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     // For certain spells reflect the spell sprite if the creature is reflected.
     const bool isReflectICN = ( icn == ICN::SHIELD || icn == ICN::REDDEATH || icn == ICN::MAGIC08 );
     // Set the defender wince animation state.
-    bool isDefenderAnimatimg = wnce;
+    bool isDefenderAnimating = wnce;
     const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn );
     uint32_t frame = 0;
 
@@ -5269,7 +5272,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents() && ( frame < maxFrame || isDefenderAnimatimg ) ) {
+    while ( le.HandleEvents() && ( frame < maxFrame || isDefenderAnimating ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -5286,8 +5289,10 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                 }
             }
 
+            RedrawPartialFinish();
+
             // Reset the defender wince animation state.
-            isDefenderAnimatimg = false;
+            isDefenderAnimating = false;
 
             if ( wnce ) {
                 for ( const TargetInfo & target : targets ) {
@@ -5298,30 +5303,31 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                     // Fully animate creature death.
                     if ( !target.defender->isValid() ) {
                         target.defender->IncreaseAnimFrame( false );
+
+                        // If the death animation is still in process then set isDefenderAnimatimg to false.
+                        isDefenderAnimating |= !target.defender->isFinishAnimFrame();
                     }
                     else if ( target.damage ) {
-                        // Check if the current animation is finished.
-                        const bool isFinishAnim = target.defender->isFinishAnimFrame();
-                        if ( target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN && isFinishAnim ) {
-                            target.defender->SwitchAnimation( Monster_Info::STATIC );
-                        }
-
-                        // If the main spell sprite animation and WNCE_UP are finised then switch unit animation to WNCE_DOWN.
-                        if ( frame >= maxFrame && isFinishAnim && target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) {
-                            target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
-                        }
-
-                        // If not all damaged units are set to STATIC animation then set isDefenderAnimatimg.
-                        isDefenderAnimatimg |= !( target.defender->GetAnimationState() == Monster_Info::STATIC );
-
+                        // If the target has taken damage and is not killed.
+                        // Check if the current animation is not finished.
                         if ( !target.defender->isFinishAnimFrame() ) {
                             target.defender->IncreaseAnimFrame( false );
                         }
+                        else if ( frame >= maxFrame && target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) {
+                            // If the main spell sprite animation and WNCE_UP are finised then switch unit animation to WNCE_DOWN.
+                            target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
+                        }
+                        else if ( target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) {
+                            // If the WNCE_DOWN animation is finished, then set STATIC animation to the target.
+                            target.defender->SwitchAnimation( Monster_Info::STATIC );
+                        }
+
+                        // If not all damaged (and not killed) units are set to STATIC animation then set isDefenderAnimatimg to false.
+                        isDefenderAnimating |= !( target.defender->GetAnimationState() == Monster_Info::STATIC );
                     }
                 }
             }
 
-            RedrawPartialFinish();
             ++frame;
         }
     }

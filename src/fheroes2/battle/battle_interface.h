@@ -332,7 +332,7 @@ namespace Battle
         void RedrawActionColdRingSpell( int32_t, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell();
-        void RedrawActionHolyShoutSpell( const int strength );
+        void RedrawActionHolyShoutSpell( const uint8_t strength );
         void RedrawActionResurrectSpell( Unit &, const Spell & );
         void RedrawActionDeathWaveSpell( const int strength );
         void RedrawActionLightningBoltSpell( const Unit & );

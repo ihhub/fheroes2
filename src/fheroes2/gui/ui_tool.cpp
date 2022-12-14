@@ -31,6 +31,7 @@
 #include <utility>
 
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -233,7 +234,7 @@ namespace fheroes2
 
         const int32_t width = in.width();
         // If the death wave curve is outside of the battlefield - return the original image.
-        if ( x < 0 || ( x - waveWidth ) >= width )
+        if ( x < 0 || ( x - waveWidth ) >= width || !deathWaveCurve.size() )
             return out;
 
         const int32_t height = in.height();
@@ -248,6 +249,12 @@ namespace fheroes2
         const std::vector<int32_t>::const_iterator endX = deathWaveCurve.end() - ( x > width ? x - width : 0 );
 
         for ( ; pntX != endX; ++pntX, ++outImageX, ++inImageX ) {
+            // The death curve should have only negative values and should not be higher, than the height of 'in' image.
+            if ( ( *pntX >= 0 ) || ( *pntX <= -height ) ) {
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Death Wave curve is out of range (" << -height << ", 0): " << *pntX )
+                continue;
+            }
+
             const uint8_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( height + *pntX ) * width;
             const uint8_t * inImageY = inImageX - static_cast<ptrdiff_t>( *pntX + 1 ) * width;
 
