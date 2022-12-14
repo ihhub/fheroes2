@@ -610,7 +610,13 @@ namespace
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
-                    hero->PickupArtifact( Artifact( scenarioBonus._subType ) );
+                    Artifact artifact( scenarioBonus._subType );
+
+                    if ( artifact == Artifact::SPELL_SCROLL ) {
+                        artifact.SetSpell( scenarioBonus._spellId );
+                    }
+
+                    hero->PickupArtifact( artifact );
                 }
 
                 break;

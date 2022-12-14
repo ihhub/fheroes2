@@ -71,7 +71,12 @@ namespace fheroes2
     {
         switch ( bonusData._type ) {
         case Campaign::ScenarioBonusData::ARTIFACT: {
-            const Artifact artifact( bonusData._subType );
+            Artifact artifact( bonusData._subType );
+
+            if ( artifact == Artifact::SPELL_SCROLL ) {
+                artifact.SetSpell( bonusData._spellId );
+            }
+
             const ArtifactDialogElement artifactUI( artifact );
             const TextDialogElement artifactDescriptionUI( std::make_shared<Text>( artifact.GetDescription(), FontType::normalWhite() ) );
 
