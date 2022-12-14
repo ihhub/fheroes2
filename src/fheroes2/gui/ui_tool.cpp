@@ -27,6 +27,7 @@
 #include <cstring>
 #include <ctime>
 #include <deque>
+#include <ostream>
 #include <string>
 #include <utility>
 
