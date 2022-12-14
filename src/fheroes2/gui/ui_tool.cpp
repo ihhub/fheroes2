@@ -234,7 +234,7 @@ namespace fheroes2
 
         const int32_t width = in.width();
         // If the death wave curve is outside of the battlefield - return the original image.
-        if ( x < 0 || ( x - waveWidth ) >= width || !deathWaveCurve.size() )
+        if ( x < 0 || ( x - waveWidth ) >= width || deathWaveCurve.empty() )
             return out;
 
         const int32_t height = in.height();
