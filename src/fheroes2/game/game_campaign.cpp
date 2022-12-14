@@ -630,7 +630,6 @@ namespace
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
-                    hero->SpellBookActivate();
                     hero->AppendSpellToBook( scenarioBonus._subType, true );
                 }
 
@@ -706,7 +705,6 @@ namespace
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
-                    hero->SpellBookActivate();
                     hero->AppendSpellToBook( awards[i]._subType, true );
                 }
 
