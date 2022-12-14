@@ -267,7 +267,7 @@ public:
 
     Heroes();
     Heroes( int heroid, int rc );
-    Heroes( int heroID, int race, int initialLevel );
+    Heroes( const int heroID, const int race, const int initialExperience );
     Heroes( const Heroes & ) = delete;
 
     ~Heroes() override = default;
