@@ -733,7 +733,6 @@ bool Heroes::Recruit( const Castle & castle )
     }
 
     if ( castle.GetLevelMageGuild() ) {
-        // learn spells
         castle.MageGuildEducateHero( *this );
     }
 
@@ -744,34 +743,29 @@ bool Heroes::Recruit( const Castle & castle )
 
 void Heroes::ActionNewDay()
 {
-    // recovery move points
     move_point = GetMaxMovePoints();
 
-    // replenish spell points
-    ReplenishSpellPoints();
+    if ( world.CountDay() > 1 ) {
+        ReplenishSpellPoints();
+    }
 
-    // remove day visit object
     visit_object.remove_if( Visit::isDayLife );
 
-    // new day, new capacities
     ResetModes( SAVEMP );
 }
 
 void Heroes::ActionNewWeek()
 {
-    // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
 }
 
 void Heroes::ActionNewMonth()
 {
-    // remove month visit object
     visit_object.remove_if( Visit::isMonthLife );
 }
 
 void Heroes::ActionAfterBattle()
 {
-    // remove month visit object
     visit_object.remove_if( Visit::isBattleLife );
 
     SetModes( ACTION );
