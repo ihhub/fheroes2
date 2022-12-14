@@ -192,14 +192,10 @@ Heroes::Heroes()
     , _aiRole( Role::HUNTER )
 {}
 
-Heroes::Heroes( const int heroID, const int race, const int initialExperience )
+Heroes::Heroes( const int heroID, const int race, const uint32_t additionalExperience )
     : Heroes( heroID, race )
 {
-    experience = initialExperience;
-
-    for ( int i = 1; i < GetLevel(); ++i ) {
-        LevelUp( false, true );
-    }
+    IncreaseExperience( additionalExperience, true );
 }
 
 Heroes::Heroes( int heroid, int rc )
@@ -992,7 +988,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
     return true;
 }
 
-void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
+void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect /* = false */ )
 {
     int oldLevel = GetLevelFromExperience( experience );
     int newLevel = GetLevelFromExperience( experience + amount );
