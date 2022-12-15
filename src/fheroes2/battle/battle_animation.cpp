@@ -228,6 +228,7 @@ bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
 const std::vector<int> & AnimationReference::getAnimationVector( int animState ) const
 {
     switch ( animState ) {
+    case Monster_Info::STAND_STILL:
     case Monster_Info::STATIC:
         return _static;
     case Monster_Info::IDLE:
@@ -293,6 +294,7 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
 {
     std::vector<int> offset;
     switch ( animState ) {
+    case Monster_Info::STAND_STILL:
     case Monster_Info::STATIC:
         offset.resize( _static.size(), 0 );
         break;

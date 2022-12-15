@@ -2989,8 +2989,13 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
 
 void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
 {
-    if ( unit.isFinishAnimFrame() ) // nothing to animate
+    if ( unit.isFinishAnimFrame() && unit.animation.animationLength() != 1 ) {
+        // If it is the last frame in the animation sequence whith more than one frame or if we have no frames.
         return;
+    }
+
+    // If we have a frame to render, then we draw it before waiting for delay.
+    Redraw();
 
     LocalEvent & le = LocalEvent::Get();
     const uint64_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
@@ -2999,10 +3004,10 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
         CheckGlobalEvents( le );
 
         if ( Game::validateCustomAnimationDelay( frameDelay ) ) {
-            Redraw();
             if ( unit.isFinishAnimFrame() )
                 break;
             unit.IncreaseAnimFrame();
+            Redraw();
         }
     }
 }
@@ -3406,6 +3411,10 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     const bool isWide = unit.isWide();
     Indexes::const_iterator pathEnd = path.end();
 
+    // Get the number of frames for unit movement.
+    unit.SwitchAnimation( Monster_Info::MOVING );
+    const uint32_t movementFrames = static_cast<uint32_t>( unit.animation.animationLength() );
+
     // Slowed flying creature has to fly off.
     if ( canFly ) {
         // Check if the bridge needs to open during the movement.
@@ -3448,8 +3457,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         unit.SetReflection( !isFlyToRight );
         unit.SwitchAnimation( Monster_Info::FLY_UP );
         AudioManager::PlaySound( unit.M82Tkof() );
-        // Take off animation is 30% length on average (original value).
-        AnimateUnitWithDelay( unit, frameDelay * 3 / 10 );
+        // Take off animation should have the same between frame delay as the movement animation.
+        AnimateUnitWithDelay( unit, frameDelay * static_cast<uint32_t>( unit.animation.animationLength() ) / movementFrames );
         // If a wide flyer returns back it should skip one path position (its head bocomes its tail - it is already one move).
         if ( isWide && ( isFlyToRight == isFromRightArmy ) ) {
             ++dst;
@@ -3463,7 +3472,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
         if ( !canFly && bridge && bridge->NeedDown( unit, *dst ) ) {
             _movingUnit = nullptr;
-            unit.SwitchAnimation( Monster_Info::STATIC );
+            unit.SwitchAnimation( Monster_Info::STAND_STILL );
             bridge->Action( unit, *dst );
             _movingUnit = &unit;
         }
@@ -3497,7 +3506,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         // Check for possible bridge close action, after land unit's end of movement.
         if ( !canFly && bridge && bridge->AllowUp() ) {
             _movingUnit = nullptr;
-            unit.SwitchAnimation( Monster_Info::STATIC );
+            unit.SwitchAnimation( Monster_Info::STAND_STILL );
             bridge->Action( unit, *dst );
             _movingUnit = &unit;
         }
@@ -3507,14 +3516,14 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     // Slowed flying creature has to land.
     if ( canFly ) {
-        // WARNING: do not combine into vector animations with the STATIC at the end: the game could switch it to IDLE this way.
-        unit.SwitchAnimation( Monster_Info::FLY_LAND );
+        // IMPORTANT: do not combine into vector animations with the STATIC at the end: the game could randomly switch it to IDLE this way.
+        std::vector<int> landAnim;
+        landAnim.push_back( Monster_Info::FLY_LAND );
+        landAnim.push_back( Monster_Info::STAND_STILL );
+        unit.SwitchAnimation( landAnim );
         AudioManager::PlaySound( unit.M82Land() );
-        AnimateUnitWithDelay( unit, frameDelay );
-
-        // After the landing the creature has to stand.
-        unit.SwitchAnimation( Monster_Info::STATIC );
-        AnimateUnitWithDelay( unit, frameDelay );
+        // Landing animation should have the same between frame delay as the movement animation (plus 1 frame for standing still).
+        AnimateUnitWithDelay( unit, frameDelay * ( static_cast<uint32_t>( unit.animation.animationLength() ) + 1 ) / movementFrames );
 
         // Close the bridge only after the creature lands.
         if ( bridge && bridge->AllowUp() ) {
@@ -3590,10 +3599,13 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
     _flyingPos = destPos;
 
+    // Get the number of frames for unit movement.
+    unit.SwitchAnimation( Monster_Info::MOVING );
+    const uint32_t movementFrames = static_cast<uint32_t>( unit.animation.animationLength() );
+
     unit.SwitchAnimation( Monster_Info::FLY_UP );
-    // Take off animation is 30% length on average (original value)
-    AudioManager::PlaySound( unit.M82Tkof() );
-    AnimateUnitWithDelay( unit, frameDelay * 3 / 10 );
+    // Take off animation should have the same between frame delay as the movement animation.
+    AnimateUnitWithDelay( unit, frameDelay * static_cast<uint32_t>( unit.animation.animationLength() ) / movementFrames );
 
     _movingUnit = nullptr;
     _flyingUnit = &unit;
@@ -3621,14 +3633,15 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = &unit;
     _movingPos = targetPos;
 
-    // WARNING: do not combine into vector animations with the STATIC at the end: the game could switch it to IDLE this way.
-    unit.SwitchAnimation( Monster_Info::FLY_LAND );
+    // IMPORTANT: do not combine into vector animations with the STATIC at the end: the game could randomly switch it to IDLE this way.
+    std::vector<int> landAnim;
+    landAnim.push_back( Monster_Info::FLY_LAND );
+    landAnim.push_back( Monster_Info::STAND_STILL );
+    unit.SwitchAnimation( landAnim );
     AudioManager::PlaySound( unit.M82Land() );
-    AnimateUnitWithDelay( unit, frameDelay );
-
-    // After the  landing the creature has to stand.
+    // Landing animation should have the same between frame delay as the movement animation (plus 1 frame for standing still).
+    AnimateUnitWithDelay( unit, frameDelay * ( static_cast<uint32_t>( unit.animation.animationLength() ) + 1 ) / movementFrames );
     unit.SwitchAnimation( Monster_Info::STATIC );
-    AnimateUnitWithDelay( unit, frameDelay );
 
     // restore
     _movingUnit = nullptr;

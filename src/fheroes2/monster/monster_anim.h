@@ -41,6 +41,7 @@ namespace Monster_Info
     enum AnimationType : int
     {
         NONE,
+        STAND_STILL,
         STATIC,
         IDLE,
         MOVE_START,
