@@ -1024,14 +1024,15 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
 
     fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
-    const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
+    const int icnAccept = isEvilInterface ? ICN::BUTTON_SMALL_ACCEPT_EVIL : ICN::BUTTON_SMALL_ACCEPT_GOOD;
+    const int icnDecline = isEvilInterface ? ICN::BUTTON_SMALL_DECLINE_EVIL : ICN::BUTTON_SMALL_DECLINE_GOOD;
     const int icnMarket = isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON;
 
     fheroes2::ButtonSprite btnAccept
-        = fheroes2::makeButtonWithShadow( pos_rt.x + 91, pos_rt.y + 152, fheroes2::AGG::GetICN( icn, 0 ), fheroes2::AGG::GetICN( icn, 1 ), display );
+        = fheroes2::makeButtonWithShadow( pos_rt.x + 91, pos_rt.y + 152, fheroes2::AGG::GetICN( icnAccept, 0 ), fheroes2::AGG::GetICN( icnAccept, 1 ), display );
 
     fheroes2::ButtonSprite btnDecline
-        = fheroes2::makeButtonWithShadow( pos_rt.x + 295, pos_rt.y + 152, fheroes2::AGG::GetICN( icn, 2 ), fheroes2::AGG::GetICN( icn, 3 ), display );
+        = fheroes2::makeButtonWithShadow( pos_rt.x + 295, pos_rt.y + 152, fheroes2::AGG::GetICN( icnDecline, 2 ), fheroes2::AGG::GetICN( icnDecline, 3 ), display );
 
     fheroes2::ButtonSprite btnMarket = fheroes2::makeButtonWithShadow( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, fheroes2::AGG::GetICN( icnMarket, 0 ),
                                                                        fheroes2::AGG::GetICN( icnMarket, 1 ), display );
@@ -1066,6 +1067,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
         text.Blit( rect.x + ( rect.width - text.w() ) / 2, rect.y - 15 );
     };
 
+    const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( icn, 4 );
     fheroes2::Blit( window, display, pos_rt.x + 55, pos_rt.y + 32 );
     hero.PortraitRedraw( pos_rt.x + 60, pos_rt.y + 38, PORT_BIG, display );
