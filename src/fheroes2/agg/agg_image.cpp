@@ -711,12 +711,12 @@ namespace fheroes2
                 const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_CANCEL_EVIL );
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 8 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 9 );
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 0 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 1 );
                     break;
                 }
 
-                int32_t textWidth = 86;
+                int32_t textWidth = 106;
                 fheroes2::Point releasedOffset;
                 fheroes2::Point pressedOffset;
                 getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
@@ -735,12 +735,12 @@ namespace fheroes2
                 const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_CANCEL_EVIL );
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 8 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 9 );
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 2 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 3 );
                     break;
                 }
 
-                int32_t textWidth = 86;
+                int32_t textWidth = 106;
                 fheroes2::Point releasedOffset;
                 fheroes2::Point pressedOffset;
                 getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
