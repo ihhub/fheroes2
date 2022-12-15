@@ -600,7 +600,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
     const int buttonOffset = allowToCancel ? 39 : 120;
     const int buttonOkICN
-        = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE ) : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
+        = isEvilInterface ? ( allowToCancel ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::WINCMBBE ) : ( allowToCancel ? ICN::BUTTON_SMALL_OKAY_GOOD : ICN::WINCMBTB );
     const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
 
     std::unique_ptr<fheroes2::ButtonBase> btnOk;
