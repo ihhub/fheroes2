@@ -429,9 +429,11 @@ namespace
         return false;
     }
 
-    uint32_t PackTileSpriteIndex( uint32_t index, uint32_t shape ) /* index max: 0x3FFF, shape value: 0, 1, 2, 3 */
+    uint16_t PackTileSpriteIndex( uint32_t index, uint32_t shape ) /* index max: 0x3FFF, shape value: 0, 1, 2, 3 */
     {
-        return ( shape << 14 ) | ( 0x3FFF & index );
+        assert( shape <= 3 );
+
+        return static_cast<uint16_t>( ( shape << 14 ) | ( 0x3FFF & index ) );
     }
 
     bool isDirectRenderingRestricted( const int icnId )
@@ -477,7 +479,7 @@ Maps::TilesAddon::TilesAddon()
     , index( 0 )
 {}
 
-Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ )
+Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint8_t index_ )
     : uniq( uid )
     , level( lv )
     , object( obj )
