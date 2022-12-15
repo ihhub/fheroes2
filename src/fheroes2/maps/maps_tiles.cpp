@@ -27,10 +27,8 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
-#include <limits>
 #include <map>
 #include <set>
-#include <type_traits>
 
 #include "agg_image.h"
 #include "army.h"
@@ -775,11 +773,7 @@ Heroes * Maps::Tiles::GetHeroes() const
 
 void Maps::Tiles::SetHeroes( Heroes * hero )
 {
-    static_assert( std::is_same_v<decltype( heroID ), uint8_t>, "The type of the heroID member has been changed, check the logic below" );
-
     if ( hero ) {
-        assert( hero->GetID() >= 0 && hero->GetID() < std::numeric_limits<uint8_t>::max() );
-
         hero->SetMapsObject( mp2_object );
         heroID = hero->GetID() + 1;
         SetObject( MP2::OBJ_HEROES );
