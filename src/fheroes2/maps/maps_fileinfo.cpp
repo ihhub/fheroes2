@@ -410,11 +410,6 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
 void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 {
-    static_assert( std::is_same_v<decltype( unions ), uint8_t[KINGDOMMAX]>, "The type of the unions[] member has been changed, check the logic below" );
-
-    assert( side1Colors >= 0 && side1Colors <= std::numeric_limits<uint8_t>::max() );
-    assert( side2Colors >= 0 && side2Colors <= std::numeric_limits<uint8_t>::max() );
-
     for ( uint32_t i = 0; i < KINGDOMMAX; ++i ) {
         const uint8_t color = ByteToColor( i );
 
