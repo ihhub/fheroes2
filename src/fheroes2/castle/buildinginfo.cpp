@@ -521,13 +521,12 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     fheroes2::Point dst_pt;
 
-    const int system = ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM );
-
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const int buttonOkayIcnID = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
-    fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonOkayIcnID, 0 ).height();
+    fheroes2::Button button1( dst_pt.x, dst_pt.y, buttonOkayIcnID, 0, 1 );
 
     const int buttonCancelIcnID = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
 

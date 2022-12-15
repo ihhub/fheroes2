@@ -183,7 +183,7 @@ namespace
         coordDifficulty.emplace_back( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight );
 
         fheroes2::Button buttonSelectMaps( rectPanel.x + 309, rectPanel.y + 45, ICN::NGEXTRA, 64, 65 );
-        fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );
+        fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
         fheroes2::drawMainMenuScreen();

@@ -264,16 +264,17 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
 
     const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
+    const int okayButtonICNID = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
-    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( okayButtonICNID, 0 ).height();
+    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, okayButtonICNID, 0, 1 );
 
-    const int cancelIcnId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+    const int cancelButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( cancelIcnId, 0 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelIcnId, 0 ).height();
-    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, cancelIcnId, 0, 1 );
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, cancelButtonIcnID, 0, 1 );
 
     if ( res.empty() )
         buttonOk.disable();

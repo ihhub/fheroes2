@@ -122,13 +122,12 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     rbs.SetPos( dst_pt.x, dst_pt.y + heroDescriptionText.h() + spacer );
     rbs.Redraw();
 
-    const int system = ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM );
-
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const int okayButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
-    fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( okayButtonIcnID, 0 ).height();
+    fheroes2::Button button1( dst_pt.x, dst_pt.y, okayButtonIcnID, 0, 1 );
 
     if ( !AllowBuyHero() ) {
         button1.disable();

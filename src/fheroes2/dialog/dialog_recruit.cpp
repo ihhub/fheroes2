@@ -290,7 +290,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
 
     dst_pt.x = pos.x + 34;
     dst_pt.y = pos.y + 249;
-    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, ICN::RECRUIT, 8, 9 );
+    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 187;
     dst_pt.y = pos.y + 249;
