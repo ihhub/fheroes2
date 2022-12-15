@@ -410,7 +410,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
 void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 {
-    for ( uint32_t i = 0; i < KINGDOMMAX; ++i ) {
+    for ( int i = 0; i < KINGDOMMAX; ++i ) {
         const uint8_t color = ByteToColor( i );
 
         if ( side1Colors & color ) {
