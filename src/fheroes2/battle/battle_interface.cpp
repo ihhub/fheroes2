@@ -3604,6 +3604,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     const uint32_t movementFrames = static_cast<uint32_t>( unit.animation.animationLength() );
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
+    AudioManager::PlaySound( unit.M82Tkof() );
     // Take off animation should have the same between frame delay as the movement animation.
     AnimateUnitWithDelay( unit, frameDelay * static_cast<uint32_t>( unit.animation.animationLength() ) / movementFrames );
 
