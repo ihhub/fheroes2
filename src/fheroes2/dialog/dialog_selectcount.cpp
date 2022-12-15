@@ -263,7 +263,6 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
     text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
 
-    const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
     const int okayButtonICNID = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
 
     dst_pt.x = box_rt.x;
