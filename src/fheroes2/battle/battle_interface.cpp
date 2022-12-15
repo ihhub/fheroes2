@@ -1336,9 +1336,6 @@ void Battle::Interface::RedrawArmies()
         RedrawKilled();
     }
 
-    // Continue the idle animation for all troops on the battlefield.
-    IdleTroopsAnimation();
-
     for ( int32_t cellRowId = 0; cellRowId < ARENAH; ++cellRowId ) {
         // Redraw objects.
         for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
@@ -1513,6 +1510,9 @@ void Battle::Interface::RedrawArmies()
     if ( _flyingUnit ) {
         RedrawTroopSprite( *_flyingUnit );
     }
+
+    // Continue the idle animation for all troops on the battlefield.
+    IdleTroopsAnimation();
 }
 
 void Battle::Interface::RedrawOpponents()
@@ -3507,11 +3507,13 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     // Slowed flying creature has to land.
     if ( canFly ) {
-        std::vector<int32_t> landAnim;
-        landAnim.push_back( Monster_Info::FLY_LAND );
-        landAnim.push_back( Monster_Info::STATIC );
-        unit.SwitchAnimation( landAnim );
+        //WARNING: do not combine into vector animations with the STATIC at the end: the game could switch it to IDLE this way.
+        unit.SwitchAnimation( Monster_Info::FLY_LAND );
         AudioManager::PlaySound( unit.M82Land() );
+        AnimateUnitWithDelay( unit, frameDelay );
+        
+        // After the landing the creature has to stand.
+        unit.SwitchAnimation( Monster_Info::STATIC );
         AnimateUnitWithDelay( unit, frameDelay );
 
         // Close the bridge only after the creature lands.
@@ -3619,11 +3621,13 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = &unit;
     _movingPos = targetPos;
 
-    std::vector<int> landAnim;
-    landAnim.push_back( Monster_Info::FLY_LAND );
-    landAnim.push_back( Monster_Info::STATIC );
-    unit.SwitchAnimation( landAnim );
+    //WARNING: do not combine into vector animations with the STATIC at the end: the game could switch it to IDLE this way.
+    unit.SwitchAnimation( Monster_Info::FLY_LAND );
     AudioManager::PlaySound( unit.M82Land() );
+    AnimateUnitWithDelay( unit, frameDelay );
+
+    // After the  landing the creature has to stand.
+    unit.SwitchAnimation( Monster_Info::STATIC );
     AnimateUnitWithDelay( unit, frameDelay );
 
     // restore
