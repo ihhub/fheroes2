@@ -140,7 +140,10 @@ Spell Maps::Tiles::QuantitySpell() const
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_ARTIFACT:
-        return { QuantityVariant() == 15 ? quantity1 : Spell::NONE };
+        if ( QuantityVariant() == 15 ) {
+            return { quantity1 };
+        }
+        return { Spell::NONE };
 
     case MP2::OBJ_SHRINE1:
     case MP2::OBJ_SHRINE2:
