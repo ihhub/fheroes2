@@ -170,12 +170,12 @@ namespace Battle
             const Board & board = *Arena::GetBoard();
 
             // Find all free spaces on the battle board - flyers can move to any of them
-            for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-                const int32_t idx = it->GetIndex();
+            for ( const Cell & cell : board ) {
+                const int32_t idx = cell.GetIndex();
                 BattleNode & node = _cache[idx];
 
                 // isPassableForUnit checks if there's space for unit tail (for wide units)
-                if ( it->isPassableForUnit( unit ) && ( isPassableBridge || !Board::isBridgeIndex( it - board.begin(), unit ) ) ) {
+                if ( cell.isPassableForUnit( unit ) && ( isPassableBridge || !Board::isBridgeIndex( idx, unit ) ) ) {
                     node._isOpen = true;
                     node._from = pathStart;
                     node._cost = Battle::Board::GetDistance( pathStart, idx );
@@ -184,19 +184,20 @@ namespace Battle
                     node._isOpen = false;
                 }
             }
-            // Once board movement is determined we look for units save shortest flight path to them
-            for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-                const Unit * boardUnit = it->GetUnit();
+            // As soon as the possibilities of movement on the board are determined, we look
+            // for units to determine the shortest flight path to them
+            for ( const Cell & cell : board ) {
+                const Unit * boardUnit = cell.GetUnit();
                 if ( boardUnit && boardUnit->GetUID() != unit.GetUID() ) {
-                    const int32_t unitIdx = it->GetIndex();
+                    const int32_t unitIdx = cell.GetIndex();
                     BattleNode & unitNode = _cache[unitIdx];
 
                     const Indexes & around = Battle::Board::GetAroundIndexes( unitIdx );
-                    for ( const int32_t cell : around ) {
-                        const uint32_t flyingDist = Battle::Board::GetDistance( pathStart, cell );
-                        if ( hexIsPassable( cell ) && ( flyingDist < unitNode._cost ) ) {
+                    for ( const int32_t aroundIdx : around ) {
+                        const uint32_t flyingDist = Battle::Board::GetDistance( pathStart, aroundIdx );
+                        if ( hexIsPassable( aroundIdx ) && ( flyingDist < unitNode._cost ) ) {
                             unitNode._isOpen = false;
-                            unitNode._from = cell;
+                            unitNode._from = aroundIdx;
                             unitNode._cost = flyingDist;
                         }
                     }
