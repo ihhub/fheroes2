@@ -2819,11 +2819,11 @@ int Battle::GetIndexIndicator( const Unit & b )
     else
         // green
         if ( b.Modes( IS_GREEN_STATUS ) )
-        return 12;
-    else
-        // red
-        if ( b.Modes( IS_RED_STATUS ) )
-        return 14;
+            return 12;
+        else
+            // red
+            if ( b.Modes( IS_RED_STATUS ) )
+                return 14;
 
     return 10;
 }
@@ -3507,11 +3507,11 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     // Slowed flying creature has to land.
     if ( canFly ) {
-        //WARNING: do not combine into vector animations with the STATIC at the end: the game could switch it to IDLE this way.
+        // WARNING: do not combine into vector animations with the STATIC at the end: the game could switch it to IDLE this way.
         unit.SwitchAnimation( Monster_Info::FLY_LAND );
         AudioManager::PlaySound( unit.M82Land() );
         AnimateUnitWithDelay( unit, frameDelay );
-        
+
         // After the landing the creature has to stand.
         unit.SwitchAnimation( Monster_Info::STATIC );
         AnimateUnitWithDelay( unit, frameDelay );
@@ -3621,7 +3621,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = &unit;
     _movingPos = targetPos;
 
-    //WARNING: do not combine into vector animations with the STATIC at the end: the game could switch it to IDLE this way.
+    // WARNING: do not combine into vector animations with the STATIC at the end: the game could switch it to IDLE this way.
     unit.SwitchAnimation( Monster_Info::FLY_LAND );
     AudioManager::PlaySound( unit.M82Land() );
     AnimateUnitWithDelay( unit, frameDelay );
