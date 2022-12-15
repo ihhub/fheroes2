@@ -127,7 +127,7 @@ void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vect
     const Heroes * hero = GetHero();
 
     if ( hero ) {
-        tempGuestArmy = hero->GetArmy().getTroops();
+        tempGuestArmy.Insert( hero->GetArmy().getTroops() );
     }
 
     for ( const uint32_t dwellingType : allCastleDwellings ) {
@@ -252,7 +252,7 @@ void Castle::OpenWell()
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
-        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::WELL_BUY_ALL_CREATURES ) ) {
+        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::TOWN_WELL_BUY_ALL ) ) {
             const Troops & currentArmy = GetArmy();
             recruitCastleMax( currentArmy, allDwellings );
         }

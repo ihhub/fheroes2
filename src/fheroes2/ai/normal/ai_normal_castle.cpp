@@ -24,16 +24,21 @@
 
 #include "ai.h"
 #include "ai_normal.h"
+#include "army.h"
+#include "army_troop.h"
+#include "battle_tower.h"
 #include "castle.h"
 #include "kingdom.h"
 #include "maps_tiles.h"
+#include "monster.h"
 #include "payment.h"
 #include "race.h"
+#include "rand.h"
 #include "resource.h"
 #include "world.h"
 #include "world_regions.h"
 
-namespace AI
+namespace
 {
     struct BuildOrder
     {
@@ -47,20 +52,15 @@ namespace AI
         {}
     };
 
+    const std::vector<BuildOrder> defensiveStructures = { { BUILD_LEFTTURRET, 1 }, { BUILD_RIGHTTURRET, 1 }, { BUILD_MOAT, 1 }, { BUILD_CAPTAIN, 1 } };
+    const std::vector<BuildOrder> supportingDefensiveStructure = { { BUILD_MAGEGUILD1, 1 }, { BUILD_SPEC, 2 }, { BUILD_TAVERN, 1 } };
+
     const std::vector<BuildOrder> & GetIncomeStructures( int type )
     {
         static const std::vector<BuildOrder> standard = { { BUILD_CASTLE, 1 }, { BUILD_STATUE, 1 } };
         static const std::vector<BuildOrder> warlock = { { BUILD_CASTLE, 1 }, { BUILD_STATUE, 1 }, { BUILD_SPEC, 1 } };
 
         return ( type == Race::WRLK ) ? warlock : standard;
-    }
-
-    const std::vector<BuildOrder> & GetDefensiveStructures()
-    {
-        static const std::vector<BuildOrder> defensive = { { BUILD_LEFTTURRET, 1 }, { BUILD_RIGHTTURRET, 1 }, { BUILD_MOAT, 1 },  { BUILD_CAPTAIN, 1 },
-                                                           { BUILD_MAGEGUILD1, 1 }, { BUILD_SPEC, 2 },        { BUILD_TAVERN, 1 } };
-
-        return defensive;
     }
 
     const std::vector<BuildOrder> & GetBuildOrder( int type )
@@ -128,7 +128,10 @@ namespace AI
 
         return genericBuildOrder;
     }
+}
 
+namespace AI
+{
     bool Build( Castle & castle, const std::vector<BuildOrder> & buildOrderList, int multiplier = 1 )
     {
         for ( std::vector<BuildOrder>::const_iterator it = buildOrderList.begin(); it != buildOrderList.end(); ++it ) {
@@ -176,20 +179,47 @@ namespace AI
             }
         }
 
-        // Call internally checks if it's valid (space/resources) to buy one
-        if ( castle.GetKingdom().GetFunds() >= PaymentConditions::BuyBoat() * ( islandOrPeninsula ? 2 : 4 ) )
+        // Check if the kingdom has at least one hero and enough resources to buy a boat.
+        const Kingdom & kingdom = castle.GetKingdom();
+        if ( !kingdom.GetHeroes().empty() && kingdom.GetFunds() >= PaymentConditions::BuyBoat() * ( islandOrPeninsula ? 2 : 4 ) ) {
             castle.BuyBoat();
+        }
 
-        return Build( castle, GetDefensiveStructures(), 10 );
+        if ( Build( castle, defensiveStructures, 10 ) ) {
+            return true;
+        }
+
+        return Build( castle, supportingDefensiveStructure, 10 );
     }
 
-    void Normal::CastleTurn( Castle & castle, bool defensive )
+    void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
     {
-        if ( defensive ) {
-            Build( castle, GetDefensiveStructures() );
+        if ( defensiveStrategy ) {
+            // TODO: add logic to build monster dwellings as they might add more monsters for defence.
+            const Kingdom & kingdom = castle.GetKingdom();
 
-            castle.recruitBestAvailable( castle.GetKingdom().GetFunds() );
+            Troops possibleReinforcement = castle.getAvailableArmy( kingdom.GetFunds() );
+            double possibleReinforcementStrength = possibleReinforcement.GetStrength();
+
+            // A very rough estimation of strength. We measure the strength of possible army to hire with the strength of purchasing a turret.
+            const Battle::Tower tower( castle, Battle::TWR_RIGHT, Rand::DeterministicRandomGenerator( 0 ), 0 );
+            const Troop towerMonster( Monster::ARCHER, tower.GetCount() );
+            const double towerStrength = towerMonster.GetStrength();
+            if ( possibleReinforcementStrength > towerStrength ) {
+                castle.recruitBestAvailable( kingdom.GetFunds() );
+                OptimizeTroopsOrder( castle.GetArmy() );
+            }
+
+            if ( castle.GetActualArmy().getTotalCount() > 0 ) {
+                Build( castle, defensiveStructures );
+            }
+
+            castle.recruitBestAvailable( kingdom.GetFunds() );
             OptimizeTroopsOrder( castle.GetArmy() );
+
+            if ( castle.GetActualArmy().getTotalCount() > 0 ) {
+                Build( castle, supportingDefensiveStructure );
+            }
         }
         else {
             const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();

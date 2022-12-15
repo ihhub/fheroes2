@@ -279,6 +279,8 @@ public:
     int DialogBuyHero( const Heroes * ) const;
     int DialogBuyCastle( bool fixed = true ) const;
 
+    Troops getAvailableArmy( Funds potentialBudget ) const;
+
 private:
     enum class ConstructionDialogResult : int
     {
@@ -302,7 +304,6 @@ private:
     void OpenWell();
     void OpenMageGuild( const Heroes * hero ) const;
     void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
-    Troops getAvailableArmy( Funds potentialBudget ) const;
     void JoinRNDArmy();
     void PostLoad();
 

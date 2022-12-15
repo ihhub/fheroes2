@@ -1336,6 +1336,9 @@ void Battle::Interface::RedrawArmies()
         RedrawKilled();
     }
 
+    // Continue the idle animation for all troops on the battlefield.
+    IdleTroopsAnimation();
+
     for ( int32_t cellRowId = 0; cellRowId < ARENAH; ++cellRowId ) {
         // Redraw objects.
         for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
@@ -2522,7 +2525,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             EventAutoFinish( a );
         }
         // Cast the spell
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::CAST_SPELL ) ) {
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) ) {
             ProcessingHeroDialogResult( 1, a );
         }
         // Retreat
@@ -3991,9 +3994,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
         const fheroes2::Rect & battleArea = border.GetArea();
-        const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( unit.GetMonsterSprite(), unit.GetFrame() );
-        const int32_t unitCenter = ( unitSprite.width() / CELLW + 1 ) * CELLW / 2;
-        const fheroes2::Point rainbowDescendPoint( pos.x + unitCenter, pos.y - unitSprite.height() / 2 );
+        const fheroes2::Point rainbowDescendPoint( pos.x + pos.width / 2, pos.y - pos.height / 2 );
 
         // If the creature is low on the battleboard - the rainbow will be from the top (in the original game the threshold is about 140 pixels).
         const bool isVerticalRainbow = ( rainbowDescendPoint.y > 140 );
@@ -4710,6 +4711,9 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
     LocalEvent & le = LocalEvent::Get();
 
     if ( !target.isValid() ) {
+        // Restore direction of the creature, since it could be killed when it was reflected.
+        target.UpdateDirection();
+
         Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
         while ( le.HandleEvents() && !target.isFinishAnimFrame() ) {
@@ -5574,7 +5578,7 @@ void Battle::PopupDamageInfo::Reset()
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
 }
 
-void Battle::PopupDamageInfo::Redraw()
+void Battle::PopupDamageInfo::Redraw() const
 {
     if ( !_redraw ) {
         return;

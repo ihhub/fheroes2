@@ -156,6 +156,7 @@ namespace fheroes2
 
         void render( const Rect & roi ); // render a part of image on screen. Prefer this method over full image if you don't draw full screen.
 
+        // Update the area which will be rendered on the next render() call.
         void updateNextRenderRoi( const Rect & roi );
 
         void resize( int32_t width_, int32_t height_ ) override;

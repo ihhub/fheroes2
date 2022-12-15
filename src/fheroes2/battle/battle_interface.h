@@ -231,7 +231,7 @@ namespace Battle
         void setBattleUIRect( const fheroes2::Rect & battleUIRect );
         void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
         void Reset();
-        void Redraw();
+        void Redraw() const;
 
     private:
         fheroes2::Rect _battleUIRect;

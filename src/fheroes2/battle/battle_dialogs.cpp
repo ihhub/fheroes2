@@ -952,7 +952,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         if ( !buttons && !le.MousePressRight() )
             break;
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::CAST_SPELL ) || ( btnCast.isEnabled() && le.MouseClickLeft( btnCast.area() ) ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) || ( btnCast.isEnabled() && le.MouseClickLeft( btnCast.area() ) ) )
             result = 1;
 
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) || ( btnRetreat.isEnabled() && le.MouseClickLeft( btnRetreat.area() ) ) )
