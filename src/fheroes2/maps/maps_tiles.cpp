@@ -27,8 +27,10 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
+#include <limits>
 #include <map>
 #include <set>
+#include <type_traits>
 
 #include "agg_image.h"
 #include "army.h"
