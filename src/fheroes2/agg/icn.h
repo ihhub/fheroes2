@@ -1027,6 +1027,12 @@ namespace ICN
         BUTTON_SMALL_LEARN_GOOD,
         BUTTON_SMALL_LEARN_EVIL,
 
+        BUTTON_MAPSIZE_SMALL,
+        BUTTON_MAPSIZE_MEDIUM,
+        BUTTON_MAPSIZE_LARGE,
+        BUTTON_MAPSIZE_XLARGE,
+        BUTTON_MAPSIZE_ALL,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

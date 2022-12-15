@@ -86,6 +86,11 @@ namespace
                                                 ICN::BUTTON_SMALL_DECLINE_EVIL,
                                                 ICN::BUTTON_SMALL_LEARN_GOOD,
                                                 ICN::BUTTON_SMALL_LEARN_EVIL,
+                                                ICN::BUTTON_MAPSIZE_SMALL,
+                                                ICN::BUTTON_MAPSIZE_MEDIUM,
+                                                ICN::BUTTON_MAPSIZE_LARGE,
+                                                ICN::BUTTON_MAPSIZE_XLARGE,
+                                                ICN::BUTTON_MAPSIZE_ALL,
                                                 ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
@@ -775,6 +780,101 @@ namespace fheroes2
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LEARN" ), releasedOffset, pressedOffset, { textWidth, 16 },
                                     buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_MAPSIZE_SMALL: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::REQUESTS, 9 );
+                    _icnVsSprite[id][1] = GetICN( ICN::REQUESTS, 10 );
+                    break;
+                }
+
+                int32_t textWidth = 46;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "S" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_MAPSIZE_MEDIUM: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::REQUESTS, 11 );
+                    _icnVsSprite[id][1] = GetICN( ICN::REQUESTS, 12 );
+                    break;
+                }
+
+                int32_t textWidth = 46;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "M" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_MAPSIZE_LARGE: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::REQUESTS, 13 );
+                    _icnVsSprite[id][1] = GetICN( ICN::REQUESTS, 14 );
+                    break;
+                }
+
+                int32_t textWidth = 46;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "L" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_MAPSIZE_XLARGE: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::REQUESTS, 15 );
+                    _icnVsSprite[id][1] = GetICN( ICN::REQUESTS, 16 );
+                    break;
+                }
+
+                int32_t textWidth = 46;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "X-L" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_MAPSIZE_ALL: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::REQUESTS, 17 );
+                    _icnVsSprite[id][1] = GetICN( ICN::REQUESTS, 18 );
+                    break;
+                }
+
+                int32_t textWidth = 46;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ALL" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1680,6 +1780,11 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_DECLINE_EVIL:
             case ICN::BUTTON_SMALL_LEARN_GOOD:
             case ICN::BUTTON_SMALL_LEARN_EVIL:
+            case ICN::BUTTON_MAPSIZE_SMALL:
+            case ICN::BUTTON_MAPSIZE_MEDIUM:
+            case ICN::BUTTON_MAPSIZE_LARGE:
+            case ICN::BUTTON_MAPSIZE_XLARGE:
+            case ICN::BUTTON_MAPSIZE_ALL:
             case ICN::BUTTON_STANDARD_GAME:
             case ICN::BUTTON_CAMPAIGN_GAME:
             case ICN::BUTTON_MULTIPLAYER_GAME:
