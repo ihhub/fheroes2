@@ -1024,6 +1024,8 @@ namespace ICN
         BUTTON_SMALL_ACCEPT_EVIL,
         BUTTON_SMALL_DECLINE_GOOD,
         BUTTON_SMALL_DECLINE_EVIL,
+        BUTTON_SMALL_LEARN_GOOD,
+        BUTTON_SMALL_LEARN_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

@@ -84,6 +84,8 @@ namespace
                                                 ICN::BUTTON_SMALL_ACCEPT_EVIL,
                                                 ICN::BUTTON_SMALL_DECLINE_GOOD,
                                                 ICN::BUTTON_SMALL_DECLINE_EVIL,
+                                                ICN::BUTTON_SMALL_LEARN_GOOD,
+                                                ICN::BUTTON_SMALL_LEARN_EVIL,
                                                 ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
@@ -708,7 +710,7 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_ACCEPT_EVIL: {
                 _icnVsSprite[id].resize( 2 );
 
-                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_CANCEL_EVIL );
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_ACCEPT_EVIL );
 
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 0 );
@@ -732,7 +734,7 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_DECLINE_EVIL: {
                 _icnVsSprite[id].resize( 2 );
 
-                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_CANCEL_EVIL );
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_DECLINE_EVIL );
 
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 2 );
@@ -748,6 +750,30 @@ namespace fheroes2
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DECLINE" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_LEARN_GOOD:
+            case ICN::BUTTON_SMALL_LEARN_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_LEARN_EVIL );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 9 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 10 );
+                    break;
+                }
+
+                int32_t textWidth = 87;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LEARN" ), releasedOffset, pressedOffset, { textWidth, 16 },
                                     buttonFontColor );
 
                 break;
@@ -1652,6 +1678,8 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_ACCEPT_EVIL:
             case ICN::BUTTON_SMALL_DECLINE_GOOD:
             case ICN::BUTTON_SMALL_DECLINE_EVIL:
+            case ICN::BUTTON_SMALL_LEARN_GOOD:
+            case ICN::BUTTON_SMALL_LEARN_EVIL:
             case ICN::BUTTON_STANDARD_GAME:
             case ICN::BUTTON_CAMPAIGN_GAME:
             case ICN::BUTTON_MULTIPLAYER_GAME:
