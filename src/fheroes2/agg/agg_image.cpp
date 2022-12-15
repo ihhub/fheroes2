@@ -1877,28 +1877,6 @@ namespace fheroes2
                     }
                 }
                 return true;
-            case ICN::NON_UNIFORM_GOOD_OKAY_BUTTON:
-                _icnVsSprite[id].resize( 2 );
-                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRG, 4 ), 6, 0, 96, 25 );
-                _icnVsSprite[id][0].setPosition( 0, 0 );
-
-                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 5 );
-                _icnVsSprite[id][1].setPosition( 0, 0 );
-
-                // fix transparent corners
-                CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
-                return true;
-            case ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON:
-                _icnVsSprite[id].resize( 2 );
-                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRG, 6 ), 6, 0, 96, 25 );
-                _icnVsSprite[id][0].setPosition( 0, 0 );
-
-                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 7 );
-                _icnVsSprite[id][1].setPosition( 0, 0 );
-
-                // fix transparent corners
-                CopyTransformLayer( _icnVsSprite[id][1], _icnVsSprite[id][0] );
-                return true;
             case ICN::NON_UNIFORM_GOOD_RESTART_BUTTON:
                 _icnVsSprite[id].resize( 2 );
                 _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRG, 2 ), 6, 0, 108, 25 );
