@@ -80,6 +80,8 @@ namespace
                                                 ICN::BUTTON_SMALL_CANCEL_EVIL,
                                                 ICN::BUTTON_SMALL_OKAY_GOOD,
                                                 ICN::BUTTON_SMALL_OKAY_EVIL,
+                                                ICN::BUTTON_SMALLER_OKAY_GOOD,
+                                                ICN::BUTTON_SMALLER_OKAY_EVIL,
                                                 ICN::BUTTON_SMALL_ACCEPT_GOOD,
                                                 ICN::BUTTON_SMALL_ACCEPT_EVIL,
                                                 ICN::BUTTON_SMALL_DECLINE_GOOD,
@@ -689,18 +691,23 @@ namespace fheroes2
                 break;
             }
             case ICN::BUTTON_SMALL_OKAY_GOOD:
-            case ICN::BUTTON_SMALL_OKAY_EVIL: {
+            case ICN::BUTTON_SMALL_OKAY_EVIL: 
+            case ICN::BUTTON_SMALLER_OKAY_GOOD:
+            case ICN::BUTTON_SMALLER_OKAY_EVIL: {
                 _icnVsSprite[id].resize( 2 );
 
-                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_OKAY_EVIL );
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_EVIL );
 
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 1 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 2 );
                     break;
                 }
-
                 int32_t textWidth = 86;
+                if ( id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) {
+                    textWidth = 70;
+                }
+
                 fheroes2::Point releasedOffset;
                 fheroes2::Point pressedOffset;
                 getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
@@ -1774,6 +1781,8 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_CANCEL_EVIL:
             case ICN::BUTTON_SMALL_OKAY_GOOD:
             case ICN::BUTTON_SMALL_OKAY_EVIL:
+            case ICN::BUTTON_SMALLER_OKAY_GOOD:
+            case ICN::BUTTON_SMALLER_OKAY_EVIL:
             case ICN::BUTTON_SMALL_ACCEPT_GOOD:
             case ICN::BUTTON_SMALL_ACCEPT_EVIL:
             case ICN::BUTTON_SMALL_DECLINE_GOOD:

@@ -282,7 +282,7 @@ namespace
         }
 
         const fheroes2::Point buttonOffset( 112 + pos_rt.x, 362 + pos_rt.y );
-        fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
+        fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         buttonOkay.draw();
 
         RedrawBattleSettings( optionAreas );
@@ -599,8 +599,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
 
     const int buttonOffset = allowToCancel ? 39 : 120;
-    const int buttonOkICN
-        = isEvilInterface ? ( allowToCancel ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::WINCMBBE ) : ( allowToCancel ? ICN::BUTTON_SMALL_OKAY_GOOD : ICN::WINCMBTB );
+    const int buttonOkICN = isEvilInterface ? ( allowToCancel ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_EVIL )
+                                            : ( allowToCancel ? ICN::BUTTON_SMALL_OKAY_GOOD : ICN::BUTTON_SMALLER_OKAY_GOOD );
     const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
 
     std::unique_ptr<fheroes2::ButtonBase> btnOk;
