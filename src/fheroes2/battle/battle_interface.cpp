@@ -2814,16 +2814,17 @@ void Battle::Interface::FadeArena( bool clearMessageLog )
 int Battle::GetIndexIndicator( const Unit & b )
 {
     // yellow
-    if ( b.Modes( IS_GREEN_STATUS ) && b.Modes( IS_RED_STATUS ) )
+    if ( b.Modes( IS_GREEN_STATUS ) && b.Modes( IS_RED_STATUS ) ) {
         return 13;
-    else
-        // green
-        if ( b.Modes( IS_GREEN_STATUS ) )
-            return 12;
-        else
-            // red
-            if ( b.Modes( IS_RED_STATUS ) )
-                return 14;
+    }
+    // green
+    if ( b.Modes( IS_GREEN_STATUS ) ) {
+        return 12;
+    }
+    // red
+    if ( b.Modes( IS_RED_STATUS ) ) {
+        return 14;
+    }
 
     return 10;
 }
@@ -3429,10 +3430,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                 }
 
                 // Fix for wide flyers - go the whole path with reflections to check the bridge.
-                if ( isWide ) {
-                    if ( unit.GetTailIndex() == *dst ) {
-                        unit.SetReflection( !unit.isReflect() );
-                    }
+                if ( isWide && ( unit.GetTailIndex() == *dst ) ) {
+                    unit.SetReflection( !unit.isReflect() );
                 }
                 unit.SetPosition( *dst );
 
@@ -3484,8 +3483,9 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                     unit.SetReflection( !unit.isReflect() );
                 }
             }
-            else
+            else {
                 show_anim = true;
+            }
         }
         else {
             unit.UpdateDirection( cell->GetPos() );
@@ -3548,8 +3548,9 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     const int32_t destTailIndex = unit.isWide() ? pos.GetTail()->GetIndex() : -1;
 
     // check if we're already there
-    if ( unit.GetPosition().contains( destIndex ) )
+    if ( unit.GetPosition().contains( destIndex ) ) {
         return;
+    }
 
     const fheroes2::Point destPos = unit.GetRectPosition().getPosition();
     fheroes2::Point targetPos = Board::GetCell( destIndex )->GetPos().getPosition();
@@ -3612,8 +3613,9 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _flyingUnit = &unit;
     _flyingPos = _movingPos;
 
-    if ( currentPoint != points.end() )
+    if ( currentPoint != points.end() ) {
         ++currentPoint;
+    }
 
     unit.SwitchAnimation( Monster_Info::MOVING );
     while ( currentPoint != points.end() ) {
