@@ -461,12 +461,11 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
 
     buttonPrevCastle.draw();
     buttonNextCastle.draw();
+    buttonExit.draw();
 
     // redraw resource panel
     const fheroes2::Rect & rectResource = fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
     const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
-
-    buttonExit.draw();
 
     display.render();
 
