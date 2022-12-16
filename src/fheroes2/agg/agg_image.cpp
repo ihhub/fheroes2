@@ -146,7 +146,8 @@ namespace
     {
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getCurrentLanguage();
         const fheroes2::SupportedLanguage resourceLanguage = fheroes2::getResourceLanguage();
-        return ( currentLanguage == fheroes2::SupportedLanguage::Polish && resourceLanguage == fheroes2::SupportedLanguage::Polish )
+        return ( currentLanguage == fheroes2::SupportedLanguage::English && resourceLanguage == fheroes2::SupportedLanguage::English )
+               || ( currentLanguage == fheroes2::SupportedLanguage::Polish && resourceLanguage == fheroes2::SupportedLanguage::Polish )
                || ( currentLanguage == fheroes2::SupportedLanguage::Russian && resourceLanguage == fheroes2::SupportedLanguage::Russian );
     }
 
