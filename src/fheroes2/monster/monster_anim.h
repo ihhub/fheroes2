@@ -61,6 +61,8 @@ namespace Monster_Info
         RANG_FRONT_END,
         RANG_BOT,
         RANG_BOT_END,
+        WNCE_UP,
+        WNCE_DOWN,
         WNCE, // combined UP and RETURN anim
         KILL,
         INVALID
