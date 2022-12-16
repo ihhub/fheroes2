@@ -129,6 +129,10 @@ namespace
                                                 ICN::UNIFORM_EVIL_MIN_BUTTON,
                                                 ICN::UNIFORM_GOOD_MAX_BUTTON,
                                                 ICN::UNIFORM_GOOD_MIN_BUTTON,
+                                                ICN::UNIFORM_GOOD_OKAY_BUTTON,
+                                                ICN::UNIFORM_EVIL_OKAY_BUTTON,
+                                                ICN::UNIFORM_GOOD_CANCEL_BUTTON,
+                                                ICN::UNIFORM_EVIL_CANCEL_BUTTON,
                                                 ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
                                                 ICN::BUTTON_SMALL_MIN_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
@@ -718,9 +722,14 @@ namespace fheroes2
 
                 const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_EVIL );
 
-                if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 1 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 2 );
+                if ( useOriginalResources() || id == ICN::BUTTON_SMALL_OKAY_EVIL || id == ICN::BUTTON_SMALL_OKAY_GOOD ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 1 );
+                    break;
+                }
+                else if ( useOriginalResources() || id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 1 );
                     break;
                 }
                 int32_t textWidth = 86;
@@ -1497,6 +1506,49 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::UNIFORM_GOOD_OKAY_BUTTON:
+            case ICN::UNIFORM_EVIL_OKAY_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_OKAY_BUTTON );
+                
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 1 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 2 );
+                    break;
+                }
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::SYSTEM, 11 + i );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::UNIFORM_GOOD_CANCEL_BUTTON:
+            case ICN::UNIFORM_EVIL_CANCEL_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+                const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_CANCEL_BUTTON );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 3 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 4 );
+                    break;
+                }
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::SYSTEM, 11 + i );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -2086,6 +2138,10 @@ namespace fheroes2
             case ICN::UNIFORM_EVIL_MIN_BUTTON:
             case ICN::UNIFORM_GOOD_MAX_BUTTON:
             case ICN::UNIFORM_GOOD_MIN_BUTTON:
+            case ICN::UNIFORM_GOOD_OKAY_BUTTON:
+            case ICN::UNIFORM_EVIL_OKAY_BUTTON:
+            case ICN::UNIFORM_GOOD_CANCEL_BUTTON:
+            case ICN::UNIFORM_EVIL_CANCEL_BUTTON:
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
             case ICN::BUTTON_SMALL_MIN_GOOD:
             case ICN::BUTTON_SMALL_MAX_GOOD:
