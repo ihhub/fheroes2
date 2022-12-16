@@ -355,7 +355,8 @@ namespace
         const int32_t originalWidth = original.width();
         if ( originalWidth >= width ) {
             fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height );
-            fheroes2::Copy( original, originalWidth - width / 2, 0, output, output.width() - width / 2, 0, width - width / 2, height );
+            const int32_t secondHalf = width - width / 2;
+            fheroes2::Copy( original, originalWidth - secondHalf, 0, output, width - secondHalf, 0, secondHalf, height );
         }
         else {
             const int32_t middleWidth = originalWidth / 3;
