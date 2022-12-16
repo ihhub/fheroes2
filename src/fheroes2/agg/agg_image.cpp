@@ -129,6 +129,7 @@ namespace
                                                 ICN::UNIFORM_EVIL_MIN_BUTTON,
                                                 ICN::UNIFORM_GOOD_MAX_BUTTON,
                                                 ICN::UNIFORM_GOOD_MIN_BUTTON,
+                                                ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
                                                 ICN::BUTTON_SMALL_MIN_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_DIFFICULTY_ARCHIBALD,
@@ -1441,6 +1442,12 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MIN_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 1 );
+                    break;
+                }
+
                 int32_t textWidth = 61;
                 fheroes2::Point releasedOffset;
                 fheroes2::Point pressedOffset;
@@ -1487,6 +1494,19 @@ namespace fheroes2
                 getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( text ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button.
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, out, 11 - i, 4 + i, 50, 16 );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -2066,6 +2086,7 @@ namespace fheroes2
             case ICN::UNIFORM_EVIL_MIN_BUTTON:
             case ICN::UNIFORM_GOOD_MAX_BUTTON:
             case ICN::UNIFORM_GOOD_MIN_BUTTON:
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
             case ICN::BUTTON_SMALL_MIN_GOOD:
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD:

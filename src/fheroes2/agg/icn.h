@@ -914,6 +914,7 @@ namespace ICN
         BTNBATTLEONLY,
         BTNGIFT_GOOD,
         BTNGIFT_EVIL,
+        NON_UNIFORM_GOOD_MIN_BUTTON,
         CSLMARKER,
 
         GRAY_FONT,
