@@ -3533,10 +3533,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     // Slowed flying creature has to land.
     if ( canFly ) {
         // IMPORTANT: do not combine into vector animations with the STATIC at the end: the game could randomly switch it to IDLE this way.
-        std::vector<int> landAnim;
-        landAnim.push_back( Monster_Info::FLY_LAND );
-        landAnim.push_back( Monster_Info::STAND_STILL );
-        unit.SwitchAnimation( landAnim );
+        unit.SwitchAnimation( { Monster_Info::FLY_LAND, Monster_Info::STAND_STILL } );
         AudioManager::PlaySound( unit.M82Land() );
         // Landing animation should have the same between frame delay as the movement animation (plus 1 frame for standing still).
         AnimateUnitWithDelay( unit, frameDelay * ( static_cast<uint32_t>( unit.animation.animationLength() ) + 1 ) / movementFrames );
