@@ -381,8 +381,15 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                 }
             }
 
-            attacker->UpdateDirection();
-            defender->UpdateDirection();
+            // Reflect attacker only if he is alive.
+            if ( attacker->isValid() ) {
+                attacker->UpdateDirection();
+            }
+
+            // Reflect defender only if he is alive.
+            if ( defender->isValid() ) {
+                defender->UpdateDirection();
+            }
         }
         else {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << attacker->String( true ) << " and " << defender->String( true ) )

@@ -43,6 +43,7 @@
 #include "kingdom.h"
 #include "mus.h"
 #include "players.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "text.h"
@@ -318,14 +319,12 @@ GameOver::Result & GameOver::Result::Get()
 GameOver::Result::Result()
     : colors( 0 )
     , result( 0 )
-    , continueAfterVictory( false )
 {}
 
 void GameOver::Result::Reset()
 {
     colors = Game::GetKingdomColors();
     result = GameOver::COND_NONE;
-    continueAfterVictory = false;
 }
 
 void GameOver::Result::ResetResult()
@@ -369,7 +368,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         const Kingdom & myKingdom = world.GetKingdom( humanColors );
 
         if ( myKingdom.isControlHuman() || Players::Get( humanColors )->isAIAutoControlMode() ) {
-            if ( !continueAfterVictory && GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
+            if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 DialogWins( result );
 
                 const Settings & conf = Settings::Get();
@@ -389,18 +388,12 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 }
             }
             else {
-                if ( !continueAfterVictory ) {
-                    // If the player's kingdom has been vanquished, he loses regardless of other conditions
-                    if ( !myKingdom.isPlay() ) {
-                        result = GameOver::LOSS_ALL;
-                    }
-                    else {
-                        result = world.CheckKingdomLoss( myKingdom );
-                    }
-                }
-                // If the player decided to continue the game after victory, just check that his kingdom is not vanquished
-                else if ( !myKingdom.isPlay() ) {
+                // If the player's kingdom has been vanquished, he loses regardless of other conditions
+                if ( !myKingdom.isPlay() ) {
                     result = GameOver::LOSS_ALL;
+                }
+                else {
+                    result = world.CheckKingdomLoss( myKingdom );
                 }
 
                 if ( result != GameOver::COND_NONE ) {
@@ -483,10 +476,19 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
 StreamBase & GameOver::operator<<( StreamBase & msg, const Result & res )
 {
-    return msg << res.colors << res.result << res.continueAfterVictory;
+    return msg << res.colors << res.result;
 }
 
 StreamBase & GameOver::operator>>( StreamBase & msg, Result & res )
 {
-    return msg >> res.colors >> res.result >> res.continueAfterVictory;
+    msg >> res.colors >> res.result;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE4_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE4_1000_RELEASE ) {
+        bool dummy;
+
+        msg >> dummy;
+    }
+
+    return msg;
 }

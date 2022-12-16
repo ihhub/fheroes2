@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <vector>
 
 #include "image.h"
 #include "math_base.h"
@@ -108,7 +109,7 @@ namespace fheroes2
         const bool isOriginalEvilInterface;
     };
 
-    Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight );
+    Image CreateDeathWaveEffect( const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve );
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );
 
