@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-16 10:13+0000\n"
-"PO-Revision-Date: 2022-12-16 17:16+0100\n"
+"PO-Revision-Date: 2022-12-16 17:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -10063,29 +10063,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Nécroman"
-
-#~ msgid "Cyberlore Studios"
-#~ msgstr "Cyberlore Studios"
-
-#~ msgid "New World Computing"
-#~ msgstr "New World Computing"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Ce peloton attend"
-
-#~ msgid "Wait"
-#~ msgstr "Attendre"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Le peloton actif reporte son tour jusqu'à ce que tous les autres pelotons "
-#~ "aient joué leur tour."
-
-# if only 1 monster: "... passe ..."
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} attendent."
