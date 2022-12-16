@@ -705,7 +705,7 @@ namespace fheroes2
                 break;
             }
             case ICN::BUTTON_SMALL_OKAY_GOOD:
-            case ICN::BUTTON_SMALL_OKAY_EVIL: 
+            case ICN::BUTTON_SMALL_OKAY_EVIL:
             case ICN::BUTTON_SMALLER_OKAY_GOOD:
             case ICN::BUTTON_SMALLER_OKAY_EVIL: {
                 _icnVsSprite[id].resize( 2 );
@@ -847,8 +847,7 @@ namespace fheroes2
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
 
                 break;
             }
@@ -936,7 +935,8 @@ namespace fheroes2
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DISMISS" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DISMISS" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    buttonFontColor );
 
                 break;
             }
@@ -959,7 +959,8 @@ namespace fheroes2
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "UPGRADE" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "UPGRADE" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    buttonFontColor );
 
                 break;
             }
