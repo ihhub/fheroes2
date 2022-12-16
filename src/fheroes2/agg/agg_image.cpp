@@ -94,6 +94,10 @@ namespace
                                                 ICN::BUTTON_SMALL_YES_EVIL,
                                                 ICN::BUTTON_SMALL_NO_GOOD,
                                                 ICN::BUTTON_SMALL_NO_EVIL,
+                                                ICN::BUTTON_SMALL_EXIT_GOOD,
+                                                ICN::BUTTON_SMALL_EXIT_EVIL,
+                                                ICN::BUTTON_SMALLER_EXIT,
+                                                ICN::BUTTON_KINGDOM_EXIT,
                                                 ICN::BUTTON_MAPSIZE_SMALL,
                                                 ICN::BUTTON_MAPSIZE_MEDIUM,
                                                 ICN::BUTTON_MAPSIZE_LARGE,
@@ -864,6 +868,70 @@ namespace fheroes2
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NO" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_EXIT_GOOD:
+            case ICN::BUTTON_SMALL_EXIT_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_EXIT_EVIL );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 7 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 8 );
+                    break;
+                }
+
+                int32_t textWidth = 85;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_SMALLER_EXIT: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::TREASURY, 1 );
+                    _icnVsSprite[id][1] = GetICN( ICN::TREASURY, 2 );
+                    break;
+                }
+
+                int32_t textWidth = 70;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_KINGDOM_EXIT: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::OVERVIEW, 4 );
+                    _icnVsSprite[id][1] = GetICN( ICN::OVERVIEW, 5 );
+                    break;
+                }
+
+                // Needs to be generated from original assets because the pressed state is 1px wider than normal.
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::OVERVIEW, 4 + i );
+
+                    // clean the button.
+                    Fill( out, 6 - i, 4 + i, 89, 16, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 6, 5 }, { 5, 6 }, { 89, 16 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1872,6 +1940,10 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_YES_EVIL:
             case ICN::BUTTON_SMALL_NO_GOOD:
             case ICN::BUTTON_SMALL_NO_EVIL:
+            case ICN::BUTTON_SMALL_EXIT_GOOD:
+            case ICN::BUTTON_SMALL_EXIT_EVIL:
+            case ICN::BUTTON_SMALLER_EXIT:
+            case ICN::BUTTON_KINGDOM_EXIT:
             case ICN::BUTTON_MAPSIZE_SMALL:
             case ICN::BUTTON_MAPSIZE_MEDIUM:
             case ICN::BUTTON_MAPSIZE_LARGE:

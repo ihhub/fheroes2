@@ -317,7 +317,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     }
 
     // button exit
-    fheroes2::Button buttonExit( cur_pt.x + 553, cur_pt.y + 428, ICN::TREASURY, 1, 2 );
+    fheroes2::Button buttonExit( cur_pt.x + 553, cur_pt.y + 428, ICN::BUTTON_SMALLER_EXIT, 0, 1 );
 
     // resource
     const fheroes2::Rect & rectResource = fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
@@ -632,9 +632,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             fheroes2::drawCastleName( *this, display, cur_pt );
             fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
 
-            if ( buttonExit.isPressed() ) {
-                buttonExit.draw();
-            }
+            buttonExit.draw();
 
             display.render();
         }

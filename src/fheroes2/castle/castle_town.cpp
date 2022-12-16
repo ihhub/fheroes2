@@ -452,7 +452,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     // button exit
     dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALLER_EXIT, 0, 1 );
 
     if ( GetKingdom().GetCastles().size() < 2 ) {
         buttonPrevCastle.disable();
@@ -461,11 +461,12 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
 
     buttonPrevCastle.draw();
     buttonNextCastle.draw();
-    buttonExit.draw();
 
     // redraw resource panel
     const fheroes2::Rect & rectResource = fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
     const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
+
+    buttonExit.draw();
 
     display.render();
 

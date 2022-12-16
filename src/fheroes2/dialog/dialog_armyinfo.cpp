@@ -193,9 +193,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, viewarmy, 1, 2 );
 
     // button exit
+    const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
     dst_pt.x = pos_rt.x + 415;
     dst_pt.y = pos_rt.y + 221;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, viewarmy, 3, 4 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
 
     if ( READONLY & flags ) {
         buttonDismiss.disable();
