@@ -88,6 +88,8 @@ namespace
                                                 ICN::BUTTON_SMALL_DECLINE_EVIL,
                                                 ICN::BUTTON_SMALL_LEARN_GOOD,
                                                 ICN::BUTTON_SMALL_LEARN_EVIL,
+                                                ICN::BUTTON_SMALL_TRADE_GOOD,
+                                                ICN::BUTTON_SMALL_TRADE_EVIL,
                                                 ICN::BUTTON_MAPSIZE_SMALL,
                                                 ICN::BUTTON_MAPSIZE_MEDIUM,
                                                 ICN::BUTTON_MAPSIZE_LARGE,
@@ -786,6 +788,30 @@ namespace fheroes2
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LEARN" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_TRADE_GOOD:
+            case ICN::BUTTON_SMALL_TRADE_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_TRADE_EVIL );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::TRADPOSE : ICN::TRADPOST, 15 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::TRADPOSE : ICN::TRADPOST, 16 );
+                    break;
+                }
+
+                int32_t textWidth = 87;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), releasedOffset, pressedOffset, { textWidth, 16 },
                                     buttonFontColor );
 
                 break;
@@ -1789,6 +1815,8 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_DECLINE_EVIL:
             case ICN::BUTTON_SMALL_LEARN_GOOD:
             case ICN::BUTTON_SMALL_LEARN_EVIL:
+            case ICN::BUTTON_SMALL_TRADE_GOOD:
+            case ICN::BUTTON_SMALL_TRADE_EVIL:
             case ICN::BUTTON_MAPSIZE_SMALL:
             case ICN::BUTTON_MAPSIZE_MEDIUM:
             case ICN::BUTTON_MAPSIZE_LARGE:
