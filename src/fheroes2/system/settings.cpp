@@ -267,7 +267,7 @@ bool Settings::Read( const std::string & filePath )
             video_mode.height = GetInt( height );
         }
         else {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown video mode: " << value )
         }
     }
 
