@@ -800,22 +800,21 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_LEARN_EVIL );
+                const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 9 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 10 );
+                    _icnVsSprite[id][0] = GetICN( baseIcnID, 9 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnID, 10 );
                     break;
                 }
 
-                int32_t textWidth = 87;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnID, 11 + i );
+                }
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LEARN" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "LEARN" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
@@ -848,21 +847,21 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_YES_EVIL );
+                const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 5 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 6 );
+                    _icnVsSprite[id][0] = GetICN( baseIcnID, 5 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnID, 6 );
                     break;
                 }
 
-                int32_t textWidth = 87;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnID, 11 + i );
+                }
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ), { 6, 5 }, { 4, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
@@ -871,21 +870,21 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_NO_EVIL );
+                const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 7 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 8 );
+                    _icnVsSprite[id][0] = GetICN( baseIcnID, 7 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnID, 8 );
                     break;
                 }
 
-                int32_t textWidth = 87;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnID, 11 + i );
+                }
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NO" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NO" ), { 6, 5 }, { 4, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
@@ -1493,16 +1492,24 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_MAX_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON );
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+                const int baseIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    const Sprite & originalButton = GetICN( ICN::RECRUIT, 4 + i );
+                    out.resize( originalButton.width() + 4, originalButton.height() - 5 + i );
+                    out.reset();
+                    const Sprite & emptyButton = GetICN( baseIcnId, 11 + i );
+                    // Copy left main body of button.
+                    fheroes2::Copy( emptyButton, 0, 0, out, 0, 0, originalButton.width() - 3 + i, originalButton.height() - 5 + i );
+                    // Copy terminating right margin of the button.
+                    fheroes2::Copy( emptyButton, 89 + i, 0, out, 63 + i, 0, 7 - i, originalButton.height() - i );
+                }
 
                 const char * text( ( id == ICN::UNIFORM_GOOD_MIN_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON ) ? "MIN" : "MAX" );
 
-                int32_t textWidth = 61;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( text ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( text ), { 6, 5 }, { 4, 5 }, { 62, 16 }, buttonFontColor );
 
                 break;
             }
@@ -1511,20 +1518,21 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_OKAY_BUTTON );
-                
+                const int baseIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
+
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 1 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 2 );
+                    _icnVsSprite[id][0] = GetICN( baseIcnId, 1 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnId, 2 );
                     break;
+                }
+                
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, 11 + i );
                 }
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::SYSTEM, 11 + i );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ), { 6, 5 }, { 4, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
@@ -1532,20 +1540,22 @@ namespace fheroes2
             case ICN::UNIFORM_EVIL_CANCEL_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
                 const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_CANCEL_BUTTON );
+                const int baseIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 3 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 4 );
+                    _icnVsSprite[id][0] = GetICN( baseIcnId, 3 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnId, 4 );
                     break;
                 }
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::SYSTEM, 11 + i );
+                    out = GetICN( baseIcnId, 11 + i );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+                
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
