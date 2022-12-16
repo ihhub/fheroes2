@@ -1752,7 +1752,7 @@ void Battle::Interface::RedrawCover()
 
     const Bridge * bridge = Arena::GetBridge();
     if ( bridge && ( bridge->isDown() || _bridgeAnimation.animationIsRequired ) ) {
-        uint32_t spriteIndex = bridge->isDestroy() ? BridgeMovementAnimation::DESTROYED : BridgeMovementAnimation::DOWN_POSITION;
+        uint32_t spriteIndex = bridge->isDestroyed() ? BridgeMovementAnimation::DESTROYED : BridgeMovementAnimation::DOWN_POSITION;
 
         if ( _bridgeAnimation.animationIsRequired ) {
             spriteIndex = _bridgeAnimation.currentFrameId;
@@ -2015,7 +2015,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
     else if ( Arena::CASTLE_GATE_POS == cellId ) {
         const Bridge * bridge = Arena::GetBridge();
         assert( bridge != nullptr );
-        if ( bridge != nullptr && !bridge->isDestroy() ) {
+        if ( bridge != nullptr && !bridge->isDestroyed() ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
             fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
         }
@@ -3439,7 +3439,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                 if ( bridge->NeedDown( unit, *dst ) ) {
                     // Restore the initial creature position before rendering the whole battlefield with the bridge animation.
                     unit.SetPosition( startPosition );
-                    bridge->ForceAction( true );
+                    bridge->ActionDown();
                     break;
                 }
 
@@ -3486,7 +3486,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         if ( bridge && bridge->NeedDown( unit, *dst ) ) {
             _movingUnit = nullptr;
             unit.SwitchAnimation( Monster_Info::STAND_STILL );
-            bridge->Action( unit, *dst );
+            bridge->ActionDown();
             _movingUnit = &unit;
         }
 
@@ -3523,7 +3523,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         if ( !canFly && bridge && bridge->AllowUp() ) {
             _movingUnit = nullptr;
             unit.SwitchAnimation( Monster_Info::STAND_STILL );
-            bridge->Action( unit, *dst );
+            bridge->ActionUp();
             _movingUnit = &unit;
         }
 
@@ -3543,7 +3543,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
         // Close the bridge only after the creature lands.
         if ( bridge && bridge->AllowUp() ) {
-            bridge->ForceAction( false );
+            bridge->ActionUp();
         }
     }
 
@@ -3602,11 +3602,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     // open the bridge if the unit should land on it
     if ( bridge ) {
-        if ( bridge->NeedDown( unit, destIndex ) ) {
-            bridge->Action( unit, destIndex );
-        }
-        else if ( unit.isWide() && bridge->NeedDown( unit, destTailIndex ) ) {
-            bridge->Action( unit, destTailIndex );
+        if ( bridge->NeedDown( unit, destIndex ) || ( unit.isWide() && bridge->NeedDown( unit, destTailIndex ) ) ) {
+            bridge->ActionDown();
         }
     }
 
@@ -3667,7 +3664,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     // check for possible bridge close action, after unit's end of movement
     if ( bridge && bridge->AllowUp() ) {
-        bridge->Action( unit, destIndex );
+        bridge->ActionUp();
     }
 
     StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );

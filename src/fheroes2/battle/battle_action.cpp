@@ -435,18 +435,15 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 const int32_t dstTail = unit->isWide() ? pos.GetTail()->GetIndex() : -1;
 
                 // open the bridge if the unit should land on it
-                if ( _bridge->NeedDown( *unit, dstHead ) ) {
-                    _bridge->Action( *unit, dstHead );
-                }
-                else if ( unit->isWide() && _bridge->NeedDown( *unit, dstTail ) ) {
-                    _bridge->Action( *unit, dstTail );
+                if ( _bridge->NeedDown( *unit, dstHead ) || ( unit->isWide() && _bridge->NeedDown( *unit, dstTail ) ) ) {
+                    _bridge->ActionDown();
                 }
 
                 unit->SetPosition( pos );
 
                 // check for possible bridge close action, after unit's end of movement
                 if ( _bridge->AllowUp() ) {
-                    _bridge->Action( *unit, dstHead );
+                    _bridge->ActionUp();
                 }
             }
 
@@ -468,8 +465,9 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 for ( Indexes::const_iterator pathIt = path.begin(); pathIt != path.end(); ++pathIt ) {
                     bool doMovement = false;
 
-                    if ( _bridge->NeedDown( *unit, *pathIt ) )
-                        _bridge->Action( *unit, *pathIt );
+                    if ( _bridge->NeedDown( *unit, *pathIt ) ) {
+                        _bridge->ActionDown();
+                    }
 
                     if ( unit->isWide() ) {
                         if ( unit->GetTailIndex() == *pathIt )
@@ -485,8 +483,9 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                         unit->SetPosition( *pathIt );
 
                     // check for possible bridge close action, after unit's end of movement
-                    if ( _bridge->AllowUp() )
-                        _bridge->Action( *unit, *pathIt );
+                    if ( _bridge->AllowUp() ) {
+                        _bridge->ActionUp();
+                    }
                 }
             }
 

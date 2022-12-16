@@ -38,24 +38,24 @@ namespace Battle
 
         Bridge & operator=( const Bridge & ) = delete;
 
-        void Action( const Unit &, int32_t );
-        void ForceAction( const bool actionDown );
+        void ActionUp();
+        void ActionDown();
 
-        void SetDestroy();
-        void SetDown( bool );
-        void SetPassable( const Unit & ) const;
+        void SetDestroyed();
+        void SetPassable( const Unit & unit ) const;
 
         bool AllowUp() const;
-        bool NeedDown( const Unit &, int32_t ) const;
-        bool isPassable( const Unit & ) const;
+        bool NeedDown( const Unit & unit, const int32_t dstIdx ) const;
+
+        bool isPassable( const Unit & unit ) const;
         bool isValid() const;
-        bool isDestroy() const;
+        bool isDestroyed() const;
         bool isDown() const;
-        bool isBridgeOccupied() const;
+        bool isOccupied() const;
 
     private:
-        bool destroy;
-        bool down;
+        bool _isDestroyed;
+        bool _isDown;
 
         enum
         {
