@@ -3363,18 +3363,17 @@ void Battle::Interface::SetHeroAnimationReactionToTroopDeath( const int32_t deat
     if ( deathColor == Color::UNUSED ) {
         return;
     }
-    else {
-        const bool attackersTurn = ( deathColor == arena.GetArmy2Color() );
-        OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
-        OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
-        // 60% of joyful animation
-        if ( attackingHero && Rand::Get( 1, 5 ) < 4 ) {
-            attackingHero->SetAnimation( OP_JOY );
-        }
-        // 80% of sorrow animation otherwise
-        else if ( defendingHero && Rand::Get( 1, 5 ) < 5 ) {
-            defendingHero->SetAnimation( OP_SORROW );
-        }
+
+    const bool attackersTurn = ( deathColor == arena.GetArmy2Color() );
+    OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
+    OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
+    // 60% of joyful animation
+    if ( attackingHero && Rand::Get( 1, 5 ) < 4 ) {
+        attackingHero->SetAnimation( OP_JOY );
+    }
+    // 80% of sorrow animation otherwise
+    else if ( defendingHero && Rand::Get( 1, 5 ) < 5 ) {
+        defendingHero->SetAnimation( OP_SORROW );
     }
 }
 
