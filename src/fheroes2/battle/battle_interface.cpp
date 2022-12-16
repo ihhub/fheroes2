@@ -3466,7 +3466,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         // Take off animation should have the same between frame delay as the movement animation.
         AnimateUnitWithDelay( unit, frameDelay * static_cast<uint32_t>( unit.animation.animationLength() ) / movementFrames );
         // If a wide flyer returns back it should skip one path position (its head bocomes its tail - it is already one move) if it is not the path end.
-        if ( isWide && ( isFlyToRight == isFromRightArmy ) && ( dst != pathEnd ) ) {
+        if ( isWide && ( isFlyToRight == isFromRightArmy ) ) {
             ++dst;
         }
     }
