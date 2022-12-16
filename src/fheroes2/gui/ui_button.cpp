@@ -232,10 +232,10 @@ namespace fheroes2
 
     ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )
     {
-        const int icnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
-
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
+        const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;
+        const int buttonNoIcnID = isEvilInterface ? ICN::BUTTON_SMALL_NO_EVIL : ICN::BUTTON_SMALL_NO_GOOD;
         const int buttonOkayIcnID = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         const int buttonCancelIcnID = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
 
@@ -244,12 +244,12 @@ namespace fheroes2
         switch ( buttonTypes ) {
         case Dialog::YES | Dialog::NO:
             offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 5 ).height();
-            createButton( offset.x, offset.y, icnId, 5, 6, Dialog::YES );
+            offset.y = area.y + area.height - AGG::GetICN( buttonYesIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonYesIcnID, 0, 1, Dialog::YES );
 
-            offset.x = area.x + area.width - AGG::GetICN( icnId, 7 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 7 ).height();
-            createButton( offset.x, offset.y, icnId, 7, 8, Dialog::NO );
+            offset.x = area.x + area.width - AGG::GetICN( buttonNoIcnID, 0 ).width();
+            offset.y = area.y + area.height - AGG::GetICN( buttonNoIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonNoIcnID, 0, 1, Dialog::NO );
             break;
 
         case Dialog::OK | Dialog::CANCEL:
