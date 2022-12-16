@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1377,6 +1377,41 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
+#, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Ge liv åt död"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr ""
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Spegelbild"
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Vit pärla"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
+msgstr "Inkalla båt"
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Visa hjältar"
+
 msgid "campaignBonus|Ballista"
 msgstr ""
 
@@ -1625,41 +1660,6 @@ msgstr "Ge liv åt död"
 #, fuzzy
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Spikad sköld"
-
-#, fuzzy
-msgid "campaignBonus|Animate Dead"
-msgstr "Ge liv åt död"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr ""
-
-msgid "campaignBonus|Fireblast"
-msgstr ""
-
-msgid "campaignBonus|Mass Curse"
-msgstr ""
-
-msgid "campaignBonus|Mass Haste"
-msgstr ""
-
-#, fuzzy
-msgid "campaignBonus|Mirror Image"
-msgstr "Spegelbild"
-
-msgid "campaignBonus|Resurrect"
-msgstr ""
-
-#, fuzzy
-msgid "campaignBonus|Steelskin"
-msgstr "Vit pärla"
-
-#, fuzzy
-msgid "campaignBonus|Summon Earth"
-msgstr "Inkalla båt"
-
-#, fuzzy
-msgid "campaignBonus|View Heroes"
-msgstr "Visa hjältar"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "

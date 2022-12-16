@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -1310,6 +1310,41 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
+#, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Anima i Morti"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Fulmini in Serie"
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Rispecchia"
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "La Perla Bianca"
+
+msgid "campaignBonus|Summon Earth"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Mostra Eroi"
+
 msgid "campaignBonus|Ballista"
 msgstr ""
 
@@ -1548,41 +1583,6 @@ msgstr "Anima i Morti"
 #, fuzzy
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Scudo Segreto"
-
-#, fuzzy
-msgid "campaignBonus|Animate Dead"
-msgstr "Anima i Morti"
-
-#, fuzzy
-msgid "campaignBonus|Chain Lightning"
-msgstr "Fulmini in Serie"
-
-msgid "campaignBonus|Fireblast"
-msgstr ""
-
-msgid "campaignBonus|Mass Curse"
-msgstr ""
-
-msgid "campaignBonus|Mass Haste"
-msgstr ""
-
-#, fuzzy
-msgid "campaignBonus|Mirror Image"
-msgstr "Rispecchia"
-
-msgid "campaignBonus|Resurrect"
-msgstr ""
-
-#, fuzzy
-msgid "campaignBonus|Steelskin"
-msgstr "La Perla Bianca"
-
-msgid "campaignBonus|Summon Earth"
-msgstr ""
-
-#, fuzzy
-msgid "campaignBonus|View Heroes"
-msgstr "Mostra Eroi"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
