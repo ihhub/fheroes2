@@ -613,7 +613,7 @@ namespace
                     Artifact artifact( scenarioBonus._subType );
 
                     if ( artifact == Artifact::SPELL_SCROLL ) {
-                        artifact.SetSpell( scenarioBonus._spellId );
+                        artifact.SetSpell( scenarioBonus._artifactSpellId );
                     }
 
                     hero->PickupArtifact( artifact );

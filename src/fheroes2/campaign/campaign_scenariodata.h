@@ -103,7 +103,7 @@ namespace Campaign
         int32_t _type;
         int32_t _subType;
         int32_t _amount;
-        int32_t _spellId; // Spell ID of a spell scroll
+        int32_t _artifactSpellId; // Spell ID of a spell scroll
 
         ScenarioBonusData();
         ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount );

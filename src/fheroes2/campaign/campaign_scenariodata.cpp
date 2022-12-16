@@ -655,21 +655,21 @@ namespace Campaign
         : _type( 0 )
         , _subType( 0 )
         , _amount( 0 )
-        , _spellId( Spell::NONE )
+        , _artifactSpellId( Spell::NONE )
     {}
 
     ScenarioBonusData::ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount )
         : _type( type )
         , _subType( subType )
         , _amount( amount )
-        , _spellId( Spell::NONE )
+        , _artifactSpellId( Spell::NONE )
     {}
 
     ScenarioBonusData::ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount, const int32_t spellId )
         : _type( type )
         , _subType( subType )
         , _amount( amount )
-        , _spellId( spellId )
+        , _artifactSpellId( spellId )
     {}
 
     std::string ScenarioBonusData::getName() const
@@ -678,7 +678,7 @@ namespace Campaign
 
         switch ( _type ) {
         case ScenarioBonusData::ARTIFACT:
-            objectName = getArtifactCampaignName( _subType, _spellId );
+            objectName = getArtifactCampaignName( _subType, _artifactSpellId );
             break;
         case ScenarioBonusData::RESOURCES:
             objectName = std::to_string( _amount ) + " " + Resource::String( _subType );
@@ -789,7 +789,7 @@ namespace Campaign
 
     StreamBase & operator<<( StreamBase & msg, const Campaign::ScenarioBonusData & data )
     {
-        return msg << data._type << data._subType << data._amount << data._spellId;
+        return msg << data._type << data._subType << data._amount << data._artifactSpellId;
     }
 
     StreamBase & operator>>( StreamBase & msg, Campaign::ScenarioBonusData & data )
@@ -798,10 +798,10 @@ namespace Campaign
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE5_1000_RELEASE, "Remove the check below." );
         if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE5_1000_RELEASE ) {
-            data._spellId = Spell::NONE;
+            data._artifactSpellId = Spell::NONE;
         }
         else {
-            msg >> data._spellId;
+            msg >> data._artifactSpellId;
         }
 
         return msg;

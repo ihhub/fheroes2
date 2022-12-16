@@ -74,7 +74,7 @@ namespace fheroes2
             Artifact artifact( bonusData._subType );
 
             if ( artifact == Artifact::SPELL_SCROLL ) {
-                artifact.SetSpell( bonusData._spellId );
+                artifact.SetSpell( bonusData._artifactSpellId );
             }
 
             const ArtifactDialogElement artifactUI( artifact );
