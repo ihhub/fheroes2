@@ -123,7 +123,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     rbs.Redraw();
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const int okayButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+    const int okayButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
     dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( okayButtonIcnID, 0 ).height();
@@ -133,7 +133,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
         button1.disable();
     }
 
-    const int cancelButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+    const int cancelButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
 
     dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();

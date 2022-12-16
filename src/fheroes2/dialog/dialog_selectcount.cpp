@@ -263,13 +263,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
     text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
 
-    const int okayButtonICNID = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+    const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
     dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( okayButtonICNID, 0 ).height();
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, okayButtonICNID, 0, 1 );
 
-    const int cancelButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+    const int cancelButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
 
     dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
