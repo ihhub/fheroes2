@@ -41,9 +41,9 @@ namespace Monster_Info
     enum AnimationType : int
     {
         NONE,
-        STAND_STILL,
-        STATIC,
-        IDLE,
+        STAND_STILL, // This animation contains one frame of a standing unit.
+        STATIC, // This is a copy of STAND STILL, with the difference that the game engine may randomly change it to IDLE.
+        IDLE, // After the idle animation is done, the game engine changes it to STATIC.
         MOVE_START,
         MOVING,
         MOVE_END,

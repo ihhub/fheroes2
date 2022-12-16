@@ -3418,12 +3418,14 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     // Slowed flying creature has to fly off.
     if ( canFly ) {
-        // Check if the bridge needs to open during the movement.
+        // If a flying creature has to cross the bridge during its path we have to open it before the creature flyes up.
+        // Otherwise it will freeze during the movement, waiting for the bridge to open. So we have to go the whole path
+        // to analyze if the bridge needs to open for this creature.
         if ( bridge ) {
             const Position startPosition = unit.GetPosition();
             while ( dst != pathEnd ) {
                 if ( bridge->NeedDown( unit, *dst ) ) {
-                    // Restore the initial creature position before rendering the animation.
+                    // Restore the initial creature position before rendering the whole battlefield with the bridge animation.
                     unit.SetPosition( startPosition );
                     bridge->ForceAction( true );
                     break;
@@ -3469,7 +3471,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         _movingPos = cell->GetPos().getPosition();
         bool show_anim = false;
 
-        if ( !canFly && bridge && bridge->NeedDown( unit, *dst ) ) {
+        if ( bridge && bridge->NeedDown( unit, *dst ) ) {
             _movingUnit = nullptr;
             unit.SwitchAnimation( Monster_Info::STAND_STILL );
             bridge->Action( unit, *dst );
@@ -3503,7 +3505,9 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             unit.SetPosition( *dst );
         }
 
-        // Check for possible bridge close action, after land unit's end of movement.
+        // Check for possible bridge close action, after walking unit's end of movement to the next cell.
+        // This check should exclude the flying creature because it can't 'hang' here to wait
+        // for bridge to close. For this creature, the bridge should close after it lands.
         if ( !canFly && bridge && bridge->AllowUp() ) {
             _movingUnit = nullptr;
             unit.SwitchAnimation( Monster_Info::STAND_STILL );

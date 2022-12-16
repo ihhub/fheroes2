@@ -121,10 +121,10 @@ void Battle::Bridge::Action( const Unit & b, int32_t dst )
     ForceAction( NeedDown( b, dst ) );
 }
 
-void Battle::Bridge::ForceAction( const bool action_down )
+void Battle::Bridge::ForceAction( const bool actionDown )
 {
     if ( Arena::GetInterface() )
-        Arena::GetInterface()->RedrawBridgeAnimation( action_down );
+        Arena::GetInterface()->RedrawBridgeAnimation( actionDown );
 
-    SetDown( action_down );
+    SetDown( actionDown );
 }
