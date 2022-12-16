@@ -20,6 +20,7 @@
 
 #include "ui_tool.h"
 
+#include <cassert>
 #include <chrono>
 #include <cmath>
 #include <cstddef>
@@ -226,7 +227,7 @@ namespace fheroes2
         }
     }
 
-    Image CreateDeathWaveEffect( const Image & in, const int32_t x, const int32_t waveWidth, const std::vector<int32_t> & deathWaveCurve )
+    Image CreateDeathWaveEffect( const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
     {
         if ( in.empty() )
             return Image();
@@ -234,6 +235,8 @@ namespace fheroes2
         Image out = in;
 
         const int32_t width = in.width();
+        const int32_t waveWidth = static_cast<int32_t>( deathWaveCurve.size() );
+
         // If the death wave curve is outside of the battlefield - return the original image.
         if ( x < 0 || ( x - waveWidth ) >= width || deathWaveCurve.empty() )
             return out;
@@ -252,7 +255,7 @@ namespace fheroes2
         for ( ; pntX != endX; ++pntX, ++outImageX, ++inImageX ) {
             // The death curve should have only negative values and should not be higher, than the height of 'in' image.
             if ( ( *pntX >= 0 ) || ( *pntX <= -height ) ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Death Wave curve is out of range (" << -height << ", 0): " << *pntX )
+                assert( 0 );
                 continue;
             }
 

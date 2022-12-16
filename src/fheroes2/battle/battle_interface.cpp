@@ -3360,8 +3360,11 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
 void Battle::Interface::SetHeroAnimationReactionToTroopDeath( const int32_t deathColor )
 {
-    if ( deathColor != Color::UNUSED ) {
-        const bool attackersTurn = deathColor == arena.GetArmy2Color();
+    if ( deathColor == Color::UNUSED ) {
+        return;
+    }
+    else {
+        const bool attackersTurn = ( deathColor == arena.GetArmy2Color() );
         OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
         OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
         // 60% of joyful animation
@@ -3772,8 +3775,9 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
 
                 ++damagedMonsters;
                 totalDamage += it->damage;
-                if ( maximumDamage < it->damage )
+                if ( maximumDamage < it->damage ) {
                     maximumDamage = it->damage;
+                }
             }
         }
 
@@ -3784,7 +3788,6 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
         case Spell::DEATHWAVE:
             RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::UNKNOWN, true );
             break;
-
         case Spell::HOLYWORD:
         case Spell::HOLYSHOUT:
             RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::UNKNOWN, true );
@@ -4770,7 +4773,8 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, waveLength, deathWaveCurve ), _mainSurface );
+            // TODO: instead of rendering the whole frame for the wave effect we should render only the area where the effect is active.
+            fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, deathWaveCurve ), _mainSurface );
             RedrawPartialFinish();
 
             position += 5;
@@ -5304,7 +5308,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                     if ( !target.defender->isValid() ) {
                         target.defender->IncreaseAnimFrame( false );
 
-                        // If the death animation is still in process then set isDefenderAnimatimg to false.
+                        // If the death animation is still in process then set isDefenderAnimating to false.
                         isDefenderAnimating |= !target.defender->isFinishAnimFrame();
                     }
                     else if ( target.damage ) {
@@ -5322,7 +5326,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                             target.defender->SwitchAnimation( Monster_Info::STATIC );
                         }
 
-                        // If not all damaged (and not killed) units are set to STATIC animation then set isDefenderAnimatimg to false.
+                        // If not all damaged (and not killed) units are set to STATIC animation then set isDefenderAnimating to false.
                         isDefenderAnimating |= !( target.defender->GetAnimationState() == Monster_Info::STATIC );
                     }
                 }
@@ -5332,8 +5336,8 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
         }
     }
 
-    if ( wnce && !mirrorImages.empty() ) {
-        // Fade away animation for destroyed mirror images
+    if ( !mirrorImages.empty() ) {
+        // Fade away animation for destroyed mirror images.
         RedrawActionRemoveMirrorImage( mirrorImages );
     }
 }
