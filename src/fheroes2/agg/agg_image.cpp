@@ -886,8 +886,8 @@ namespace fheroes2
                 const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_EXIT_EVIL );
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 7 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 8 );
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 3 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 4 );
                     break;
                 }
 
