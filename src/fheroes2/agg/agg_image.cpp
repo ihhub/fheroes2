@@ -928,7 +928,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 96;
+                int32_t textWidth = 101;
                 fheroes2::Point releasedOffset;
                 fheroes2::Point pressedOffset;
                 getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
@@ -952,7 +952,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 96;
+                int32_t textWidth = 101;
                 fheroes2::Point releasedOffset;
                 fheroes2::Point pressedOffset;
                 getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
