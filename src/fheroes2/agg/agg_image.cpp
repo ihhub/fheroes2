@@ -101,6 +101,8 @@ namespace
                                                 ICN::BUTTON_SMALL_DISMISS_EVIL,
                                                 ICN::BUTTON_SMALL_UPGRADE_GOOD,
                                                 ICN::BUTTON_SMALL_UPGRADE_EVIL,
+                                                ICN::BUTTON_SMALL_RESTART_GOOD,
+                                                ICN::BUTTON_SMALL_RESTART_EVIL,
                                                 ICN::BUTTON_KINGDOM_EXIT,
                                                 ICN::BUTTON_MAPSIZE_SMALL,
                                                 ICN::BUTTON_MAPSIZE_MEDIUM,
@@ -960,6 +962,30 @@ namespace fheroes2
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "UPGRADE" ), releasedOffset, pressedOffset, { textWidth, 16 },
+                                    buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_RESTART_GOOD:
+            case ICN::BUTTON_SMALL_RESTART_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_RESTART_EVIL );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON, 0 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON, 1 );
+                    break;
+                }
+
+                int32_t textWidth = 98;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTART" ), releasedOffset, pressedOffset, { textWidth, 16 },
                                     buttonFontColor );
 
                 break;
@@ -1998,6 +2024,8 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_DISMISS_EVIL:
             case ICN::BUTTON_SMALL_UPGRADE_GOOD:
             case ICN::BUTTON_SMALL_UPGRADE_EVIL:
+            case ICN::BUTTON_SMALL_RESTART_GOOD:
+            case ICN::BUTTON_SMALL_RESTART_EVIL:
             case ICN::BUTTON_KINGDOM_EXIT:
             case ICN::BUTTON_MAPSIZE_SMALL:
             case ICN::BUTTON_MAPSIZE_MEDIUM:
