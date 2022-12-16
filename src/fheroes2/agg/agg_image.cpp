@@ -97,6 +97,10 @@ namespace
                                                 ICN::BUTTON_SMALL_EXIT_GOOD,
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
                                                 ICN::BUTTON_SMALLER_EXIT,
+                                                ICN::BUTTON_SMALL_DISMISS_GOOD,
+                                                ICN::BUTTON_SMALL_DISMISS_EVIL,
+                                                ICN::BUTTON_SMALL_UPGRADE_GOOD,
+                                                ICN::BUTTON_SMALL_UPGRADE_EVIL,
                                                 ICN::BUTTON_KINGDOM_EXIT,
                                                 ICN::BUTTON_MAPSIZE_SMALL,
                                                 ICN::BUTTON_MAPSIZE_MEDIUM,
@@ -883,7 +887,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 85;
+                int32_t textWidth = 87;
                 fheroes2::Point releasedOffset;
                 fheroes2::Point pressedOffset;
                 getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
@@ -910,6 +914,52 @@ namespace fheroes2
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), releasedOffset, pressedOffset, { textWidth, 16 },
                                     fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_DISMISS_GOOD:
+            case ICN::BUTTON_SMALL_DISMISS_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_DISMISS_EVIL );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 1 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 2 );
+                    break;
+                }
+
+                int32_t textWidth = 96;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DISMISS" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_UPGRADE_GOOD:
+            case ICN::BUTTON_SMALL_UPGRADE_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALL_UPGRADE_EVIL );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 5 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY, 6 );
+                    break;
+                }
+
+                int32_t textWidth = 96;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "UPGRADE" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
 
                 break;
             }
@@ -1943,6 +1993,10 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_EXIT_GOOD:
             case ICN::BUTTON_SMALL_EXIT_EVIL:
             case ICN::BUTTON_SMALLER_EXIT:
+            case ICN::BUTTON_SMALL_DISMISS_GOOD:
+            case ICN::BUTTON_SMALL_DISMISS_EVIL:
+            case ICN::BUTTON_SMALL_UPGRADE_GOOD:
+            case ICN::BUTTON_SMALL_UPGRADE_EVIL:
             case ICN::BUTTON_KINGDOM_EXIT:
             case ICN::BUTTON_MAPSIZE_SMALL:
             case ICN::BUTTON_MAPSIZE_MEDIUM:

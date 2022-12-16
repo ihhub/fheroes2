@@ -182,15 +182,17 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi );
 
     // button upgrade
+    const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
     fheroes2::Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
     dst_pt.x = pos_rt.x + 280;
     dst_pt.y = pos_rt.y + 192;
-    fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, viewarmy, 5, 6 );
+    fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, upgradeButtonIcnID, 0, 1 );
 
     // button dismiss
+    const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
     dst_pt.x = pos_rt.x + 280;
     dst_pt.y = pos_rt.y + 221;
-    fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, viewarmy, 1, 2 );
+    fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, dismissButtonIcnID, 0, 1 );
 
     // button exit
     const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
