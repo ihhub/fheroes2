@@ -1474,25 +1474,17 @@ namespace fheroes2
             case ICN::UNIFORM_GOOD_MIN_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                const bool isGoodInterface = ( id == ICN::UNIFORM_GOOD_MAX_BUTTON || id == ICN::UNIFORM_GOOD_MIN_BUTTON );
-                const int baseIcnId = isGoodInterface ? ICN::SYSTEM : ICN::SYSTEME;
-                const fheroes2::FontColor buttonFontColor = isGoodInterface ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    const Sprite & originalButton = GetICN( ICN::RECRUIT, 4 + i );
-                    out.resize( originalButton.width() - 6, originalButton.height() - 5 + i );
-                    out.reset();
-                    const Sprite & emptyButton = GetICN( baseIcnId, 11 + i );
-                    // Copy left main body of button.
-                    fheroes2::Copy( emptyButton, 0, 0, out, 0, 0, originalButton.width() - 13 + i, originalButton.height() - 5 + i );
-                    // Copy terminating right margin of the button.
-                    fheroes2::Copy( emptyButton, 89 + i, 0, out, 53 + i, 0, 7 - i, originalButton.height() - i );
-                }
+                const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_MAX_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON );
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
                 const char * text( ( id == ICN::UNIFORM_GOOD_MIN_BUTTON || id == ICN::UNIFORM_EVIL_MIN_BUTTON ) ? "MIN" : "MAX" );
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( text ), { 6, 5 }, { 4, 6 }, { 52, 16 }, buttonFontColor );
+                int32_t textWidth = 61;
+                fheroes2::Point releasedOffset;
+                fheroes2::Point pressedOffset;
+                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( text ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
 
                 break;
             }
