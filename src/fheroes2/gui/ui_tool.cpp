@@ -28,12 +28,10 @@
 #include <cstring>
 #include <ctime>
 #include <deque>
-#include <ostream>
 #include <string>
 #include <utility>
 
 #include "localevent.h"
-#include "logging.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
