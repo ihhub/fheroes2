@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1478,6 +1478,46 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Гноможер!!!!, рятуйтесь хто може.\""
 
 #, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Підняття немертвих"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Цеп блискавок"
+
+#, fuzzy
+msgid "campaignBonus|Fireblast"
+msgstr "Вогняний вибух"
+
+#, fuzzy
+msgid "campaignBonus|Mass Curse"
+msgstr "Масове прокляття"
+
+#, fuzzy
+msgid "campaignBonus|Mass Haste"
+msgstr "Масове прискорення"
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Зеркальний фантом"
+
+#, fuzzy
+msgid "campaignBonus|Resurrect"
+msgstr "Воскресіння"
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Сталева кожа"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
+msgstr "Клич Землі"
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Показ героїв"
+
+#, fuzzy
 msgid "campaignBonus|Ballista"
 msgstr "Баліста"
 
@@ -1730,46 +1770,6 @@ msgstr "Просунута Мудрість"
 #, fuzzy
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Експертна Мудрість"
-
-#, fuzzy
-msgid "campaignBonus|Animate Dead"
-msgstr "Підняття немертвих"
-
-#, fuzzy
-msgid "campaignBonus|Chain Lightning"
-msgstr "Цеп блискавок"
-
-#, fuzzy
-msgid "campaignBonus|Fireblast"
-msgstr "Вогняний вибух"
-
-#, fuzzy
-msgid "campaignBonus|Mass Curse"
-msgstr "Масове прокляття"
-
-#, fuzzy
-msgid "campaignBonus|Mass Haste"
-msgstr "Масове прискорення"
-
-#, fuzzy
-msgid "campaignBonus|Mirror Image"
-msgstr "Зеркальний фантом"
-
-#, fuzzy
-msgid "campaignBonus|Resurrect"
-msgstr "Воскресіння"
-
-#, fuzzy
-msgid "campaignBonus|Steelskin"
-msgstr "Сталева кожа"
-
-#, fuzzy
-msgid "campaignBonus|Summon Earth"
-msgstr "Клич Землі"
-
-#, fuzzy
-msgid "campaignBonus|View Heroes"
-msgstr "Показ героїв"
 
 #, fuzzy
 msgid ""

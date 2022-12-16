@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1457,6 +1457,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Джуджеубиецо!!!!, бягай за да опазиш живота си.\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Анимирайте мъртвите"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Верижна светкавица"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Огнена експлозия"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Масово проклятие"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Масово бързане"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Огледална картина"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Възкръсни"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Стоманена кожа"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Призови Земята"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Виж героите"
+
 msgid "campaignBonus|Ballista"
 msgstr "Катапулт"
 
@@ -1648,36 +1678,6 @@ msgstr "Напреднала мъдрост"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Експертна мъдрост"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Анимирайте мъртвите"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Верижна светкавица"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Огнена експлозия"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Масово проклятие"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Масово бързане"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Огледална картина"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Възкръсни"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Стоманена кожа"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Призови Земята"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Виж героите"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "

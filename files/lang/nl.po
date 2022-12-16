@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -1478,6 +1478,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"De Drawven Moordenaar!!!!, ren voor je leven.\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Dood Animeren"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Ketting Bliksem"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Vuurstraal"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Massa Vloek"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Massale Haast"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Spiegelbeeld"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Herrijzen"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Staalhuid"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Aarde Oproepen"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Bekijk Helden"
+
 msgid "campaignBonus|Ballista"
 msgstr "Ballista"
 
@@ -1669,36 +1699,6 @@ msgstr "Geavanceerd Wijsdom"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Expert Wijsdom"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Dood Animeren"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Ketting Bliksem"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Vuurstraal"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Massa Vloek"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Massale Haast"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Spiegelbeeld"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Herrijzen"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Staalhuid"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Aarde Oproepen"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Bekijk Helden"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
