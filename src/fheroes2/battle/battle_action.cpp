@@ -411,7 +411,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     const Cell * cell = Board::GetCell( dst );
 
     if ( unit && unit->isValid() && cell && cell->isPassableForUnit( *unit ) ) {
-        const int32_t head = unit->GetHeadIndex();
+        const int32_t initialHeadIdx = unit->GetHeadIndex();
 
         Position pos = Position::GetPosition( *unit, dst );
         assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
@@ -424,8 +424,10 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 
         if ( unit->isFlying() ) {
             unit->UpdateDirection( pos.GetRect() );
-            if ( unit->isReflect() != pos.isReflect() )
+
+            if ( unit->isReflect() != pos.isReflect() ) {
                 pos.Swap();
+            }
 
             if ( _interface ) {
                 _interface->RedrawActionFly( *unit, pos );
@@ -434,14 +436,14 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 const int32_t dstHead = pos.GetHead()->GetIndex();
                 const int32_t dstTail = unit->isWide() ? pos.GetTail()->GetIndex() : -1;
 
-                // open the bridge if the unit should land on it
+                // Lower the bridge if the unit needs to land on it
                 if ( _bridge->NeedDown( *unit, dstHead ) || ( unit->isWide() && _bridge->NeedDown( *unit, dstTail ) ) ) {
                     _bridge->ActionDown();
                 }
 
                 unit->SetPosition( pos );
 
-                // check for possible bridge close action, after unit's end of movement
+                // Raise the bridge if possible after the unit has completed its movement
                 if ( _bridge->AllowUp() ) {
                     _bridge->ActionUp();
                 }
@@ -459,30 +461,22 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 return;
             }
 
-            if ( _interface )
+            if ( _interface ) {
                 _interface->RedrawActionMove( *unit, path );
+            }
             else if ( _bridge ) {
-                for ( Indexes::const_iterator pathIt = path.begin(); pathIt != path.end(); ++pathIt ) {
-                    bool doMovement = false;
-
-                    if ( _bridge->NeedDown( *unit, *pathIt ) ) {
+                for ( const int32_t idx : path ) {
+                    if ( _bridge->NeedDown( *unit, idx ) ) {
                         _bridge->ActionDown();
                     }
 
-                    if ( unit->isWide() ) {
-                        if ( unit->GetTailIndex() == *pathIt )
-                            unit->SetReflection( !unit->isReflect() );
-                        else
-                            doMovement = true;
+                    if ( unit->isWide() && unit->GetTailIndex() == idx ) {
+                        unit->SetReflection( !unit->isReflect() );
                     }
                     else {
-                        doMovement = true;
+                        unit->SetPosition( idx );
                     }
 
-                    if ( doMovement )
-                        unit->SetPosition( *pathIt );
-
-                    // check for possible bridge close action, after unit's end of movement
                     if ( _bridge->AllowUp() ) {
                         _bridge->ActionUp();
                     }
@@ -490,10 +484,10 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             }
 
             if ( unit->isWide() ) {
-                const int32_t dst1 = path.back();
-                const int32_t dst2 = 1 < path.size() ? path[path.size() - 2] : head;
+                const int32_t dstHeadIdx = path.back();
+                const int32_t dstTailIdx = path.size() > 1 ? path[path.size() - 2] : initialHeadIdx;
 
-                finalPos.Set( dst1, unit->isWide(), ( RIGHT_SIDE & Board::GetDirection( dst1, dst2 ) ) != 0 );
+                finalPos.Set( dstHeadIdx, true, ( Board::GetDirection( dstHeadIdx, dstTailIdx ) & RIGHT_SIDE ) != 0 );
             }
             else {
                 finalPos.Set( path.back(), false, unit->isReflect() );
