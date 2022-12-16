@@ -890,7 +890,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 87;
+                int32_t textWidth = 85;
                 fheroes2::Point releasedOffset;
                 fheroes2::Point pressedOffset;
                 getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
