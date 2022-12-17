@@ -1701,6 +1701,8 @@ namespace AI
 
             const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY, Game::MAPS_DELAY };
 
+            fheroes2::Display & display = fheroes2::Display::instance();
+
             LocalEvent & le = LocalEvent::Get();
             while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
 #if defined( WITH_DEBUG )
@@ -1720,9 +1722,25 @@ namespace AI
                     break;
                 }
 
-                if ( hideAIMovements || !AIHeroesShowAnimation( hero, colors ) ) {
+                const bool hideHeroAnimation = ( hideAIMovements || !AIHeroesShowAnimation( hero, colors ) );
+
+                if ( hideHeroAnimation ) {
                     hero.Move( true );
                     recenterNeeded = true;
+
+                    // Render a frame only if there is a need to show one.
+                    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                        // Update Adventure Map objects' animation.
+                        uint32_t & frame = Game::MapsAnimationFrame();
+                        ++frame;
+
+                        basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+
+                        // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+                        assert( basicInterface.GetRedrawMask() == 0 );
+
+                        display.render();
+                    }
                 }
                 else if ( Game::validateAnimationDelay( Game::CURRENT_AI_DELAY ) ) {
                     // re-center in case hero appears from the fog
@@ -1780,19 +1798,12 @@ namespace AI
                         }
                     }
 
-                    gameArea.SetRedraw();
-                }
+                    basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
 
-                if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                    // Update Adventure Map objects' animation.
-                    uint32_t & frame = Game::MapsAnimationFrame();
-                    ++frame;
-                    gameArea.SetRedraw();
-                }
+                    // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+                    assert( basicInterface.GetRedrawMask() == 0 );
 
-                if ( basicInterface.NeedRedraw() ) {
-                    basicInterface.Redraw();
-                    fheroes2::Display::instance().render();
+                    display.render();
                 }
             }
 
