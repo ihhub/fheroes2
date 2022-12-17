@@ -144,11 +144,28 @@ int GetInt( const std::string & str )
 
 void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & inString )
 {
-    size_t position = std::string::npos;
+    // This function converts all letters in 'inString' to lowercase, except when it is the first word in a sentence.
+    size_t position;
 
     while ( std::string::npos != ( position = workString.find( pattern ) ) ) {
-        if ( position == 0 ) {
-            workString.replace( position, std::strlen( pattern ), inString );
+        // To determine if the end of a sentence was before this word we analyze the a character with shift
+        // by '-2' from 'position' to the presence of full stop, question or exclamation a punctuation mark,
+        // assuming that it is followed by one space before the inserted word.
+        // If the insert position is less than 2 we cannot get a character for analysis and put zero instead.
+        const char prevWordEnd = ( position > 1 ) ? workString.at( position - 2 ) : '\0';
+
+        // Also if the instert position equals to zero, than it is the first word in a sentence.
+        if ( position == 0 || prevWordEnd == '.' || prevWordEnd == '?' || prevWordEnd == '!' ) {
+            // Also, "inString" can consist of two words (for example, "Power Liches"), to detect this, we look for a space mark.
+            const size_t spacePosition = inString.find( ' ' );
+
+            // The first (and possibly only) word of 'inString' replaces 'pattern' in 'workString'.
+            workString.replace( position, std::strlen( pattern ), inString.substr( 0, spacePosition ) );
+
+            // Check if a space was found to insert the rest, lowaercased, part of 'isString'.
+            if ( spacePosition != std::string::npos ) {
+                workString.insert( position + spacePosition, Translation::StringLower( inString.substr( spacePosition ) ) );
+            }
         }
         else {
             workString.replace( position, std::strlen( pattern ), Translation::StringLower( inString ) );
@@ -158,7 +175,7 @@ void StringReplaceWithLowercase( std::string & workString, const char * pattern,
 
 void StringReplace( std::string & dst, const char * pred, const std::string & src )
 {
-    size_t pos = std::string::npos;
+    size_t pos;
 
     while ( std::string::npos != ( pos = dst.find( pred ) ) )
         dst.replace( pos, std::strlen( pred ), src );
@@ -173,7 +190,7 @@ std::vector<std::string> StringSplit( const std::string & str, const std::string
 {
     std::vector<std::string> vec;
     size_t pos1 = 0;
-    size_t pos2 = std::string::npos;
+    size_t pos2;
 
     while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
         vec.push_back( str.substr( pos1, pos2 - pos1 ) );

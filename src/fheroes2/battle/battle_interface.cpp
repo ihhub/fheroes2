@@ -3049,7 +3049,7 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 {
     std::string msg = _( "%{name} skip their turn." );
-    StringReplace( msg, "%{name}", attacker.GetName() );
+    StringReplaceWithLowercase( msg, "%{name}", attacker.GetName() );
 
     status.SetMessage( msg, true );
 }
@@ -3208,7 +3208,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
     // draw status for first defender
     if ( !isMirror && !targets.empty() ) {
         std::string msg( _n( "%{attacker} does %{damage} damage.", "%{attacker} do %{damage} damage.", attacker.GetCount() ) );
-        StringReplace( msg, "%{attacker}", attacker.GetName() );
+        StringReplaceWithLowercase( msg, "%{attacker}", attacker.GetName() );
 
         if ( 1 < targets.size() ) {
             uint32_t killed = 0;
