@@ -174,6 +174,7 @@ namespace Battle
             return shots;
         }
 
+        //        killed   resurrected
         std::pair<uint32_t, uint32_t> ApplyDamage( Unit &, uint32_t );
         uint32_t ApplyDamage( uint32_t );
         uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;

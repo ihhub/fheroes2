@@ -3163,12 +3163,12 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
         status.SetMessage( "", false );
 
         if ( resurrects != 0 ) {
-            auto log = []( Battle::Status & uiel, std::string & lmsg, uint32_t lres, const char * lunit ) {
-                StringReplace( lmsg, "%{count}", lres );
-                StringReplace( lmsg, "%{unit}", lunit );
+            auto log = []( Battle::Status & uiEl, std::string & lMsg, uint32_t lRes, const char * lUnit ) {
+                StringReplace( lMsg, "%{count}", lRes );
+                StringReplace( lMsg, "%{unit}", lUnit );
 
-                uiel.SetMessage( lmsg, true );
-                uiel.SetMessage( "", false );
+                uiEl.SetMessage( lMsg, true );
+                uiEl.SetMessage( "", false );
             };
 
             switch ( attacker.GetID() ) {
