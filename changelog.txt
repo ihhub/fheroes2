@@ -63,7 +63,7 @@ version 1.0.0 (21 December 2022)
 - remove and integrate the rest of experimental options
 - always center text when a maximum width is provided
 - fix UI elements for the unhired hero popup window
-- update Ballista and and Turrets damage information when they are destroyed
+- update Ballista and Turrets damage information when they are destroyed
 - correctly reflect the change of fullscreen mode in the graphics settings dialog when it was toggled using a hotkey
 
 version 0.9.21 (12 November 2022)
