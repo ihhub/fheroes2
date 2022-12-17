@@ -1,20 +1,23 @@
+# Dutch translation for fheroes2
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# This file is distributed under the same license as the fheroes2 package.
+# fheroes2 team <fhomm2@gmail.com>, 2022
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-16 13:44+0000\n"
-"PO-Revision-Date: 2022-12-12 12:20+0100\n"
+"PO-Revision-Date: 2022-12-07 07:34+0100\n"
 "Last-Translator: \n"
-"Language-Team: Danish (Denmark)\n"
-"Language: da_DK\n"
+"Language-Team: Dansk\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Loco-Source-Locale: da_DK\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.2.2\n"
-"X-Loco-Parser: loco_parse_po\n"
 
 msgid ""
 "BATTLE\n"
@@ -294,7 +297,7 @@ msgid "The enemy has fled!"
 msgstr "Fjenden er flygtet!"
 
 msgid "A glorious victory!"
-msgstr "En glorværdig sejr!"
+msgstr "En gloværdig sejr!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
 msgstr "For at udvise tapperhed i kamp, får %{name} %{exp} erfaringspoint."
@@ -368,7 +371,7 @@ msgid "Spell Points"
 msgstr "Magipoint"
 
 msgid "Hero's Options"
-msgstr "Helts mulige træk"
+msgstr "Helts træk"
 
 msgid "Cast Spell"
 msgstr "Kast magi"
@@ -386,7 +389,7 @@ msgid "Hero Screen"
 msgstr "Helteskærm"
 
 msgid "Captain's Options"
-msgstr "Kaptajns mulige træk"
+msgstr "Kaptajns træk"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -521,10 +524,10 @@ msgstr ""
 "før sin tur i næste runde."
 
 msgid "View Captain's options"
-msgstr "Se Kaptajns mulige træk"
+msgstr "Se Kaptajns muligheder"
 
 msgid "View Hero's options"
-msgstr "Se helts mulige træk"
+msgstr "Se Helts muligheder"
 
 msgid "View opposing Captain"
 msgstr "Se modstanders Kaptajn"
@@ -626,7 +629,7 @@ msgid "High morale enables the %{monster} to attack again."
 msgstr "Høj morale gør det muligt for troppen med %{monster} at angribe igen."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr "Lav moral vækker frysende panik i troppen med %{monster}."
+msgstr "Lav morale vækker frysende panik i troppen med %{monster}."
 
 msgid "%{tower} does %{damage} damage."
 msgstr "Borgens %{tower} giver %{damage} i skade."
@@ -662,7 +665,7 @@ msgid "Damage: %{min} - %{max}"
 msgstr "Skade: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr "Dræber: %{max}"
+msgstr "Drøber: %{max}"
 
 msgid "Perish: %{min} - %{max}"
 msgstr "Dræber: %{min} - %{max}"
@@ -671,7 +674,7 @@ msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
-"Med sit ørneblik observerer %{name} magien %{spell} og lærer den selv at "
+"Med sine ørneøjne observerer %{name} magien %{spell} og lærer den selv at "
 "kende."
 
 msgid "Human"
@@ -717,7 +720,7 @@ msgid "Right Turret"
 msgstr "Højre tårn"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr "Borgens %{name} skyder med en styrke af %{count} bueskyttere"
+msgstr "Borgens %{name} med en styrke af %{count} Bueskyttere"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "hver med en +%{attack} bonus til deres angrebsevne."
@@ -738,7 +741,7 @@ msgstr[0] "%{count} %{name} rejser sig fra de døde!"
 msgstr[1] "%{count} %{name} rejser sig fra de døde!"
 
 msgid "Dwarven Alliance"
-msgstr "Dværgalliance"
+msgstr ""
 
 msgid "Sorceress Guild"
 msgstr ""
@@ -750,7 +753,7 @@ msgid "Ogre Alliance"
 msgstr ""
 
 msgid "Dwarfbane"
-msgstr "Dværgsmorder"
+msgstr ""
 
 msgid "Dragon Alliance"
 msgstr ""
@@ -774,7 +777,7 @@ msgid "Force of Arms"
 msgstr ""
 
 msgid "Save the Dwarves"
-msgstr "Red dværgene"
+msgstr ""
 
 msgid "Carator Mines"
 msgstr ""
@@ -818,9 +821,6 @@ msgid ""
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
-"Din opgave er at forsvare dværgene mod Archibalds styrker. Overtag alle "
-"fjendens borge og byer for at vinde, men undgå at miste alle dine dværg-"
-"byer, for så vinder fjenden."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
@@ -880,7 +880,7 @@ msgid "Necromancers"
 msgstr ""
 
 msgid "Slay the Dwarves"
-msgstr "Dræb dværgene"
+msgstr ""
 
 msgid "Country Lords"
 msgstr ""
@@ -924,10 +924,6 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
-"Dværgene skal erobres, før de kan blande sig i kong Archibalds planer. "
-"Rolands styrker har mere end én helt og mange byer til at starte med, så vær "
-"klar til angreb fra flere retninger. Du skal erobre alle fjendens borge og "
-"byer for at hævde sejren."
 
 msgid ""
 "You must put down a peasant revolt led by Roland's forces. All are allied "
@@ -1334,13 +1330,13 @@ msgid "campaignBonus|Expert Diplomacy"
 msgstr ""
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Begynder Ørneblik"
+msgstr ""
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Avanceret Ørneblik"
+msgstr ""
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Ekspert Ørneblik"
+msgstr ""
 
 msgid "campaignBonus|Basic Estates"
 msgstr ""
@@ -1492,10 +1488,9 @@ msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
 msgstr ""
-"Hovedhelten vil i dette scenarie begynde med yderligere %{count} %{skill}."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr "Hovedhelten vil i dette scenarie begynde med %{skill}"
+msgstr ""
 
 msgid "Roland"
 msgstr ""
@@ -1786,31 +1781,31 @@ msgid "Archery Range"
 msgstr "Bueskydningsbane"
 
 msgid "Upg. Archery Range"
-msgstr "Opg. bueskydningsbane"
+msgstr "Opg. Bueskydningsbane"
 
 msgid "Blacksmith"
 msgstr "Grovsmedje"
 
 msgid "Upg. Blacksmith"
-msgstr "Opg. grovsmedje"
+msgstr "Opg. Grovsmedje"
 
 msgid "Armory"
 msgstr "Våbensmedje"
 
 msgid "Upg. Armory"
-msgstr "Opg. våbensmedje"
+msgstr "Opg. Våbensmedje"
 
 msgid "Jousting Arena"
 msgstr "Dystningsarena"
 
 msgid "Upg. Jousting Arena"
-msgstr "Opg. dystningsarena"
+msgstr "Opg. Dystningsarena"
 
 msgid "Cathedral"
 msgstr "Katedral"
 
 msgid "Upg. Cathedral"
-msgstr "Opg. katedral"
+msgstr "Opg. Katedral"
 
 msgid "Coliseum"
 msgstr "Colosseum"
@@ -1825,7 +1820,7 @@ msgid "Stick Hut"
 msgstr "Pindehytte"
 
 msgid "Upg. Stick Hut"
-msgstr "Opg. pindehytte"
+msgstr "Opg. Pindehytte"
 
 msgid "Den"
 msgstr "Hule"
@@ -1835,13 +1830,13 @@ msgid "Adobe"
 msgstr "Adobehus"
 
 msgid "Upg. Adobe"
-msgstr "Opg. adobehus"
+msgstr "Opg. Adobehus"
 
 msgid "Bridge"
 msgstr "Bro"
 
 msgid "Upg. Bridge"
-msgstr "Opg. bro"
+msgstr "Opg. Bro"
 
 msgid "Pyramid"
 msgstr "Pyramide"
@@ -1860,19 +1855,19 @@ msgid "Cottage"
 msgstr "Kottage"
 
 msgid "Upg. Cottage"
-msgstr "Opg. kottage"
+msgstr "Opg. Kottage"
 
 msgid "Stonehenge"
 msgstr "Stenkreds"
 
 msgid "Upg. Stonehenge"
-msgstr "Opg. stenkreds"
+msgstr "Opg. Stenkreds"
 
 msgid "Fenced Meadow"
 msgstr "Indhegnet eng"
 
 msgid "sorceress|Red Tower"
-msgstr "Ildtårn"
+msgstr "Rødt tårn"
 
 msgid "Dungeon"
 msgstr "Fangehul"
@@ -1893,7 +1888,7 @@ msgid "Maze"
 msgstr "Labyrint"
 
 msgid "Upg. Maze"
-msgstr "Opg. labyrint"
+msgstr "Opg. Labyrint"
 
 msgid "Swamp"
 msgstr "Sump"
@@ -1905,7 +1900,7 @@ msgid "warlock|Red Tower"
 msgstr "Rødt tårn"
 
 msgid "Black Tower"
-msgstr "Sort tårn"
+msgstr "Sort Tårn"
 
 msgid "Library"
 msgstr "Bibliotek"
@@ -1923,7 +1918,7 @@ msgid "Foundry"
 msgstr "Støberi"
 
 msgid "Upg. Foundry"
-msgstr "Opg. støberi"
+msgstr "Opg. Støberi"
 
 msgid "Cliff Nest"
 msgstr "Klipperede"
@@ -1932,13 +1927,13 @@ msgid "Ivory Tower"
 msgstr "Elfenbenstårn"
 
 msgid "Upg. Ivory Tower"
-msgstr "Opg. elfenbenstårn"
+msgstr "Opg. Elfenbenstårn"
 
 msgid "Cloud Castle"
 msgstr "Skyslot"
 
 msgid "Upg. Cloud Castle"
-msgstr "Opg. skyslot"
+msgstr "Opg. Skyslot"
 
 msgid "Storm"
 msgstr "Storm"
@@ -1953,22 +1948,22 @@ msgid "Graveyard"
 msgstr "Kirkegård"
 
 msgid "Upg. Graveyard"
-msgstr "Opg. kirkegård"
+msgstr "Opg. Kirkegård"
 
 msgid "Upg. Pyramid"
-msgstr "Opg. pyramide"
+msgstr "Opg. Pyramide"
 
 msgid "Mansion"
 msgstr "Palæ"
 
 msgid "Upg. Mansion"
-msgstr "Opg. palæ"
+msgstr "Opg. Palæ"
 
 msgid "Mausoleum"
 msgstr "Mausoleum"
 
 msgid "Upg. Mausoleum"
-msgstr "Opg. mausoleum"
+msgstr "Opg. Mausoleum"
 
 msgid "Laboratory"
 msgstr "Laboratorium"
@@ -2068,7 +2063,6 @@ msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
-"Helligdommen øger alle dine nekromantikeres nekromantik med 10 procent."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
@@ -2299,10 +2293,6 @@ msgid ""
 "them, to the wild cheers of the crowd.  Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
-"Du går ind i arenaen og står over for en flok glubske løver. Publikums vilde "
-"jubel lyder, idet du snildt besejrer løverne. Imponeret over dine evner, er "
-"den gamle gladiatortræner villig til at træne dig i en færdighed - Du vælger "
-"selv hvilken."
 
 msgid "You can't afford to upgrade your troops!"
 msgstr ""
@@ -2316,10 +2306,10 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
 msgid "Attack Skill"
-msgstr "Angrebsevne"
+msgstr ""
 
 msgid "Defense Skill"
-msgstr "Forsvarsevne"
+msgstr ""
 
 msgid "Shots"
 msgstr ""
@@ -2656,10 +2646,10 @@ msgid "%{name} has gained a level."
 msgstr ""
 
 msgid "%{skill} +1"
-msgstr "%{skill} +1"
+msgstr ""
 
 msgid "You have learned %{skill}."
-msgstr "Du har lært %{skill}"
+msgstr ""
 
 msgid "You may learn either:"
 msgstr ""
@@ -2717,10 +2707,10 @@ msgid "already learned"
 msgstr ""
 
 msgid "already knows this skill"
-msgstr "kender allerede denne evne"
+msgstr ""
 
 msgid "already has max skills"
-msgstr "har allerede maksimale evner"
+msgstr ""
 
 msgid "(already visited)"
 msgstr ""
@@ -2840,7 +2830,7 @@ msgid "Select Spell:"
 msgstr ""
 
 msgid "Select Skill:"
-msgstr "Vælg evne:"
+msgstr ""
 
 msgid "Location: "
 msgstr ""
@@ -3915,7 +3905,7 @@ msgid ""
 msgstr ""
 
 msgid "View %{skill} Info"
-msgstr "Se info om %{skill}"
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr ""
@@ -4354,9 +4344,6 @@ msgid ""
 "%{skill}.\n"
 " \n"
 msgstr ""
-"Du nærmer dig hytten og observerer en heks indenfor, som studerer et "
-"ældgammelt bind om %{skill}.\n"
-"\n"
 
 msgid ""
 "As you approach, she turns and focuses her one glass eye on you.\n"
@@ -4373,8 +4360,6 @@ msgid ""
 "An ancient and immortal witch living in a hut with bird's legs for stilts "
 "teaches you %{skill} for her own inscrutable purposes."
 msgstr ""
-"I hytten lever en udødelig og ældgammel heks med krøkker af fugleben. Af "
-"sine egne uransagelige årsager, lærer hun dig at blive %{skill}."
 
 msgid "As you drink the sweet water, you gain luck for your next battle."
 msgstr ""
@@ -4460,9 +4445,6 @@ msgid ""
 "You've come upon a mercenary camp practicing their tactics. \"You're too "
 "advanced for us,\" the mercenary captain says. \"We can teach nothing more.\""
 msgstr ""
-"Du er stødt på en lejesoldatslejr, der øver deres taktiske evner. \"Dine "
-"evner overgår vores egne,\" siger lejesoldatskaptajnen. \"Vi kan ikke lære "
-"dig mere.\""
 
 msgid ""
 "You've come upon a mercenary camp practicing their tactics. The mercenaries "
@@ -4621,8 +4603,6 @@ msgid ""
 "You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
-"Du har mødt en sær person med en ugle siddende ovenpå sit hat. Han fortæller "
-"dig, at han er villig til at give %{art}, hvis du har %{skill}."
 
 msgid ""
 "You come upon an ancient artifact. As you reach for it, a pack of Rogues "
@@ -4910,8 +4890,6 @@ msgid ""
 "The butler admits you to see the master of the house. He trains you in the "
 "four skills a hero should know."
 msgstr ""
-"Butleren tillader dig at se herren i huset. Herren træner dig indenfor de "
-"fire evner, enhver helt bør kende."
 
 msgid ""
 "The butler opens the door and looks you up and down. \"You are neither "
@@ -5201,10 +5179,6 @@ msgid ""
 "\"In my travels, I have learned much in the way of arcane magic. A great "
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
-"Du går ind i teltet og ser en gammel kvinde stirre ind i en magisk ædelsten. "
-"Hun kigger op og siger:\n"
-"\"På mine rejser har jeg lært meget om mystisk magi. Et stort orakel lærte "
-"mig sine færdigheder. Jeg har svaret, du søger.\""
 
 msgid "Spell book is not present."
 msgstr ""
@@ -5368,13 +5342,9 @@ msgstr ""
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
-"Din angrebsevne er en bonus, der lægges til hver af dine troppers "
-"angrebsevner."
 
 msgid "Your defense skill is a bonus added to each creature's defense skill."
 msgstr ""
-"Din forsvarsevne er en bonus, der lægges til hver af dine troppers "
-"forsvarsevner."
 
 msgid "Your spell power determines the length or power of a spell."
 msgstr ""
@@ -5389,13 +5359,13 @@ msgid "Current Modifiers:"
 msgstr ""
 
 msgid "skill|Basic"
-msgstr "Begynder"
+msgstr ""
 
 msgid "skill|Advanced"
-msgstr "Avanceret"
+msgstr ""
 
 msgid "skill|Expert"
-msgstr "Ekspert"
+msgstr ""
 
 msgid "Pathfinding"
 msgstr ""
@@ -5428,7 +5398,7 @@ msgid "Ballistics"
 msgstr ""
 
 msgid "Eagle Eye"
-msgstr "Ørneblik"
+msgstr ""
 
 msgid "Necromancy"
 msgstr ""
@@ -5437,160 +5407,156 @@ msgid "Estates"
 msgstr ""
 
 msgid "Advanced Archery"
-msgstr "Avanceret Skytte"
+msgstr ""
 
 msgid "Advanced Pathfinding"
-msgstr "Avanceret Stifinder"
+msgstr ""
 
 msgid "Basic Archery"
-msgstr "Begynder Skytte"
+msgstr ""
 
 msgid "Basic Pathfinding"
-msgstr "Begynder Stifinder"
+msgstr ""
 
 msgid "Expert Pathfinding"
-msgstr "Ekspert Stifinder"
+msgstr ""
 
 msgid "Advanced Logistics"
-msgstr "Avanceret Logistik"
+msgstr ""
 
 msgid "Basic Logistics"
-msgstr "Begynder Logistik"
+msgstr ""
 
 msgid "Basic Scouting"
-msgstr "Begynder Opdager"
+msgstr ""
 
 msgid "Expert Archery"
-msgstr "Ekspert Skytte"
+msgstr ""
 
 msgid "Expert Logistics"
-msgstr "Ekspert Logistik"
+msgstr ""
 
 msgid "Advanced Diplomacy"
-msgstr "Avanceret Diplomatik"
+msgstr ""
 
 msgid "Advanced Scouting"
-msgstr "Avanceret Opdager"
+msgstr ""
 
 msgid "Basic Diplomacy"
-msgstr "Begynder Diplomatik"
+msgstr ""
 
 msgid "Expert Diplomacy"
-msgstr "Ekspert Diplomatik"
+msgstr ""
 
 msgid "Expert Scouting"
-msgstr "Ekspert Opdager"
+msgstr ""
 
 msgid "Advanced Leadership"
-msgstr "Avanceret Lederskab"
+msgstr ""
 
 msgid "Advanced Navigation"
-msgstr "Avanceret Navigation"
+msgstr ""
 
 msgid "Basic Leadership"
-msgstr "Begynder Lederskab"
+msgstr ""
 
 msgid "Basic Navigation"
-msgstr "Begynder Navigation"
+msgstr ""
 
 msgid "Expert Navigation"
-msgstr "Ekspert Navigation"
+msgstr ""
 
 msgid "Advanced Wisdom"
-msgstr "Avanceret Visdom"
+msgstr ""
 
 msgid "Basic Mysticism"
-msgstr "Begynder Mysticisme"
+msgstr ""
 
 msgid "Basic Wisdom"
-msgstr "Begynder Visdom"
+msgstr ""
 
 msgid "Expert Leadership"
-msgstr "Ekspert Lederskab"
+msgstr ""
 
 msgid "Expert Wisdom"
-msgstr "Ekspert Visdom"
+msgstr ""
 
 msgid "Advanced Luck"
-msgstr "Avanceret Held"
+msgstr ""
 
 msgid "Advanced Mysticism"
-msgstr "Avanceret Mysticisme"
+msgstr ""
 
 msgid "Basic Luck"
-msgstr "Begynder Held"
+msgstr ""
 
 msgid "Expert Luck"
-msgstr "Ekspert Held"
+msgstr ""
 
 msgid "Expert Mysticism"
-msgstr "Ekspert Mysticisme"
+msgstr ""
 
 msgid "Advanced Ballistics"
-msgstr "Avanceret Ballistik"
+msgstr ""
 
 msgid "Advanced Eagle Eye"
-msgstr "Avanceret Ørneblik"
+msgstr ""
 
 msgid "Basic Ballistics"
-msgstr "Begynder Ballistik"
+msgstr ""
 
 msgid "Basic Eagle Eye"
-msgstr "Begynder Ørneblik"
+msgstr ""
 
 msgid "Expert Ballistics"
-msgstr "Ekspert Ballistik"
+msgstr ""
 
 msgid "Advanced Necromancy"
-msgstr "Avanceret Nekromantik"
+msgstr ""
 
 msgid "Basic Estates"
-msgstr "Begynder Adelskab"
+msgstr ""
 
 msgid "Basic Necromancy"
-msgstr "Begynder Nekromantik"
+msgstr ""
 
 msgid "Expert Eagle Eye"
-msgstr "Ekspert Ørneblik"
+msgstr ""
 
 msgid "Expert Necromancy"
-msgstr "Ekspert Nekromantik"
+msgstr ""
 
 msgid "Advanced Estates"
-msgstr "Avanceret Adelskab"
+msgstr ""
 
 msgid "Expert Estates"
-msgstr "Ekspert Adelskab"
+msgstr ""
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
 msgstr ""
-"%{skill} reducerer bevægelsesbesvær i ujævnt terræn med %{count} procent."
 
 msgid "%{skill} eliminates the movement penalty for rough terrain."
-msgstr "%{skill} eliminerer bevægelsesbesvær i ujævnt terræn."
+msgstr ""
 
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
 msgstr ""
-"%{skill} øger skaden forårsaget af skydende væsner med %{count} procent."
 
 msgid "%{skill} increases your hero's movement points by %{count} percent."
-msgstr "%{skill} øger din helts bevægelsespoint med %{count} procent."
+msgstr ""
 
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] "%{skill} øger din helts sigtbarhed med én firkant."
-msgstr[1] "%{skill} øger din helts sigtbarhed med  %{count} firkanter."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
 msgstr ""
-"%{skill} giver dig mulighed for at forhandle med væsener, der er svagere end "
-"din gruppe. "
 
 msgid "Approximately %{count} percent of the creatures may offer to join you."
 msgstr ""
@@ -5602,77 +5568,62 @@ msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
 msgstr ""
-"%{skill} øger din helts bevægelsespoint over vand med %{count} procent."
 
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr "%{skill} øger din helts troppers moral med %{count}."
+msgstr ""
 
 msgid "%{skill} allows your hero to learn third level spells."
-msgstr "%{skill} giver din helt mulighed for at lære magi på tredje niveau."
+msgstr ""
 
 msgid "%{skill} allows your hero to learn fourth level spells."
-msgstr "%{skill} giver din helt mulighed for at lære magi på fjerde niveau."
+msgstr ""
 
 msgid "%{skill} allows your hero to learn fifth level spells."
-msgstr "%{skill} giver din helt mulighed for at lære magi på femte niveau."
+msgstr ""
 
 msgid "%{skill} regenerates one of your hero's spell points per day."
 msgid_plural ""
 "%{skill} regenerates %{count} of your hero's spell points per day."
-msgstr[0] "%{skill} regenerer ét af din helts magipoint per dag."
-msgstr[1] "%{skill} regenerer %{count} af din helts magipoint per dag."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr "%{skill} øger din helts held med %{count}."
+msgstr ""
 
 msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
-"%{skill} giver din helts katapultskud en større chance for at ramme og gøre "
-"skade på slottets mure."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
-"%{skill} giver din helts katapult et ekstra skud, og hvert skud har en "
-"større chance for at ramme og skade slottets mure."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
-"%{skill} giver din helts katapult et ekstra skud, og hvert skud ødelægger "
-"automatisk enhver mur, undtagen en befæstet mur i en ridderborg."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level enemy spell used against him in a combat."
 msgstr ""
-"%{skill} giver din helt en %{count} procent chance for at lære en given 1.- "
-"eller 2.niveau fjendtlig magi, der bruges mod ham i kamp."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) used against him in combat."
 msgstr ""
-"%{skill} giver din helt en %{count} procent chance for at lære en given 3."
-"niveau (eller under) fjendtlig magi, der bruges mod ham i kamp."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) used against him in combat."
 msgstr ""
-"%{skill} giver din helt en %{count} procent chance for at lære en given 4."
-"niveau (eller under) fjendtlig magi, der bruges mod ham i kamp."
 
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
-"%{skill} tillader %{count} procent af de væsener, der blev dræbt i kamp, at "
-"blive bragt tilbage fra de døde som skeletter."
 
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
@@ -5751,14 +5702,12 @@ msgid ""
 "Experience allows your heroes to go up levels, increasing their primary and "
 "secondary skills."
 msgstr ""
-"Erfaringspoint giver dine helte mulighed for at stige i niveau, og derved "
-"øge deres primære og sekundære evner."
 
 msgid "Hero/Stats"
 msgstr ""
 
 msgid "Skills"
-msgstr "Evner"
+msgstr ""
 
 msgid "Artifacts"
 msgstr ""
@@ -6691,10 +6640,10 @@ msgid "Archmagi"
 msgstr "Ærkemagikere"
 
 msgid "Giant"
-msgstr "Kæmpe"
+msgstr "Kollos"
 
 msgid "Giants"
-msgstr "Kæmper"
+msgstr "Kollosser"
 
 msgid "Titan"
 msgstr "Titan"
@@ -6790,28 +6739,28 @@ msgid "Medusas"
 msgstr "Medusaer"
 
 msgid "Earth Elemental"
-msgstr "Jord-elemental"
+msgstr "Jord-element"
 
 msgid "Earth Elementals"
-msgstr "Jord-elementaler"
+msgstr "Jord-elementer"
 
 msgid "Air Elemental"
-msgstr "Luft-elemental"
+msgstr "Luft-element"
 
 msgid "Air Elementals"
-msgstr "Luft-elementaler"
+msgstr "Luft-elementer"
 
 msgid "Fire Elemental"
-msgstr "Ild-elemental"
+msgstr "Ild-element"
 
 msgid "Fire Elementals"
-msgstr "Ild-elementaler"
+msgstr "Ild-elementer"
 
 msgid "Water Elemental"
-msgstr "Vand-elemental"
+msgstr "Vand-element"
 
 msgid "Water Elementals"
-msgstr "Vand-elementaler"
+msgstr "Vand-elementer"
 
 msgid "Random Monsters"
 msgstr "Tilfældige monstre"
@@ -6937,10 +6886,10 @@ msgid "Soul Eater"
 msgstr ""
 
 msgid "Elemental"
-msgstr "Elementalt"
+msgstr ""
 
 msgid "No Morale"
-msgstr "Ingen moral"
+msgstr ""
 
 msgid "200% damage from Fire spells"
 msgstr ""
@@ -6985,14 +6934,13 @@ msgid "Ultimate Book of Knowledge"
 msgstr ""
 
 msgid "The %{name} increases your attack skill by %{count}."
-msgstr "%{name} øger dine væseners evne til at angribe med %{count} point."
+msgstr ""
 
 msgid "Ultimate Sword of Dominion"
 msgstr ""
 
 msgid "The %{name} increases your defense skill by %{count}."
 msgstr ""
-"%{name} øger dine væseners evne til at forsvare sig med %{count} point."
 
 msgid "Ultimate Cloak of Protection"
 msgstr ""
@@ -7004,7 +6952,7 @@ msgid "Ultimate Wand of Magic"
 msgstr ""
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
-msgstr "%{name} øger både din angrebs- og forsvarsevne med %{count} point."
+msgstr ""
 
 msgid "Ultimate Shield"
 msgstr ""
@@ -7016,7 +6964,7 @@ msgid "Ultimate Staff"
 msgstr ""
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr "%{name} øger alle dine primære evner med %{count} point."
+msgstr ""
 
 msgid "Ultimate Crown"
 msgstr ""
@@ -7120,7 +7068,7 @@ msgid "Armored Gauntlets of Protection"
 msgstr ""
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr "%{name} øger dine forsvarsevne med %{count} point."
+msgstr ""
 
 msgid ""
 "You encounter the infamous Black Knight!  After a grueling duel ending in a "
@@ -7138,15 +7086,11 @@ msgstr ""
 msgid "Giant Flail of Dominion"
 msgstr ""
 
-# ordet "plejl" beskrives som en "flail" typisk ser ud
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
 "skill with this weapon, you confidently remove the spectacular flail from "
 "the fallen Giant."
 msgstr ""
-"En klodset kæmpe har dræbt sig selv med sin egen plejl. Når du kender dine "
-"overlegne færdigheder med dette våben, fjerner du trygt den spektakulære "
-"plejl fra den faldne kæmpe."
 
 msgid "Ballista of Quickness"
 msgstr ""
@@ -7505,7 +7449,7 @@ msgid ""
 msgstr ""
 
 msgid "Elemental Ring"
-msgstr "Elemental-ring"
+msgstr ""
 
 msgid "The %{name} halves the casting cost of all summoning spells."
 msgstr ""
@@ -8071,7 +8015,7 @@ msgid "Spade of Necromancy"
 msgstr ""
 
 msgid "The %{name} gives you increased necromancy skill."
-msgstr "%{name} dine nekromantiske evne."
+msgstr ""
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
@@ -8194,7 +8138,7 @@ msgid "Slows target to half movement rate."
 msgstr ""
 
 msgid "spell|Slow"
-msgstr "Forsløvning"
+msgstr "spell|Sløvning"
 
 msgid "Mass Slow"
 msgstr "Masseforsløvning"
@@ -8206,7 +8150,7 @@ msgid "Clouds the affected creatures' eyes, preventing them from moving."
 msgstr ""
 
 msgid "spell|Blind"
-msgstr "Blinding"
+msgstr "spell|Blinding"
 
 msgid "Bless"
 msgstr "Velsignelse"
@@ -8221,7 +8165,7 @@ msgid "Mass Bless"
 msgstr "Massevelsignelse"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr "Øger på magisk vis den valgte trops forsvarsevne."
+msgstr ""
 
 msgid "Stoneskin"
 msgstr "Stenskind"
@@ -8230,8 +8174,6 @@ msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
 "version of Stoneskin."
 msgstr ""
-"Øger den valgte trops forsvarsevne. Dette er en forbedret version af magien "
-"Stenskin."
 
 msgid "Steelskin"
 msgstr "Stålskind"
@@ -8361,16 +8303,16 @@ msgid ""
 msgstr ""
 
 msgid "Dragon Slayer"
-msgstr "Dragedræber"
+msgstr "Drage Dræber"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr "Øger i høj grad en enheds angrebsevne mod drager."
+msgstr ""
 
 msgid "Blood Lust"
 msgstr "Blodlyst"
 
 msgid "Increases a unit's attack skill."
-msgstr "Øger en trops angrebsevne."
+msgstr ""
 
 msgid "Animate Dead"
 msgstr "Animer døde"
@@ -8600,7 +8542,7 @@ msgid "battle: show damage info"
 msgstr ""
 
 msgid "world: Scouting skill shows extended content info"
-msgstr "verden: Opdager-evnen giver adgang til flere informationer"
+msgstr ""
 
 msgid "world: allow to set guardian to objects"
 msgstr ""
@@ -8612,7 +8554,7 @@ msgid "heroes: allow buy a spellbook from Shrines"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "helte: tillad at vælge hvilken som helst primær evne i Arena"
+msgstr ""
 
 msgid "battle: allow soft wait for troops"
 msgstr ""
