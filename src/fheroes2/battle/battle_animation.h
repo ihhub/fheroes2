@@ -65,6 +65,7 @@ public:
 
     int getFrame() const;
     int firstFrame() const;
+    size_t getFrameNumber() const;
     size_t animationLength() const;
     virtual double movementProgress() const;
     bool isLastFrame() const;
@@ -131,6 +132,7 @@ public:
 
     int getFrame() const;
     int firstFrame() const;
+    int32_t getCurrentFrameXOffset() const;
     size_t animationLength() const;
     double movementProgress() const;
     bool isLastFrame() const;

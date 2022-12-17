@@ -92,6 +92,11 @@ int AnimationSequence::getFrame() const
     return isValid() ? _seq[_currentFrame] : 0;
 }
 
+size_t AnimationSequence::getFrameNumber() const
+{
+    return _currentFrame;
+}
+
 size_t AnimationSequence::animationLength() const
 {
     return _seq.size();
@@ -166,8 +171,12 @@ AnimationReference::AnimationReference( int monsterID )
     if ( _monsterInfo.hasAnim( Bin_Info::MonsterAnimInfo::MOVE_ONE ) ) {
         appendFrames( _moveOneTile, Bin_Info::MonsterAnimInfo::MOVE_ONE );
     }
-    else { // TODO: this must be LICH or POWER_LICH. Check it!
-        _moveOneTile = _moving;
+    else {
+        // If there is no animation for one tile movement (fix for LICH and POWER_LICH)
+        // make it from sequent MOVE_START, MOVE_MAIN, MOVE_STOP.
+        appendFrames( _moveOneTile, Bin_Info::MonsterAnimInfo::MOVE_START );
+        appendFrames( _moveOneTile, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
+        appendFrames( _moveOneTile, Bin_Info::MonsterAnimInfo::MOVE_STOP );
     }
 
     // First tile move: 1 + 3 + 4
@@ -323,7 +332,9 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
         offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].end() );
         break;
     case Monster_Info::MOVE_QUICK:
-        offset.resize( _moveOneTile.size(), 0 );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].end() );
         break;
     case Monster_Info::FLY_UP:
         offset.resize( _flying.start.size(), 0 );
@@ -500,6 +511,21 @@ size_t AnimationState::animationLength() const
 int AnimationState::firstFrame() const
 {
     return _currentSequence.firstFrame();
+}
+
+int32_t AnimationState::getCurrentFrameXOffset() const
+{
+    // Return the horizontal frame offset to use in rendering.
+    // TODO: Don't make a vector, get only one needed value from '_offsetX'.
+    const std::vector<int32_t> offset( getAnimationOffset( _animState ) );
+    const size_t currentFrame = _currentSequence.getFrameNumber();
+    if ( currentFrame < offset.size() ) {
+        return offset[currentFrame];
+    }
+    else {
+        // If there is no horizontal offset data, return 0 as offset.
+        return 0;
+    }
 }
 
 double AnimationState::movementProgress() const

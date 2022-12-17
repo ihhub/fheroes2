@@ -1671,50 +1671,57 @@ void Battle::Interface::RedrawTroopSprite( const Unit & unit )
 
 fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite )
 {
-    const fheroes2::Rect & rt = unit.GetRectPosition();
-    fheroes2::Point sp = GetTroopPosition( unit, troopSprite );
+    const fheroes2::Rect & unitPosition = unit.GetRectPosition();
+    // Get the sprite rendering offset.
+    fheroes2::Point offset = GetTroopPosition( unit, troopSprite );
 
     if ( _movingUnit == &unit ) {
         // Monster is moving.
-        // Here we're getting the first frame and then based on the offset from the first frame we calculate the position of the current frame.
-        // TODO: verify if it's the correct way as we have issues for monster movement animation.
-        const int monsterIcnId = unit.GetMonsterSprite();
-        const fheroes2::Sprite & firstMonsterFrame = fheroes2::AGG::GetICN( monsterIcnId, _movingUnit->animation.firstFrame() );
-        const int32_t ox = troopSprite.x() - firstMonsterFrame.x();
+        // Unit coordinates relevant to its position are set in Sprite coordinates 'x'  and 'y' (with bugs for some units).
+        // The offset data from BIN file is used in unit info dialog and to correct horizontal movement range when moving diagonally.
+        // IMPORTANT: The 'x' offset from BIN file cannot be used in horizontal movement animation as
+        // it does not take into account the uneven movement during the step. Use sprite 'x' coordinate for this purpose.
 
         if ( _movingUnit->animation.animationLength() ) {
-            const int32_t cx = _movingPos.x - rt.x;
-            const int32_t cy = _movingPos.y - rt.y;
+            // Get the horizontal and vertical movement projections.
+            const int32_t moveX = _movingPos.x - unitPosition.x;
+            const int32_t moveY = _movingPos.y - unitPosition.y;
             const double movementProgress = _movingUnit->animation.movementProgress();
 
-            // TODO: use offset X from bin file for ground movement
-            // cx/cy is sprite size
-            // Frame count: one tile of movement goes through all stages of animation
             // sp is sprite drawing offset
-            sp.y += static_cast<int32_t>( movementProgress * cy );
+            offset.y += static_cast<int32_t>( movementProgress * moveY );
             // If it is a slowed flying creature, then it should smoothly move horizontally.
             if ( _movingUnit->isAbilityPresent( fheroes2::MonsterAbilityType::FLYING ) ) {
-                sp.x += static_cast<int32_t>( movementProgress * cx );
+                offset.x += static_cast<int32_t>( movementProgress * moveX );
             }
-            else if ( 0 != Sign( cy ) ) {
-                sp.x -= Sign( cx ) * ox / 2;
+            else if ( 0 != Sign( moveY ) ) {
+                const int32_t offsetX = _movingUnit->animation.getCurrentFrameXOffset();
+                offset.x -= Sign( moveX ) * offsetX / 2;
+            }
+
+            // Special movement animation fix for Iron and Steel Golem: its 'MOVING' and 'MOVE_END' animation is missing 1/4 of animation start.
+            else if ( ( _movingUnit->animation.getCurrentState() == Monster_Info::MOVING || _movingUnit->animation.getCurrentState() == Monster_Info::MOVE_END )
+                      && ( _movingUnit->GetID() == Monster::IRON_GOLEM || _movingUnit->GetID() == Monster::STEEL_GOLEM ) ) {
+                // Expand the 'x' sprite offset range from [0.25,1] to [0,1] to smoothly concatenate with other animations.
+                offset.x -= static_cast<int32_t>( ( 0.75 - movementProgress ) * moveX / 4 );
             }
         }
     }
     else if ( _flyingUnit == &unit ) {
         // Monster is flying.
-        const int32_t cx = _flyingPos.x - rt.x;
-        const int32_t cy = _flyingPos.y - rt.y;
+        // Get the horizontal and vertical movement projections.
+        const int32_t moveX = _flyingPos.x - unitPosition.x;
+        const int32_t moveY = _flyingPos.y - unitPosition.y;
 
         const double movementProgress = _flyingUnit->animation.movementProgress();
 
-        sp.x += cx + static_cast<int32_t>( ( _movingPos.x - _flyingPos.x ) * movementProgress );
-        sp.y += cy + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
+        offset.x += moveX + static_cast<int32_t>( ( _movingPos.x - _flyingPos.x ) * movementProgress );
+        offset.y += moveY + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
     }
 
-    fheroes2::AlphaBlit( troopSprite, _mainSurface, sp.x, sp.y, unit.GetCustomAlpha(), unit.isReflect() );
+    fheroes2::AlphaBlit( troopSprite, _mainSurface, offset.x, offset.y, unit.GetCustomAlpha(), unit.isReflect() );
 
-    return sp;
+    return offset;
 }
 
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
@@ -3426,7 +3433,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     const bool canFly = unit.isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
     // If it is a wide creature (cache this boolean to use in the loop).
     const bool isWide = unit.isWide();
-    Indexes::const_iterator pathEnd = path.end();
+    const Indexes::const_iterator pathEnd = path.end();
 
     // Get the number of frames for unit movement.
     unit.SwitchAnimation( Monster_Info::MOVING );
@@ -3480,45 +3487,76 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         if ( isWide && ( isFlyToRight == isFromRightArmy ) ) {
             ++dst;
         }
+
+        // Switch animation to MOVING before going through the path.
+        unit.SwitchAnimation( Monster_Info::MOVING );
+    }
+    else {
+        // Every ground unit should start its movement from the special 'MOVE_START' animation
+        // or if it moves only for one cell its animation must be 'MOVE_QUICK'. So a check for 1 cell path is made.
+        // If a wide unit moves backwards for 1 cell, it turns twice, so it has 3 path points. And its first 'dst' point is equal to the last.
+        // TODO: try to rewrite path generation and movement of wide creatures to get more clear and unique code (to get rid of of 'wide creature patches').
+        if ( ( path.size() == 1 ) || ( isWide && path.size() == 3 && ( *dst == *( pathEnd - 1 ) ) ) ) {
+            unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
+        }
+        else {
+            unit.SwitchAnimation( Monster_Info::MOVE_START );
+        }
     }
 
     while ( dst != pathEnd ) {
+        // Check if a wide unit changes its horizontal direction.
+        if ( isWide && unit.GetTailIndex() == *dst ) {
+            // We must not reflect the flyers at the and of the path (just before the landing).
+            if ( !canFly || ( dst != ( pathEnd - 1 ) ) ) {
+                unit.SetReflection( !unit.isReflect() );
+            }
+            // After changind the direction go to the next step in the path.
+            ++dst;
+            continue;
+        }
+
         const Cell * cell = Board::GetCell( *dst );
         _movingPos = cell->GetPos().getPosition();
-        bool show_anim = false;
+
+        if ( !isWide ) {
+            // Check for change the horizontal direction. Only for non-wide units, the wide units use their own algorithm.
+            unit.UpdateDirection( cell->GetPos() );
+        }
 
         if ( bridge && bridge->NeedDown( unit, *dst ) ) {
             _movingUnit = nullptr;
             unit.SwitchAnimation( Monster_Info::STAND_STILL );
             bridge->ActionDown();
             _movingUnit = &unit;
-        }
-
-        if ( isWide ) {
-            if ( unit.GetTailIndex() == *dst ) {
-                // We must not reflect the flyers at the and of the path (just before the landing).
-                if ( !canFly || ( pathEnd != ( dst + 1 ) ) ) {
-                    unit.SetReflection( !unit.isReflect() );
-                }
+            if ( dst != ( pathEnd - 1 ) ) {
+                // Continue unit movement.
+                unit.SwitchAnimation( Monster_Info::MOVE_START );
             }
             else {
-                show_anim = true;
+                // If only one cell movement left, then perform `MOVE_QUICK`.
+                unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
             }
-        }
-        else {
-            unit.UpdateDirection( cell->GetPos() );
-            show_anim = true;
         }
 
-        if ( show_anim ) {
-            // If a wide flyer is flying to the left its horizontal position should be shifted to the left by one cell.
-            if ( canFly && isWide && !unit.isReflect() ) {
-                _movingPos.x -= CELLW;
-            }
-            AudioManager::PlaySound( unit.M82Move() );
+        // If a wide flyer is flying to the right its visual horizontal destination should be shifted to the left by one cell.
+        if ( canFly && isWide && !unit.isReflect() ) {
+            _movingPos.x -= CELLW;
+        }
+
+        // Render the unit movement withthe movement sound.
+        AudioManager::PlaySound( unit.M82Move() );
+        AnimateUnitWithDelay( unit, frameDelay );
+        unit.SetPosition( *dst );
+
+        // Set the animation for the next step in the path (next loop).
+        // TODO: If it is needed: predict if after the next step the unit will stop to wait for the brige action.
+        if ( canFly || ( path.size() > 1 && dst != ( pathEnd - 2 ) ) ) {
             unit.SwitchAnimation( Monster_Info::MOVING );
-            AnimateUnitWithDelay( unit, frameDelay );
-            unit.SetPosition( *dst );
+        }
+        else {
+            // If the next step is final in the path use 'MOVE_END' animation, extcept the flying units.
+            unit.SwitchAnimation( Monster_Info::MOVE_END );
         }
 
         // Check for possible bridge close action, after walking unit's end of movement to the next cell.
@@ -3529,6 +3567,14 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             unit.SwitchAnimation( Monster_Info::STAND_STILL );
             bridge->ActionUp();
             _movingUnit = &unit;
+            if ( path.size() > 1 && dst != ( pathEnd - 2 ) ) {
+                // Continue unit movement.
+                unit.SwitchAnimation( Monster_Info::MOVE_START );
+            }
+            else {
+                // If only one cell movement left, then perform `MOVE_QUICK`.
+                unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
+            }
         }
 
         ++dst;
