@@ -479,7 +479,7 @@ void Interface::StatusWindow::DrawAITurnProgress( const uint32_t progressValue )
 
     turn_progress = progressValue;
 
-    interface.Redraw( REDRAW_STATUS );
+    interface.SetRedraw( REDRAW_STATUS );
 
     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
         uint32_t & frame = Game::MapsAnimationFrame();
