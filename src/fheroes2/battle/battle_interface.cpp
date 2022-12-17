@@ -3416,8 +3416,12 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     StringReplace( msg, "%{monster}", Translation::StringLower( unit.GetName() ) );
     StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
 
+    // TODO: remove this temporary assertion
+    assert( _flyingUnit == nullptr );
+
     _currentUnit = nullptr;
     _movingUnit = &unit;
+
     // If it is a flying creature that acts like walking one when it is under the Slow spell.
     const bool canFly = unit.isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
     // If it is a wide creature (cache this boolean to use in the loop).
@@ -3544,10 +3548,11 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
     }
 
-    // restore
-    _flyingUnit = nullptr;
+    // TODO: remove this temporary assertion
+    assert( _currentUnit == nullptr && _flyingUnit == nullptr );
+
     _movingUnit = nullptr;
-    _currentUnit = nullptr;
+
     unit.SwitchAnimation( Monster_Info::STATIC );
 
     StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
@@ -3590,25 +3595,22 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     const std::vector<fheroes2::Point> points = GetEuclideanLine( destPos, targetPos, step );
     std::vector<fheroes2::Point>::const_iterator currentPoint = points.begin();
 
-    // cleanup
-    _currentUnit = nullptr;
-    _movingUnit = nullptr;
-    _flyingUnit = nullptr;
-
     Bridge * bridge = Arena::GetBridge();
 
-    // open the bridge if the unit should land on it
+    // Lower the bridge if the unit needs to land on it
     if ( bridge ) {
         if ( bridge->NeedDown( unit, destIndex ) || ( unit.isWide() && bridge->NeedDown( unit, destTailIndex ) ) ) {
             bridge->ActionDown();
         }
     }
 
-    // jump up
-    _flyingUnit = nullptr;
+    // TODO: remove this temporary assertion
+    assert( _movingUnit == nullptr && _flyingUnit == nullptr );
+
+    // Jump up
+    _currentUnit = nullptr;
     _movingUnit = &unit;
     _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
-    _flyingPos = destPos;
 
     // Get the number of frames for unit movement.
     unit.SwitchAnimation( Monster_Info::MOVING );
@@ -3641,25 +3643,21 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     unit.SetPosition( destIndex );
 
-    // landing
+    // Landing
     _flyingUnit = nullptr;
     _movingUnit = &unit;
     _movingPos = targetPos;
 
     // IMPORTANT: do not combine into vector animations with the STATIC at the end: the game could randomly switch it to IDLE this way.
-    std::vector<int> landAnim;
-    landAnim.push_back( Monster_Info::FLY_LAND );
-    landAnim.push_back( Monster_Info::STAND_STILL );
-    unit.SwitchAnimation( landAnim );
+    unit.SwitchAnimation( { Monster_Info::FLY_LAND, Monster_Info::STAND_STILL } );
     AudioManager::PlaySound( unit.M82Land() );
     // Landing animation should have the same between frame delay as the movement animation (plus 1 frame for standing still).
     AnimateUnitWithDelay( unit, frameDelay * ( static_cast<uint32_t>( unit.animation.animationLength() ) + 1 ) / movementFrames );
     unit.SwitchAnimation( Monster_Info::STATIC );
 
-    // restore
     _movingUnit = nullptr;
 
-    // check for possible bridge close action, after unit's end of movement
+    // Raise the bridge if possible after the unit has completed its movement
     if ( bridge && bridge->AllowUp() ) {
         bridge->ActionUp();
     }
