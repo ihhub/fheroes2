@@ -261,7 +261,7 @@ namespace fheroes2
 
         std::vector<Point> line;
 
-        if ( length == 0 ) {
+        if ( length < 2 ) {
             // If the length is equal to 0 than 'pt2' could be closer to 'pt1' than 'step'.
             // In this case we put 'pt1' as the start of the line.
             line.emplace_back( pt1 );
@@ -275,7 +275,7 @@ namespace fheroes2
             const double moveX = dx / static_cast<double>( length );
             const double moveY = dy / static_cast<double>( length );
 
-            line.reserve( length );
+            line.reserve( length + 1 );
 
             for ( uint32_t i = 0; i <= length; ++i ) {
                 line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
