@@ -1798,8 +1798,6 @@ namespace AI
                     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                         // Update Adventure Map objects' animation.
                         Game::updateAdventureMapAnimationIndex();
-
-                        gameArea.SetRedraw();
                     }
 
                     basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
