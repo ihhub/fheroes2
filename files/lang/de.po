@@ -97,7 +97,7 @@ msgstr ""
 
 msgid "HOT SEAT"
 msgstr ""
-"HEIẞER\n"
+"HEIßER\n"
 "STUHL"
 
 msgid "2 PLAYERS"
