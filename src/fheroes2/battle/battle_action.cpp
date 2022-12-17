@@ -411,7 +411,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     const Cell * cell = Board::GetCell( dst );
 
     if ( unit && unit->isValid() && cell && cell->isPassableForUnit( *unit ) ) {
-        const int32_t initialHeadIdx = unit->GetHeadIndex();
+        const int32_t initialHead = unit->GetHeadIndex();
 
         Position pos = Position::GetPosition( *unit, dst );
         assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
@@ -484,10 +484,10 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             }
 
             if ( unit->isWide() ) {
-                const int32_t dstHeadIdx = path.back();
-                const int32_t dstTailIdx = path.size() > 1 ? path[path.size() - 2] : initialHeadIdx;
+                const int32_t dstHead = path.back();
+                const int32_t dstTail = path.size() > 1 ? path[path.size() - 2] : initialHead;
 
-                finalPos.Set( dstHeadIdx, true, ( Board::GetDirection( dstHeadIdx, dstTailIdx ) & RIGHT_SIDE ) != 0 );
+                finalPos.Set( dstHead, true, ( Board::GetDirection( dstHead, dstTail ) & RIGHT_SIDE ) != 0 );
             }
             else {
                 finalPos.Set( path.back(), false, unit->isReflect() );
