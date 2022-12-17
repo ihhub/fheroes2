@@ -134,7 +134,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 {
     // The active size of the window is 520 by 256 pixels
     fheroes2::Display & display = fheroes2::Display::instance();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const int viewarmy = isEvilInterface ? ICN::VIEWARME : ICN::VIEWARMY;
     const fheroes2::Sprite & sprite_dialog = fheroes2::AGG::GetICN( viewarmy, 0 );
@@ -229,7 +229,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
             // upgrade
-            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::UPGRADE_TROOP ) ) ) {
+            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
                     const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
                     fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
@@ -245,7 +245,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 }
             }
             // dismiss
-            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DISMISS_TROOP ) )
+            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) )
                  && Dialog::YES
                         == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
                                             Dialog::YES | Dialog::NO ) ) {
@@ -710,6 +710,9 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
 
     posy += text.h() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
+
+    const fheroes2::Text goldText( std::to_string( gold ), fheroes2::FontType::smallWhite() );
+    goldText.draw( pos.x + ( pos.width - goldText.width() ) / 2, posy + sprite.height() + 5, display );
 
     fheroes2::ButtonGroup btnGroup( pos, buttons );
     btnGroup.draw();

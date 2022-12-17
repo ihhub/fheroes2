@@ -103,9 +103,11 @@ namespace Campaign
         int32_t _type;
         int32_t _subType;
         int32_t _amount;
+        int32_t _artifactSpellId; // Spell ID of a spell scroll
 
         ScenarioBonusData();
         ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount );
+        ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount, const int32_t spellId );
 
         friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
         friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );

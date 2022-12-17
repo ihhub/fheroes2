@@ -541,13 +541,13 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     LocalEvent::PauseCycling();
 
     Settings & conf = Settings::Get();
-    const bool isEvilInterface = conf.ExtGameEvilInterface();
-    const bool isHideInterface = conf.ExtGameHideInterface();
+    const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+    const bool isHideInterface = conf.isHideInterfaceEnabled();
 
     // If the interface is currently hidden, we have to temporarily bring it back, because
     // the map generation in the World View mode heavily depends on the existing game area
     if ( isHideInterface ) {
-        conf.SetHideInterface( false );
+        conf.setHideInterface( false );
         interface.Reset();
     }
 
@@ -654,7 +654,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
     // Don't forget to reset the interface settings back if necessary
     if ( isHideInterface ) {
-        conf.SetHideInterface( true );
+        conf.setHideInterface( true );
         interface.Reset();
     }
 

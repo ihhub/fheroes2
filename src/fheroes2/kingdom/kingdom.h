@@ -46,8 +46,6 @@ namespace Maps
     class Tiles;
 }
 
-struct CapturedObjects;
-
 struct KingdomCastles : public VecCastles
 {};
 
@@ -93,7 +91,7 @@ public:
 
     void appendSurrenderedHero( Heroes & hero );
 
-    Heroes * GetBestHero();
+    Heroes * GetBestHero() const;
 
     Monster GetStrongestMonster() const;
 
@@ -236,8 +234,6 @@ public:
 
     void AddHeroes( const AllHeroes & );
     void AddCastles( const AllCastles & );
-
-    void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType );
 
     // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
     // in the kingdoms

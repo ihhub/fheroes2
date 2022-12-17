@@ -130,7 +130,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
         const fheroes2::Rect & radarArea = radar.GetArea();
@@ -172,8 +172,8 @@ namespace
         fheroes2::Image background( blitArea.width, blitArea.height );
 
         const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.ExtGameEvilInterface();
-        const bool isHideInterface = conf.ExtGameHideInterface();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+        const bool isHideInterface = conf.isHideInterfaceEnabled();
 
         if ( isEvilInterface ) {
             background.fill( fheroes2::GetColorId( 80, 80, 80 ) );
@@ -280,7 +280,7 @@ void Puzzle::ShowMapsDialog() const
 
     AudioManager::PlayMusic( MUS::PUZZLE, Music::PlaybackMode::PLAY_ONCE );
 
-    if ( display.isDefaultSize() && !Settings::Get().ExtGameHideInterface() )
+    if ( display.isDefaultSize() && !Settings::Get().isHideInterfaceEnabled() )
         ShowStandardDialog( *this, sf );
     else
         ShowExtendedDialog( *this, sf );

@@ -28,7 +28,6 @@
 #include <cstdint>
 #include <functional>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "monster.h"
@@ -52,7 +51,7 @@ public:
     Troops() = default;
     Troops( const Troops & troops );
     virtual ~Troops();
-    Troops & operator=( const Troops & rhs );
+    Troops & operator=( const Troops & ) = delete;
 
     void Assign( const Troop *, const Troop * );
     void Assign( const Troops & );
@@ -86,13 +85,6 @@ public:
     bool JoinTroop( const Troop & troop );
     bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
-
-    void JoinTroops( Troops & );
-    bool CanJoinTroops( const Troops & ) const;
-
-    // Implements the necessary logic to move unit stacks from army to army using the arrow buttons in the
-    // hero's meeting dialog
-    void MoveTroops( Troops & from, const int monsterIdToKeep );
 
     void MergeSameMonsterTroops();
     Troops GetOptimized() const;
@@ -158,8 +150,6 @@ public:
     static std::string SizeString( uint32_t );
     static std::string TroopSizeString( const Troop & );
 
-    static std::pair<uint32_t, uint32_t> SizeRange( const uint32_t count );
-
     // Comparison functions
     static bool WeakestTroop( const Troop *, const Troop * );
     static bool StrongestTroop( const Troop *, const Troop * );
@@ -170,9 +160,9 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
-    static void drawMiniMonsLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first = 0, uint32_t count = 0 );
-    static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact = true,
-                                  bool isScouteView = true );
+    static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width );
+    static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
+                                          const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
 
     explicit Army( HeroBase * s = nullptr );
     explicit Army( const Maps::Tiles & );
@@ -220,6 +210,9 @@ public:
     std::string String() const;
 
     void JoinStrongestFromArmy( Army & giver );
+
+    // Implements the necessary logic to move unit stacks from army to army in the hero's meeting dialog and in the castle dialog
+    void MoveTroops( Army & from, const int monsterIdToKeep );
 
     void SetSpreadFormat( bool f )
     {

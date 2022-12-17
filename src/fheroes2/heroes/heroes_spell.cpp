@@ -34,7 +34,6 @@
 #include "army_troop.h"
 #include "audio_manager.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -407,7 +406,7 @@ namespace
             return false;
         }
 
-        if ( castle->GetHeroes().Guest() && castle->GetHeroes().Guest() != &hero ) {
+        if ( castle->GetHero() && castle->GetHero() != &hero ) {
             // The nearest town occupation must be checked before casting this spell. Something is wrong with the logic!
             assert( 0 );
             return false;
@@ -428,13 +427,13 @@ namespace
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         LocalEvent & le = LocalEvent::Get();
 
         for ( const Castle * castle : kingdom.GetCastles() ) {
             assert( castle != nullptr );
 
-            if ( !castle->GetHeroes().Guest() ) {
+            if ( !castle->GetHero() ) {
                 castles.push_back( castle->GetIndex() );
             }
         }

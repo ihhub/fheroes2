@@ -60,7 +60,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // fade
-    if ( fade && Settings::ExtGameUseFade() )
+    if ( fade && Settings::isFadeEffectEnabled() )
         fheroes2::FadeDisplay();
 
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -80,7 +80,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
-    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
 
     // portrait
     dst_pt.x = cur_pt.x + 49;
@@ -300,13 +300,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // prev hero
         if ( buttonPrevHero.isEnabled()
-             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
             return Dialog::PREV;
         }
 
         // next hero
         if ( buttonNextHero.isEnabled()
-             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
             return Dialog::NEXT;
         }
 

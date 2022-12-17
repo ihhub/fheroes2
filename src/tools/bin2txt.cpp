@@ -129,7 +129,7 @@ int main( int argc, char ** argv )
     file << "Troop count offset: [" << fheroes2::getLEValue<int32_t>( data.data(), 235 ) << ", " << fheroes2::getLEValue<int32_t>( data.data(), 239 ) << "]\n\n";
 
     file << "Animation sequence (frame IDs):\n";
-    const char invalidFrameId = static_cast<char>( 0xFF );
+    const char invalidFrameId = '\xFF';
     for ( size_t setId = 0u; setId < 34; ++setId ) {
         file << setId + 1 << " : ";
         int frameCount = 0;

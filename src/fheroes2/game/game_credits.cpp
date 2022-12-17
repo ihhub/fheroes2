@@ -39,6 +39,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_text.h"
 
@@ -176,7 +177,7 @@ namespace
         output._disableTransformLayer();
 
         const int32_t columnStep = 210;
-        const int32_t textInitialOffsetY = 3;
+        const int32_t textInitialOffsetY = 40;
         const int32_t textWidth = 200;
 
         int32_t offsetY = textInitialOffsetY;
@@ -189,7 +190,7 @@ namespace
 
         const fheroes2::Sprite & blackDragon = fheroes2::AGG::GetICN( ICN::DRAGBLAK, 5 );
         fheroes2::Blit( blackDragon, output, ( columnStep - blackDragon.width() ) / 2, offsetY );
-        offsetY += blackDragon.height();
+        offsetY += blackDragon.height() + 50;
 
         const int32_t secondAuthorLayerY = offsetY;
 
@@ -203,47 +204,7 @@ namespace
         fheroes2::Blit( cyclop, output, ( columnStep - cyclop.width() ) / 2, offsetY );
         offsetY += cyclop.height();
 
-        const int32_t thirdAuthorLayerY = offsetY;
-
-        title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
-        name.Set( "Ivan Shibanov", Font::BIG, textWidth );
-        title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
-        name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 10;
-
-        const fheroes2::Sprite & crusader = fheroes2::AGG::GetICN( ICN::PALADIN2, 23 );
-        fheroes2::Blit( crusader, output, ( columnStep - crusader.width() ) / 2, offsetY );
-        offsetY += crusader.height();
-
-        const int32_t bottomOffset = offsetY;
-
-        const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
-        fheroes2::Blit( goblin, output, columnStep + columnStep / 2 - 15, secondAuthorLayerY - goblin.height() - 15, true );
-
-        offsetY = secondAuthorLayerY;
-
-        title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
-        name.Set( "Oleg Derevenetz", Font::BIG, textWidth );
-        title.Blit( columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
-        name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
-
-        offsetY += title.h() + name.h() + 10;
-
-        const fheroes2::Sprite & mage = fheroes2::AGG::GetICN( ICN::MAGE1, 24 );
-        fheroes2::Blit( mage, output, columnStep + ( columnStep - mage.width() ) / 2, offsetY );
-
-        offsetY = thirdAuthorLayerY;
-
-        title.Set( _( "Dev and Support" ), Font::YELLOW_BIG, textWidth );
-        name.Set( "Zense", Font::BIG, textWidth );
-        title.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY, output );
-        name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 10;
-
-        const fheroes2::Sprite & phoenix = fheroes2::AGG::GetICN( ICN::PHOENIX, 4 );
-        fheroes2::Blit( phoenix, output, columnStep + ( columnStep - phoenix.width() ) / 2, offsetY - 10 );
-
-        offsetY = bottomOffset + 10;
+        offsetY += 40;
 
         const Text websiteInto( _( "Visit us at " ), Font::BIG );
         const Text website( "https://github.com/ihhub/fheroes2", Font::YELLOW_BIG );
@@ -255,126 +216,161 @@ namespace
         fheroes2::Blit( missile, output, websiteOffsetX - 10 - missile.width(), offsetY + website.h() / 2 - missile.height() / 2 );
         fheroes2::Blit( missile, output, websiteOffsetX + websiteInto.w() + website.w() + 10, offsetY + website.h() / 2 - missile.height() / 2, true );
 
+        const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
+        fheroes2::Blit( goblin, output, columnStep + columnStep / 2 - 15, ( textInitialOffsetY + ( secondAuthorLayerY - textInitialOffsetY ) - goblin.height() ) / 2,
+                        true );
+
+        offsetY = secondAuthorLayerY;
+
+        title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
+        name.Set( "Ivan Shibanov", Font::BIG, textWidth );
+        title.Blit( columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
+        name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
+        offsetY += title.h() + name.h() + 10;
+
+        const fheroes2::Sprite & crusader = fheroes2::AGG::GetICN( ICN::PALADIN2, 23 );
+        fheroes2::Blit( crusader, output, columnStep + ( columnStep - crusader.width() ) / 2, offsetY );
+
         offsetY = textInitialOffsetY;
 
-        title.Set( _( "Special Thanks to" ), Font::YELLOW_BIG, textWidth );
-        title.Blit( 2 * columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
-        offsetY += title.h();
+        title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
+        name.Set( "Oleg Derevenetz", Font::BIG, textWidth );
+        title.Blit( columnStep * 2 + ( columnStep - title.w() ) / 2, offsetY, output );
+        name.Blit( columnStep * 2 + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
 
-        const std::string contributors( "LeHerosInconnu\n"
-                                        "undef21\n"
-                                        "shprotru\n"
-                                        "Arkadiy Illarionov\n"
-                                        "vincent-grosbois\n"
-                                        "eos428\n"
-                                        "a1exsh\n"
-                                        "Vasilenko Alexey\n"
-                                        "felix642\n"
-                                        "Andrii Kurdiumov\n"
-                                        "Arthusppp\n"
-                                        "dimag0g\n"
-                                        "tau3\n" );
+        offsetY += title.h() + name.h() + 10;
 
-        name.Set( contributors + _( "and many other contributors!" ), Font::BIG, textWidth );
-        name.Blit( 2 * columnStep + ( columnStep - name.w() ) / 2, offsetY, output );
-        offsetY += name.h() + 10;
+        const fheroes2::Sprite & mage = fheroes2::AGG::GetICN( ICN::MAGE1, 24 );
+        fheroes2::Blit( mage, output, columnStep * 2 + ( columnStep - mage.width() ) / 2, offsetY );
 
-        const fheroes2::Sprite & hydra = fheroes2::AGG::GetICN( ICN::HYDRA, 11 );
-        fheroes2::Blit( hydra, output, 2 * columnStep + ( columnStep - hydra.width() ) / 2, offsetY );
+        offsetY = secondAuthorLayerY;
+
+        title.Set( _( "Dev and Support" ), Font::YELLOW_BIG, textWidth );
+        name.Set( "Zense", Font::BIG, textWidth );
+        title.Blit( columnStep * 2 + ( columnStep - name.w() ) / 2, offsetY, output );
+        name.Blit( columnStep * 2 + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
+        offsetY += title.h() + name.h() + 10;
+
+        const fheroes2::Sprite & phoenix = fheroes2::AGG::GetICN( ICN::PHOENIX, 4 );
+        fheroes2::Blit( phoenix, output, columnStep * 2 + ( columnStep - phoenix.width() ) / 2, offsetY - 10 );
 
         return output;
     }
 
     fheroes2::Sprite generateResurrectionCreditsSecondPage()
     {
-        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGSWMP, 0 );
+        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
         output._disableTransformLayer();
 
-        const int32_t textInitialOffsetX = 350;
-        const int32_t columnStep = 430;
-        const int32_t textInitialOffsetY = 55;
+        const int32_t textInitialOffsetX = 320;
+        const int32_t textInitialOffsetY = 60;
         const int32_t textWidth = 300;
 
         int32_t offsetY = textInitialOffsetY;
 
-        TextBox title( _( "Support us at" ), Font::BIG, textWidth );
-        TextBox name( "https://www.patreon.com/fheroes2", Font::YELLOW_BIG, textWidth );
+        TextBox title( _( "Special Thanks to" ), Font::YELLOW_BIG, textWidth );
+        title.Blit( ( output.width() - title.w() ) / 2, offsetY, output );
+        offsetY += title.h() + 5;
+
+        const std::string contributors( "LeHerosInconnu\n"
+                                        "undef21\n"
+                                        "shprotru\n"
+                                        "Arkadiy Illarionov\n"
+                                        "a1exsh\n"
+                                        "vincent-grosbois\n"
+                                        "eos428\n"
+                                        "felix642\n"
+                                        "Vasilenko Alexey\n"
+                                        "Andrii Kurdiumov\n"
+                                        "Arthusppp\n"
+                                        "dimag0g\n"
+                                        "tau3\n" );
+
+        TextBox name( contributors, Font::BIG, textWidth );
+        const int32_t constributorsHeight = name.h();
+        const int32_t contributorCount = static_cast<int32_t>( name.row() );
+        name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY, output );
+
+        std::string supporters( "William Hoskinson\n"
+                                "Aleksei Mazur\n"
+                                "Connor Townsend\n"
+                                "Brandon Wright\n"
+                                "Aimi Lindschouw\n"
+                                "Kiril Lipatov\n"
+                                "Matt Taylor\n"
+                                "Andrew Szucs\n"
+                                "Kresimir Condic\n"
+                                "slvclw\n" );
+
+        name.Set( supporters, Font::BIG, textWidth );
+        const int32_t supportersHeight = name.h();
+        const int32_t supporterCount = static_cast<int32_t>( name.row() );
+        const int32_t countDifference = ( contributorCount - supporterCount );
+        const int32_t supportersOffset = ( countDifference / 2 ) * ( supportersHeight / supporterCount );
+
+        name.Blit( textInitialOffsetX + ( textInitialOffsetX - name.w() ) / 2, offsetY + supportersOffset, output );
+
+        offsetY += constributorsHeight;
+
+        name.Set( _( "and many other contributors!" ), Font::BIG, textWidth );
+        name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY, output );
+
+        name.Set( _( "and many-many other supporters!" ), Font::BIG, textWidth );
+        name.Blit( textInitialOffsetX + ( textInitialOffsetX - name.w() ) / 2, offsetY, output );
+
+        offsetY += name.h();
+
+        const fheroes2::Sprite & hydra = fheroes2::AGG::GetICN( ICN::HYDRA, 11 );
+        fheroes2::Blit( hydra, output, ( output.width() - hydra.width() ) / 2, offsetY );
+
+        return output;
+    }
+
+    fheroes2::Sprite generateResurrectionCreditsThirdPage()
+    {
+        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGSWMP, 0 );
+        output._disableTransformLayer();
+
+        const int32_t textInitialOffsetX = 320;
+        const int32_t textInitialOffsetY = 80;
+        const int32_t textWidth = 300;
+
+        int32_t offsetY = textInitialOffsetY;
+
+        TextBox title( _( "Support us at" ), Font::YELLOW_BIG, textWidth );
+        TextBox name( _( "local-donation-platform|https://www.patreon.com/fheroes2" ), Font::BIG, textWidth );
         title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 5;
+        offsetY += title.h() + name.h() + 30;
 
         const fheroes2::Sprite & wizard = fheroes2::AGG::GetICN( ICN::CMBTCAPZ, 4 );
         fheroes2::Blit( wizard, output, ( textInitialOffsetX - wizard.width() ) / 2, offsetY );
-        offsetY += wizard.height();
+        offsetY += wizard.height() + 20;
 
-        title.Set( _( "Connect with us at" ), Font::BIG, textWidth );
-        name.Set( "https://www.facebook.com/groups/fheroes2", Font::YELLOW_BIG, textWidth - 10 ); // special case to properly split the string
+        title.Set( _( "Connect with us at" ), Font::YELLOW_BIG, textWidth );
+        name.Set( _( "local-social-network|https://www.facebook.com/groups/fheroes2" ), Font::BIG, textWidth - 10 ); // special case to properly split the string
         title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 10;
+        offsetY += title.h() + name.h() + 30;
 
         const fheroes2::Sprite & vampireLord = fheroes2::AGG::GetICN( ICN::VAMPIRE2, 22 );
         fheroes2::Blit( vampireLord, output, ( textInitialOffsetX - vampireLord.width() ) / 2, offsetY );
-        offsetY += vampireLord.height();
 
-        title.Set( _( "Need help with the game?" ), Font::BIG, textWidth );
-        name.Set( "https://discord.gg/xF85vbZ", Font::YELLOW_BIG, textWidth );
-        title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
-        name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
+        offsetY = textInitialOffsetY;
+
+        title.Set( _( "Need help with the game?" ), Font::YELLOW_BIG, textWidth );
+        name.Set( "https://discord.gg/xF85vbZ", Font::BIG, textWidth );
+        title.Blit( textInitialOffsetX + ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
+        name.Blit( textInitialOffsetX + ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
         offsetY += title.h() + name.h() + 10;
 
         fheroes2::Sprite labyrinth = fheroes2::AGG::GetICN( ICN::TWNWUP_3, 0 );
         fheroes2::ApplyPalette( labyrinth, 2 );
-        fheroes2::Blit( labyrinth, output, ( textInitialOffsetX - labyrinth.width() ) / 2, offsetY );
+        fheroes2::Blit( labyrinth, output, textInitialOffsetX + ( textInitialOffsetX - labyrinth.width() ) / 2, offsetY );
 
-        offsetY = textInitialOffsetY + 35;
-
-        title.Set( _( "Special Thanks to" ), Font::YELLOW_BIG, output.width() - textInitialOffsetX );
-        title.Blit( textInitialOffsetX + ( output.width() - textInitialOffsetX - title.w() ) / 2, offsetY, output );
-        offsetY += title.h();
-
-        std::string contributors( "William Hoskinson\n"
-                                  "Aleksei Mazur\n"
-                                  "Connor Townsend\n"
-                                  "Brandon Wright\n"
-                                  "Aimi Lindschouw\n" );
-
-        name.Set( contributors, Font::BIG, output.width() - textInitialOffsetX );
-
-        const int32_t contributorsHeight = name.h();
-
-        name.Blit( textInitialOffsetX + ( ( output.width() - textInitialOffsetX ) / 2 - name.w() ) / 2, offsetY, output );
-
-        contributors = "Kiril Lipatov\n"
-                       "Matt Taylor\n"
-                       "Andrew Szucs\n"
-                       "slvclw\n";
-
-        name.Set( contributors, Font::BIG, output.width() - textInitialOffsetX );
-        name.Blit( textInitialOffsetX + ( 3 * ( output.width() - textInitialOffsetX ) / 2 - name.w() ) / 2, offsetY, output );
-
-        offsetY += contributorsHeight;
-
-        name.Set( _( "and many-many other supporters!" ), Font::BIG, output.width() - columnStep );
-        name.Blit( textInitialOffsetX + ( output.width() - textInitialOffsetX - name.w() ) / 2, offsetY, output );
-        offsetY += name.h() + 10;
-
-        const fheroes2::Sprite & miniPeasant = fheroes2::AGG::GetICN( ICN::MONS32, 0 );
-        const fheroes2::Sprite & miniSwordsman = fheroes2::AGG::GetICN( ICN::MONS32, 5 );
-        const fheroes2::Sprite & miniCrusader = fheroes2::AGG::GetICN( ICN::MONS32, 10 );
-        const fheroes2::Sprite & miniTitan = fheroes2::AGG::GetICN( ICN::MONS32, 46 );
+        offsetY += labyrinth.height() + 50;
 
         const int32_t miniMonsterXOffset = textInitialOffsetX + ( output.width() - textInitialOffsetX ) / 2;
-        offsetY += miniTitan.height();
-
-        fheroes2::Blit( miniPeasant, 0, 0, output, miniMonsterXOffset - miniPeasant.width() - miniSwordsman.width(), offsetY - miniPeasant.height(), miniPeasant.width(),
-                        miniPeasant.height() );
-        fheroes2::Blit( miniSwordsman, 0, 0, output, miniMonsterXOffset - miniSwordsman.width(), offsetY - miniSwordsman.height(), miniSwordsman.width(),
-                        miniSwordsman.height() );
-        fheroes2::Blit( miniCrusader, 0, 0, output, miniMonsterXOffset, offsetY - miniCrusader.height(), miniCrusader.width(), miniCrusader.height() );
-        fheroes2::Blit( miniTitan, 0, 0, output, miniMonsterXOffset + miniCrusader.width(), offsetY - miniTitan.height(), miniTitan.width(), miniTitan.height() );
-
-        offsetY += 10;
 
         title.Set( _( "Original project before 0.7" ), Font::YELLOW_SMALL, textWidth );
         title.Blit( textInitialOffsetX + ( output.width() - textInitialOffsetX - title.w() ) / 2, offsetY, output );
@@ -529,7 +525,7 @@ namespace
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
-        title.set( _( "Cyberlore Studios" ), titleFontType );
+        title.set( "Cyberlore Studios", titleFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;
@@ -580,7 +576,7 @@ namespace
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
-        title.set( _( "New World Computing" ), titleFontType );
+        title.set( "New World Computing", titleFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;
@@ -619,7 +615,10 @@ namespace
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Basso Vocal" ), "Reid Bruton" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Soprano Vocal" ), "Karin Meshagin" );
 
-        title.set( _( "Recorded at Green Street Studios" ), titleFontType );
+        std::string recordedString = _( "Recorded at %{recordingStudio}" );
+        StringReplace( recordedString, "%{recordingStudio}", "Green Street Studios" );
+
+        title.set( recordedString, titleFontType );
         title.draw( offsetX, offsetY, textWidth, output );
 
         return output;
@@ -637,7 +636,7 @@ namespace
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
-        title.set( _( "New World Computing" ), titleFontType );
+        title.set( "New World Computing", titleFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;
@@ -697,6 +696,8 @@ void Game::ShowCredits()
     std::vector<fheroes2::Sprite> pages;
     pages.emplace_back( generateResurrectionCreditsFirstPage() );
     pages.emplace_back( generateResurrectionCreditsSecondPage() );
+    pages.emplace_back( generateResurrectionCreditsThirdPage() );
+
     if ( Settings::Get().isPriceOfLoyaltySupported() ) {
         pages.emplace_back( generatePriceOfLoyaltyCreditsFirstPage() );
         pages.emplace_back( generatePriceOfLoyaltyCreditsSecondPage() );

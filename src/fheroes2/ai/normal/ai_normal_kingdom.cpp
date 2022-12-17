@@ -38,7 +38,6 @@
 #include "audio.h"
 #include "audio_manager.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "color.h"
 #include "game_interface.h"
 #include "ground.h"
@@ -126,9 +125,15 @@ namespace
                 heroList.erase( heroList.begin() );
             }
 
-            // Assign the role and remove them so they aren't counted towards the median strength
+            // Assign the courier role and remove them so they aren't counted towards the median strength
             heroList.back().hero->setAIRole( Heroes::Role::COURIER );
             heroList.pop_back();
+
+            if ( heroList.size() > 2 ) {
+                // We still have a plenty of heroes. In this case lets create a Scout hero to uncover the fog.
+                heroList.back().hero->setAIRole( Heroes::Role::SCOUT );
+                heroList.pop_back();
+            }
         }
 
         assert( !heroList.empty() );
@@ -354,7 +359,18 @@ namespace AI
             if ( !left.underThreat && !right.underThreat ) {
                 return left.safetyFactor > right.safetyFactor;
             }
-            return left.buildingValue > right.buildingValue;
+
+            if ( left.underThreat && !right.underThreat ) {
+                return true;
+            }
+
+            if ( !left.underThreat && right.underThreat ) {
+                return false;
+            }
+
+            // We have a building value of a castle and its safety factor. The higher safety factor the lower priority to defend the castle.
+            // Since we compare 2 castles we need to use safety factor of the opposite castle.
+            return left.buildingValue * right.safetyFactor > right.buildingValue * left.safetyFactor;
         } );
 
         return sortedCastleList;
@@ -409,7 +425,7 @@ namespace AI
 
         // reset indicator
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
-        status.RedrawTurnProgress( 0 );
+        status.DrawAITurnProgress( 0 );
 
         AudioManager::PlayMusicAsync( MUS::COMPUTER_TURN, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
@@ -531,9 +547,8 @@ namespace AI
 
         DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" )
 
-        status.RedrawTurnProgress( 1 );
-
-        uint32_t progressStatus = 6;
+        uint32_t progressStatus = 1;
+        status.DrawAITurnProgress( progressStatus );
 
         std::vector<AICastle> sortedCastleList;
         std::set<int> castlesInDanger;
@@ -547,25 +562,18 @@ namespace AI
             // Step 3. Reassign heroes roles
             setHeroRoles( heroes );
 
-            if ( progressStatus == 6 ) {
-                status.RedrawTurnProgress( 6 );
-                ++progressStatus;
-            }
-            else {
-                status.RedrawTurnProgress( 8 );
-            }
-
             castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
             sortedCastleList = getSortedCastleList( castles, castlesInDanger );
 
-            if ( progressStatus == 7 ) {
-                status.RedrawTurnProgress( 7 );
-            }
-            else {
-                status.RedrawTurnProgress( 8 );
-            }
+            const uint32_t startProgressValue = progressStatus;
+            const uint32_t endProgressValue = ( progressStatus == 1 ) ? 8 : std::max( progressStatus + 1U, 9U );
 
-            const bool moreTaskForHeroes = HeroesTurn( heroes );
+            const bool moreTaskForHeroes = HeroesTurn( heroes, startProgressValue, endProgressValue );
+
+            if ( progressStatus == 1 ) {
+                progressStatus = 8;
+                status.DrawAITurnProgress( progressStatus );
+            }
 
             // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
             if ( !purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
@@ -574,7 +582,7 @@ namespace AI
             ++availableHeroCount;
         }
 
-        status.RedrawTurnProgress( 9 );
+        status.DrawAITurnProgress( 9 );
 
         // sync up castle list (if conquered new ones during the turn)
         if ( castles.size() != sortedCastleList.size() ) {
@@ -588,6 +596,8 @@ namespace AI
                 CastleTurn( *entry.castle, entry.underThreat );
             }
         }
+
+        status.DrawAITurnProgress( 10 );
     }
 
     bool Normal::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
@@ -612,7 +622,7 @@ namespace AI
         for ( const AICastle & entry : sortedCastleList ) {
             Castle * castle = entry.castle;
             if ( castle && castle->isCastle() ) {
-                const Heroes * hero = castle->GetHeroes().Guest();
+                const Heroes * hero = castle->GetHero();
                 const int mapIndex = castle->GetIndex();
 
                 // Make sure there is no hero in castle already and we're not under threat while having other heroes.

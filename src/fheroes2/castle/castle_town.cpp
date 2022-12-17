@@ -64,7 +64,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     if ( !hero )
         return Dialog::CANCEL;
 
-    const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
+    const int system = ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -187,7 +187,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt );
 
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLWIND_EVIL : ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
 
@@ -482,11 +482,11 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             break;
 
         if ( buttonPrevCastle.isEnabled()
-             && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
             return ConstructionDialogResult::PrevConstructionWindow;
         }
         if ( buttonNextCastle.isEnabled()
-             && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
             return ConstructionDialogResult::NextConstructionWindow;
         }
 

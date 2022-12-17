@@ -51,7 +51,6 @@ namespace
         Open,
         ChangeInterfaceTheme,
         UpdateInterface,
-        SaveConfiguration,
         AudioSettings,
         HotKeys,
         CursorType,
@@ -66,16 +65,17 @@ namespace
 
         // Audio settings.
         const fheroes2::Sprite & audioSettingsIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 1 );
-        fheroes2::drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "Settings" ) );
+        fheroes2::drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Hot keys.
         const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, 5 );
-        fheroes2::drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ) );
+        fheroes2::drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Cursor Type.
         const bool isMonoCursor = Settings::Get().isMonochromeCursorEnabled();
         const fheroes2::Sprite & cursorTypeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isMonoCursor ? 20 : 21 );
-        fheroes2::drawOption( rects[2], cursorTypeIcon, _( "Mouse Cursor" ), isMonoCursor ? _( "Black & White" ) : _( "Color" ) );
+        fheroes2::drawOption( rects[2], cursorTypeIcon, _( "Mouse Cursor" ), isMonoCursor ? _( "Black & White" ) : _( "Color" ),
+                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Hero's movement speed.
         const int heroSpeed = conf.HeroesMoveSpeed();
@@ -96,7 +96,7 @@ namespace
             value = std::to_string( heroSpeed );
         }
 
-        fheroes2::drawOption( rects[3], heroSpeedIcon, _( "Hero Speed" ), value );
+        fheroes2::drawOption( rects[3], heroSpeedIcon, _( "Hero Speed" ), value, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // AI's movement speed.
         const int aiSpeed = conf.AIMoveSpeed();
@@ -119,26 +119,47 @@ namespace
             value = std::to_string( aiSpeed );
         }
 
-        fheroes2::drawOption( rects[4], aiSpeedIcon, _( "Enemy Speed" ), value );
+        fheroes2::drawOption( rects[4], aiSpeedIcon, _( "Enemy Speed" ), value, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Scrolling speed.
         const int scrollSpeed = conf.ScrollSpeed();
-        uint32_t scrollSpeedIconId = 7;
-        if ( scrollSpeed < SCROLL_NORMAL ) {
-            scrollSpeedIconId = 4;
+        int32_t scrollSpeedIconIcn = ICN::UNKNOWN;
+        uint32_t scrollSpeedIconId = 0;
+        std::string scrollSpeedName;
+
+        if ( scrollSpeed == SCROLL_SPEED_NONE ) {
+            scrollSpeedName = _( "Off" );
+            scrollSpeedIconIcn = ICN::SPANEL;
+            scrollSpeedIconId = 9;
         }
-        else if ( scrollSpeed < SCROLL_FAST1 ) {
-            scrollSpeedIconId = 5;
+        else if ( scrollSpeed == SCROLL_SPEED_SLOW ) {
+            scrollSpeedName = _( "Slow" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 0;
         }
-        else if ( scrollSpeed < SCROLL_FAST2 ) {
-            scrollSpeedIconId = 6;
+        else if ( scrollSpeed == SCROLL_SPEED_NORMAL ) {
+            scrollSpeedName = _( "Normal" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 0;
+        }
+        else if ( scrollSpeed == SCROLL_SPEED_FAST ) {
+            scrollSpeedName = _( "Fast" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 1;
+        }
+        else if ( scrollSpeed == SCROLL_SPEED_VERY_FAST ) {
+            scrollSpeedName = _( "Very Fast" );
+            scrollSpeedIconIcn = ICN::CSPANEL;
+            scrollSpeedIconId = 2;
         }
 
-        const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( ICN::SPANEL, scrollSpeedIconId );
-        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), std::to_string( scrollSpeed ) );
+        assert( scrollSpeedIconIcn != ICN::UNKNOWN );
+
+        const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( scrollSpeedIconIcn, scrollSpeedIconId );
+        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), scrollSpeedName, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Interface theme.
-        const bool isEvilInterface = conf.ExtGameEvilInterface();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
         const fheroes2::Sprite & interfaceThemeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
         if ( isEvilInterface ) {
             value = _( "Evil" );
@@ -147,10 +168,10 @@ namespace
             value = _( "Good" );
         }
 
-        fheroes2::drawOption( rects[6], interfaceThemeIcon, _( "Interface Type" ), value );
+        fheroes2::drawOption( rects[6], interfaceThemeIcon, _( "Interface Type" ), value, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Interface show/hide state.
-        const bool isHiddenInterface = conf.ExtGameHideInterface();
+        const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const fheroes2::Sprite & interfaceStateIcon
             = isHiddenInterface ? fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ) : fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
         if ( isHiddenInterface ) {
@@ -160,7 +181,7 @@ namespace
             value = _( "Show" );
         }
 
-        fheroes2::drawOption( rects[7], interfaceStateIcon, _( "Interface" ), value );
+        fheroes2::drawOption( rects[7], interfaceStateIcon, _( "Interface" ), value, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Auto-battles.
         if ( conf.BattleAutoResolve() ) {
@@ -168,20 +189,20 @@ namespace
             value = spellcast ? _( "Auto Resolve" ) : _( "Auto, No Spells" );
 
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, spellcast ? 7 : 6 );
-            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), value );
+            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), value, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 18 );
-            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "autoBattle|Manual" ) );
+            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "autoBattle|Manual" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
 
-    DialogAction openSystemOptionsDialog()
+    DialogAction openSystemOptionsDialog( bool & saveConfiguration )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.ExtGameEvilInterface();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -227,8 +248,6 @@ namespace
         buttonOkay.draw();
 
         display.render();
-
-        bool saveConfig = false;
 
         // dialog menu loop
         LocalEvent & le = LocalEvent::Get();
@@ -291,7 +310,7 @@ namespace
             // set scroll speed
             bool saveScrollSpeed = false;
             if ( le.MouseClickLeft( scrollSpeedRoi ) ) {
-                conf.SetScrollSpeed( conf.ScrollSpeed() % SCROLL_FAST2 + 1 );
+                conf.SetScrollSpeed( ( conf.ScrollSpeed() + 1 ) % ( SCROLL_SPEED_VERY_FAST + 1 ) );
                 saveScrollSpeed = true;
             }
             else if ( le.MouseWheelUp( scrollSpeedRoi ) ) {
@@ -334,7 +353,6 @@ namespace
             if ( le.MousePressRight( audioSettingsRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Audio" ), _( "Change the audio settings of the game." ), 0 );
             }
-
             else if ( le.MousePressRight( hotkeysRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );
             }
@@ -371,12 +389,8 @@ namespace
                 buttonOkay.draw();
                 display.render();
 
-                saveConfig = true;
+                saveConfiguration = true;
             }
-        }
-
-        if ( saveConfig ) {
-            return DialogAction::SaveConfiguration;
         }
 
         return DialogAction::Close;
@@ -389,29 +403,28 @@ namespace fheroes2
     {
         // We should make file writing only once.
         bool saveConfiguration = false;
+        Settings & conf = Settings::Get();
 
         DialogAction action = DialogAction::Open;
 
         while ( action != DialogAction::Close ) {
             switch ( action ) {
             case DialogAction::Open:
-                action = openSystemOptionsDialog();
+                action = openSystemOptionsDialog( saveConfiguration );
                 break;
             case DialogAction::ChangeInterfaceTheme: {
-                Settings & conf = Settings::Get();
-                conf.SetEvilInterface( !conf.ExtGameEvilInterface() );
+                conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
                 saveConfiguration = true;
 
                 Interface::Basic & basicInterface = Interface::Basic::Get();
                 basicInterface.Reset();
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
-                action = openSystemOptionsDialog();
+                action = DialogAction::Open;
                 break;
             }
             case DialogAction::UpdateInterface: {
-                Settings & conf = Settings::Get();
-                conf.SetHideInterface( !conf.ExtGameHideInterface() );
+                conf.setHideInterface( !conf.isHideInterfaceEnabled() );
                 saveConfiguration = true;
 
                 Interface::Basic & basicInterface = Interface::Basic::Get();
@@ -421,12 +434,9 @@ namespace fheroes2
                 basicInterface.Redraw( Interface::REDRAW_RADAR );
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
-                action = openSystemOptionsDialog();
+                action = DialogAction::Open;
                 break;
             }
-            case DialogAction::SaveConfiguration:
-                Settings::Get().Save( Settings::configFileName );
-                return;
             case DialogAction::AudioSettings:
                 Dialog::openAudioSettingsDialog( true );
                 action = DialogAction::Open;
@@ -436,7 +446,6 @@ namespace fheroes2
                 action = DialogAction::Open;
                 break;
             case DialogAction::CursorType: {
-                Settings & conf = Settings::Get();
                 conf.setMonochromeCursor( !conf.isMonochromeCursorEnabled() );
                 saveConfiguration = true;
                 action = DialogAction::Open;
@@ -448,7 +457,7 @@ namespace fheroes2
         }
 
         if ( saveConfiguration ) {
-            Settings::Get().Save( Settings::configFileName );
+            conf.Save( Settings::configFileName );
         }
     }
 }

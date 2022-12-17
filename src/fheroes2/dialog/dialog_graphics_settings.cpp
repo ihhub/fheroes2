@@ -66,22 +66,22 @@ namespace
         const fheroes2::Display & display = fheroes2::Display::instance();
         std::string resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().ExtGameEvilInterface() ? 17 : 16 ), _( "Resolution" ),
-                              std::move( resolutionName ) );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), _( "Resolution" ),
+                              std::move( resolutionName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawMode( const fheroes2::Rect & optionRoi )
     {
-        const fheroes2::Sprite & originalIcon = fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().ExtGameEvilInterface() ? 17 : 16 );
+        const fheroes2::Sprite & originalIcon = fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 );
 
         if ( fheroes2::engine().isFullScreen() ) {
             fheroes2::Sprite icon = originalIcon;
             fheroes2::Resize( originalIcon, 6, 6, 53, 53, icon, 2, 2, 61, 61 );
 
-            fheroes2::drawOption( optionRoi, icon, _( "window|Mode" ), _( "Fullscreen" ) );
+            fheroes2::drawOption( optionRoi, icon, _( "window|Mode" ), _( "Fullscreen" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, originalIcon, _( "window|Mode" ), _( "Windowed" ) );
+            fheroes2::drawOption( optionRoi, originalIcon, _( "window|Mode" ), _( "Windowed" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
         }
     }
 
@@ -89,7 +89,8 @@ namespace
     {
         const bool isVSyncEnabled = Settings::Get().isVSyncEnabled();
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "on" ) : _( "off" ) );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "on" ) : _( "off" ),
+                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawSystemInfo( const fheroes2::Rect & optionRoi )
@@ -106,7 +107,7 @@ namespace
         }
         info.draw( ( image.width() - info.width() ) / 2, ( image.height() - info.height() ) / 2, image );
 
-        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ) );
+        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     SelectedWindow showConfigurationWindow()
@@ -114,7 +115,7 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.ExtGameEvilInterface();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
         const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::ESPANBKG_EVIL : ICN::ESPANBKG ), 0 );
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
@@ -128,21 +129,29 @@ namespace
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
+
         const fheroes2::Rect windowResolutionRoi( resolutionRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowModeRoi( modeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
 
-        drawResolution( windowResolutionRoi );
-        drawMode( windowModeRoi );
-        drawVSync( windowVSyncRoi );
-        drawSystemInfo( windowSystemInfoRoi );
+        auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi]() {
+            drawResolution( windowResolutionRoi );
+            drawMode( windowModeRoi );
+            drawVSync( windowVSyncRoi );
+            drawSystemInfo( windowSystemInfoRoi );
+        };
+
+        drawOptions();
 
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
         fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
         okayButton.draw();
 
         display.render();
+
+        bool fullScreen = fheroes2::engine().isFullScreen();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
@@ -183,6 +192,16 @@ namespace
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
+            }
+
+            // Fullscreen mode can be toggled using a hotkey, we need to properly reflect this change in the UI
+            if ( fullScreen != fheroes2::engine().isFullScreen() ) {
+                fullScreen = fheroes2::engine().isFullScreen();
+
+                emptyDialogRestorer.restore();
+                drawOptions();
+
+                display.render();
             }
         }
 

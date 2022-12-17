@@ -44,9 +44,8 @@
 fheroes2::GameMode Dialog::FileOptions()
 {
     // preload
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
-    const int cpanel = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -63,11 +62,11 @@ fheroes2::GameMode Dialog::FileOptions()
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, cpanel, 0, 1 );
-    fheroes2::Button buttonLoad( rb.x + 195, rb.y + 31, cpanel, 2, 3 );
-    fheroes2::Button buttonSave( rb.x + 62, rb.y + 107, cpanel, 4, 5 );
-    fheroes2::Button buttonQuit( rb.x + 195, rb.y + 107, cpanel, 6, 7 );
-    fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, cpanel, 8, 9 );
+    fheroes2::Button buttonNew( rb.x + 62, rb.y + 31, isEvilInterface ? ICN::BUTTON_NEW_GAME_EVIL : ICN::BUTTON_NEW_GAME_GOOD, 0, 1 );
+    fheroes2::Button buttonLoad( rb.x + 195, rb.y + 31, isEvilInterface ? ICN::BUTTON_LOAD_GAME_EVIL : ICN::BUTTON_LOAD_GAME_GOOD, 0, 1 );
+    fheroes2::Button buttonSave( rb.x + 62, rb.y + 107, isEvilInterface ? ICN::BUTTON_SAVE_GAME_EVIL : ICN::BUTTON_SAVE_GAME_GOOD, 0, 1 );
+    fheroes2::Button buttonQuit( rb.x + 195, rb.y + 107, isEvilInterface ? ICN::BUTTON_QUIT_EVIL : ICN::BUTTON_QUIT_GOOD, 0, 1 );
+    fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 8, 9 );
 
     buttonNew.draw();
     buttonLoad.draw();
@@ -87,13 +86,13 @@ fheroes2::GameMode Dialog::FileOptions()
         le.MousePressLeft( buttonQuit.area() ) ? buttonQuit.drawOnPress() : buttonQuit.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonNew.area() ) ) {
+        if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
             if ( Interface::Basic::Get().EventNewGame() == fheroes2::GameMode::NEW_GAME ) {
                 result = fheroes2::GameMode::NEW_GAME;
                 break;
             }
         }
-        else if ( le.MouseClickLeft( buttonLoad.area() ) ) {
+        else if ( le.MouseClickLeft( buttonLoad.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
             if ( ListFiles::IsEmpty( Game::GetSaveDir(), Game::GetSaveFileExtension(), false ) ) {
                 fheroes2::showMessage( fheroes2::Text( _( "Load Game" ), fheroes2::FontType::normalYellow() ),
                                        fheroes2::Text( _( "No save files to load." ), fheroes2::FontType::normalWhite() ), Dialog::OK );
@@ -103,13 +102,13 @@ fheroes2::GameMode Dialog::FileOptions()
                 break;
             }
         }
-        else if ( le.MouseClickLeft( buttonSave.area() ) ) {
+        else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
             // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
             back.restore();
 
             return Interface::Basic::Get().EventSaveGame();
         }
-        else if ( le.MouseClickLeft( buttonQuit.area() ) ) {
+        else if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 result = fheroes2::GameMode::QUIT_GAME;
                 break;

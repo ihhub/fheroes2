@@ -21,7 +21,8 @@
 #ifndef H2BIN_FRM_H
 #define H2BIN_FRM_H
 
-#include <algorithm>
+// TODO: this header is redundant here, but detected as required by IWYU with older compilers
+// IWYU pragma: no_include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <vector>

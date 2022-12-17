@@ -53,7 +53,6 @@
 #include "profit.h"
 #include "race.h"
 #include "route.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -455,16 +454,16 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
     if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
         const int tileColor = tile.QuantityColor();
-        if ( Players::isFriends( color, tileColor ) ) {
-            // false only if alliance castles can't be visited
-            return color == tileColor;
-        }
-        return true;
+
+        // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
+        return color == tileColor || !Players::isFriends( color, tileColor );
     }
 
     // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
     if ( objectType == MP2::OBJ_HEROES ) {
         const Heroes * hero = tile.GetHeroes();
+
+        // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)
         return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
     }
 
@@ -686,7 +685,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     return getHandicapDependentIncome( totalIncome, player->getHandicapStatus() );
 }
 
-Heroes * Kingdom::GetBestHero()
+Heroes * Kingdom::GetBestHero() const
 {
     return !heroes.empty() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : nullptr;
 }
@@ -859,46 +858,6 @@ void Kingdoms::AddCastles( const AllCastles & castles )
     }
 }
 
-void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType )
-{
-    for ( Kingdom & kingdom : kingdoms ) {
-        if ( kingdom.isPlay() ) {
-            const int color = kingdom.GetColor();
-            Funds funds;
-            int objectCount = 0;
-
-            captureobj.tributeCapturedObjects( color, objectType, funds, objectCount );
-            if ( objectCount == 0 ) {
-                continue;
-            }
-
-            // for show dialogs
-            if ( funds.GetValidItemsCount() && kingdom.isControlHuman() ) {
-                EventDate event;
-
-                event.computer = true;
-                event.first = day;
-                event.colors = color;
-                event.resource = funds;
-
-                if ( objectCount > 1 ) {
-                    event.title = std::to_string( objectCount );
-                    event.title += ' ';
-                    event.title += MP2::StringObject( objectType, objectCount );
-                }
-                else {
-                    event.title = MP2::StringObject( objectType );
-                }
-
-                world.AddEventDate( event );
-            }
-            else {
-                kingdom.AddFundsResource( funds );
-            }
-        }
-    }
-}
-
 std::set<Heroes *> Kingdoms::resetRecruits()
 {
     std::set<Heroes *> remainingRecruits;
@@ -999,18 +958,9 @@ StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
-        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topCastleInKingdomView;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0921_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_0921_RELEASE ) {
-        msg >> kingdom._topHeroInKingdomView;
-    }
-    else {
-        kingdom._topHeroInKingdomView = -1;
-    }
-
-    return msg;
+    return msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
+           >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topCastleInKingdomView
+           >> kingdom._topHeroInKingdomView;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )

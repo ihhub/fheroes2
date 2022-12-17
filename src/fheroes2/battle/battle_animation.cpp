@@ -142,6 +142,8 @@ AnimationReference::AnimationReference( int monsterID )
     // Taking damage
     appendFrames( _wince, Bin_Info::MonsterAnimInfo::WINCE_UP );
     appendFrames( _wince, Bin_Info::MonsterAnimInfo::WINCE_END ); // TODO: play it back together for now
+    appendFrames( _winceUp, Bin_Info::MonsterAnimInfo::WINCE_UP );
+    appendFrames( _winceDown, Bin_Info::MonsterAnimInfo::WINCE_END );
     appendFrames( _death, Bin_Info::MonsterAnimInfo::DEATH );
 
     // Idle animations
@@ -228,6 +230,7 @@ bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
 const std::vector<int> & AnimationReference::getAnimationVector( int animState ) const
 {
     switch ( animState ) {
+    case Monster_Info::STAND_STILL:
     case Monster_Info::STATIC:
         return _static;
     case Monster_Info::IDLE:
@@ -279,6 +282,10 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
         return _ranged[Monster_Info::BOTTOM].start;
     case Monster_Info::RANG_BOT_END:
         return _ranged[Monster_Info::BOTTOM].end;
+    case Monster_Info::WNCE_UP:
+        return _winceUp;
+    case Monster_Info::WNCE_DOWN:
+        return _winceDown;
     case Monster_Info::WNCE:
         return _wince;
     case Monster_Info::KILL:
@@ -293,6 +300,7 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
 {
     std::vector<int> offset;
     switch ( animState ) {
+    case Monster_Info::STAND_STILL:
     case Monster_Info::STATIC:
         offset.resize( _static.size(), 0 );
         break;
@@ -358,6 +366,12 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
         break;
     case Monster_Info::RANG_BOT_END:
         offset.resize( _ranged[Monster_Info::BOTTOM].end.size(), 0 );
+        break;
+    case Monster_Info::WNCE_UP:
+        offset.resize( _winceUp.size(), 0 );
+        break;
+    case Monster_Info::WNCE_DOWN:
+        offset.resize( _winceDown.size(), 0 );
         break;
     case Monster_Info::WNCE:
         offset.resize( _wince.size(), 0 );

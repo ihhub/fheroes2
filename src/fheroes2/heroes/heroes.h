@@ -180,10 +180,12 @@ public:
         RECRUIT = 0x00000040,
         JAIL = 0x00000080,
         ACTION = 0x00000100,
-        // Hero should remember his movement points when retreating or surrendering, related to Settings::HEROES_REMEMBER_MP_WHEN_RETREATING
+        // Hero must retain his movement points if he retreated or surrendered and was then rehired on the same day
         SAVEMP = 0x00000200,
         SLEEPER = 0x00000400,
-        GUARDIAN = 0x00000800,
+
+        // UNUSED = 0x00000800,
+
         NOTDEFAULTS = 0x00001000,
         NOTDISMISS = 0x00002000,
         VISIONS = 0x00004000,
@@ -265,7 +267,7 @@ public:
 
     Heroes();
     Heroes( int heroid, int rc );
-    Heroes( int heroID, int race, int initialLevel );
+    Heroes( const int heroID, const int race, const uint32_t additionalExperience );
     Heroes( const Heroes & ) = delete;
 
     ~Heroes() override = default;
@@ -515,6 +517,11 @@ public:
         return Heroes::GetPortrait( portrait, type );
     }
 
+    int getPortraitId() const
+    {
+        return portrait;
+    }
+
     static int GetLevelFromExperience( uint32_t );
     static uint32_t GetExperienceFromLevel( int );
 
@@ -587,8 +594,11 @@ private:
 
     Army army;
 
-    int hid; /* hero id */
-    int portrait; /* hero id */
+    // Hero ID
+    int hid;
+    // Corresponds to the ID of the hero whose portrait is applied. Usually equal to the
+    // ID of this hero, unless a custom portrait is applied.
+    int portrait;
     int _race;
     int save_maps_object;
 
@@ -657,8 +667,7 @@ struct AllHeroes : public VecHeroes
         std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
     }
 
-    Heroes * GetGuest( const Castle & ) const;
-    Heroes * GetGuard( const Castle & ) const;
+    Heroes * GetHero( const Castle & castle ) const;
     Heroes * GetFreeman( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t ) const;
 };

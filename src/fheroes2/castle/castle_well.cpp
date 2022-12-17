@@ -33,7 +33,6 @@
 #include "army_troop.h"
 #include "battle_cell.h"
 #include "castle.h"
-#include "castle_heroes.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_delays.h"
@@ -125,10 +124,10 @@ void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vect
     Troops tempCastleArmy( currentCastleArmy );
     Troops tempGuestArmy;
 
-    const CastleHeroes heroes = GetHeroes();
+    const Heroes * hero = GetHero();
 
-    if ( heroes.Guest() ) {
-        tempGuestArmy = heroes.Guest()->GetArmy().getTroops();
+    if ( hero ) {
+        tempGuestArmy.Insert( hero->GetArmy().getTroops() );
     }
 
     for ( const uint32_t dwellingType : allCastleDwellings ) {
@@ -253,7 +252,7 @@ void Castle::OpenWell()
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
-        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::WELL_BUY_ALL_CREATURES ) ) {
+        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::TOWN_WELL_BUY_ALL ) ) {
             const Troops & currentArmy = GetArmy();
             recruitCastleMax( currentArmy, allDwellings );
         }
@@ -307,7 +306,7 @@ void Castle::OpenWell()
 void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );
 

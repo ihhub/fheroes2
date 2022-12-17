@@ -20,8 +20,10 @@
 
 #include "ui_tool.h"
 
+#include <cassert>
 #include <chrono>
 #include <cmath>
+#include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
@@ -209,21 +211,21 @@ namespace fheroes2
 
     GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const bool isEvilInterface_ )
         : isEvilInterface( isEvilInterface_ )
-        , isOriginalEvilInterface( Settings::Get().ExtGameEvilInterface() )
+        , isOriginalEvilInterface( Settings::Get().isEvilInterfaceEnabled() )
     {
         if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().SetEvilInterface( isEvilInterface );
+            Settings::Get().setEvilInterface( isEvilInterface );
         }
     }
 
     GameInterfaceTypeRestorer::~GameInterfaceTypeRestorer()
     {
         if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().SetEvilInterface( isOriginalEvilInterface );
+            Settings::Get().setEvilInterface( isOriginalEvilInterface );
         }
     }
 
-    Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight )
+    Image CreateDeathWaveEffect( const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
     {
         if ( in.empty() )
             return Image();
@@ -231,43 +233,45 @@ namespace fheroes2
         Image out = in;
 
         const int32_t width = in.width();
-        const int32_t height = in.height();
+        const int32_t waveWidth = static_cast<int32_t>( deathWaveCurve.size() );
 
-        if ( x + waveWidth < 0 || x - waveWidth >= width )
+        // If the death wave curve is outside of the battlefield - return the original image.
+        if ( x < 0 || ( x - waveWidth ) >= width || deathWaveCurve.empty() )
             return out;
 
-        const int32_t startX = ( x > waveWidth ) ? x - waveWidth : 0;
-        const int32_t endX = ( x + waveWidth < width ) ? x + waveWidth : width;
+        const int32_t height = in.height();
 
-        const double pi = std::acos( -1 );
-        const double waveLimit = waveWidth / pi;
+        // Set the image horizontal offset from where to draw the wave.
+        const int32_t offsetX = x < waveWidth ? 0 : x - waveWidth;
+        uint8_t * outImageX = out.image() + offsetX;
+        const uint8_t * inImageX = in.image() + offsetX;
 
-        uint8_t * outImageX = out.image() + startX;
-        uint8_t * outTransformX = out.transform() + startX;
+        // Set pointers to the start and the end of the death wave curve.
+        std::vector<int32_t>::const_iterator pntX = deathWaveCurve.begin() + ( x < waveWidth ? waveWidth - x : 0 );
+        const std::vector<int32_t>::const_iterator endX = deathWaveCurve.end() - ( x > width ? x - width : 0 );
 
-        const uint8_t * inImageX = in.image() + startX;
-        const uint8_t * inTransformX = in.transform() + startX;
+        for ( ; pntX != endX; ++pntX, ++outImageX, ++inImageX ) {
+            // The death curve should have only negative values and should not be higher, than the height of 'in' image.
+            if ( ( *pntX >= 0 ) || ( *pntX <= -height ) ) {
+                assert( 0 );
+                continue;
+            }
 
-        for ( int32_t posX = startX; posX < endX; ++posX, ++outImageX, ++outTransformX, ++inImageX, ++inTransformX ) {
-            const int32_t waveX = posX - x;
+            const uint8_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( height + *pntX ) * width;
+            const uint8_t * inImageY = inImageX - static_cast<ptrdiff_t>( *pntX + 1 ) * width;
 
-            const int32_t offsetY = static_cast<int32_t>( waveHeight * ( ( waveX < waveLimit ) ? tan( waveX / waveLimit ) / 2 : sin( waveX / waveLimit ) ) );
-
-            const int32_t offsetOut = offsetY >= 0 ? offsetY * width : 0;
-            const int32_t offsetOutEnd = offsetY >= 0 ? ( height - 1 - offsetY ) * width : ( height - 1 + offsetY ) * width;
-
-            uint8_t * outImageY = outImageX + offsetOut;
-            uint8_t * outTransformY = outTransformX + offsetOut;
-            const uint8_t * outImageYEnd = outImageX + offsetOutEnd;
-
-            const int32_t offsetIn = offsetY >= 0 ? 0 : -offsetY * width;
-
-            const uint8_t * inImageY = inImageX + offsetIn;
-            const uint8_t * inTransformY = inTransformX + offsetIn;
-
-            for ( ; outImageY != outImageYEnd; outImageY += width, outTransformY += width, inImageY += width, inTransformY += width ) {
+            // A loop to shift all horizontal pixels vertically.
+            uint8_t * outImageY = outImageX;
+            for ( ; outImageY != outImageYEnd; outImageY += width ) {
+                inImageY += width;
                 *outImageY = *inImageY;
-                *outTransformY = *inTransformY;
+            }
+
+            // Flip the image under the death wave to create a distortion effect.
+            for ( int32_t i = 0; i > *pntX; --i ) {
+                *outImageY = *inImageY;
+                outImageY += width;
+                inImageY -= width;
             }
         }
 
