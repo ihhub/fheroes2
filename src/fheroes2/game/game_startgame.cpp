@@ -1152,8 +1152,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         // map objects animation
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            uint32_t & frame = Game::MapsAnimationFrame();
-            ++frame;
+            Game::updateAdventureMapAnimationIndex();
             gameArea.SetRedraw();
         }
 

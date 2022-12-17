@@ -1729,8 +1729,7 @@ namespace AI
                     // Render a frame only if there is a need to show one.
                     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                         // Update Adventure Map objects' animation.
-                        uint32_t & frame = Game::MapsAnimationFrame();
-                        ++frame;
+                        Game::updateAdventureMapAnimationIndex();
 
                         basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
 
@@ -1798,8 +1797,7 @@ namespace AI
 
                     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                         // Update Adventure Map objects' animation.
-                        uint32_t & frame = Game::MapsAnimationFrame();
-                        ++frame;
+                        Game::updateAdventureMapAnimationIndex();
 
                         gameArea.SetRedraw();
                     }

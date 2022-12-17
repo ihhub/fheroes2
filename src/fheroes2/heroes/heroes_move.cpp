@@ -532,7 +532,7 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Heroes::getHeroSprites
 
     int flagFrameID = sprite_index;
     if ( !isMoveEnabled() ) {
-        flagFrameID = isShipMaster() ? 0 : Game::MapsAnimationFrame();
+        flagFrameID = isShipMaster() ? 0 : Game::getAdventureMapAnimationIndex();
     }
 
     fheroes2::Point offset;
