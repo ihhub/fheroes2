@@ -714,7 +714,7 @@ msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Der %{spell} verursacht %{damage} Schaden an allen lebenden Kreaturen."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "%{target} wegen des Angriffs von %{attacker} geblendet!"
+msgstr "%{target} ist wegen des Angriffs von %{attacker} geblendet!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "Der Blick des %{attacker} verwandelt das %{target} in Stein!"
