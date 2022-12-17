@@ -51,6 +51,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -490,6 +491,18 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
             result = 1;
             paymentCosts = paymentMonster;
             redraw = true;
+        }
+        else if ( le.MousePressRight( buttonOk.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Recruit selected monsters." ), 0 );
+        }
+        else if ( le.MousePressRight( buttonCancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), 0 );
+        }
+        else if ( buttonMax.isEnabled() && le.MousePressRight( buttonMax.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "MAX" ), _( "Select maximum monsters to be recruited." ), 0 );
+        }
+        else if ( buttonMin.isEnabled() && le.MousePressRight( buttonMin.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "MIN" ), _( "Select only 1 monster to be recruited." ), 0 );
         }
 
         if ( redraw ) {
