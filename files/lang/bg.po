@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-16 10:13+0000\n"
+"POT-Creation-Date: 2022-12-17 14:33+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3015,14 +3015,23 @@ msgstr "Налични: %{count}"
 msgid "Number to buy:"
 msgstr "Покупка на:"
 
+msgid "Recruit selected monsters."
+msgstr ""
+
+msgid "MAX"
+msgstr "МАКС"
+
+msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "Select only 1 monster to be recruited."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr "Изберете резолюция на играта:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Кликни, за да приложиш избраната резолюция."
-
-msgid "MAX"
-msgstr "МАКС"
 
 msgid "How many troops to move?"
 msgstr "Колко единици ще преместите?"
