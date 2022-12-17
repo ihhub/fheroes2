@@ -173,9 +173,10 @@ void Dialog::NonFixedFrameBox::redraw()
 
 Dialog::NonFixedFrameBox::~NonFixedFrameBox()
 {
+    const fheroes2::Rect restoredArea{ _restorer->x(), _restorer->y(), _restorer->width(), _restorer->height() };
     _restorer->restore();
 
-    fheroes2::Display::instance().render();
+    fheroes2::Display::instance().render( restoredArea );
 }
 
 Dialog::FrameBox::FrameBox( int height, bool buttons )

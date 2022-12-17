@@ -1044,11 +1044,13 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
     addObjectAnimationInfo( info );
 
     LocalEvent & le = LocalEvent::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
+    Interface::Basic & basicInterface = Interface::Basic::Get();
 
     while ( le.HandleEvents() && !info->isAnimationCompleted() ) {
         if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
-            fheroes2::Display::instance().render();
+            basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+            display.render();
         }
     }
 }

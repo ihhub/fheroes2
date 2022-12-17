@@ -144,7 +144,6 @@ bool RowSpells::QueueEventProcessing()
 
         if ( spell != Spell::NONE ) {
             fheroes2::SpellDialogElement( spell, nullptr ).showPopup( le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
-            fheroes2::Display::instance().render();
         }
     }
 
