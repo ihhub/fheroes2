@@ -632,6 +632,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             fheroes2::drawCastleName( *this, display, cur_pt );
             fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
 
+            if ( buttonExit.isPressed() ) {
+                buttonExit.draw();
+            }
+
             display.render();
         }
 
