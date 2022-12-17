@@ -123,7 +123,7 @@ namespace
 
         const Monster monster( race, buildingId );
         std::string msgStatus = _( "Recruit %{name}" );
-        StringReplace( msgStatus, "%{name}", Translation::StringLower( monster.GetMultiName() ) );
+        StringReplaceWithLowercase( msgStatus, "%{name}", monster.GetMultiName() );
         return msgStatus;
     }
 

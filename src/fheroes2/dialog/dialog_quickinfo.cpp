@@ -173,13 +173,13 @@ namespace
 
             if ( isOwned ) {
                 str.append( _( "guarded by %{count} %{monster}" ) );
-                StringReplace( str, "%{count}", Translation::StringLower( Game::formatMonsterCount( troop.GetCount(), true ) ) );
+                StringReplaceWithLowercase( str, "%{count}", Game::formatMonsterCount( troop.GetCount(), true ) );
 
                 if ( troop.GetCount() == 1 ) {
-                    StringReplace( str, "%{monster}", Translation::StringLower( troop.GetName() ) );
+                    StringReplaceWithLowercase( str, "%{monster}", troop.GetName() );
                 }
                 else {
-                    StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+                    StringReplaceWithLowercase( str, "%{monster}", troop.GetMultiName() );
                 }
             }
             else {
@@ -199,10 +199,10 @@ namespace
             StringReplace( str, "%{count}", Game::formatMonsterCount( troop.GetCount(), true ) );
 
             if ( troop.GetCount() == 1 ) {
-                StringReplace( str, "%{monster}", Translation::StringLower( troop.GetName() ) );
+                StringReplaceWithLowercase( str, "%{monster}", troop.GetName() );
             }
             else {
-                StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+                StringReplaceWithLowercase( str, "%{monster}", troop.GetMultiName() );
             }
 
             return str;

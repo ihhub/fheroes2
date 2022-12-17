@@ -32,6 +32,7 @@
 
 #include "logging.h"
 #include "tools.h"
+#include "translations.h"
 
 /* trim left right space */
 std::string StringTrim( std::string str )
@@ -139,6 +140,20 @@ int GetInt( const std::string & str )
     }
 
     return res;
+}
+
+void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & inString )
+{
+    size_t position = std::string::npos;
+
+    while ( std::string::npos != ( position = workString.find( pattern ) ) ) {
+        if ( position == 0 ) {
+            workString.replace( position, std::strlen( pattern ), inString );
+        }
+        else {
+            workString.replace( position, std::strlen( pattern ), Translation::StringLower( inString ) );
+        }
+    }
 }
 
 void StringReplace( std::string & dst, const char * pred, const std::string & src )
