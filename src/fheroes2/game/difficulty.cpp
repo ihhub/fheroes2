@@ -24,6 +24,8 @@
 #include "difficulty.h"
 #include "translations.h"
 
+#include <cassert>
+
 std::string Difficulty::String( int difficulty )
 {
     switch ( difficulty ) {
@@ -78,16 +80,35 @@ double Difficulty::GetGoldIncomeBonus( int difficulty )
     return 1.0;
 }
 
-double Difficulty::GetUnitGrowthBonus( int difficulty )
+double Difficulty::GetUnitGrowthBonusForAI( int difficulty )
 {
+    // In the original game AI has a cheeky monster growth bonus depending on difficulty:
+    // Easy - 1.0 (no bonus)
+    // Normal - 1.0 (no bonus)
+    // Hard - 1.20 (or 20% extra)
+    // Expert - 1.32 (or 32% extra)
+    // Impossible - 1.44 (or 44% extra)
+    // This bonus was introduced to compensate weak AI in the game.
+    //
+    // However, with introduction of proper AI in this engine AI has become much stronger and some maps are impossible to beat.
+    // Also this bonus can be abused by players while capturing AI castles on a first day of a week.
+    //
+    // Completely removing these bonuses might break some maps and they become unplayable.
+    // Therefore, these bonuses are reduced by approximately 5% which is the value of noise in many processes / systems.
+
     switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return 1.0;
     case Difficulty::HARD:
-        return 1.2;
+        return 1.15;
     case Difficulty::EXPERT:
-        return 1.32;
+        return 1.26;
     case Difficulty::IMPOSSIBLE:
-        return 1.44;
+        return 1.37;
     default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
         break;
     }
     return 1.0;

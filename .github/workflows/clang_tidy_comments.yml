@@ -39,7 +39,7 @@ jobs:
         echo "PR_ID=$(cat clang-tidy-result/pr-id.txt)" >> "$GITHUB_ENV"
         echo "PR_HEAD_REPO=$(cat clang-tidy-result/pr-head-repo.txt)" >> "$GITHUB_ENV"
         echo "PR_HEAD_REF=$(cat clang-tidy-result/pr-head-ref.txt)" >> "$GITHUB_ENV"
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         repository: ${{ env.PR_HEAD_REPO }}
         ref: ${{ env.PR_HEAD_REF }}

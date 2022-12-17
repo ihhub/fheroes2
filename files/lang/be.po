@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-02 03:05+0000\n"
-"PO-Revision-Date: 2022-05-10 16:34+0200\n"
+"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: be\n"
@@ -17,18 +17,40 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+
+msgid "GIFT"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr ""
+
+msgid "MIN"
+msgstr ""
 
 msgid "Warrior"
-msgstr ""
+msgstr "Ваяр"
 
 msgid "Builder"
-msgstr ""
+msgstr "Будаўнік"
 
 msgid "Explorer"
-msgstr ""
+msgstr "Даследчык"
 
 msgid "None"
+msgstr ""
+
+msgid "Warning"
+msgstr "Увага"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
 msgstr ""
 
 msgid ""
@@ -251,13 +273,13 @@ msgid ""
 msgstr ""
 
 msgid "The enemy has surrendered!"
-msgstr "Праціўнік здаўся!"
+msgstr "Вораг здаўся!"
 
 msgid "The enemy has fled!"
-msgstr "Праціўнік уцёк!"
+msgstr "Вораг уцёк!"
 
 msgid "A glorious victory!"
-msgstr "Выдатная перамога!"
+msgstr "Слаўная перамога!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
 msgstr "За мужнасць у баі %{name} атрымлівае %{exp} вопыту."
@@ -266,22 +288,22 @@ msgid "The cowardly %{name} flees from battle."
 msgstr "%{name} баязліва ўцякае з поля бітвы."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr "%{name} здаўся праціўніку і пакінуў з ганьбай."
+msgstr "%{name} здаўся ворагу і сышоў з ганьбай."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr "Вашы войскі былі знішчаны і %{name} пакідае вас."
+msgstr "Вашыя войскі былі знішчаны, а %{name} пакідае вас."
 
 msgid "Your force suffer a bitter defeat."
-msgstr "Вашы войскі былі знішчаны."
+msgstr "Вашыя войскі былі знішчаны."
 
 msgid "Battlefield Casualties"
-msgstr ""
+msgstr "Страты на полі бою"
 
 msgid "Attacker"
-msgstr ""
+msgstr "Нападнік"
 
 msgid "Defender"
-msgstr ""
+msgstr "Абаронца"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
@@ -520,10 +542,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr ""
-
-msgid "Moved %{monster}"
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
 
 msgid "The %{name} resist the spell!"
@@ -680,8 +699,11 @@ msgid ""
 "spell."
 msgstr ""
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Dwarven Alliance"
 msgstr ""
@@ -716,13 +738,22 @@ msgstr ""
 msgid "Annexation"
 msgstr ""
 
-msgid "Carator Mines"
-msgstr ""
-
 msgid "Force of Arms"
 msgstr ""
 
 msgid "Save the Dwarves"
+msgstr ""
+
+msgid "Carator Mines"
+msgstr ""
+
+msgid "Turning Point"
+msgstr ""
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
 msgstr ""
 
 msgid "The Crown"
@@ -731,13 +762,7 @@ msgstr ""
 msgid "The Gauntlet"
 msgstr ""
 
-msgid "Turning Point"
-msgstr ""
-
 msgid "Betrayal"
-msgstr ""
-
-msgid "Corlagon's Defense"
 msgstr ""
 
 msgid "Final Justice"
@@ -2189,6 +2214,12 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr ""
 
+msgid "Max"
+msgstr ""
+
+msgid "Hire all creatures in the town."
+msgstr ""
+
 msgid "Town Population Information and Statistics"
 msgstr ""
 
@@ -2391,25 +2422,22 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-msgid "Resolution"
-msgstr ""
-
-msgid "Experimental"
+msgid "Graphics"
 msgstr ""
 
 msgid "Settings"
 msgstr ""
 
+msgid "Experimental"
+msgstr ""
+
 msgid "Audio"
 msgstr ""
 
-msgid "settings"
+msgid "Configure"
 msgstr ""
 
 msgid "Hot Keys"
-msgstr ""
-
-msgid "In-game"
 msgstr ""
 
 msgid "Black & White"
@@ -2424,13 +2452,13 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
+msgid "Interface Type"
+msgstr ""
+
 msgid "Evil"
 msgstr ""
 
 msgid "Good"
-msgstr ""
-
-msgid "Interface Type"
 msgstr ""
 
 msgid "Auto Resolve"
@@ -2445,19 +2473,16 @@ msgstr ""
 msgid "Battles"
 msgstr ""
 
+msgid "Change the language of the game."
+msgstr ""
+
 msgid "Select Game Language"
 msgstr ""
 
-msgid "Change language of the game."
+msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Select Game Resolution"
-msgstr ""
-
-msgid "Change resolution of the game."
-msgstr ""
-
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr ""
 
 msgid "Experimental game settings."
@@ -2466,15 +2491,13 @@ msgstr ""
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "Check all Hot Keys used in the game."
+msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -2543,6 +2566,47 @@ msgstr ""
 msgid "Gift from %{name}"
 msgstr ""
 
+msgid "Resolution"
+msgstr ""
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+msgid "on"
+msgstr ""
+
+msgid "FPS"
+msgstr ""
+
+msgid "System Info"
+msgstr ""
+
+msgid "Change the resolution of the game."
+msgstr ""
+
+msgid "Select Game Resolution"
+msgstr ""
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
+
 msgid "Set Guardian"
 msgstr ""
 
@@ -2553,6 +2617,9 @@ msgid "Hot Keys:"
 msgstr ""
 
 msgid "Select Game Language:"
+msgstr ""
+
+msgid "Click to choose the selected language."
 msgstr ""
 
 msgid "%{name} has gained a level."
@@ -2584,9 +2651,6 @@ msgid "I can offer you %{count} for 1 unit of %{resfrom}."
 msgstr ""
 
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
-msgstr ""
-
-msgid "Max"
 msgstr ""
 
 msgid "Min"
@@ -2689,6 +2753,9 @@ msgid "Available: %{count}"
 msgstr ""
 
 msgid "Number to buy:"
+msgstr ""
+
+msgid "Select Game Resolution:"
 msgstr ""
 
 msgid "Click to apply the selected resolution."
@@ -2794,6 +2861,9 @@ msgid "Victory Condition"
 msgstr ""
 
 msgid "Map difficulty:"
+msgstr ""
+
+msgid "N"
 msgstr ""
 
 msgid "No maps exist at that size"
@@ -3015,9 +3085,6 @@ msgid "difficulty|Impossible"
 msgstr ""
 
 msgid "and more..."
-msgstr ""
-
-msgid "DIFFICULTY"
 msgstr ""
 
 msgid "Campaign Difficulty"
@@ -3252,9 +3319,6 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-msgid "Warning"
-msgstr ""
-
 msgid "This file contains a save with an invalid game type."
 msgstr ""
 
@@ -3330,17 +3394,7 @@ msgid "door"
 msgstr ""
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-
-msgid "F4"
-msgstr ""
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
@@ -3505,6 +3559,22 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
 
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 msgid "Capture the castle '%{name}'."
 msgstr ""
 
@@ -3635,6 +3705,11 @@ msgid "%{color} player's turn."
 msgstr ""
 
 msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -3715,6 +3790,11 @@ msgid "Try looking on land!!!"
 msgstr ""
 
 msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
+
+msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
 
@@ -3775,7 +3855,41 @@ msgid ""
 "and/or heroes not of their primary alignment."
 msgstr ""
 
+msgid "Handicap"
+msgstr ""
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 msgid "%{color} player"
+msgstr ""
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
 msgstr ""
 
 msgid "View %{skill} Info"
@@ -3812,7 +3926,7 @@ msgid "Norwegian"
 msgstr ""
 
 msgid "Belarusian"
-msgstr "Беларускі"
+msgstr "Беларуская"
 
 msgid "Bulgarian"
 msgstr ""
@@ -3830,6 +3944,15 @@ msgid "Swedish"
 msgstr ""
 
 msgid "Portuguese"
+msgstr ""
+
+msgid "Turkish"
+msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+msgid "Hungarian"
 msgstr ""
 
 msgid ", FPS: "
@@ -5729,7 +5852,49 @@ msgstr "Нястрымная"
 msgid "speed|Instant"
 msgstr "Імгненная"
 
-msgid "week|PLAGUE"
+msgid "week|Squirrel"
+msgstr ""
+
+msgid "week|Rabbit"
+msgstr ""
+
+msgid "week|Gopher"
+msgstr ""
+
+msgid "week|Badger"
+msgstr ""
+
+msgid "week|Rat"
+msgstr ""
+
+msgid "week|Eagle"
+msgstr ""
+
+msgid "week|Weasel"
+msgstr ""
+
+msgid "week|Raven"
+msgstr ""
+
+msgid "week|Mongoose"
+msgstr ""
+
+msgid "week|Dog"
+msgstr ""
+
+msgid "week|Aardvark"
+msgstr ""
+
+msgid "week|Lizard"
+msgstr ""
+
+msgid "week|Tortoise"
+msgstr ""
+
+msgid "week|Hedgehog"
+msgstr ""
+
+msgid "week|Condor"
 msgstr ""
 
 msgid "week|Ant"
@@ -5762,43 +5927,10 @@ msgstr ""
 msgid "week|Beetle"
 msgstr ""
 
-msgid "week|Squirrel"
+msgid "week|PLAGUE"
 msgstr ""
 
-msgid "week|Rabbit"
-msgstr ""
-
-msgid "week|Gopher"
-msgstr ""
-
-msgid "week|Badger"
-msgstr ""
-
-msgid "week|Eagle"
-msgstr ""
-
-msgid "week|Weasel"
-msgstr ""
-
-msgid "week|Raven"
-msgstr ""
-
-msgid "week|Mongoose"
-msgstr ""
-
-msgid "week|Aardvark"
-msgstr ""
-
-msgid "week|Lizard"
-msgstr ""
-
-msgid "week|Tortoise"
-msgstr ""
-
-msgid "week|Hedgehog"
-msgstr ""
-
-msgid "week|Condor"
+msgid "week|Unnamed"
 msgstr ""
 
 msgid "Desert"
@@ -8411,9 +8543,6 @@ msgstr ""
 msgid "world: allow to set guardian to objects"
 msgstr ""
 
-msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
@@ -8433,9 +8562,6 @@ msgid "battle: allow soft wait for troops"
 msgstr ""
 
 msgid "battle: deterministic events"
-msgstr ""
-
-msgid "game: show system info"
 msgstr ""
 
 msgid "game: autosave will be made at the beginning of the day"

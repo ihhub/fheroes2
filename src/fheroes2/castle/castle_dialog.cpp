@@ -110,7 +110,7 @@ namespace
 
         const Monster monster( race, buildingId );
         std::string msgStatus = _( "Recruit %{name}" );
-        StringReplace( msgStatus, "%{name}", monster.GetMultiName() );
+        StringReplace( msgStatus, "%{name}", Translation::StringLower( monster.GetMultiName() ) );
         return msgStatus;
     }
 
@@ -181,38 +181,35 @@ namespace
         return output;
     }
 
-    void verifyMagicBookPresence( const Castle & castle, CastleHeroes & heroes )
+    bool purchaseSpellBookIfNecessary( const Castle & castle, CastleHeroes & heroes )
     {
-        bool noFreeSpaceForMagicBook = false;
+        bool spellBookPurchased = false;
 
-        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
-            if ( heroes.Guard()->IsFullBagArtifacts() ) {
-                noFreeSpaceForMagicBook = true;
+        auto purchaseSpellBookForHero = [&castle, &spellBookPurchased]( Heroes * hero ) {
+            assert( hero != nullptr );
+
+            if ( hero->IsFullBagArtifacts() ) {
+                Dialog::Message(
+                    hero->GetName(),
+                    _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                    Font::BIG, Dialog::OK );
             }
             else {
-                heroes.Guard()->BuySpellBook( &castle );
+                const bool purchased = hero->BuySpellBook( &castle );
+
+                spellBookPurchased = spellBookPurchased || purchased;
             }
+        };
+
+        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
+            purchaseSpellBookForHero( heroes.Guard() );
         }
 
         if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
-            if ( heroes.Guest()->IsFullBagArtifacts() ) {
-                noFreeSpaceForMagicBook = true;
-            }
-            else {
-                heroes.Guest()->BuySpellBook( &castle );
-            }
+            purchaseSpellBookForHero( heroes.Guest() );
         }
 
-        if ( noFreeSpaceForMagicBook ) {
-            const Heroes * hero = heroes.Guard();
-            if ( !hero || hero->HaveSpellBook() || !hero->IsFullBagArtifacts() )
-                hero = heroes.Guest();
-
-            Dialog::Message(
-                hero->GetName(),
-                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Font::BIG, Dialog::OK );
-        }
+        return spellBookPurchased;
     }
 
     void openHeroDialog( ArmyBar & topArmyBar, ArmyBar & bottomArmyBar, Heroes & hero )
@@ -515,6 +512,18 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 need_redraw = true;
             }
 
+            if ( le.MousePressRight( rectSign1 ) ) {
+                if ( heroes.Guard() ) {
+                    Dialog::QuickInfo( *heroes.Guard() );
+                }
+                else if ( isBuild( BUILD_CAPTAIN ) ) {
+                    Dialog::QuickInfo( GetCaptain() );
+                }
+            }
+            else if ( heroes.Guest() && le.MousePressRight( rectSign2 ) ) {
+                Dialog::QuickInfo( *heroes.Guest() );
+            }
+
             // Get pressed hotkey.
             const building_t hotKeyBuilding = getPressedBuildingHotkey();
 
@@ -556,7 +565,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     else if ( isMagicGuild ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
-                        verifyMagicBookPresence( *this, heroes );
+                        if ( purchaseSpellBookIfNecessary( *this, heroes ) ) {
+                            // At least one of the castle heroes purchased the spellbook, redraw the resource panel
+                            need_redraw = true;
+                        }
 
                         OpenMageGuild( heroes );
                     }

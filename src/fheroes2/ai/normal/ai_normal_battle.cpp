@@ -91,7 +91,7 @@ namespace AI
             MeleeAttackOutcome current;
             current.positionValue = Board::GetCell( cell )->GetQuality();
             current.attackValue = Board::OptimalAttackValue( attacker, defender, cell );
-            current.canAttackImmediately = Board::CanAttackUnitFromPosition( attacker, defender, cell );
+            current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, cell );
 
             // Pick target if either position has improved or unit is higher value at the same position quality
             if ( IsOutcomeImproved( current, bestOutcome ) ) {
@@ -814,7 +814,7 @@ namespace AI
                     continue;
                 }
 
-                if ( Board::CanAttackUnitFromPosition( currentUnit, *nearbyUnit, cell ) ) {
+                if ( Board::CanAttackTargetFromPosition( currentUnit, *nearbyUnit, cell ) ) {
                     targetInfo.cell = cell;
                     targetInfo.unit = nearbyUnit;
 

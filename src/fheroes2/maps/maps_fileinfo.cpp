@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
 #include <locale>
 #endif
 #include <algorithm>

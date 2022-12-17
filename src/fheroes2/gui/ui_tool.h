@@ -34,15 +34,24 @@ namespace fheroes2
         MovableSprite();
         MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ );
         explicit MovableSprite( const Sprite & sprite );
-        ~MovableSprite() override = default;
+        ~MovableSprite() override;
 
         MovableSprite & operator=( const Sprite & sprite );
 
         void show();
         void hide();
-        void redraw(); // in case if Display has changed
 
-        bool isHidden() const;
+        // In case if Display has changed.
+        void redraw()
+        {
+            hide();
+            show();
+        }
+
+        bool isHidden() const
+        {
+            return _isHidden;
+        }
 
         void setPosition( int32_t x_, int32_t y_ ) override;
 

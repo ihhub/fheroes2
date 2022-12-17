@@ -21,9 +21,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <string>
+
+#include <SDL.h>
+
+#if defined( _WIN32 ) && !SDL_VERSION_ATLEAST( 2, 0, 0 )
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
 
 #include "agg.h"
 #include "audio_manager.h"
@@ -116,8 +124,6 @@ namespace
         {
             const Settings & conf = Settings::Get();
 
-            fheroes2::engine().setVSync( conf.isVSyncEnabled() );
-
             fheroes2::Display & display = fheroes2::Display::instance();
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
                 fheroes2::engine().toggleFullScreen();
@@ -200,12 +206,27 @@ namespace
     };
 }
 
-#if defined( _MSC_VER )
+// SDL1: this app is not linked against the SDLmain.lib, implement our own WinMain
+#if defined( _WIN32 ) && !SDL_VERSION_ATLEAST( 2, 0, 0 )
 #undef main
+
+int main( int argc, char ** argv );
+
+int WINAPI WinMain( HINSTANCE /* hInstance */, HINSTANCE /* hPrevInstance */, LPSTR /* pCmdLine */, int /* nCmdShow */ )
+{
+    return main( __argc, __argv );
+}
 #endif
 
 int main( int argc, char ** argv )
 {
+// SDL2main.lib converts argv to UTF-8, but this application expects ANSI, use the original argv
+#if defined( _WIN32 ) && SDL_VERSION_ATLEAST( 2, 0, 0 )
+    assert( argc == __argc );
+
+    argv = __argv;
+#endif
+
     try {
         const fheroes2::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
@@ -222,6 +243,7 @@ int main( int argc, char ** argv )
         // getopt
         {
             int opt;
+
             while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
                 switch ( opt ) {
 #ifdef WITH_DEBUG

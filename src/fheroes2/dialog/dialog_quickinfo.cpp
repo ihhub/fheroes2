@@ -795,7 +795,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
         text.draw( dst_pt.x, dst_pt.y, display );
     }
 
-    const uint32_t count = castle.GetArmy().GetCount();
+    const uint32_t count = castle.GetArmy().GetOccupiedSlotCount();
 
     // draw defenders
     if ( count == 0 ) {
@@ -861,7 +861,8 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
     const Kingdom & kingdom = world.GetKingdom( conf.CurrentColor() );
     const bool isFriend = ColorBase( hero.GetColor() ).isFriends( conf.CurrentColor() );
     const bool isUnderIdentifyHeroSpell = kingdom.Modes( Kingdom::IDENTIFYHERO );
-    const bool showFullInfo = isFriend || isUnderIdentifyHeroSpell || kingdom.IsTileVisibleFromCrystalBall( hero.GetIndex() );
+    const bool isNeutralHero = ( hero.GetColor() == Color::NONE );
+    const bool showFullInfo = isNeutralHero || isFriend || isUnderIdentifyHeroSpell || kingdom.IsTileVisibleFromCrystalBall( hero.GetIndex() );
 
     const Heroes * activeHero = dynamic_cast<const Heroes *>( &hero );
     const Captain * activeCaptain = dynamic_cast<const Captain *>( &hero );
@@ -922,44 +923,43 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
         }
     }
 
-    // color flags
-    uint32_t index = 0;
+    // color flags, except for neutral heroes
+    if ( !isNeutralHero ) {
+        uint32_t index = 0;
 
-    switch ( hero.GetColor() ) {
-    case Color::BLUE:
-        index = 0;
-        break;
-    case Color::GREEN:
-        index = 2;
-        break;
-    case Color::RED:
-        index = 4;
-        break;
-    case Color::YELLOW:
-        index = 6;
-        break;
-    case Color::ORANGE:
-        index = 8;
-        break;
-    case Color::PURPLE:
-        index = 10;
-        break;
-    case Color::NONE:
-        index = 12;
-        break;
-    default:
-        break;
+        switch ( hero.GetColor() ) {
+        case Color::BLUE:
+            index = 0;
+            break;
+        case Color::GREEN:
+            index = 2;
+            break;
+        case Color::RED:
+            index = 4;
+            break;
+        case Color::YELLOW:
+            index = 6;
+            break;
+        case Color::ORANGE:
+            index = 8;
+            break;
+        case Color::PURPLE:
+            index = 10;
+            break;
+        default:
+            break;
+        }
+
+        dst_pt.y = cur_rt.y + 13;
+
+        const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
+        dst_pt.x = cur_rt.x + ( cur_rt.width - 40 ) / 2 - l_flag.width();
+        fheroes2::Blit( l_flag, display, dst_pt.x, dst_pt.y );
+
+        const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index + 1 );
+        dst_pt.x = cur_rt.x + ( cur_rt.width + 40 ) / 2;
+        fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
     }
-
-    dst_pt.y = cur_rt.y + 13;
-
-    const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
-    dst_pt.x = cur_rt.x + ( cur_rt.width - 40 ) / 2 - l_flag.width();
-    fheroes2::Blit( l_flag, display, dst_pt.x, dst_pt.y );
-
-    const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index + 1 );
-    dst_pt.x = cur_rt.x + ( cur_rt.width + 40 ) / 2;
-    fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
 
     const uint16_t statNumberColumn = 89;
     const uint16_t statRow = 12;

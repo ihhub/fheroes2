@@ -179,7 +179,7 @@ namespace AI
 
         Army & heroArmy = hero.GetArmy();
         Army & garrison = castle.GetArmy();
-        const double armyStrength = heroArmy.GetStrength();
+        const double heroStrengthBefore = heroArmy.GetStrength();
 
         heroArmy.UpgradeTroops( castle );
         castle.recruitBestAvailable( budget );
@@ -195,14 +195,17 @@ namespace AI
             bool onlyHalf = false;
             Troop * unitToSwap = heroArmy.GetSlowestTroop();
             if ( unitToSwap ) {
+                // We need to compare a strength of troops excluding hero's stats.
+                const double troopsStrength = Troops( heroArmy.getTroops() ).GetStrength();
+
                 const double significanceRatio = isFigtherHero ? 20.0 : 10.0;
-                if ( unitToSwap->GetStrength() > armyStrength / significanceRatio ) {
+                if ( unitToSwap->GetStrength() > troopsStrength / significanceRatio ) {
                     Troop * weakest = heroArmy.GetWeakestTroop();
 
                     assert( weakest != nullptr );
                     if ( weakest ) {
                         unitToSwap = weakest;
-                        if ( weakest->GetStrength() > armyStrength / significanceRatio ) {
+                        if ( weakest->GetStrength() > troopsStrength / significanceRatio ) {
                             if ( isFigtherHero ) {
                                 // if it's an important hero and all troops are significant - keep the army
                                 unitToSwap = nullptr;
@@ -224,12 +227,15 @@ namespace AI
                     else {
                         unitToSwap->SetCount( count - toMove );
                     }
+
+                    // TODO: redistribute troops properly.
+                    OptimizeTroopsOrder( garrison );
                 }
             }
         }
 
         OptimizeTroopsOrder( heroArmy );
-        if ( std::fabs( armyStrength - heroArmy.GetStrength() ) > 0.001 ) {
+        if ( std::fabs( heroStrengthBefore - heroArmy.GetStrength() ) > 0.001 ) {
             hero.unmarkHeroMeeting();
         }
     }

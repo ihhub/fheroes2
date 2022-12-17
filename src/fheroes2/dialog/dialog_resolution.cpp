@@ -104,7 +104,7 @@ namespace
 
     void RedrawInfo( const fheroes2::Point & dst, const fheroes2::Size & resolution )
     {
-        Text text( _( "Select Game Resolution" ), Font::YELLOW_BIG );
+        Text text( _( "Select Game Resolution:" ), Font::YELLOW_BIG );
         text.Blit( dst.x + ( 377 - text.w() ) / 2, dst.y + 30 );
 
         if ( resolution.width > 0 && resolution.height > 0 ) {

@@ -220,8 +220,8 @@ Heroes::Heroes( int heroid, int rc )
     switch ( hid ) {
     case DEBUG_HERO:
         army.Clean();
-        army.JoinTroop( Monster::BLACK_DRAGON, 2 );
-        army.JoinTroop( Monster::RED_DRAGON, 3 );
+        army.JoinTroop( Monster::BLACK_DRAGON, 2, false );
+        army.JoinTroop( Monster::RED_DRAGON, 3, false );
 
         secondary_skills = Skill::SecSkills();
         secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::PATHFINDING, Skill::Level::ADVANCED ) );
@@ -1940,6 +1940,38 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
     return seeds;
 }
 
+double Heroes::getAIMininumJoiningArmyStrength() const
+{
+    // Ideally we need to assert here that the hero is under AI control.
+    // But in cases when we regain a temporary control from the AI then the hero becomes non-AI.
+
+    double strengthThreshold = 0.05;
+
+    switch ( getAIRole() ) {
+    case Heroes::Role::SCOUT:
+        strengthThreshold = 0.01;
+        break;
+    case Heroes::Role::COURIER:
+        strengthThreshold = 0.015;
+        break;
+    case Heroes::Role::HUNTER:
+        strengthThreshold = 0.02;
+        break;
+    case Heroes::Role::FIGHTER:
+        strengthThreshold = 0.025;
+        break;
+    case Heroes::Role::CHAMPION:
+        strengthThreshold = 0.03;
+        break;
+    default:
+        // Did you add a new AI hero role? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return strengthThreshold * Troops( GetArmy().getTroops() ).GetStrength();
+}
+
 StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )
 {
     msg << static_cast<uint32_t>( heroes.size() );
@@ -1996,16 +2028,8 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     msg >> base;
 
     // Heroes
-    msg >> hero.name >> col >> hero.experience;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0917_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0917_RELEASE ) {
-        int32_t dummy;
-
-        msg >> dummy;
-    }
-
-    msg >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index;
+    msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path
+        >> hero.direction >> hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     int16_t patrolX = 0;

@@ -662,6 +662,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     statusWindow.Reset();
                     statusWindow.SetState( StatusType::STATUS_AITURN );
 
+                    if ( player->isAIAutoControlMode() ) {
+                        radar.SetHide( false );
+                        radar.SetRedraw();
+                    }
+
                     Redraw();
                     display.render();
 
@@ -725,7 +730,12 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
 
-    ResetFocus( GameFocus::FIRSTHERO );
+    if ( isload ) {
+        updateFocus();
+    }
+    else {
+        ResetFocus( GameFocus::FIRSTHERO );
+    }
 
     radar.SetHide( false );
     statusWindow.Reset();
@@ -789,8 +799,23 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         // hotkeys
         if ( le.KeyPress() ) {
             // if the hero is currently moving, pressing any key should stop him
-            if ( isMovingHero )
+            if ( isMovingHero ) {
                 stopHero = true;
+            }
+
+#if defined( WITH_DEBUG )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI ) ) {
+                if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
+                                            fheroes2::Text( _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
+                                                            fheroes2::FontType::normalWhite() ),
+                                            Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    Players::Get( myKingdom.GetColor() )->setAIAutoControlMode( true );
+                    return fheroes2::GameMode::END_TURN;
+                }
+            }
+#endif
+
             // adventure map control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
                 res = EventExit();
@@ -1143,6 +1168,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
         if ( nullptr != to_hero ) {
             if ( !from_hero || from_hero != to_hero ) {
                 SetFocus( to_hero );
+                CalculateHeroPath( to_hero, -1 );
                 RedrawFocus();
             }
             else {

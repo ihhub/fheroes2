@@ -30,57 +30,83 @@ namespace fheroes2
     class ButtonBase : public ActionObject
     {
     public:
-        ButtonBase( int32_t offsetX = 0, int32_t offsetY = 0 );
+        ButtonBase() = default;
+        ButtonBase( const int32_t offsetX, const int32_t offsetY );
         ButtonBase( const ButtonBase & ) = delete;
-        ButtonBase( ButtonBase && button ) noexcept;
+        ButtonBase( ButtonBase && ) noexcept = default;
 
         ~ButtonBase() override = default;
 
         ButtonBase & operator=( const ButtonBase & button ) = delete;
-        ButtonBase & operator=( ButtonBase && button ) noexcept;
+        ButtonBase & operator=( ButtonBase && ) noexcept = default;
 
-        bool isEnabled() const;
-        bool isDisabled() const;
-        bool isPressed() const;
-        bool isReleased() const;
-        bool isVisible() const;
-        bool isHidden() const;
+        bool isEnabled() const
+        {
+            return _isEnabled;
+        }
 
-        void press();
-        void release();
+        bool isDisabled() const
+        {
+            return !_isEnabled;
+        }
+
+        bool isPressed() const
+        {
+            return _isPressed;
+        }
+
+        bool isReleased() const
+        {
+            return !_isPressed;
+        }
+
+        bool isVisible() const
+        {
+            return _isVisible;
+        }
+
+        bool isHidden() const
+        {
+            return !_isVisible;
+        }
+
+        bool press();
+        bool release();
         void enable();
         void disable(); // button becomes disabled and released
         void show(); // this method doesn't call draw
         void hide(); // this method doesn't call draw
 
-        void setPosition( int32_t offsetX_, int32_t offsetY_ );
+        void setPosition( const int32_t offsetX_, const int32_t offsetY_ )
+        {
+            _offsetX = offsetX_;
+            _offsetY = offsetY_;
+        }
 
-        void draw( Image & output = Display::instance() ) const; // will draw on screen by default
+        bool draw( Image & output = Display::instance() ) const; // will draw on screen by default
 
         // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
-        bool drawOnPress( Image & output = Display::instance() );
+        bool drawOnPress( Display & output = Display::instance() );
 
         // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
-        bool drawOnRelease( Image & output = Display::instance() );
+        bool drawOnRelease( Display & output = Display::instance() );
 
         Rect area() const;
 
     protected:
-        void _swap( ButtonBase & button );
-
         virtual const Sprite & _getPressed() const = 0;
         virtual const Sprite & _getReleased() const = 0;
         virtual const Sprite & _getDisabled() const;
 
     private:
-        int32_t _offsetX;
-        int32_t _offsetY;
+        int32_t _offsetX{ 0 };
+        int32_t _offsetY{ 0 };
 
-        bool _isPressed;
-        bool _isEnabled;
-        bool _isVisible;
+        bool _isPressed{ false };
+        bool _isEnabled{ true };
+        bool _isVisible{ true };
 
-        mutable const Sprite * _releasedSprite;
+        mutable const Sprite * _releasedSprite = nullptr;
         mutable std::unique_ptr<Sprite> _disabledSprite;
     };
 
@@ -110,12 +136,12 @@ namespace fheroes2
         ButtonSprite( int32_t offsetX = 0, int32_t offsetY = 0 );
         ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
         ButtonSprite( const ButtonSprite & ) = delete;
-        ButtonSprite( ButtonSprite && button ) noexcept;
+        ButtonSprite( ButtonSprite && ) noexcept = default;
 
         ~ButtonSprite() override = default;
 
         ButtonSprite & operator=( const ButtonSprite & ) = delete;
-        ButtonSprite & operator=( ButtonSprite && button ) noexcept;
+        ButtonSprite & operator=( ButtonSprite && ) noexcept = default;
 
         void setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
 
@@ -151,7 +177,10 @@ namespace fheroes2
         ButtonBase & button( size_t id );
         const ButtonBase & button( size_t id ) const;
 
-        size_t size() const;
+        size_t size() const
+        {
+            return _button.size();
+        }
 
         int processEvents();
 

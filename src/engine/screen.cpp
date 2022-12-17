@@ -732,7 +732,7 @@ namespace
             bool fullScreen = true;
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
-#if defined( __WIN32__ )
+#if defined( _WIN32 )
                 flags &= ~SDL_WINDOW_FULLSCREEN;
 #else
                 flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -741,7 +741,7 @@ namespace
                 fullScreen = false;
             }
             else {
-#if defined( __WIN32__ )
+#if defined( _WIN32 )
                 flags |= SDL_WINDOW_FULLSCREEN;
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -972,9 +972,16 @@ namespace
                 height_ = correctResolution.height;
             }
 
+#if defined( ANDROID )
+            // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            if ( SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set a hint for screen orientation." )
+            }
+#endif
+
             uint32_t flags = SDL_WINDOW_SHOWN;
             if ( isFullScreen ) {
-#if defined( __WIN32__ )
+#if defined( _WIN32 )
                 flags |= SDL_WINDOW_FULLSCREEN;
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -1336,7 +1343,7 @@ namespace
 
         uint32_t renderFlags() const
         {
-#if defined( __WIN32__ )
+#if defined( _WIN32 )
             return SDL_HWSURFACE | SDL_HWPALETTE;
 #else
             return SDL_SWSURFACE;

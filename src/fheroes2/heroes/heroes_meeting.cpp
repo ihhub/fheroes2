@@ -543,7 +543,16 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
-            otherHero.GetArmy().MoveTroops( GetArmy() );
+            const ArmyTroop * keep = nullptr;
+
+            if ( selectArmy1.isSelected() ) {
+                keep = selectArmy1.GetSelectedItem();
+            }
+            else if ( selectArmy2.isSelected() ) {
+                keep = selectArmy2.GetSelectedItem();
+            }
+
+            otherHero.GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
@@ -559,7 +568,16 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
-            GetArmy().MoveTroops( otherHero.GetArmy() );
+            const ArmyTroop * keep = nullptr;
+
+            if ( selectArmy1.isSelected() ) {
+                keep = selectArmy1.GetSelectedItem();
+            }
+            else if ( selectArmy2.isSelected() ) {
+                keep = selectArmy2.GetSelectedItem();
+            }
+
+            GetArmy().MoveTroops( otherHero.GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
@@ -607,6 +625,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             luckIndicator2.Redraw();
 
             display.render();
+        }
+
+        if ( le.MousePressRight( hero1Area ) ) {
+            Dialog::QuickInfo( *this );
+        }
+        else if ( le.MousePressRight( hero2Area ) ) {
+            Dialog::QuickInfo( otherHero );
         }
     }
 

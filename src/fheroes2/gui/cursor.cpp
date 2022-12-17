@@ -23,8 +23,8 @@
 
 #include <cassert>
 
-#include "cursor.h"
 #include "agg_image.h"
+#include "cursor.h"
 #include "icn.h"
 #include "localevent.h"
 #include "screen.h"
@@ -53,7 +53,8 @@ bool Cursor::SetThemes( int name, bool force )
     if ( force || theme != name ) {
         theme = name;
 
-        int icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_ADVMBW : ICN::ADVMCO;
+        // Video pointer cannot be properly rendered in black-white so we have to force to use color cursor.
+        int icnID = ( _monochromeCursorThemes && ( name != Cursor::POINTER_VIDEO ) ) ? ICN::MONO_CURSOR_ADVMBW : ICN::ADVMCO;
         switch ( 0xF000 & name ) {
         case 0x3000:
             icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_SPELBW : ICN::SPELCO;
@@ -114,6 +115,8 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     case Cursor::POINTER:
     case Cursor::POINTER_VIDEO:
     case Cursor::WAR_POINTER:
+        _offset = { 0, 0 };
+        break;
     case Cursor::CURSOR_HERO_FIGHT:
     case Cursor::CURSOR_HERO_FIGHT_2:
     case Cursor::CURSOR_HERO_FIGHT_3:
@@ -122,7 +125,7 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     case Cursor::CURSOR_HERO_FIGHT_6:
     case Cursor::CURSOR_HERO_FIGHT_7:
     case Cursor::CURSOR_HERO_FIGHT_8:
-        _offset = { 0, 0 };
+        _offset = { -10, -11 };
         break;
 
     case Cursor::SCROLL_TOPRIGHT:

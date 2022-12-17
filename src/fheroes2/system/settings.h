@@ -57,7 +57,7 @@ public:
         GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
         // UNUSED = 0x10000020,
         // UNUSED = 0x10000040,
-        GAME_SHOW_SYSTEM_INFO = 0x10000100,
+        // UNUSED = 0x10000100,
         // UNUSED = 0x10000200,
         // UNUSED = 0x10000400,
         GAME_EVIL_INTERFACE = 0x10001000,
@@ -96,7 +96,7 @@ public:
         // UNUSED = 0x30000001,
         // UNUSED = 0x30000008,
         // UNUSED = 0x30000010,
-        WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
+        // UNUSED = 0x30000020,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
         // UNUSED = 0x30000100,
         // UNUSED = 0x30000200,
@@ -230,6 +230,7 @@ public:
     bool isMonochromeCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
     bool is3DAudioEnabled() const;
+    bool isSystemInfoEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -281,11 +282,6 @@ public:
         return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
     }
 
-    bool ExtWorldNeutralArmyDifficultyScaling() const
-    {
-        return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
-    }
-
     bool ExtWorldExtObjectsCaptured() const
     {
         return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
@@ -314,11 +310,6 @@ public:
     bool ExtGameContinueAfterVictory() const
     {
         return ExtModes( GAME_CONTINUE_AFTER_VICTORY );
-    }
-
-    bool ExtGameShowSystemInfo() const
-    {
-        return ExtModes( GAME_SHOW_SYSTEM_INFO );
     }
 
     bool ExtGameAutosaveBeginOfDay() const
@@ -377,6 +368,8 @@ public:
     void setMonochromeCursor( const bool enable );
     void setTextSupportMode( const bool enable );
     void set3DAudio( const bool enable );
+    void setVSync( const bool enable );
+    void setSystemInfo( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

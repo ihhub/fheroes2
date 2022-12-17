@@ -1126,7 +1126,7 @@ bool Battle::Board::isValidMirrorImageIndex( const int32_t index, const Unit * u
     return true;
 }
 
-bool Battle::Board::CanAttackUnitFromCell( const Unit & currentUnit, const int32_t from )
+bool Battle::Board::CanAttackFromCell( const Unit & currentUnit, const int32_t from )
 {
     const Cell * fromCell = GetCell( from );
     assert( fromCell != nullptr );
@@ -1162,7 +1162,7 @@ bool Battle::Board::CanAttackUnitFromCell( const Unit & currentUnit, const int32
     return false;
 }
 
-bool Battle::Board::CanAttackUnitFromPosition( const Unit & currentUnit, const Unit & target, const int32_t dst )
+bool Battle::Board::CanAttackTargetFromPosition( const Unit & currentUnit, const Unit & target, const int32_t dst )
 {
     // Get the actual position of the attacker before attacking
     const Position pos = Position::GetReachable( currentUnit, dst );
@@ -1175,7 +1175,7 @@ bool Battle::Board::CanAttackUnitFromPosition( const Unit & currentUnit, const U
             continue;
         }
 
-        if ( !CanAttackUnitFromCell( currentUnit, cell->GetIndex() ) ) {
+        if ( !CanAttackFromCell( currentUnit, cell->GetIndex() ) ) {
             continue;
         }
 

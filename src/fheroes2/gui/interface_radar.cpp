@@ -56,19 +56,19 @@ namespace
         COLOR_DESERT = 0x76,
         COLOR_SNOW = 0x0D,
         COLOR_SWAMP = 0x68,
-        COLOR_WASTELAND = 0xCD,
+        COLOR_WASTELAND = 0xCE,
         COLOR_BEACH = 0x29,
         COLOR_LAVA = 0x20,
         COLOR_DIRT = 0x36,
-        COLOR_GRASS = 0x63,
+        COLOR_GRASS = 0x62,
         COLOR_WATER = 0x4D,
         COLOR_ROAD = 0x7A,
 
         COLOR_BLUE = 0x47,
-        COLOR_GREEN = 0x69,
+        COLOR_GREEN = 0x5D,
         COLOR_RED = 0xbd,
         COLOR_YELLOW = 0x70,
-        COLOR_ORANGE = 0xcd,
+        COLOR_ORANGE = 0xCA,
         COLOR_PURPLE = 0x87,
         COLOR_GRAY = 0x10,
         COLOR_WHITE = 0x0a
@@ -245,6 +245,7 @@ void Interface::Radar::Redraw()
             cursorArea.hide();
             fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
             RedrawObjects( Players::FriendColors(), ViewWorldMode::OnlyVisible );
+            cursorArea.show();
             RedrawCursor();
         }
     }
@@ -258,6 +259,7 @@ void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, cons
     fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
     RedrawObjects( Players::FriendColors(), mode );
     const fheroes2::Rect roiInTiles = roi.GetROIinTiles();
+    cursorArea.show();
     RedrawCursor( &roiInTiles );
 }
 

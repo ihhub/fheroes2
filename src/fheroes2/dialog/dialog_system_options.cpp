@@ -35,6 +35,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_option_item.h"
 #include "ui_text.h"
 
 #include <cassert>
@@ -53,23 +54,6 @@ namespace
         Close
     };
 
-    void drawOption( const fheroes2::Rect & optionRoi, const fheroes2::Sprite & icon, const std::string & titleText, const std::string & valueText )
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        const fheroes2::FontType smallWhite = fheroes2::FontType::smallWhite();
-
-        const fheroes2::Text title( titleText, smallWhite );
-        const fheroes2::Text value( valueText, smallWhite );
-
-        const int16_t textMaxWidth = 87;
-
-        title.draw( optionRoi.x - 12, optionRoi.y - title.height( textMaxWidth ), textMaxWidth, display );
-        value.draw( optionRoi.x + ( optionRoi.width - value.width() ) / 2, optionRoi.y + optionRoi.height + 4, display );
-
-        fheroes2::Blit( icon, display, optionRoi.x, optionRoi.y );
-    }
-
     void drawDialog( const std::vector<fheroes2::Rect> & rects )
     {
         assert( rects.size() == 9 );
@@ -78,16 +62,16 @@ namespace
 
         // Audio settings.
         const fheroes2::Sprite & audioSettingsIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 1 );
-        drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "settings" ) );
+        fheroes2::drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "Settings" ) );
 
         // Hot keys.
         const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, 5 );
-        drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "In-game" ) );
+        fheroes2::drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ) );
 
         // Cursor Type.
         const bool isMonoCursor = Settings::Get().isMonochromeCursorEnabled();
         const fheroes2::Sprite & cursorTypeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isMonoCursor ? 20 : 21 );
-        drawOption( rects[2], cursorTypeIcon, _( "Mouse Cursor" ), isMonoCursor ? _( "Black & White" ) : _( "Color" ) );
+        fheroes2::drawOption( rects[2], cursorTypeIcon, _( "Mouse Cursor" ), isMonoCursor ? _( "Black & White" ) : _( "Color" ) );
 
         // Hero's movement speed.
         const int heroSpeed = conf.HeroesMoveSpeed();
@@ -108,7 +92,7 @@ namespace
             value = std::to_string( heroSpeed );
         }
 
-        drawOption( rects[3], heroSpeedIcon, _( "Hero Speed" ), value );
+        fheroes2::drawOption( rects[3], heroSpeedIcon, _( "Hero Speed" ), value );
 
         // AI's movement speed.
         const int aiSpeed = conf.AIMoveSpeed();
@@ -131,7 +115,7 @@ namespace
             value = std::to_string( aiSpeed );
         }
 
-        drawOption( rects[4], aiSpeedIcon, _( "Enemy Speed" ), value );
+        fheroes2::drawOption( rects[4], aiSpeedIcon, _( "Enemy Speed" ), value );
 
         // Scrolling speed.
         const int scrollSpeed = conf.ScrollSpeed();
@@ -147,7 +131,7 @@ namespace
         }
 
         const fheroes2::Sprite & scrollSpeedIcon = fheroes2::AGG::GetICN( ICN::SPANEL, scrollSpeedIconId );
-        drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), std::to_string( scrollSpeed ) );
+        fheroes2::drawOption( rects[5], scrollSpeedIcon, _( "Scroll Speed" ), std::to_string( scrollSpeed ) );
 
         // Interface theme.
         const bool isEvilInterface = conf.ExtGameEvilInterface();
@@ -159,7 +143,7 @@ namespace
             value = _( "Good" );
         }
 
-        drawOption( rects[6], interfaceThemeIcon, _( "Interface Type" ), value );
+        fheroes2::drawOption( rects[6], interfaceThemeIcon, _( "Interface Type" ), value );
 
         // Interface show/hide state.
         const bool isHiddenInterface = conf.ExtGameHideInterface();
@@ -172,7 +156,7 @@ namespace
             value = _( "Show" );
         }
 
-        drawOption( rects[7], interfaceStateIcon, _( "Interface" ), value );
+        fheroes2::drawOption( rects[7], interfaceStateIcon, _( "Interface" ), value );
 
         // Auto-battles.
         if ( conf.BattleAutoResolve() ) {
@@ -180,11 +164,11 @@ namespace
             value = spellcast ? _( "Auto Resolve" ) : _( "Auto, No Spells" );
 
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, spellcast ? 7 : 6 );
-            drawOption( rects[8], autoBattleIcon, _( "Battles" ), value );
+            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), value );
         }
         else {
             const fheroes2::Sprite & autoBattleIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 18 );
-            drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "Manual" ) );
+            fheroes2::drawOption( rects[8], autoBattleIcon, _( "Battles" ), _( "Manual" ) );
         }
     }
 
@@ -343,70 +327,37 @@ namespace
                 saveAutoBattle = true;
             }
 
-            const fheroes2::FontType normalYellow = fheroes2::FontType::normalYellow();
-            const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
-
             if ( le.MousePressRight( audioSettingsRoi ) ) {
-                fheroes2::Text header( _( "Audio" ), normalYellow );
-                fheroes2::Text body( _( "Change audio settings of the game." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Audio" ), _( "Change the audio settings of the game." ), 0 );
             }
 
             else if ( le.MousePressRight( hotkeysRoi ) ) {
-                fheroes2::Text header( _( "Hot Keys" ), normalYellow );
-                fheroes2::Text body( _( "Check all Hot Keys used in the game." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );
             }
             else if ( le.MousePressRight( cursorTypeRoi ) ) {
-                fheroes2::Text header( _( "Mouse Cursor" ), normalYellow );
-                fheroes2::Text body( _( "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't move as smoothly as black and white ones." ),
-                                     normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an esthetic choice." ), 0 );
             }
             else if ( le.MousePressRight( heroSpeedRoi ) ) {
-                fheroes2::Text header( _( "Hero Speed" ), normalYellow );
-                fheroes2::Text body( _( "Change the speed at which your heroes move on the main screen." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Hero Speed" ), _( "Change the speed at which your heroes move on the main screen." ), 0 );
             }
             else if ( le.MousePressRight( aiSpeedRoi ) ) {
-                fheroes2::Text header( _( "Enemy Speed" ), normalYellow );
-                fheroes2::Text body( _( "Sets the speed that A.I. heroes move at.  You can also elect not to view A.I. movement at all." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Enemy Speed" ),
+                                                   _( "Sets the speed that A.I. heroes move at.  You can also elect not to view A.I. movement at all." ), 0 );
             }
             else if ( le.MousePressRight( scrollSpeedRoi ) ) {
-                fheroes2::Text header( _( "Scroll Speed" ), normalYellow );
-                fheroes2::Text body( _( "Sets the speed at which you scroll the window." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), 0 );
             }
             else if ( le.MousePressRight( interfaceTypeRoi ) ) {
-                fheroes2::Text header( _( "Interface Type" ), normalYellow );
-                fheroes2::Text body( _( "Toggle the type of interface you want to use." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Interface Type" ), _( "Toggle the type of interface you want to use." ), 0 );
             }
             else if ( le.MousePressRight( interfaceStateRoi ) ) {
-                fheroes2::Text header( _( "Interface" ), normalYellow );
-                fheroes2::Text body( _( "Toggle interface visibility." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Interface" ), _( "Toggle interface visibility." ), 0 );
             }
             else if ( le.MousePressRight( battleResolveRoi ) ) {
-                fheroes2::Text header( _( "Battles" ), normalYellow );
-                fheroes2::Text body( _( "Toggle instant battle mode." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Battles" ), _( "Toggle instant battle mode." ), 0 );
             }
             else if ( le.MousePressRight( buttonOkay.area() ) ) {
-                fheroes2::Text header( _( "Okay" ), normalYellow );
-                fheroes2::Text body( _( "Exit this menu." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
             if ( saveHeroSpeed || saveAISpeed || saveScrollSpeed || saveAutoBattle ) {

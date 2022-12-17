@@ -199,7 +199,7 @@ public:
     }
 
     LevelType GetRandomUnitLevel() const;
-    uint32_t GetRNDSize( bool skip ) const;
+    uint32_t GetRNDSize() const;
 
     const char * GetName() const;
     const char * GetMultiName() const;
@@ -238,11 +238,6 @@ public:
     bool isAllowUpgrade() const
     {
         return id != GetUpgrade().id;
-    }
-
-    bool isDoubleAttack() const
-    {
-        return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) || isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
     }
 
     bool isRegenerating() const

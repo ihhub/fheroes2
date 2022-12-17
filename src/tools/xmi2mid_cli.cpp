@@ -26,7 +26,7 @@
 #include "audio.h"
 #include "tools.h"
 
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
 #undef main
 #endif
 

@@ -48,6 +48,6 @@ namespace fheroes2
         const Sprite & getChar( const uint8_t character, const FontType & fontType );
 
         // This function must be called only at the type of setting up a new language.
-        void updateAlphabet( const SupportedLanguage language, const bool loadOriginalAlphabet );
+        void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet );
     }
 }

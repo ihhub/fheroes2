@@ -70,7 +70,7 @@ namespace
             troopTarget.SetCount( 2 );
         }
         else {
-            uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetCount() );
+            uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetOccupiedSlotCount() );
 
             if ( isSameTroopType )
                 ++freeSlots;
@@ -111,7 +111,10 @@ namespace
 
                 totalSplitTroopCount -= troopFromSplitCount;
                 totalSplitTroopCount -= troopTargetSplitCount;
-                armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount ), troopTarget, slots - 2 );
+
+                if ( slots > 2 ) {
+                    armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount ), troopTarget, slots - 2 );
+                }
             }
         }
     }
@@ -122,7 +125,7 @@ namespace
         if ( troopFrom.GetCount() <= 1 || count == 0 )
             return;
 
-        const size_t freeSlots = armyTarget->Size() - armyTarget->GetCount();
+        const size_t freeSlots = armyTarget->Size() - armyTarget->GetOccupiedSlotCount();
         if ( freeSlots == 0 )
             return;
 
@@ -293,7 +296,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 
         if ( &troop == troop2 ) {
             msg = _( "View %{name}" );
-            StringReplace( msg, "%{name}", troop.GetName() );
+            StringReplace( msg, "%{name}", Translation::StringLower( troop.GetName() ) );
         }
         else if ( !troop.isValid() ) {
             if ( !read_only ) {
@@ -304,24 +307,24 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
                     msg = _( "Move or right click to redistribute %{name}" );
                 }
 
-                StringReplace( msg, "%{name}", troop2->GetName() );
+                StringReplace( msg, "%{name}", Translation::StringLower( troop2->GetName() ) );
             }
         }
         else if ( troop.GetID() == troop2->GetID() ) {
             if ( !read_only ) {
                 msg = _( "Combine %{name} armies" );
-                StringReplace( msg, "%{name}", troop.GetName() );
+                StringReplace( msg, "%{name}", Translation::StringLower( troop.GetName() ) );
             }
         }
         else if ( !read_only ) {
             msg = _( "Exchange %{name2} with %{name}" );
-            StringReplace( msg, "%{name}", troop.GetName() );
-            StringReplace( msg, "%{name2}", troop2->GetName() );
+            StringReplace( msg, "%{name}", Translation::StringLower( troop.GetName() ) );
+            StringReplace( msg, "%{name2}", Translation::StringLower( troop2->GetName() ) );
         }
     }
     else if ( troop.isValid() ) {
         msg = _( "Select %{name}" );
-        StringReplace( msg, "%{name}", troop.GetName() );
+        StringReplace( msg, "%{name}", Translation::StringLower( troop.GetName() ) );
     }
 
     return false;
@@ -334,14 +337,14 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
     if ( destTroop.isValid() ) {
         if ( destTroop.GetID() != selectedTroop.GetID() ) {
             msg = _( "Exchange %{name2} with %{name}" );
-            StringReplace( msg, "%{name}", destTroop.GetName() );
-            StringReplace( msg, "%{name2}", selectedTroop.GetName() );
+            StringReplace( msg, "%{name}", Translation::StringLower( destTroop.GetName() ) );
+            StringReplace( msg, "%{name2}", Translation::StringLower( selectedTroop.GetName() ) );
         }
         else if ( save_last_troop )
             msg = _( "Cannot move last troop" );
         else {
             msg = _( "Combine %{name} armies" );
-            StringReplace( msg, "%{name}", destTroop.GetName() );
+            StringReplace( msg, "%{name}", Translation::StringLower( destTroop.GetName() ) );
         }
     }
     else if ( save_last_troop )
@@ -354,7 +357,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
             msg = _( "Move or right click to redistribute %{name}" );
         }
 
-        StringReplace( msg, "%{name}", selectedTroop.GetName() );
+        StringReplace( msg, "%{name}", Translation::StringLower( selectedTroop.GetName() ) );
     }
 
     return false;

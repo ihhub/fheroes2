@@ -2995,20 +2995,8 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> objectType;
     tile.mp2_object = static_cast<MP2::MapObjectType>( objectType );
 
-    msg >> tile.fog_colors >> tile.quantity1 >> tile.quantity2;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_0918_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_0918_RELEASE ) {
-        // Old additional metadata was stored in uint8_t format.
-        uint8_t temp;
-        msg >> temp;
-        tile.additionalMetadata = temp;
-    }
-    else {
-        msg >> tile.additionalMetadata;
-    }
-
-    msg >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._level;
+    msg >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.additionalMetadata >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2
+        >> tile._level;
 
     return msg;
 }

@@ -1169,11 +1169,6 @@ int Battle::Unit::GetControl() const
     return !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
 }
 
-bool Battle::Unit::isArchers() const
-{
-    return ArmyTroop::isArchers() && shots;
-}
-
 void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * hero )
 {
     if ( hero ) {
@@ -1519,9 +1514,9 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
         SetPosition( GetPosition() );
 
         if ( Arena::GetInterface() ) {
-            std::string str( _( "%{count} %{name} rise(s) from the dead!" ) );
+            std::string str( _n( "%{count} %{name} rises from the dead!", "%{count} %{name} rise from the dead!", resurrect ) );
             StringReplace( str, "%{count}", resurrect );
-            StringReplace( str, "%{name}", GetName() );
+            StringReplace( str, "%{name}", Monster::GetPluralName( resurrect ) );
             Arena::GetInterface()->SetStatus( str, true );
         }
         break;
@@ -1534,17 +1529,16 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
 
 bool Battle::Unit::isDoubleAttack() const
 {
-    switch ( GetID() ) {
-    case Monster::ELF:
-    case Monster::GRAND_ELF:
-    case Monster::RANGER:
-        return !isHandFighting();
-
-    default:
-        break;
+    if ( isHandFighting() ) {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK );
     }
 
-    return ArmyTroop::isDoubleAttack();
+    // Archers with double shooting ability can only fire a second shot if they have enough ammo
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING ) ) {
+        return GetShots() > 1;
+    }
+
+    return false;
 }
 
 uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const

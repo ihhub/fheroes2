@@ -115,13 +115,18 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
     }
 
     players.clear();
+
     for ( const Player & p : savedPlayers ) {
         Player * player = new Player( p.GetColor() );
+
         player->SetRace( p.GetRace() );
         player->SetControl( p.GetControl() );
         player->SetFriends( p.GetFriends() );
         player->SetName( p.GetName() );
+        player->setHandicapStatus( p.getHandicapStatus() );
+
         players.push_back( player );
+
         Players::Set( Color::GetIndex( p.GetColor() ), player );
     }
 }
@@ -134,13 +139,20 @@ void Game::saveDifficulty( const int difficulty )
 void Game::SavePlayers( const std::string & mapFileName, const Players & players )
 {
     lastMapFileName = mapFileName;
+
     savedPlayers.clear();
+
     for ( const Player * p : players ) {
+        assert( p != nullptr );
+
         Player player( p->GetColor() );
+
         player.SetRace( p->GetRace() );
         player.SetControl( p->GetControl() );
         player.SetFriends( p->GetFriends() );
         player.SetName( p->GetName() );
+        player.setHandicapStatus( p->getHandicapStatus() );
+
         savedPlayers.push_back( player );
     }
 }

@@ -67,9 +67,9 @@ namespace
 
         if ( count > 0 ) {
             if ( tempCastleArmy.CanJoinTroop( monsters ) )
-                tempCastleArmy.JoinTroop( monsters, count );
+                tempCastleArmy.JoinTroop( monsters, count, false );
             else if ( tempHeroArmy.CanJoinTroop( monsters ) )
-                tempHeroArmy.JoinTroop( monsters, count );
+                tempHeroArmy.JoinTroop( monsters, count, false );
         }
 
         return count;
@@ -275,6 +275,16 @@ void Castle::OpenWell()
 
             buttonMax.draw();
             display.render();
+        }
+
+        if ( le.MousePressRight( buttonExit.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Exit" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Exit this menu." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+
+        if ( le.MousePressRight( buttonMax.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Max" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Hire all creatures in the town." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
     }
 }
