@@ -35,7 +35,6 @@
 
 #include "localevent.h"
 #include "logging.h"
-#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "tinyconfig.h"
