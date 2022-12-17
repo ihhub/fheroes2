@@ -187,18 +187,21 @@ namespace
             // Fullscreen event must be disabled as well.
             const fheroes2::Key okayEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY );
             const fheroes2::Key cancelEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL );
-            const fheroes2::Key fullscreenEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::SYSTEM_FULLSCREEN );
+            const fheroes2::Key fullscreenEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN );
+            const fheroes2::Key textSupportModeEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE );
 
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, fheroes2::Key::NONE );
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL, fheroes2::Key::NONE );
-            Game::setHotKeyForEvent( Game::HotKeyEvent::SYSTEM_FULLSCREEN, fheroes2::Key::NONE );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN, fheroes2::Key::NONE );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE, fheroes2::Key::NONE );
 
             const int returnValue = fheroes2::showMessage( fheroes2::Text{ Game::getHotKeyEventNameByEventId( hotKeyEvent ), fheroes2::FontType::normalWhite() },
                                                            fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK | Dialog::CANCEL, { &hotKeyUI } );
 
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, okayEventKey );
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL, cancelEventKey );
-            Game::setHotKeyForEvent( Game::HotKeyEvent::SYSTEM_FULLSCREEN, fullscreenEventKey );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN, fullscreenEventKey );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE, textSupportModeEventKey );
 
             // To avoid UI issues we need to reset restorer manually.
             hotKeyUI.reset();
