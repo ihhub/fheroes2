@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 14:33+0000\n"
-"PO-Revision-Date: 2022-11-09 01:17+0100\n"
+"PO-Revision-Date: 2022-12-17 18:06+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -638,7 +638,7 @@ msgstr ""
 "turen sin og får ikke en ny tur før neste runde."
 
 msgid "View Captain's options"
-msgstr "Vis innstillinger for kapteinen."
+msgstr "Vis innstillinger for kapteinen"
 
 msgid "View Hero's options"
 msgstr "Vis helteinnstillinger"
@@ -695,22 +695,22 @@ msgid "%{name} casts %{spell}."
 msgstr "%{name} brukte %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "%{spell} gjorde %{value} skadepoeng på én vandød skapning."
+msgstr "%{spell} gjorde %{damage} skadepoeng på én vandød skapning."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
 msgstr "%{spell} gjorde %{damage} skadepoeng på alle vandøde."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr "%{spell} gjorde %{value} skadepoeng, %{count} skapninger dør."
+msgstr "%{spell} gjorde %{damage} skadepoeng, %{count} skapninger dør."
 
 msgid "The %{spell} does %{damage} damage."
 msgstr "%{spell} gjorde %{damage} skadepoeng."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr "%{spell} gjorde %{value} skadepoeng på én levende skapning."
+msgstr "%{spell} gjorde %{damage} skadepoeng på én levende skapning."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr "%{spell} gjorde %{value} skadepoeng på alle levende skapninger."
+msgstr "%{spell} gjorde %{damage} skadepoeng på alle levende skapninger."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr ""
@@ -844,7 +844,7 @@ msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "hver med en angrepsbonus på +%{attack}."
 
 msgid "The %{name} is destroyed."
-msgstr "Borgens %{name} ble ødelagt!"
+msgstr "Borgens %{name} ble ødelagt."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -3812,7 +3812,7 @@ msgstr ""
 "Vennligst velg skjermoppløsning før du begynner."
 
 msgid "Please Remember"
-msgstr "Husk!"
+msgstr "Husk"
 
 # Needs extra whitespace to avoid yellow word splitting
 msgid "You can always change game resolution by clicking on the "
@@ -4028,8 +4028,8 @@ msgstr "Gå tom for tid. (Mislykkes i å vinne innen en viss tid.)"
 
 msgid "You must defeat the enemy %{enemies}."
 msgid_plural "You must defeat the enemy alliance of %{enemies}."
-msgstr[0] "Slå ut motstanderen din %{name}."
-msgstr[1] "Slå ut den fiendtlige alliansen bestående av %{name}."
+msgstr[0] "Slå ut motstanderen din %{enemies}."
+msgstr[1] "Slå ut den fiendtlige alliansen bestående av %{enemies}."
 
 msgid ""
 "The alliance consisting of %{allies} and you must defeat the enemy "
@@ -5040,7 +5040,7 @@ msgstr ""
 "allerede alt vi har å lære bort.\""
 
 msgid "The soldiers living in the fort teach you a few new defensive tricks."
-msgstr "Soldatene som bor i fortet lærer deg et par nye forsvarstriks"
+msgstr "Soldatene som bor i fortet lærer deg et par nye forsvarstriks."
 
 msgid ""
 "You've come upon a mercenary camp practicing their tactics. \"You're too "
@@ -6740,7 +6740,7 @@ msgid ""
 "only do half damage."
 msgstr ""
 "Uflaks kan av og til føre til at styrkene dine kun skader halvparten av det "
-"vanlige"
+"vanlige."
 
 msgid ""
 "Neutral luck means your armies will never get lucky or unlucky attacks on "
