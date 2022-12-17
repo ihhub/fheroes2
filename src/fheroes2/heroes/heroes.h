@@ -267,7 +267,7 @@ public:
 
     Heroes();
     Heroes( int heroid, int rc );
-    Heroes( int heroID, int race, int initialLevel );
+    Heroes( const int heroID, const int race, const uint32_t additionalExperience );
     Heroes( const Heroes & ) = delete;
 
     ~Heroes() override = default;
@@ -517,6 +517,11 @@ public:
         return Heroes::GetPortrait( portrait, type );
     }
 
+    int getPortraitId() const
+    {
+        return portrait;
+    }
+
     static int GetLevelFromExperience( uint32_t );
     static uint32_t GetExperienceFromLevel( int );
 
@@ -589,8 +594,11 @@ private:
 
     Army army;
 
-    int hid; /* hero id */
-    int portrait; /* hero id */
+    // Hero ID
+    int hid;
+    // Corresponds to the ID of the hero whose portrait is applied. Usually equal to the
+    // ID of this hero, unless a custom portrait is applied.
+    int portrait;
     int _race;
     int save_maps_object;
 

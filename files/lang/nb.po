@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1484,6 +1484,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Dvergebanen!!!! Flykt for livene deres!\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Dødebesjelning"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Kjedelyn"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Ildsmell"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Masseforbannelse"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Hastverk"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Speilbilde"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Gjenopplivning"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Stålhud"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Tilkall jord"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Vis helter"
+
 msgid "campaignBonus|Ballista"
 msgstr "Hurtigballisten"
 
@@ -1675,36 +1705,6 @@ msgstr "Forbedret visdom"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Ekspert visdom"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Dødebesjelning"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Kjedelyn"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Ildsmell"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Masseforbannelse"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Hastverk"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Speilbilde"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Gjenopplivning"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Stålhud"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Tilkall jord"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Vis helter"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
