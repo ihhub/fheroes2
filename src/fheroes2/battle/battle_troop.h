@@ -175,7 +175,7 @@ namespace Battle
         }
 
         //        killed   resurrected
-        std::pair<uint32_t, uint32_t> ApplyDamage( Unit &, uint32_t );
+        std::pair<uint32_t, uint32_t> ApplyDamage( Unit & enemy, uint32_t dmg );
         uint32_t ApplyDamage( uint32_t );
         uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
         uint32_t CalculateMinDamage( const Unit & ) const;
