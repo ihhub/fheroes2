@@ -252,8 +252,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            uint32_t & frame = Game::MapsAnimationFrame();
-            ++frame;
+            Game::updateAdventureMapAnimationIndex();
 
             Redraw( REDRAW_GAMEAREA );
 
