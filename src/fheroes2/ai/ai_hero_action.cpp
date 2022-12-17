@@ -1796,6 +1796,14 @@ namespace AI
                         }
                     }
 
+                    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                        // Update Adventure Map objects' animation.
+                        uint32_t & frame = Game::MapsAnimationFrame();
+                        ++frame;
+
+                        gameArea.SetRedraw();
+                    }
+
                     basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
