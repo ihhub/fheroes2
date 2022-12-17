@@ -382,7 +382,7 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
     Settings & conf = Settings::Get();
 
     if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN )].key ) {
-        conf.setFullScreen( !fheroes2::engine().isFullScreen() );
+        conf.setFullScreen( !conf.FullScreen() );
         conf.Save( Settings::configFileName );
     }
     else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE )].key ) {

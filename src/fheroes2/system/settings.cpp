@@ -685,8 +685,10 @@ void Settings::setFullScreen( const bool enable )
         _optGlobal.ResetModes( GLOBAL_FULLSCREEN );
     }
 
-    fheroes2::engine().toggleFullScreen();
-    fheroes2::Display::instance().render();
+    if ( enable != fheroes2::engine().isFullScreen() ) {
+        fheroes2::engine().toggleFullScreen();
+        fheroes2::Display::instance().render();
+    }
 }
 
 void Settings::setMonochromeCursor( const bool enable )
