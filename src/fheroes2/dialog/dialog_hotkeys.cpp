@@ -184,7 +184,7 @@ namespace
             HotKeyElement hotKeyUI( Game::getHotKeyForEvent( hotKeyEvent ), fheroes2::Display::instance() );
 
             // Okay and Cancel events are special cases as they are used in dialogs. By default we need to disable these events to allow to be set any key for an event.
-            // Fullscreen event must be disabled as well.
+            // Global events (that work on all screens) must be disabled as well.
             const fheroes2::Key okayEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY );
             const fheroes2::Key cancelEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL );
             const fheroes2::Key fullscreenEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN );
