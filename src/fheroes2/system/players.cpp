@@ -37,7 +37,6 @@
 #include "players.h"
 #include "race.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "world.h"
@@ -248,16 +247,11 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
     assert( player._ai );
     msg >> *player._ai;
 
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0920_RELEASE ) {
-        player._handicapStatus = Player::HandicapStatus::NONE;
-    }
-    else {
-        uint8_t handicapStatusInt;
+    uint8_t handicapStatusInt;
 
-        msg >> handicapStatusInt;
+    msg >> handicapStatusInt;
 
-        player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
-    }
+    player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
 
     return msg;
 }

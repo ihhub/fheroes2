@@ -39,6 +39,7 @@ namespace Battle
         Bridge & operator=( const Bridge & ) = delete;
 
         void Action( const Unit &, int32_t );
+        void ForceAction( const bool actionDown );
 
         void SetDestroy();
         void SetDown( bool );
