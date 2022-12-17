@@ -741,7 +741,7 @@ namespace fheroes2
                     textWidth = 70;
                 }
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "OKAY" ), isEvilInterface );
-               
+
                 break;
             }
             case ICN::BUTTON_SMALL_ACCEPT_GOOD:
@@ -815,7 +815,7 @@ namespace fheroes2
 
                 int32_t textWidth = 87;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "TRADE" ), isEvilInterface );
-                
+
                 break;
             }
             case ICN::BUTTON_SMALL_YES_GOOD:
@@ -878,7 +878,7 @@ namespace fheroes2
 
                 int32_t textWidth = 85;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "EXIT" ), isEvilInterface );
-                
+
                 break;
             }
             case ICN::BUTTON_SMALLER_EXIT: {
@@ -932,7 +932,7 @@ namespace fheroes2
 
                 int32_t textWidth = 101;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "UPGRADE" ), isEvilInterface );
-                
+
                 break;
             }
             case ICN::BUTTON_SMALL_RESTART_GOOD:
@@ -949,7 +949,7 @@ namespace fheroes2
 
                 int32_t textWidth = 98;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "RESTART" ), isEvilInterface );
-                
+
                 break;
             }
             case ICN::BUTTON_KINGDOM_EXIT: {
@@ -999,7 +999,7 @@ namespace fheroes2
 
                 int32_t textWidth = 46;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "M" ), false );
-                
+
                 break;
             }
             case ICN::BUTTON_MAPSIZE_LARGE: {
@@ -1013,7 +1013,7 @@ namespace fheroes2
 
                 int32_t textWidth = 46;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "L" ), false );
-                
+
                 break;
             }
             case ICN::BUTTON_MAPSIZE_XLARGE: {
@@ -1027,7 +1027,7 @@ namespace fheroes2
 
                 int32_t textWidth = 46;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "X-L" ), false );
-                
+
                 break;
             }
             case ICN::BUTTON_MAPSIZE_ALL: {
@@ -1041,7 +1041,7 @@ namespace fheroes2
 
                 int32_t textWidth = 46;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ALL" ), false );
-                
+
                 break;
             }
             case ICN::BUTTON_STANDARD_GAME: {
@@ -1383,7 +1383,7 @@ namespace fheroes2
 
                 int32_t textWidth = 61;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "MIN" ), false );
-                
+
                 break;
             }
             case ICN::BUTTON_SMALL_MAX_GOOD: {
@@ -1397,7 +1397,7 @@ namespace fheroes2
 
                 int32_t textWidth = 61;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "MAX" ), false );
-                
+
                 break;
             }
             case ICN::UNIFORM_EVIL_MAX_BUTTON:
