@@ -429,6 +429,17 @@ namespace
         pressed.setPosition( originalPressed.x(), originalPressed.y() );
     }
 
+    void createNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, int32_t textWidth, const char * text, const bool isEvilInterface )
+    {
+        fheroes2::Point releasedOffset;
+        fheroes2::Point pressedOffset;
+        getCustomNormalButton( released, pressed, isEvilInterface, textWidth, releasedOffset, pressedOffset );
+
+        const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+    }
+
     uint8_t getButtonFillingColor( const bool isReleasedState, const bool isGoodInterface = true )
     {
         if ( isGoodInterface ) {
@@ -703,14 +714,7 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 86;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    buttonFontColor );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "CANCEL" ), isEvilInterface );
 
                 break;
             }
@@ -736,15 +740,8 @@ namespace fheroes2
                 if ( id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) {
                     textWidth = 70;
                 }
-
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "OKAY" ), isEvilInterface );
+               
                 break;
             }
             case ICN::BUTTON_SMALL_ACCEPT_GOOD:
@@ -760,14 +757,7 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 106;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ACCEPT" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    buttonFontColor );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ACCEPT" ), isEvilInterface );
 
                 break;
             }
@@ -784,14 +774,7 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 106;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DECLINE" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    buttonFontColor );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "DECLINE" ), isEvilInterface );
 
                 break;
             }
@@ -831,15 +814,8 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 87;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    buttonFontColor );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "TRADE" ), isEvilInterface );
+                
                 break;
             }
             case ICN::BUTTON_SMALL_YES_GOOD:
@@ -901,14 +877,8 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 85;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "EXIT" ), isEvilInterface );
+                
                 break;
             }
             case ICN::BUTTON_SMALLER_EXIT: {
@@ -944,14 +914,7 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 101;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DISMISS" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    buttonFontColor );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "DISMISS" ), isEvilInterface );
 
                 break;
             }
@@ -968,15 +931,8 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 101;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "UPGRADE" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    buttonFontColor );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "UPGRADE" ), isEvilInterface );
+                
                 break;
             }
             case ICN::BUTTON_SMALL_RESTART_GOOD:
@@ -992,15 +948,8 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 98;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], isEvilInterface, textWidth, releasedOffset, pressedOffset );
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTART" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    buttonFontColor );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "RESTART" ), isEvilInterface );
+                
                 break;
             }
             case ICN::BUTTON_KINGDOM_EXIT: {
@@ -1035,12 +984,7 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 46;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "S" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    fheroes2::FontColor::WHITE );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "S" ), isEvilInterface );
 
                 break;
             }
@@ -1054,13 +998,8 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 46;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "M" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    fheroes2::FontColor::WHITE );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "M" ), isEvilInterface );
+                
                 break;
             }
             case ICN::BUTTON_MAPSIZE_LARGE: {
@@ -1073,13 +1012,8 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 46;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "L" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    fheroes2::FontColor::WHITE );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "L" ), isEvilInterface );
+                
                 break;
             }
             case ICN::BUTTON_MAPSIZE_XLARGE: {
@@ -1092,13 +1026,8 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 46;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "X-L" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    fheroes2::FontColor::WHITE );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "X-L" ), isEvilInterface );
+                
                 break;
             }
             case ICN::BUTTON_MAPSIZE_ALL: {
@@ -1111,13 +1040,8 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 46;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ALL" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    fheroes2::FontColor::WHITE );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ALL" ), isEvilInterface );
+                
                 break;
             }
             case ICN::BUTTON_STANDARD_GAME: {
@@ -1458,13 +1382,8 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 61;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    fheroes2::FontColor::WHITE );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "MIN" ), false );
+                
                 break;
             }
             case ICN::BUTTON_SMALL_MAX_GOOD: {
@@ -1477,13 +1396,8 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 61;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    fheroes2::FontColor::WHITE );
-
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "MAX" ), false );
+                
                 break;
             }
             case ICN::UNIFORM_EVIL_MAX_BUTTON:
