@@ -255,19 +255,32 @@ namespace fheroes2
     {
         const int dx = pt2.x - pt1.x;
         const int dy = pt2.y - pt1.y;
-        const uint32_t dist = static_cast<uint32_t>( std::hypot( std::abs( dx ), std::abs( dy ) ) );
-        // round up the integer division
-        const uint32_t length = ( step > 0 && dist >= step / 2 ) ? ( dist + step / 2 ) / step : 1;
-        const double moveX = dx / static_cast<double>( length );
-        const double moveY = dy / static_cast<double>( length );
+        const uint32_t dist = static_cast<uint32_t>( std::hypot( dx, dy ) );
+        // Round up the integer division and avoid the division by zero in calculation of total line points.
+        const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 0;
 
         std::vector<Point> line;
-        line.reserve( length );
 
-        for ( uint32_t i = 0; i <= length; ++i ) {
-            line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
+        if ( length < 2 ) {
+            // If the length is equal to 0 than 'pt2' could be closer to 'pt1' than 'step'.
+            // In this case we put 'pt1' as the start of the line.
+            line.emplace_back( pt1 );
+            // And put 'pt2' as the end of the line only if 'pt1' is not equal to 'pt2'.
+            if ( pt1 != pt2 ) {
+                line.emplace_back( pt2 );
+            }
         }
+        else {
+            // Otherwise we calculate the equclidean line, using the dermined parameters.
+            const double moveX = dx / static_cast<double>( length );
+            const double moveY = dy / static_cast<double>( length );
 
+            line.reserve( length + 1 );
+
+            for ( uint32_t i = 0; i <= length; ++i ) {
+                line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
+            }
+        }
         return line;
     }
 
