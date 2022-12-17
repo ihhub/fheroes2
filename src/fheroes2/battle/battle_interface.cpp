@@ -2445,9 +2445,10 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     // in case we moved the window
     _interfacePosition = border.GetArea();
 
-    Board & board = *Arena::GetBoard();
-    board.Reset();
-    board.SetScanPassability( b );
+    Board * board = Arena::GetBoard();
+
+    board->Reset();
+    board->SetScanPassability( b );
 
     popup.Reset();
 
@@ -2465,7 +2466,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
         // move cursor
         int32_t indexNew = -1;
         if ( le.MouseCursor( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
-            indexNew = board.GetIndexAbsPosition( GetMouseCursor() );
+            indexNew = board->GetIndexAbsPosition( GetMouseCursor() );
         }
         if ( index_pos != indexNew ) {
             index_pos = indexNew;

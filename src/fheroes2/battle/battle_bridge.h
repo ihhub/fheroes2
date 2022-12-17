@@ -42,7 +42,7 @@ namespace Battle
         void ActionDown();
 
         void SetDestroyed();
-        void SetPassable( const Unit & unit ) const;
+        void SetPassability( const Unit & unit ) const;
 
         bool AllowUp() const;
         bool NeedDown( const Unit & unit, const int32_t dstIdx ) const;
