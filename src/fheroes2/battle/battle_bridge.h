@@ -51,9 +51,10 @@ namespace Battle
         bool isValid() const;
         bool isDestroyed() const;
         bool isDown() const;
-        bool isOccupied() const;
 
     private:
+        static bool isOccupied();
+
         bool _isDestroyed;
         bool _isDown;
 

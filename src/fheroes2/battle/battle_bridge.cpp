@@ -60,7 +60,7 @@ bool Battle::Bridge::AllowUp() const
     return isValid() && isDown() && !isOccupied();
 }
 
-bool Battle::Bridge::isOccupied() const
+bool Battle::Bridge::isOccupied()
 {
     const Battle::Graveyard * graveyard = Arena::GetGraveyard();
 
