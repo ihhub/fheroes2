@@ -1722,9 +1722,7 @@ namespace AI
                     break;
                 }
 
-                const bool hideHeroAnimation = ( hideAIMovements || !AIHeroesShowAnimation( hero, colors ) );
-
-                if ( hideHeroAnimation ) {
+                if ( hideAIMovements || !AIHeroesShowAnimation( hero, colors ) ) {
                     hero.Move( true );
                     recenterNeeded = true;
 
