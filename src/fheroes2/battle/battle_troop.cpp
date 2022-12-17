@@ -710,13 +710,13 @@ uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool ski
     return resurrect;
 }
 
-std::pair<uint32_t, uint32_t> Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg )
+void Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg, uint32_t & killed, uint32_t & resurrected )
 {
-    uint32_t killed = ApplyDamage( dmg );
-    uint32_t resurrected = 0;
+    resurrected = 0;
+    killed = ApplyDamage( dmg );
 
     if ( killed == 0 ) {
-        return std::pair{ 0, 0 };
+        return;
     }
 
     switch ( enemy.GetID() ) {
@@ -737,9 +737,7 @@ std::pair<uint32_t, uint32_t> Battle::Unit::ApplyDamage( Unit & enemy, uint32_t 
     }
 
     if ( resurrected > 0 )
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrected )
-
-    return std::pair{ killed, resurrected };
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrected );
 }
 
 bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg, bool forceApplyToAlly ) const

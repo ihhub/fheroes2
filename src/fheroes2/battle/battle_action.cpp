@@ -640,9 +640,9 @@ void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, 
     for ( TargetInfo & target : targets ) {
         assert( target.defender != nullptr && target.defender->isValid() );
 
-        std::pair<uint32_t, uint32_t> results = target.defender->ApplyDamage( attacker, target.damage );
-        target.killed = results.first;
-        resurrected += results.second;
+        uint32_t resInc;
+        target.defender->ApplyDamage( attacker, target.damage, target.killed, resInc );
+        resurrected += resInc;
     }
 }
 
@@ -965,7 +965,8 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
 
         if ( _interface )
             _interface->RedrawActionTowerPart1( *tower, *unit );
-        target.killed = unit->ApplyDamage( *tower, target.damage ).first;
+        uint32_t unusedResurrected;
+        unit->ApplyDamage( *tower, target.damage, target.killed, unusedResurrected );
         if ( _interface )
             _interface->RedrawActionTowerPart2( *tower, target );
     }
