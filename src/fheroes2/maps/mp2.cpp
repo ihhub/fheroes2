@@ -22,14 +22,16 @@
  ***************************************************************************/
 
 #include "mp2.h"
+
+#include <cassert>
+#include <ostream>
+
 #include "direction.h"
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
 #include "settings.h"
 #include "translations.h"
-
-#include <cassert>
 
 int MP2::GetICNObject( const uint8_t tileset )
 {
@@ -1001,10 +1003,6 @@ bool MP2::isCaptureObject( const MapObjectType objectType )
     case OBJ_LIGHTHOUSE:
     case OBJ_CASTLE:
         return true;
-    case OBJ_WATERWHEEL:
-    case OBJ_WINDMILL:
-    case OBJ_MAGICGARDEN:
-        return Settings::Get().ExtWorldExtObjectsCaptured();
     default:
         break;
     }

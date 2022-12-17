@@ -21,10 +21,13 @@
 #ifndef H2MONSTER_INFO_H
 #define H2MONSTER_INFO_H
 
-#include "resource.h"
-
+// TODO: this header is redundant here, but detected as required by IWYU with older compilers
+// IWYU pragma: no_include <algorithm>
+#include <cstdint>
 #include <string>
 #include <vector>
+
+#include "resource.h"
 
 namespace fheroes2
 {

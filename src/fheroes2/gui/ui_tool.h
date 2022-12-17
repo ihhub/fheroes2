@@ -20,9 +20,12 @@
 
 #pragma once
 
+#include <cstdint>
 #include <functional>
+#include <vector>
 
 #include "image.h"
+#include "math_base.h"
 #include "timing.h"
 #include "ui_base.h"
 
@@ -34,15 +37,24 @@ namespace fheroes2
         MovableSprite();
         MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ );
         explicit MovableSprite( const Sprite & sprite );
-        ~MovableSprite() override = default;
+        ~MovableSprite() override;
 
         MovableSprite & operator=( const Sprite & sprite );
 
         void show();
         void hide();
-        void redraw(); // in case if Display has changed
 
-        bool isHidden() const;
+        // In case if Display has changed.
+        void redraw()
+        {
+            hide();
+            show();
+        }
+
+        bool isHidden() const
+        {
+            return _isHidden;
+        }
 
         void setPosition( int32_t x_, int32_t y_ ) override;
 
@@ -97,7 +109,7 @@ namespace fheroes2
         const bool isOriginalEvilInterface;
     };
 
-    Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight );
+    Image CreateDeathWaveEffect( const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve );
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );
 

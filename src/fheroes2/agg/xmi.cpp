@@ -31,30 +31,30 @@ namespace XMI
         int type;
         const char * string;
     } xmimap[] = {
-        {UNKNOWN, "UNKNOWN"},
-        {MIDI0002, "MIDI0002.XMI"},
-        {MIDI0003, "MIDI0003.XMI"},
-        {MIDI0004, "MIDI0004.XMI"},
-        {MIDI0005, "MIDI0005.XMI"},
-        {MIDI0006, "MIDI0006.XMI"},
-        {MIDI0007, "MIDI0007.XMI"},
-        {MIDI0008, "MIDI0008.XMI"},
-        {MIDI0009, "MIDI0009.XMI"},
-        {MIDI0010, "MIDI0010.XMI"},
-        {MIDI0011, "MIDI0011.XMI"},
-        {MIDI0013, "MIDI0013.XMI"},
-        {MIDI0014, "MIDI0014.XMI"},
-        {MIDI0015, "MIDI0015.XMI"},
-        {MIDI0017, "MIDI0017.XMI"},
-        {MIDI0018, "MIDI0018.XMI"},
-        {MIDI0042, "MIDI0042.XMI"},
-        {MIDI0043, "MIDI0043.XMI"},
-        {MIDI_ORIGINAL_KNIGHT, "MIDI0009.XMI"}, // Knight theme was used by both Barbarian and Wizard castles, so we use either MIDI0009 or MIDI0010
-        {MIDI_ORIGINAL_BARBARIAN, "MIDI0007.XMI"}, // Barbarian intended theme is under MIDI0007
-        {MIDI_ORIGINAL_SORCERESS, "MIDI0005.XMI"}, // Sorceress doesn't have own track in OG release, Warlock theme was used
-        {MIDI_ORIGINAL_WARLOCK, "MIDI0005.XMI"}, // Warlock theme was set to Sorceress so we use MIDI0005
-        {MIDI_ORIGINAL_WIZARD, "MIDI0008.XMI"}, // Wizard's and Knight's tracks were switched around, so we use MIDI0008
-        {MIDI_ORIGINAL_NECROMANCER, "MIDI0006.XMI"} // Necromancer theme has trickled down to Warlock so we use MIDI0006
+        { UNKNOWN, "UNKNOWN" },
+        { MIDI0002, "MIDI0002.XMI" },
+        { MIDI0003, "MIDI0003.XMI" },
+        { MIDI0004, "MIDI0004.XMI" },
+        { MIDI0005, "MIDI0005.XMI" },
+        { MIDI0006, "MIDI0006.XMI" },
+        { MIDI0007, "MIDI0007.XMI" },
+        { MIDI0008, "MIDI0008.XMI" },
+        { MIDI0009, "MIDI0009.XMI" },
+        { MIDI0010, "MIDI0010.XMI" },
+        { MIDI0011, "MIDI0011.XMI" },
+        { MIDI0013, "MIDI0013.XMI" },
+        { MIDI0014, "MIDI0014.XMI" },
+        { MIDI0015, "MIDI0015.XMI" },
+        { MIDI0017, "MIDI0017.XMI" },
+        { MIDI0018, "MIDI0018.XMI" },
+        { MIDI0042, "MIDI0042.XMI" },
+        { MIDI0043, "MIDI0043.XMI" },
+        { MIDI_ORIGINAL_KNIGHT, "MIDI0009.XMI" }, // Knight theme was used by both Barbarian and Wizard castles, so we use either MIDI0009 or MIDI0010
+        { MIDI_ORIGINAL_BARBARIAN, "MIDI0007.XMI" }, // Barbarian intended theme is under MIDI0007
+        { MIDI_ORIGINAL_SORCERESS, "MIDI0005.XMI" }, // Sorceress doesn't have own track in OG release, Warlock theme was used
+        { MIDI_ORIGINAL_WARLOCK, "MIDI0005.XMI" }, // Warlock theme was set to Sorceress so we use MIDI0005
+        { MIDI_ORIGINAL_WIZARD, "MIDI0008.XMI" }, // Wizard's and Knight's tracks were switched around, so we use MIDI0008
+        { MIDI_ORIGINAL_NECROMANCER, "MIDI0006.XMI" } // Necromancer theme has trickled down to Warlock so we use MIDI0006
     };
 }
 

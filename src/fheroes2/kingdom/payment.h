@@ -24,6 +24,8 @@
 #ifndef H2PAYMENT_H
 #define H2PAYMENT_H
 
+#include <cstdint>
+
 #include "resource.h"
 
 using payment_t = Funds;

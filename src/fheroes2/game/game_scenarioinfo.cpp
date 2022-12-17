@@ -23,10 +23,15 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
 #include <string>
 #include <vector>
 
 #include "agg_image.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -36,12 +41,18 @@
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
+#include "game_mode.h"
 #include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
+#include "math_base.h"
 #include "mus.h"
 #include "player_info.h"
+#include "players.h"
+#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "text.h"
@@ -93,45 +104,55 @@ namespace
 
         // text scenario
         fheroes2::Text text( _( "Scenario:" ), normalWhiteFont );
-        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 25, display );
+        text.draw( rt.x, rt.y + 25, rt.width, display );
 
         // maps name
         text.set( conf.MapsName(), normalWhiteFont );
-        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 48, display );
+        text.draw( rt.x, rt.y + 48, rt.width, display );
 
         // text game difficulty
         text.set( _( "Game Difficulty:" ), normalWhiteFont );
-        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 77, display );
+        text.draw( rt.x, rt.y + 75, rt.width, display );
 
         // text opponents
         text.set( _( "Opponents:" ), normalWhiteFont );
-        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 183, display );
+        text.draw( rt.x, rt.y + 180, rt.width, display );
 
         // text class
         text.set( _( "Class:" ), normalWhiteFont );
-        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 264, display );
+        text.draw( rt.x, rt.y + 264, rt.width, display );
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
     {
         const int32_t width = 77;
-        const int32_t height = 70;
+        const int32_t height = 69;
 
         for ( int32_t current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
             const int32_t offset = width * current;
+            int32_t normalSpecificOffset = 0;
+            // Add offset shift because the original difficulty icons have irregular spacing.
+            if ( current == Difficulty::NORMAL ) {
+                normalSpecificOffset = 1;
+            }
 
             fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
-            text.draw( dst.x + 31 + offset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
+            text.draw( dst.x + 31 + offset + normalSpecificOffset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }
 
-    void RedrawRatingInfo( TextSprite & sprite )
+    fheroes2::Rect RedrawRatingInfo( const fheroes2::Point & offset, int32_t width_ )
     {
-        sprite.Hide();
         std::string str( _( "Rating %{rating}%" ) );
         StringReplace( str, "%{rating}", Game::GetRating() );
-        sprite.SetText( str );
-        sprite.Show();
+
+        const fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
+        const int32_t y = offset.y + 385;
+        text.draw( offset.x, y, width_, fheroes2::Display::instance() );
+
+        const int32_t textX = ( width_ > text.width() ) ? offset.x + ( width_ - text.width() ) / 2 : 0;
+
+        return { textX, y, text.width(), text.height() };
     }
 
     fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists )
@@ -142,9 +163,9 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
         const fheroes2::Rect rectPanel( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
-        const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 93 );
-        const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 202 );
-        const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 282 );
+        const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 95 );
+        const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 197 );
+        const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 281 );
 
         const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
 
@@ -170,7 +191,7 @@ namespace
         Settings & conf = Settings::Get();
         bool resetStartingSettings = conf.MapsFile().empty();
         Players & players = conf.GetPlayers();
-        Interface::PlayersInfo playersInfo( true, true, true );
+        Interface::PlayersInfo playersInfo;
 
         const int humanPlayerCount = Settings::Get().PreferablyCountPlayers();
 
@@ -203,12 +224,9 @@ namespace
         RedrawScenarioStaticInfo( rectPanel, true );
         RedrawDifficultyInfo( pointDifficultyInfo );
 
-        playersInfo.RedrawInfo();
+        playersInfo.RedrawInfo( false );
 
-        TextSprite rating;
-        rating.SetFont( Font::BIG );
-        rating.SetPos( rectPanel.x + 166, rectPanel.y + 383 );
-        RedrawRatingInfo( rating );
+        fheroes2::Rect ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
 
         fheroes2::MovableSprite levelCursor( ngextra );
 
@@ -246,7 +264,7 @@ namespace
         while ( true ) {
             if ( !le.HandleEvents( true, true ) ) {
                 if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                    if ( Settings::ExtGameUseFade() ) {
+                    if ( Settings::isFadeEffectEnabled() ) {
                         fheroes2::FadeDisplay();
                     }
                     return fheroes2::GameMode::QUIT_GAME;
@@ -275,8 +293,8 @@ namespace
                     RedrawScenarioStaticInfo( rectPanel );
                     RedrawDifficultyInfo( pointDifficultyInfo );
                     playersInfo.resetSelection();
-                    playersInfo.RedrawInfo();
-                    RedrawRatingInfo( rating );
+                    playersInfo.RedrawInfo( false );
+                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
                     buttonOk.draw();
                     buttonCancel.draw();
@@ -298,10 +316,15 @@ namespace
 
                 // select difficulty
                 if ( 0 <= index ) {
+                    RedrawScenarioStaticInfo( rectPanel );
                     levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
-                    RedrawRatingInfo( rating );
+                    RedrawDifficultyInfo( pointDifficultyInfo );
+                    playersInfo.RedrawInfo( false );
+                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+                    buttonOk.draw();
+                    buttonCancel.draw();
                     display.render();
                 }
                 // playersInfo
@@ -310,8 +333,8 @@ namespace
                     levelCursor.redraw();
                     RedrawDifficultyInfo( pointDifficultyInfo );
 
-                    playersInfo.RedrawInfo();
-                    RedrawRatingInfo( rating );
+                    playersInfo.RedrawInfo( false );
+                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     buttonOk.draw();
                     buttonCancel.draw();
                     display.render();
@@ -325,8 +348,8 @@ namespace
                     levelCursor.redraw();
                     RedrawDifficultyInfo( pointDifficultyInfo );
 
-                    playersInfo.RedrawInfo();
-                    RedrawRatingInfo( rating );
+                    playersInfo.RedrawInfo( false );
+                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     buttonOk.draw();
                     buttonCancel.draw();
                     display.render();
@@ -341,7 +364,7 @@ namespace
                         _( "Game Difficulty" ),
                         _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
                         Font::BIG );
-                else if ( le.MousePressRight( rating.GetRect() ) )
+                else if ( le.MousePressRight( ratingRoi ) )
                     Dialog::
                         Message( _( "Difficulty Rating" ),
                                  _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
@@ -365,7 +388,7 @@ namespace
         Settings & conf = Settings::Get();
 
         conf.GetPlayers().SetStartGame();
-        if ( Settings::ExtGameUseFade() ) {
+        if ( Settings::isFadeEffectEnabled() ) {
             fheroes2::FadeDisplay();
         }
 

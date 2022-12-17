@@ -22,28 +22,39 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cctype>
+#include <charconv>
+#include <cstddef>
+#include <regex>
+#include <system_error>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
 #include "serialize.h"
 #include "tinyconfig.h"
 #include "tools.h"
 
-bool SpaceCompare( char a, char b )
+namespace
 {
-    return std::isspace( a ) && std::isspace( b );
-}
+    bool SpaceCompare( char a, char b )
+    {
+        return std::isspace( a ) && std::isspace( b );
+    }
 
-std::string ModifyKey( const std::string & str )
-{
-    std::string key = StringTrim( StringLower( str ) );
+    std::string ModifyKey( const std::string & str )
+    {
+        std::string key = StringTrim( StringLower( str ) );
 
-    // remove multiple space
-    key.erase( std::unique( key.begin(), key.end(), SpaceCompare ), key.end() );
+        // remove multiple space
+        key.erase( std::unique( key.begin(), key.end(), SpaceCompare ), key.end() );
 
-    // change space
-    std::replace_if( key.begin(), key.end(), ::isspace, '\x20' );
+        // change space
+        std::replace_if( key.begin(), key.end(), ::isspace, '\x20' );
 
-    return key;
+        return key;
+    }
 }
 
 TinyConfig::TinyConfig( char sep, char com )
@@ -90,6 +101,44 @@ std::string TinyConfig::StrParams( const std::string & key ) const
 {
     const_iterator it = find( ModifyKey( key ) );
     return it != end() ? it->second : "";
+}
+
+fheroes2::Point TinyConfig::PointParams( const std::string & key, const fheroes2::Point & fallbackValue ) const
+{
+    const const_iterator it = find( ModifyKey( key ) );
+    if ( it == end() ) {
+        return fallbackValue;
+    }
+
+    static const std::regex pointRegex( "^\\[ *(-?[0-9]+) *, *(-?[0-9]+) *]$", std::regex_constants::extended );
+
+    std::smatch pointRegexMatch;
+
+    if ( !std::regex_match( it->second, pointRegexMatch, pointRegex ) ) {
+        return fallbackValue;
+    }
+
+    assert( pointRegexMatch.size() == 3 );
+
+    auto convertToInt = []( const std::string & str, auto & intValue ) {
+        const auto [ptr, ec] = std::from_chars( str.data(), str.data() + str.size(), intValue );
+
+        return ec == std::errc();
+    };
+
+    fheroes2::Point result;
+
+    static_assert( std::is_integral<decltype( result.x )>::value && std::is_integral<decltype( result.y )>::value,
+                   "The type of result fields is not integer, check the logic of this method" );
+
+    if ( !convertToInt( pointRegexMatch[1].str(), result.x ) ) {
+        return fallbackValue;
+    }
+    if ( !convertToInt( pointRegexMatch[2].str(), result.y ) ) {
+        return fallbackValue;
+    }
+
+    return result;
 }
 
 bool TinyConfig::Exists( const std::string & key ) const

@@ -21,38 +21,68 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <list>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "ai.h"
+#include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
+#include "color.h"
+#include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_gamearea.h"
+#include "interface_status.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "m82.h"
+#include "maps.h"
 #include "maps_actions.h"
 #include "maps_objects.h"
+#include "maps_tiles.h"
+#include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
 #include "mus.h"
+#include "pairs.h"
 #include "payment.h"
+#include "players.h"
 #include "profit.h"
-#include "race.h"
+#include "puzzle.h"
+#include "rand.h"
+#include "resource.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
 #include "skill.h"
+#include "spell.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
+#include "visit.h"
 #include "world.h"
 
 namespace
@@ -120,7 +150,7 @@ void ActionToBoat( Heroes & hero, int32_t dst_index );
 void ActionToCoast( Heroes & hero, int32_t dst_index );
 void ActionToWagon( Heroes & hero, int32_t dst_index );
 void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
-void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
+void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToFlotSam( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToArtifact( Heroes & hero, int32_t dst_index );
@@ -171,12 +201,9 @@ void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker )
     const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
     AudioManager::PlaySound( M82::KILLFADE );
+
     hero.FadeOut();
     hero.SetFreeman( reason );
-
-    Interface::Basic & I = Interface::Basic::Get();
-    I.ResetFocus( GameFocus::HEROES );
-    I.RedrawFocus();
 }
 
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -201,7 +228,7 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             const payment_t paymentCosts = troop.GetMonster().GetCost() * recruit;
             hero.GetKingdom().OddFundsResource( paymentCosts );
 
-            hero.GetArmy().JoinTroop( troop.GetMonster(), recruit );
+            hero.GetArmy().JoinTroop( troop.GetMonster(), recruit, false );
 
             Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
         }
@@ -219,7 +246,7 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
     }
 
     // Whirlpool effect affects heroes only with more than one creature in more than one slot
-    if ( heroArmy.GetCount() == 1 && weakestTroop->GetCount() == 1 ) {
+    if ( heroArmy.GetOccupiedSlotCount() == 1 && weakestTroop->GetCount() == 1 ) {
         return;
     }
 
@@ -245,9 +272,37 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
     }
 }
 
-// action to next cell
 void Heroes::Action( int tileIndex, bool isDestination )
 {
+    // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
+    struct FocusUpdater
+    {
+        FocusUpdater() = default;
+
+        FocusUpdater( const FocusUpdater & ) = delete;
+
+        ~FocusUpdater()
+        {
+            Interface::Basic & I = Interface::Basic::Get();
+
+            I.ResetFocus( GameFocus::HEROES );
+            I.RedrawFocus();
+        }
+
+        FocusUpdater & operator=( const FocusUpdater & ) = delete;
+    };
+
+    std::unique_ptr<FocusUpdater> focusUpdater;
+    const bool isAIControlledForHumanPlayer = Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode();
+
+    if ( !GetKingdom().isControlAI() || isAIControlledForHumanPlayer ) {
+        focusUpdater = std::make_unique<FocusUpdater>();
+
+        if ( isAIControlledForHumanPlayer ) {
+            Interface::Basic::Get().SetFocus( this );
+        }
+    }
+
     if ( GetKingdom().isControlAI() ) {
         // Restore the original music after the action is completed.
         const AudioManager::MusicRestorer musicRestorer;
@@ -255,23 +310,44 @@ void Heroes::Action( int tileIndex, bool isDestination )
         return AI::HeroesAction( *this, tileIndex );
     }
 
-    // Update environment sounds and music before doing the action. Interface::Basic::SetFocus() function is responsible for update them after the action.
     const int32_t heroPosIndex = GetIndex();
     assert( heroPosIndex >= 0 );
+
+    // Update environment sounds and music before performing the action
     if ( Game::UpdateSoundsOnFocusUpdate() ) {
         Game::EnvironmentSoundMixer();
         AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
-    // Restore the original music after the action is completed.
-    const AudioManager::MusicRestorer musicRestorer;
+    // "Musical" sounds use the volume of sounds instead of the volume of music, reset the music volume after completing the action
+    struct MusicVolumeRestorer
+    {
+        MusicVolumeRestorer() = default;
+
+        MusicVolumeRestorer( const MusicVolumeRestorer & ) = delete;
+
+        ~MusicVolumeRestorer()
+        {
+            Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
+        }
+
+        MusicVolumeRestorer & operator=( const MusicVolumeRestorer & ) = delete;
+    };
+
+    const MusicVolumeRestorer musicVolumeRestorer;
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
     const int objectMusicTrack = MUS::FromMapObject( objectType );
     if ( objectMusicTrack != MUS::UNKNOWN ) {
-        AudioManager::PlayMusic( objectMusicTrack, Music::PlaybackMode::PLAY_ONCE );
+        // "Musical" sounds should use the volume of the sounds instead of the volume of the music
+        const int32_t soundVolume = 100 * Settings::Get().SoundVolume() / 10;
+        if ( soundVolume > 0 ) {
+            // Play the sound only if audio volume is not set to 0.
+            Music::setVolume( soundVolume );
+            AudioManager::PlayMusic( objectMusicTrack, Music::PlaybackMode::PLAY_ONCE );
+        }
     }
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
@@ -644,7 +720,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
         DEBUG_LOG( DBG_GAME, DBG_INFO, join.monsterCount << " " << troop.GetName() << " want to join " << hero.GetName() << " for " << joiningCost << " gold" )
 
         if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.monsterCount, joiningCost ) ) {
-            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
+            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount, false );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
 
             I.SetRedraw( Interface::REDRAW_STATUS );
@@ -728,8 +804,7 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable meeting" )
     }
     else {
-        const Castle * other_hero_castle = other_hero->inCastle();
-        if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
+        if ( other_hero->inCastle() ) {
             ActionToCastle( hero, dst_index );
             return;
         }
@@ -777,20 +852,12 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable visiting" )
     }
     else {
-        CastleHeroes heroes = castle->GetHeroes();
-
-        // first attack to guest hero
-        if ( heroes.FullHouse() ) {
-            ActionToHeroes( hero, dst_index );
-            return;
-        }
-
         Army & army = castle->GetActualArmy();
 
         if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() )
 
-            Heroes * defender = heroes.GuardFirst();
+            Heroes * defender = castle->GetHero();
             castle->ActionPreBattle();
 
             // new battle
@@ -929,12 +996,10 @@ void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objec
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
 
-void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     ResourceCount rc = tile.QuantityResourceCount();
-    bool cancapture = Settings::Get().ExtWorldExtObjectsCaptured();
-    bool showinvalid = cancapture && hero.GetColor() == tile.QuantityColor() ? false : true;
 
     std::string msg;
     const std::string & caption = MP2::StringObject( objectType );
@@ -954,7 +1019,6 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
         break;
 
     case MP2::OBJ_LEANTO:
-        cancapture = false;
         msg = rc.isValid() ? _( "You've found an abandoned lean-to.\nPoking about, you discover some resources hidden nearby." )
                            : _( "The lean-to is long abandoned. There is nothing of value here." );
         break;
@@ -968,7 +1032,6 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
         break;
 
     default:
-        cancapture = false;
         break;
     }
 
@@ -991,16 +1054,9 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
                                        Dialog::OK, funds );
 
         hero.GetKingdom().AddFundsResource( funds );
-
-        if ( cancapture )
-            ActionToCaptureObject( hero, objectType, dst_index );
     }
     else {
-        if ( cancapture )
-            ActionToCaptureObject( hero, objectType, dst_index );
-
-        if ( showinvalid )
-            Dialog::Message( caption, msg, Font::BIG, Dialog::OK );
+        Dialog::Message( caption, msg, Font::BIG, Dialog::OK );
     }
 
     tile.QuantityReset();
@@ -1173,14 +1229,6 @@ void ActionToShrine( Heroes & hero, int32_t dst_index )
 
     StringReplace( body, "%{spell}", spell.GetName() );
 
-    // check spell book
-    if ( !hero.HaveSpellBook() ) {
-        if ( !Settings::Get().ExtHeroBuySpellBookFromShrine() || !hero.BuySpellBook( nullptr, spell_level ) ) {
-            body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
-            Dialog::Message( head, body, Font::BIG, Dialog::OK );
-        }
-    }
-
     if ( hero.HaveSpellBook() ) {
         // check valid level spell and wisdom skill
         if ( 3 == spell_level && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
@@ -1201,6 +1249,10 @@ void ActionToShrine( Heroes & hero, int32_t dst_index )
             fheroes2::showMessage( fheroes2::Text( head, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                    { &spellUI } );
         }
+    }
+    else {
+        body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
+        Dialog::Message( head, body, Font::BIG, Dialog::OK );
     }
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -1832,7 +1884,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
                 else {
                     msg = _(
                         "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
-                    StringReplace( msg, "%{monster}", troop->GetName() );
+                    StringReplace( msg, "%{monster}", Translation::StringLower( troop->GetName() ) );
                     battle = ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) );
                 }
             }
@@ -2095,6 +2147,7 @@ void ActionToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, 
 void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
+
     std::string header;
     std::string body;
     int32_t resource = Resource::UNKNOWN;
@@ -2156,7 +2209,6 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
         break;
     }
 
-    // capture object
     if ( !hero.isFriends( tile.QuantityColor() ) ) {
         bool capture = true;
 
@@ -2187,32 +2239,22 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
             if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
                 Maps::Tiles::UpdateAbandonedMineSprite( tile );
                 hero.SetMapsObject( MP2::OBJ_MINES );
-                world.CaptureObject( dst_index, hero.GetColor() );
-                Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
             }
 
-            if ( resource == Resource::UNKNOWN )
-                Dialog::Message( header, body, Font::BIG, Dialog::OK );
-            else
-                DialogCaptureResourceObject( header, body, resource );
-
             tile.QuantitySetColor( hero.GetColor() );
+
+            Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
+
+            if ( resource == Resource::UNKNOWN ) {
+                Dialog::Message( header, body, Font::BIG, Dialog::OK );
+            }
+            else {
+                DialogCaptureResourceObject( header, body, resource );
+            }
         }
     }
-    // set guardians
-    else if ( Settings::Get().ExtWorldAllowSetGuardian() ) {
-        CapturedObject & co = world.GetCapturedObject( dst_index );
-        Troop & troop = co.GetTroop();
-        Troop new_troop = troop;
 
-        // check if it is already guarded by a spell
-        const bool readonly = ( Maps::getSpellIdFromTile( tile ) != Spell::NONE );
-
-        if ( Dialog::SetGuardian( hero, new_troop, co, readonly ) )
-            troop.Set( new_troop.GetMonster(), new_troop.GetCount() );
-    }
-
-    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( objectType ) )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
 }
 
 void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -2224,7 +2266,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
 
     if ( troop.isValid() ) {
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
-        StringReplace( message, "%{monster}", troop.GetMultiName() );
+        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
 
         AudioManager::PlaySound( M82::EXPERNCE );
 
@@ -3040,7 +3082,7 @@ void ActionToSirens( Heroes & hero, const MP2::MapObjectType objectType, int32_t
         const uint32_t experience = hero.GetArmy().ActionToSirens();
         if ( experience == 0 ) {
             Dialog::Message( title, _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ),
-                         Font::BIG, Dialog::OK );
+                             Font::BIG, Dialog::OK );
         }
         else {
             const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( experience ) );
@@ -3118,9 +3160,13 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
 
                 LocalEvent & le = LocalEvent::Get();
                 int delay = 0;
-                while ( le.HandleEvents() && delay < 7 ) {
+
+                while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) && delay < 7 ) {
                     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                         ++delay;
+                        uint32_t & frame = Game::MapsAnimationFrame();
+                        ++frame;
+                        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
                     }
                 }
             }

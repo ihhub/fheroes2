@@ -22,16 +22,23 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdint>
 #include <functional>
+#include <iterator>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
+#include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
-#include "image_tool.h"
+#include "image.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "screen.h"
 #include "spell_book.h"
 #include "text.h"
 #include "tools.h"
@@ -231,11 +238,11 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) ) && _startSpellIndex > 0 ) {
+        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) && _startSpellIndex > 0 ) {
             _startSpellIndex -= spellsPerPage * 2;
             redraw = true;
         }
-        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) )
+        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) )
                   && displayedSpells.size() > ( _startSpellIndex + ( spellsPerPage * 2 ) ) ) {
             _startSpellIndex += spellsPerPage * 2;
             redraw = true;

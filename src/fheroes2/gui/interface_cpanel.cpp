@@ -23,11 +23,13 @@
 
 #include <cassert>
 
-#include "interface_cpanel.h"
 #include "agg_image.h"
 #include "game_interface.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_cpanel.h"
 #include "localevent.h"
+#include "screen.h"
 #include "settings.h"
 
 Interface::ControlPanel::ControlPanel( Basic & basic )
@@ -52,7 +54,7 @@ Interface::ControlPanel::ControlPanel( Basic & basic )
 
 void Interface::ControlPanel::ResetTheme()
 {
-    const int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
+    const int icn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
     _buttons.reset( new Buttons( fheroes2::AGG::GetICN( icn, 4 ), fheroes2::AGG::GetICN( icn, 0 ), fheroes2::AGG::GetICN( icn, 12 ), fheroes2::AGG::GetICN( icn, 10 ),
                                  fheroes2::AGG::GetICN( icn, 8 ) ) );

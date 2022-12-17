@@ -21,14 +21,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "spell.h"
+#include <algorithm>
+#include <cassert>
+#include <vector>
+
 #include "artifact.h"
+#include "artifact_info.h"
 #include "heroes_base.h"
 #include "monster.h"
 #include "race.h"
 #include "rand.h"
-#include "resource.h"
 #include "serialize.h"
+#include "spell.h"
 #include "translations.h"
 
 struct spellstats_t
@@ -131,7 +135,7 @@ spellstats_t spells[] = {
     { "Random 3", 1, 0, 0, 0, 0, "Random 3" },
     { "Random 4", 1, 0, 0, 0, 0, "Random 4" },
     { "Random 5", 1, 0, 0, 0, 0, "Random 5" },
-    { gettext_noop( "Petrification" ), 1, 0, 0, 0, 0,
+    { gettext_noop( "Petrification" ), 1, 0, 0, 66, 0,
       gettext_noop( "Turns the affected creature into stone.  A petrified creature receives half damage from a direct attack." ) },
 };
 

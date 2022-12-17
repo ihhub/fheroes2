@@ -19,8 +19,11 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <cstdint>
+#include <stdexcept>
 
 #include <SDL.h>
+#include <SDL_error.h>
 #include <SDL_version.h>
 
 #include "audio.h"
@@ -120,6 +123,8 @@ namespace
 #else
         SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
 #endif
+
+        LocalEvent::setEventProcessingStates();
 
         return true;
     }

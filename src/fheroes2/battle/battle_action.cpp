@@ -22,22 +22,40 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
-#include <iomanip>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
 #include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_board.h"
 #include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_command.h"
+#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
+#include "color.h"
+#include "heroes.h"
+#include "heroes_base.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "monster.h"
+#include "monster_info.h"
+#include "players.h"
 #include "rand.h"
+#include "resource.h"
 #include "spell.h"
+#include "spell_storage.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -342,6 +360,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, attacker->String() << " to " << defender->String() )
 
         const bool handfighting = Unit::isHandFighting( *attacker, *defender );
+        const bool doubleAttack = attacker->isDoubleAttack();
 
         if ( attacker->isArchers() || handfighting ) {
             defender->SetBlindAnswer( defender->Modes( SP_BLIND ) );
@@ -356,14 +375,21 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
 
                 defender->SetBlindAnswer( false );
 
-                if ( attacker->isValid() && attacker->isDoubleAttack() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+                if ( doubleAttack && attacker->isValid() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "double attack" )
                     BattleProcess( *attacker, *defender, dst, dir );
                 }
             }
 
-            attacker->UpdateDirection();
-            defender->UpdateDirection();
+            // Reflect attacker only if he is alive.
+            if ( attacker->isValid() ) {
+                attacker->UpdateDirection();
+            }
+
+            // Reflect defender only if he is alive.
+            if ( defender->isValid() ) {
+                defender->UpdateDirection();
+            }
         }
         else {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << attacker->String( true ) << " and " << defender->String( true ) )
@@ -488,21 +514,17 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 void Battle::Arena::ApplyActionSkip( Command & cmd )
 {
     const uint32_t uid = cmd.GetValue();
-    const int32_t hard = cmd.GetValue();
 
     Unit * unit = GetTroopUID( uid );
 
     if ( unit && unit->isValid() ) {
         if ( !unit->Modes( TR_MOVED ) ) {
-            if ( hard || unit->Modes( TR_SKIPMOVE ) ) {
-                unit->SetModes( TR_HARDSKIP );
-                unit->SetModes( TR_MOVED );
-            }
+            unit->SetModes( TR_SKIP );
+            unit->SetModes( TR_MOVED );
 
-            unit->SetModes( TR_SKIPMOVE );
-
-            if ( _interface )
+            if ( _interface ) {
                 _interface->RedrawActionSkipStatus( *unit );
+            }
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
         }
@@ -526,9 +548,6 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
     if ( unit ) {
         if ( !unit->Modes( TR_MOVED ) ) {
             unit->SetModes( TR_MOVED );
-
-            if ( unit->Modes( TR_SKIPMOVE ) && _interface )
-                _interface->RedrawActionSkipStatus( *unit );
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
         }
@@ -570,8 +589,7 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
     }
     // Bad morale
     else {
-        // A bad morale event cannot happen when a waiting unit gets its turn
-        if ( !unit->Modes( MORALE_BAD ) || unit->Modes( TR_MOVED | TR_SKIPMOVE ) ) {
+        if ( !unit->Modes( MORALE_BAD ) || unit->Modes( TR_MOVED ) ) {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unit is in an invalid state: " << unit->String( true ) )
 
             return;
@@ -984,11 +1002,15 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
 
             if ( target ) {
                 if ( _interface ) {
-                    _interface->RedrawActionCatapult( target, hit );
+                    _interface->RedrawActionCatapultPart1( target, hit );
                 }
 
                 if ( hit ) {
                     SetCastleTargetValue( target, GetCastleTargetValue( target ) - damage );
+                    if ( _interface ) {
+                        // Continue animating the smoke cloud after changing the "health" of the building.
+                        _interface->RedrawActionCatapultPart2( target );
+                    }
                 }
 
                 DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << target << ", damage: " << damage << ", hit: " << hit )

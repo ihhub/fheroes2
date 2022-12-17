@@ -18,7 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
+#include <string>
+#include <vector>
 
 #include "agg_image.h"
 #include "audio.h"
@@ -27,34 +30,20 @@
 #include "dialog_audio.h"
 #include "game.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
+#include "ui_option_item.h"
 
 namespace
 {
-    void drawOption( const fheroes2::Rect & optionRoi, const fheroes2::Sprite & icon, const std::string & titleText, const std::string & valueText )
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        const fheroes2::FontType smallWhite = fheroes2::FontType::smallWhite();
-
-        const fheroes2::Text title( titleText, smallWhite );
-        const fheroes2::Text value( valueText, smallWhite );
-
-        const int16_t textMaxWidth = 87;
-
-        title.draw( optionRoi.x - 12, optionRoi.y - title.height( textMaxWidth ), textMaxWidth, display );
-        value.draw( optionRoi.x + ( optionRoi.width - value.width() ) / 2, optionRoi.y + optionRoi.height + 4, display );
-
-        fheroes2::Blit( icon, display, optionRoi.x, optionRoi.y );
-    }
-
     void drawDialog( const std::vector<fheroes2::Rect> & rects )
     {
         assert( rects.size() == 4 );
@@ -71,7 +60,7 @@ namespace
             value = _( "off" );
         }
 
-        drawOption( rects[0], musicVolumeIcon, _( "Music" ), value );
+        fheroes2::drawOption( rects[0], musicVolumeIcon, _( "Music" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
 
         // Sound volume.
         const fheroes2::Sprite & soundVolumeOption = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 3 : 2 );
@@ -82,7 +71,7 @@ namespace
             value = _( "off" );
         }
 
-        drawOption( rects[1], soundVolumeOption, _( "Effects" ), value );
+        fheroes2::drawOption( rects[1], soundVolumeOption, _( "Effects" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
 
         // Music Type.
         const MusicSource musicType = conf.MusicType();
@@ -97,7 +86,7 @@ namespace
             value = _( "External" );
         }
 
-        drawOption( rects[2], musicTypeIcon, _( "Music Type" ), value );
+        fheroes2::drawOption( rects[2], musicTypeIcon, _( "Music Type" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
 
         // 3D Audio.
         const bool is3DAudioEnabled = conf.is3DAudioEnabled();
@@ -109,7 +98,7 @@ namespace
             value = _( "Off" );
         }
 
-        drawOption( rects[3], interfaceStateIcon, _( "3D Audio" ), value );
+        fheroes2::drawOption( rects[3], interfaceStateIcon, _( "3D Audio" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 }
 
@@ -120,7 +109,7 @@ namespace Dialog
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.ExtGameEvilInterface();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -231,39 +220,21 @@ namespace Dialog
                 saveMusicType = true;
             }
 
-            const fheroes2::FontType normalYellow = fheroes2::FontType::normalYellow();
-            const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
-
             if ( le.MousePressRight( musicVolumeRoi ) ) {
-                fheroes2::Text header( _( "Music" ), normalYellow );
-                fheroes2::Text body( _( "Toggle ambient music level." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Music" ), _( "Toggle ambient music level." ), 0 );
             }
 
             else if ( le.MousePressRight( soundVolumeRoi ) ) {
-                fheroes2::Text header( _( "Effects" ), normalYellow );
-                fheroes2::Text body( _( "Toggle foreground sounds level." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Effects" ), _( "Toggle foreground sounds level." ), 0 );
             }
             else if ( le.MousePressRight( musicTypeRoi ) ) {
-                fheroes2::Text header( _( "Music Type" ), normalYellow );
-                fheroes2::Text body( _( "Change the type of music." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Music Type" ), _( "Change the type of music." ), 0 );
             }
             else if ( le.MousePressRight( audio3D ) ) {
-                fheroes2::Text header( _( "3D Audio" ), normalYellow );
-                fheroes2::Text body( _( "Toggle 3D effects of foreground sounds." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "3D Audio" ), _( "Toggle 3D effects of foreground sounds." ), 0 );
             }
             else if ( le.MousePressRight( buttonOkay.area() ) ) {
-                fheroes2::Text header( _( "Okay" ), normalYellow );
-                fheroes2::Text body( _( "Exit this menu." ), normalWhite );
-
-                fheroes2::showMessage( header, body, 0 );
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
             if ( saveMusicVolume || saveSoundVolume || saveMusicType ) {

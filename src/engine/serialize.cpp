@@ -26,6 +26,7 @@
 #include <cstring>
 #include <string>
 
+#include "endian_h2.h"
 #include "logging.h"
 #include "serialize.h"
 

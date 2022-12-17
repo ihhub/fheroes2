@@ -23,29 +23,38 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <map>
+#include <utility>
+#include <vector>
 
+#include "army.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "campaign_savedata.h"
+#include "castle.h"
+#include "color.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
 #include "game_credits.h"
-#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
-#include "icn.h"
+#include "heroes.h"
+#include "localevent.h"
 #include "m82.h"
+#include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
-#include "monster.h"
+#include "math_base.h"
 #include "mp2.h"
+#include "mus.h"
+#include "players.h"
 #include "rand.h"
 #include "save_format_version.h"
 #include "settings.h"
-#include "skill.h"
 #include "tools.h"
-#include "translations.h"
 #include "world.h"
 
 namespace
@@ -115,13 +124,18 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
     }
 
     players.clear();
+
     for ( const Player & p : savedPlayers ) {
         Player * player = new Player( p.GetColor() );
+
         player->SetRace( p.GetRace() );
         player->SetControl( p.GetControl() );
         player->SetFriends( p.GetFriends() );
         player->SetName( p.GetName() );
+        player->setHandicapStatus( p.getHandicapStatus() );
+
         players.push_back( player );
+
         Players::Set( Color::GetIndex( p.GetColor() ), player );
     }
 }
@@ -134,13 +148,20 @@ void Game::saveDifficulty( const int difficulty )
 void Game::SavePlayers( const std::string & mapFileName, const Players & players )
 {
     lastMapFileName = mapFileName;
+
     savedPlayers.clear();
+
     for ( const Player * p : players ) {
+        assert( p != nullptr );
+
         Player player( p->GetColor() );
+
         player.SetRace( p->GetRace() );
         player.SetControl( p->GetControl() );
         player.SetFriends( p->GetFriends() );
         player.SetName( p->GetName() );
+        player.setHandicapStatus( p->getHandicapStatus() );
+
         savedPlayers.push_back( player );
     }
 }
@@ -184,13 +205,10 @@ void Game::SetUpdateSoundsOnFocusUpdate( const bool update )
 
 void Game::Init()
 {
-    // default events
-    LocalEvent::SetStateDefaults();
-
     // set global events
     LocalEvent & le = LocalEvent::Get();
-    le.SetGlobalFilterMouseEvents( Cursor::Redraw );
-    le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
+    le.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
+    le.setGlobalKeyDownEventHook( Game::globalKeyDownEvent );
 
     Game::AnimateDelaysInitialize();
 
@@ -469,89 +487,13 @@ int Game::GetActualKingdomColors()
     return Settings::Get().GetPlayers().GetActualColors();
 }
 
-std::string Game::formatMonsterCount( const uint32_t count, const int scoutingLevel, const bool abbreviateNumber /* = false */ )
+std::string Game::formatMonsterCount( const uint32_t count, const bool isDetailedView, const bool abbreviateNumber /* = false */ )
 {
-    switch ( scoutingLevel ) {
-    case Skill::Level::BASIC:
-    case Skill::Level::ADVANCED: {
-        // Always use abbreviated numbers for ranges, otherwise the string might become too long
-        auto formatString = []( const uint32_t min, const uint32_t max ) {
-            const std::string minStr = fheroes2::abbreviateNumber( min );
-            const std::string maxStr = fheroes2::abbreviateNumber( max );
-
-            if ( minStr == maxStr ) {
-                return '~' + minStr;
-            }
-
-            return minStr + '-' + maxStr;
-        };
-
-        const auto [min, max] = Army::SizeRange( count );
-        assert( min <= max );
-
-        // Open range without upper bound
-        if ( max == UINT32_MAX ) {
-            return fheroes2::abbreviateNumber( min ) + '+';
-        }
-
-        // With basic scouting level, the range is divided in half and the part of the range into
-        // which the monster count falls is returned
-        if ( scoutingLevel == Skill::Level::BASIC ) {
-            const uint32_t half = min + ( max - min ) / 2;
-
-            if ( count < half ) {
-                return formatString( min, half );
-            }
-
-            return formatString( half, max );
-        }
-
-        // With advanced scouting level, the range is divided into four parts and the part of the
-        // range into which the monster count falls is returned
-        if ( scoutingLevel == Skill::Level::ADVANCED ) {
-            const uint32_t firstQuarter = min + ( max - min ) / 4;
-
-            if ( count < firstQuarter ) {
-                return formatString( min, firstQuarter );
-            }
-
-            const uint32_t secondQuarter = min + ( max - min ) / 2;
-
-            if ( count < secondQuarter ) {
-                return formatString( firstQuarter, secondQuarter );
-            }
-
-            const uint32_t thirdQuarter = min + ( max - min ) / 2 + ( max - min ) / 4;
-
-            if ( count < thirdQuarter ) {
-                return formatString( secondQuarter, thirdQuarter );
-            }
-
-            return formatString( thirdQuarter, max );
-        }
-
-        // We shouldn't be here
-        assert( 0 );
-
-        break;
-    }
-
-    // With expert scouting level, the exact monster count is returned (possibly in abbreviated form)
-    case Skill::Level::EXPERT:
+    if ( isDetailedView ) {
         return ( abbreviateNumber ? fheroes2::abbreviateNumber( count ) : std::to_string( count ) );
-
-    default:
-        break;
     }
 
-    // Otherwise we just return the approximate string representation (Few, Several, Pack, ...)
     return Army::SizeString( count );
-}
-
-std::string Game::CountThievesGuild( uint32_t monsterCount, int guildCount )
-{
-    assert( guildCount > 0 );
-    return guildCount == 1 ? "???" : Army::SizeString( monsterCount );
 }
 
 void Game::PlayPickupSound()

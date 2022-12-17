@@ -21,16 +21,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "captain.h"
+#include <cassert>
+
 #include "agg_image.h"
+#include "artifact.h"
+#include "artifact_info.h"
+#include "captain.h"
 #include "castle.h"
 #include "icn.h"
 #include "interface_icons.h"
 #include "luck.h"
+#include "math_base.h"
 #include "morale.h"
 #include "race.h"
+#include "spell_book.h"
 
-#include <cassert>
+class Army;
 
 namespace
 {
@@ -182,8 +188,6 @@ void Captain::ActionAfterBattle()
 
 void Captain::ActionPreBattle()
 {
-    SetSpellPoints( GetMaxSpellPoints() );
-
     spell_book.resetState();
 }
 

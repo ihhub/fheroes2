@@ -22,13 +22,13 @@
 #define ENDIAN_H2_H
 
 #if defined( __linux__ )
-#include <endian.h>
+#include <endian.h> // IWYU pragma: export
 
 #elif defined( __FreeBSD__ ) || defined( __OpenBSD__ )
-#include <sys/endian.h>
+#include <sys/endian.h> // IWYU pragma: export
 
-#elif defined( _WIN32 ) || defined( _WIN64 )
-#include <stdlib.h>
+#elif defined( _WIN32 )
+#include <cstdlib>
 
 #define BIG_ENDIAN 4321
 #define LITTLE_ENDIAN 1234
@@ -44,7 +44,7 @@
 #define le32toh( x ) ( x )
 
 #elif defined( __APPLE__ )
-#include <libkern/OSByteOrder.h>
+#include <libkern/OSByteOrder.h> // IWYU pragma: export
 #define htobe16( x ) OSSwapHostToBigInt16( x )
 #define htole16( x ) OSSwapHostToLittleInt16( x )
 #define be16toh( x ) OSSwapBigToHostInt16( x )
@@ -69,7 +69,7 @@
 #define le32toh( x ) ( x )
 
 #elif defined( TARGET_NINTENDO_SWITCH )
-#include <machine/endian.h>
+#include <machine/endian.h> // IWYU pragma: export
 #define LITTLE_ENDIAN _LITTLE_ENDIAN
 #define BIG_ENDIAN _BIG_ENDIAN
 #define BYTE_ORDER _BYTE_ORDER

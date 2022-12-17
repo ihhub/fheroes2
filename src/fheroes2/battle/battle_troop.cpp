@@ -23,26 +23,40 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstring>
-#include <iomanip>
+#include <ostream>
 
 #include "agg_image.h"
+#include "army.h"
+#include "artifact.h"
+#include "artifact_info.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_board.h"
 #include "battle_cell.h"
+#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
+#include "castle.h"
+#include "color.h"
 #include "game_static.h"
+#include "heroes_base.h"
+#include "image.h"
 #include "logging.h"
+#include "m82.h"
+#include "monster.h"
 #include "monster_anim.h"
+#include "monster_info.h"
 #include "morale.h"
+#include "rand.h"
+#include "resource.h"
+#include "skill.h"
 #include "speed.h"
+#include "spell.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
-#include "world.h"
 
 Battle::ModeDuration::ModeDuration( uint32_t mode, uint32_t duration )
     : std::pair<uint32_t, uint32_t>( mode, duration )
@@ -413,10 +427,9 @@ void Battle::Unit::NewTurn()
     if ( isRegenerating() )
         hp = ArmyTroop::GetHitPoints();
 
-    ResetModes( TR_RESPONSED );
+    ResetModes( TR_RESPONDED );
     ResetModes( TR_MOVED );
-    ResetModes( TR_HARDSKIP );
-    ResetModes( TR_SKIPMOVE );
+    ResetModes( TR_SKIP );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
@@ -613,7 +626,7 @@ uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
 
         // clean paralyze or stone magic
         if ( Modes( IS_PARALYZE_MAGIC ) ) {
-            SetModes( TR_RESPONSED );
+            SetModes( TR_RESPONDED );
             SetModes( TR_MOVED );
             ResetModes( IS_PARALYZE_MAGIC );
             affected.RemoveMode( IS_PARALYZE_MAGIC );
@@ -657,9 +670,8 @@ void Battle::Unit::PostKilledAction()
         mirror = nullptr;
     }
 
-    ResetModes( TR_RESPONSED );
-    ResetModes( TR_HARDSKIP );
-    ResetModes( TR_SKIPMOVE );
+    ResetModes( TR_RESPONDED );
+    ResetModes( TR_SKIP );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
@@ -964,12 +976,12 @@ std::string Battle::Unit::String( bool more ) const
 bool Battle::Unit::AllowResponse() const
 {
     return ( !Modes( SP_BLIND ) || blindanswer ) && !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE )
-           && ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) || !Modes( TR_RESPONSED ) );
+           && ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) || !Modes( TR_RESPONDED ) );
 }
 
 void Battle::Unit::SetResponse()
 {
-    SetModes( TR_RESPONSED );
+    SetModes( TR_RESPONDED );
 }
 
 void Battle::Unit::PostAttackAction()
@@ -1078,7 +1090,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
     // Monster special abilities
     auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) );
     if ( foundAbility != abilities.end() ) {
-        if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
+        if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONDED ) ) {
             attackerThreat *= 2;
         }
         else {
@@ -1167,11 +1179,6 @@ payment_t Battle::Unit::GetSurrenderCost() const
 int Battle::Unit::GetControl() const
 {
     return !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
-}
-
-bool Battle::Unit::isArchers() const
-{
-    return ArmyTroop::isArchers() && shots;
 }
 
 void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * hero )
@@ -1519,9 +1526,9 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
         SetPosition( GetPosition() );
 
         if ( Arena::GetInterface() ) {
-            std::string str( _( "%{count} %{name} rise(s) from the dead!" ) );
+            std::string str( _n( "%{count} %{name} rises from the dead!", "%{count} %{name} rise from the dead!", resurrect ) );
             StringReplace( str, "%{count}", resurrect );
-            StringReplace( str, "%{name}", GetName() );
+            StringReplace( str, "%{name}", Monster::GetPluralName( resurrect ) );
             Arena::GetInterface()->SetStatus( str, true );
         }
         break;
@@ -1534,17 +1541,16 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
 
 bool Battle::Unit::isDoubleAttack() const
 {
-    switch ( GetID() ) {
-    case Monster::ELF:
-    case Monster::GRAND_ELF:
-    case Monster::RANGER:
-        return !isHandFighting();
-
-    default:
-        break;
+    if ( isHandFighting() ) {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK );
     }
 
-    return ArmyTroop::isDoubleAttack();
+    // Archers with double shooting ability can only fire a second shot if they have enough ammo
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING ) ) {
+        return GetShots() > 1;
+    }
+
+    return false;
 }
 
 uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const

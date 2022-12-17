@@ -24,17 +24,21 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstdlib>
+#include <ostream>
 
 #include "ai.h"
 #include "difficulty.h"
+#include "direction.h"
 #include "game.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "players.h"
 #include "race.h"
-#include "serialize.h"
+#include "resource.h"
 #include "translations.h"
 #include "world.h"
 
@@ -633,14 +637,4 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
                 world.GetTiles( shadowTile ).UpdateObjectSprite( castleID, 37, 37 * 4, -16 ); // no change in tileset
         }
     }
-}
-
-StreamBase & operator>>( StreamBase & sb, IndexObject & st )
-{
-    return sb >> st.first >> st.second;
-}
-
-StreamBase & operator>>( StreamBase & sb, ObjectColor & st )
-{
-    return sb >> st.first >> st.second;
 }

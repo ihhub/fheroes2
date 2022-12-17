@@ -20,20 +20,51 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <list>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <utility>
+#include <vector>
 
+#include "ai.h"
 #include "ai_normal.h"
-#include "game.h"
+#include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "castle.h"
+#include "color.h"
+#include "game_interface.h"
 #include "game_over.h"
 #include "game_static.h"
+#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
+#include "interface_status.h"
+#include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
 #include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "monster.h"
 #include "morale.h"
 #include "mp2.h"
+#include "pairs.h"
+#include "payment.h"
+#include "players.h"
+#include "rand.h"
+#include "resource.h"
+#include "route.h"
 #include "settings.h"
+#include "skill.h"
+#include "spell.h"
+#include "visit.h"
 #include "world.h"
+#include "world_pathfinding.h"
 
 namespace
 {
@@ -41,13 +72,8 @@ namespace
     {
         assert( castle != nullptr );
 
-        const Heroes * castleGuest = castle->GetHeroes().Guest();
-        if ( castleGuest && castleGuest == world.GetHeroesCondWins() ) {
-            return true;
-        }
-
-        const Heroes * castleGuard = castle->GetHeroes().Guard();
-        if ( castleGuard && castleGuard == world.GetHeroesCondWins() ) {
+        const Heroes * hero = castle->GetHero();
+        if ( hero && hero == world.GetHeroesCondWins() ) {
             return true;
         }
 
@@ -99,7 +125,7 @@ namespace
         }
 
         if ( hero.GetColor() == castle->GetColor() ) {
-            return castle->GetHeroes().Guest() == nullptr;
+            return castle->GetHero() == nullptr;
         }
 
         if ( hero.isFriends( castle->GetColor() ) ) {
@@ -122,12 +148,26 @@ namespace
         return heroArmyStrength > ai.getTargetArmyStrength( tile, objectType ) * targetStrengthMultiplier;
     }
 
-    bool HeroesValidObject( const Heroes & hero, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai, const double heroArmyStrength )
+    bool isArmyValuableToObtain( const Troop & monster, double armyStrengthThreshold, const bool armyHasMonster )
+    {
+        if ( armyHasMonster ) {
+            // Since the army has the same monster the limit must be reduced.
+            armyStrengthThreshold /= 2;
+        }
+
+        // Do not even care about this monster if it brings no visible advantage to the army.
+        return monster.GetStrength() > armyStrengthThreshold;
+    }
+
+    bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai,
+                            const double armyStrengthThreshold )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
 
         if ( !MP2::isActionObject( objectType ) ) {
+            // TODO: add logic to verify if all parts of puzzle are opened and the location is known.
+            // TODO: once it is done, check if the tile does not have a hole. If it does not mark it as a valid object.
             return false;
         }
 
@@ -148,7 +188,10 @@ namespace
         case MP2::OBJ_WATERCHEST:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_BOTTLE:
-            return hero.isShipMaster();
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_TREASURECHEST:
+            return true;
 
         case MP2::OBJ_BUOY:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
@@ -160,14 +203,15 @@ namespace
             return false;
 
         case MP2::OBJ_MAGELLANMAPS:
-            return hero.isShipMaster() && !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
+            // TODO: avoid hardcoded resource values for objects.
+            return !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
 
         case MP2::OBJ_WHIRLPOOL:
             // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
             return false;
 
         case MP2::OBJ_COAST:
-            // Coast is not an action object. If this assertion blows up then something wrong with the logic above.
+            // Coast is not an action object. If this assertion blows up then something is wrong with the logic above.
             assert( 0 );
             return false;
 
@@ -197,34 +241,15 @@ namespace
         case MP2::OBJ_WAGON:
         case MP2::OBJ_LEANTO:
         case MP2::OBJ_SKELETON:
-            return tile.QuantityIsValid();
-
         case MP2::OBJ_MAGICGARDEN:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_WINDMILL:
-            if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.isCaptureObjectProtected() ) {
-                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
-                }
-
-                return true;
-            }
-            else if ( tile.QuantityIsValid() )
-                return true;
-            break;
-
-        case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_CAMPFIRE:
-        case MP2::OBJ_TREASURECHEST:
-            return !hero.isShipMaster();
+            return tile.QuantityIsValid();
 
         case MP2::OBJ_ARTIFACT: {
             const uint32_t variants = tile.QuantityVariant();
 
             if ( hero.IsFullBagArtifacts() )
-                return false;
-
-            if ( hero.isShipMaster() )
                 return false;
 
             // 1,2,3 - 2000g, 2500g+3res, 3000g+5res
@@ -310,8 +335,10 @@ namespace
         case MP2::OBJ_TREEKNOWLEDGE:
             if ( !hero.isVisited( tile ) ) {
                 const ResourceCount & rc = tile.QuantityResourceCount();
-                if ( !rc.isValid() || kingdom.AllowPayment( Funds( rc ) ) )
+                // If the payment is required do not waste all resources from the kingdom. Use them wisely.
+                if ( !rc.isValid() || kingdom.AllowPayment( Funds( rc ) * 5 ) ) {
                     return true;
+                }
             }
             break;
 
@@ -346,7 +373,7 @@ namespace
             break;
         }
 
-        // accept army
+        // Get a free army.
         case MP2::OBJ_WATCHTOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
@@ -355,15 +382,19 @@ namespace
         case MP2::OBJ_GOBLINHUT:
         case MP2::OBJ_DWARFCOTT:
         case MP2::OBJ_HALFLINGHOLE:
-        case MP2::OBJ_THATCHEDHUT: {
-            const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
-        }
-
+        case MP2::OBJ_THATCHEDHUT:
         case MP2::OBJ_PEASANTHUT: {
-            // Peasants are special monsters. They're the weakest! Think twice before getting them.
             const Troop & troop = tile.QuantityTroop();
-            return troop.isValid() && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
+            if ( !troop.isValid() ) {
+                return false;
+            }
+
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
+                return false;
+            }
+
+            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
         }
 
         // recruit army
@@ -375,11 +406,34 @@ namespace
         case MP2::OBJ_AIRALTAR:
         case MP2::OBJ_FIREALTAR:
         case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS: {
+        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_ANCIENTLAMP: {
             const Troop & troop = tile.QuantityTroop();
-            const payment_t & paymentCosts = troop.GetTotalCost();
+            if ( !troop.isValid() ) {
+                return false;
+            }
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || !army.isFullHouse() );
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
+                return false;
+            }
+
+            const payment_t singleMonsterCost = troop.GetCost();
+
+            uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
+            if ( recruitTroopCount <= 0 ) {
+                // We do not have resources to hire even a single creature.
+                return false;
+            }
+
+            const uint32_t availableTroopCount = troop.GetCount();
+            if ( recruitTroopCount > availableTroopCount ) {
+                recruitTroopCount = availableTroopCount;
+            }
+
+            const Troop troopToHire{ troop.GetID(), recruitTroopCount };
+
+            return isArmyValuableToObtain( troopToHire, armyStrengthThreshold, armyHasMonster );
         }
 
         // recruit army (battle)
@@ -389,20 +443,24 @@ namespace
             if ( Color::NONE == tile.QuantityColor() ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
-            else {
-                const Troop & troop = tile.QuantityTroop();
-                const payment_t & paymentCosts = troop.GetTotalCost();
 
-                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
-            }
-        }
-
-        // recruit genie
-        case MP2::OBJ_ANCIENTLAMP: {
             const Troop & troop = tile.QuantityTroop();
-            const payment_t & paymentCosts = troop.GetTotalCost();
+            if ( !troop.isValid() ) {
+                return false;
+            }
 
-            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
+                return false;
+            }
+
+            const payment_t & paymentCosts = troop.GetTotalCost();
+            // TODO: even if AI does not have enough money it might still buy few monsters.
+            if ( !kingdom.AllowPayment( paymentCosts ) ) {
+                return false;
+            }
+
+            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
         }
 
         // upgrade army
@@ -510,10 +568,12 @@ namespace
         case MP2::OBJ_ALCHEMYTOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
             const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
+            if ( cursed == 0 ) {
+                return false;
+            }
 
             const payment_t payment = PaymentConditions::ForAlchemist();
-
-            return cursed > 0 && kingdom.AllowPayment( payment );
+            return kingdom.AllowPayment( payment );
         }
         default:
             // Did you add a new action object but forget to add AI interaction for it?
@@ -554,6 +614,7 @@ namespace
             , _pathfinder( pathfinder )
             , _ai( ai )
             , _heroArmyStrength( hero.GetArmy().GetStrength() )
+            , _armyStrengthThreshold( hero.getAIMininumJoiningArmyStrength() )
         {
             // Do nothing.
         }
@@ -565,7 +626,7 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = HeroesValidObject( _hero, index, _pathfinder, _ai, _heroArmyStrength );
+            const bool valid = HeroesValidObject( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold );
             _validObjects[index] = valid;
             return valid;
         }
@@ -578,6 +639,9 @@ namespace
         // Hero's strength value is valid till any action is done.
         // Since an instance of this class is used only for evaluation of the future movement it is appropriate to cache the strength.
         const double _heroArmyStrength;
+
+        // Army strength threshold is used to decide whether getting extra monsters is useful.
+        const double _armyStrengthThreshold;
 
         std::map<int, bool> _validObjects;
     };
@@ -635,6 +699,7 @@ namespace
     const double freeMonsterUpgradeModifier = 3;
 
     const double dangerousTaskPenalty = 20000.0;
+    const double fogDiscoveryBaseValue = -10000.0;
 
     double ScaleWithDistance( double value, uint32_t distance )
     {
@@ -647,19 +712,21 @@ namespace
     double getFogDiscoveryValue( const Heroes & hero )
     {
         switch ( hero.getAIRole() ) {
+        case Heroes::Role::SCOUT:
+            return 0;
         case Heroes::Role::HUNTER:
-            return -dangerousTaskPenalty;
+            return fogDiscoveryBaseValue;
         case Heroes::Role::COURIER:
         case Heroes::Role::FIGHTER:
         case Heroes::Role::CHAMPION:
-            return -dangerousTaskPenalty * 2;
+            return fogDiscoveryBaseValue * 2;
         default:
             // If you set a new type of a hero you must add the logic here.
             assert( 0 );
             break;
         }
 
-        return -dangerousTaskPenalty;
+        return fogDiscoveryBaseValue;
     }
 }
 
@@ -670,8 +737,8 @@ namespace AI
 
     double Normal::getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
-        // Hunter has almost equal priorities to all kind of objects.
-        assert( hero.getAIRole() == Heroes::Role::HUNTER );
+        // Hunter has almost equal priorities to all kind of objects. Scout posseses the same priorities but has much higher priority to discover fog.
+        assert( ( hero.getAIRole() == Heroes::Role::HUNTER ) || ( hero.getAIRole() == Heroes::Role::SCOUT ) );
 
         // In the future these hardcoded values could be configured by the mod
         // 1 tile distance is 100.0 value approximately
@@ -784,6 +851,11 @@ namespace AI
             return 1000.0 * art.getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectType ) ) {
+            if ( objectType == MP2::OBJ_BOTTLE ) {
+                // A bottle is useless to AI as it contains only a message.
+                return 0;
+            }
+
             return 850.0;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
@@ -1066,6 +1138,11 @@ namespace AI
             return std::max( tile.QuantityGold(), 1000U );
         }
         else if ( MP2::isPickupObject( objectType ) ) {
+            if ( objectType == MP2::OBJ_BOTTLE ) {
+                // A bottle is useless to AI as it contains only a message.
+                return 0;
+            }
+
             return anotherFriendlyHeroPresent ? 100.0 : 500.0;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
@@ -1330,6 +1407,11 @@ namespace AI
             return 1000.0 * art.getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectType ) ) {
+            if ( objectType == MP2::OBJ_BOTTLE ) {
+                // A bottle is useless to AI as it contains only a message.
+                return 0;
+            }
+
             return twoTiles;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
@@ -1423,6 +1505,7 @@ namespace AI
     {
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
+        case Heroes::Role::SCOUT:
             return getHunterObjectValue( hero, index, valueToIgnore, distanceToObject );
         case Heroes::Role::CHAMPION:
         case Heroes::Role::FIGHTER:
@@ -1484,7 +1567,7 @@ namespace AI
         bestTargetValue = lowestPossibleValue;
 
         for ( const Castle * castle : kingdom.GetCastles() ) {
-            if ( !castle || castle->GetHeroes().Guest() != nullptr )
+            if ( !castle || castle->GetHero() != nullptr )
                 continue;
 
             const int currentCastleIndex = castle->GetIndex();
@@ -1537,14 +1620,18 @@ namespace AI
         ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value ) {
-            const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
-            for ( const IndexObject & pair : list ) {
-                if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
-                    const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
-                    if ( extraValue > 0 ) {
-                        // There is no need to reduce the quality of the object even if the path has others.
-                        value += extraValue;
+        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
+                                                                                                            const bool isDimensionDoor ) {
+            if ( !isDimensionDoor ) {
+                // Dimension door path does not include any objects on the way.
+                const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
+                for ( const IndexObject & pair : list ) {
+                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
+                        const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
+                        if ( extraValue > 0 ) {
+                            // There is no need to reduce the quality of the object even if the path has others.
+                            value += extraValue;
+                        }
                     }
                 }
             }
@@ -1587,9 +1674,7 @@ namespace AI
             }
         }
 
-        for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
-            const IndexObject & node = _mapObjects[idx];
-
+        for ( const IndexObject & node : _mapObjects ) {
             // Skip if hero in patrol mode and object outside of reach
             if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance )
                 continue;
@@ -1597,17 +1682,19 @@ namespace AI
             if ( objectValidator.isValid( node.first ) ) {
                 uint32_t dist = _pathfinder.getDistance( node.first );
 
+                bool useDimensionDoor = false;
                 const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
-                if ( dimensionDoorDist && ( !dist || dimensionDoorDist < dist / 2 ) ) {
+                if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
                     dist = dimensionDoorDist;
+                    useDimensionDoor = true;
                 }
 
-                if ( dist == 0 )
+                if ( dist == 0 ) {
                     continue;
+                }
 
                 double value = valueStorage.value( node, dist );
-
-                getObjectValue( node.first, dist, value );
+                getObjectValue( node.first, dist, value, useDimensionDoor );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
@@ -1628,7 +1715,14 @@ namespace AI
         if ( fogDiscoveryTarget >= 0 ) {
             uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
 
-            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue );
+            bool useDimensionDoor = false;
+            const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
+            if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
+                distanceToFogDiscovery = dimensionDoorDist;
+                useDimensionDoor = true;
+            }
+
+            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, useDimensionDoor );
         }
 
         if ( priorityTarget != -1 ) {
@@ -1669,7 +1763,7 @@ namespace AI
         }
     }
 
-    bool Normal::HeroesTurn( VecHeroes & heroes )
+    bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
     {
         if ( heroes.empty() ) {
             // No heroes so we indicate that all heroes moved.
@@ -1686,6 +1780,8 @@ namespace AI
 
         const int monsterStrengthMultiplierCount = 2;
         const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
+
+        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
@@ -1787,12 +1883,24 @@ namespace AI
 
             _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
             _pathfinder.setSpellPointReserve( 0.5 );
+
+            // The size of heroes can be increased if a new hero is released from Jail.
+            const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
+
+            if ( maxHeroCount > 0 ) {
+                // At least one hero still exist in the kingdom.
+                const size_t progressValue = ( endProgressValue - startProgressValue ) * ( maxHeroCount - availableHeroes.size() ) / maxHeroCount + startProgressValue;
+
+                status.DrawAITurnProgress( static_cast<uint32_t>( progressValue ) );
+            }
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
 
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
         _pathfinder.setSpellPointReserve( 0.5 );
+
+        status.DrawAITurnProgress( endProgressValue );
 
         return allHeroesMoved;
     }

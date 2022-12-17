@@ -23,9 +23,10 @@
 
 #include <cassert>
 
-#include "cursor.h"
 #include "agg_image.h"
+#include "cursor.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
 #include "screen.h"
 
@@ -94,14 +95,16 @@ void Cursor::setCustomImage( const fheroes2::Image & image, const fheroes2::Poin
     Move( currentPos.x, currentPos.y );
 }
 
-void Cursor::Redraw( int32_t x, int32_t y )
+fheroes2::Rect Cursor::updateCursorPosition( const int32_t x, const int32_t y )
 {
     if ( fheroes2::cursor().isSoftwareEmulation() ) {
         Cursor::Get().Move( x, y );
         if ( fheroes2::cursor().isVisible() ) {
-            fheroes2::Display::instance().render( { x, y, 1, 1 } );
+            return { x, y, 1, 1 };
         }
     }
+
+    return {};
 }
 
 void Cursor::Move( int32_t x, int32_t y ) const
@@ -115,6 +118,8 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     case Cursor::POINTER:
     case Cursor::POINTER_VIDEO:
     case Cursor::WAR_POINTER:
+        _offset = { 0, 0 };
+        break;
     case Cursor::CURSOR_HERO_FIGHT:
     case Cursor::CURSOR_HERO_FIGHT_2:
     case Cursor::CURSOR_HERO_FIGHT_3:
@@ -123,7 +128,7 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     case Cursor::CURSOR_HERO_FIGHT_6:
     case Cursor::CURSOR_HERO_FIGHT_7:
     case Cursor::CURSOR_HERO_FIGHT_8:
-        _offset = { 0, 0 };
+        _offset = { -10, -11 };
         break;
 
     case Cursor::SCROLL_TOPRIGHT:

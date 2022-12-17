@@ -6,11 +6,14 @@ on:
 jobs:
   translation:
     name: Translation update
+    if: ${{ github.repository == 'ihhub/fheroes2' && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) ) }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    if: ${{ github.repository == 'ihhub/fheroes2' && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) ) }}
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -32,7 +35,6 @@ jobs:
         make -C files/lang -j 2 merge
     - name: Commit changes
       run: |
-        set -o pipefail
         git diff --name-only -z -- files/lang/*.po \
         | xargs -r0 bash -c 'set -e; for NAME in "$@"; do if [[ "$(git diff "-I^\"POT-Creation-Date:[^\"]*\"$" -- "$NAME")" != "" ]]; then git add -- "$NAME"; fi; done' dummy
         if git commit -m "Update translation files"; then git push origin HEAD; echo "CREATE_PR=YES" >> "$GITHUB_ENV"; fi

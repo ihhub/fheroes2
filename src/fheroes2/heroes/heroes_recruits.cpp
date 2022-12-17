@@ -23,9 +23,8 @@
 
 #include <cassert>
 
-#include "game.h"
+#include "heroes.h"
 #include "heroes_recruits.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "world.h"
 

@@ -21,11 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
+#include <list>
+#include <stdexcept>
+#include <utility>
 
 #include "agg.h"
 #include "agg_file.h"
-
+#include "dir.h"
 #include "settings.h"
 #include "tools.h"
 

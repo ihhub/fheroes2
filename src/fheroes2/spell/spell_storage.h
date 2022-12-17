@@ -24,6 +24,7 @@
 #ifndef H2SPELLSTORAGE_H
 #define H2SPELLSTORAGE_H
 
+#include <string>
 #include <vector>
 
 #include "spell.h"

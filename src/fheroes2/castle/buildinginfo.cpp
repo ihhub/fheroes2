@@ -21,6 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
 
 #include "agg_image.h"
@@ -31,15 +32,20 @@
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "localevent.h"
 #include "m82.h"
 #include "monster.h"
 #include "pal.h"
 #include "profit.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "statusbar.h"
+#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 
 namespace
 {
@@ -400,7 +406,7 @@ void BuildingInfo::Redraw() const
 
         // build image
         if ( BUILD_NOTHING == building ) {
-            const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+            const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
             fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 ), display, area.x, area.y );
             return;
         }
@@ -470,7 +476,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
+    const int system = ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM );
 
     // setup cursor
     const CursorRestorer cursorRestorer( buttons, Cursor::POINTER );

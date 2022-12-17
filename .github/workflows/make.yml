@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  make:
     strategy:
       matrix:
         config:
@@ -12,9 +12,9 @@ jobs:
           os: ubuntu-latest
           dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
-          package_name: fheroes2_ubuntu_sdl1.zip
+          package_name: fheroes2_ubuntu_SDL1.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: Ubuntu (Linux) build with SDL 1.2 support (latest commit)
+          release_name: Ubuntu (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-sdl1_dev
         - name: Linux SDL1 Debug
           os: ubuntu-latest
@@ -24,9 +24,9 @@ jobs:
           os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
-          package_name: fheroes2_ubuntu_sdl2.zip
+          package_name: fheroes2_ubuntu_SDL2.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: Ubuntu (Linux) build with SDL 2.0 support (latest commit)
+          release_name: Ubuntu (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux SDL2 Debug
           os: ubuntu-latest
@@ -36,9 +36,9 @@ jobs:
           os: macos-11
           dependencies: sdl sdl_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
-          package_name: fheroes2_macos11_sdl1_x86-64.zip
+          package_name: fheroes2_macos_x86-64_SDL1.zip
           package_files: fheroes2 LICENSE script/macos/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: MacOS build with SDL 1 support (latest commit)
+          release_name: macOS x86-64 build with SDL1 (latest commit)
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
           os: macos-11
@@ -48,9 +48,9 @@ jobs:
           os: macos-11
           dependencies: sdl2 sdl2_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
-          package_name: fheroes2_macos11_sdl2_x86-64.zip
+          package_name: fheroes2_macos_x86-64_SDL2.zip
           package_files: fheroes2 LICENSE script/macos/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: MacOS build with SDL 2 support (latest commit)
+          release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
           os: macos-11
@@ -59,8 +59,11 @@ jobs:
     name: Make (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
@@ -85,7 +88,7 @@ jobs:
       run: |
         cp docs/README.txt script/demo/download_demo_version.sh script/homm2/extract_homm2_resources.sh .
         zip ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' && matrix.config.package_name != '' }}
       with:
         name: ${{ matrix.config.package_name }}
@@ -103,12 +106,15 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-  build-psv:
+  make-psv:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -131,23 +137,6 @@ jobs:
         rm -rf ~/.vitasdk-cache
       env:
         VITASDK: /usr/local/vitasdk
-    - name: Apply temporary patches
-      run: |
-        [[ -d ~/.vitasdk-cache ]] && exit 0
-        cd /usr/local/vitasdk
-        patch --force -p0 << EOF
-        --- arm-vita-eabi/include/SDL2/SDL_atomic.h.orig        2022-08-19 23:51:15.143690708 +0300
-        +++ arm-vita-eabi/include/SDL2/SDL_atomic.h     2022-08-19 23:51:40.734117312 +0300
-        @@ -240,7 +240,7 @@
-         /* "REP NOP" is PAUSE, coded for tools that don't know it by that name. */
-         #if (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
-             #define SDL_CPUPauseInstruction() __asm__ __volatile__("pause\n")  /* Some assemblers can't do REP NOP, so go with PAUSE. */
-        -#elif (defined(__arm__) && __ARM_ARCH__ >= 7) || defined(__aarch64__)
-        +#elif (defined(__arm__) && __ARM_ARCH >= 7) || defined(__aarch64__)
-             #define SDL_CPUPauseInstruction() __asm__ __volatile__("yield" ::: "memory")
-         #elif (defined(__powerpc__) || defined(__powerpc64__))
-             #define SDL_CPUPauseInstruction() __asm__ __volatile__("or 27,27,27");
-        EOF
     - name: Restore Vita SDK from cache
       run: |
         if [[ -d ~/.vitasdk-cache ]]; then
@@ -171,32 +160,35 @@ jobs:
       run: |
         cp docs/README.txt docs/README_PSV.md .
         # Translations and H2D files are already included in fheroes2.vpk
-        zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE changelog.txt README.txt README_PSV.md
-    - uses: actions/upload-artifact@v2
+        zip fheroes2_psv.zip fheroes2.vpk LICENSE changelog.txt README.txt README_PSV.md
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
-        name: fheroes2_psv_sdl2.zip
-        path: fheroes2_psv_sdl2.zip
+        name: fheroes2_psv.zip
+        path: fheroes2_psv.zip
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
-        artifacts: fheroes2_psv_sdl2.zip
+        artifacts: fheroes2_psv.zip
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: PS Vita build with SDL 2.0 support (latest commit)
+        name: PS Vita build (latest commit)
         tag: fheroes2-psv-sdl2_dev
         allowUpdates: true
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-  build-switch:
+  make-switch:
     name: Make (Nintendo Switch)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     container: devkitpro/devkita64:latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -214,20 +206,20 @@ jobs:
     - name: Create package
       run: |
         cp docs/README.txt docs/README_switch.md .
-        zip fheroes2_switch_sdl2.zip fheroes2.nro LICENSE changelog.txt README.txt README_switch.md files/lang/*.mo files/data/*.h2d
-    - uses: actions/upload-artifact@v2
+        zip fheroes2_switch.zip fheroes2.nro LICENSE changelog.txt README.txt README_switch.md files/lang/*.mo files/data/*.h2d
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
-        name: fheroes2_switch_sdl2.zip
-        path: fheroes2_switch_sdl2.zip
+        name: fheroes2_switch.zip
+        path: fheroes2_switch.zip
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
-        artifacts: fheroes2_switch_sdl2.zip
+        artifacts: fheroes2_switch.zip
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Nintendo Switch build with SDL 2.0 support (latest commit)
+        name: Nintendo Switch build (latest commit)
         tag: fheroes2-switch-sdl2_dev
         allowUpdates: true
         artifactErrorsFailBuild: true

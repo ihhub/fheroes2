@@ -26,8 +26,12 @@
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "payment.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
@@ -37,7 +41,7 @@ int Dialog::BuyBoat( bool enable )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+    const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

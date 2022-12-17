@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-10 16:23+0000\n"
-"PO-Revision-Date: 2022-05-10 16:35+0200\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
+"PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "Language: tr\n"
@@ -17,672 +17,834 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"SADECE\n"
+"SAVAŞ"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
+
+msgid "GIFT"
+msgstr "HEDİYE"
+
+msgid "DIFFICULTY"
+msgstr "ZORLUK"
 
 msgid "MIN"
-msgstr ""
+msgstr "MİN"
 
 msgid "Warrior"
-msgstr ""
+msgstr "Savaşçı"
 
 msgid "Builder"
-msgstr ""
+msgstr "İnşaatçı"
 
 msgid "Explorer"
-msgstr ""
+msgstr "Kaşif"
 
 msgid "None"
+msgstr "Hiç"
+
+msgid "Warning"
+msgstr "Uyarı"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
 msgstr ""
+"Bilgisayardan kontrolü yeniden kazanmak istiyor musunuz? Etki bir sonraki "
+"tur'da gerçekleşecek."
 
 msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
+"Birkaç\n"
+"%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
+"Birçok\n"
+"%{monster}"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
+"Bir yığın\n"
+"%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
+"Fazla\n"
+"%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
+"Bir sürü\n"
+"%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
+"Çok fazla\n"
+"%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
+"Bir tabur\n"
+"%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
+"Aşırı fazla\n"
+"%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
+"Bir lejyon\n"
+"%{monster}"
 
 msgid "army|Few"
-msgstr ""
+msgstr "Birkaç"
 
 msgid "army|Several"
-msgstr ""
+msgstr "Birçok"
 
 msgid "army|Pack"
-msgstr ""
+msgstr "Yığın"
 
 msgid "army|Lots"
-msgstr ""
+msgstr "Fazla"
 
 msgid "army|Horde"
-msgstr ""
+msgstr "Sürü"
 
 msgid "army|Throng"
-msgstr ""
+msgstr "Çok Fazla"
 
 msgid "army|Swarm"
-msgstr ""
+msgstr "Tabur"
 
 msgid "army|Zounds"
-msgstr ""
+msgstr "Aşırı"
 
 msgid "army|Legion"
-msgstr ""
+msgstr "Lejyon"
 
 msgid "All %{race} troops +1"
-msgstr ""
+msgstr "Bütün %{race} askerler +1"
 
 msgid "Multiple"
-msgstr ""
+msgstr "Çoklu"
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr ""
+msgstr "Birlikleri %{count} hizala -%{penalty}"
 
 msgid "Some undead in group -1"
-msgstr ""
+msgstr "Gruptaki bazı ölümsüzler -1"
 
 msgid "View %{name}"
-msgstr ""
+msgstr "Görünüm %{name}"
 
 msgid "Move the %{name} "
-msgstr ""
+msgstr "%{name} 'i hareket ettir "
 
 msgid "Move or right click to redistribute %{name}"
-msgstr ""
+msgstr "%{name} Yeniden dağıtmak için oynatın veya sağ tıklayın"
 
 msgid "Combine %{name} armies"
-msgstr ""
+msgstr "%{name} orduları birleştir"
 
 msgid "Exchange %{name2} with %{name}"
-msgstr ""
+msgstr "%{name2} 'ı %{name} ile değiştir"
 
 msgid "Select %{name}"
-msgstr ""
+msgstr "%{name}'ı seç"
 
 msgid "Cannot move last troop"
-msgstr ""
+msgstr "Son birlik hareket ettirilemiyor"
 
 msgid "Move the %{name}"
-msgstr ""
+msgstr "%{name} 'i hareket ettir"
 
 msgid "Set Count"
-msgstr ""
+msgstr "Sayıyı Ayarla"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{name} düşman birliklerinin yarısını yok etti!"
+msgstr[1] "%{name} düşman birliklerinin yarısını yok etti!"
 
 msgid "%{name} has turned off the auto battle"
-msgstr ""
+msgstr "%{name} otomatik savaşı kapattı"
 
 msgid "%{name} has turned on the auto battle"
-msgstr ""
+msgstr "%{name} otomatik savaşı açtı"
 
 msgid "Spell failed!"
-msgstr ""
+msgstr "Büyü başarısız oldu!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
+"Bu savaşta İnkar Alanı Eseri aktif, bütün savaş büyülerini devre dışı "
+"bırakıyor."
 
 msgid "You have already cast a spell this round."
-msgstr ""
+msgstr "Bu turda zaten bir büyü yaptın."
 
 msgid "That spell will affect no one!"
-msgstr ""
+msgstr "Bu büyü hiç kimseyi etkilemeyecek!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr ""
+msgstr "Savaş başına yalnızca bir tür elemental çağırabilirsiniz."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr ""
+msgstr "Kahramanınızın yanında bir Elemental çağırmak için açık bir alan yok."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
-
-msgid "Speed"
-msgstr ""
+"Hendek savunma becerisi herhangi bir birimin savunma becerisi ve hareket "
+"hızını  -%{count} düşürüyor."
 
 msgid "Speed: %{speed}"
-msgstr ""
+msgstr "Hız: %{speed}"
+
+msgid "Speed"
+msgstr "Hız"
 
 msgid "Army Order"
-msgstr ""
-
-msgid "Auto Spell Casting"
-msgstr ""
-
-msgid "Grid"
-msgstr ""
-
-msgid "Shadow Movement"
-msgstr ""
-
-msgid "Shadow Cursor"
-msgstr ""
+msgstr "Ordu Düzeni"
 
 msgid "Off"
-msgstr ""
+msgstr "Kapalı"
 
 msgid "On"
+msgstr "Açık"
+
+msgid "Auto Spell Casting"
+msgstr "Otomatik Büyü Yapma"
+
+msgid "Grid"
+msgstr "Kafes"
+
+msgid "Shadow Movement"
+msgstr "Gölge Hareketi"
+
+msgid "Shadow Cursor"
+msgstr "Gölge İmleci"
+
+msgid "Audio"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+msgid "Damage Info"
 msgstr ""
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Savaş eylemlerinin ve animasyonların hızını ayarlayın."
 
 msgid "Toggle to display army order during the battle."
-msgstr ""
+msgstr "Savaş sırasında ordu düzenini görüntülemek için geçiş yapın."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
+"Otomatik savaş açıkken bilgisayarın sizin için büyü yapıp yapmayacağını "
+"değiştirin.(Not: Bu, bilgisayar oyuncuları için büyü yapmayı hiçbir şekilde "
+"etkilemez ve hızlı savaşı etkilemez.)"
 
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
+"Altıgen ızgarayı aç veya kapat.Altıgen ızgara, kapatılsa bile her zaman "
+"hareketin temelini oluşturur. Bu anahtar yalnızca ızgaranın görünür olup "
+"olmadığını belirler."
 
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
 msgstr ""
+"Yaratıklarınızın nereye hareket edip saldırabileceğini gösteren gölgeleri "
+"açın veya kapatın."
 
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+"Fare imlecinin mevcut altıgen konumunu gösteren bir gölgeyi açın veya "
+"kapatın."
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr "Savaş sırasında ordu düzenini görüntülemek için geçiş yapın."
+
+msgid "Exit this menu."
+msgstr ""
+
+msgid "Okay"
+msgstr ""
 
 msgid "The enemy has surrendered!"
-msgstr ""
+msgstr "Düşman teslim oldu!"
 
 msgid "The enemy has fled!"
-msgstr ""
+msgstr "Düşman kaçtı!"
 
 msgid "A glorious victory!"
-msgstr ""
+msgstr "Şanlı bir zafer!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr ""
+msgstr "Savaş'taki cesareti için %{name} %{exp} tecrübe kazandı."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr ""
+msgstr "Korkak %{name} savaştan kaçtı."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr ""
+msgstr "%{name} düşmana teslim oldu, ve utanç içinde ayrıldı."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr ""
+msgstr "Kuvvetleriniz acı bir yenilgiye uğradı, ve %{name} davanızı terk etti."
 
 msgid "Your force suffer a bitter defeat."
-msgstr ""
+msgstr "Kuvvetleriniz acı bir yenilgiye uğradı."
 
 msgid "Battlefield Casualties"
-msgstr ""
+msgstr "Savaş Alanı Kayıpları"
 
 msgid "Attacker"
-msgstr ""
+msgstr "Saldıran"
 
 msgid "Defender"
-msgstr ""
+msgstr "Savunan"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "%{name}' ye ulaştığınızda,gizemli bir şekilde kayboldu."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Düşman %{name}' ye ulaştığında,gizemli bir şekilde kayboldu."
 
 msgid "You have captured an enemy artifact!"
-msgstr ""
+msgstr "Bir düşman eseri ele geçirdiniz!"
 
 msgid "Necromancy!"
-msgstr ""
+msgstr "Ölü Büyücülüğü!"
 
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
+"Karanlık büyücülük sanatlarını uygulayarak, %{canavar} olarak hizmetinize "
+"geri dönmek için düşmanın ölülerinin %{count} kadarını çağırabilirsiniz."
 
 msgid "%{name} the %{race}"
-msgstr ""
+msgstr "%{name} %{race}"
 
 msgid "Captain of %{name}"
-msgstr ""
+msgstr "%{name} Kaptanı"
 
 msgid "Attack"
-msgstr ""
+msgstr "Saldırı"
 
 msgid "Defense"
-msgstr ""
+msgstr "Savunma"
 
 msgid "Spell Power"
-msgstr ""
+msgstr "Büyü Gücü"
 
 msgid "Knowledge"
-msgstr ""
+msgstr "Bilgi"
 
 msgid "Morale"
-msgstr ""
+msgstr "Moral"
 
 msgid "Luck"
-msgstr ""
+msgstr "Şans"
 
 msgid "Spell Points"
-msgstr ""
+msgstr "Büyü Puanları"
 
 msgid "Hero's Options"
-msgstr ""
+msgstr "Kahramanın Seçenekleri"
 
 msgid "Cast Spell"
-msgstr ""
+msgstr "Yapılan Büyü"
 
 msgid "Retreat"
-msgstr ""
+msgstr "Geri Çekil"
 
 msgid "Surrender"
-msgstr ""
+msgstr "Teslim Olmak"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Vazgeç"
 
 msgid "Hero Screen"
-msgstr ""
+msgstr "Kahraman Ekranı"
 
 msgid "Captain's Options"
-msgstr ""
+msgstr "Kaptanın Seçenekleri"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
+"Bir büyü yap. Her savaş turunda yalnızca bir büyü yapabilirsiniz. Her "
+"yaratık bir sıra aldığında tur sıfırlanır."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
 "for you to recruit again, however, the hero will have only a novice hero's "
 "forces."
 msgstr ""
+"Kahramanını geri çek, yaratıklarını terk et. Kahramanınız tekrar askere "
+"almanız için hazır olacak, ancak kahramanın yalnızca acemi bir kahramanın "
+"güçleri olacak."
 
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
+"Teslim olmak Altın'a mal olur. Ancak fidyeyi öderseniz, kahraman ve hayatta "
+"kalan tüm yaratıkları yeniden askere alınabilir."
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
+"Kahraman hakkında tüm bilgileri görüntülemek için Kahraman Ekranını açın."
 
 msgid "Return to the battle."
-msgstr ""
+msgstr "Savaşa geri dön."
 
 msgid "Not enough gold (%{gold})"
-msgstr ""
+msgstr "Yeterli altın yok (%{gold})"
 
 msgid "%{name} states:"
-msgstr ""
+msgstr "%{name} diyor:"
 
 msgid "Captain of %{name} states:"
-msgstr ""
+msgstr "%{name} Kaptanı diyor:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
+"\"Teslim olmanızı kabul ediyorum ve %{price} altın karşılığında size ve "
+"birliklerinize güvenli geçiş izni veriyorum.\""
 
 msgid "View %{monster} info"
-msgstr ""
+msgstr "%{monster} bilgisini görüntüle"
 
 msgid "Shoot %{monster}"
-msgstr ""
+msgstr "%{monster} vur"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(1 vuruş kaldı)"
+msgstr[1] "(%{count} vuruşlar kaldı)"
 
 msgid "Attack %{monster}"
-msgstr ""
+msgstr "%{monster} Saldır"
 
 msgid "Fly %{monster} here"
-msgstr ""
+msgstr "%{monster} Buraya uçur"
 
 msgid "Move %{monster} here"
-msgstr ""
+msgstr "%{monster} Buraya hareket ettir"
 
 msgid "Turn %{turn}"
-msgstr ""
+msgstr "%{turn} Dön"
 
 msgid "Teleport here"
-msgstr ""
+msgstr "Buraya ışınlan"
 
 msgid "Invalid teleport destination"
-msgstr ""
+msgstr "Geçersiz ışınlanma hedefi"
 
 msgid "Cast %{spell} on %{monster}"
-msgstr ""
+msgstr "%{monster}'a  %{spell} uygula"
 
 msgid "Cast %{spell}"
-msgstr ""
+msgstr "%{spell} uygula"
 
 msgid "Select spell target"
-msgstr ""
+msgstr "Büyü hedefini seç"
 
 msgid "View Ballista info"
-msgstr ""
+msgstr "Mancınık bilgilerini görüntüle"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Mancınık"
 
 msgid "Enable auto combat"
-msgstr ""
+msgstr "Otomatik savacı aç"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Bilgisayarın sizin için savaşmasına izin verir."
 
 msgid "Auto Combat"
-msgstr ""
+msgstr "Otomatik savaş"
 
 msgid "Customize system options"
-msgstr ""
+msgstr "Sistem seçeneklerini özelleştirin"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Savaş ekranını özelleştirmenizi sağlar."
 
 msgid "System Options"
-msgstr ""
-
-msgid "Wait this unit"
-msgstr ""
-
-msgid "Wait"
-msgstr ""
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
+msgstr "Sistem Seçenekleri"
 
 msgid "Skip this unit"
-msgstr ""
+msgstr "Bu birimi geç"
 
 msgid "Skip"
-msgstr ""
+msgstr "Geç"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Mevcut yaratığı atlar. Mevcut yaratığın sırası sona erer ve bir sonraki tura "
+"kadar tekrar hareket edemez."
 
 msgid "View Captain's options"
-msgstr ""
+msgstr "Kaptanın seçeneklerini görüntüle"
 
 msgid "View Hero's options"
-msgstr ""
+msgstr "Kahramanın seçeneklerini görüntüle"
 
 msgid "View opposing Captain"
-msgstr ""
+msgstr "Rakip Kaptanı görüntüle"
 
 msgid "View opposing Hero"
-msgstr ""
+msgstr "Karşı Kahramanı görüntüle"
 
 msgid "Hide logs"
-msgstr ""
+msgstr "Günlükleri gizle"
 
 msgid "Show logs"
-msgstr ""
+msgstr "Günlükleri göster"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Mesaj Çubuğu"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Bireysel canavar eylemlerinin sonuçlarını gösterir."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr ""
+msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "%{name} skip their turn."
-msgstr ""
-
-msgid "%{name} wait their turn."
-msgstr ""
+msgstr "%{name} sırasını geçti."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{attacker} %{damage} hasar verdi."
+msgstr[1] "%{attacker} %{damage} hasar verdi."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 yaratik yok oldu."
+msgstr[1] "%{count} yaratık yok oldu."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 %{defender} yok oldu."
+msgstr[1] "%{count} %{defender} yok oldu."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr ""
-
-msgid "Moved %{monster}"
-msgstr ""
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
+msgstr "%{monster}: [%{src}] buradan [%{dst}] buraya hareket ettirdi."
 
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "%{name} büyüye direndi!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr ""
+msgstr "%{name} %{troop} 'a %{spell}  uyguladı."
 
 msgid "%{name} casts %{spell}."
-msgstr ""
+msgstr "%{name} %{spell} uyguladı."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr ""
+msgstr "%{spell} büyüsü bir ölümsüz canavara %{damage} hasar verdi."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr ""
+msgstr "%{spell} büyüsü bütün ölümsüz canavarlara %{damage} hasar verdi."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr ""
+msgstr "%{spell} büyüsü %{damage} hasar verdi, %{count}  canavarlar yok oldu."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr ""
+msgstr "%{spell} büyüsü %{damage} hasar verdi."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr ""
+msgstr "%{spell}  büyüsü bir yaşayan canavara %{damage} hasar verdi."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr ""
+msgstr "%{spell}  büyüsü bütün yaşayan canavarlara %{damage} hasar verdi."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgstr "%{attacker}' saldırısı %{target}'ı kör etti!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgstr "%{attacker}'ın bakışları %{target}'ı taşa çevirdi!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr ""
+msgstr "%{attacker}'ın laneti %{target}'in üzerine geldi!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgstr "%{attacker}' saldırısı %{target}'ı sakatladı!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "%{attacker} %{target} üzerindeki tüm iyi büyüleri yok etti!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgstr "%{attacker} %{target}'a %{spell} uyguladı!"
 
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "Kötü şans %{attacker} üzerine çöktü."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "İyi şans %{attacker} üzerine parladı."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "Yüksek moral %{monster}'ın tekrar saldırmasını sağlar."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr ""
+msgstr "Düşük moral %{monster}'ın panikten donmasına yol açtı."
 
 msgid "%{tower} does %{damage} damage."
-msgstr ""
+msgstr "%{tower} %{damage} hasar verir."
 
 msgid "The mirror image is created."
-msgstr ""
+msgstr "Ayna görüntüsü oluşturuldu."
 
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "Ayna görüntüsü yok edildi!"
 
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr ""
+msgstr "Otomatik savaşı kesmek istediğine emin misin?"
 
 msgid "Error"
-msgstr ""
+msgstr "Hata"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Yapılacak büyü yok."
 
 msgid "Are you sure you want to retreat?"
-msgstr ""
+msgstr "Geri çekilmek istediğine emin misin?"
 
 msgid "Retreat disabled"
-msgstr ""
+msgstr "Geri çekilme engellendi"
 
 msgid "Surrender disabled"
-msgstr ""
+msgstr "Teslim olma engellendi"
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Hasar: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Hasar: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Yok oldu: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Yok oldu: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
+"Kartal gözlü gözlem sayesinde, %{name} %{spell} sihirli büyüsünü öğrendi."
 
 msgid "Human"
-msgstr ""
+msgstr "İnsan"
 
 msgid "AI"
-msgstr ""
+msgstr "Bilgisayar"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Lütfen başka bir kahraman seç."
 
 msgid "Set Attack Skill"
-msgstr ""
+msgstr "Saldırı Becerisini Ayarla"
 
 msgid "Set Defense Skill"
-msgstr ""
+msgstr "Savunma Becerisini Ayarla"
 
 msgid "Set Power Skill"
-msgstr ""
+msgstr "Güç Becerisini Ayarla"
 
 msgid "Set Knowledge Skill"
-msgstr ""
+msgstr "Bilgi Becerisini Ayarla"
 
 msgid "%{race1} %{name1}"
-msgstr ""
+msgstr "%{race1} %{name1}"
 
 msgid "vs"
-msgstr ""
+msgstr "karşı"
 
 msgid "%{race2} %{name2}"
-msgstr ""
+msgstr "%{race2} %{name2}"
 
 msgid "Monsters"
-msgstr ""
+msgstr "Canavarlar"
 
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 msgid "Left Turret"
-msgstr ""
+msgstr "Sol Taret"
 
 msgid "Right Turret"
-msgstr ""
+msgstr "Sağ Taret"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} %{count} Okçu gücüyle ateş ediyor"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "her biri saldırı becerilerine +%{attack} bonusu ekler."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Ayna görüntüsü yok edildi!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr ""
+"%{artifact} eseri bu savaşta etkin, %{spell} büyüsünü devre dışı bırakıyor."
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Cüce İttifakı"
 
 msgid "Sorceress Guild"
-msgstr ""
+msgstr "Büyücü Loncası"
 
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Ölüm Büyücüleri Loncası"
 
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Dev İttifakı"
 
 msgid "Dwarfbane"
 msgstr ""
 
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Ejderha İttifakı"
 
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Elf İttifakı"
 
 msgid "Kraeger defeated"
 msgstr ""
@@ -691,12 +853,9 @@ msgid "Wayward Son"
 msgstr ""
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Ivan Amca"
 
 msgid "Annexation"
-msgstr ""
-
-msgid "Carator Mines"
 msgstr ""
 
 msgid "Force of Arms"
@@ -705,20 +864,26 @@ msgstr ""
 msgid "Save the Dwarves"
 msgstr ""
 
-msgid "The Crown"
-msgstr ""
-
-msgid "The Gauntlet"
+msgid "Carator Mines"
 msgstr ""
 
 msgid "Turning Point"
-msgstr ""
+msgstr "Dönüm Noktası"
 
-msgid "Betrayal"
+msgid "scenarioName|Defender"
 msgstr ""
 
 msgid "Corlagon's Defense"
 msgstr ""
+
+msgid "The Crown"
+msgstr "Taç"
+
+msgid "The Gauntlet"
+msgstr "Eldiven"
+
+msgid "Betrayal"
+msgstr "İhanet"
 
 msgid "Final Justice"
 msgstr ""
@@ -958,10 +1123,10 @@ msgid "Ivory Gates"
 msgstr ""
 
 msgid "The Elven Lands"
-msgstr ""
+msgstr "Elf Diyarları"
 
 msgid "The Epic Battle"
-msgstr ""
+msgstr "Epik Savaş"
 
 msgid "The Southern War"
 msgstr ""
@@ -1087,7 +1252,7 @@ msgid " bonus"
 msgstr ""
 
 msgid " defeated"
-msgstr ""
+msgstr " yenildi"
 
 msgid " will always run away from your army."
 msgstr ""
@@ -1154,6 +1319,36 @@ msgid ""
 msgstr ""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
+msgstr ""
+
+msgid "campaignBonus|Animate Dead"
+msgstr ""
+
+msgid "campaignBonus|Chain Lightning"
+msgstr ""
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+msgid "campaignBonus|Mirror Image"
+msgstr ""
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+msgid "campaignBonus|Steelskin"
+msgstr ""
+
+msgid "campaignBonus|Summon Earth"
+msgstr ""
+
+msgid "campaignBonus|View Heroes"
 msgstr ""
 
 msgid "campaignBonus|Ballista"
@@ -1346,36 +1541,6 @@ msgid "campaignBonus|Advanced Wisdom"
 msgstr ""
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr ""
-
-msgid "campaignBonus|Animate Dead"
-msgstr ""
-
-msgid "campaignBonus|Chain Lightning"
-msgstr ""
-
-msgid "campaignBonus|Fireblast"
-msgstr ""
-
-msgid "campaignBonus|Mass Curse"
-msgstr ""
-
-msgid "campaignBonus|Mass Haste"
-msgstr ""
-
-msgid "campaignBonus|Mirror Image"
-msgstr ""
-
-msgid "campaignBonus|Resurrect"
-msgstr ""
-
-msgid "campaignBonus|Steelskin"
-msgstr ""
-
-msgid "campaignBonus|Summon Earth"
-msgstr ""
-
-msgid "campaignBonus|View Heroes"
 msgstr ""
 
 msgid ""
@@ -1676,9 +1841,6 @@ msgstr ""
 msgid "Sheltemburg"
 msgstr ""
 
-msgid "Cannot recruit - guest to guard automove error."
-msgstr ""
-
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr ""
 
@@ -1755,7 +1917,7 @@ msgid "Upg. Adobe"
 msgstr ""
 
 msgid "Bridge"
-msgstr ""
+msgstr "Köprü"
 
 msgid "Upg. Bridge"
 msgstr ""
@@ -1794,28 +1956,28 @@ msgid "Dungeon"
 msgstr ""
 
 msgid "Waterfall"
-msgstr ""
+msgstr "Şelale"
 
 msgid "Cave"
-msgstr ""
+msgstr "Mağara"
 
 msgid "Crypt"
 msgstr ""
 
 msgid "Nest"
-msgstr ""
+msgstr "Yuva"
 
 msgid "Maze"
-msgstr ""
+msgstr "Labirent"
 
 msgid "Upg. Maze"
 msgstr ""
 
 msgid "Swamp"
-msgstr ""
+msgstr "Bataklık"
 
 msgid "Green Tower"
-msgstr ""
+msgstr "Yeşil Kule"
 
 msgid "warlock|Red Tower"
 msgstr ""
@@ -1824,7 +1986,7 @@ msgid "Black Tower"
 msgstr ""
 
 msgid "Library"
-msgstr ""
+msgstr "Kütüphane"
 
 msgid "Orchard"
 msgstr ""
@@ -2055,9 +2217,6 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-msgid "Exit this menu."
-msgstr ""
-
 msgid "Click to show next town."
 msgstr ""
 
@@ -2068,14 +2227,6 @@ msgid "Click to show previous town."
 msgstr ""
 
 msgid "Show previous town"
-msgstr ""
-
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
 msgstr ""
 
 msgid "This town may not be upgraded to a castle."
@@ -2091,12 +2242,6 @@ msgid "Exit Town"
 msgstr ""
 
 msgid "Show Income"
-msgstr ""
-
-msgid "Swap Heroes"
-msgstr ""
-
-msgid "Meeting Heroes"
 msgstr ""
 
 msgid "View Hero"
@@ -2332,9 +2477,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr ""
-
 msgid "Build a new ship:"
 msgstr ""
 
@@ -2377,25 +2519,7 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-msgid "Resolution"
-msgstr ""
-
-msgid "Experimental"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "settings"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
-
-msgid "In-game"
+msgid "Graphics"
 msgstr ""
 
 msgid "Black & White"
@@ -2410,57 +2534,16 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Battles"
+msgid "Change the language of the game."
 msgstr ""
 
 msgid "Select Game Language"
 msgstr ""
 
-msgid "Change language of the game."
+msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Select Game Resolution"
-msgstr ""
-
-msgid "Change resolution of the game."
-msgstr ""
-
-msgid "Change audio settings of the game."
-msgstr ""
-
-msgid "Experimental game settings."
-msgstr ""
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check all Hot Keys used in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -2529,16 +2612,56 @@ msgstr ""
 msgid "Gift from %{name}"
 msgstr ""
 
-msgid "Set Guardian"
+msgid "Resolution"
 msgstr ""
 
-msgid "Your army too big!"
+msgid "Fullscreen"
+msgstr ""
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "Hiç"
+
+msgid "FPS"
+msgstr ""
+
+#, fuzzy
+msgid "System Info"
+msgstr "Sistem Seçenekleri"
+
+msgid "Change the resolution of the game."
+msgstr ""
+
+msgid "Select Game Resolution"
+msgstr ""
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
 msgstr ""
 
 msgid "Hot Keys:"
 msgstr ""
 
 msgid "Select Game Language:"
+msgstr ""
+
+msgid "Click to choose the selected language."
 msgstr ""
 
 msgid "%{name} has gained a level."
@@ -2590,10 +2713,10 @@ msgstr ""
 msgid "n/a"
 msgstr ""
 
-msgid "guarded by "
+msgid "guarded by %{count} %{monster}"
 msgstr ""
 
-msgid "guarded by %{count} %{monster}"
+msgid "guarded by "
 msgstr ""
 
 msgid "(available: %{count})"
@@ -2672,6 +2795,9 @@ msgid "Available: %{count}"
 msgstr ""
 
 msgid "Number to buy:"
+msgstr ""
+
+msgid "Select Game Resolution:"
 msgstr ""
 
 msgid "Click to apply the selected resolution."
@@ -2779,6 +2905,9 @@ msgstr ""
 msgid "Map difficulty:"
 msgstr ""
 
+msgid "N"
+msgstr ""
+
 msgid "No maps exist at that size"
 msgstr ""
 
@@ -2863,9 +2992,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "Experimental Game Settings"
-msgstr ""
-
 msgid "Jump"
 msgstr ""
 
@@ -2878,7 +3004,28 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr ""
 
+msgid "Slow"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
 msgid "Scroll Speed"
+msgstr ""
+
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Interface Type"
 msgstr ""
 
 msgid "Hide"
@@ -2888,6 +3035,18 @@ msgid "Show"
 msgstr ""
 
 msgid "Interface"
+msgstr ""
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
+msgid "autoBattle|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -2901,7 +3060,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3000,9 +3165,6 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
-msgid "DIFFICULTY"
-msgstr ""
-
 msgid "Campaign Difficulty"
 msgstr ""
 
@@ -3021,9 +3183,6 @@ msgid ""
 msgstr ""
 
 msgid "Easy"
-msgstr ""
-
-msgid "Normal"
 msgstr ""
 
 msgid "Hard"
@@ -3068,13 +3227,13 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
 msgid "Dev and Support"
-msgstr ""
-
-msgid "Visit us at "
 msgstr ""
 
 msgid "Special Thanks to"
@@ -3083,16 +3242,22 @@ msgstr ""
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3155,9 +3320,6 @@ msgstr ""
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr ""
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3171,9 +3333,6 @@ msgid "Art Lead"
 msgstr ""
 
 msgid "Playtesters"
-msgstr ""
-
-msgid "New World Computing"
 msgstr ""
 
 msgid "Designer"
@@ -3203,7 +3362,10 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
+msgstr ""
+
+msgid "credits|Manual"
 msgstr ""
 
 msgid "German Consultant"
@@ -3231,9 +3393,6 @@ msgid "Campaign"
 msgstr ""
 
 msgid "View High Scores for Campaigns."
-msgstr ""
-
-msgid "Warning"
 msgstr ""
 
 msgid "This file contains a save with an invalid game type."
@@ -3296,6 +3455,9 @@ msgstr ""
 msgid "Greetings!"
 msgstr ""
 
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
@@ -3311,17 +3473,7 @@ msgid "door"
 msgstr ""
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-
-msgid "F4"
-msgstr ""
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
@@ -3486,6 +3638,20 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
 
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Capture the castle '%{name}'."
 msgstr ""
 
@@ -3522,9 +3688,6 @@ msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
 
 msgid "%{color} player has been vanquished!"
-msgstr ""
-
-msgid "Do you wish to continue the game?"
 msgstr ""
 
 msgid "Scenario:"
@@ -3615,6 +3778,11 @@ msgid "%{color} player's turn."
 msgstr ""
 
 msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -3695,6 +3863,11 @@ msgid "Try looking on land!!!"
 msgstr ""
 
 msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
+
+msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
 
@@ -3740,9 +3913,6 @@ msgid ""
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
 
-msgid "Necroman"
-msgstr ""
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -3755,7 +3925,41 @@ msgid ""
 "and/or heroes not of their primary alignment."
 msgstr ""
 
+msgid "Handicap"
+msgstr ""
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 msgid "%{color} player"
+msgstr ""
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
 msgstr ""
 
 msgid "View %{skill} Info"
@@ -3810,6 +4014,18 @@ msgid "Swedish"
 msgstr ""
 
 msgid "Portuguese"
+msgstr ""
+
+msgid "Turkish"
+msgstr "Türkçe"
+
+msgid "Dutch"
+msgstr ""
+
+msgid "Hungarian"
+msgstr ""
+
+msgid "Danish"
 msgstr ""
 
 msgid ", FPS: "
@@ -4169,11 +4385,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4182,6 +4393,11 @@ msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 
 msgid ""
@@ -5673,6 +5889,35 @@ msgstr ""
 msgid "race|Neutral"
 msgstr ""
 
+msgid "doubleLined|Knight"
+msgstr ""
+
+msgid "doubleLined|Barbarian"
+msgstr ""
+
+msgid "doubleLined|Sorceress"
+msgstr ""
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+msgid "doubleLinedRace|Random"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
 msgid "speed|Standing"
 msgstr ""
 
@@ -5703,7 +5948,49 @@ msgstr ""
 msgid "speed|Instant"
 msgstr ""
 
-msgid "week|PLAGUE"
+msgid "week|Squirrel"
+msgstr ""
+
+msgid "week|Rabbit"
+msgstr ""
+
+msgid "week|Gopher"
+msgstr ""
+
+msgid "week|Badger"
+msgstr ""
+
+msgid "week|Rat"
+msgstr ""
+
+msgid "week|Eagle"
+msgstr ""
+
+msgid "week|Weasel"
+msgstr ""
+
+msgid "week|Raven"
+msgstr ""
+
+msgid "week|Mongoose"
+msgstr ""
+
+msgid "week|Dog"
+msgstr ""
+
+msgid "week|Aardvark"
+msgstr ""
+
+msgid "week|Lizard"
+msgstr ""
+
+msgid "week|Tortoise"
+msgstr ""
+
+msgid "week|Hedgehog"
+msgstr ""
+
+msgid "week|Condor"
 msgstr ""
 
 msgid "week|Ant"
@@ -5736,43 +6023,10 @@ msgstr ""
 msgid "week|Beetle"
 msgstr ""
 
-msgid "week|Squirrel"
+msgid "week|PLAGUE"
 msgstr ""
 
-msgid "week|Rabbit"
-msgstr ""
-
-msgid "week|Gopher"
-msgstr ""
-
-msgid "week|Badger"
-msgstr ""
-
-msgid "week|Eagle"
-msgstr ""
-
-msgid "week|Weasel"
-msgstr ""
-
-msgid "week|Raven"
-msgstr ""
-
-msgid "week|Mongoose"
-msgstr ""
-
-msgid "week|Aardvark"
-msgstr ""
-
-msgid "week|Lizard"
-msgstr ""
-
-msgid "week|Tortoise"
-msgstr ""
-
-msgid "week|Hedgehog"
-msgstr ""
-
-msgid "week|Condor"
+msgid "week|Unnamed"
 msgstr ""
 
 msgid "Desert"
@@ -8373,54 +8627,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "castle: allow guardians"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "battle: deterministic events"
-msgstr ""
-
-msgid "game: show system info"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
-msgstr ""
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr ""
 
@@ -8431,28 +8637,28 @@ msgid "north-west"
 msgstr ""
 
 msgid "north"
-msgstr ""
+msgstr "kuzey"
 
 msgid "north-east"
-msgstr ""
+msgstr "kuzey-doğu"
 
 msgid "west"
-msgstr ""
+msgstr "batı"
 
 msgid "center"
-msgstr ""
+msgstr "merkez"
 
 msgid "east"
-msgstr ""
+msgstr "doğu"
 
 msgid "south-west"
-msgstr ""
+msgstr "güney-batı"
 
 msgid "south"
-msgstr ""
+msgstr "güney"
 
 msgid "south-east"
-msgstr ""
+msgstr "güney-doğu"
 
 msgid "The truth is out there."
 msgstr ""
@@ -8480,3 +8686,19 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Wait this unit"
+#~ msgstr "Bu birimi bekle"
+
+#~ msgid "Wait"
+#~ msgstr "Bekle"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Mevcut yaratığı bekletir. Mevcut yaratık, diğer tüm yaratıkların sırası "
+#~ "gelene kadar sırasını erteler."
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} sırasını bekledi."

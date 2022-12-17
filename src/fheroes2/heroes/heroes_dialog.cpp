@@ -21,21 +21,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <functional>
+#include <memory>
 #include <string>
 
 #include "agg_image.h"
+#include "army.h"
 #include "army_bar.h"
+#include "artifact.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "statusbar.h"
+#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -48,7 +60,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // fade
-    if ( fade && Settings::ExtGameUseFade() )
+    if ( fade && Settings::isFadeEffectEnabled() )
         fheroes2::FadeDisplay();
 
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -68,7 +80,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
-    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
 
     // portrait
     dst_pt.x = cur_pt.x + 49;
@@ -288,13 +300,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // prev hero
         if ( buttonPrevHero.isEnabled()
-             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
             return Dialog::PREV;
         }
 
         // next hero
         if ( buttonNextHero.isEnabled()
-             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
             return Dialog::NEXT;
         }
 
@@ -332,7 +344,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // right info
-        if ( !readonly && le.MousePressRight( portPos ) ) {
+        if ( le.MousePressRight( portPos ) ) {
             Dialog::QuickInfo( *this );
         }
         else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {

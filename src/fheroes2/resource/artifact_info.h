@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include <cassert>
+// TODO: this header is redundant here, but detected as required by IWYU with older compilers
+// IWYU pragma: no_include <algorithm>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -166,12 +167,14 @@ namespace fheroes2
         int32_t value;
     };
 
+    // This is the only bonus type which is cumulative even for several copies of the same artifact.
     bool isBonusCumulative( const ArtifactBonusType bonus );
 
     bool isBonusMultiplied( const ArtifactBonusType bonus );
 
     bool isBonusUnique( const ArtifactBonusType bonus );
 
+    // This is the only curse type which is cumulative even for several copies of the same artifact.
     bool isCurseCumulative( const ArtifactCurseType curse );
 
     bool isCurseMultiplied( const ArtifactCurseType curse );

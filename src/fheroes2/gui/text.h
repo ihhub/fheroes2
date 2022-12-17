@@ -24,10 +24,13 @@
 #ifndef H2TEXT_H
 #define H2TEXT_H
 
+#include <cstddef>
 #include <cstdint>
 #include <list>
 #include <string>
 
+#include "image.h"
+#include "math_base.h"
 #include "screen.h"
 
 namespace Font

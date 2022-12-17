@@ -21,19 +21,47 @@
 #ifndef H2AI_NORMAL_H
 #define H2AI_NORMAL_H
 
-#include "ai.h"
-#include "kingdom.h"
-#include "world_pathfinding.h"
-
+#include <cassert>
+#include <cstdint>
 #include <map>
 #include <set>
+#include <utility>
+#include <vector>
 
-struct KingdomCastles;
+#include "ai.h"
+#include "color.h"
+#include "mp2.h"
+#include "pairs.h"
+#include "world_pathfinding.h"
+
+class Army;
+class Castle;
+class Funds;
+class HeroBase;
+class Heroes;
+class Kingdom;
+class Spell;
 
 namespace Battle
 {
+    class Actions;
+    class Arena;
+    class Unit;
     class Units;
 }
+
+namespace Maps
+{
+    class Tiles;
+}
+
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
+
+struct VecHeroes;
+struct KingdomCastles;
 
 namespace AI
 {
@@ -223,8 +251,8 @@ namespace AI
         // In order to avoid extra computations during AI turn it is important to keep cache of monster strength but update it when an action on a monster is taken.
         std::map<int32_t, double> _neutralMonsterStrengthCache;
 
-        void CastleTurn( Castle & castle, bool defensive );
-        bool HeroesTurn( VecHeroes & heroes );
+        void CastleTurn( Castle & castle, const bool defensiveStrategy );
+        bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
 
         double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;

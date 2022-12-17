@@ -21,6 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstdint>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -29,8 +32,13 @@
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "players.h"
 #include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
@@ -38,6 +46,7 @@
 #include "ui_button.h"
 #include "ui_kingdom.h"
 #include "ui_scrollbar.h"
+#include "ui_tool.h"
 #include "world.h"
 
 namespace
@@ -134,14 +143,14 @@ public:
     explicit TradeWindowGUI( const fheroes2::Rect & rt )
         : pos_rt( rt )
         , back( fheroes2::Display::instance() )
-        , tradpostIcnId( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )
+        , tradpostIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST )
         , _singlePlayer( false )
     {
         Settings & conf = Settings::Get();
 
         back.update( rt.x - 5, rt.y + 15, rt.width + 10, 160 );
 
-        buttonGift.setICNInfo( conf.ExtGameEvilInterface() ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
+        buttonGift.setICNInfo( conf.isEvilInterfaceEnabled() ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
         buttonTrade.setICNInfo( tradpostIcnId, 15, 16 );
         buttonLeft.setICNInfo( tradpostIcnId, 3, 4 );
         buttonRight.setICNInfo( tradpostIcnId, 5, 6 );
@@ -322,7 +331,7 @@ void TradeWindowGUI::RedrawInfoBuySell( uint32_t count_sell, uint32_t count_buy,
 void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int tradpost = Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST;
+    const int tradpost = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
     const std::string & header = fromTradingPost ? _( "Trading Post" ) : _( "Marketplace" );
 
     // setup cursor
@@ -470,6 +479,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 count_sell = 0;
                 count_buy = 0;
 
+                cursorFrom.show();
                 cursorFrom.setPosition( rect_from.x - 2, rect_from.y - 2 );
 
                 if ( resourceTo ) {
@@ -503,6 +513,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 count_sell = 0;
                 count_buy = 0;
 
+                cursorTo.show();
                 cursorTo.setPosition( rect_to.x - 2, rect_to.y - 2 );
 
                 if ( resourceFrom ) {
@@ -616,7 +627,7 @@ void RedrawResourceSprite( const fheroes2::Image & sf, int32_t px, int32_t py, i
 
 void RedrawFromResource( const fheroes2::Point & pt, const Funds & rs )
 {
-    const int tradpost = Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST;
+    const int tradpost = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
 
     // wood
     RedrawResourceSprite( fheroes2::AGG::GetICN( tradpost, 7 ), pt.x, pt.y, rs.wood );
@@ -650,7 +661,7 @@ void RedrawResourceSprite2( const fheroes2::Image & sf, int32_t px, int32_t py, 
 
 void RedrawToResource( const fheroes2::Point & pt, bool showcost, const Kingdom & kingdom, bool tradingPost, int from_resource )
 {
-    const int tradpost = Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST;
+    const int tradpost = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
 
     // wood
     RedrawResourceSprite2( fheroes2::AGG::GetICN( tradpost, 7 ), pt.x, pt.y, showcost, kingdom, from_resource, Resource::WOOD, tradingPost );

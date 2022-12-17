@@ -21,6 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
@@ -34,16 +41,21 @@
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
+#include "game_mode.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
 #include "logging.h"
+#include "math_base.h"
 #include "mus.h"
+#include "screen.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 
 namespace
@@ -75,7 +87,8 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES ) << " to show High Scores." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CREDITS ) << " to show Credits." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to Quit the game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_QUIT ) << " or " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL )
+                       << " to Quit the game." )
     }
 }
 
@@ -186,13 +199,18 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     if ( isFirstGameRun ) {
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
-        Dialog::Message( _( "Greetings!" ),
-                         _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before starting the game please choose game resolution." ), Font::BIG,
-                         Dialog::OK );
-
-        bool isResolutionChanged = Dialog::SelectResolution();
-        if ( isResolutionChanged ) {
-            fheroes2::drawMainMenuScreen();
+        if ( System::isHandheldDevice() ) {
+            // Handheld devices should use the minimal game's resolution. Users on handheld devices aren't asked to choose resolution.
+            fheroes2::showStandardTextMessage( _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!" ), Dialog::OK );
+        }
+        else {
+            fheroes2::showStandardTextMessage(
+                _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before starting the game please choose game resolution." ),
+                Dialog::OK );
+            const bool isResolutionChanged = Dialog::SelectResolution();
+            if ( isResolutionChanged ) {
+                fheroes2::drawMainMenuScreen();
+            }
         }
 
         fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
@@ -200,9 +218,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         fheroes2::MultiFontText body;
         body.add( { _( "You can always change game resolution by clicking on the " ), fheroes2::FontType::normalWhite() } );
         body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " on the left side of main menu.\n\nTo switch between windowed and full screen modes\npress " ), fheroes2::FontType::normalWhite() } );
-        body.add( { _( "F4" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " key on the keyboard.\n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( " on the left side of main menu or by clicking on the configuration button. \n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::OK );
 
@@ -314,7 +330,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             return fheroes2::GameMode::CREDITS;
         }
 
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 return fheroes2::GameMode::QUIT_GAME;
             }

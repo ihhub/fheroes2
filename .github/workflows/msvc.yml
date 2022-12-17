@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  msvc:
     strategy:
       matrix:
         config:
@@ -13,28 +13,28 @@ jobs:
           build_config: Release-SDL1
           deploy_config: SDL1
           package_name: fheroes2_windows_x86_SDL1
-          release_name: Windows x86 build with SDL1 support (latest commit)
+          release_name: Windows x86 build with SDL1 (latest commit)
           release_tag: fheroes2-windows-x86-SDL1
         - name: SDL1 x64
           platform: x64
           build_config: Release-SDL1
           deploy_config: SDL1
           package_name: fheroes2_windows_x64_SDL1
-          release_name: Windows x64 build with SDL1 support (latest commit)
+          release_name: Windows x64 build with SDL1 (latest commit)
           release_tag: fheroes2-windows-x64-SDL1
         - name: SDL2 x86
           platform: x86
           build_config: Release-SDL2
           deploy_config: SDL2
           package_name: fheroes2_windows_x86_SDL2
-          release_name: Windows x86 build with SDL2 support (latest commit)
+          release_name: Windows x86 build with SDL2 (latest commit)
           release_tag: fheroes2-windows-x86-SDL2
         - name: SDL2 x64
           platform: x64
           build_config: Release-SDL2
           deploy_config: SDL2
           package_name: fheroes2_windows_x64_SDL2
-          release_name: Windows x64 build with SDL2 support (latest commit)
+          release_name: Windows x64 build with SDL2 (latest commit)
           release_tag: fheroes2-windows-x64-SDL2
     name: MSVC (${{ matrix.config.name }})
     runs-on: windows-2019
@@ -43,15 +43,32 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies and cygwin
+    - uses: actions/checkout@v3
+    - name: Install dependencies
       run: |
         script/windows/install_packages.bat
-        choco.exe install make gettext-devel -y --source cygwin
-    - uses: microsoft/setup-msbuild@v1
+    - name: Install MSYS2 tools
+      run: |
+        C:\msys64\usr\bin\pacman.exe -S --noconfirm --noprogressbar gettext-devel
+      shell: cmd
+    - name: Download MSVC Redistributable package
+      run: |
+        mkdir .vcredist && ^
+        C:\msys64\usr\bin\wget.exe -O .vcredist/vcredist.exe "%VCREDIST_URL%"
+      shell: cmd
+      env:
+        # Permalink URL from https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+        VCREDIST_URL: https://aka.ms/vs/17/release/vc_redist.${{ matrix.config.platform }}.exe
+    - name: Verify MSVC Redistributable package
+      run: |
+        "%SIGNTOOL_DIR%\signtool.exe" verify /v /d /all /pa /r "Microsoft Root Certificate Authority" .vcredist\vcredist.exe
+      shell: cmd
+      env:
+        SIGNTOOL_DIR: C:\Program Files (x86)\Windows Kits\10\bin\x64
     - name: Generate version information
       run: |
         echo "FHEROES2_APP_VERSION=$(cat version.txt)" >> "$GITHUB_ENV"
+    - uses: microsoft/setup-msbuild@v1
     - name: Build
       run: |
         MSBuild.exe fheroes2-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
@@ -63,7 +80,8 @@ jobs:
         MSBuild.exe bin2txt-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
     - name: Generate translations
       run: |
-        C:\tools\cygwin\bin\bash.exe -l -c ^"cd ""$GITHUB_WORKSPACE"" ^&^& make -C files/lang -j 2^"
+        set PATH=C:\msys64\usr\bin;%PATH%
+        C:\msys64\usr\bin\make.exe -C files/lang -j 2
       shell: cmd
     - name: Create Inno Setup package
       run: |
@@ -82,13 +100,13 @@ jobs:
         fi
       env:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: ${{ matrix.config.package_name }}_installer.exe
         path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}_installer.exe
         if-no-files-found: error
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: ${{ matrix.config.package_name }}.zip

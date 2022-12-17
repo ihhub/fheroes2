@@ -22,7 +22,9 @@
  ***************************************************************************/
 
 #include "ground.h"
+
 #include "maps_tiles.h"
+#include "skill.h"
 #include "translations.h"
 
 const char * Maps::Ground::String( int ground )

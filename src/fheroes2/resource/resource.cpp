@@ -22,12 +22,22 @@
  ***************************************************************************/
 
 #include "resource.h"
+
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <memory>
+#include <ostream>
+#include <utility>
+#include <vector>
+
 #include "agg_image.h"
 #include "icn.h"
 #include "image.h"
 #include "logging.h"
 #include "pairs.h"
 #include "rand.h"
+#include "screen.h"
 #include "serialize.h"
 #include "text.h"
 #include "translations.h"
@@ -197,7 +207,6 @@ Funds & Funds::operator=( const cost_t & cost )
     return *this;
 }
 
-// operator Funds +
 Funds Funds::operator+( const Funds & pm ) const
 {
     Funds res;
@@ -226,7 +235,6 @@ Funds & Funds::operator+=( const Funds & pm )
     return *this;
 }
 
-// operator Funds -
 Funds Funds::operator-( const Funds & pm ) const
 {
     Funds res;
@@ -238,6 +246,26 @@ Funds Funds::operator-( const Funds & pm ) const
     res.crystal = crystal - pm.crystal;
     res.gems = gems - pm.gems;
     res.gold = gold - pm.gold;
+
+    return res;
+}
+
+Funds Funds::operator/( const int32_t div ) const
+{
+    if ( div == 0 ) {
+        assert( 0 );
+        return {};
+    }
+
+    Funds res;
+
+    res.wood = wood / div;
+    res.mercury = mercury / div;
+    res.ore = ore / div;
+    res.sulfur = sulfur / div;
+    res.crystal = crystal / div;
+    res.gems = gems / div;
+    res.gold = gold / div;
 
     return res;
 }
@@ -277,7 +305,6 @@ int Funds::getLowestQuotient( const Funds & divisor ) const
     return result;
 }
 
-// operator Funds *
 Funds Funds::operator*( uint32_t mul ) const
 {
     Funds res;
@@ -306,7 +333,24 @@ Funds & Funds::operator*=( uint32_t mul )
     return *this;
 }
 
-// operator Funds >=
+Funds & Funds::operator/=( const int32_t div )
+{
+    if ( div == 0 ) {
+        assert( 0 );
+        return *this;
+    }
+
+    wood /= div;
+    mercury /= div;
+    ore /= div;
+    sulfur /= div;
+    crystal /= div;
+    gems /= div;
+    gold /= div;
+
+    return *this;
+}
+
 bool Funds::operator>=( const Funds & pm ) const
 {
     return wood >= pm.wood && mercury >= pm.mercury && ore >= pm.ore && sulfur >= pm.sulfur && crystal >= pm.crystal && gems >= pm.gems && gold >= pm.gold;
@@ -557,7 +601,7 @@ void RedrawResourceSprite( const fheroes2::Image & sf, const fheroes2::Point & p
 
 void Resource::BoxSprite::Redraw() const
 {
-    std::vector<std::pair<int32_t, uint32_t> > valueVsSprite;
+    std::vector<std::pair<int32_t, uint32_t>> valueVsSprite;
 
     if ( rs.wood )
         valueVsSprite.emplace_back( rs.wood, 0 );

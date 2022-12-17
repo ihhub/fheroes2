@@ -24,6 +24,7 @@
 #ifndef H2BATTLE_GRAVEYARD_H
 #define H2BATTLE_GRAVEYARD_H
 
+#include <algorithm>
 #include <cstdint>
 #include <map>
 #include <vector>

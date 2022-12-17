@@ -27,6 +27,7 @@
 #include <string>
 
 #include "image.h"
+#include "math_base.h"
 
 namespace fheroes2
 {

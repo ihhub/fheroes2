@@ -38,11 +38,15 @@ namespace fheroes2
         // All languages listed below are original to fheroes2.
         Belarusian,
         Bulgarian,
+        Danish,
+        Dutch,
+        Hungarian,
         Norwegian,
         Portuguese,
         Romanian,
         Spanish,
         Swedish,
+        Turkish,
         Ukrainian
     };
 
@@ -75,4 +79,6 @@ namespace fheroes2
     SupportedLanguage getLanguageFromAbbreviation( const std::string & abbreviation );
 
     void updateAlphabet( const std::string & abbreviation );
+
+    SupportedLanguage getCurrentLanguage();
 }

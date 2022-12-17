@@ -19,6 +19,11 @@
  ***************************************************************************/
 
 #include "ui_button.h"
+
+#include <algorithm>
+#include <cassert>
+#include <utility>
+
 #include "agg_image.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -26,8 +31,6 @@
 #include "localevent.h"
 #include "pal.h"
 #include "settings.h"
-
-#include <cassert>
 
 namespace fheroes2
 {
@@ -229,7 +232,7 @@ namespace fheroes2
 
     ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )
     {
-        const int icnId = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+        const int icnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
 
         Point offset;
 

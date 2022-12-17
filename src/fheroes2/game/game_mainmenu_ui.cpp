@@ -19,8 +19,12 @@
  ***************************************************************************/
 
 #include "game_mainmenu_ui.h"
+
+#include <cstdint>
+
 #include "agg_image.h"
 #include "icn.h"
+#include "image.h"
 #include "screen.h"
 
 namespace fheroes2

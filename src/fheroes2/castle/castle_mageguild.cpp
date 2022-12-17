@@ -22,6 +22,8 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdint>
+#include <iterator>
 #include <vector>
 
 #include "agg_image.h"
@@ -29,13 +31,21 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
 #include "mageguild.h"
+#include "math_base.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell.h"
+#include "spell_storage.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 
@@ -141,7 +151,7 @@ bool RowSpells::QueueEventProcessing()
     return 0 <= index;
 }
 
-void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
+void Castle::OpenMageGuild( const Heroes * hero ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -155,7 +165,7 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
 
@@ -170,10 +180,12 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
 
     // text bar
     Text text;
-    if ( ( !heroes.Guard() || !heroes.Guard()->HaveSpellBook() ) && ( !heroes.Guest() || !heroes.Guest()->HaveSpellBook() ) )
+    if ( hero == nullptr || !hero->HaveSpellBook() ) {
         text.Set( _( "The above spells are available here." ), Font::BIG );
-    else
+    }
+    else {
         text.Set( _( "The above spells have been added to your book." ), Font::BIG );
+    }
     text.Blit( cur_pt.x + 280 - text.w() / 2, cur_pt.y + 463 );
 
     const int level = GetLevelMageGuild();

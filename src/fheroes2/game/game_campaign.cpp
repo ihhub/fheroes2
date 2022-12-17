@@ -18,10 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
+#include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "campaign_data.h"
@@ -33,18 +46,34 @@
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "game_video.h"
+#include "game_video_type.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mus.h"
 #include "pal.h"
+#include "players.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_campaign.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -501,6 +530,62 @@ namespace
         }
     }
 
+    Heroes * getHeroToApplyBonusOrAwards( const Campaign::ScenarioInfoId & scenarioInfoId, const Kingdom & kingdom )
+    {
+        {
+            static const std::map<std::pair<int, int>, int> targetHeroes = { // Final Justice
+                                                                             { { Campaign::ROLAND_CAMPAIGN, 9 }, Heroes::ROLAND },
+                                                                             // Apocalypse
+                                                                             { { Campaign::ARCHIBALD_CAMPAIGN, 10 }, Heroes::ARCHIBALD },
+                                                                             // Blood is Thicker
+                                                                             { { Campaign::VOYAGE_HOME_CAMPAIGN, 3 }, Heroes::GALLAVANT } };
+
+            const auto iter = targetHeroes.find( { scenarioInfoId.campaignId, scenarioInfoId.scenarioId } );
+            if ( iter != targetHeroes.end() ) {
+                // The "special" kingdom heroes may have the ID of another hero, but a custom name and portrait,
+                // so the search should be performed by the portrait ID
+                for ( Heroes * hero : kingdom.GetHeroes() ) {
+                    assert( hero != nullptr );
+
+                    if ( hero->getPortraitId() == iter->second ) {
+                        return hero;
+                    }
+                }
+
+                DEBUG_LOG( DBG_GAME, DBG_WARN,
+                           "the hero to whom bonuses or awards should be applied has not been found"
+                               << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
+            }
+        }
+
+        {
+            static const std::map<std::pair<int, int>, int> targetRaces = { // Defender
+                                                                            { { Campaign::ROLAND_CAMPAIGN, 5 }, Race::SORC },
+                                                                            // The Wayward Son
+                                                                            { { Campaign::DESCENDANTS_CAMPAIGN, 2 }, Race::SORC },
+                                                                            // The Epic Battle
+                                                                            { { Campaign::DESCENDANTS_CAMPAIGN, 7 }, Race::SORC } };
+
+            const auto iter = targetRaces.find( { scenarioInfoId.campaignId, scenarioInfoId.scenarioId } );
+            if ( iter != targetRaces.end() ) {
+                for ( Heroes * hero : kingdom.GetHeroes() ) {
+                    assert( hero != nullptr );
+
+                    if ( hero->GetRace() == iter->second ) {
+                        return hero;
+                    }
+                }
+
+                DEBUG_LOG( DBG_GAME, DBG_WARN,
+                           "the hero to whom bonuses or awards should be applied has not been found"
+                               << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
+            }
+        }
+
+        // By default, bonuses and awards are applied to the best hero of the kingdom
+        return kingdom.GetBestHero();
+    }
+
     void SetScenarioBonus( const Campaign::ScenarioInfoId & scenarioInfoId, const Campaign::ScenarioBonusData & scenarioBonus )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
@@ -509,60 +594,89 @@ namespace
                 continue;
             }
 
-            if ( !player->isControlHuman() )
+            if ( !player->isControlHuman() ) {
                 continue;
+            }
 
             Kingdom & kingdom = world.GetKingdom( player->GetColor() );
-            Heroes * bestHero = kingdom.GetBestHero();
 
             switch ( scenarioBonus._type ) {
             case Campaign::ScenarioBonusData::RESOURCES:
                 kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
+
                 break;
             case Campaign::ScenarioBonusData::ARTIFACT: {
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->PickupArtifact( Artifact( scenarioBonus._subType ) );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    Artifact artifact( scenarioBonus._subType );
+
+                    if ( artifact == Artifact::SPELL_SCROLL ) {
+                        artifact.SetSpell( scenarioBonus._artifactSpellId );
+                    }
+
+                    hero->PickupArtifact( artifact );
                 }
+
                 break;
             }
-            case Campaign::ScenarioBonusData::TROOP:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
+            case Campaign::ScenarioBonusData::TROOP: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
                 }
+
                 break;
+            }
             case Campaign::ScenarioBonusData::SPELL: {
-                KingdomHeroes & heroes = kingdom.GetHeroes();
-                assert( !heroes.empty() );
-                if ( !heroes.empty() ) {
-                    // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
-                    heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->AppendSpellToBook( scenarioBonus._subType, true );
                 }
+
                 break;
             }
             case Campaign::ScenarioBonusData::STARTING_RACE:
                 Players::SetPlayerRace( player->GetColor(), scenarioBonus._subType );
+
                 break;
-            case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    setHeroAndArmyBonus( bestHero, scenarioInfoId );
+            case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    setHeroAndArmyBonus( hero, scenarioInfoId );
                 }
+
                 break;
-            case Campaign::ScenarioBonusData::SKILL_PRIMARY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    for ( int32_t i = 0; i < scenarioBonus._amount; ++i )
-                        bestHero->IncreasePrimarySkill( scenarioBonus._subType );
+            }
+            case Campaign::ScenarioBonusData::SKILL_PRIMARY: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    for ( int32_t i = 0; i < scenarioBonus._amount; ++i ) {
+                        hero->IncreasePrimarySkill( scenarioBonus._subType );
+                    }
                 }
+
                 break;
-            case Campaign::ScenarioBonusData::SKILL_SECONDARY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+            }
+            case Campaign::ScenarioBonusData::SKILL_SECONDARY: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
                 }
+
                 break;
+            }
             default:
                 assert( 0 );
             }
@@ -577,32 +691,57 @@ namespace
         Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
-            if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID )
+            if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID ) {
                 continue;
+            }
 
             switch ( awards[i]._type ) {
-            case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT:
-                humanKingdom.GetBestHero()->PickupArtifact( Artifact( awards[i]._subType ) );
+            case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->PickupArtifact( Artifact( awards[i]._subType ) );
+                }
+
                 break;
-            case Campaign::CampaignAwardData::TYPE_GET_SPELL:
-                humanKingdom.GetBestHero()->AppendSpellToBook( awards[i]._subType, true );
+            }
+            case Campaign::CampaignAwardData::TYPE_GET_SPELL: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->AppendSpellToBook( awards[i]._subType, true );
+                }
+
                 break;
+            }
             case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
                 for ( const Player * player : sortedPlayers ) {
-                    Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+                    const Kingdom & kingdom = world.GetKingdom( player->GetColor() );
                     const KingdomHeroes & heroes = kingdom.GetHeroes();
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
+                        assert( heroes[j] != nullptr );
+
                         if ( heroes[j]->GetID() == awards[i]._subType ) {
                             heroes[j]->SetFreeman( Battle::RESULT_LOSS );
                             break;
                         }
                     }
                 }
+
                 break;
-            case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES:
-                replaceArmy( humanKingdom.GetBestHero()->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+            case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    replaceArmy( hero->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+                }
+
                 break;
+            }
             default:
                 break;
             }
@@ -723,63 +862,29 @@ namespace
         }
     }
 
-    fheroes2::ButtonSprite getDifficultyButton( const int campaignId, const int buttonIconID, const fheroes2::Point & offset )
+    fheroes2::ButtonSprite getDifficultyButton( const int campaignId, const fheroes2::Point & offset )
     {
-        fheroes2::FontColor fontColor{ fheroes2::FontColor::WHITE };
-        fheroes2::Rect fillingReleasedArea;
-        fheroes2::Rect fillingPressedArea;
-        fheroes2::Point releasedTextPosition;
-        fheroes2::Point pressedTextPosition;
+        int icnId = ICN::UNKNOWN;
 
         switch ( campaignId ) {
         case Campaign::ROLAND_CAMPAIGN:
-            fontColor = fheroes2::FontColor::WHITE;
-            fillingReleasedArea = { 13, 4, 128, 16 };
-            fillingPressedArea = { 13, 5, 128, 16 };
-            releasedTextPosition = { 12, 5 };
-            pressedTextPosition = { 11, 6 };
+            icnId = ICN::BUTTON_DIFFICULTY_ROLAND;
             break;
         case Campaign::ARCHIBALD_CAMPAIGN:
-            fontColor = fheroes2::FontColor::GRAY;
-            fillingReleasedArea = { 13, 4, 128, 14 };
-            fillingPressedArea = { 13, 6, 128, 14 };
-            releasedTextPosition = { 10, 5 };
-            pressedTextPosition = { 11, 6 };
+            icnId = ICN::BUTTON_DIFFICULTY_ARCHIBALD;
             break;
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
         case Campaign::DESCENDANTS_CAMPAIGN:
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            fontColor = fheroes2::FontColor::GRAY;
-            fillingReleasedArea = { 7, 5, 125, 14 };
-            fillingPressedArea = { 6, 6, 128, 14 };
-            releasedTextPosition = { 4, 5 };
-            pressedTextPosition = { 4, 5 };
+            icnId = ICN::BUTTON_DIFFICULTY_POL;
             break;
         default:
             // Implementing a new campaign? Add a new case!
             assert( 0 );
             break;
         }
-
-        fheroes2::Sprite releasedImage = fheroes2::AGG::GetICN( buttonIconID, 0 );
-        fheroes2::Sprite pressedImage = fheroes2::AGG::GetICN( buttonIconID, 1 );
-
-        fheroes2::Fill( releasedImage, fillingReleasedArea.x, fillingReleasedArea.y, fillingReleasedArea.width, fillingReleasedArea.height,
-                        releasedImage.image()[fillingReleasedArea.x + fillingReleasedArea.y * releasedImage.width()] );
-        fheroes2::Fill( pressedImage, fillingPressedArea.x, fillingPressedArea.y, fillingPressedArea.width, fillingPressedArea.height,
-                        pressedImage.image()[fillingPressedArea.x + fillingPressedArea.y * pressedImage.width()] );
-
-        const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fontColor };
-        const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fontColor };
-
-        const char * translatedText = _( "DIFFICULTY" );
-        const char * text = fheroes2::isFontAvailable( translatedText, releasedFont ) ? translatedText : "DIFFICULTY";
-
-        fheroes2::Text( text, releasedFont ).draw( releasedTextPosition.x, releasedTextPosition.y, releasedImage );
-        fheroes2::Text( text, pressedFont ).draw( pressedTextPosition.x, pressedTextPosition.y, pressedImage );
-
-        return fheroes2::ButtonSprite( offset.x, offset.y, releasedImage, pressedImage );
+        return fheroes2::ButtonSprite( offset.x, offset.y, fheroes2::AGG::GetICN( icnId, 0 ), fheroes2::AGG::GetICN( icnId, 1 ) );
     }
 
     int32_t setCampaignDifficulty( int32_t currentDifficulty, const bool isSelectionAllowed )
@@ -787,7 +892,7 @@ namespace
         const fheroes2::StandardWindow frameborder( 234, 270 );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
-        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int buttonIcnId = isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN;
         const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
 
@@ -868,7 +973,7 @@ namespace
         }
 
         const int32_t textWidth = windowRoi.width - 16;
-        const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 140 };
+        const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 135 };
 
         fheroes2::Text description( currentDescription, fheroes2::FontType::normalWhite() );
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
@@ -998,7 +1103,7 @@ namespace
         }
 
         if ( allowToRestart ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to Restart scenario." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_RESTART_SCENARIO ) << " to Restart scenario." )
         }
         else {
             COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to Start scenario." )
@@ -1181,8 +1286,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::Button buttonOk( top.x + 367, top.y + 431, buttonIconID, 4, 5 );
     fheroes2::Button buttonCancel( top.x + 511, top.y + 431, buttonIconID, 6, 7 );
 
-    // Difficulty button does not present in the original assets so we need to generate it.
-    fheroes2::ButtonSprite buttonDifficulty = getDifficultyButton( chosenCampaignID, buttonIconID, top + fheroes2::Point( 195, 431 ) );
+    // Difficulty button is not present in the original assets so we need to generate it.
+    fheroes2::ButtonSprite buttonDifficulty = getDifficultyButton( chosenCampaignID, top + fheroes2::Point( 195, 431 ) );
 
     // create scenario bonus choice buttons
     fheroes2::ButtonGroup buttonChoices;
@@ -1215,24 +1320,31 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     buttonDifficulty.draw();
 
     const bool isDifficultySelectionAllowed = campaignSaveData.isStarting() && !allowToRestart;
-
-    if ( !scenario.isMapFilePresent() ) {
-        buttonOk.disable();
-    }
+    const bool isMapPresent = scenario.isMapFilePresent();
 
     if ( allowToRestart ) {
         buttonOk.disable();
         buttonOk.hide();
+
+        if ( !isMapPresent ) {
+            buttonRestart.disable();
+        }
+
         buttonRestart.draw();
     }
     else {
         buttonRestart.disable();
         buttonRestart.hide();
+
+        if ( !isMapPresent ) {
+            buttonOk.disable();
+        }
+
         buttonOk.draw();
     }
 
     // Only one button can be enabled at the time.
-    assert( buttonRestart.isHidden() != buttonOk.isHidden() && buttonRestart.isDisabled() != buttonOk.isDisabled() );
+    assert( buttonRestart.isHidden() != buttonOk.isHidden() );
 
     buttonCancel.draw();
 
@@ -1319,7 +1431,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         displayScenarioAwardsPopupWindow( campaignSaveData, top ) || displayScenarioBonusPopupWindow( scenario, top );
 
-        const bool restartButtonClicked = ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) );
+        const bool restartButtonClicked
+            = ( buttonRestart.isEnabled() && ( le.MouseClickLeft( buttonRestart.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_RESTART_SCENARIO ) ) );
 
         if ( le.MousePressRight( buttonCancel.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Cancel" ), fheroes2::FontType::normalYellow() ),
@@ -1347,7 +1460,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 continue;
             }
 
-            const Maps::FileInfo mapInfo = scenario.loadMap();
+            Maps::FileInfo mapInfo = scenario.loadMap();
+            Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
+
             conf.SetCurrentFileInfo( mapInfo );
 
             // starting faction scenario bonus has to be called before players.SetStartGame()
@@ -1363,13 +1478,15 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
-            if ( Settings::ExtGameUseFade() )
+            if ( Settings::isFadeEffectEnabled() )
                 fheroes2::FadeDisplay();
 
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
             if ( !world.LoadMapMP2( mapInfo.file ) ) {
                 Dialog::Message( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ), Font::BIG, Dialog::OK );
+
+                // TODO: find a way to restore world for the current game after a failure.
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
             }
@@ -1391,6 +1508,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
             playPreviosScenarioVideo();
             playCurrentScenarioVideo();
+
+            restorer.restore();
+            display.render();
 
             playCampaignMusic( chosenCampaignID );
         }

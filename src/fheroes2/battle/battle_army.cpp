@@ -22,15 +22,22 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
+#include <cstddef>
 
+#include "army_troop.h"
+#include "artifact.h"
+#include "artifact_info.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_cell.h"
 #include "battle_troop.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "monster_anim.h"
-#include "settings.h"
-#include "speed.h"
+#include "payment.h"
+#include "skill.h"
 
 namespace
 {
@@ -51,11 +58,6 @@ Battle::Units::Units( const Units & units, const bool filter )
     if ( filter ) {
         erase( std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ), end() );
     }
-}
-
-void Battle::Units::SortSlowest()
-{
-    std::stable_sort( begin(), end(), Army::SlowestTroop );
 }
 
 void Battle::Units::SortFastest()

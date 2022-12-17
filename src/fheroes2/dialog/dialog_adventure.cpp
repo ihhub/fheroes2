@@ -25,8 +25,12 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
@@ -35,7 +39,7 @@
 int Dialog::AdventureOptions( bool enabledig )
 {
     // preload
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int apanbkg = isEvilInterface ? ICN::APANBKGE : ICN::APANBKG;
     const int apanel = isEvilInterface ? ICN::APANELE : ICN::APANEL;
 
@@ -55,7 +59,7 @@ int Dialog::AdventureOptions( bool enabledig )
 
     fheroes2::Button buttonWorld( rb.x + 62, rb.y + 30, apanel, 0, 1 );
     fheroes2::Button buttonPuzzle( rb.x + 195, rb.y + 30, apanel, 2, 3 );
-    fheroes2::Button buttonInfo( rb.x + 62, rb.y + 107, apanel, 4, 5 );
+    fheroes2::Button buttonInfo( rb.x + 62, rb.y + 107, isEvilInterface ? ICN::BUTTON_INFO_EVIL : ICN::BUTTON_INFO_GOOD, 0, 1 );
     fheroes2::Button buttonDig( rb.x + 195, rb.y + 107, apanel, 6, 7 );
     fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, apanel, 8, 9 );
 
@@ -80,19 +84,19 @@ int Dialog::AdventureOptions( bool enabledig )
         le.MousePressLeft( buttonDig.area() ) ? buttonDig.drawOnPress() : buttonDig.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonWorld.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::VIEW_WORLD ) ) {
+        if ( le.MouseClickLeft( buttonWorld.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
             result = Dialog::WORLD;
             break;
         }
-        if ( le.MouseClickLeft( buttonPuzzle.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::PUZZLE_MAP ) ) {
+        if ( le.MouseClickLeft( buttonPuzzle.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_PUZZLE_MAP ) ) {
             result = Dialog::PUZZLE;
             break;
         }
-        if ( le.MouseClickLeft( buttonInfo.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::SCENARIO_INFORMATION ) ) {
+        if ( le.MouseClickLeft( buttonInfo.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
             result = Dialog::INFO;
             break;
         }
-        if ( ( le.MouseClickLeft( buttonDig.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DIG_ARTIFACT ) ) && buttonDig.isEnabled() ) {
+        if ( ( le.MouseClickLeft( buttonDig.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) ) && buttonDig.isEnabled() ) {
             result = Dialog::DIG;
             break;
         }

@@ -24,9 +24,13 @@
 #ifndef H2ARMYTROOP_H
 #define H2ARMYTROOP_H
 
+#include <cstdint>
 #include <string>
 
 #include "monster.h"
+#include "payment.h"
+
+class StreamBase;
 
 class Army;
 

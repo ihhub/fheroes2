@@ -21,31 +21,44 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "interface_gamearea.h"
+#include <algorithm>
+#include <cassert>
+#include <cstdlib>
+#include <deque>
+#include <list>
+#include <map>
+#include <ostream>
+#include <type_traits>
 
 #include "agg_image.h"
+#include "castle.h"
 #include "cursor.h"
-#include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
+#include "gamedefs.h"
 #include "ground.h"
+#include "heroes.h"
 #include "icn.h"
+#include "interface_cpanel.h"
+#include "interface_gamearea.h"
+#include "localevent.h"
 #include "logging.h"
 #include "maps.h"
+#include "maps_tiles.h"
 #include "pal.h"
+#include "players.h"
 #include "route.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "world.h"
-
-#include <cassert>
-#include <deque>
 
 namespace
 {
+    const int32_t minimalRequiredDraggingMovement = 10;
+
     struct RenderObjectInfo
     {
-        RenderObjectInfo() = default;
-
         RenderObjectInfo( fheroes2::Sprite in, const uint8_t value )
             : image( std::move( in ) )
             , alphaValue( value )
@@ -316,6 +329,8 @@ Interface::GameArea::GameArea( Basic & basic )
     , _prevIndexPos( 0 )
     , scrollDirection( 0 )
     , updateCursor( false )
+    , _mouseDraggingInitiated( false )
+    , _mouseDraggingMovement( false )
 {
     // Do nothing.
 }
@@ -479,6 +494,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 populateHeroObjectInfo( tileUnfit, tile.GetHeroes() );
 
+                // Update object type as it could be an object under the hero.
+                objectType = tile.GetObject( false );
+
                 break;
             }
 
@@ -516,10 +534,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             default:
                 break;
-            }
-
-            if ( objectType == MP2::OBJ_HEROES ) {
-                objectType = tile.GetObject( false );
             }
 
             switch ( objectType ) {
@@ -692,8 +706,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         const fheroes2::Rect extendedVisibleRoi{ tileROI.x - 1, tileROI.y - 1, tileROI.width + 2, tileROI.height + 2 };
 
         for ( ; currentStep != path.end(); ++currentStep ) {
-            const int32_t from = currentStep->GetIndex();
-            const fheroes2::Point & mp = Maps::GetPoint( from );
+            const int32_t tileIndex = currentStep->GetIndex();
+            const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
 
             ++nextStep;
             --greenColorSteps;
@@ -705,16 +719,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             uint32_t routeSpriteIndex = 0;
             if ( nextStep != path.end() ) {
-                const Maps::Tiles & tileFrom = world.GetTiles( from );
-                const Maps::Tiles & tileTo = world.GetTiles( nextStep->GetIndex() );
-                uint32_t cost = 0;
-
-                if ( tileFrom.isRoad() && tileTo.isRoad() ) {
-                    cost = Maps::Ground::roadPenalty;
-                }
-                else {
-                    cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
-                }
+                const Maps::Tiles & tile = world.GetTiles( tileIndex );
+                const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, pathfinding );
 
                 routeSpriteIndex = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
             }
@@ -732,7 +738,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( flag & LEVEL_ALL ) {
             for ( int32_t y = minY; y < maxY; ++y ) {
                 for ( int32_t x = minX; x < maxX; ++x ) {
-                    world.GetTiles( x, y ).RedrawPassable( dst, *this );
+                    world.GetTiles( x, y ).RedrawPassable( dst, friendColors, *this );
                 }
             }
         }
@@ -766,7 +772,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
 void Interface::GameArea::Scroll()
 {
-    const int32_t shift = 2 << Settings::Get().ScrollSpeed();
+    const int32_t scrollSpeed = Settings::Get().ScrollSpeed();
+    if ( scrollSpeed == SCROLL_SPEED_NONE ) {
+        // No scrolling.
+        scrollDirection = SCROLL_NONE;
+        return;
+    }
+
+    const int32_t shift = 2 << scrollSpeed;
     fheroes2::Point offset;
 
     if ( scrollDirection & SCROLL_LEFT ) {
@@ -785,7 +798,7 @@ void Interface::GameArea::Scroll()
 
     ShiftCenter( offset );
 
-    scrollDirection = 0;
+    scrollDirection = SCROLL_NONE;
 }
 
 void Interface::GameArea::SetRedraw() const
@@ -796,7 +809,7 @@ void Interface::GameArea::SetRedraw() const
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Ultimate artifact is not found on index " << index )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Ultimate artifact is not found on index " << index )
         return fheroes2::Image();
     }
 
@@ -881,15 +894,35 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
-void Interface::GameArea::QueueEventProcessing()
+void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
 
+    if ( !le.MousePressLeft() ) {
+        _mouseDraggingInitiated = false;
+        _mouseDraggingMovement = false;
+    }
+    else if ( !_mouseDraggingInitiated ) {
+        _mouseDraggingInitiated = true;
+        _startMouseDragPosition = mp;
+    }
+    else if ( ( std::abs( _startMouseDragPosition.x - mp.x ) > minimalRequiredDraggingMovement
+                || std::abs( _startMouseDragPosition.y - mp.y ) > minimalRequiredDraggingMovement )
+              && isCursorOverGamearea ) {
+        _mouseDraggingMovement = true;
+    }
+
+    if ( _mouseDraggingMovement ) {
+        SetCenterInPixels( getCurrentCenterInPixels() + _startMouseDragPosition - mp );
+        _startMouseDragPosition = mp;
+        return;
+    }
+
     int32_t index = GetValidTileIdFromPoint( mp );
 
-    // change cusor if need
-    if ( updateCursor || index != _prevIndexPos ) {
+    // change cursor if need
+    if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
         Cursor::Get().SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
@@ -900,7 +933,7 @@ void Interface::GameArea::QueueEventProcessing()
         return;
 
     const Settings & conf = Settings::Get();
-    if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
 
     const fheroes2::Point tileOffset = _topLeftTileOffset + mp - _windowROI.getPosition();

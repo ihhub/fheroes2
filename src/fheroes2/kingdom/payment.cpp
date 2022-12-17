@@ -21,9 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "buildinginfo.h"
 #include "payment.h"
-#include "settings.h"
+#include "buildinginfo.h"
 
 payment_t PaymentConditions::BuyBuilding( int race, uint32_t build )
 {

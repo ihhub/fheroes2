@@ -21,13 +21,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -77,7 +85,7 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int system = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
     // setup cursor

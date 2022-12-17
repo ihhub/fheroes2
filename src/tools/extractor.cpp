@@ -21,7 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdint>
+#include <cstdlib>
 #include <iostream>
+#include <map>
+#include <string>
+#include <utility>
 #include <vector>
 
 #include "serialize.h"
@@ -30,7 +35,7 @@
 
 #define FATSIZENAME 15
 
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
 #undef main
 #endif
 
@@ -79,7 +84,7 @@ int main( int argc, char ** argv )
 
     for ( std::map<std::string, aggfat_t>::const_iterator it = maps.begin(); it != maps.end(); ++it ) {
         const aggfat_t & fat = ( *it ).second;
-        const std::string & fn = System::ConcatePath( argv[2], ( *it ).first );
+        const std::string & fn = System::concatPath( argv[2], ( *it ).first );
         sf1.seek( fat.offset );
         std::vector<uint8_t> buf = sf1.getRaw( fat.size );
 

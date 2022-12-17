@@ -22,23 +22,33 @@
  ***************************************************************************/
 
 #include <array>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <functional>
+#include <memory>
+#include <string>
+#include <vector>
 
 #include "agg_image.h"
-#include "campaign_data.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "highscores.h"
 #include "icn.h"
-#ifdef WITH_DEBUG
-#include "logging.h"
-#endif
+#include "image.h"
+#include "localevent.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
+#include "monster.h"
 #include "monster_anim.h"
-#include "mus.h"
+#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "translations.h"
@@ -47,7 +57,10 @@
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
-#include "zzlib.h"
+
+#ifdef WITH_DEBUG
+#include "logging.h"
+#endif
 
 namespace
 {
@@ -56,20 +69,26 @@ namespace
     const int32_t initialHighScoreEntryOffsetY = 72;
     const int32_t highScoreEntryStepY = 40;
 
-    void RedrawHighScoresStandard( int32_t ox, int32_t oy, uint32_t & monsterAnimationFrameId, const int32_t selectedScoreIndex )
+    const int32_t playerNameOffset = 88;
+    const int32_t scenarioNameOffset = 244;
+    const int32_t dayCountOffset = 403;
+    const int32_t ratingOffset = 484;
+
+    void redrawHighScoreScreen( int32_t offsetX, int32_t offsetY, uint32_t & monsterAnimationFrameId, const int32_t selectedScoreIndex,
+                                const std::vector<fheroes2::HighscoreData> & highScores, const uint32_t titleImageIndex,
+                                const std::function<Monster( size_t )> & getMonster )
     {
         ++monsterAnimationFrameId;
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // Draw background.
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, ox, oy );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 6 ), display, ox + 50, oy + 31 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, offsetX, offsetY );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, titleImageIndex ), display, offsetX + 50, offsetY + 31 );
 
         fheroes2::Text text( "", fheroes2::FontType::normalWhite() );
 
         const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
-        const std::vector<fheroes2::HighscoreData> & highScores = highScoreDataContainer.getHighScoresStandard();
 
         int32_t scoreIndex = 0;
 
@@ -77,76 +96,67 @@ namespace
             const fheroes2::FontType font = ( scoreIndex == selectedScoreIndex ) ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
             text.set( data.playerName, font );
-            text.draw( ox + 88, oy + initialHighScoreEntryOffsetY, display );
+            text.draw( offsetX + playerNameOffset, offsetY + initialHighScoreEntryOffsetY, display );
 
             text.set( data.scenarioName, font );
-            text.draw( ox + 244, oy + initialHighScoreEntryOffsetY, display );
+            text.draw( offsetX + scenarioNameOffset, offsetY + initialHighScoreEntryOffsetY, display );
 
             text.set( std::to_string( data.dayCount ), font );
-            text.draw( ox + 403, oy + initialHighScoreEntryOffsetY, display );
+            text.draw( offsetX + dayCountOffset, offsetY + initialHighScoreEntryOffsetY, display );
 
             text.set( std::to_string( data.rating ), font );
-            text.draw( ox + 484, oy + initialHighScoreEntryOffsetY, display );
+            text.draw( offsetX + ratingOffset, offsetY + initialHighScoreEntryOffsetY, display );
 
-            const Monster monster = fheroes2::HighScoreDataContainer::getMonsterByRating( data.rating );
+            const Monster monster = getMonster( data.rating );
             const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
             const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
-            fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
+            fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + offsetX + 554, baseMonsterSprite.y() + offsetY + 91 );
 
             // Animation frame of a creature is based on its position on screen and common animation frame ID.
-            const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + data.dayCount + monsterAnimationFrameId ) % monsterAnimationSequence.size()];
+            const uint32_t monsterAnimationId
+                = monsterAnimationSequence[( offsetX + offsetY + data.dayCount + monsterAnimationFrameId ) % monsterAnimationSequence.size()];
             const uint32_t secondaryMonsterAnimationIndex = baseMonsterAnimationIndex + 1 + monsterAnimationId;
             const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
-            fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
+            fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + offsetX + 554, secondaryMonsterSprite.y() + offsetY + 91 );
 
-            oy += highScoreEntryStepY;
+            offsetY += highScoreEntryStepY;
             ++scoreIndex;
         }
     }
 
+    void RedrawHighScoresStandard( int32_t ox, int32_t oy, uint32_t & monsterAnimationFrameId, const int32_t selectedScoreIndex )
+    {
+        redrawHighScoreScreen( ox, oy, monsterAnimationFrameId, selectedScoreIndex, highScoreDataContainer.getHighScoresStandard(), 6,
+                               fheroes2::HighScoreDataContainer::getMonsterByRating );
+    }
+
     void RedrawHighScoresCampaign( int32_t ox, int32_t oy, uint32_t & monsterAnimationFrameId, const int32_t selectedScoreIndex )
     {
-        ++monsterAnimationFrameId;
+        redrawHighScoreScreen( ox, oy, monsterAnimationFrameId, selectedScoreIndex, highScoreDataContainer.getHighScoresCampaign(), 7,
+                               fheroes2::HighScoreDataContainer::getMonsterByDay );
+    }
 
-        fheroes2::Display & display = fheroes2::Display::instance();
+    uint32_t getCampaignRating( const Campaign::CampaignSaveData & campaignSaveData )
+    {
+        const uint32_t daysPassed = campaignSaveData.getDaysPassed();
 
-        // Draw background.
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, ox, oy );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 7 ), display, ox + 50, oy + 31 );
-
-        fheroes2::Text text( "", fheroes2::FontType::normalWhite() );
-
-        const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
-        const std::vector<fheroes2::HighscoreData> & highScores = highScoreDataContainer.getHighScoresCampaign();
-
-        int32_t scoreIndex = 0;
-
-        for ( const fheroes2::HighscoreData & data : highScores ) {
-            const fheroes2::FontType font = ( scoreIndex == selectedScoreIndex ) ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
-
-            text.set( data.playerName, font );
-            text.draw( ox + 88, oy + initialHighScoreEntryOffsetY, display );
-
-            text.set( data.scenarioName, font );
-            text.draw( ox + 280, oy + initialHighScoreEntryOffsetY, display );
-
-            text.set( std::to_string( data.dayCount ), font );
-            text.draw( ox + 455, oy + initialHighScoreEntryOffsetY, display );
-
-            const Monster monster = fheroes2::HighScoreDataContainer::getMonsterByDay( data.dayCount );
-            const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
-            const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
-            fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
-
-            // Animation frame of a creature is based on its position on screen and common animation frame ID.
-            uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + data.dayCount + monsterAnimationFrameId ) % monsterAnimationSequence.size()];
-            const uint32_t secondaryMonsterAnimationIndex = baseMonsterAnimationIndex + 1 + monsterAnimationId;
-            const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
-            fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
-
-            oy += highScoreEntryStepY;
-            ++scoreIndex;
+        // Rating is calculated based on difficulty of campaign.
+        const int32_t difficulty = campaignSaveData.getDifficulty();
+        switch ( difficulty ) {
+        case Campaign::CampaignDifficulty::Easy:
+            return daysPassed * 125 / 100;
+        case Campaign::CampaignDifficulty::Normal:
+            // Nothing we need to do here.
+            return daysPassed;
+        case Campaign::CampaignDifficulty::Hard:
+            return daysPassed * 75 / 100;
+        default:
+            // Did you add a new campaign difficulty? Add the logic above!
+            assert( 0 );
+            break;
         }
+
+        return daysPassed;
     }
 }
 
@@ -173,10 +183,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     }
 #endif
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreFileName );
+    const std::string highScoreDataPath = System::concatPath( GetSaveDir(), highScoreFileName );
 
     if ( !highScoreDataContainer.load( highScoreDataPath ) ) {
         // Unable to load the file. Let's populate with the default values.
@@ -185,10 +192,39 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         highScoreDataContainer.save( highScoreDataPath );
     }
 
+    const bool isAfterGameCompletion = ( ( gameResult.GetResult() & GameOver::WINS ) != 0 );
+    if ( isAfterGameCompletion ) {
+        // Check whether the game result is good enough to be put on high score board. If not then just skip showing the player name dialog.
+        if ( isCampaign ) {
+            const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+            const uint32_t rating = getCampaignRating( campaignSaveData );
+            const auto & campaignHighscoreData = highScoreDataContainer.getHighScoresCampaign();
+            assert( !campaignHighscoreData.empty() );
+
+            if ( campaignHighscoreData.back().rating < rating ) {
+                gameResult.ResetResult();
+                return fheroes2::GameMode::MAIN_MENU;
+            }
+        }
+        else {
+            const uint32_t rating = GetGameOverScores();
+            const auto & standardHighscoreData = highScoreDataContainer.getHighScoresStandard();
+            assert( !standardHighscoreData.empty() );
+
+            if ( standardHighscoreData.back().rating > rating ) {
+                gameResult.ResetResult();
+                return fheroes2::GameMode::MAIN_MENU;
+            }
+        }
+    }
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
+    const fheroes2::Point top{ ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 };
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
     int32_t selectedEntryIndex = -1;
@@ -208,7 +244,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     display.render();
 
-    if ( gameResult.GetResult() & GameOver::WINS ) {
+    if ( isAfterGameCompletion ) {
         std::string player( _( "Unknown Hero" ) );
         Dialog::InputString( _( "Your Name" ), player, std::string(), 15 );
         if ( player.empty() )
@@ -218,8 +254,10 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
         if ( isCampaign ) {
             const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+            const uint32_t rating = getCampaignRating( campaignSaveData );
+
             selectedEntryIndex = highScoreDataContainer.registerScoreCampaign(
-                { player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ), completionTime, campaignSaveData.getDaysPassed(), 0, world.GetMapSeed() } );
+                { player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ), completionTime, campaignSaveData.getDaysPassed(), rating, world.GetMapSeed() } );
         }
         else {
             const uint32_t rating = GetGameOverScores();

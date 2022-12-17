@@ -24,17 +24,26 @@
 #ifndef H2SETTINGS_H
 #define H2SETTINGS_H
 
+#include <cstdint>
+#include <string>
+#include <string_view>
+#include <vector>
+
 #include "bitmodes.h"
 #include "dir.h"
 #include "maps_fileinfo.h"
+#include "math_base.h"
 #include "players.h"
 
-enum : int
+class StreamBase;
+
+enum AdventureMapScrollSpeed : int
 {
-    SCROLL_SLOW = 1,
-    SCROLL_NORMAL = 2,
-    SCROLL_FAST1 = 3,
-    SCROLL_FAST2 = 4
+    SCROLL_SPEED_NONE = 0,
+    SCROLL_SPEED_SLOW = 1,
+    SCROLL_SPEED_NORMAL = 2,
+    SCROLL_SPEED_FAST = 3,
+    SCROLL_SPEED_VERY_FAST = 4
 };
 
 enum MusicSource
@@ -49,77 +58,16 @@ class Settings
 public:
     static constexpr const char * configFileName = "fheroes2.cfg";
 
-    enum : uint32_t
-    {
-        // The following extended options do not affect the overall
-        // game balance and are saved in the binary config file
-        //
-        GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
-        // UNUSED = 0x10000020,
-        // UNUSED = 0x10000040,
-        GAME_SHOW_SYSTEM_INFO = 0x10000100,
-        // UNUSED = 0x10000200,
-        // UNUSED = 0x10000400,
-        GAME_EVIL_INTERFACE = 0x10001000,
-        GAME_HIDE_INTERFACE = 0x10002000,
-        // UNUSED = 0x10008000,
-        // UNUSED = 0x10010000,
-        GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
-        GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
-
-        // The following extended options affect the overall game balance and
-        // are saved both in the binary config file and in the savefile
-        //
-        // TODO: combine them all into one bitset
-        //
-        // UNUSED = 0x20000001,
-        // UNUSED = 0x20000002,
-        WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
-        // UNUSED = 0x20000020,
-        WORLD_SCOUTING_EXTENDED = 0x20000040,
-        // UNUSED = 0x20000080,
-        // UNUSED = 0x20000100,
-        HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
-        // UNUSED = 0x20000400,
-        // UNUSED = 0x20000800,
-        // UNUSED = 0x20001000,
-        // UNUSED = 0x20002000,
-        // UNUSED = 0x20004000,
-        // UNUSED = 0x20008000,
-        // UNUSED = 0x20010000,
-        // UNUSED = 0x20020000,
-        // UNUSED = 0x20040000,
-        CASTLE_ALLOW_GUARDIANS = 0x20080000,
-        // UNUSED = 0x20800000,
-        HEROES_REMEMBER_MP_WHEN_RETREATING = 0x21000000,
-
-        // UNUSED = 0x30000001,
-        // UNUSED = 0x30000008,
-        // UNUSED = 0x30000010,
-        WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
-        HEROES_ARENA_ANY_SKILLS = 0x30000080,
-        // UNUSED = 0x30000100,
-        // UNUSED = 0x30000200,
-        // UNUSED = 0x30000400,
-        // UNUSED = 0x30000800,
-        // UNUSED = 0x30001000,
-        WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
-        // UNUSED = 0x30008000,
-
-        // UNUSED = 0x40004000,
-        BATTLE_DETERMINISTIC_RESULT = 0x40008000,
-        BATTLE_SOFT_WAITING = 0x40010000,
-        // UNUSED = 0x40020000
-    };
-
     Settings( const Settings & ) = delete;
 
     Settings & operator=( const Settings & ) = delete;
 
+    ~Settings() = default;
+
     static Settings & Get();
 
-    bool Read( const std::string & );
-    bool Save( const std::string & ) const;
+    bool Read( const std::string & filePath );
+    bool Save( const std::string_view fileName ) const;
 
     std::string String() const;
     void SetCurrentFileInfo( const Maps::FileInfo & );
@@ -132,11 +80,6 @@ public:
     bool isCurrentMapPriceOfLoyalty() const
     {
         return current_maps_file._version == GameVersion::PRICE_OF_LOYALTY;
-    }
-
-    int Debug() const
-    {
-        return debug;
     }
 
     int HeroesMoveSpeed() const
@@ -230,6 +173,18 @@ public:
     bool isMonochromeCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
     bool is3DAudioEnabled() const;
+    bool isSystemInfoEnabled() const;
+    bool isAutoSaveAtBeginningOfTurnEnabled() const;
+    bool isBattleShowDamageInfoEnabled() const;
+    bool isHideInterfaceEnabled() const;
+    bool isEvilInterfaceEnabled() const;
+
+    static bool isFadeEffectEnabled()
+    {
+        // TODO: fix fading effect for the original resolution (640 x 480) and enable back this option.
+        // return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+        return false;
+    }
 
     bool LoadedGameVersion() const
     {
@@ -250,105 +205,11 @@ public:
     bool isFirstGameRun() const;
     void resetFirstGameRun();
 
-    bool CanChangeInGame( uint32_t ) const;
-    bool ExtModes( uint32_t ) const;
-    void ExtSetModes( uint32_t );
-    void ExtResetModes( uint32_t );
-    static std::string ExtName( const uint32_t settingId );
-
-    bool ExtHeroBuySpellBookFromShrine() const
-    {
-        return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
-    }
-
-    bool ExtHeroRememberMovementPointsWhenRetreating() const
-    {
-        return ExtModes( HEROES_REMEMBER_MP_WHEN_RETREATING );
-    }
-
-    bool ExtHeroArenaCanChoiseAnySkills() const
-    {
-        return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtWorldScouteExtended() const
-    {
-        return ExtModes( WORLD_SCOUTING_EXTENDED );
-    }
-
-    bool ExtWorldAllowSetGuardian() const
-    {
-        return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
-    }
-
-    bool ExtWorldNeutralArmyDifficultyScaling() const
-    {
-        return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
-    }
-
-    bool ExtWorldExtObjectsCaptured() const
-    {
-        return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
-    }
-
-    bool ExtCastleAllowGuardians() const
-    {
-        return ExtModes( CASTLE_ALLOW_GUARDIANS );
-    }
-
-    bool ExtBattleShowDamage() const
-    {
-        return ExtModes( GAME_BATTLE_SHOW_DAMAGE );
-    }
-
-    bool ExtBattleSoftWait() const
-    {
-        return ExtModes( BATTLE_SOFT_WAITING );
-    }
-
-    bool ExtBattleDeterministicResult() const
-    {
-        return ExtModes( BATTLE_DETERMINISTIC_RESULT );
-    }
-
-    bool ExtGameContinueAfterVictory() const
-    {
-        return ExtModes( GAME_CONTINUE_AFTER_VICTORY );
-    }
-
-    bool ExtGameShowSystemInfo() const
-    {
-        return ExtModes( GAME_SHOW_SYSTEM_INFO );
-    }
-
-    bool ExtGameAutosaveBeginOfDay() const
-    {
-        return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
-    }
-
-    static bool ExtGameUseFade()
-    {
-        // TODO: fix fading effect for the original resolution (640 x 480) and enable back this option.
-        // return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-        return false;
-    }
-
-    bool ExtGameEvilInterface() const
-    {
-        return ExtModes( GAME_EVIL_INTERFACE );
-    }
-
-    bool ExtGameHideInterface() const
-    {
-        return ExtModes( GAME_HIDE_INTERFACE );
-    }
-
     const fheroes2::Size & VideoMode() const
     {
         return video_mode;
     }
 
-    void SetDebug( int );
     void EnablePriceOfLoyaltySupport( const bool set );
 
     void SetGameDifficulty( const int difficulty )
@@ -356,8 +217,6 @@ public:
         game_difficulty = difficulty;
     }
 
-    void SetEvilInterface( bool );
-    void SetHideInterface( bool );
     void SetBattleGrid( bool );
     void SetBattleMovementShaded( bool );
     void SetBattleMouseShaded( bool );
@@ -366,9 +225,12 @@ public:
     void SetShowIcons( bool );
     void SetShowButtons( bool );
     void SetShowStatus( bool );
+    // Sets the speed of AI-controlled heroes in the range 0 - 10, 0 means "don't show"
     void SetAIMoveSpeed( int );
     void SetScrollSpeed( int );
+    // Sets the speed of human-controlled heroes in the range 1 - 10
     void SetHeroesMoveSpeed( int );
+    // Sets the animation speed during combat in the range 1 - 10
     void SetBattleSpeed( int );
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
@@ -377,6 +239,13 @@ public:
     void setMonochromeCursor( const bool enable );
     void setTextSupportMode( const bool enable );
     void set3DAudio( const bool enable );
+    void setVSync( const bool enable );
+    void setSystemInfo( const bool enable );
+    void setAutoSaveAtBeginningOfTurn( const bool enable );
+    void setBattleDamageInfo( const bool enable );
+    void setHideInterface( const bool enable );
+    void setEvilInterface( const bool enable );
+    void setNearestLinearScaling( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
@@ -403,7 +272,6 @@ public:
         return _musicType;
     }
 
-    /* check game type */
     bool IsGameType( int type ) const
     {
         return ( game_type & type ) != 0;
@@ -546,9 +414,7 @@ public:
     static const std::vector<std::string> & GetRootDirs();
 
     static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
-
     static bool findFile( const std::string & internalDirectory, const std::string & fileName, std::string & fullPath );
-
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
 private:
@@ -556,23 +422,12 @@ private:
     friend StreamBase & operator>>( StreamBase &, Settings & );
 
     Settings();
-    ~Settings();
 
-    void BinarySave() const;
-    void BinaryLoad();
+    static void setDebug( int debug );
 
-    // Global game options (GLOBAL_), they are saved in the text config file
+    // Global game options (GLOBAL_)
     BitModes _optGlobal;
-    // Extended options that do not affect the overall game balance (GAME_),
-    // they are saved in the binary config file
-    BitModes _optExtGame;
-    // Extended options that affect the overall game balance, they are saved
-    // both in the binary config file and in the savefile
-    BitModes _optExtBalance2; // Options with codes starting with 0x2
-    BitModes _optExtBalance3; // Options with codes starting with 0x3
-    BitModes _optExtBalance4; // Options with codes starting with 0x4
 
-    int debug;
     fheroes2::Size video_mode;
     int game_difficulty;
 

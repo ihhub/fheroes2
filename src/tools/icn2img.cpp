@@ -21,12 +21,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <fstream>
+#include <cstdint>
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
+#include <memory>
+#include <sstream> // IWYU pragma: keep
+#include <string>
+#include <vector>
 
 #include "agg_file.h"
+#include "image.h"
 #include "image_palette.h"
 #include "image_tool.h"
 #include "serialize.h"
@@ -69,7 +74,7 @@ int main( int argc, char ** argv )
     int total_size = sf.getLE32();
 
     inputFileName.replace( inputFileName.find( ".icn" ), 4, "" );
-    prefix = System::ConcatePath( prefix, inputFileName );
+    prefix = System::concatPath( prefix, inputFileName );
 
     if ( 0 != System::MakeDirectory( prefix ) ) {
         std::cout << "error mkdir: " << prefix << std::endl;
@@ -96,7 +101,7 @@ int main( int argc, char ** argv )
             std::ostringstream os;
             os << std::setw( 3 ) << std::setfill( '0' ) << ii;
 
-            std::string dstfile = System::ConcatePath( prefix, os.str() );
+            std::string dstfile = System::concatPath( prefix, os.str() );
 
             if ( fheroes2::isPNGFormatSupported() ) {
                 dstfile += ".png";

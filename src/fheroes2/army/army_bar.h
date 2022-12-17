@@ -24,7 +24,12 @@
 #ifndef H2ARMYBAR_H
 #define H2ARMYBAR_H
 
+#include <cstdint>
+#include <string>
+
+#include "image.h"
 #include "interface_itemsbar.h"
+#include "math_base.h"
 #include "ui_tool.h"
 
 class Army;

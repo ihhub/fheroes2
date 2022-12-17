@@ -22,8 +22,28 @@
  ***************************************************************************/
 
 #include <cstdlib>
+#include <exception>
 #include <iostream>
+#include <list>
+#include <memory>
+#include <set>
 #include <string>
+
+#include <SDL_events.h>
+#include <SDL_main.h> // IWYU pragma: keep
+#include <SDL_mouse.h>
+#include <SDL_version.h>
+
+#if defined( _WIN32 )
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <cassert>
+#else
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
+#endif
 
 #include "agg.h"
 #include "audio_manager.h"
@@ -35,16 +55,16 @@
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
+#include "game_video_type.h"
 #include "h2d.h"
+#include "image.h"
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
+#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#ifdef WITH_DEBUG
-#include "tools.h"
-#endif
 #include "ui_tool.h"
 #include "zzlib.h"
 
@@ -53,17 +73,6 @@ namespace
     std::string GetCaption()
     {
         return std::string( "fheroes2 engine, version: " + Settings::GetVersion() );
-    }
-
-    int PrintHelp( const char * basename )
-    {
-        COUT( "Usage: " << basename << " [OPTIONS]" )
-#ifdef WITH_DEBUG
-        COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" )
-#endif
-        COUT( "  -h\t\tprint this help message and exit" )
-
-        return EXIT_SUCCESS;
     }
 
     void ReadConfigs()
@@ -96,8 +105,8 @@ namespace
         if ( dataDir.empty() )
             return;
 
-        const std::string dataFiles = System::ConcatePath( dataDir, "files" );
-        const std::string dataFilesSave = System::ConcatePath( dataFiles, "save" );
+        const std::string dataFiles = System::concatPath( dataDir, "files" );
+        const std::string dataFilesSave = System::concatPath( dataFiles, "save" );
 
         if ( !System::IsDirectory( dataDir ) )
             System::MakeDirectory( dataDir );
@@ -115,8 +124,6 @@ namespace
         DisplayInitializer()
         {
             const Settings & conf = Settings::Get();
-
-            fheroes2::engine().setVSync( conf.isVSyncEnabled() );
 
             fheroes2::Display & display = fheroes2::Display::instance();
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
@@ -200,12 +207,29 @@ namespace
     };
 }
 
-#if defined( _MSC_VER )
+// SDL1: this app is not linked against the SDLmain.lib, implement our own WinMain
+#if defined( _WIN32 ) && !SDL_VERSION_ATLEAST( 2, 0, 0 )
 #undef main
+
+int main( int argc, char ** argv );
+
+int WINAPI WinMain( HINSTANCE /* hInstance */, HINSTANCE /* hPrevInstance */, LPSTR /* pCmdLine */, int /* nCmdShow */ )
+{
+    return main( __argc, __argv );
+}
 #endif
 
 int main( int argc, char ** argv )
 {
+// SDL2main.lib converts argv to UTF-8, but this application expects ANSI, use the original argv
+#if defined( _WIN32 ) && SDL_VERSION_ATLEAST( 2, 0, 0 )
+    assert( argc == __argc );
+
+    argv = __argv;
+#else
+    (void)argc;
+#endif
+
     try {
         const fheroes2::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
@@ -219,25 +243,6 @@ int main( int argc, char ** argv )
         InitDataDir();
         ReadConfigs();
 
-        // getopt
-        {
-            int opt;
-            while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
-                switch ( opt ) {
-#ifdef WITH_DEBUG
-                case 'd':
-                    conf.SetDebug( System::GetOptionsArgument() ? GetInt( System::GetOptionsArgument() ) : 0 );
-                    break;
-#endif
-                case '?':
-                case 'h':
-                    return PrintHelp( argv[0] );
-
-                default:
-                    break;
-                }
-        }
-
         std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
                                                                           fheroes2::SystemInitializationComponent::Video };
 
@@ -250,13 +255,12 @@ int main( int argc, char ** argv )
         DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() )
 
         const DisplayInitializer displayInitializer;
-
         const DataInitializer dataInitializer;
 
         ListFiles midiSoundFonts;
 
-        midiSoundFonts.Append( Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf2", false ) );
-        midiSoundFonts.Append( Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf3", false ) );
+        midiSoundFonts.Append( Settings::FindFiles( System::concatPath( "files", "soundfonts" ), ".sf2", false ) );
+        midiSoundFonts.Append( Settings::FindFiles( System::concatPath( "files", "soundfonts" ), ".sf3", false ) );
 
 #ifdef WITH_DEBUG
         for ( const std::string & file : midiSoundFonts ) {

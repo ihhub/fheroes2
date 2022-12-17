@@ -20,7 +20,7 @@
 
 set -e -o pipefail
 
-FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp)$" || true) \
+FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|java)$" || true) \
                                             | (grep -v "^src/thirdparty/.*/.*" || true))
 
 if [ -z "${FILES_TO_CHECK}" ]; then

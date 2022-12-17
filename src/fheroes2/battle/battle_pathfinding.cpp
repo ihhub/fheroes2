@@ -18,13 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "battle_pathfinding.h"
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <vector>
+
 #include "battle_arena.h"
 #include "battle_bridge.h"
+#include "battle_pathfinding.h"
 #include "battle_troop.h"
 #include "castle.h"
 #include "logging.h"
-#include <algorithm>
 
 namespace Battle
 {
@@ -196,62 +203,79 @@ namespace Battle
                 }
             }
         }
+        // Walking units - explore the movements sequentially from both the head and tail cells
         else {
-            // Walkers - explore moves sequentially from both head and tail cells
             std::vector<int32_t> nodesToExplore;
+
             nodesToExplore.push_back( pathStart );
-            if ( unitIsWide )
+            if ( unitIsWide ) {
                 nodesToExplore.push_back( unitTail->GetIndex() );
+            }
 
             for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                 const int32_t fromNode = nodesToExplore[lastProcessedNode];
                 const BattleNode & previousNode = _cache[fromNode];
 
+                const Cell * fromCell = Board::GetCell( fromNode );
+                assert( fromCell != nullptr );
+
                 Indexes availableMoves;
-                if ( !unitIsWide )
+
+                if ( !unitIsWide ) {
                     availableMoves = Board::GetAroundIndexes( fromNode );
-                else if ( previousNode._from < 0 )
+                }
+                else if ( previousNode._from < 0 ) {
                     availableMoves = Board::GetMoveWideIndexes( fromNode, unit.isReflect() );
-                else
+                }
+                else {
                     availableMoves = Board::GetMoveWideIndexes( fromNode, ( RIGHT_SIDE & Board::GetDirection( fromNode, previousNode._from ) ) != 0 );
+                }
 
                 for ( const int32_t newNode : availableMoves ) {
-                    const Cell * headCell = Board::GetCell( newNode );
                     const bool isLeftDirection = unitIsWide && Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
 
-                    const int32_t newTailIndex = isLeftDirection ? newNode + 1 : newNode - 1;
-                    const Cell * tailCell = ( unitIsWide && !_start.contains( newTailIndex ) ) ? Board::GetCell( newTailIndex ) : nullptr;
+                    const Cell * newCell = Board::GetCell( newNode );
+                    assert( newCell != nullptr );
 
-                    // Special case: headCell is *allowed* to have another unit in it, that's why we check isPassable( false ) instead of isPassableFromAdjacent
-                    if ( headCell->isPassable( false ) && ( !tailCell || tailCell->isPassable( true ) )
-                         && ( isPassableBridge || !Board::isBridgeIndex( newNode, unit ) ) ) {
+                    if ( newCell->isPassableFromAdjacent( unit, *fromCell ) && ( isPassableBridge || !Board::isBridgeIndex( newNode, unit ) ) ) {
                         const uint32_t cost = previousNode._cost;
                         BattleNode & node = _cache[newNode];
 
-                        // Check if we're turning back. No movement at all.
                         uint32_t additionalCost = 1u;
+
+                        // Turning back is not a movement
                         if ( isLeftDirection != previousNode._isLeftDirection ) {
                             additionalCost = 0;
                         }
-                        // Moat penalty consumes all remaining movement. Be careful when dealing with unsigned values.
-                        else if ( isMoatBuilt && ( Board::isMoatIndex( newNode, unit ) || Board::isMoatIndex( newTailIndex, unit ) )
-                                  && moatPenalty > previousNode._cost ) {
-                            additionalCost = moatPenalty - cost;
+                        else {
+                            const int32_t newTailIndex = isLeftDirection ? newNode + 1 : newNode - 1;
+
+                            // The moat penalty consumes all remaining movement. Be careful when dealing with unsigned values.
+                            if ( isMoatBuilt && ( Board::isMoatIndex( newNode, unit ) || Board::isMoatIndex( newTailIndex, unit ) )
+                                 && moatPenalty > previousNode._cost ) {
+                                additionalCost = moatPenalty - cost;
+                            }
                         }
 
-                        // Now we check if headCell has a unit - this determines if hex is passable or just accessible (for attack)
-                        if ( headCell->GetUnit() && cost < node._cost ) {
-                            node._isOpen = false;
-                            node._from = fromNode;
-                            node._cost = cost;
-                            node._isLeftDirection = isLeftDirection;
-                        }
-                        else if ( cost + additionalCost < node._cost ) {
+                        if ( cost + additionalCost < node._cost ) {
                             node._isOpen = true;
                             node._from = fromNode;
                             node._cost = cost + additionalCost;
                             node._isLeftDirection = isLeftDirection;
+
                             nodesToExplore.push_back( newNode );
+                        }
+                    }
+                    // Special case: there is a unit in this cell, mark this cell as impassable, but available for a possible attack
+                    else if ( newCell->GetUnit() ) {
+                        const uint32_t cost = previousNode._cost;
+                        BattleNode & node = _cache[newNode];
+
+                        if ( cost < node._cost ) {
+                            node._isOpen = false;
+                            node._from = fromNode;
+                            node._cost = cost;
+                            node._isLeftDirection = isLeftDirection;
                         }
                     }
                 }

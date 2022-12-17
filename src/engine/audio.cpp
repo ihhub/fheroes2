@@ -24,18 +24,27 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <list>
 #include <map>
 #include <memory>
 #include <mutex>
-#include <numeric>
+#include <ostream>
+#include <type_traits>
 #include <utility>
 #include <variant>
 
-#include <SDL.h>
+#include <SDL_audio.h>
+#include <SDL_error.h>
 #include <SDL_mixer.h>
+#include <SDL_rwops.h>
+#include <SDL_stdinc.h>
+#include <SDL_version.h>
 
 #include "audio.h"
 #include "core.h"
+#include "dir.h"
 #include "logging.h"
 #include "system.h"
 #include "thread.h"
@@ -53,7 +62,12 @@ namespace
             format = AUDIO_S16;
             channels = 2; // Support stereo audio.
             silence = 0;
+#if defined( ANDROID )
+            // TODO: a value greater than 1024 causes audio distortion on Android
+            samples = 1024;
+#else
             samples = 2048;
+#endif
             size = 0;
             // TODO: research if we need to utilize these 2 paremeters in the future.
             callback = nullptr;
@@ -171,7 +185,11 @@ namespace
 
     // This is the callback function set by Mix_ChannelFinished(). As a rule, it is called from
     // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    void SDLCALL channelFinished( const int channelId )
+#else
     void channelFinished( const int channelId )
+#endif
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
@@ -364,7 +382,7 @@ namespace
 
         double getCurrentTrackPosition() const
         {
-            return _currentTrackTimer.get();
+            return _currentTrackTimer.getS();
         }
 
         void updateCurrentTrack( const uint64_t musicUID, const Music::PlaybackMode trackPlaybackMode )
@@ -493,7 +511,11 @@ namespace
 
     // This is the callback function set by Mix_HookMusicFinished(). As a rule, it is called from
     // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    void SDLCALL musicFinished()
+#else
     void musicFinished()
+#endif
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
@@ -591,6 +613,10 @@ namespace
         musicTrackManager.musicStarted( mus );
     }
 
+    // By the Weber-Fechner law, humans subjective sound sensation is proportional logarithm of sound intensity.
+    // So for linear changing sound intensity we have to change the volume exponential.
+    // There is a good explanation at https://www.dr-lex.be/info-stuff/volumecontrols.html.
+    // This function maps sound volumes in percents to SDL units with values [0..MIX_MAX_VOLUME] by exponetial law.
     int normalizeToSDLVolume( const int volumePercentage )
     {
         if ( volumePercentage < 0 ) {
@@ -603,12 +629,7 @@ namespace
             return MIX_MAX_VOLUME;
         }
 
-        return volumePercentage * MIX_MAX_VOLUME / 100;
-    }
-
-    int normalizeFromSDLVolume( const int volume )
-    {
-        return volume * 100 / MIX_MAX_VOLUME;
+        return static_cast<int>( ( std::exp( std::log( 10 + 1 ) * volumePercentage / 100 ) - 1 ) / 10 * MIX_MAX_VOLUME );
     }
 }
 
@@ -803,7 +824,7 @@ void Mixer::SetChannels( const int num )
     }
 
     if ( isMuted ) {
-        savedMixerVolumes.resize( static_cast<size_t>( mixerChannelCount ), 0 );
+        savedMixerVolumes.resize( static_cast<size_t>( mixerChannelCount ), MIX_MAX_VOLUME );
 
         Mix_Volume( -1, 0 );
     }
@@ -871,42 +892,31 @@ int Mixer::applySoundEffect( const int channelId, const int16_t angle, const uin
     return channelId;
 }
 
-int Mixer::setVolume( const int channelId, const int volumePercentage )
+void Mixer::setVolume( const int channelId, const int volumePercentage )
 {
     const int volume = normalizeToSDLVolume( volumePercentage );
 
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
-        return 0;
+        return;
     }
 
     if ( !isMuted ) {
-        return normalizeFromSDLVolume( Mix_Volume( channelId, volume ) );
+        Mix_Volume( channelId, volume );
+        return;
     }
 
     if ( channelId < 0 ) {
-        if ( savedMixerVolumes.empty() ) {
-            return 0;
-        }
-
-        // return the average volume
-        const int prevVolume = std::accumulate( savedMixerVolumes.begin(), savedMixerVolumes.end(), 0 ) / static_cast<int>( savedMixerVolumes.size() );
         std::fill( savedMixerVolumes.begin(), savedMixerVolumes.end(), volume );
-
-        return normalizeFromSDLVolume( prevVolume );
+        return;
     }
 
     const size_t channel = static_cast<size_t>( channelId );
 
-    if ( channel >= savedMixerVolumes.size() ) {
-        return 0;
+    if ( channel < savedMixerVolumes.size() ) {
+        savedMixerVolumes[channel] = volume;
     }
-
-    const int prevVolume = savedMixerVolumes[channel];
-    savedMixerVolumes[channel] = volume;
-
-    return normalizeFromSDLVolume( prevVolume );
 }
 
 void Mixer::Pause( const int channelId /* = -1 */ )
@@ -1014,25 +1024,22 @@ void Music::SetFadeInMs( const int timeMs )
     musicFadeInMs = timeMs;
 }
 
-int Music::setVolume( const int volumePercentage )
+void Music::setVolume( const int volumePercentage )
 {
     const int volume = normalizeToSDLVolume( volumePercentage );
 
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
-        return 0;
+        return;
     }
 
     if ( isMuted ) {
-        const int prevVolume = savedMusicVolume;
-
         savedMusicVolume = volume;
-
-        return normalizeFromSDLVolume( prevVolume );
+        return;
     }
 
-    return normalizeFromSDLVolume( Mix_VolumeMusic( volume ) );
+    Mix_VolumeMusic( volume );
 }
 
 void Music::Stop()

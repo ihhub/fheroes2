@@ -18,9 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
+#include <cassert>
 #include <ctime>
 
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
@@ -34,11 +36,10 @@
 
 namespace
 {
-    int g_debug = DBG_ALL_WARN + DBG_ALL_INFO;
-
+    int debugLevel = DBG_ALL_WARN;
     bool textSupportMode = false;
 
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( _WIN32 )
     // Sets the Windows console codepage to the system codepage
     class ConsoleCPSwitcher
     {
@@ -72,7 +73,7 @@ namespace
 
 namespace Logging
 {
-#if defined( TARGET_NINTENDO_SWITCH )
+#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
     std::ofstream logFile;
     // This mutex protects operations with logFile
     std::mutex logMutex;
@@ -102,10 +103,15 @@ namespace Logging
     {
         const tm tmi = System::GetTM( std::time( nullptr ) );
 
-        char buf[13] = {0};
-        std::strftime( buf, sizeof( buf ) - 1, "%X", &tmi );
+        std::array<char, 256> buf;
 
-        return std::string( buf );
+        const size_t writtenBytes = std::strftime( buf.data(), buf.size(), "%d.%m.%Y %H:%M:%S", &tmi );
+        if ( writtenBytes == 0 ) {
+            assert( 0 );
+            return "<TIMESTAMP ERROR>";
+        }
+
+        return std::string( buf.data() );
     }
 
     void InitLog()
@@ -114,15 +120,27 @@ namespace Logging
         const std::scoped_lock<std::mutex> lock( logMutex );
 
         logFile.open( "fheroes2.log", std::ofstream::out );
+#elif defined( _WIN32 )
+        const std::scoped_lock<std::mutex> lock( logMutex );
+        const std::string logPath( System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.log" ) );
+
+        System::MakeDirectory( System::GetDirname( logPath ) );
+
+        logFile.open( logPath, std::ofstream::out );
 #elif defined( MACOS_APP_BUNDLE )
         openlog( "fheroes2", LOG_CONS | LOG_NDELAY, LOG_USER );
         setlogmask( LOG_UPTO( LOG_WARNING ) );
 #endif
     }
 
-    void SetDebugLevel( const int debugLevel )
+    void setDebugLevel( const int level )
     {
-        g_debug = debugLevel;
+        debugLevel = level;
+    }
+
+    int getDebugLevel()
+    {
+        return debugLevel;
     }
 
     void setTextSupportMode( const bool enableTextSupportMode )
@@ -138,7 +156,7 @@ namespace Logging
 
 bool IS_DEBUG( const int name, const int level )
 {
-    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & g_debug ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & g_debug ) >> 4 ) >= level )
-           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & g_debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & g_debug ) >> 8 ) >= level )
-           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & g_debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & g_debug ) >> 12 ) >= level );
+    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & debugLevel ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & debugLevel ) >> 4 ) >= level )
+           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & debugLevel ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & debugLevel ) >> 8 ) >= level )
+           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & debugLevel ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & debugLevel ) >> 12 ) >= level );
 }
