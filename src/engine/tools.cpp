@@ -162,12 +162,13 @@ void StringReplaceWithLowercase( std::string & workString, const char * pattern,
             // The first (and possibly only) word of 'inString' replaces 'pattern' in 'workString'.
             workString.replace( position, std::strlen( pattern ), inString.substr( 0, spacePosition ) );
 
-            // Check if a space was found to insert the rest, lowaercased, part of 'isString'.
+            // Check if a space mark was found to insert the rest part of 'inString' with lowercase applied.
             if ( spacePosition != std::string::npos ) {
                 workString.insert( position + spacePosition, Translation::StringLower( inString.substr( spacePosition ) ) );
             }
         }
         else {
+            // For all other cases lowercase the 'inString' and replace the 'pattern' with it in 'workString'.
             workString.replace( position, std::strlen( pattern ), Translation::StringLower( inString ) );
         }
     }
