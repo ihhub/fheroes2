@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-17 14:33+0000\n"
-"PO-Revision-Date: 2022-12-03 04:38+0100\n"
+"PO-Revision-Date: 2022-12-17 18:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -686,22 +686,22 @@ msgid "%{name} casts %{spell}."
 msgstr "%{name} lance %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "%{spell} inflige %{value} dégâts à un mort-vivant."
+msgstr "%{spell} inflige %{damage} dégâts à un mort-vivant."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr "%{spell} inflige %{value} dégâts à tous les morts-vivants."
+msgstr "%{spell} inflige %{damage} dégâts à tous les morts-vivants."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr "%{spell} inflige %{value} dégâts, %{count} créatures meurent."
+msgstr "%{spell} inflige %{damage} dégâts, %{count} créatures meurent."
 
 msgid "The %{spell} does %{damage} damage."
 msgstr "%{spell} inflige %{damage} dégâts."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr "%{spell} inflige %{value} dégâts à une créature vivante."
+msgstr "%{spell} inflige %{damage} dégâts à une créature vivante."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr "%{spell} inflige %{value} dégâts à toutes les créatures vivantes."
+msgstr "%{spell} inflige %{damage} dégâts à toutes les créatures vivantes."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "L'attaque de %{attacker} aveugle %{target} !"
@@ -828,7 +828,7 @@ msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "chacun avec un bonus de +%{attack} à sa compétence d'attaque."
 
 msgid "The %{name} is destroyed."
-msgstr "Le %{name} est détruit !"
+msgstr "Le %{name} est détruit."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -2358,8 +2358,8 @@ msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
-"Le puits augmente le taux de croissance de population de deux créatures par "
-"semaine dans chaque demeure."
+"Le puits augmente le taux de croissance de population de %{count} créatures "
+"par semaine dans chaque demeure."
 
 msgid "The Statue increases your town's income by %{count} per day."
 msgstr "La statue génère des revenus de %{count} pièces d'or par jour."
@@ -2718,7 +2718,7 @@ msgid "Change the type of music."
 msgstr "Change de type de musique."
 
 msgid "Toggle 3D effects of foreground sounds."
-msgstr "Basculer les effets 3D des sons au premier plan"
+msgstr "Basculer les effets 3D des sons au premier plan."
 
 msgid "Build a new ship:"
 msgstr "Construire un nouveau navire :"
@@ -3065,16 +3065,16 @@ msgid "Number to buy:"
 msgstr "Recruter :"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Recruter les forces sélectionnées."
 
 msgid "MAX"
 msgstr "MAX"
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Sélectionnez les forces maximales à recruter."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Ne sélectionnez qu'une seule unité à recruter."
 
 msgid "Select Game Resolution:"
 msgstr "Choisir la résolution d'écran:"
@@ -8509,7 +8509,7 @@ msgstr "Le casque paratonnerre"
 
 msgid "The %{name} halves all damage your troops take from lightning spells."
 msgstr ""
-" %{name} réduit de moitié tous les dégâts de foudre subis par vos troupes."
+"%{name} réduit de moitié tous les dégâts de foudre subis par vos troupes."
 
 msgid ""
 "A traveling tinker in need of supplies offers you a helm with a thunderbolt "
