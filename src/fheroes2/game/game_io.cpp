@@ -264,10 +264,6 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     Game::SetLastSavename( filePath );
     conf.SetGameType( conf.GameType() | Game::TYPE_LOADFILE );
 
-    if ( returnValue != fheroes2::GameMode::START_GAME ) {
-        return returnValue;
-    }
-
     return returnValue;
 }
 

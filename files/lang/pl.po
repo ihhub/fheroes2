@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 22:36+0000\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -28,6 +28,77 @@ msgid ""
 msgstr ""
 "TYLKO\n"
 "WALKA"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
 
 msgid "GIFT"
 msgstr "WYŚLIJ"
@@ -1403,6 +1474,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Pogromca Krasnoludów, ratuj się kto może!!!\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Ożywienie martwych"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Łańcuch piorunów"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Eksplozja ognia"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Grupowa klątwa"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Grupowe przyspieszenie"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Lustrzane odbicie"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Ożywienie"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Stalowa skóra"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Przyw. ziemi"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Pokaż bohaterów"
+
 msgid "campaignBonus|Ballista"
 msgstr "Balista"
 
@@ -1594,36 +1695,6 @@ msgstr "Zaawan. mądrość"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Mistrzowska mądrość"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Ożywienie martwych"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Łańcuch piorunów"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Eksplozja ognia"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Grupowa klątwa"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Grupowe przyspieszenie"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Lustrzane odbicie"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Ożywienie"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Stalowa skóra"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Przyw. ziemi"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Pokaż bohaterów"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -4181,9 +4252,6 @@ msgstr ""
 "królestwa, a także aktualna data. Kliknij tu lewym przyciskiem, aby "
 "przejrzeć kolejne informacje."
 
-msgid "Necroman"
-msgstr "Nekromanta"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -6622,6 +6690,43 @@ msgid "race|Random"
 msgstr "Losowo"
 
 msgid "race|Neutral"
+msgstr "Neutralny"
+
+msgid "doubleLined|Knight"
+msgstr "Rycerz"
+
+msgid "doubleLined|Barbarian"
+msgstr ""
+"Barba-\n"
+"rzyńca"
+
+msgid "doubleLined|Sorceress"
+msgstr ""
+"Czaro-\n"
+"dziejka"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+"Czarno-\n"
+"księżnik"
+
+msgid "doubleLined|Wizard"
+msgstr "Czarodziej"
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+"Nekro-\n"
+"manta"
+
+msgid "doubleLinedRace|Multi"
+msgstr "Różne"
+
+msgid "doubleLinedRace|Random"
+msgstr "Losowo"
+
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutralny"
 
 msgid "speed|Standing"
@@ -9807,6 +9912,9 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Nekromanta"
 
 #~ msgid "Cyberlore Studios"
 #~ msgstr "Cyberlore Studios"

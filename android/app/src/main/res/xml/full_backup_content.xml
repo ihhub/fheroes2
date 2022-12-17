@@ -12,9 +12,6 @@
         path="files/save" />
     <include
         domain="external"
-        path="fheroes2.bin" />
-    <include
-        domain="external"
         path="fheroes2.cfg" />
     <include
         domain="external"

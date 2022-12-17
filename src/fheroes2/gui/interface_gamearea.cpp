@@ -494,6 +494,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 populateHeroObjectInfo( tileUnfit, tile.GetHeroes() );
 
+                // Update object type as it could be an object under the hero.
+                objectType = tile.GetObject( false );
+
                 break;
             }
 
@@ -531,10 +534,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             default:
                 break;
-            }
-
-            if ( objectType == MP2::OBJ_HEROES ) {
-                objectType = tile.GetObject( false );
             }
 
             switch ( objectType ) {
@@ -810,7 +809,7 @@ void Interface::GameArea::SetRedraw() const
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Ultimate artifact is not found on index " << index )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Ultimate artifact is not found on index " << index )
         return fheroes2::Image();
     }
 

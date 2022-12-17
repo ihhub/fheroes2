@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 22:36+0000\n"
-"PO-Revision-Date: 2022-09-23 16:14+0200\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
+"PO-Revision-Date: 2022-12-03 03:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,11 +16,82 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
 "ONLY"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
 msgstr ""
 
 msgid "GIFT"
@@ -1436,6 +1507,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Zwergenfluch!!!!, rennt um euer Leben.\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Tote beleben"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Kettenblitzstrahl"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Feuerstoß"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Massenfluch"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Masseneile"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Spiegelbild"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Tote beleben"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Stahlhaut"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Erdwesen beschwören"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Helden anzeigen"
+
 msgid "campaignBonus|Ballista"
 msgstr "Ballista"
 
@@ -1627,36 +1728,6 @@ msgstr "Verbesserte Weisheit"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Meisterhafte Weisheit"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Tote beleben"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Kettenblitzstrahl"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Feuerstoß"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Massenfluch"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Masseneile"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Spiegelbild"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Tote beleben"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Stahlhaut"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Erdwesen beschwören"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Helden anzeigen"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -4276,9 +4347,6 @@ msgstr ""
 "und zeigt das Datum an. Klicken Sie hier mit der linken Maustaste, um durch "
 "diese Fenster zu ziehen."
 
-msgid "Necroman"
-msgstr "Totenbesc"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -6782,6 +6850,37 @@ msgid "race|Random"
 msgstr "Zufällig"
 
 msgid "race|Neutral"
+msgstr "Neutral"
+
+msgid "doubleLined|Knight"
+msgstr "Ritter"
+
+msgid "doubleLined|Barbarian"
+msgstr "Barbar"
+
+msgid "doubleLined|Sorceress"
+msgstr "Zauberin"
+
+msgid "doubleLined|Warlock"
+msgstr "Hexer"
+
+msgid "doubleLined|Wizard"
+msgstr "Zauberer"
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+"Totenbe-\n"
+"schwörer"
+
+msgid "doubleLinedRace|Multi"
+msgstr "Verschied"
+
+msgid "doubleLinedRace|Random"
+msgstr "Zufällig"
+
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
 
 msgid "speed|Standing"
@@ -10024,6 +10123,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Totenbesc"
 
 #~ msgid "Wait this unit"
 #~ msgstr "Auf diesen Zug warten"

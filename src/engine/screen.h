@@ -81,9 +81,20 @@ namespace fheroes2
             // Do nothing.
         }
 
+        void setNearestScaling( const bool enable )
+        {
+            _nearestScaling = enable;
+        }
+
+        bool isNearestScaling() const
+        {
+            return _nearestScaling;
+        }
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
+            , _nearestScaling( false )
         {
             // Do nothing.
         }
@@ -118,6 +129,8 @@ namespace fheroes2
 
     private:
         bool _isFullScreen;
+
+        bool _nearestScaling;
     };
 
     class Display : public Image
@@ -143,6 +156,7 @@ namespace fheroes2
 
         void render( const Rect & roi ); // render a part of image on screen. Prefer this method over full image if you don't draw full screen.
 
+        // Update the area which will be rendered on the next render() call.
         void updateNextRenderRoi( const Rect & roi );
 
         void resize( int32_t width_, int32_t height_ ) override;

@@ -685,7 +685,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     return getHandicapDependentIncome( totalIncome, player->getHandicapStatus() );
 }
 
-Heroes * Kingdom::GetBestHero()
+Heroes * Kingdom::GetBestHero() const
 {
     return !heroes.empty() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : nullptr;
 }

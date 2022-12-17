@@ -37,11 +37,13 @@
 #include "artifact.h"
 #include "castle.h"
 #include "color.h"
+#include "game_interface.h"
 #include "game_over.h"
 #include "game_static.h"
 #include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
+#include "interface_status.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
@@ -164,6 +166,8 @@ namespace
         const MP2::MapObjectType objectType = tile.GetObject();
 
         if ( !MP2::isActionObject( objectType ) ) {
+            // TODO: add logic to verify if all parts of puzzle are opened and the location is known.
+            // TODO: once it is done, check if the tile does not have a hole. If it does not mark it as a valid object.
             return false;
         }
 
@@ -331,8 +335,10 @@ namespace
         case MP2::OBJ_TREEKNOWLEDGE:
             if ( !hero.isVisited( tile ) ) {
                 const ResourceCount & rc = tile.QuantityResourceCount();
-                if ( !rc.isValid() || kingdom.AllowPayment( Funds( rc ) ) )
+                // If the payment is required do not waste all resources from the kingdom. Use them wisely.
+                if ( !rc.isValid() || kingdom.AllowPayment( Funds( rc ) * 5 ) ) {
                     return true;
+                }
             }
             break;
 
@@ -367,7 +373,7 @@ namespace
             break;
         }
 
-        // accept army
+        // Get a free army.
         case MP2::OBJ_WATCHTOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
@@ -845,6 +851,11 @@ namespace AI
             return 1000.0 * art.getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectType ) ) {
+            if ( objectType == MP2::OBJ_BOTTLE ) {
+                // A bottle is useless to AI as it contains only a message.
+                return 0;
+            }
+
             return 850.0;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
@@ -1127,6 +1138,11 @@ namespace AI
             return std::max( tile.QuantityGold(), 1000U );
         }
         else if ( MP2::isPickupObject( objectType ) ) {
+            if ( objectType == MP2::OBJ_BOTTLE ) {
+                // A bottle is useless to AI as it contains only a message.
+                return 0;
+            }
+
             return anotherFriendlyHeroPresent ? 100.0 : 500.0;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
@@ -1391,6 +1407,11 @@ namespace AI
             return 1000.0 * art.getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectType ) ) {
+            if ( objectType == MP2::OBJ_BOTTLE ) {
+                // A bottle is useless to AI as it contains only a message.
+                return 0;
+            }
+
             return twoTiles;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
@@ -1742,7 +1763,7 @@ namespace AI
         }
     }
 
-    bool Normal::HeroesTurn( VecHeroes & heroes )
+    bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
     {
         if ( heroes.empty() ) {
             // No heroes so we indicate that all heroes moved.
@@ -1759,6 +1780,8 @@ namespace AI
 
         const int monsterStrengthMultiplierCount = 2;
         const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
+
+        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
@@ -1860,12 +1883,24 @@ namespace AI
 
             _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
             _pathfinder.setSpellPointReserve( 0.5 );
+
+            // The size of heroes can be increased if a new hero is released from Jail.
+            const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
+
+            if ( maxHeroCount > 0 ) {
+                // At least one hero still exist in the kingdom.
+                const size_t progressValue = ( endProgressValue - startProgressValue ) * ( maxHeroCount - availableHeroes.size() ) / maxHeroCount + startProgressValue;
+
+                status.DrawAITurnProgress( static_cast<uint32_t>( progressValue ) );
+            }
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
 
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
         _pathfinder.setSpellPointReserve( 0.5 );
+
+        status.DrawAITurnProgress( endProgressValue );
 
         return allHeroesMoved;
     }

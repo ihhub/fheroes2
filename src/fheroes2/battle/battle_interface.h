@@ -231,7 +231,7 @@ namespace Battle
         void setBattleUIRect( const fheroes2::Rect & battleUIRect );
         void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
         void Reset();
-        void Redraw();
+        void Redraw() const;
 
     private:
         fheroes2::Rect _battleUIRect;
@@ -284,7 +284,8 @@ namespace Battle
         void RedrawActionLuck( const Unit & );
         void RedrawActionTowerPart1( const Tower &, const Unit & );
         void RedrawActionTowerPart2( const Tower &, const TargetInfo & );
-        void RedrawActionCatapult( int target, bool hit );
+        void RedrawActionCatapultPart1( const int catapultTargetId, const bool isHit );
+        void RedrawActionCatapultPart2( const int catapultTargetId );
         void RedrawActionTeleportSpell( Unit &, int32_t );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
         void RedrawActionSummonElementalSpell( Unit & target );
@@ -331,9 +332,9 @@ namespace Battle
         void RedrawActionColdRingSpell( int32_t, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell();
-        void RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength );
+        void RedrawActionHolyShoutSpell( const uint8_t strength );
         void RedrawActionResurrectSpell( Unit &, const Spell & );
-        void RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength );
+        void RedrawActionDeathWaveSpell( const int strength );
         void RedrawActionLightningBoltSpell( const Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
         void RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi ); // helper function
@@ -350,6 +351,7 @@ namespace Battle
         void ResetIdleTroopAnimation() const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
+        void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor );
 
         void ProcessingHeroDialogResult( int, Actions & );
 

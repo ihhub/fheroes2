@@ -381,8 +381,15 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                 }
             }
 
-            attacker->UpdateDirection();
-            defender->UpdateDirection();
+            // Reflect attacker only if he is alive.
+            if ( attacker->isValid() ) {
+                attacker->UpdateDirection();
+            }
+
+            // Reflect defender only if he is alive.
+            if ( defender->isValid() ) {
+                defender->UpdateDirection();
+            }
         }
         else {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << attacker->String( true ) << " and " << defender->String( true ) )
@@ -995,11 +1002,15 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
 
             if ( target ) {
                 if ( _interface ) {
-                    _interface->RedrawActionCatapult( target, hit );
+                    _interface->RedrawActionCatapultPart1( target, hit );
                 }
 
                 if ( hit ) {
                     SetCastleTargetValue( target, GetCastleTargetValue( target ) - damage );
+                    if ( _interface ) {
+                        // Continue animating the smoke cloud after changing the "health" of the building.
+                        _interface->RedrawActionCatapultPart2( target );
+                    }
                 }
 
                 DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << target << ", damage: " << damage << ", hit: " << hit )

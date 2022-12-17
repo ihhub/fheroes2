@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 22:36+0000\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -22,6 +22,77 @@ msgstr ""
 msgid ""
 "BATTLE\n"
 "ONLY"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
 msgstr ""
 
 msgid "GIFT"
@@ -1407,6 +1478,46 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Гноможер!!!!, рятуйтесь хто може.\""
 
 #, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Підняття немертвих"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Цеп блискавок"
+
+#, fuzzy
+msgid "campaignBonus|Fireblast"
+msgstr "Вогняний вибух"
+
+#, fuzzy
+msgid "campaignBonus|Mass Curse"
+msgstr "Масове прокляття"
+
+#, fuzzy
+msgid "campaignBonus|Mass Haste"
+msgstr "Масове прискорення"
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Зеркальний фантом"
+
+#, fuzzy
+msgid "campaignBonus|Resurrect"
+msgstr "Воскресіння"
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Сталева кожа"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
+msgstr "Клич Землі"
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Показ героїв"
+
+#, fuzzy
 msgid "campaignBonus|Ballista"
 msgstr "Баліста"
 
@@ -1659,46 +1770,6 @@ msgstr "Просунута Мудрість"
 #, fuzzy
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Експертна Мудрість"
-
-#, fuzzy
-msgid "campaignBonus|Animate Dead"
-msgstr "Підняття немертвих"
-
-#, fuzzy
-msgid "campaignBonus|Chain Lightning"
-msgstr "Цеп блискавок"
-
-#, fuzzy
-msgid "campaignBonus|Fireblast"
-msgstr "Вогняний вибух"
-
-#, fuzzy
-msgid "campaignBonus|Mass Curse"
-msgstr "Масове прокляття"
-
-#, fuzzy
-msgid "campaignBonus|Mass Haste"
-msgstr "Масове прискорення"
-
-#, fuzzy
-msgid "campaignBonus|Mirror Image"
-msgstr "Зеркальний фантом"
-
-#, fuzzy
-msgid "campaignBonus|Resurrect"
-msgstr "Воскресіння"
-
-#, fuzzy
-msgid "campaignBonus|Steelskin"
-msgstr "Сталева кожа"
-
-#, fuzzy
-msgid "campaignBonus|Summon Earth"
-msgstr "Клич Землі"
-
-#, fuzzy
-msgid "campaignBonus|View Heroes"
-msgstr "Показ героїв"
 
 #, fuzzy
 msgid ""
@@ -4274,9 +4345,6 @@ msgid ""
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
 
-msgid "Necroman"
-msgstr ""
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -6390,6 +6458,38 @@ msgid "race|Random"
 msgstr ""
 
 msgid "race|Neutral"
+msgstr ""
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Варвар"
+
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Чарівниця"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Некромант"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+msgid "doubleLinedRace|Random"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"

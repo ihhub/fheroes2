@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 22:36+0000\n"
-"PO-Revision-Date: 2022-10-24 12:26+0200\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
+"PO-Revision-Date: 2022-12-03 04:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -17,12 +17,83 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr "BATAILLE"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
 
 msgid "GIFT"
 msgstr "DON"
@@ -1415,6 +1486,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Le fléau des nains !!!!, sauve qui peut.\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Mort-vivant"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Foudre"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Souffle de feu"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Malédiction massive"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Célérité de masse"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Image miroir"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Résurrection"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Chair d'acier"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Invoquer la terre"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Voir héros"
+
 msgid "campaignBonus|Ballista"
 msgstr "Baliste"
 
@@ -1606,36 +1707,6 @@ msgstr "Sagesse avancée"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Expert en sagesse"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Mort-vivant"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Foudre"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Souffle de feu"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Malédiction massive"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Célérité de masse"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Image miroir"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Résurrection"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Chair d'acier"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Invoquer la terre"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Voir héros"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -4241,9 +4312,6 @@ msgstr ""
 "royaume, et affiche la date. Faites un clic gauche ici pour passer d'une "
 "fenêtre à l'autre."
 
-msgid "Necroman"
-msgstr "Nécroman"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -6746,6 +6814,37 @@ msgid "race|Random"
 msgstr "Aléatoire"
 
 msgid "race|Neutral"
+msgstr "Neutre"
+
+msgid "doubleLined|Knight"
+msgstr "Chevalier"
+
+msgid "doubleLined|Barbarian"
+msgstr "Barbare"
+
+msgid "doubleLined|Sorceress"
+msgstr "Sorcière"
+
+msgid "doubleLined|Warlock"
+msgstr "Mage"
+
+msgid "doubleLined|Wizard"
+msgstr "Magicien"
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+"Nécro-\n"
+"mant"
+
+msgid "doubleLinedRace|Multi"
+msgstr "Multi"
+
+msgid "doubleLinedRace|Random"
+msgstr "Aléatoire"
+
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutre"
 
 msgid "speed|Standing"
@@ -9960,6 +10059,9 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Nécroman"
 
 #~ msgid "Cyberlore Studios"
 #~ msgstr "Cyberlore Studios"

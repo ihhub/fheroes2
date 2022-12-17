@@ -1699,11 +1699,12 @@ namespace AI
             const bool hideAIMovements = ( conf.AIMoveSpeed() == 0 );
             const bool noMovementAnimation = ( conf.AIMoveSpeed() == 10 );
 
-            const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY };
+            const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY, Game::MAPS_DELAY };
 
-            while ( LocalEvent::Get().HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
+            LocalEvent & le = LocalEvent::Get();
+            while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
 #if defined( WITH_DEBUG )
-                if ( HotKeyPressEvent( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
+                if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
                     if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
                                                 fheroes2::Text( _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
                                                                 fheroes2::FontType::normalWhite() ),
@@ -1779,14 +1780,19 @@ namespace AI
                         }
                     }
 
-                    basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
-                    fheroes2::Display::instance().render();
+                    gameArea.SetRedraw();
                 }
 
                 if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                    // will be animated in hero loop
+                    // Update Adventure Map objects' animation.
                     uint32_t & frame = Game::MapsAnimationFrame();
                     ++frame;
+                    gameArea.SetRedraw();
+                }
+
+                if ( basicInterface.NeedRedraw() ) {
+                    basicInterface.Redraw();
+                    fheroes2::Display::instance().render();
                 }
             }
 

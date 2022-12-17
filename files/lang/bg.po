@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 22:36+0000\n"
+"POT-Creation-Date: 2022-12-16 10:13+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -24,6 +24,77 @@ msgid ""
 msgstr ""
 "САМО\n"
 "БИТКА"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
 
 msgid "GIFT"
 msgstr "ДАРИ"
@@ -1386,6 +1457,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Джуджеубиецо!!!!, бягай за да опазиш живота си.\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Анимирайте мъртвите"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Верижна светкавица"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Огнена експлозия"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Масово проклятие"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Масово бързане"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Огледална картина"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Възкръсни"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Стоманена кожа"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Призови Земята"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Виж героите"
+
 msgid "campaignBonus|Ballista"
 msgstr "Катапулт"
 
@@ -1577,36 +1678,6 @@ msgstr "Напреднала мъдрост"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Експертна мъдрост"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Анимирайте мъртвите"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Верижна светкавица"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Огнена експлозия"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Масово проклятие"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Масово бързане"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Огледална картина"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Възкръсни"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Стоманена кожа"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Призови Земята"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Виж героите"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -4179,9 +4250,6 @@ msgstr ""
 "кралство и показва датата. Щракни с левия бутон тук, за да преминеш през "
 "тези прозорци."
 
-msgid "Necroman"
-msgstr "Некромант"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -6609,6 +6677,47 @@ msgstr "Случаен"
 
 msgid "race|Neutral"
 msgstr "Неутрален"
+
+msgid "doubleLined|Knight"
+msgstr "Рицар"
+
+msgid "doubleLined|Barbarian"
+msgstr "Варварин"
+
+msgid "doubleLined|Sorceress"
+msgstr ""
+"Магьос-\n"
+"ница"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+"Магьос-\n"
+"ник"
+
+msgid "doubleLined|Wizard"
+msgstr ""
+"Вълшеб-\n"
+"ник"
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+"Некро-\n"
+"мант"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+"Комбина-\n"
+"ция"
+
+msgid "doubleLinedRace|Random"
+msgstr "Случаен"
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+"Неутра-\n"
+"лен"
 
 msgid "speed|Standing"
 msgstr "Стояща"
@@ -9762,6 +9871,9 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Necroman"
+#~ msgstr "Некромант"
 
 #~ msgid "Cyberlore Studios"
 #~ msgstr "Студия Cyberlore"
