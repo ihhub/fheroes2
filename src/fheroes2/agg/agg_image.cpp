@@ -844,8 +844,7 @@ namespace fheroes2
                                     originalButton.height() );
 
                     // Copy terminating right margin of the button.
-                    fheroes2::Copy( originalButton, originalButton.width() - widthEndPart, 0, out, offsetXEndPart, 0, widthEndPart,
-                                    originalButton.height() );
+                    fheroes2::Copy( originalButton, originalButton.width() - widthEndPart, 0, out, offsetXEndPart, 0, widthEndPart, originalButton.height() );
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
