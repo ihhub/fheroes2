@@ -1513,7 +1513,7 @@ namespace fheroes2
 
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( baseIcnId, 11 + i );
+                    out = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 11 + i );
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
