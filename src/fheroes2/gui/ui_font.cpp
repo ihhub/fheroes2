@@ -3565,6 +3565,7 @@ namespace
             letter.setPosition( buttonFontOffset.x, buttonFontOffset.y );
         }
         // Address symbols that should have even less space to neighboring symbols.
+        released[14].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
         released[33].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[54].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[57].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
@@ -3573,6 +3574,12 @@ namespace
         released[13].resize( 6 + offset * 2, 6 + offset * 2 );
         released[13].reset();
         fheroes2::DrawLine( released[13], { offset + 0, offset + 5 }, { offset + 5, offset + 5 }, buttonGoodReleasedColor );
+
+        // .
+        released[14].resize( 2 + offset * 2, 10 + offset * 2 );
+        released[14].reset();
+        fheroes2::DrawLine( released[14], { offset + 0, offset + 8 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[14], { offset + 0, offset + 9 }, { offset + 1, offset + 9 }, buttonGoodReleasedColor );
 
         // 0
         released[16].resize( 9 + offset * 2, 10 + offset * 2 );
