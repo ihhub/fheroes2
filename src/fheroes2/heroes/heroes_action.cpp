@@ -3150,13 +3150,15 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
         if ( !vec_eyes.empty() ) {
             Interface::Basic & I = Interface::Basic::Get();
 
+            fheroes2::Display & display = fheroes2::Display::instance();
+
             for ( const int32_t eyeIndex : vec_eyes ) {
                 Maps::ClearFog( eyeIndex, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
 
                 I.GetGameArea().SetCenter( Maps::GetPoint( eyeIndex ) );
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
-                fheroes2::Display::instance().render();
+                display.render();
 
                 LocalEvent & le = LocalEvent::Get();
                 int delay = 0;
@@ -3166,12 +3168,16 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
                         ++delay;
                         Game::updateAdventureMapAnimationIndex();
                         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+                        display.render();
                     }
                 }
             }
 
             I.GetGameArea().SetCenter( hero.GetCenter() );
             I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+            display.render();
         }
     }
 
