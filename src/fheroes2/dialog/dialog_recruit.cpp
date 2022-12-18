@@ -291,17 +291,17 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
 
     dst_pt.x = pos.x + 34;
     dst_pt.y = pos.y + 249;
-    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, ICN::RECRUIT, 8, 9 );
+    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 187;
     dst_pt.y = pos.y + 249;
-    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, ICN::RECRUIT, 6, 7 );
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 229;
     dst_pt.y = pos.y + 156;
-    fheroes2::ButtonSprite buttonMax( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ),
+    fheroes2::ButtonSprite buttonMax( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 ), fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 1 ),
                                       fheroes2::AGG::GetICN( ICN::MAX_DISABLED_BUTTON, 0 ) );
-    fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
+    fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_MIN_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 205;
     dst_pt.y = pos.y + 154;

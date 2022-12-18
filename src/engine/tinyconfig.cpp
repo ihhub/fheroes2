@@ -38,20 +38,17 @@
 
 namespace
 {
-    bool SpaceCompare( char a, char b )
-    {
-        return std::isspace( a ) && std::isspace( b );
-    }
-
     std::string ModifyKey( const std::string & str )
     {
         std::string key = StringTrim( StringLower( str ) );
 
-        // remove multiple space
-        key.erase( std::unique( key.begin(), key.end(), SpaceCompare ), key.end() );
+        // Replace consecutive space-like characters with only one such character
+        key.erase( std::unique( key.begin(), key.end(), []( const unsigned char a, const unsigned char b ) { return std::isspace( a ) && std::isspace( b ); } ),
+                   key.end() );
 
-        // change space
-        std::replace_if( key.begin(), key.end(), ::isspace, '\x20' );
+        // Replace all space-like characters with spaces
+        std::replace_if(
+            key.begin(), key.end(), []( const unsigned char c ) { return std::isspace( c ); }, '\x20' );
 
         return key;
     }
