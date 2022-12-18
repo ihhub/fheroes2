@@ -926,7 +926,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 101;
+                int32_t textWidth = 110;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "DISMISS" ), isEvilInterface );
 
                 break;
@@ -943,7 +943,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 101;
+                int32_t textWidth = 110;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "UPGRADE" ), isEvilInterface );
 
                 break;
@@ -1340,7 +1340,7 @@ namespace fheroes2
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 7, 5 }, { 6, 6 }, { 86, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 5, 5 }, { 4, 6 }, { 88, 16 }, buttonFontColor );
 
                 break;
             }
