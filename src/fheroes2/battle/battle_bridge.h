@@ -31,7 +31,7 @@ namespace Battle
 {
     class Unit;
 
-    class Bridge
+    class Bridge final
     {
     public:
         Bridge()
