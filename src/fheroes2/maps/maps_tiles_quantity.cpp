@@ -22,6 +22,8 @@
  ***************************************************************************/
 
 #include <cstdint>
+#include <list>
+#include <utility>
 
 #include "army_troop.h"
 #include "artifact.h"
