@@ -1152,8 +1152,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         // map objects animation
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            uint32_t & frame = Game::MapsAnimationFrame();
-            ++frame;
+            Game::updateAdventureMapAnimationIndex();
             gameArea.SetRedraw();
         }
 
@@ -1164,6 +1163,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         if ( NeedRedraw() ) {
             Redraw();
+
+            // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+            assert( GetRedrawMask() == 0 );
+
             display.render();
         }
     }

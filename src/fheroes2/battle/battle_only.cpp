@@ -181,7 +181,7 @@ bool Battle::Only::ChangeSettings()
     const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
     fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
 
-    const int icnId = ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int icnId = ICN::BUTTON_SMALL_OKAY_GOOD;
     const fheroes2::Sprite & buttonStartImage = fheroes2::AGG::GetICN( icnId, 0 );
     fheroes2::ButtonSprite buttonStart = fheroes2::makeButtonWithShadow( cur_pt.x + ( 640 - buttonStartImage.width() ) / 2, cur_pt.y + 428, buttonStartImage,
                                                                          fheroes2::AGG::GetICN( icnId, 1 ), display );

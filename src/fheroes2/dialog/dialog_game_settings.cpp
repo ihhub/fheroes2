@@ -138,9 +138,9 @@ namespace
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
-        const int buttonIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
-        const fheroes2::Sprite & buttonOkayReleased = fheroes2::AGG::GetICN( buttonIcnId, 0 );
-        const fheroes2::Sprite & buttonOkayPressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
+
+        const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowGraphicsRoi( graphicsRoi + windowRoi.getPosition() );
@@ -149,17 +149,23 @@ namespace
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowTextSupportModeRoi( textSupportModeRoi + windowRoi.getPosition() );
 
-        drawLanguage( windowLanguageRoi );
-        drawGraphics( windowGraphicsRoi );
-        drawAudioOptions( windowAudioRoi );
-        drawHotKeyOptions( windowHotKeyRoi );
-        drawCursorTypeOptions( windowCursorTypeRoi );
-        drawTextSupportModeOptions( windowTextSupportModeRoi );
+        auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowTextSupportModeRoi]() {
+            drawLanguage( windowLanguageRoi );
+            drawGraphics( windowGraphicsRoi );
+            drawAudioOptions( windowAudioRoi );
+            drawHotKeyOptions( windowHotKeyRoi );
+            drawCursorTypeOptions( windowCursorTypeRoi );
+            drawTextSupportModeOptions( windowTextSupportModeRoi );
+        };
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, buttonOkayReleased, buttonOkayPressed );
+        drawOptions();
+
+        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
         okayButton.draw();
 
         display.render();
+
+        bool isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
@@ -213,6 +219,16 @@ namespace
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
+            }
+
+            // Text support mode can be toggled using a global hotkey, we need to properly reflect this change in the UI
+            if ( isTextSupportModeEnabled != conf.isTextSupportModeEnabled() ) {
+                isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
+
+                emptyDialogRestorer.restore();
+                drawOptions();
+
+                display.render( emptyDialogRestorer.rect() );
             }
         }
 
