@@ -2822,7 +2822,7 @@ msgid "Language"
 msgstr "Langue"
 
 msgid "Graphics"
-msgstr "Graphique"
+msgstr "Paramètres\nd'affichage"
 
 msgid "Black & White"
 msgstr "Noir et blanc"
@@ -2843,7 +2843,7 @@ msgid "Select Game Language"
 msgstr "Choix de la langue"
 
 msgid "Change the graphics settings of the game."
-msgstr "Changer les paramètres de la graphique du jeu."
+msgstr "Changer les paramètres d'affichage."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -2951,7 +2951,7 @@ msgid "FPS"
 msgstr "FPS"
 
 msgid "System Info"
-msgstr "Infos sur le système"
+msgstr "Information\nsystème"
 
 msgid "Change the resolution of the game."
 msgstr "Changer la résolution du jeu."
