@@ -3565,7 +3565,7 @@ namespace
             letter.setPosition( buttonFontOffset.x, buttonFontOffset.y );
         }
         // Address symbols that should have even less space to neighboring symbols.
-        released[14].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
+        released[14].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[33].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[54].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[57].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
