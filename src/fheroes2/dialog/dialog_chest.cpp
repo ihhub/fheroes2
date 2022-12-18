@@ -45,7 +45,6 @@
 bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & message, uint32_t gold, uint32_t expr, const Heroes & hero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -64,13 +63,18 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite_expr.height() + 2 + text.h(), true );
 
     fheroes2::Point pt;
-    pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( system, 9 ).width() - 20;
-    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 5 ).height();
-    fheroes2::Button button_yes( pt.x, pt.y, system, 5, 6 );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;
+    const int buttonNoIcnID = isEvilInterface ? ICN::BUTTON_SMALL_NO_EVIL : ICN::BUTTON_SMALL_NO_GOOD;
+
+    pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( buttonYesIcnID, 0 ).width() - 20;
+    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonYesIcnID, 0 ).height();
+    fheroes2::Button button_yes( pt.x, pt.y, buttonYesIcnID, 0, 1 );
 
     pt.x = box.GetArea().x + box.GetArea().width / 2 + 20;
-    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 7 ).height();
-    fheroes2::Button button_no( pt.x, pt.y, system, 7, 8 );
+    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonNoIcnID, 0 ).height();
+    fheroes2::Button button_no( pt.x, pt.y, buttonNoIcnID, 0, 1 );
 
     fheroes2::Rect pos = box.GetArea();
 

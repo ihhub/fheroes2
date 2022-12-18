@@ -36,7 +36,7 @@ void StatusBar::ShowMessage( const std::string & msg )
         SetText( msg );
         SetPos( center.x - w() / 2, center.y - h() / 2 );
         Show();
-        fheroes2::Display::instance().render();
+        fheroes2::Display::instance().render( GetRect() );
         prev = msg;
     }
 }

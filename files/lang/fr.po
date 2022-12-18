@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
+"POT-Creation-Date: 2022-12-18 02:36+0000\n"
 "PO-Revision-Date: 2022-12-03 04:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -45,6 +45,57 @@ msgstr ""
 msgid "QUIT"
 msgstr ""
 
+msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
 msgid ""
 "STANDARD\n"
 "GAME"
@@ -59,9 +110,6 @@ msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
-msgstr ""
-
-msgid "CANCEL"
 msgstr ""
 
 msgid "CONFIG"
@@ -103,6 +151,9 @@ msgstr "DIFFICULTÉ"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "MAX"
+msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -1486,6 +1537,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Le fléau des nains !!!!, sauve qui peut.\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Mort-vivant"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Foudre"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Souffle de feu"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Malédiction massive"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Célérité de masse"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Image miroir"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Résurrection"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Chair d'acier"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Invoquer la terre"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Voir héros"
+
 msgid "campaignBonus|Ballista"
 msgstr "Baliste"
 
@@ -1677,36 +1758,6 @@ msgstr "Sagesse avancée"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Expert en sagesse"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Mort-vivant"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Foudre"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Souffle de feu"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Malédiction massive"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Célérité de masse"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Image miroir"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Résurrection"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Chair d'acier"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Invoquer la terre"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Voir héros"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -3059,14 +3110,20 @@ msgstr "Disponible : %{count}"
 msgid "Number to buy:"
 msgstr "Recruter :"
 
+msgid "Recruit selected monsters."
+msgstr ""
+
+msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "Select only 1 monster to be recruited."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr "Choisir la résolution d'écran:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Cliquez pour valider la résolution choisie."
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "How many troops to move?"
 msgstr "Troupes à déplacer :"

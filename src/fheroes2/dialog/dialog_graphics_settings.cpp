@@ -146,12 +146,12 @@ namespace
         drawOptions();
 
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
-        fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
+        fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         okayButton.draw();
 
         display.render();
 
-        bool fullScreen = fheroes2::engine().isFullScreen();
+        bool isFullScreen = fheroes2::engine().isFullScreen();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
@@ -194,14 +194,14 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
-            // Fullscreen mode can be toggled using a hotkey, we need to properly reflect this change in the UI
-            if ( fullScreen != fheroes2::engine().isFullScreen() ) {
-                fullScreen = fheroes2::engine().isFullScreen();
+            // Fullscreen mode can be toggled using a global hotkey, we need to properly reflect this change in the UI
+            if ( isFullScreen != fheroes2::engine().isFullScreen() ) {
+                isFullScreen = fheroes2::engine().isFullScreen();
 
                 emptyDialogRestorer.restore();
                 drawOptions();
 
-                display.render();
+                display.render( emptyDialogRestorer.rect() );
             }
         }
 

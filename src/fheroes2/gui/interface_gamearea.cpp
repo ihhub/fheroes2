@@ -809,7 +809,7 @@ void Interface::GameArea::SetRedraw() const
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Ultimate artifact is not found on index " << index )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Ultimate artifact is not found on index " << index )
         return fheroes2::Image();
     }
 
@@ -1044,11 +1044,13 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
     addObjectAnimationInfo( info );
 
     LocalEvent & le = LocalEvent::Get();
+    fheroes2::Display & display = fheroes2::Display::instance();
+    Interface::Basic & basicInterface = Interface::Basic::Get();
 
     while ( le.HandleEvents() && !info->isAnimationCompleted() ) {
         if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
-            fheroes2::Display::instance().render();
+            basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+            display.render();
         }
     }
 }

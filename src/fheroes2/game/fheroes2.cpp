@@ -126,8 +126,6 @@ namespace
             const Settings & conf = Settings::Get();
 
             fheroes2::Display & display = fheroes2::Display::instance();
-            if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
-                fheroes2::engine().toggleFullScreen();
 
             display.resize( conf.VideoMode().width, conf.VideoMode().height );
             display.fill( 0 ); // start from a black screen

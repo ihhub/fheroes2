@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
+"POT-Creation-Date: 2022-12-18 02:36+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -48,6 +48,57 @@ msgstr ""
 msgid "QUIT"
 msgstr ""
 
+msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
 msgid ""
 "STANDARD\n"
 "GAME"
@@ -62,9 +113,6 @@ msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
-msgstr ""
-
-msgid "CANCEL"
 msgstr ""
 
 msgid "CONFIG"
@@ -106,6 +154,9 @@ msgstr "СЛОЖНОСТЬ"
 
 msgid "MIN"
 msgstr "МИН"
+
+msgid "MAX"
+msgstr "МАКС"
 
 msgid "Warrior"
 msgstr "Воин"
@@ -1461,6 +1512,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Убийца гномов!!!!, спасайтесь кто может!\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Поднять нежить"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Цепь молний"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Огненный взрыв"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Общее проклятие"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Общее ускорение"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Фантом"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Оживление"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Стальная кожа"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Элементаль"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Показать героев"
+
 msgid "campaignBonus|Ballista"
 msgstr "Баллиста"
 
@@ -1652,36 +1733,6 @@ msgstr "Прод. мудрость"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Эксп. мудрость"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Поднять нежить"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Цепь молний"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Огненный взрыв"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Общее проклятие"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Общее ускорение"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Фантом"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Оживление"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Стальная кожа"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Элементаль"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Показать героев"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -3011,14 +3062,20 @@ msgstr "Доступно: %{count}"
 msgid "Number to buy:"
 msgstr "Нанять:"
 
+msgid "Recruit selected monsters."
+msgstr ""
+
+msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "Select only 1 monster to be recruited."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr "Выбор разрешения экрана:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
-
-msgid "MAX"
-msgstr "МАКС"
 
 msgid "How many troops to move?"
 msgstr "Сколько существ перенести?"

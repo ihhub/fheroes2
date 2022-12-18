@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
+"POT-Creation-Date: 2022-12-18 02:36+0000\n"
 "PO-Revision-Date: 2022-12-03 03:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -44,6 +44,57 @@ msgstr ""
 msgid "QUIT"
 msgstr ""
 
+msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
 msgid ""
 "STANDARD\n"
 "GAME"
@@ -58,9 +109,6 @@ msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
-msgstr ""
-
-msgid "CANCEL"
 msgstr ""
 
 msgid "CONFIG"
@@ -102,6 +150,9 @@ msgstr ""
 
 msgid "MIN"
 msgstr ""
+
+msgid "MAX"
+msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Krieger"
@@ -1507,6 +1558,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Zwergenfluch!!!!, rennt um euer Leben.\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Tote beleben"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Kettenblitzstrahl"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Feuerstoß"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Massenfluch"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Masseneile"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Spiegelbild"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Tote beleben"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Stahlhaut"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Erdwesen beschwören"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Helden anzeigen"
+
 msgid "campaignBonus|Ballista"
 msgstr "Ballista"
 
@@ -1698,36 +1779,6 @@ msgstr "Verbesserte Weisheit"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Meisterhafte Weisheit"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Tote beleben"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Kettenblitzstrahl"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Feuerstoß"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Massenfluch"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Masseneile"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Spiegelbild"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Tote beleben"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Stahlhaut"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Erdwesen beschwören"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Helden anzeigen"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -3088,14 +3139,20 @@ msgstr "Vorhanden: %{count}"
 msgid "Number to buy:"
 msgstr "Anzahl:"
 
+msgid "Recruit selected monsters."
+msgstr ""
+
+msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "Select only 1 monster to be recruited."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr "Spielauflösung wählen:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Klicken Sie, um die ausgewählte Auflösung anzuwenden."
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "How many troops to move?"
 msgstr "Wie viele Truppen sollen verlegt werden?"
