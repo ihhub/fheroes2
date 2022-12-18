@@ -783,7 +783,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uin
     Game::PlayPickupSound();
 
     const int buttonOffset = 121;
-    const int buttonICN = isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB;
+    const int buttonICN = isEvilInterface ? ICN::BUTTON_SMALLER_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_GOOD;
     fheroes2::Button buttonOk( renderArea.x + buttonOffset, renderArea.y + 410, buttonICN, 0, 1 );
     buttonOk.draw();
 
