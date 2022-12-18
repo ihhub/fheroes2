@@ -358,7 +358,7 @@ namespace
 namespace
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    class RenderCursor : public fheroes2::Cursor
+    class RenderCursor final : public fheroes2::Cursor
     {
     public:
         RenderCursor( const RenderCursor & ) = delete;
@@ -518,7 +518,7 @@ namespace
     };
 #else
     // SDL 1 doesn't support hardware level cursor.
-    class RenderCursor : public fheroes2::Cursor
+    class RenderCursor final : public fheroes2::Cursor
     {
     public:
         RenderCursor() = default;
@@ -754,13 +754,10 @@ namespace
                 return;
             }
 
-            bool fullScreen = true;
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
                 flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
                 flags &= ~SDL_WINDOW_FULLSCREEN;
-
-                fullScreen = false;
             }
             else {
 #if defined( _WIN32 )
@@ -787,7 +784,9 @@ namespace
                 ERROR_LOG( "Failed to set fullscreen mode flags. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
 
-            if ( !fullScreen && _windowedSize.width != 0 && _windowedSize.height != 0 ) {
+            _syncFullScreen();
+
+            if ( !isFullScreen() && _windowedSize.width != 0 && _windowedSize.height != 0 ) {
                 SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
             }
 
@@ -1045,6 +1044,8 @@ namespace
                 return false;
             }
 
+            _syncFullScreen();
+
             bool isPaletteModeSupported = false;
 
             SDL_RendererInfo rendererInfo;
@@ -1230,6 +1231,15 @@ namespace
 
             return true;
         }
+
+        void _syncFullScreen()
+        {
+            if ( isFullScreen() != BaseRenderEngine::isFullScreen() ) {
+                BaseRenderEngine::toggleFullScreen();
+
+                assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
+            }
+        }
     };
 #else
     class RenderEngine final : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
@@ -1267,6 +1277,7 @@ namespace
                 _surface = SDL_SetVideoMode( 0, 0, _bitDepth, flags );
             }
 
+            _syncFullScreen();
             _createPalette();
         }
 
@@ -1371,6 +1382,8 @@ namespace
                 return false;
             }
 
+            _syncFullScreen();
+
             if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != width_ || _surface->h != height_ ) {
                 clear();
                 return false;
@@ -1430,6 +1443,15 @@ namespace
                         linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                     }
                 }
+            }
+        }
+
+        void _syncFullScreen()
+        {
+            if ( isFullScreen() != BaseRenderEngine::isFullScreen() ) {
+                BaseRenderEngine::toggleFullScreen();
+
+                assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
             }
         }
     };
