@@ -3417,8 +3417,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     StringReplace( msg, "%{monster}", Translation::StringLower( unit.GetName() ) );
     StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
 
-    // TODO: remove this temporary assertion
-    assert( _flyingUnit == nullptr );
+    assert( _movingUnit == nullptr && _flyingUnit == nullptr );
 
     _currentUnit = nullptr;
     _movingUnit = &unit;
@@ -3549,9 +3548,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
     }
 
-    // TODO: remove this temporary assertion
-    assert( _currentUnit == nullptr && _flyingUnit == nullptr );
-
     _movingUnit = nullptr;
 
     unit.SwitchAnimation( Monster_Info::STATIC );
@@ -3559,6 +3555,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
 
     status.SetMessage( msg, true );
+
+    assert( _currentUnit == nullptr && _movingUnit == nullptr && _flyingUnit == nullptr );
 }
 
 void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
@@ -3605,7 +3603,6 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         }
     }
 
-    // TODO: remove this temporary assertion
     assert( _movingUnit == nullptr && _flyingUnit == nullptr );
 
     // Jump up
@@ -3666,6 +3663,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
 
     status.SetMessage( msg, true );
+
+    assert( _currentUnit == nullptr && _movingUnit == nullptr && _flyingUnit == nullptr );
 }
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playSound )
@@ -3985,7 +3984,9 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
     }
 
     status.SetMessage( " ", false );
-    _movingUnit = nullptr;
+
+    // TODO: remove this temporary assertion
+    assert( _movingUnit == nullptr );
 }
 
 void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell, const Unit & attacker, const TargetInfo & target )
@@ -4225,7 +4226,8 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
         status.SetMessage( "", false );
     }
 
-    _movingUnit = nullptr;
+    // TODO: remove this temporary assertion
+    assert( _movingUnit == nullptr );
 }
 
 void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, const bool isHit )
