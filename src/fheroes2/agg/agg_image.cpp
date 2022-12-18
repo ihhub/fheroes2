@@ -133,6 +133,8 @@ namespace
                                                 ICN::UNIFORM_EVIL_OKAY_BUTTON,
                                                 ICN::UNIFORM_GOOD_CANCEL_BUTTON,
                                                 ICN::UNIFORM_EVIL_CANCEL_BUTTON,
+                                                ICN::UNIFORM_GOOD_EXIT_BUTTON,
+                                                ICN::UNIFORM_EVIL_EXIT_BUTTON,
                                                 ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
                                                 ICN::BUTTON_SMALL_MIN_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
@@ -1496,6 +1498,29 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::UNIFORM_GOOD_EXIT_BUTTON:
+            case ICN::UNIFORM_EVIL_EXIT_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_EXIT_BUTTON );
+                const int baseIcnId = isEvilInterface ? ICN::TRADPOSE : ICN::TRADPOST;
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( baseIcnId, 17 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnId, 18 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, 11 + i );
+                }
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
+
+                break;
+            }
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -2091,6 +2116,8 @@ namespace fheroes2
             case ICN::UNIFORM_EVIL_OKAY_BUTTON:
             case ICN::UNIFORM_GOOD_CANCEL_BUTTON:
             case ICN::UNIFORM_EVIL_CANCEL_BUTTON:
+            case ICN::UNIFORM_GOOD_EXIT_BUTTON:
+            case ICN::UNIFORM_EVIL_EXIT_BUTTON:
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
             case ICN::BUTTON_SMALL_MIN_GOOD:
             case ICN::BUTTON_SMALL_MAX_GOOD:

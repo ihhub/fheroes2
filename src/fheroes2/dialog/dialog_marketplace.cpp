@@ -333,7 +333,9 @@ void TradeWindowGUI::RedrawInfoBuySell( uint32_t count_sell, uint32_t count_buy,
 void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int tradpost = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const int tradpost = isEvilInterface ? ICN::TRADPOSE : ICN::TRADPOST;
     const std::string & header = fromTradingPost ? _( "Trading Post" ) : _( "Marketplace" );
 
     // setup cursor
@@ -418,11 +420,12 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     fheroes2::Scrollbar & scrollbar = gui._scrollbar;
 
     // button exit
-    const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpost, 17 );
+    const int exitButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_EXIT_BUTTON : ICN::UNIFORM_GOOD_EXIT_BUTTON;
+    const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( exitButtonIcnID, 0 );
 
     dst_pt.x = pos_rt.x + 68 + ( pos_rt.width - spriteExit.width() ) / 2;
     dst_pt.y = pos_rt.y + pos_rt.height - spriteExit.height();
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, tradpost, 17, 18 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
 
     buttonGift.draw();
     buttonExit.draw();
