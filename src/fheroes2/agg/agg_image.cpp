@@ -818,8 +818,15 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 87;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "TRADE" ), isEvilInterface );
+                const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnID, 11 + i );
+                }
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
