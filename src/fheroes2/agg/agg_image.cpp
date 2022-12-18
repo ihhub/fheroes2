@@ -961,7 +961,7 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 102;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "OMSTART" ), isEvilInterface );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "RESTART" ), isEvilInterface );
 
                 break;
             }
