@@ -28,6 +28,7 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
@@ -597,6 +598,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             break;
         default:
             // Some maps have broken resources being put which ideally we need to correct. Let's make them 0 Wood.
+            ERROR_LOG( "Tile " << _index << " contains unknown resource type. Tileset " << objectTileset << ", object index " << objectIndex )
             resourceType = Resource::WOOD;
             count = 0;
             break;
