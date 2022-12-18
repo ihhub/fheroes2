@@ -59,55 +59,55 @@ msgid "QUIT"
 msgstr "ВЫЙТИ"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ОТМЕНА"
 
 msgid "OKAY"
-msgstr ""
+msgstr "ОК"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ПРИНЯТЬ"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "ОТКЛОНИТЬ"
 
 msgid "LEARN"
-msgstr ""
+msgstr "ИЗУЧИТЬ"
 
 msgid "TRADE"
-msgstr ""
+msgstr "МЕНЯТЬ"
 
 msgid "YES"
-msgstr ""
+msgstr "ДА"
 
 msgid "NO"
-msgstr ""
+msgstr "НЕТ"
 
 msgid "EXIT"
-msgstr ""
+msgstr "ВЫЙТИ"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "УВОЛИТЬ"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "УЛУЧШИТЬ"
 
 msgid "RESTART"
-msgstr ""
+msgstr "ПЕРЕИГРАТЬ"
 
 msgid "S"
-msgstr ""
+msgstr "М"
 
 msgid "M"
-msgstr ""
+msgstr "С"
 
 msgid "L"
-msgstr ""
+msgstr "Б"
 
 msgid "X-L"
-msgstr ""
+msgstr "О-Б"
 
 msgid "ALL"
-msgstr ""
+msgstr "ВСЕ"
 
 msgid ""
 "STANDARD\n"
@@ -3090,13 +3090,13 @@ msgid "Number to buy:"
 msgstr "Нанять:"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Нанять выбранных существ."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Выбрать максимальное количество существ для найма."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Выбрать всего 1 существо для найма."
 
 msgid "Select Game Resolution:"
 msgstr "Выбор разрешения экрана:"
