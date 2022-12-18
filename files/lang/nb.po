@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-17 14:33+0000\n"
+"POT-Creation-Date: 2022-12-18 02:36+0000\n"
 "PO-Revision-Date: 2022-11-09 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -44,6 +44,57 @@ msgstr ""
 msgid "QUIT"
 msgstr ""
 
+msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
 msgid ""
 "STANDARD\n"
 "GAME"
@@ -58,9 +109,6 @@ msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
-msgstr ""
-
-msgid "CANCEL"
 msgstr ""
 
 msgid "CONFIG"
@@ -102,6 +150,9 @@ msgstr "NIVÅ"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "MAX"
+msgstr "MAKS"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -3078,9 +3129,6 @@ msgstr "Antall valgt:"
 
 msgid "Recruit selected monsters."
 msgstr ""
-
-msgid "MAX"
-msgstr "MAKS"
 
 msgid "Select maximum monsters to be recruited."
 msgstr ""
