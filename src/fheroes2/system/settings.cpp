@@ -113,7 +113,7 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
-    _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+    _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
 
     if ( System::isHandheldDevice() ) {
         // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
