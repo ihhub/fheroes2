@@ -741,11 +741,13 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 86;
+                const char * text = "OKAY";
                 if ( id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) {
                     textWidth = 70;
+                    text = "smallerButton|OKAY";
                 }
 
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "OKAY" ), isEvilInterface );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( text ), isEvilInterface );
 
                 break;
             }
