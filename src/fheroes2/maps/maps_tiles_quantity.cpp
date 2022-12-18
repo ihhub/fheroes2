@@ -23,6 +23,7 @@
 
 #include <cstdint>
 #include <list>
+#include <ostream>
 #include <utility>
 
 #include "army_troop.h"
@@ -598,7 +599,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             break;
         default:
             // Some maps have broken resources being put which ideally we need to correct. Let's make them 0 Wood.
-            ERROR_LOG( "Tile " << _index << " contains unknown resource type. Tileset " << objectTileset << ", object index " << objectIndex )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << _index << " contains unknown resource type. Tileset " << objectTileset << ", object index " << objectIndex )
             resourceType = Resource::WOOD;
             count = 0;
             break;
