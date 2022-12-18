@@ -733,7 +733,7 @@ void Kingdom::openOverviewDialog()
 
     dst_pt.x = cur_pt.x + 540;
     dst_pt.y = cur_pt.y + 453;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 4, 5 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_EXIT, 0, 1 );
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
 
