@@ -424,6 +424,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     buttonGift.draw();
     buttonExit.draw();
+    buttonTrade.disable();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
