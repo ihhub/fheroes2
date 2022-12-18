@@ -53,41 +53,40 @@ msgid "QUIT"
 msgstr "ИЗХОД"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ОТКАЗ"
 
 msgid "OKAY"
-msgstr ""
+msgstr "ДОБРЕ"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ПРИЕМАМ"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "ОТКАЗВАМ"
 
 msgid "LEARN"
-msgstr ""
+msgstr "УЧА"
 
 msgid "TRADE"
-msgstr ""
+msgstr "СДЕЛКА"
 
 msgid "YES"
-msgstr ""
+msgstr "ДА"
 
-#, fuzzy
 msgid "NO"
-msgstr "С"
+msgstr "НЕ"
 
 msgid "EXIT"
-msgstr ""
+msgstr "ИЗХОД"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "ОТПРАЩАМ"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "ПОДОБРЯВАМ"
 
 msgid "RESTART"
-msgstr ""
+msgstr "РЕСТАРТ"
 
 msgid "S"
 msgstr ""
@@ -102,7 +101,7 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
-msgstr ""
+msgstr "ВСИЧКИ"
 
 msgid ""
 "STANDARD\n"
