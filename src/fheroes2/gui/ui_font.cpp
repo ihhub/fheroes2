@@ -4367,8 +4367,11 @@ namespace
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
 
-        // Offset letters with diacritics above them.
-        released[197 - 32].setPosition( buttonFontOffset.x, -2 );
+        // Change spacing relative to other characters.
+        released[192 - 32].setPosition( buttonFontOffset.x - 1, -3 );
+        released[193 - 32].setPosition( buttonFontOffset.x - 1, -3 );
+        released[197 - 32].setPosition( buttonFontOffset.x - 1, -2 );
+        released[200 - 32].setPosition( buttonFontOffset.x, -3 );
         released[201 - 32].setPosition( buttonFontOffset.x, -3 );
 
         // A with circle on top
@@ -4407,6 +4410,24 @@ namespace
         fheroes2::SetPixel( released[198 - 32], offset + 14, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[198 - 32], offset + 12, offset + 3, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[198 - 32], offset + 12, offset + 5, buttonGoodReleasedColor );
+
+        // A with grave.
+        released[192 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 3 );
+        released[192 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[192 - 32], 0, 3, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::DrawLine( released[192 - 32], { offset + 6, offset + 0 }, { offset + 7, offset + 1 }, buttonGoodReleasedColor );
+
+        // A with acute.
+        released[193 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 3 );
+        released[193 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[193 - 32], 0, 3, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::DrawLine( released[193 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+
+        // E with grave.
+        released[200 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 3 );
+        released[200 - 32].reset();
+        fheroes2::Copy( released[69 - 32], 0, 0, released[200 - 32], 0, 3, released[69 - 32].width(), released[69 - 32].height() );
+        fheroes2::DrawLine( released[200 - 32], { offset + 4, offset + 0 }, { offset + 5, offset + 1 }, buttonGoodReleasedColor );
 
         // E with acute.
         released[201 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 3 );
