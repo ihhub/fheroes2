@@ -1,4 +1,9 @@
 version 1.0.0 (21 December 2022)
+- update the Norwegian translation
+- add global hotkey to toggle the text support mode
+- make the regular small buttons translatable
+- make Trade button in Marketplace window disabled by default
+- add popup windows for monster recruit dialog
 - fix animation of slowed flying creatures
 - fix multiple hero related awards for campaigns
 - fix Death Wave, Holy Shout and Holy Word spell animations
