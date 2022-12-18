@@ -960,8 +960,8 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 98;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "RESTART" ), isEvilInterface );
+                int32_t textWidth = 102;
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "OMSTART" ), isEvilInterface );
 
                 break;
             }
