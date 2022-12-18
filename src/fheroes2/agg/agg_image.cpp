@@ -828,7 +828,7 @@ namespace fheroes2
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), { 6, 5 }, { 4, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
