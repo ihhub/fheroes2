@@ -65,7 +65,7 @@ msgid "DECLINE"
 msgstr "ОТКАЗВАМ"
 
 msgid "LEARN"
-msgstr "УЧА"
+msgstr "НАУЧИ"
 
 msgid "TRADE"
 msgstr "СДЕЛКА"
