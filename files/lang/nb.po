@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-18 02:36+0000\n"
-"PO-Revision-Date: 2022-11-09 01:17+0100\n"
+"PO-Revision-Date: 2022-12-18 04:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -56,52 +56,52 @@ msgid "CANCEL"
 msgstr "AVBRYT"
 
 msgid "OKAY"
-msgstr ""
+msgstr "GREIT"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "GODTA"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "AVSLÅ"
 
 msgid "LEARN"
-msgstr ""
+msgstr "LÆR"
 
 msgid "TRADE"
-msgstr ""
+msgstr "BYTT"
 
 msgid "YES"
-msgstr ""
+msgstr "JA"
 
 msgid "NO"
-msgstr ""
+msgstr "NEI"
 
 msgid "EXIT"
-msgstr ""
+msgstr "UT"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "BORTVIS"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "OPPGRAD."
 
 msgid "RESTART"
-msgstr ""
+msgstr "PÅ NYTT"
 
 msgid "S"
-msgstr ""
+msgstr "L"
 
 msgid "M"
-msgstr ""
+msgstr "M"
 
 msgid "L"
-msgstr ""
+msgstr "S"
 
 msgid "X-L"
-msgstr ""
+msgstr "XS"
 
 msgid "ALL"
-msgstr ""
+msgstr "ALT"
 
 msgid ""
 "STANDARD\n"
