@@ -34,12 +34,10 @@ namespace Battle
     class Bridge final
     {
     public:
-        Bridge()
-            : _isDestroyed( false )
-            , _isDown( false )
-        {}
-
+        Bridge() = default;
         Bridge( const Bridge & ) = delete;
+
+        ~Bridge() = default;
 
         Bridge & operator=( const Bridge & ) = delete;
 
@@ -79,8 +77,8 @@ namespace Battle
     private:
         static bool isOccupied();
 
-        bool _isDestroyed;
-        bool _isDown;
+        bool _isDestroyed{ false };
+        bool _isDown{ false };
 
         enum
         {
