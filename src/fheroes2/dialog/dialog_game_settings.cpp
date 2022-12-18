@@ -140,9 +140,7 @@ namespace
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
-        const int buttonIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
-        const fheroes2::Sprite & buttonOkayReleased = fheroes2::AGG::GetICN( buttonIcnId, 0 );
-        const fheroes2::Sprite & buttonOkayPressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );
+        const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowGraphicsRoi( graphicsRoi + windowRoi.getPosition() );
@@ -162,7 +160,7 @@ namespace
 
         drawOptions();
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, buttonOkayReleased, buttonOkayPressed );
+        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
         okayButton.draw();
 
         display.render();
