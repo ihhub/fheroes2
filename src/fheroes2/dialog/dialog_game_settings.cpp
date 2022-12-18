@@ -167,7 +167,7 @@ namespace
 
         display.render();
 
-        bool isTextSupportModeEnabled = Settings::Get().isTextSupportModeEnabled();
+        bool isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
@@ -224,13 +224,13 @@ namespace
             }
 
             // Text support mode can be toggled using a global hotkey, we need to properly reflect this change in the UI
-            if ( isTextSupportModeEnabled != Settings::Get().isTextSupportModeEnabled() ) {
-                isTextSupportModeEnabled = Settings::Get().isTextSupportModeEnabled();
+            if ( isTextSupportModeEnabled != conf.isTextSupportModeEnabled() ) {
+                isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
 
                 emptyDialogRestorer.restore();
                 drawOptions();
 
-                display.render();
+                display.render( emptyDialogRestorer.rect() );
             }
         }
 

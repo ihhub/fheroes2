@@ -201,7 +201,7 @@ namespace
                 emptyDialogRestorer.restore();
                 drawOptions();
 
-                display.render();
+                display.render( emptyDialogRestorer.rect() );
             }
         }
 
