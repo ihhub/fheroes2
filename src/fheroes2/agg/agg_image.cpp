@@ -1052,7 +1052,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 46;
+                int32_t textWidth = 58;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ALL" ), false );
 
                 break;
