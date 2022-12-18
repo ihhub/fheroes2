@@ -80,10 +80,10 @@ msgid "EXIT"
 msgstr "ИЗХОД"
 
 msgid "DISMISS"
-msgstr "ОТПРАЩАМ"
+msgstr "МАХНИ"
 
 msgid "UPGRADE"
-msgstr "ПОДОБРЯВАМ"
+msgstr "ЗАСИЛИ"
 
 msgid "RESTART"
 msgstr "РЕСТАРТ"
@@ -101,7 +101,7 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
-msgstr "ВСИЧКИ"
+msgstr ""
 
 msgid ""
 "STANDARD\n"
@@ -2562,7 +2562,7 @@ msgid "Recruit Creatures"
 msgstr "Вербувай същества"
 
 msgid "Max"
-msgstr "Макс"
+msgstr "Максимално"
 
 msgid "Hire all creatures in the town."
 msgstr "Наеми всички същества в града."
@@ -2982,7 +2982,7 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr "Мога да ти предложа 1 единица %{resto} за %{count} единици %{resfrom}."
 
 msgid "Min"
-msgstr "Мин"
+msgstr "Минимално"
 
 msgid "Qty to trade"
 msgstr "Количество за търговия"
@@ -3084,13 +3084,13 @@ msgid "Number to buy:"
 msgstr "Покупка на:"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Вербувай избраните чудовища."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Избери максимален брой чудовища, които да бъдат наети."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Избери само 1 чудовище, което да бъде наето."
 
 msgid "Select Game Resolution:"
 msgstr "Изберете резолюция на играта:"
