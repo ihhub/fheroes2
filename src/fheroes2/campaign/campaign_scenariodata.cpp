@@ -29,10 +29,12 @@
 #include "artifact.h"
 #include "campaign_scenariodata.h"
 #include "dir.h"
+#include "game.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -202,7 +204,7 @@ namespace
         case 6:
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::SULFUR, 10 );
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::POWER_AXE, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::ANIMATEDEAD, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::SPELL_SCROLL, 1, Spell::ANIMATEDEAD );
             break;
         case 7:
             bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::VIEWHEROES, 1 );
@@ -337,7 +339,35 @@ namespace
         return bonus;
     }
 
-    const char * getArtifactCampaignName( const int32_t artifactId )
+    const char * getSpellCampaignName( const int32_t spellId )
+    {
+        switch ( spellId ) {
+        case Spell::ANIMATEDEAD:
+            return _( "campaignBonus|Animate Dead" );
+        case Spell::CHAINLIGHTNING:
+            return _( "campaignBonus|Chain Lightning" );
+        case Spell::FIREBLAST:
+            return _( "campaignBonus|Fireblast" );
+        case Spell::MASSCURSE:
+            return _( "campaignBonus|Mass Curse" );
+        case Spell::MASSHASTE:
+            return _( "campaignBonus|Mass Haste" );
+        case Spell::MIRRORIMAGE:
+            return _( "campaignBonus|Mirror Image" );
+        case Spell::RESURRECT:
+            return _( "campaignBonus|Resurrect" );
+        case Spell::STEELSKIN:
+            return _( "campaignBonus|Steelskin" );
+        case Spell::SUMMONEELEMENT:
+            return _( "campaignBonus|Summon Earth" );
+        case Spell::VIEWHEROES:
+            return _( "campaignBonus|View Heroes" );
+        default:
+            return Spell( spellId ).GetName();
+        }
+    }
+
+    const char * getArtifactCampaignName( const int32_t artifactId, const int32_t spellId )
     {
         switch ( artifactId ) {
         case Artifact::BALLISTA:
@@ -384,6 +414,8 @@ namespace
             return _( "campaignBonus|Traveler's Boots" );
         case Artifact::WHITE_PEARL:
             return _( "campaignBonus|White Pearl" );
+        case Artifact::SPELL_SCROLL:
+            return getSpellCampaignName( spellId );
         default:
             return Artifact( artifactId ).GetName();
         }
@@ -581,34 +613,6 @@ namespace
         }
     }
 
-    const char * getSpellCampaignName( const int32_t spellId )
-    {
-        switch ( spellId ) {
-        case Spell::ANIMATEDEAD:
-            return _( "campaignBonus|Animate Dead" );
-        case Spell::CHAINLIGHTNING:
-            return _( "campaignBonus|Chain Lightning" );
-        case Spell::FIREBLAST:
-            return _( "campaignBonus|Fireblast" );
-        case Spell::MASSCURSE:
-            return _( "campaignBonus|Mass Curse" );
-        case Spell::MASSHASTE:
-            return _( "campaignBonus|Mass Haste" );
-        case Spell::MIRRORIMAGE:
-            return _( "campaignBonus|Mirror Image" );
-        case Spell::RESURRECT:
-            return _( "campaignBonus|Resurrect" );
-        case Spell::STEELSKIN:
-            return _( "campaignBonus|Steelskin" );
-        case Spell::SUMMONEELEMENT:
-            return _( "campaignBonus|Summon Earth" );
-        case Spell::VIEWHEROES:
-            return _( "campaignBonus|View Heroes" );
-        default:
-            return Spell( spellId ).GetName();
-        }
-    }
-
     bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
     {
         static const auto fileNameToPath = []() {
@@ -651,12 +655,21 @@ namespace Campaign
         : _type( 0 )
         , _subType( 0 )
         , _amount( 0 )
+        , _artifactSpellId( Spell::NONE )
     {}
 
     ScenarioBonusData::ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount )
         : _type( type )
         , _subType( subType )
         , _amount( amount )
+        , _artifactSpellId( Spell::NONE )
+    {}
+
+    ScenarioBonusData::ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount, const int32_t spellId )
+        : _type( type )
+        , _subType( subType )
+        , _amount( amount )
+        , _artifactSpellId( spellId )
     {}
 
     std::string ScenarioBonusData::getName() const
@@ -665,7 +678,7 @@ namespace Campaign
 
         switch ( _type ) {
         case ScenarioBonusData::ARTIFACT:
-            objectName = getArtifactCampaignName( _subType );
+            objectName = getArtifactCampaignName( _subType, _artifactSpellId );
             break;
         case ScenarioBonusData::RESOURCES:
             objectName = std::to_string( _amount ) + " " + Resource::String( _subType );
@@ -776,12 +789,22 @@ namespace Campaign
 
     StreamBase & operator<<( StreamBase & msg, const Campaign::ScenarioBonusData & data )
     {
-        return msg << data._type << data._subType << data._amount;
+        return msg << data._type << data._subType << data._amount << data._artifactSpellId;
     }
 
     StreamBase & operator>>( StreamBase & msg, Campaign::ScenarioBonusData & data )
     {
-        return msg >> data._type >> data._subType >> data._amount;
+        msg >> data._type >> data._subType >> data._amount;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE5_1000_RELEASE, "Remove the check below." );
+        if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE5_1000_RELEASE ) {
+            data._artifactSpellId = Spell::NONE;
+        }
+        else {
+            msg >> data._artifactSpellId;
+        }
+
+        return msg;
     }
 
     ScenarioData::ScenarioData( const ScenarioInfoId & scenarioInfo, std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName,

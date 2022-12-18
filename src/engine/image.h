@@ -167,6 +167,11 @@ namespace fheroes2
             return _height;
         }
 
+        Rect rect() const
+        {
+            return { _x, _y, _width, _height };
+        }
+
         void restore();
         void reset();
 

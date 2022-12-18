@@ -192,15 +192,10 @@ Heroes::Heroes()
     , _aiRole( Role::HUNTER )
 {}
 
-Heroes::Heroes( int heroID, int race, int initialLevel )
+Heroes::Heroes( const int heroID, const int race, const uint32_t additionalExperience )
     : Heroes( heroID, race )
 {
-    // level 1 is technically regarded as 0, so reduce the initial level by 1
-    experience = GetExperienceFromLevel( initialLevel - 1 );
-
-    for ( int i = 1; i < initialLevel; ++i ) {
-        LevelUp( false, true );
-    }
+    IncreaseExperience( additionalExperience, true );
 }
 
 Heroes::Heroes( int heroid, int rc )
@@ -733,7 +728,6 @@ bool Heroes::Recruit( const Castle & castle )
     }
 
     if ( castle.GetLevelMageGuild() ) {
-        // learn spells
         castle.MageGuildEducateHero( *this );
     }
 
@@ -744,34 +738,29 @@ bool Heroes::Recruit( const Castle & castle )
 
 void Heroes::ActionNewDay()
 {
-    // recovery move points
     move_point = GetMaxMovePoints();
 
-    // replenish spell points
-    ReplenishSpellPoints();
+    if ( world.CountDay() > 1 ) {
+        ReplenishSpellPoints();
+    }
 
-    // remove day visit object
     visit_object.remove_if( Visit::isDayLife );
 
-    // new day, new capacities
     ResetModes( SAVEMP );
 }
 
 void Heroes::ActionNewWeek()
 {
-    // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
 }
 
 void Heroes::ActionNewMonth()
 {
-    // remove month visit object
     visit_object.remove_if( Visit::isMonthLife );
 }
 
 void Heroes::ActionAfterBattle()
 {
-    // remove month visit object
     visit_object.remove_if( Visit::isBattleLife );
 
     SetModes( ACTION );
@@ -999,7 +988,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
     return true;
 }
 
-void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
+void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect /* = false */ )
 {
     int oldLevel = GetLevelFromExperience( experience );
     int newLevel = GetLevelFromExperience( experience + amount );
@@ -1721,27 +1710,27 @@ void AllHeroes::Init()
     for ( uint32_t hid = Heroes::ZOM; hid <= Heroes::CELIA; ++hid )
         push_back( new Heroes( hid, Race::NECR ) );
 
-    // from campain
-    push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5 ) );
-    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT, 5 ) );
-    push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5 ) );
-    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5 ) );
-    push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5 ) );
-    push_back( new Heroes( Heroes::BAX, Race::NECR, 5 ) );
+    // SW campaign
+    push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5000 ) );
+    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT, 5000 ) );
+    push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5000 ) );
+    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5000 ) );
+    push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5000 ) );
+    push_back( new Heroes( Heroes::BAX, Race::NECR, 5000 ) );
 
-    // loyalty version
+    // PoL
     if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
-        push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5 ) );
-        push_back( new Heroes( Heroes::MOG, Race::NECR, 5 ) );
-        push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5 ) );
-        push_back( new Heroes( Heroes::JOSEPH, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5 ) );
-        push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5 ) );
-        push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5 ) );
-        push_back( new Heroes( Heroes::DRAKONIA, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5 ) );
-        push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5 ) );
+        push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5000 ) );
+        push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5000 ) );
+        push_back( new Heroes( Heroes::MOG, Race::NECR, 5000 ) );
+        push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5000 ) );
+        push_back( new Heroes( Heroes::JOSEPH, Race::WZRD, 5000 ) );
+        push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5000 ) );
+        push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5000 ) );
+        push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5000 ) );
+        push_back( new Heroes( Heroes::DRAKONIA, Race::WZRD, 5000 ) );
+        push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5000 ) );
+        push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5000 ) );
     }
     else {
         // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones

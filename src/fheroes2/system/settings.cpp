@@ -267,7 +267,7 @@ bool Settings::Read( const std::string & filePath )
             video_mode.height = GetInt( height );
         }
         else {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown video mode: " << value )
         }
     }
 
@@ -392,7 +392,7 @@ std::string Settings::String() const
     os << std::endl << "# music volume: 0 - 10" << std::endl;
     os << "music volume = " << music_volume << std::endl;
 
-    os << std::endl << "# run in fullscreen mode: on/off (use F4 key to switch between modes)" << std::endl;
+    os << std::endl << "# run in fullscreen mode: on/off" << std::endl;
     os << "fullscreen = " << ( _optGlobal.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
@@ -685,8 +685,10 @@ void Settings::setFullScreen( const bool enable )
         _optGlobal.ResetModes( GLOBAL_FULLSCREEN );
     }
 
-    fheroes2::engine().toggleFullScreen();
-    fheroes2::Display::instance().render();
+    if ( enable != fheroes2::engine().isFullScreen() ) {
+        fheroes2::engine().toggleFullScreen();
+        fheroes2::Display::instance().render();
+    }
 }
 
 void Settings::setMonochromeCursor( const bool enable )

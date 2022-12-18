@@ -118,13 +118,13 @@ void Battle::Bridge::SetPassable( const Unit & b ) const
 
 void Battle::Bridge::Action( const Unit & b, int32_t dst )
 {
-    bool action_down = false;
+    ForceAction( NeedDown( b, dst ) );
+}
 
-    if ( NeedDown( b, dst ) )
-        action_down = true;
-
+void Battle::Bridge::ForceAction( const bool actionDown )
+{
     if ( Arena::GetInterface() )
-        Arena::GetInterface()->RedrawBridgeAnimation( action_down );
+        Arena::GetInterface()->RedrawBridgeAnimation( actionDown );
 
-    SetDown( action_down );
+    SetDown( actionDown );
 }
