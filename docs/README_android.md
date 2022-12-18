@@ -4,7 +4,8 @@
 Install the fheroes2.apk to your device running Android. You need to have set the necessary permissions on your device to
 do this.
 
-fheroes2 requires the data files from the original Heroes of Might and Magic II.
+fheroes2 requires the data files from the original Heroes of Might and Magic II. If you do not have the original game you
+can download a demo version of the game from https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip
 
 From your original Heroes 2 installation copy the directories named "DATA", "MAPS", "ANIM" and "MUSIC" into the
 "internalStorage:Android/data/org.fheroes2/files/" folder.
