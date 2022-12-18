@@ -150,8 +150,10 @@ public:
 
         back.update( rt.x - 5, rt.y + 15, rt.width + 10, 160 );
 
-        buttonGift.setICNInfo( conf.isEvilInterfaceEnabled() ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
-        buttonTrade.setICNInfo( tradpostIcnId, 15, 16 );
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+
+        buttonGift.setICNInfo( isEvilInterface ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
+        buttonTrade.setICNInfo( isEvilInterface ? ICN::BUTTON_SMALL_TRADE_EVIL : ICN::BUTTON_SMALL_TRADE_GOOD, 0, 1 );
         buttonLeft.setICNInfo( tradpostIcnId, 3, 4 );
         buttonRight.setICNInfo( tradpostIcnId, 5, 6 );
 
