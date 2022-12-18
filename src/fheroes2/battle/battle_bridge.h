@@ -24,6 +24,7 @@
 #ifndef H2BATTLE_BRIDGE_H
 #define H2BATTLE_BRIDGE_H
 
+#include <cassert>
 #include <cstdint>
 
 namespace Battle
@@ -33,7 +34,11 @@ namespace Battle
     class Bridge
     {
     public:
-        Bridge();
+        Bridge()
+            : _isDestroyed( false )
+            , _isDown( false )
+        {}
+
         Bridge( const Bridge & ) = delete;
 
         Bridge & operator=( const Bridge & ) = delete;
@@ -44,13 +49,32 @@ namespace Battle
         void SetDestroyed();
         void SetPassability( const Unit & unit ) const;
 
-        bool AllowUp() const;
+        bool AllowUp() const
+        {
+            // Yes if not destroyed and lowered and there are no any troops (alive or dead) on or under the bridge
+            return isValid() && isDown() && !isOccupied();
+        }
+
         bool NeedDown( const Unit & unit, const int32_t dstIdx ) const;
 
         bool isPassable( const Unit & unit ) const;
-        bool isValid() const;
-        bool isDestroyed() const;
-        bool isDown() const;
+
+        bool isValid() const
+        {
+            return !_isDestroyed;
+        }
+
+        bool isDestroyed() const
+        {
+            return _isDestroyed;
+        }
+
+        bool isDown() const
+        {
+            assert( !_isDestroyed || _isDown );
+
+            return _isDown;
+        }
 
     private:
         static bool isOccupied();

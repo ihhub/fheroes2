@@ -21,44 +21,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
-
+#include "battle_bridge.h"
 #include "battle_arena.h"
 #include "battle_board.h"
-#include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_troop.h"
 #include "castle.h"
-
-Battle::Bridge::Bridge()
-    : _isDestroyed( false )
-    , _isDown( false )
-{}
-
-bool Battle::Bridge::isValid() const
-{
-    return !_isDestroyed;
-}
-
-bool Battle::Bridge::isDestroyed() const
-{
-    return _isDestroyed;
-}
-
-bool Battle::Bridge::isDown() const
-{
-    assert( !_isDestroyed || _isDown );
-
-    return _isDown;
-}
-
-bool Battle::Bridge::AllowUp() const
-{
-    // Yes if not destroyed and lowered and there are no any troops (alive or dead) on or under the bridge
-    return isValid() && isDown() && !isOccupied();
-}
 
 bool Battle::Bridge::isOccupied()
 {
