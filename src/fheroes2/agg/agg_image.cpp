@@ -761,7 +761,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 106;
+                int32_t textWidth = 108;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ACCEPT" ), isEvilInterface );
 
                 break;
@@ -778,7 +778,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 106;
+                int32_t textWidth = 108;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "DECLINE" ), isEvilInterface );
 
                 break;
