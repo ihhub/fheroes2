@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-17 14:33+0000\n"
-"PO-Revision-Date: 2022-12-17 18:13+0100\n"
+"POT-Creation-Date: 2022-12-18 02:36+0000\n"
+"PO-Revision-Date: 2022-12-03 04:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -47,6 +47,57 @@ msgstr "INFOS"
 msgid "QUIT"
 msgstr "QUITTER"
 
+msgid "CANCEL"
+msgstr "ANNULER"
+
+msgid "OKAY"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
 msgid ""
 "STANDARD\n"
 "GAME"
@@ -65,9 +116,6 @@ msgstr ""
 "MODES\n"
 "MULTI-\n"
 "JOUEUR"
-
-msgid "CANCEL"
-msgstr "ANNULER"
 
 msgid "CONFIG"
 msgstr "CONFIG."
@@ -114,6 +162,9 @@ msgstr "DIFFICULTÉ"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "MAX"
+msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -3066,9 +3117,6 @@ msgstr "Recruter :"
 
 msgid "Recruit selected monsters."
 msgstr "Recruter les forces sélectionnées."
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "Select maximum monsters to be recruited."
 msgstr "Sélectionnez les forces maximales à recruter."

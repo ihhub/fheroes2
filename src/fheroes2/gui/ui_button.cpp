@@ -232,41 +232,46 @@ namespace fheroes2
 
     ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )
     {
-        const int icnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;
+        const int buttonNoIcnID = isEvilInterface ? ICN::BUTTON_SMALL_NO_EVIL : ICN::BUTTON_SMALL_NO_GOOD;
+        const int buttonOkayIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
+        const int buttonCancelIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
 
         Point offset;
 
         switch ( buttonTypes ) {
         case Dialog::YES | Dialog::NO:
             offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 5 ).height();
-            createButton( offset.x, offset.y, icnId, 5, 6, Dialog::YES );
+            offset.y = area.y + area.height - AGG::GetICN( buttonYesIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonYesIcnID, 0, 1, Dialog::YES );
 
-            offset.x = area.x + area.width - AGG::GetICN( icnId, 7 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 7 ).height();
-            createButton( offset.x, offset.y, icnId, 7, 8, Dialog::NO );
+            offset.x = area.x + area.width - AGG::GetICN( buttonNoIcnID, 0 ).width();
+            offset.y = area.y + area.height - AGG::GetICN( buttonNoIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonNoIcnID, 0, 1, Dialog::NO );
             break;
 
         case Dialog::OK | Dialog::CANCEL:
             offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
-            createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
 
-            offset.x = area.x + area.width - AGG::GetICN( icnId, 3 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
-            createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            offset.x = area.x + area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width();
+            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
 
         case Dialog::OK:
-            offset.x = area.x + ( area.width - AGG::GetICN( icnId, 1 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
-            createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            offset.x = area.x + ( area.width - AGG::GetICN( buttonOkayIcnID, 0 ).width() ) / 2;
+            offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
             break;
 
         case Dialog::CANCEL:
-            offset.x = area.x + ( area.width - AGG::GetICN( icnId, 3 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
-            createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            offset.x = area.x + ( area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width() ) / 2;
+            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
 
         default:
