@@ -148,11 +148,19 @@ void StringReplaceWithLowercase( std::string & workString, const char * pattern,
     size_t position;
 
     while ( std::string::npos != ( position = workString.find( pattern ) ) ) {
-        // To determine if the end of a sentence was before this word we analyze the a character with shift
-        // by '-2' from 'position' to the presence of full stop, question or exclamation a punctuation mark,
-        // assuming that it is followed by one space before the inserted word.
-        // If the insert position is less than 2 we cannot get a character for analysis and put zero instead.
-        const char prevWordEnd = ( position > 1 ) ? workString.at( position - 2 ) : '\0';
+        // To determine if the end of a sentence was before this word we parse the character before it
+        // for the presence of full stop, question mark, or exclamation mark, skipping whitespace characters.
+        const char prevWordEnd = [&workString, position]() {
+            assert( position < workString.size() );
+
+            const auto iter = std::find_if_not( workString.rbegin() + ( workString.size() - position ), workString.rend(),
+                                                []( const unsigned char c ) { return std::isspace( c ); } );
+            if ( iter != workString.rend() ) {
+                return *iter;
+            }
+
+            return '\0';
+        }();
 
         // Also if the instert position equals to zero, than it is the first word in a sentence.
         if ( position == 0 || prevWordEnd == '.' || prevWordEnd == '?' || prevWordEnd == '!' ) {
