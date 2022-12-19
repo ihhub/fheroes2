@@ -142,42 +142,48 @@ int GetInt( const std::string & str )
     return res;
 }
 
-void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & inString )
+void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement )
 {
-    // This function converts all letters in 'inString' to lowercase, except when it is the first word in a sentence.
-    size_t position;
+    // This function converts all letters in 'patternReplacement' to lowercase, except when it is the first word in a sentence.
 
-    while ( std::string::npos != ( position = workString.find( pattern ) ) ) {
+    if ( pattern == nullptr ) {
+        return;
+    }
+
+    for ( size_t position = workString.find( pattern ); position != std::string::npos; position = workString.find( pattern ) ) {
         // To determine if the end of a sentence was before this word we parse the character before it
         // for the presence of full stop, question mark, or exclamation mark, skipping whitespace characters.
         const char prevWordEnd = [&workString, position]() {
             assert( position < workString.size() );
 
-            const auto iter = std::find_if_not( workString.rbegin() + ( workString.size() - position ), workString.rend(),
+            const auto iter = std::find_if_not( workString.rbegin() + static_cast<int32_t>( workString.size() - position ), workString.rend(),
                                                 []( const unsigned char c ) { return std::isspace( c ); } );
             if ( iter != workString.rend() ) {
                 return *iter;
             }
 
+            // Before 'position' there is nothing, or there are only spaces.
             return '\0';
         }();
 
-        // Also if the instert position equals to zero, than it is the first word in a sentence.
+        // Also if the insert 'position' equals to zero, than it is the first word in a sentence.
         if ( position == 0 || prevWordEnd == '.' || prevWordEnd == '?' || prevWordEnd == '!' ) {
-            // Also, "inString" can consist of two words (for example, "Power Liches"), to detect this, we look for a space mark.
-            const size_t spacePosition = inString.find( ' ' );
+            // Also, 'patternReplacement' can consist of two words (for example, "Power Liches") and
+            // if it is placed as the firs word in sentence, then we have to lovercase only the second word.
+            // To detect this, we look for a space mark in 'patternReplacement'.
+            const size_t spacePosition = patternReplacement.find( ' ' );
 
-            // The first (and possibly only) word of 'inString' replaces 'pattern' in 'workString'.
-            workString.replace( position, std::strlen( pattern ), inString.substr( 0, spacePosition ) );
+            // The first (and possibly only) word of 'patternReplacement' replaces 'pattern' in 'workString'.
+            workString.replace( position, std::strlen( pattern ), patternReplacement.substr( 0, spacePosition ) );
 
-            // Check if a space mark was found to insert the rest part of 'inString' with lowercase applied.
+            // Check if a space mark was found to insert the rest part of 'patternReplacement' with lowercase applied.
             if ( spacePosition != std::string::npos ) {
-                workString.insert( position + spacePosition, Translation::StringLower( inString.substr( spacePosition ) ) );
+                workString.insert( position + spacePosition, Translation::StringLower( patternReplacement.substr( spacePosition ) ) );
             }
         }
         else {
-            // For all other cases lowercase the 'inString' and replace the 'pattern' with it in 'workString'.
-            workString.replace( position, std::strlen( pattern ), Translation::StringLower( inString ) );
+            // For all other cases lowercase the 'patternReplacement' and replace the 'pattern' with it in 'workString'.
+            workString.replace( position, std::strlen( pattern ), Translation::StringLower( patternReplacement ) );
         }
     }
 }
