@@ -337,7 +337,7 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "screen scaling type" ) ) {
-        setNearestLinearScaling( config.StrParams( "screen scaling type" ) == "nearest" );
+        setNearestScreenScaling( config.StrParams( "screen scaling type" ) == "nearest" );
     }
 
     return true;
@@ -789,7 +789,7 @@ void Settings::setEvilInterface( const bool enable )
     }
 }
 
-void Settings::setNearestLinearScaling( const bool enable )
+void Settings::setNearestScreenScaling( const bool enable )
 {
     if ( enable ) {
         _optGlobal.SetModes( GLOBAL_SCREEN_NEAREST_SCALING );
