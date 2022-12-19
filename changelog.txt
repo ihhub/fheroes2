@@ -1,4 +1,11 @@
 version 1.0.0 (21 December 2022)
+- update Polish translation
+- update the French translation
+- fix incorrect resource placements on certain maps
+- adjust "Battlefield Casualties" vertical position
+- fix bridge logic after morale event
+- enable the instant battle by default
+- optimize rendering in multiple places
 - update the Norwegian translation
 - add global hotkey to toggle the text support mode
 - make the regular small buttons translatable
