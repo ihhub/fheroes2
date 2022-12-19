@@ -522,10 +522,9 @@ int32_t AnimationState::getCurrentFrameXOffset() const
     if ( currentFrame < offset.size() ) {
         return offset[currentFrame];
     }
-    else {
-        // If there is no horizontal offset data, return 0 as offset.
-        return 0;
-    }
+
+    // If there is no horizontal offset data for currentFrame, return 0 as offset.
+    return 0;
 }
 
 double AnimationState::movementProgress() const
