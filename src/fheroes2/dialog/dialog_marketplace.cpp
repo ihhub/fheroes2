@@ -152,15 +152,19 @@ public:
 
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        buttonGift.setICNInfo( isEvilInterface ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
-        buttonTrade.setICNInfo( isEvilInterface ? ICN::BUTTON_SMALL_TRADE_EVIL : ICN::BUTTON_SMALL_TRADE_GOOD, 0, 1 );
+        const int tradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_TRADE_EVIL : ICN::BUTTON_SMALL_TRADE_GOOD;
+        const int giftButtonIcnID = isEvilInterface ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD;
+
+        buttonGift.setICNInfo( giftButtonIcnID, 0, 1 );
+        buttonTrade.setICNInfo( tradeButtonIcnID, 0, 1 );
         buttonLeft.setICNInfo( tradpostIcnId, 3, 4 );
         buttonRight.setICNInfo( tradpostIcnId, 5, 6 );
 
-        const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpostIcnId, 17 );
+        const fheroes2::Sprite & spriteGift = fheroes2::AGG::GetICN( giftButtonIcnID, 0 );
+        const fheroes2::Sprite & spriteTrade = fheroes2::AGG::GetICN( tradeButtonIcnID, 0 );
 
-        buttonGift.setPosition( pos_rt.x - 68 + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + pos_rt.height - spriteExit.height() );
-        buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + 150 );
+        buttonGift.setPosition( pos_rt.x - 68 + ( pos_rt.width - spriteGift.width() ) / 2, pos_rt.y + pos_rt.height - spriteGift.height() );
+        buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - spriteTrade.width() ) / 2, pos_rt.y + 150 );
         buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
         buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
         _scrollbar.setImage( fheroes2::AGG::GetICN( tradpostIcnId, 2 ) );

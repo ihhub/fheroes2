@@ -827,12 +827,13 @@ namespace fheroes2
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     const Sprite & originalButton = GetICN( baseIcnID, 11 + i );
-                    out.resize( originalButton.width() + 30, originalButton.height() );
+                    const int extendedAmount = 14;
+                    out.resize( originalButton.width() + extendedAmount, originalButton.height() );
                     out.reset();
 
-                    const int widthEndPart = 4 + 3 * i;
+                    const int widthEndPart = 4 + 2 * i;
                     const int widthFirstPart = originalButton.width() - widthEndPart;
-                    const int widthMiddlePart = 16 + i;
+                    const int widthMiddlePart = extendedAmount + i;
                     const int offsetXEndPart = widthFirstPart + widthMiddlePart;
                     const int startOffsetXMiddlePart = 36;
 
@@ -848,7 +849,7 @@ namespace fheroes2
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), { 7, 5 }, { 5, 6 }, { 102, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), { 6, 5 }, { 4, 6 }, { 100, 16 }, buttonFontColor );
 
                 break;
             }
