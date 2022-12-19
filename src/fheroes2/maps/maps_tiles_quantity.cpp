@@ -22,10 +22,14 @@
  ***************************************************************************/
 
 #include <cstdint>
+#include <list>
+#include <ostream>
+#include <utility>
 
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
@@ -557,10 +561,32 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     }
 
     case MP2::OBJ_RESOURCE: {
-        const int res = Resource::FromIndexSprite( objectIndex );
+        int resourceType = Resource::UNKNOWN;
+        // TODO: add a function opposite to MP2::GetICNObject() to return tileset ID.
+        const int resourceTileSet = 46;
+
+        if ( ( objectTileset >> 2 ) == resourceTileSet ) {
+            // The resource is located at the top.
+            resourceType = Resource::FromIndexSprite( objectIndex );
+        }
+        else {
+            for ( TilesAddon & addon : addons_level1 ) {
+                if ( ( addon.object >> 2 ) == resourceTileSet ) {
+                    resourceType = Resource::FromIndexSprite( addon.index );
+                    // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
+                    // Let's swap the addon and main tile objects
+                    std::swap( addon.object, objectTileset );
+                    std::swap( addon.index, objectIndex );
+                    std::swap( addon.uniq, uniq );
+                    std::swap( addon.level, _level );
+
+                    break;
+                }
+            }
+        }
         uint32_t count = 0;
 
-        switch ( res ) {
+        switch ( resourceType ) {
         case Resource::GOLD:
             count = 100 * Rand::Get( 5, 10 );
             break;
@@ -568,12 +594,21 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         case Resource::ORE:
             count = Rand::Get( 5, 10 );
             break;
-        default:
+        case Resource::MERCURY:
+        case Resource::SULFUR:
+        case Resource::CRYSTAL:
+        case Resource::GEMS:
             count = Rand::Get( 3, 6 );
+            break;
+        default:
+            // Some maps have broken resources being put which ideally we need to correct. Let's make them 0 Wood.
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << _index << " contains unknown resource type. Tileset " << objectTileset << ", object index " << objectIndex )
+            resourceType = Resource::WOOD;
+            count = 0;
             break;
         }
 
-        QuantitySetResource( res, count );
+        QuantitySetResource( resourceType, count );
         break;
     }
 
