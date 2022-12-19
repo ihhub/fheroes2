@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.0.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -29,59 +29,64 @@ msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"НОВА\n"
+"ИГРА"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"ЗАПАЗИ\n"
+"ИГРА"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"ЗАРЕДИ\n"
+"ИГРА"
 
 msgid "INFO"
-msgstr ""
+msgstr "ИНФО"
 
 msgid "QUIT"
-msgstr ""
+msgstr "ИЗХОД"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ОТКАЗ"
 
 msgid "OKAY"
-msgstr ""
+msgstr "ДОБРЕ"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ПРИЕМАМ"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "ОТКАЗВАМ"
 
 msgid "LEARN"
-msgstr ""
+msgstr "НАУЧИ"
 
 msgid "TRADE"
-msgstr ""
+msgstr "СДЕЛКА"
 
 msgid "YES"
-msgstr ""
+msgstr "ДА"
 
-#, fuzzy
 msgid "NO"
-msgstr "С"
+msgstr "НЕ"
 
 msgid "EXIT"
-msgstr ""
+msgstr "ИЗХОД"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "МАХНИ"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "ЗАСИЛИ"
 
 msgid "RESTART"
-msgstr ""
+msgstr "РЕСТАРТ"
 
 msgid "S"
 msgstr ""
@@ -102,48 +107,59 @@ msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"НОРМАЛНА\n"
+"ИГРА"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr ""
+"ИГРАЙ\n"
+"ИСТОРИЯ"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"ИГРА С\n"
+"ПОВЕЧЕ\n"
+"ИГРАЧИ"
 
 msgid "CONFIG"
 msgstr ""
+"КОНФИ-\n"
+"ГУРАЦИЯ"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"НАЧАЛНА\n"
+"ИСТОРИЯ"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
-msgstr ""
+msgstr "ЕКСПАНЗИЯ"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "ОБЩ СТОЛ"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 ИГРАЧА"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 ИГРАЧА"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 ИГРАЧА"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 ИГРАЧА"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 ИГРАЧА"
 
 msgid "GIFT"
 msgstr "ДАРИ"
@@ -449,7 +465,7 @@ msgid "A glorious victory!"
 msgstr "Славна победа!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr "За храброст в битка %{name} получава %{exp} опит."
+msgstr "За храброст в битката %{name} получава %{exp} опит."
 
 msgid "The cowardly %{name} flees from battle."
 msgstr "Страхливият %{name} бяга от битката."
@@ -2546,7 +2562,7 @@ msgid "Recruit Creatures"
 msgstr "Вербувай същества"
 
 msgid "Max"
-msgstr "Макс"
+msgstr "Максимално"
 
 msgid "Hire all creatures in the town."
 msgstr "Наеми всички същества в града."
@@ -2966,7 +2982,7 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr "Мога да ти предложа 1 единица %{resto} за %{count} единици %{resfrom}."
 
 msgid "Min"
-msgstr "Мин"
+msgstr "Минимално"
 
 msgid "Qty to trade"
 msgstr "Количество за търговия"
@@ -3068,13 +3084,13 @@ msgid "Number to buy:"
 msgstr "Покупка на:"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Вербувай избраните чудовища."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Избери максимален брой чудовища, които да бъдат наети."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Избери само 1 чудовище, което да бъде наето."
 
 msgid "Select Game Resolution:"
 msgstr "Изберете резолюция на играта:"
@@ -3664,9 +3680,8 @@ msgstr "Басов вокал"
 msgid "Soprano Vocal"
 msgstr "Сопрано вокал"
 
-#, fuzzy
 msgid "Recorded at %{recordingStudio}"
-msgstr "Записано в Green Street Studios"
+msgstr "Записано в %{recordingStudio}"
 
 msgid "credits|Manual"
 msgstr "Руководство по игре"
@@ -3724,7 +3739,7 @@ msgid "' language, but the current language of the game is '"
 msgstr "\" език, но текущият език на играта е \""
 
 msgid "Hot Seat"
-msgstr "Гореща седалка"
+msgstr "Горещ стол"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
@@ -4435,9 +4450,8 @@ msgstr "Холандски"
 msgid "Hungarian"
 msgstr "Унгарски"
 
-#, fuzzy
 msgid "Danish"
-msgstr "Испански"
+msgstr "Датски"
 
 msgid ", FPS: "
 msgstr ""
@@ -5037,7 +5051,7 @@ msgid ""
 "edifices. Silently, they teach you new ways to cast spells."
 msgstr ""
 "Намираш група друиди да се покланят в една от техните странни каменни "
-"сгради. Тихичко те те научават на нови начини да правите магии."
+"сгради. Тихичко те те научават на нови начини за правене магии."
 
 msgid ""
 "You tentatively approach the burial ground of ancient warriors. Do you want "
@@ -6728,7 +6742,7 @@ msgid "Necromancer"
 msgstr "Некромант"
 
 msgid "Multi"
-msgstr "Комбинация"
+msgstr "Смесен"
 
 msgid "race|Random"
 msgstr "Случаен"
