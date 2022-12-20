@@ -1,4 +1,5 @@
 version 1.0.0 (21 December 2022)
+- add Ubuntu ARM support
 - update Polish translation
 - update the French translation
 - fix incorrect resource placements on certain maps
