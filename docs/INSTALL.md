@@ -217,7 +217,8 @@ You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive
 
-* Download one of the following Linux ZIP archives:<br>
+* Download one of the following Linux ZIP archives:
+
   * **Linux x64-64**:<br>
   [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_x86-64_SDL2.zip) or<br>
   [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_x86-64_SDL1.zip)
