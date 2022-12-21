@@ -126,9 +126,8 @@ make FHEROES2_MACOS_APP_BUNDLE=ON bundle
   method (using [**MacPorts**](#macports) or [**Homebrew**](#homebrew-mac)), or
   [**build the project from source**](DEVELOPMENT.md#macos-and-linux).
 
-* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_1.sh` or
-  `install_sdl_2.sh` (depending on the downloaded build) from the `script/macos` subdirectory. This will install the SDL libraries
-  required to run the game.
+* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_2.sh` from
+  the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
 
 * If you have a legally purchased copy of the original game, run the `extract_homm2_resources.sh` script supplied in the ZIP archive.
   You will be prompted to enter the location of the original game, and the script will extract all the necessary resource files.
@@ -212,11 +211,9 @@ You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice. Then you will need to install the SDL libraries
   required to run the game. The installation procedure depends on the Linux distribution you are using:
 
-  * **Debian-based**: run the script `install_sdl_1.sh` or `install_sdl_2.sh` (depending on the downloaded build) from the `script/linux`
-    subdirectory.
+  * **Debian-based**: run the script `install_sdl_2.sh` from the `script/linux` subdirectory.
 
-  * **Pacman-based (e.g. Arch Linux)**: run one of the following commands: `sudo pacman -S sdl sdl_mixer` or `sudo pacman -S sdl2 sdl2_mixer`
-    (depending on the downloaded build).
+  * **Pacman-based (e.g. Arch Linux)**: run the following command: `sudo pacman -S sdl2 sdl2_mixer`.
 
   * **RedHat-based**: for RPM-based distributions (such as Fedora or RedHat) use the commands `sudo yum install SDL*` or `sudo dnf install SDL*`.
 
