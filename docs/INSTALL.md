@@ -217,9 +217,15 @@ You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive
 
-* Download one of the following Linux ZIP archives:<br>
-  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_SDL2.zip) or<br>
-  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_SDL1.zip).
+* Download one of the following Linux ZIP archives:
+
+  * **Linux x64-64**:<br>
+  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_x86-64_SDL2.zip) or<br>
+  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_x86-64_SDL1.zip)
+
+  * **Linux ARM64**:<br>
+  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_arm64_SDL2.zip) or<br>
+  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_arm64_SDL1.zip)
 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice. Then you will need to install the SDL libraries
   required to run the game. The installation procedure depends on the Linux distribution you are using:
@@ -286,8 +292,10 @@ You can download the precompiled binaries of the latest commit (snapshot) for
 [**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl1_dev)
 ),
 **Ubuntu** (
-[**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev) and
-[**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl1_dev)
+[**x86-64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev),
+[**x86-64 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl1_dev),
+[**ARM64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-arm-sdl2_dev) and
+[**ARM64 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-arm-sdl1_dev)
 ),
 [**Android**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-android),
 [**PlayStation Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev) and
