@@ -37,15 +37,9 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 <a name="windows-installer"></a>
 ### Windows installer
 
-* Download one of the following Windows installer packages:
-
-  * **Windows x64 (64-bit)**:<br>
-  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x64_SDL2_installer.exe) or<br>
-  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x64_SDL1_installer.exe)
-
-  * **Windows x86 (32-bit)**:<br>
-  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x86_SDL2_installer.exe) or<br>
-  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x86_SDL1_installer.exe)
+* Download one of the following Windows installer packages:<br>
+  [**Windows x64 (64-bit)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x64_SDL2_installer.exe) or<br>
+  [**Windows x86 (32-bit)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x86_SDL2_installer.exe)
 
 * After downloading the installer, launch it and follow the instructions.
 
@@ -65,15 +59,9 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 <a name="windows-zip-archive"></a>
 ### Windows ZIP archive
 
-* Download one of the following Windows ZIP archives:
-
-  * **Windows x64 (64-bit)**:<br>
-  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x64_SDL2.zip) or<br>
-  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x64_SDL1.zip)
-
-  * **Windows x86 (32-bit)**:<br>
-  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x86_SDL2.zip) or<br>
-  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x86_SDL1.zip)
+* Download one of the following Windows ZIP archives:<br>
+  [**Windows x64 (64-bit)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x64_SDL2.zip) or<br>
+  [**Windows x86 (32-bit)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_windows_x86_SDL2.zip)
 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice.
 
@@ -217,15 +205,9 @@ You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive
 
-* Download one of the following Linux ZIP archives:
-
-  * **Linux x64-64**:<br>
-  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_x86-64_SDL2.zip) or<br>
-  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_x86-64_SDL1.zip)
-
-  * **Linux ARM64**:<br>
-  [**SDL2 (recommended)**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_arm64_SDL2.zip) or<br>
-  [**SDL1**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_arm64_SDL1.zip)
+* Download one of the following Linux ZIP archives:<br>
+  [**Linux x86-64**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_x86-64_SDL2.zip) or<br>
+  [**Linux ARM64**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_ubuntu_arm64_SDL2.zip)
 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice. Then you will need to install the SDL libraries
   required to run the game. The installation procedure depends on the Linux distribution you are using:
