@@ -16,6 +16,9 @@
     <content_attribute id="violence-fantasy">mild</content_attribute>
   </content_rating>
   <releases>
+    <release date="2022-12-21" version="v1.0.0">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.0</url>
+    </release>
     <release date="2022-11-12" version="v0.9.21">
       <url>https://github.com/ihhub/fheroes2/releases/tag/0.9.21</url>
     </release>
