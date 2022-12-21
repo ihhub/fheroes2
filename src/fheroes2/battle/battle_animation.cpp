@@ -516,14 +516,47 @@ int AnimationState::firstFrame() const
 int32_t AnimationState::getCurrentFrameXOffset() const
 {
     // Return the horizontal frame offset to use in rendering.
-    // TODO: Don't make a vector, get only one needed value from '_offsetX'.
-    const std::vector<int32_t> offset( getAnimationOffset( _animState ) );
+    std::vector<int32_t> animSubsequences;
+
+    // The animations consist of some subsequences. Put into vector the animation subsequences queue.
+    switch ( _animState ) {
+    case Monster_Info::MOVE_START:
+        animSubsequences = { Bin_Info::MonsterAnimInfo::MOVE_START, Bin_Info::MonsterAnimInfo::MOVE_MAIN, Bin_Info::MonsterAnimInfo::MOVE_TILE_END };
+        break;
+    case Monster_Info::MOVING: {
+        animSubsequences = { Bin_Info::MonsterAnimInfo::MOVE_TILE_START, Bin_Info::MonsterAnimInfo::MOVE_MAIN, Bin_Info::MonsterAnimInfo::MOVE_TILE_END };
+        break;
+    }
+    case Monster_Info::MOVE_END: {
+        animSubsequences = { Bin_Info::MonsterAnimInfo::MOVE_TILE_START, Bin_Info::MonsterAnimInfo::MOVE_MAIN, Bin_Info::MonsterAnimInfo::MOVE_STOP };
+        break;
+    }
+    case Monster_Info::MOVE_QUICK: {
+        animSubsequences = { Bin_Info::MonsterAnimInfo::MOVE_START, Bin_Info::MonsterAnimInfo::MOVE_MAIN, Bin_Info::MonsterAnimInfo::MOVE_STOP };
+        break;
+    }
+    default:
+        // If there is no horizontal offset data for current animation state, return 0 as offset.
+        return 0;
+    }
+
+    // The frame number of current subsequence start.
+    size_t subequenceStart = 0;
+    // The frame number in the full animation sequence, which include subsequences.
     const size_t currentFrame = _currentSequence.getFrameNumber();
-    if ( currentFrame < offset.size() ) {
-        return offset[currentFrame];
+
+    // Get frame offset from _offsetX, analyzing in which subsequence it is.
+    for ( const int32_t animSubsequence : animSubsequences ) {
+        // Get the current subsequence end (it is the frame number after the last subsequence frame).
+        const size_t subequenceEnd = _offsetX[animSubsequence].size() + subequenceStart;
+        if ( currentFrame < subequenceEnd ) {
+            return _offsetX[animSubsequence][currentFrame - subequenceStart];
+        }
+        subequenceStart = subequenceEnd;
     }
 
     // If there is no horizontal offset data for currentFrame, return 0 as offset.
+    DEBUG_LOG( DBG_GAME, DBG_WARN, " Frame " << currentFrame << " is outside _offsetX [0 - " << subequenceStart << "] for animation state " << _animState )
     return 0;
 }
 

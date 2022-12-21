@@ -3433,6 +3433,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     const bool canFly = unit.isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
     // If it is a wide creature (cache this boolean to use in the loop).
     const bool isWide = unit.isWide();
+    const bool isOneStepPath = ( path.size() == 1 );
     const Indexes::const_iterator pathEnd = path.end();
 
     // Get the number of frames for unit movement.
@@ -3495,8 +3496,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         // Every ground unit should start its movement from the special 'MOVE_START' animation
         // or if it moves only for one cell its animation must be 'MOVE_QUICK'. So a check for 1 cell path is made.
         // If a wide unit moves backwards for 1 cell, it turns twice, so it has 3 path points. And its first 'dst' point is equal to the last.
-        // TODO: try to rewrite path generation and movement of wide creatures to get more clear and unique code (to get rid of of 'wide creature patches').
-        if ( ( path.size() == 1 ) || ( isWide && path.size() == 3 && ( *dst == *( pathEnd - 1 ) ) ) ) {
+        // TODO: try to rewrite path generation and movement of wide creatures to get more clear and unique path with non-wide (to get rid of of 'wide creature patches').
+        if ( isOneStepPath || ( isWide && path.size() == 3 && ( *dst == *( pathEnd - 1 ) ) ) ) {
             unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
         }
         else {
@@ -3551,7 +3552,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
         // Set the animation for the next step in the path (next loop).
         // TODO: If it is needed: predict if after the next step the unit will stop to wait for the brige action.
-        if ( canFly || ( path.size() > 1 && dst != ( pathEnd - 2 ) ) ) {
+        if ( canFly || ( !isOneStepPath && dst != ( pathEnd - 2 ) ) ) {
             unit.SwitchAnimation( Monster_Info::MOVING );
         }
         else {
@@ -3567,7 +3568,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             unit.SwitchAnimation( Monster_Info::STAND_STILL );
             bridge->ActionUp();
             _movingUnit = &unit;
-            if ( path.size() > 1 && dst != ( pathEnd - 2 ) ) {
+            if ( !isOneStepPath && dst != ( pathEnd - 2 ) ) {
                 // Continue unit movement.
                 unit.SwitchAnimation( Monster_Info::MOVE_START );
             }
