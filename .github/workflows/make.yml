@@ -14,7 +14,7 @@ jobs:
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
           package_name: fheroes2_ubuntu_x86-64_SDL1.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: Ubuntu (Linux) build with SDL1 (latest commit)
+          release_name: Ubuntu x86-64 (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-sdl1_dev
         - name: Linux x86-64 SDL1 Debug
           os: ubuntu-latest
@@ -26,7 +26,7 @@ jobs:
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
           package_name: fheroes2_ubuntu_x86-64_SDL2.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: Ubuntu (Linux) build with SDL2 (latest commit)
+          release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux x86-64 SDL2 Debug
           os: ubuntu-latest
