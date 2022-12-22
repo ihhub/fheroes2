@@ -168,8 +168,8 @@ void StringReplaceWithLowercase( std::string & workString, const char * pattern,
 
         // Also if the insert 'position' equals to zero, than it is the first word in a sentence.
         if ( position == 0 || prevWordEnd == '.' || prevWordEnd == '?' || prevWordEnd == '!' ) {
-            // Also, 'patternReplacement' can consist of two words (for example, "Power Liches") and
-            // if it is placed as the firs word in sentence, then we have to lovercase only the second word.
+            // Also, 'patternReplacement' can consist of two words (for example, "Power Liches") and if
+            // it is placed as the first word in sentence, then we have to lowercase only the second word.
             // To detect this, we look for a space mark in 'patternReplacement'.
             const size_t spacePosition = patternReplacement.find( ' ' );
 
