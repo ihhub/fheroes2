@@ -41,12 +41,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies (Linux)
-      if: ${{ matrix.config.os == 'ubuntu-latest' }}
+      if: ${{ startsWith( matrix.config.os, 'ubuntu-' ) }}
       run: |
         sudo apt-get -y update
         sudo apt-get -y install ${{ matrix.config.dependencies }}
     - name: Install dependencies (macOS)
-      if: ${{ matrix.config.os == 'macos-latest' }}
+      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
       run: |
         brew update
         brew install ${{ matrix.config.dependencies }}
