@@ -35,7 +35,6 @@
 #include "army_bar.h"
 #include "army_troop.h"
 #include "artifact.h"
-#include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -46,7 +45,6 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
-#include "m82.h"
 #include "math_base.h"
 #include "monster.h"
 #include "screen.h"
@@ -56,8 +54,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
-#include "ui_dialog.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace
