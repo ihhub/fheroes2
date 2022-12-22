@@ -9203,7 +9203,7 @@ msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
 "hero has a Magic Book."
 msgstr ""
-"Dieser %{name} gibt Eurem Helden die Fähigkeit, den %{spell} zu wirken, wenn "
+"Dieser %{name} gibt Ihrem Helden die Fähigkeit, den %{spell} zu wirken, wenn "
 "Euer Held ein Zauberbuch besitzt."
 
 msgid ""
