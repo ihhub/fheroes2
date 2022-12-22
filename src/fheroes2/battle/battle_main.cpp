@@ -34,6 +34,7 @@
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
+#include "audio_manager.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
@@ -294,6 +295,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
                 if ( winnerHero->isControlHuman() ) {
                     for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
+                        AudioManager::PlaySound( M82::TREASURE );
+
                         const Artifact artifact( static_cast<int>( artifactSetData._assembledArtifactID ) );
                         const fheroes2::ArtifactDialogElement artifactUI( artifact );
 

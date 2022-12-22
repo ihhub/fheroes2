@@ -35,6 +35,7 @@
 #include "army_bar.h"
 #include "army_troop.h"
 #include "artifact.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -45,6 +46,7 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "m82.h"
 #include "math_base.h"
 #include "monster.h"
 #include "screen.h"
@@ -470,13 +472,15 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
             const std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
 
-            // Use insert instead of std::merge to make appveyour happy
             assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
 
             for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
-                const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
-                fheroes2::showMessage( fheroes2::Text( Artifact( static_cast<int>( artifactSetData._assembledArtifactID ) ).GetName(),
-                                                       fheroes2::FontType::normalYellow() ),
+                AudioManager::PlaySound( M82::TREASURE );
+
+                const Artifact artifact( static_cast<int>( artifactSetData._assembledArtifactID ) );
+                const fheroes2::ArtifactDialogElement artifactUI( artifact );
+
+                fheroes2::showMessage( fheroes2::Text( artifact.GetName(), fheroes2::FontType::normalYellow() ),
                                        fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
             }
 
