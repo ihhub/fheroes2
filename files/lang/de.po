@@ -396,7 +396,7 @@ msgstr ""
 "Mauszeigers anzeigt."
 
 msgid "Change the audio settings of the game."
-msgstr "Ändere die AUdioeinstellungen des Spiels."
+msgstr "Ändere die Audioeinstellungen des Spiels."
 
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Überprüfe alle im Spiel verwendeten Hotkeys."
