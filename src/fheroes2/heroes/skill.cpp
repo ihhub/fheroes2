@@ -265,12 +265,12 @@ void Skill::Secondary::Set( const Secondary & skill )
 
 void Skill::Secondary::SetSkill( int skill )
 {
-    first = skill <= ESTATES ? skill : UNKNOWN;
+    first = ( skill >= UNKNOWN && skill <= ESTATES ) ? skill : UNKNOWN;
 }
 
 void Skill::Secondary::SetLevel( int level )
 {
-    second = level <= Level::EXPERT ? level : Level::NONE;
+    second = ( level >= Level::NONE && level <= Level::EXPERT ) ? level : Level::NONE;
 }
 
 void Skill::Secondary::NextLevel()
@@ -336,16 +336,14 @@ int Skill::Secondary::RandForWitchsHut()
     return v.empty() ? UNKNOWN : Rand::Get( v );
 }
 
-/* index sprite from SECSKILL */
 int Skill::Secondary::GetIndexSprite1() const
 {
-    return Skill() <= ESTATES ? Skill() : 0;
+    return ( Skill() > UNKNOWN && Skill() <= ESTATES ) ? Skill() : 0;
 }
 
-/* index sprite from MINISS */
 int Skill::Secondary::GetIndexSprite2() const
 {
-    return Skill() <= ESTATES ? Skill() - 1 : 0xFF;
+    return ( Skill() > UNKNOWN && Skill() <= ESTATES ) ? Skill() - 1 : 0xFF;
 }
 
 const char * Skill::Secondary::String( int skill )
