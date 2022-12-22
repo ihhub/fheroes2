@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-16 10:13+0000\n"
-"PO-Revision-Date: 2022-12-17 14:26+0100\n"
+"PO-Revision-Date: 2022-12-22 21:39+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -53,55 +53,55 @@ msgid "QUIT"
 msgstr "BEEND."
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ABBR."
 
 msgid "OKAY"
-msgstr ""
+msgstr "OKAY"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "AKZEPT."
 
 msgid "DECLINE"
-msgstr ""
+msgstr "ABLEHNEN"
 
 msgid "LEARN"
-msgstr ""
+msgstr "LERNEN"
 
 msgid "TRADE"
-msgstr ""
+msgstr "HANDELN"
 
 msgid "YES"
-msgstr ""
+msgstr "JA"
 
 msgid "NO"
-msgstr ""
+msgstr "NEIN"
 
 msgid "EXIT"
-msgstr ""
+msgstr "BEEND."
 
 msgid "DISMISS"
-msgstr ""
+msgstr "ABLEHNEN"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "AUFRÜST."
 
 msgid "RESTART"
-msgstr ""
+msgstr "NEUSTART"
 
 msgid "S"
-msgstr ""
+msgstr "S"
 
 msgid "M"
-msgstr ""
+msgstr "M"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "X-L"
-msgstr ""
+msgstr "X-L"
 
 msgid "ALL"
-msgstr ""
+msgstr "ALLE"
 
 msgid ""
 "STANDARD\n"
@@ -450,7 +450,7 @@ msgid "Change the audio settings of the game."
 msgstr "Ändere die Audioeinstellungen des Spiels."
 
 msgid "Check and configure all the hot keys present in the game."
-msgstr "Überprüfe alle im Spiel verwendeten Hotkeys."
+msgstr "Überprüfe und konfiguriere alle im Spiel verwendeten Hotkeys."
 
 msgid "Toggle to display damage information during the battle."
 msgstr "Schaltet die Ansicht der Schadensinformation während des Kampfes um."
@@ -690,7 +690,7 @@ msgstr ""
 "darf erst in der nächsten Runde wieder losziehen."
 
 msgid "View Captain's options"
-msgstr "Optionen des Kapitäns anzeigen"
+msgstr "Möglichkeiten des Kapitäns anzeigen"
 
 msgid "View Hero's options"
 msgstr "Optionen für den Helden anzeigen"
@@ -889,7 +889,7 @@ msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "jeder mit einem +%{attack} Bonus auf seine Angriffsfähigkeit."
 
 msgid "The %{name} is destroyed."
-msgstr "%{name}  ist zerstört!"
+msgstr "Das %{name}  ist zerstört."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -3132,13 +3132,13 @@ msgid "Number to buy:"
 msgstr "Anzahl:"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Rekrutiere ausgewählte Monster."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Wähle die maximale Anzahl an zu rekrutierenden Monstern."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Wähle nur 1 Monster aus, das rekrutiert werden soll."
 
 msgid "Select Game Resolution:"
 msgstr "Spielauflösung wählen:"
