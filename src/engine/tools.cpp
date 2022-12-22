@@ -144,12 +144,12 @@ int GetInt( const std::string & str )
 
 void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement )
 {
-    // This function converts all letters in 'patternReplacement' to lowercase, except when it is the first word in a sentence.
-
     if ( pattern == nullptr ) {
         return;
     }
 
+    // This function converts all letters in 'patternReplacement' to lowercase before replacing the 'pattern' in 'workString',
+    // except for the first word in a sentence.
     for ( size_t position = workString.find( pattern ); position != std::string::npos; position = workString.find( pattern ) ) {
         // To determine if the end of a sentence was before this word we parse the character before it
         // for the presence of full stop, question mark, or exclamation mark, skipping whitespace characters.
@@ -166,7 +166,7 @@ void StringReplaceWithLowercase( std::string & workString, const char * pattern,
             return '\0';
         }();
 
-        // Also if the insert 'position' equals to zero, than it is the first word in a sentence.
+        // Also if the insert 'position' equals zero, then it is the first word in a sentence.
         if ( position == 0 || prevWordEnd == '.' || prevWordEnd == '?' || prevWordEnd == '!' ) {
             // Also, 'patternReplacement' can consist of two words (for example, "Power Liches") and if
             // it is placed as the first word in sentence, then we have to lowercase only the second word.
