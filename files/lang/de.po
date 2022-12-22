@@ -9204,7 +9204,7 @@ msgid ""
 "hero has a Magic Book."
 msgstr ""
 "Dieser %{name} gibt Ihrem Helden die Fähigkeit, den %{spell} zu wirken, wenn "
-"Euer Held ein Zauberbuch besitzt."
+"Ihr Held ein Zauberbuch besitzt."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
