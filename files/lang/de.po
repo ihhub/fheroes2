@@ -52,6 +52,57 @@ msgstr "INFO"
 msgid "QUIT"
 msgstr "BEEND."
 
+msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
 msgid ""
 "STANDARD\n"
 "GAME"
@@ -74,9 +125,6 @@ msgstr ""
 "MEHR-\n"
 "SPIELER\n"
 "SPIEL"
-
-msgid "CANCEL"
-msgstr "ABBRUCH"
 
 msgid "CONFIG"
 msgstr "KONFIG."
@@ -123,6 +171,9 @@ msgstr "SCHWIERIG."
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "MAX"
+msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Krieger"
@@ -3080,14 +3131,20 @@ msgstr "Vorhanden: %{count}"
 msgid "Number to buy:"
 msgstr "Anzahl:"
 
+msgid "Recruit selected monsters."
+msgstr ""
+
+msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "Select only 1 monster to be recruited."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr "Spielauflösung wählen:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Klicken Sie, um die ausgewählte Auflösung anzuwenden."
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "How many troops to move?"
 msgstr "Wie viele Truppen sollen verlegt werden?"

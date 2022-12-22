@@ -61,7 +61,7 @@ int Dialog::AdventureOptions( bool enabledig )
     fheroes2::Button buttonPuzzle( rb.x + 195, rb.y + 30, apanel, 2, 3 );
     fheroes2::Button buttonInfo( rb.x + 62, rb.y + 107, isEvilInterface ? ICN::BUTTON_INFO_EVIL : ICN::BUTTON_INFO_GOOD, 0, 1 );
     fheroes2::Button buttonDig( rb.x + 195, rb.y + 107, apanel, 6, 7 );
-    fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, apanel, 8, 9 );
+    fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
     if ( !enabledig )
         buttonDig.disable();

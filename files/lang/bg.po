@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-16 10:13+0000\n"
+"POT-Creation-Date: 2022-12-18 02:36+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.0.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -29,72 +29,137 @@ msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"НОВА\n"
+"ИГРА"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"ЗАПАЗИ\n"
+"ИГРА"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"ЗАРЕДИ\n"
+"ИГРА"
 
 msgid "INFO"
-msgstr ""
+msgstr "ИНФО"
 
 msgid "QUIT"
+msgstr "ИЗХОД"
+
+msgid "CANCEL"
+msgstr "ОТКАЗ"
+
+msgid "OKAY"
+msgstr "ДОБРЕ"
+
+msgid "ACCEPT"
+msgstr "ПРИЕМАМ"
+
+msgid "DECLINE"
+msgstr "ОТКАЗВАМ"
+
+msgid "LEARN"
+msgstr "НАУЧИ"
+
+msgid "TRADE"
+msgstr "СДЕЛКА"
+
+msgid "YES"
+msgstr "ДА"
+
+msgid "NO"
+msgstr "НЕ"
+
+msgid "EXIT"
+msgstr "ИЗХОД"
+
+msgid "DISMISS"
+msgstr "МАХНИ"
+
+msgid "UPGRADE"
+msgstr "ЗАСИЛИ"
+
+msgid "RESTART"
+msgstr "РЕСТАРТ"
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
 msgstr ""
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"НОРМАЛНА\n"
+"ИГРА"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr ""
+"ИГРАЙ\n"
+"ИСТОРИЯ"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
-
-msgid "CANCEL"
-msgstr ""
+"ИГРА С\n"
+"ПОВЕЧЕ\n"
+"ИГРАЧИ"
 
 msgid "CONFIG"
 msgstr ""
+"КОНФИ-\n"
+"ГУРАЦИЯ"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"НАЧАЛНА\n"
+"ИСТОРИЯ"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
-msgstr ""
+msgstr "ЕКСПАНЗИЯ"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "ОБЩ СТОЛ"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 ИГРАЧА"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 ИГРАЧА"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 ИГРАЧА"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 ИГРАЧА"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 ИГРАЧА"
 
 msgid "GIFT"
 msgstr "ДАРИ"
@@ -104,6 +169,9 @@ msgstr "ТРУДНОСТ"
 
 msgid "MIN"
 msgstr "МИН"
+
+msgid "MAX"
+msgstr "МАКС"
 
 msgid "Warrior"
 msgstr "Войн"
@@ -397,7 +465,7 @@ msgid "A glorious victory!"
 msgstr "Славна победа!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr "За храброст в битка %{name} получава %{exp} опит."
+msgstr "За храброст в битката %{name} получава %{exp} опит."
 
 msgid "The cowardly %{name} flees from battle."
 msgstr "Страхливият %{name} бяга от битката."
@@ -2494,7 +2562,7 @@ msgid "Recruit Creatures"
 msgstr "Вербувай същества"
 
 msgid "Max"
-msgstr "Макс"
+msgstr "Максимално"
 
 msgid "Hire all creatures in the town."
 msgstr "Наеми всички същества в града."
@@ -2914,7 +2982,7 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr "Мога да ти предложа 1 единица %{resto} за %{count} единици %{resfrom}."
 
 msgid "Min"
-msgstr "Мин"
+msgstr "Минимално"
 
 msgid "Qty to trade"
 msgstr "Количество за търговия"
@@ -3015,14 +3083,20 @@ msgstr "Налични: %{count}"
 msgid "Number to buy:"
 msgstr "Покупка на:"
 
+msgid "Recruit selected monsters."
+msgstr "Вербувай избраните чудовища."
+
+msgid "Select maximum monsters to be recruited."
+msgstr "Избери максимален брой чудовища, които да бъдат наети."
+
+msgid "Select only 1 monster to be recruited."
+msgstr "Избери само 1 чудовище, което да бъде наето."
+
 msgid "Select Game Resolution:"
 msgstr "Изберете резолюция на играта:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Кликни, за да приложиш избраната резолюция."
-
-msgid "MAX"
-msgstr "МАКС"
 
 msgid "How many troops to move?"
 msgstr "Колко единици ще преместите?"
@@ -3606,9 +3680,8 @@ msgstr "Басов вокал"
 msgid "Soprano Vocal"
 msgstr "Сопрано вокал"
 
-#, fuzzy
 msgid "Recorded at %{recordingStudio}"
-msgstr "Записано в Green Street Studios"
+msgstr "Записано в %{recordingStudio}"
 
 msgid "credits|Manual"
 msgstr "Руководство по игре"
@@ -3666,7 +3739,7 @@ msgid "' language, but the current language of the game is '"
 msgstr "\" език, но текущият език на играта е \""
 
 msgid "Hot Seat"
-msgstr "Гореща седалка"
+msgstr "Горещ стол"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
@@ -4377,9 +4450,8 @@ msgstr "Холандски"
 msgid "Hungarian"
 msgstr "Унгарски"
 
-#, fuzzy
 msgid "Danish"
-msgstr "Испански"
+msgstr "Датски"
 
 msgid ", FPS: "
 msgstr ""
@@ -4979,7 +5051,7 @@ msgid ""
 "edifices. Silently, they teach you new ways to cast spells."
 msgstr ""
 "Намираш група друиди да се покланят в една от техните странни каменни "
-"сгради. Тихичко те те научават на нови начини да правите магии."
+"сгради. Тихичко те те научават на нови начини за правене магии."
 
 msgid ""
 "You tentatively approach the burial ground of ancient warriors. Do you want "
@@ -6670,7 +6742,7 @@ msgid "Necromancer"
 msgstr "Некромант"
 
 msgid "Multi"
-msgstr "Комбинация"
+msgstr "Смесен"
 
 msgid "race|Random"
 msgstr "Случаен"

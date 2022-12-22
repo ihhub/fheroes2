@@ -688,7 +688,7 @@ namespace
     void applyObtainedCampaignAwards( const Campaign::ScenarioInfoId & currentScenarioInfoId, const std::vector<Campaign::CampaignAwardData> & awards )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
+        const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
             if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID ) {

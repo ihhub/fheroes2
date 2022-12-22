@@ -1279,7 +1279,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     return Direction::UNKNOWN;
 }
 
-bool MP2::getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint32_t & index )
+bool MP2::getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint8_t & index )
 {
     switch ( terrainType ) {
     case Maps::Ground::DESERT:
@@ -1329,10 +1329,10 @@ bool MP2::getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint32
     return false;
 }
 
-bool MP2::isDiggingHoleSprite( const int terrainType, const uint8_t tileSet, const uint32_t index )
+bool MP2::isDiggingHoleSprite( const int terrainType, const uint8_t tileSet, const uint8_t index )
 {
     uint8_t correctTileSet = 0;
-    uint32_t correctIndex = 0;
+    uint8_t correctIndex = 0;
 
     if ( !getDiggingHoleSprite( terrainType, correctTileSet, correctIndex ) ) {
         return false;

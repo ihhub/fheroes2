@@ -282,7 +282,7 @@ namespace
         }
 
         const fheroes2::Point buttonOffset( 112 + pos_rt.x, 362 + pos_rt.y );
-        fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
+        fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         buttonOkay.draw();
 
         RedrawBattleSettings( optionAreas );
@@ -576,7 +576,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 285 );
 
     if ( killed1.isValid() )
-        Army::drawSingleDetailedMonsterLine( killed1, pos_rt.x + 25, pos_rt.y + 303, 270 );
+        Army::drawSingleDetailedMonsterLine( killed1, pos_rt.x + 25, pos_rt.y + 308, 270 );
     else {
         text.Set( _( "None" ), Font::SMALL );
         text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 300 );
@@ -587,7 +587,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 345 );
 
     if ( killed2.isValid() )
-        Army::drawSingleDetailedMonsterLine( killed2, pos_rt.x + 25, pos_rt.y + 363, 270 );
+        Army::drawSingleDetailedMonsterLine( killed2, pos_rt.x + 25, pos_rt.y + 368, 270 );
     else {
         text.Set( _( "None" ), Font::SMALL );
         text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 360 );
@@ -599,9 +599,9 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
 
     const int buttonOffset = allowToCancel ? 39 : 120;
-    const int buttonOkICN
-        = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE ) : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
-    const int buttonCancelICN = isEvilInterface ? ICN::NON_UNIFORM_EVIL_RESTART_BUTTON : ICN::NON_UNIFORM_GOOD_RESTART_BUTTON;
+    const int buttonOkICN = isEvilInterface ? ( allowToCancel ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_EVIL )
+                                            : ( allowToCancel ? ICN::BUTTON_SMALL_OKAY_GOOD : ICN::BUTTON_SMALLER_OKAY_GOOD );
+    const int buttonCancelICN = isEvilInterface ? ICN::BUTTON_SMALL_RESTART_EVIL : ICN::BUTTON_SMALL_RESTART_GOOD;
 
     std::unique_ptr<fheroes2::ButtonBase> btnOk;
     fheroes2::ButtonSprite btnCancel = fheroes2::makeButtonWithShadow( pos_rt.x + buttonOffset + 129, pos_rt.y + 410, fheroes2::AGG::GetICN( buttonCancelICN, 0 ),
@@ -1024,14 +1024,15 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
 
     fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
-    const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
+    const int icnAccept = isEvilInterface ? ICN::BUTTON_SMALL_ACCEPT_EVIL : ICN::BUTTON_SMALL_ACCEPT_GOOD;
+    const int icnDecline = isEvilInterface ? ICN::BUTTON_SMALL_DECLINE_EVIL : ICN::BUTTON_SMALL_DECLINE_GOOD;
     const int icnMarket = isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON;
 
     fheroes2::ButtonSprite btnAccept
-        = fheroes2::makeButtonWithShadow( pos_rt.x + 91, pos_rt.y + 152, fheroes2::AGG::GetICN( icn, 0 ), fheroes2::AGG::GetICN( icn, 1 ), display );
+        = fheroes2::makeButtonWithShadow( pos_rt.x + 91, pos_rt.y + 152, fheroes2::AGG::GetICN( icnAccept, 0 ), fheroes2::AGG::GetICN( icnAccept, 1 ), display );
 
     fheroes2::ButtonSprite btnDecline
-        = fheroes2::makeButtonWithShadow( pos_rt.x + 295, pos_rt.y + 152, fheroes2::AGG::GetICN( icn, 2 ), fheroes2::AGG::GetICN( icn, 3 ), display );
+        = fheroes2::makeButtonWithShadow( pos_rt.x + 295, pos_rt.y + 152, fheroes2::AGG::GetICN( icnDecline, 0 ), fheroes2::AGG::GetICN( icnDecline, 1 ), display );
 
     fheroes2::ButtonSprite btnMarket = fheroes2::makeButtonWithShadow( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, fheroes2::AGG::GetICN( icnMarket, 0 ),
                                                                        fheroes2::AGG::GetICN( icnMarket, 1 ), display );
@@ -1066,6 +1067,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
         text.Blit( rect.x + ( rect.width - text.w() ) / 2, rect.y - 15 );
     };
 
+    const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( icn, 4 );
     fheroes2::Blit( window, display, pos_rt.x + 55, pos_rt.y + 32 );
     hero.PortraitRedraw( pos_rt.x + 60, pos_rt.y + 38, PORT_BIG, display );

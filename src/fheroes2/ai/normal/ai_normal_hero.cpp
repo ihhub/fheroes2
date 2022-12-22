@@ -1783,6 +1783,8 @@ namespace AI
 
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
+        uint32_t currentProgressValue = startProgressValue;
+
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
             double maxPriority = 0;
@@ -1890,8 +1892,10 @@ namespace AI
             if ( maxHeroCount > 0 ) {
                 // At least one hero still exist in the kingdom.
                 const size_t progressValue = ( endProgressValue - startProgressValue ) * ( maxHeroCount - availableHeroes.size() ) / maxHeroCount + startProgressValue;
-
-                status.DrawAITurnProgress( static_cast<uint32_t>( progressValue ) );
+                if ( currentProgressValue < progressValue ) {
+                    currentProgressValue = static_cast<uint32_t>( progressValue );
+                    status.DrawAITurnProgress( currentProgressValue );
+                }
             }
         }
 

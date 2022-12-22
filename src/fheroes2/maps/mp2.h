@@ -601,9 +601,8 @@ namespace MP2
     // Make sure that you pass a valid action object.
     int getActionObjectDirection( const MapObjectType objectType );
 
-    bool getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint32_t & index );
-
-    bool isDiggingHoleSprite( const int terrainType, const uint8_t tileSet, const uint32_t index );
+    bool getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint8_t & index );
+    bool isDiggingHoleSprite( const int terrainType, const uint8_t tileSet, const uint8_t index );
 }
 
 #endif

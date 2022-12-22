@@ -35,7 +35,6 @@
 
 #include "localevent.h"
 #include "logging.h"
-#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "tinyconfig.h"
@@ -45,8 +44,8 @@ namespace
 {
     enum class HotKeyCategory : uint8_t
     {
-        DEFAULT_ACTIONS,
-        SYSTEM,
+        DEFAULT,
+        GLOBAL,
         MAIN_MENU,
         CAMPAIGN,
         WORLD_MAP,
@@ -58,10 +57,10 @@ namespace
     const char * getHotKeyCategoryName( const HotKeyCategory category )
     {
         switch ( category ) {
-        case HotKeyCategory::DEFAULT_ACTIONS:
+        case HotKeyCategory::DEFAULT:
             return "Default actions";
-        case HotKeyCategory::SYSTEM:
-            return "System";
+        case HotKeyCategory::GLOBAL:
+            return "Global actions, work on all screens";
         case HotKeyCategory::MAIN_MENU:
             return "Main Menu";
         case HotKeyCategory::CAMPAIGN:
@@ -102,7 +101,7 @@ namespace
         HotKeyEventInfo & operator=( const HotKeyEventInfo & ) = default;
         HotKeyEventInfo & operator=( HotKeyEventInfo && ) = default;
 
-        HotKeyCategory category = HotKeyCategory::DEFAULT_ACTIONS;
+        HotKeyCategory category = HotKeyCategory::DEFAULT;
 
         const char * name = "";
 
@@ -119,14 +118,16 @@ namespace
     void initializeHotKeyEvents()
     {
         // Make sure that event name is unique!
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_OKAY )] = { HotKeyCategory::DEFAULT_ACTIONS, "default okay event", fheroes2::Key::KEY_ENTER };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_CANCEL )] = { HotKeyCategory::DEFAULT_ACTIONS, "default cancel event", fheroes2::Key::KEY_ESCAPE };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_LEFT )] = { HotKeyCategory::DEFAULT_ACTIONS, "default left", fheroes2::Key::KEY_LEFT };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_RIGHT )] = { HotKeyCategory::DEFAULT_ACTIONS, "default right", fheroes2::Key::KEY_RIGHT };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_UP )] = { HotKeyCategory::DEFAULT_ACTIONS, "default up", fheroes2::Key::KEY_UP };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_DOWN )] = { HotKeyCategory::DEFAULT_ACTIONS, "default down", fheroes2::Key::KEY_DOWN };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_OKAY )] = { HotKeyCategory::DEFAULT, "default okay event", fheroes2::Key::KEY_ENTER };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_CANCEL )] = { HotKeyCategory::DEFAULT, "default cancel event", fheroes2::Key::KEY_ESCAPE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_LEFT )] = { HotKeyCategory::DEFAULT, "default left", fheroes2::Key::KEY_LEFT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_RIGHT )] = { HotKeyCategory::DEFAULT, "default right", fheroes2::Key::KEY_RIGHT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_UP )] = { HotKeyCategory::DEFAULT, "default up", fheroes2::Key::KEY_UP };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_DOWN )] = { HotKeyCategory::DEFAULT, "default down", fheroes2::Key::KEY_DOWN };
 
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SYSTEM_FULLSCREEN )] = { HotKeyCategory::SYSTEM, "toggle fullscreen", fheroes2::Key::KEY_F4 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN )] = { HotKeyCategory::GLOBAL, "toggle fullscreen", fheroes2::Key::KEY_F4 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE )]
+            = { HotKeyCategory::GLOBAL, "toggle text support mode", fheroes2::Key::KEY_F10 };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_GAME )] = { HotKeyCategory::MAIN_MENU, "new game", fheroes2::Key::KEY_N };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME )] = { HotKeyCategory::MAIN_MENU, "load game", fheroes2::Key::KEY_L };
@@ -373,10 +374,18 @@ void Game::HotKeySave()
 
 void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
 {
-    if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key && !( modifier & fheroes2::KeyModifier::KEY_MODIFIER_ALT )
-         && !( modifier & fheroes2::KeyModifier::KEY_MODIFIER_CTRL ) ) {
-        Settings & conf = Settings::Get();
-        conf.setFullScreen( !fheroes2::engine().isFullScreen() );
+    if ( ( modifier & fheroes2::KeyModifier::KEY_MODIFIER_ALT ) || ( modifier & fheroes2::KeyModifier::KEY_MODIFIER_CTRL ) ) {
+        return;
+    }
+
+    Settings & conf = Settings::Get();
+
+    if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN )].key ) {
+        conf.setFullScreen( !conf.FullScreen() );
+        conf.Save( Settings::configFileName );
+    }
+    else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE )].key ) {
+        conf.setTextSupportMode( !conf.isTextSupportModeEnabled() );
         conf.Save( Settings::configFileName );
     }
 }

@@ -215,9 +215,14 @@ void Game::Init()
     Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
-uint32_t & Game::MapsAnimationFrame()
+uint32_t Game::getAdventureMapAnimationIndex()
 {
     return maps_animation_frame;
+}
+
+void Game::updateAdventureMapAnimationIndex()
+{
+    ++maps_animation_frame;
 }
 
 // play environment sounds from the game area in focus
