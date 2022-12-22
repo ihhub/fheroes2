@@ -285,7 +285,21 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
             // if the other army also had a hero, some artifacts may be captured by them
             if ( winnerHero != nullptr ) {
-                transferArtifacts( winnerHero->GetBagArtifacts(), artifactsToTransfer );
+                BagArtifacts & bag = winnerHero->GetBagArtifacts();
+
+                transferArtifacts( bag, artifactsToTransfer );
+
+                const auto assembledArtifacts = bag.assembleArtifactSetIfPossible();
+
+                if ( winnerHero->isControlHuman() ) {
+                    for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
+                        const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
+
+                        fheroes2::showMessage( fheroes2::Text( Artifact( static_cast<int>( artifactSetData._assembledArtifactID ) ).GetName(),
+                                                               fheroes2::FontType::normalYellow() ),
+                                               fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
+                    }
+                }
             }
         }
 
