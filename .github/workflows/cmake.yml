@@ -50,6 +50,9 @@ jobs:
       run: |
         brew update
         brew install ${{ matrix.config.dependencies }}
+      env:
+        # TODO: remove this temporary setting
+        HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
     - name: Build
       run: |
         cmake -B build -G Ninja -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON \
