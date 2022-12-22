@@ -44,6 +44,7 @@
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "m82.h"
 #include "monster.h"
 #include "players.h"
 #include "rand.h"
