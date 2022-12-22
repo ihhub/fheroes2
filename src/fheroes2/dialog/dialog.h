@@ -42,6 +42,8 @@ class HeroBase;
 class Heroes;
 class Monster;
 class Troop;
+
+struct ArtifactSetData;
 struct CapturedObject;
 
 namespace Skill
@@ -109,6 +111,9 @@ namespace Dialog
     int BuyBoat( bool enable );
     void ThievesGuild( bool oracle );
     void GameInfo();
+
+    // Displays a dialog box informing that an artifact set has been assembled
+    void ArtifactSetAssembled( const ArtifactSetData & artifactSetData );
 
     class NonFixedFrameBox
     {

@@ -976,19 +976,10 @@ bool Heroes::PickupArtifact( const Artifact & art )
         return false;
     }
 
-    // check: artifact sets such as anduran garb
     const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
 
     if ( isControlHuman() ) {
-        for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
-            AudioManager::PlaySound( M82::TREASURE );
-
-            const Artifact artifact( static_cast<int>( artifactSetData._assembledArtifactID ) );
-            const fheroes2::ArtifactDialogElement artifactUI( artifact );
-
-            fheroes2::showMessage( fheroes2::Text( artifact.GetName(), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
-        }
+        std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
     }
 
     return true;

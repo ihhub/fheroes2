@@ -470,19 +470,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
                 selectArmy2.ResetSelected();
 
             std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
-            const std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+            std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
 
-            assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
+            assembledArtifacts.merge( otherHeroAssembledArtifacts );
 
-            for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
-                AudioManager::PlaySound( M82::TREASURE );
-
-                const Artifact artifact( static_cast<int>( artifactSetData._assembledArtifactID ) );
-                const fheroes2::ArtifactDialogElement artifactUI( artifact );
-
-                fheroes2::showMessage( fheroes2::Text( artifact.GetName(), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
-            }
+            std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
 
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );

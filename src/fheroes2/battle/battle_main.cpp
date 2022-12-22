@@ -295,15 +295,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
                 const auto assembledArtifacts = bag.assembleArtifactSetIfPossible();
 
                 if ( winnerHero->isControlHuman() ) {
-                    for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
-                        AudioManager::PlaySound( M82::TREASURE );
-
-                        const Artifact artifact( static_cast<int>( artifactSetData._assembledArtifactID ) );
-                        const fheroes2::ArtifactDialogElement artifactUI( artifact );
-
-                        fheroes2::showMessage( fheroes2::Text( artifact.GetName(), fheroes2::FontType::normalYellow() ),
-                                               fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
-                    }
+                    std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
                 }
             }
         }
