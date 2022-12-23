@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <array>
+#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
