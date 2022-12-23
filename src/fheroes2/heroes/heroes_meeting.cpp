@@ -468,6 +468,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
             std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
 
+            // MSVC 2017 fails to use the std::set<...>::merge( std::set<...> && ) overload here, so we have to use a temporary variable
             assembledArtifacts.merge( otherHeroAssembledArtifacts );
 
             std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
