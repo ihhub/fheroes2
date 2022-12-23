@@ -148,8 +148,6 @@ void StringReplaceWithLowercase( std::string & workString, const char * pattern,
         return;
     }
 
-    // This function converts all letters in 'patternReplacement' to lowercase before replacing the 'pattern' in 'workString',
-    // except for the first word in a sentence.
     for ( size_t position = workString.find( pattern ); position != std::string::npos; position = workString.find( pattern ) ) {
         // To determine if the end of a sentence was before this word we parse the character before it
         // for the presence of full stop, question mark, or exclamation mark, skipping whitespace characters.
