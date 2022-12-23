@@ -292,6 +292,11 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor::Get().setVideoPlaybackCursor();
 
+    // Immediately indicate that the delay has passed to render first frame immediately.
+    Game::passCustomAnimationDelay( customDelay );
+    // Make sure that the first run is passed immediately.
+    assert( !Game::isCustomDelayNeeded( customDelay ) );
+
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( customDelay ) ) ) {
         if ( le.MouseClickLeft( campaignRoi[0] ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_ROLAND ) ) {
@@ -391,6 +396,11 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
     fheroes2::GameMode gameChoice = fheroes2::GameMode::NEW_CAMPAIGN_SELECTION;
     uint64_t customDelay = 0;
+
+    // Immediately indicate that the delay has passed to render first frame immediately.
+    Game::passCustomAnimationDelay( customDelay );
+    // Make sure that the first run is passed immediately.
+    assert( !Game::isCustomDelayNeeded( customDelay ) );
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( highlightCampaignId < videos.size() ? Game::isCustomDelayNeeded( customDelay ) : true ) ) {

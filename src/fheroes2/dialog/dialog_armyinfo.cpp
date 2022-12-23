@@ -220,10 +220,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     LocalEvent & le = LocalEvent::Get();
     int result = Dialog::ZERO;
 
-    display.render();
+    display.render( restorer.rect() );
 
     // dialog menu loop
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
         if ( flags & BUTTONS ) {
             if ( buttonUpgrade.isEnabled() )
                 le.MousePressLeft( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
@@ -288,7 +288,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( buttonExit.isEnabled() )
                     buttonExit.draw();
 
-                display.render();
+                display.render( restorer.rect() );
             }
         }
         else {
