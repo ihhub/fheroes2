@@ -3531,11 +3531,11 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             bridge->ActionDown();
             _movingUnit = &unit;
             if ( dst != ( pathEnd - 1 ) ) {
-                // Continue unit movement.
+                // If the path has more than one step after the bridge action then begin the movement.
                 unit.SwitchAnimation( Monster_Info::MOVE_START );
             }
             else {
-                // If only one cell movement left, then perform `MOVE_QUICK`.
+                // There is only one cell left to move after standing.
                 unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
             }
         }
@@ -3545,36 +3545,40 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             _movingPos.x -= CELLW;
         }
 
-        // Render the unit movement withthe movement sound.
+        // Render the unit movement with the movement sound.
         AudioManager::PlaySound( unit.M82Move() );
         AnimateUnitWithDelay( unit, frameDelay );
         unit.SetPosition( *dst );
 
-        // Set the animation for the next step in the path (next loop).
-        // TODO: If it is needed: predict if after the next step the unit will stop to wait for the brige action.
-        if ( canFly || ( !isOneStepPath && dst != ( pathEnd - 2 ) ) ) {
+        // Do a post-move check for the bridge action and set the animation the movement to the next cell in the path.
+        if ( canFly ) {
+            // The animation for the next step in the path of slow flying creatures is always "MOVING".
             unit.SwitchAnimation( Monster_Info::MOVING );
         }
         else {
-            // If the next step is final in the path use 'MOVE_END' animation, extcept the flying units.
-            unit.SwitchAnimation( Monster_Info::MOVE_END );
-        }
-
-        // Check for possible bridge close action, after walking unit's end of movement to the next cell.
-        // This check should exclude the flying creature because it can't 'hang' here to wait
-        // for bridge to close. For this creature, the bridge should close after it lands.
-        if ( !canFly && bridge && bridge->AllowUp() ) {
-            _movingUnit = nullptr;
-            unit.SwitchAnimation( Monster_Info::STAND_STILL );
-            bridge->ActionUp();
-            _movingUnit = &unit;
-            if ( !isOneStepPath && dst != ( pathEnd - 2 ) ) {
-                // Continue unit movement.
-                unit.SwitchAnimation( Monster_Info::MOVE_START );
+            // Check for possible bridge close action, after walking unit's end of movement to the next cell.
+            // This check should exclude the flying creature because it can't 'hang' here to wait
+            // for bridge to close. For this creature, the bridge should close after it lands.
+            if ( bridge && bridge->AllowUp() ) {
+                _movingUnit = nullptr;
+                unit.SwitchAnimation( Monster_Info::STAND_STILL );
+                bridge->ActionUp();
+                _movingUnit = &unit;
+                if ( !isOneStepPath && dst != ( pathEnd - 2 ) ) {
+                    // If the path has more than one step after the bridge action then begin the movement.
+                    unit.SwitchAnimation( Monster_Info::MOVE_START );
+                }
+                else {
+                    // There is only one cell left to move after standing.
+                    unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
+                }
+            }
+            else if ( !isOneStepPath && dst == ( pathEnd - 2 ) ) {
+                // There is only one cell left to move.
+                unit.SwitchAnimation( Monster_Info::MOVE_END );
             }
             else {
-                // If only one cell movement left, then perform `MOVE_QUICK`.
-                unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
+                unit.SwitchAnimation( Monster_Info::MOVING );
             }
         }
 
