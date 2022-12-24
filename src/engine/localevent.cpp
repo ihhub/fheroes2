@@ -1240,7 +1240,9 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
         case SDL_JOYDEVICEADDED:
         case SDL_JOYDEVICEREMOVED:
         case SDL_CONTROLLERDEVICEREMAPPED:
-            // All these joystick and controller events aren't handled.
+            // SDL requires joystick events to be enabled in order to handle controller events.
+            // This is because the controller related code depends on the joystick related code.
+            // See SDL_gamecontroller.c within SDL source code for implementation details.
             break;
         case SDL_CONTROLLERAXISMOTION:
             HandleControllerAxisEvent( event.caxis );
