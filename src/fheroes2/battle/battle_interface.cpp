@@ -4851,9 +4851,9 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     _currentUnit = nullptr;
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    // Reset the idle animation for all troops and redraw the '_mainSurface'.
-    ResetIdleTroopAnimation();
-    RedrawPartialFinish();
+    // Set all non-dead troops animation to standing still without unit counters and redraw the '_mainSurface'.
+    SwitchAllUnitsAnimation( Monster_Info::STAND_STILL );
+    Redraw();
 
     fheroes2::Rect area = GetArea();
     // Cut out the battle log image so we don't use it in the death wave effect.
@@ -4862,6 +4862,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     const fheroes2::Sprite & copy = fheroes2::Crop( _mainSurface, area.x, area.y, area.width, area.height );
     // The death wave horizontal length in pixels.
     const int32_t waveLength = 38;
+    const int32_t waveStep = 5;
     // A death wave parameter that limits the curve to one cosine period.
     const double waveLimit = waveLength / M_PI / 2;
     std::vector<int32_t> deathWaveCurve;
@@ -4876,18 +4877,43 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
-    int32_t position = 0;
+    // Take into account that the Death Wave starts outside the battle screen.
+    area.x -= waveLength;
+    // The first frame of spell effect must have a part of the spell, so we start from its first position.
+    int32_t position = waveStep;
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     while ( le.HandleEvents() && position < area.width + waveLength ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            // TODO: instead of rendering the whole frame for the wave effect we should render only the area where the effect is active.
-            fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, deathWaveCurve ), _mainSurface );
-            RedrawPartialFinish();
+            const int32_t wavePositionX = ( area.x + position < 0 ) ? 0 : ( area.x + position );
+            const int32_t restorePositionX = ( wavePositionX < waveStep ) ? 0 : ( wavePositionX - waveStep );
+            const int32_t restoreWidth = wavePositionX < waveStep ? wavePositionX : waveStep;
 
-            position += 5;
+            const fheroes2::Image spellEffect = fheroes2::CreateDeathWaveEffect( copy, position, deathWaveCurve );
+
+            const fheroes2::Rect renderArea( _interfacePosition.x + restorePositionX, _interfacePosition.y + area.y, spellEffect.width() + restoreWidth, area.height );
+
+            // Place a copy of the original image where the Death Wave effect was on the previous frame.
+            fheroes2::Blit( copy, restorePositionX, area.y, display, renderArea.x, renderArea.y, restoreWidth, renderArea.height );
+
+            // Place the Death Wave effect to its new position.
+            fheroes2::Blit( spellEffect, display, renderArea.x + restoreWidth, renderArea.y );
+
+            // If the battle log was open we redraw it.
+            if ( listlog && listlog->isOpenLog() ) {
+                listlog->Redraw();
+            }
+
+            // Render only the changed screen area.
+            display.render( renderArea );
+
+            position += waveStep;
         }
     }
+
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionColdRingSpell( int32_t dst, const TargetsInfo & targets )
@@ -4944,9 +4970,9 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    // Reset the idle animation for all troops and redraw the '_mainSurface'.
-    ResetIdleTroopAnimation();
-    RedrawPartialFinish();
+    // Set all non-dead troops animation to standing still without unit counters and redraw the '_mainSurface'.
+    SwitchAllUnitsAnimation( Monster_Info::STAND_STILL );
+    Redraw();
 
     const fheroes2::Image original( _mainSurface );
     fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, 3 );
@@ -4978,6 +5004,8 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
             ++frame;
         }
     }
+
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & targets )
@@ -5553,6 +5581,20 @@ void Battle::Interface::ResetIdleTroopAnimation() const
 {
     arena.GetForce1().resetIdleAnimation();
     arena.GetForce2().resetIdleAnimation();
+}
+
+void Battle::Interface::SwitchAllUnitsAnimation( const int32_t animationState ) const
+{
+    for ( Battle::Unit * unit : arena.GetForce1() ) {
+        if ( unit->isValid() ) {
+            unit->SwitchAnimation( animationState );
+        }
+    }
+    for ( Battle::Unit * unit : arena.GetForce2() ) {
+        if ( unit->isValid() ) {
+            unit->SwitchAnimation( animationState );
+        }
+    }
 }
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )

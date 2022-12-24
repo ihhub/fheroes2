@@ -227,28 +227,33 @@ namespace fheroes2
 
     Image CreateDeathWaveEffect( const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
     {
-        if ( in.empty() )
+        if ( in.empty() ) {
             return Image();
+        }
 
-        Image out = in;
-
-        const int32_t width = in.width();
+        const int32_t inWidth = in.width();
         const int32_t waveWidth = static_cast<int32_t>( deathWaveCurve.size() );
 
-        // If the death wave curve is outside of the battlefield - return the original image.
-        if ( x < 0 || ( x - waveWidth ) >= width || deathWaveCurve.empty() )
-            return out;
+        // If the death wave curve is outside of the battlefield - return an empty image.
+        if ( x < 0 || ( x - waveWidth ) >= inWidth || deathWaveCurve.empty() ) {
+            return Image();
+        }
 
         const int32_t height = in.height();
+        const int32_t outWidth = x > waveWidth ? ( x > inWidth ? ( waveWidth - x + inWidth ) : waveWidth ) : x;
 
-        // Set the image horizontal offset from where to draw the wave.
+        // Set the input image horizontal offset from where to draw the wave.
         const int32_t offsetX = x < waveWidth ? 0 : x - waveWidth;
-        uint8_t * outImageX = out.image() + offsetX;
         const uint8_t * inImageX = in.image() + offsetX;
+
+        // Create the output image and fill it with 0 to set transform layer to 0.
+        Image out( outWidth, height );
+        out.fill( uint8_t{ 0 } );
+        uint8_t * outImageX = out.image();
 
         // Set pointers to the start and the end of the death wave curve.
         std::vector<int32_t>::const_iterator pntX = deathWaveCurve.begin() + ( x < waveWidth ? waveWidth - x : 0 );
-        const std::vector<int32_t>::const_iterator endX = deathWaveCurve.end() - ( x > width ? x - width : 0 );
+        const std::vector<int32_t>::const_iterator endX = deathWaveCurve.end() - ( x > inWidth ? x - inWidth : 0 );
 
         for ( ; pntX != endX; ++pntX, ++outImageX, ++inImageX ) {
             // The death curve should have only negative values and should not be higher, than the height of 'in' image.
@@ -257,21 +262,21 @@ namespace fheroes2
                 continue;
             }
 
-            const uint8_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( height + *pntX ) * width;
-            const uint8_t * inImageY = inImageX - static_cast<ptrdiff_t>( *pntX + 1 ) * width;
+            const uint8_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( height + *pntX ) * outWidth;
+            const uint8_t * inImageY = inImageX - static_cast<ptrdiff_t>( *pntX + 1 ) * inWidth;
 
             // A loop to shift all horizontal pixels vertically.
             uint8_t * outImageY = outImageX;
-            for ( ; outImageY != outImageYEnd; outImageY += width ) {
-                inImageY += width;
+            for ( ; outImageY != outImageYEnd; outImageY += outWidth ) {
+                inImageY += inWidth;
                 *outImageY = *inImageY;
             }
 
             // Flip the image under the death wave to create a distortion effect.
             for ( int32_t i = 0; i > *pntX; --i ) {
                 *outImageY = *inImageY;
-                outImageY += width;
-                inImageY -= width;
+                outImageY += outWidth;
+                inImageY -= inWidth;
             }
         }
 
