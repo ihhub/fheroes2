@@ -49,6 +49,7 @@
 #include "audio.h"
 #include "image.h"
 #include "localevent.h"
+#include "logging.h"
 #include "pal.h"
 #include "screen.h"
 #include "tools.h"
@@ -974,10 +975,12 @@ LocalEvent::LocalEvent()
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::OpenController()
 {
+    VERBOSE_LOG( "Open controller" )
     for ( int i = 0; i < SDL_NumJoysticks(); ++i ) {
         if ( SDL_IsGameController( i ) ) {
             _gameController = SDL_GameControllerOpen( i );
             if ( _gameController != nullptr ) {
+                VERBOSE_LOG( "A controller created" )
                 fheroes2::cursor().enableSoftwareEmulation( true );
                 break;
             }
@@ -987,6 +990,7 @@ void LocalEvent::OpenController()
 
 void LocalEvent::CloseController()
 {
+    VERBOSE_LOG( "Close controller" )
     if ( SDL_GameControllerGetAttached( _gameController ) ) {
         SDL_GameControllerClose( _gameController );
         _gameController = nullptr;
@@ -1217,6 +1221,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             break;
         case SDL_CONTROLLERDEVICEREMOVED:
             if ( _gameController != nullptr ) {
+                VERBOSE_LOG( "A controller device removed" )
                 const SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.jdevice.which );
                 if ( removedController == _gameController ) {
                     SDL_GameControllerClose( _gameController );
@@ -1226,17 +1231,24 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             break;
         case SDL_CONTROLLERDEVICEADDED:
             if ( _gameController == nullptr ) {
+                VERBOSE_LOG( "A controller device added" )
                 _gameController = SDL_GameControllerOpen( event.jdevice.which );
                 if ( _gameController != nullptr ) {
                     fheroes2::cursor().enableSoftwareEmulation( true );
                 }
             }
             break;
+        case SDL_CONTROLLERDEVICEREMAPPED:
+            VERBOSE_LOG( "Unprocessed " << event.type << " event" )
+            // Do nothing.
+            break;
         case SDL_CONTROLLERAXISMOTION:
+            VERBOSE_LOG( "Controller axis motion" )
             HandleControllerAxisEvent( event.caxis );
             break;
         case SDL_CONTROLLERBUTTONDOWN:
         case SDL_CONTROLLERBUTTONUP:
+            VERBOSE_LOG( "Controller button action" )
             HandleControllerButtonEvent( event.cbutton );
             break;
         case SDL_FINGERDOWN:
@@ -1971,7 +1983,7 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_CONTROLLERDEVICEADDED, true );
     setEventProcessingState( SDL_CONTROLLERDEVICEREMOVED, true );
     // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_CONTROLLERDEVICEREMAPPED, false );
+    setEventProcessingState( SDL_CONTROLLERDEVICEREMAPPED, true );
     // SDL_CONTROLLERTOUCHPADDOWN is supported from SDL 2.0.14
     // SDL_CONTROLLERTOUCHPADMOTION is supported from SDL 2.0.14
     // SDL_CONTROLLERTOUCHPADUP is supported from SDL 2.0.14

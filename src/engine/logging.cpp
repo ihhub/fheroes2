@@ -116,7 +116,7 @@ namespace Logging
 
     void InitLog()
     {
-#if defined( TARGET_NINTENDO_SWITCH )
+#if defined( TARGET_NINTENDO_SWITCH ) || defined( TARGET_PS_VITA )
         const std::scoped_lock<std::mutex> lock( logMutex );
 
         logFile.open( "fheroes2.log", std::ofstream::out );

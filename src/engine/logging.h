@@ -67,7 +67,7 @@ enum
     DBG_ALL_TRACE = DBG_ENGINE_TRACE | DBG_GAME_TRACE | DBG_BATTLE_TRACE | DBG_AI_TRACE | DBG_NETWORK_TRACE | DBG_OTHER_TRACE
 };
 
-#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
+#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 ) || defined( TARGET_PS_VITA )
 #include <fstream>
 #include <mutex>
 
@@ -116,6 +116,10 @@ namespace Logging
 #include <psp2/kernel/clib.h>
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
+        const std::scoped_lock<std::mutex> _logfile_lock( Logging::logMutex ); /* The name was chosen on purpose to avoid name collisions with outer code blocks. */     \
+                                                                                                                                                                         \
+        Logging::logFile << x << std::endl;                                                                                                                              \
+        Logging::logFile.flush();                                                                                                                                        \
         std::ostringstream osss;                                                                                                                                         \
         osss << x << std::endl;                                                                                                                                          \
         sceClibPrintf( osss.str().c_str() );                                                                                                                             \
