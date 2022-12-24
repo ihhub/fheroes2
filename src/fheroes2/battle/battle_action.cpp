@@ -183,7 +183,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     TargetsApplyDamage( attacker, attackTargets );
 
     if ( _interface ) {
-        _interface->RedrawActionAttackPart2( attacker, attackTargets );
+        _interface->RedrawActionAttackPart2( attacker, defender, attackTargets );
     }
 
     // Then apply the attacker's built-in spell
