@@ -50,7 +50,6 @@
 #include "audio.h"
 #include "image.h"
 #include "localevent.h"
-#include "logging.h"
 #include "pal.h"
 #include "screen.h"
 #include "tools.h"
@@ -976,12 +975,10 @@ LocalEvent::LocalEvent()
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::OpenController()
 {
-    VERBOSE_LOG( "Open controller" )
     for ( int i = 0; i < SDL_NumJoysticks(); ++i ) {
         if ( SDL_IsGameController( i ) ) {
             _gameController = SDL_GameControllerOpen( i );
             if ( _gameController != nullptr ) {
-                VERBOSE_LOG( "A controller created" )
                 fheroes2::cursor().enableSoftwareEmulation( true );
                 break;
             }
@@ -991,7 +988,6 @@ void LocalEvent::OpenController()
 
 void LocalEvent::CloseController()
 {
-    VERBOSE_LOG( "Close controller" )
     if ( SDL_GameControllerGetAttached( _gameController ) ) {
         SDL_GameControllerClose( _gameController );
         _gameController = nullptr;
@@ -1222,7 +1218,6 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             break;
         case SDL_CONTROLLERDEVICEREMOVED:
             if ( _gameController != nullptr ) {
-                VERBOSE_LOG( "A controller device removed" )
                 const SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.jdevice.which );
                 if ( removedController == _gameController ) {
                     SDL_GameControllerClose( _gameController );
@@ -1232,24 +1227,27 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             break;
         case SDL_CONTROLLERDEVICEADDED:
             if ( _gameController == nullptr ) {
-                VERBOSE_LOG( "A controller device added" )
                 _gameController = SDL_GameControllerOpen( event.jdevice.which );
                 if ( _gameController != nullptr ) {
                     fheroes2::cursor().enableSoftwareEmulation( true );
                 }
             }
             break;
+        case SDL_JOYAXISMOTION:
+        case SDL_JOYBALLMOTION:
+        case SDL_JOYHATMOTION:
+        case SDL_JOYBUTTONDOWN:
+        case SDL_JOYBUTTONUP:
+        case SDL_JOYDEVICEADDED:
+        case SDL_JOYDEVICEREMOVED:
         case SDL_CONTROLLERDEVICEREMAPPED:
-            VERBOSE_LOG( "Unprocessed " << event.type << " event" )
-            // Do nothing.
+            // All these joystick and controller events aren't handled.
             break;
         case SDL_CONTROLLERAXISMOTION:
-            VERBOSE_LOG( "Controller axis motion" )
             HandleControllerAxisEvent( event.caxis );
             break;
         case SDL_CONTROLLERBUTTONDOWN:
         case SDL_CONTROLLERBUTTONUP:
-            VERBOSE_LOG( "Controller button action" )
             HandleControllerButtonEvent( event.cbutton );
             break;
         case SDL_FINGERDOWN:
@@ -1279,8 +1277,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             break;
         default:
             // If this assertion blows up then we included an event type but we didn't add logic for it.
-            // assert( eventTypeStatus.count( event.type ) == 0 );
-            VERBOSE_LOG( "Unprocessed " << event.type << " event" )
+            assert( eventTypeStatus.count( event.type ) == 0 );
 
             // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
             break;
@@ -1965,26 +1962,18 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_MOUSEBUTTONDOWN, true );
     setEventProcessingState( SDL_MOUSEBUTTONUP, true );
     setEventProcessingState( SDL_MOUSEWHEEL, true );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYAXISMOTION, true );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYBALLMOTION, true );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYHATMOTION, true );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYBUTTONDOWN, true );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYBUTTONUP, true );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYDEVICEADDED, true );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYDEVICEREMOVED, true );
     setEventProcessingState( SDL_CONTROLLERAXISMOTION, true );
     setEventProcessingState( SDL_CONTROLLERBUTTONDOWN, true );
     setEventProcessingState( SDL_CONTROLLERBUTTONUP, true );
     setEventProcessingState( SDL_CONTROLLERDEVICEADDED, true );
     setEventProcessingState( SDL_CONTROLLERDEVICEREMOVED, true );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_CONTROLLERDEVICEREMAPPED, true );
     // SDL_CONTROLLERTOUCHPADDOWN is supported from SDL 2.0.14
     // SDL_CONTROLLERTOUCHPADMOTION is supported from SDL 2.0.14
@@ -2024,15 +2013,11 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_MOUSEMOTION, true );
     setEventProcessingState( SDL_MOUSEBUTTONDOWN, true );
     setEventProcessingState( SDL_MOUSEBUTTONUP, true );
-    // TODO: verify why disabled processing of this event.
+    // SDL 1 does not support joysticks and controllers.
     setEventProcessingState( SDL_JOYAXISMOTION, false );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYBALLMOTION, false );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYHATMOTION, false );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYBUTTONDOWN, false );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYBUTTONUP, false );
     setEventProcessingState( SDL_QUIT, true );
     // TODO: verify why disabled processing of this event.

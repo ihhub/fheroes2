@@ -73,7 +73,7 @@ namespace
 
 namespace Logging
 {
-#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 ) || defined( TARGET_PS_VITA )
+#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
     std::ofstream logFile;
     // This mutex protects operations with logFile
     std::mutex logMutex;
@@ -116,7 +116,7 @@ namespace Logging
 
     void InitLog()
     {
-#if defined( TARGET_NINTENDO_SWITCH ) || defined( TARGET_PS_VITA )
+#if defined( TARGET_NINTENDO_SWITCH )
         const std::scoped_lock<std::mutex> lock( logMutex );
 
         logFile.open( "fheroes2.log", std::ofstream::out );
