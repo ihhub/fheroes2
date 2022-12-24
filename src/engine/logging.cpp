@@ -73,7 +73,7 @@ namespace
 
 namespace Logging
 {
-#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
+#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 ) || defined( TARGET_PS_VITA )
     std::ofstream logFile;
     // This mutex protects operations with logFile
     std::mutex logMutex;
