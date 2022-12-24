@@ -228,7 +228,7 @@ namespace fheroes2
     Image CreateDeathWaveEffect( const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
     {
         if ( in.empty() ) {
-            return Image();
+            return {};
         }
 
         const int32_t inWidth = in.width();
@@ -236,7 +236,7 @@ namespace fheroes2
 
         // If the death wave curve is outside of the battlefield - return an empty image.
         if ( x < 0 || ( x - waveWidth ) >= inWidth || deathWaveCurve.empty() ) {
-            return Image();
+            return {};
         }
 
         const int32_t height = in.height();
