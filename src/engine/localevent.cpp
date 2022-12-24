@@ -839,7 +839,7 @@ namespace fheroes2
 
         switch ( key ) {
         // delete char
-        case fheroes2::Key::KEY_KP_4: {
+        case fheroes2::Key::KEY_LEFT: {
             if ( !res.empty() && pos ) {
                 res.resize( res.size() - 1 );
                 --pos;
@@ -847,7 +847,7 @@ namespace fheroes2
             break;
         }
         // add new char
-        case fheroes2::Key::KEY_KP_6: {
+        case fheroes2::Key::KEY_RIGHT: {
             currentUpper = res.empty();
             currentCharIndex = 0;
 
@@ -859,7 +859,7 @@ namespace fheroes2
             break;
         }
         // next char
-        case fheroes2::Key::KEY_KP_2: {
+        case fheroes2::Key::KEY_DOWN: {
             ++currentCharIndex;
             if ( currentCharIndex >= totalCharactersDPad )
                 currentCharIndex = 0;
@@ -878,7 +878,7 @@ namespace fheroes2
             break;
         }
         // previous char
-        case fheroes2::Key::KEY_KP_8: {
+        case fheroes2::Key::KEY_UP: {
             --currentCharIndex;
             if ( currentCharIndex < 0 )
                 currentCharIndex = totalCharactersDPad - 1;
@@ -1558,16 +1558,16 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
                 key_value = fheroes2::Key::KEY_SHIFT;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
-                key_value = fheroes2::Key::KEY_KP_4;
+                key_value = fheroes2::Key::KEY_LEFT;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
-                key_value = fheroes2::Key::KEY_KP_6;
+                key_value = fheroes2::Key::KEY_RIGHT;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_UP ) {
-                key_value = fheroes2::Key::KEY_KP_8;
+                key_value = fheroes2::Key::KEY_UP;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
-                key_value = fheroes2::Key::KEY_KP_2;
+                key_value = fheroes2::Key::KEY_DOWN;
             }
             return;
         }
@@ -1657,13 +1657,13 @@ void LocalEvent::ProcessControllerAxisMotion()
         SetModes( KEY_PRESSED );
 
         if ( _controllerRightXAxis < 0 )
-            key_value = fheroes2::Key::KEY_KP_4;
+            key_value = fheroes2::Key::KEY_LEFT;
         else if ( _controllerRightXAxis > 0 )
-            key_value = fheroes2::Key::KEY_KP_6;
+            key_value = fheroes2::Key::KEY_RIGHT;
         else if ( _controllerRightYAxis < 0 )
-            key_value = fheroes2::Key::KEY_KP_8;
+            key_value = fheroes2::Key::KEY_UP;
         else if ( _controllerRightYAxis > 0 )
-            key_value = fheroes2::Key::KEY_KP_2;
+            key_value = fheroes2::Key::KEY_DOWN;
     }
     else if ( _controllerScrollActive ) {
         ResetModes( KEY_PRESSED );
