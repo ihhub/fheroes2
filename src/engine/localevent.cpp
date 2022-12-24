@@ -1278,7 +1278,8 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             break;
         default:
             // If this assertion blows up then we included an event type but we didn't add logic for it.
-            assert( eventTypeStatus.count( event.type ) == 0 );
+            // assert( eventTypeStatus.count( event.type ) == 0 );
+            VERBOSE_LOG( "Unprocessed " << event.type << " event" )
 
             // This is a new event type which we do not handle. It might have been added in a newer version of SDL.
             break;
@@ -1964,19 +1965,19 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_MOUSEBUTTONUP, true );
     setEventProcessingState( SDL_MOUSEWHEEL, true );
     // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYAXISMOTION, false );
+    setEventProcessingState( SDL_JOYAXISMOTION, true );
     // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYBALLMOTION, false );
+    setEventProcessingState( SDL_JOYBALLMOTION, true );
     // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYHATMOTION, false );
+    setEventProcessingState( SDL_JOYHATMOTION, true );
     // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYBUTTONDOWN, false );
+    setEventProcessingState( SDL_JOYBUTTONDOWN, true );
     // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYBUTTONUP, false );
+    setEventProcessingState( SDL_JOYBUTTONUP, true );
     // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYDEVICEADDED, false );
+    setEventProcessingState( SDL_JOYDEVICEADDED, true );
     // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYDEVICEREMOVED, false );
+    setEventProcessingState( SDL_JOYDEVICEREMOVED, true );
     setEventProcessingState( SDL_CONTROLLERAXISMOTION, true );
     setEventProcessingState( SDL_CONTROLLERBUTTONDOWN, true );
     setEventProcessingState( SDL_CONTROLLERBUTTONUP, true );
