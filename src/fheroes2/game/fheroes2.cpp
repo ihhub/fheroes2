@@ -130,6 +130,8 @@ namespace
             display.resize( conf.VideoMode().width, conf.VideoMode().height );
             display.fill( 0 ); // start from a black screen
 
+            fheroes2::engine().setPosition(conf.WindowPosition());
+
             fheroes2::engine().setTitle( GetCaption() );
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor

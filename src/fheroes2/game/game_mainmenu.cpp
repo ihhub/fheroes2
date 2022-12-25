@@ -176,6 +176,9 @@ void Game::mainGameLoop( bool isFirstGameRun )
             break;
         }
     }
+    fheroes2::Display & display = fheroes2::Display::instance();
+    auto x = display.height();
+    x++;
 }
 
 fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )

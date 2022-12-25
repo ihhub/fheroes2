@@ -51,6 +51,11 @@ namespace fheroes2
             return _isFullScreen;
         }
 
+        virtual void setPosition( fheroes2::Point )
+        {
+            // Do nothing.
+        }
+
         virtual std::vector<Size> getAvailableResolutions() const
         {
             return {};

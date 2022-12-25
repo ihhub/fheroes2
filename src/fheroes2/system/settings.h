@@ -210,6 +210,10 @@ public:
         return video_mode;
     }
 
+    const fheroes2::Point WindowPosition() const {
+        return window_position;
+    }
+
     void EnablePriceOfLoyaltySupport( const bool set );
 
     void SetGameDifficulty( const int difficulty )
@@ -249,6 +253,8 @@ public:
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
+
+    void SetWindowPosition( int x, int y );
 
     void SetMusicType( int v )
     {
@@ -429,6 +435,7 @@ private:
     BitModes _optGlobal;
 
     fheroes2::Size video_mode;
+    fheroes2::Point window_position{ 0, 0 };
     int game_difficulty;
 
     std::string path_program;

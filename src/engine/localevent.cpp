@@ -49,9 +49,11 @@
 #include "audio.h"
 #include "image.h"
 #include "localevent.h"
+#include "logging.h"
 #include "pal.h"
 #include "screen.h"
 #include "tools.h"
+#include <settings.h>
 
 namespace
 {
@@ -1186,6 +1188,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
     ResetModes( MOUSE_WHEEL );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    Settings & conf = Settings::Get();
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
         case SDL_WINDOWEVENT:
@@ -1196,6 +1199,11 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
                     return false;
                 }
                 break;
+            }
+            if ( event.window.event == SDL_WINDOWEVENT_MOVED ) {
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Window moved! New position: (" << event.window.data1 << "," << event.window.data2 << ")." );
+                conf.SetWindowPosition(event.window.data1, event.window.data2);
+                conf.Save( Settings::configFileName );
             }
             if ( HandleWindowEvent( event.window ) ) {
                 renderRoi = { 0, 0, display.width(), display.height() };
