@@ -127,10 +127,9 @@ namespace
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            display.resize( conf.VideoMode().width, conf.VideoMode().height );
+            display.resize( conf.VideoMode().width, conf.VideoMode().height );  // TODO: right here! This is the culprit!
+            fheroes2::engine().setPosition( conf.WindowPosition() );
             display.fill( 0 ); // start from a black screen
-
-            fheroes2::engine().setPosition(conf.WindowPosition());
 
             fheroes2::engine().setTitle( GetCaption() );
 
