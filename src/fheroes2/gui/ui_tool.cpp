@@ -225,44 +225,49 @@ namespace fheroes2
         }
     }
 
-    Image CreateDeathWaveEffect( const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
+    void CreateDeathWaveEffect( Image & out, const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
     {
         if ( in.empty() ) {
-            return {};
+            return;
         }
 
         const int32_t inWidth = in.width();
-        const int32_t waveWidth = static_cast<int32_t>( deathWaveCurve.size() );
+        const int32_t waveLength = static_cast<int32_t>( deathWaveCurve.size() );
 
-        // If the death wave curve is outside of the battlefield - return an empty image.
-        if ( x < 0 || ( x - waveWidth ) >= inWidth || deathWaveCurve.empty() ) {
-            return {};
+        // If the death wave curve is outside of the battlefield - return.
+        if ( x < 0 || ( x - waveLength ) >= inWidth || deathWaveCurve.empty() ) {
+            return;
         }
 
-        const int32_t height = in.height();
-        const int32_t outWidth = x > waveWidth ? ( x > inWidth ? ( waveWidth - x + inWidth ) : waveWidth ) : x;
+        const int32_t inHeight = in.height();
+        const int32_t outWaveWidth = x > waveLength ? ( x > inWidth ? ( waveLength - x + inWidth ) : waveLength ) : x;
+
+        // If the out image is small for the Death Wave spell effect, resize it anf fill the transform layer with "0".
+        if ( out.width() < outWaveWidth || out.height() < inHeight ) {
+            out.resize( outWaveWidth, inHeight );
+            std::fill( out.transform(), out.transform() + static_cast<size_t>( outWaveWidth * inHeight ), static_cast<uint8_t>( 0 ) );
+        }
+
+        const int32_t outWidth = out.width();
 
         // Set the input image horizontal offset from where to draw the wave.
-        const int32_t offsetX = x < waveWidth ? 0 : x - waveWidth;
+        const int32_t offsetX = x < waveLength ? 0 : x - waveLength;
         const uint8_t * inImageX = in.image() + offsetX;
 
-        // Create the output image and fill it with 0 to set transform layer to 0.
-        Image out( outWidth, height );
-        out.fill( uint8_t{ 0 } );
         uint8_t * outImageX = out.image();
 
         // Set pointers to the start and the end of the death wave curve.
-        std::vector<int32_t>::const_iterator pntX = deathWaveCurve.begin() + ( x < waveWidth ? waveWidth - x : 0 );
+        std::vector<int32_t>::const_iterator pntX = deathWaveCurve.begin() + ( x < waveLength ? waveLength - x : 0 );
         const std::vector<int32_t>::const_iterator endX = deathWaveCurve.end() - ( x > inWidth ? x - inWidth : 0 );
 
         for ( ; pntX != endX; ++pntX, ++outImageX, ++inImageX ) {
             // The death curve should have only negative values and should not be higher, than the height of 'in' image.
-            if ( ( *pntX >= 0 ) || ( *pntX <= -height ) ) {
+            if ( ( *pntX >= 0 ) || ( *pntX <= -inHeight ) ) {
                 assert( 0 );
                 continue;
             }
 
-            const uint8_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( height + *pntX ) * outWidth;
+            const uint8_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( inHeight + *pntX ) * outWidth;
             const uint8_t * inImageY = inImageX - static_cast<ptrdiff_t>( *pntX + 1 ) * inWidth;
 
             // A loop to shift all horizontal pixels vertically.
@@ -279,8 +284,6 @@ namespace fheroes2
                 inImageY -= inWidth;
             }
         }
-
-        return out;
     }
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX, double waveFrequency )
