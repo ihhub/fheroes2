@@ -53,6 +53,7 @@
 #include "logging.h"
 #include "screen.h"
 #include "tools.h"
+#include <settings.h>
 
 namespace
 {
@@ -804,6 +805,11 @@ namespace
             return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
         }
 
+        void setPosition( fheroes2::Point position )
+        {
+            SDL_SetWindowPosition( _window, position.x, position.y );
+        }
+
         std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
             static std::vector<fheroes2::Size> filteredResolutions;
@@ -902,7 +908,9 @@ namespace
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
             , _isVSyncEnabled( false )
         {
-            // Do nothing.
+            //Settings & conf = Settings::Get();
+            //_prevWindowPos = conf.WindowPosition();
+            // TODO: set to ( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED ) if invalid?
         }
 
         void clear() override
@@ -1497,6 +1505,7 @@ namespace fheroes2
         // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
         std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
     }
+
 
     Display & Display::instance()
     {

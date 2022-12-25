@@ -46,6 +46,7 @@
 #include "translations.h"
 #include "ui_language.h"
 #include "version.h"
+#include <SDL2/SDL_video.h>
 
 #define STRINGIFY( DEF ) #DEF
 #define EXPANDDEF( DEF ) STRINGIFY( DEF )
@@ -276,6 +277,11 @@ bool Settings::Read( const std::string & filePath )
         setFullScreen( config.StrParams( "fullscreen" ) == "on" );
     }
 
+    // window position
+    if ( config.Exists( "windowposition" ) ) {
+        window_position = config.PointParams( "windowposition", { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED } );
+    }
+
     if ( config.Exists( "controller pointer speed" ) ) {
         _controllerPointerSpeed = std::clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
     }
@@ -382,6 +388,9 @@ std::string Settings::String() const
 
     os << std::endl << "# video mode (game resolution)" << std::endl;
     os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
+
+    os << std::endl << "# window position (x,y)" << std::endl;
+    os << "windowposition = [ " << window_position.x << ", " << window_position.y << " ]" << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
@@ -964,6 +973,11 @@ void Settings::SetSoundVolume( int v )
 void Settings::SetMusicVolume( int v )
 {
     music_volume = std::clamp( v, 0, 10 );
+}
+
+void Settings::SetWindowPosition( int x, int y )
+{
+    window_position = { x, y };
 }
 
 void Settings::SetPreferablyCountPlayers( int c )
