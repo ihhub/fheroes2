@@ -3360,7 +3360,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         AudioManager::PlaySound( attacker->M82Expl() );
     }
 
-    uint32_t frame = 0;
+    uint32_t lichCloudFrame = 0;
 
     // targets damage animation loop
     bool finishedAnimation = false;
@@ -3368,7 +3368,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
-            if ( finishedAnimation && ( !drawLichCloud || ( drawLichCloud && frame == fheroes2::AGG::GetICNCount( ICN::LICHCLOD ) ) ) ) {
+            if ( finishedAnimation && ( !drawLichCloud || ( drawLichCloud && lichCloudFrame == fheroes2::AGG::GetICNCount( ICN::LICHCLOD ) ) ) ) {
                 // All unit frames are rendered and if it was a Lich attack also its cloud frames are rendered too.
                 break;
             }
@@ -3399,10 +3399,10 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
                 if ( drawLichCloud ) {
                     // Draw a Lich cloud above the target unit.
-                    const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, frame );
+                    const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, lichCloudFrame );
                     const fheroes2::Point & pos = CalculateSpellPosition( *defender, ICN::LICHCLOD, spellSprite );
                     fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, false );
-                    ++frame;
+                    ++lichCloudFrame;
                 }
 
                 RedrawPartialFinish();
