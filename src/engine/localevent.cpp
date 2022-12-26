@@ -1200,7 +1200,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
                 break;
             }
             if ( event.window.event == SDL_WINDOWEVENT_MOVED ) {
-                conf.SetWindowPosition(event.window.data1, event.window.data2);
+                conf.SetWindowPosition( { event.window.data1, event.window.data2 } );
                 conf.Save( Settings::configFileName );
             }
             if ( HandleWindowEvent( event.window ) ) {
