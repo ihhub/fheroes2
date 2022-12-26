@@ -211,11 +211,11 @@ public:
         return video_mode;
     }
 
-    #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     const fheroes2::Point WindowPosition() const {
         return window_position;
     }
-    #endif
+#endif
 
     void EnablePriceOfLoyaltySupport( const bool set );
 
@@ -257,9 +257,9 @@ public:
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
 
-    #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void SetWindowPosition( fheroes2::Point position );
-    #endif
+#endif
 
     void SetMusicType( int v )
     {
@@ -441,9 +441,9 @@ private:
 
     fheroes2::Size video_mode;
 
-    #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     fheroes2::Point window_position{ 0, 0 };
-    #endif
+#endif
 
     int game_difficulty;
 

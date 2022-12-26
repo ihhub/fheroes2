@@ -53,7 +53,7 @@
 #include "logging.h"
 #include "screen.h"
 #include "tools.h"
-#include <settings.h>
+#include "settings.h"
 
 namespace
 {

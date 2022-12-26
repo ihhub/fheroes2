@@ -280,7 +280,7 @@ bool Settings::Read( const std::string & filePath )
         setFullScreen( config.StrParams( "fullscreen" ) == "on" );
     }
 
-    #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // window position
     if ( config.Exists( "windowposition" ) ) {
         int default_x = SDL_WINDOWPOS_CENTERED;
@@ -288,7 +288,7 @@ bool Settings::Read( const std::string & filePath )
 
         window_position = config.PointParams( "windowposition", { default_x, default_y } );
     }
-    #endif
+#endif
 
     if ( config.Exists( "controller pointer speed" ) ) {
         _controllerPointerSpeed = std::clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
@@ -397,10 +397,10 @@ std::string Settings::String() const
     os << std::endl << "# video mode (game resolution)" << std::endl;
     os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
 
-    #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     os << std::endl << "# starting window position (x,y); used to maintain it between sessions" << std::endl;
     os << "windowposition = [ " << window_position.x << ", " << window_position.y << " ]" << std::endl;
-    #endif
+#endif
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
