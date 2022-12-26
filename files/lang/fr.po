@@ -711,7 +711,7 @@ msgstr ""
 "Affiche le déroulement du combat et indique toutes les actions individuelles."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Êtes vous sûr de vouloir finir la bataille en mode combat auto ?"
+msgstr "Voulez-vous vraiment finir la bataille en mode combat auto ?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} passent leur tour."
@@ -802,7 +802,7 @@ msgid "The mirror image is destroyed!"
 msgstr "L'image miroir est détruite !"
 
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr "Êtes vous sûr de vouloir interrompre le combat auto ?"
+msgstr "Voulez-vous vraiment interrompre le combat auto ?"
 
 msgid "Error"
 msgstr "Erreur"
@@ -811,7 +811,7 @@ msgid "No spells to cast."
 msgstr "Aucun sort disponible."
 
 msgid "Are you sure you want to retreat?"
-msgstr "Êtes vous sûr de vouloir sonner la retraite ?"
+msgstr "Voulez-vous vraiment sonner la retraite ?"
 
 msgid "Retreat disabled"
 msgstr "Retraite impossible"
@@ -2671,7 +2671,7 @@ msgstr ""
 "vous les améliorer ?"
 
 msgid "Are you sure you want to dismiss this army?"
-msgstr "Êtes vous sûr de vouloir renvoyer cette troupe ?"
+msgstr "Voulez-vous vraiment renvoyer cette troupe ?"
 
 msgid "Attack Skill"
 msgstr "Attaque"
@@ -3174,7 +3174,7 @@ msgid "Click to load a previously saved game."
 msgstr "Charger une partie sauvegardée."
 
 msgid "Are you sure you want to delete file:"
-msgstr "Êtes vous sûr de vouloir effacer le fichier :"
+msgstr "Voulez-vous vraiment effacer le fichier :"
 
 msgid "Warning!"
 msgstr "Attention !"
@@ -3574,7 +3574,7 @@ msgid "Restart the current scenario."
 msgstr "Recommencer le scénario actuel."
 
 msgid "Are you sure you want to restart this scenario?"
-msgstr "Êtes vous sûr de vouloir recommencer ce scénario ?"
+msgstr "Voulez-vous vraiment recommencer ce scénario ?"
 
 msgid "Campaign Scenario loading failure"
 msgstr "Échec du chargement du scénario de campagne"
@@ -4292,15 +4292,15 @@ msgstr ""
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
-"Un ou plusieurs héros peuvent encore se déplacer. Êtes-vous sûr de vouloir "
+"Un ou plusieurs héros peuvent encore se déplacer. Voulez-vous vraiment "
 "terminer votre tour ?"
 
 msgid "Are you sure you want to quit?"
-msgstr "Êtes vous sûr de vouloir quitter ?"
+msgstr "Voulez-vous vraiment quitter ?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
-"Êtes-vous sûr de vouloir recommencer ? (Votre partie en cours sera perdue)"
+"Voulez-vous vraiment recommencer ? (Votre partie en cours sera perdue.)"
 
 msgid "Are you sure you want to overwrite the save with this name?"
 msgstr "Voulez-vous vraiment remplacer la sauvegarde avec ce nom ?"
@@ -4315,8 +4315,8 @@ msgstr "Il y a eu un problème lors de la sauvegarde."
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
 msgstr ""
-"Êtes-vous sûr de vouloir charger une nouvelle\n"
-"partie ? (Votre partie en cours sera perdue)"
+"Voulez-vous vraiment charger une nouvelle\n"
+"partie ? (Votre partie en cours sera perdue.)"
 
 msgid "Try looking on land!!!"
 msgstr "Essayez de chercher sur la terre ferme !!!"
@@ -6217,7 +6217,7 @@ msgstr ""
 "bataille, de votre coté."
 
 msgid "Are you sure you want to dismiss this Hero?"
-msgstr "Êtes vous sûr de vouloir renvoyer ce héros ?"
+msgstr "Voulez-vous vraiment renvoyer ce héros ?"
 
 msgid "View Experience Info"
 msgstr "Voir les infos de l'expérience"
