@@ -1040,7 +1040,7 @@ namespace
             bool isPaletteModeSupported = false;
 
             SDL_RendererInfo rendererInfo;
-            _driverIndex = 0;
+            _driverIndex = -1;
 
             const uint32_t renderingFlags = renderFlags();
 
@@ -1060,14 +1060,17 @@ namespace
                     if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
                         // Bingo! This is the best driver and format.
                         isPaletteModeSupported = true;
+                        _driverIndex = driverId;
                         break;
                     }
                 }
 
-                _driverIndex = driverId;
-
                 if ( isPaletteModeSupported ) {
                     break;
+                }
+
+                if ( _driverIndex < 0 ) {
+                    _driverIndex = driverId;
                 }
             }
 
