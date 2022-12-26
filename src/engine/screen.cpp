@@ -899,7 +899,7 @@ namespace
             , _surface( nullptr )
             , _renderer( nullptr )
             , _texture( nullptr )
-            , _driverIndex( 0 )
+            , _driverIndex( -1 )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
             , _isVSyncEnabled( false )
         {
@@ -936,7 +936,7 @@ namespace
 
             _windowedSize = fheroes2::Size();
 
-            _driverIndex = 0;
+            _driverIndex = -1;
         }
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
