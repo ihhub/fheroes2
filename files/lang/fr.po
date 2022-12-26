@@ -84,7 +84,7 @@ msgid "DISMISS"
 msgstr "RENVOYER"
 
 msgid "UPGRADE"
-msgstr "ÉVOLUER"
+msgstr "AMÉLIORER"
 
 msgid "RESTART"
 msgstr "REJOUER"
