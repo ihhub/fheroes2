@@ -586,7 +586,6 @@ namespace
             , _surface( nullptr )
             , _texBuffer( nullptr )
             , _palettedTexturePointer( nullptr )
-            , _isLinkedSurface( false )
         {
             // Do nothing.
         }
@@ -618,8 +617,6 @@ namespace
                 vita2d_free_texture( _texBuffer );
                 _texBuffer = nullptr;
             }
-
-            _isLinkedSurface = false;
         }
 
         bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
@@ -652,9 +649,6 @@ namespace
             vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
             _texBuffer = vita2d_create_empty_texture_format( width_, height_, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
             _palettedTexturePointer = static_cast<uint8_t *>( vita2d_texture_get_datap( _texBuffer ) );
-
-            const int32_t textureWidth = static_cast<int32_t>( vita2d_texture_get_stride( _texBuffer ) );
-            _isLinkedSurface = ( width_ == textureWidth );
 
             _createPalette();
 
@@ -700,11 +694,10 @@ namespace
 
             const int32_t imageWidth = display.width();
             const int32_t imageHeight = display.height();
+            const uint8_t * imageIn = display.image();
 
-            if ( !_isLinkedSurface ) {
+            if ( imageIn != _palettedTexturePointer ) {
                 // Display class doesn't have support for image pitch so we must copy display image line by line.
-                const uint8_t * imageIn = display.image();
-
                 const int32_t textureWidth = static_cast<int32_t>( vita2d_texture_get_stride( _texBuffer ) );
                 for ( int32_t i = 0; i < imageHeight; ++i ) {
                     memcpy( static_cast<uint8_t *>( _palettedTexturePointer ) + textureWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
@@ -744,7 +737,6 @@ namespace
         vita2d_texture * _texBuffer;
         uint8_t * _palettedTexturePointer;
         fheroes2::Rect _destRect;
-        bool _isLinkedSurface;
 
         void _createPalette()
         {
@@ -754,13 +746,13 @@ namespace
             const int32_t imageWidth = display.width();
             const int32_t imageHeight = display.height();
             const uint8_t * imageIn = display.image();
+            const int32_t textureWidth = static_cast<int32_t>( vita2d_texture_get_stride( _texBuffer ) );
 
-            if ( _isLinkedSurface ) {
-                memcpy( _palettedTexturePointer, display.image(), static_cast<size_t>( imageWidth * imageHeight ) );
+            if ( imageWidth == textureWidth ) {
+                memcpy( _palettedTexturePointer, imageIn, static_cast<size_t>( imageWidth * imageHeight ) );
                 linkRenderSurface( _palettedTexturePointer );
             }
             else {
-                const int32_t textureWidth = static_cast<int32_t>( vita2d_texture_get_stride( _texBuffer ) );
                 for ( int32_t i = 0; i < imageHeight; ++i ) {
                     memcpy( static_cast<uint8_t *>( _palettedTexturePointer ) + textureWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
                 }
