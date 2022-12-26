@@ -940,6 +940,8 @@ namespace
 
         void clear() override
         {
+            linkRenderSurface( nullptr );
+
             if ( _texture != nullptr ) {
                 SDL_DestroyTexture( _texture );
                 _texture = nullptr;
