@@ -807,7 +807,7 @@ namespace
 
         void setPosition( fheroes2::Point position )
         {
-            SDL_SetWindowPosition( _window, position.x, position.y );
+            _prevWindowPos = position;
         }
 
         std::vector<fheroes2::Size> getAvailableResolutions() const override
