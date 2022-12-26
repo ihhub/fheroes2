@@ -4863,7 +4863,9 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
         area.height -= listlog->GetArea().height;
     }
 
-    const fheroes2::Sprite & battleFieldCopy = fheroes2::Crop( _mainSurface, area.x, area.y, area.width, area.height );
+    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
+
     // The death wave horizontal length in pixels.
     const int32_t waveLength = 38;
     const int32_t waveStep = 5;
