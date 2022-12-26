@@ -25,7 +25,6 @@
 #include <cstdlib>
 #include <fstream>
 #include <memory>
-#include <SDL_version.h>
 #include <utility>
 
 #if defined( MACOS_APP_BUNDLE )
@@ -281,18 +280,15 @@ bool Settings::Read( const std::string & filePath )
         setFullScreen( config.StrParams( "fullscreen" ) == "on" );
     }
 
+    #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // window position
     if ( config.Exists( "windowposition" ) ) {
-        int default_x = 0;
-        int default_y = 0;
-
-        #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        default_x = SDL_WINDOWPOS_CENTERED;
-        default_y = SDL_WINDOWPOS_CENTERED;
-        #endif
+        int default_x = SDL_WINDOWPOS_CENTERED;
+        int default_y = SDL_WINDOWPOS_CENTERED;
 
         window_position = config.PointParams( "windowposition", { default_x, default_y } );
     }
+    #endif
 
     if ( config.Exists( "controller pointer speed" ) ) {
         _controllerPointerSpeed = std::clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
@@ -401,8 +397,10 @@ std::string Settings::String() const
     os << std::endl << "# video mode (game resolution)" << std::endl;
     os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
 
+    #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     os << std::endl << "# starting window position (x,y); used to maintain it between sessions" << std::endl;
     os << "windowposition = [ " << window_position.x << ", " << window_position.y << " ]" << std::endl;
+    #endif
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
@@ -987,10 +985,12 @@ void Settings::SetMusicVolume( int v )
     music_volume = std::clamp( v, 0, 10 );
 }
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void Settings::SetWindowPosition( fheroes2::Point position )
 {
     window_position = position;
 }
+#endif
 
 void Settings::SetPreferablyCountPlayers( int c )
 {
