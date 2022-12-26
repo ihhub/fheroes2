@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <SDL_version.h>
 #include <string>
 #include <vector>
 
@@ -51,10 +52,12 @@ namespace fheroes2
             return _isFullScreen;
         }
 
+        #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         virtual void setPosition( fheroes2::Point )
         {
             // Do nothing.
         }
+        #endif
 
         virtual std::vector<Size> getAvailableResolutions() const
         {
