@@ -1194,16 +1194,7 @@ namespace
 
         bool _createRenderer( const int32_t width_, const int32_t height_ )
         {
-            SDL_RendererInfo rendererInfo;
-            int returnCode = SDL_GetRenderDriverInfo( _driverIndex, &rendererInfo );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
-            }
-
             const uint32_t renderingFlags = renderFlags();
-            if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
-                ERROR_LOG( "Chosen rendering driver does not support all rendering flags" )
-            }
 
             // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
             _renderer = SDL_CreateRenderer( _window, _driverIndex, renderingFlags );
@@ -1213,7 +1204,7 @@ namespace
                 return false;
             }
 
-            returnCode = SDL_SetRenderTarget( _renderer, nullptr );
+            int returnCode = SDL_SetRenderTarget( _renderer, nullptr );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
