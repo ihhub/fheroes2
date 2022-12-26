@@ -48,7 +48,7 @@
 #include "version.h"
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    #include <SDL2/SDL_video.h>
+#include <SDL2/SDL_video.h>
 #endif
 
 #define STRINGIFY( DEF ) #DEF

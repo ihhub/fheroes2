@@ -24,8 +24,8 @@
 #ifndef H2SETTINGS_H
 #define H2SETTINGS_H
 
-#include <cstdint>
 #include <SDL_version.h>
+#include <cstdint>
 #include <string>
 #include <string_view>
 #include <vector>

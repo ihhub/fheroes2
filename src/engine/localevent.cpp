@@ -54,7 +54,6 @@
 #include "settings.h"
 #include "tools.h"
 
-
 namespace
 {
     const uint32_t globalLoopSleepTime{ 1 };

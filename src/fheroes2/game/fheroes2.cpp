@@ -128,7 +128,7 @@ namespace
             fheroes2::Display & display = fheroes2::Display::instance();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-            fheroes2::engine().setPosition(conf.WindowPosition());
+            fheroes2::engine().setPosition( conf.WindowPosition() );
 #endif
 
             display.resize( conf.VideoMode().width, conf.VideoMode().height );
