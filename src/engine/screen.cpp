@@ -1044,9 +1044,6 @@ namespace
 
             const uint32_t renderingFlags = renderFlags();
 
-            bool bestRGBFormatFound = false;
-            bool bestARGBFormatFound = false;
-
             const int driverCount = SDL_GetNumRenderDrivers();
             for ( int driverId = 0; driverId < driverCount; ++driverId ) {
                 int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
@@ -1063,20 +1060,11 @@ namespace
                     if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
                         // Bingo! This is the best driver and format.
                         isPaletteModeSupported = true;
-                        _driverIndex = driverId;
                         break;
                     }
-
-                    if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_XRGB8888 && !bestRGBFormatFound ) {
-                        bestRGBFormatFound = true;
-                        bestARGBFormatFound = true;
-                        _driverIndex = driverId;
-                    }
-                    else if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_ARGB8888 && !bestARGBFormatFound ) {
-                        bestARGBFormatFound = true;
-                        _driverIndex = driverId;
-                    }
                 }
+
+                _driverIndex = driverId;
 
                 if ( isPaletteModeSupported ) {
                     break;
@@ -1245,7 +1233,7 @@ namespace
                 return false;
             }
 
-            _texture = SDL_CreateTexture( _renderer, SDL_PIXELFORMAT_XRGB8888, SDL_TEXTUREACCESS_STATIC, width_, height_ );
+            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
             if ( _texture == nullptr ) {
                 ERROR_LOG( "Failed to create a texture from a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
                 clear();
