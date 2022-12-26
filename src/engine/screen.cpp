@@ -899,6 +899,7 @@ namespace
             , _surface( nullptr )
             , _renderer( nullptr )
             , _texture( nullptr )
+            , _driverIndex( 0 )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
             , _isVSyncEnabled( false )
         {
@@ -934,6 +935,8 @@ namespace
             }
 
             _windowedSize = fheroes2::Size();
+
+            _driverIndex = 0;
         }
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
@@ -948,7 +951,7 @@ namespace
                     SDL_DestroyRenderer( _renderer );
 
                 // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-                _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
+                _renderer = SDL_CreateRenderer( _window, _driverIndex, renderFlags() );
                 if ( _renderer == nullptr ) {
                     ERROR_LOG( "Failed to create a window renderer. The error: " << SDL_GetError() )
                 }
@@ -959,12 +962,6 @@ namespace
                     int returnCode = SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
                     if ( returnCode < 0 ) {
                         ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    }
-
-                    returnCode = SDL_SetRenderTarget( _renderer, nullptr );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to set render target. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        return;
                     }
 
                     returnCode = SDL_RenderClear( _renderer );
@@ -983,12 +980,6 @@ namespace
                     int returnCode = SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
                     if ( returnCode < 0 ) {
                         ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    }
-
-                    returnCode = SDL_SetRenderTarget( _renderer, nullptr );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to set render target. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        return;
                     }
                 }
 
@@ -1049,16 +1040,46 @@ namespace
             bool isPaletteModeSupported = false;
 
             SDL_RendererInfo rendererInfo;
-            int returnCode = SDL_GetRenderDriverInfo( 0, &rendererInfo );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
-            }
-            else {
+            _driverIndex = 0;
+
+            const uint32_t renderingFlags = renderFlags();
+
+            bool bestRGBFormatFound = false;
+            bool bestARGBFormatFound = false;
+
+            const int driverCount = SDL_GetNumRenderDrivers();
+            for ( int driverId = 0; driverId < driverCount; ++driverId ) {
+                int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
+                if ( returnCode < 0 ) {
+                    ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                    continue;
+                }
+
+                if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
+                    continue;
+                }
+
                 for ( uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i ) {
                     if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
+                        // Bingo! This is the best driver and format.
                         isPaletteModeSupported = true;
+                        _driverIndex = driverId;
                         break;
                     }
+
+                    if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_XRGB8888 && !bestRGBFormatFound ) {
+                        bestRGBFormatFound = true;
+                        bestARGBFormatFound = true;
+                        _driverIndex = driverId;
+                    }
+                    else if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_ARGB8888 && !bestARGBFormatFound ) {
+                        bestARGBFormatFound = true;
+                        _driverIndex = driverId;
+                    }
+                }
+
+                if ( isPaletteModeSupported ) {
+                    break;
                 }
             }
 
@@ -1103,6 +1124,7 @@ namespace
         SDL_Surface * _surface;
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
+        int _driverIndex;
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
@@ -1182,7 +1204,7 @@ namespace
         bool _createRenderer( const int32_t width_, const int32_t height_ )
         {
             SDL_RendererInfo rendererInfo;
-            int returnCode = SDL_GetRenderDriverInfo( 0, &rendererInfo );
+            int returnCode = SDL_GetRenderDriverInfo( _driverIndex, &rendererInfo );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
@@ -1193,11 +1215,16 @@ namespace
             }
 
             // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-            _renderer = SDL_CreateRenderer( _window, -1, renderingFlags );
+            _renderer = SDL_CreateRenderer( _window, _driverIndex, renderingFlags );
             if ( _renderer == nullptr ) {
                 ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
                 clear();
                 return false;
+            }
+
+            returnCode = SDL_SetRenderTarget( _renderer, nullptr );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
 
             if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
@@ -1218,7 +1245,7 @@ namespace
                 return false;
             }
 
-            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
+            _texture = SDL_CreateTexture( _renderer, SDL_PIXELFORMAT_XRGB8888, SDL_TEXTUREACCESS_STATIC, width_, height_ ); // SDL_CreateTextureFromSurface( _renderer, _surface );
             if ( _texture == nullptr ) {
                 ERROR_LOG( "Failed to create a texture from a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
                 clear();
