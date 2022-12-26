@@ -52,8 +52,8 @@
 #include "image_palette.h"
 #include "logging.h"
 #include "screen.h"
-#include "tools.h"
 #include "settings.h"
+#include "tools.h"
 
 namespace
 {
@@ -805,7 +805,7 @@ namespace
             return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
         }
 
-        void setPosition( fheroes2::Point position )
+        void setPosition( fheroes2::Point position ) override
         {
             _prevWindowPos = position;
         }

@@ -212,7 +212,7 @@ public:
     }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const fheroes2::Point WindowPosition() const {
+    fheroes2::Point WindowPosition() const {
         return window_position;
     }
 #endif
