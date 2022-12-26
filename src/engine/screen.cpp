@@ -1245,7 +1245,7 @@ namespace
                 return false;
             }
 
-            _texture = SDL_CreateTexture( _renderer, SDL_PIXELFORMAT_XRGB8888, SDL_TEXTUREACCESS_STATIC, width_, height_ ); // SDL_CreateTextureFromSurface( _renderer, _surface );
+            _texture = SDL_CreateTexture( _renderer, SDL_PIXELFORMAT_XRGB8888, SDL_TEXTUREACCESS_STATIC, width_, height_ );
             if ( _texture == nullptr ) {
                 ERROR_LOG( "Failed to create a texture from a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
                 clear();
