@@ -44,6 +44,8 @@
 #include <SDL_keycode.h>
 #include <SDL_touch.h>
 
+#include <settings.h>
+
 #endif
 
 #include "audio.h"
@@ -51,7 +53,6 @@
 #include "localevent.h"
 #include "pal.h"
 #include "screen.h"
-#include "settings.h"
 #include "tools.h"
 
 namespace
