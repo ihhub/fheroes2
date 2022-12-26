@@ -254,7 +254,7 @@ public:
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
 
-    void SetWindowPosition( int x, int y );
+    void SetWindowPosition( fheroes2::Point position );
 
     void SetMusicType( int v )
     {
