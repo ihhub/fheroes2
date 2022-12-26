@@ -41,6 +41,9 @@
 #include <SDL_rect.h>
 #include <SDL_render.h>
 #include <SDL_surface.h>
+
+#include <settings.h>
+
 #else
 #include <SDL_active.h>
 #endif
@@ -52,7 +55,6 @@
 #include "image_palette.h"
 #include "logging.h"
 #include "screen.h"
-#include "settings.h"
 #include "tools.h"
 
 namespace
