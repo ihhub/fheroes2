@@ -600,6 +600,8 @@ namespace
 
         void clear() override
         {
+            linkRenderSurface( nullptr );
+
             if ( _window != nullptr ) {
                 SDL_DestroyWindow( _window );
                 _window = nullptr;
