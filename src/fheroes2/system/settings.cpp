@@ -287,8 +287,8 @@ bool Settings::Read( const std::string & filePath )
         int default_y = 0;
 
         #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        int default_x = SDL_WINDOWPOS_CENTERED;
-        int default_y = SDL_WINDOWPOS_CENTERED;
+        default_x = SDL_WINDOWPOS_CENTERED;
+        default_y = SDL_WINDOWPOS_CENTERED;
         #endif
 
         window_position = config.PointParams( "windowposition", { default_x, default_y } );
