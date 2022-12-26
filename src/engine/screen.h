@@ -53,7 +53,7 @@ namespace fheroes2
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        virtual void setPosition( fheroes2::Point )
+        virtual void setPosition( fheroes2::Point /*unused*/ )
         {
             // Do nothing.
         }
