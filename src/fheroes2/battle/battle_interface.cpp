@@ -303,6 +303,65 @@ namespace
         }
         return rainbow;
     }
+
+    fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
+    {
+        const fheroes2::Rect & pos = target.GetRectPosition();
+
+        // Get the sprite for the first frame, so its center not shift if the creature is animating (instead of target.GetFrame()).
+        const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.animation.firstFrame() );
+
+        // Bottom-left corner (default) position with spell offset applied
+        fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.height + cellYOffset + spellSprite.y() );
+
+        switch ( spellICN ) {
+        case ICN::SHIELD:
+            // in front of the unit
+            result.x += target.isReflect() ? -pos.width / ( target.isWide() ? 2 : 1 ) : pos.width;
+            result.y += unitSprite.y() / 2;
+            break;
+        case ICN::BLIND: {
+            // unit's eyes
+            const fheroes2::Point & offset = target.animation.getBlindOffset();
+
+            // calculate OG Heroes2 unit position to apply offset to
+            const int rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.width * 3 / 4 : CELLW / 2;
+
+            // Overwrite result with custom blind value
+            result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
+            result.y += offset.y;
+            break;
+        }
+        case ICN::STONSKIN:
+        case ICN::STELSKIN:
+            // bottom center point
+            result.x += pos.width / 2;
+            break;
+        case ICN::REDDEATH:
+            // Shift spell sprite position for wide ceature to its head.
+            result.x += pos.width / 2 + ( target.isReflect() ? ( 1 - spellSprite.width() - 2 * spellSprite.x() - pos.width / 8 ) : ( pos.width / 8 ) );
+            result.y -= pos.height - 4;
+            break;
+        case ICN::MAGIC08:
+            // Position shifts for the Holy Shout spell to be closer to OG.
+            result.x += pos.width / 2 + ( target.isReflect() ? 12 : 0 );
+            result.y += unitSprite.y() / 2 - 1;
+            break;
+        default:
+            // center point of the unit
+            result.x += pos.width / 2;
+            result.y += unitSprite.y() / 2;
+            break;
+        }
+
+        if ( result.y < 0 ) {
+            const int maximumY = fheroes2::AGG::GetAbsoluteICNHeight( spellICN );
+            result.y = maximumY + spellSprite.y();
+        }
+
+        return result;
+    }
+
 }
 
 namespace Battle
@@ -2989,64 +3048,6 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
     }
 }
 
-fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
-{
-    const fheroes2::Rect & pos = target.GetRectPosition();
-
-    // Get the sprite for the first frame, so its center not shift if the creature is animating (instead of target.GetFrame()).
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.animation.firstFrame() );
-
-    // Bottom-left corner (default) position with spell offset applied
-    fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.height + cellYOffset + spellSprite.y() );
-
-    switch ( spellICN ) {
-    case ICN::SHIELD:
-        // in front of the unit
-        result.x += target.isReflect() ? -pos.width / ( target.isWide() ? 2 : 1 ) : pos.width;
-        result.y += unitSprite.y() / 2;
-        break;
-    case ICN::BLIND: {
-        // unit's eyes
-        const fheroes2::Point & offset = target.animation.getBlindOffset();
-
-        // calculate OG Heroes2 unit position to apply offset to
-        const int rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.width * 3 / 4 : CELLW / 2;
-
-        // Overwrite result with custom blind value
-        result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
-        result.y += offset.y;
-        break;
-    }
-    case ICN::STONSKIN:
-    case ICN::STELSKIN:
-        // bottom center point
-        result.x += pos.width / 2;
-        break;
-    case ICN::REDDEATH:
-        // Shift spell sprite position for wide ceature to its head.
-        result.x += pos.width / 2 + ( target.isReflect() ? ( 1 - spellSprite.width() - 2 * spellSprite.x() - pos.width / 8 ) : ( pos.width / 8 ) );
-        result.y -= pos.height - 4;
-        break;
-    case ICN::MAGIC08:
-        // Position shifts for the Holy Shout spell to be closer to OG.
-        result.x += pos.width / 2 + ( target.isReflect() ? 12 : 0 );
-        result.y += unitSprite.y() / 2 - 1;
-        break;
-    default:
-        // center point of the unit
-        result.x += pos.width / 2;
-        result.y += unitSprite.y() / 2;
-        break;
-    }
-
-    if ( result.y < 0 ) {
-        const int maximumY = fheroes2::AGG::GetAbsoluteICNHeight( spellICN );
-        result.y = maximumY + spellSprite.y();
-    }
-
-    return result;
-}
-
 void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
 {
     if ( unit.isFinishAnimFrame() && unit.animation.animationLength() != 1 ) {
@@ -3353,22 +3354,24 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
     // along with the unit kill/wince animation.
-    const bool drawLichCloud = attacker != nullptr && defender != nullptr && attacker->isArchers() && !attacker->isHandFighting()
+    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
                                && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
+    uint32_t lichCloudFrame = 0;
+    const uint32_t lichCloudMaxFrame = fheroes2::AGG::GetICNCount( ICN::LICHCLOD );
+
+    // targets damage animation loop
+    bool finishedAnimation = false;
+
     if ( drawLichCloud ) {
         // Lich cloud sound.
         AudioManager::PlaySound( attacker->M82Expl() );
     }
 
-    uint32_t lichCloudFrame = 0;
-
-    // targets damage animation loop
-    bool finishedAnimation = false;
     while ( le.HandleEvents() ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
-            if ( finishedAnimation && ( !drawLichCloud || ( drawLichCloud && lichCloudFrame == fheroes2::AGG::GetICNCount( ICN::LICHCLOD ) ) ) ) {
+            if ( finishedAnimation && ( !drawLichCloud || ( lichCloudFrame == lichCloudMaxFrame ) ) ) {
                 // All unit frames are rendered and if it was a Lich attack also its cloud frames are rendered too.
                 break;
             }
