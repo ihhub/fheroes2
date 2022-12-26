@@ -42,8 +42,6 @@
 #include <SDL_render.h>
 #include <SDL_surface.h>
 
-#include <settings.h>
-
 #else
 #include <SDL_active.h>
 #endif

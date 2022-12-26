@@ -44,8 +44,6 @@
 #include <SDL_keycode.h>
 #include <SDL_touch.h>
 
-#include <settings.h>
-
 #endif
 
 #include "audio.h"
