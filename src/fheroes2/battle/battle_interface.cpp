@@ -2990,25 +2990,26 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
         return;
     }
 
+    // Render the first frame before waiting any delay.
+    Redraw();
+    unit.IncreaseAnimFrame();
+
+    // Reset the delay to wait till the next frame.
+    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
+
     LocalEvent & le = LocalEvent::Get();
     const uint64_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
-
-    // Immediately indicate that the delay has passed to render first frame immediately.
-    Game::passCustomAnimationDelay( frameDelay );
-    // Make sure that the first run is passed immediately.
-    assert( !Game::isCustomDelayNeeded( frameDelay ) );
 
     while ( le.HandleEvents( Game::isCustomDelayNeeded( frameDelay ) ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateCustomAnimationDelay( frameDelay ) ) {
-            Redraw();
-
             if ( unit.isFinishAnimFrame() ) {
                 // We have reached the end of animation.
                 break;
             }
 
+            Redraw();
             unit.IncreaseAnimFrame();
         }
     }
@@ -3019,21 +3020,22 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
     if ( target == nullptr || target->isFinishFrame() ) // nothing to animate
         return;
 
-    // Immediately indicate that the delay has passed to render first frame immediately.
-    Game::passAnimationDelay( Game::BATTLE_OPPONENTS_DELAY );
-    // Make sure that the first run is passed immediately.
-    assert( !Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY } ) );
+    // Render the first frame before waiting any delay.
+    Redraw();
+    target->IncreaseAnimFrame();
+
+    // Reset the delay to wait till the next frame.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY } ) ) ) {
         if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-            Redraw();
-
             if ( target->isFinishFrame() ) {
                 // We have reached the end of animation.
                 break;
             }
 
+            Redraw();
             target->IncreaseAnimFrame();
         }
     }
@@ -3044,23 +3046,24 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
     if ( unit.isFinishAnimFrame() ) // nothing to animate
         return;
 
-    // Immediately indicate that the delay has passed to render first frame immediately.
-    Game::passAnimationDelay( Game::BATTLE_FRAME_DELAY );
-    // Make sure that the first run is passed immediately.
-    assert( !Game::isDelayNeeded( { Game::BATTLE_FRAME_DELAY } ) );
+    // Render the first frame before waiting any delay.
+    Redraw();
+    unit.IncreaseAnimFrame();
+
+    // Reset the delay to wait till the next frame.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
 
     LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents( false ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_FRAME_DELAY } ) ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
-            Redraw();
-
             if ( unit.isFinishAnimFrame() ) {
                 // We have reached the end of animation.
                 break;
             }
 
+            Redraw();
             unit.IncreaseAnimFrame();
         }
     }
@@ -4783,6 +4786,9 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
         // Restore direction of the creature, since it could be killed when it was reflected.
         target.UpdateDirection();
 
+        Redraw();
+        target.IncreaseAnimFrame();
+
         Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
         LocalEvent & le = LocalEvent::Get();
@@ -4790,13 +4796,12 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
             CheckGlobalEvents( le );
 
             if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-                Redraw();
-
                 if ( target.isFinishAnimFrame() ) {
                     // We have reached the end of animation.
                     break;
                 }
 
+                Redraw();
                 target.IncreaseAnimFrame();
             }
         }
