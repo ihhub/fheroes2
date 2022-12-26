@@ -20,9 +20,9 @@
 
 #pragma once
 
+#include <SDL_version.h>
 #include <cstdint>
 #include <memory>
-#include <SDL_version.h>
 #include <string>
 #include <vector>
 
