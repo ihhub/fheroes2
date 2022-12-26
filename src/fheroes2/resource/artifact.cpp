@@ -977,6 +977,10 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
     }
 
     assert( combined.empty() );
+
+    // Assemble artifact sets after the exchange, if possible
+    assembleArtifactSetIfPossible();
+    giftBag.assembleArtifactSetIfPossible();
 }
 
 bool BagArtifacts::ContainUltimateArtifact() const
