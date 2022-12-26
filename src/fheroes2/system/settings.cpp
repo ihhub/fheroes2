@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <memory>
+#include <SDL_version.h>
 #include <utility>
 
 #if defined( MACOS_APP_BUNDLE )
@@ -46,7 +47,10 @@
 #include "translations.h"
 #include "ui_language.h"
 #include "version.h"
-#include <SDL2/SDL_video.h>
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    #include <SDL2/SDL_video.h>
+#endif
 
 #define STRINGIFY( DEF ) #DEF
 #define EXPANDDEF( DEF ) STRINGIFY( DEF )
@@ -279,7 +283,15 @@ bool Settings::Read( const std::string & filePath )
 
     // window position
     if ( config.Exists( "windowposition" ) ) {
-        window_position = config.PointParams( "windowposition", { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED } );
+        int default_x = 0;
+        int default_y = 0;
+
+        #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        int default_x = SDL_WINDOWPOS_CENTERED;
+        int default_y = SDL_WINDOWPOS_CENTERED;
+        #endif
+
+        window_position = config.PointParams( "windowposition", { default_x, default_y } );
     }
 
     if ( config.Exists( "controller pointer speed" ) ) {
