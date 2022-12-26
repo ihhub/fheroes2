@@ -389,7 +389,7 @@ std::string Settings::String() const
     os << std::endl << "# video mode (game resolution)" << std::endl;
     os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
 
-    os << std::endl << "# window position (x,y)" << std::endl;
+    os << std::endl << "# starting window position (x,y); used to maintain it between sessions" << std::endl;
     os << "windowposition = [ " << window_position.x << ", " << window_position.y << " ]" << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
