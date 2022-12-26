@@ -35,9 +35,9 @@
 #include <SDL_version.h>
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include "settings.h"
 #include <SDL_gamecontroller.h>
 #include <SDL_touch.h>
-#include "settings.h"
 #endif
 
 #include "math_base.h"
