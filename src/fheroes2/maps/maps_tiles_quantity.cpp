@@ -144,19 +144,22 @@ Spell Maps::Tiles::QuantitySpell() const
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_ARTIFACT:
-        return Spell( QuantityVariant() == 15 ? quantity1 : static_cast<int>( Spell::NONE ) );
+        if ( QuantityVariant() == 15 ) {
+            return { quantity1 };
+        }
+        return { Spell::NONE };
 
     case MP2::OBJ_SHRINE1:
     case MP2::OBJ_SHRINE2:
     case MP2::OBJ_SHRINE3:
     case MP2::OBJ_PYRAMID:
-        return Spell( quantity1 );
+        return { quantity1 };
 
     default:
         break;
     }
 
-    return Spell( Spell::NONE );
+    return { Spell::NONE };
 }
 
 void Maps::Tiles::QuantitySetSpell( int spell )

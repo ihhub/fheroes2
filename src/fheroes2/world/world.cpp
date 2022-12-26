@@ -933,7 +933,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 
     // Get digging hole sprite.
     uint8_t obj = 0;
-    uint32_t idx = 0;
+    uint8_t idx = 0;
 
     if ( !MP2::getDiggingHoleSprite( tile.GetGround(), obj, idx ) ) {
         // Are you sure that you can dig here?
@@ -944,7 +944,6 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 
     tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), obj, idx ) );
 
-    // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
         return true;
