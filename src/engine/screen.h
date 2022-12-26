@@ -52,12 +52,12 @@ namespace fheroes2
             return _isFullScreen;
         }
 
-        #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         virtual void setPosition( fheroes2::Point )
         {
             // Do nothing.
         }
-        #endif
+#endif
 
         virtual std::vector<Size> getAvailableResolutions() const
         {
