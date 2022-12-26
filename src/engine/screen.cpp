@@ -748,13 +748,11 @@ namespace
         {
             updatePalette( StandardPaletteIndexes() );
 
-            // copy the image from display buffer to SDL surface
             const fheroes2::Display & display = fheroes2::Display::instance();
             const int32_t imageWidth = display.width();
             const int32_t imageHeight = display.height();
             const uint8_t * imageIn = display.image();
 
-            // Display class doesn't have support for image pitch so we mustn't link display to surface if width is not divisible by 4.
             if ( _isLinkedSurface ) {
                 memcpy( _palettedTexturePointer, display.image(), static_cast<size_t>( imageWidth * imageHeight ) );
                 linkRenderSurface( _palettedTexturePointer );
