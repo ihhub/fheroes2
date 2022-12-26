@@ -49,7 +49,6 @@
 #include "audio.h"
 #include "image.h"
 #include "localevent.h"
-#include "logging.h"
 #include "pal.h"
 #include "screen.h"
 #include "tools.h"
@@ -1201,7 +1200,6 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
                 break;
             }
             if ( event.window.event == SDL_WINDOWEVENT_MOVED ) {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Window moved! New position: (" << event.window.data1 << "," << event.window.data2 << ")." );
                 conf.SetWindowPosition(event.window.data1, event.window.data2);
                 conf.Save( Settings::configFileName );
             }
