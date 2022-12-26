@@ -586,6 +586,7 @@ namespace
             , _surface( nullptr )
             , _texBuffer( nullptr )
             , _palettedTexturePointer( nullptr )
+            , _isLinkedSurface( false )
         {
             // Do nothing.
         }
@@ -615,6 +616,8 @@ namespace
                 vita2d_free_texture( _texBuffer );
                 _texBuffer = nullptr;
             }
+
+            _isLinkedSurface = false;
         }
 
         bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
@@ -647,7 +650,10 @@ namespace
             vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
             _texBuffer = vita2d_create_empty_texture_format( width_, height_, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
             _palettedTexturePointer = static_cast<uint8_t *>( vita2d_texture_get_datap( _texBuffer ) );
-            memset( _palettedTexturePointer, 0, width_ * height_ * sizeof( uint8_t ) );
+
+            const int32_t textureWidth = static_cast<int32_t>( vita2d_texture_get_stride( _texBuffer ) );
+            _isLinkedSurface = ( width_ == textureWidth );
+
             _createPalette();
 
             // screen scaling calculation
@@ -690,14 +696,22 @@ namespace
             if ( _texBuffer == nullptr )
                 return;
 
-            const int32_t width = display.width();
-            const int32_t height = display.height();
+            const int32_t imageWidth = display.width();
+            const int32_t imageHeight = display.height();
 
-            SDL_memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
+            if ( !_isLinkedSurface ) {
+                // Display class doesn't have support for image pitch so we must copy display image line by line.
+                const uint8_t * imageIn = display.image();
+
+                const int32_t textureWidth = static_cast<int32_t>( vita2d_texture_get_stride( _texBuffer ) );
+                for ( int32_t i = 0; i < imageHeight; ++i ) {
+                    memcpy( static_cast<uint8_t *>( _palettedTexturePointer ) + textureWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
+                }
+            }
 
             vita2d_start_drawing();
-            vita2d_draw_texture_scale( _texBuffer, _destRect.x, _destRect.y, static_cast<float>( _destRect.width ) / width,
-                                       static_cast<float>( _destRect.height ) / height );
+            vita2d_draw_texture_scale( _texBuffer, _destRect.x, _destRect.y, static_cast<float>( _destRect.width ) / imageWidth,
+                                       static_cast<float>( _destRect.height ) / imageHeight );
             vita2d_end_drawing();
             vita2d_swap_buffers();
         }
@@ -728,10 +742,29 @@ namespace
         vita2d_texture * _texBuffer;
         uint8_t * _palettedTexturePointer;
         fheroes2::Rect _destRect;
+        bool _isLinkedSurface;
 
         void _createPalette()
         {
             updatePalette( StandardPaletteIndexes() );
+
+            // copy the image from display buffer to SDL surface
+            const fheroes2::Display & display = fheroes2::Display::instance();
+            const int32_t imageWidth = display.width();
+            const int32_t imageHeight = display.height();
+            const uint8_t * imageIn = display.image();
+
+            // Display class doesn't have support for image pitch so we mustn't link display to surface if width is not divisible by 4.
+            if ( _isLinkedSurface ) {
+                memcpy( _palettedTexturePointer, display.image(), static_cast<size_t>( imageWidth * imageHeight ) );
+                linkRenderSurface( _palettedTexturePointer );
+            }
+            else {
+                const int32_t textureWidth = static_cast<int32_t>( vita2d_texture_get_stride( _texBuffer ) );
+                for ( int32_t i = 0; i < imageHeight; ++i ) {
+                    memcpy( static_cast<uint8_t *>( _palettedTexturePointer ) + textureWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
+                }
+            }
         }
     };
 #elif SDL_VERSION_ATLEAST( 2, 0, 0 )
