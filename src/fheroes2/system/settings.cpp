@@ -975,9 +975,9 @@ void Settings::SetMusicVolume( int v )
     music_volume = std::clamp( v, 0, 10 );
 }
 
-void Settings::SetWindowPosition( int x, int y )
+void Settings::SetWindowPosition( fheroes2::Point position )
 {
-    window_position = { x, y };
+    window_position = position;
 }
 
 void Settings::SetPreferablyCountPlayers( int c )
