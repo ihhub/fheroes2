@@ -65,11 +65,15 @@ public:
 
     int getFrame() const;
     int firstFrame() const;
-    size_t getFrameNumber() const;
     size_t animationLength() const;
     virtual double movementProgress() const;
     bool isLastFrame() const;
     virtual bool isValid() const;
+
+    inline size_t getCurrentFrameId() const
+    {
+        return _currentFrame;
+    }
 
 protected:
     std::vector<int> _seq;

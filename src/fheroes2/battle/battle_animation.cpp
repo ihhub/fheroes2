@@ -92,11 +92,6 @@ int AnimationSequence::getFrame() const
     return isValid() ? _seq[_currentFrame] : 0;
 }
 
-size_t AnimationSequence::getFrameNumber() const
-{
-    return _currentFrame;
-}
-
 size_t AnimationSequence::animationLength() const
 {
     return _seq.size();
@@ -543,7 +538,7 @@ int32_t AnimationState::getCurrentFrameXOffset() const
     // The frame number of current subsequence start.
     size_t subequenceStart = 0;
     // The frame number in the full animation sequence, which include subsequences.
-    const size_t currentFrame = _currentSequence.getFrameNumber();
+    const size_t currentFrame = _currentSequence.getCurrentFrameId();
 
     // Get frame offset from _offsetX, analyzing in which subsequence it is.
     for ( const int32_t animSubsequence : animSubsequences ) {

@@ -1698,13 +1698,6 @@ fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fhe
                 const int32_t offsetX = _movingUnit->animation.getCurrentFrameXOffset();
                 offset.x -= Sign( moveX ) * offsetX / 2;
             }
-
-            // Special movement animation fix for Iron and Steel Golem: its 'MOVING' and 'MOVE_END' animation is missing 1/4 of animation start.
-            else if ( ( _movingUnit->animation.getCurrentState() == Monster_Info::MOVING || _movingUnit->animation.getCurrentState() == Monster_Info::MOVE_END )
-                      && ( _movingUnit->GetID() == Monster::IRON_GOLEM || _movingUnit->GetID() == Monster::STEEL_GOLEM ) ) {
-                // Expand the 'x' sprite offset range from [0.25,1] to [0,1] to smoothly concatenate with other animations.
-                offset.x -= static_cast<int32_t>( ( 0.75 - movementProgress ) * moveX / 4 );
-            }
         }
     }
     else if ( _flyingUnit == &unit ) {
@@ -3552,7 +3545,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
         // Do a post-move check for the bridge action and set the animation the movement to the next cell in the path.
         if ( canFly ) {
-            // The animation for the next step in the path of slow flying creatures is always "MOVING".
+            // The animation for the next step in the path of slowed flying creatures is always "MOVING".
             unit.SwitchAnimation( Monster_Info::MOVING );
         }
         else {
