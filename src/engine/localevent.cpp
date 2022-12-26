@@ -51,8 +51,9 @@
 #include "localevent.h"
 #include "pal.h"
 #include "screen.h"
-#include "tools.h"
 #include "settings.h"
+#include "tools.h"
+
 
 namespace
 {
