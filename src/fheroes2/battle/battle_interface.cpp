@@ -361,7 +361,6 @@ namespace
 
         return result;
     }
-
 }
 
 namespace Battle
