@@ -944,8 +944,6 @@ namespace
             if ( _surface == nullptr )
                 return;
 
-            copyImageToSurface( display, _surface, roi );
-
             if ( _texture == nullptr ) {
                 if ( _renderer != nullptr )
                     SDL_DestroyRenderer( _renderer );
@@ -955,42 +953,45 @@ namespace
                 if ( _renderer == nullptr ) {
                     ERROR_LOG( "Failed to create a window renderer. The error: " << SDL_GetError() )
                 }
+
+                return;
             }
-            else {
-                const bool fullFrame = ( roi.width == display.width() ) && ( roi.height == display.height() );
-                if ( fullFrame ) {
-                    int returnCode = SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    }
 
-                    returnCode = SDL_RenderClear( _renderer );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to clear render. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        return;
-                    }
-                }
-                else {
-                    SDL_Rect area;
-                    area.x = roi.x;
-                    area.y = roi.y;
-                    area.w = roi.width;
-                    area.h = roi.height;
+            copyImageToSurface( display, _surface, roi );
 
-                    int returnCode = SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    }
-                }
-
-                const int returnCode = SDL_RenderCopy( _renderer, _texture, nullptr, nullptr );
+            const bool fullFrame = ( roi.width == display.width() ) && ( roi.height == display.height() );
+            if ( fullFrame ) {
+                int returnCode = SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
                 if ( returnCode < 0 ) {
-                    ERROR_LOG( "Failed to copy render.The error value: " << returnCode << ", description: " << SDL_GetError() )
+                    ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                }
+
+                returnCode = SDL_RenderClear( _renderer );
+                if ( returnCode < 0 ) {
+                    ERROR_LOG( "Failed to clear render. The error value: " << returnCode << ", description: " << SDL_GetError() )
                     return;
                 }
-
-                SDL_RenderPresent( _renderer );
             }
+            else {
+                SDL_Rect area;
+                area.x = roi.x;
+                area.y = roi.y;
+                area.w = roi.width;
+                area.h = roi.height;
+
+                int returnCode = SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
+                if ( returnCode < 0 ) {
+                    ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                }
+            }
+
+            const int returnCode = SDL_RenderCopy( _renderer, _texture, nullptr, nullptr );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to copy render.The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            SDL_RenderPresent( _renderer );
         }
 
         bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
