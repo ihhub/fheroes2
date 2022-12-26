@@ -477,10 +477,10 @@ msgid "For valor in combat, %{name} receives %{exp} experience."
 msgstr "Pour sa bravoure au combat, %{name} reçoit %{exp} points d'expérience."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr "Le lâche %{name} fuit la bataille."
+msgstr "%{name} fuit la bataille avec lâcheté."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr "%{name} se rend à l'ennemi et part couvert de honte."
+msgstr "%{name} se rend à l'ennemi et part, son nom couvert de honte."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Votre armée subit une défaite amère, et %{name} abandonne votre cause."
