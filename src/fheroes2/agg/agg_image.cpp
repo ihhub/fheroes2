@@ -3430,13 +3430,19 @@ namespace fheroes2
 
             const int32_t imgScaleFactor = _icnVsSprite[id][0].scaleFactor();
             const int32_t displayScaleFactor = Display::instance().scaleFactor();
+
             if ( imgScaleFactor != displayScaleFactor ) {
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     const Sprite & original = _icnVsSprite[id][i];
                     // resize the image to match the display's scale factor
-                    Sprite scaled( original.width() * displayScaleFactor / imgScaleFactor, original.height() * displayScaleFactor / imgScaleFactor );
-                    // TODO: set sprite scale factor!
+                    Sprite scaled( original.width() * displayScaleFactor / imgScaleFactor, original.height() * displayScaleFactor / imgScaleFactor, 0, 0,
+                                   displayScaleFactor );
                     scaled.setPosition( original.x() * displayScaleFactor / imgScaleFactor, original.y() * displayScaleFactor / imgScaleFactor );
+
+                    if ( original.singleLayer() ) {
+                        scaled._disableTransformLayer();
+                    }
+
                     Resize( original, scaled, false );
                     _icnVsSprite[id][i] = scaled;
                 }
