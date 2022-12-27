@@ -30,7 +30,7 @@
 #include "math_base.h"
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#include "../fheroes2/system/settings.h"
+#include "settings.h"
 #endif
 
 namespace fheroes2
