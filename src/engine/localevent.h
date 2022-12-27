@@ -35,7 +35,6 @@
 #include <SDL_version.h>
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#include "settings.h"
 #include <SDL_gamecontroller.h>
 #include <SDL_touch.h>
 #endif
@@ -194,6 +193,10 @@ public:
     void setGlobalKeyDownEventHook( std::function<void( const fheroes2::Key, const int32_t )> hook )
     {
         _globalKeyDownEventHook = std::move( hook );
+    }
+
+    void setWindowMovedHook ( std::function<void( const int, const int)> hook ) {
+        _onWindowMoved = std::move ( hook );
     }
 
     static void setEventProcessingStates();
@@ -378,6 +381,7 @@ private:
 
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
+    std::function<void( const int, const int)> _onWindowMoved;
 
     fheroes2::Rect _mouseCursorRenderArea;
 
