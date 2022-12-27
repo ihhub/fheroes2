@@ -196,9 +196,9 @@ public:
     }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    void setWindowMovedHook ( std::function<void( const int, const int)> hook )
+    void setWindowMovedHook( std::function<void( const int, const int)> hook )
     {
-        _onWindowMoved = std::move ( hook );
+        _onWindowMoved = std::move( hook );
     }
 #endif
 
