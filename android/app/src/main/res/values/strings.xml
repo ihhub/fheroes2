@@ -2,4 +2,10 @@
 
 <resources>
     <string name="app_name">fheroes2</string>
+    <string name="activity_launcher_game_status_lbl_text">You cannot run the game at the moment, because some data files of the original game are missing. Please put the contents of the directory with the original Heroes of Might and Magic II game into a ZIP archive, copy it to this device and use the \"Extract HoMM2 resources\" button. If you do not have a copy of the original game, you can download the <a href="https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip">ZIP archive of a demo version</a>.</string>
+    <string name="activity_launcher_run_game_btn_name">Run fheroes2</string>
+    <string name="activity_launcher_extract_homm2_resources_btn_name">Extract HoMM2 resources</string>
+    <string name="activity_launcher_extract_homm2_resources_chooser_title">Choose the ZIP file with HoMM2 resources</string>
+    <string name="activity_launcher_last_task_status_lbl_text_completed_successfully">Operation completed successfully.</string>
+    <string name="activity_launcher_last_task_status_lbl_text_failed">An error occurred during the operation: %s</string>
 </resources>

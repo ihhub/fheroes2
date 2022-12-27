@@ -84,6 +84,8 @@ dependencies {
 
     implementation project(':sdl2')
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
 
 task copyH2D(type: Copy) {

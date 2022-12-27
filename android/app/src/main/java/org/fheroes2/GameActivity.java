@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import org.apache.commons.io.IOUtils;
 import org.libsdl.app.SDLActivity;
 
-public final class MainActivity extends SDLActivity
+public final class GameActivity extends SDLActivity
 {
     @Override
     protected void onCreate( final Bundle savedInstanceState )
@@ -77,9 +77,9 @@ public final class MainActivity extends SDLActivity
             try ( final InputStream in = getAssets().open( path ) ) {
                 final File outFile = new File( dstDir, path );
 
-                final String outFileDir = outFile.getParent();
+                final File outFileDir = outFile.getParentFile();
                 if ( outFileDir != null ) {
-                    ( new File( outFileDir ) ).mkdirs();
+                    outFileDir.mkdirs();
                 }
 
                 try ( final OutputStream out = new FileOutputStream( outFile ) ) {
