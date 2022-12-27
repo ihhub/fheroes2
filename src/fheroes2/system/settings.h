@@ -21,7 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#ifndef H2SETTINGS_H
+#define H2SETTINGS_H
 
 #include <SDL_version.h>
 #include <cstdint>
@@ -30,10 +31,10 @@
 #include <vector>
 
 #include "bitmodes.h"
-#include "../engine/dir.h"
-#include "../maps/maps_fileinfo.h"
-#include "../engine/math_base.h"
-#include "../system/players.h"
+#include "dir.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
+#include "players.h"
 
 class StreamBase;
 
@@ -477,3 +478,5 @@ private:
 
 StreamBase & operator<<( StreamBase &, const Settings & );
 StreamBase & operator>>( StreamBase &, Settings & );
+
+#endif
