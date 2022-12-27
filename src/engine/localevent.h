@@ -35,7 +35,7 @@
 #include <SDL_version.h>
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#include "settings.h"
+#include "../fheroes2/system/settings.h"
 #include <SDL_gamecontroller.h>
 #include <SDL_touch.h>
 #endif
