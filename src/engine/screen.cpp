@@ -1475,6 +1475,8 @@ namespace fheroes2
         Display::instance().linkRenderSurface( surface );
     }
 
+    int32_t Display::_currentScaleFactor = 1;
+
     Display::Display()
         : _engine( RenderEngine::create() )
         , _cursor( RenderCursor::create() )
@@ -1510,10 +1512,21 @@ namespace fheroes2
         std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
     }
 
+    void Display::_setScaleFactor( int32_t scaleFactor_ )
+    {
+        _scaleFactor = scaleFactor_;
+        _currentScaleFactor = scaleFactor_;
+    }
+
     Display & Display::instance()
     {
         static Display display;
         return display;
+    }
+
+    int32_t Display::scaleFactor()
+    {
+        return _currentScaleFactor;
     }
 
     void Display::render( const Rect & roi )

@@ -557,15 +557,15 @@ namespace fheroes2
         {
             const char * icnString = ICN::GetString( id );
 
-            const int32_t SCALE_FACTOR_FULLHD = 4;
-            const std::string fullHdPath = System::concatPath( System::GetDataDirectory( "fheroes2" ), "fullhd" );
+            // const int32_t SCALE_FACTOR_FULLHD = 4;
+            // const std::string fullHdPath = System::concatPath( System::GetDataDirectory( "fheroes2" ), "fullhd" );
 
-            if ( LoadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGG" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
-                return true;
-            }
-            if ( LoadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGGX" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
-                return true;
-            }
+            // if ( LoadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGG" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
+            //     return true;
+            // }
+            // if ( LoadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGGX" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
+            //     return true;
+            // }
 
             const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( icnString );
 
@@ -3429,21 +3429,22 @@ namespace fheroes2
             }
 
             const int32_t imgScaleFactor = _icnVsSprite[id][0].scaleFactor();
-            const int32_t displayScaleFactor = Display::instance().scaleFactor();
+            const int32_t displayScaleFactor = Display::scaleFactor();
 
             if ( imgScaleFactor != displayScaleFactor ) {
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     const Sprite & original = _icnVsSprite[id][i];
-                    // resize the image to match the display's scale factor
-                    Sprite scaled( original.width() * displayScaleFactor / imgScaleFactor, original.height() * displayScaleFactor / imgScaleFactor, 0, 0,
-                                   displayScaleFactor );
-                    scaled.setPosition( original.x() * displayScaleFactor / imgScaleFactor, original.y() * displayScaleFactor / imgScaleFactor );
+
+                    // resize and position the sprite to match the display's scale factor
+                    Sprite scaled( original.width() * displayScaleFactor / imgScaleFactor, original.height() * displayScaleFactor / imgScaleFactor,
+                                   original.x() * displayScaleFactor / imgScaleFactor, original.y() * displayScaleFactor / imgScaleFactor );
 
                     if ( original.singleLayer() ) {
                         scaled._disableTransformLayer();
                     }
 
-                    Resize( original, scaled, false );
+                    bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
+                    Resize( original, scaled, subpixel );
                     _icnVsSprite[id][i] = scaled;
                 }
             }

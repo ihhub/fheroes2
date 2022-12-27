@@ -145,6 +145,7 @@ namespace fheroes2
         };
 
         static Display & instance();
+        static int32_t scaleFactor();
 
         ~Display() override = default;
 
@@ -160,6 +161,7 @@ namespace fheroes2
         void updateNextRenderRoi( const Rect & roi );
 
         void resize( int32_t width_, int32_t height_ ) override;
+        void _setScaleFactor( int32_t scaleFactor_ );
 
         bool isDefaultSize() const
         {
@@ -190,6 +192,8 @@ namespace fheroes2
         friend Cursor & cursor();
 
     private:
+        static int32_t _currentScaleFactor;
+
         std::unique_ptr<BaseRenderEngine> _engine;
         std::unique_ptr<Cursor> _cursor;
         PreRenderProcessing _preprocessing;

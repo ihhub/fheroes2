@@ -26,6 +26,8 @@
 
 #include "image.h"
 #include "image_palette.h"
+// Not very nice to include screen here...
+#include "screen.h"
 
 namespace
 {
@@ -415,58 +417,50 @@ namespace
 namespace fheroes2
 {
     Image::Image()
-        : _width( 0 )
-        , _height( 0 )
-        , _scaleFactor( 1 )
-        , _singleLayer( false )
+        : Image( 0, 0 )
     {
-        // Do nothing.
     }
 
     Image::Image( int32_t width_, int32_t height_ )
-        : _width( 0 )
-        , _height( 0 )
-        , _scaleFactor( 1 )
-        , _singleLayer( false )
+        : Image( width_, height_, Display::scaleFactor() )
     {
-        Image::resize( width_, height_ );
     }
 
     Image::Image( int32_t width_, int32_t height_, int32_t scaleFactor_ )
-        : _width( 0 )
+        : _scaleFactor( scaleFactor_ )
+        , _width( 0 )
         , _height( 0 )
-        , _scaleFactor( scaleFactor_ )
         , _singleLayer( false )
     {
         Image::resize( width_, height_ );
     }
 
     Image::Image( const Image & image_ )
-        : _width( 0 )
+        : _scaleFactor( 1 )
+        , _width( 0 )
         , _height( 0 )
-        , _scaleFactor( 1 )
         , _singleLayer( false )
     {
-        copy( image_ );
+        copyFrom( image_ );
     }
 
     Image::Image( Image && image_ ) noexcept
-        : _width( 0 )
+        : _scaleFactor( 1 )
+        , _width( 0 )
         , _height( 0 )
-        , _scaleFactor( 1 )
         , _data( std::move( image_._data ) )
         , _singleLayer( false )
     {
-        std::swap( _singleLayer, image_._singleLayer );
+        std::swap( _scaleFactor, image_._scaleFactor );
         std::swap( _width, image_._width );
         std::swap( _height, image_._height );
-        std::swap( _scaleFactor, image_._scaleFactor );
+        std::swap( _singleLayer, image_._singleLayer );
     }
 
     Image & Image::operator=( const Image & image_ )
     {
         if ( this != &image_ ) {
-            copy( image_ );
+            copyFrom( image_ );
         }
 
         return *this;
@@ -478,9 +472,9 @@ namespace fheroes2
             // We shouldn't copy or move different types of images.
             assert( _singleLayer == image_._singleLayer );
 
+            std::swap( _scaleFactor, image_._scaleFactor );
             std::swap( _width, image_._width );
             std::swap( _height, image_._height );
-            std::swap( _scaleFactor, image_._scaleFactor );
             std::swap( _data, image_._data );
         }
 
@@ -503,7 +497,7 @@ namespace fheroes2
 
         _width = 0;
         _height = 0;
-        _scaleFactor = 1;
+        _scaleFactor = Display::scaleFactor();
     }
 
     void Image::fill( uint8_t value )
@@ -517,34 +511,32 @@ namespace fheroes2
 
     void Image::resize( int32_t width_, int32_t height_ )
     {
-        if ( width_ == _width && height_ == _height ) {
+        if ( _width == width_ * _scaleFactor && _height == height_ * _scaleFactor ) {
             return;
         }
 
         if ( width_ <= 0 || height_ <= 0 ) {
             clear();
-
             return;
         }
 
-        const size_t size = static_cast<size_t>( width_ * height_ );
+        _width = width_ * _scaleFactor;
+        _height = height_ * _scaleFactor;
 
-        _data.reset( new uint8_t[size * 2] );
-
-        _width = width_;
-        _height = height_;
+        const size_t totalBytes = static_cast<size_t>( 2 * _width * _height );
+        _data.reset( new uint8_t[totalBytes] );
     }
 
     void Image::reset()
     {
         if ( !empty() ) {
-            const size_t totalSize = static_cast<size_t>( _width * _height );
-            std::fill( image(), image() + totalSize, static_cast<uint8_t>( 0 ) );
-            std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 1 ) ); // skip all data
+            const size_t bytesPerLayer = static_cast<size_t>( _width * _height );
+            std::fill( image(), image() + bytesPerLayer, static_cast<uint8_t>( 0 ) );
+            std::fill( transform(), transform() + bytesPerLayer, static_cast<uint8_t>( 1 ) ); // skip all data
         }
     }
 
-    void Image::copy( const Image & image )
+    void Image::copyFrom( const Image & image )
     {
         // We shouldn't copy or move different types of images.
         assert( _singleLayer == image._singleLayer );
@@ -554,17 +546,17 @@ namespace fheroes2
             return;
         }
 
-        const size_t size = static_cast<size_t>( image._width * image._height );
+        const size_t totalBytes = static_cast<size_t>( 2 * image._width * image._height );
 
         if ( image._width != _width || image._height != _height ) {
-            _data.reset( new uint8_t[size * 2] );
+            _data.reset( new uint8_t[totalBytes] );
 
+            _scaleFactor = image._scaleFactor;
             _width = image._width;
             _height = image._height;
-            _scaleFactor = image._scaleFactor;
         }
 
-        memcpy( _data.get(), image._data.get(), size * 2 );
+        memcpy( _data.get(), image._data.get(), totalBytes );
     }
 
     Sprite::Sprite()
@@ -575,20 +567,16 @@ namespace fheroes2
         // Do nothing.
     }
 
-    Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_, int32_t scaleFactor_ )
-        : Image( width_, height_, scaleFactor_ )
-        , _x( x_ )
-        , _y( y_ )
+    Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
+        : Image( width_, height_ )
     {
-        // Do nothing.
+        setPosition( x_, y_ );
     }
 
     Sprite::Sprite( const Image & image, int32_t x_, int32_t y_ )
         : Image( image )
-        , _x( x_ )
-        , _y( y_ )
     {
-        // Do nothing.
+        setPosition( x_, y_ );
     }
 
     Sprite::Sprite( const Sprite & sprite )
@@ -634,42 +622,30 @@ namespace fheroes2
 
     void Sprite::setPosition( int32_t x_, int32_t y_ )
     {
-        _x = x_;
-        _y = y_;
+        _x = x_ * _scaleFactor;
+        _y = y_ * _scaleFactor;
     }
 
-    ImageRestorer::ImageRestorer( Image & image )
-        : _image( image )
-        , _x( 0 )
-        , _y( 0 )
-        , _width( image.width() )
-        , _height( image.height() )
+    ImageRestorer::ImageRestorer( Image & image_ )
+        : _image( image_ )
         , _isRestored( false )
     {
-        _updateRoi();
-        _copy.resize( _width, _height );
+        _captured.resize( _image.width(), _image.height() );
         if ( _image.singleLayer() ) {
-            _copy._disableTransformLayer();
+            _captured._disableTransformLayer();
         }
-
-        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
+        _capture();
     }
 
-    ImageRestorer::ImageRestorer( Image & image, int32_t x_, int32_t y_, int32_t width, int32_t height )
-        : _image( image )
-        , _x( x_ )
-        , _y( y_ )
-        , _width( width )
-        , _height( height )
+    ImageRestorer::ImageRestorer( Image & image_, int32_t x_, int32_t y_, int32_t width_, int32_t height_ )
+        : _image( image_ )
+        , _captured( width_, height_, x_, y_ )
         , _isRestored( false )
     {
-        _updateRoi();
-        _copy.resize( _width, _height );
         if ( _image.singleLayer() ) {
-            _copy._disableTransformLayer();
+            _captured._disableTransformLayer();
         }
-
-        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
+        _capture();
     }
 
     ImageRestorer::~ImageRestorer()
@@ -679,81 +655,29 @@ namespace fheroes2
         }
     }
 
-    void ImageRestorer::update( int32_t x_, int32_t y_, int32_t width, int32_t height )
+    void ImageRestorer::_capture()
+    {
+        Copy( _image, x(), y(), _captured, 0, 0, width(), height() );
+    }
+
+    void ImageRestorer::update( int32_t x_, int32_t y_, int32_t width_, int32_t height_ )
     {
         _isRestored = false;
-        _x = x_;
-        _y = y_;
-        _width = width;
-        _height = height;
-        _updateRoi();
 
-        _copy.resize( _width, _height );
-        Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
+        _captured.resize( width_, height_ );
+        _captured.setPosition( x_, y_ );
+        _capture();
     }
 
     void ImageRestorer::restore()
     {
         _isRestored = true;
-        Copy( _copy, 0, 0, _image, _x, _y, _width, _height );
+        Copy( _captured, 0, 0, _image, x(), y(), width(), height() );
     }
 
     void ImageRestorer::reset()
     {
         _isRestored = true;
-    }
-
-    void ImageRestorer::_updateRoi()
-    {
-        if ( _width < 0 )
-            _width = 0;
-
-        if ( _height < 0 )
-            _height = 0;
-
-        if ( _x < 0 ) {
-            const int32_t offset = -_x;
-            _x = 0;
-            _width = _width < offset ? 0 : _width - offset;
-        }
-
-        if ( _y < 0 ) {
-            const int32_t offset = -_y;
-            _y = 0;
-            _height = _height < offset ? 0 : _height - offset;
-        }
-
-        if ( _x >= _image.width() || _y >= _image.height() ) {
-            _x = 0;
-            _y = 0;
-            _width = 0;
-            _height = 0;
-            return;
-        }
-
-        if ( _x + _width > _image.width() ) {
-            const int32_t offsetX = _x + _width - _image.width();
-            if ( offsetX >= _width ) {
-                _x = 0;
-                _y = 0;
-                _width = 0;
-                _height = 0;
-                return;
-            }
-            _width -= offsetX;
-        }
-
-        if ( _y + _height > _image.height() ) {
-            const int32_t offsetY = _y + _height - _image.height();
-            if ( offsetY >= _height ) {
-                _x = 0;
-                _y = 0;
-                _width = 0;
-                _height = 0;
-                return;
-            }
-            _height -= offsetY;
-        }
     }
 
     Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )

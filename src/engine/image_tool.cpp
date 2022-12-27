@@ -237,7 +237,7 @@ namespace fheroes2
 
     Sprite decodeICNSprite( const uint8_t * data, uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY )
     {
-        Sprite sprite( width, height, offsetX, offsetY );
+        Image sprite( width, height, 1 );
         sprite.reset();
 
         uint8_t * imageData = sprite.image();
@@ -322,7 +322,7 @@ namespace fheroes2
             }
         }
 
-        return sprite;
+        return Sprite( sprite, offsetX, offsetY );
     }
 
     bool isPNGFormatSupported()

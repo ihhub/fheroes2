@@ -50,12 +50,12 @@ namespace fheroes2
         // It's safe to cast to uint32_t as width and height are always >= 0
         int32_t width() const
         {
-            return _width;
+            return _width / _scaleFactor;
         }
 
         int32_t height() const
         {
-            return _height;
+            return _height / _scaleFactor;
         }
 
         int32_t scaleFactor() const
@@ -68,12 +68,12 @@ namespace fheroes2
 
         uint8_t * transform()
         {
-            return _data.get() + width() * height();
+            return _data.get() + _width * _height;
         }
 
         const uint8_t * transform() const
         {
-            return _data.get() + width() * height();
+            return _data.get() + _width * _height;
         }
 
         bool empty() const
@@ -107,12 +107,13 @@ namespace fheroes2
             _scaleFactor = scaleFactor;
         }
 
+        int32_t _scaleFactor;
+
     private:
-        void copy( const Image & image );
+        void copyFrom( const Image & image );
 
         int32_t _width;
         int32_t _height;
-        int32_t _scaleFactor;
         std::unique_ptr<uint8_t[]> _data; // holds 2 image layers
 
         bool _singleLayer; // only for images which are not used for any other operations except displaying on screen. Non-copyable member.
@@ -122,7 +123,7 @@ namespace fheroes2
     {
     public:
         Sprite();
-        Sprite( int32_t width_, int32_t height_, int32_t x_ = 0, int32_t y_ = 0, int32_t scaleFactor_ = 1 );
+        Sprite( int32_t width_, int32_t height_, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Sprite & sprite );
         Sprite( Sprite && sprite ) noexcept;
@@ -134,12 +135,12 @@ namespace fheroes2
 
         int32_t x() const
         {
-            return _x;
+            return _x / _scaleFactor;
         }
 
         int32_t y() const
         {
-            return _y;
+            return _y / _scaleFactor;
         }
 
         virtual void setPosition( int32_t x_, int32_t y_ );
@@ -153,53 +154,48 @@ namespace fheroes2
     class ImageRestorer
     {
     public:
-        explicit ImageRestorer( Image & image );
-        ImageRestorer( Image & image, int32_t x_, int32_t y_, int32_t width, int32_t height );
+        explicit ImageRestorer( Image & image_ ); // the `image` parameter is not needed: it should always be the display
+        ImageRestorer( Image & image_, int32_t x_, int32_t y_, int32_t width_, int32_t height_ );
         ~ImageRestorer(); // restore method will be call upon object's destruction
 
         ImageRestorer( const ImageRestorer & ) = delete;
 
-        void update( int32_t x_, int32_t y_, int32_t width, int32_t height );
+        void update( int32_t x_, int32_t y_, int32_t width_, int32_t height_ );
 
         int32_t x() const
         {
-            return _x;
+            return _captured.x();
         }
 
         int32_t y() const
         {
-            return _y;
+            return _captured.y();
         }
 
         int32_t width() const
         {
-            return _width;
+            return _captured.width();
         }
 
         int32_t height() const
         {
-            return _height;
+            return _captured.height();
         }
 
         Rect rect() const
         {
-            return { _x, _y, _width, _height };
+            return { x(), y(), width(), height() };
         }
 
         void restore();
         void reset();
 
     private:
+        // void _updateRoi();
+        void _capture();
+
         Image & _image;
-        Image _copy;
-
-        int32_t _x;
-        int32_t _y;
-        int32_t _width;
-        int32_t _height;
-
-        void _updateRoi();
-
+        Sprite _captured;
         bool _isRestored;
     };
 
