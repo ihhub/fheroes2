@@ -1502,6 +1502,8 @@ namespace fheroes2
             clear();
         }
 
+        _setScaleFactor( std::max( 1, std::min( width_ / fheroes2::Display::DEFAULT_WIDTH, height_ / fheroes2::Display::DEFAULT_HEIGHT ) ) );
+
         Image::resize( width_, height_ );
 
         // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.

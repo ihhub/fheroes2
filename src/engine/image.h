@@ -36,6 +36,7 @@ namespace fheroes2
     public:
         Image();
         Image( int32_t width_, int32_t height_ );
+        Image( int32_t width_, int32_t height_, int32_t scaleFactor_ );
         Image( const Image & image_ );
         Image( Image && image_ ) noexcept;
 
@@ -55,6 +56,11 @@ namespace fheroes2
         int32_t height() const
         {
             return _height;
+        }
+
+        int32_t scaleFactor() const
+        {
+            return _scaleFactor;
         }
 
         virtual uint8_t * image();
@@ -94,11 +100,19 @@ namespace fheroes2
             _singleLayer = true;
         }
 
+    protected:
+        // ONLY FOR THE Display CLASS!
+        void _setScaleFactor( int32_t scaleFactor )
+        {
+            _scaleFactor = scaleFactor;
+        }
+
     private:
         void copy( const Image & image );
 
         int32_t _width;
         int32_t _height;
+        int32_t _scaleFactor;
         std::unique_ptr<uint8_t[]> _data; // holds 2 image layers
 
         bool _singleLayer; // only for images which are not used for any other operations except displaying on screen. Non-copyable member.
@@ -108,7 +122,7 @@ namespace fheroes2
     {
     public:
         Sprite();
-        Sprite( int32_t width_, int32_t height_, int32_t x_ = 0, int32_t y_ = 0 );
+        Sprite( int32_t width_, int32_t height_, int32_t x_ = 0, int32_t y_ = 0, int32_t scaleFactor_ = 1 );
         Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Sprite & sprite );
         Sprite( Sprite && sprite ) noexcept;

@@ -162,15 +162,16 @@ namespace fheroes2
         return SaveImage( image, path );
     }
 
-    bool Load( const std::string & path, Image & image )
+    bool Load( const std::string & path, Image & output, int32_t scaleFactor )
     {
-        SDL_Surface * surface = SDL_LoadBMP( path.c_str() );
+        SDL_Surface * surface = IMG_Load( path.c_str() );
         if ( surface == nullptr ) {
             return false;
         }
 
+        Image image( surface->w, surface->h, scaleFactor );
+
         if ( surface->format->BytesPerPixel == 3 ) {
-            image.resize( surface->w, surface->h );
             memset( image.transform(), 0, surface->w * surface->h );
 
             const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
@@ -184,14 +185,11 @@ namespace fheroes2
                 const uint8_t * inXEnd = inX + surface->w * 3;
 
                 for ( ; inX != inXEnd; inX += 3, ++outX ) {
-                    *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
+                    *outX = GetColorId( inX[0], inX[1], inX[2] );
                 }
             }
         }
         else if ( surface->format->BytesPerPixel == 4 ) {
-            image.resize( surface->w, surface->h );
-            image.reset();
-
             const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
             uint8_t * outY = image.image();
             uint8_t * transformY = image.transform();
@@ -205,21 +203,23 @@ namespace fheroes2
                 const uint8_t * inXEnd = inX + surface->w * 4;
 
                 for ( ; inX != inXEnd; inX += 4, ++outX, ++transformX ) {
-                    const uint8_t alpha = *( inX + 3 );
+                    const uint8_t alpha = inX[3];
                     if ( alpha < 255 ) {
-                        if ( alpha == 0 ) {
-                            *transformX = 1;
-                        }
-                        else if ( *inX == 0 && *( inX + 1 ) == 0 && *( inX + 2 ) == 0 ) {
-                            *transformX = 2;
-                        }
-                        else {
-                            *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
-                            *transformX = 0;
-                        }
+                        *outX = 0;
+                        *transformX = ( alpha == 0 ) ? 1 : 2;
+                        // if ( alpha == 0 ) {
+                        //     *transformX = 1;
+                        // }
+                        // else if ( *inX == 0 && *( inX + 1 ) == 0 && *( inX + 2 ) == 0 ) {
+                        //     *transformX = 2;
+                        // }
+                        // else {
+                        //     *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
+                        //     *transformX = 0;
+                        // }
                     }
                     else {
-                        *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
+                        *outX = GetColorId( inX[0], inX[1], inX[2] );
                         *transformX = 0;
                     }
                 }
@@ -229,9 +229,9 @@ namespace fheroes2
             SDL_FreeSurface( surface );
             return false;
         }
-
         SDL_FreeSurface( surface );
 
+        std::swap( image, output );
         return true;
     }
 

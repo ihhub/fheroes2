@@ -417,6 +417,7 @@ namespace fheroes2
     Image::Image()
         : _width( 0 )
         , _height( 0 )
+        , _scaleFactor( 1 )
         , _singleLayer( false )
     {
         // Do nothing.
@@ -425,6 +426,16 @@ namespace fheroes2
     Image::Image( int32_t width_, int32_t height_ )
         : _width( 0 )
         , _height( 0 )
+        , _scaleFactor( 1 )
+        , _singleLayer( false )
+    {
+        Image::resize( width_, height_ );
+    }
+
+    Image::Image( int32_t width_, int32_t height_, int32_t scaleFactor_ )
+        : _width( 0 )
+        , _height( 0 )
+        , _scaleFactor( scaleFactor_ )
         , _singleLayer( false )
     {
         Image::resize( width_, height_ );
@@ -433,6 +444,7 @@ namespace fheroes2
     Image::Image( const Image & image_ )
         : _width( 0 )
         , _height( 0 )
+        , _scaleFactor( 1 )
         , _singleLayer( false )
     {
         copy( image_ );
@@ -441,12 +453,14 @@ namespace fheroes2
     Image::Image( Image && image_ ) noexcept
         : _width( 0 )
         , _height( 0 )
+        , _scaleFactor( 1 )
         , _data( std::move( image_._data ) )
         , _singleLayer( false )
     {
         std::swap( _singleLayer, image_._singleLayer );
         std::swap( _width, image_._width );
         std::swap( _height, image_._height );
+        std::swap( _scaleFactor, image_._scaleFactor );
     }
 
     Image & Image::operator=( const Image & image_ )
@@ -466,6 +480,7 @@ namespace fheroes2
 
             std::swap( _width, image_._width );
             std::swap( _height, image_._height );
+            std::swap( _scaleFactor, image_._scaleFactor );
             std::swap( _data, image_._data );
         }
 
@@ -488,6 +503,7 @@ namespace fheroes2
 
         _width = 0;
         _height = 0;
+        _scaleFactor = 1;
     }
 
     void Image::fill( uint8_t value )
@@ -546,6 +562,7 @@ namespace fheroes2
 
             _width = image._width;
             _height = image._height;
+            _scaleFactor = image._scaleFactor;
         }
 
         memcpy( _data.get(), image._data.get(), size * 2 );
@@ -559,8 +576,8 @@ namespace fheroes2
         // Do nothing.
     }
 
-    Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
-        : Image( width_, height_ )
+    Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_, int32_t scaleFactor_ )
+        : Image( width_, height_, scaleFactor_ )
         , _x( x_ )
         , _y( y_ )
     {
