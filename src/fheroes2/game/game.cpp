@@ -215,7 +215,7 @@ void Game::Init()
         Settings & conf = Settings::Get();
         conf.SetWindowPosition( { x, y } );
         conf.Save( Settings::configFileName );
-    });
+    } );
 #endif
 
     Game::AnimateDelaysInitialize();

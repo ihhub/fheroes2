@@ -1198,7 +1198,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
                 break;
             }
             if ( event.window.event == SDL_WINDOWEVENT_MOVED ) {
-                if ( _onWindowMoved ){
+                if ( _onWindowMoved ) {
                     _onWindowMoved( event.window.data1, event.window.data2 );
                 }
             }
