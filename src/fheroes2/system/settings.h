@@ -29,8 +29,8 @@
 #include <string_view>
 #include <vector>
 
-#include "../engine/dir.h"
-#include "../engine/math_base.h"
+#include "../../engine/dir.h"
+#include "../../engine/math_base.h"
 #include "../maps/maps_fileinfo.h"
 #include "../system/players.h"
 #include "bitmodes.h"
