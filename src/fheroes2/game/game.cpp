@@ -210,6 +210,14 @@ void Game::Init()
     le.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
     le.setGlobalKeyDownEventHook( Game::globalKeyDownEvent );
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    le.setWindowMovedHook( []( int x, int y ) {
+        Settings & conf = Settings::Get();
+        conf.SetWindowPosition( { x, y } );
+        conf.Save( Settings::configFileName );
+    });
+#endif
+
     Game::AnimateDelaysInitialize();
 
     Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
