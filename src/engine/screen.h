@@ -133,7 +133,7 @@ namespace fheroes2
         bool _nearestScaling;
     };
 
-    class Display : public Image
+    class Display : public Image // That's a REALLY bad idea after all...
     {
     public:
         friend class BaseRenderEngine;

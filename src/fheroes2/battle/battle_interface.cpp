@@ -1923,7 +1923,8 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
 {
     if ( icn_cbkg != ICN::UNKNOWN ) {
         const fheroes2::Sprite & cbkg = fheroes2::AGG::GetICN( icn_cbkg, 0 );
-        fheroes2::Copy( cbkg, _mainSurface );
+        // fheroes2::Copy( cbkg, _mainSurface );
+        _mainSurface = cbkg;
     }
 
     if ( icn_frng != ICN::UNKNOWN ) {
@@ -5000,7 +5001,8 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
         if ( Game::validateCustomAnimationDelay( spellcastDelay ) ) {
             // stay at maximum blur for 2 frames
             if ( frame < 9 || frame > 10 ) {
-                fheroes2::Copy( original, _mainSurface );
+                // fheroes2::Copy( original, _mainSurface );
+                _mainSurface = original;
                 fheroes2::AlphaBlit( blurred, _mainSurface, alpha );
                 RedrawPartialFinish();
 

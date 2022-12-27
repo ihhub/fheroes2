@@ -551,7 +551,6 @@ namespace fheroes2
 
         if ( !image._data ) {
             clear();
-
             return;
         }
 
@@ -1131,7 +1130,6 @@ namespace fheroes2
 
     void Copy( const Image & in, Image & out )
     {
-        out.resize( in.width(), in.height() );
         Copy( in, 0, 0, out, 0, 0, in.width(), in.height() );
     }
 
