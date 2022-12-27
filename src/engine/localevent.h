@@ -21,8 +21,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2LOCALEVENT_H
-#define H2LOCALEVENT_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -405,5 +404,3 @@ private:
     bool _isTwoFingerGestureInProgress = false;
 #endif
 };
-
-#endif
