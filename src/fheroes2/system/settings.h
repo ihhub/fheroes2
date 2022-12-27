@@ -29,11 +29,11 @@
 #include <string_view>
 #include <vector>
 
-#include "bitmodes.h"
 #include "../engine/dir.h"
 #include "../maps/maps_fileinfo.h"
 #include "../engine/math_base.h"
 #include "../system/players.h"
+#include "bitmodes.h"
 
 class StreamBase;
 
