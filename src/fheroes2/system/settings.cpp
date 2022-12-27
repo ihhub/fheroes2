@@ -21,6 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <SDL_version.h>
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
