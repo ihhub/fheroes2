@@ -41,7 +41,6 @@
 #include <SDL_rect.h>
 #include <SDL_render.h>
 #include <SDL_surface.h>
-
 #else
 #include <SDL_active.h>
 #endif
