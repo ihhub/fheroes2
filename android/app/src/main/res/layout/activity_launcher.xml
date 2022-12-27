@@ -5,6 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/activity_launcher_game_logo_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:contentDescription="@string/activity_launcher_game_logo_img_content_description"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintBottom_toTopOf="@+id/activity_launcher_game_status_lbl"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <TextView
         android:id="@+id/activity_launcher_game_status_lbl"
         android:layout_width="wrap_content"
@@ -14,7 +25,6 @@
         android:maxWidth="512dp"
         android:padding="8dp"
         android:text="@string/activity_launcher_game_status_lbl_text"
-        android:textAlignment="center"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/activity_launcher_run_game_btn"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -75,7 +85,6 @@
         android:maxWidth="512dp"
         android:padding="8dp"
         android:text=""
-        android:textAlignment="center"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
