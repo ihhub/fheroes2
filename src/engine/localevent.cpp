@@ -1186,7 +1186,6 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
     ResetModes( MOUSE_WHEEL );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    Settings & conf = Settings::Get();
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
         case SDL_WINDOWEVENT:
@@ -1199,8 +1198,9 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
                 break;
             }
             if ( event.window.event == SDL_WINDOWEVENT_MOVED ) {
-                conf.SetWindowPosition( { event.window.data1, event.window.data2 } );
-                conf.Save( Settings::configFileName );
+                if ( _onWindowMoved ){
+                    _onWindowMoved( event.window.data1, event.window.data2 );
+                }
             }
             if ( HandleWindowEvent( event.window ) ) {
                 renderRoi = { 0, 0, display.width(), display.height() };
