@@ -42,6 +42,9 @@ Additional non-original assets from fheroes2 project.
 .B files/lang/*.mo
 Translations from fheroes2 project.
 .TP
+.B files/soundfonts/*
+Additional SoundFont files for MIDI synthesier. sf2 and sf3 formats are supported.
+.TP
 .B maps/*
 .br
 Single scenarios and campaigns (h2c, hxc, mp2, mx2 files).
@@ -49,7 +52,7 @@ Single scenarios and campaigns (h2c, hxc, mp2, mx2 files).
 .B music/*
 CD audio music tracks which are ripped in mp3, ogg or flac formats.
 The tracks should be named as "homm2_XX.ext" or "TrackXX.ext" where XX is a track number and ext is an extension.
-Numeration starts from "01" for the first naming and from "02" for the second one.
+Numeration starts from "01" for the "homm2_" prefix and from "02" for the "Track" prefix.
 .TP
 \fBanim/*.smk\fP or \fBanim2/*.smk\fP or \fBheroes2/anim/*.smk\fP
 Video files.
