@@ -1205,7 +1205,12 @@ namespace
                 return false;
             }
 
-            int returnCode = SDL_SetRenderTarget( _renderer, nullptr );
+            int returnCode = SDL_SetRenderDrawColor( _renderer, 0, 0, 0, SDL_ALPHA_OPAQUE );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to set default color for rendered. The error value: " << returnCode << ", description: " << SDL_GetError() )
+            }
+
+            returnCode = SDL_SetRenderTarget( _renderer, nullptr );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
