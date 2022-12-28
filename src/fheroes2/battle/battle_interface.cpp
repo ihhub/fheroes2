@@ -4887,17 +4887,24 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     _currentUnit = nullptr;
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    // Reset the idle animation for all troops and redraw the '_mainSurface'.
-    ResetIdleTroopAnimation();
-    RedrawPartialFinish();
+    // Set all non-dead troops animation to standing still without unit counters and redraw the '_mainSurface'.
+    SwitchAllUnitsAnimation( Monster_Info::STAND_STILL );
+    Redraw();
 
     fheroes2::Rect area = GetArea();
     // Cut out the battle log image so we don't use it in the death wave effect.
-    area.height -= 36;
+    area.height -= status.height;
+    // And if listlog is open, then cut off it too.
+    if ( listlog && listlog->isOpenLog() ) {
+        area.height -= listlog->GetArea().height;
+    }
 
-    const fheroes2::Sprite & copy = fheroes2::Crop( _mainSurface, area.x, area.y, area.width, area.height );
+    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
+
     // The death wave horizontal length in pixels.
     const int32_t waveLength = 38;
+    const int32_t waveStep = 5;
     // A death wave parameter that limits the curve to one cosine period.
     const double waveLimit = waveLength / M_PI / 2;
     std::vector<int32_t> deathWaveCurve;
@@ -4910,6 +4917,16 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
         deathWaveCurve.push_back( static_cast<int32_t>( std::round( strength * ( cos( posX / waveLimit ) / 2 - 0.5 ) ) ) - 1 );
     }
 
+    // Take into account that the Death Wave starts outside the battle screen.
+    area.x -= waveLength;
+    // The first frame of spell effect must have a part of the spell, so we start from its first position.
+    int32_t position = waveStep;
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    // Prepare the blank image for the Death Wave spell effect with the transform layer equal to "0"
+    fheroes2::Image spellEffect( waveLength, area.height );
+    std::fill( spellEffect.transform(), spellEffect.transform() + static_cast<size_t>( waveLength * area.height ), static_cast<uint8_t>( 0 ) );
+
     AudioManager::PlaySound( M82::MNRDEATH );
 
     int32_t position = 0;
@@ -4917,13 +4934,28 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            // TODO: instead of rendering the whole frame for the wave effect we should render only the area where the effect is active.
-            fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, deathWaveCurve ), _mainSurface );
-            RedrawPartialFinish();
+            const int32_t wavePositionX = ( area.x + position < 0 ) ? 0 : ( area.x + position );
+            const int32_t waveWidth = position > waveLength ? ( position > area.width ? ( waveLength - position + area.width ) : waveLength ) : position;
+            const int32_t restorePositionX = ( wavePositionX < waveStep ) ? 0 : ( wavePositionX - waveStep );
+            const int32_t restoreWidth = wavePositionX < waveStep ? wavePositionX : waveStep;
 
-            position += 5;
+            const fheroes2::Rect renderArea( _interfacePosition.x + restorePositionX, _interfacePosition.y + area.y, waveWidth + restoreWidth, area.height );
+
+            // Place a copy of the original image where the Death Wave effect was on the previous frame.
+            fheroes2::Blit( battleFieldCopy, restorePositionX, area.y, display, renderArea.x, renderArea.y, restoreWidth, renderArea.height );
+
+            // Place the Death Wave effect to its new position.
+            fheroes2::CreateDeathWaveEffect( spellEffect, battleFieldCopy, position, deathWaveCurve );
+            fheroes2::Blit( spellEffect, 0, 0, display, renderArea.x + restoreWidth, renderArea.y, waveWidth, area.height );
+
+            // Render only the changed screen area.
+            display.render( renderArea );
+
+            position += waveStep;
         }
     }
+
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionColdRingSpell( int32_t dst, const TargetsInfo & targets )
@@ -4980,9 +5012,9 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    // Reset the idle animation for all troops and redraw the '_mainSurface'.
-    ResetIdleTroopAnimation();
-    RedrawPartialFinish();
+    // Set all non-dead troops animation to standing still without unit counters and redraw the '_mainSurface'.
+    SwitchAllUnitsAnimation( Monster_Info::STAND_STILL );
+    Redraw();
 
     const fheroes2::Image original( _mainSurface );
     fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, 3 );
@@ -5019,6 +5051,8 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
             ++frame;
         }
     }
+
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & targets )
@@ -5594,6 +5628,20 @@ void Battle::Interface::ResetIdleTroopAnimation() const
 {
     arena.GetForce1().resetIdleAnimation();
     arena.GetForce2().resetIdleAnimation();
+}
+
+void Battle::Interface::SwitchAllUnitsAnimation( const int32_t animationState ) const
+{
+    for ( Battle::Unit * unit : arena.GetForce1() ) {
+        if ( unit->isValid() ) {
+            unit->SwitchAnimation( animationState );
+        }
+    }
+    for ( Battle::Unit * unit : arena.GetForce2() ) {
+        if ( unit->isValid() ) {
+            unit->SwitchAnimation( animationState );
+        }
+    }
 }
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
