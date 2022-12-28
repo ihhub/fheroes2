@@ -52,16 +52,32 @@
         android:id="@+id/activity_launcher_extract_homm2_resources_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:enabled="false"
         android:minWidth="256dp"
         android:onClick="extractHoMM2ResourcesButtonClicked"
         android:padding="8dp"
         android:text="@string/activity_launcher_extract_homm2_resources_btn_name"
-        app:layout_constraintBottom_toTopOf="@+id/activity_launcher_pb"
+        app:layout_constraintBottom_toTopOf="@+id/activity_launcher_download_homm2_demo_btn"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_launcher_run_game_btn"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+        android:id="@+id/activity_launcher_download_homm2_demo_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:enabled="false"
+        android:minWidth="256dp"
+        android:onClick="downloadHoMM2DemoButtonClicked"
+        android:padding="8dp"
+        android:text="@string/activity_launcher_download_homm2_demo_btn_name"
+        app:layout_constraintBottom_toTopOf="@+id/activity_launcher_pb"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_launcher_extract_homm2_resources_btn"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <ProgressBar
@@ -73,7 +89,7 @@
         app:layout_constraintBottom_toTopOf="@+id/activity_launcher_last_task_status_lbl"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_launcher_extract_homm2_resources_btn"
+        app:layout_constraintTop_toBottomOf="@+id/activity_launcher_download_homm2_demo_btn"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView

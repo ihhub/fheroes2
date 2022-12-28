@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +48,7 @@ public final class LauncherActivity extends Activity
 
     private Button runGameButton = null;
     private Button extractHoMM2ResourcesButton = null;
+    private Button downloadHoMM2DemoButton = null;
 
     private TextView gameStatusTextView = null;
     private TextView lastTaskStatusTextView = null;
@@ -66,13 +66,12 @@ public final class LauncherActivity extends Activity
 
         runGameButton = findViewById( R.id.activity_launcher_run_game_btn );
         extractHoMM2ResourcesButton = findViewById( R.id.activity_launcher_extract_homm2_resources_btn );
+        downloadHoMM2DemoButton = findViewById( R.id.activity_launcher_download_homm2_demo_btn );
 
         gameStatusTextView = findViewById( R.id.activity_launcher_game_status_lbl );
         lastTaskStatusTextView = findViewById( R.id.activity_launcher_last_task_status_lbl );
 
         progressBar = findViewById( R.id.activity_launcher_pb );
-
-        gameStatusTextView.setMovementMethod( LinkMovementMethod.getInstance() );
     }
 
     @Override
@@ -139,6 +138,11 @@ public final class LauncherActivity extends Activity
                                 REQUEST_CODE_OPEN_HOMM2_RESOURCES_ZIP );
     }
 
+    public void downloadHoMM2DemoButtonClicked( final View view )
+    {
+        startActivity( new Intent( Intent.ACTION_VIEW, Uri.parse( getString( R.string.activity_launcher_homm2_demo_url ) ) ) );
+    }
+
     private void updateLastTaskStatus( final String status )
     {
         lastTaskStatusTextView.setText( status );
@@ -151,11 +155,13 @@ public final class LauncherActivity extends Activity
 
         runGameButton.setEnabled( activeBackgroundTask == null && isHoMM2ResourcesPresent() );
         extractHoMM2ResourcesButton.setEnabled( activeBackgroundTask == null );
+        downloadHoMM2DemoButton.setEnabled( activeBackgroundTask == null && !isHoMM2ResourcesPresent() );
 
         gameStatusTextView.setVisibility( isHoMM2ResourcesPresent() ? View.GONE : View.VISIBLE );
-        lastTaskStatusTextView.setVisibility( activeBackgroundTask != null ? View.GONE : View.VISIBLE );
-
+        runGameButton.setVisibility( !isHoMM2ResourcesPresent() ? View.GONE : View.VISIBLE );
+        downloadHoMM2DemoButton.setVisibility( isHoMM2ResourcesPresent() ? View.GONE : View.VISIBLE );
         progressBar.setVisibility( activeBackgroundTask == null ? View.GONE : View.VISIBLE );
+        lastTaskStatusTextView.setVisibility( activeBackgroundTask != null ? View.GONE : View.VISIBLE );
     }
 
     private boolean isValidHoMM2ResourcePath( final File path, final Set<File> allowedSubdirs ) throws IOException
