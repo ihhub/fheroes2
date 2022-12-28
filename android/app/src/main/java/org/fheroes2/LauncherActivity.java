@@ -38,6 +38,8 @@ import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.io.IOUtils;
@@ -46,6 +48,9 @@ public final class LauncherActivity extends Activity
 {
     private static final int REQUEST_CODE_OPEN_HOMM2_RESOURCES_ZIP = 1001;
 
+    private static final int INACTIVITY_TIMEOUT = 3000;
+    private static final int INACTIVITY_TIMER_PERIOD = 100;
+
     private Button runGameButton = null;
     private Button extractHoMM2ResourcesButton = null;
     private Button downloadHoMM2DemoButton = null;
@@ -53,9 +58,12 @@ public final class LauncherActivity extends Activity
     private TextView gameStatusTextView = null;
     private TextView lastTaskStatusTextView = null;
 
-    private ProgressBar progressBar = null;
+    private ProgressBar inactivityTimerProgressBar = null;
+    private ProgressBar backgroundTaskProgressBar = null;
 
-    private Thread activeBackgroundTask = null;
+    private Thread backgroundTask = null;
+
+    private Timer inactivityTimer = null;
 
     @Override
     protected void onCreate( final Bundle savedInstanceState )
@@ -71,7 +79,30 @@ public final class LauncherActivity extends Activity
         gameStatusTextView = findViewById( R.id.activity_launcher_game_status_lbl );
         lastTaskStatusTextView = findViewById( R.id.activity_launcher_last_task_status_lbl );
 
-        progressBar = findViewById( R.id.activity_launcher_pb );
+        inactivityTimerProgressBar = findViewById( R.id.activity_launcher_inactivity_timer_pb );
+        backgroundTaskProgressBar = findViewById( R.id.activity_launcher_background_task_pb );
+
+        if ( savedInstanceState == null && isHoMM2ResourcesPresent() ) {
+            inactivityTimer = new Timer();
+
+            inactivityTimer.scheduleAtFixedRate( new TimerTask() {
+                @Override
+                public void run()
+                {
+                    runOnUiThread( () -> {
+                        inactivityTimerProgressBar.incrementProgressBy( INACTIVITY_TIMER_PERIOD );
+
+                        if ( inactivityTimerProgressBar.getProgress() >= inactivityTimerProgressBar.getMax() ) {
+                            cancelInactivityTimer();
+
+                            runGame();
+                        }
+                    } );
+                }
+            }, INACTIVITY_TIMER_PERIOD, INACTIVITY_TIMER_PERIOD );
+
+            inactivityTimerProgressBar.setMax( INACTIVITY_TIMEOUT );
+        }
     }
 
     @Override
@@ -80,6 +111,14 @@ public final class LauncherActivity extends Activity
         super.onResume();
 
         updateUI();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        cancelInactivityTimer();
     }
 
     @Override
@@ -92,8 +131,8 @@ public final class LauncherActivity extends Activity
             if ( resultCode == RESULT_OK && data != null ) {
                 final Uri zipFileUri = data.getData();
 
-                if ( activeBackgroundTask == null ) {
-                    activeBackgroundTask = new Thread( () -> {
+                if ( backgroundTask == null ) {
+                    backgroundTask = new Thread( () -> {
                         try ( final InputStream iStream = getContentResolver().openInputStream( zipFileUri ) ) {
                             extractHoMM2ResourcesFromZip( iStream );
 
@@ -106,7 +145,7 @@ public final class LauncherActivity extends Activity
                         }
                         finally {
                             runOnUiThread( () -> {
-                                activeBackgroundTask = null;
+                                backgroundTask = null;
 
                                 updateUI();
                             } );
@@ -115,7 +154,7 @@ public final class LauncherActivity extends Activity
 
                     updateUI();
 
-                    activeBackgroundTask.start();
+                    backgroundTask.start();
                 }
             }
             break;
@@ -126,11 +165,15 @@ public final class LauncherActivity extends Activity
 
     public void runGameButtonClicked( final View view )
     {
-        startActivity( new Intent( this, GameActivity.class ) );
+        cancelInactivityTimer();
+
+        runGame();
     }
 
     public void extractHoMM2ResourcesButtonClicked( final View view )
     {
+        cancelInactivityTimer();
+
         final Intent intent = new Intent( Intent.ACTION_OPEN_DOCUMENT );
         intent.setType( "application/zip" );
 
@@ -140,7 +183,21 @@ public final class LauncherActivity extends Activity
 
     public void downloadHoMM2DemoButtonClicked( final View view )
     {
+        cancelInactivityTimer();
+
         startActivity( new Intent( Intent.ACTION_VIEW, Uri.parse( getString( R.string.activity_launcher_homm2_demo_url ) ) ) );
+    }
+
+    private void cancelInactivityTimer()
+    {
+        if ( inactivityTimer == null ) {
+            return;
+        }
+
+        inactivityTimer.cancel();
+        inactivityTimer = null;
+
+        updateUI();
     }
 
     private void updateLastTaskStatus( final String status )
@@ -151,17 +208,18 @@ public final class LauncherActivity extends Activity
     private void updateUI()
     {
         // A quick and dirty way to avoid the re-creation of this activity due to the screen orientation change while running a background task
-        setRequestedOrientation( activeBackgroundTask == null ? ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED : ActivityInfo.SCREEN_ORIENTATION_LOCKED );
+        setRequestedOrientation( backgroundTask == null ? ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED : ActivityInfo.SCREEN_ORIENTATION_LOCKED );
 
-        runGameButton.setEnabled( activeBackgroundTask == null && isHoMM2ResourcesPresent() );
-        extractHoMM2ResourcesButton.setEnabled( activeBackgroundTask == null );
-        downloadHoMM2DemoButton.setEnabled( activeBackgroundTask == null && !isHoMM2ResourcesPresent() );
+        runGameButton.setEnabled( backgroundTask == null && isHoMM2ResourcesPresent() );
+        extractHoMM2ResourcesButton.setEnabled( backgroundTask == null );
+        downloadHoMM2DemoButton.setEnabled( backgroundTask == null && !isHoMM2ResourcesPresent() );
 
+        inactivityTimerProgressBar.setVisibility( inactivityTimer == null ? View.GONE : View.VISIBLE );
         gameStatusTextView.setVisibility( isHoMM2ResourcesPresent() ? View.GONE : View.VISIBLE );
         runGameButton.setVisibility( !isHoMM2ResourcesPresent() ? View.GONE : View.VISIBLE );
         downloadHoMM2DemoButton.setVisibility( isHoMM2ResourcesPresent() ? View.GONE : View.VISIBLE );
-        progressBar.setVisibility( activeBackgroundTask == null ? View.GONE : View.VISIBLE );
-        lastTaskStatusTextView.setVisibility( activeBackgroundTask != null ? View.GONE : View.VISIBLE );
+        backgroundTaskProgressBar.setVisibility( backgroundTask == null ? View.GONE : View.VISIBLE );
+        lastTaskStatusTextView.setVisibility( backgroundTask != null ? View.GONE : View.VISIBLE );
     }
 
     private boolean isValidHoMM2ResourcePath( final File path, final Set<File> allowedSubdirs ) throws IOException
@@ -212,5 +270,10 @@ public final class LauncherActivity extends Activity
     private boolean isHoMM2ResourcesPresent()
     {
         return ( new File( getExternalFilesDir( null ), "data" + File.separator + "heroes2.agg" ) ).exists();
+    }
+
+    private void runGame()
+    {
+        startActivity( new Intent( this, GameActivity.class ) );
     }
 }

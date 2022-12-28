@@ -12,9 +12,23 @@
         android:layout_marginBottom="32dp"
         android:contentDescription="@string/activity_launcher_game_logo_img_content_description"
         android:src="@mipmap/ic_launcher"
-        app:layout_constraintBottom_toTopOf="@+id/activity_launcher_game_status_lbl"
+        app:layout_constraintBottom_toTopOf="@+id/activity_launcher_inactivity_timer_pb"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/activity_launcher_inactivity_timer_pb"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:minWidth="256dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/activity_launcher_game_status_lbl"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/activity_launcher_game_status_lbl"
@@ -29,7 +43,7 @@
         app:layout_constraintBottom_toTopOf="@+id/activity_launcher_run_game_btn"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_launcher_inactivity_timer_pb"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
@@ -74,14 +88,14 @@
         android:onClick="downloadHoMM2DemoButtonClicked"
         android:padding="8dp"
         android:text="@string/activity_launcher_download_homm2_demo_btn_name"
-        app:layout_constraintBottom_toTopOf="@+id/activity_launcher_pb"
+        app:layout_constraintBottom_toTopOf="@+id/activity_launcher_background_task_pb"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_launcher_extract_homm2_resources_btn"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <ProgressBar
-        android:id="@+id/activity_launcher_pb"
+        android:id="@+id/activity_launcher_background_task_pb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -105,6 +119,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_launcher_pb"
+        app:layout_constraintTop_toBottomOf="@+id/activity_launcher_background_task_pb"
         app:layout_constraintVertical_chainStyle="packed" />
 </androidx.constraintlayout.widget.ConstraintLayout>
