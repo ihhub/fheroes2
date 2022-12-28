@@ -252,7 +252,8 @@ public final class LauncherActivity extends Activity
                 continue;
             }
 
-            // Convert file paths in the ZIP archive to lowercase to properly validate them
+            // Convert file paths in the ZIP archive to lowercase in order to properly validate them against
+            // the list of allowed subdirectories that are specified in lowercase
             final File outFile = new File( externalFilesDir, zEntry.getName().toLowerCase( Locale.ROOT ) );
             if ( isValidHoMM2ResourcePath( outFile, allowedSubdirs ) ) {
                 final File outFileDir = outFile.getParentFile();
