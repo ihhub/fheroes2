@@ -735,8 +735,8 @@ namespace fheroes2
         }
 
         // Blitting one image onto another can be done only for image layer so we don't consider transform part of the output image
-        const int32_t widthIn = in.width();
-        const int32_t widthOut = out.width();
+        const int32_t widthIn = in._w();
+        const int32_t widthOut = out._w();
 
         const uint8_t behindValue = 255 - alphaValue;
 
@@ -889,7 +889,7 @@ namespace fheroes2
         if ( !Verify( image, x, y, width, height ) )
             return;
 
-        const int32_t imageWidth = image.width();
+        const int32_t imageWidth = image._w();
 
         uint8_t * imageY = image.image() + y * imageWidth + x;
         const uint8_t * imageYEnd = imageY + height * imageWidth;
@@ -942,8 +942,8 @@ namespace fheroes2
             return;
         }
 
-        const int32_t widthIn = in.width();
-        const int32_t widthOut = out.width();
+        const int32_t widthIn = in._w();
+        const int32_t widthOut = out._w();
 
         if ( flip ) {
             const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
@@ -1116,7 +1116,7 @@ namespace fheroes2
             assert( 0 );
             return;
         }
-        memcpy( out.transform(), in.transform(), in.width() * in.height() );
+        memcpy( out.transform(), in.transform(), in._w() * in._h() );
     }
 
     Image CreateBlurredImage( const Image & in, int32_t blurRadius )
@@ -1127,8 +1127,8 @@ namespace fheroes2
         if ( blurRadius < 1 )
             return in;
 
-        const int32_t width = in.width();
-        const int32_t height = in.height();
+        const int32_t width = in._w();
+        const int32_t height = in._h();
         if ( blurRadius > width )
             blurRadius = width;
         if ( blurRadius > height )
@@ -1200,8 +1200,8 @@ namespace fheroes2
 
     Sprite CreateContour( const Image & image, uint8_t value )
     {
-        const int32_t width = image.width();
-        const int32_t height = image.height();
+        const int32_t width = image._w();
+        const int32_t height = image._h();
 
         Sprite contour( width, height );
         contour.reset();
@@ -1243,6 +1243,7 @@ namespace fheroes2
         if ( image.empty() || width <= 0 || height <= 0 )
             return Sprite();
 
+        // This looks a lot like a call to Verify().
         if ( x < 0 ) {
             const int32_t offsetX = -x;
             if ( offsetX >= width )
@@ -1290,8 +1291,8 @@ namespace fheroes2
             return;
         }
 
-        const int32_t width = image.width();
-        const int32_t height = image.height();
+        const int32_t width = image._w();
+        const int32_t height = image._h();
 
         if ( skipFactor < 2 ) {
             // top side
@@ -1400,8 +1401,8 @@ namespace fheroes2
         if ( image.empty() )
             return;
 
-        const int32_t width = image.width();
-        const int32_t height = image.height();
+        const int32_t width = image._w();
+        const int32_t height = image._h();
 
         int32_t x1 = start.x;
         int32_t y1 = start.y;
@@ -1568,7 +1569,7 @@ namespace fheroes2
 
         uint8_t * imageOut = out.image();
         uint8_t * transformOut = out.transform();
-        const uint8_t * imageOutEnd = imageOut + out.width() * out.height();
+        const uint8_t * imageOutEnd = imageOut + out._w() * out._h();
 
         bool isEqual = false;
 
@@ -1606,7 +1607,7 @@ namespace fheroes2
             return;
         }
 
-        const int32_t imageWidth = image.width();
+        const int32_t imageWidth = image._w();
 
         uint8_t * imageY = image.image() + y * imageWidth + x;
         uint8_t * transformY = image.transform() + y * imageWidth + x;
@@ -1623,7 +1624,7 @@ namespace fheroes2
         if ( !Verify( image, x, y, width, height ) )
             return;
 
-        const int32_t imageWidth = image.width();
+        const int32_t imageWidth = image._w();
 
         uint8_t * imageY = image.image() + y * imageWidth + x;
         uint8_t * transformY = image.transform() + y * imageWidth + x;
@@ -1641,10 +1642,7 @@ namespace fheroes2
             return input;
         }
 
-        const int32_t width = input.width();
-        const int32_t height = input.height();
-
-        Image output( width, height );
+        Image output( input.width(), input.height() );
         output.reset();
 
         const uint8_t * imageInY = input.image();
@@ -1652,6 +1650,9 @@ namespace fheroes2
 
         uint8_t * imageOutY = output.image();
         uint8_t * transformOutY = output.transform();
+
+        const int32_t width = input._w();
+        const int32_t height = input._h();
 
         for ( int32_t y = 0; y < height; ++y ) {
             const uint8_t * transformInX = transformInY;
@@ -1722,8 +1723,8 @@ namespace fheroes2
             return;
         }
 
-        const int32_t widthIn = in.width();
-        const int32_t widthOut = out.width();
+        const int32_t widthIn = in._w();
+        const int32_t widthOut = out._w();
 
         const int32_t offsetOut = outY * widthOut + outX;
         const int32_t offsetIn = inY * widthIn + inX;
@@ -1782,8 +1783,8 @@ namespace fheroes2
         if ( image.empty() )
             return Rect();
 
-        const int32_t width = image.width();
-        const int32_t height = image.height();
+        const int32_t width = image._w();
+        const int32_t height = image._h();
 
         Rect area( -1, -1, -1, -1 );
 
@@ -1854,7 +1855,7 @@ namespace fheroes2
                 break;
         }
 
-        return area;
+        return { area.x / image.scaleFactor(), area.y / image.scaleFactor(), area.width / image.scaleFactor(), area.height / image.scaleFactor() };
     }
 
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue )
@@ -1877,7 +1878,7 @@ namespace fheroes2
             return table;
         }
 
-        const int32_t imageWidth = in.width();
+        const int32_t imageWidth = in._w();
 
         const int32_t offset = y * imageWidth + x;
 
@@ -1915,19 +1916,19 @@ namespace fheroes2
         if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
             return Sprite();
 
-        const int32_t width = in.width();
-        const int32_t height = in.height();
-
         // Shadow has (-x, +y) offset.
-        Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
+        Sprite out( in.width() - shadowOffset.x, in.height() + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
         out.reset();
 
         assert( !out.empty() );
 
-        const int32_t widthOut = out.width();
+        const int32_t width = in._w();
+        const int32_t height = in._h();
 
         const uint8_t * transformInY = in.transform();
         const uint8_t * transformInYEnd = transformInY + width * height;
+
+        const int32_t widthOut = out._w();
         uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
 
         for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
@@ -1951,8 +1952,8 @@ namespace fheroes2
             return;
         }
 
-        const int32_t widthMask = mask.width();
-        const int32_t widthOut = out.width();
+        const int32_t widthMask = mask._w();
+        const int32_t widthOut = out._h();
 
         const uint8_t * imageMaskY = mask.transform() + maskY * widthMask + maskX;
         uint8_t * imageOutY = out.transform() + outY * widthOut + outX;
@@ -1977,7 +1978,7 @@ namespace fheroes2
             return;
 
         uint8_t * data = image.image();
-        const uint8_t * dataEnd = data + image.width() * image.height();
+        const uint8_t * dataEnd = data + image._w() * image._h();
 
         for ( ; data != dataEnd; ++data ) {
             if ( *data == oldColorId ) {
@@ -1991,8 +1992,8 @@ namespace fheroes2
         if ( transformId > 15 )
             return;
 
-        const int32_t width = image.width();
-        const int32_t height = image.height();
+        const int32_t width = image._w();
+        const int32_t height = image._h();
 
         const uint8_t * imageIn = image.image();
         uint8_t * transformIn = image.transform();
@@ -2195,7 +2196,7 @@ namespace fheroes2
             return;
         }
 
-        const int32_t offset = y * image.width() + x;
+        const int32_t offset = y * image._w() + x;
         *( image.image() + offset ) = value;
         *( image.transform() + offset ) = 0;
     }
@@ -2214,7 +2215,7 @@ namespace fheroes2
                 continue;
             }
 
-            const int32_t offset = point.y * width + point.x;
+            const int32_t offset = point.y * image._w() + point.x;
             *( image.image() + offset ) = value;
             *( image.transform() + offset ) = 0;
         }
@@ -2226,7 +2227,7 @@ namespace fheroes2
             return;
         }
 
-        const int32_t offset = y * image.width() + x;
+        const int32_t offset = y * image._w() + x;
         *( image.image() + offset ) = 0;
         *( image.transform() + offset ) = value;
     }
@@ -2300,8 +2301,8 @@ namespace fheroes2
             out.reset();
             return;
         }
-        const int32_t width = in.width();
-        const int32_t height = in.height();
+        const int32_t width = in._w();
+        const int32_t height = in._h();
 
         const uint8_t * imageInY = in.image();
         const uint8_t * imageInYEnd = imageInY + width * height;
@@ -2332,26 +2333,26 @@ namespace fheroes2
         const int32_t width = image.width() - std::abs( shadowOffset.x );
         const int32_t height = image.height() - std::abs( shadowOffset.y );
 
-        const int32_t imageWidth = image.width();
+        const int32_t imageWidth = image._w();
 
         const uint8_t * transformInY = image.transform();
         uint8_t * transformOutY = image.transform();
 
         if ( shadowOffset.x > 0 ) {
-            transformOutY += shadowOffset.x;
+            transformOutY += shadowOffset.x * image.scaleFactor();
         }
         else {
-            transformInY -= shadowOffset.x;
+            transformInY -= shadowOffset.x * image.scaleFactor();
         }
 
         if ( shadowOffset.y > 0 ) {
-            transformOutY += imageWidth * shadowOffset.y;
+            transformOutY += imageWidth * shadowOffset.y * image.scaleFactor();
         }
         else {
-            transformInY -= imageWidth * shadowOffset.y;
+            transformInY -= imageWidth * shadowOffset.y * image.scaleFactor();
         }
 
-        const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
+        const uint8_t * transformOutYEnd = transformOutY + imageWidth * height * image.scaleFactor();
 
         for ( ; transformOutY != transformOutYEnd; transformInY += imageWidth, transformOutY += imageWidth ) {
             const uint8_t * transformInX = transformInY;

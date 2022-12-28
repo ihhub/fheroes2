@@ -1761,10 +1761,10 @@ void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
 {
     SetModes( MOUSE_MOTION );
-    mouse_cu.x = motion.x;
-    mouse_cu.y = motion.y;
-    _emulatedPointerPosX = mouse_cu.x;
-    _emulatedPointerPosY = mouse_cu.y;
+    _emulatedPointerPosX = motion.x;
+    _emulatedPointerPosY = motion.y;
+    mouse_cu.x = motion.x / fheroes2::Display::scaleFactor();
+    mouse_cu.y = motion.y / fheroes2::Display::scaleFactor();
 
     if ( _globalMouseMotionEventHook ) {
         _mouseCursorRenderArea = _globalMouseMotionEventHook( motion.x, motion.y );
@@ -1784,10 +1784,10 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
     mouse_button = button.button;
 
-    mouse_cu.x = button.x;
-    mouse_cu.y = button.y;
-    _emulatedPointerPosX = mouse_cu.x;
-    _emulatedPointerPosY = mouse_cu.y;
+    _emulatedPointerPosX = button.x;
+    _emulatedPointerPosY = button.y;
+    mouse_cu.x = button.x / fheroes2::Display::scaleFactor();
+    mouse_cu.y = button.y / fheroes2::Display::scaleFactor();
 
     if ( modes & MOUSE_PRESSED )
         switch ( button.button ) {

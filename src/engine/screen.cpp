@@ -212,8 +212,8 @@ namespace
                 }
             }
 
-            const int32_t imageWidth = image.width();
-            const int32_t imageHeight = image.height();
+            const int32_t imageWidth = image._w();
+            const int32_t imageHeight = image._h();
 
             const bool fullFrame = ( roi.width == imageWidth ) && ( roi.height == imageHeight );
 
@@ -1585,14 +1585,14 @@ namespace fheroes2
                 updateImage = ( _renderSurface == nullptr );
                 if ( updateImage ) {
                     // Pre-processing step is applied to the whole image so we forcefully render the full frame.
-                    _engine->render( *this, { 0, 0, width(), height() } );
+                    _engine->render( *this, { 0, 0, _w(), _h() } );
                     return;
                 }
             }
         }
 
         if ( updateImage ) {
-            _engine->render( *this, roi );
+            _engine->render( *this, { roi.x * scaleFactor(), roi.y * scaleFactor(), roi.width * scaleFactor(), roi.height * scaleFactor() } );
         }
     }
 
