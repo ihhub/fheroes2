@@ -2992,7 +2992,6 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
 
     // Render the first frame before waiting any delay.
     Redraw();
-    unit.IncreaseAnimFrame();
 
     // Reset the delay to wait till the next frame.
     Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
@@ -3009,8 +3008,8 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
                 break;
             }
 
-            Redraw();
             unit.IncreaseAnimFrame();
+            Redraw();
         }
     }
 }
@@ -3022,7 +3021,6 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
 
     // Render the first frame before waiting any delay.
     Redraw();
-    target->IncreaseAnimFrame();
 
     // Reset the delay to wait till the next frame.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
@@ -3035,8 +3033,8 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
                 break;
             }
 
-            Redraw();
             target->IncreaseAnimFrame();
+            Redraw();
         }
     }
 }
@@ -3048,7 +3046,6 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 
     // Render the first frame before waiting any delay.
     Redraw();
-    unit.IncreaseAnimFrame();
 
     // Reset the delay to wait till the next frame.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
@@ -3063,8 +3060,8 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
                 break;
             }
 
-            Redraw();
             unit.IncreaseAnimFrame();
+            Redraw();
         }
     }
 }
@@ -4929,7 +4926,6 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
-    int32_t position = 0;
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && position < area.width + waveLength ) {
         CheckGlobalEvents( le );
 
