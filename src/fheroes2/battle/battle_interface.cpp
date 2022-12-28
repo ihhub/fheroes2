@@ -2990,12 +2990,6 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
         return;
     }
 
-    // Render the first frame before waiting any delay.
-    Redraw();
-
-    // Reset the delay to wait till the next frame.
-    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
-
     LocalEvent & le = LocalEvent::Get();
     const uint64_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
 
@@ -3003,13 +2997,14 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
         CheckGlobalEvents( le );
 
         if ( Game::validateCustomAnimationDelay( frameDelay ) ) {
+            Redraw();
+
             if ( unit.isFinishAnimFrame() ) {
                 // We have reached the end of animation.
                 break;
             }
 
             unit.IncreaseAnimFrame();
-            Redraw();
         }
     }
 }
@@ -3019,22 +3014,18 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
     if ( target == nullptr || target->isFinishFrame() ) // nothing to animate
         return;
 
-    // Render the first frame before waiting any delay.
-    Redraw();
-
-    // Reset the delay to wait till the next frame.
-    Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
-
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY } ) ) ) {
         if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
+            // Render the first frame before waiting any delay.
+            Redraw();
+
             if ( target->isFinishFrame() ) {
                 // We have reached the end of animation.
                 break;
             }
 
             target->IncreaseAnimFrame();
-            Redraw();
         }
     }
 }
@@ -3044,24 +3035,19 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
     if ( unit.isFinishAnimFrame() ) // nothing to animate
         return;
 
-    // Render the first frame before waiting any delay.
-    Redraw();
-
-    // Reset the delay to wait till the next frame.
-    Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
-
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_FRAME_DELAY } ) ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
+            Redraw();
+
             if ( unit.isFinishAnimFrame() ) {
                 // We have reached the end of animation.
                 break;
             }
 
             unit.IncreaseAnimFrame();
-            Redraw();
         }
     }
 }
@@ -3180,6 +3166,9 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         // redraw archer attack animation
         if ( attacker.SwitchAnimation( Monster_Info::RANG_TOP + direction * 2 ) ) {
+            // Reset the delay to wait till the next frame.
+            Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
+
             AnimateUnitWithDelay( attacker, Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) );
         }
 
@@ -3199,6 +3188,9 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         // redraw melee attack animation
         if ( attacker.SwitchAnimation( attackAnim ) ) {
+            // Reset the delay to wait till the next frame.
+            Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+
             RedrawTroopDefaultDelay( attacker );
         }
     }
@@ -3220,6 +3212,10 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
 
     // targets damage animation
     RedrawActionWincesKills( targets, &attacker );
+
+    // Reset the delay to wait till the next frame.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+
     RedrawTroopDefaultDelay( attacker );
 
     attacker.SwitchAnimation( Monster_Info::STATIC );
@@ -3451,6 +3447,9 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     unit.SwitchAnimation( Monster_Info::MOVING );
     const uint32_t movementFrames = static_cast<uint32_t>( unit.animation.animationLength() );
 
+    // Reset the delay to wait till the next frame.
+    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
+
     // Slowed flying creature has to fly off.
     if ( canFly ) {
         // If a flying creature has to cross the bridge during its path we have to open it before the creature flyes up.
@@ -3635,6 +3634,10 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
     AudioManager::PlaySound( unit.M82Tkof() );
+
+    // Reset the delay to wait till the next frame.
+    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
+
     // Take off animation should have the same between frame delay as the movement animation.
     AnimateUnitWithDelay( unit, frameDelay * static_cast<uint32_t>( unit.animation.animationLength() ) / movementFrames );
 
@@ -3728,6 +3731,9 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? opponent1 : opponent2;
         if ( opponent ) {
+            // Reset the delay to wait till the next frame.
+            Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
+
             opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
@@ -3878,6 +3884,9 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? opponent1 : opponent2;
         if ( opponent ) {
+            // Reset the delay to wait till the next frame.
+            Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
+
             opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
             AnimateOpponents( opponent );
         }
