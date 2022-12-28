@@ -17,6 +17,7 @@ body:
     description: Choose your platform
     options:
     - Windows
+    - Android
     - macOS
     - Linux
     - PlayStation Vita
