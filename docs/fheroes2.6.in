@@ -29,7 +29,7 @@ This environment variable can contain a path to a directory with game files.
 .TP
 .B @data@
 Per-user data directory.
-This path can be overriden by XDG_DATA_HOME environment variable.
+This path can be overridden by XDG_DATA_HOME environment variable.
 .PP
 The game resources which searched in these directories:
 .TP
