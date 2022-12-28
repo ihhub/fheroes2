@@ -3436,8 +3436,7 @@ namespace fheroes2
                     const Sprite & original = _icnVsSprite[id][i];
 
                     // resize and position the sprite to match the display's scale factor
-                    Sprite scaled( original.width() * displayScaleFactor / imgScaleFactor, original.height() * displayScaleFactor / imgScaleFactor,
-                                   original.x() * displayScaleFactor / imgScaleFactor, original.y() * displayScaleFactor / imgScaleFactor );
+                    Sprite scaled( original.width() / imgScaleFactor, original.height() / imgScaleFactor, original.x() / imgScaleFactor, original.y() / imgScaleFactor );
 
                     if ( original.singleLayer() ) {
                         scaled._disableTransformLayer();

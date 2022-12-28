@@ -251,11 +251,16 @@ namespace
             height -= offsetY;
         }
 
+        x *= image.scaleFactor();
+        y *= image.scaleFactor();
+        width *= image.scaleFactor();
+        height *= image.scaleFactor();
+
         return true;
     }
 
     bool Verify( int32_t & inX, int32_t & inY, int32_t & outX, int32_t & outY, int32_t & width, int32_t & height, int32_t widthIn, int32_t heightIn, int32_t widthOut,
-                 int32_t heightOut )
+                 int32_t heightOut, int32_t scaleFactor )
     {
         if ( widthIn <= 0 || heightIn <= 0 || widthOut <= 0 || heightOut <= 0 || width <= 0 || height <= 0 ) // what's the reason to work with empty images?
             return false;
@@ -314,13 +319,21 @@ namespace
             height -= offsetY;
         }
 
+        inX *= scaleFactor;
+        inY *= scaleFactor;
+        outX *= scaleFactor;
+        outY *= scaleFactor;
+        width *= scaleFactor;
+        height *= scaleFactor;
+
         return true;
     }
 
     bool Verify( const fheroes2::Image & in, int32_t & inX, int32_t & inY, const fheroes2::Image & out, int32_t & outX, int32_t & outY, int32_t & width,
                  int32_t & height )
     {
-        return Verify( inX, inY, outX, outY, width, height, in.width(), in.height(), out.width(), out.height() );
+        assert( in.scaleFactor() == out.scaleFactor() );
+        return Verify( inX, inY, outX, outY, width, height, in.width(), in.height(), out.width(), out.height(), in.scaleFactor() );
     }
 
     uint8_t GetPALColorId( uint8_t red, uint8_t green, uint8_t blue )
@@ -427,27 +440,27 @@ namespace fheroes2
     }
 
     Image::Image( int32_t width_, int32_t height_, int32_t scaleFactor_ )
-        : _scaleFactor( scaleFactor_ )
-        , _width( 0 )
+        : _width( 0 )
         , _height( 0 )
+        , _scaleFactor( scaleFactor_ )
         , _singleLayer( false )
     {
         Image::resize( width_, height_ );
     }
 
     Image::Image( const Image & image_ )
-        : _scaleFactor( 1 )
-        , _width( 0 )
+        : _width( 0 )
         , _height( 0 )
+        , _scaleFactor( 1 )
         , _singleLayer( false )
     {
         copyFrom( image_ );
     }
 
     Image::Image( Image && image_ ) noexcept
-        : _scaleFactor( 1 )
-        , _width( 0 )
+        : _width( 0 )
         , _height( 0 )
+        , _scaleFactor( 1 )
         , _data( std::move( image_._data ) )
         , _singleLayer( false )
     {
@@ -622,8 +635,8 @@ namespace fheroes2
 
     void Sprite::setPosition( int32_t x_, int32_t y_ )
     {
-        _x = x_ * _scaleFactor;
-        _y = y_ * _scaleFactor;
+        _x = x_ * scaleFactor();
+        _y = y_ * scaleFactor();
     }
 
     ImageRestorer::ImageRestorer( Image & image_ )
@@ -1063,8 +1076,8 @@ namespace fheroes2
             return;
         }
 
-        const int32_t widthIn = in.width();
-        const int32_t widthOut = out.width();
+        const int32_t widthIn = in._w();
+        const int32_t widthOut = out._w();
 
         const int32_t offsetInY = inY * widthIn + inX;
         const uint8_t * imageInY = in.image() + offsetInY;
@@ -1672,7 +1685,9 @@ namespace fheroes2
         outPos.x -= outputRoi.x;
         outPos.y -= outputRoi.y;
 
-        if ( !Verify( inPos.x, inPos.y, outPos.x, outPos.y, outputSize.width, outputSize.height, in.width(), in.height(), outputRoi.width, outputRoi.height ) ) {
+        // FIXME: abusing verify is not the best idea ever
+        if ( !Verify( inPos.x, inPos.y, outPos.x, outPos.y, outputSize.width, outputSize.height, in.width(), in.height(), outputRoi.width, outputRoi.height,
+                      in.scaleFactor() ) ) {
             return false;
         }
 
@@ -1998,19 +2013,28 @@ namespace fheroes2
         Resize( in, 0, 0, in.width(), in.height(), out, 0, 0, out.width(), out.height(), isSubpixelAccuracy );
     }
 
-    void Resize( const Image & in, const int32_t inX, const int32_t inY, const int32_t widthRoiIn, const int32_t heightRoiIn, Image & out, const int32_t outX,
-                 const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut, const bool isSubpixelAccuracy )
+    void Resize( const Image & in, int32_t inX, int32_t inY, int32_t widthRoiIn, int32_t heightRoiIn, Image & out, int32_t outX, int32_t outY, int32_t widthRoiOut,
+                 int32_t heightRoiOut, bool isSubpixelAccuracy )
     {
         if ( !Validate( in, inX, inY, widthRoiIn, heightRoiIn ) || !Validate( out, outX, outY, widthRoiOut, heightRoiOut ) )
             return;
 
-        if ( widthRoiIn == widthRoiOut && heightRoiIn == heightRoiOut ) {
+        if ( widthRoiIn == widthRoiOut && heightRoiIn == heightRoiOut && in.scaleFactor() == out.scaleFactor() ) {
             Copy( in, inX, inY, out, outX, outY, widthRoiIn, heightRoiIn );
             return;
         }
 
-        const int32_t widthIn = in.width();
-        const int32_t widthOut = out.width();
+        inX *= in.scaleFactor();
+        inY *= in.scaleFactor();
+        widthRoiIn *= in.scaleFactor();
+        heightRoiIn *= in.scaleFactor();
+        outX *= out.scaleFactor();
+        outY *= out.scaleFactor();
+        widthRoiOut *= out.scaleFactor();
+        heightRoiOut *= out.scaleFactor();
+
+        const int32_t widthIn = in._w();
+        const int32_t widthOut = out._w();
 
         const int32_t offsetInY = inY * widthIn + inX;
         const int32_t offsetOutY = outY * widthOut + outX;

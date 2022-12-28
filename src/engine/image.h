@@ -58,6 +58,17 @@ namespace fheroes2
             return _height / _scaleFactor;
         }
 
+        // Internal width and height for use in the blit routines.
+        int32_t _w() const
+        {
+            return _width;
+        }
+
+        int32_t _h() const
+        {
+            return _height;
+        }
+
         int32_t scaleFactor() const
         {
             return _scaleFactor;
@@ -107,13 +118,12 @@ namespace fheroes2
             _scaleFactor = scaleFactor;
         }
 
-        int32_t _scaleFactor;
-
     private:
         void copyFrom( const Image & image );
 
         int32_t _width;
         int32_t _height;
+        int32_t _scaleFactor;
         std::unique_ptr<uint8_t[]> _data; // holds 2 image layers
 
         bool _singleLayer; // only for images which are not used for any other operations except displaying on screen. Non-copyable member.
@@ -135,12 +145,12 @@ namespace fheroes2
 
         int32_t x() const
         {
-            return _x / _scaleFactor;
+            return _x / scaleFactor();
         }
 
         int32_t y() const
         {
-            return _y / _scaleFactor;
+            return _y / scaleFactor();
         }
 
         virtual void setPosition( int32_t x_, int32_t y_ );

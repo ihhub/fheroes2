@@ -1489,7 +1489,7 @@ namespace fheroes2
 
     void Display::resize( int32_t width_, int32_t height_ )
     {
-        if ( width() > 0 && height() > 0 && width_ == width() && height_ == height() ) // nothing to resize
+        if ( width() > 0 && height() > 0 && width_ == width() * scaleFactor() && height_ == height() * scaleFactor() ) // nothing to resize
             return;
 
         const bool isFullScreen = _engine->isFullScreen();
@@ -1505,8 +1505,7 @@ namespace fheroes2
         }
 
         _setScaleFactor( std::max( 1, std::min( width_ / fheroes2::Display::DEFAULT_WIDTH, height_ / fheroes2::Display::DEFAULT_HEIGHT ) ) );
-
-        Image::resize( width_, height_ );
+        Image::resize( width_ / scaleFactor(), height_ / scaleFactor() );
 
         // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
         std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
@@ -1514,7 +1513,7 @@ namespace fheroes2
 
     void Display::_setScaleFactor( int32_t scaleFactor_ )
     {
-        _scaleFactor = scaleFactor_;
+        Image::_setScaleFactor( scaleFactor_ );
         _currentScaleFactor = scaleFactor_;
     }
 
