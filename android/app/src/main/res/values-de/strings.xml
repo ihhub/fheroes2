@@ -2,6 +2,7 @@
 
 <resources>
     <string name="app_name">fheroes2</string>
+    <string name="activity_launcher_game_logo_img_content_description">fheroes2 Emblem</string>
     <string name="activity_launcher_game_status_lbl_text">Sie können das Spiel im Moment nicht ausführen, da einige Dateien des Originalspiels fehlen. Bitte packen Sie den Inhalt des Verzeichnisses mit dem Originalspiel Heroes of Might and Magic II in ein ZIP-Archiv, kopieren Sie es auf dieses Gerät und verwenden Sie die Schaltfläche "HoMM2-Ressourcen extrahieren". Wenn Sie keine Kopie des Originalspiels haben, können Sie das <a href="https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip">ZIP-Archiv einer Demoversion</a> herunterladen.</string>
     <string name="activity_launcher_run_game_btn_name">fheroes2 starten</string>
     <string name="activity_launcher_extract_homm2_resources_btn_name">HoMM2-Ressourcen extrahieren</string>
