@@ -1207,7 +1207,7 @@ namespace
 
             int returnCode = SDL_SetRenderDrawColor( _renderer, 0, 0, 0, SDL_ALPHA_OPAQUE );
             if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to set default color for rendered. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
 
             returnCode = SDL_SetRenderTarget( _renderer, nullptr );
