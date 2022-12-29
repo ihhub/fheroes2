@@ -60,11 +60,11 @@ public final class GameActivity extends SDLActivity
     {
         super.onDestroy();
 
-        // TODO: When SDL_main() exits, the app process can still remain in memory, and restarting
-        // TODO: it (for example, using Android Launcher) may result in various errors when SDL
-        // TODO: attempts to "reinitialize" already initialized structures. This workaround terminates
-        // TODO: the whole process when this activity exits, allowing SDL to initialize normally at
-        // TODO: the next startup.
+        // When SDL_main() exits, the app process can still remain in memory, and restarting it
+        // (for example, using Android Launcher) may result in various errors when SDL attempts
+        // to "reinitialize" already initialized things. This workaround terminates the whole
+        // process when this activity is destroyed, allowing SDL to initialize normally on the
+        // next startup.
         System.exit( 0 );
     }
 
