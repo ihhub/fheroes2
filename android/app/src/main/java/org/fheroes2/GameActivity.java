@@ -20,6 +20,7 @@
 
 package org.fheroes2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import java.io.File;
@@ -36,14 +37,22 @@ public final class GameActivity extends SDLActivity
     @Override
     protected void onCreate( final Bundle savedInstanceState )
     {
+        final File filesDir = getFilesDir();
+        final File externalFilesDir = getExternalFilesDir( null );
+
         // Extract H2D and translations to the external app-specific storage (sdcard)
-        extractAssets( "files", getExternalFilesDir( null ) );
+        extractAssets( "files", externalFilesDir );
 
         // Extract TiMidity GUS patches and config file to the internal app-specific storage
-        extractAssets( "instruments", getFilesDir() );
-        extractAssets( "timidity.cfg", getFilesDir() );
+        extractAssets( "instruments", filesDir );
+        extractAssets( "timidity.cfg", filesDir );
 
         super.onCreate( savedInstanceState );
+
+        // If the minimum set of game assets has not been found, run the toolset activity instead
+        if ( !HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ) ) {
+            runToolset();
+        }
     }
 
     @Override
@@ -51,12 +60,11 @@ public final class GameActivity extends SDLActivity
     {
         super.onDestroy();
 
-        // TODO: When SDL_main() exits, the Android app can still remain in memory, and restarting it using Launcher may result in
-        // TODO: the following errors during SDL reinitialization:
-        // TODO:
-        // TODO: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x38 in tid 4397 (SDLThread), pid 4295 (SDLActivity)
-        // TODO:
-        // TODO: This workaround terminates the whole app when this Activity exits, allowing SDL to initialize normally on startup
+        // TODO: When SDL_main() exits, the app process can still remain in memory, and restarting
+        // TODO: it (for example, using Android Launcher) may result in various errors when SDL
+        // TODO: attempts to "reinitialize" already initialized structures. This workaround terminates
+        // TODO: the whole process when this activity exits, allowing SDL to initialize normally at
+        // TODO: the next startup.
         System.exit( 0 );
     }
 
@@ -116,5 +124,13 @@ public final class GameActivity extends SDLActivity
         }
 
         return result;
+    }
+
+    private void runToolset()
+    {
+        startActivity( new Intent( this, ToolsetActivity.class ) );
+
+        // Replace this activity by the toolset activity
+        finish();
     }
 }
