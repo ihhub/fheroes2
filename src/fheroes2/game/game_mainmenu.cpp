@@ -230,17 +230,21 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Button buttonNewGame( 0, 0, ICN::BTNSHNGL, NEWGAME_DEFAULT, NEWGAME_DEFAULT + 2 );
-    fheroes2::Button buttonLoadGame( 0, 0, ICN::BTNSHNGL, LOADGAME_DEFAULT, LOADGAME_DEFAULT + 2 );
-    fheroes2::Button buttonHighScores( 0, 0, ICN::BTNSHNGL, HIGHSCORES_DEFAULT, HIGHSCORES_DEFAULT + 2 );
-    fheroes2::Button buttonCredits( 0, 0, ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
-    fheroes2::Button buttonQuit( 0, 0, ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
+    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+    const int32_t offX = ( display.width() - background.width() ) / 2;
+    const int32_t offY = ( display.height() - background.height() ) / 2;
+
+    fheroes2::Button buttonNewGame( offX, offY, ICN::BTNSHNGL, NEWGAME_DEFAULT, NEWGAME_DEFAULT + 2 );
+    fheroes2::Button buttonLoadGame( offX, offY, ICN::BTNSHNGL, LOADGAME_DEFAULT, LOADGAME_DEFAULT + 2 );
+    fheroes2::Button buttonHighScores( offX, offY, ICN::BTNSHNGL, HIGHSCORES_DEFAULT, HIGHSCORES_DEFAULT + 2 );
+    fheroes2::Button buttonCredits( offX, offY, ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
+    fheroes2::Button buttonQuit( offX, offY, ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
 
     const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
-    fheroes2::Blit( lantern10, display, lantern10.x(), lantern10.y() );
+    fheroes2::Blit( lantern10, display, offX + lantern10.x(), offY + lantern10.y() );
 
     const fheroes2::Sprite & lantern11 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, 0 ) );
-    fheroes2::Blit( lantern11, display, lantern11.x(), lantern11.y() );
+    fheroes2::Blit( lantern11, display, offX + lantern11.x(), offY + lantern11.y() );
 
     buttonNewGame.draw();
     buttonLoadGame.draw();
@@ -250,10 +254,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     display.render();
 
-    const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
-    const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
-    const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scaleX ), static_cast<int32_t>( 202 * scaleY ), static_cast<int32_t>( 90 * scaleX ),
-                                       static_cast<int32_t>( 160 * scaleY ) );
+    const fheroes2::Rect settingsArea( 63, 202, 90, 160 );
 
     uint32_t lantern_frame = 0;
 
@@ -265,7 +266,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     for ( size_t i = 0; le.MouseMotion() && i < buttons.size(); ++i ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
-        fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
+        fheroes2::Blit( sprite, display, offX + sprite.x(), offY + sprite.y() );
     }
 
     fheroes2::Sprite highlightDoor = fheroes2::AGG::GetICN( ICN::SHNGANIM, 18 );
@@ -306,7 +307,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
                     redrawScreen = true;
                 }
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, frame );
-                fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
+                fheroes2::Blit( sprite, display, offX + sprite.x(), offY + sprite.y() );
             }
         }
 
@@ -358,10 +359,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;
-            fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
+            fheroes2::Blit( lantern12, display, offX + lantern12.x(), offY + lantern12.y() );
             if ( le.MouseCursor( settingsArea ) ) {
-                const int32_t offsetY = static_cast<int32_t>( 55 * scaleY );
-                fheroes2::Blit( highlightDoor, 0, offsetY, display, highlightDoor.x(), highlightDoor.y() + offsetY, highlightDoor.width(), highlightDoor.height() );
+                fheroes2::Blit( highlightDoor, 0, 55, display, offX + highlightDoor.x(), offY + highlightDoor.y() + 55, highlightDoor.width(), highlightDoor.height() );
             }
 
             display.render();
