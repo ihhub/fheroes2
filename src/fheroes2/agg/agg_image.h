@@ -32,6 +32,9 @@ namespace fheroes2
 
     namespace AGG
     {
+        // To be called when display's scale factor has changed.
+        void ClearLoadedICNs();
+
         const Sprite & GetICN( int icnId, uint32_t index );
         uint32_t GetICNCount( int icnId );
 

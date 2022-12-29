@@ -174,27 +174,27 @@ namespace fheroes2
 
         int32_t x() const
         {
-            return _captured.x();
+            return _x;
         }
 
         int32_t y() const
         {
-            return _captured.y();
+            return _y;
         }
 
         int32_t width() const
         {
-            return _captured.width();
+            return _width;
         }
 
         int32_t height() const
         {
-            return _captured.height();
+            return _height;
         }
 
         Rect rect() const
         {
-            return { x(), y(), width(), height() };
+            return { _x, _y, _width, _height };
         }
 
         void restore();
@@ -205,7 +205,12 @@ namespace fheroes2
         void _capture();
 
         Image & _image;
-        Sprite _captured;
+        int32_t _x;
+        int32_t _y;
+        int32_t _width;
+        int32_t _height;
+
+        Image _capturedImage;
         bool _isRestored;
     };
 

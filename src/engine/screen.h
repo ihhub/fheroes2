@@ -147,6 +147,9 @@ namespace fheroes2
         static Display & instance();
         static int32_t scaleFactor();
 
+        typedef void ( *onScaleFactorChangeHook )( int32_t oldScaleFactor, int32_t newScaleFactor );
+        static void setOnScaleFactorChangeHook( onScaleFactorChangeHook hook );
+
         ~Display() override = default;
 
         // Render a full frame on screen.
@@ -193,6 +196,7 @@ namespace fheroes2
 
     private:
         static int32_t _currentScaleFactor;
+        static onScaleFactorChangeHook _onScaleFactorChangeHook;
 
         std::unique_ptr<BaseRenderEngine> _engine;
         std::unique_ptr<Cursor> _cursor;

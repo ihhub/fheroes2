@@ -20,7 +20,9 @@
 
 #pragma once
 
+#include "math_base.h"
+
 namespace Dialog
 {
-    bool SelectResolution(); // returns true if a new resolution is set
+    fheroes2::Size SelectResolution(); // returns size > 0,0 if a new resolution is selected
 }

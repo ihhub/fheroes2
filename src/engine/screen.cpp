@@ -1476,6 +1476,7 @@ namespace fheroes2
     }
 
     int32_t Display::_currentScaleFactor = 1;
+    Display::onScaleFactorChangeHook Display::_onScaleFactorChangeHook = nullptr;
 
     Display::Display()
         : _engine( RenderEngine::create() )
@@ -1489,7 +1490,7 @@ namespace fheroes2
 
     void Display::resize( int32_t width_, int32_t height_ )
     {
-        if ( width() > 0 && height() > 0 && width_ == width() * scaleFactor() && height_ == height() * scaleFactor() ) // nothing to resize
+        if ( _w() > 0 && _h() > 0 && width_ == _w() && height_ == _h() ) // nothing to resize
             return;
 
         const bool isFullScreen = _engine->isFullScreen();
@@ -1504,17 +1505,30 @@ namespace fheroes2
             clear();
         }
 
-        _setScaleFactor( std::max( 1, std::min( width_ / fheroes2::Display::DEFAULT_WIDTH, height_ / fheroes2::Display::DEFAULT_HEIGHT ) ) );
-        Image::resize( width_ / scaleFactor(), height_ / scaleFactor() );
+        const int32_t newScaleFactor = std::max( 1, std::min( width_ / fheroes2::Display::DEFAULT_WIDTH, height_ / fheroes2::Display::DEFAULT_HEIGHT ) );
+        _setScaleFactor( newScaleFactor );
+        Image::resize( width_ / newScaleFactor, height_ / newScaleFactor );
 
         // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
-        std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
+        std::fill( image(), image() + _w() * _h(), static_cast<uint8_t>( 0 ) );
+        std::fill( transform(), transform() + _w() * _h(), static_cast<uint8_t>( 1 ) );
     }
 
     void Display::_setScaleFactor( int32_t scaleFactor_ )
     {
+        const int32_t oldScaleFactor = scaleFactor();
+
         Image::_setScaleFactor( scaleFactor_ );
         _currentScaleFactor = scaleFactor_;
+
+        if ( oldScaleFactor != scaleFactor_ && _onScaleFactorChangeHook != nullptr ) {
+            _onScaleFactorChangeHook( oldScaleFactor, scaleFactor_ );
+        }
+    }
+
+    void Display::setOnScaleFactorChangeHook( onScaleFactorChangeHook hook )
+    {
+        _onScaleFactorChangeHook = hook;
     }
 
     Display & Display::instance()

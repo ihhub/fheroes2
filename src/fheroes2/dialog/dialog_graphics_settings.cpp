@@ -25,6 +25,7 @@
 #include "agg_image.h"
 #include "dialog_graphics_settings.h"
 #include "dialog_resolution.h"
+#include "embedded_image.h"
 #include "game_hotkeys.h"
 #include "game_mainmenu_ui.h"
 #include "gamedefs.h"
@@ -39,6 +40,7 @@
 #include "ui_dialog.h"
 #include "ui_option_item.h"
 #include "ui_text.h"
+#include "zzlib.h"
 
 namespace
 {
@@ -64,7 +66,7 @@ namespace
     void drawResolution( const fheroes2::Rect & optionRoi )
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
-        std::string resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
+        std::string resolutionName = std::to_string( display._w() ) + 'x' + std::to_string( display._h() );
 
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), _( "Resolution" ),
                               std::move( resolutionName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
@@ -223,13 +225,23 @@ namespace fheroes2
             case SelectedWindow::Configuration:
                 windowType = showConfigurationWindow();
                 break;
-            case SelectedWindow::Resolution:
-                if ( Dialog::SelectResolution() ) {
+            case SelectedWindow::Resolution: {
+                const fheroes2::Size selectedResolution = Dialog::SelectResolution();
+                if ( selectedResolution.width > 0 && selectedResolution.height > 0 ) {
+                    fheroes2::Display::instance().resize( selectedResolution.width, selectedResolution.height );
+
                     conf.Save( Settings::configFileName );
+
+#if !defined( MACOS_APP_BUNDLE )
+                    const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
+                    fheroes2::engine().setIcon( appIcon );
+#endif
                 }
                 drawMainMenuScreen();
+
                 windowType = SelectedWindow::Configuration;
                 break;
+            }
             case SelectedWindow::Mode:
                 conf.setFullScreen( !conf.FullScreen() );
                 conf.Save( Settings::configFileName );

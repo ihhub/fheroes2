@@ -27,7 +27,6 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog_resolution.h"
-#include "embedded_image.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
 #include "icn.h"
@@ -42,7 +41,6 @@
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
-#include "zzlib.h"
 
 namespace
 {
@@ -125,11 +123,11 @@ namespace
 
 namespace Dialog
 {
-    bool SelectResolution()
+    fheroes2::Size SelectResolution()
     {
         std::vector<fheroes2::Size> resolutions = fheroes2::engine().getAvailableResolutions();
         if ( resolutions.empty() )
-            return false;
+            return { 0, 0 };
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -166,7 +164,7 @@ namespace Dialog
 
         resList.SetListContent( resolutions );
 
-        const fheroes2::Size currentResolution( display.width(), display.height() );
+        const fheroes2::Size currentResolution( display._w(), display._h() );
 
         fheroes2::Size selectedResolution;
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
@@ -231,16 +229,9 @@ namespace Dialog
 
         if ( selectedResolution.width > 0 && selectedResolution.height > 0
              && ( selectedResolution.width != currentResolution.width || selectedResolution.height != currentResolution.height ) ) {
-            display.resize( selectedResolution.width, selectedResolution.height );
-
-#if !defined( MACOS_APP_BUNDLE )
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
-            fheroes2::engine().setIcon( appIcon );
-#endif
-
-            return true;
+            return selectedResolution;
         }
 
-        return false;
+        return { 0, 0 };
     }
 }

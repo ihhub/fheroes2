@@ -381,7 +381,7 @@ std::string Settings::String() const
     os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
 
     os << std::endl << "# video mode (game resolution)" << std::endl;
-    os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
+    os << "videomode = " << fheroes2::Display::instance()._w() << "x" << fheroes2::Display::instance()._h() << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;

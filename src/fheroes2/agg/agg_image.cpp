@@ -505,70 +505,79 @@ namespace
         fheroes2::Copy( original, 0, original.height() - 16, image, roi.x, roi.y + roi.height - 16, 16, 16 );
         fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
     }
+
+    void scaleICNToDisplayFactor( fheroes2::Sprite & sprite )
+    {
+        const int32_t displayScaleFactor = fheroes2::Display::scaleFactor();
+        const int32_t imgScaleFactor = sprite.scaleFactor();
+        if ( imgScaleFactor != displayScaleFactor ) {
+            // resize and position the sprite to match the display's scale factor
+            fheroes2::Sprite scaled( sprite.width() / imgScaleFactor, sprite.height() / imgScaleFactor, sprite.x() / imgScaleFactor, sprite.y() / imgScaleFactor );
+
+            if ( sprite.singleLayer() ) {
+                scaled._disableTransformLayer();
+            }
+
+            bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
+            fheroes2::Resize( sprite, scaled, subpixel );
+            sprite = scaled;
+        }
+    }
+
+    bool loadImagesFromDir( const int id, const std::string & pathToImagesDir, int32_t scaleFactor )
+    {
+        std::string pathToImagesSpec = System::concatPath( pathToImagesDir, "spec.txt" );
+
+        FILE * const f = fopen( pathToImagesSpec.c_str(), "r" );
+        if ( nullptr == f ) {
+            return false;
+        }
+
+        int count;
+        if ( fscanf( f, "%d", &count ) != 1 ) {
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to parse image count from: " << pathToImagesSpec );
+            fclose( f );
+            return false;
+        }
+
+        _icnVsSprite[id].resize( count );
+
+        for ( int i = 0; i < count; ++i ) {
+            int offsetX;
+            int offsetY;
+            if ( fscanf( f, "%d %d", &offsetX, &offsetY ) != 2 ) {
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to parse sprite offsets from: " << pathToImagesSpec << ":" << i );
+                fclose( f );
+                return false;
+            }
+            _icnVsSprite[id][i].setPosition( offsetX, offsetY );
+
+            char fname[16];
+            snprintf( fname, 16, "%03d.png", i );
+            std::string filepath = System::concatPath( pathToImagesDir, fname );
+            if ( !fheroes2::Load( filepath, _icnVsSprite[id][i], scaleFactor ) ) {
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to load image from: " << filepath );
+                fclose( f );
+                return false;
+            }
+
+            scaleICNToDisplayFactor( _icnVsSprite[id][i] );
+        }
+        fclose( f );
+
+        return true;
+    }
 }
 
 namespace fheroes2
 {
     namespace AGG
     {
-        bool LoadImagesFromDir( const int id, const std::string & pathToImagesDir, int32_t scaleFactor )
+        void ClearLoadedICNs()
         {
-            std::string pathToImagesSpec = System::concatPath( pathToImagesDir, "spec.txt" );
-
-            FILE * const f = fopen( pathToImagesSpec.c_str(), "r" );
-            if ( nullptr == f ) {
-                return false;
-            }
-
-            int count;
-            if ( fscanf( f, "%d", &count ) != 1 ) {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to parse image count from: " << pathToImagesSpec );
-                fclose( f );
-                return false;
-            }
-
-            _icnVsSprite[id].resize( count );
-
-            for ( int i = 0; i < count; ++i ) {
-                int offsetX;
-                int offsetY;
-                if ( fscanf( f, "%d %d", &offsetX, &offsetY ) != 2 ) {
-                    DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to parse sprite offsets from: " << pathToImagesSpec << ":" << i );
-                    fclose( f );
-                    return false;
-                }
-                _icnVsSprite[id][i].setPosition( offsetX, offsetY );
-
-                char fname[16];
-                snprintf( fname, 16, "%03d.png", i );
-                std::string filepath = System::concatPath( pathToImagesDir, fname );
-                if ( !fheroes2::Load( filepath, _icnVsSprite[id][i], scaleFactor ) ) {
-                    DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to load image from: " << filepath );
-                    fclose( f );
-                    return false;
-                }
-            }
-            fclose( f );
-
-            return true;
-        }
-
-        void ScaleICNToDisplayFactor( Sprite & sprite )
-        {
-            const int32_t displayScaleFactor = Display::scaleFactor();
-            const int32_t imgScaleFactor = sprite.scaleFactor();
-            if ( imgScaleFactor != displayScaleFactor ) {
-                // resize and position the sprite to match the display's scale factor
-                Sprite scaled( sprite.width() / imgScaleFactor, sprite.height() / imgScaleFactor, sprite.x() / imgScaleFactor, sprite.y() / imgScaleFactor );
-
-                if ( sprite.singleLayer() ) {
-                    scaled._disableTransformLayer();
-                }
-
-                bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
-                Resize( sprite, scaled, subpixel );
-                sprite = scaled;
-            }
+            const size_t totalICNs = _icnVsSprite.size();
+            _icnVsSprite.clear();
+            _icnVsSprite.resize( totalICNs );
         }
 
         bool LoadOriginalICN( int id )
@@ -578,10 +587,10 @@ namespace fheroes2
             // const int32_t SCALE_FACTOR_FULLHD = 4;
             // const std::string fullHdPath = System::concatPath( System::GetDataDirectory( "fheroes2" ), "fullhd" );
 
-            // if ( LoadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGG" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
+            // if ( loadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGG" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
             //     return true;
             // }
-            // if ( LoadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGGX" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
+            // if ( loadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGGX" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
             //     return true;
             // }
 
@@ -622,7 +631,7 @@ namespace fheroes2
                 _icnVsSprite[id][i]
                     = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
 
-                ScaleICNToDisplayFactor( _icnVsSprite[id][i] );
+                scaleICNToDisplayFactor( _icnVsSprite[id][i] );
             }
 
             return true;

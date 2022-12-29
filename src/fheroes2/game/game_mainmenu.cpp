@@ -207,8 +207,11 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             fheroes2::showStandardTextMessage(
                 _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before starting the game please choose game resolution." ),
                 Dialog::OK );
-            const bool isResolutionChanged = Dialog::SelectResolution();
-            if ( isResolutionChanged ) {
+
+            const fheroes2::Size selectedResolution = Dialog::SelectResolution();
+            if ( selectedResolution.width > 0 && selectedResolution.height > 0 ) {
+                fheroes2::Display::instance().resize( selectedResolution.width, selectedResolution.height );
+
                 fheroes2::drawMainMenuScreen();
             }
         }

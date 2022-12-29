@@ -643,21 +643,16 @@ namespace fheroes2
         : _image( image_ )
         , _isRestored( false )
     {
-        _captured.resize( _image.width(), _image.height() );
-        if ( _image.singleLayer() ) {
-            _captured._disableTransformLayer();
-        }
-        _capture();
     }
 
     ImageRestorer::ImageRestorer( Image & image_, int32_t x_, int32_t y_, int32_t width_, int32_t height_ )
         : _image( image_ )
-        , _captured( width_, height_, x_, y_ )
+        , _x( x_ )
+        , _y( y_ )
+        , _width( width_ )
+        , _height( height_ )
         , _isRestored( false )
     {
-        if ( _image.singleLayer() ) {
-            _captured._disableTransformLayer();
-        }
         _capture();
     }
 
@@ -670,22 +665,30 @@ namespace fheroes2
 
     void ImageRestorer::_capture()
     {
-        Copy( _image, x(), y(), _captured, 0, 0, width(), height() );
+        Image newCapture( _width, _height, _image.scaleFactor() );
+        newCapture._disableTransformLayer();
+
+        Copy( _image, _x, _y, newCapture, 0, 0, _width, _height );
+
+        _capturedImage._disableTransformLayer();
+        _capturedImage = std::move( newCapture );
     }
 
     void ImageRestorer::update( int32_t x_, int32_t y_, int32_t width_, int32_t height_ )
     {
         _isRestored = false;
 
-        _captured.resize( width_, height_ );
-        _captured.setPosition( x_, y_ );
+        _x = x_;
+        _y = y_;
+        _width = width_;
+        _height = height_;
         _capture();
     }
 
     void ImageRestorer::restore()
     {
         _isRestored = true;
-        Copy( _captured, 0, 0, _image, x(), y(), width(), height() );
+        Copy( _capturedImage, 0, 0, _image, _x, _y, _width, _height );
     }
 
     void ImageRestorer::reset()
