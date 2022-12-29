@@ -3588,6 +3588,9 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         return;
     }
 
+    // Reset the delay to wait till the next frame.
+    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
+
     const fheroes2::Point destPos = unit.GetRectPosition().getPosition();
     fheroes2::Point targetPos = Board::GetCell( destIndex )->GetPos().getPosition();
 
@@ -3635,9 +3638,6 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
     AudioManager::PlaySound( unit.M82Tkof() );
-
-    // Reset the delay to wait till the next frame.
-    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
 
     // Take off animation should have the same between frame delay as the movement animation.
     AnimateUnitWithDelay( unit, frameDelay * static_cast<uint32_t>( unit.animation.animationLength() ) / movementFrames );
