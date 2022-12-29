@@ -73,12 +73,6 @@ public final class ToolsetActivity extends Activity
     }
 
     @Override
-    protected void onPause()
-    {
-        super.onPause();
-    }
-
-    @Override
     protected void onActivityResult( final int requestCode, final int resultCode, final Intent data )
     {
         super.onActivityResult( requestCode, resultCode, data );
