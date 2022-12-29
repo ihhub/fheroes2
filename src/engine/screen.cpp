@@ -981,7 +981,7 @@ namespace
 
             int returnCode = SDL_RenderClear( _renderer );
             if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to clear render. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                ERROR_LOG( "Failed to clear renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
                 return;
             }
 
