@@ -553,6 +553,24 @@ namespace fheroes2
             return true;
         }
 
+        void ScaleICNToDisplayFactor( Sprite & sprite )
+        {
+            const int32_t displayScaleFactor = Display::scaleFactor();
+            const int32_t imgScaleFactor = sprite.scaleFactor();
+            if ( imgScaleFactor != displayScaleFactor ) {
+                // resize and position the sprite to match the display's scale factor
+                Sprite scaled( sprite.width() / imgScaleFactor, sprite.height() / imgScaleFactor, sprite.x() / imgScaleFactor, sprite.y() / imgScaleFactor );
+
+                if ( sprite.singleLayer() ) {
+                    scaled._disableTransformLayer();
+                }
+
+                bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
+                Resize( sprite, scaled, subpixel );
+                sprite = scaled;
+            }
+        }
+
         bool LoadOriginalICN( int id )
         {
             const char * icnString = ICN::GetString( id );
@@ -603,6 +621,8 @@ namespace fheroes2
 
                 _icnVsSprite[id][i]
                     = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
+
+                ScaleICNToDisplayFactor( _icnVsSprite[id][i] );
             }
 
             return true;
@@ -3426,26 +3446,6 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 1 );
                 _icnVsSprite[id][0] = errorImage;
                 return;
-            }
-
-            const int32_t imgScaleFactor = _icnVsSprite[id][0].scaleFactor();
-            const int32_t displayScaleFactor = Display::scaleFactor();
-
-            if ( imgScaleFactor != displayScaleFactor ) {
-                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                    const Sprite & original = _icnVsSprite[id][i];
-
-                    // resize and position the sprite to match the display's scale factor
-                    Sprite scaled( original.width() / imgScaleFactor, original.height() / imgScaleFactor, original.x() / imgScaleFactor, original.y() / imgScaleFactor );
-
-                    if ( original.singleLayer() ) {
-                        scaled._disableTransformLayer();
-                    }
-
-                    bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
-                    Resize( original, scaled, subpixel );
-                    _icnVsSprite[id][i] = scaled;
-                }
             }
         }
 
