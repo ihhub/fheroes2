@@ -1689,9 +1689,8 @@ namespace fheroes2
         outPos.x -= outputRoi.x;
         outPos.y -= outputRoi.y;
 
-        // FIXME: abusing verify is not the best idea ever
-        if ( !Verify( inPos.x, inPos.y, outPos.x, outPos.y, outputSize.width, outputSize.height, in.width(), in.height(), outputRoi.width, outputRoi.height,
-                      in.scaleFactor() ) ) {
+        // Here we only want the bounding to happen, but not scaling to physical size, so we pass scale factor of 1.
+        if ( !Verify( inPos.x, inPos.y, outPos.x, outPos.y, outputSize.width, outputSize.height, in.width(), in.height(), outputRoi.width, outputRoi.height, 1 ) ) {
             return false;
         }
 
