@@ -961,15 +961,9 @@ namespace
 
             const bool fullFrame = ( roi.width == display.width() ) && ( roi.height == display.height() );
             if ( fullFrame ) {
-                int returnCode = SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
+                const int returnCode = SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
                 if ( returnCode < 0 ) {
                     ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                }
-
-                returnCode = SDL_RenderClear( _renderer );
-                if ( returnCode < 0 ) {
-                    ERROR_LOG( "Failed to clear render. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    return;
                 }
             }
             else {
@@ -979,13 +973,19 @@ namespace
                 area.w = roi.width;
                 area.h = roi.height;
 
-                int returnCode = SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
+                const int returnCode = SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
                 if ( returnCode < 0 ) {
                     ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
                 }
             }
 
-            const int returnCode = SDL_RenderCopy( _renderer, _texture, nullptr, nullptr );
+            int returnCode = SDL_RenderClear( _renderer );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to clear render. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            returnCode = SDL_RenderCopy( _renderer, _texture, nullptr, nullptr );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to copy render.The error value: " << returnCode << ", description: " << SDL_GetError() )
                 return;
