@@ -169,7 +169,7 @@ namespace fheroes2
             return false;
         }
 
-        Image image( surface->w, surface->h, scaleFactor );
+        Image image( surface->w / scaleFactor, surface->h / scaleFactor, scaleFactor );
 
         if ( surface->format->BytesPerPixel == 3 ) {
             memset( image.transform(), 0, surface->w * surface->h );
@@ -231,7 +231,7 @@ namespace fheroes2
         }
         SDL_FreeSurface( surface );
 
-        std::swap( image, output );
+        output = std::move( image );
         return true;
     }
 
@@ -322,7 +322,8 @@ namespace fheroes2
             }
         }
 
-        return Sprite( sprite, offsetX, offsetY );
+        // FIXME: meh, but no other way to create sprite with SF=1 for now
+        return Sprite( std::move( sprite ), offsetX, offsetY );
     }
 
     bool isPNGFormatSupported()
