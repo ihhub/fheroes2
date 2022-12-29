@@ -3203,6 +3203,11 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
 void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets )
 {
+    // Reset the delay to wait till the next frame.
+    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+    }
+
     // post attack animation
     int attackStart = attacker.animation.getCurrentState();
     if ( attackStart >= Monster_Info::MELEE_TOP && attackStart <= Monster_Info::RANG_BOT ) {
@@ -3212,9 +3217,6 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
 
     // targets damage animation
     RedrawActionWincesKills( targets, &attacker );
-
-    // Reset the delay to wait till the next frame.
-    Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
 
     RedrawTroopDefaultDelay( attacker );
 
@@ -3312,16 +3314,10 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
     SetHeroAnimationReactionToTroopDeath( deathColor );
 
     // targets damage animation loop
-    bool finishedAnimation = false;
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_FRAME_DELAY } ) ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
-            if ( finishedAnimation ) {
-                // All frames are rendered.
-                break;
-            }
-
             bool redrawBattleField = false;
 
             if ( attacker != nullptr ) {
@@ -3369,7 +3365,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 return TargetInfo::isFinishAnimFrame( info );
             } );
 
-            finishedAnimation = ( finish == static_cast<int>( finishedAnimationCount ) );
+            const bool finishedAnimation = ( finish == static_cast<int>( finishedAnimationCount ) );
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
@@ -3380,6 +3376,11 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                         it->defender->IncreaseAnimFrame();
                     }
                 }
+            }
+
+            if ( finishedAnimation ) {
+                // All frames are rendered.
+                break;
             }
         }
     }
@@ -3415,6 +3416,9 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         return;
     }
 
+    // Reset the delay to wait till the next frame.
+    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
+
     Indexes::const_iterator dst = path.begin();
     Bridge * bridge = Arena::GetBridge();
 
@@ -3446,9 +3450,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     // Get the number of frames for unit movement.
     unit.SwitchAnimation( Monster_Info::MOVING );
     const uint32_t movementFrames = static_cast<uint32_t>( unit.animation.animationLength() );
-
-    // Reset the delay to wait till the next frame.
-    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
 
     // Slowed flying creature has to fly off.
     if ( canFly ) {
