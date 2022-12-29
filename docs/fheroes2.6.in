@@ -43,7 +43,7 @@ Additional non-original assets from fheroes2 project.
 Translations from fheroes2 project.
 .TP
 .B files/soundfonts/*
-Additional SoundFont files for MIDI synthesier. sf2 and sf3 formats are supported.
+Additional SoundFont files for MIDI synthesizer. sf2 and sf3 formats are supported.
 .TP
 .B maps/*
 .br
