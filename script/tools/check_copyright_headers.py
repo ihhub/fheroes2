@@ -13,8 +13,8 @@ CURRENT_YEAR = datetime.datetime.now().date().year
 class CustomArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         self.print_usage(sys.stderr)
-        self.exit(1, '%(prog)s: error: %(message)s\n' %
-                  {'prog': self.prog, 'message': message})
+        self.exit(1, "%(prog)s: error: %(message)s\n" %
+                  {"prog": self.prog, "message": message})
 
 
 def parse_arguments():
