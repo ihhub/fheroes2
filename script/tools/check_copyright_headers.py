@@ -2,7 +2,6 @@
 
 import argparse
 import datetime
-from gettext import gettext
 import os
 import re
 import subprocess
@@ -14,7 +13,7 @@ CURRENT_YEAR = datetime.datetime.now().date().year
 class CustomArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         self.print_usage(sys.stderr)
-        self.exit(1, gettext('%(prog)s: error: %(message)s\n') %
+        self.exit(1, '%(prog)s: error: %(message)s\n' %
                   {'prog': self.prog, 'message': message})
 
 
