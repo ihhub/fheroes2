@@ -37,20 +37,6 @@
         android:supportsRtl="false">
 
         <activity
-            android:name=".ToolsetActivity"
-            android:exported="true"
-            android:label="@string/activity_toolset_label"
-            android:launchMode="singleInstance"
-            android:taskAffinity="org.fheroes2.ToolsetActivityTask"
-            android:theme="@style/Theme.Material3.DayNight">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".GameActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="layoutDirection|locale|orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
@@ -70,6 +56,20 @@
             <!-- Let Android know that we can handle some USB devices and should receive this event -->
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ToolsetActivity"
+            android:exported="true"
+            android:label="@string/activity_toolset_label"
+            android:launchMode="singleInstance"
+            android:taskAffinity="org.fheroes2.ToolsetActivityTask"
+            android:theme="@style/Theme.Material3.DayNight">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
