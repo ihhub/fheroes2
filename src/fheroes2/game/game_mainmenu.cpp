@@ -254,7 +254,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     display.render();
 
-    const fheroes2::Rect settingsArea( 63, 202, 90, 160 );
+    const fheroes2::Rect settingsArea( offX + 63, offY + 202, 90, 160 );
 
     uint32_t lantern_frame = 0;
 
