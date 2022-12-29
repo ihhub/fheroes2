@@ -122,7 +122,10 @@ public final class ToolsetActivity extends Activity
 
     public void runGameButtonClicked( final View view )
     {
-        runGame();
+        startActivity( new Intent( this, GameActivity.class ) );
+
+        // Replace this activity with the newly launched activity
+        finish();
     }
 
     public void extractHoMM2AssetsButtonClicked( final View view )
@@ -160,13 +163,5 @@ public final class ToolsetActivity extends Activity
         downloadHoMM2DemoButton.setVisibility( isHoMM2AssetsPresent ? View.GONE : View.VISIBLE );
         backgroundTaskProgressBar.setVisibility( backgroundTask == null ? View.GONE : View.VISIBLE );
         lastTaskStatusTextView.setVisibility( backgroundTask != null ? View.GONE : View.VISIBLE );
-    }
-
-    private void runGame()
-    {
-        startActivity( new Intent( this, GameActivity.class ) );
-
-        // Replace this activity by the game activity
-        finish();
     }
 }

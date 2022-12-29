@@ -51,7 +51,10 @@ public final class GameActivity extends SDLActivity
 
         // If the minimum set of game assets has not been found, run the toolset activity instead
         if ( !HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ) ) {
-            runToolset();
+            startActivity( new Intent( this, ToolsetActivity.class ) );
+
+            // Replace this activity with the newly launched activity
+            finish();
         }
     }
 
@@ -124,13 +127,5 @@ public final class GameActivity extends SDLActivity
         }
 
         return result;
-    }
-
-    private void runToolset()
-    {
-        startActivity( new Intent( this, ToolsetActivity.class ) );
-
-        // Replace this activity by the toolset activity
-        finish();
     }
 }
