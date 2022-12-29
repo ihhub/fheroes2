@@ -349,6 +349,7 @@ namespace Battle
 
         bool IdleTroopsAnimation() const;
         void ResetIdleTroopAnimation() const;
+        void SwitchAllUnitsAnimation( const int32_t animationState ) const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
         void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor );
