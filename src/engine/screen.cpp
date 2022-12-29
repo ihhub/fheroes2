@@ -400,14 +400,14 @@ namespace
                 return;
             }
 
-            SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
+            const uint32_t width = image._w();
+            const uint32_t height = image._h();
+
+            SDL_Surface * surface = SDL_CreateRGBSurface( 0, width, height, 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == nullptr ) {
-                ERROR_LOG( "Failed to create a surface of " << image.width() << " x " << image.height() << " size for cursor. The error: " << SDL_GetError() )
+                ERROR_LOG( "Failed to create a surface of " << width << " x " << height << " size for cursor. The error: " << SDL_GetError() )
                 return;
             }
-
-            const uint32_t width = image.width();
-            const uint32_t height = image.height();
 
             uint32_t * out = static_cast<uint32_t *>( surface->pixels );
             const uint32_t * outEnd = out + width * height;
