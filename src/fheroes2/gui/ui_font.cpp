@@ -3565,7 +3565,7 @@ namespace
         // Since all symbols have -1 shift by X axis to avoid any issues with alignment we need to makes all images at least 1 pixel in size.
         // These images are completely transparent.
         for ( fheroes2::Sprite & letter : released ) {
-            letter.resize( 1, 1 );
+            letter = fheroes2::Image( 1, 1, 1 );
             letter.reset();
 
             letter.setPosition( buttonFontOffset.x, buttonFontOffset.y );
