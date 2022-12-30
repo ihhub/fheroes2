@@ -1403,7 +1403,7 @@ namespace fheroes2
 
     void DrawLine( Image & image, const Point & start, const Point & end, uint8_t value, const Rect & roi )
     {
-        assert( image.scaleFactor() == 1 );
+        // assert( image.scaleFactor() == 1 );
 
         if ( image.empty() )
             return;
