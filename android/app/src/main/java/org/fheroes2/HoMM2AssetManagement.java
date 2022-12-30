@@ -39,7 +39,8 @@ public final class HoMM2AssetManagement
         return ( new File( externalFilesDir, "data" + File.separator + "heroes2.agg" ) ).exists();
     }
 
-    static void extractHoMM2AssetsFromZip( final File externalFilesDir, final InputStream iStream ) throws IOException
+    // Returns true if at least one asset was found and extracted, otherwise returns false
+    static boolean extractHoMM2AssetsFromZip( final File externalFilesDir, final InputStream iStream ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
         final String[] allowedSubdirNames = { "anim", "data", "maps", "music" };
@@ -48,6 +49,8 @@ public final class HoMM2AssetManagement
         for ( String name : allowedSubdirNames ) {
             allowedSubdirs.add( new File( externalFilesDir, name ).getCanonicalFile() );
         }
+
+        boolean result = false;
 
         final ZipInputStream zStream = new ZipInputStream( iStream );
         for ( ZipEntry zEntry = zStream.getNextEntry(); zEntry != null; zEntry = zStream.getNextEntry() ) {
@@ -68,8 +71,12 @@ public final class HoMM2AssetManagement
                 try ( final OutputStream out = new FileOutputStream( outFile ) ) {
                     IOUtils.copy( zStream, out );
                 }
+
+                result = true;
             }
         }
+
+        return result;
     }
 
     private static boolean isValidHoMM2AssetPath( final File path, final Set<File> allowedSubdirs ) throws IOException

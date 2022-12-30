@@ -85,9 +85,12 @@ public final class ToolsetActivity extends Activity
                 if ( backgroundTask == null ) {
                     backgroundTask = new Thread( () -> {
                         try ( final InputStream iStream = getContentResolver().openInputStream( zipFileUri ) ) {
-                            HoMM2AssetManagement.extractHoMM2AssetsFromZip( getExternalFilesDir( null ), iStream );
-
-                            runOnUiThread( () -> updateLastTaskStatus( getString( R.string.activity_toolset_last_task_status_lbl_text_completed_successfully ) ) );
+                            if ( HoMM2AssetManagement.extractHoMM2AssetsFromZip( getExternalFilesDir( null ), iStream ) ) {
+                                runOnUiThread( () -> updateLastTaskStatus( getString( R.string.activity_toolset_last_task_status_lbl_text_completed_successfully ) ) );
+                            }
+                            else {
+                                runOnUiThread( () -> updateLastTaskStatus( getString( R.string.activity_toolset_last_task_status_lbl_text_no_assets_found ) ) );
+                            }
                         }
                         catch ( final Exception ex ) {
                             Log.e( "fheroes2", "Failed to extract the ZIP file.", ex );
