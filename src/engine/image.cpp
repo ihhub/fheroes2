@@ -389,8 +389,8 @@ namespace
             return;
         }
 
-        const int32_t widthIn = in.width();
-        const int32_t widthOut = out.width();
+        const int32_t widthIn = in._w();
+        const int32_t widthOut = out._w();
 
         const uint8_t * imageInY = in.image() + inY * widthIn + inX;
         uint8_t * imageOutY = out.image() + outY * widthOut + outX;
