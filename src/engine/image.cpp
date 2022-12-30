@@ -1245,13 +1245,13 @@ namespace fheroes2
     Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height )
     {
         if ( image.empty() || width <= 0 || height <= 0 )
-            return Sprite();
+            return Image( 0, 0, image.scaleFactor() );
 
         // This looks a lot like a call to Verify().
         if ( x < 0 ) {
             const int32_t offsetX = -x;
             if ( offsetX >= width )
-                return Sprite();
+                return Image( 0, 0, image.scaleFactor() );
 
             x = 0;
             width -= offsetX;
@@ -1260,14 +1260,14 @@ namespace fheroes2
         if ( y < 0 ) {
             const int32_t offsetY = -y;
             if ( offsetY >= height )
-                return Sprite();
+                return Image( 0, 0, image.scaleFactor() );
 
             y = 0;
             height -= offsetY;
         }
 
         if ( x > image.width() || y > image.height() )
-            return Sprite();
+            return Image( 0, 0, image.scaleFactor() );
 
         if ( x + width > image.width() ) {
             const int32_t offsetX = x + width - image.width();
@@ -1279,18 +1279,19 @@ namespace fheroes2
             height -= offsetY;
         }
 
-        Sprite out( width, height );
+        Sprite out( std::move( Image( width, height, image.scaleFactor() ) ), x, y );
         if ( image.singleLayer() ) {
             out._disableTransformLayer();
         }
-
         Copy( image, x, y, out, 0, 0, width, height );
-        out.setPosition( x, y );
+
         return out;
     }
 
     void DrawBorder( Image & image, uint8_t value, uint32_t skipFactor )
     {
+        // assert( image.scaleFactor() == 1 );
+
         if ( image.empty() || image.width() < 2 || image.height() < 2 ) {
             return;
         }
@@ -1402,6 +1403,8 @@ namespace fheroes2
 
     void DrawLine( Image & image, const Point & start, const Point & end, uint8_t value, const Rect & roi )
     {
+        assert( image.scaleFactor() == 1 );
+
         if ( image.empty() )
             return;
 
@@ -1920,7 +1923,7 @@ namespace fheroes2
             return Sprite();
 
         // Shadow has (-x, +y) offset.
-        Sprite out( in.width() - shadowOffset.x, in.height() + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
+        Sprite out( Image( in.width() - shadowOffset.x, in.height() + shadowOffset.y, in.scaleFactor() ), in.x() + shadowOffset.x, in.y() );
         out.reset();
 
         assert( !out.empty() );

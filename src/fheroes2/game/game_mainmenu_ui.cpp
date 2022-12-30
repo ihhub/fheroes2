@@ -39,6 +39,9 @@ namespace fheroes2
     {
         Display & display = Display::instance();
 
+        // clear out any artifacts outside of the main background
+        Fill( display, 0, 0, display.width(), display.height(), 0 );
+
         const Sprite & background = AGG::GetICN( ICN::HEROES, 0 );
         const int32_t offX = ( display.width() - background.width() ) / 2;
         const int32_t offY = ( display.height() - background.height() ) / 2;

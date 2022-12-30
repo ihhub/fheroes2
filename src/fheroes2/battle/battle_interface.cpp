@@ -560,14 +560,16 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     sf.reset();
 
     fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
-    fheroes2::SetPixel( sf, r, 1, colorId );
+    // fheroes2::SetPixel( sf, r, 1, colorId );
+    fheroes2::Fill( sf, r, 1, 1, 1, colorId );
     fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
 
     fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
     fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
 
     fheroes2::DrawLine( sf, { r - 1, h }, { 0, h - l }, colorId );
-    fheroes2::SetPixel( sf, r, h, colorId );
+    // fheroes2::SetPixel( sf, r, h, colorId );
+    fheroes2::Fill( sf, r, h, 1, 1, colorId );
     fheroes2::DrawLine( sf, { r + 1, h }, { w, h - l }, colorId );
 
     return sf;
@@ -585,7 +587,8 @@ fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horiz
     for ( int i = 0; i < w / 2; i += 2 ) {
         for ( int x = 0; x < rt.width; ++x ) {
             for ( int y = 0; y < rt.height; ++y ) {
-                fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
+                // fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
+                fheroes2::FillTransform( sf, rt.x + x, rt.y + y, 1, 1, alphaValue );
             }
         }
         --rt.y;
@@ -1171,7 +1174,9 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     }
 
     // hexagon
-    _hexagonGrid = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
+    if ( conf.BattleShowGrid() ) {
+        _hexagonGrid = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
+    }
     // Shadow under the cursor: the first parameter is the shadow strength (smaller is stronger), the second is the distance between the hexagonal shadows.
     _hexagonCursorShadow = DrawHexagonShadow( 2, 1 );
     // Hexagon shadow for the case when grid is disabled.
