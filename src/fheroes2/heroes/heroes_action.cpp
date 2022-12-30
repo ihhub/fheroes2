@@ -732,7 +732,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
     }
     else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
         std::string message = _( "The %{monster}, awed by the power of your forces, begin to scatter.\nDo you wish to pursue and engage them?" );
-        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+        StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
         if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
             destroy = true;
@@ -1884,7 +1884,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
                 else {
                     msg = _(
                         "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
-                    StringReplace( msg, "%{monster}", Translation::StringLower( troop->GetName() ) );
+                    StringReplaceWithLowercase( msg, "%{monster}", troop->GetName() );
                     battle = ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) );
                 }
             }
@@ -2266,7 +2266,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
 
     if ( troop.isValid() ) {
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
-        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+        StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
         AudioManager::PlaySound( M82::EXPERNCE );
 
