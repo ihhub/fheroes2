@@ -249,12 +249,12 @@ namespace Bin_Info
 
             // Correct the 'x' offset by half of cell.
             frameXOffset[MOVE_MAIN][0] += CELLW / 2;
-            for ( int32_t id = 0; id < frameXOffset[MOVE_TILE_START].size(); ++id ) {
+            for ( size_t id = 0; id < frameXOffset[MOVE_TILE_START].size(); ++id ) {
                 frameXOffset[MOVE_START][id + 4] += CELLW / 2;
                 // For 'MOVE_TILE_START' also include the correction, made in "agg_image.cpp".
-                frameXOffset[MOVE_TILE_START][id] += CELLW / 2 - ( 6 - id ) * CELLW / 28;
+                frameXOffset[MOVE_TILE_START][id] += CELLW / 2 - ( 6 - static_cast<int32_t>( id ) ) * CELLW / 28;
                 // For 'MOVE_TILE_START' animation frames IDs use new frames, made in "agg_image.cpp", which starts from ID = 40.
-                animationFrames[MOVE_TILE_START][id] = 40 + id;
+                animationFrames[MOVE_TILE_START][id] = 40 + static_cast<int32_t>( id );
             }
         }
 
