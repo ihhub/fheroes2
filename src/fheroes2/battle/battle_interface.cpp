@@ -3268,6 +3268,11 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
 
 void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */ )
 {
+    // Reset the delay to wait till the next frame.
+    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+    }
+
     LocalEvent & le = LocalEvent::Get();
 
     // targets damage animation
