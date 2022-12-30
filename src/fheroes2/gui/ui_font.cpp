@@ -26,6 +26,7 @@
 #include <initializer_list>
 #include <memory>
 
+#include "agg_image.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
@@ -132,6 +133,11 @@ namespace
             applyEvilButtonReleasedLetterEffects( evilReleased[i] );
             applyEvilButtonPressedLetterEffects( evilPressed[i] );
         }
+
+        fheroes2::AGG::scaleICNToDisplayFactor( goodReleased );
+        fheroes2::AGG::scaleICNToDisplayFactor( goodPressed );
+        fheroes2::AGG::scaleICNToDisplayFactor( evilReleased );
+        fheroes2::AGG::scaleICNToDisplayFactor( evilPressed );
     }
 
     void generateCP1250Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
@@ -4516,23 +4522,12 @@ namespace fheroes2
         return false;
     }
 
-    void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed, std::vector<Sprite> & evilReleased,
-                                 std::vector<Sprite> & evilPressed )
-    {
-        generateGoodButtonFontBaseShape( goodReleased );
-
-        updateButtonFont( goodReleased, goodPressed, evilReleased, evilPressed );
-    }
-
     void generateButtonAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
-        generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
-
         switch ( language ) {
         case SupportedLanguage::English:
-            generateBaseButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
-                                    icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
-            return;
+            generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            break;
         case SupportedLanguage::Czech:
         case SupportedLanguage::Hungarian:
         case SupportedLanguage::Polish:

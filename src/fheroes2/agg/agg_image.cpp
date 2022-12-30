@@ -59,7 +59,6 @@ namespace
 
     std::vector<std::vector<fheroes2::Sprite>> _icnVsSprite( ICN::LASTICN );
     std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL> _tilVsImage;
-    const fheroes2::Sprite errorImage;
 
     const uint32_t headerSize = 6;
 
@@ -139,6 +138,13 @@ namespace
                                                 ICN::BUTTON_DIFFICULTY_ARCHIBALD,
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
                                                 ICN::BUTTON_DIFFICULTY_POL };
+
+    const fheroes2::Sprite & errorImage()
+    {
+        static fheroes2::Sprite image;
+        image = fheroes2::Sprite();
+        return image;
+    }
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -505,68 +511,6 @@ namespace
         fheroes2::Copy( original, 0, original.height() - 16, image, roi.x, roi.y + roi.height - 16, 16, 16 );
         fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
     }
-
-    void scaleICNToDisplayFactor( fheroes2::Sprite & sprite )
-    {
-        const int32_t displayScaleFactor = fheroes2::Display::scaleFactor();
-        const int32_t imgScaleFactor = sprite.scaleFactor();
-        if ( imgScaleFactor != displayScaleFactor ) {
-            // resize and position the sprite to match the display's scale factor
-            fheroes2::Sprite scaled( sprite.width() / imgScaleFactor, sprite.height() / imgScaleFactor, sprite.x() / imgScaleFactor, sprite.y() / imgScaleFactor );
-
-            if ( sprite.singleLayer() ) {
-                scaled._disableTransformLayer();
-            }
-
-            bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
-            fheroes2::Resize( sprite, scaled, subpixel );
-            sprite = scaled;
-        }
-    }
-
-    bool loadImagesFromDir( const int id, const std::string & pathToImagesDir, int32_t scaleFactor )
-    {
-        std::string pathToImagesSpec = System::concatPath( pathToImagesDir, "spec.txt" );
-
-        FILE * const f = fopen( pathToImagesSpec.c_str(), "r" );
-        if ( nullptr == f ) {
-            return false;
-        }
-
-        int count;
-        if ( fscanf( f, "%d", &count ) != 1 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to parse image count from: " << pathToImagesSpec );
-            fclose( f );
-            return false;
-        }
-
-        _icnVsSprite[id].resize( count );
-
-        for ( int i = 0; i < count; ++i ) {
-            int offsetX;
-            int offsetY;
-            if ( fscanf( f, "%d %d", &offsetX, &offsetY ) != 2 ) {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to parse sprite offsets from: " << pathToImagesSpec << ":" << i );
-                fclose( f );
-                return false;
-            }
-            _icnVsSprite[id][i].setPosition( offsetX, offsetY );
-
-            char fname[16];
-            snprintf( fname, 16, "%03d.png", i );
-            std::string filepath = System::concatPath( pathToImagesDir, fname );
-            if ( !fheroes2::Load( filepath, _icnVsSprite[id][i], scaleFactor ) ) {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to load image from: " << filepath );
-                fclose( f );
-                return false;
-            }
-
-            scaleICNToDisplayFactor( _icnVsSprite[id][i] );
-        }
-        fclose( f );
-
-        return true;
-    }
 }
 
 namespace fheroes2
@@ -579,6 +523,75 @@ namespace fheroes2
             _icnVsSprite.clear();
             _icnVsSprite.resize( totalICNs );
         }
+
+        void scaleToDisplayFactor( Sprite & sprite )
+        {
+            const int32_t displayScaleFactor = Display::scaleFactor();
+            const int32_t imgScaleFactor = sprite.scaleFactor();
+            if ( imgScaleFactor != displayScaleFactor ) {
+                // resize and position the sprite to match the display's scale factor
+                Sprite scaled( sprite.width() / imgScaleFactor, sprite.height() / imgScaleFactor, sprite.x() / imgScaleFactor, sprite.y() / imgScaleFactor );
+
+                if ( sprite.singleLayer() ) {
+                    scaled._disableTransformLayer();
+                }
+
+                bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
+                Resize( sprite, scaled, subpixel );
+                sprite = scaled;
+            }
+        }
+
+        void scaleICNToDisplayFactor( std::vector<Sprite> & sprites )
+        {
+            for ( Sprite & img : sprites ) {
+                scaleToDisplayFactor( img );
+            }
+        }
+
+        // bool loadImagesFromDir( const int id, const std::string & pathToImagesDir, int32_t scaleFactor )
+        // {
+        //     std::string pathToImagesSpec = System::concatPath( pathToImagesDir, "spec.txt" );
+
+        //     FILE * const f = fopen( pathToImagesSpec.c_str(), "r" );
+        //     if ( nullptr == f ) {
+        //         return false;
+        //     }
+
+        //     int count;
+        //     if ( fscanf( f, "%d", &count ) != 1 ) {
+        //         DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to parse image count from: " << pathToImagesSpec );
+        //         fclose( f );
+        //         return false;
+        //     }
+
+        //     _icnVsSprite[id].resize( count );
+
+        //     for ( int i = 0; i < count; ++i ) {
+        //         int offsetX;
+        //         int offsetY;
+        //         if ( fscanf( f, "%d %d", &offsetX, &offsetY ) != 2 ) {
+        //             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to parse sprite offsets from: " << pathToImagesSpec << ":" << i );
+        //             fclose( f );
+        //             return false;
+        //         }
+        //         _icnVsSprite[id][i].setPosition( offsetX, offsetY );
+
+        //         char fname[16];
+        //         snprintf( fname, 16, "%03d.png", i );
+        //         std::string filepath = System::concatPath( pathToImagesDir, fname );
+        //         if ( !fheroes2::Load( filepath, _icnVsSprite[id][i], scaleFactor ) ) {
+        //             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to load image from: " << filepath );
+        //             fclose( f );
+        //             return false;
+        //         }
+
+        //         scaleToDisplayFactor( _icnVsSprite[id][i] );
+        //     }
+        //     fclose( f );
+
+        //     return true;
+        // }
 
         bool LoadOriginalICN( int id )
         {
@@ -3329,7 +3342,7 @@ namespace fheroes2
 
                 for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_IMAGE] ) {
                     uint8_t * transform = image.transform();
-                    const uint8_t * transformEnd = transform + image.width() * image.height();
+                    const uint8_t * transformEnd = transform + image._w() * image._w();
                     for ( ; transform != transformEnd; ++transform ) {
                         if ( *transform > 1 ) {
                             *transform = 1;
@@ -3339,7 +3352,7 @@ namespace fheroes2
 
                 for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_SHADOW] ) {
                     uint8_t * transform = image.transform();
-                    const uint8_t * transformEnd = transform + image.width() * image.height();
+                    const uint8_t * transformEnd = transform + image._w() * image._h();
                     for ( ; transform != transformEnd; ++transform ) {
                         if ( *transform == 0 ) {
                             *transform = 1;
@@ -3451,11 +3464,14 @@ namespace fheroes2
             if ( !_icnVsSprite[id].empty() ) {
                 return;
             }
+
             if ( !( LoadModifiedICN( id ) || LoadOriginalICN( id ) ) ) {
                 _icnVsSprite[id].resize( 1 );
-                _icnVsSprite[id][0] = errorImage;
+                _icnVsSprite[id][0] = errorImage();
                 return;
             }
+
+            scaleICNToDisplayFactor( _icnVsSprite[id] );
         }
 
         size_t GetMaximumICNIndex( int id )
@@ -3516,11 +3532,11 @@ namespace fheroes2
         const Sprite & GetICN( int icnId, uint32_t index )
         {
             if ( !IsValidICNId( icnId ) ) {
-                return errorImage;
+                return errorImage();
             }
 
             if ( index >= GetMaximumICNIndex( icnId ) ) {
-                return errorImage;
+                return errorImage();
             }
 
             return _icnVsSprite[icnId][index];
@@ -3538,16 +3554,16 @@ namespace fheroes2
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
             if ( shapeId > 3 ) {
-                return errorImage;
+                return errorImage();
             }
 
             if ( !IsValidTILId( tilId ) ) {
-                return errorImage;
+                return errorImage();
             }
 
             const size_t maxTILIndex = GetMaximumTILIndex( tilId );
             if ( index >= maxTILIndex ) {
-                return errorImage;
+                return errorImage();
             }
 
             return _tilVsImage[tilId][shapeId][index];
@@ -3556,7 +3572,7 @@ namespace fheroes2
         const Sprite & GetLetter( uint32_t character, uint32_t fontType )
         {
             if ( character < 0x21 ) {
-                return errorImage;
+                return errorImage();
             }
 
             // TODO: correct naming and standardize the code
@@ -3634,7 +3650,7 @@ namespace fheroes2
         const Sprite & getChar( const uint8_t character, const FontType & fontType )
         {
             if ( character < 0x21 ) {
-                return errorImage;
+                return errorImage();
             }
 
             switch ( fontType.size ) {
@@ -3708,7 +3724,7 @@ namespace fheroes2
 
             assert( 0 ); // Did you add a new font size? Please add implementation.
 
-            return errorImage;
+            return errorImage();
         }
 
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )

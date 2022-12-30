@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
 
 namespace fheroes2
 {
@@ -34,6 +35,9 @@ namespace fheroes2
     {
         // To be called when display's scale factor has changed.
         void ClearLoadedICNs();
+
+        void scaleICNToDisplayFactor( std::vector<Sprite> & sprites );
+        void scaleToDisplayFactor( Sprite & sprite );
 
         const Sprite & GetICN( int icnId, uint32_t index );
         uint32_t GetICNCount( int icnId );
