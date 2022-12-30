@@ -527,6 +527,24 @@ namespace fheroes2
             _icnVsSprite.resize( totalICNs );
         }
 
+        void scaleToDisplayFactor( Image & image )
+        {
+            const int32_t displayScaleFactor = Display::scaleFactor();
+            const int32_t imgScaleFactor = image.scaleFactor();
+            if ( imgScaleFactor != displayScaleFactor ) {
+                // resize and position the sprite to match the display's scale factor
+                Image scaled( image.width() / imgScaleFactor, image.height() / imgScaleFactor, displayScaleFactor );
+
+                if ( image.singleLayer() ) {
+                    scaled._disableTransformLayer();
+                }
+
+                bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
+                Resize( image, scaled, subpixel );
+                image = std::move( scaled );
+            }
+        }
+
         void scaleToDisplayFactor( Sprite & sprite )
         {
             const int32_t displayScaleFactor = Display::scaleFactor();
@@ -541,7 +559,7 @@ namespace fheroes2
 
                 bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
                 Resize( sprite, scaled, subpixel );
-                sprite = scaled;
+                sprite = std::move( scaled );
             }
         }
 
@@ -3534,10 +3552,12 @@ namespace fheroes2
                 originalTIL.resize( count );
                 for ( uint32_t i = 0; i < count; ++i ) {
                     Image & tilImage = originalTIL[i];
-                    tilImage.resize( width, height );
+                    tilImage = std::move( Image( width, height, 1 ) );
                     tilImage._disableTransformLayer();
                     memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
                     std::fill( tilImage.transform(), tilImage.transform() + width * height, static_cast<uint8_t>( 0 ) );
+
+                    scaleToDisplayFactor( tilImage );
                 }
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
