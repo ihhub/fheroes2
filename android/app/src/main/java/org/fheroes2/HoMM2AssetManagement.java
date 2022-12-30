@@ -43,7 +43,11 @@ public final class HoMM2AssetManagement
     static boolean extractHoMM2AssetsFromZip( final File externalFilesDir, final InputStream iStream ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
-        final String[] allowedSubdirNames = { "anim", "data", "maps", "music" };
+        final Set<String> allowedSubdirNames = new HashSet<>();
+        allowedSubdirNames.add( "anim" );
+        allowedSubdirNames.add( "data" );
+        allowedSubdirNames.add( "maps" );
+        allowedSubdirNames.add( "music" );
 
         final Set<File> allowedSubdirs = new HashSet<>();
         for ( String name : allowedSubdirNames ) {
@@ -59,24 +63,54 @@ public final class HoMM2AssetManagement
                 continue;
             }
 
-            // Convert file paths in the ZIP archive to lowercase in order to properly validate them against
-            // the list of allowed subdirectories that are specified in lowercase
-            final File outFile = new File( externalFilesDir, zEntry.getName().toLowerCase( Locale.ROOT ) );
-            if ( isValidHoMM2AssetPath( outFile, allowedSubdirs ) ) {
-                final File outFileDir = outFile.getParentFile();
-                if ( outFileDir != null ) {
-                    outFileDir.mkdirs();
-                }
-
-                try ( final OutputStream out = new FileOutputStream( outFile ) ) {
-                    IOUtils.copy( zStream, out );
-                }
-
-                result = true;
+            final String assetSubpath = getHoMM2AssetSubpath( new File( zEntry.getName() ), allowedSubdirNames );
+            // No need to extract the file if its path does not contain any of the allowed subdirectories
+            if ( assetSubpath.isEmpty() ) {
+                continue;
             }
+
+            final File outFile = new File( externalFilesDir, assetSubpath );
+            // Check the path for various trickery, such as 'data/../../../bin/file'
+            if ( !isValidHoMM2AssetPath( outFile, allowedSubdirs ) ) {
+                continue;
+            }
+
+            final File outFileDir = outFile.getParentFile();
+            if ( outFileDir != null ) {
+                outFileDir.mkdirs();
+            }
+
+            try ( final OutputStream out = new FileOutputStream( outFile ) ) {
+                IOUtils.copy( zStream, out );
+            }
+
+            result = true;
         }
 
         return result;
+    }
+
+    // Tries to truncate the given path to the shortest path starting from one of the allowed subdirectories,
+    // for example 'foo/bar/data/zoo/file' -> 'data/zoo/file'. Returns an empty string if the given path does
+    // not contain any of the allowed subdirectories.
+    private static String getHoMM2AssetSubpath( final File path, final Set<String> allowedSubdirNames )
+    {
+        StringBuilder assetSubpath = new StringBuilder();
+
+        for ( File pathItem = path; pathItem != null; pathItem = pathItem.getParentFile() ) {
+            final String pathItemName = pathItem.getName().toLowerCase( Locale.ROOT );
+
+            if ( pathItem != path ) {
+                assetSubpath.insert( 0, File.separator );
+            }
+            assetSubpath.insert( 0, pathItemName );
+
+            if ( allowedSubdirNames.contains( pathItemName ) ) {
+                return assetSubpath.toString();
+            }
+        }
+
+        return "";
     }
 
     private static boolean isValidHoMM2AssetPath( final File path, final Set<File> allowedSubdirs ) throws IOException
