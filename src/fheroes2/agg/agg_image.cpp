@@ -2078,7 +2078,9 @@ namespace fheroes2
                     else if ( i == 65 ) // Mass Shield
                         originalIndex = 15;
 
-                    const Sprite & originalImage = _icnVsSprite[id][originalIndex];
+                    Sprite & originalImage = _icnVsSprite[id][originalIndex];
+                    scaleToDisplayFactor( originalImage );
+
                     Sprite & image = _icnVsSprite[id][i];
 
                     image.resize( originalImage.width() + 8, originalImage.height() + 8 );

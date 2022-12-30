@@ -1559,6 +1559,7 @@ namespace fheroes2
 
         for ( size_t i = 1; i < input.size(); ++i ) {
             assert( input[i] != nullptr );
+            assert( input[0]->scaleFactor() == input[i]->scaleFactor() );
             if ( input[i]->width() != input[0]->width() || input[i]->height() != input[0]->height() )
                 return Image();
         }
@@ -1571,7 +1572,7 @@ namespace fheroes2
             transformIn[i] = input[i]->transform();
         }
 
-        Image out( input[0]->width(), input[0]->height() );
+        Image out( input[0]->width(), input[0]->height(), input[0]->scaleFactor() );
         out.reset();
 
         uint8_t * imageOut = out.image();
@@ -1959,7 +1960,7 @@ namespace fheroes2
         }
 
         const int32_t widthMask = mask._w();
-        const int32_t widthOut = out._h();
+        const int32_t widthOut = out._w();
 
         const uint8_t * imageMaskY = mask.transform() + maskY * widthMask + maskX;
         uint8_t * imageOutY = out.transform() + outY * widthOut + outX;
