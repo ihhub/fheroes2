@@ -1203,16 +1203,17 @@ namespace fheroes2
 
     Sprite CreateContour( const Image & image, uint8_t value )
     {
-        const int32_t width = image._w();
-        const int32_t height = image._h();
-
-        Sprite contour( width, height );
+        Image contour( image.width(), image.height(), image.scaleFactor() );
         contour.reset();
-        if ( width < 2 || height < 2 ) {
+
+        if ( contour.width() < 2 || contour.height() < 2 ) {
             return contour;
         }
 
         assert( !contour.empty() );
+
+        const int32_t width = image._w();
+        const int32_t height = image._h();
 
         const uint8_t * inY = image.transform();
         uint8_t * outImageY = contour.image();
