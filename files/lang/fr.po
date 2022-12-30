@@ -1522,7 +1522,7 @@ msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
 "pass.\""
 msgstr ""
-"Les nains vous saluent, \"Tous les ami des Roland sont nos amis. Vous pouvez "
+"Les nains vous saluent, \"Tous les amis de Roland sont nos amis. Vous pouvez "
 "passer.\""
 
 msgid ""
