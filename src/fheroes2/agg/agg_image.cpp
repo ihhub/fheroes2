@@ -179,7 +179,10 @@ namespace
         fheroes2::Image digit( width, height );
         digit.reset();
 
-        fheroes2::SetPixel( digit, points, pixelColor );
+        // fheroes2::SetPixel( digit, points, pixelColor );
+        for ( const fheroes2::Point & p : points ) {
+            fheroes2::Fill( digit, p.x, p.y, 1, 1, pixelColor );
+        }
         fheroes2::Blit( fheroes2::CreateContour( digit, 35 ), digit );
 
         return digit;

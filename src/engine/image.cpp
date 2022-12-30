@@ -2195,6 +2195,8 @@ namespace fheroes2
 
     void SetPixel( Image & image, int32_t x, int32_t y, uint8_t value )
     {
+        assert( image.scaleFactor() == 1 );
+
         if ( image.empty() || x >= image.width() || y >= image.height() || x < 0 || y < 0 ) {
             return;
         }
@@ -2206,6 +2208,8 @@ namespace fheroes2
 
     void SetPixel( Image & image, const std::vector<Point> & points, uint8_t value )
     {
+        assert( image.scaleFactor() == 1 );
+
         if ( image.empty() ) {
             return;
         }
@@ -2226,6 +2230,8 @@ namespace fheroes2
 
     void SetTransformPixel( Image & image, int32_t x, int32_t y, uint8_t value )
     {
+        assert( image.scaleFactor() == 1 );
+
         if ( image.empty() || x >= image.width() || y >= image.height() || x < 0 || y < 0 ) {
             return;
         }

@@ -210,7 +210,8 @@ void Interface::Radar::Generate()
                     color += 3;
             }
 
-            fheroes2::SetPixel( spriteArea, x, y, color );
+            // fheroes2::SetPixel( spriteArea, x, y, color );
+            fheroes2::Fill( spriteArea, x, y, 1, 1, color );
         }
     }
 
@@ -389,13 +390,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
             }
 
             const int dstx = offsetX + ( x * areaw ) / worldWidth;
-
-            if ( sw > 1 ) {
-                fheroes2::Fill( display, dstx, dsty, sw, sw, fillColor );
-            }
-            else {
-                fheroes2::SetPixel( display, dstx, dsty, fillColor );
-            }
+            fheroes2::Fill( display, dstx, dsty, sw, sw, fillColor );
         }
     }
 }
