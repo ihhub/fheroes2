@@ -643,8 +643,6 @@ namespace fheroes2
 
                 _icnVsSprite[id][i]
                     = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
-
-                scaleICNToDisplayFactor( _icnVsSprite[id][i] );
             }
 
             return true;
@@ -2202,6 +2200,9 @@ namespace fheroes2
             case ICN::MONH0028: // phoenix
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 1 ) {
+                    // prepare to work with upscaled images
+                    scaleICNToDisplayFactor( _icnVsSprite[id] );
+
                     const Sprite & correctFrame = GetICN( ICN::PHOENIX, 32 );
                     Copy( correctFrame, 60, 73, _icnVsSprite[id][0], 58, 70, 14, 13 );
                 }
@@ -2327,6 +2328,9 @@ namespace fheroes2
             case ICN::HSICONS:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 7 ) {
+                    // prepare to work with upscaled images
+                    scaleICNToDisplayFactor( _icnVsSprite[id] );
+
                     Sprite & out = _icnVsSprite[id][7];
                     if ( out.width() == 34 && out.height() == 19 ) {
                         Sprite temp;
@@ -2350,6 +2354,8 @@ namespace fheroes2
 
                 if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman
                     Sprite & modified = _icnVsSprite[id][4];
+                    // prepare to work with upscaled images
+                    scaleToDisplayFactor( modified );
 
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
@@ -2359,6 +2365,8 @@ namespace fheroes2
                 }
                 if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman
                     Sprite & modified = _icnVsSprite[id][6];
+                    // prepare to work with upscaled images
+                    scaleToDisplayFactor( modified );
 
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
@@ -2368,6 +2376,8 @@ namespace fheroes2
                 }
                 if ( _icnVsSprite[id].size() > 8 ) { // Champion
                     Sprite & modified = _icnVsSprite[id][8];
+                    // prepare to work with upscaled images
+                    scaleToDisplayFactor( modified );
 
                     Sprite temp( modified.width(), modified.height() + 1 );
                     temp.reset();
@@ -2379,6 +2389,9 @@ namespace fheroes2
                     const Point shadowOffset( -1, 2 );
                     for ( size_t i = 0; i < 62; ++i ) {
                         Sprite & modified = _icnVsSprite[id][i];
+                        // prepare to work with upscaled images
+                        scaleToDisplayFactor( modified );
+
                         const Point originalOffset( modified.x(), modified.y() );
                         Sprite temp = addShadow( modified, { -1, 2 }, 2 );
                         temp.setPosition( originalOffset.x - 1, originalOffset.y + 2 );
@@ -2394,8 +2407,9 @@ namespace fheroes2
                         }
                     }
                 }
-                if ( _icnVsSprite[id].size() > 63 && _icnVsSprite[id][63].width() == 19 && _icnVsSprite[id][63].height() == 37 ) { // Air Elemental
+                if ( _icnVsSprite[id].size() > 63 && _icnVsSprite[id][63]._w() == 19 && _icnVsSprite[id][63]._h() == 37 ) { // Air Elemental
                     Sprite & modified = _icnVsSprite[id][63];
+                    // working with 1x scale here
                     modified.image()[19 * 9 + 9] = modified.image()[19 * 5 + 11];
                     modified.transform()[19 * 9 + 9] = modified.transform()[19 * 5 + 11];
                 }
@@ -2435,7 +2449,7 @@ namespace fheroes2
                     for ( uint32_t i : { 0, 2 } ) {
                         Sprite & out = _icnVsSprite[id][i + 1];
 
-                        Sprite tmp( out.width(), out.height() );
+                        Image tmp( out.width(), out.height(), 1 );
                         tmp.reset();
                         Copy( out, 0, 1, tmp, 1, 0, tmp.width() - 1, tmp.height() - 1 );
                         CopyTransformLayer( _icnVsSprite[id][i], tmp );
@@ -2503,6 +2517,7 @@ namespace fheroes2
                 Image out = ExtractCommonPattern( { &input[0], &input[1], &input[2], &input[3] } );
 
                 // Here are 2 pixels which should be removed.
+                // FIXME: scale factor!
                 if ( out.width() == width && out.height() == height ) {
                     out.image()[40] = 0;
                     out.transform()[40] = 1;
@@ -2877,7 +2892,7 @@ namespace fheroes2
                     // add missing part of the released button state on the left
                     Sprite & out = _icnVsSprite[id][0];
 
-                    Sprite released( out.width() + 1, out.height() );
+                    Image released( out.width() + 1, out.height(), 1 );
                     released.reset();
                     const uint8_t color = id == ICN::SPANBTN || id == ICN::CSPANBTN ? 57 : 32;
                     DrawLine( released, { 0, 3 }, { 0, out.height() - 1 }, color );
@@ -2890,6 +2905,9 @@ namespace fheroes2
             case ICN::TRADPOSE: {
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() >= 19 ) {
+                    // prepare to work with upscaled images
+                    scaleICNToDisplayFactor( _icnVsSprite[id] );
+
                     // fix background for TRADE and EXIT buttons
                     for ( uint32_t i : { 16, 18 } ) {
                         Sprite pressed;
@@ -3033,8 +3051,9 @@ namespace fheroes2
                 // Fix "Arm of the Martyr" artifact rendering.
                 if ( _icnVsSprite[id].size() > 88 ) {
                     Sprite & originalImage = _icnVsSprite[id][88];
-                    Sprite temp( originalImage.width(), originalImage.height() );
-                    temp.setPosition( originalImage.x(), originalImage.y() );
+                    scaleToDisplayFactor( originalImage );
+
+                    Sprite temp( originalImage.width(), originalImage.height(), originalImage.x(), originalImage.y() );
                     temp.fill( 0 );
                     Blit( originalImage, temp );
                     originalImage = std::move( temp );
@@ -3093,7 +3112,7 @@ namespace fheroes2
                     Copy( image, 37, 113, image, 38, 117, 1, 1 );
 
                     // Create a temporary image to be a holder of pixels.
-                    Sprite temp( 4 * 2, 8 );
+                    Image temp( 4 * 2, 8, 1 );
                     Copy( image, 33, 105, temp, 0, 0, 4, 8 );
                     Copy( image, 41, 105, temp, 4, 0, 4, 8 );
                     fillRandomPixelsFromImage( temp, { 0, 0, temp.width(), temp.height() }, image, { 37, 119, 4, 37 }, seededGen );
@@ -3125,6 +3144,9 @@ namespace fheroes2
             case ICN::SCENIBKG:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 436 && _icnVsSprite[id][0].height() == 476 ) {
+                    // prepare to work with upscaled images
+                    scaleICNToDisplayFactor( _icnVsSprite[id] );
+
                     const Sprite & helper = GetICN( ICN::CSPANBKE, 1 );
                     if ( !helper.empty() ) {
                         Sprite & original = _icnVsSprite[id][0];
@@ -3140,6 +3162,9 @@ namespace fheroes2
             case ICN::CSTLCAPS:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 84 && _icnVsSprite[id][0].height() == 81 ) {
+                    // prepare to work with upscaled images
+                    scaleICNToDisplayFactor( _icnVsSprite[id] );
+
                     const Sprite & castle = GetICN( ICN::TWNSCSTL, 0 );
                     if ( !castle.empty() ) {
                         Blit( castle, 206, 106, _icnVsSprite[id][0], 2, 2, 33, 67 );
@@ -3366,8 +3391,7 @@ namespace fheroes2
             case ICN::BUTTON_GOOD_FONT_PRESSED:
             case ICN::BUTTON_EVIL_FONT_RELEASED:
             case ICN::BUTTON_EVIL_FONT_PRESSED: {
-                generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED],
-                                        _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
+                generateButtonAlphabet( fheroes2::getCurrentLanguage(), _icnVsSprite );
                 return true;
             }
             case ICN::HISCORE: {
