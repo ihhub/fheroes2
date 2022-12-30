@@ -291,7 +291,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     else if ( IsDwelling() ) {
         description = _( "The %{building} produces %{monster}." );
         StringReplace( description, "%{building}", Castle::GetStringBuilding( building, castle.GetRace() ) );
-        StringReplace( description, "%{monster}", Translation::StringLower( Monster( castle.GetRace(), building ).GetMultiName() ) );
+        StringReplaceWithLowercase( description, "%{monster}", Monster( castle.GetRace(), building ).GetMultiName() );
     }
     else
         description = Castle::GetDescriptionBuilding( building, castle.GetRace() );

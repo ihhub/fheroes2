@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import datetime
 import os
 import re
@@ -8,17 +9,31 @@ import sys
 
 CURRENT_YEAR = datetime.datetime.now().date().year
 
-def main():
-    if len(sys.argv) < 4:
-        print(f"Syntax: {os.path.basename(sys.argv[0])} full_header_file" +
-                                                      " header_template_file" +
-                                                      " source_file ...",
-              file=sys.stderr)
-        return 1
 
-    with open(sys.argv[1], "r", encoding="latin_1") as full_header_file:
+class CustomArgumentParser(argparse.ArgumentParser):
+    def error(self, message):
+        self.print_usage(sys.stderr)
+        self.exit(1, "%(prog)s: error: %(message)s\n" %
+                  {"prog": self.prog, "message": message})
+
+
+def parse_arguments():
+    parser = CustomArgumentParser()
+    parser.add_argument("full_header_file", help="full header file")
+    parser.add_argument("header_template_file", help="header template file")
+    parser.add_argument("source_file", help="source files (at least one, can be multiple)",
+                        nargs="+")
+    return parser.parse_args()
+
+
+def main():
+    # if something is wrong with the commandline arguments,
+    # the script exits here with return code 1:
+    args = parse_arguments()
+
+    with open(args.full_header_file, "r", encoding="latin_1") as full_header_file:
         copyright_hdr_full = full_header_file.read().strip().replace("{YR}", f"{CURRENT_YEAR}")
-    with open(sys.argv[2], "r", encoding="latin_1") as header_template_file:
+    with open(args.header_template_file, "r", encoding="latin_1") as header_template_file:
         copyright_hdr_tmpl = header_template_file.read().strip()
 
     copyright_hdr_re_tmpl = copyright_hdr_tmpl
@@ -33,7 +48,7 @@ def main():
 
     generic_hdr_re = re.compile("^/\\*.*?\\*/", re.DOTALL)
 
-    for file_name in sys.argv[3:]:
+    for file_name in args.source_file:
         if not os.path.exists(file_name):
             continue
         with open(file_name, "r", encoding="latin_1") as src_file:
@@ -73,7 +88,6 @@ def main():
 
                 os.remove(file_name + ".tmp")
 
-    return 0
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

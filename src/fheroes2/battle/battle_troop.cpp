@@ -1614,7 +1614,13 @@ bool Battle::Unit::isHaveDamage() const
 
 bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
 {
+    if ( rule == Monster_Info::STATIC && GetAnimationState() != Monster_Info::IDLE ) {
+        // Reset the delay before switching to the 'IDLE' animation from 'STATIC'.
+        checkIdleDelay();
+    }
+
     animation.switchAnimation( rule, reverse );
+
     return animation.isValid();
 }
 

@@ -317,7 +317,7 @@ void ShowNewWeekDialog()
                                                                   "After regular growth, the population of %{monster} increases by %{count} percent!", count );
             else
                 message += _( "%{monster} growth +%{count}." );
-            StringReplace( message, "%{monster}", monster.GetMultiName() );
+            StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
             message += "\n \n";
         }
