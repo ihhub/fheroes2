@@ -150,11 +150,9 @@ public final class ToolsetActivity extends Activity
 
         runGameButton.setEnabled( backgroundTask == null && isHoMM2AssetsPresent );
         extractHoMM2AssetsButton.setEnabled( backgroundTask == null );
-        downloadHoMM2DemoButton.setEnabled( backgroundTask == null && !isHoMM2AssetsPresent );
+        downloadHoMM2DemoButton.setEnabled( backgroundTask == null );
 
         gameStatusTextView.setVisibility( isHoMM2AssetsPresent ? View.GONE : View.VISIBLE );
-        runGameButton.setVisibility( !isHoMM2AssetsPresent ? View.GONE : View.VISIBLE );
-        downloadHoMM2DemoButton.setVisibility( isHoMM2AssetsPresent ? View.GONE : View.VISIBLE );
         backgroundTaskProgressBar.setVisibility( backgroundTask == null ? View.GONE : View.VISIBLE );
         lastTaskStatusTextView.setVisibility( backgroundTask != null ? View.GONE : View.VISIBLE );
     }
