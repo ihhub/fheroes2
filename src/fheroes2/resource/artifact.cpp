@@ -24,21 +24,31 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <functional>
 #include <map>
+#include <ostream>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "artifact.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
 #include "rand.h"
 #include "serialize.h"
 #include "settings.h"
+#include "skill.h"
 #include "spell.h"
+#include "spell_book.h"
+#include "spell_storage.h"
 #include "statusbar.h"
+#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -967,6 +977,10 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
     }
 
     assert( combined.empty() );
+
+    // Assemble artifact sets after the exchange, if possible
+    assembleArtifactSetIfPossible();
+    giftBag.assembleArtifactSetIfPossible();
 }
 
 bool BagArtifacts::ContainUltimateArtifact() const

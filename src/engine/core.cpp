@@ -19,8 +19,11 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <cstdint>
+#include <stdexcept>
 
 #include <SDL.h>
+#include <SDL_error.h>
 #include <SDL_version.h>
 
 #include "audio.h"
@@ -41,9 +44,13 @@ namespace
 #if defined( TARGET_PS_VITA )
     void initHardwareInternally()
     {
+        // CPU clock speed, MHz. Possible values: 41, 83, 111, 166, 222, 333, 444, 500
         scePowerSetArmClockFrequency( 444 );
+        // CPU memory clock speed, MHz. Possible values: 55, 83, 111, 166, 222
         scePowerSetBusClockFrequency( 222 );
+        // GPU clock speed, MHz. Possible values: 41, 55, 83, 111, 166, 222
         scePowerSetGpuClockFrequency( 222 );
+        // GPU memory clock speed, MHz. Possible values: 83, 111, 166
         scePowerSetGpuXbarClockFrequency( 166 );
     }
 
@@ -120,6 +127,8 @@ namespace
 #else
         SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
 #endif
+
+        LocalEvent::setEventProcessingStates();
 
         return true;
     }

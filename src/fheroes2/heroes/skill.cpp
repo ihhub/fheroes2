@@ -22,10 +22,16 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <iterator>
 
+#include "artifact.h"
+#include "artifact_info.h"
 #include "game_static.h"
+#include "gamedefs.h"
 #include "heroes.h"
+#include "heroes_base.h"
+#include "kingdom.h"
 #include "race.h"
 #include "rand.h"
 #include "serialize.h"
@@ -41,8 +47,8 @@ namespace Skill
     int SecondaryPriorityFromRace( int, const std::vector<int> &, uint32_t seed );
 
     const int secskills[]
-        = {Secondary::PATHFINDING, Secondary::ARCHERY,   Secondary::LOGISTICS, Secondary::SCOUTING,   Secondary::DIPLOMACY, Secondary::NAVIGATION, Secondary::LEADERSHIP,
-           Secondary::WISDOM,      Secondary::MYSTICISM, Secondary::LUCK,      Secondary::BALLISTICS, Secondary::EAGLEEYE,  Secondary::NECROMANCY, Secondary::ESTATES};
+        = { Secondary::PATHFINDING, Secondary::ARCHERY,   Secondary::LOGISTICS, Secondary::SCOUTING,   Secondary::DIPLOMACY, Secondary::NAVIGATION, Secondary::LEADERSHIP,
+            Secondary::WISDOM,      Secondary::MYSTICISM, Secondary::LUCK,      Secondary::BALLISTICS, Secondary::EAGLEEYE,  Secondary::NECROMANCY, Secondary::ESTATES };
 }
 
 uint32_t Skill::Secondary::GetValues() const
@@ -259,12 +265,12 @@ void Skill::Secondary::Set( const Secondary & skill )
 
 void Skill::Secondary::SetSkill( int skill )
 {
-    first = skill <= ESTATES ? skill : UNKNOWN;
+    first = ( skill >= UNKNOWN && skill <= ESTATES ) ? skill : UNKNOWN;
 }
 
 void Skill::Secondary::SetLevel( int level )
 {
-    second = level <= Level::EXPERT ? level : Level::NONE;
+    second = ( level >= Level::NONE && level <= Level::EXPERT ) ? level : Level::NONE;
 }
 
 void Skill::Secondary::NextLevel()
@@ -330,16 +336,14 @@ int Skill::Secondary::RandForWitchsHut()
     return v.empty() ? UNKNOWN : Rand::Get( v );
 }
 
-/* index sprite from SECSKILL */
 int Skill::Secondary::GetIndexSprite1() const
 {
-    return Skill() <= ESTATES ? Skill() : 0;
+    return ( Skill() > UNKNOWN && Skill() <= ESTATES ) ? Skill() : 0;
 }
 
-/* index sprite from MINISS */
 int Skill::Secondary::GetIndexSprite2() const
 {
-    return Skill() <= ESTATES ? Skill() - 1 : 0xFF;
+    return ( Skill() > UNKNOWN && Skill() <= ESTATES ) ? Skill() - 1 : 0xFF;
 }
 
 const char * Skill::Secondary::String( int skill )
@@ -385,15 +389,15 @@ const char * Skill::Secondary::String( int skill )
 std::string Skill::Secondary::GetName() const
 {
     const char * name_skill[]
-        = {_( "Basic Pathfinding" ),  _( "Advanced Pathfinding" ), _( "Expert Pathfinding" ),  _( "Basic Archery" ),      _( "Advanced Archery" ),
-           _( "Expert Archery" ),     _( "Basic Logistics" ),      _( "Advanced Logistics" ),  _( "Expert Logistics" ),   _( "Basic Scouting" ),
-           _( "Advanced Scouting" ),  _( "Expert Scouting" ),      _( "Basic Diplomacy" ),     _( "Advanced Diplomacy" ), _( "Expert Diplomacy" ),
-           _( "Basic Navigation" ),   _( "Advanced Navigation" ),  _( "Expert Navigation" ),   _( "Basic Leadership" ),   _( "Advanced Leadership" ),
-           _( "Expert Leadership" ),  _( "Basic Wisdom" ),         _( "Advanced Wisdom" ),     _( "Expert Wisdom" ),      _( "Basic Mysticism" ),
-           _( "Advanced Mysticism" ), _( "Expert Mysticism" ),     _( "Basic Luck" ),          _( "Advanced Luck" ),      _( "Expert Luck" ),
-           _( "Basic Ballistics" ),   _( "Advanced Ballistics" ),  _( "Expert Ballistics" ),   _( "Basic Eagle Eye" ),    _( "Advanced Eagle Eye" ),
-           _( "Expert Eagle Eye" ),   _( "Basic Necromancy" ),     _( "Advanced Necromancy" ), _( "Expert Necromancy" ),  _( "Basic Estates" ),
-           _( "Advanced Estates" ),   _( "Expert Estates" )};
+        = { _( "Basic Pathfinding" ),  _( "Advanced Pathfinding" ), _( "Expert Pathfinding" ),  _( "Basic Archery" ),      _( "Advanced Archery" ),
+            _( "Expert Archery" ),     _( "Basic Logistics" ),      _( "Advanced Logistics" ),  _( "Expert Logistics" ),   _( "Basic Scouting" ),
+            _( "Advanced Scouting" ),  _( "Expert Scouting" ),      _( "Basic Diplomacy" ),     _( "Advanced Diplomacy" ), _( "Expert Diplomacy" ),
+            _( "Basic Navigation" ),   _( "Advanced Navigation" ),  _( "Expert Navigation" ),   _( "Basic Leadership" ),   _( "Advanced Leadership" ),
+            _( "Expert Leadership" ),  _( "Basic Wisdom" ),         _( "Advanced Wisdom" ),     _( "Expert Wisdom" ),      _( "Basic Mysticism" ),
+            _( "Advanced Mysticism" ), _( "Expert Mysticism" ),     _( "Basic Luck" ),          _( "Advanced Luck" ),      _( "Expert Luck" ),
+            _( "Basic Ballistics" ),   _( "Advanced Ballistics" ),  _( "Expert Ballistics" ),   _( "Basic Eagle Eye" ),    _( "Advanced Eagle Eye" ),
+            _( "Expert Eagle Eye" ),   _( "Basic Necromancy" ),     _( "Advanced Necromancy" ), _( "Expert Necromancy" ),  _( "Basic Estates" ),
+            _( "Advanced Estates" ),   _( "Expert Estates" ) };
 
     return isValid() ? name_skill[( Level() - 1 ) + ( Skill() - 1 ) * 3] : "unknown";
 }

@@ -22,7 +22,8 @@
 #define H2LOGGING_H
 
 #include <iostream>
-#include <sstream>
+#include <sstream> // IWYU pragma: keep
+#include <string>
 
 enum
 {
@@ -87,10 +88,10 @@ namespace Logging
     // Initialize logging. Some systems require writing logging information into a file.
     void InitLog();
 
-    void SetDebugLevel( const int debugLevel );
+    void setDebugLevel( const int level );
+    int getDebugLevel();
 
     void setTextSupportMode( const bool enableTextSupportMode );
-
     bool isTextSupportModeEnabled();
 }
 
@@ -169,12 +170,10 @@ namespace Logging
     // This structure simply adds text separators. It is used for Text Support Mode only.
     struct TextSupportLogger
     {
-        TextSupportLogger()
-        {
-            COUT( "----------" )
-        }
+        TextSupportLogger(){ COUT( "----------" ) }
 
-        TextSupportLogger( const TextSupportLogger & ) = delete;
+        TextSupportLogger( const TextSupportLogger & )
+            = delete;
         TextSupportLogger( const TextSupportLogger && ) = delete;
         TextSupportLogger & operator=( const TextSupportLogger & ) = delete;
         TextSupportLogger & operator=( const TextSupportLogger && ) = delete;

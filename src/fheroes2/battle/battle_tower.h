@@ -24,7 +24,16 @@
 #ifndef H2BATTLE_TOWER_H
 #define H2BATTLE_TOWER_H
 
+#include <cstdint>
+#include <string>
+
 #include "battle_troop.h"
+#include "math_base.h"
+
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
 
 class Castle;
 
@@ -56,7 +65,10 @@ namespace Battle
         void SetDestroy();
         fheroes2::Point GetPortPosition() const;
 
-        static std::string GetInfo( const Castle & );
+        // Returns a text description of the parameters of the towers of the given castle. Can be
+        // called both during combat and outside of it. In the former case, the current state of
+        // the towers destroyed during the siege will be reflected.
+        static std::string GetInfo( const Castle & castle );
 
     private:
         int type;

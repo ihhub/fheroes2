@@ -21,14 +21,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <iterator>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
 #include "icn.h"
+#include "image.h"
+#include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "players.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_window.h"
@@ -242,9 +258,9 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     ResourceBar info2( funds2, posX, box.y + 150 );
     info2.Redraw();
 
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
-    const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
-    const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const int okIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+    const int cancelIcnId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
     const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
     const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
 

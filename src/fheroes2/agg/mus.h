@@ -24,8 +24,9 @@
 #ifndef H2MUS_H
 #define H2MUS_H
 
-#include "mp2.h"
 #include <string>
+
+#include "mp2.h"
 
 namespace MUS
 {

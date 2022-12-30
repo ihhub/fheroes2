@@ -23,12 +23,14 @@
 
 #include <algorithm>
 
-#include "interface_border.h"
 #include "agg_image.h"
-#include "game_interface.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_border.h"
 #include "localevent.h"
 #include "maps.h"
+#include "screen.h"
 #include "settings.h"
 #include "ui_tool.h"
 
@@ -67,10 +69,10 @@ namespace
 void Interface::GameBorderRedraw( const bool viewWorldMode )
 {
     const Settings & conf = Settings::Get();
-    if ( conf.ExtGameHideInterface() && !viewWorldMode )
+    if ( conf.isHideInterfaceEnabled() && !viewWorldMode )
         return;
 
-    const bool isEvilInterface = conf.ExtGameEvilInterface();
+    const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -420,7 +422,7 @@ Interface::BorderWindow::BorderWindow( const fheroes2::Rect & rt )
 
 const fheroes2::Rect & Interface::BorderWindow::GetRect() const
 {
-    return Settings::Get().ExtGameHideInterface() && border.isValid() ? border.GetRect() : GetArea();
+    return Settings::Get().isHideInterfaceEnabled() && border.isValid() ? border.GetRect() : GetArea();
 }
 
 void Interface::BorderWindow::Redraw() const
@@ -438,7 +440,7 @@ void Interface::BorderWindow::SetPosition( int32_t px, int32_t py, uint32_t pw, 
 
 void Interface::BorderWindow::SetPosition( int32_t px, int32_t py )
 {
-    if ( Settings::Get().ExtGameHideInterface() ) {
+    if ( Settings::Get().isHideInterfaceEnabled() ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
         px = std::max( 0, std::min( px, display.width() - ( area.width + border.BorderWidth() * 2 ) ) );
@@ -461,7 +463,7 @@ bool Interface::BorderWindow::QueueEventProcessing()
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    if ( conf.ExtGameHideInterface() && le.MousePressLeft( border.GetTop() ) ) {
+    if ( conf.isHideInterfaceEnabled() && le.MousePressLeft( border.GetTop() ) ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const fheroes2::Point & mp = le.GetMouseCursor();

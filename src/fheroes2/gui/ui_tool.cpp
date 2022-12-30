@@ -19,20 +19,25 @@
  ***************************************************************************/
 
 #include "ui_tool.h"
+
+#include <algorithm>
+#include <cassert>
+#include <chrono>
+#include <cmath>
+#include <cstddef>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <deque>
+#include <string>
+#include <utility>
+
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "text.h"
 #include "translations.h"
-
-#include <chrono>
-#include <cmath>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#include <deque>
-#include <utility>
 
 namespace
 {
@@ -207,69 +212,79 @@ namespace fheroes2
 
     GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const bool isEvilInterface_ )
         : isEvilInterface( isEvilInterface_ )
-        , isOriginalEvilInterface( Settings::Get().ExtGameEvilInterface() )
+        , isOriginalEvilInterface( Settings::Get().isEvilInterfaceEnabled() )
     {
         if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().SetEvilInterface( isEvilInterface );
+            Settings::Get().setEvilInterface( isEvilInterface );
         }
     }
 
     GameInterfaceTypeRestorer::~GameInterfaceTypeRestorer()
     {
         if ( isEvilInterface != isOriginalEvilInterface ) {
-            Settings::Get().SetEvilInterface( isOriginalEvilInterface );
+            Settings::Get().setEvilInterface( isOriginalEvilInterface );
         }
     }
 
-    Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight )
+    void CreateDeathWaveEffect( Image & out, const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
     {
-        if ( in.empty() )
-            return Image();
-
-        Image out = in;
-
-        const int32_t width = in.width();
-        const int32_t height = in.height();
-
-        if ( x + waveWidth < 0 || x - waveWidth >= width )
-            return out;
-
-        const int32_t startX = ( x > waveWidth ) ? x - waveWidth : 0;
-        const int32_t endX = ( x + waveWidth < width ) ? x + waveWidth : width;
-
-        const double pi = std::acos( -1 );
-        const double waveLimit = waveWidth / pi;
-
-        uint8_t * outImageX = out.image() + startX;
-        uint8_t * outTransformX = out.transform() + startX;
-
-        const uint8_t * inImageX = in.image() + startX;
-        const uint8_t * inTransformX = in.transform() + startX;
-
-        for ( int32_t posX = startX; posX < endX; ++posX, ++outImageX, ++outTransformX, ++inImageX, ++inTransformX ) {
-            const int32_t waveX = posX - x;
-
-            const int32_t offsetY = static_cast<int32_t>( waveHeight * ( ( waveX < waveLimit ) ? tan( waveX / waveLimit ) / 2 : sin( waveX / waveLimit ) ) );
-
-            const int32_t offsetOut = offsetY >= 0 ? offsetY * width : 0;
-            const int32_t offsetOutEnd = offsetY >= 0 ? ( height - 1 - offsetY ) * width : ( height - 1 + offsetY ) * width;
-
-            uint8_t * outImageY = outImageX + offsetOut;
-            uint8_t * outTransformY = outTransformX + offsetOut;
-            const uint8_t * outImageYEnd = outImageX + offsetOutEnd;
-
-            const int32_t offsetIn = offsetY >= 0 ? 0 : -offsetY * width;
-
-            const uint8_t * inImageY = inImageX + offsetIn;
-            const uint8_t * inTransformY = inTransformX + offsetIn;
-
-            for ( ; outImageY != outImageYEnd; outImageY += width, outTransformY += width, inImageY += width, inTransformY += width ) {
-                *outImageY = *inImageY;
-                *outTransformY = *inTransformY;
-            }
+        if ( in.empty() ) {
+            return;
         }
 
-        return out;
+        const int32_t inWidth = in.width();
+        const int32_t waveLength = static_cast<int32_t>( deathWaveCurve.size() );
+
+        // If the death wave curve is outside of the battlefield - return.
+        if ( x < 0 || ( x - waveLength ) >= inWidth || deathWaveCurve.empty() ) {
+            return;
+        }
+
+        const int32_t inHeight = in.height();
+        const int32_t outWaveWidth = x > waveLength ? ( x > inWidth ? ( waveLength - x + inWidth ) : waveLength ) : x;
+
+        // If the out image is small for the Death Wave spell effect, resize it anf fill the transform layer with "0".
+        if ( out.width() < outWaveWidth || out.height() < inHeight ) {
+            out.resize( outWaveWidth, inHeight );
+            std::fill( out.transform(), out.transform() + static_cast<size_t>( outWaveWidth * inHeight ), static_cast<uint8_t>( 0 ) );
+        }
+
+        const int32_t outWidth = out.width();
+
+        // Set the input image horizontal offset from where to draw the wave.
+        const int32_t offsetX = x < waveLength ? 0 : x - waveLength;
+        const uint8_t * inImageX = in.image() + offsetX;
+
+        uint8_t * outImageX = out.image();
+
+        // Set pointers to the start and the end of the death wave curve.
+        std::vector<int32_t>::const_iterator pntX = deathWaveCurve.begin() + ( x < waveLength ? waveLength - x : 0 );
+        const std::vector<int32_t>::const_iterator endX = deathWaveCurve.end() - ( x > inWidth ? x - inWidth : 0 );
+
+        for ( ; pntX != endX; ++pntX, ++outImageX, ++inImageX ) {
+            // The death curve should have only negative values and should not be higher, than the height of 'in' image.
+            if ( ( *pntX >= 0 ) || ( *pntX <= -inHeight ) ) {
+                assert( 0 );
+                continue;
+            }
+
+            const uint8_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( inHeight + *pntX ) * outWidth;
+            const uint8_t * inImageY = inImageX - static_cast<ptrdiff_t>( *pntX + 1 ) * inWidth;
+
+            // A loop to shift all horizontal pixels vertically.
+            uint8_t * outImageY = outImageX;
+            for ( ; outImageY != outImageYEnd; outImageY += outWidth ) {
+                inImageY += inWidth;
+                *outImageY = *inImageY;
+            }
+
+            // Flip the image under the death wave to create a distortion effect.
+            for ( int32_t i = 0; i > *pntX; --i ) {
+                *outImageY = *inImageY;
+                outImageY += outWidth;
+                inImageY -= inWidth;
+            }
+        }
     }
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX, double waveFrequency )

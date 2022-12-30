@@ -42,6 +42,8 @@ class HeroBase;
 class Heroes;
 class Monster;
 class Troop;
+
+struct ArtifactSetData;
 struct CapturedObject;
 
 namespace Skill
@@ -93,7 +95,6 @@ namespace Dialog
     void QuickInfo( const HeroBase & hero, const fheroes2::Point & position = {}, const bool showOnRadar = false, const fheroes2::Rect & areaToRestore = {} );
 
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
-    void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
@@ -101,7 +102,6 @@ namespace Dialog
     bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
     Troop RecruitMonster( const Monster & monster0, uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
     void DwellingInfo( const Monster &, uint32_t available );
-    bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
     int ArmyJoinFree( const Troop & troop );
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
@@ -111,6 +111,9 @@ namespace Dialog
     int BuyBoat( bool enable );
     void ThievesGuild( bool oracle );
     void GameInfo();
+
+    // Displays a dialog box informing that an artifact set has been assembled
+    void ArtifactSetAssembled( const ArtifactSetData & artifactSetData );
 
     class NonFixedFrameBox
     {

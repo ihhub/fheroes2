@@ -21,30 +21,53 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
+#include "army.h"
+#include "army_troop.h"
 #include "audio_manager.h"
 #include "castle.h"
+#include "color.h"
 #include "cursor.h"
-#include "game.h"
+#include "dialog.h"
+#include "direction.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_gamearea.h"
+#include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
 #include "monster.h"
+#include "mp2.h"
+#include "payment.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
 #include "spell.h"
 #include "spell_info.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
+#include "ui_scrollbar.h"
 #include "ui_window.h"
+#include "view_world.h"
 #include "world.h"
-
-#include <cassert>
-#include <memory>
 
 namespace
 {
@@ -383,7 +406,7 @@ namespace
             return false;
         }
 
-        if ( castle->GetHeroes().Guest() && castle->GetHeroes().Guest() != &hero ) {
+        if ( castle->GetHero() && castle->GetHero() != &hero ) {
             // The nearest town occupation must be checked before casting this spell. Something is wrong with the logic!
             assert( 0 );
             return false;
@@ -404,13 +427,13 @@ namespace
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         LocalEvent & le = LocalEvent::Get();
 
         for ( const Castle * castle : kingdom.GetCastles() ) {
             assert( castle != nullptr );
 
-            if ( !castle->GetHeroes().Guest() ) {
+            if ( !castle->GetHero() ) {
                 castles.push_back( castle->GetIndex() );
             }
         }
@@ -447,8 +470,8 @@ namespace
         listbox.RedrawBackground( activeArea.getPosition() );
         listbox.Redraw();
 
-        const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
-        const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+        const int okIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        const int cancelIcnId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
         const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
         const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
 

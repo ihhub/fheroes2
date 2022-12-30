@@ -18,12 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <vector>
+
 #include "ai.h"
 #include "army.h"
 #include "army_troop.h"
 #include "castle.h"
 #include "kingdom.h"
 #include "normal/ai_normal.h"
+#include "payment.h"
+#include "rand.h"
+#include "resource.h"
 
 namespace AI
 {
@@ -93,20 +101,20 @@ namespace AI
         // Archers sorted purely by strength.
         std::sort( archers.begin(), archers.end(), []( const Troop & left, const Troop & right ) { return left.GetStrength() < right.GetStrength(); } );
 
-        std::vector<size_t> slotOrder = {2, 1, 3, 0, 4};
+        std::vector<size_t> slotOrder = { 2, 1, 3, 0, 4 };
         switch ( archers.size() ) {
         case 1:
-            slotOrder = {0, 2, 1, 3, 4};
+            slotOrder = { 0, 2, 1, 3, 4 };
             break;
         case 2:
         case 3:
-            slotOrder = {0, 4, 2, 1, 3};
+            slotOrder = { 0, 4, 2, 1, 3 };
             break;
         case 4:
-            slotOrder = {0, 4, 2, 3, 1};
+            slotOrder = { 0, 4, 2, 3, 1 };
             break;
         case 5:
-            slotOrder = {0, 4, 1, 2, 3};
+            slotOrder = { 0, 4, 1, 2, 3 };
             break;
         default:
             break;

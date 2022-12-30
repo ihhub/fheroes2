@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-12-18 02:36+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -26,6 +26,125 @@ msgstr ""
 "SADECE\n"
 "SAVAŞ"
 
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
+
 msgid "GIFT"
 msgstr "HEDİYE"
 
@@ -34,6 +153,9 @@ msgstr "ZORLUK"
 
 msgid "MIN"
 msgstr "MİN"
+
+msgid "MAX"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Savaşçı"
@@ -226,14 +348,20 @@ msgstr ""
 "Hendek savunma becerisi herhangi bir birimin savunma becerisi ve hareket "
 "hızını  -%{count} düşürüyor."
 
-msgid "Speed"
-msgstr "Hız"
-
 msgid "Speed: %{speed}"
 msgstr "Hız: %{speed}"
 
+msgid "Speed"
+msgstr "Hız"
+
 msgid "Army Order"
 msgstr "Ordu Düzeni"
+
+msgid "Off"
+msgstr "Kapalı"
+
+msgid "On"
+msgstr "Açık"
 
 msgid "Auto Spell Casting"
 msgstr "Otomatik Büyü Yapma"
@@ -247,11 +375,20 @@ msgstr "Gölge Hareketi"
 msgid "Shadow Cursor"
 msgstr "Gölge İmleci"
 
-msgid "Off"
-msgstr "Kapalı"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Açık"
+msgid "Settings"
+msgstr ""
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+msgid "Damage Info"
+msgstr ""
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Savaş eylemlerinin ve animasyonların hızını ayarlayın."
@@ -288,6 +425,22 @@ msgid ""
 msgstr ""
 "Fare imlecinin mevcut altıgen konumunu gösteren bir gölgeyi açın veya "
 "kapatın."
+
+msgid "Change the audio settings of the game."
+msgstr ""
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr "Savaş sırasında ordu düzenini görüntülemek için geçiş yapın."
+
+msgid "Exit this menu."
+msgstr ""
+
+msgid "Okay"
+msgstr ""
 
 msgid "The enemy has surrendered!"
 msgstr "Düşman teslim oldu!"
@@ -497,19 +650,6 @@ msgstr "Savaş ekranını özelleştirmenizi sağlar."
 msgid "System Options"
 msgstr "Sistem Seçenekleri"
 
-msgid "Wait this unit"
-msgstr "Bu birimi bekle"
-
-msgid "Wait"
-msgstr "Bekle"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Mevcut yaratığı bekletir. Mevcut yaratık, diğer tüm yaratıkların sırası "
-"gelene kadar sırasını erteler."
-
 msgid "Skip this unit"
 msgstr "Bu birimi geç"
 
@@ -552,9 +692,6 @@ msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} sırasını geçti."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} sırasını bekledi."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -723,6 +860,10 @@ msgstr "%{name} %{count} Okçu gücüyle ateş ediyor"
 
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "her biri saldırı becerilerine +%{attack} bonusu ekler."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Ayna görüntüsü yok edildi!"
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1231,6 +1372,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
+msgid "campaignBonus|Animate Dead"
+msgstr ""
+
+msgid "campaignBonus|Chain Lightning"
+msgstr ""
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+msgid "campaignBonus|Mirror Image"
+msgstr ""
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+msgid "campaignBonus|Steelskin"
+msgstr ""
+
+msgid "campaignBonus|Summon Earth"
+msgstr ""
+
+msgid "campaignBonus|View Heroes"
+msgstr ""
+
 msgid "campaignBonus|Ballista"
 msgstr ""
 
@@ -1421,36 +1592,6 @@ msgid "campaignBonus|Advanced Wisdom"
 msgstr ""
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr ""
-
-msgid "campaignBonus|Animate Dead"
-msgstr ""
-
-msgid "campaignBonus|Chain Lightning"
-msgstr ""
-
-msgid "campaignBonus|Fireblast"
-msgstr ""
-
-msgid "campaignBonus|Mass Curse"
-msgstr ""
-
-msgid "campaignBonus|Mass Haste"
-msgstr ""
-
-msgid "campaignBonus|Mirror Image"
-msgstr ""
-
-msgid "campaignBonus|Resurrect"
-msgstr ""
-
-msgid "campaignBonus|Steelskin"
-msgstr ""
-
-msgid "campaignBonus|Summon Earth"
-msgstr ""
-
-msgid "campaignBonus|View Heroes"
 msgstr ""
 
 msgid ""
@@ -1749,9 +1890,6 @@ msgid "Corackston"
 msgstr ""
 
 msgid "Sheltemburg"
-msgstr ""
-
-msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
 
 msgid "Cannot recruit - you already have a Hero in this town."
@@ -2130,9 +2268,6 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-msgid "Exit this menu."
-msgstr ""
-
 msgid "Click to show next town."
 msgstr ""
 
@@ -2143,14 +2278,6 @@ msgid "Click to show previous town."
 msgstr ""
 
 msgid "Show previous town"
-msgstr ""
-
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
 msgstr ""
 
 msgid "This town may not be upgraded to a castle."
@@ -2166,12 +2293,6 @@ msgid "Exit Town"
 msgstr ""
 
 msgid "Show Income"
-msgstr ""
-
-msgid "Swap Heroes"
-msgstr ""
-
-msgid "Meeting Heroes"
 msgstr ""
 
 msgid "View Hero"
@@ -2407,9 +2528,6 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr ""
-
 msgid "Build a new ship:"
 msgstr ""
 
@@ -2455,21 +2573,6 @@ msgstr ""
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr ""
-
-msgid "Experimental"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
-
 msgid "Black & White"
 msgstr ""
 
@@ -2482,27 +2585,6 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
-msgid "Interface Type"
-msgstr ""
-
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr ""
 
@@ -2510,21 +2592,6 @@ msgid "Select Game Language"
 msgstr ""
 
 msgid "Change the graphics settings of the game."
-msgstr ""
-
-msgid "Change the audio settings of the game."
-msgstr ""
-
-msgid "Experimental game settings."
-msgstr ""
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
@@ -2639,12 +2706,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr ""
-
-msgid "Your army too big!"
-msgstr ""
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -2703,10 +2764,10 @@ msgstr ""
 msgid "n/a"
 msgstr ""
 
-msgid "guarded by "
+msgid "guarded by %{count} %{monster}"
 msgstr ""
 
-msgid "guarded by %{count} %{monster}"
+msgid "guarded by "
 msgstr ""
 
 msgid "(available: %{count})"
@@ -2787,13 +2848,19 @@ msgstr ""
 msgid "Number to buy:"
 msgstr ""
 
+msgid "Recruit selected monsters."
+msgstr ""
+
+msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "Select only 1 monster to be recruited."
+msgstr ""
+
 msgid "Select Game Resolution:"
 msgstr ""
 
 msgid "Click to apply the selected resolution."
-msgstr ""
-
-msgid "MAX"
 msgstr ""
 
 msgid "How many troops to move?"
@@ -2982,9 +3049,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "Experimental Game Settings"
-msgstr ""
-
 msgid "Jump"
 msgstr ""
 
@@ -2997,7 +3061,28 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr ""
 
+msgid "Slow"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
 msgid "Scroll Speed"
+msgstr ""
+
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Interface Type"
 msgstr ""
 
 msgid "Hide"
@@ -3007,6 +3092,18 @@ msgid "Show"
 msgstr ""
 
 msgid "Interface"
+msgstr ""
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
+msgid "autoBattle|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3020,7 +3117,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3139,9 +3242,6 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
-msgid "Normal"
-msgstr ""
-
 msgid "Hard"
 msgstr ""
 
@@ -3184,13 +3284,13 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 msgid "Development"
 msgstr ""
 
 msgid "Dev and Support"
-msgstr ""
-
-msgid "Visit us at "
 msgstr ""
 
 msgid "Special Thanks to"
@@ -3199,16 +3299,22 @@ msgstr ""
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3271,9 +3377,6 @@ msgstr ""
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr ""
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3287,9 +3390,6 @@ msgid "Art Lead"
 msgstr ""
 
 msgid "Playtesters"
-msgstr ""
-
-msgid "New World Computing"
 msgstr ""
 
 msgid "Designer"
@@ -3319,7 +3419,10 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
+msgstr ""
+
+msgid "credits|Manual"
 msgstr ""
 
 msgid "German Consultant"
@@ -3407,6 +3510,9 @@ msgid "fheroes2 Resurrection Team presents"
 msgstr ""
 
 msgid "Greetings!"
+msgstr ""
+
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 
 msgid ""
@@ -3641,9 +3747,6 @@ msgstr ""
 msgid "%{color} player has been vanquished!"
 msgstr ""
 
-msgid "Do you wish to continue the game?"
-msgstr ""
-
 msgid "Scenario:"
 msgstr ""
 
@@ -3867,9 +3970,6 @@ msgid ""
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
 
-msgid "Necroman"
-msgstr ""
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -3980,6 +4080,9 @@ msgid "Dutch"
 msgstr ""
 
 msgid "Hungarian"
+msgstr ""
+
+msgid "Danish"
 msgstr ""
 
 msgid ", FPS: "
@@ -4339,11 +4442,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4352,6 +4450,11 @@ msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 
 msgid ""
@@ -5841,6 +5944,35 @@ msgid "race|Random"
 msgstr ""
 
 msgid "race|Neutral"
+msgstr ""
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+msgid "doubleLined|Barbarian"
+msgstr ""
+
+msgid "doubleLined|Sorceress"
+msgstr ""
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+msgid "doubleLinedRace|Random"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -8552,48 +8684,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "castle: allow guardians"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "battle: deterministic events"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
-msgstr ""
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr ""
 
@@ -8653,3 +8743,19 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Wait this unit"
+#~ msgstr "Bu birimi bekle"
+
+#~ msgid "Wait"
+#~ msgstr "Bekle"
+
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Mevcut yaratığı bekletir. Mevcut yaratık, diğer tüm yaratıkların sırası "
+#~ "gelene kadar sırasını erteler."
+
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} sırasını bekledi."

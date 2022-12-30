@@ -20,9 +20,9 @@
 
 #pragma once
 
-#define MAJOR_VERSION 0
-#define MINOR_VERSION 9
-#define INTERMEDIATE_VERSION 20
+#define MAJOR_VERSION 1
+#define MINOR_VERSION 0
+#define INTERMEDIATE_VERSION 0
 
 #ifndef BUILD_VERSION
 #define BUILD_VERSION 0

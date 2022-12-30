@@ -21,12 +21,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <memory>
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
@@ -34,16 +39,69 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 
-void InfoSkillClear( const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );
-void InfoSkillSelect( int, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );
-int InfoSkillNext( int );
-int InfoSkillPrev( int );
+namespace
+{
+    void InfoSkillClear( const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3 )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 ), display, rect1.x, rect1.y );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 1 ), display, rect2.x, rect2.y );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 2 ), display, rect3.x, rect3.y );
+    }
+
+    void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3 )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        switch ( skill ) {
+        case Skill::Primary::ATTACK:
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 4 ), display, rect1.x, rect1.y );
+            break;
+        case Skill::Primary::DEFENSE:
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 5 ), display, rect2.x, rect2.y );
+            break;
+        case Skill::Primary::POWER:
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 6 ), display, rect3.x, rect3.y );
+            break;
+        default:
+            break;
+        }
+    }
+
+    int InfoSkillNext( int skill )
+    {
+        switch ( skill ) {
+        case Skill::Primary::ATTACK:
+            return Skill::Primary::DEFENSE;
+        case Skill::Primary::DEFENSE:
+            return Skill::Primary::POWER;
+        default:
+            break;
+        }
+
+        return Skill::Primary::UNKNOWN;
+    }
+
+    int InfoSkillPrev( int skill )
+    {
+        switch ( skill ) {
+        case Skill::Primary::POWER:
+            return Skill::Primary::DEFENSE;
+        case Skill::Primary::DEFENSE:
+            return Skill::Primary::ATTACK;
+        default:
+            break;
+        }
+
+        return Skill::Primary::UNKNOWN;
+    }
+}
 
 int Dialog::SelectSkillFromArena()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
-    const bool allSkills = Settings::Get().ExtHeroArenaCanChoiseAnySkills();
+    const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -69,15 +127,14 @@ int Dialog::SelectSkillFromArena()
 
     int res = Skill::Primary::ATTACK;
 
-    const int spacingX = allSkills ? ( box_rt.width - sprite.width() * 4 ) / 5 : ( box_rt.width - sprite.width() * 3 ) / 4;
+    const int spacingX = ( box_rt.width - sprite.width() * 3 ) / 4;
 
     fheroes2::Rect rect1( dst_pt.x + spacingX, dst_pt.y, sprite.width(), sprite.height() );
     fheroes2::Rect rect2( rect1.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
     fheroes2::Rect rect3( rect2.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
-    fheroes2::Rect rect4( rect3.x + sprite.width() + spacingX, dst_pt.y, sprite.width(), sprite.height() );
 
-    InfoSkillClear( rect1, rect2, rect3, rect4 );
-    InfoSkillSelect( res, rect1, rect2, rect3, rect4 );
+    InfoSkillClear( rect1, rect2, rect3 );
+    InfoSkillSelect( res, rect1, rect2, rect3 );
 
     // info texts
     TextBox text( Skill::Primary::String( Skill::Primary::ATTACK ), Font::SMALL, 60 );
@@ -95,13 +152,6 @@ int Dialog::SelectSkillFromArena()
     dst_pt.y = rect3.y + rect3.height + 5;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    if ( allSkills ) {
-        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), Font::SMALL, 66 );
-        dst_pt.x = rect4.x + ( rect4.width - text.w() ) / 2;
-        dst_pt.y = rect4.y + rect4.height + 5;
-        text.Blit( dst_pt.x, dst_pt.y );
-    }
-
     // buttons
     dst_pt.x = box_rt.x + ( box_rt.width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
@@ -118,11 +168,11 @@ int Dialog::SelectSkillFromArena()
 
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
             res = InfoSkillPrev( res );
             redraw = true;
         }
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) && Skill::Primary::UNKNOWN != InfoSkillNext( res ) ) {
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) && Skill::Primary::UNKNOWN != InfoSkillNext( res ) ) {
             res = InfoSkillNext( res );
             redraw = true;
         }
@@ -138,10 +188,6 @@ int Dialog::SelectSkillFromArena()
             res = Skill::Primary::POWER;
             redraw = true;
         }
-        else if ( allSkills && le.MouseClickLeft( rect4 ) ) {
-            res = Skill::Primary::KNOWLEDGE;
-            redraw = true;
-        }
         else if ( le.MousePressRight( rect1 ) ) {
             fheroes2::PrimarySkillDialogElement( Skill::Primary::ATTACK, "" ).showPopup( Dialog::ZERO );
         }
@@ -151,13 +197,10 @@ int Dialog::SelectSkillFromArena()
         else if ( le.MousePressRight( rect3 ) ) {
             fheroes2::PrimarySkillDialogElement( Skill::Primary::POWER, "" ).showPopup( Dialog::ZERO );
         }
-        else if ( allSkills && le.MousePressRight( rect4 ) ) {
-            fheroes2::PrimarySkillDialogElement( Skill::Primary::KNOWLEDGE, "" ).showPopup( Dialog::ZERO );
-        }
 
         if ( redraw ) {
-            InfoSkillClear( rect1, rect2, rect3, rect4 );
-            InfoSkillSelect( res, rect1, rect2, rect3, rect4 );
+            InfoSkillClear( rect1, rect2, rect3 );
+            InfoSkillSelect( res, rect1, rect2, rect3 );
             display.render();
         }
 
@@ -166,88 +209,4 @@ int Dialog::SelectSkillFromArena()
     }
 
     return res;
-}
-
-void InfoSkillClear( const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3, const fheroes2::Rect & rect4 )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 ), display, rect1.x, rect1.y );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 1 ), display, rect2.x, rect2.y );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 2 ), display, rect3.x, rect3.y );
-
-    if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
-        const int32_t borderWidth = 2;
-        const fheroes2::Sprite & knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 );
-
-        fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
-        fheroes2::Blit( knowledgeICN, borderWidth + 1, borderWidth, display, rect4.x + borderWidth, rect4.y + borderWidth, rect4.width - 2 * borderWidth - 1,
-                        rect4.height - 2 * borderWidth );
-        fheroes2::Blit( knowledgeICN, borderWidth, 0, display, rect4.x + rect4.width - borderWidth - 1, rect4.y, 1, rect4.height );
-    }
-}
-
-void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3, const fheroes2::Rect & rect4 )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    switch ( skill ) {
-    case Skill::Primary::ATTACK:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 4 ), display, rect1.x, rect1.y );
-        break;
-    case Skill::Primary::DEFENSE:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 5 ), display, rect2.x, rect2.y );
-        break;
-    case Skill::Primary::POWER:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 6 ), display, rect3.x, rect3.y );
-        break;
-    case Skill::Primary::KNOWLEDGE:
-        if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
-            const int32_t borderWidth = 2;
-            const fheroes2::Sprite & knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 7 );
-
-            fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
-            fheroes2::Blit( knowledgeICN, borderWidth + 1, borderWidth, display, rect4.x + borderWidth, rect4.y + borderWidth, rect4.width - 2 * borderWidth - 1,
-                            rect4.height - 2 * borderWidth );
-            fheroes2::Blit( knowledgeICN, borderWidth, 0, display, rect4.x + rect4.width - borderWidth - 1, rect4.y, 1, rect4.height );
-        }
-
-        break;
-    default:
-        break;
-    }
-}
-
-int InfoSkillNext( int skill )
-{
-    switch ( skill ) {
-    case Skill::Primary::ATTACK:
-        return Skill::Primary::DEFENSE;
-    case Skill::Primary::DEFENSE:
-        return Skill::Primary::POWER;
-    case Skill::Primary::POWER:
-        if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() )
-            return Skill::Primary::KNOWLEDGE;
-        break;
-    default:
-        break;
-    }
-
-    return Skill::Primary::UNKNOWN;
-}
-
-int InfoSkillPrev( int skill )
-{
-    switch ( skill ) {
-    case Skill::Primary::DEFENSE:
-        return Skill::Primary::ATTACK;
-    case Skill::Primary::POWER:
-        return Skill::Primary::DEFENSE;
-    case Skill::Primary::KNOWLEDGE:
-        return Skill::Primary::POWER;
-    default:
-        break;
-    }
-
-    return Skill::Primary::UNKNOWN;
 }

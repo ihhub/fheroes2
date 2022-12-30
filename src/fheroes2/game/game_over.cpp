@@ -24,20 +24,26 @@
 #include <cassert>
 #include <cstddef>
 #include <utility>
+#include <vector>
 
+#include "artifact.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
 #include "game.h"
-#include "game_interface.h"
 #include "game_over.h"
 #include "game_video.h"
+#include "game_video_type.h"
 #include "gamedefs.h"
+#include "heroes.h"
 #include "kingdom.h"
 #include "mus.h"
 #include "players.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "text.h"
@@ -313,14 +319,12 @@ GameOver::Result & GameOver::Result::Get()
 GameOver::Result::Result()
     : colors( 0 )
     , result( 0 )
-    , continueAfterVictory( false )
 {}
 
 void GameOver::Result::Reset()
 {
     colors = Game::GetKingdomColors();
     result = GameOver::COND_NONE;
-    continueAfterVictory = false;
 }
 
 void GameOver::Result::ResetResult()
@@ -364,7 +368,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         const Kingdom & myKingdom = world.GetKingdom( humanColors );
 
         if ( myKingdom.isControlHuman() || Players::Get( humanColors )->isAIAutoControlMode() ) {
-            if ( !continueAfterVictory && GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
+            if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 DialogWins( result );
 
                 const Settings & conf = Settings::Get();
@@ -381,37 +385,15 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
                     res = fheroes2::GameMode::HIGHSCORES_STANDARD;
-
-                    if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() ) {
-                        if ( Dialog::YES == Dialog::Message( "", _( "Do you wish to continue the game?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                            continueAfterVictory = true;
-
-                            // Game::HighScores() calls ResetResult()
-                            Game::DisplayHighScores( false );
-
-                            Interface::Basic & I = Interface::Basic::Get();
-
-                            I.ResetFocus( GameFocus::HEROES );
-                            I.SetRedraw( Interface::REDRAW_ALL );
-
-                            res = fheroes2::GameMode::CANCEL;
-                        }
-                    }
                 }
             }
             else {
-                if ( !continueAfterVictory ) {
-                    // If the player's kingdom has been vanquished, he loses regardless of other conditions
-                    if ( !myKingdom.isPlay() ) {
-                        result = GameOver::LOSS_ALL;
-                    }
-                    else {
-                        result = world.CheckKingdomLoss( myKingdom );
-                    }
-                }
-                // If the player decided to continue the game after victory, just check that his kingdom is not vanquished
-                else if ( !myKingdom.isPlay() ) {
+                // If the player's kingdom has been vanquished, he loses regardless of other conditions
+                if ( !myKingdom.isPlay() ) {
                     result = GameOver::LOSS_ALL;
+                }
+                else {
+                    result = world.CheckKingdomLoss( myKingdom );
                 }
 
                 if ( result != GameOver::COND_NONE ) {
@@ -494,10 +476,19 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
 StreamBase & GameOver::operator<<( StreamBase & msg, const Result & res )
 {
-    return msg << res.colors << res.result << res.continueAfterVictory;
+    return msg << res.colors << res.result;
 }
 
 StreamBase & GameOver::operator>>( StreamBase & msg, Result & res )
 {
-    return msg >> res.colors >> res.result >> res.continueAfterVictory;
+    msg >> res.colors >> res.result;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE4_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE4_1000_RELEASE ) {
+        bool dummy;
+
+        msg >> dummy;
+    }
+
+    return msg;
 }

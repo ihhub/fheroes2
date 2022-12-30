@@ -18,7 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
+#include <string>
+#include <vector>
 
 #include "agg_image.h"
 #include "audio.h"
@@ -27,8 +30,11 @@
 #include "dialog_audio.h"
 #include "game.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
@@ -54,7 +60,7 @@ namespace
             value = _( "off" );
         }
 
-        fheroes2::drawOption( rects[0], musicVolumeIcon, _( "Music" ), value );
+        fheroes2::drawOption( rects[0], musicVolumeIcon, _( "Music" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
 
         // Sound volume.
         const fheroes2::Sprite & soundVolumeOption = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 3 : 2 );
@@ -65,7 +71,7 @@ namespace
             value = _( "off" );
         }
 
-        fheroes2::drawOption( rects[1], soundVolumeOption, _( "Effects" ), value );
+        fheroes2::drawOption( rects[1], soundVolumeOption, _( "Effects" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
 
         // Music Type.
         const MusicSource musicType = conf.MusicType();
@@ -80,7 +86,7 @@ namespace
             value = _( "External" );
         }
 
-        fheroes2::drawOption( rects[2], musicTypeIcon, _( "Music Type" ), value );
+        fheroes2::drawOption( rects[2], musicTypeIcon, _( "Music Type" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
 
         // 3D Audio.
         const bool is3DAudioEnabled = conf.is3DAudioEnabled();
@@ -92,7 +98,7 @@ namespace
             value = _( "Off" );
         }
 
-        fheroes2::drawOption( rects[3], interfaceStateIcon, _( "3D Audio" ), value );
+        fheroes2::drawOption( rects[3], interfaceStateIcon, _( "3D Audio" ), value, fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 }
 
@@ -103,7 +109,7 @@ namespace Dialog
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.ExtGameEvilInterface();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -139,7 +145,7 @@ namespace Dialog
         drawDialog( roi );
 
         const fheroes2::Point buttonOffset( 112 + dialogArea.x, 252 + dialogArea.y );
-        fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
+        fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         buttonOkay.draw();
 
         display.render();

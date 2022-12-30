@@ -20,7 +20,10 @@
 
 #pragma once
 
+#include <vector>
+
 #include "castle.h"
+#include "math_base.h"
 
 enum class GameVersion : int;
 

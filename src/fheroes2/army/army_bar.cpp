@@ -21,21 +21,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "army_bar.h"
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <vector>
+
 #include "agg_image.h"
 #include "army.h"
+#include "army_bar.h"
+#include "army_troop.h"
+#include "castle.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "kingdom.h"
+#include "localevent.h"
+#include "monster.h"
 #include "race.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_monster.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -145,15 +154,15 @@ namespace
 
     bool IsSplitHotkeyUsed( ArmyTroop & troopFrom, Army * armyTarget )
     {
-        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::SPLIT_STACK_BY_ONE ) ) {
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_ONE ) ) {
             RedistributeTroopByOne( troopFrom, armyTarget );
             return true;
         }
-        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::JOIN_STACKS ) ) {
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_JOIN_STACKS ) ) {
             armyTarget->JoinAllTroopsOfType( troopFrom );
             return true;
         }
-        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::SPLIT_STACK_BY_HALF ) ) {
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF ) ) {
             RedistributeTroopEvenly( troopFrom, armyTarget );
             return true;
         }
@@ -376,7 +385,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         const bool isSameTroopType = troop.isValid() && troop.GetID() == selectedTroop->GetID();
 
         // prioritize standard split via shift hotkey
-        if ( ( !troop.isValid() || isSameTroopType ) && Game::HotKeyHoldEvent( Game::HotKeyEvent::SPLIT_STACK_BY_HALF ) ) {
+        if ( ( !troop.isValid() || isSameTroopType ) && Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF ) ) {
             RedistributeArmy( *selectedTroop, troop, _army );
             ResetSelected();
         }
@@ -392,7 +401,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         // exchange
         else if ( selectedTroop ) {
             // count this as an attempt to split to a troop type that is not the same
-            if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::SPLIT_STACK_BY_HALF ) )
+            if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF ) )
                 ResetSelected();
             else if ( IsSplitHotkeyUsed( troop, _army ) )
                 return false;
@@ -462,7 +471,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
 
     // specifically for shift hotkey, handle this logic before anything else
     // this will ensure that clicking on a different troop type while shift key is pressed will not show the split dialogue, which can be ambiguous
-    if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::SPLIT_STACK_BY_HALF ) ) {
+    if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF ) ) {
         if ( destTroop.isEmpty() || isSameTroopType ) {
             RedistributeArmy( selectedTroop, destTroop, _army );
             ResetSelected();
@@ -557,17 +566,15 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
 {
     if ( !read_only ) {
         // drag drop - redistribute troops
-        LocalEvent & le = LocalEvent::Get();
-        ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
-
+        ArmyTroop * troopPress = GetItem( LocalEvent::Get().GetMousePressLeft() );
         const bool isTroopPressValid = troopPress && troopPress->isValid();
 
         if ( isTroopPressValid && ( !troop.isValid() || troop.GetID() == troopPress->GetID() ) ) {
             RedistributeArmy( *troopPress, troop, _army );
-            le.ResetPressLeft();
 
-            if ( isSelected() )
+            if ( isSelected() ) {
                 ResetSelected();
+            }
         }
     }
 

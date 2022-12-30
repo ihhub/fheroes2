@@ -34,8 +34,12 @@ namespace fheroes2
         Time();
 
         void reset();
-        double get() const; // returns time in seconds
-        uint64_t getMs() const; // returns rounded time in milliseconds
+
+        // Returns time in seconds.
+        double getS() const;
+
+        // Returns rounded time in milliseconds.
+        uint64_t getMs() const;
 
     private:
         std::chrono::time_point<std::chrono::steady_clock> _startTime;

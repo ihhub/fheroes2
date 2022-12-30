@@ -44,15 +44,31 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v3
-    - name: Install dependencies and cygwin
+    - name: Install dependencies
       run: |
         script/windows/install_packages.bat
-        choco.exe install cygwin cyg-get -y
-        cyg-get.bat make libiconv libunistring5 gettext-devel
-    - uses: microsoft/setup-msbuild@v1
+    - name: Install MSYS2 tools
+      run: |
+        C:\msys64\usr\bin\pacman.exe -S --noconfirm --noprogressbar gettext-devel
+      shell: cmd
+    - name: Download MSVC Redistributable package
+      run: |
+        mkdir .vcredist && ^
+        C:\msys64\usr\bin\wget.exe -O .vcredist/vcredist.exe "%VCREDIST_URL%"
+      shell: cmd
+      env:
+        # Permalink URL from https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+        VCREDIST_URL: https://aka.ms/vs/17/release/vc_redist.${{ matrix.config.platform }}.exe
+    - name: Verify MSVC Redistributable package
+      run: |
+        "%SIGNTOOL_DIR%\signtool.exe" verify /v /d /all /pa /r "Microsoft Root Certificate Authority" .vcredist\vcredist.exe
+      shell: cmd
+      env:
+        SIGNTOOL_DIR: C:\Program Files (x86)\Windows Kits\10\bin\x64
     - name: Generate version information
       run: |
         echo "FHEROES2_APP_VERSION=$(cat version.txt)" >> "$GITHUB_ENV"
+    - uses: microsoft/setup-msbuild@v1
     - name: Build
       run: |
         MSBuild.exe fheroes2-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
@@ -64,7 +80,8 @@ jobs:
         MSBuild.exe bin2txt-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
     - name: Generate translations
       run: |
-        C:\tools\cygwin\bin\bash.exe -l -c ^"cd ""$GITHUB_WORKSPACE"" ^&^& make -C files/lang -j 2^"
+        set PATH=C:\msys64\usr\bin;%PATH%
+        C:\msys64\usr\bin\make.exe -C files/lang -j 2
       shell: cmd
     - name: Create Inno Setup package
       run: |

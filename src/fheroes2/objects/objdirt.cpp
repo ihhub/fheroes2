@@ -22,7 +22,9 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <set>
+#include <bitset>
+#include <iterator>
+#include <vector>
 
 #include "direction.h"
 #include "mp2.h"

@@ -22,22 +22,40 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
-#include <iomanip>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
 #include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_board.h"
 #include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_command.h"
+#include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
+#include "color.h"
+#include "heroes.h"
+#include "heroes_base.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "monster.h"
+#include "monster_info.h"
+#include "players.h"
 #include "rand.h"
+#include "resource.h"
 #include "spell.h"
+#include "spell_storage.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
@@ -364,8 +382,15 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                 }
             }
 
-            attacker->UpdateDirection();
-            defender->UpdateDirection();
+            // Reflect attacker only if he is alive.
+            if ( attacker->isValid() ) {
+                attacker->UpdateDirection();
+            }
+
+            // Reflect defender only if he is alive.
+            if ( defender->isValid() ) {
+                defender->UpdateDirection();
+            }
         }
         else {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << attacker->String( true ) << " and " << defender->String( true ) )
@@ -387,7 +412,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     const Cell * cell = Board::GetCell( dst );
 
     if ( unit && unit->isValid() && cell && cell->isPassableForUnit( *unit ) ) {
-        const int32_t head = unit->GetHeadIndex();
+        const int32_t initialHead = unit->GetHeadIndex();
 
         Position pos = Position::GetPosition( *unit, dst );
         assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
@@ -400,8 +425,10 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 
         if ( unit->isFlying() ) {
             unit->UpdateDirection( pos.GetRect() );
-            if ( unit->isReflect() != pos.isReflect() )
+
+            if ( unit->isReflect() != pos.isReflect() ) {
                 pos.Swap();
+            }
 
             if ( _interface ) {
                 _interface->RedrawActionFly( *unit, pos );
@@ -410,19 +437,16 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 const int32_t dstHead = pos.GetHead()->GetIndex();
                 const int32_t dstTail = unit->isWide() ? pos.GetTail()->GetIndex() : -1;
 
-                // open the bridge if the unit should land on it
-                if ( _bridge->NeedDown( *unit, dstHead ) ) {
-                    _bridge->Action( *unit, dstHead );
-                }
-                else if ( unit->isWide() && _bridge->NeedDown( *unit, dstTail ) ) {
-                    _bridge->Action( *unit, dstTail );
+                // Lower the bridge if the unit needs to land on it
+                if ( _bridge->NeedDown( *unit, dstHead ) || ( unit->isWide() && _bridge->NeedDown( *unit, dstTail ) ) ) {
+                    _bridge->ActionDown();
                 }
 
                 unit->SetPosition( pos );
 
-                // check for possible bridge close action, after unit's end of movement
+                // Raise the bridge if possible after the unit has completed its movement
                 if ( _bridge->AllowUp() ) {
-                    _bridge->Action( *unit, dstHead );
+                    _bridge->ActionUp();
                 }
             }
 
@@ -438,39 +462,33 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 return;
             }
 
-            if ( _interface )
+            if ( _interface ) {
                 _interface->RedrawActionMove( *unit, path );
+            }
             else if ( _bridge ) {
-                for ( Indexes::const_iterator pathIt = path.begin(); pathIt != path.end(); ++pathIt ) {
-                    bool doMovement = false;
+                for ( const int32_t idx : path ) {
+                    if ( _bridge->NeedDown( *unit, idx ) ) {
+                        _bridge->ActionDown();
+                    }
 
-                    if ( _bridge->NeedDown( *unit, *pathIt ) )
-                        _bridge->Action( *unit, *pathIt );
-
-                    if ( unit->isWide() ) {
-                        if ( unit->GetTailIndex() == *pathIt )
-                            unit->SetReflection( !unit->isReflect() );
-                        else
-                            doMovement = true;
+                    if ( unit->isWide() && unit->GetTailIndex() == idx ) {
+                        unit->SetReflection( !unit->isReflect() );
                     }
                     else {
-                        doMovement = true;
+                        unit->SetPosition( idx );
                     }
 
-                    if ( doMovement )
-                        unit->SetPosition( *pathIt );
-
-                    // check for possible bridge close action, after unit's end of movement
-                    if ( _bridge->AllowUp() )
-                        _bridge->Action( *unit, *pathIt );
+                    if ( _bridge->AllowUp() ) {
+                        _bridge->ActionUp();
+                    }
                 }
             }
 
             if ( unit->isWide() ) {
-                const int32_t dst1 = path.back();
-                const int32_t dst2 = 1 < path.size() ? path[path.size() - 2] : head;
+                const int32_t dstHead = path.back();
+                const int32_t dstTail = path.size() > 1 ? path[path.size() - 2] : initialHead;
 
-                finalPos.Set( dst1, unit->isWide(), ( RIGHT_SIDE & Board::GetDirection( dst1, dst2 ) ) != 0 );
+                finalPos.Set( dstHead, true, ( Board::GetDirection( dstHead, dstTail ) & RIGHT_SIDE ) != 0 );
             }
             else {
                 finalPos.Set( path.back(), false, unit->isReflect() );
@@ -490,21 +508,17 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 void Battle::Arena::ApplyActionSkip( Command & cmd )
 {
     const uint32_t uid = cmd.GetValue();
-    const int32_t hard = cmd.GetValue();
 
     Unit * unit = GetTroopUID( uid );
 
     if ( unit && unit->isValid() ) {
         if ( !unit->Modes( TR_MOVED ) ) {
-            if ( hard || unit->Modes( TR_SKIPMOVE ) ) {
-                unit->SetModes( TR_HARDSKIP );
-                unit->SetModes( TR_MOVED );
-            }
+            unit->SetModes( TR_SKIP );
+            unit->SetModes( TR_MOVED );
 
-            unit->SetModes( TR_SKIPMOVE );
-
-            if ( _interface )
+            if ( _interface ) {
                 _interface->RedrawActionSkipStatus( *unit );
+            }
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
         }
@@ -528,9 +542,6 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
     if ( unit ) {
         if ( !unit->Modes( TR_MOVED ) ) {
             unit->SetModes( TR_MOVED );
-
-            if ( unit->Modes( TR_SKIPMOVE ) && _interface )
-                _interface->RedrawActionSkipStatus( *unit );
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
         }
@@ -572,8 +583,7 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
     }
     // Bad morale
     else {
-        // A bad morale event cannot happen when a waiting unit gets its turn
-        if ( !unit->Modes( MORALE_BAD ) || unit->Modes( TR_MOVED | TR_SKIPMOVE ) ) {
+        if ( !unit->Modes( MORALE_BAD ) || unit->Modes( TR_MOVED ) ) {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unit is in an invalid state: " << unit->String( true ) )
 
             return;
@@ -989,11 +999,15 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
 
             if ( target ) {
                 if ( _interface ) {
-                    _interface->RedrawActionCatapult( target, hit );
+                    _interface->RedrawActionCatapultPart1( target, hit );
                 }
 
                 if ( hit ) {
                     SetCastleTargetValue( target, GetCastleTargetValue( target ) - damage );
+                    if ( _interface ) {
+                        // Continue animating the smoke cloud after changing the "health" of the building.
+                        _interface->RedrawActionCatapultPart2( target );
+                    }
                 }
 
                 DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << target << ", damage: " << damage << ", hit: " << hit )

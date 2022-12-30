@@ -21,11 +21,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstdint>
+#include <cstdlib>
 #include <cstring>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
+#include <sstream> // IWYU pragma: keep
+#include <string>
+#include <vector>
 
+#include "image.h"
 #include "image_tool.h"
 #include "serialize.h"
 #include "system.h"
@@ -53,7 +59,7 @@ int main( int argc, char ** argv )
     }
 
     shortname.replace( shortname.find( "." ), 4, "" );
-    prefix = System::ConcatePath( prefix, shortname );
+    prefix = System::concatPath( prefix, shortname );
 
     if ( 0 != System::MakeDirectory( prefix ) ) {
         std::cout << "error mkdir: " << prefix << std::endl;
@@ -79,7 +85,7 @@ int main( int argc, char ** argv )
 
             std::ostringstream stream;
             stream << std::setw( 3 ) << std::setfill( '0' ) << cur;
-            std::string dstfile = System::ConcatePath( prefix, stream.str() );
+            std::string dstfile = System::concatPath( prefix, stream.str() );
 
             if ( fheroes2::isPNGFormatSupported() ) {
                 dstfile += ".png";

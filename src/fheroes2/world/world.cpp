@@ -24,30 +24,41 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <limits>
+#include <memory>
+#include <ostream>
 #include <set>
 #include <tuple>
+#include <utility>
 
 #include "ai.h"
 #include "artifact.h"
-#include "campaign_data.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "castle.h"
+#include "color.h"
+#include "direction.h"
 #include "game.h"
 #include "game_over.h"
-#include "ground.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
 #include "maps_actions.h"
+#include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "mp2.h"
 #include "pairs.h"
+#include "players.h"
 #include "race.h"
+#include "rand.h"
 #include "resource.h"
+#include "route.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "week.h"
 #include "world.h"
 
 namespace
@@ -305,24 +316,6 @@ void CapturedObjects::ResetColor( int color )
     }
 }
 
-void CapturedObjects::tributeCapturedObjects( const int playerColorId, const MP2::MapObjectType objectType, Funds & funds, int & objectCount )
-{
-    funds = Funds();
-    objectCount = 0;
-
-    for ( iterator it = begin(); it != end(); ++it ) {
-        const ObjectColor & objcol = ( *it ).second.objcol;
-
-        if ( objcol.isObject( objectType ) && objcol.isColor( playerColorId ) ) {
-            Maps::Tiles & tile = world.GetTiles( ( *it ).first );
-
-            funds += Funds( tile.QuantityResourceCount() );
-            ++objectCount;
-            tile.QuantityReset();
-        }
-    }
-}
-
 World & world = World::Get();
 
 World & World::Get()
@@ -466,9 +459,9 @@ Heroes * World::FromJailHeroes( int32_t index )
     return vec_heroes.FromJail( index );
 }
 
-CastleHeroes World::GetHeroes( const Castle & castle ) const
+Heroes * World::GetHero( const Castle & castle ) const
 {
-    return CastleHeroes( vec_heroes.GetGuest( castle ), vec_heroes.GetGuard( castle ) );
+    return vec_heroes.GetHero( castle );
 }
 
 int World::GetDay() const
@@ -571,13 +564,6 @@ void World::NewWeek()
                 tile.QuantityUpdate( false );
             }
         }
-    }
-
-    // add events
-    if ( Settings::Get().ExtWorldExtObjectsCaptured() ) {
-        vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WATERWHEEL );
-        vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WINDMILL );
-        vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
     }
 
     // Reset RECRUIT mode for all heroes at once
@@ -947,7 +933,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 
     // Get digging hole sprite.
     uint8_t obj = 0;
-    uint32_t idx = 0;
+    uint8_t idx = 0;
 
     if ( !MP2::getDiggingHoleSprite( tile.GetGround(), obj, idx ) ) {
         // Are you sure that you can dig here?
@@ -958,7 +944,6 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 
     tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), obj, idx ) );
 
-    // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
         return true;
@@ -1319,12 +1304,21 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
-    return msg << obj.objcol << obj.guardians << obj.split;
+    return msg << obj.objcol << obj.guardians;
 }
 
 StreamBase & operator>>( StreamBase & msg, CapturedObject & obj )
 {
-    return msg >> obj.objcol >> obj.guardians >> obj.split;
+    msg >> obj.objcol >> obj.guardians;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1000_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE1_1000_RELEASE ) {
+        int dummy;
+
+        msg >> dummy;
+    }
+
+    return msg;
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
@@ -1427,14 +1421,6 @@ StreamBase & operator>>( StreamBase & msg, World & w )
         >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
-
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0918_RELEASE ) {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove the code in this block." );
-        for ( Maps::Tiles & tile : world.vec_tiles ) {
-            tile.correctOldSaveOwnershipFlag();
-            tile.correctDiggingHoles();
-        }
-    }
 
     return msg;
 }

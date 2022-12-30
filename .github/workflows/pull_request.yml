@@ -17,6 +17,11 @@ jobs:
     needs:
     - style
     uses: ./.github/workflows/clang_analyzer.yml
+  iwyu:
+    name: IWYU
+    needs:
+    - style
+    uses: ./.github/workflows/iwyu.yml
   msvc:
     name: MSVC
     needs:

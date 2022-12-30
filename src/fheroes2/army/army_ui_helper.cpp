@@ -18,17 +18,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "army_ui_helper.h"
+#include <cassert>
+#include <cstddef>
+#include <string>
+
 #include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
+#include "army_ui_helper.h"
 #include "game.h"
 #include "icn.h"
 #include "image.h"
 #include "ui_text.h"
 
-void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact,
-                                 bool isScouteView, Image & output )
+void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_t cy, const uint32_t width, uint32_t first, uint32_t count, const bool isCompact,
+                                 const bool isDetailedView, const bool isGarrisonView, const uint32_t thievesGuildsCount, Image & output )
 {
     if ( !troops.isValid() ) {
         return;
@@ -39,7 +43,8 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, 
     }
 
     const int chunk = width / count;
-    if ( !compact ) {
+
+    if ( !isCompact ) {
         cx += chunk / 2;
     }
 
@@ -52,13 +57,28 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, 
             --first;
             continue;
         }
-        const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
-        fheroes2::Text text( isScouteView ? Game::formatMonsterCount( troop->GetCount(), drawPower, compact ) : Game::CountThievesGuild( troop->GetCount(), drawPower ),
-                             fheroes2::FontType::smallWhite() );
 
-        // This is the drawing of army troops in compact form in the small info window beneath resources,
-        // as well as for castle troops when a hero is set as guardian (:experimental option).
-        if ( compact ) {
+        std::string monstersCountRepresentation;
+
+        if ( isDetailedView || !isGarrisonView ) {
+            monstersCountRepresentation = Game::formatMonsterCount( troop->GetCount(), isDetailedView, isCompact );
+        }
+        else {
+            assert( thievesGuildsCount > 0 );
+
+            if ( thievesGuildsCount == 1 ) {
+                monstersCountRepresentation = "???";
+            }
+            else {
+                monstersCountRepresentation = Army::SizeString( troop->GetCount() );
+            }
+        }
+
+        const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
+        fheroes2::Text text( monstersCountRepresentation, fheroes2::FontType::smallWhite() );
+
+        // This is the drawing of army troops in compact form in the small info window beneath resources
+        if ( isCompact ) {
             const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
             int offset = ( chunk - monster.width() - text.width() ) / 2;
             if ( offset < 0 )

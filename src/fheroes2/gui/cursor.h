@@ -23,6 +23,8 @@
 #ifndef H2CURSOR_H
 #define H2CURSOR_H
 
+#include <cstdint>
+
 #include "math_base.h"
 
 namespace fheroes2
@@ -176,7 +178,9 @@ public:
 
     static Cursor & Get();
 
-    static void Redraw( int32_t, int32_t );
+    // Returns a non-empty area if it should be updated while rendering.
+    static fheroes2::Rect updateCursorPosition( const int32_t x, const int32_t y );
+
     static int DistanceThemes( const int theme, uint32_t distance );
     static int WithoutDistanceThemes( const int theme );
     static void Refresh();

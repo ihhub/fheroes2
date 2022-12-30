@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 00:48+0000\n"
+"POT-Creation-Date: 2022-12-18 02:36+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -15,13 +15,132 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.1.1\n"
 
 msgid ""
 "BATTLE\n"
 "ONLY"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
 msgstr ""
 
 msgid "GIFT"
@@ -32,6 +151,10 @@ msgstr ""
 
 msgid "MIN"
 msgstr ""
+
+#, fuzzy
+msgid "MAX"
+msgstr "МАКС"
 
 msgid "Warrior"
 msgstr "Воїн"
@@ -260,16 +383,24 @@ msgstr ""
 "сповільнює його вдвічі."
 
 #, fuzzy
-msgid "Speed"
-msgstr "Швидкість"
-
-#, fuzzy
 msgid "Speed: %{speed}"
 msgstr "Швидкість: %{speed}"
 
 #, fuzzy
+msgid "Speed"
+msgstr "Швидкість"
+
+#, fuzzy
 msgid "Army Order"
 msgstr "Черговість армій"
+
+#, fuzzy
+msgid "Off"
+msgstr "Вимк."
+
+#, fuzzy
+msgid "On"
+msgstr "Увімк."
 
 #, fuzzy
 msgid "Auto Spell Casting"
@@ -287,13 +418,20 @@ msgstr "Тінь під час руху"
 msgid "Shadow Cursor"
 msgstr "Тінь курсора"
 
-#, fuzzy
-msgid "Off"
-msgstr "Вимк."
+msgid "Audio"
+msgstr ""
 
-#, fuzzy
-msgid "On"
-msgstr "Увімк."
+msgid "Settings"
+msgstr ""
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+msgid "Damage Info"
+msgstr ""
 
 #, fuzzy
 msgid "Set the speed of combat actions and animations."
@@ -330,6 +468,25 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr "Чи підсвічувати клітину, над якою знаходиться курсор миші."
+
+#, fuzzy
+msgid "Change the audio settings of the game."
+msgstr "Змінити мову гри."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+#, fuzzy
+msgid "Toggle to display damage information during the battle."
+msgstr "Чи показувати черговість армій під час битви."
+
+#, fuzzy
+msgid "Exit this menu."
+msgstr "Вийти з цього меню."
+
+#, fuzzy
+msgid "Okay"
+msgstr "Окєй"
 
 #, fuzzy
 msgid "The enemy has surrendered!"
@@ -584,22 +741,6 @@ msgid "System Options"
 msgstr "Системні Параметри"
 
 #, fuzzy
-msgid "Wait this unit"
-msgstr "Чекати інших"
-
-#, fuzzy
-msgid "Wait"
-msgstr "Чекати"
-
-#, fuzzy
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Очікування для цієї істоти. Ця істота не буде ходити доки не походять всі "
-"інші істоти."
-
-#, fuzzy
 msgid "Skip this unit"
 msgstr "Пропустити чергу"
 
@@ -652,10 +793,6 @@ msgstr "Ви впевнені, що хочете відступити?"
 #, fuzzy
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускає свою чергу."
-
-#, fuzzy
-msgid "%{name} wait their turn."
-msgstr "%{name} чекає на свою чергу."
 
 #, fuzzy
 msgid "%{attacker} does %{damage} damage."
@@ -871,6 +1008,10 @@ msgstr "%{name} б'є із силою %{count} Стрільців"
 #, fuzzy
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "кожен з бонусом +%{attack} до його вміння Атаки."
+
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "Фантомний загін знищений!"
 
 #, fuzzy
 msgid ""
@@ -1389,6 +1530,46 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Гноможер!!!!, рятуйтесь хто може.\""
 
 #, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Підняття немертвих"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Цеп блискавок"
+
+#, fuzzy
+msgid "campaignBonus|Fireblast"
+msgstr "Вогняний вибух"
+
+#, fuzzy
+msgid "campaignBonus|Mass Curse"
+msgstr "Масове прокляття"
+
+#, fuzzy
+msgid "campaignBonus|Mass Haste"
+msgstr "Масове прискорення"
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Зеркальний фантом"
+
+#, fuzzy
+msgid "campaignBonus|Resurrect"
+msgstr "Воскресіння"
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Сталева кожа"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
+msgstr "Клич Землі"
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Показ героїв"
+
+#, fuzzy
 msgid "campaignBonus|Ballista"
 msgstr "Баліста"
 
@@ -1641,46 +1822,6 @@ msgstr "Просунута Мудрість"
 #, fuzzy
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Експертна Мудрість"
-
-#, fuzzy
-msgid "campaignBonus|Animate Dead"
-msgstr "Підняття немертвих"
-
-#, fuzzy
-msgid "campaignBonus|Chain Lightning"
-msgstr "Цеп блискавок"
-
-#, fuzzy
-msgid "campaignBonus|Fireblast"
-msgstr "Вогняний вибух"
-
-#, fuzzy
-msgid "campaignBonus|Mass Curse"
-msgstr "Масове прокляття"
-
-#, fuzzy
-msgid "campaignBonus|Mass Haste"
-msgstr "Масове прискорення"
-
-#, fuzzy
-msgid "campaignBonus|Mirror Image"
-msgstr "Зеркальний фантом"
-
-#, fuzzy
-msgid "campaignBonus|Resurrect"
-msgstr "Воскресіння"
-
-#, fuzzy
-msgid "campaignBonus|Steelskin"
-msgstr "Сталева кожа"
-
-#, fuzzy
-msgid "campaignBonus|Summon Earth"
-msgstr "Клич Землі"
-
-#, fuzzy
-msgid "campaignBonus|View Heroes"
-msgstr "Показ героїв"
 
 #, fuzzy
 msgid ""
@@ -2006,9 +2147,6 @@ msgid "Corackston"
 msgstr ""
 
 msgid "Sheltemburg"
-msgstr ""
-
-msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
 
 msgid "Cannot recruit - you already have a Hero in this town."
@@ -2484,10 +2622,6 @@ msgid "Exit"
 msgstr "Вийти"
 
 #, fuzzy
-msgid "Exit this menu."
-msgstr "Вийти з цього меню."
-
-#, fuzzy
 msgid "Click to show next town."
 msgstr "Натисніть щоб побачити наступне місто."
 
@@ -2502,14 +2636,6 @@ msgstr "Натисніть щоб побачити попереднє місто
 #, fuzzy
 msgid "Show previous town"
 msgstr "Показати попереднє місто"
-
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
 
 #, fuzzy
 msgid "This town may not be upgraded to a castle."
@@ -2528,12 +2654,6 @@ msgid "Exit Town"
 msgstr "Полишити місто"
 
 msgid "Show Income"
-msgstr ""
-
-msgid "Swap Heroes"
-msgstr ""
-
-msgid "Meeting Heroes"
 msgstr ""
 
 msgid "View Hero"
@@ -2786,10 +2906,6 @@ msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
 #, fuzzy
-msgid "Okay"
-msgstr "Окєй"
-
-#, fuzzy
 msgid "Build a new ship:"
 msgstr "Побудувати новий корабель:"
 
@@ -2844,21 +2960,6 @@ msgstr "Мова"
 msgid "Graphics"
 msgstr ""
 
-msgid "Settings"
-msgstr ""
-
-msgid "Experimental"
-msgstr ""
-
-msgid "Audio"
-msgstr ""
-
-msgid "Configure"
-msgstr ""
-
-msgid "Hot Keys"
-msgstr ""
-
 msgid "Black & White"
 msgstr ""
 
@@ -2871,28 +2972,6 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
-#, fuzzy
-msgid "Interface Type"
-msgstr "Тип Інтерфейсу"
-
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
 msgid "Change the language of the game."
 msgstr "Змінити мову гри."
 
@@ -2902,22 +2981,6 @@ msgstr "Обрати мову гри"
 #, fuzzy
 msgid "Change the graphics settings of the game."
 msgstr "Змінити мову гри."
-
-#, fuzzy
-msgid "Change the audio settings of the game."
-msgstr "Змінити мову гри."
-
-msgid "Experimental game settings."
-msgstr ""
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check and configure all the hot keys present in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -3039,13 +3102,6 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
-msgid "Set Guardian"
-msgstr ""
-
-#, fuzzy
-msgid "Your army too big!"
-msgstr "Ваша армія завелика!"
-
 msgid "Hot Keys:"
 msgstr ""
 
@@ -3105,10 +3161,10 @@ msgstr ""
 msgid "n/a"
 msgstr ""
 
-msgid "guarded by "
+msgid "guarded by %{count} %{monster}"
 msgstr ""
 
-msgid "guarded by %{count} %{monster}"
+msgid "guarded by "
 msgstr ""
 
 msgid "(available: %{count})"
@@ -3195,16 +3251,21 @@ msgstr ""
 msgid "Number to buy:"
 msgstr ""
 
+msgid "Recruit selected monsters."
+msgstr ""
+
+msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "Select only 1 monster to be recruited."
+msgstr ""
+
 #, fuzzy
 msgid "Select Game Resolution:"
 msgstr "Обрати мову гри:"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
-
-#, fuzzy
-msgid "MAX"
-msgstr "МАКС"
 
 msgid "How many troops to move?"
 msgstr ""
@@ -3400,9 +3461,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "Experimental Game Settings"
-msgstr ""
-
 msgid "Jump"
 msgstr ""
 
@@ -3415,8 +3473,31 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr ""
 
+msgid "Slow"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Звичайна"
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
 msgid "Scroll Speed"
 msgstr ""
+
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Тип Інтерфейсу"
 
 msgid "Hide"
 msgstr ""
@@ -3425,6 +3506,18 @@ msgid "Show"
 msgstr ""
 
 msgid "Interface"
+msgstr ""
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
+msgid "autoBattle|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -3438,7 +3531,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3560,10 +3659,6 @@ msgstr ""
 msgid "Easy"
 msgstr ""
 
-#, fuzzy
-msgid "Normal"
-msgstr "Звичайна"
-
 msgid "Hard"
 msgstr ""
 
@@ -3606,14 +3701,14 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+msgid "Visit us at "
+msgstr ""
+
 #, fuzzy
 msgid "Development"
 msgstr "Розробка"
 
 msgid "Dev and Support"
-msgstr ""
-
-msgid "Visit us at "
 msgstr ""
 
 msgid "Special Thanks to"
@@ -3622,16 +3717,22 @@ msgstr ""
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3698,9 +3799,6 @@ msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr ""
 "Залишити Heroes of Might and Magic II і повернутися до операційної системи."
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3714,9 +3812,6 @@ msgid "Art Lead"
 msgstr ""
 
 msgid "Playtesters"
-msgstr ""
-
-msgid "New World Computing"
 msgstr ""
 
 msgid "Designer"
@@ -3747,7 +3842,10 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
+msgstr ""
+
+msgid "credits|Manual"
 msgstr ""
 
 msgid "German Consultant"
@@ -3839,6 +3937,11 @@ msgstr ""
 
 msgid "Greetings!"
 msgstr ""
+
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Залишити Heroes of Might and Magic II і повернутися до операційної системи."
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -4075,9 +4178,6 @@ msgstr ""
 msgid "%{color} player has been vanquished!"
 msgstr ""
 
-msgid "Do you wish to continue the game?"
-msgstr ""
-
 msgid "Scenario:"
 msgstr ""
 
@@ -4302,9 +4402,6 @@ msgid ""
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
 
-msgid "Necroman"
-msgstr ""
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -4415,6 +4512,9 @@ msgid "Dutch"
 msgstr ""
 
 msgid "Hungarian"
+msgstr ""
+
+msgid "Danish"
 msgstr ""
 
 msgid ", FPS: "
@@ -4775,11 +4875,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4788,6 +4883,11 @@ msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 
 msgid ""
@@ -6415,6 +6515,38 @@ msgid "race|Random"
 msgstr ""
 
 msgid "race|Neutral"
+msgstr ""
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+#, fuzzy
+msgid "doubleLined|Barbarian"
+msgstr "Варвар"
+
+#, fuzzy
+msgid "doubleLined|Sorceress"
+msgstr "Чарівниця"
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr "Некромант"
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+msgid "doubleLinedRace|Random"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -9405,48 +9537,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "castle: allow guardians"
-msgstr "замок: дозволити захистників"
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "герої: дозволити придбати книгу чарів з Святинь"
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "battle: deterministic events"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr "гра: автозберігати на початку дня"
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
-msgstr ""
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr ""
 
@@ -9510,5 +9600,22 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "game: show system info"
-#~ msgstr "гра: показувати системну інфу"
+#, fuzzy
+#~ msgid "Wait this unit"
+#~ msgstr "Чекати інших"
+
+#, fuzzy
+#~ msgid "Wait"
+#~ msgstr "Чекати"
+
+#, fuzzy
+#~ msgid ""
+#~ "Waits the current creature. The current creature delays its turn until "
+#~ "after all other creatures have had their turn."
+#~ msgstr ""
+#~ "Очікування для цієї істоти. Ця істота не буде ходити доки не походять всі "
+#~ "інші істоти."
+
+#, fuzzy
+#~ msgid "%{name} wait their turn."
+#~ msgstr "%{name} чекає на свою чергу."

@@ -21,23 +21,40 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <functional>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
+#include "army_troop.h"
 #include "bin_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
 #include "monster.h"
 #include "payment.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -274,17 +291,17 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
 
     dst_pt.x = pos.x + 34;
     dst_pt.y = pos.y + 249;
-    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, ICN::RECRUIT, 8, 9 );
+    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 187;
     dst_pt.y = pos.y + 249;
-    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, ICN::RECRUIT, 6, 7 );
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 229;
     dst_pt.y = pos.y + 156;
-    fheroes2::ButtonSprite buttonMax( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ),
+    fheroes2::ButtonSprite buttonMax( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 ), fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 1 ),
                                       fheroes2::AGG::GetICN( ICN::MAX_DISABLED_BUTTON, 0 ) );
-    fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
+    fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_MIN_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 205;
     dst_pt.y = pos.y + 154;
@@ -475,6 +492,18 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
             paymentCosts = paymentMonster;
             redraw = true;
         }
+        else if ( le.MousePressRight( buttonOk.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Recruit selected monsters." ), 0 );
+        }
+        else if ( le.MousePressRight( buttonCancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), 0 );
+        }
+        else if ( buttonMax.isEnabled() && le.MousePressRight( buttonMax.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "MAX" ), _( "Select maximum monsters to be recruited." ), 0 );
+        }
+        else if ( buttonMin.isEnabled() && le.MousePressRight( buttonMin.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "MIN" ), _( "Select only 1 monster to be recruited." ), 0 );
+        }
 
         if ( redraw ) {
             RedrawStaticInfo( pos, monster, available, windowIcnId );
@@ -488,6 +517,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
                 buttonOk.enable();
                 buttonOk.draw();
             }
+
+            buttonCancel.draw();
 
             if ( buttonMax.isEnabled() || max == 0 )
                 buttonMax.draw();
@@ -522,7 +553,7 @@ void Dialog::DwellingInfo( const Monster & monster, uint32_t available )
     // setup cursor
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int icnId = isEvilInterface ? ICN::RECR2BKG_EVIL : ICN::RECR2BKG;
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( icnId, 0 );

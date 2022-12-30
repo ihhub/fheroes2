@@ -18,14 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "campaign_savedata.h"
-#include "army.h"
-#include "campaign_data.h"
-#include "game.h"
-#include "save_format_version.h"
-#include "serialize.h"
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <memory>
+
+#include "army.h"
+#include "campaign_data.h"
+#include "campaign_savedata.h"
+#include "serialize.h"
 
 namespace Campaign
 {
@@ -123,18 +124,8 @@ namespace Campaign
 
     StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
     {
-        msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus >> data._finishedMaps >> data._daysPassed
-            >> data._obtainedCampaignAwards >> data._carryOverTroops;
-
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0919_RELEASE, "Remove the check below." );
-        if ( Game::GetLoadVersion() < FORMAT_VERSION_0919_RELEASE ) {
-            data._difficulty = CampaignDifficulty::Normal;
-        }
-        else {
-            msg >> data._difficulty;
-        }
-
-        return msg;
+        return msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus >> data._finishedMaps
+               >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
     }
 
     ScenarioVictoryCondition getCurrentScenarioVictoryCondition()

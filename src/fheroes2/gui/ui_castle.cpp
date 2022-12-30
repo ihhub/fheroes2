@@ -18,19 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "ui_castle.h"
+#include <array>
+#include <cassert>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "castle.h"
 #include "color.h"
 #include "icn.h"
+#include "image.h"
 #include "logging.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
-#include "tools.h"
+#include "ui_castle.h"
 #include "ui_text.h"
-
-#include <array>
-#include <cassert>
 
 namespace
 {
@@ -80,51 +84,45 @@ namespace
     std::vector<fheroes2::Rect> getColorEffectiveAreas( const int32_t icnId, const uint32_t icnIndex )
     {
         switch ( icnId ) {
-        case ICN::TWNZCSTL:
+        case ICN::TWNZCSTL: {
             if ( icnIndex == 0 ) {
                 return { fheroes2::Rect( 76, 7, 3, 3 ), fheroes2::Rect( 96, 7, 3, 3 ), fheroes2::Rect( 178, 11, 3, 3 ) };
             }
-            else {
-                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
-                return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
-            }
-            break;
-        case ICN::TWNKCSTL:
+
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+            return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
+        }
+        case ICN::TWNKCSTL: {
             if ( icnIndex == 0 ) {
                 return { fheroes2::Rect( 127, 36, 3, 3 ), fheroes2::Rect( 287, 6, 3, 3 ) };
             }
-            else {
-                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
-                return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
-            }
-            break;
+
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+            return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
+        }
         case ICN::TWNKDW_4:
         case ICN::TWNKUP_4:
             if ( icnIndex == 0 ) {
                 return { fheroes2::Rect( 61, 3, 1, 1 ) };
             }
-            else {
-                return { fheroes2::Rect( 59, 0, 6, 5 ) };
-            }
-            break;
-        case ICN::TWNKLTUR:
+
+            return { fheroes2::Rect( 59, 0, 6, 5 ) };
+        case ICN::TWNKLTUR: {
             if ( icnIndex == 0 ) {
                 return { fheroes2::Rect( 5, 6, 3, 3 ) };
             }
-            else {
-                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
-                return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
-            }
-            break;
-        case ICN::TWNKRTUR:
+
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+            return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
+        }
+        case ICN::TWNKRTUR: {
             if ( icnIndex == 0 ) {
                 return { fheroes2::Rect( 55, 6, 3, 3 ) };
             }
-            else {
-                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
-                return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
-            }
-            break;
+
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+            return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
+        }
         default:
             // You are calling this function for unsupported image ID. Verify your logic!
             assert( 0 );
@@ -193,10 +191,10 @@ namespace fheroes2
             break;
         default:
             assert( 0 );
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" )
         }
 
-        const Sprite & castleImage = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
+        const Sprite & castleImage = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
         fheroes2::Blit( castleImage, output, offset.x, offset.y );
 
         // Draw castle's marker.
@@ -268,7 +266,7 @@ namespace fheroes2
         text.set( std::to_string( kingdomTreasures.gold ), fontType );
         text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + offsetY[3] + goldImage.height() + 1, output );
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TREASURY, 1 ), output, roi.x + 1, roi.y + 166 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BUTTON_SMALLER_EXIT, 0 ), output, roi.x + 1, roi.y + 166 );
 
         return roi;
     }
@@ -280,19 +278,6 @@ namespace fheroes2
 
         const fheroes2::Text text( castle.GetName(), fheroes2::FontType::smallWhite() );
         text.draw( offset.x + 320 - text.width() / 2, offset.y + 250, output );
-    }
-
-    Sprite getHeroExchangeImage()
-    {
-        const Sprite & sprite = fheroes2::AGG::GetICN( ICN::ADVMCO, 8 );
-
-        Sprite result( sprite.width() + 4, sprite.height() + 4 );
-        result.fill( 0 );
-
-        DrawBorder( result, fheroes2::GetColorId( 0xe0, 0xb4, 0 ) );
-        Blit( sprite, result, 2, 2 );
-
-        return result;
     }
 
     void drawCastleDialogBuilding( const int32_t icnId, const uint32_t icnIndex, const Castle & castle, const Point & offset, const Rect & renderArea,

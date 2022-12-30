@@ -23,25 +23,32 @@
 #ifndef H2TILES_H
 #define H2TILES_H
 
+#include <cstdint>
 #include <list>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
 #include "direction.h"
+#include "math_base.h"
 #include "mp2.h"
+#include "pairs.h"
 #include "resource.h"
 #include "skill.h"
 #include "world_regions.h"
 
 class Heroes;
-class Spell;
 class Monster;
+class Spell;
+class StreamBase;
 
-namespace MP2
+namespace fheroes2
 {
-    struct mp2tile_t;
-    struct mp2addon_t;
+    class Image;
+    class Sprite;
 }
 
 namespace Interface
@@ -62,7 +69,7 @@ namespace Maps
     struct TilesAddon
     {
         TilesAddon();
-        TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
+        TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint8_t index_ );
 
         TilesAddon( const TilesAddon & ) = default;
 
@@ -236,9 +243,6 @@ namespace Maps
 
         void setOwnershipFlag( const MP2::MapObjectType objectType, const int color );
 
-        void correctOldSaveOwnershipFlag();
-        void correctDiggingHoles();
-
         void removeOwnershipFlag( const MP2::MapObjectType objectType );
 
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
@@ -247,7 +251,7 @@ namespace Maps
         int GetFogDirections( int color ) const;
 
         void drawFog( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
-        void RedrawPassable( fheroes2::Image & dst, const Interface::GameArea & area ) const;
+        void RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const;
         void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
 
         void drawByIcnId( fheroes2::Image & output, const Interface::GameArea & area, const int32_t icnId ) const;
@@ -411,8 +415,6 @@ namespace Maps
 
         static void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon );
         void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
-
-        static bool removeOldFlag( Addons & addons, const uint8_t startIndex, int & ownerColor );
 
         Addons addons_level1; // bottom layer
         Addons addons_level2; // top layer

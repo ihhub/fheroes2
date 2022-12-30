@@ -22,11 +22,25 @@
  ***************************************************************************/
 
 #include "interface_radar.h"
+
+#include <utility>
+
 #include "agg_image.h"
 #include "castle.h"
+#include "color.h"
+#include "dialog.h"
 #include "game_interface.h"
+#include "gamedefs.h"
 #include "ground.h"
+#include "heroes.h"
 #include "icn.h"
+#include "interface_gamearea.h"
+#include "localevent.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "mp2.h"
+#include "players.h"
+#include "screen.h"
 #ifdef WITH_DEBUG
 #include "logging.h"
 #endif
@@ -141,6 +155,7 @@ Interface::Radar::Radar( Basic & basic )
     , radarType( RadarType::WorldMap )
     , interface( basic )
     , hide( true )
+    , _mouseDraggingMovement( false )
 {}
 
 Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
@@ -149,11 +164,15 @@ Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display 
     , interface( radar.interface )
     , spriteArea( radar.spriteArea )
     , hide( false )
+    , _mouseDraggingMovement( false )
 {}
 
 void Interface::Radar::SavePosition()
 {
-    Settings::Get().SetPosRadar( GetRect().getPosition() );
+    Settings & conf = Settings::Get();
+
+    conf.SetPosRadar( GetRect().getPosition() );
+    conf.Save( Settings::configFileName );
 }
 
 void Interface::Radar::SetPos( int32_t ox, int32_t oy )
@@ -229,7 +248,7 @@ void Interface::Radar::SetRedraw() const
 void Interface::Radar::Redraw()
 {
     const Settings & conf = Settings::Get();
-    const bool hideInterface = conf.ExtGameHideInterface();
+    const bool hideInterface = conf.isHideInterfaceEnabled();
 
     if ( hideInterface && conf.ShowRadar() ) {
         BorderWindow::Redraw();
@@ -239,7 +258,7 @@ void Interface::Radar::Redraw()
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Rect & rect = GetArea();
         if ( hide ) {
-            fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.isEvilInterfaceEnabled() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
         }
         else {
             cursorArea.hide();
@@ -385,7 +404,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nullptr */ )
 {
     const Settings & conf = Settings::Get();
-    if ( conf.ExtGameHideInterface() && !conf.ShowRadar() && radarType != RadarType::ViewWorld ) {
+    if ( conf.isHideInterfaceEnabled() && !conf.ShowRadar() && radarType != RadarType::ViewWorld ) {
         return;
     }
 
@@ -418,6 +437,11 @@ void Interface::Radar::QueueEventProcessing()
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Rect & rect = GetArea();
+    const fheroes2::Rect & borderArea = GetRect();
+
+    if ( !le.MouseCursor( borderArea ) || le.MouseCursor( rect ) ) {
+        _mouseDraggingMovement = false;
+    }
 
     // Move border window
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
@@ -427,6 +451,7 @@ void Interface::Radar::QueueEventProcessing()
     else if ( le.MouseCursor( rect ) ) {
         // move cursor
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
+            _mouseDraggingMovement = true;
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {

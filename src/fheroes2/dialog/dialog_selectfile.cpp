@@ -22,11 +22,15 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdint>
 #include <ctime>
 #include <iomanip>
 #include <iterator>
+#include <list>
+#include <memory>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -34,16 +38,21 @@
 #include "dir.h"
 #include "game.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_list.h"
+#include "localevent.h"
 #include "maps_fileinfo.h"
-#include "settings.h"
+#include "math_base.h"
+#include "screen.h"
 #include "system.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "world.h"
 
@@ -218,7 +227,7 @@ std::string Dialog::SelectFileSave()
 {
     std::ostringstream os;
 
-    os << System::ConcatePath( Game::GetSaveDir(), Game::GetSaveFileBaseName() ) << '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay()
+    os << System::concatPath( Game::GetSaveDir(), Game::GetSaveFileBaseName() ) << '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay()
        << Game::GetSaveFileExtension();
 
     return SelectFileListSimple( _( "File to Save:" ), os.str(), true );
@@ -251,8 +260,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     const fheroes2::Rect enter_field( rt.x + 42, rt.y + 286, 260, 16 );
 
-    fheroes2::Button buttonOk( rt.x + 34, rt.y + 315, ICN::REQUEST, 1, 2 );
-    fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::REQUEST, 3, 4 );
+    fheroes2::Button buttonOk( rt.x + 34, rt.y + 315, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+    fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
     MapsFileInfoList lists = GetSortedMapsFileInfoList();
     FileInfoListBox listbox( rt.getPosition() );
@@ -310,7 +319,11 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     buttonCancel.draw();
 
     display.render();
-    le.OpenVirtualKeyboard();
+
+    if ( isEditing ) {
+        // Show keyboard only when editing file name.
+        le.OpenVirtualKeyboard();
+    }
 
     std::string result;
     bool is_limit = false;
@@ -328,7 +341,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
              || listbox.isDoubleClicked() ) {
             if ( !filename.empty() )
-                result = System::ConcatePath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
+                result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
             else if ( isListboxSelected )
                 result = listbox.GetCurrent().file;
         }
@@ -343,7 +356,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             needRedraw = true;
         }
         else if ( isEditing && le.KeyPress() && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
-            charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
+            charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
             if ( filename.empty() )
                 buttonOk.disable();
             else
@@ -414,7 +427,9 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         display.render();
     }
 
-    le.CloseVirtualKeyboard();
+    if ( isEditing ) {
+        le.CloseVirtualKeyboard();
+    }
 
     return result;
 }

@@ -24,7 +24,14 @@
 #ifndef H2INTERFACE_GAMEAREA_H
 #define H2INTERFACE_GAMEAREA_H
 
+#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <utility>
+#include <vector>
+
 #include "image.h"
+#include "math_base.h"
 #include "mp2.h"
 #include "timing.h"
 
@@ -207,7 +214,7 @@ namespace Interface
             updateCursor = true;
         }
 
-        void QueueEventProcessing();
+        void QueueEventProcessing( bool isCursorOverGamearea );
 
         static fheroes2::Image GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset );
 
@@ -238,6 +245,11 @@ namespace Interface
         // Make sure you do not have a copy of this object after the execution of the method to avoid incorrect object removal in some cases.
         void runSingleObjectAnimation( const std::shared_ptr<BaseObjectAnimationInfo> & info );
 
+        bool isDragScroll() const
+        {
+            return _mouseDraggingMovement;
+        }
+
     private:
         Basic & interface;
 
@@ -260,6 +272,10 @@ namespace Interface
 
         // This member needs to be mutable because it is modified during rendering.
         mutable std::vector<std::shared_ptr<BaseObjectAnimationInfo>> _animationInfo;
+
+        bool _mouseDraggingInitiated;
+        bool _mouseDraggingMovement;
+        fheroes2::Point _startMouseDragPosition;
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const

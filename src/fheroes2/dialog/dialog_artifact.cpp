@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,71 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2CASTLE_HEROES_H
-#define H2CASTLE_HEROES_H
+#include <memory>
 
-#include <algorithm>
-#include <utility>
+#include "artifact.h"
+#include "audio_manager.h"
+#include "dialog.h"
+#include "m82.h"
+#include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
-#include "gamedefs.h"
-#include "heroes.h"
-
-class CastleHeroes : protected std::pair<Heroes *, Heroes *>
+void Dialog::ArtifactSetAssembled( const ArtifactSetData & artifactSetData )
 {
-public:
-    CastleHeroes( Heroes * guest, Heroes * guard )
-        : std::pair<Heroes *, Heroes *>( guest, guard )
-    {}
+    const Artifact artifact( static_cast<int>( artifactSetData._assembledArtifactID ) );
+    const fheroes2::ArtifactDialogElement artifactUI( artifact );
 
-    Heroes * Guest()
-    {
-        return first;
-    }
+    AudioManager::PlaySound( M82::TREASURE );
 
-    Heroes * Guard()
-    {
-        return second;
-    }
-
-    const Heroes * Guest() const
-    {
-        return first;
-    }
-
-    const Heroes * Guard() const
-    {
-        return second;
-    }
-
-    Heroes * GuestFirst()
-    {
-        return first ? first : second;
-    }
-
-    Heroes * GuardFirst()
-    {
-        return second ? second : first;
-    }
-
-    bool operator==( const Heroes * hero ) const
-    {
-        return first == hero || second == hero;
-    }
-
-    void Swap()
-    {
-        std::swap( first, second );
-    }
-
-    bool FullHouse() const
-    {
-        return first && second;
-    }
-
-    bool IsValid() const
-    {
-        return first || second;
-    }
-};
-
-#endif
+    fheroes2::showMessage( fheroes2::Text( artifact.GetName(), fheroes2::FontType::normalYellow() ),
+                           fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
+}

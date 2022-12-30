@@ -22,28 +22,39 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <set>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "army_troop.h"
+#include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
-#include "logging.h"
-#include "settings.h"
+#include "image.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "monster.h"
+#include "screen.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
-#include "ui_dialog.h"
-#include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -395,11 +406,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MousePressLeft( moveArmyToHero2.area() ) ) {
+        if ( le.MousePressLeft( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             moveArmyToHero2.drawOnPress();
             moveArmyToHero1.drawOnRelease();
         }
-        else if ( le.MousePressLeft( moveArmyToHero1.area() ) ) {
+        else if ( le.MousePressLeft( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnRelease();
         }
@@ -455,17 +466,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
                 selectArmy2.ResetSelected();
 
             std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
-            const std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+            std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
 
-            // Use insert instead of std::merge to make appveyour happy
-            assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
+            // MSVC 2017 fails to use the std::set<...>::merge( std::set<...> && ) overload here, so we have to use a temporary variable
+            assembledArtifacts.merge( otherHeroAssembledArtifacts );
 
-            for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
-                const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
-                fheroes2::showMessage( fheroes2::Text( Artifact( static_cast<int>( artifactSetData._assembledArtifactID ) ).GetName(),
-                                                       fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
-            }
+            std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
 
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );
@@ -542,7 +548,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
-        else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
+        else if ( le.MouseClickLeft( moveArmyToHero2.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             const ArmyTroop * keep = nullptr;
 
             if ( selectArmy1.isSelected() ) {
@@ -567,7 +573,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
-        else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
+        else if ( le.MouseClickLeft( moveArmyToHero1.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
             const ArmyTroop * keep = nullptr;
 
             if ( selectArmy1.isSelected() ) {

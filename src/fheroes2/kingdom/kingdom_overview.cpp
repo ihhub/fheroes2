@@ -21,29 +21,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "army_bar.h"
+#include "artifact.h"
 #include "buildinginfo.h"
+#include "captain.h"
 #include "castle.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "mp2.h"
+#include "resource.h"
+#include "screen.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_kingdom.h"
+#include "ui_scrollbar.h"
 #include "ui_window.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -73,8 +91,8 @@ struct HeroRow
     Heroes * hero;
     std::unique_ptr<ArmyBar> armyBar;
     std::unique_ptr<ArtifactsBar> artifactsBar;
-    std::unique_ptr<SecondarySkillsBar> secskillsBar;
-    std::unique_ptr<PrimarySkillsBar> primskillsBar;
+    std::unique_ptr<SecondarySkillsBar> secSkillsBar;
+    std::unique_ptr<PrimarySkillsBar> primSkillsBar;
 
     explicit HeroRow( Heroes * ptr = nullptr )
     {
@@ -91,25 +109,25 @@ struct HeroRow
     {
         hero = ptr;
 
-        armyBar.reset( new ArmyBar( &hero->GetArmy(), true, false ) );
+        armyBar = std::make_unique<ArmyBar>( &hero->GetArmy(), true, false );
         armyBar->SetBackground( { 41, 53 }, fheroes2::GetColorId( 72, 28, 0 ) );
         armyBar->setTableSize( { 5, 1 } );
         armyBar->setInBetweenItemsOffset( { -1, 0 } );
 
-        artifactsBar.reset( new ArtifactsBar( hero, true, false, false, true, nullptr ) );
+        artifactsBar = std::make_unique<ArtifactsBar>( hero, true, false, false, true, nullptr );
         artifactsBar->setTableSize( { 7, 2 } );
         artifactsBar->setInBetweenItemsOffset( { 1, 8 } );
         artifactsBar->SetContent( hero->GetBagArtifacts() );
 
-        secskillsBar.reset( new SecondarySkillsBar( *hero ) );
-        secskillsBar->setTableSize( { 4, 2 } );
-        secskillsBar->setInBetweenItemsOffset( { -1, 8 } );
-        secskillsBar->SetContent( hero->GetSecondarySkills().ToVector() );
+        secSkillsBar = std::make_unique<SecondarySkillsBar>( *hero );
+        secSkillsBar->setTableSize( { 4, 2 } );
+        secSkillsBar->setInBetweenItemsOffset( { -1, 8 } );
+        secSkillsBar->SetContent( hero->GetSecondarySkills().ToVector() );
 
-        primskillsBar.reset( new PrimarySkillsBar( ptr, true ) );
-        primskillsBar->setTableSize( { 4, 1 } );
-        primskillsBar->setInBetweenItemsOffset( { 2, 0 } );
-        primskillsBar->SetTextOff( 20, -13 );
+        primSkillsBar = std::make_unique<PrimarySkillsBar>( ptr, true );
+        primSkillsBar->setTableSize( { 4, 1 } );
+        primSkillsBar->setInBetweenItemsOffset( { 2, 0 } );
+        primSkillsBar->SetTextOff( 20, -13 );
     }
 };
 
@@ -237,19 +255,24 @@ bool StatsHeroesList::ActionListCursor( HeroRow & row, const fheroes2::Point & c
     const fheroes2::Point cursorPos( cursor.x, cursor.y );
 
     if ( ( row.armyBar->GetArea() & cursorPos ) && row.armyBar->QueueEventProcessing() ) {
-        if ( row.artifactsBar->isSelected() )
+        if ( row.artifactsBar->isSelected() ) {
             row.artifactsBar->ResetSelected();
+        }
         return true;
     }
-    else if ( ( row.artifactsBar->GetArea() & cursorPos ) && row.artifactsBar->QueueEventProcessing() ) {
-        if ( row.armyBar->isSelected() )
+
+    if ( ( row.artifactsBar->GetArea() & cursorPos ) && row.artifactsBar->QueueEventProcessing() ) {
+        if ( row.armyBar->isSelected() ) {
             row.armyBar->ResetSelected();
+        }
         return true;
     }
-    else if ( ( row.primskillsBar->GetArea() & cursorPos ) && row.primskillsBar->QueueEventProcessing() ) {
+
+    if ( ( row.primSkillsBar->GetArea() & cursorPos ) && row.primSkillsBar->QueueEventProcessing() ) {
         return true;
     }
-    else if ( ( row.secskillsBar->GetArea() & cursorPos ) && row.secskillsBar->QueueEventProcessing() ) {
+
+    if ( ( row.secSkillsBar->GetArea() & cursorPos ) && row.secSkillsBar->QueueEventProcessing() ) {
         return true;
     }
 
@@ -286,12 +309,12 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, int32_t dstx, int32_t dst
     // primary skills info
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    row.primskillsBar->setRenderingOffset( { dstx + 56, dsty - 3 } );
-    row.primskillsBar->Redraw( display );
+    row.primSkillsBar->setRenderingOffset( { dstx + 56, dsty - 3 } );
+    row.primSkillsBar->Redraw( display );
 
     // secondary skills info
-    row.secskillsBar->setRenderingOffset( { dstx + 206, dsty + 3 } );
-    row.secskillsBar->Redraw( display );
+    row.secSkillsBar->setRenderingOffset( { dstx + 206, dsty + 3 } );
+    row.secSkillsBar->Redraw( display );
 
     // artifacts info
     row.artifactsBar->setRenderingOffset( { dstx + 348, dsty + 3 } );
@@ -332,8 +355,8 @@ void StatsHeroesList::RedrawBackground( const fheroes2::Point & dst )
 struct CstlRow
 {
     Castle * castle;
-    std::unique_ptr<ArmyBar> armyBarGuard;
-    std::unique_ptr<ArmyBar> armyBarGuest;
+    std::unique_ptr<ArmyBar> garrisonArmyBar;
+    std::unique_ptr<ArmyBar> heroArmyBar;
     std::unique_ptr<DwellingsBar> dwellingsBar;
 
     explicit CstlRow( Castle * ptr = nullptr )
@@ -353,24 +376,24 @@ struct CstlRow
 
         const uint8_t fill = fheroes2::GetColorId( 40, 12, 0 );
 
-        armyBarGuard.reset( new ArmyBar( &castle->GetArmy(), true, false ) );
-        armyBarGuard->SetBackground( { 41, 41 }, fill );
-        armyBarGuard->setTableSize( { 5, 1 } );
-        armyBarGuard->setInBetweenItemsOffset( { -1, 0 } );
+        garrisonArmyBar = std::make_unique<ArmyBar>( &castle->GetArmy(), true, false );
+        garrisonArmyBar->SetBackground( { 41, 41 }, fill );
+        garrisonArmyBar->setTableSize( { 5, 1 } );
+        garrisonArmyBar->setInBetweenItemsOffset( { -1, 0 } );
 
-        CastleHeroes heroes = world.GetHeroes( *castle );
+        Heroes * hero = world.GetHero( *castle );
 
-        if ( heroes.Guest() ) {
-            armyBarGuest.reset( new ArmyBar( &heroes.Guest()->GetArmy(), true, false ) );
-            armyBarGuest->SetBackground( { 41, 41 }, fill );
-            armyBarGuest->setTableSize( { 5, 1 } );
-            armyBarGuest->setInBetweenItemsOffset( { -1, 0 } );
+        if ( hero ) {
+            heroArmyBar = std::make_unique<ArmyBar>( &hero->GetArmy(), true, false );
+            heroArmyBar->SetBackground( { 41, 41 }, fill );
+            heroArmyBar->setTableSize( { 5, 1 } );
+            heroArmyBar->setInBetweenItemsOffset( { -1, 0 } );
         }
         else {
-            armyBarGuest.reset();
+            heroArmyBar.reset();
         }
 
-        dwellingsBar.reset( new DwellingsBar( *castle, { 39, 52 } ) );
+        dwellingsBar = std::make_unique<DwellingsBar>( *castle, fheroes2::Size{ 39, 52 } );
         dwellingsBar->setTableSize( { 6, 1 } );
         dwellingsBar->setInBetweenItemsOffset( { 2, 0 } );
     }
@@ -459,10 +482,9 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
             Game::OpenCastleDialog( *row.castle, false );
             row.Init( row.castle );
         }
-        else
-            // click hero icon
-            if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
-            Heroes * hero = row.castle->GetHeroes().GuardFirst();
+        // click hero icon
+        else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
+            Heroes * hero = row.castle->GetHero();
             if ( hero ) {
                 Game::OpenHeroesDialog( *hero, false, false );
                 row.Init( row.castle );
@@ -478,7 +500,7 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Poin
             Dialog::QuickInfo( *row.castle, {}, true, _windowArea );
         }
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
-            const Heroes * hero = row.castle->GetHeroes().GuardFirst();
+            const Heroes * hero = row.castle->GetHero();
             if ( hero ) {
                 Dialog::QuickInfo( *hero, {}, true, _windowArea );
             }
@@ -493,23 +515,29 @@ bool StatsCastlesList::ActionListCursor( CstlRow & row, const fheroes2::Point & 
 {
     const fheroes2::Point cursorPos( cursor.x, cursor.y );
 
-    if ( row.armyBarGuard && ( row.armyBarGuard->GetArea() & cursorPos )
-         && ( row.armyBarGuest ? row.armyBarGuard->QueueEventProcessing( *row.armyBarGuest ) : row.armyBarGuard->QueueEventProcessing() ) ) {
-        if ( row.armyBarGuest && row.armyBarGuest->isSelected() )
-            row.armyBarGuest->ResetSelected();
+    if ( row.garrisonArmyBar && ( row.garrisonArmyBar->GetArea() & cursorPos )
+         && ( row.heroArmyBar ? row.garrisonArmyBar->QueueEventProcessing( *row.heroArmyBar ) : row.garrisonArmyBar->QueueEventProcessing() ) ) {
+        if ( row.heroArmyBar && row.heroArmyBar->isSelected() ) {
+            row.heroArmyBar->ResetSelected();
+        }
         return true;
     }
-    else if ( row.armyBarGuest && ( row.armyBarGuest->GetArea() & cursorPos )
-              && ( row.armyBarGuard ? row.armyBarGuest->QueueEventProcessing( *row.armyBarGuard ) : row.armyBarGuest->QueueEventProcessing() ) ) {
-        if ( row.armyBarGuard && row.armyBarGuard->isSelected() )
-            row.armyBarGuard->ResetSelected();
+
+    if ( row.heroArmyBar && ( row.heroArmyBar->GetArea() & cursorPos )
+         && ( row.garrisonArmyBar ? row.heroArmyBar->QueueEventProcessing( *row.garrisonArmyBar ) : row.heroArmyBar->QueueEventProcessing() ) ) {
+        if ( row.garrisonArmyBar && row.garrisonArmyBar->isSelected() ) {
+            row.garrisonArmyBar->ResetSelected();
+        }
         return true;
     }
-    else if ( row.dwellingsBar && ( row.dwellingsBar->GetArea() & cursorPos ) && row.dwellingsBar->QueueEventProcessing() ) {
-        if ( row.armyBarGuest && row.armyBarGuest->isSelected() )
-            row.armyBarGuest->ResetSelected();
-        if ( row.armyBarGuard && row.armyBarGuard->isSelected() )
-            row.armyBarGuard->ResetSelected();
+
+    if ( row.dwellingsBar && ( row.dwellingsBar->GetArea() & cursorPos ) && row.dwellingsBar->QueueEventProcessing() ) {
+        if ( row.heroArmyBar && row.heroArmyBar->isSelected() ) {
+            row.heroArmyBar->ResetSelected();
+        }
+        if ( row.garrisonArmyBar && row.garrisonArmyBar->isSelected() ) {
+            row.garrisonArmyBar->ResetSelected();
+        }
         return true;
     }
 
@@ -531,7 +559,7 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
     // base info
     Interface::RedrawCastleIcon( *row.castle, dstx + 17, dsty + 19 );
 
-    const Heroes * hero = row.castle->GetHeroes().GuardFirst();
+    const Heroes * hero = row.castle->GetHero();
 
     if ( hero ) {
         Interface::RedrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
@@ -555,14 +583,14 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // army info
-    if ( row.armyBarGuard ) {
-        row.armyBarGuard->setRenderingOffset( { dstx + 146, row.armyBarGuest ? dsty : dsty + 20 } );
-        row.armyBarGuard->Redraw( display );
+    if ( row.garrisonArmyBar ) {
+        row.garrisonArmyBar->setRenderingOffset( { dstx + 146, row.heroArmyBar ? dsty : dsty + 20 } );
+        row.garrisonArmyBar->Redraw( display );
     }
 
-    if ( row.armyBarGuest ) {
-        row.armyBarGuest->setRenderingOffset( { dstx + 146, row.armyBarGuard ? dsty + 41 : dsty + 20 } );
-        row.armyBarGuest->Redraw( display );
+    if ( row.heroArmyBar ) {
+        row.heroArmyBar->setRenderingOffset( { dstx + 146, row.garrisonArmyBar ? dsty + 41 : dsty + 20 } );
+        row.heroArmyBar->Redraw( display );
     }
 
     row.dwellingsBar->setRenderingOffset( { dstx + 349, dsty + 15 } );
@@ -705,7 +733,7 @@ void Kingdom::openOverviewDialog()
 
     dst_pt.x = cur_pt.x + 540;
     dst_pt.y = cur_pt.y + 453;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 4, 5 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_EXIT, 0, 1 );
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
 

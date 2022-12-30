@@ -18,14 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "artifact_info.h"
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <memory>
+#include <sstream>
+
 #include "artifact.h"
+#include "artifact_info.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
-
-#include <array>
-#include <sstream>
 
 namespace
 {

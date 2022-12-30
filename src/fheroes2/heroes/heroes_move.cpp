@@ -21,9 +21,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <utility>
+#include <vector>
+
 #include "agg_image.h"
+#include "army.h"
 #include "audio_manager.h"
 #include "castle.h"
+#include "color.h"
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
@@ -31,15 +41,21 @@
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_gamearea.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
+#include "maps.h"
 #include "maps_tiles.h"
+#include "math_base.h"
+#include "mp2.h"
 #include "race.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -467,7 +483,14 @@ namespace
     {
         if ( next.GetObject() == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( next.GetCenter() );
-            return castle && !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
+            if ( castle == nullptr ) {
+                return false;
+            }
+
+            // If this is an allied castle, then we shouldn't be here at all
+            assert( hero.GetColor() == castle->GetColor() || !hero.isFriends( castle->GetColor() ) );
+
+            return !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
         }
         if ( hero.isShipMaster() && next.GetObject() == MP2::OBJ_COAST ) {
             return true;
@@ -509,7 +532,7 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Heroes::getHeroSprites
 
     int flagFrameID = sprite_index;
     if ( !isMoveEnabled() ) {
-        flagFrameID = isShipMaster() ? 0 : Game::MapsAnimationFrame();
+        flagFrameID = isShipMaster() ? 0 : static_cast<int>( Game::getAdventureMapAnimationIndex() );
     }
 
     fheroes2::Point offset;

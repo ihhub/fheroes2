@@ -22,10 +22,8 @@
  ***************************************************************************/
 
 #include "artifact_ultimate.h"
-#include "game.h"
 #include "interface_gamearea.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "serialize.h"
 
 UltimateArtifact::UltimateArtifact()
@@ -40,9 +38,10 @@ void UltimateArtifact::Set( const int32_t position, const Artifact & a )
     _index = position;
     _isFound = false;
 
-    // Since artifact cannot be placed closer than 9 tiles from any edge and puzzle screen is 14 x 14 tiles it's absolutely safe to put offset within [-2; +2] range.
+    // The Ultimate Artifact should not always be shown right in the center of the puzzle to make it
+    // harder to find, but it should be shown behind one of the last four central pieces of the puzzle.
     _offset.x = Rand::Get( 0, 4 ) - 2;
-    _offset.y = Rand::Get( 0, 4 ) - 2;
+    _offset.y = Rand::Get( 0, 2 ) - 1;
 }
 
 fheroes2::Image UltimateArtifact::GetPuzzleMapSurface() const

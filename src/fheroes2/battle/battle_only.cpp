@@ -21,23 +21,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "battle_only.h"
+#include <cstdint>
+#include <string>
+
 #include "agg_image.h"
 #include "army_bar.h"
+#include "army_troop.h"
 #include "battle.h"
+#include "battle_only.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
+#include "monster.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
@@ -169,7 +181,7 @@ bool Battle::Only::ChangeSettings()
     const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
     fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
 
-    const int icnId = ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int icnId = ICN::BUTTON_SMALL_OKAY_GOOD;
     const fheroes2::Sprite & buttonStartImage = fheroes2::AGG::GetICN( icnId, 0 );
     fheroes2::ButtonSprite buttonStart = fheroes2::makeButtonWithShadow( cur_pt.x + ( 640 - buttonStartImage.width() ) / 2, cur_pt.y + 428, buttonStartImage,
                                                                          fheroes2::AGG::GetICN( icnId, 1 ), display );

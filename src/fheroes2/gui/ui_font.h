@@ -20,11 +20,14 @@
 
 #pragma once
 
-#include "image.h"
+#include <vector>
+
 #include "ui_language.h"
 
 namespace fheroes2
 {
+    class Sprite;
+
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
 
     bool isAlphabetSupported( const SupportedLanguage language );

@@ -31,10 +31,10 @@ import java.util.ArrayList;
 import org.apache.commons.io.IOUtils;
 import org.libsdl.app.SDLActivity;
 
-public class MainActivity extends SDLActivity
+public final class MainActivity extends SDLActivity
 {
     @Override
-    protected void onCreate( Bundle savedInstanceState )
+    protected void onCreate( final Bundle savedInstanceState )
     {
         // Extract H2D and translations to the external app-specific storage (sdcard)
         extractAssets( "files", getExternalFilesDir( null ) );
@@ -60,43 +60,43 @@ public class MainActivity extends SDLActivity
         System.exit( 0 );
     }
 
-    private void extractAssets( String srcPath, File dstDir )
+    private void extractAssets( final String srcPath, final File dstDir )
     {
-        ArrayList<String> assetsPaths;
+        final ArrayList<String> assetsPaths;
 
         try {
             assetsPaths = getAssetsPaths( srcPath );
         }
-        catch ( Exception ex ) {
+        catch ( final Exception ex ) {
             Log.e( "fheroes2", "Failed to get a list of assets.", ex );
 
             return;
         }
 
-        for ( String path : assetsPaths ) {
-            try ( InputStream in = getAssets().open( path ) ) {
-                File outFile = new File( dstDir, path );
+        for ( final String path : assetsPaths ) {
+            try ( final InputStream in = getAssets().open( path ) ) {
+                final File outFile = new File( dstDir, path );
 
-                String outFileDir = outFile.getParent();
+                final String outFileDir = outFile.getParent();
                 if ( outFileDir != null ) {
                     ( new File( outFileDir ) ).mkdirs();
                 }
 
-                try ( OutputStream out = new FileOutputStream( outFile ) ) {
+                try ( final OutputStream out = new FileOutputStream( outFile ) ) {
                     IOUtils.copy( in, out );
                 }
             }
-            catch ( Exception ex ) {
+            catch ( final Exception ex ) {
                 Log.e( "fheroes2", "Failed to extract the asset.", ex );
             }
         }
     }
 
-    private ArrayList<String> getAssetsPaths( String path ) throws IOException
+    private ArrayList<String> getAssetsPaths( final String path ) throws IOException
     {
-        ArrayList<String> result = new ArrayList<>();
+        final ArrayList<String> result = new ArrayList<>();
 
-        String[] assets = getAssets().list( path );
+        final String[] assets = getAssets().list( path );
 
         // There is no such path at all
         if ( assets == null ) {
@@ -111,7 +111,7 @@ public class MainActivity extends SDLActivity
         }
 
         // Regular node
-        for ( String asset : assets ) {
+        for ( final String asset : assets ) {
             result.addAll( getAssetsPaths( path + File.separator + asset ) );
         }
 

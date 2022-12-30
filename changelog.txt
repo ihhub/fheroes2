@@ -1,3 +1,144 @@
+version 1.0.0 (21 December 2022)
+- add Ubuntu ARM support
+- update Polish translation
+- update the French translation
+- fix incorrect resource placements on certain maps
+- adjust "Battlefield Casualties" vertical position
+- fix bridge logic after morale event
+- enable the instant battle by default
+- optimize rendering in multiple places
+- update the Norwegian translation
+- add global hotkey to toggle the text support mode
+- make the regular small buttons translatable
+- make Trade button in Marketplace window disabled by default
+- add popup windows for monster recruit dialog
+- fix animation of slowed flying creatures
+- fix multiple hero related awards for campaigns
+- fix Death Wave, Holy Shout and Holy Word spell animations
+- do not mirror corpses of defeated troops during battle
+- fix rendering an extra empty line for specific texts
+- fix monster idling animation during battle
+- use logarithmic scale of sound volume
+- enable touch support for all devices
+- make separate hotkeys to cast battle & adventure spells
+- add the "Quit game" hotkey
+- handle hotkeys in the Adventure Map's File dialog
+- optimize defensive strategy for AI castles
+- fix black area not being rendering during video playback
+- reduce priority for bottles in sea for AI
+- make File Dialog and Adventure Dialog buttons translatable
+- do not stop object animation during AI turn
+- update Russian translation
+- fix text rendering for game option's names of certain translations
+- fix incorrect battlefield image restoration in the place of the previous damage popup
+- adjust several button font characters
+- rework the hotkeys concerning the hero movement
+- make the Main Menu's dialog buttons translatable for specific languages
+- display the amount of gold in the diplomacy dialog
+- show object animation during Hut of Magi visit
+- fix Dwarves death animation
+- fix very slow hero movement animation when moving a cursor with software cursor rendering
+- fix translated Cancel button in monster recruit dialog being switched to English
+- fix animation of bridge destruction during battle
+- fix the smoke animation when demolishing a castle building during battle
+- improve Adventure Map rendering performance
+- fix multiline word splitting for short phrases with a long first word
+- fix position of left barbarian's captain quarters part
+- reset the cursor position at the start of 'human turn'
+- add an option to toggle screen scaling type
+- recreate the original rainbow animation during battle
+- fix Scenario Info window elements
+- improve hexagon shading during battle
+- add Danish language option and font
+- improve rendering speed with software cursor rendering
+- fix French and Italian characters not being shown with their assets
+- set the minimum supported version to Android 5.1
+- introduce AI Scout role
+- fix fullscreen mode with DPI higher than 100% on Windows
+- fix multi-monitor fullscreen support on Windows
+- update Bulgarian Translation
+- add Android installation and usage documentation
+- fix the scenario info dialog position
+- generate resizable buttons for both interfaces
+- fix inability to toggle V-Sync option dynamically
+- do not show resolution dialog on handheld devices on the first startup
+- add mouse right click simulation on touchscreen devices
+- fix cursor being too small for certain resolutions
+- disable Adventure Map scrolling for handheld devices by default
+- change battlefield hexagon generation to match the original
+- make fullscreen mode as a default state for Android devices
+- implement all troops transfer between armies within castle dialog
+- scroll Adventure Map with mouse left button pressed
+- use parabolic catapult projectile flight trajectory
+- update credits page
+- always show the Ultimate Artifact behind one of the last four central pieces of the puzzle
+- update captain's mana on map load and when building the Captain's Quarters
+- remove and integrate the rest of experimental options
+- always center text when a maximum width is provided
+- fix UI elements for the unhired hero popup window
+- update Ballista and Turrets damage information when they are destroyed
+- correctly reflect the change of fullscreen mode in the graphics settings dialog when it was toggled using a hotkey
+
+version 0.9.21 (12 November 2022)
+- fix audio playback issues on Windows OSes
+- do not show any hero status for AI heroes
+- add hotkeys for moving armies between heroes
+- update the Norwegian translation
+- fix monster upgrade cost formula
+- reset AI hero meeting flag every time if hero's strength has changed
+- add missing alliance conditions for the Succession Wars campaign last scenarios
+- add small optimizations for the pathfinding algorithm
+- fix incorrect evaluation of army strength where hero's abilities should not be taken into account
+- fix handicap income calculation
+- add right click quick info in more dialogs for hero and castle captain
+- fix possible assertion hit for campaign scenario info dialog
+- Luck / Morale related objects are now reset after meeting / battle for AI heroes
+- add a separate graphics options window
+- make more contrast for player objects on the minimap
+- do not override hero or castle selection focus on a game load
+- change language selection window to support many languages
+- improve the combat log's use of plural forms
+- draw the correct arrows for the paths on the adventure map
+- rework the troops arrangement mechanics for the castle defense
+- fix catapult's boulder animation
+- update position for text in difficulty selection dialog
+- add CP1252 French quotation marks
+- clear the kingdom's visited objects according to their lifetime, even if this kingdom has already been vanquished
+- update AI logic for monster distribution and recruitment
+- do not increase the number of upgraded creatures on Week Of/Month Of basic creatures
+- generate new MAX/MIN buttons for other languages
+- add Czech language option in game and add fonts
+- fix the troop splitting logic
+- include project's resource files into Android packages
+- translate language names in native language
+- add proper CP1250 font
+- update French translation
+- do not waste time to get useless monsters for an AI army
+- add audio support for Android devices
+- take Magic Book into account while visiting a castle by an AI hero
+- avoid using armies with 1 monster for AI heroes
+- lock the screen orientation to landscape for Android devices
+- fix campaign score sorting issue
+- fix an issue when kingdom overview scrollbar does not not remember last position
+- fix terrain colors on the minimap
+- memorize selected Scenario in Scenario Selection dialog
+- do not overwrite default platform's soundfonts if none is included into the package
+- update Hungarian translation
+- add Hungarian language option and font replacements
+- fix the shade used for mountains and trees
+- fix UI elements position in Select Scenario dialog
+- fix hero's fight cursor offset
+- fix heroes position on battle screen
+- add Android compilation
+- update Russian translation
+- redraw the castle's resource panel when a hero purchases the spellbook
+- add Dutch font and language option
+- update language dependent resources while changing language
+- update Bulgarian Translation
+- fix the Week Of / Month Of logic
+- update Belarusian translation
+- fix button font generation for original buttons
+
 version 0.9.20 (10 October 2022)
 - add Russian and French button translations
 - update the Norwegian translation

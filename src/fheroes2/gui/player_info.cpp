@@ -20,14 +20,21 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <string>
 
 #include "agg_image.h"
+#include "color.h"
 #include "dialog.h"
 #include "game.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "maps_fileinfo.h"
 #include "player_info.h"
+#include "players.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
@@ -125,7 +132,7 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
         info.nameRoi = { info.playerTypeRoi.x, info.playerTypeRoi.y + info.playerTypeRoi.height, info.playerTypeRoi.width, 10 };
         info.classRoi = { classOffset.x + Game::GetStep4Player( i, classImage.width(), playerCount ), classOffset.y, classImage.width(), classImage.height() };
         info.handicapRoi
-            = { classOffset.x + Game::GetStep4Player( i, handicapImage.width(), playerCount ), classOffset.y + 65, handicapImage.width(), handicapImage.height() };
+            = { classOffset.x + Game::GetStep4Player( i, handicapImage.width(), playerCount ), classOffset.y + 69, handicapImage.width(), handicapImage.height() };
     }
 }
 
@@ -245,6 +252,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
     fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::FileInfo & fi = conf.CurrentFileInfo();
 
+    const int32_t playerCount = static_cast<int32_t>( conf.GetPlayers().size() );
     const uint32_t humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
     // We need to render icon shadows and since shadows are drawn on left side from images we have to render images from right to left.
@@ -331,9 +339,18 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         fheroes2::Blit( classIconShadow, display, info.classRoi.x - 5, info.classRoi.y + 3 );
         fheroes2::Blit( classIcon, display, info.classRoi.x, info.classRoi.y );
 
-        const std::string & className = ( Race::NECR == info.player->GetRace() ? _( "Necroman" ) : Race::String( info.player->GetRace() ) );
-        Text text( className, Font::SMALL );
-        text.Blit( info.classRoi.x + ( info.classRoi.width - text.w() ) / 2, info.classRoi.y + info.classRoi.height + 2 );
+        const char * raceName;
+
+        if ( playerCount > 4 ) {
+            raceName = Race::DoubleLinedString( info.player->GetRace() );
+        }
+        else {
+            raceName = Race::String( info.player->GetRace() );
+        }
+        const int32_t maxClassNameTextWidth = classIcon.width() + 60;
+
+        const fheroes2::Text text( raceName, fheroes2::FontType::smallWhite() );
+        text.draw( info.classRoi.x - 31, info.classRoi.y + info.classRoi.height + 4, maxClassNameTextWidth, display );
 
         // Display a handicap icon.
         uint32_t handicapIcnIndex = 0;

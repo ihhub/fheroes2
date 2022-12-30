@@ -21,6 +21,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include "math_base.h"
@@ -164,6 +165,11 @@ namespace fheroes2
         int32_t height() const
         {
             return _height;
+        }
+
+        Rect rect() const
+        {
+            return { _x, _y, _width, _height };
         }
 
         void restore();

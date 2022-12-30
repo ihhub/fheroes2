@@ -18,24 +18,27 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "dialog_language_selection.h"
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+
 #include "agg_image.h"
 #include "cursor.h"
+#include "dialog_language_selection.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
-#include "logging.h"
+#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
 #include "ui_text.h"
-#include "ui_window.h"
-
-#include <algorithm>
-#include <cassert>
 
 namespace
 {
@@ -132,8 +135,8 @@ namespace
 
         fheroes2::Blit( windowShadow, display, roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
 
-        fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::REQUEST, 1, 2 );
-        fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::REQUEST, 3, 4 );
+        fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+        fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
         LanguageList items( roi.getPosition() );
 

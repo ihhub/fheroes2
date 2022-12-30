@@ -20,6 +20,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include <cstring>
+#include <utility>
+
+#if !defined( _WIN32 )
+#include <strings.h>
+#endif
+
 #if defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -31,14 +39,6 @@
 
 #include "dir.h"
 #include "system.h"
-#if defined( TARGET_PS_VITA )
-#include "tools.h"
-#endif
-
-#include <cstring>
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
-#include <strings.h> // for strcasecmp
-#endif
 
 namespace
 {
@@ -81,7 +81,7 @@ namespace
                 continue;
             }
 
-            std::string fullname = System::ConcatePath( path, data.cFileName );
+            std::string fullname = System::concatPath( path, data.cFileName );
 
             // FindFirstFile() searches for both long and short variants of names, so we need additional filtering
             if ( filterByName( data.cFileName, nameAsFilter, name, _stricmp ) )
@@ -103,7 +103,7 @@ namespace
         // this means you use strlen() to get length of file name
         SceIoDirent dir;
         while ( sceIoDread( uid, &dir ) > 0 ) {
-            std::string fullname = System::ConcatePath( path, dir.d_name );
+            std::string fullname = System::concatPath( path, dir.d_name );
 
             // if not regular file
             if ( !SCE_S_ISREG( dir.d_stat.st_mode ) )
@@ -132,7 +132,7 @@ namespace
 
         const struct dirent * ep;
         while ( nullptr != ( ep = readdir( dp ) ) ) {
-            std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
+            std::string fullname = System::concatPath( correctedPath, ep->d_name );
 
             // if not regular file
             if ( !System::IsFile( fullname ) )

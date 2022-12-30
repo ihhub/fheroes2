@@ -18,30 +18,41 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "screen.h"
-#include "image_palette.h"
-#include "logging.h"
-#include "tools.h"
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <cstring>
+#include <iterator>
+#include <ostream>
+#include <set>
+#include <utility>
 
+#include <SDL_error.h>
+#include <SDL_stdinc.h>
 #include <SDL_version.h>
 #include <SDL_video.h>
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #include <SDL_events.h>
 #include <SDL_hints.h>
 #include <SDL_mouse.h>
+#include <SDL_pixels.h>
+#include <SDL_rect.h>
 #include <SDL_render.h>
+#include <SDL_surface.h>
 #else
 #include <SDL_active.h>
 #endif
 
-#include <algorithm>
-#include <cassert>
-#include <cmath>
-#include <set>
-
 #if defined( TARGET_PS_VITA )
 #include <vita2d.h>
 #endif
+
+#include "image_palette.h"
+#include "logging.h"
+#include "screen.h"
+#include "tools.h"
 
 namespace
 {
@@ -347,7 +358,7 @@ namespace
 namespace
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    class RenderCursor : public fheroes2::Cursor
+    class RenderCursor final : public fheroes2::Cursor
     {
     public:
         RenderCursor( const RenderCursor & ) = delete;
@@ -378,6 +389,12 @@ namespace
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
+            if ( image.empty() ) {
+                // What are you trying to do? Set an invisible cursor? Use hide() method!
+                assert( 0 );
+                return;
+            }
+
             if ( _emulation ) {
                 fheroes2::Cursor::update( image, offsetX, offsetY );
                 return;
@@ -423,7 +440,12 @@ namespace
             }
 
             SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, offsetX, offsetY );
-            SDL_SetCursor( tempCursor );
+            if ( tempCursor == nullptr ) {
+                ERROR_LOG( "Failed to create a cursor. The error description: " << SDL_GetError() )
+            }
+            else {
+                SDL_SetCursor( tempCursor );
+            }
 
             const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
             if ( returnCode < 0 ) {
@@ -431,8 +453,10 @@ namespace
             }
             SDL_FreeSurface( surface );
 
-            clear();
-            std::swap( _cursor, tempCursor );
+            if ( tempCursor != nullptr ) {
+                clear();
+                std::swap( _cursor, tempCursor );
+            }
         }
 
         void enableSoftwareEmulation( const bool enable ) override
@@ -494,7 +518,7 @@ namespace
     };
 #else
     // SDL 1 doesn't support hardware level cursor.
-    class RenderCursor : public fheroes2::Cursor
+    class RenderCursor final : public fheroes2::Cursor
     {
     public:
         RenderCursor() = default;
@@ -634,7 +658,8 @@ namespace
 
             if ( width_ != VITA_FULLSCREEN_WIDTH || height_ != VITA_FULLSCREEN_HEIGHT ) {
                 if ( isFullScreen ) {
-                    vita2d_texture_set_filters( _texBuffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR );
+                    vita2d_texture_set_filters( _texBuffer, isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR,
+                                                isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR );
                     if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
                         const float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
                         _destRect.width = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
@@ -729,20 +754,19 @@ namespace
                 return;
             }
 
-            bool fullScreen = true;
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
-#if defined( _WIN32 )
-                flags &= ~SDL_WINDOW_FULLSCREEN;
-#else
                 flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
-#endif
-
-                fullScreen = false;
+                flags &= ~SDL_WINDOW_FULLSCREEN;
             }
             else {
 #if defined( _WIN32 )
-                flags |= SDL_WINDOW_FULLSCREEN;
+                if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                    flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+                }
+                else {
+                    flags |= SDL_WINDOW_FULLSCREEN;
+                }
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
@@ -760,7 +784,9 @@ namespace
                 ERROR_LOG( "Failed to set fullscreen mode flags. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
 
-            if ( !fullScreen && _windowedSize.width != 0 && _windowedSize.height != 0 ) {
+            _syncFullScreen();
+
+            if ( !isFullScreen() && _windowedSize.width != 0 && _windowedSize.height != 0 ) {
                 SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
             }
 
@@ -849,6 +875,22 @@ namespace
         void setVSync( const bool enable ) override
         {
             _isVSyncEnabled = enable;
+
+            if ( _window != nullptr ) {
+                // We do not need to rebuild window but renderer only.
+                if ( _texture != nullptr ) {
+                    SDL_DestroyTexture( _texture );
+                    _texture = nullptr;
+                }
+
+                if ( _renderer != nullptr ) {
+                    SDL_DestroyRenderer( _renderer );
+                    _renderer = nullptr;
+                }
+
+                const fheroes2::Display & display = fheroes2::Display::instance();
+                _createRenderer( display.width(), display.height() );
+            }
         }
 
     protected:
@@ -857,6 +899,7 @@ namespace
             , _surface( nullptr )
             , _renderer( nullptr )
             , _texture( nullptr )
+            , _driverIndex( -1 )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
             , _isVSyncEnabled( false )
         {
@@ -892,6 +935,8 @@ namespace
             }
 
             _windowedSize = fheroes2::Size();
+
+            _driverIndex = -1;
         }
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
@@ -899,65 +944,54 @@ namespace
             if ( _surface == nullptr )
                 return;
 
-            copyImageToSurface( display, _surface, roi );
-
             if ( _texture == nullptr ) {
                 if ( _renderer != nullptr )
                     SDL_DestroyRenderer( _renderer );
 
                 // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-                _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
+                _renderer = SDL_CreateRenderer( _window, _driverIndex, renderFlags() );
                 if ( _renderer == nullptr ) {
                     ERROR_LOG( "Failed to create a window renderer. The error: " << SDL_GetError() )
                 }
+
+                return;
+            }
+
+            copyImageToSurface( display, _surface, roi );
+
+            const bool fullFrame = ( roi.width == display.width() ) && ( roi.height == display.height() );
+            if ( fullFrame ) {
+                const int returnCode = SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
+                if ( returnCode < 0 ) {
+                    ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                }
             }
             else {
-                const bool fullFrame = ( roi.width == display.width() ) && ( roi.height == display.height() );
-                if ( fullFrame ) {
-                    int returnCode = SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    }
+                SDL_Rect area;
+                area.x = roi.x;
+                area.y = roi.y;
+                area.w = roi.width;
+                area.h = roi.height;
 
-                    returnCode = SDL_SetRenderTarget( _renderer, nullptr );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to set render target. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        return;
-                    }
-
-                    returnCode = SDL_RenderClear( _renderer );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to clear render. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        return;
-                    }
-                }
-                else {
-                    SDL_Rect area;
-                    area.x = roi.x;
-                    area.y = roi.y;
-                    area.w = roi.width;
-                    area.h = roi.height;
-
-                    int returnCode = SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    }
-
-                    returnCode = SDL_SetRenderTarget( _renderer, nullptr );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to set render target. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        return;
-                    }
-                }
-
-                const int returnCode = SDL_RenderCopy( _renderer, _texture, nullptr, nullptr );
+                const int returnCode = SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
                 if ( returnCode < 0 ) {
-                    ERROR_LOG( "Failed to copy render.The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    return;
+                    ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
                 }
-
-                SDL_RenderPresent( _renderer );
             }
+
+            int returnCode = SDL_RenderClear( _renderer );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to clear renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            returnCode = SDL_RenderCopy( _renderer, _texture, nullptr, nullptr );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to copy render.The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            SDL_RenderPresent( _renderer );
         }
 
         bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
@@ -982,7 +1016,12 @@ namespace
             uint32_t flags = SDL_WINDOW_SHOWN;
             if ( isFullScreen ) {
 #if defined( _WIN32 )
-                flags |= SDL_WINDOW_FULLSCREEN;
+                if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                    flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+                }
+                else {
+                    flags |= SDL_WINDOW_FULLSCREEN;
+                }
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
@@ -997,33 +1036,43 @@ namespace
                 return false;
             }
 
+            _syncFullScreen();
+
             bool isPaletteModeSupported = false;
 
             SDL_RendererInfo rendererInfo;
-            int returnCode = SDL_GetRenderDriverInfo( 0, &rendererInfo );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
-            }
-            else {
+            _driverIndex = -1;
+
+            const uint32_t renderingFlags = renderFlags();
+
+            const int driverCount = SDL_GetNumRenderDrivers();
+            for ( int driverId = 0; driverId < driverCount; ++driverId ) {
+                int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
+                if ( returnCode < 0 ) {
+                    ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                    continue;
+                }
+
+                if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
+                    continue;
+                }
+
                 for ( uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i ) {
                     if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
+                        // Bingo! This is the best driver and format.
                         isPaletteModeSupported = true;
+                        _driverIndex = driverId;
                         break;
                     }
                 }
-            }
 
-            const uint32_t renderingFlags = renderFlags();
-            if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
-                ERROR_LOG( "Chosen rendering driver does not support all rendering flags" )
-            }
+                if ( isPaletteModeSupported ) {
+                    break;
+                }
 
-            // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-            _renderer = SDL_CreateRenderer( _window, -1, renderingFlags );
-            if ( _renderer == nullptr ) {
-                ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
-                clear();
-                return false;
+                if ( _driverIndex < 0 ) {
+                    _driverIndex = driverId;
+                }
             }
 
             _surface = SDL_CreateRGBSurface( 0, width_, height_, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
@@ -1039,36 +1088,8 @@ namespace
             }
 
             _createPalette();
-            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
-            }
 
-            // Setting this hint prevents the window to regain focus after loosing it in fullscreen mode.
-            // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
-            if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
-                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
-            }
-
-            returnCode = SDL_RenderSetLogicalSize( _renderer, width_, height_ );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to create logical size of " << width_ << " x " << height_ << " size. The error value: " << returnCode
-                                                               << ", description: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
-            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
-            if ( _texture == nullptr ) {
-                ERROR_LOG( "Failed to create a texture from a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
-            _retrieveWindowInfo();
-
-            _toggleMouseCaptureMode();
-
-            return true;
+            return _createRenderer( width_, height_ );
         }
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
@@ -1095,6 +1116,7 @@ namespace
         SDL_Surface * _surface;
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
+        int _driverIndex;
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
@@ -1152,7 +1174,7 @@ namespace
 
 #if defined( TARGET_NINTENDO_SWITCH )
             // On a Nintendo Switch the game is always fullscreen
-            _activeWindowROI = fheroes2::Rect( 0, 0, _currentScreenResolution.width, _currentScreenResolution.height );
+            _activeWindowROI = { 0, 0, _currentScreenResolution.width, _currentScreenResolution.height };
 #else
             SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
             SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
@@ -1168,6 +1190,69 @@ namespace
             }
             else {
                 SDL_SetWindowGrab( _window, SDL_FALSE );
+            }
+        }
+
+        bool _createRenderer( const int32_t width_, const int32_t height_ )
+        {
+            const uint32_t renderingFlags = renderFlags();
+
+            // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
+            _renderer = SDL_CreateRenderer( _window, _driverIndex, renderingFlags );
+            if ( _renderer == nullptr ) {
+                ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            int returnCode = SDL_SetRenderDrawColor( _renderer, 0, 0, 0, SDL_ALPHA_OPAQUE );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
+            }
+
+            returnCode = SDL_SetRenderTarget( _renderer, nullptr );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
+            }
+
+            if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
+            }
+
+            // Setting this hint prevents the window to regain focus after losing it in fullscreen mode.
+            // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
+            if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
+            }
+
+            returnCode = SDL_RenderSetLogicalSize( _renderer, width_, height_ );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to create logical size of " << width_ << " x " << height_ << " size. The error value: " << returnCode
+                                                               << ", description: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
+            if ( _texture == nullptr ) {
+                ERROR_LOG( "Failed to create a texture from a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
+            _retrieveWindowInfo();
+
+            _toggleMouseCaptureMode();
+
+            return true;
+        }
+
+        void _syncFullScreen()
+        {
+            if ( isFullScreen() != BaseRenderEngine::isFullScreen() ) {
+                BaseRenderEngine::toggleFullScreen();
+
+                assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
             }
         }
     };
@@ -1207,6 +1292,7 @@ namespace
                 _surface = SDL_SetVideoMode( 0, 0, _bitDepth, flags );
             }
 
+            _syncFullScreen();
             _createPalette();
         }
 
@@ -1311,6 +1397,8 @@ namespace
                 return false;
             }
 
+            _syncFullScreen();
+
             if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != width_ || _surface->h != height_ ) {
                 clear();
                 return false;
@@ -1370,6 +1458,15 @@ namespace
                         linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                     }
                 }
+            }
+        }
+
+        void _syncFullScreen()
+        {
+            if ( isFullScreen() != BaseRenderEngine::isFullScreen() ) {
+                BaseRenderEngine::toggleFullScreen();
+
+                assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
             }
         }
     };
@@ -1461,6 +1558,11 @@ namespace fheroes2
         }
 
         _prevRoi = temp;
+    }
+
+    void Display::updateNextRenderRoi( const Rect & roi )
+    {
+        _prevRoi = getBoundaryRect( _prevRoi, roi );
     }
 
     void Display::_renderFrame( const Rect & roi ) const

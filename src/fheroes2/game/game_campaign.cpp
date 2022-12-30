@@ -18,10 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
+#include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "campaign_data.h"
@@ -33,18 +46,34 @@
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "game_video.h"
+#include "game_video_type.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mus.h"
 #include "pal.h"
+#include "players.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_campaign.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -501,6 +530,62 @@ namespace
         }
     }
 
+    Heroes * getHeroToApplyBonusOrAwards( const Campaign::ScenarioInfoId & scenarioInfoId, const Kingdom & kingdom )
+    {
+        {
+            static const std::map<std::pair<int, int>, int> targetHeroes = { // Final Justice
+                                                                             { { Campaign::ROLAND_CAMPAIGN, 9 }, Heroes::ROLAND },
+                                                                             // Apocalypse
+                                                                             { { Campaign::ARCHIBALD_CAMPAIGN, 10 }, Heroes::ARCHIBALD },
+                                                                             // Blood is Thicker
+                                                                             { { Campaign::VOYAGE_HOME_CAMPAIGN, 3 }, Heroes::GALLAVANT } };
+
+            const auto iter = targetHeroes.find( { scenarioInfoId.campaignId, scenarioInfoId.scenarioId } );
+            if ( iter != targetHeroes.end() ) {
+                // The "special" kingdom heroes may have the ID of another hero, but a custom name and portrait,
+                // so the search should be performed by the portrait ID
+                for ( Heroes * hero : kingdom.GetHeroes() ) {
+                    assert( hero != nullptr );
+
+                    if ( hero->getPortraitId() == iter->second ) {
+                        return hero;
+                    }
+                }
+
+                DEBUG_LOG( DBG_GAME, DBG_WARN,
+                           "the hero to whom bonuses or awards should be applied has not been found"
+                               << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
+            }
+        }
+
+        {
+            static const std::map<std::pair<int, int>, int> targetRaces = { // Defender
+                                                                            { { Campaign::ROLAND_CAMPAIGN, 5 }, Race::SORC },
+                                                                            // The Wayward Son
+                                                                            { { Campaign::DESCENDANTS_CAMPAIGN, 2 }, Race::SORC },
+                                                                            // The Epic Battle
+                                                                            { { Campaign::DESCENDANTS_CAMPAIGN, 7 }, Race::SORC } };
+
+            const auto iter = targetRaces.find( { scenarioInfoId.campaignId, scenarioInfoId.scenarioId } );
+            if ( iter != targetRaces.end() ) {
+                for ( Heroes * hero : kingdom.GetHeroes() ) {
+                    assert( hero != nullptr );
+
+                    if ( hero->GetRace() == iter->second ) {
+                        return hero;
+                    }
+                }
+
+                DEBUG_LOG( DBG_GAME, DBG_WARN,
+                           "the hero to whom bonuses or awards should be applied has not been found"
+                               << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
+            }
+        }
+
+        // By default, bonuses and awards are applied to the best hero of the kingdom
+        return kingdom.GetBestHero();
+    }
+
     void SetScenarioBonus( const Campaign::ScenarioInfoId & scenarioInfoId, const Campaign::ScenarioBonusData & scenarioBonus )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
@@ -509,60 +594,89 @@ namespace
                 continue;
             }
 
-            if ( !player->isControlHuman() )
+            if ( !player->isControlHuman() ) {
                 continue;
+            }
 
             Kingdom & kingdom = world.GetKingdom( player->GetColor() );
-            Heroes * bestHero = kingdom.GetBestHero();
 
             switch ( scenarioBonus._type ) {
             case Campaign::ScenarioBonusData::RESOURCES:
                 kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
+
                 break;
             case Campaign::ScenarioBonusData::ARTIFACT: {
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->PickupArtifact( Artifact( scenarioBonus._subType ) );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    Artifact artifact( scenarioBonus._subType );
+
+                    if ( artifact == Artifact::SPELL_SCROLL ) {
+                        artifact.SetSpell( scenarioBonus._artifactSpellId );
+                    }
+
+                    hero->PickupArtifact( artifact );
                 }
+
                 break;
             }
-            case Campaign::ScenarioBonusData::TROOP:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
+            case Campaign::ScenarioBonusData::TROOP: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
                 }
+
                 break;
+            }
             case Campaign::ScenarioBonusData::SPELL: {
-                KingdomHeroes & heroes = kingdom.GetHeroes();
-                assert( !heroes.empty() );
-                if ( !heroes.empty() ) {
-                    // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
-                    heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->AppendSpellToBook( scenarioBonus._subType, true );
                 }
+
                 break;
             }
             case Campaign::ScenarioBonusData::STARTING_RACE:
                 Players::SetPlayerRace( player->GetColor(), scenarioBonus._subType );
+
                 break;
-            case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    setHeroAndArmyBonus( bestHero, scenarioInfoId );
+            case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    setHeroAndArmyBonus( hero, scenarioInfoId );
                 }
+
                 break;
-            case Campaign::ScenarioBonusData::SKILL_PRIMARY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    for ( int32_t i = 0; i < scenarioBonus._amount; ++i )
-                        bestHero->IncreasePrimarySkill( scenarioBonus._subType );
+            }
+            case Campaign::ScenarioBonusData::SKILL_PRIMARY: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    for ( int32_t i = 0; i < scenarioBonus._amount; ++i ) {
+                        hero->IncreasePrimarySkill( scenarioBonus._subType );
+                    }
                 }
+
                 break;
-            case Campaign::ScenarioBonusData::SKILL_SECONDARY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+            }
+            case Campaign::ScenarioBonusData::SKILL_SECONDARY: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
                 }
+
                 break;
+            }
             default:
                 assert( 0 );
             }
@@ -574,35 +688,60 @@ namespace
     void applyObtainedCampaignAwards( const Campaign::ScenarioInfoId & currentScenarioInfoId, const std::vector<Campaign::CampaignAwardData> & awards )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
+        const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
-            if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID )
+            if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID ) {
                 continue;
+            }
 
             switch ( awards[i]._type ) {
-            case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT:
-                humanKingdom.GetBestHero()->PickupArtifact( Artifact( awards[i]._subType ) );
+            case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->PickupArtifact( Artifact( awards[i]._subType ) );
+                }
+
                 break;
-            case Campaign::CampaignAwardData::TYPE_GET_SPELL:
-                humanKingdom.GetBestHero()->AppendSpellToBook( awards[i]._subType, true );
+            }
+            case Campaign::CampaignAwardData::TYPE_GET_SPELL: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->AppendSpellToBook( awards[i]._subType, true );
+                }
+
                 break;
+            }
             case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
                 for ( const Player * player : sortedPlayers ) {
-                    Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+                    const Kingdom & kingdom = world.GetKingdom( player->GetColor() );
                     const KingdomHeroes & heroes = kingdom.GetHeroes();
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
+                        assert( heroes[j] != nullptr );
+
                         if ( heroes[j]->GetID() == awards[i]._subType ) {
                             heroes[j]->SetFreeman( Battle::RESULT_LOSS );
                             break;
                         }
                     }
                 }
+
                 break;
-            case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES:
-                replaceArmy( humanKingdom.GetBestHero()->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+            case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    replaceArmy( hero->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+                }
+
                 break;
+            }
             default:
                 break;
             }
@@ -753,7 +892,7 @@ namespace
         const fheroes2::StandardWindow frameborder( 234, 270 );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
-        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int buttonIcnId = isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN;
         const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
 
@@ -1321,7 +1460,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 continue;
             }
 
-            const Maps::FileInfo mapInfo = scenario.loadMap();
+            Maps::FileInfo mapInfo = scenario.loadMap();
+            Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
+
             conf.SetCurrentFileInfo( mapInfo );
 
             // starting faction scenario bonus has to be called before players.SetStartGame()
@@ -1337,7 +1478,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
-            if ( Settings::ExtGameUseFade() )
+            if ( Settings::isFadeEffectEnabled() )
                 fheroes2::FadeDisplay();
 
             conf.SetGameType( Game::TYPE_CAMPAIGN );
@@ -1367,6 +1508,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
             playPreviosScenarioVideo();
             playCurrentScenarioVideo();
+
+            restorer.restore();
+            display.render();
 
             playCampaignMusic( chosenCampaignID );
         }

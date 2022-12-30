@@ -21,16 +21,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dir.h"
+#include "game.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "game_mainmenu_ui.h"
+#include "game_mode.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
 #include "logging.h"
 #include "mus.h"
@@ -90,9 +100,9 @@ fheroes2::GameMode Game::LoadMulti()
     const int32_t buttonYPos = 46;
     const int32_t buttonYStep = 66;
 
-    fheroes2::Button buttonHotSeat( buttonXPos, buttonYPos, ICN::BTNMP, 0, 1 );
+    fheroes2::Button buttonHotSeat( buttonXPos, buttonYPos, ICN::BUTTON_HOT_SEAT, 0, 1 );
     fheroes2::Button buttonNetwork( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNMP, 2, 3 );
-    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNMP, 8, 9 );
+    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     buttonHotSeat.draw();
     buttonCancelGame.draw();
@@ -160,10 +170,10 @@ fheroes2::GameMode Game::LoadGame()
     std::vector<fheroes2::Button> buttons( 4 );
     const size_t buttonCount = buttons.size();
 
-    buttons[0].setICNInfo( ICN::BTNNEWGM, 0, 1 );
-    buttons[1].setICNInfo( ICN::BTNNEWGM, 2, 3 );
-    buttons[2].setICNInfo( ICN::BTNNEWGM, 4, 5 );
-    buttons[3].setICNInfo( ICN::BTNNEWGM, 6, 7 );
+    buttons[0].setICNInfo( ICN::BUTTON_STANDARD_GAME, 0, 1 );
+    buttons[1].setICNInfo( ICN::BUTTON_CAMPAIGN_GAME, 0, 1 );
+    buttons[2].setICNInfo( ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
+    buttons[3].setICNInfo( ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
     const int32_t buttonYPos = 46;

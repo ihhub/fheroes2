@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include "game_interface.h"
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -29,8 +30,12 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_border.h"
+#include "localevent.h"
 #include "maps.h"
 #include "settings.h"
+#include "ui_button.h"
 #include "ui_tool.h"
 #include "world.h"
 
@@ -42,6 +47,7 @@ Interface::Basic::Basic()
     , statusWindow( *this )
     , controlPanel( *this )
     , redraw( 0 )
+    , _lockRedraw( false )
 {
     Reset();
 }
@@ -51,7 +57,7 @@ void Interface::Basic::Reset()
     const fheroes2::Display & display = fheroes2::Display::instance();
 
     Settings & conf = Settings::Get();
-    const bool isHideInterface = conf.ExtGameHideInterface();
+    const bool isHideInterface = conf.isHideInterfaceEnabled();
 
     if ( isHideInterface ) {
         conf.SetShowPanel( true );
@@ -74,9 +80,9 @@ void Interface::Basic::Reset()
         else {
             radar.SetPos( 0, 0 );
             // It's OK to use display.width() for the X coordinate here, panel will be docked to the right edge
-            iconsPanel.SetPos( display.width(), radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
-            buttonsArea.SetPos( display.width(), iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
-            statusWindow.SetPos( display.width(), buttonsArea.GetArea().y + buttonsArea.GetArea().height );
+            iconsPanel.SetPos( display.width(), radar.GetRect().y + radar.GetRect().height );
+            buttonsArea.SetPos( display.width(), iconsPanel.GetRect().y + iconsPanel.GetRect().height );
+            statusWindow.SetPos( display.width(), buttonsArea.GetRect().y + buttonsArea.GetRect().height );
         }
     }
     else {
@@ -107,10 +113,15 @@ Interface::Basic & Interface::Basic::Get()
 
 void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
 {
+    if ( _lockRedraw ) {
+        SetRedraw( force );
+        return;
+    }
+
     const Settings & conf = Settings::Get();
 
     const uint32_t combinedRedraw = redraw | force;
-    const bool hideInterface = conf.ExtGameHideInterface();
+    const bool hideInterface = conf.isHideInterfaceEnabled();
 
     if ( combinedRedraw & REDRAW_GAMEAREA ) {
         gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
@@ -154,8 +165,8 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const Settings & conf = Settings::Get();
-    const bool isEvilInterface = conf.ExtGameEvilInterface();
-    const bool isHideInterface = conf.ExtGameHideInterface();
+    const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+    const bool isHideInterface = conf.isHideInterfaceEnabled();
 
     const fheroes2::Rect & radarRect = radar.GetRect();
     const fheroes2::Rect & radarArea = radar.GetArea();
@@ -241,8 +252,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            uint32_t & frame = Game::MapsAnimationFrame();
-            ++frame;
+            Game::updateAdventureMapAnimationIndex();
 
             Redraw( REDRAW_GAMEAREA );
 

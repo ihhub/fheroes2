@@ -19,6 +19,14 @@
  ***************************************************************************/
 
 #include "ui_language.h"
+
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <map>
+#include <set>
+#include <utility>
+
 #include "agg.h"
 #include "agg_image.h"
 #include "icn.h"
@@ -26,10 +34,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_font.h"
-
-#include <cassert>
-#include <map>
-#include <set>
 
 namespace
 {
@@ -59,7 +63,8 @@ namespace
             { "tr", fheroes2::SupportedLanguage::Turkish },    { "turkish", fheroes2::SupportedLanguage::Turkish },
             { "ro", fheroes2::SupportedLanguage::Romanian },   { "romanian", fheroes2::SupportedLanguage::Romanian },
             { "nl", fheroes2::SupportedLanguage::Dutch },      { "dutch", fheroes2::SupportedLanguage::Dutch },
-            { "hu", fheroes2::SupportedLanguage::Hungarian },  { "hungarian", fheroes2::SupportedLanguage::Hungarian } };
+            { "hu", fheroes2::SupportedLanguage::Hungarian },  { "hungarian", fheroes2::SupportedLanguage::Hungarian },
+            { "dk", fheroes2::SupportedLanguage::Danish },     { "danish", fheroes2::SupportedLanguage::Danish } };
 }
 
 namespace fheroes2
@@ -107,7 +112,7 @@ namespace fheroes2
                                                              SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian,
                                                              SupportedLanguage::Romanian,   SupportedLanguage::Spanish,   SupportedLanguage::Portuguese,
                                                              SupportedLanguage::Swedish,    SupportedLanguage::Turkish,   SupportedLanguage::Dutch,
-                                                             SupportedLanguage::Hungarian,  SupportedLanguage::Czech };
+                                                             SupportedLanguage::Hungarian,  SupportedLanguage::Czech,     SupportedLanguage::Danish };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
@@ -173,6 +178,8 @@ namespace fheroes2
             return _( "Dutch" );
         case SupportedLanguage::Hungarian:
             return _( "Hungarian" );
+        case SupportedLanguage::Danish:
+            return _( "Danish" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -219,6 +226,8 @@ namespace fheroes2
             return "nl";
         case SupportedLanguage::Hungarian:
             return "hu";
+        case SupportedLanguage::Danish:
+            return "dk";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -249,5 +258,10 @@ namespace fheroes2
         const bool isOriginalResourceLanguage = ( language == SupportedLanguage::English ) || ( language == getResourceLanguage() );
 
         AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
+    }
+
+    SupportedLanguage getCurrentLanguage()
+    {
+        return fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
     }
 }

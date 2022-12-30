@@ -18,7 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "ui_dialog.h"
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <ostream>
+#include <string>
+#include <utility>
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -34,12 +41,11 @@
 #include "resource.h"
 #include "screen.h"
 #include "spell_info.h"
-#include "tools.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 
-#include <cassert>
-#include <string>
+class HeroBase;
 
 namespace
 {

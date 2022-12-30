@@ -24,19 +24,21 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstdint>
+#include <cstdlib>
 #include <iostream>
+#include <map>
+#include <set>
 
 #include "agg_image.h"
+#include "army.h"
 #include "castle.h"
 #include "game.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
-#ifdef WITH_DEBUG
-#include "game_interface.h"
-#else
+#include "image.h"
 #include "interface_gamearea.h"
-#endif
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -56,9 +58,7 @@
 #include "objwatr.h"
 #include "objxloc.h"
 #include "race.h"
-#include "save_format_version.h"
 #include "serialize.h"
-#include "settings.h"
 #include "spell.h"
 #include "til.h"
 #include "trees.h"
@@ -339,6 +339,17 @@ namespace
 
         return imageMap.try_emplace( passable, std::move( sf ) ).first->second;
     }
+
+    const fheroes2::Image & getDebugFogImage()
+    {
+        static const fheroes2::Image fog = []() {
+            fheroes2::Image temp( 32, 32 );
+            fheroes2::FillTransform( temp, 0, 0, temp.width(), temp.height(), 2 );
+            return temp;
+        }();
+
+        return fog;
+    }
 #endif
 
     bool isShortObject( const MP2::MapObjectType objectType )
@@ -418,7 +429,7 @@ namespace
         return false;
     }
 
-    uint32_t PackTileSpriteIndex( uint32_t index, uint32_t shape ) /* index max: 0x3FFF, shape value: 0, 1, 2, 3 */
+    uint32_t PackTileSpriteIndex( uint32_t index, uint32_t shape )
     {
         return ( shape << 14 ) | ( 0x3FFF & index );
     }
@@ -437,51 +448,6 @@ namespace
         }
 
         return false;
-    }
-
-    Maps::Addons::const_iterator getAddonWithAnyFlag( const Maps::Addons & addons )
-    {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this function." );
-        Maps::Addons::const_iterator foundAddon = addons.end();
-        for ( auto iter = addons.begin(); iter != addons.end(); ++iter ) {
-            if ( MP2::GetICNObject( iter->object ) == ICN::FLAG32 ) {
-                if ( foundAddon == addons.end() ) {
-                    foundAddon = iter;
-                }
-                else {
-                    // The stack of addons contains more than one flag. We have no idea which flag belongs to the actual object.
-                    return addons.end();
-                }
-            }
-        }
-
-        return foundAddon;
-    }
-
-    uint8_t getColorFromIndex( const int colorIndex )
-    {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this function." );
-        switch ( colorIndex ) {
-        case 0:
-            return Color::BLUE;
-        case 1:
-            return Color::GREEN;
-        case 2:
-            return Color::RED;
-        case 3:
-            return Color::YELLOW;
-        case 4:
-            return Color::ORANGE;
-        case 5:
-            return Color::PURPLE;
-        case 6:
-            return Color::UNUSED;
-        default:
-            assert( 0 );
-            break;
-        }
-
-        return Color::NONE;
     }
 
     const char * getObjectLayerName( const uint8_t level )
@@ -511,7 +477,7 @@ Maps::TilesAddon::TilesAddon()
     , index( 0 )
 {}
 
-Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ )
+Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint8_t index_ )
     : uniq( uid )
     , level( lv )
     , object( obj )
@@ -923,6 +889,7 @@ int Maps::Tiles::getBoatDirection() const
 
 void Maps::Tiles::SetTerrain( uint32_t sprite_index, uint32_t shape )
 {
+    // TODO: verify the logic! The shape value can exceed 3, and the result will not fit into uint16_t
     pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
 }
 
@@ -1247,15 +1214,19 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point 
     }
 }
 
-void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const
 {
 #ifdef WITH_DEBUG
+    if ( isFog( friendColors ) ) {
+        area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( _index ), false, 255 );
+    }
     if ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) {
         area.BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, Maps::GetPoint( _index ), false, 255 );
     }
 #else
     (void)dst;
     (void)area;
+    (void)friendColors;
 #endif
 }
 
@@ -1270,7 +1241,10 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
     // - check the main object which is on the tile
 
     // Some addons must be rendered after the main object on the tile. This applies for flags.
-    std::vector<const TilesAddon *> postRenderingAddon;
+    // Since this method is called intensively during rendering we have to avoid memory allocation on heap.
+    const size_t maxPostRenderAddons = 16;
+    std::array<const TilesAddon *, maxPostRenderAddons> postRenderingAddon{};
+    size_t postRenderAddonCount = 0;
 
     for ( const TilesAddon & addon : addons_level1 ) {
         if ( ( addon.level & 0x03 ) != level ) {
@@ -1283,7 +1257,11 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
 
         const int icn = MP2::GetICNObject( addon.object );
         if ( icn == ICN::FLAG32 ) {
-            postRenderingAddon.emplace_back( &addon );
+            // Based on logically thinking it is impossible to have more than 16 flags on a single tile.
+            assert( postRenderAddonCount < maxPostRenderAddons );
+
+            postRenderingAddon[postRenderAddonCount] = &addon;
+            ++postRenderAddonCount;
             continue;
         }
 
@@ -1294,10 +1272,10 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
         renderMainObject( dst, area, mp );
     }
 
-    for ( const TilesAddon * addon : postRenderingAddon ) {
-        assert( addon != nullptr );
+    for ( size_t i = 0; i < postRenderAddonCount; ++i ) {
+        assert( postRenderingAddon[i] != nullptr );
 
-        renderAddonObject( dst, area, mp, *addon );
+        renderAddonObject( dst, area, mp, *postRenderingAddon[i] );
     }
 }
 
@@ -1324,7 +1302,7 @@ void Maps::Tiles::renderAddonObject( fheroes2::Image & output, const Interface::
 
     area.BlitOnTile( output, sprite, sprite.x(), sprite.y(), offset, false, alphaValue );
 
-    const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame() );
+    const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::getAdventureMapAnimationIndex() );
     if ( animationIndex > 0 ) {
         const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
@@ -1357,7 +1335,7 @@ void Maps::Tiles::renderMainObject( fheroes2::Image & output, const Interface::G
 
     // Render possible animation image.
     // TODO: quantity2 is used in absolutely incorrect way! Fix all the logic for it. As of now (quantity2 != 0) expression is used only for Magic Garden.
-    const uint32_t mainObjectAnimationIndex = ICN::AnimationFrame( mainObjectIcn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
+    const uint32_t mainObjectAnimationIndex = ICN::AnimationFrame( mainObjectIcn, objectIndex, Game::getAdventureMapAnimationIndex(), quantity2 != 0 );
     if ( mainObjectAnimationIndex > 0 ) {
         const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, mainObjectAnimationIndex );
 
@@ -1539,7 +1517,7 @@ void Maps::Tiles::redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool 
     if ( renderFlyingGhosts ) {
         // This sprite is bigger than TILEWIDTH but rendering is correct for heroes and boats.
         // TODO: consider adding this sprite as a part of an addon.
-        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
+        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::getAdventureMapAnimationIndex() % 15 );
 
         const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
 
@@ -1877,117 +1855,6 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
     }
 }
 
-void Maps::Tiles::correctOldSaveOwnershipFlag()
-{
-    // Old saves prior 0.9.18 release contain flags in different incorrect places. This method attempts to fix it but there is no guarantee that it will always work.
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this method." );
-
-    int ownerColor = Color::NONE;
-
-    switch ( mp2_object ) {
-    case MP2::OBJ_LIGHTHOUSE:
-    case MP2::OBJ_WINDMILL:
-    case MP2::OBJ_MAGICGARDEN: {
-        if ( removeOldFlag( addons_level1, 42, ownerColor ) ) {
-            setOwnershipFlag( mp2_object, ownerColor );
-        }
-        break;
-    }
-
-    case MP2::OBJ_WATERWHEEL: {
-        if ( removeOldFlag( addons_level1, 14, ownerColor ) ) {
-            setOwnershipFlag( mp2_object, ownerColor );
-        }
-        break;
-    }
-    case MP2::OBJ_MINES: {
-        if ( removeOldFlag( addons_level2, 14, ownerColor ) ) {
-            setOwnershipFlag( mp2_object, ownerColor );
-        }
-        break;
-    }
-
-    case MP2::OBJ_ALCHEMYLAB: {
-        if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
-            Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
-            if ( removeOldFlag( tile.addons_level2, 21, ownerColor ) ) {
-                setOwnershipFlag( mp2_object, ownerColor );
-            }
-        }
-        break;
-    }
-
-    case MP2::OBJ_SAWMILL: {
-        if ( Maps::isValidDirection( _index, Direction::TOP_RIGHT ) ) {
-            Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
-            if ( removeOldFlag( tile.addons_level2, 21, ownerColor ) ) {
-                setOwnershipFlag( mp2_object, ownerColor );
-            }
-        }
-        break;
-    }
-
-    default:
-        // Castles do not need flag conversion as they come with flags from map format.
-        break;
-    }
-}
-
-bool Maps::Tiles::removeOldFlag( Addons & addons, const uint8_t startIndex, int & ownerColor )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this method." );
-
-    Maps::Addons::const_iterator foundAddon = getAddonWithAnyFlag( addons );
-    if ( foundAddon == addons.end() ) {
-        return false;
-    }
-
-    const int colorIndex = foundAddon->index - startIndex;
-    if ( colorIndex >= 0 && colorIndex <= 6 ) {
-        addons.erase( foundAddon );
-        ownerColor = getColorFromIndex( colorIndex );
-        return true;
-    }
-
-    return false;
-}
-
-void Maps::Tiles::correctDiggingHoles()
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this method." );
-    uint8_t obj = 0;
-    uint32_t idx = 0;
-    switch ( GetGround() ) {
-    case Maps::Ground::WASTELAND:
-        obj = 0xE4; // ICN::OBJNCRCK
-        idx = 70;
-        break;
-    case Maps::Ground::DIRT:
-        obj = 0xE0; // ICN::OBJNDIRT
-        idx = 140;
-        break;
-    case Maps::Ground::DESERT:
-        obj = 0xDC; // ICN::OBJNDSRT
-        idx = 68;
-        break;
-    case Maps::Ground::LAVA:
-        obj = 0xD8; // ICN::OBJNLAVA
-        idx = 26;
-        break;
-    default:
-        // Previous implementation was using incorrect digging holes for my terrains. We aren't going to fix it for old saves.
-        obj = 0xC0; // ICN::OBJNGRA2
-        idx = 9;
-        break;
-    }
-
-    for ( TilesAddon & addon : addons_level1 ) {
-        if ( addon.object == obj && addon.index == idx ) {
-            addon.level = BACKGROUND_LAYER;
-        }
-    }
-}
-
 void Maps::Tiles::removeOwnershipFlag( const MP2::MapObjectType objectType )
 {
     setOwnershipFlag( objectType, Color::NONE );
@@ -2244,7 +2111,7 @@ void Maps::Tiles::RemoveObjectSprite()
     }
     case MP2::OBJ_BARRIER:
         tilePassable = DIRECTION_ALL;
-        // fall-through
+        [[fallthrough]];
     default:
         // remove shadow sprite from left cell
         if ( Maps::isValidDirection( _index, Direction::LEFT ) )
@@ -2437,7 +2304,7 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     else {
         const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
         const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
-        spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % monsterAnimationSequence.size()];
+        spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::getAdventureMapAnimationIndex() + mp.x * mp.y ) % monsterAnimationSequence.size()];
     }
     return spriteIndices;
 }

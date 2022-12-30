@@ -22,23 +22,33 @@
  ***************************************************************************/
 
 #include <array>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <functional>
+#include <memory>
+#include <string>
+#include <vector>
 
 #include "agg_image.h"
-#include "campaign_data.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "highscores.h"
 #include "icn.h"
-#ifdef WITH_DEBUG
-#include "logging.h"
-#endif
+#include "image.h"
+#include "localevent.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
+#include "monster.h"
 #include "monster_anim.h"
-#include "mus.h"
+#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "translations.h"
@@ -47,7 +57,10 @@
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
-#include "zzlib.h"
+
+#ifdef WITH_DEBUG
+#include "logging.h"
+#endif
 
 namespace
 {
@@ -170,7 +183,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     }
 #endif
 
-    const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreFileName );
+    const std::string highScoreDataPath = System::concatPath( GetSaveDir(), highScoreFileName );
 
     if ( !highScoreDataContainer.load( highScoreDataPath ) ) {
         // Unable to load the file. Let's populate with the default values.

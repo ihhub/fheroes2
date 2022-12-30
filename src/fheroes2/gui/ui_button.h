@@ -20,9 +20,15 @@
 
 #pragma once
 
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <vector>
+
+#include "image.h"
+#include "math_base.h"
 #include "screen.h"
 #include "ui_base.h"
-#include <memory>
 
 namespace fheroes2
 {

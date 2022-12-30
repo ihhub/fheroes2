@@ -8,30 +8,54 @@ jobs:
     strategy:
       matrix:
         config:
-        - name: Linux SDL1 Release
-          os: ubuntu-latest
+        - name: Linux x86-64 SDL1 Release
+          os: ubuntu-20.04
           dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
-          package_name: fheroes2_ubuntu_SDL1.zip
+          package_name: fheroes2_ubuntu_x86-64_SDL1.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: Ubuntu (Linux) build with SDL1 (latest commit)
+          release_name: Ubuntu x86-64 (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-sdl1_dev
-        - name: Linux SDL1 Debug
-          os: ubuntu-latest
+        - name: Linux x86-64 SDL1 Debug
+          os: ubuntu-20.04
           dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_ASAN: ON }
-        - name: Linux SDL2 Release
-          os: ubuntu-latest
+        - name: Linux x86-64 SDL2 Release
+          os: ubuntu-20.04
           dependencies: libsdl2-dev libsdl2-mixer-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
-          package_name: fheroes2_ubuntu_SDL2.zip
+          package_name: fheroes2_ubuntu_x86-64_SDL2.zip
           package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: Ubuntu (Linux) build with SDL2 (latest commit)
+          release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
-        - name: Linux SDL2 Debug
-          os: ubuntu-latest
+        - name: Linux x86-64 SDL2 Debug
+          os: ubuntu-20.04
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON }
+        - name: Linux ARM64 SDL1 Release
+          os: ubuntu-22.04
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl1.2-dev:arm64 libsdl-mixer1.2-dev:arm64 gettext
+          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
+          package_name: fheroes2_ubuntu_arm64_SDL1.zip
+          package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          release_name: Ubuntu ARM64 (Linux) build with SDL1 (latest commit)
+          release_tag: fheroes2-linux-arm-sdl1_dev
+        - name: Linux ARM64 SDL1 Debug
+          os: ubuntu-22.04
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl1.2-dev:arm64 libsdl-mixer1.2-dev:arm64 gettext
+          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_ASAN: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
+        - name: Linux ARM64 SDL2 Release
+          os: ubuntu-22.04
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 gettext
+          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
+          package_name: fheroes2_ubuntu_arm64_SDL2.zip
+          package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
+          release_tag: fheroes2-linux-arm-sdl2_dev
+        - name: Linux ARM64 SDL2 Debug
+          os: ubuntu-22.04
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 libpng-dev:arm64 gettext
+          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
         - name: macOS SDL1
           os: macos-11
           dependencies: sdl sdl_mixer
@@ -59,15 +83,28 @@ jobs:
     name: Make (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies (Linux)
-      if: ${{ matrix.config.os == 'ubuntu-latest' }}
+      if: ${{ startsWith( matrix.config.os, 'ubuntu-' ) }}
       run: |
+        if [[ "${{ matrix.config.name }}" == *ARM64* ]]
+        then
+          sudo sed -i -e 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
+          sudo dpkg --add-architecture arm64
+          sudo sh -c '. /etc/os-release;
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME} main restricted universe multiverse" > /etc/apt/sources.list.d/arm64.list;
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-updates main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-security main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-backports main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;'
+        fi
         sudo apt-get -y update
         sudo apt-get -y install ${{ matrix.config.dependencies }}
     - name: Install dependencies (macOS)
-      if: ${{ matrix.config.os == 'macos-11' }}
+      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
       run: |
         brew update
         brew install ${{ matrix.config.dependencies }}
@@ -76,7 +113,7 @@ jobs:
         make -j 2
       env: ${{ matrix.config.env }}
     - name: Create app bundle
-      if: ${{ matrix.config.os == 'macos-11' }}
+      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
       run: |
         make -j 2 bundle
       env: ${{ matrix.config.env }}
@@ -107,6 +144,9 @@ jobs:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies
@@ -176,8 +216,11 @@ jobs:
   make-switch:
     name: Make (Nintendo Switch)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     container: devkitpro/devkita64:latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies

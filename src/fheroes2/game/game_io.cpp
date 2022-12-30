@@ -23,17 +23,20 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstdint>
 #include <ctime>
+#include <ostream>
 
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_io.h"
 #include "game_over.h"
-#include "game_static.h"
 #include "logging.h"
-#include "monster.h"
+#include "maps_fileinfo.h"
 #include "save_format_version.h"
+#include "serialize.h"
 #include "settings.h"
 #include "system.h"
 #include "translations.h"
@@ -45,6 +48,8 @@
 
 namespace
 {
+    const std::string autoSaveName{ "AUTOSAVE" };
+
     const uint16_t SAV2ID2 = 0xFF02;
     const uint16_t SAV2ID3 = 0xFF03;
 
@@ -91,26 +96,27 @@ namespace
 
 bool Game::AutoSave()
 {
-    return Game::Save( System::ConcatePath( GetSaveDir(), "AUTOSAVE" + GetSaveFileExtension() ) );
+    return Game::Save( System::concatPath( GetSaveDir(), autoSaveName + GetSaveFileExtension() ), true );
 }
 
-bool Game::Save( const std::string & fn )
+bool Game::Save( const std::string & filePath, const bool autoSave /* = false */ )
 {
-    DEBUG_LOG( DBG_GAME, DBG_INFO, fn )
-    const bool autosave = ( System::GetBasename( fn ) == "AUTOSAVE" + GetSaveFileExtension() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
+
     const Settings & conf = Settings::Get();
 
     StreamFile fs;
     fs.setbigendian( true );
 
-    if ( !fs.open( fn, "wb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" )
+    if ( !fs.open( filePath, "wb" ) ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, filePath << ", error open" )
         return false;
     }
 
     uint16_t loadver = GetLoadVersion();
-    if ( !autosave )
-        Game::SetLastSavename( fn );
+    if ( !autoSave ) {
+        Game::SetLastSavename( filePath );
+    }
 
     // raw info content
     fs << static_cast<uint8_t>( SAV2ID3 >> 8 ) << static_cast<uint8_t>( SAV2ID3 & 0xFF ) << std::to_string( loadver ) << loadver
@@ -128,18 +134,18 @@ bool Game::Save( const std::string & fn )
 
     fz << SAV2ID3; // eof marker
 
-    return !fz.fail() && fz.write( fn, true );
+    return !fz.fail() && fz.write( filePath, true );
 }
 
-fheroes2::GameMode Game::Load( const std::string & fn )
+fheroes2::GameMode Game::Load( const std::string & filePath )
 {
-    DEBUG_LOG( DBG_GAME, DBG_INFO, fn )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
     StreamFile fs;
     fs.setbigendian( true );
 
-    if ( !fs.open( fn, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" )
+    if ( !fs.open( filePath, "rb" ) ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, filePath << ", error open" )
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -150,7 +156,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", incorrect SAV2ID" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, filePath << ", incorrect SAV2ID" )
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -182,7 +188,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     ZStreamFile fz;
     fz.setbigendian( true );
 
-    if ( !fz.read( fn, offset ) ) {
+    if ( !fz.read( filePath, offset ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, ", uncompress: error" )
         return fheroes2::GameMode::CANCEL;
     }
@@ -249,31 +255,27 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     fz >> end_check;
 
     if ( fz.fail() || ( end_check != SAV2ID2 && end_check != SAV2ID3 ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid load file: " << fn )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid load file: " << filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
     SetLoadVersion( CURRENT_FORMAT_VERSION );
 
-    Game::SetLastSavename( fn );
+    Game::SetLastSavename( filePath );
     conf.SetGameType( conf.GameType() | Game::TYPE_LOADFILE );
-
-    if ( returnValue != fheroes2::GameMode::START_GAME ) {
-        return returnValue;
-    }
 
     return returnValue;
 }
 
-bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
+bool Game::LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & fileInfo )
 {
-    DEBUG_LOG( DBG_GAME, DBG_INFO, fn )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
     StreamFile fs;
     fs.setbigendian( true );
 
-    if ( !fs.open( fn, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", error open" )
+    if ( !fs.open( filePath, "rb" ) ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, filePath << ", error open" )
         return false;
     }
 
@@ -284,7 +286,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, fn << ", incorrect SAV2ID" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, filePath << ", incorrect SAV2ID" )
         return false;
     }
 
@@ -306,15 +308,15 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
     if ( ( Settings::Get().GameType() & fileGameType ) == 0 )
         return false;
 
-    finfo = header.info;
-    finfo.file = fn;
+    fileInfo = header.info;
+    fileInfo.file = filePath;
 
     return true;
 }
 
 std::string Game::GetSaveDir()
 {
-    return System::ConcatePath( System::ConcatePath( System::GetDataDirectory( "fheroes2" ), "files" ), "save" );
+    return System::concatPath( System::concatPath( System::GetDataDirectory( "fheroes2" ), "files" ), "save" );
 }
 
 std::string Game::GetSaveFileBaseName()
@@ -356,5 +358,5 @@ std::string Game::GetSaveFileExtension( const int gameType )
 
 bool Game::SaveCompletedCampaignScenario()
 {
-    return Save( System::ConcatePath( GetSaveDir(), GetSaveFileBaseName() ) + "_Complete" + GetSaveFileExtension() );
+    return Save( System::concatPath( GetSaveDir(), GetSaveFileBaseName() ) + "_Complete" + GetSaveFileExtension() );
 }

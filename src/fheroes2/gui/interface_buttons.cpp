@@ -22,10 +22,17 @@
  ***************************************************************************/
 
 #include "interface_buttons.h"
+
+#include <cstddef>
+#include <vector>
+
 #include "dialog.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
+#include "kingdom.h"
+#include "localevent.h"
+#include "route.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
@@ -38,7 +45,10 @@ Interface::ButtonsArea::ButtonsArea( Basic & basic )
 
 void Interface::ButtonsArea::SavePosition()
 {
-    Settings::Get().SetPosButtons( GetRect().getPosition() );
+    Settings & conf = Settings::Get();
+
+    conf.SetPosButtons( GetRect().getPosition() );
+    conf.Save( Settings::configFileName );
 }
 
 void Interface::ButtonsArea::SetRedraw() const
@@ -50,7 +60,7 @@ void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
 {
     BorderWindow::SetPosition( ox, oy );
 
-    const int icnbtn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
+    const int icnbtn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
     buttonNextHero.setICNInfo( icnbtn, 0, 1 );
     buttonMovement.setICNInfo( icnbtn, 2, 3 );
@@ -99,8 +109,8 @@ void Interface::ButtonsArea::Redraw()
 {
     const Settings & conf = Settings::Get();
 
-    if ( !conf.ExtGameHideInterface() || conf.ShowButtons() ) {
-        if ( conf.ExtGameHideInterface() )
+    if ( !conf.isHideInterfaceEnabled() || conf.ShowButtons() ) {
+        if ( conf.isHideInterfaceEnabled() )
             BorderWindow::Redraw();
 
         SetButtonStatus();
@@ -133,8 +143,6 @@ void Interface::ButtonsArea::ResetButtons()
     buttonAdventure.drawOnRelease();
     buttonFile.drawOnRelease();
     buttonSystem.drawOnRelease();
-
-    LocalEvent::Get().ResetPressLeft();
 }
 
 fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()

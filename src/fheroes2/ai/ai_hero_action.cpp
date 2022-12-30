@@ -23,12 +23,22 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <vector>
 
 #include "ai.h"
 #include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
+#include "color.h"
+#include "dialog.h"
+#include "direction.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -37,15 +47,31 @@
 #include "heroes.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "m82.h"
+#include "maps.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mp2.h"
+#include "pairs.h"
 #include "payment.h"
+#include "players.h"
+#include "puzzle.h"
 #include "race.h"
+#include "rand.h"
+#include "resource.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
+#include "spell.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "visit.h"
 #include "world.h"
 
 namespace
@@ -95,6 +121,78 @@ namespace
             return true;
 
         return false;
+    }
+
+    int AISelectSkillFromArena( const Heroes & hero )
+    {
+        switch ( hero.GetRace() ) {
+        case Race::KNGT:
+            if ( hero.GetDefense() < 5 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            if ( hero.GetAttack() < 5 ) {
+                return Skill::Primary::ATTACK;
+            }
+            if ( hero.GetPower() < 3 ) {
+                return Skill::Primary::POWER;
+            }
+            break;
+
+        case Race::BARB:
+            if ( hero.GetAttack() < 5 ) {
+                return Skill::Primary::ATTACK;
+            }
+            if ( hero.GetDefense() < 5 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            if ( hero.GetPower() < 3 ) {
+                return Skill::Primary::POWER;
+            }
+            break;
+
+        case Race::SORC:
+        case Race::WZRD:
+            if ( hero.GetPower() < 5 ) {
+                return Skill::Primary::POWER;
+            }
+            if ( hero.GetDefense() < 3 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            if ( hero.GetAttack() < 3 ) {
+                return Skill::Primary::ATTACK;
+            }
+            break;
+
+        case Race::WRLK:
+        case Race::NECR:
+            if ( hero.GetPower() < 5 ) {
+                return Skill::Primary::POWER;
+            }
+            if ( hero.GetAttack() < 3 ) {
+                return Skill::Primary::ATTACK;
+            }
+            if ( hero.GetDefense() < 3 ) {
+                return Skill::Primary::DEFENSE;
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        switch ( Rand::Get( 1, 3 ) ) {
+        case 1:
+            return Skill::Primary::ATTACK;
+        case 2:
+            return Skill::Primary::DEFENSE;
+        case 3:
+            return Skill::Primary::POWER;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return Skill::Primary::UNKNOWN;
     }
 
     bool canMonsterJoinHero( const Troop & troop, Heroes & hero )
@@ -168,79 +266,6 @@ namespace AI
     void AIToAlchemistTower( Heroes & hero );
     void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex );
 
-    int AISelectPrimarySkill( const Heroes & hero )
-    {
-        switch ( hero.GetRace() ) {
-        case Race::KNGT: {
-            if ( 5 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            if ( 5 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            if ( 3 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            if ( 3 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            break;
-        }
-
-        case Race::BARB: {
-            if ( 5 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            if ( 5 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            if ( 3 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            if ( 3 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            break;
-        }
-
-        case Race::SORC:
-        case Race::WZRD: {
-            if ( 5 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            if ( 5 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            if ( 3 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            if ( 3 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            break;
-        }
-
-        case Race::WRLK:
-        case Race::NECR: {
-            if ( 5 > hero.GetPower() )
-                return Skill::Primary::POWER;
-            if ( 5 > hero.GetKnowledge() )
-                return Skill::Primary::KNOWLEDGE;
-            if ( 3 > hero.GetAttack() )
-                return Skill::Primary::ATTACK;
-            if ( 3 > hero.GetDefense() )
-                return Skill::Primary::DEFENSE;
-            break;
-        }
-
-        default:
-            break;
-        }
-
-        switch ( Rand::Get( 1, 4 ) ) {
-        case 1:
-            return Skill::Primary::ATTACK;
-        case 2:
-            return Skill::Primary::DEFENSE;
-        case 3:
-            return Skill::Primary::POWER;
-        case 4:
-            return Skill::Primary::KNOWLEDGE;
-        default:
-            break;
-        }
-
-        return Skill::Primary::UNKNOWN;
-    }
-
     void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, const fheroes2::Point * centerOn = nullptr, const bool playSound = false )
     {
         const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
@@ -261,6 +286,8 @@ namespace AI
 
     void HeroesAction( Heroes & hero, const int32_t dst_index )
     {
+        const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
+
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
         bool isAction = true;
@@ -540,8 +567,7 @@ namespace AI
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " disable meeting" )
         }
         else {
-            const Castle * other_hero_castle = other_hero->inCastle();
-            if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
+            if ( other_hero->inCastle() ) {
                 AIToCastle( hero, dst_index );
                 return;
             }
@@ -591,20 +617,12 @@ namespace AI
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " disable visiting" )
         }
         else {
-            CastleHeroes heroes = castle->GetHeroes();
-
-            // first attack to guest hero
-            if ( heroes.FullHouse() ) {
-                AIToHeroes( hero, dst_index );
-                return;
-            }
-
             Army & army = castle->GetActualArmy();
 
             if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
                 DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() )
 
-                Heroes * defender = heroes.GuardFirst();
+                Heroes * defender = castle->GetHero();
                 castle->ActionPreBattle();
 
                 const bool playVanishingHeroSound = defender != nullptr && defender->isControlHuman();
@@ -720,8 +738,6 @@ namespace AI
             tile.MonsterSetCount( 0 );
             tile.setAsEmpty();
         }
-
-        hero.unmarkHeroMeeting();
     }
 
     void AIToPickupResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -875,7 +891,6 @@ namespace AI
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        // capture object
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
             bool capture = true;
 
@@ -912,7 +927,7 @@ namespace AI
             }
         }
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( objectType ) )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
     }
 
     void AIToFlotSam( const Heroes & hero, int32_t dst_index )
@@ -1032,22 +1047,8 @@ namespace AI
             skill = Skill::Primary::POWER;
             break;
         case MP2::OBJ_ARENA:
-            if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() )
-                skill = AISelectPrimarySkill( hero );
-            else {
-                switch ( Rand::Get( 1, 3 ) ) {
-                case 1:
-                case 2:
-                    skill = Rand::Get( 1 ) ? Skill::Primary::ATTACK : Skill::Primary::DEFENSE;
-                    break;
-
-                default:
-                    skill = Skill::Primary::POWER;
-                    break;
-                }
-            }
+            skill = AISelectSkillFromArena( hero );
             break;
-
         default:
             break;
         }
@@ -1394,7 +1395,6 @@ namespace AI
         }
 
         tile.MonsterSetCount( 0 );
-        hero.unmarkHeroMeeting();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -1442,8 +1442,6 @@ namespace AI
             tile.setAsEmpty();
         }
 
-        hero.unmarkHeroMeeting();
-
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
@@ -1461,8 +1459,6 @@ namespace AI
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 tile.QuantitySetColor( hero.GetColor() );
                 tile.SetObjectPassable( true );
-
-                hero.unmarkHeroMeeting();
             }
             else {
                 AIBattleLose( hero, res, true );
@@ -1703,11 +1699,14 @@ namespace AI
             const bool hideAIMovements = ( conf.AIMoveSpeed() == 0 );
             const bool noMovementAnimation = ( conf.AIMoveSpeed() == 10 );
 
-            const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY };
+            const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY, Game::MAPS_DELAY };
 
-            while ( LocalEvent::Get().HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
+            fheroes2::Display & display = fheroes2::Display::instance();
+
+            LocalEvent & le = LocalEvent::Get();
+            while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
 #if defined( WITH_DEBUG )
-                if ( HotKeyPressEvent( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
+                if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
                     if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
                                                 fheroes2::Text( _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
                                                                 fheroes2::FontType::normalWhite() ),
@@ -1726,6 +1725,19 @@ namespace AI
                 if ( hideAIMovements || !AIHeroesShowAnimation( hero, colors ) ) {
                     hero.Move( true );
                     recenterNeeded = true;
+
+                    // Render a frame only if there is a need to show one.
+                    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                        // Update Adventure Map objects' animation.
+                        Game::updateAdventureMapAnimationIndex();
+
+                        basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+
+                        // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+                        assert( basicInterface.GetRedrawMask() == 0 );
+
+                        display.render();
+                    }
                 }
                 else if ( Game::validateAnimationDelay( Game::CURRENT_AI_DELAY ) ) {
                     // re-center in case hero appears from the fog
@@ -1783,14 +1795,17 @@ namespace AI
                         }
                     }
 
-                    basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
-                    fheroes2::Display::instance().render();
-                }
+                    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                        // Update Adventure Map objects' animation.
+                        Game::updateAdventureMapAnimationIndex();
+                    }
 
-                if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                    // will be animated in hero loop
-                    uint32_t & frame = Game::MapsAnimationFrame();
-                    ++frame;
+                    basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+
+                    // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+                    assert( basicInterface.GetRedrawMask() == 0 );
+
+                    display.render();
                 }
             }
 

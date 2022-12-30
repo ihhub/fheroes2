@@ -24,13 +24,19 @@
 #ifndef H2GAMEINTERFACE_H
 #define H2GAMEINTERFACE_H
 
+#include <cstdint>
+
+#include "game_mode.h"
+#include "gamedefs.h"
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_radar.h"
 #include "interface_status.h"
+#include "math_base.h"
 #include "players.h"
+#include "screen.h"
 
 class Castle;
 class Heroes;
@@ -74,6 +80,32 @@ namespace Interface
     class Basic
     {
     public:
+        // This class is used to lock rendering of Basic class. This is useful when we have to generate only a single frame.
+        // Use this class ONLY when you are going to call rendering after all other operations.
+        class RedrawLocker
+        {
+        public:
+            explicit RedrawLocker( Basic & basic )
+                : _basic( basic )
+            {
+                _basic._lockRedraw = true;
+            }
+
+            RedrawLocker( const RedrawLocker & ) = delete;
+            RedrawLocker( RedrawLocker && ) = delete;
+
+            RedrawLocker & operator=( const RedrawLocker & ) = delete;
+            RedrawLocker & operator=( RedrawLocker && ) = delete;
+
+            ~RedrawLocker()
+            {
+                _basic._lockRedraw = false;
+            }
+
+        private:
+            Basic & _basic;
+        };
+
         static Basic & Get();
 
         bool NeedRedraw() const
@@ -206,6 +238,8 @@ namespace Interface
         ControlPanel controlPanel;
 
         uint32_t redraw;
+
+        bool _lockRedraw;
     };
 }
 

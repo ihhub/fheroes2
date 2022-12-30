@@ -23,11 +23,13 @@
 
 #include <algorithm>
 #include <array>
+#include <vector>
 
 #include "heroes_base.h"
 #include "mageguild.h"
 #include "rand.h"
 #include "serialize.h"
+#include "spell.h"
 
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int level );
 Spell GetGuaranteedDamageSpellForMageGuild();

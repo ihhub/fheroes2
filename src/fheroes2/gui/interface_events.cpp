@@ -23,32 +23,58 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <ostream>
+#include <string>
 #include <vector>
 
+#include "artifact.h"
+#include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "dialog_system_options.h"
+#include "direction.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "image.h"
+#include "interface_buttons.h"
+#include "interface_gamearea.h"
+#include "interface_icons.h"
+#include "interface_radar.h"
+#include "interface_status.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "mp2.h"
+#include "mus.h"
+#include "puzzle.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell.h"
+#include "spell_book.h"
 #include "system.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "view_world.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
 {
-    if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) ) {
+    if ( hero == nullptr ) {
         return;
     }
 
@@ -79,8 +105,9 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx 
 
 void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, int32_t destinationIdx )
 {
-    if ( !hero || hero->Modes( Heroes::GUARDIAN ) )
+    if ( hero == nullptr ) {
         return;
+    }
 
     const Route::Path & path = hero->GetPath();
 
@@ -464,7 +491,7 @@ void Interface::Basic::EventSwitchShowRadar() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowRadar() ) {
             conf.SetShowRadar( false );
             gameArea.SetRedraw();
@@ -480,7 +507,7 @@ void Interface::Basic::EventSwitchShowButtons() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowButtons() ) {
             conf.SetShowButtons( false );
             gameArea.SetRedraw();
@@ -496,7 +523,7 @@ void Interface::Basic::EventSwitchShowStatus() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowStatus() ) {
             conf.SetShowStatus( false );
             gameArea.SetRedraw();
@@ -512,7 +539,7 @@ void Interface::Basic::EventSwitchShowIcons() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowIcons() ) {
             conf.SetShowIcons( false );
             gameArea.SetRedraw();
@@ -528,7 +555,7 @@ void Interface::Basic::EventSwitchShowControlPanel() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         conf.SetShowPanel( !conf.ShowControlPanel() );
         gameArea.SetRedraw();
     }

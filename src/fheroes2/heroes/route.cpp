@@ -22,9 +22,12 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <memory>
 
 #include "heroes.h"
 #include "maps.h"
+#include "maps_tiles.h"
+#include "mp2.h"
 #include "route.h"
 #include "serialize.h"
 #include "world.h"

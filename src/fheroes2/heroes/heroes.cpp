@@ -21,15 +21,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <array>
-#include <cassert>
 #include <cmath>
-#include <functional>
+#include <cstddef>
+#include <iterator>
+#include <map>
+#include <ostream>
+#include <set>
 
 #include "agg_image.h"
 #include "ai.h"
+#include "army_troop.h"
 #include "artifact.h"
+#include "artifact_info.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
@@ -38,23 +42,29 @@
 #include "direction.h"
 #include "game.h"
 #include "game_static.h"
+#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
-#include "interface_icons.h"
+#include "image.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
+#include "m82.h"
+#include "maps.h"
 #include "maps_objects.h"
+#include "maps_tiles.h"
 #include "monster.h"
 #include "morale.h"
 #include "mp2.h"
 #include "payment.h"
+#include "players.h"
 #include "race.h"
-#include "save_format_version.h"
+#include "rand.h"
 #include "serialize.h"
 #include "settings.h"
 #include "speed.h"
+#include "spell_book.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -182,15 +192,10 @@ Heroes::Heroes()
     , _aiRole( Role::HUNTER )
 {}
 
-Heroes::Heroes( int heroID, int race, int initialLevel )
+Heroes::Heroes( const int heroID, const int race, const uint32_t additionalExperience )
     : Heroes( heroID, race )
 {
-    // level 1 is technically regarded as 0, so reduce the initial level by 1
-    experience = GetExperienceFromLevel( initialLevel - 1 );
-
-    for ( int i = 1; i < initialLevel; ++i ) {
-        LevelUp( false, true );
-    }
+    IncreaseExperience( additionalExperience, true );
 }
 
 Heroes::Heroes( int heroid, int rc )
@@ -723,7 +728,6 @@ bool Heroes::Recruit( const Castle & castle )
     }
 
     if ( castle.GetLevelMageGuild() ) {
-        // learn spells
         castle.MageGuildEducateHero( *this );
     }
 
@@ -734,34 +738,29 @@ bool Heroes::Recruit( const Castle & castle )
 
 void Heroes::ActionNewDay()
 {
-    // recovery move points
     move_point = GetMaxMovePoints();
 
-    // replenish spell points
-    ReplenishSpellPoints();
+    if ( world.CountDay() > 1 ) {
+        ReplenishSpellPoints();
+    }
 
-    // remove day visit object
     visit_object.remove_if( Visit::isDayLife );
 
-    // new day, new capacities
     ResetModes( SAVEMP );
 }
 
 void Heroes::ActionNewWeek()
 {
-    // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
 }
 
 void Heroes::ActionNewMonth()
 {
-    // remove month visit object
     visit_object.remove_if( Visit::isMonthLife );
 }
 
 void Heroes::ActionAfterBattle()
 {
-    // remove month visit object
     visit_object.remove_if( Visit::isBattleLife );
 
     SetModes( ACTION );
@@ -830,18 +829,8 @@ Castle * Heroes::inCastleMutable() const
         return nullptr;
     }
 
-    if ( Modes( Heroes::GUARDIAN ) ) {
-        const fheroes2::Point & heroPoint = GetCenter();
-        const fheroes2::Point castlePoint( heroPoint.x, heroPoint.y + 1 );
-
-        Castle * castle = world.getCastleEntrance( castlePoint );
-
-        return castle && castle->GetHeroes() == this ? castle : nullptr;
-    }
-
     Castle * castle = world.getCastleEntrance( GetCenter() );
-
-    return castle && castle->GetHeroes() == this ? castle : nullptr;
+    return castle && castle->GetHero() == this ? castle : nullptr;
 }
 
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
@@ -971,8 +960,9 @@ bool Heroes::IsFullBagArtifacts() const
 
 bool Heroes::PickupArtifact( const Artifact & art )
 {
-    if ( !art.isValid() )
+    if ( !art.isValid() ) {
         return false;
+    }
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
@@ -986,20 +976,16 @@ bool Heroes::PickupArtifact( const Artifact & art )
         return false;
     }
 
-    // check: artifact sets such as anduran garb
     const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
+
     if ( isControlHuman() ) {
-        for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
-            const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
-            fheroes2::showMessage( fheroes2::Text( Artifact( static_cast<int>( artifactSetData._assembledArtifactID ) ).GetName(), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
-        }
+        std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
     }
 
     return true;
 }
 
-void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
+void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect /* = false */ )
 {
     int oldLevel = GetLevelFromExperience( experience );
     int newLevel = GetLevelFromExperience( experience + amount );
@@ -1417,7 +1403,7 @@ void Heroes::ApplyPenaltyMovement( uint32_t penalty )
 
 bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const
 {
-    if ( Modes( GUARDIAN ) || isFreeman() ) {
+    if ( isFreeman() ) {
         return false;
     }
 
@@ -1434,7 +1420,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
 
 bool Heroes::MayCastAdventureSpells() const
 {
-    return !Modes( GUARDIAN ) && !isFreeman();
+    return !isFreeman();
 }
 
 bool Heroes::isValid() const
@@ -1475,9 +1461,7 @@ void Heroes::SetFreeman( int reason )
         SetModes( ACTION );
 
         if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-            if ( Settings::Get().ExtHeroRememberMovementPointsWhenRetreating() ) {
-                SetModes( SAVEMP );
-            }
+            SetModes( SAVEMP );
 
             if ( heroColor != Color::NONE ) {
                 kingdom.appendSurrenderedHero( *this );
@@ -1628,14 +1612,9 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
         }
     }
 
-    if ( Modes( Heroes::GUARDIAN ) ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MISC6, 11 );
-        fheroes2::Image guardianBG( sprite.width(), sprite.height() );
-        guardianBG.fill( 0 );
-
-        fheroes2::Blit( guardianBG, dstsf, px + mp.x + 3, py + mp.y );
-        fheroes2::Blit( sprite, dstsf, px + mp.x + 3, py + mp.y );
-        mp.y = sprite.height();
+    if ( isControlAI() ) {
+        // AI heroes should not have any UI indicators for their statuses.
+        return;
     }
 
     if ( Modes( Heroes::SLEEPER ) ) {
@@ -1728,27 +1707,27 @@ void AllHeroes::Init()
     for ( uint32_t hid = Heroes::ZOM; hid <= Heroes::CELIA; ++hid )
         push_back( new Heroes( hid, Race::NECR ) );
 
-    // from campain
-    push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5 ) );
-    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT, 5 ) );
-    push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5 ) );
-    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5 ) );
-    push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5 ) );
-    push_back( new Heroes( Heroes::BAX, Race::NECR, 5 ) );
+    // SW campaign
+    push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5000 ) );
+    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT, 5000 ) );
+    push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5000 ) );
+    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5000 ) );
+    push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5000 ) );
+    push_back( new Heroes( Heroes::BAX, Race::NECR, 5000 ) );
 
-    // loyalty version
+    // PoL
     if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
-        push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5 ) );
-        push_back( new Heroes( Heroes::MOG, Race::NECR, 5 ) );
-        push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5 ) );
-        push_back( new Heroes( Heroes::JOSEPH, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5 ) );
-        push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5 ) );
-        push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5 ) );
-        push_back( new Heroes( Heroes::DRAKONIA, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5 ) );
-        push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5 ) );
+        push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5000 ) );
+        push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5000 ) );
+        push_back( new Heroes( Heroes::MOG, Race::NECR, 5000 ) );
+        push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5000 ) );
+        push_back( new Heroes( Heroes::JOSEPH, Race::WZRD, 5000 ) );
+        push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5000 ) );
+        push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5000 ) );
+        push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5000 ) );
+        push_back( new Heroes( Heroes::DRAKONIA, Race::WZRD, 5000 ) );
+        push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5000 ) );
+        push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5000 ) );
     }
     else {
         // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones
@@ -1789,22 +1768,9 @@ Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
     return end() != it ? *it : nullptr;
 }
 
-Heroes * AllHeroes::GetGuest( const Castle & castle ) const
+Heroes * AllHeroes::GetHero( const Castle & castle ) const
 {
-    const_iterator it
-        = std::find_if( begin(), end(), [&castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN ); } );
-    return end() != it ? *it : nullptr;
-}
-
-Heroes * AllHeroes::GetGuard( const Castle & castle ) const
-{
-    const_iterator it = Settings::Get().ExtCastleAllowGuardians() ? std::find_if( begin(), end(),
-                                                                                  [&castle]( const Heroes * hero ) {
-                                                                                      const fheroes2::Point & cpt = castle.GetCenter();
-                                                                                      const fheroes2::Point & hpt = hero->GetCenter();
-                                                                                      return cpt.x == hpt.x && cpt.y == hpt.y + 1 && hero->Modes( Heroes::GUARDIAN );
-                                                                                  } )
-                                                                  : end();
+    const_iterator it = std::find_if( begin(), end(), [&castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter(); } );
     return end() != it ? *it : nullptr;
 }
 
