@@ -1353,7 +1353,7 @@ msgid ""
 msgstr ""
 "Gagnez la faveur des elfes. Ils ne permettront pas aux arbres d'être coupés, "
 "ils vous enverront donc du bois toutes les 2 semaines. Vous devez terminer "
-"votre mission avant le premier jour du septième mois, sinon le royaume "
+"votre mission avant le premier jour du septième mois, sinon le royaume va "
 "sûrement s'effondrer."
 
 msgid ""
