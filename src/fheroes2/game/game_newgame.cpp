@@ -70,12 +70,17 @@ namespace
     // Draw button panel and return the position for a button.
     fheroes2::Point drawButtonPanel()
     {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
         const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
 
-        const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
+        const int32_t offX = ( display.width() - back.width() ) / 2;
+        const int32_t offY = ( display.height() - back.height() ) / 2;
+
+        const int32_t panelOffset = back.height() - panel.height();
         const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
-        fheroes2::Blit( panel, fheroes2::Display::instance(), panelXPos, panelOffset );
+        fheroes2::Blit( panel, display, offX + panelXPos, offY + panelOffset );
 
         const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
 
@@ -84,7 +89,7 @@ namespace
         const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
         const int32_t buttonYPos = 46;
 
-        return fheroes2::Point( buttonXPos, buttonYPos );
+        return fheroes2::Point( offX + buttonXPos, offY + buttonYPos );
     }
 
     std::unique_ptr<SMKVideoSequence> getVideo( const std::string & fileName )
