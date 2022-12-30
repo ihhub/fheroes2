@@ -24,38 +24,61 @@
 #ifndef H2BATTLE_BRIDGE_H
 #define H2BATTLE_BRIDGE_H
 
+#include <cassert>
 #include <cstdint>
 
 namespace Battle
 {
     class Unit;
 
-    class Bridge
+    class Bridge final
     {
     public:
-        Bridge();
+        Bridge() = default;
         Bridge( const Bridge & ) = delete;
+
+        ~Bridge() = default;
 
         Bridge & operator=( const Bridge & ) = delete;
 
-        void Action( const Unit &, int32_t );
-        void ForceAction( const bool actionDown );
+        void ActionUp();
+        void ActionDown();
 
-        void SetDestroy();
-        void SetDown( bool );
-        void SetPassable( const Unit & ) const;
+        void SetDestroyed();
+        void SetPassability( const Unit & unit ) const;
 
-        bool AllowUp() const;
-        bool NeedDown( const Unit &, int32_t ) const;
-        bool isPassable( const Unit & ) const;
-        bool isValid() const;
-        bool isDestroy() const;
-        bool isDown() const;
-        bool isBridgeOccupied() const;
+        bool AllowUp() const
+        {
+            // Yes if not destroyed and lowered and there are no any troops (alive or dead) on or under the bridge
+            return isValid() && isDown() && !isOccupied();
+        }
+
+        bool NeedDown( const Unit & unit, const int32_t dstIdx ) const;
+
+        bool isPassable( const Unit & unit ) const;
+
+        bool isValid() const
+        {
+            return !_isDestroyed;
+        }
+
+        bool isDestroyed() const
+        {
+            return _isDestroyed;
+        }
+
+        bool isDown() const
+        {
+            assert( !_isDestroyed || _isDown );
+
+            return _isDown;
+        }
 
     private:
-        bool destroy;
-        bool down;
+        static bool isOccupied();
+
+        bool _isDestroyed{ false };
+        bool _isDown{ false };
 
         enum
         {

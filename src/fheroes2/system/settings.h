@@ -245,7 +245,7 @@ public:
     void setBattleDamageInfo( const bool enable );
     void setHideInterface( const bool enable );
     void setEvilInterface( const bool enable );
-    void setNearestLinearScaling( const bool enable );
+    void setScreenScalingTypeNearest( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

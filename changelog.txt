@@ -1,3 +1,84 @@
+version 1.0.0 (21 December 2022)
+- add Ubuntu ARM support
+- update Polish translation
+- update the French translation
+- fix incorrect resource placements on certain maps
+- adjust "Battlefield Casualties" vertical position
+- fix bridge logic after morale event
+- enable the instant battle by default
+- optimize rendering in multiple places
+- update the Norwegian translation
+- add global hotkey to toggle the text support mode
+- make the regular small buttons translatable
+- make Trade button in Marketplace window disabled by default
+- add popup windows for monster recruit dialog
+- fix animation of slowed flying creatures
+- fix multiple hero related awards for campaigns
+- fix Death Wave, Holy Shout and Holy Word spell animations
+- do not mirror corpses of defeated troops during battle
+- fix rendering an extra empty line for specific texts
+- fix monster idling animation during battle
+- use logarithmic scale of sound volume
+- enable touch support for all devices
+- make separate hotkeys to cast battle & adventure spells
+- add the "Quit game" hotkey
+- handle hotkeys in the Adventure Map's File dialog
+- optimize defensive strategy for AI castles
+- fix black area not being rendering during video playback
+- reduce priority for bottles in sea for AI
+- make File Dialog and Adventure Dialog buttons translatable
+- do not stop object animation during AI turn
+- update Russian translation
+- fix text rendering for game option's names of certain translations
+- fix incorrect battlefield image restoration in the place of the previous damage popup
+- adjust several button font characters
+- rework the hotkeys concerning the hero movement
+- make the Main Menu's dialog buttons translatable for specific languages
+- display the amount of gold in the diplomacy dialog
+- show object animation during Hut of Magi visit
+- fix Dwarves death animation
+- fix very slow hero movement animation when moving a cursor with software cursor rendering
+- fix translated Cancel button in monster recruit dialog being switched to English
+- fix animation of bridge destruction during battle
+- fix the smoke animation when demolishing a castle building during battle
+- improve Adventure Map rendering performance
+- fix multiline word splitting for short phrases with a long first word
+- fix position of left barbarian's captain quarters part
+- reset the cursor position at the start of 'human turn'
+- add an option to toggle screen scaling type
+- recreate the original rainbow animation during battle
+- fix Scenario Info window elements
+- improve hexagon shading during battle
+- add Danish language option and font
+- improve rendering speed with software cursor rendering
+- fix French and Italian characters not being shown with their assets
+- set the minimum supported version to Android 5.1
+- introduce AI Scout role
+- fix fullscreen mode with DPI higher than 100% on Windows
+- fix multi-monitor fullscreen support on Windows
+- update Bulgarian Translation
+- add Android installation and usage documentation
+- fix the scenario info dialog position
+- generate resizable buttons for both interfaces
+- fix inability to toggle V-Sync option dynamically
+- do not show resolution dialog on handheld devices on the first startup
+- add mouse right click simulation on touchscreen devices
+- fix cursor being too small for certain resolutions
+- disable Adventure Map scrolling for handheld devices by default
+- change battlefield hexagon generation to match the original
+- make fullscreen mode as a default state for Android devices
+- implement all troops transfer between armies within castle dialog
+- scroll Adventure Map with mouse left button pressed
+- use parabolic catapult projectile flight trajectory
+- update credits page
+- always show the Ultimate Artifact behind one of the last four central pieces of the puzzle
+- update captain's mana on map load and when building the Captain's Quarters
+- remove and integrate the rest of experimental options
+- always center text when a maximum width is provided
+- fix UI elements for the unhired hero popup window
+- update Ballista and Turrets damage information when they are destroyed
+- correctly reflect the change of fullscreen mode in the graphics settings dialog when it was toggled using a hotkey
+
 version 0.9.21 (12 November 2022)
 - fix audio playback issues on Windows OSes
 - do not show any hero status for AI heroes

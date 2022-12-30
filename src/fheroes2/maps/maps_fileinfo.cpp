@@ -331,9 +331,12 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     // race color
     for ( const int color : colors ) {
         const int race = ByteToRace( fs.get() );
+
         races[Color::GetIndex( color )] = race;
-        if ( Race::RAND == race )
+
+        if ( Race::RAND == race ) {
             rnd_races |= color;
+        }
     }
 
     bool skipUnionSetup = false;
@@ -407,15 +410,18 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
 void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 {
-    for ( uint32_t i = 0; i < KINGDOMMAX; ++i ) {
-        const int color = ByteToColor( i );
+    for ( int i = 0; i < KINGDOMMAX; ++i ) {
+        const uint8_t color = ByteToColor( i );
 
-        if ( side1Colors & color )
+        if ( side1Colors & color ) {
             unions[i] = side1Colors;
-        else if ( side2Colors & color )
+        }
+        else if ( side2Colors & color ) {
             unions[i] = side2Colors;
-        else
+        }
+        else {
             unions[i] = color;
+        }
     }
 }
 

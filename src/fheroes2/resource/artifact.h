@@ -306,6 +306,7 @@ public:
     bool isFull() const;
     bool ContainUltimateArtifact() const;
 
+    // Automatically exchange artifacts between two heroes. The taker should get the best possible artifacts.
     void exchangeArtifacts( BagArtifacts & giftBag, const Heroes & taker, const Heroes & giver );
 
     double getArtifactValue() const;

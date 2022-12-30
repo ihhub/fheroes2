@@ -284,6 +284,7 @@ namespace
                                         "Andrii Kurdiumov\n"
                                         "Arthusppp\n"
                                         "dimag0g\n"
+                                        "Sergei Ivanov\n"
                                         "tau3\n" );
 
         TextBox name( contributors, Font::BIG, textWidth );
