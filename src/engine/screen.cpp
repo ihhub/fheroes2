@@ -1520,11 +1520,6 @@ namespace fheroes2
         return display;
     }
 
-    int32_t Display::scaleFactor()
-    {
-        return _currentScaleFactor;
-    }
-
     void Display::render( const Rect & roi )
     {
         Rect temp( roi );

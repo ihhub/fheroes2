@@ -123,7 +123,7 @@ namespace Video
         display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
 
         unsigned int currentFrame = 0;
-        fheroes2::Rect frameRoi( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2, 0, 0 );
+        fheroes2::Rect frameRoi( ( display._w() - video.width() ) / 2, ( display._h() - video.height() ) / 2, 0, 0 );
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
 

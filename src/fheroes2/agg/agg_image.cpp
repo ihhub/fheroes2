@@ -199,7 +199,7 @@ namespace
 
     std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL> & getTILs()
     {
-        return getTILsForScaleFactor( fheroes2::Display::scaleFactor() );
+        return getTILsForScaleFactor( fheroes2::Display::currentScaleFactor() );
     }
 
     bool IsValidICNId( int id )
@@ -3543,7 +3543,7 @@ namespace fheroes2
 
         void EnsureTILLoaded( int id )
         {
-            const int32_t scaleFactor = Display::scaleFactor();
+            const int32_t scaleFactor = Display::currentScaleFactor();
             auto & tilVsImage = getTILsForScaleFactor( scaleFactor );
 
             if ( tilVsImage[id].empty() ) {
@@ -3612,7 +3612,7 @@ namespace fheroes2
                 return errorImage;
             }
 
-            const int32_t scaleFactor = Display::scaleFactor();
+            const int32_t scaleFactor = Display::currentScaleFactor();
             auto & icnVsSprite = getSpritesForScaleFactor( scaleFactor );
 
             std::vector<Sprite> & sprites = icnVsSprite[icnId];
@@ -3649,7 +3649,7 @@ namespace fheroes2
                 return errorImage;
             }
 
-            const int32_t scaleFactor = Display::scaleFactor();
+            const int32_t scaleFactor = Display::currentScaleFactor();
             auto & tilVsImage = getTILsForScaleFactor( scaleFactor );
 
             std::vector<std::vector<Image>> & images = tilVsImage[tilId];

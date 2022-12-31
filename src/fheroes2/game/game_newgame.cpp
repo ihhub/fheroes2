@@ -259,13 +259,16 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     AudioManager::ResetAudio();
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
+
+    const fheroes2::Point roiOffset( ( display._w() - display.DEFAULT_WIDTH ) / 2, ( display._h() - display.DEFAULT_HEIGHT ) / 2 );
 
     display.fill( 0 );
 
     const Text loadingScreen( "Loading video. Please wait...", Font::BIG );
     loadingScreen.Blit( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 );
     display.render();
+
+    fheroes2::Display::ScaleFactorOverride scaleFactorOverride( 1 );
 
     Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
@@ -370,7 +373,9 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     Cursor::Get().setVideoPlaybackCursor();
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
+    fheroes2::Display::ScaleFactorOverride scaleFactorOverride( 1 );
+
+    const fheroes2::Point roiOffset( ( display._w() - display.DEFAULT_WIDTH ) / 2, ( display._h() - display.DEFAULT_HEIGHT ) / 2 );
 
     display.fill( 0 );
 

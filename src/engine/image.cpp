@@ -435,7 +435,7 @@ namespace fheroes2
     }
 
     Image::Image( int32_t width_, int32_t height_ )
-        : Image( width_, height_, Display::scaleFactor() )
+        : Image( width_, height_, Display::currentScaleFactor() )
     {
     }
 
@@ -452,7 +452,7 @@ namespace fheroes2
         : _width( 0 )
         , _height( 0 )
         , _scaleFactor( 1 )
-        , _singleLayer( false )
+        , _singleLayer( image_._singleLayer )
     {
         copyFrom( image_ );
     }
@@ -510,7 +510,7 @@ namespace fheroes2
 
         _width = 0;
         _height = 0;
-        _scaleFactor = Display::scaleFactor();
+        _scaleFactor = Display::currentScaleFactor();
     }
 
     void Image::fill( uint8_t value )
@@ -529,21 +529,21 @@ namespace fheroes2
 
     void Image::_resize( int32_t physicalWidth_, int32_t physicalHeight_, int32_t scaleFactor_ )
     {
-        if ( _width == physicalWidth_ && _height == physicalHeight_ && _scaleFactor == scaleFactor_ ) {
-            return;
-        }
+        _scaleFactor = scaleFactor_;
 
         if ( physicalWidth_ <= 0 || physicalHeight_ <= 0 ) {
             clear();
             return;
         }
 
+        // don't reset if only changing scale factor, for example
+        if ( _width != physicalWidth_ || _height != physicalHeight_ ) {
+            const size_t totalBytes = static_cast<size_t>( 2 * physicalWidth_ * physicalHeight_ );
+            _data.reset( new uint8_t[totalBytes] );
+        }
+
         _width = physicalWidth_;
         _height = physicalHeight_;
-        _scaleFactor = scaleFactor_;
-
-        const size_t totalBytes = static_cast<size_t>( 2 * _width * _height );
-        _data.reset( new uint8_t[totalBytes] );
     }
 
     void Image::reset()

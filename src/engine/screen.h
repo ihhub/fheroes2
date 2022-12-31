@@ -144,17 +144,22 @@ namespace fheroes2
             DEFAULT_WIDTH = 640,
             DEFAULT_HEIGHT = 480
         };
-        static const int32_t MAX_SCALE_FACTOR = 4;
 
         static Display & instance();
-        static int32_t scaleFactor();
+
+        static const int32_t MAX_SCALE_FACTOR = 4;
+
+        static int32_t currentScaleFactor()
+        {
+            return _currentScaleFactor;
+        }
 
         friend class ScaleFactorOverride;
         class ScaleFactorOverride
         {
         public:
             explicit ScaleFactorOverride( int32_t tempScaleFactor )
-                : _scaleFactorToRestore( Display::scaleFactor() )
+                : _scaleFactorToRestore( Display::currentScaleFactor() )
             {
                 Display::_setCurrentScaleFactor( tempScaleFactor );
             }
@@ -182,7 +187,6 @@ namespace fheroes2
         void updateNextRenderRoi( const Rect & roi );
 
         void resize( int32_t width_, int32_t height_ ) override;
-        void _setScaleFactor( int32_t scaleFactor_ );
 
         bool isDefaultSize() const
         {
@@ -216,6 +220,10 @@ namespace fheroes2
         static void _setCurrentScaleFactor( int32_t scaleFactor )
         {
             _currentScaleFactor = scaleFactor;
+
+            // a hack to only change scale factor of the display instance
+            Display & display = instance();
+            display._resize( display._w(), display._h(), scaleFactor );
         }
 
         static int32_t _currentScaleFactor;

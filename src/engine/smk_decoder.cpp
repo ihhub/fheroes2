@@ -213,7 +213,7 @@ void SMKVideoSequence::resetFrame()
 
 void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette )
 {
-    if ( _videoFile == nullptr || image.empty() || x < 0 || y < 0 || x >= image.width() || y >= image.height() || !image.singleLayer() ) {
+    if ( _videoFile == nullptr || image.empty() || x < 0 || y < 0 || x >= image._w() || y >= image._h() || !image.singleLayer() ) {
         width = 0;
         height = 0;
         return;
@@ -228,7 +228,7 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, c
     assert( _heightScaleFactor == 1 || _heightScaleFactor == 2 );
     assert( ( _height % _heightScaleFactor ) == 0 );
 
-    if ( image.width() == _width && image.height() == _height && x == 0 && y == 0 ) {
+    if ( image._w() == _width && image._h() == _height && x == 0 && y == 0 ) {
         const size_t size = static_cast<size_t>( _width ) * _height;
 
         if ( _heightScaleFactor == 2 ) {
@@ -247,16 +247,16 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, c
         }
     }
     else {
-        if ( x + width > image.width() ) {
-            width = image.width() - x;
+        if ( x + width > image._w() ) {
+            width = image._w() - x;
         }
-        if ( y + height > image.height() ) {
-            height = image.height() - y;
+        if ( y + height > image._h() ) {
+            height = image._h() - y;
         }
 
         const uint8_t * inY = data;
 
-        const int32_t imageWidth = image.width();
+        const int32_t imageWidth = image._w();
         uint8_t * outY = image.image() + x + y * imageWidth;
         const uint8_t * outYEnd = outY + ( height / _heightScaleFactor ) * _heightScaleFactor * imageWidth;
 
