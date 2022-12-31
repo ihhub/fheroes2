@@ -1174,9 +1174,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     }
 
     // hexagon
-    if ( conf.BattleShowGrid() ) {
-        _hexagonGrid = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
-    }
+    _hexagonGrid = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
     // Shadow under the cursor: the first parameter is the shadow strength (smaller is stronger), the second is the distance between the hexagonal shadows.
     _hexagonCursorShadow = DrawHexagonShadow( 2, 1 );
     // Hexagon shadow for the case when grid is disabled.
@@ -1928,8 +1926,7 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
 {
     if ( icn_cbkg != ICN::UNKNOWN ) {
         const fheroes2::Sprite & cbkg = fheroes2::AGG::GetICN( icn_cbkg, 0 );
-        // fheroes2::Copy( cbkg, _mainSurface );
-        _mainSurface = cbkg;
+        fheroes2::Copy( cbkg, _mainSurface );
     }
 
     if ( icn_frng != ICN::UNKNOWN ) {
@@ -5006,8 +5003,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
         if ( Game::validateCustomAnimationDelay( spellcastDelay ) ) {
             // stay at maximum blur for 2 frames
             if ( frame < 9 || frame > 10 ) {
-                // fheroes2::Copy( original, _mainSurface );
-                _mainSurface = original;
+                fheroes2::Copy( original, _mainSurface );
                 fheroes2::AlphaBlit( blurred, _mainSurface, alpha );
                 RedrawPartialFinish();
 

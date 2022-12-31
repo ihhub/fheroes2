@@ -198,7 +198,6 @@ namespace fheroes2
         void reset();
 
     private:
-        // void _updateRoi();
         void _capture();
 
         Image & _image;

@@ -23,12 +23,10 @@
 #include <cstdint>
 #include <vector>
 
-#include "screen.h"
-
 namespace fheroes2
 {
-    // class Image;
-    // class Sprite;
+    class Image;
+    class Sprite;
     enum class FontSize : uint8_t;
     struct FontType;
     enum class SupportedLanguage : int;

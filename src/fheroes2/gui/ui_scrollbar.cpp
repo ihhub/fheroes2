@@ -36,8 +36,6 @@ namespace fheroes2
 
     void Scrollbar::setImage( const Image & image )
     {
-        // resize( image.width(), image.height() );
-        // Copy( image, *this );
         Image::operator=( image );
     }
 

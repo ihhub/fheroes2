@@ -46,7 +46,6 @@
 #endif
 
 #include "agg.h"
-#include "agg_image.h"
 #include "audio_manager.h"
 #include "bin_info.h"
 #include "core.h"
