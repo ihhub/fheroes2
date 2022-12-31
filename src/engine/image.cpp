@@ -674,6 +674,12 @@ namespace fheroes2
         Image newCapture( _width, _height, _image.scaleFactor() );
         newCapture._disableTransformLayer();
 
+        if ( _x < 0 ) {
+            _x = 0;
+        }
+        if ( _y < 0 ) {
+            _y = 0;
+        }
         Copy( _image, _x, _y, newCapture, 0, 0, _width, _height );
 
         _capturedImage._disableTransformLayer();
