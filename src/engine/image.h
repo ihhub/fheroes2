@@ -112,11 +112,8 @@ namespace fheroes2
         }
 
     protected:
-        // ONLY FOR THE Display CLASS!
-        void _setScaleFactor( int32_t scaleFactor )
-        {
-            _scaleFactor = scaleFactor;
-        }
+        // For the Display class.
+        void _resize( int32_t physicalWidth_, int32_t physicalHeight_, int32_t scaleFactor_ );
 
     private:
         void copyFrom( const Image & image );

@@ -1506,8 +1506,11 @@ namespace fheroes2
         }
 
         const int32_t newScaleFactor = std::max( 1, std::min( width_ / fheroes2::Display::DEFAULT_WIDTH, height_ / fheroes2::Display::DEFAULT_HEIGHT ) );
+
+        // FIXME: remove when there's hook no more
         _setScaleFactor( newScaleFactor );
-        Image::resize( width_ / newScaleFactor, height_ / newScaleFactor );
+
+        Image::_resize( width_, height_, newScaleFactor );
 
         // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
         std::fill( image(), image() + _w() * _h(), static_cast<uint8_t>( 0 ) );
@@ -1517,8 +1520,6 @@ namespace fheroes2
     void Display::_setScaleFactor( int32_t scaleFactor_ )
     {
         const int32_t oldScaleFactor = scaleFactor();
-
-        Image::_setScaleFactor( scaleFactor_ );
         _currentScaleFactor = scaleFactor_;
 
         if ( oldScaleFactor != scaleFactor_ && _onScaleFactorChangeHook != nullptr ) {

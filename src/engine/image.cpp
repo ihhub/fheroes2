@@ -524,17 +524,23 @@ namespace fheroes2
 
     void Image::resize( int32_t width_, int32_t height_ )
     {
-        if ( _width == width_ * _scaleFactor && _height == height_ * _scaleFactor ) {
+        _resize( width_ * _scaleFactor, height_ * _scaleFactor, _scaleFactor );
+    }
+
+    void Image::_resize( int32_t physicalWidth_, int32_t physicalHeight_, int32_t scaleFactor_ )
+    {
+        if ( _width == physicalWidth_ && _height == physicalHeight_ && _scaleFactor == scaleFactor_ ) {
             return;
         }
 
-        if ( width_ <= 0 || height_ <= 0 ) {
+        if ( physicalWidth_ <= 0 || physicalHeight_ <= 0 ) {
             clear();
             return;
         }
 
-        _width = width_ * _scaleFactor;
-        _height = height_ * _scaleFactor;
+        _width = physicalWidth_;
+        _height = physicalHeight_;
+        _scaleFactor = scaleFactor_;
 
         const size_t totalBytes = static_cast<size_t>( 2 * _width * _height );
         _data.reset( new uint8_t[totalBytes] );
