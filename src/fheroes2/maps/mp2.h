@@ -562,6 +562,74 @@ namespace MP2
         OBJ_WATERALTAR = 0xFF
     };
 
+    enum ObjectIcnType : uint8_t
+    {
+        OBJ_ICN_TYPE_UNKNOWN,
+        OBJ_ICN_TYPE_UNUSED_1, // Unused
+        OBJ_ICN_TYPE_UNUSED_2, // Unused
+        OBJ_ICN_TYPE_UNUSED_3, // Unused
+        OBJ_ICN_TYPE_UNUSED_4, // Unused
+        OBJ_ICN_TYPE_UNUSED_5, // Unused
+        OBJ_ICN_TYPE_UNUSED_6, // Unused
+        OBJ_ICN_TYPE_UNUSED_7, // Unused
+        OBJ_ICN_TYPE_UNUSED_8, // Unused
+        OBJ_ICN_TYPE_UNUSED_9, // Unused
+        OBJ_ICN_TYPE_OBJNHAUN,
+        OBJ_ICN_TYPE_OBJNARTI,
+        OBJ_ICN_TYPE_MONS32, // MON32.icn corresponds to static monsters while we use dynamic monster animation from MINIMON.icn.
+        OBJ_ICN_TYPE_UNUSED_13, // Unused
+        OBJ_ICN_TYPE_FLAG32,
+        OBJ_ICN_TYPE_UNUSED_15, // Unused
+        OBJ_ICN_TYPE_UNUSED_16, // Unused
+        OBJ_ICN_TYPE_UNUSED_17, // Unused
+        OBJ_ICN_TYPE_UNUSED_18, // Unused
+        OBJ_ICN_TYPE_UNUSED_19, // Unused
+        OBJ_ICN_TYPE_MINIMON, // Somehow it is unused but we need to use it properly.
+        OBJ_ICN_TYPE_MINIHERO,
+        OBJ_ICN_TYPE_MTNSNOW,
+        OBJ_ICN_TYPE_MTNSWMP,
+        OBJ_ICN_TYPE_MTNLAVA,
+        OBJ_ICN_TYPE_MTNDSRT,
+        OBJ_ICN_TYPE_MTNDIRT,
+        OBJ_ICN_TYPE_MTNMULT,
+        OBJ_ICN_TYPE_UNUSED_28, // Unused
+        OBJ_ICN_TYPE_EXTRAOVR,
+        OBJ_ICN_TYPE_ROAD,
+        OBJ_ICN_TYPE_MTNCRCK,
+        OBJ_ICN_TYPE_MTNGRAS,
+        OBJ_ICN_TYPE_TREJNGL,
+        OBJ_ICN_TYPE_TREEVIL,
+        OBJ_ICN_TYPE_OBJNTOWN,
+        OBJ_ICN_TYPE_OBJNTWBA,
+        OBJ_ICN_TYPE_OBJNTWSH,
+        OBJ_ICN_TYPE_OBJNTWRD,
+        OBJ_ICN_TYPE_OBJNXTRA,
+        OBJ_ICN_TYPE_OBJNWAT2,
+        OBJ_ICN_TYPE_OBJNMUL2,
+        OBJ_ICN_TYPE_TRESNOW,
+        OBJ_ICN_TYPE_TREFIR,
+        OBJ_ICN_TYPE_TREFALL,
+        OBJ_ICN_TYPE_STREAM,
+        OBJ_ICN_TYPE_OBJNRSRC,
+        OBJ_ICN_TYPE_UNUSED_47, // Unused
+        OBJ_ICN_TYPE_OBJNGRA2,
+        OBJ_ICN_TYPE_TREDECI,
+        OBJ_ICN_TYPE_OBJNWATR,
+        OBJ_ICN_TYPE_OBJNGRAS,
+        OBJ_ICN_TYPE_OBJNSNOW,
+        OBJ_ICN_TYPE_OBJNSWMP,
+        OBJ_ICN_TYPE_OBJNLAVA,
+        OBJ_ICN_TYPE_OBJNDSRT,
+        OBJ_ICN_TYPE_OBJNDIRT,
+        OBJ_ICN_TYPE_OBJNCRCK,
+        OBJ_ICN_TYPE_OBJNLAV3,
+        OBJ_ICN_TYPE_OBJNMULT,
+        OBJ_ICN_TYPE_OBJNLAV2,
+        OBJ_ICN_TYPE_X_LOC1,
+        OBJ_ICN_TYPE_X_LOC2,
+        OBJ_ICN_TYPE_X_LOC3
+    };
+
     // Return Icn ID related to this tileset value.
     int GetICNObject( const uint8_t tileset );
 

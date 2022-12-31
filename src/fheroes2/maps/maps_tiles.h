@@ -66,6 +66,43 @@ namespace Maps
         TERRAIN_LAYER = 3 // roads, water flaws and cracks. Essentially everything what is a part of terrain.
     };
 
+    struct TileObjectPartInfo
+    {
+        TileObjectPartInfo() = default;
+
+        TileObjectPartInfo( const uint32_t uid_, const uint8_t layerType_, const uint8_t objectType_, const uint8_t imageIndex_, const uint8_t extraInfo_ )
+            : uid( uid_ )
+            , layerType( layerType_ )
+            , objectType( objectType_ )
+            , imageIndex( imageIndex_ )
+            , extraInfo( extraInfo_ )
+        {
+            // Do nothing.
+        }
+
+        TileObjectPartInfo( const TileObjectPartInfo & ) = default;
+
+        ~TileObjectPartInfo() = default;
+
+        TileObjectPartInfo & operator=( const TileObjectPartInfo & ) = delete;
+
+        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
+        uint32_t uid{ 0 };
+
+        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
+        uint8_t layerType{ OBJECT_LAYER };
+
+        // The type of object which correlates to ICN id. See MP2::GetICNObject() function for mor details.
+        uint8_t objectType{ 0 };
+
+        // Image index to define which part of the object is the current tile. It is always used in tandem with objectType.
+        uint8_t imageIndex{ 0 };
+
+        // First 2 bits which are used to indicate road and overlay(?).
+        // TODO: verify what both bits do.
+        uint8_t extraInfo{ 0 };
+    };
+
     struct TilesAddon
     {
         TilesAddon();
@@ -86,7 +123,7 @@ namespace Maps
 
         bool hasSpriteAnimation() const
         {
-            return object & 1;
+            return _objectType & 1;
         }
 
         std::string String( int level ) const;
@@ -100,8 +137,12 @@ namespace Maps
 
         uint32_t uniq;
         uint8_t level;
-        uint8_t object;
-        uint8_t index;
+
+        // The type of object which correlates to ICN id. See MP2::GetICNObject() function for more details.
+        uint8_t _objectType;
+
+        // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
+        uint8_t _imageIndex;
     };
 
     using Addons = std::list<TilesAddon>;
@@ -124,12 +165,12 @@ namespace Maps
 
         uint8_t GetObjectTileset() const
         {
-            return objectTileset;
+            return _objectType;
         }
 
         uint8_t GetObjectSpriteIndex() const
         {
-            return objectIndex;
+            return _imageIndex;
         }
 
         uint32_t GetObjectUID() const
@@ -180,7 +221,7 @@ namespace Maps
 
         bool hasSpriteAnimation() const
         {
-            return objectTileset & 1;
+            return _objectType & 1;
         }
 
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
@@ -216,8 +257,8 @@ namespace Maps
 
         void resetObjectSprite()
         {
-            objectTileset = 0;
-            objectIndex = 255;
+            _objectType = 0;
+            _imageIndex = 255;
         }
 
         void FixObject();
@@ -423,8 +464,13 @@ namespace Maps
         uint16_t pack_sprite_index = 0;
 
         uint32_t uniq = 0;
-        uint8_t objectTileset = 0;
-        uint8_t objectIndex = 255;
+
+        // The type of object which correlates to ICN id. See MP2::GetICNObject() function for more details.
+        uint8_t _objectType = 0;
+
+        // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
+        uint8_t _imageIndex{ 255 };
+
         MP2::MapObjectType mp2_object = MP2::OBJ_ZERO;
         uint16_t tilePassable = DIRECTION_ALL;
         uint8_t fog_colors = Color::ALL;
