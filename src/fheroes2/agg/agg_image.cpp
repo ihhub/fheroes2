@@ -533,7 +533,7 @@ namespace fheroes2
             const int32_t imgScaleFactor = image.scaleFactor();
             if ( imgScaleFactor != displayScaleFactor ) {
                 // resize and position the sprite to match the display's scale factor
-                Image scaled( image.width() / imgScaleFactor, image.height() / imgScaleFactor, displayScaleFactor );
+                Image scaled( image.width(), image.height(), displayScaleFactor );
 
                 if ( image.singleLayer() ) {
                     scaled._disableTransformLayer();
@@ -551,7 +551,7 @@ namespace fheroes2
             const int32_t imgScaleFactor = sprite.scaleFactor();
             if ( imgScaleFactor != displayScaleFactor ) {
                 // resize and position the sprite to match the display's scale factor
-                Sprite scaled( sprite.width() / imgScaleFactor, sprite.height() / imgScaleFactor, sprite.x() / imgScaleFactor, sprite.y() / imgScaleFactor );
+                Sprite scaled( sprite.width(), sprite.height(), sprite.x(), sprite.y() );
 
                 if ( sprite.singleLayer() ) {
                     scaled._disableTransformLayer();
