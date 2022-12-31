@@ -34,6 +34,7 @@
 #include "battle_animation.h"
 #include "battle_cell.h"
 #include "bitmodes.h"
+#include "image.h"
 #include "math_base.h"
 #include "payment.h"
 #include "players.h"
@@ -71,6 +72,14 @@ namespace Battle
         uint32_t FindZeroDuration() const;
     };
 
+    // Sprite to render over the unit (i.e. spell effect animation)
+    struct OverlaySprite
+    {
+        const fheroes2::Sprite * overlaySprite = nullptr;
+        fheroes2::Point position = fheroes2::Point( 0, 0 );
+        bool reflect = false;
+    };
+
     // battle troop stats
     class Unit : public ArmyTroop, public BitModes, public Control
     {
@@ -99,6 +108,30 @@ namespace Battle
         {
             mirror = ptr;
         }
+
+        bool HasOverlaySprite() const
+        {
+            return overlaySprite.overlaySprite != nullptr;
+        }
+
+        fheroes2::Sprite GetOverlaySprite() const
+        {
+            return *overlaySprite.overlaySprite;
+        }
+
+        fheroes2::Point GetOverlaySpritePosition() const
+        {
+            return overlaySprite.position;
+        }
+
+        bool isOverlaySpriteReflect() const
+        {
+            return overlaySprite.reflect;
+        }
+
+        void SetOverlaySprite( const fheroes2::Sprite & sprite, fheroes2::Point pos, bool flip );
+
+        void ResetOverlaySprite();
 
         void SetRandomMorale();
         void SetRandomLuck();
@@ -292,6 +325,8 @@ namespace Battle
         uint8_t customAlphaMask;
 
         const Rand::DeterministicRandomGenerator & _randomGenerator;
+
+        OverlaySprite overlaySprite;
     };
 }
 

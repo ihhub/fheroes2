@@ -119,6 +119,18 @@ uint32_t Battle::ModesAffected::FindZeroDuration() const
     return it == end() ? 0 : ( *it ).first;
 }
 
+void Battle::Unit::ResetOverlaySprite()
+{
+    overlaySprite.overlaySprite = nullptr;
+}
+
+void Battle::Unit::SetOverlaySprite( const fheroes2::Sprite &sprite, fheroes2::Point pos, bool flip ) 
+{
+    overlaySprite.overlaySprite = &sprite;
+    overlaySprite.position = pos;
+    overlaySprite.reflect = flip;
+}
+
 Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
     : ArmyTroop( nullptr, t )
     , animation( id )

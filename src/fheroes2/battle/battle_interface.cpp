@@ -1364,6 +1364,11 @@ void Battle::Interface::RedrawArmies()
             std::vector<const Unit *> movingTroopBeforeWall;
             std::vector<const Unit *> movingTroopAfterWall;
 
+            // Overlay sprites for troops (i.e. spell effect animation) should be rendered after rendereing all troops
+            // for current row so the next troop will not be rendered over the overlay sprite.
+            std::vector<const Unit *> troopOverlaySpriteBeforeWall;
+            std::vector<const Unit *> troopOverlaySpriteAfterWall;
+
             const int32_t wallCellId = wallCellIds[cellRowId];
 
             for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
@@ -1386,9 +1391,16 @@ void Battle::Interface::RedrawArmies()
                     if ( deadUnits[i] && cellId != deadUnits[i]->GetTailIndex() ) {
                         if ( isCellBefore ) {
                             deadTroopBeforeWall.emplace_back( deadUnits[i] );
+                            // Check for overlay sprites of dead units (i.e. Resurrect spell).
+                            if ( deadUnits[i]->HasOverlaySprite() ) {
+                                troopOverlaySpriteBeforeWall.emplace_back( deadUnits[i] );
+                            }
                         }
                         else {
                             deadTroopAfterWall.emplace_back( deadUnits[i] );
+                            if ( deadUnits[i]->HasOverlaySprite() ) {
+                                troopOverlaySpriteAfterWall.emplace_back( deadUnits[i] );
+                            }
                         }
                     }
                 }
@@ -1423,6 +1435,15 @@ void Battle::Interface::RedrawArmies()
                         movingTroopAfterWall.emplace_back( unitOnCell );
                     }
                 }
+
+                if ( unitOnCell->HasOverlaySprite() ) {
+                    if ( isCellBefore ) {
+                        troopOverlaySpriteBeforeWall.emplace_back( unitOnCell );
+                    }
+                    else {
+                        troopOverlaySpriteAfterWall.emplace_back( unitOnCell );
+                    }
+                }
             }
 
             for ( size_t i = 0; i < deadTroopBeforeWall.size(); ++i ) {
@@ -1439,6 +1460,12 @@ void Battle::Interface::RedrawArmies()
 
             for ( size_t i = 0; i < movingTroopBeforeWall.size(); ++i ) {
                 RedrawTroopSprite( *movingTroopBeforeWall[i] );
+            }
+
+            // Render the overlay srite for units in current cell row above all units in this and upper rows.
+            for ( const Unit * unit : troopOverlaySpriteBeforeWall ) {
+                fheroes2::Blit( unit->GetOverlaySprite(), _mainSurface, unit->GetOverlaySpritePosition().x, unit->GetOverlaySpritePosition().y,
+                                unit->isOverlaySpriteReflect() );
             }
 
             RedrawCastle( *castle, wallCellId );
@@ -1458,15 +1485,29 @@ void Battle::Interface::RedrawArmies()
             for ( size_t i = 0; i < movingTroopAfterWall.size(); ++i ) {
                 RedrawTroopSprite( *movingTroopAfterWall[i] );
             }
+
+            // Render the overlay srite for units in current cell row above all units in this and upper rows.
+            for ( const Unit * unit : troopOverlaySpriteAfterWall ) {
+                fheroes2::Blit( unit->GetOverlaySprite(), _mainSurface, unit->GetOverlaySpritePosition().x, unit->GetOverlaySpritePosition().y,
+                                unit->isOverlaySpriteReflect() );
+            }
         }
         else {
             std::vector<const Unit *> troopCounter;
             std::vector<const Unit *> troop;
             std::vector<const Unit *> movingTroop;
+            std::vector<const Unit *> troopOverlaySprite;
 
             // Redraw monsters.
             for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
                 const int32_t cellId = cellRowId * ARENAW + cellColumnId;
+
+                // Check for overlay sprites of dead units (i.e. Resurrect spell).
+                for ( const Unit * deadUnit : arena.GetGraveyardTroops( cellId ) ) {
+                    if ( deadUnit->HasOverlaySprite() ) {
+                        troopOverlaySprite.emplace_back( deadUnit );
+                    }
+                }
 
                 const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
                 if ( unitOnCell == nullptr || _flyingUnit == unitOnCell || cellId == unitOnCell->GetTailIndex() ) {
@@ -1485,6 +1526,10 @@ void Battle::Interface::RedrawArmies()
                 else {
                     movingTroop.emplace_back( unitOnCell );
                 }
+
+                if ( unitOnCell->HasOverlaySprite() ) {
+                    troopOverlaySprite.emplace_back( unitOnCell );
+                }
             }
 
             // Redraw monster counters.
@@ -1498,6 +1543,12 @@ void Battle::Interface::RedrawArmies()
 
             for ( size_t i = 0; i < movingTroop.size(); ++i ) {
                 RedrawTroopSprite( *movingTroop[i] );
+            }
+
+            // Render the overlay srite for units in current cell row above all units in this and upper rows.
+            for ( const Unit * unit : troopOverlaySprite ) {
+                fheroes2::Blit( unit->GetOverlaySprite(), _mainSurface, unit->GetOverlaySpritePosition().x, unit->GetOverlaySpritePosition().y,
+                                unit->isOverlaySpriteReflect() );
             }
         }
 
@@ -5421,20 +5472,25 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            RedrawPartialStart();
-
-            if ( frame < maxFrame ) {
-                for ( const auto & target : targets ) {
+            if ( frame <= maxFrame ) {
+                for ( const Battle::TargetInfo & target : targets ) {
                     if ( target.defender ) {
-                        const bool reflect = ( isReflectICN && target.defender->isReflect() );
-                        const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-                        const fheroes2::Point & pos = CalculateSpellPosition( *target.defender, icn, spellSprite );
-                        fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
+                        if ( frame == maxFrame ) {
+                            // Spell animation is finished, so delete the overlay sprite from unit.
+                            target.defender->ResetOverlaySprite();
+                        }
+                        else {
+                            const bool reflect = ( isReflectICN && target.defender->isReflect() );
+                            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
+                            const fheroes2::Point & pos = CalculateSpellPosition( *target.defender, icn, spellSprite );
+                            // Set the overlay sprite for unit to render it with the unit in 'RedrawArmies()' prior to units in the next (lower) row.
+                            target.defender->SetOverlaySprite( spellSprite, pos, reflect );
+                        }
                     }
                 }
             }
 
-            RedrawPartialFinish();
+            Redraw();
 
             // Reset the defender wince animation state.
             isDefenderAnimating = false;
@@ -5477,6 +5533,15 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
         }
     }
 
+    if ( frame == maxFrame ) {
+        for ( const Battle::TargetInfo & target : targets ) {
+            if ( target.defender ) {
+                // Spell animation is finished, so delete the overlay sprite from unit.
+                target.defender->ResetOverlaySprite();
+            }
+        }
+    }
+
     if ( !mirrorImages.empty() ) {
         // Fade away animation for destroyed mirror images.
         RedrawActionRemoveMirrorImage( mirrorImages );
@@ -5509,12 +5574,11 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            RedrawPartialStart();
-
             const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
             const fheroes2::Point & pos = CalculateSpellPosition( b, icn, spellSprite );
-            fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
-            RedrawPartialFinish();
+            // Set the overlay sprite for unit to render it with the unit in 'RedrawArmies()' prior to units in the next (lower) row.
+            b.SetOverlaySprite( spellSprite, pos, reflect );
+            Redraw();
 
             if ( animation != NONE ) {
                 if ( animation == RESURRECT ) {
@@ -5526,6 +5590,9 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
             ++frame;
         }
     }
+
+    // Spell animation is finished, so delete the overlay sprite from unit.
+    b.ResetOverlaySprite();
 
     if ( animation != NONE ) {
         b.SwitchAnimation( Monster_Info::STATIC );
