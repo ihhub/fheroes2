@@ -131,8 +131,6 @@ namespace
             display.resize( conf.VideoMode().width, conf.VideoMode().height );
             display.fill( 0 ); // start from a black screen
 
-            display.setOnScaleFactorChangeHook( onScaleFactorChangeHook );
-
             fheroes2::engine().setTitle( GetCaption() );
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
@@ -155,14 +153,6 @@ namespace
         ~DisplayInitializer()
         {
             fheroes2::Display::instance().release();
-        }
-
-    private:
-        static void onScaleFactorChangeHook( int32_t oldScaleFactor, int32_t newScaleFactor )
-        {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "Detected display scale factor change from " << oldScaleFactor << " to " << newScaleFactor << ": clearing loaded ICNs..." )
-
-            fheroes2::AGG::ClearLoadedICNs();
         }
     };
 

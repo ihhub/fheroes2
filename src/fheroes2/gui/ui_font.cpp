@@ -59,10 +59,10 @@ namespace
 
         fheroes2::Sprite output = input;
 
-        const int32_t width = output.width() + contourOffset.x;
-        const int32_t height = output.height() - contourOffset.y;
+        const int32_t width = output._w() + contourOffset.x;
+        const int32_t height = output._h() - contourOffset.y;
 
-        const int32_t imageWidth = output.width();
+        const int32_t imageWidth = output._w();
 
         uint8_t * imageOutY = output.image() + imageWidth * contourOffset.y;
         const uint8_t * transformInY = input.transform() - contourOffset.x;
@@ -133,11 +133,6 @@ namespace
             applyEvilButtonReleasedLetterEffects( evilReleased[i] );
             applyEvilButtonPressedLetterEffects( evilPressed[i] );
         }
-
-        fheroes2::AGG::scaleICNToDisplayFactor( goodReleased );
-        fheroes2::AGG::scaleICNToDisplayFactor( goodPressed );
-        fheroes2::AGG::scaleICNToDisplayFactor( evilReleased );
-        fheroes2::AGG::scaleICNToDisplayFactor( evilPressed );
     }
 
     void generateCP1250Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )

@@ -57,8 +57,19 @@ namespace
 {
     const std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
 
-    std::vector<std::vector<fheroes2::Sprite>> _icnVsSprite( ICN::LASTICN );
-    std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL> _tilVsImage;
+    std::array<std::vector<std::vector<fheroes2::Sprite>>, fheroes2::Display::MAX_SCALE_FACTOR> _spritesForScaleFactor;
+
+    std::array<int32_t, ICN::LASTICN> allDefaultICNScaleFactors()
+    {
+        std::array<int32_t, ICN::LASTICN> arr;
+        arr.fill( 1 );
+        return arr;
+    }
+    std::array<int32_t, ICN::LASTICN> _originalICNScaleFactor = allDefaultICNScaleFactors();
+
+    std::array<std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL>, fheroes2::Display::MAX_SCALE_FACTOR> _tilForScaleFactor;
+
+    const fheroes2::Sprite errorImage;
 
     const uint32_t headerSize = 6;
 
@@ -139,13 +150,6 @@ namespace
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
                                                 ICN::BUTTON_DIFFICULTY_POL };
 
-    const fheroes2::Sprite & errorImage()
-    {
-        static fheroes2::Sprite image;
-        image = fheroes2::Sprite();
-        return image;
-    }
-
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
     {
@@ -164,14 +168,44 @@ namespace
                || ( currentLanguage == fheroes2::SupportedLanguage::Russian && resourceLanguage == fheroes2::SupportedLanguage::Russian );
     }
 
+    std::vector<std::vector<fheroes2::Sprite>> & getSpritesForScaleFactor( int32_t scaleFactor )
+    {
+        assert( 1 <= scaleFactor && static_cast<size_t>( scaleFactor ) <= _spritesForScaleFactor.size() );
+
+        auto & icnVsSprite = _spritesForScaleFactor[scaleFactor - 1];
+        if ( icnVsSprite.empty() ) {
+            icnVsSprite.resize( ICN::LASTICN );
+        }
+        return icnVsSprite;
+    }
+
+    /*
+    std::vector<std::vector<fheroes2::Sprite>> & getSprites()
+    {
+        return getSpritesForScaleFactor( fheroes2::Display::scaleFactor() );
+    }
+    */
+
+    std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL> & getTILsForScaleFactor( int32_t scaleFactor )
+    {
+        assert( 1 <= scaleFactor && static_cast<size_t>( scaleFactor ) <= _tilForScaleFactor.size() );
+
+        return _tilForScaleFactor[scaleFactor - 1];
+    }
+
+    std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL> & getTILs()
+    {
+        return getTILsForScaleFactor( fheroes2::Display::scaleFactor() );
+    }
+
     bool IsValidICNId( int id )
     {
-        return id >= 0 && static_cast<size_t>( id ) < _icnVsSprite.size();
+        return id >= 0 && id < ICN::LASTICN;
     }
 
     bool IsValidTILId( int id )
     {
-        return id >= 0 && static_cast<size_t>( id ) < _tilVsImage.size();
+        return id >= 0 && id < TIL::LASTTIL;
     }
 
     fheroes2::Image createDigit( const int32_t width, const int32_t height, const std::vector<fheroes2::Point> & points, const uint8_t pixelColor )
@@ -288,19 +322,20 @@ namespace
                 return;
             }
 
-            fheroes2::AGG::GetICN( ICN::FONT, 0 );
-            fheroes2::AGG::GetICN( ICN::SMALFONT, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, 0 );
-            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, 0 );
+            fheroes2::AGG::GetICN( ICN::FONT, 0, 1 );
+            fheroes2::AGG::GetICN( ICN::SMALFONT, 0, 1 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, 0, 1 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, 0, 1 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, 0, 1 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, 0, 1 );
 
-            _normalFont = _icnVsSprite[ICN::FONT];
-            _smallFont = _icnVsSprite[ICN::SMALFONT];
-            _buttonGoodReleasedFont = _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED];
-            _buttonGoodPressedFont = _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED];
-            _buttonEvilReleasedFont = _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED];
-            _buttonEvilPressedFont = _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED];
+            auto & icnVsSprite = getSpritesForScaleFactor( 1 );
+            _normalFont = icnVsSprite[ICN::FONT];
+            _smallFont = icnVsSprite[ICN::SMALFONT];
+            _buttonGoodReleasedFont = icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED];
+            _buttonGoodPressedFont = icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED];
+            _buttonEvilReleasedFont = icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED];
+            _buttonEvilPressedFont = icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED];
 
             _isPreserved = true;
         }
@@ -311,20 +346,22 @@ namespace
                 return;
             }
 
+            auto & icnVsSprite = getSpritesForScaleFactor( 1 );
+
             // Restore the original font.
-            _icnVsSprite[ICN::FONT] = _normalFont;
-            _icnVsSprite[ICN::SMALFONT] = _smallFont;
-            _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] = _buttonGoodReleasedFont;
-            _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED] = _buttonGoodPressedFont;
-            _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] = _buttonEvilReleasedFont;
-            _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] = _buttonEvilPressedFont;
+            icnVsSprite[ICN::FONT] = _normalFont;
+            icnVsSprite[ICN::SMALFONT] = _smallFont;
+            icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] = _buttonGoodReleasedFont;
+            icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED] = _buttonGoodPressedFont;
+            icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] = _buttonEvilReleasedFont;
+            icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] = _buttonEvilPressedFont;
 
             // Clear modified fonts.
-            _icnVsSprite[ICN::YELLOW_FONT].clear();
-            _icnVsSprite[ICN::YELLOW_SMALLFONT].clear();
-            _icnVsSprite[ICN::GRAY_FONT].clear();
-            _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
-            _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
+            icnVsSprite[ICN::YELLOW_FONT].clear();
+            icnVsSprite[ICN::YELLOW_SMALLFONT].clear();
+            icnVsSprite[ICN::GRAY_FONT].clear();
+            icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
+            icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
         }
 
     private:
@@ -520,54 +557,18 @@ namespace fheroes2
 {
     namespace AGG
     {
-        void ClearLoadedICNs()
+        Sprite scaleToDesiredFactor( const Sprite & sprite, int32_t scaleFactor )
         {
-            const size_t totalICNs = _icnVsSprite.size();
-            _icnVsSprite.clear();
-            _icnVsSprite.resize( totalICNs );
-        }
-
-        void scaleToDisplayFactor( Image & image )
-        {
-            const int32_t displayScaleFactor = Display::scaleFactor();
-            const int32_t imgScaleFactor = image.scaleFactor();
-            if ( imgScaleFactor != displayScaleFactor ) {
-                // resize and position the sprite to match the display's scale factor
-                Image scaled( image.width(), image.height(), displayScaleFactor );
-
-                if ( image.singleLayer() ) {
-                    scaled._disableTransformLayer();
-                }
-
-                bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
-                Resize( image, scaled, subpixel );
-                image = std::move( scaled );
+            Image scaled( sprite.width(), sprite.height(), scaleFactor );
+            if ( sprite.singleLayer() ) {
+                scaled._disableTransformLayer();
             }
-        }
 
-        void scaleToDisplayFactor( Sprite & sprite )
-        {
-            const int32_t displayScaleFactor = Display::scaleFactor();
             const int32_t imgScaleFactor = sprite.scaleFactor();
-            if ( imgScaleFactor != displayScaleFactor ) {
-                // resize and position the sprite to match the display's scale factor
-                Sprite scaled( sprite.width(), sprite.height(), sprite.x(), sprite.y() );
+            bool subpixel = imgScaleFactor > scaleFactor; // lose less information when scaling down, don't blur when scaling up
+            Resize( sprite, scaled, subpixel );
 
-                if ( sprite.singleLayer() ) {
-                    scaled._disableTransformLayer();
-                }
-
-                bool subpixel = imgScaleFactor > displayScaleFactor; // lose less information when scaling down, don't blur when scaling up
-                Resize( sprite, scaled, subpixel );
-                sprite = std::move( scaled );
-            }
-        }
-
-        void scaleICNToDisplayFactor( std::vector<Sprite> & sprites )
-        {
-            for ( Sprite & img : sprites ) {
-                scaleToDisplayFactor( img );
-            }
+            return Sprite( std::move( scaled ), sprite.x(), sprite.y() );
         }
 
         // bool loadImagesFromDir( const int id, const std::string & pathToImagesDir, int32_t scaleFactor )
@@ -586,9 +587,20 @@ namespace fheroes2
         //         return false;
         //     }
 
-        //     _icnVsSprite[id].resize( count );
+        //     auto & icnVsSprite = getSpritesForScaleFactor( scaleFactor );
+
+        //     icnVsSprite[id].resize( count );
 
         //     for ( int i = 0; i < count; ++i ) {
+        //         char fname[16];
+        //         snprintf( fname, 16, "%03d.png", i );
+        //         std::string filepath = System::concatPath( pathToImagesDir, fname );
+        //         if ( !fheroes2::Load( filepath, icnVsSprite[id][i], scaleFactor ) ) {
+        //             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to load image from: " << filepath );
+        //             fclose( f );
+        //             return false;
+        //         }
+
         //         int offsetX;
         //         int offsetY;
         //         if ( fscanf( f, "%d %d", &offsetX, &offsetY ) != 2 ) {
@@ -596,37 +608,36 @@ namespace fheroes2
         //             fclose( f );
         //             return false;
         //         }
-        //         _icnVsSprite[id][i].setPosition( offsetX, offsetY );
-
-        //         char fname[16];
-        //         snprintf( fname, 16, "%03d.png", i );
-        //         std::string filepath = System::concatPath( pathToImagesDir, fname );
-        //         if ( !fheroes2::Load( filepath, _icnVsSprite[id][i], scaleFactor ) ) {
-        //             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "failed to load image from: " << filepath );
-        //             fclose( f );
-        //             return false;
-        //         }
-
-        //         scaleToDisplayFactor( _icnVsSprite[id][i] );
+        //         // FIXME: the division here is only because we've multiplied the offsets in the spec file, but we didn't have to
+        //         icnVsSprite[id][i].setPosition( offsetX / scaleFactor, offsetY / scaleFactor );
         //     }
         //     fclose( f );
 
+        //     _originalICNScaleFactor[id] = scaleFactor;
+
         //     return true;
+        // }
+
+        // bool LoadExternalICN( int id )
+        // {
+        //     const char * icnString = ICN::GetString( id );
+
+        //     const int32_t SCALE_FACTOR_FULLHD = 4;
+        //     const std::string fullHdPath = System::concatPath( System::GetDataDirectory( "fheroes2" ), "fullhd" );
+
+        //     if ( loadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGGX" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
+        //         return true;
+        //     }
+        //     if ( loadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGG" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
+        //         return true;
+        //     }
+
+        //     return false;
         // }
 
         bool LoadOriginalICN( int id )
         {
             const char * icnString = ICN::GetString( id );
-
-            // const int32_t SCALE_FACTOR_FULLHD = 4;
-            // const std::string fullHdPath = System::concatPath( System::GetDataDirectory( "fheroes2" ), "fullhd" );
-
-            // if ( loadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGG" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
-            //     return true;
-            // }
-            // if ( loadImagesFromDir( id, System::concatPath( System::concatPath( fullHdPath, "AGGX" ), icnString ), SCALE_FACTOR_FULLHD ) ) {
-            //     return true;
-            // }
 
             const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( icnString );
 
@@ -642,7 +653,9 @@ namespace fheroes2
                 return false;
             }
 
-            _icnVsSprite[id].resize( count );
+            auto & icnVsSprite = getSpritesForScaleFactor( 1 );
+
+            icnVsSprite[id].resize( count );
 
             for ( uint32_t i = 0; i < count; ++i ) {
                 imageStream.seek( headerSize + i * 13 );
@@ -662,7 +675,7 @@ namespace fheroes2
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
-                _icnVsSprite[id][i]
+                icnVsSprite[id][i]
                     = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
             }
 
@@ -1839,11 +1852,13 @@ namespace fheroes2
 
         bool generatePolishSpecificImages( const int id )
         {
+            auto & icnVsSprite = getSpritesForScaleFactor( 1 );
+
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
+                icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // clean the button
                     Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
@@ -1867,11 +1882,13 @@ namespace fheroes2
 
         bool generateItalianSpecificImages( const int id )
         {
+            auto & icnVsSprite = getSpritesForScaleFactor( 1 );
+
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
+                icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // clean the button
                     uint8_t buttonFillingColor = getButtonFillingColor( i == 0 );
@@ -3508,35 +3525,54 @@ namespace fheroes2
 
         void EnsureICNLoaded( int id )
         {
-            if ( !_icnVsSprite[id].empty() ) {
+            auto & icnVsSprite = getSpritesForScaleFactor( 1 );
+
+            if ( !icnVsSprite[id].empty() ) {
                 return;
             }
 
-            if ( !( LoadModifiedICN( id ) || LoadOriginalICN( id ) ) ) {
-                _icnVsSprite[id].resize( 1 );
-                _icnVsSprite[id][0] = errorImage();
+            // if ( LoadExternalICN( id ) ) {
+            //     return;
+            // }
+
+            if ( LoadModifiedICN( id ) ) {
                 return;
             }
 
-            scaleICNToDisplayFactor( _icnVsSprite[id] );
+            if ( LoadOriginalICN( id ) ) {
+                return;
+            }
+
+            // cannot find your resource anywhere
+            icnVsSprite[id].resize( 1 );
+            icnVsSprite[id][0] = errorImage;
         }
 
         size_t GetMaximumICNIndex( int id )
         {
+            if ( !IsValidICNId( id ) ) {
+                return 0;
+            }
+
             EnsureICNLoaded( id );
-            return _icnVsSprite[id].size();
+
+            auto & icnVsSprite = getSpritesForScaleFactor( _originalICNScaleFactor[id] );
+            return icnVsSprite[id].size();
         }
 
-        size_t GetMaximumTILIndex( int id )
+        void EnsureTILLoaded( int id )
         {
-            if ( _tilVsImage[id].empty() ) {
-                _tilVsImage[id].resize( 4 ); // 4 possible sides
+            const int32_t scaleFactor = Display::scaleFactor();
+            auto & tilVsImage = getTILsForScaleFactor( scaleFactor );
+
+            if ( tilVsImage[id].empty() ) {
+                tilVsImage[id].resize( 4 ); // 4 possible sides
 
                 const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( tilFileName[id] );
                 if ( data.size() < headerSize ) {
                     // The important resource is absent! Make sure that you are using the correct version of the game.
                     assert( 0 );
-                    return 0;
+                    return;
                 }
 
                 StreamBuf buffer( data );
@@ -3546,10 +3582,10 @@ namespace fheroes2
                 const uint32_t height = buffer.getLE16();
                 const uint32_t size = width * height;
                 if ( headerSize + count * size != data.size() ) {
-                    return 0;
+                    return;
                 }
 
-                std::vector<Image> & originalTIL = _tilVsImage[id][0];
+                std::vector<Image> & originalTIL = tilVsImage[id][0];
 
                 originalTIL.resize( count );
                 for ( uint32_t i = 0; i < count; ++i ) {
@@ -3559,11 +3595,11 @@ namespace fheroes2
                     memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
                     std::fill( tilImage.transform(), tilImage.transform() + width * height, static_cast<uint8_t>( 0 ) );
 
-                    scaleToDisplayFactor( tilImage );
+                    tilImage = std::move( scaleToDesiredFactor( tilImage, scaleFactor ) );
                 }
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
-                    std::vector<Image> & currentTIL = _tilVsImage[id][shapeId];
+                    std::vector<Image> & currentTIL = tilVsImage[id][shapeId];
                     currentTIL.resize( count );
 
                     const bool horizontalFlip = ( shapeId & 2 ) != 0;
@@ -3574,54 +3610,70 @@ namespace fheroes2
                     }
                 }
             }
-
-            return _tilVsImage[id][0].size();
         }
 
-        const Sprite & GetICN( int icnId, uint32_t index )
+        size_t GetMaximumTILIndex( int id )
         {
-            if ( !IsValidICNId( icnId ) ) {
-                return errorImage();
+            if ( !IsValidTILId( id ) ) {
+                return 0;
             }
 
+            EnsureTILLoaded( id );
+
+            const auto & tilVsImage = getTILs();
+            return tilVsImage[id][0].size();
+        }
+
+        const Sprite & GetICN( int icnId, uint32_t index, int32_t scaleFactor_ )
+        {
             if ( index >= GetMaximumICNIndex( icnId ) ) {
-                return errorImage();
+                // FIXME: this will crash due to scale factor mismatch
+                return errorImage;
             }
 
-            return _icnVsSprite[icnId][index];
+            auto & icnVsSprite = getSpritesForScaleFactor( scaleFactor_ );
+            std::vector<Sprite> & sprites = icnVsSprite[icnId];
+            if ( sprites.empty() ) {
+                const auto & originalIcnVsSprite = getSpritesForScaleFactor( _originalICNScaleFactor[icnId] );
+                const std::vector<Sprite> & originalSprites = originalIcnVsSprite[icnId];
+
+                sprites.resize( originalIcnVsSprite.size() );
+                for ( size_t i = 0; i < originalSprites.size(); ++i ) {
+                    const Sprite & original = originalSprites[i];
+                    if ( original.singleLayer() ) {
+                        sprites[i]._disableTransformLayer();
+                    }
+                    sprites[i] = std::move( scaleToDesiredFactor( original, scaleFactor_ ) );
+                }
+            }
+
+            return sprites[index];
         }
 
         uint32_t GetICNCount( int icnId )
         {
-            if ( !IsValidICNId( icnId ) ) {
-                return 0;
-            }
-
             return static_cast<uint32_t>( GetMaximumICNIndex( icnId ) );
         }
 
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
             if ( shapeId > 3 ) {
-                return errorImage();
-            }
-
-            if ( !IsValidTILId( tilId ) ) {
-                return errorImage();
+                return errorImage;
             }
 
             const size_t maxTILIndex = GetMaximumTILIndex( tilId );
             if ( index >= maxTILIndex ) {
-                return errorImage();
+                return errorImage;
             }
 
-            return _tilVsImage[tilId][shapeId][index];
+            const auto & tilVsImage = getTILs();
+            return tilVsImage[tilId][shapeId][index];
         }
 
         const Sprite & GetLetter( uint32_t character, uint32_t fontType )
         {
             if ( character < 0x21 ) {
-                return errorImage();
+                return errorImage;
             }
 
             // TODO: correct naming and standardize the code
@@ -3699,7 +3751,7 @@ namespace fheroes2
         const Sprite & getChar( const uint8_t character, const FontType & fontType )
         {
             if ( character < 0x21 ) {
-                return errorImage();
+                return errorImage;
             }
 
             switch ( fontType.size ) {
@@ -3773,11 +3825,13 @@ namespace fheroes2
 
             assert( 0 ); // Did you add a new font size? Please add implementation.
 
-            return errorImage();
+            return errorImage;
         }
 
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
         {
+            auto & icnVsSprite = getSpritesForScaleFactor( 1 );
+
             if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
                 alphabetPreserver.restore();
             }
@@ -3785,13 +3839,13 @@ namespace fheroes2
                 alphabetPreserver.preserve();
                 // Restore original letters when changing language to avoid changes to them being carried over.
                 alphabetPreserver.restore();
-                generateAlphabet( language, _icnVsSprite );
+                generateAlphabet( language, icnVsSprite );
             }
-            generateButtonAlphabet( language, _icnVsSprite );
+            generateButtonAlphabet( language, icnVsSprite );
 
             // Clear language dependent resources.
             for ( const int id : languageDependentIcnId ) {
-                _icnVsSprite[id].clear();
+                icnVsSprite[id].clear();
             }
         }
     }

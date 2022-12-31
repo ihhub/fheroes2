@@ -23,23 +23,19 @@
 #include <cstdint>
 #include <vector>
 
+#include "screen.h"
+
 namespace fheroes2
 {
-    class Image;
-    class Sprite;
+    // class Image;
+    // class Sprite;
     enum class FontSize : uint8_t;
     struct FontType;
     enum class SupportedLanguage : int;
 
     namespace AGG
     {
-        // To be called when display's scale factor has changed.
-        void ClearLoadedICNs();
-
-        void scaleICNToDisplayFactor( std::vector<Sprite> & sprites );
-        void scaleToDisplayFactor( Sprite & sprite );
-
-        const Sprite & GetICN( int icnId, uint32_t index );
+        const Sprite & GetICN( int icnId, uint32_t index, int32_t scaleFactor = Display::scaleFactor() );
         uint32_t GetICNCount( int icnId );
 
         // shapeId could be 0, 1, 2 or 3 only

@@ -1652,11 +1652,16 @@ namespace fheroes2
 
     Image FilterOnePixelNoise( const Image & input )
     {
-        if ( input.width() < 3 || input.height() < 3 ) {
+        assert( input.scaleFactor() == 1 );
+
+        const int32_t width = input._w();
+        const int32_t height = input._h();
+
+        if ( width < 3 || height < 3 ) {
             return input;
         }
 
-        Image output( input.width(), input.height() );
+        Image output( width, height, 1 );
         output.reset();
 
         const uint8_t * imageInY = input.image();
@@ -1664,9 +1669,6 @@ namespace fheroes2
 
         uint8_t * imageOutY = output.image();
         uint8_t * transformOutY = output.transform();
-
-        const int32_t width = input._w();
-        const int32_t height = input._h();
 
         for ( int32_t y = 0; y < height; ++y ) {
             const uint8_t * transformInX = transformInY;

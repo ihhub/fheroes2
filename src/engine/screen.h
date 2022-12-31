@@ -133,22 +133,40 @@ namespace fheroes2
         bool _nearestScaling;
     };
 
-    class Display : public Image // That's a REALLY bad idea after all...
+    class Display : public Image
     {
     public:
         friend class BaseRenderEngine;
 
         enum : int32_t
         {
+            // TODO: find where else is still used
             DEFAULT_WIDTH = 640,
             DEFAULT_HEIGHT = 480
         };
+        static const int32_t MAX_SCALE_FACTOR = 4;
 
         static Display & instance();
         static int32_t scaleFactor();
 
-        typedef void ( *onScaleFactorChangeHook )( int32_t oldScaleFactor, int32_t newScaleFactor );
-        static void setOnScaleFactorChangeHook( onScaleFactorChangeHook hook );
+        friend class ScaleFactorOverride;
+        class ScaleFactorOverride
+        {
+        public:
+            explicit ScaleFactorOverride( int32_t tempScaleFactor )
+                : _scaleFactorToRestore( Display::scaleFactor() )
+            {
+                Display::_setCurrentScaleFactor( tempScaleFactor );
+            }
+
+            ~ScaleFactorOverride()
+            {
+                Display::_setCurrentScaleFactor( _scaleFactorToRestore );
+            }
+
+        private:
+            int32_t _scaleFactorToRestore;
+        };
 
         ~Display() override = default;
 
@@ -195,8 +213,12 @@ namespace fheroes2
         friend Cursor & cursor();
 
     private:
+        static void _setCurrentScaleFactor( int32_t scaleFactor )
+        {
+            _currentScaleFactor = scaleFactor;
+        }
+
         static int32_t _currentScaleFactor;
-        static onScaleFactorChangeHook _onScaleFactorChangeHook;
 
         std::unique_ptr<BaseRenderEngine> _engine;
         std::unique_ptr<Cursor> _cursor;
