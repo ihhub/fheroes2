@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>fheroes2.desktop</id>
+  <id>io.github.ihhub.Fheroes2</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0</project_license>
   <name>fheroes2</name>
   <developer_name>fheroes2 Resurrection team</developer_name>
-  <summary>fheroes2 is a recreation of Heroes of Might and Magic II game engine.</summary>
+  <summary>fheroes2 is a recreation of Heroes of Might and Magic II game engine</summary>
   <description>
     <p>fheroes2 is a recreation of Heroes of Might and Magic II game engine.</p>
     <p>This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategies.</p>
   </description>
+  <categories>
+    <category>Game</category>
+    <category>StrategyGame</category>
+  </categories>
+  <keywords>
+    <keyword translate="no">heroes2</keyword>
+    <keyword translate="no">homm2</keyword>
+  </keywords>
   <url type="homepage">https://ihhub.github.io/fheroes2/</url>
   <url type="bugtracker">https://github.com/ihhub/fheroes2/issues</url>
+  <url type="faq">https://github.com/ihhub/fheroes2/wiki/F.A.Q.</url>
+  <url type="translate">https://github.com/ihhub/fheroes2/blob/master/docs/TRANSLATION.md</url>
   <content_rating type="oars-1.1">
     <content_attribute id="violence-cartoon">mild</content_attribute>
     <content_attribute id="violence-fantasy">mild</content_attribute>
   </content_rating>
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>touch</control>
+  </recommends>
   <releases>
     <release date="2022-12-21" version="v1.0.0">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.0</url>
