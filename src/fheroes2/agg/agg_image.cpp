@@ -3834,6 +3834,7 @@ namespace fheroes2
 
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
         {
+            Display::ScaleFactorOverride override( 1 );
             auto & _icnVsSprite = getSpritesForScaleFactor( 1 );
 
             if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
