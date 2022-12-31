@@ -35,7 +35,7 @@ namespace fheroes2
 
     namespace AGG
     {
-        const Sprite & GetICN( int icnId, uint32_t index, int32_t scaleFactor = Display::scaleFactor() );
+        const Sprite & GetICN( int icnId, uint32_t index );
         uint32_t GetICNCount( int icnId );
 
         // shapeId could be 0, 1, 2 or 3 only
