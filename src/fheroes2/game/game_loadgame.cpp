@@ -84,20 +84,24 @@ fheroes2::GameMode Game::LoadMulti()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    // image background
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
     fheroes2::drawMainMenuScreen();
 
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    const int32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-    const int32_t panelXPos = back.width() - ( panel.width() + panelOffset );
-    fheroes2::Blit( panel, display, panelXPos, panelOffset );
+
+    const int32_t offX = ( display.width() - back.width() ) / 2;
+    const int32_t offY = ( display.height() - back.height() ) / 2;
+
+    const int32_t panelOffset = back.height() - panel.height();
+    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
+
+    fheroes2::Blit( panel, display, offX + panelXPos, offY + panelOffset );
 
     const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
     const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
     const int32_t buttonWidth = buttonSample.width();
-    const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
-    const int32_t buttonYPos = 46;
+    const int32_t buttonXPos = offX + buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
+    const int32_t buttonYPos = offY + 46;
     const int32_t buttonYStep = 66;
 
     fheroes2::Button buttonHotSeat( buttonXPos, buttonYPos, ICN::BUTTON_HOT_SEAT, 0, 1 );
@@ -155,13 +159,17 @@ fheroes2::GameMode Game::LoadGame()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
     fheroes2::drawMainMenuScreen();
 
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    const int32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-    const int32_t panelXPos = back.width() - ( panel.width() + panelOffset );
-    fheroes2::Blit( panel, display, panelXPos, panelOffset );
+
+    const int32_t offX = ( display.width() - back.width() ) / 2;
+    const int32_t offY = ( display.height() - back.height() ) / 2;
+
+    const int32_t panelOffset = back.height() - panel.height();
+    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
+    fheroes2::Blit( panel, display, offX + panelXPos, offY + panelOffset );
 
     const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
     const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
@@ -175,8 +183,8 @@ fheroes2::GameMode Game::LoadGame()
     buttons[2].setICNInfo( ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
     buttons[3].setICNInfo( ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
-    const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
-    const int32_t buttonYPos = 46;
+    const int32_t buttonXPos = offX + buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
+    const int32_t buttonYPos = offY + 46;
     const int32_t buttonYStep = 66;
 
     for ( size_t i = 0; i < buttonCount - 1; ++i ) {
