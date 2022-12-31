@@ -3,7 +3,7 @@
 import argparse
 import re
 import datetime
-import html
+from xml.sax.saxutils import escape
 
 #
 # Appstream file could be validated with 'appstream-util validate io.github.ihhub.Fheroes2.appdata.xml'
@@ -47,7 +47,7 @@ def main():
             match[0],
             match[0],
             match[1],
-            re.sub(r'- (.*)', r'          <li>\1</li>', html.escape(match[2]))
+            re.sub(r'- (.*)', r'          <li>\1</li>', escape(match[2]))
         )
         
     new_appdata = re.sub(r'<releases>(.*?)</releases>', r'<releases>\n' + tmp + '  </releases>',
