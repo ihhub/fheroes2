@@ -35,7 +35,7 @@
             android:id="@+id/activity_toolset_start_game_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:enabled="false"
             android:minWidth="256dp"
             android:onClick="startGameButtonClicked"
