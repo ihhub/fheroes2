@@ -574,7 +574,7 @@ namespace MP2
         OBJ_ICN_TYPE_UNUSED_7, // Unused
         OBJ_ICN_TYPE_UNUSED_8, // Unused
         OBJ_ICN_TYPE_UNUSED_9, // Unused
-        OBJ_ICN_TYPE_OBJNHAUN,
+        OBJ_ICN_TYPE_OBJNHAUN, // Flying ghosts over an object (mine).
         OBJ_ICN_TYPE_OBJNARTI, // Artifacts
         OBJ_ICN_TYPE_MONS32, // MON32.icn corresponds to static monsters while we use dynamic monster animation from MINIMON.icn.
         OBJ_ICN_TYPE_UNUSED_13, // Unused

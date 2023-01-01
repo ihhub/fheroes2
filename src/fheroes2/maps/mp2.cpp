@@ -154,9 +154,38 @@ int MP2::getIcnIdFromObjectIcnType( const uint8_t objectIcnType )
 
 bool MP2::isHiddenForPuzzle( const int terrainType, uint8_t tileset, uint8_t index )
 {
-    const int icnID = tileset >> 2;
-    if ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) || ( icnID == 59 && index >= 124 && index <= 137 ) ) {
+    const int objectIcnType = tileset >> 2;
+    switch ( objectIcnType ) {
+    case OBJ_ICN_TYPE_UNKNOWN:
+    case OBJ_ICN_TYPE_UNUSED_1:
+    case OBJ_ICN_TYPE_UNUSED_2:
+    case OBJ_ICN_TYPE_UNUSED_3:
+    case OBJ_ICN_TYPE_UNUSED_4:
+    case OBJ_ICN_TYPE_UNUSED_5:
+    case OBJ_ICN_TYPE_BOAT32:
+    case OBJ_ICN_TYPE_UNUSED_7:
+    case OBJ_ICN_TYPE_UNUSED_8:
+    case OBJ_ICN_TYPE_UNUSED_9:
+    case OBJ_ICN_TYPE_OBJNHAUN:
+    case OBJ_ICN_TYPE_OBJNARTI:
+    case OBJ_ICN_TYPE_MONS32:
+    case OBJ_ICN_TYPE_UNUSED_13:
+    case OBJ_ICN_TYPE_FLAG32:
+    case OBJ_ICN_TYPE_UNUSED_15:
+    case OBJ_ICN_TYPE_UNUSED_16:
+    case OBJ_ICN_TYPE_UNUSED_17:
+    case OBJ_ICN_TYPE_UNUSED_18:
+    case OBJ_ICN_TYPE_UNUSED_19:
+    case OBJ_ICN_TYPE_MINIMON:
+    case OBJ_ICN_TYPE_MINIHERO:
+    case OBJ_ICN_TYPE_OBJNRSRC:
         return true;
+    case OBJ_ICN_TYPE_OBJNMULT:
+        // Campfire.
+        return ( index >= 124 && index <= 137 );
+    default:
+        // TODO: verify whether we need to show pickup objects in water.
+        break;
     }
 
     return isDiggingHoleSprite( terrainType, tileset, index );
@@ -1245,33 +1274,33 @@ bool MP2::getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint8_
 {
     switch ( terrainType ) {
     case Maps::Ground::DESERT:
-        tileSet = 0xDC; // ICN::OBJNDSRT
+        tileSet = ( OBJ_ICN_TYPE_OBJNDSRT << 2 );
         index = 68;
         return true;
     case Maps::Ground::SNOW:
-        tileSet = 208; // ICN::OBJNSNOW
+        tileSet = ( OBJ_ICN_TYPE_OBJNSNOW << 2 );
         index = 11;
         return true;
     case Maps::Ground::SWAMP:
-        tileSet = 212; // ICN::OBJNSWMP
+        tileSet = ( OBJ_ICN_TYPE_OBJNSWMP << 2 );
         index = 86;
         return true;
     case Maps::Ground::WASTELAND:
-        tileSet = 0xE4; // ICN::OBJNCRCK
+        tileSet = ( OBJ_ICN_TYPE_OBJNCRCK << 2 );
         index = 70;
         return true;
     case Maps::Ground::LAVA:
-        tileSet = 0xD8; // ICN::OBJNLAVA
+        tileSet = ( OBJ_ICN_TYPE_OBJNLAVA << 2 );
         index = 26;
         return true;
     case Maps::Ground::DIRT:
-        tileSet = 0xE0; // ICN::OBJNDIRT
+        tileSet = ( OBJ_ICN_TYPE_OBJNDIRT << 2 );
         index = 140;
         return true;
     case Maps::Ground::BEACH:
     case Maps::Ground::GRASS:
         // Beach doesn't have its digging hole so we use it from Grass terrain.
-        tileSet = 0xC0; // ICN::OBJNGRA2
+        tileSet = ( OBJ_ICN_TYPE_OBJNGRA2 << 2 );
         index = 9;
         return true;
     case Maps::Ground::WATER:
