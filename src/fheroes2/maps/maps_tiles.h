@@ -66,43 +66,6 @@ namespace Maps
         TERRAIN_LAYER = 3 // roads, water flaws and cracks. Essentially everything what is a part of terrain.
     };
 
-    struct TileObjectPartInfo
-    {
-        TileObjectPartInfo() = default;
-
-        TileObjectPartInfo( const uint32_t uid_, const uint8_t layerType_, const uint8_t objectType_, const uint8_t imageIndex_, const uint8_t extraInfo_ )
-            : uid( uid_ )
-            , layerType( layerType_ )
-            , objectType( objectType_ )
-            , imageIndex( imageIndex_ )
-            , extraInfo( extraInfo_ )
-        {
-            // Do nothing.
-        }
-
-        TileObjectPartInfo( const TileObjectPartInfo & ) = default;
-
-        ~TileObjectPartInfo() = default;
-
-        TileObjectPartInfo & operator=( const TileObjectPartInfo & ) = delete;
-
-        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
-        uint32_t uid{ 0 };
-
-        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
-        uint8_t layerType{ OBJECT_LAYER };
-
-        // The type of object which correlates to ICN id. See MP2::GetICNObject() function for mor details.
-        uint8_t objectType{ 0 };
-
-        // Image index to define which part of the object is the current tile. It is always used in tandem with objectType.
-        uint8_t imageIndex{ 0 };
-
-        // First 2 bits which are used to indicate road and overlay(?).
-        // TODO: verify what both bits do.
-        uint8_t extraInfo{ 0 };
-    };
-
     struct TilesAddon
     {
         TilesAddon();
@@ -166,7 +129,7 @@ namespace Maps
 
         MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
 
-        uint8_t GetObjectTileset() const
+        uint8_t getObjectType() const
         {
             return _objectType;
         }
