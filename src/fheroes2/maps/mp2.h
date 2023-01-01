@@ -564,7 +564,7 @@ namespace MP2
 
     enum ObjectIcnType : uint8_t
     {
-        OBJ_ICN_TYPE_UNKNOWN,
+        OBJ_ICN_TYPE_UNKNOWN, // Object does not exist.
         OBJ_ICN_TYPE_UNUSED_1, // Unused
         OBJ_ICN_TYPE_UNUSED_2, // Unused
         OBJ_ICN_TYPE_UNUSED_3, // Unused
@@ -608,7 +608,7 @@ namespace MP2
         OBJ_ICN_TYPE_OBJNMUL2, // Miscellaneous ground objects.
         OBJ_ICN_TYPE_TRESNOW, // Snow trees.
         OBJ_ICN_TYPE_TREFIR, // Fir-trees during Summer.
-        OBJ_ICN_TYPE_TREFALL, // Fir-trees during Autum.
+        OBJ_ICN_TYPE_TREFALL, // Fir-trees during Autumn.
         OBJ_ICN_TYPE_STREAM, // River streams.
         OBJ_ICN_TYPE_OBJNRSRC, // Resources.
         OBJ_ICN_TYPE_UNUSED_47, // Unused
@@ -625,9 +625,9 @@ namespace MP2
         OBJ_ICN_TYPE_OBJNLAV3, // Animated lava objects.
         OBJ_ICN_TYPE_OBJNMULT, // Miscellaneous ground objects.
         OBJ_ICN_TYPE_OBJNLAV2, // Animated lava objects.
-        OBJ_ICN_TYPE_X_LOC1, // Objects from The Price of Loaylty expansion.
-        OBJ_ICN_TYPE_X_LOC2, // Objects from The Price of Loaylty expansion.
-        OBJ_ICN_TYPE_X_LOC3 // Objects from The Price of Loaylty expansion.
+        OBJ_ICN_TYPE_X_LOC1, // Objects from The Price of Loyalty expansion.
+        OBJ_ICN_TYPE_X_LOC2, // Objects from The Price of Loyalty expansion.
+        OBJ_ICN_TYPE_X_LOC3 // Objects from The Price of Loyalty expansion.
     };
 
     // Return Icn ID related to this tileset value.
