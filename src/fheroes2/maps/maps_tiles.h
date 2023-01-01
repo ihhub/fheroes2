@@ -105,6 +105,7 @@ namespace Maps
         uint8_t _layerType;
 
         // The type of object which correlates to ICN id. See MP2::GetICNObject() function for more details.
+        // First 2 bits are used for marking a tile as a road and indicating that the object has animation.
         uint8_t _objectType;
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
@@ -435,6 +436,7 @@ namespace Maps
         uint8_t _layerType{ OBJECT_LAYER };
 
         // The type of object which correlates to ICN id. See MP2::GetICNObject() function for more details.
+        // First 2 bits are used for marking a tile as a road and indicating that the object has animation.
         uint8_t _objectType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
