@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
-import re
 import datetime
+import re
+import sys
 from xml.sax.saxutils import escape
 
 #
