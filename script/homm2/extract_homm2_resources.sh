@@ -83,18 +83,18 @@ fi
 
 # Special case - CD image from GOG
 
-if [[ "$(command -v python3)" != "" ]]; then
+if [[ -n "$(command -v python3)" ]]; then
     PYTHON="python3"
-elif [[ "$(command -v python2)" != "" ]]; then
+elif [[ -n "$(command -v python2)" ]]; then
     PYTHON="python2"
-elif [[ "$(command -v python)" != "" ]]; then
+elif [[ -n "$(command -v python)" ]]; then
     PYTHON="python"
 else
     echo_yellow "python was not found in your system. Please install it and re-run this script to extract animation resources."
     exit 0
 fi
 
-if [[ "$(command -v bsdtar)" == "" ]]; then
+if [[ -z "$(command -v bsdtar)" ]]; then
     echo_yellow "bsdtar was not found in your system. Please install it and re-run this script to extract animation resources."
     exit 0
 fi
