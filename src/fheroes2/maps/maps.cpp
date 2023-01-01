@@ -616,9 +616,9 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
             Tiles & tile = world.GetTiles( castleTile );
 
             if ( isRandom )
-                tile.ReplaceObjectSprite( castleID, 38, 35 * 4, lookupID, fullTownIndex ); // OBJNTWRD to OBJNTOWN
+                tile.ReplaceObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTWRD, 35 * 4, lookupID, fullTownIndex ); // OBJNTWRD to OBJNTOWN
             else
-                tile.UpdateObjectSprite( castleID, 35, 35 * 4, -16 ); // no change in tileset
+                tile.UpdateObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTOWN, 35 * 4, -16 ); // no change in tileset
 
             if ( index == 0 ) {
                 TilesAddon * addon = tile.FindAddonLevel2( castleID );
@@ -632,9 +632,9 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
         const int shadowTile = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );
         if ( isValidAbsIndex( shadowTile ) ) {
             if ( isRandom )
-                world.GetTiles( shadowTile ).ReplaceObjectSprite( castleID, 38, 37 * 4, lookupID + 32, fullTownIndex ); // OBJNTWRD to OBJNTWSH
+                world.GetTiles( shadowTile ).ReplaceObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTWRD, 37 * 4, lookupID + 32, fullTownIndex ); // OBJNTWRD to OBJNTWSH
             else
-                world.GetTiles( shadowTile ).UpdateObjectSprite( castleID, 37, 37 * 4, -16 ); // no change in tileset
+                world.GetTiles( shadowTile ).UpdateObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTWSH, 37 * 4, -16 ); // no change in tileset
         }
     }
 }
