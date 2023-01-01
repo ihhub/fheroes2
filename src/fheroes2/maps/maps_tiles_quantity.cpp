@@ -29,6 +29,7 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
+#include "icn.h"
 #include "logging.h"
 #include "maps_tiles.h"
 #include "monster.h"
@@ -966,14 +967,18 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
 {
     tile.SetObject( MP2::OBJ_MONSTER );
 
-    // if there was another sprite here (shadow for example) push it down to Addons,
-    // except when there is already MONS32.ICN here (a random monster for example)
-    if ( tile.objectTileset != 0 && tile.objectTileset != 48 && tile.objectIndex != 255 ) {
+    const int icnId = MP2::GetICNObject( tile.objectTileset );
+
+    // If there was another object sprite here (shadow for example) push it down to Addons,
+    // except when there is already MONS32.ICN here.
+    if ( tile.objectTileset != 0 && icnId != ICN::MONS32 && tile.objectIndex != 255 ) {
         tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile.uniq, tile.objectTileset, tile.objectIndex ) );
+
+        // replace sprite with the one for the new monster
+        tile.uniq = 0;
+        tile.objectTileset = 48; // MONS32.ICN
     }
-    // replace sprite with the one for the new monster
-    tile.uniq = 0;
-    tile.objectTileset = 48; // MONS32.ICN
+
     tile.objectIndex = mons.GetSpriteIndex();
 
     const bool setDefinedCount = ( count > 0 );

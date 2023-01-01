@@ -198,8 +198,15 @@ flatpak run io.github.ihhub.Fheroes2
 
 Alternatively, you can use an application manager like Discover, which is also available on Steam Deck.
 
-You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the
-`~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory. You will be asked when you start the application.
+After the first start you will be asked for the original files. There are three possibilities:
+1. Install GOG version (recommended)
+2. Manual install
+3. Install demo
+
+The recommended option requires the Heroes of Might and Magic II installer file (*.exe) from GOG. This will extract the appropriate resources by itself.
+
+For the manual installation you have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the
+`~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory. The destination folder will be opened when this option is selected.
 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive
