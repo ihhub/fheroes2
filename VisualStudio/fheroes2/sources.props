@@ -78,6 +78,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_adventure.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_arena.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_armyinfo.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_artifact.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_audio.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_box.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_buyboat.cpp" />

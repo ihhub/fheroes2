@@ -443,6 +443,10 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             // This unit will certainly perform at least one full-fledged action
             _lastActiveUnitArmyColor = troop->GetArmyColor();
 
+            if ( _bridge ) {
+                _bridge->SetPassability( *troop );
+            }
+
             _globalAIPathfinder.calculate( *troop );
 
             if ( troop->isControlRemote() ) {
@@ -575,10 +579,6 @@ void Battle::Arena::Turns()
                         break;
                     }
                 }
-            }
-
-            if ( _bridge ) {
-                _bridge->SetPassable( *troop );
             }
 
             TurnTroop( troop, orderHistory );
@@ -1074,8 +1074,7 @@ void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
 
     case CAT_BRIDGE:
         if ( _bridge->isValid() ) {
-            _bridge->SetDown( true );
-            _bridge->SetDestroy();
+            _bridge->SetDestroyed();
         }
         break;
 

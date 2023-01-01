@@ -732,7 +732,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
     }
     else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
         std::string message = _( "The %{monster}, awed by the power of your forces, begin to scatter.\nDo you wish to pursue and engage them?" );
-        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+        StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
         if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
             destroy = true;
@@ -1884,7 +1884,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
                 else {
                     msg = _(
                         "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
-                    StringReplace( msg, "%{monster}", Translation::StringLower( troop->GetName() ) );
+                    StringReplaceWithLowercase( msg, "%{monster}", troop->GetName() );
                     battle = ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) );
                 }
             }
@@ -2266,7 +2266,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
 
     if ( troop.isValid() ) {
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
-        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+        StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
         AudioManager::PlaySound( M82::EXPERNCE );
 
@@ -3150,13 +3150,15 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
         if ( !vec_eyes.empty() ) {
             Interface::Basic & I = Interface::Basic::Get();
 
+            fheroes2::Display & display = fheroes2::Display::instance();
+
             for ( const int32_t eyeIndex : vec_eyes ) {
                 Maps::ClearFog( eyeIndex, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
 
                 I.GetGameArea().SetCenter( Maps::GetPoint( eyeIndex ) );
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
-                fheroes2::Display::instance().render();
+                display.render();
 
                 LocalEvent & le = LocalEvent::Get();
                 int delay = 0;
@@ -3166,12 +3168,16 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
                         ++delay;
                         Game::updateAdventureMapAnimationIndex();
                         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+                        display.render();
                     }
                 }
             }
 
             I.GetGameArea().SetCenter( hero.GetCenter() );
             I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+            display.render();
         }
     }
 

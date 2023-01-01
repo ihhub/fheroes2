@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 02:36+0000\n"
-"PO-Revision-Date: 2022-12-03 04:38+0100\n"
+"POT-Creation-Date: 2022-12-19 00:42+0000\n"
+"PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -28,123 +28,142 @@ msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"NOU-\n"
+"VEAU"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"SAUVE-\n"
+"GARDER"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"CHAR-\n"
+"GER"
 
 msgid "INFO"
-msgstr ""
+msgstr "INFOS"
 
 msgid "QUIT"
 msgstr ""
+"QUITT-\n"
+"ER"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "SORTIR"
 
 msgid "OKAY"
-msgstr ""
+msgstr "OK"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ACCEPTER"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "REFUSER"
 
 msgid "LEARN"
-msgstr ""
+msgstr "OK"
 
 msgid "TRADE"
-msgstr ""
+msgstr "TROQUER"
 
 msgid "YES"
-msgstr ""
+msgstr "OUI"
 
 msgid "NO"
-msgstr ""
+msgstr "NON"
 
 msgid "EXIT"
-msgstr ""
+msgstr "FIN"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "RENVOYER"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "EVOLUER"
 
 msgid "RESTART"
-msgstr ""
+msgstr "REJOUER"
 
 msgid "S"
-msgstr ""
+msgstr "S"
 
 msgid "M"
-msgstr ""
+msgstr "M"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "X-L"
-msgstr ""
+msgstr "XL"
 
 msgid "ALL"
-msgstr ""
+msgstr "T"
 
 msgid ""
 "STANDARD\n"
 "GAME"
-msgstr ""
+msgstr "SCENARIO"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
-msgstr ""
+msgstr "CAMPAGNE"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"MODES\n"
+"MULTI-\n"
+"JOUEUR"
 
 msgid "CONFIG"
 msgstr ""
+"PARA-\n"
+"MÈTRES"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"CAMPAGNE\n"
+"ORIGINALE"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"SCENARIO\n"
+"DISC"
 
 msgid "HOT SEAT"
 msgstr ""
+"JOUER À\n"
+"PLUSIEURS"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 JOUEURS"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 JOUEURS"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 JOUEURS"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 JOUEURS"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 JOUEURS"
 
 msgid "GIFT"
-msgstr "DON"
+msgstr "DONNER"
 
 msgid "DIFFICULTY"
 msgstr "DIFFICULTÉ"
@@ -389,9 +408,8 @@ msgstr ""
 "Raccourcis\n"
 "clavier"
 
-#, fuzzy
 msgid "Damage Info"
-msgstr "Dégâts"
+msgstr "Infos sur dégâts"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Définir la vitesse des actions et animations de combat."
@@ -436,11 +454,9 @@ msgstr "Changer les paramètres du son du jeu."
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Verifier et configurer les raccourcis clavier du jeu."
 
-#, fuzzy
 msgid "Toggle to display damage information during the battle."
 msgstr ""
-"Activer ou désactiver l'affichage de l'ordre de jeu des créatures pendant le "
-"combat."
+"Basculez pour afficher les informations sur les dégâts pendant la bataille."
 
 msgid "Exit this menu."
 msgstr "Quitter ce menu."
@@ -729,22 +745,22 @@ msgid "%{name} casts %{spell}."
 msgstr "%{name} lance %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "%{spell} inflige %{value} dégâts à un mort-vivant."
+msgstr "%{spell} inflige %{damage} dégâts à un mort-vivant."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr "%{spell} inflige %{value} dégâts à tous les morts-vivants."
+msgstr "%{spell} inflige %{damage} dégâts à tous les morts-vivants."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr "%{spell} inflige %{value} dégâts, %{count} créatures meurent."
+msgstr "%{spell} inflige %{damage} dégâts, %{count} créatures meurent."
 
 msgid "The %{spell} does %{damage} damage."
 msgstr "%{spell} inflige %{damage} dégâts."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr "%{spell} inflige %{value} dégâts à une créature vivante."
+msgstr "%{spell} inflige %{damage} dégâts à une créature vivante."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr "%{spell} inflige %{value} dégâts à toutes les créatures vivantes."
+msgstr "%{spell} inflige %{damage} dégâts à toutes les créatures vivantes."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "L'attaque de %{attacker} aveugle %{target} !"
@@ -870,9 +886,8 @@ msgstr "La %{name} tire avec la force de %{count} archers"
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr "chacun avec un bonus de +%{attack} à sa compétence d'attaque."
 
-#, fuzzy
 msgid "The %{name} is destroyed."
-msgstr "L'image miroir est détruite !"
+msgstr "Le %{name} est détruit."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -881,10 +896,9 @@ msgstr ""
 "L'artéfact %{artifact} est en vigueur pour ce combat, désactivant le sort "
 "%{spell}."
 
-#, fuzzy
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] "%{count} %{name} reviennent à la vie !"
+msgstr[0] "%{count} %{name} revient à la vie !"
 msgstr[1] "%{count} %{name} reviennent à la vie !"
 
 msgid "Dwarven Alliance"
@@ -2403,8 +2417,8 @@ msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
-"Le puits augmente le taux de croissance de population de deux créatures par "
-"semaine dans chaque demeure."
+"Le puits augmente le taux de croissance de population de %{count} créatures "
+"par semaine dans chaque demeure."
 
 msgid "The Statue increases your town's income by %{count} per day."
 msgstr "La statue génère des revenus de %{count} pièces d'or par jour."
@@ -2763,7 +2777,7 @@ msgid "Change the type of music."
 msgstr "Change de type de musique."
 
 msgid "Toggle 3D effects of foreground sounds."
-msgstr "Basculer les effets 3D des sons au premier plan"
+msgstr "Basculer les effets 3D des sons au premier plan."
 
 msgid "Build a new ship:"
 msgstr "Construire un nouveau navire :"
@@ -2809,6 +2823,8 @@ msgstr "Langue"
 
 msgid "Graphics"
 msgstr ""
+"Paramètres\n"
+"d'affichage"
 
 msgid "Black & White"
 msgstr "Noir et blanc"
@@ -2828,9 +2844,8 @@ msgstr "Changer la langue du jeu."
 msgid "Select Game Language"
 msgstr "Choix de la langue"
 
-#, fuzzy
 msgid "Change the graphics settings of the game."
-msgstr "Changer les paramètres du son du jeu."
+msgstr "Changer les paramètres d'affichage."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -2920,28 +2935,27 @@ msgid "Resolution"
 msgstr "Résolution"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Plein écran"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Mode"
 
 msgid "Windowed"
-msgstr ""
+msgstr "Fenêtré"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "V-sync"
 
-#, fuzzy
 msgid "on"
-msgstr "1"
+msgstr "activé"
 
-#, fuzzy
 msgid "FPS"
-msgstr ", FPS : "
+msgstr "FPS"
 
-#, fuzzy
 msgid "System Info"
-msgstr "Options du système"
+msgstr ""
+"Information\n"
+"système"
 
 msgid "Change the resolution of the game."
 msgstr "Changer la résolution du jeu."
@@ -2950,15 +2964,19 @@ msgid "Select Game Resolution"
 msgstr "Choisir la résolution d'écran"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Basculez entre les modes plein écran et fenêtré."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
 msgstr ""
+"L'option V-Sync peut être activée pour résoudre les problèmes de "
+"scintillement sur certains moniteurs."
 
 msgid "Show extra information such as FPS and current time."
 msgstr ""
+"Afficher des informations supplémentaires telles que le FPS et l'heure "
+"actuelle."
 
 msgid "Hot Keys:"
 msgstr "Raccourcis clavier :"
@@ -2966,9 +2984,8 @@ msgstr "Raccourcis clavier :"
 msgid "Select Game Language:"
 msgstr "Choix de la langue :"
 
-#, fuzzy
 msgid "Click to choose the selected language."
-msgstr "Cliquez pour valider la résolution choisie."
+msgstr "Cliquez pour valider la langue choisie."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} a gagné un niveau."
@@ -3111,13 +3128,13 @@ msgid "Number to buy:"
 msgstr "Recruter :"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Recruter les forces sélectionnées."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Sélectionnez les forces maximales à recruter."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Ne sélectionnez qu'une seule unité à recruter."
 
 msgid "Select Game Resolution:"
 msgstr "Choisir la résolution d'écran:"
@@ -3342,17 +3359,15 @@ msgstr "Masquer"
 msgid "Enemy Speed"
 msgstr "Vitesse IA"
 
-#, fuzzy
 msgid "Slow"
-msgstr "Lourdeur collective"
+msgstr "Lente"
 
 msgid "Normal"
 msgstr "Normal"
 
 msgid "Fast"
-msgstr ""
+msgstr "Rapide"
 
-#, fuzzy
 msgid "Very Fast"
 msgstr "Très rapide"
 
@@ -3600,13 +3615,13 @@ msgid "Support us at"
 msgstr "Soutenez-nous sur"
 
 msgid "local-donation-platform|https://www.patreon.com/fheroes2"
-msgstr ""
+msgstr "https://www.patreon.com/fheroes2"
 
 msgid "Connect with us at"
 msgstr "Prenez contact avec nous sur"
 
 msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
-msgstr ""
+msgstr "https://www.facebook.com/groups/fheroes2"
 
 msgid "Need help with the game?"
 msgstr "Besoin d'aide avec le jeu ?"
@@ -3713,9 +3728,8 @@ msgstr "Basse (Voix)"
 msgid "Soprano Vocal"
 msgstr "Soprano (Voix)"
 
-#, fuzzy
 msgid "Recorded at %{recordingStudio}"
-msgstr "Enregistrée aux Green Street Studios"
+msgstr "Enregistrée aux %{recordingStudio}"
 
 msgid "credits|Manual"
 msgstr "Manuel"
@@ -3813,11 +3827,10 @@ msgstr "L'équipe fheroes2 Resurrection présente"
 msgid "Greetings!"
 msgstr "Salutations !"
 
-#, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Bienvenue sur Heroes of Might and Magic II (amélioré par le moteur "
-"fheroes2) ! Avant de commencer le jeu choisissez la résolution du jeu."
+"fheroes2) !"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -3843,6 +3856,10 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
+" située à gauche du menu principal ou en cliquant sur le bouton de "
+"configuration.\n"
+"\n"
+"Profitez du jeu !"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -4495,9 +4512,8 @@ msgstr ""
 msgid "Dutch"
 msgstr ""
 
-#, fuzzy
 msgid "Hungarian"
-msgstr "Bulgare"
+msgstr ""
 
 msgid "Danish"
 msgstr ""
@@ -8553,7 +8569,7 @@ msgstr "Le casque paratonnerre"
 
 msgid "The %{name} halves all damage your troops take from lightning spells."
 msgstr ""
-" %{name} réduit de moitié tous les dégâts de foudre subis par vos troupes."
+"%{name} réduit de moitié tous les dégâts de foudre subis par vos troupes."
 
 msgid ""
 "A traveling tinker in need of supplies offers you a helm with a thunderbolt "
@@ -10116,29 +10132,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Nécroman"
-
-#~ msgid "Cyberlore Studios"
-#~ msgstr "Cyberlore Studios"
-
-#~ msgid "New World Computing"
-#~ msgstr "New World Computing"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Ce peloton attend"
-
-#~ msgid "Wait"
-#~ msgstr "Attendre"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Le peloton actif reporte son tour jusqu'à ce que tous les autres pelotons "
-#~ "aient joué leur tour."
-
-# if only 1 monster: "... passe ..."
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} attendent."

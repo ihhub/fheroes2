@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,22 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "statusbar.h"
-#include "screen.h"
+#include <memory>
 
-void StatusBar::SetCenter( int32_t cx, int32_t cy )
-{
-    center.x = cx;
-    center.y = cy;
-}
+#include "artifact.h"
+#include "audio_manager.h"
+#include "dialog.h"
+#include "m82.h"
+#include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
-void StatusBar::ShowMessage( const std::string & msg )
+void Dialog::ArtifactSetAssembled( const ArtifactSetData & artifactSetData )
 {
-    if ( msg != prev ) {
-        SetText( msg );
-        SetPos( center.x - w() / 2, center.y - h() / 2 );
-        Show();
-        fheroes2::Display::instance().render( GetRect() );
-        prev = msg;
-    }
+    const Artifact artifact( static_cast<int>( artifactSetData._assembledArtifactID ) );
+    const fheroes2::ArtifactDialogElement artifactUI( artifact );
+
+    AudioManager::PlaySound( M82::TREASURE );
+
+    fheroes2::showMessage( fheroes2::Text( artifact.GetName(), fheroes2::FontType::normalYellow() ),
+                           fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
 }

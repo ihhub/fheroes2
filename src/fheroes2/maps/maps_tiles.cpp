@@ -429,7 +429,7 @@ namespace
         return false;
     }
 
-    uint32_t PackTileSpriteIndex( uint32_t index, uint32_t shape ) /* index max: 0x3FFF, shape value: 0, 1, 2, 3 */
+    uint32_t PackTileSpriteIndex( uint32_t index, uint32_t shape )
     {
         return ( shape << 14 ) | ( 0x3FFF & index );
     }
@@ -477,7 +477,7 @@ Maps::TilesAddon::TilesAddon()
     , index( 0 )
 {}
 
-Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ )
+Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint8_t index_ )
     : uniq( uid )
     , level( lv )
     , object( obj )
@@ -889,6 +889,7 @@ int Maps::Tiles::getBoatDirection() const
 
 void Maps::Tiles::SetTerrain( uint32_t sprite_index, uint32_t shape )
 {
+    // TODO: verify the logic! The shape value can exceed 3, and the result will not fit into uint16_t
     pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
 }
 

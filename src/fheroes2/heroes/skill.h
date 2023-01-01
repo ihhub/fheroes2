@@ -112,9 +112,9 @@ namespace Skill
         std::string GetDescription( const Heroes & hero ) const;
         uint32_t GetValues() const;
 
-        /* index sprite from SECSKILL */
+        // Returns the sprite index from SECSKILL
         int GetIndexSprite1() const;
-        /* index sprite from MINISS */
+        // Returns the sprite index from MINISS
         int GetIndexSprite2() const;
 
         static int RandForWitchsHut();
