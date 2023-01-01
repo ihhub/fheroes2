@@ -563,16 +563,14 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_RESOURCE: {
         int resourceType = Resource::UNKNOWN;
-        // TODO: add a function opposite to MP2::GetICNObject() to return tileset ID.
-        const int resourceTileSet = 46;
 
-        if ( ( _objectType >> 2 ) == resourceTileSet ) {
+        if ( ( _objectType >> 2 ) == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
             // The resource is located at the top.
             resourceType = Resource::FromIndexSprite( _imageIndex );
         }
         else {
             for ( TilesAddon & addon : addons_level1 ) {
-                if ( ( addon._objectType >> 2 ) == resourceTileSet ) {
+                if ( ( addon._objectType >> 2 ) == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
                     resourceType = Resource::FromIndexSprite( addon._imageIndex );
                     // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
                     // Let's swap the addon and main tile objects
@@ -978,7 +976,7 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
         // TODO: why are we setting UID to 0? It should be unique!
         tile._uid = 0;
         // TODO: we ignore first 2 bits which might be not 0!
-        tile._objectType = 48; // MONS32.ICN
+        tile._objectType = ( MP2::OBJ_ICN_TYPE_MONS32 << 2 );
     }
 
     tile._imageIndex = mons.GetSpriteIndex();

@@ -645,11 +645,11 @@ bool Maps::Tiles::isShadowSprite( const uint8_t tileset, const uint8_t icnIndex 
 void Maps::Tiles::UpdateAbandonedMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource )
 {
     if ( ICN::OBJNGRAS == MP2::GetICNObject( tileset ) && 6 == index ) {
-        tileset = 128; // MTNGRAS
+        tileset = ( MP2::OBJ_ICN_TYPE_MTNGRAS << 2 );
         index = 82;
     }
     else if ( ICN::OBJNDIRT == MP2::GetICNObject( tileset ) && 8 == index ) {
-        tileset = 104; // MTNDIRT
+        tileset = ( MP2::OBJ_ICN_TYPE_MTNDIRT << 2 );
         index = 112;
     }
     else if ( ICN::EXTRAOVR == MP2::GetICNObject( tileset ) && 5 == index ) {
@@ -678,11 +678,11 @@ void Maps::Tiles::UpdateAbandonedMineLeftSprite( uint8_t & tileset, uint8_t & in
 void Maps::Tiles::UpdateAbandonedMineRightSprite( uint8_t & tileset, uint8_t & index )
 {
     if ( ICN::OBJNDIRT == MP2::GetICNObject( tileset ) && index == 9 ) {
-        tileset = 104;
+        tileset = ( MP2::OBJ_ICN_TYPE_MTNDIRT << 2 );
         index = 113;
     }
     else if ( ICN::OBJNGRAS == MP2::GetICNObject( tileset ) && index == 7 ) {
-        tileset = 128;
+        tileset = ( MP2::OBJ_ICN_TYPE_MTNGRAS << 2 );
         index = 83;
     }
 }
@@ -1872,7 +1872,7 @@ void Maps::Tiles::updateFlag( const int color, const uint8_t objectSpriteIndex, 
         return;
     }
 
-    const uint8_t objectType = 0x38;
+    const uint8_t objectType = ( MP2::OBJ_ICN_TYPE_FLAG32 << 2 );
 
     TilesAddon * addon = getAddonWithFlag( uid );
     if ( addon != nullptr ) {
