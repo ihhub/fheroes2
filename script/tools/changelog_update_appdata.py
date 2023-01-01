@@ -37,7 +37,7 @@ def main():
 {}
         </ul>
       </description>
-    </release>\n'''[1:]
+    </release>\n'''.lstrip("\r\n")
     tmp = ''
     
     regex = r"version ([\d.]+) \(([\w ]+)\)\n(.*?)[\n]{2}"
