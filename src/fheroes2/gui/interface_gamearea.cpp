@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -310,7 +310,7 @@ namespace
         const Maps::Addons & lowerTileAddons = tileBelow.getLevel2Addons();
 
         for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
-            if ( lowerAddon.uniq == uid ) {
+            if ( lowerAddon._uid == uid ) {
                 // This is a tall object.
                 return true;
             }
@@ -664,7 +664,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             topLayerTallObjects.clear();
             for ( const Maps::TilesAddon & addon : tile.getLevel2Addons() ) {
-                if ( isTallTopLayerObject( x, y, addon.uniq ) ) {
+                if ( isTallTopLayerObject( x, y, addon._uid ) ) {
                     topLayerTallObjects.emplace_back( &addon );
                 }
                 else {
