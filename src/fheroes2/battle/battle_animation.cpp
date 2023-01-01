@@ -104,8 +104,11 @@ int AnimationSequence::firstFrame() const
 
 double AnimationSequence::movementProgress() const
 {
-    if ( _seq.size() > 1 )
-        return static_cast<double>( _currentFrame ) / ( static_cast<double>( animationLength() ) );
+    if ( _seq.size() > 1 ) {
+        // We return the progress coefficient for moving from one static position to another (the whole path is 2 this positions + animationLength()),
+        // so we have (animationLength + 1) moving intervals and also we have to take into account that frame number count starts from zero, so we increase it by 1.
+        return static_cast<double>( _currentFrame + 1 ) / ( static_cast<double>( animationLength() + 1 ) );
+    }
 
     return 0;
 }

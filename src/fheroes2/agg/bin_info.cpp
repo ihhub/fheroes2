@@ -258,6 +258,12 @@ namespace Bin_Info
             }
         }
 
+        // The Ogre has a duplicate frame of the 'STATIC' animation at the start of the 'MOVE_MAIN' animation, making him to move non-smoothly.
+        if ( ( monsterID == Monster::OGRE || monsterID == Monster::OGRE_LORD ) && frameXOffset[MOVE_MAIN].size() == 9 && animationFrames[MOVE_MAIN].size() == 9 ) {
+            animationFrames[MOVE_MAIN].erase( animationFrames[MOVE_MAIN].begin() );
+            frameXOffset[MOVE_MAIN].erase( frameXOffset[MOVE_MAIN].begin() );
+        }
+
         if ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) {
             if ( frameXOffset[MOVE_START].size() == 2 && frameXOffset[MOVE_STOP].size() == 1 ) { // the original swordsman info
                 frameXOffset[MOVE_START][0] = 0;
