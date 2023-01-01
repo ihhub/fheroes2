@@ -82,10 +82,18 @@ if [[ ! -f "$HOMM2_PATH/homm2.gog" ]]; then
 fi
 
 # Special case - CD image from GOG
-if [[ "$(command -v python)" == "" ]]; then
+
+if [[ "$(command -v python3)" != "" ]]; then
+    PYTHON="python3"
+elif [[ "$(command -v python2)" != "" ]]; then
+    PYTHON="python2"
+elif [[ "$(command -v python)" != "" ]]; then
+    PYTHON="python"
+else
     echo_yellow "python was not found in your system. Please install it and re-run this script to extract animation resources."
     exit 0
 fi
+
 if [[ "$(command -v bsdtar)" == "" ]]; then
     echo_yellow "bsdtar was not found in your system. Please install it and re-run this script to extract animation resources."
     exit 0
@@ -93,7 +101,7 @@ fi
 
 echo_green "Extracting animation resources, please wait..."
 
-python - << EOF
+"$PYTHON" - << EOF
 with open("$HOMM2_PATH/homm2.gog", "rb") as raw_file:
     with open("homm2.iso", "wb") as iso_file:
         while True:
