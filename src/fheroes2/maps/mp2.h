@@ -570,7 +570,7 @@ namespace MP2
         OBJ_ICN_TYPE_UNUSED_3, // Unused
         OBJ_ICN_TYPE_UNUSED_4, // Unused
         OBJ_ICN_TYPE_UNUSED_5, // Unused
-        OBJ_ICN_TYPE_UNUSED_6, // Unused
+        OBJ_ICN_TYPE_BOAT32, // TODO: this is incorrect type set by mistake. Fix it.
         OBJ_ICN_TYPE_UNUSED_7, // Unused
         OBJ_ICN_TYPE_UNUSED_8, // Unused
         OBJ_ICN_TYPE_UNUSED_9, // Unused
