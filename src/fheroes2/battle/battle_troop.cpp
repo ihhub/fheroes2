@@ -124,7 +124,7 @@ void Battle::Unit::ResetOverlaySprite()
     overlaySprite.overlaySprite = nullptr;
 }
 
-void Battle::Unit::SetOverlaySprite( const fheroes2::Sprite &sprite, fheroes2::Point pos, bool flip ) 
+void Battle::Unit::SetOverlaySprite( const fheroes2::Sprite & sprite, fheroes2::Point pos, bool flip )
 {
     overlaySprite.overlaySprite = &sprite;
     overlaySprite.position = pos;
