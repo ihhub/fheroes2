@@ -51,9 +51,9 @@ echo_stage "[2/4] downloading the demo version"
 
 cd "$DEST_PATH/demo"
 
-if [[ "$(command -v wget)" != "" ]]; then
+if [[ -n "$(command -v wget)" ]]; then
     wget -O h2demo.zip "$H2DEMO_URL"
-elif [[ "$(command -v curl)" != "" ]]; then
+elif [[ -n "$(command -v curl)" ]]; then
     curl -o h2demo.zip -L "$H2DEMO_URL"
 else
     echo_red "Neither wget nor curl were found in your system. Unable to download the demo version. Installation aborted."
@@ -62,9 +62,9 @@ fi
 
 echo "$H2DEMO_SHA256 *h2demo.zip" > checksums
 
-if [[ "$(command -v shasum)" != "" ]]; then
+if [[ -n "$(command -v shasum)" ]]; then
     shasum --check --algorithm 256 checksums
-elif [[ "$(command -v sha256sum)" != "" ]]; then
+elif [[ -n "$(command -v sha256sum)" ]]; then
     sha256sum --check --strict checksums
 else
     echo_red "Neither shasum nor sha256sum were found in your system. Unable to verify the downloaded file. Installation aborted."
