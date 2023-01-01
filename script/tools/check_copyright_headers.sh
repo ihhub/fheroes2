@@ -34,8 +34,10 @@ C_LIKE_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 SCRIPT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*(\.(sh|py|ps1)|CMakeLists.txt|Makefile[^/]*|Android.mk|Application.mk)$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
+WINBAT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.bat$" || true) \
+                                                   | (grep -v "^src/thirdparty/.*/.*" || true))
 
-if [ -z "$C_LIKE_FILES_TO_CHECK" ] && [ -z "$SCRIPT_FILES_TO_CHECK" ]; then
+if [ -z "$C_LIKE_FILES_TO_CHECK" ] && [ -z "$SCRIPT_FILES_TO_CHECK" ] && [ -z "$WINBAT_FILES_TO_CHECK" ]; then
   echo "No source code to check if the copyright headers are correct."
   exit 0
 fi
@@ -51,13 +53,19 @@ if [ -n "$SCRIPT_FILES_TO_CHECK" ]; then
                                                                         "$HEADERS_DIR/header_template_script.txt" \
                                                                         $SCRIPT_FILES_TO_CHECK)
 fi
+if [ -n "$WINBAT_FILES_TO_CHECK" ]; then
+  WINBAT_FORMAT_DIFF=$(python3 "$SCRIPT_DIR/check_copyright_headers.py" "$HEADERS_DIR/full_header_winbat.txt" \
+                                                                        "$HEADERS_DIR/header_template_winbat.txt" \
+                                                                        $WINBAT_FILES_TO_CHECK)
+fi
 
-if [ -z "$C_LIKE_FORMAT_DIFF" ] && [ -z "$SCRIPT_FORMAT_DIFF" ]; then
+if [ -z "$C_LIKE_FORMAT_DIFF" ] && [ -z "$SCRIPT_FORMAT_DIFF" ] && [ -z "$WINBAT_FORMAT_DIFF" ]; then
   echo "All source code in PR has proper copyright headers."
   exit 0
 else
   echo "Found invalid copyright headers!"
   [ -n "$C_LIKE_FORMAT_DIFF" ] && echo "$C_LIKE_FORMAT_DIFF"
   [ -n "$SCRIPT_FORMAT_DIFF" ] && echo "$SCRIPT_FORMAT_DIFF"
+  [ -n "$WINBAT_FORMAT_DIFF" ] && echo "$WINBAT_FORMAT_DIFF"
   exit 1
 fi
