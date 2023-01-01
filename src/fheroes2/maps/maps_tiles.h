@@ -472,7 +472,7 @@ namespace Maps
         uint8_t _layerType{ OBJECT_LAYER };
 
         // The type of object which correlates to ICN id. See MP2::GetICNObject() function for more details.
-        uint8_t _objectType{ 0 };
+        uint8_t _objectType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
         uint8_t _imageIndex{ 255 };

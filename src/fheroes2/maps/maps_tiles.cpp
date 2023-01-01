@@ -473,8 +473,8 @@ namespace
 Maps::TilesAddon::TilesAddon()
     : _uid( 0 )
     , _layerType( OBJECT_LAYER )
-    , _objectType( 0 )
-    , _imageIndex( 0 )
+    , _objectType( MP2::OBJ_ICN_TYPE_UNKNOWN )
+    , _imageIndex( 255 )
 {}
 
 Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint8_t index_ )
