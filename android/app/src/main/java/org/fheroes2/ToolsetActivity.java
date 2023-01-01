@@ -36,7 +36,7 @@ public final class ToolsetActivity extends Activity
 {
     private static final int REQUEST_CODE_OPEN_HOMM2_ASSETS_ZIP = 1001;
 
-    private Button runGameButton = null;
+    private Button startGameButton = null;
     private Button extractHoMM2AssetsButton = null;
     private Button downloadHoMM2DemoButton = null;
 
@@ -54,7 +54,7 @@ public final class ToolsetActivity extends Activity
 
         setContentView( R.layout.activity_toolset );
 
-        runGameButton = findViewById( R.id.activity_toolset_run_game_btn );
+        startGameButton = findViewById( R.id.activity_toolset_start_game_btn );
         extractHoMM2AssetsButton = findViewById( R.id.activity_toolset_extract_homm2_assets_btn );
         downloadHoMM2DemoButton = findViewById( R.id.activity_toolset_download_homm2_demo_btn );
 
@@ -117,7 +117,7 @@ public final class ToolsetActivity extends Activity
         }
     }
 
-    public void runGameButtonClicked( final View view )
+    public void startGameButtonClicked( final View view )
     {
         startActivity( new Intent( this, GameActivity.class ) );
 
@@ -151,7 +151,7 @@ public final class ToolsetActivity extends Activity
 
         final boolean isHoMM2AssetsPresent = HoMM2AssetManagement.isHoMM2AssetsPresent( getExternalFilesDir( null ) );
 
-        runGameButton.setEnabled( backgroundTask == null && isHoMM2AssetsPresent );
+        startGameButton.setEnabled( backgroundTask == null && isHoMM2AssetsPresent );
         extractHoMM2AssetsButton.setEnabled( backgroundTask == null );
         downloadHoMM2DemoButton.setEnabled( backgroundTask == null );
 

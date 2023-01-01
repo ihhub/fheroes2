@@ -5,7 +5,7 @@
     <string name="activity_toolset_label">fh2 Toolset</string>
     <string name="activity_toolset_game_logo_img_content_description">fheroes2 logo</string>
     <string name="activity_toolset_game_status_lbl_text"><b>You cannot run the game at the moment, because some data files of the original game are missing.</b>\n\nPlease put the contents of the directory with the original Heroes of Might and Magic II game (or just <b>ANIM</b>, <b>DATA</b>, <b>MAPS</b> and <b>MUSIC</b> folders) into a ZIP archive, copy it to this device, press the \"<b>Extract HoMM2 assets</b>\" button and select this ZIP archive.\n\nIf you do not have a copy of the original game, you can download a ZIP archive of the demo version. Once the download is complete please press the \"<b>Extract HoMM2 assets</b>\" button and select the newly downloaded demo archive.</string>
-    <string name="activity_toolset_run_game_btn_name">Run fheroes2</string>
+    <string name="activity_toolset_start_game_btn_name">Start game</string>
     <string name="activity_toolset_extract_homm2_assets_btn_name">Extract HoMM2 assets</string>
     <string name="activity_toolset_download_homm2_demo_btn_name">Download HoMM2 demo</string>
     <string name="activity_toolset_extract_homm2_assets_chooser_title">Choose the ZIP file with HoMM2 assets</string>

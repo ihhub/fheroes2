@@ -32,15 +32,15 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/activity_toolset_run_game_btn"
+            android:id="@+id/activity_toolset_start_game_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:enabled="false"
             android:minWidth="256dp"
-            android:onClick="runGameButtonClicked"
+            android:onClick="startGameButtonClicked"
             android:padding="8dp"
-            android:text="@string/activity_toolset_run_game_btn_name" />
+            android:text="@string/activity_toolset_start_game_btn_name" />
 
         <Button
             android:id="@+id/activity_toolset_extract_homm2_assets_btn"
