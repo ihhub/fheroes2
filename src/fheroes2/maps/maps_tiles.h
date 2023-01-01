@@ -116,7 +116,7 @@ namespace Maps
 
         bool isUniq( const uint32_t id ) const
         {
-            return uniq == id;
+            return _uid == id;
         }
 
         bool isRoad() const;
@@ -135,8 +135,11 @@ namespace Maps
 
         static bool PredicateSortRules1( const TilesAddon & ta1, const TilesAddon & ta2 );
 
-        uint32_t uniq;
-        uint8_t level;
+        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
+        uint32_t _uid;
+
+        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
+        uint8_t _layerType;
 
         // The type of object which correlates to ICN id. See MP2::GetICNObject() function for more details.
         uint8_t _objectType;
@@ -175,7 +178,7 @@ namespace Maps
 
         uint32_t GetObjectUID() const
         {
-            return uniq;
+            return _uid;
         }
 
         // Get Tile metadata field #1 (used for things like monster count or resource amount)
@@ -340,7 +343,6 @@ namespace Maps
             fog_colors &= ~colors;
         }
 
-        /* monster operation */
         void MonsterSetCount( uint32_t count );
         uint32_t MonsterCount() const;
 
@@ -463,10 +465,14 @@ namespace Maps
         int32_t _index = 0;
         uint16_t pack_sprite_index = 0;
 
-        uint32_t uniq = 0;
+        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
+        uint32_t _uid{ 0 };
+
+        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
+        uint8_t _layerType{ OBJECT_LAYER };
 
         // The type of object which correlates to ICN id. See MP2::GetICNObject() function for more details.
-        uint8_t _objectType = 0;
+        uint8_t _objectType{ 0 };
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
         uint8_t _imageIndex{ 255 };
@@ -488,8 +494,6 @@ namespace Maps
 
         // This field does not persist in savegame.
         uint32_t _region = REGION_NODE_BLOCKED;
-
-        uint8_t _level = 0;
     };
 
     StreamBase & operator<<( StreamBase &, const TilesAddon & );

@@ -578,8 +578,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                     // Let's swap the addon and main tile objects
                     std::swap( addon._objectType, _objectType );
                     std::swap( addon._imageIndex, _imageIndex );
-                    std::swap( addon.uniq, uniq );
-                    std::swap( addon.level, _level );
+                    std::swap( addon._uid, _uid );
+                    std::swap( addon._layerType, _layerType );
 
                     break;
                 }
@@ -973,10 +973,10 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
     // If there was another object sprite here (shadow for example) push it down to Addons,
     // except when there is already MONS32.ICN here.
     if ( tile._objectType != 0 && icnId != ICN::MONS32 && tile._imageIndex != 255 ) {
-        tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile.uniq, tile._objectType, tile._imageIndex ) );
+        tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile._uid, tile._objectType, tile._imageIndex ) );
 
-        // replace sprite with the one for the new monster
-        tile.uniq = 0;
+        // TODO: why are we setting UID to 0? It should be unique!
+        tile._uid = 0;
         // TODO: we ignore first 2 bits which might be not 0!
         tile._objectType = 48; // MONS32.ICN
     }
