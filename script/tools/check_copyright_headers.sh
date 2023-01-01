@@ -33,8 +33,10 @@ HEADERS_DIR="$SCRIPT_DIR/copyright_headers"
 C_LIKE_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|java|rc)$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 SCRIPT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*(\.(sh|py|ps1)|CMakeLists.txt|Makefile[^/]*|Android.mk|Application.mk)$" || true) \
+                                                   | (grep -v "^script/tools/check_code_format.sh$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 WINBAT_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.bat$" || true) \
+                                                   | (grep -v "^android/gradlew.bat$" || true) \
                                                    | (grep -v "^src/thirdparty/.*/.*" || true))
 
 if [ -z "$C_LIKE_FILES_TO_CHECK" ] && [ -z "$SCRIPT_FILES_TO_CHECK" ] && [ -z "$WINBAT_FILES_TO_CHECK" ]; then
