@@ -3848,9 +3848,12 @@ namespace fheroes2
             }
             generateButtonAlphabet( language, _icnVsSprite );
 
-            // Clear language dependent resources.
-            for ( const int id : languageDependentIcnId ) {
-                _icnVsSprite[id].clear();
+            // Clear language dependent resources for all scale factors.
+            for ( int32_t scaleFactor = 1; scaleFactor <= Display::MAX_SCALE_FACTOR; ++scaleFactor ) {
+                auto & icnVsSpriteForSF = getSpritesForScaleFactor( scaleFactor );
+                for ( const int id : languageDependentIcnId ) {
+                    icnVsSpriteForSF[id].clear();
+                }
             }
         }
     }
