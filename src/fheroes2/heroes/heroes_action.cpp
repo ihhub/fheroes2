@@ -1441,9 +1441,7 @@ void ActionToMagicWell( Heroes & hero, int32_t dst_index )
     if ( hero.GetSpellPoints() >= max ) {
         Dialog::Message( title, _( "A drink at the well is supposed to restore your spell points, but you are already at maximum." ), Font::BIG, Dialog::OK );
     }
-    else
-        // check already visited
-        if ( hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) ) {
+    else if ( hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) ) {
         Dialog::Message( title, _( "A second drink at the well in one day will not help you." ), Font::BIG, Dialog::OK );
     }
     else {

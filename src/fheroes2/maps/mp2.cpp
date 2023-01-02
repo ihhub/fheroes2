@@ -529,38 +529,8 @@ const char * MP2::StringObject( const MapObjectType objectType, const int count 
         return _( "Lava Pool" );
     case OBJ_SHRUB:
         return _( "Shrub" );
-    
-    
-    
     case OBJ_WATERCHEST:
         return _( "Sea Chest" );
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     case OBJ_RNDARTIFACT1:
         return _( "Random Artifact - Treasure" );
     case OBJ_RNDARTIFACT2:
