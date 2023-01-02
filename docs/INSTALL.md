@@ -124,6 +124,9 @@ Follow the [instructions below](#macos-resources) to gather resources necessary 
   method (using [**MacPorts**](#macports) or [**Homebrew**](#homebrew-mac)), or
   [**build the project from source**](DEVELOPMENT.md#macos-and-linux).
 
+* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_2.sh` from
+  the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
+
 Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
 
 <a name="macos-resources"></a>
@@ -135,14 +138,15 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
   [`innoextract`](https://constexpr.org/innoextract/#use) to extract files out of the exe without having to use wine/windows emulation 
   software on your Unix-based machine
 
-* If you have a legally purchased copy of the original game, run the `extract_homm2_resources_for_app_bundle.sh` script supplied in the
-  `script/homm2` directory (or directory of the pre-built binary installation). You will be prompted to enter the location of the original game, and the script will extract all the necessary resource files.
+* If you have a legally purchased copy of the original game, run the `extract_homm2_resources.sh` script (`extract_homm2_resources_for_app_bundle.sh` 
+  if built from source) supplied in the `script/homm2` directory (or directory of the pre-built binary installation). You will be prompted to enter 
+  the location of the original game, and the script will extract all the necessary resource files.
 
 * As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) from the original game directory to `~/Library/Application Support/fheroes2`.
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
-  by running the `download_demo_version_for_app_bundle.sh` script supplied in `script/demo` directory (or directory of the pre-built binary installation).
+  by running the `download_demo_version.sh` (`download_demo_version_for_app_bundle.sh` if built from source) script supplied in `script/demo` directory (or directory of the pre-built binary installation).
 
 
 <a name="linux"></a>
