@@ -47,7 +47,12 @@ namespace MP2
 
         uint8_t objectName1; // Ground (bottom) level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
         uint8_t level1IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for ground (bottom) object. 255 means it's an empty object.
-        uint8_t quantity1; // Bitfield, first 3 bits are flags, rest is used as quantity
+
+        // First 2 bits correspond to object layer type used to identify the order of rendering on Adventure Map.
+        // The third bit is unknown. TODO: find out what the third bit is used for.
+        // The last 5 bits are used together with quantity 2 as the value for the object.
+        uint8_t quantity1;
+
         uint8_t quantity2; // Used as a part of quantity, field size is actually 13 bits. Has most significant bits
         uint8_t objectName2; // Top level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
         uint8_t level2IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
