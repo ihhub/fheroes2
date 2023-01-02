@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <cstdlib>
+#include <initializer_list>
 #include <map>
 #include <memory>
 #include <ostream>
@@ -265,9 +266,9 @@ namespace Bin_Info
         }
 
         // Some creatures needs their 'x' offset in moving animations to be bigger by 3px to avoid sprite shift in well and during diagonal movement.
-        if ( monsterID == Monster::OGRE || monsterID == Monster::OGRE_LORD || monsterID == Monster::GOBLIN || monsterID == Monster::ORC || monsterID == Monster::ORC_CHIEF
-             || monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL || monsterID == Monster::UNICORN || monsterID == Monster::BOAR
-             || monsterID == Monster::CENTAUR || monsterID == Monster::DWARF || monsterID == Monster::BATTLE_DWARF || monsterID == Monster::ROGUE ) {
+        if ( monsterID == Monster::GOBLIN || monsterID == Monster::ORC || monsterID == Monster::ORC_CHIEF || monsterID == Monster::OGRE || monsterID == Monster::OGRE_LORD
+             || monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL || monsterID == Monster::DWARF || monsterID == Monster::BATTLE_DWARF
+             || monsterID == Monster::UNICORN || monsterID == Monster::CENTAUR || monsterID == Monster::BOAR || monsterID == Monster::ROGUE ) {
             for ( const int animType : { MOVE_START, MOVE_TILE_START, MOVE_MAIN, MOVE_TILE_END, MOVE_STOP } ) {
                 for ( int & xOffset : frameXOffset[animType] ) {
                     xOffset += 3;
