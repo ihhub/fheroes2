@@ -89,6 +89,8 @@ port install fheroes2
 
 Then follow the instructions on the screen.
 
+Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
+
 <a name="homebrew-mac"></a>
 ### Homebrew
 
@@ -97,6 +99,10 @@ If you are using [**Homebrew**](https://brew.sh/), you can install the game by r
 ```sh
 brew install fheroes2
 ```
+
+You will find the extraction and demo download scripts in the following path: `/opt/homebrew/Cellar/fheroes2/<version>/share/doc/fheroes2/homm2/`
+
+Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
 
 <a name="macos-native-app"></a>
 ### macOS native app
@@ -108,15 +114,7 @@ make FHEROES2_MACOS_APP_BUNDLE=ON
 make FHEROES2_MACOS_APP_BUNDLE=ON bundle
 ```
 
-* If you have a legally purchased copy of the original game, run the `extract_homm2_resources_for_app_bundle.sh` script supplied in the
-  `script/homm2` directory. You will be prompted to enter the location of the original game, and the script will extract all the
-  necessary resource files.
-
-* As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
-  be missing depending on the version of the original game) from the original game directory to `~/Library/Application Support/fheroes2`.
-
-* If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
-  by running the `download_demo_version_for_app_bundle.sh` script supplied in `script/demo` directory.
+Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
 
 <a name="macos-zip-archive"></a>
 ### macOS ZIP archive
@@ -126,17 +124,26 @@ make FHEROES2_MACOS_APP_BUNDLE=ON bundle
   method (using [**MacPorts**](#macports) or [**Homebrew**](#homebrew-mac)), or
   [**build the project from source**](DEVELOPMENT.md#macos-and-linux).
 
-* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_2.sh` from
-  the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
+Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
 
-* If you have a legally purchased copy of the original game, run the `extract_homm2_resources.sh` script supplied in the ZIP archive.
-  You will be prompted to enter the location of the original game, and the script will extract all the necessary resource files.
+<a name="macos-resources"></a>
+## Gathering game resources
+
+Once you obtain the fheroes2 executable using any of the options above, you should follow these steps to load in the correct resources
+
+* If you have a legally purchased copy of the original game in a self-extracting Windows executable (such as from GOG), you can utilize 
+  [`innoextract`](https://constexpr.org/innoextract/#use) to extract files out of the exe without having to use wine/windows emulation 
+  software on your Unix-based machine
+
+* If you have a legally purchased copy of the original game, run the `extract_homm2_resources_for_app_bundle.sh` script supplied in the
+  `script/homm2` directory (or directory of the pre-built binary installation). You will be prompted to enter the location of the original game, and the script will extract all the necessary resource files.
 
 * As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
-  be missing depending on the version of the original game) from the original game directory to the fheroes2 installation directory.
+  be missing depending on the version of the original game) from the original game directory to `~/Library/Application Support/fheroes2`.
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
-  by running the `download_demo_version.sh` script supplied in the ZIP archive.
+  by running the `download_demo_version_for_app_bundle.sh` script supplied in `script/demo` directory (or directory of the pre-built binary installation).
+
 
 <a name="linux"></a>
 ## Linux
