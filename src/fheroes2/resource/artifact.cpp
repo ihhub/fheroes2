@@ -456,15 +456,15 @@ Artifact Artifact::FromMP2IndexSprite( uint32_t index )
     else if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
         return Artifact( ( index - 1 ) / 2 );
     else if ( 0xA3 == index )
-        return Artifact( Rand( ART_LEVEL_ALL_NORMAL ) );
+        return { Rand( ART_LEVEL_ALL_NORMAL ) };
     else if ( 0xA4 == index )
-        return Artifact( Rand( ART_ULTIMATE ) );
+        return { Rand( ART_ULTIMATE ) };
     else if ( 0xA7 == index )
-        return Artifact( Rand( ART_LEVEL_TREASURE ) );
+        return { Rand( ART_LEVEL_TREASURE ) };
     else if ( 0xA9 == index )
-        return Artifact( Rand( ART_LEVEL_MINOR ) );
+        return { Rand( ART_LEVEL_MINOR ) };
     else if ( 0xAB == index )
-        return Rand( ART_LEVEL_MAJOR );
+        return { ART_LEVEL_MAJOR };
 
     DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) )
 
