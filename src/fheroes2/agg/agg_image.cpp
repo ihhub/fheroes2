@@ -343,6 +343,25 @@ namespace
                 return;
             }
 
+            for ( int32_t scaleFactor = 1; scaleFactor <= fheroes2::Display::MAX_SCALE_FACTOR; ++scaleFactor ) {
+                auto & icnVsSpriteForSF = getSpritesForScaleFactor( scaleFactor );
+
+                // Clear current base fonts.
+                icnVsSpriteForSF[ICN::FONT].clear();
+                icnVsSpriteForSF[ICN::SMALFONT].clear();
+                icnVsSpriteForSF[ICN::BUTTON_GOOD_FONT_RELEASED].clear();
+                icnVsSpriteForSF[ICN::BUTTON_GOOD_FONT_PRESSED].clear();
+                icnVsSpriteForSF[ICN::BUTTON_EVIL_FONT_RELEASED].clear();
+                icnVsSpriteForSF[ICN::BUTTON_EVIL_FONT_PRESSED].clear();
+
+                // Clear modified fonts.
+                icnVsSpriteForSF[ICN::YELLOW_FONT].clear();
+                icnVsSpriteForSF[ICN::YELLOW_SMALLFONT].clear();
+                icnVsSpriteForSF[ICN::GRAY_FONT].clear();
+                icnVsSpriteForSF[ICN::GRAY_SMALL_FONT].clear();
+                icnVsSpriteForSF[ICN::WHITE_LARGE_FONT].clear();
+            }
+
             auto & _icnVsSprite = getSpritesForScaleFactor( 1 );
 
             // Restore the original font.
@@ -352,13 +371,6 @@ namespace
             _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED] = _buttonGoodPressedFont;
             _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] = _buttonEvilReleasedFont;
             _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] = _buttonEvilPressedFont;
-
-            // Clear modified fonts.
-            _icnVsSprite[ICN::YELLOW_FONT].clear();
-            _icnVsSprite[ICN::YELLOW_SMALLFONT].clear();
-            _icnVsSprite[ICN::GRAY_FONT].clear();
-            _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
-            _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
         }
 
     private:
