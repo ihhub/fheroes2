@@ -3936,6 +3936,8 @@ namespace
 
     void generateCP1250GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
+        assert( !released.empty() );
+
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         released.insert( released.end(), 160, released[0] );
 
@@ -4078,6 +4080,8 @@ namespace
 
     void generateCP1251GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
+        assert( !released.empty() );
+
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         released.insert( released.end(), 160, released[0] );
 
@@ -4362,6 +4366,8 @@ namespace
 
     void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
+        assert( !released.empty() );
+
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         released.insert( released.end(), 160, released[0] );
 
@@ -4519,9 +4525,11 @@ namespace fheroes2
 
     void generateButtonAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
+        generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+
         switch ( language ) {
         case SupportedLanguage::English:
-            generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            // nothing special to do here for English
             break;
         case SupportedLanguage::Czech:
         case SupportedLanguage::Hungarian:
