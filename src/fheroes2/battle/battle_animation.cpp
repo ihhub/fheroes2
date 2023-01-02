@@ -104,10 +104,12 @@ int AnimationSequence::firstFrame() const
 
 double AnimationSequence::movementProgress() const
 {
-    if ( _seq.size() > 1 ) {
-        // We return the progress coefficient for moving from one static position to another (the whole path is 2 this positions + animationLength()),
-        // so we have (animationLength + 1) moving intervals and also we have to take into account that frame number count starts from zero, so we increase it by 1.
-        return static_cast<double>( _currentFrame + 1 ) / ( static_cast<double>( animationLength() + 1 ) );
+    if ( isValid() ) {
+        // We return the progress coefficient for moving creature sprite from one position to another.
+        // At the start and the end of the path we also have creature's static position,
+        // but there is no such position on the cells which creature path through.
+        // So to make the movement start and end more smoothly we add 0.5 to the frame number (since it starts from zero).
+        return ( static_cast<double>( _currentFrame ) + 0.5 ) / static_cast<double>( animationLength() );
     }
 
     return 0;
