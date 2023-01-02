@@ -601,7 +601,7 @@ namespace
             if ( spell == Spell::HAUNT ) {
                 world.CaptureObject( tile.GetIndex(), Color::NONE );
                 tile.removeOwnershipFlag( MP2::OBJ_MINES );
-                hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
+                hero.SetMapsObject( MP2::OBJ_ABANDONED_MINE );
             }
 
             world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );

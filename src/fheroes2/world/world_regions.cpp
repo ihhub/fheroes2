@@ -357,7 +357,7 @@ void World::ComputeStaticAnalysis()
             // connect regions through teleports
             MapsIndexes exits;
 
-            if ( node.mapObject == MP2::OBJ_STONELITHS ) {
+            if ( node.mapObject == MP2::OBJ_STONE_LITHS ) {
                 exits = GetTeleportEndPoints( node.index );
             }
             else if ( node.mapObject == MP2::OBJ_WHIRLPOOL ) {

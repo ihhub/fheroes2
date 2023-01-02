@@ -287,7 +287,7 @@ void CapturedObjects::ClearFog( int colors )
 
             switch ( objcol.first ) {
             case MP2::OBJ_MINES:
-            case MP2::OBJ_ALCHEMYLAB:
+            case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_SAWMILL:
                 scoute = 2;
                 break;
@@ -417,7 +417,7 @@ void World::NewMaps( int32_t sw, int32_t sh )
         mp2tile.objectName2 = 0; // object sprite level 2
         mp2tile.level2IcnImageIndex = 0xff; // index sprite level 2
         mp2tile.flags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        mp2tile.mapObjectType = MP2::OBJ_ZERO;
+        mp2tile.mapObjectType = MP2::OBJ_NONE;
         mp2tile.nextAddonIndex = 0;
         mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.
         mp2tile.level2ObjectUID = 0;
@@ -788,7 +788,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
 
     const Maps::Tiles & entranceTile = GetTiles( index );
 
-    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONELITHS ) {
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONE_LITHS ) {
         return result;
     }
 
@@ -865,7 +865,7 @@ uint32_t World::CountCapturedMines( int type, int color ) const
     case Resource::WOOD:
         return CountCapturedObject( MP2::OBJ_SAWMILL, color );
     case Resource::MERCURY:
-        return CountCapturedObject( MP2::OBJ_ALCHEMYLAB, color );
+        return CountCapturedObject( MP2::OBJ_ALCHEMIST_LAB, color );
     default:
         break;
     }
@@ -1148,7 +1148,8 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
     if ( conf.isCampaignGameType() ) {
         const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
         if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
+            // TODO: why are we checking non-action object type here? Verify it!
+            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGON_CITY ) || kingdom.isVisited( MP2::OBJ_NON_ACTION_DRAGON_CITY );
             if ( visited ) {
                 return GameOver::WINS_SIDE;
             }
@@ -1261,7 +1262,7 @@ void World::PostLoad( const bool setTilePassabilities )
     // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
     _allTeleports.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true ) ) {
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS, true ) ) {
         _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
     }
 

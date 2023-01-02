@@ -80,7 +80,7 @@ namespace Interface
 
         int32_t tileId{ -1 };
 
-        MP2::MapObjectType type{ MP2::OBJ_ZERO };
+        MP2::MapObjectType type{ MP2::OBJ_NONE };
 
         uint8_t alphaValue{ 255 };
 

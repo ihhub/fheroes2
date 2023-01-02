@@ -72,12 +72,12 @@ int ObjTwba::GetPassable( const uint8_t index0 )
 
 bool ObjTown::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjTwba::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjTown::isShadow( const uint8_t index )
@@ -100,10 +100,10 @@ int ObjTown::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 int ObjTwba::GetActionObject( uint32_t /* unused */ )
 {
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

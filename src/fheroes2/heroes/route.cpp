@@ -401,7 +401,7 @@ std::string Route::Path::String() const
     output += ", to: ";
     output += std::to_string( dst );
     output += ", obj: ";
-    output += MP2::StringObject( Maps::isValidAbsIndex( dst ) ? world.GetTiles( dst ).GetObject() : MP2::OBJ_ZERO );
+    output += MP2::StringObject( Maps::isValidAbsIndex( dst ) ? world.GetTiles( dst ).GetObject() : MP2::OBJ_NONE );
     output += ", dump: ";
 
     for ( const Step & step : *this ) {

@@ -206,51 +206,51 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
     case MP2::OBJ_BUOY:
         return LOOP0000;
     case MP2::OBJ_SHIPWRECK:
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_DERELICT_SHIP:
         return LOOP0001;
     case MP2::OBJ_COAST:
         return LOOP0002;
     case MP2::OBJ_ORACLE:
         return LOOP0003;
-    case MP2::OBJ_STONELITHS:
+    case MP2::OBJ_STONE_LITHS:
         return LOOP0004;
     case MP2::OBJ_LAVAPOOL:
         return LOOP0006;
-    case MP2::OBJ_ALCHEMYLAB:
+    case MP2::OBJ_ALCHEMIST_LAB:
         return LOOP0007;
-    case MP2::OBJ_WATERWHEEL:
+    case MP2::OBJ_WATER_WHEEL:
         return LOOP0009;
     case MP2::OBJ_CAMPFIRE:
         return LOOP0010;
     case MP2::OBJ_WINDMILL:
         return LOOP0011;
-    case MP2::OBJ_ARTESIANSPRING:
+    case MP2::OBJ_ARTESIAN_SPRING:
     case MP2::OBJ_FOUNTAIN:
         return LOOP0012;
     case MP2::OBJ_WATERLAKE:
-    case MP2::OBJ_WATERINGHOLE:
+    case MP2::OBJ_WATERING_HOLE:
         return LOOP0013;
     case MP2::OBJ_MINES:
         return LOOP0015;
     case MP2::OBJ_SAWMILL:
         return LOOP0016;
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         return LOOP0017;
-    case MP2::OBJ_SHRINE1:
-    case MP2::OBJ_SHRINE2:
-    case MP2::OBJ_SHRINE3:
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
         return LOOP0018;
-    case MP2::OBJ_TARPIT:
+    case MP2::OBJ_TAR_PIT:
         return LOOP0021;
-    case MP2::OBJ_TRADINGPOST:
+    case MP2::OBJ_TRADING_POST:
         return LOOP0022;
     case MP2::OBJ_RUINS:
         return LOOP0024;
-    case MP2::OBJ_PEASANTHUT:
-    case MP2::OBJ_DWARFCOTT:
-    case MP2::OBJ_ARCHERHOUSE:
+    case MP2::OBJ_PEASANT_HUT:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_ARCHER_HOUSE:
         return LOOP0025;
-    case MP2::OBJ_FREEMANFOUNDRY:
+    case MP2::OBJ_FREEMANS_FOUNDRY:
         return LOOP0026;
     case MP2::OBJ_VOLCANO:
         // TODO: LOOP0005 is for all volcanos in the original game while LOOP0027 is used only for tall volcanos. Figure our how to use 2 sounds together.

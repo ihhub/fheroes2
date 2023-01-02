@@ -183,16 +183,16 @@ int32_t GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType 
     switch ( objectType ) {
     case MP2::OBJ_BUOY:
     case MP2::OBJ_OASIS:
-    case MP2::OBJ_WATERINGHOLE:
+    case MP2::OBJ_WATERING_HOLE:
     case MP2::OBJ_MERMAID:
-    case MP2::OBJ_FAERIERING:
+    case MP2::OBJ_FAERIE_RING:
     case MP2::OBJ_FOUNTAIN:
     case MP2::OBJ_IDOL:
         return 1;
     case MP2::OBJ_TEMPLE:
         return 2;
     case MP2::OBJ_GRAVEYARD:
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_DERELICT_SHIP:
     case MP2::OBJ_SHIPWRECK:
         return -1;
     case MP2::OBJ_PYRAMID:

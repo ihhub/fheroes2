@@ -55,7 +55,7 @@ int ObjSwmp::GetPassable( const uint8_t index )
 
 bool ObjSwmp::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjSwmp::isShadow( const uint8_t index )
@@ -67,11 +67,11 @@ int ObjSwmp::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 22:
-        return MP2::OBJ_WITCHSHUT;
+        return MP2::OBJ_WITCHS_HUT;
     case 81:
         return MP2::OBJ_XANADU;
     case 84:
-        return MP2::OBJ_FAERIERING;
+        return MP2::OBJ_FAERIE_RING;
     case 140:
         return MP2::OBJ_SIGN;
     case 216:
@@ -80,5 +80,5 @@ int ObjSwmp::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

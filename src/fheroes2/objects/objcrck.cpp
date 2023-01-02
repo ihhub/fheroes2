@@ -55,7 +55,7 @@ int ObjCrck::GetPassable( const uint8_t index )
 
 bool ObjCrck::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjCrck::isShadow( const uint8_t index )
@@ -78,18 +78,18 @@ int ObjCrck::GetActionObject( uint32_t index )
     switch ( index ) {
     case 3:
     case 4:
-        return MP2::OBJ_ARTESIANSPRING;
+        return MP2::OBJ_ARTESIAN_SPRING;
     case 74:
         return MP2::OBJ_WAGON;
     case 189:
-        return MP2::OBJ_TROLLBRIDGE;
+        return MP2::OBJ_TROLL_BRIDGE;
     case 213:
-        return MP2::OBJ_TRADINGPOST;
+        return MP2::OBJ_TRADING_POST;
     case 217:
     case 218:
     case 219:
     case 220:
-        return MP2::OBJ_WATERINGHOLE;
+        return MP2::OBJ_WATERING_HOLE;
     case 238:
         return MP2::OBJ_OBELISK;
     case 245:
@@ -98,5 +98,5 @@ int ObjCrck::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

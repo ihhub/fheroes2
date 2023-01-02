@@ -56,7 +56,7 @@ int ObjMult::GetPassable( const uint8_t index )
 
 bool ObjMult::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjMult::isShadow( const uint8_t index )
@@ -79,7 +79,7 @@ int ObjMul2::GetPassable( const uint8_t index )
 
 bool ObjMul2::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjMul2::isShadow( const uint8_t index )
@@ -95,7 +95,7 @@ int ObjMul2::GetActionObject( uint32_t index )
     case 26:
         return MP2::OBJ_ALCHEMYTOWER;
     case 54:
-        return MP2::OBJ_DRAGONCITY;
+        return MP2::OBJ_DRAGON_CITY;
     case 58:
         return MP2::OBJ_GRAVEYARD;
     case 73:
@@ -103,24 +103,24 @@ int ObjMul2::GetActionObject( uint32_t index )
     case 80:
         return MP2::OBJ_SAWMILL;
     case 112:
-        return MP2::OBJ_WATERWHEEL;
+        return MP2::OBJ_WATER_WHEEL;
     case 114:
         return MP2::OBJ_SIGN;
     case 116:
     case 119:
     case 122:
-        return MP2::OBJ_STONELITHS;
+        return MP2::OBJ_STONE_LITHS;
     case 129:
-        return MP2::OBJ_WAGONCAMP;
+        return MP2::OBJ_WAGON_CAMP;
     case 162:
     case 165:
-        return MP2::OBJ_MAGICWELL;
+        return MP2::OBJ_MAGIC_WELL;
     case 188:
-        return MP2::OBJ_FREEMANFOUNDRY;
+        return MP2::OBJ_FREEMANS_FOUNDRY;
     case 190:
-        return MP2::OBJ_MAGICGARDEN;
+        return MP2::OBJ_MAGIC_GARDEN;
     case 201:
-        return MP2::OBJ_OBSERVATIONTOWER;
+        return MP2::OBJ_OBSERVATION_TOWER;
     case 208:
         return MP2::OBJ_GRAVEYARD;
     case 216:
@@ -129,48 +129,48 @@ int ObjMul2::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 int ObjMult::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 35:
-        return MP2::OBJ_PEASANTHUT;
+        return MP2::OBJ_PEASANT_HUT;
     case 59:
         return MP2::OBJ_FORT;
     case 62:
         return MP2::OBJ_GAZEBO;
     case 69:
-        return MP2::OBJ_WITCHSHUT;
+        return MP2::OBJ_WITCHS_HUT;
     case 71:
-        return MP2::OBJ_MERCENARYCAMP;
+        return MP2::OBJ_MERCENARY_CAMP;
     case 74:
         return MP2::OBJ_RUINS;
     case 76:
-        return MP2::OBJ_SHRINE1;
+        return MP2::OBJ_SHRINE_FIRST_CIRCLE;
     case 78:
-        return MP2::OBJ_SHRINE2;
+        return MP2::OBJ_SHRINE_SECOND_CIRCLE;
     case 80:
-        return MP2::OBJ_SHRINE3;
+        return MP2::OBJ_SHRINE_THIRD_CIRCLE;
     case 82:
         return MP2::OBJ_IDOL;
     case 84:
     case 85:
-        return MP2::OBJ_STANDINGSTONES;
+        return MP2::OBJ_STANDING_STONES;
     case 88:
         return MP2::OBJ_TEMPLE;
     case 111:
-        return MP2::OBJ_TRADINGPOST;
+        return MP2::OBJ_TRADING_POST;
     case 114:
-        return MP2::OBJ_TREEHOUSE;
+        return MP2::OBJ_TREE_HOUSE;
     case 116:
-        return MP2::OBJ_WATCHTOWER;
+        return MP2::OBJ_WATCH_TOWER;
     case 123:
-        return MP2::OBJ_TREEKNOWLEDGE;
+        return MP2::OBJ_TREE_OF_KNOWLEDGE;
     default:
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

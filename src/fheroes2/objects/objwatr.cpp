@@ -71,12 +71,12 @@ int ObjWatr::GetPassable( const uint8_t index )
 
 bool ObjWat2::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjWatr::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjWatr::isShadow( const uint8_t index )
@@ -93,7 +93,7 @@ int ObjWatr::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 62:
-        return MP2::OBJ_MAGELLANMAPS;
+        return MP2::OBJ_MAGELLANS_MAPS;
     case 195:
         return MP2::OBJ_BUOY;
     case 202:
@@ -109,17 +109,17 @@ int ObjWatr::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 int ObjWat2::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 21:
-        return MP2::OBJ_DERELICTSHIP;
+        return MP2::OBJ_DERELICT_SHIP;
     default:
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

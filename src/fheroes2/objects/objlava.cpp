@@ -59,7 +59,7 @@ int ObjLav2::GetPassable( const uint8_t index )
 
 bool ObjLav2::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjLav2::isShadow( const uint8_t index )
@@ -79,7 +79,7 @@ int ObjLav3::GetPassable( const uint8_t index )
 
 bool ObjLav3::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjLav3::isShadow( const uint8_t index )
@@ -102,7 +102,7 @@ int ObjLava::GetPassable( const uint8_t index )
 
 bool ObjLava::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjLava::isShadow( const uint8_t index )
@@ -112,12 +112,12 @@ bool ObjLava::isShadow( const uint8_t index )
 
 int ObjLav2::GetActionObject( uint32_t /* unused */ )
 {
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 int ObjLav3::GetActionObject( uint32_t /* unused */ )
 {
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 int ObjLava::GetActionObject( uint32_t index )
@@ -126,7 +126,7 @@ int ObjLava::GetActionObject( uint32_t index )
     case 110:
         return MP2::OBJ_OBELISK;
     case 115:
-        return MP2::OBJ_DAEMONCAVE;
+        return MP2::OBJ_DAEMON_CAVE;
     case 117:
         return MP2::OBJ_SIGN;
     case 124:
@@ -135,5 +135,5 @@ int ObjLava::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

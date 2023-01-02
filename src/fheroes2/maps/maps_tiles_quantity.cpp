@@ -49,10 +49,10 @@ bool Maps::Tiles::QuantityIsValid() const
     case MP2::OBJ_RESOURCE:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_FLOTSAM:
-    case MP2::OBJ_SHIPWRECKSURVIVOR:
-    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
+    case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_ABANDONEDMINE:
+    case MP2::OBJ_ABANDONED_MINE:
         return true;
 
     case MP2::OBJ_PYRAMID:
@@ -60,11 +60,11 @@ bool Maps::Tiles::QuantityIsValid() const
 
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
-    case MP2::OBJ_DERELICTSHIP:
-    case MP2::OBJ_WATERWHEEL:
+    case MP2::OBJ_DERELICT_SHIP:
+    case MP2::OBJ_WATER_WHEEL:
     case MP2::OBJ_WINDMILL:
-    case MP2::OBJ_LEANTO:
-    case MP2::OBJ_MAGICGARDEN:
+    case MP2::OBJ_LEAN_TO:
+    case MP2::OBJ_MAGIC_GARDEN:
         return quantity2 != 0;
 
     case MP2::OBJ_SKELETON:
@@ -73,7 +73,7 @@ bool Maps::Tiles::QuantityIsValid() const
     case MP2::OBJ_WAGON:
         return QuantityArtifact() != Artifact::UNKNOWN || quantity2 != 0;
 
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         return QuantityVariant() != 0;
 
     default:
@@ -119,7 +119,7 @@ Skill::Secondary Maps::Tiles::QuantitySkill() const
         }
         break;
 
-    case MP2::OBJ_WITCHSHUT:
+    case MP2::OBJ_WITCHS_HUT:
         return Skill::Secondary( quantity1, Skill::Level::BASIC );
 
     default:
@@ -132,7 +132,7 @@ Skill::Secondary Maps::Tiles::QuantitySkill() const
 void Maps::Tiles::QuantitySetSkill( int skill )
 {
     switch ( GetObject( false ) ) {
-    case MP2::OBJ_WITCHSHUT:
+    case MP2::OBJ_WITCHS_HUT:
         quantity1 = skill;
         break;
 
@@ -150,9 +150,9 @@ Spell Maps::Tiles::QuantitySpell() const
         }
         return { Spell::NONE };
 
-    case MP2::OBJ_SHRINE1:
-    case MP2::OBJ_SHRINE2:
-    case MP2::OBJ_SHRINE3:
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
     case MP2::OBJ_PYRAMID:
         return { quantity1 };
 
@@ -167,9 +167,9 @@ void Maps::Tiles::QuantitySetSpell( int spell )
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_ARTIFACT:
-    case MP2::OBJ_SHRINE1:
-    case MP2::OBJ_SHRINE2:
-    case MP2::OBJ_SHRINE3:
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
     case MP2::OBJ_PYRAMID:
         quantity1 = spell;
         break;
@@ -186,10 +186,10 @@ Artifact Maps::Tiles::QuantityArtifact() const
         return Artifact( quantity2 ? static_cast<int>( Artifact::UNKNOWN ) : quantity1 );
 
     case MP2::OBJ_SKELETON:
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
     case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_SHIPWRECKSURVIVOR:
+    case MP2::OBJ_TREASURE_CHEST:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
         return Artifact( quantity1 );
@@ -238,20 +238,20 @@ uint32_t Maps::Tiles::QuantityGold() const
         break;
 
     case MP2::OBJ_RESOURCE:
-    case MP2::OBJ_MAGICGARDEN:
-    case MP2::OBJ_WATERWHEEL:
-    case MP2::OBJ_TREEKNOWLEDGE:
+    case MP2::OBJ_MAGIC_GARDEN:
+    case MP2::OBJ_WATER_WHEEL:
+    case MP2::OBJ_TREE_OF_KNOWLEDGE:
         return quantity1 == Resource::GOLD ? 100 * quantity2 : 0;
 
     case MP2::OBJ_FLOTSAM:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_TREASURE_CHEST:
+    case MP2::OBJ_DERELICT_SHIP:
     case MP2::OBJ_GRAVEYARD:
         return 100 * quantity2;
 
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         switch ( QuantityVariant() ) {
         case 2:
         case 4:
@@ -300,7 +300,7 @@ ResourceCount Maps::Tiles::QuantityResourceCount() const
         break;
 
     case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_TREASURE_CHEST:
         return ResourceCount( Resource::GOLD, QuantityGold() );
 
     case MP2::OBJ_FLOTSAM:
@@ -337,11 +337,11 @@ Funds Maps::Tiles::QuantityFunds() const
         return Funds( Resource::GOLD, QuantityGold() ) + Funds( Resource::WOOD, quantity1 );
 
     case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_TREASURE_CHEST:
+    case MP2::OBJ_DERELICT_SHIP:
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         return Funds( Resource::GOLD, QuantityGold() );
 
     default:
@@ -380,43 +380,43 @@ int Maps::Tiles::QuantityColor() const
 Monster Maps::Tiles::QuantityMonster() const
 {
     switch ( GetObject( false ) ) {
-    case MP2::OBJ_WATCHTOWER:
+    case MP2::OBJ_WATCH_TOWER:
         return Monster( Monster::ORC );
     case MP2::OBJ_EXCAVATION:
         return Monster( Monster::SKELETON );
     case MP2::OBJ_CAVE:
         return Monster( Monster::CENTAUR );
-    case MP2::OBJ_TREEHOUSE:
+    case MP2::OBJ_TREE_HOUSE:
         return Monster( Monster::SPRITE );
-    case MP2::OBJ_ARCHERHOUSE:
+    case MP2::OBJ_ARCHER_HOUSE:
         return Monster( Monster::ARCHER );
-    case MP2::OBJ_GOBLINHUT:
+    case MP2::OBJ_GOBLIN_HUT:
         return Monster( Monster::GOBLIN );
-    case MP2::OBJ_DWARFCOTT:
+    case MP2::OBJ_DWARF_COTTAGE:
         return Monster( Monster::DWARF );
-    case MP2::OBJ_HALFLINGHOLE:
+    case MP2::OBJ_HALFLING_HOLE:
         return Monster( Monster::HALFLING );
-    case MP2::OBJ_PEASANTHUT:
-    case MP2::OBJ_THATCHEDHUT:
+    case MP2::OBJ_PEASANT_HUT:
+    case MP2::OBJ_THATCHED_HUT:
         return Monster( Monster::PEASANT );
 
     case MP2::OBJ_RUINS:
         return Monster( Monster::MEDUSA );
-    case MP2::OBJ_TREECITY:
+    case MP2::OBJ_TREE_CITY:
         return Monster( Monster::SPRITE );
-    case MP2::OBJ_WAGONCAMP:
+    case MP2::OBJ_WAGON_CAMP:
         return Monster( Monster::ROGUE );
-    case MP2::OBJ_DESERTTENT:
+    case MP2::OBJ_DESERT_TENT:
         return Monster( Monster::NOMAD );
 
-    case MP2::OBJ_TROLLBRIDGE:
+    case MP2::OBJ_TROLL_BRIDGE:
         return Monster( Monster::TROLL );
-    case MP2::OBJ_DRAGONCITY:
+    case MP2::OBJ_DRAGON_CITY:
         return Monster( Monster::RED_DRAGON );
-    case MP2::OBJ_CITYDEAD:
+    case MP2::OBJ_CITY_OF_DEAD:
         return Monster( Monster::POWER_LICH );
 
-    case MP2::OBJ_ANCIENTLAMP:
+    case MP2::OBJ_GENIE_LAMP:
         return Monster( Monster::GENIE );
 
     // loyalty version
@@ -456,12 +456,12 @@ void Maps::Tiles::QuantityReset()
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_WAGON:
     case MP2::OBJ_ARTIFACT:
-    case MP2::OBJ_SHIPWRECKSURVIVOR:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         QuantitySetArtifact( Artifact::UNKNOWN );
         break;
 
@@ -477,19 +477,19 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 {
     // TODO: don't modify first 2 bits of quantity1.
     switch ( GetObject( false ) ) {
-    case MP2::OBJ_WITCHSHUT:
+    case MP2::OBJ_WITCHS_HUT:
         QuantitySetSkill( Skill::Secondary::RandForWitchsHut() );
         break;
 
-    case MP2::OBJ_SHRINE1:
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 1 ).GetID() : Spell::RandAdventure( 1 ).GetID() );
         break;
 
-    case MP2::OBJ_SHRINE2:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 2 ).GetID() : Spell::RandAdventure( 2 ).GetID() );
         break;
 
-    case MP2::OBJ_SHRINE3:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
         QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 3 ).GetID() : Spell::RandAdventure( 3 ).GetID() );
         break;
 
@@ -618,7 +618,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         QuantitySetResource( Resource::Rand( false ), Rand::Get( 4, 6 ) );
         break;
 
-    case MP2::OBJ_MAGICGARDEN:
+    case MP2::OBJ_MAGIC_GARDEN:
         // 5 gems or 500 gold
         if ( Rand::Get( 1 ) )
             QuantitySetResource( Resource::GEMS, 5 );
@@ -626,7 +626,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             QuantitySetResource( Resource::GOLD, 500 );
         break;
 
-    case MP2::OBJ_WATERWHEEL:
+    case MP2::OBJ_WATER_WHEEL:
         // first week 500 gold, next week 1000 gold
         QuantitySetResource( Resource::GOLD, ( 0 == world.CountDay() ? 500 : 1000 ) );
         break;
@@ -642,7 +642,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_LEANTO:
+    case MP2::OBJ_LEAN_TO:
         // 1-4 rnd resource
         QuantitySetResource( Resource::Rand( false ), Rand::Get( 1, 4 ) );
         break;
@@ -670,7 +670,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_SHIPWRECKSURVIVOR: {
+    case MP2::OBJ_SHIPWRECK_SURVIVOR: {
         Rand::Queue percents( 3 );
         // 55%: artifact 1
         percents.Push( 1, 55 );
@@ -724,8 +724,9 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_TREASURE_CHEST:
         if ( isWater() ) {
+            // TODO: fix invalid object type!
             SetObject( MP2::OBJ_WATERCHEST );
             QuantityUpdate();
         }
@@ -764,7 +765,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         }
         break;
 
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_DERELICT_SHIP:
         QuantitySetResource( Resource::GOLD, 5000 );
         break;
 
@@ -799,7 +800,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_DAEMONCAVE: {
+    case MP2::OBJ_DAEMON_CAVE: {
         // 1000 exp or 1000 exp + 2500 gold or 1000 exp + art or (-2500 or remove hero)
         const int cond = Rand::Get( 1, 4 );
         QuantitySetVariant( cond );
@@ -807,7 +808,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_TREEKNOWLEDGE:
+    case MP2::OBJ_TREE_OF_KNOWLEDGE:
         // variant: 10 gems, 2000 gold or free
         switch ( Rand::Get( 1, 3 ) ) {
         case 1:
@@ -829,7 +830,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         QuantitySetColor( Tiles::ColorFromTravellerTentSprite( objectTileset, objectIndex ) );
         break;
 
-    case MP2::OBJ_ALCHEMYLAB:
+    case MP2::OBJ_ALCHEMIST_LAB:
         QuantitySetResource( Resource::MERCURY, 1 );
         break;
 
@@ -860,7 +861,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_ABANDONEDMINE: {
+    case MP2::OBJ_ABANDONED_MINE: {
         Troop & troop = world.GetCapturedObject( GetIndex() ).GetTroop();
 
         // Min is 3 x 13, and max is 3 x 15
@@ -879,7 +880,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         resetObjectSprite();
         break;
 
-    case MP2::OBJ_RNDARTIFACT:
+    case MP2::OBJ_RANDOM_ARTIFACT:
     case MP2::OBJ_RNDARTIFACT1:
     case MP2::OBJ_RNDARTIFACT2:
     case MP2::OBJ_RNDARTIFACT3:
@@ -888,7 +889,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         QuantityUpdate();
         break;
 
-    case MP2::OBJ_RNDRESOURCE:
+    case MP2::OBJ_RANDOM_RESOURCE:
         // modify rnd resource sprite
         UpdateRNDResourceSprite( *this );
         QuantityUpdate();
@@ -901,39 +902,39 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             UpdateMonsterInfo( *this );
         break;
 
-    case MP2::OBJ_RNDMONSTER:
-    case MP2::OBJ_RNDMONSTER1:
-    case MP2::OBJ_RNDMONSTER2:
-    case MP2::OBJ_RNDMONSTER3:
-    case MP2::OBJ_RNDMONSTER4:
+    case MP2::OBJ_RANDOM_MONSTER:
+    case MP2::OBJ_RANDOM_MONSTER_WEAK:
+    case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+    case MP2::OBJ_RANDOM_MONSTER_STRONG:
+    case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
         // modify rnd monster sprite
         UpdateMonsterInfo( *this );
         break;
 
-    case MP2::OBJ_ANCIENTLAMP:
+    case MP2::OBJ_GENIE_LAMP:
         // Genies in the lamp do not accumulate
         if ( isFirstLoad )
             MonsterSetCount( Rand::Get( 2, 4 ) );
         break;
 
-    case MP2::OBJ_WATCHTOWER:
+    case MP2::OBJ_WATCH_TOWER:
     case MP2::OBJ_EXCAVATION:
     case MP2::OBJ_CAVE:
-    case MP2::OBJ_TREEHOUSE:
-    case MP2::OBJ_ARCHERHOUSE:
-    case MP2::OBJ_GOBLINHUT:
-    case MP2::OBJ_DWARFCOTT:
-    case MP2::OBJ_HALFLINGHOLE:
-    case MP2::OBJ_PEASANTHUT:
-    case MP2::OBJ_THATCHEDHUT:
+    case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_PEASANT_HUT:
+    case MP2::OBJ_THATCHED_HUT:
     // recruit dwelling
     case MP2::OBJ_RUINS:
-    case MP2::OBJ_TREECITY:
-    case MP2::OBJ_WAGONCAMP:
-    case MP2::OBJ_DESERTTENT:
-    case MP2::OBJ_TROLLBRIDGE:
-    case MP2::OBJ_DRAGONCITY:
-    case MP2::OBJ_CITYDEAD:
+    case MP2::OBJ_TREE_CITY:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_TROLL_BRIDGE:
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_CITY_OF_DEAD:
     case MP2::OBJ_WATERALTAR:
     case MP2::OBJ_AIRALTAR:
     case MP2::OBJ_FIREALTAR:
@@ -1020,19 +1021,19 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
     }
     else {
         switch ( tile.GetObject() ) {
-        case MP2::OBJ_RNDMONSTER:
+        case MP2::OBJ_RANDOM_MONSTER:
             mons = Monster::Rand( Monster::LevelType::LEVEL_ANY ).GetID();
             break;
-        case MP2::OBJ_RNDMONSTER1:
+        case MP2::OBJ_RANDOM_MONSTER_WEAK:
             mons = Monster::Rand( Monster::LevelType::LEVEL_1 ).GetID();
             break;
-        case MP2::OBJ_RNDMONSTER2:
+        case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
             mons = Monster::Rand( Monster::LevelType::LEVEL_2 ).GetID();
             break;
-        case MP2::OBJ_RNDMONSTER3:
+        case MP2::OBJ_RANDOM_MONSTER_STRONG:
             mons = Monster::Rand( Monster::LevelType::LEVEL_3 ).GetID();
             break;
-        case MP2::OBJ_RNDMONSTER4:
+        case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
             mons = Monster::Rand( Monster::LevelType::LEVEL_4 ).GetID();
             break;
         default:
@@ -1064,41 +1065,41 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 
     switch ( objectType ) {
     // join monsters
-    case MP2::OBJ_HALFLINGHOLE:
+    case MP2::OBJ_HALFLING_HOLE:
         count += isFirstLoad ? Rand::Get( 20, 40 ) : Rand::Get( 5, 10 );
         break;
-    case MP2::OBJ_PEASANTHUT:
-    case MP2::OBJ_THATCHEDHUT:
+    case MP2::OBJ_PEASANT_HUT:
+    case MP2::OBJ_THATCHED_HUT:
         count += isFirstLoad ? Rand::Get( 20, 50 ) : Rand::Get( 5, 10 );
         break;
     case MP2::OBJ_EXCAVATION:
-    case MP2::OBJ_TREEHOUSE:
+    case MP2::OBJ_TREE_HOUSE:
         count += isFirstLoad ? Rand::Get( 10, 25 ) : Rand::Get( 4, 8 );
         break;
     case MP2::OBJ_CAVE:
         count += isFirstLoad ? Rand::Get( 10, 20 ) : Rand::Get( 3, 6 );
         break;
-    case MP2::OBJ_GOBLINHUT:
+    case MP2::OBJ_GOBLIN_HUT:
         count += isFirstLoad ? Rand::Get( 15, 40 ) : Rand::Get( 3, 6 );
         break;
 
-    case MP2::OBJ_TREECITY:
+    case MP2::OBJ_TREE_CITY:
         count += isFirstLoad ? Rand::Get( 20, 40 ) : Rand::Get( 10, 20 );
         break;
 
-    case MP2::OBJ_WATCHTOWER:
+    case MP2::OBJ_WATCH_TOWER:
         count += isFirstLoad ? Rand::Get( 7, 10 ) : Rand::Get( 2, 4 );
         break;
-    case MP2::OBJ_ARCHERHOUSE:
+    case MP2::OBJ_ARCHER_HOUSE:
         count += isFirstLoad ? Rand::Get( 10, 25 ) : Rand::Get( 2, 4 );
         break;
-    case MP2::OBJ_DWARFCOTT:
+    case MP2::OBJ_DWARF_COTTAGE:
         count += isFirstLoad ? Rand::Get( 10, 20 ) : Rand::Get( 3, 6 );
         break;
-    case MP2::OBJ_WAGONCAMP:
+    case MP2::OBJ_WAGON_CAMP:
         count += isFirstLoad ? Rand::Get( 30, 50 ) : Rand::Get( 3, 6 );
         break;
-    case MP2::OBJ_DESERTTENT:
+    case MP2::OBJ_DESERT_TENT:
         count += isFirstLoad ? Rand::Get( 10, 20 ) : Rand::Get( 1, 3 );
         break;
     case MP2::OBJ_RUINS:
@@ -1112,12 +1113,12 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
         count += Rand::Get( 2, 5 );
         break;
 
-    case MP2::OBJ_TROLLBRIDGE:
-    case MP2::OBJ_CITYDEAD:
+    case MP2::OBJ_TROLL_BRIDGE:
+    case MP2::OBJ_CITY_OF_DEAD:
         count = isFirstLoad ? Rand::Get( 4, 6 ) : ( Color::NONE == tile.QuantityColor() ) ? count : count + Rand::Get( 1, 3 );
         break;
 
-    case MP2::OBJ_DRAGONCITY:
+    case MP2::OBJ_DRAGON_CITY:
         count = isFirstLoad ? 2 : ( Color::NONE == tile.QuantityColor() ) ? count : count + 1;
         break;
 

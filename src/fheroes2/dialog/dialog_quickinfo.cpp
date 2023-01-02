@@ -146,7 +146,7 @@ namespace
     std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned )
     {
         const MP2::MapObjectType objectType = tile.GetObject( false );
-        const bool isAbandonedMine = ( objectType == MP2::OBJN_ABANDONEDMINE || objectType == MP2::OBJ_ABANDONEDMINE );
+        const bool isAbandonedMine = ( objectType == MP2::OBJ_NON_ACTION_ABANDONED_MINE || objectType == MP2::OBJ_ABANDONED_MINE );
 
         std::string str;
 
@@ -469,7 +469,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
 
     if ( tile.isFog( settings.CurrentColor() ) )
         name_object = _( "Uncharted Territory" );
-    else if ( MP2::OBJ_ABANDONEDMINE == objectType || tile.isCaptureObjectProtected() ) {
+    else if ( MP2::OBJ_ABANDONED_MINE == objectType || tile.isCaptureObjectProtected() ) {
         name_object = ShowGuardiansInfo( tile, settings.CurrentColor() == tile.QuantityColor() );
     }
     else
@@ -479,25 +479,25 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
             break;
 
         case MP2::OBJ_EVENT:
-        case MP2::OBJ_ZERO:
+        case MP2::OBJ_NONE:
         case MP2::OBJ_COAST:
             name_object = ShowGroundInfo( tile, from_hero );
             break;
 
-        case MP2::OBJ_DERELICTSHIP:
+        case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_DAEMONCAVE:
+        case MP2::OBJ_DAEMON_CAVE:
         case MP2::OBJ_PYRAMID:
         case MP2::OBJ_WAGON:
         case MP2::OBJ_SKELETON:
-        case MP2::OBJ_LEANTO:
+        case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_WATERWHEEL:
-        case MP2::OBJ_MAGICGARDEN:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_MAGIC_GARDEN:
             name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
-        case MP2::OBJ_MAGELLANMAPS:
+        case MP2::OBJ_MAGELLANS_MAPS:
             name_object = showUniqueObjectVisitInfo( objectType, kingdom );
             break;
 
@@ -516,7 +516,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
                 name_object.append( GetMinesIncomeString( tile.QuantityResourceCount().first ) );
             break;
 
-        case MP2::OBJ_ALCHEMYLAB:
+        case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_SAWMILL:
             name_object = MP2::StringObject( objectType );
             if ( settings.CurrentColor() == tile.QuantityColor() )
@@ -524,25 +524,25 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
             break;
 
         // join army
-        case MP2::OBJ_WATCHTOWER:
+        case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREEHOUSE:
-        case MP2::OBJ_ARCHERHOUSE:
-        case MP2::OBJ_GOBLINHUT:
-        case MP2::OBJ_DWARFCOTT:
-        case MP2::OBJ_HALFLINGHOLE:
-        case MP2::OBJ_PEASANTHUT:
-        case MP2::OBJ_THATCHEDHUT:
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_ARCHER_HOUSE:
+        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_HALFLING_HOLE:
+        case MP2::OBJ_PEASANT_HUT:
+        case MP2::OBJ_THATCHED_HUT:
         // recruit army
         case MP2::OBJ_RUINS:
-        case MP2::OBJ_TREECITY:
-        case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJ_DESERTTENT:
+        case MP2::OBJ_TREE_CITY:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_DESERT_TENT:
         // battle and recruit army
-        case MP2::OBJ_DRAGONCITY:
-        case MP2::OBJ_CITYDEAD:
-        case MP2::OBJ_TROLLBRIDGE:
+        case MP2::OBJ_DRAGON_CITY:
+        case MP2::OBJ_CITY_OF_DEAD:
+        case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_BARROWMOUNDS:
         case MP2::OBJ_AIRALTAR:
         case MP2::OBJ_FIREALTAR:
@@ -554,39 +554,39 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_GAZEBO:
         case MP2::OBJ_FORT:
         case MP2::OBJ_XANADU:
-        case MP2::OBJ_MERCENARYCAMP:
-        case MP2::OBJ_DOCTORHUT:
-        case MP2::OBJ_STANDINGSTONES:
-        case MP2::OBJ_TREEKNOWLEDGE:
+        case MP2::OBJ_MERCENARY_CAMP:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
+        case MP2::OBJ_STANDING_STONES:
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
             name_object = ShowLocalVisitTileInfo( tile, from_hero );
             break;
 
-        case MP2::OBJ_ARTESIANSPRING:
+        case MP2::OBJ_ARTESIAN_SPRING:
             name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
 
-        case MP2::OBJ_MAGICWELL:
+        case MP2::OBJ_MAGIC_WELL:
         case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_FAERIERING:
+        case MP2::OBJ_FAERIE_RING:
         case MP2::OBJ_IDOL:
         case MP2::OBJ_OASIS:
         case MP2::OBJ_TEMPLE:
         case MP2::OBJ_BUOY:
         case MP2::OBJ_MERMAID:
-        case MP2::OBJ_WATERINGHOLE:
+        case MP2::OBJ_WATERING_HOLE:
         case MP2::OBJ_ARENA:
         case MP2::OBJ_STABLES:
         case MP2::OBJ_SIRENS:
             name_object = ShowLocalVisitObjectInfo( tile, from_hero );
             break;
 
-        case MP2::OBJ_SHRINE1:
-        case MP2::OBJ_SHRINE2:
-        case MP2::OBJ_SHRINE3:
+        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+        case MP2::OBJ_SHRINE_THIRD_CIRCLE:
             name_object = ShowShrineInfo( tile, from_hero, kingdom.isVisited( tile ) );
             break;
 
-        case MP2::OBJ_WITCHSHUT:
+        case MP2::OBJ_WITCHS_HUT:
             name_object = ShowWitchHutInfo( tile, from_hero, kingdom.isVisited( tile ) );
             break;
 

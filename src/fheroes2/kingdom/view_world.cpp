@@ -332,7 +332,7 @@ namespace
                         break;
                     }
 
-                    case MP2::OBJ_ALCHEMYLAB:
+                    case MP2::OBJ_ALCHEMIST_LAB:
                     case MP2::OBJ_MINES:
                     case MP2::OBJ_SAWMILL:
                         if ( revealMines || !tile.isFog( color ) ) {

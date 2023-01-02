@@ -59,7 +59,7 @@ int ObjXlc1::GetPassable( const uint8_t index )
 
 bool ObjXlc1::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjXlc1::isShadow( const uint8_t index )
@@ -81,7 +81,7 @@ int ObjXlc2::GetPassable( const uint8_t index )
 
 bool ObjXlc2::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjXlc2::isShadow( const uint8_t index )
@@ -101,7 +101,7 @@ int ObjXlc3::GetPassable( const uint8_t index )
 
 bool ObjXlc3::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjXlc3::isShadow( const uint8_t index )
@@ -130,7 +130,7 @@ int ObjXlc1::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 int ObjXlc2::GetActionObject( uint32_t index )
@@ -148,7 +148,7 @@ int ObjXlc2::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 bool ObjXlc2::isReefs( const uint8_t index )
@@ -185,5 +185,5 @@ int ObjXlc3::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

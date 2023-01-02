@@ -34,7 +34,7 @@ class IndexObject : public std::pair<int32_t, int>
 {
 public:
     IndexObject()
-        : std::pair<int32_t, int>( -1, MP2::OBJ_ZERO )
+        : std::pair<int32_t, int>( -1, MP2::OBJ_NONE )
     {}
 
     IndexObject( int32_t index, int object )
@@ -56,7 +56,7 @@ class ObjectColor : public std::pair<int, int>
 {
 public:
     ObjectColor()
-        : std::pair<int, int>( MP2::OBJ_ZERO, Color::NONE )
+        : std::pair<int, int>( MP2::OBJ_NONE, Color::NONE )
     {}
 
     ObjectColor( int object, int color )

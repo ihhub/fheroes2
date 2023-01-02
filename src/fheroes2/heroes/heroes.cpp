@@ -87,18 +87,18 @@ namespace
                 if ( strs ) {
                     switch ( objectType ) {
                     case MP2::OBJ_GRAVEYARD:
-                    case MP2::OBJN_GRAVEYARD:
+                    case MP2::OBJ_NON_ACTION_GRAVEYARD:
                     case MP2::OBJ_SHIPWRECK:
-                    case MP2::OBJN_SHIPWRECK:
-                    case MP2::OBJ_DERELICTSHIP:
-                    case MP2::OBJN_DERELICTSHIP: {
+                    case MP2::OBJ_NON_ACTION_SHIPWRECK:
+                    case MP2::OBJ_DERELICT_SHIP:
+                    case MP2::OBJ_NON_ACTION_DERELICT_SHIP: {
                         std::string modRobber = _( "%{object} robber" );
                         StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRobber );
                         break;
                     }
                     case MP2::OBJ_PYRAMID:
-                    case MP2::OBJN_PYRAMID: {
+                    case MP2::OBJ_NON_ACTION_PYRAMID: {
                         std::string modRaided = _( "%{object} raided" );
                         StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRaided );
@@ -207,7 +207,7 @@ Heroes::Heroes( int heroid, int rc )
     , hid( heroid )
     , portrait( heroid )
     , _race( rc )
-    , save_maps_object( MP2::OBJ_ZERO )
+    , save_maps_object( MP2::OBJ_NONE )
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
@@ -381,7 +381,7 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
 void Heroes::PostLoad()
 {
     // An object on which the hero currently stands
-    save_maps_object = MP2::OBJ_ZERO;
+    save_maps_object = MP2::OBJ_NONE;
 
     // Fix a custom hero without an army
     if ( !army.isValid() ) {
@@ -631,8 +631,8 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     // object visited
-    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_BUOY,      MP2::OBJ_OASIS,        MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE,
-                                                       MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
+    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_BUOY,      MP2::OBJ_OASIS,         MP2::OBJ_WATERING_HOLE, MP2::OBJ_TEMPLE,
+                                                       MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICT_SHIP, MP2::OBJ_SHIPWRECK };
     result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
     // bonus artifact
@@ -664,7 +664,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
+    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIE_RING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
     result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
     // bonus artifact
@@ -860,7 +860,7 @@ void Heroes::SetVisited( int32_t index, Visit::type_t type )
     if ( Visit::GLOBAL == type ) {
         GetKingdom().SetVisited( index, objectType );
     }
-    else if ( !isVisited( tile ) && MP2::OBJ_ZERO != objectType ) {
+    else if ( !isVisited( tile ) && MP2::OBJ_NONE != objectType ) {
         visit_object.push_front( IndexObject( index, objectType ) );
     }
 }
@@ -886,11 +886,11 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
     switch ( objectType ) {
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_OASIS:
-    case MP2::OBJ_STANDINGSTONES:
-    case MP2::OBJ_ARTESIANSPRING:
+    case MP2::OBJ_STANDING_STONES:
+    case MP2::OBJ_ARTESIAN_SPRING:
         wide = 2;
         break;
-    case MP2::OBJ_WATERINGHOLE:
+    case MP2::OBJ_WATERING_HOLE:
         wide = 4;
         break;
     default:
@@ -1487,7 +1487,7 @@ MP2::MapObjectType Heroes::GetMapsObject() const
 
 void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
 {
-    save_maps_object = objectType != MP2::OBJ_HEROES ? objectType : MP2::OBJ_ZERO;
+    save_maps_object = objectType != MP2::OBJ_HEROES ? objectType : MP2::OBJ_NONE;
 }
 
 void Heroes::ActionPreBattle()

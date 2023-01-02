@@ -44,7 +44,7 @@ int ObjTree::GetPassable( const uint8_t index )
 
 bool ObjTree::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjTree::isShadow( const uint8_t index )
@@ -54,5 +54,5 @@ bool ObjTree::isShadow( const uint8_t index )
 
 int ObjTree::GetActionObject( uint32_t /* unused */ )
 {
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
