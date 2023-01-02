@@ -778,6 +778,7 @@ bool MP2::isActionObject( const MapObjectType objectType )
 
 MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType )
 {
+    // TODO: this function should just check 8th bit in object type instead of having switch-case code.
     switch ( objectType ) {
     case OBJ_NON_ACTION_ALCHEMIST_LAB:
         return OBJ_ALCHEMIST_LAB;

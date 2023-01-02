@@ -939,13 +939,9 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_AIR_ALTAR:
     case MP2::OBJ_FIRE_ALTAR:
     case MP2::OBJ_EARTH_ALTAR:
-        UpdateDwellingPopulation( *this, isFirstLoad );
-        break;
-
     case MP2::OBJ_BARROW_MOUNDS:
         UpdateDwellingPopulation( *this, isFirstLoad );
         break;
-
     default:
         break;
     }
