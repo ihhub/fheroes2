@@ -1693,7 +1693,7 @@ fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fhe
                 offset.x += static_cast<int32_t>( movementProgress * moveX );
             }
             // If the creature has to move diagonally.
-            else if ( moveY !=0 ) {
+            else if ( moveY != 0 ) {
                 offset.y += static_cast<int32_t>( movementProgress * moveY );
                 offset.x -= Sign( moveX ) * ( _movingUnit->animation.getCurrentFrameXOffset() ) / 2;
             }
