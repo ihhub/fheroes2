@@ -281,8 +281,8 @@ namespace Bin_Info
              && frameXOffset[MOVE_STOP].size() == 1 ) {
             frameXOffset[MOVE_START][0] = 0;
             frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
-            for ( size_t id = 0; id < frameXOffset[MOVE_MAIN].size(); ++id ) {
-                frameXOffset[MOVE_MAIN][id] += CELLW / 4 + 3;
+            for ( int & xOffset : frameXOffset[MOVE_MAIN] ) {
+                xOffset += CELLW / 4 + 3;
             }
 
             frameXOffset[MOVE_STOP][0] = CELLW;
