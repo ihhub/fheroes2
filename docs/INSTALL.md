@@ -130,7 +130,7 @@ Follow the [instructions below](#macos-resources) to gather resources necessary 
 Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
 
 <a name="macos-resources"></a>
-## Gathering game resources
+### Gathering game resources
 
 Once you obtain the fheroes2 executable using any of the options above, you should follow these steps to load in the correct resources
 
