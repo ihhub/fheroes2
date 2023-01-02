@@ -199,8 +199,11 @@ namespace
             }
 
             if ( items.isSelected() ) {
-                chosenLanguage = items.GetCurrent();
-                Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+                const fheroes2::SupportedLanguage newChosenLanguage = items.GetCurrent();
+                if ( newChosenLanguage != chosenLanguage ) {
+                    chosenLanguage = newChosenLanguage;
+                    Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+                }
             }
 
             if ( !items.IsNeedRedraw() ) {
