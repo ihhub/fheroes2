@@ -61,7 +61,9 @@ namespace MP2
         // between land and sea. They can be related to passabilities.
         uint8_t flags;
 
-        uint8_t mapObjectType; // Object type. Please refer to MapObjectType enumeration.
+        // The main object type for the tile. The tile can have multiple objects but the game can display information only about one.
+        // Refer to MapObjectType enumeration below.
+        uint8_t mapObjectType;
 
         uint16_t nextAddonIndex; // Next add-on index. Zero value means it's the last addon chunk.
 
@@ -633,6 +635,8 @@ namespace MP2
         OBJ_ICN_TYPE_X_LOC1, // Objects from The Price of Loyalty expansion.
         OBJ_ICN_TYPE_X_LOC2, // Objects from The Price of Loyalty expansion.
         OBJ_ICN_TYPE_X_LOC3 // Objects from The Price of Loyalty expansion.
+
+        // IMPORTANT!!! If you want to add new types firstly use unused entries and only then add new entries in this enumeration.
     };
 
     // Return Icn ID related to this tileset value.
