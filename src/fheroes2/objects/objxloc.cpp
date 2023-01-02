@@ -113,19 +113,19 @@ int ObjXlc1::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 3:
-        return MP2::OBJ_ALCHEMYTOWER;
+        return MP2::OBJ_ALCHEMIST_TOWER;
     case 70:
         return MP2::OBJ_ARENA;
     case 77:
-        return MP2::OBJ_BARROWMOUNDS;
+        return MP2::OBJ_BARROW_MOUNDS;
     case 94:
-        return MP2::OBJ_EARTHALTAR;
+        return MP2::OBJ_EARTH_ALTAR;
     case 118:
-        return MP2::OBJ_AIRALTAR;
+        return MP2::OBJ_AIR_ALTAR;
     case 127:
-        return MP2::OBJ_FIREALTAR;
+        return MP2::OBJ_FIRE_ALTAR;
     case 135:
-        return MP2::OBJ_WATERALTAR;
+        return MP2::OBJ_WATER_ALTAR;
     default:
         break;
     }
@@ -160,9 +160,9 @@ int ObjXlc3::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 30:
-        return MP2::OBJ_HUTMAGI;
+        return MP2::OBJ_HUT_OF_MAGI;
     case 50:
-        return MP2::OBJ_EYEMAGI;
+        return MP2::OBJ_EYE_OF_MAGI;
     case 60:
     case 66:
     case 72:
@@ -180,7 +180,7 @@ int ObjXlc3::GetActionObject( uint32_t index )
     case 130:
     case 134:
     case 138:
-        return MP2::OBJ_TRAVELLERTENT;
+        return MP2::OBJ_TRAVELLER_TENT;
     default:
         break;
     }

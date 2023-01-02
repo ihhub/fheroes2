@@ -362,7 +362,7 @@ namespace
         case MP2::OBJ_HALFLING_HOLE:
         case MP2::OBJ_NON_ACTION_HALFLING_HOLE:
         case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_WATERLAKE:
+        case MP2::OBJ_WATER_LAKE:
         case MP2::OBJ_TAR_PIT:
         case MP2::OBJ_MERCENARY_CAMP:
         case MP2::OBJ_NON_ACTION_MERCENARY_CAMP:
@@ -403,10 +403,10 @@ namespace
         case MP2::OBJ_FAERIE_RING:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
+        case MP2::OBJ_WATER_ALTAR:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
             return true;
         default:
             break;
@@ -504,68 +504,69 @@ bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const 
 
 MP2::MapObjectType Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex )
 {
+    // TODO: why we return non-action object types which are not equal to (action object type value - 128)?
     switch ( MP2::GetICNObject( tileset ) ) {
     case ICN::X_LOC1:
         if ( icnIndex == 3 )
-            return MP2::OBJ_ALCHEMYTOWER;
+            return MP2::OBJ_ALCHEMIST_TOWER;
         else if ( icnIndex < 3 )
-            return MP2::OBJN_ALCHEMYTOWER;
+            return MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
         else if ( 70 == icnIndex )
             return MP2::OBJ_ARENA;
         else if ( 3 < icnIndex && icnIndex < 72 )
-            return MP2::OBJN_ARENA;
+            return MP2::OBJ_NON_ACTION_ARENA;
         else if ( 77 == icnIndex )
-            return MP2::OBJ_BARROWMOUNDS;
+            return MP2::OBJ_BARROW_MOUNDS;
         else if ( 71 < icnIndex && icnIndex < 78 )
-            return MP2::OBJN_BARROWMOUNDS;
+            return MP2::OBJ_NON_ACTION_BARROW_MOUNDS;
         else if ( 94 == icnIndex )
-            return MP2::OBJ_EARTHALTAR;
+            return MP2::OBJ_EARTH_ALTAR;
         else if ( 77 < icnIndex && icnIndex < 112 )
-            return MP2::OBJN_EARTHALTAR;
+            return MP2::OBJ_NON_ACTION_EARTH_ALTAR;
         else if ( 118 == icnIndex )
-            return MP2::OBJ_AIRALTAR;
+            return MP2::OBJ_AIR_ALTAR;
         else if ( 111 < icnIndex && icnIndex < 120 )
-            return MP2::OBJN_AIRALTAR;
+            return MP2::OBJ_NON_ACTION_AIR_ALTAR;
         else if ( 127 == icnIndex )
-            return MP2::OBJ_FIREALTAR;
+            return MP2::OBJ_FIRE_ALTAR;
         else if ( 119 < icnIndex && icnIndex < 129 )
-            return MP2::OBJN_FIREALTAR;
+            return MP2::OBJ_NON_ACTION_FIRE_ALTAR;
         else if ( 135 == icnIndex )
-            return MP2::OBJ_WATERALTAR;
+            return MP2::OBJ_WATER_ALTAR;
         else if ( 128 < icnIndex && icnIndex < 137 )
-            return MP2::OBJN_WATERALTAR;
+            return MP2::OBJ_NON_ACTION_WATER_ALTAR;
         break;
 
     case ICN::X_LOC2:
         if ( icnIndex == 4 )
             return MP2::OBJ_STABLES;
         else if ( icnIndex < 4 )
-            return MP2::OBJN_STABLES;
+            return MP2::OBJ_NON_ACTION_STABLES;
         else if ( icnIndex == 9 )
             return MP2::OBJ_JAIL;
         else if ( 4 < icnIndex && icnIndex < 10 )
-            return MP2::OBJN_JAIL;
+            return MP2::OBJ_NON_ACTION_JAIL;
         else if ( icnIndex == 37 )
             return MP2::OBJ_MERMAID;
         else if ( 9 < icnIndex && icnIndex < 47 )
-            return MP2::OBJN_MERMAID;
+            return MP2::OBJ_NON_ACTION_MERMAID;
         else if ( icnIndex == 101 )
             return MP2::OBJ_SIRENS;
         else if ( 46 < icnIndex && icnIndex < 111 )
-            return MP2::OBJN_SIRENS;
+            return MP2::OBJ_NON_ACTION_SIRENS;
         else if ( ObjXlc2::isReefs( icnIndex ) )
             return MP2::OBJ_REEFS;
         break;
 
     case ICN::X_LOC3:
         if ( icnIndex == 30 )
-            return MP2::OBJ_HUTMAGI;
+            return MP2::OBJ_HUT_OF_MAGI;
         else if ( icnIndex < 32 )
-            return MP2::OBJN_HUTMAGI;
+            return MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
         else if ( icnIndex == 50 )
-            return MP2::OBJ_EYEMAGI;
+            return MP2::OBJ_EYE_OF_MAGI;
         else if ( 31 < icnIndex && icnIndex < 59 )
-            return MP2::OBJN_EYEMAGI;
+            return MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
         break;
 
     default:
@@ -1900,7 +1901,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
     // Original Editor marks Reefs as Stones. We're fixing this issue by changing the type of the object without changing the content of a tile.
     // This is also required in order to properly calculate Reefs' passbility.
-    if ( originalObjectType == MP2::OBJ_STONES && isValidReefsSprite( originalICN, tile.objectIndex ) ) {
+    if ( originalObjectType == MP2::OBJ_ROCK && isValidReefsSprite( originalICN, tile.objectIndex ) ) {
         tile.SetObject( MP2::OBJ_REEFS );
 
         // There is no need to check the rest of things as we fixed this object.
@@ -1968,10 +1969,10 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
     // Fix The Price of Loyalty objects even if the map is The Succession Wars type.
     switch ( originalObjectType ) {
-    case MP2::OBJ_UNUSED_79:
-    case MP2::OBJ_UNUSED_7A:
-    case MP2::OBJ_UNUSED_F9:
-    case MP2::OBJ_UNUSED_FA: {
+    case MP2::OBJ_NON_ACTION_EXPANSION_DWELLING:
+    case MP2::OBJ_NON_ACTION_EXPANSION_OBJECT:
+    case MP2::OBJ_EXPANSION_DWELLING:
+    case MP2::OBJ_EXPANSION_OBJECT: {
         MP2::MapObjectType objectType = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
         if ( objectType != MP2::OBJ_NONE ) {
             tile.SetObject( objectType );
@@ -2214,16 +2215,16 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
 
     switch ( tile.GetObject() ) {
     case MP2::OBJ_RANDOM_ARTIFACT:
-        art = Artifact::Rand( Artifact::ART_LEVEL123 );
+        art = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
         break;
-    case MP2::OBJ_RNDARTIFACT1:
-        art = Artifact::Rand( Artifact::ART_LEVEL1 );
+    case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+        art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
         break;
-    case MP2::OBJ_RNDARTIFACT2:
-        art = Artifact::Rand( Artifact::ART_LEVEL2 );
+    case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+        art = Artifact::Rand( Artifact::ART_LEVEL_MINOR );
         break;
-    case MP2::OBJ_RNDARTIFACT3:
-        art = Artifact::Rand( Artifact::ART_LEVEL3 );
+    case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+        art = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
         break;
     default:
         return;

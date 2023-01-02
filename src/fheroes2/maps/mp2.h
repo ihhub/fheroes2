@@ -230,11 +230,11 @@ namespace MP2
         char text; // message + '/0'
     };
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // First bit indicates if you can interact with object
+    // An object type could be action and non-action. If both parts are present the difference between them must be 128.
+    // TODO: right now some PoL objects do not follow this procedure leading to hacks in the code. We must fix it!
     enum MapObjectType : uint8_t
     {
-        OBJ_NONE = 0,
+        OBJ_NONE = 0, // No object exist.
         OBJ_NON_ACTION_ALCHEMIST_LAB = 1,
         OBJ_NON_ACTION_SIGN = 2,
         OBJ_NON_ACTION_BUOY = 3,
@@ -332,37 +332,36 @@ namespace MP2
         OBJ_NON_ACTION_MAGIC_GARDEN = 95,
         OBJ_NON_ACTION_OBSERVATION_TOWER = 96,
         OBJ_NON_ACTION_FREEMANS_FOUNDRY = 97,
-        OBJ_NON_ACTION_STEAM = 98,
-        OBJ_TREES,
-        OBJ_MOUNTS,
-        OBJ_VOLCANO,
-        OBJ_FLOWERS,
-        OBJ_STONES,
-        OBJ_WATERLAKE,
-        OBJ_MANDRAKE,
-        OBJ_DEADTREE,
-        OBJ_STUMP,
-        OBJ_CRATER,
-        OBJ_CACTUS,
-        OBJ_MOUND,
-        OBJ_DUNE,
-
-        OBJ_LAVAPOOL,
-        OBJ_SHRUB,
-        OBJN_ARENA,
-        OBJN_BARROWMOUNDS,
-        OBJN_MERMAID,
-        OBJN_SIRENS,
-        OBJN_HUTMAGI,
-        OBJN_EYEMAGI,
-        OBJN_TRAVELLERTENT,
-        OBJ_UNUSED_79,
-        OBJ_UNUSED_7A,
-        OBJN_JAIL,
-        OBJN_FIREALTAR,
-        OBJN_AIRALTAR,
-        OBJN_EARTHALTAR,
-        OBJN_WATERALTAR,
+        OBJ_STREAM = 98, // Not in use within the original Editor.
+        OBJ_TREES = 99,
+        OBJ_MOUNTAINS = 100,
+        OBJ_VOLCANO = 101,
+        OBJ_FLOWERS = 102,
+        OBJ_ROCK = 103,
+        OBJ_WATER_LAKE = 104,
+        OBJ_MANDRAKE = 105,
+        OBJ_DEAD_TREE = 106,
+        OBJ_STUMP = 107,
+        OBJ_CRATER = 108,
+        OBJ_CACTUS = 109,
+        OBJ_MOUND = 110,
+        OBJ_DUNE = 111,
+        OBJ_LAVAPOOL = 112,
+        OBJ_SHRUB = 113,
+        OBJ_NON_ACTION_ARENA = 114, // TODO: verify whether it should be a Hole.
+        OBJ_NON_ACTION_BARROW_MOUNDS = 115,
+        OBJ_NON_ACTION_MERMAID = 116,
+        OBJ_NON_ACTION_SIRENS = 117,
+        OBJ_NON_ACTION_HUT_OF_MAGI = 118, // TODO: this object has wrong ID.
+        OBJ_NON_ACTION_EYE_OF_MAGI = 119, // TODO: this object has wrong ID.
+        OBJ_NON_ACTION_TRAVELLER_TENT = 120,
+        OBJ_NON_ACTION_EXPANSION_DWELLING = 121,
+        OBJ_NON_ACTION_EXPANSION_OBJECT = 122,
+        OBJ_NON_ACTION_JAIL = 123,
+        OBJ_NON_ACTION_FIRE_ALTAR = 124,
+        OBJ_NON_ACTION_AIR_ALTAR = 125,
+        OBJ_NON_ACTION_EARTH_ALTAR = 126,
+        OBJ_NON_ACTION_WATER_ALTAR = 127,
 
         OBJ_WATERCHEST,
         OBJ_ALCHEMIST_LAB,
@@ -380,7 +379,6 @@ namespace MP2
         OBJ_ARCHER_HOUSE,
         OBJ_GOBLIN_HUT,
         OBJ_DWARF_COTTAGE,
-
         OBJ_PEASANT_HUT,
         OBJ_UNUSED_17,
         OBJ_UNUSED_18,
@@ -397,7 +395,6 @@ namespace MP2
         OBJ_SAWMILL,
         OBJ_ORACLE,
         OBJ_SHRINE_FIRST_CIRCLE,
-
         OBJ_SHIPWRECK,
         OBJ_UNUSED_33,
         OBJ_DESERT_TENT,
@@ -414,7 +411,6 @@ namespace MP2
         OBJ_RANDOM_ARTIFACT,
         OBJ_RANDOM_RESOURCE,
         OBJ_RANDOM_MONSTER,
-
         OBJ_RANDOM_TOWN,
         OBJ_RANDOM_CASTLE,
         OBJ_UNUSED_50,
@@ -431,7 +427,6 @@ namespace MP2
         OBJ_RUINS,
         OBJ_FORT,
         OBJ_TRADING_POST,
-
         OBJ_ABANDONED_MINE,
         OBJ_THATCHED_HUT, // TODO: it is a peasant hut! Verify whether this object is used anywhere else. Alternative name of this object is Dwarf Cabin.
         OBJ_STANDING_STONES,
@@ -448,7 +443,6 @@ namespace MP2
         OBJ_CITY_OF_DEAD,
         OBJ_EXCAVATION,
         OBJ_SPHINX,
-
         OBJ_WAGON,
         OBJ_TAR_PIT,
         OBJ_ARTESIAN_SPRING,
@@ -465,42 +459,40 @@ namespace MP2
         OBJ_BOTTLE,
         OBJ_MAGIC_WELL,
         OBJ_MAGIC_GARDEN,
-
         OBJ_OBSERVATION_TOWER,
         OBJ_FREEMANS_FOUNDRY,
-        OBJ_STEAM,
-        OBJ_UNUSED_E3,
-        OBJ_UNUSED_E4,
-        OBJ_UNUSED_E5,
-        OBJ_UNUSED_E6,
-        OBJ_UNUSED_E7,
-        OBJ_UNUSED_E8,
+        OBJ_ACTION_UNUSED_226,
+        OBJ_ACTION_UNUSED_227,
+        OBJ_ACTION_UNUSED_228,
+        OBJ_ACTION_UNUSED_229,
+        OBJ_ACTION_UNUSED_230,
+        OBJ_ACTION_UNUSED_231,
+        OBJ_ACTION_UNUSED_232,
         OBJ_REEFS,
-        OBJN_ALCHEMYTOWER,
-        OBJN_STABLES,
+        OBJ_NON_ACTION_ALCHEMIST_TOWER,
+        OBJ_NON_ACTION_STABLES,
         OBJ_MERMAID,
         OBJ_SIRENS,
-        OBJ_HUTMAGI,
-        OBJ_EYEMAGI,
-
-        OBJ_ALCHEMYTOWER,
+        OBJ_HUT_OF_MAGI,
+        OBJ_EYE_OF_MAGI,
+        OBJ_ALCHEMIST_TOWER,
         OBJ_STABLES,
         OBJ_ARENA,
-        OBJ_BARROWMOUNDS,
-        OBJ_RNDARTIFACT1,
-        OBJ_RNDARTIFACT2,
-        OBJ_RNDARTIFACT3,
+        OBJ_BARROW_MOUNDS,
+        OBJ_RANDOM_ARTIFACT_TREASURE,
+        OBJ_RANDOM_ARTIFACT_MINOR,
+        OBJ_RANDOM_ARTIFACT_MAJOR,
         OBJ_BARRIER,
-        OBJ_TRAVELLERTENT,
-        OBJ_UNUSED_F9,
-        OBJ_UNUSED_FA,
+        OBJ_TRAVELLER_TENT,
+        OBJ_EXPANSION_DWELLING,
+        OBJ_EXPANSION_OBJECT,
         OBJ_JAIL,
-        OBJ_FIREALTAR,
-        OBJ_AIRALTAR,
-        OBJ_EARTHALTAR,
-        OBJ_WATERALTAR
+        OBJ_FIRE_ALTAR,
+        OBJ_AIR_ALTAR,
+        OBJ_EARTH_ALTAR,
+        OBJ_WATER_ALTAR
 
-        // IMPORTANT!!! Do not use any of unused entries for new objects. Add new entries just above this line
+        // IMPORTANT!!! Do not use any of unused entries for new objects. Add new entries just above this line.
     };
 
     // Return Icn ID related to this tileset value.

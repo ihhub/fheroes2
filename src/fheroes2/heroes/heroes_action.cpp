@@ -621,14 +621,14 @@ void Heroes::Action( int tileIndex, bool isDestination )
             break;
 
         // loyalty version
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_WATER_ALTAR:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
             ActionToDwellingRecruitMonster( *this, objectType, tileIndex );
             break;
-        case MP2::OBJ_ALCHEMYTOWER:
+        case MP2::OBJ_ALCHEMIST_TOWER:
             ActionToAlchemistsTower( *this );
             break;
         case MP2::OBJ_STABLES:
@@ -646,17 +646,17 @@ void Heroes::Action( int tileIndex, bool isDestination )
         case MP2::OBJ_JAIL:
             ActionToJail( *this, objectType, tileIndex );
             break;
-        case MP2::OBJ_HUTMAGI:
+        case MP2::OBJ_HUT_OF_MAGI:
             ActionToHutMagi( *this, objectType, tileIndex );
             break;
-        case MP2::OBJ_EYEMAGI:
+        case MP2::OBJ_EYE_OF_MAGI:
             ActionToEyeMagi( *this, objectType );
             break;
 
         case MP2::OBJ_BARRIER:
             ActionToBarrier( *this, objectType, tileIndex );
             break;
-        case MP2::OBJ_TRAVELLERTENT:
+        case MP2::OBJ_TRAVELLER_TENT:
             ActionToTravellersTent( *this, objectType, tileIndex );
             break;
 
@@ -2316,31 +2316,31 @@ void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType obj
         msg_full = _( "A group of tattered tents, billowing in the sandy wind, beckons you. Do you wish to have any Nomads join you during your travels?" );
         break;
 
-    case MP2::OBJ_EARTHALTAR:
+    case MP2::OBJ_EARTH_ALTAR:
         msg_void = _( "The pit of mud bubbles for a minute and then lies still." );
         msg_full = _(
             "As you approach the bubbling pit of mud, creatures begin to climb out and position themselves around it. In unison they say: \"Mother Earth would like to offer you a few of her troops. Do you want to recruit Earth Elementals?\"" );
         break;
 
-    case MP2::OBJ_AIRALTAR:
+    case MP2::OBJ_AIR_ALTAR:
         msg_void = _( "You enter the structure of white stone pillars, and find nothing." );
         msg_full = _(
             "White stone pillars support a roof that rises up to the sky. As you enter the structure, the dead air of the outside gives way to a whirling gust that almost pushes you back out. The air current materializes into a barely visible form. The creature asks, in what can only be described as a loud whisper: \"Why have you come? Are you here to call upon the forces of the air?\"" );
         break;
 
-    case MP2::OBJ_FIREALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
         msg_void = _( "No Fire Elementals approach you from the lava pool." );
         msg_full = _(
             "Beneath a structure that serves to hold in heat, Fire Elementals move about in a fiery pool of molten lava. A group of them approach you and offer their services. Would you like to recruit Fire Elementals?" );
         break;
 
-    case MP2::OBJ_WATERALTAR:
+    case MP2::OBJ_WATER_ALTAR:
         msg_void = _( "A face forms in the water for a moment, and then is gone." );
         msg_full = _(
             "Crystalline structures cast shadows over a small reflective pool of water. You peer into the pool, and a face that is not your own peers back. It asks: \"Would you like to call upon the powers of water?\"" );
         break;
 
-    case MP2::OBJ_BARROWMOUNDS:
+    case MP2::OBJ_BARROW_MOUNDS:
         msg_void = _( "This burial site is deathly still." );
         msg_full
             = _( "Restless spirits of long dead warriors seeking their final resting place offer to join you in hopes of finding peace. Do you wish to recruit ghosts?" );
@@ -2970,7 +2970,7 @@ void ActionToAlchemistsTower( Heroes & hero )
     BagArtifacts & bag = hero.GetBagArtifacts();
     const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
 
-    const char * title = MP2::StringObject( MP2::OBJ_ALCHEMYTOWER );
+    const char * title = MP2::StringObject( MP2::OBJ_ALCHEMIST_TOWER );
 
     if ( cursed ) {
         const payment_t payment = PaymentConditions::ForAlchemist();
@@ -3143,7 +3143,7 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
 
     if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
         hero.SetVisited( dst_index, Visit::GLOBAL );
-        MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+        MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
 
         if ( !vec_eyes.empty() ) {
             Interface::Basic & I = Interface::Basic::Get();

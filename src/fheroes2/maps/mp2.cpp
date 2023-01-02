@@ -496,115 +496,112 @@ const char * MP2::StringObject( const MapObjectType objectType, const int count 
     case OBJ_NON_ACTION_FREEMANS_FOUNDRY:
     case OBJ_FREEMANS_FOUNDRY:
         return _( "Freeman's Foundry" );
-    case OBJ_NON_ACTION_STEAM:
-    case OBJ_STEAM:
+    case OBJ_STREAM:
         return "Steam";
+    case OBJ_TREES:
+        return _( "Trees" );
+    case OBJ_MOUNTAINS:
+        return _( "Mountains" );
+    case OBJ_VOLCANO:
+        return _( "Volcano" );
+    case OBJ_FLOWERS:
+        return _( "Flowers" );
+    case OBJ_ROCK:
+        return _( "Rock" );
+    case OBJ_WATER_LAKE:
+        return _( "Water Lake" );
+    case OBJ_MANDRAKE:
+        return _( "Mandrake" );
+    case OBJ_DEAD_TREE:
+        return _( "Dead Tree" );
+    case OBJ_STUMP:
+        return _( "Stump" );
+    case OBJ_CRATER:
+        return _( "Crater" );
+    case OBJ_CACTUS:
+        return _( "Cactus" );
     case OBJ_MOUND:
         return _( "Mound" );
     case OBJ_DUNE:
         return _( "Dune" );
-    case OBJ_STUMP:
-        return _( "Stump" );
-    case OBJ_CACTUS:
-        return _( "Cactus" );
-    case OBJ_TREES:
-        return _( "Trees" );
-    case OBJ_DEADTREE:
-        return _( "Dead Tree" );
-    case OBJ_MOUNTS:
-        return _( "Mountains" );
-    case OBJ_VOLCANO:
-        return _( "Volcano" );
-    case OBJ_STONES:
-        return _( "Rock" );
-    case OBJ_FLOWERS:
-        return _( "Flowers" );
-    case OBJ_WATERLAKE:
-        return _( "Water Lake" );
-    case OBJ_MANDRAKE:
-        return _( "Mandrake" );
-    case OBJ_CRATER:
-        return _( "Crater" );
     case OBJ_LAVAPOOL:
         return _( "Lava Pool" );
     case OBJ_SHRUB:
         return _( "Shrub" );
-    case OBJ_WATERCHEST:
-        return _( "Sea Chest" );
-    case OBJ_RNDARTIFACT1:
-        return _( "Random Artifact - Treasure" );
-    case OBJ_RNDARTIFACT2:
-        return _( "Random Artifact - Minor" );
-    case OBJ_RNDARTIFACT3:
-        return _( "Random Artifact - Major" );
-    case OBJN_JAIL:
-    case OBJ_JAIL:
-        return _( "Jail" );
-    case OBJN_TRAVELLERTENT:
-    case OBJ_TRAVELLERTENT:
-        return _( "Traveller's Tent" );
-    case OBJ_BARRIER:
-        return _( "Barrier" );
-    case OBJN_FIREALTAR:
-    case OBJ_FIREALTAR:
-        return _( "Fire Summoning Altar" );
-    case OBJN_AIRALTAR:
-    case OBJ_AIRALTAR:
-        return _( "Air Summoning Altar" );
-    case OBJN_EARTHALTAR:
-    case OBJ_EARTHALTAR:
-        return _( "Earth Summoning Altar" );
-    case OBJN_WATERALTAR:
-    case OBJ_WATERALTAR:
-        return _( "Water Summoning Altar" );
-    case OBJN_BARROWMOUNDS:
-    case OBJ_BARROWMOUNDS:
-        return _( "Barrow Mounds" );
-    case OBJN_ARENA:
+    case OBJ_NON_ACTION_ARENA:
     case OBJ_ARENA:
         return _( "Arena" );
-    case OBJN_STABLES:
-    case OBJ_STABLES:
-        return _( "Stables" );
-    case OBJN_ALCHEMYTOWER:
-    case OBJ_ALCHEMYTOWER:
-        return _( "Alchemist's Tower" );
-    case OBJN_HUTMAGI:
-    case OBJ_HUTMAGI:
-        return _( "Hut of the Magi" );
-    case OBJN_EYEMAGI:
-    case OBJ_EYEMAGI:
-        return _( "Eye of the Magi" );
-    case OBJN_MERMAID:
+    case OBJ_NON_ACTION_BARROW_MOUNDS:
+    case OBJ_BARROW_MOUNDS:
+        return _( "Barrow Mounds" );
+    case OBJ_NON_ACTION_MERMAID:
     case OBJ_MERMAID:
         return _( "Mermaid" );
-    case OBJN_SIRENS:
+    case OBJ_NON_ACTION_SIRENS:
     case OBJ_SIRENS:
         return _( "Sirens" );
+    case OBJ_NON_ACTION_HUT_OF_MAGI:
+    case OBJ_HUT_OF_MAGI:
+        return _( "Hut of the Magi" );
+    case OBJ_NON_ACTION_EYE_OF_MAGI:
+    case OBJ_EYE_OF_MAGI:
+        return _( "Eye of the Magi" );
+    case OBJ_NON_ACTION_TRAVELLER_TENT:
+    case OBJ_TRAVELLER_TENT:
+        return _( "Traveller's Tent" );
+    case OBJ_NON_ACTION_EXPANSION_DWELLING:
+    case OBJ_EXPANSION_DWELLING:
+        return "Expansion Dwelling";
+    case OBJ_NON_ACTION_EXPANSION_OBJECT:
+    case OBJ_EXPANSION_OBJECT:
+        return "Expansion Object";
+    case OBJ_NON_ACTION_JAIL:
+    case OBJ_JAIL:
+        return _( "Jail" );
+    case OBJ_NON_ACTION_FIRE_ALTAR:
+    case OBJ_FIRE_ALTAR:
+        return _( "Fire Summoning Altar" );
+    case OBJ_NON_ACTION_AIR_ALTAR:
+    case OBJ_AIR_ALTAR:
+        return _( "Air Summoning Altar" );
+    case OBJ_NON_ACTION_EARTH_ALTAR:
+    case OBJ_EARTH_ALTAR:
+        return _( "Earth Summoning Altar" );
+    case OBJ_NON_ACTION_WATER_ALTAR:
+    case OBJ_WATER_ALTAR:
+        return _( "Water Summoning Altar" );
+    case OBJ_WATERCHEST:
+        return _( "Sea Chest" );
+    case OBJ_ACTION_UNUSED_227:
+        return "Not in use object 227";
+    case OBJ_ACTION_UNUSED_228:
+        return "Not in use object 228";
+    case OBJ_ACTION_UNUSED_229:
+        return "Not in use object 229";
+    case OBJ_ACTION_UNUSED_230:
+        return "Not in use object 230";
+    case OBJ_ACTION_UNUSED_231:
+        return "Not in use object 231";
+    case OBJ_ACTION_UNUSED_232:
+        return "Not in use object 232";
     case OBJ_REEFS:
         return _( "Reefs" );
-    case OBJ_UNUSED_79:
-        return "Unknown object type 0x79";
-    case OBJ_UNUSED_7A:
-        return "Unknown object type 0x7A";
-    case OBJ_UNUSED_E3:
-        return "Unknown object type 0xE3";
-    case OBJ_UNUSED_E4:
-        return "Unknown object type 0xE4";
-    case OBJ_UNUSED_E5:
-        return "Unknown object type 0xE5";
-    case OBJ_UNUSED_E6:
-        return "Unknown object type 0xE6";
-    case OBJ_UNUSED_E7:
-        return "Unknown object type 0xE7";
-    case OBJ_UNUSED_E8:
-        return "Unknown object type 0xE8";
-    case OBJ_UNUSED_F9:
-        return "Unknown object type 0xF9";
-    case OBJ_UNUSED_FA:
-        return "Unknown object type 0xFA";
+    case OBJ_NON_ACTION_ALCHEMIST_TOWER:
+    case OBJ_ALCHEMIST_TOWER:
+        return _( "Alchemist's Tower" );
+    case OBJ_NON_ACTION_STABLES:
+    case OBJ_STABLES:
+        return _( "Stables" );
+    case OBJ_RANDOM_ARTIFACT_TREASURE:
+        return _( "Random Artifact - Treasure" );
+    case OBJ_RANDOM_ARTIFACT_MINOR:
+        return _( "Random Artifact - Minor" );
+    case OBJ_RANDOM_ARTIFACT_MAJOR:
+        return _( "Random Artifact - Major" );
+    case OBJ_BARRIER:
+        return _( "Barrier" );
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown object: " << static_cast<int>( objectType ) )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown object type: " << static_cast<int>( objectType ) )
         break;
     }
 
@@ -650,11 +647,11 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     case OBJ_TREE_CITY:
     case OBJ_WAGON_CAMP:
     case OBJ_DESERT_TENT:
-    case OBJ_WATERALTAR:
-    case OBJ_AIRALTAR:
-    case OBJ_FIREALTAR:
-    case OBJ_EARTHALTAR:
-    case OBJ_BARROWMOUNDS:
+    case OBJ_WATER_ALTAR:
+    case OBJ_AIR_ALTAR:
+    case OBJ_FIRE_ALTAR:
+    case OBJ_EARTH_ALTAR:
+    case OBJ_BARROW_MOUNDS:
     // battle and recruit army
     case OBJ_DRAGON_CITY:
     case OBJ_CITY_OF_DEAD:
@@ -746,19 +743,21 @@ bool MP2::isActionObject( const MapObjectType objectType )
     if ( objectType < 128 ) {
         return false;
     }
+
+    // TODO: These edge cases shouldn't exist! All PoL objects present here have incorrect values!
     switch ( objectType ) {
     case OBJ_EVENT:
-    case OBJN_STABLES:
-    case OBJN_ALCHEMYTOWER:
-    case OBJ_STEAM:
-    case OBJ_UNUSED_E3:
-    case OBJ_UNUSED_E4:
-    case OBJ_UNUSED_E5:
-    case OBJ_UNUSED_E6:
-    case OBJ_UNUSED_E7:
-    case OBJ_UNUSED_E8:
-    case OBJ_UNUSED_F9:
-    case OBJ_UNUSED_FA:
+    case OBJ_NON_ACTION_STABLES:
+    case OBJ_NON_ACTION_ALCHEMIST_TOWER:
+    case OBJ_ACTION_UNUSED_226: // This type is not used anywhere
+    case OBJ_ACTION_UNUSED_227: // This type is not used anywhere
+    case OBJ_ACTION_UNUSED_228: // This type is not used anywhere
+    case OBJ_ACTION_UNUSED_229: // This type is not used anywhere
+    case OBJ_ACTION_UNUSED_230: // This type is not used anywhere
+    case OBJ_ACTION_UNUSED_231: // This type is not used anywhere
+    case OBJ_ACTION_UNUSED_232: // This type is not used anywhere
+    case OBJ_EXPANSION_DWELLING:
+    case OBJ_EXPANSION_OBJECT:
     case OBJ_UNUSED_17: // Log Cabin
     case OBJ_UNUSED_18: // Road
     case OBJ_ACTION_COAST: // This type is not used anywhere
@@ -886,33 +885,33 @@ MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType 
         return OBJ_OBSERVATION_TOWER;
     case OBJ_NON_ACTION_FREEMANS_FOUNDRY:
         return OBJ_FREEMANS_FOUNDRY;
-    case OBJN_ARENA:
+    case OBJ_NON_ACTION_ARENA:
         return OBJ_ARENA;
-    case OBJN_BARROWMOUNDS:
-        return OBJ_BARROWMOUNDS;
-    case OBJN_MERMAID:
+    case OBJ_NON_ACTION_BARROW_MOUNDS:
+        return OBJ_BARROW_MOUNDS;
+    case OBJ_NON_ACTION_MERMAID:
         return OBJ_MERMAID;
-    case OBJN_SIRENS:
+    case OBJ_NON_ACTION_SIRENS:
         return OBJ_SIRENS;
-    case OBJN_HUTMAGI:
-        return OBJ_HUTMAGI;
-    case OBJN_EYEMAGI:
-        return OBJ_EYEMAGI;
-    case OBJN_TRAVELLERTENT:
-        return OBJ_TRAVELLERTENT;
-    case OBJN_JAIL:
+    case OBJ_NON_ACTION_HUT_OF_MAGI:
+        return OBJ_HUT_OF_MAGI;
+    case OBJ_NON_ACTION_EYE_OF_MAGI:
+        return OBJ_EYE_OF_MAGI;
+    case OBJ_NON_ACTION_TRAVELLER_TENT:
+        return OBJ_TRAVELLER_TENT;
+    case OBJ_NON_ACTION_JAIL:
         return OBJ_JAIL;
-    case OBJN_FIREALTAR:
-        return OBJ_FIREALTAR;
-    case OBJN_AIRALTAR:
-        return OBJ_AIRALTAR;
-    case OBJN_EARTHALTAR:
-        return OBJ_EARTHALTAR;
-    case OBJN_WATERALTAR:
-        return OBJ_WATERALTAR;
-    case OBJN_ALCHEMYTOWER:
-        return OBJ_ALCHEMYTOWER;
-    case OBJN_STABLES:
+    case OBJ_NON_ACTION_FIRE_ALTAR:
+        return OBJ_FIRE_ALTAR;
+    case OBJ_NON_ACTION_AIR_ALTAR:
+        return OBJ_AIR_ALTAR;
+    case OBJ_NON_ACTION_EARTH_ALTAR:
+        return OBJ_EARTH_ALTAR;
+    case OBJ_NON_ACTION_WATER_ALTAR:
+        return OBJ_WATER_ALTAR;
+    case OBJ_NON_ACTION_ALCHEMIST_TOWER:
+        return OBJ_ALCHEMIST_TOWER;
+    case OBJ_NON_ACTION_STABLES:
         return OBJ_STABLES;
     default:
         break;
@@ -1047,11 +1046,11 @@ bool MP2::isMonsterDwelling( const MapObjectType objectType )
     case OBJ_TREE_CITY:
     case OBJ_WAGON_CAMP:
     case OBJ_DESERT_TENT:
-    case OBJ_WATERALTAR:
-    case OBJ_AIRALTAR:
-    case OBJ_FIREALTAR:
-    case OBJ_EARTHALTAR:
-    case OBJ_BARROWMOUNDS:
+    case OBJ_WATER_ALTAR:
+    case OBJ_AIR_ALTAR:
+    case OBJ_FIRE_ALTAR:
+    case OBJ_EARTH_ALTAR:
+    case OBJ_BARROW_MOUNDS:
     case OBJ_CITY_OF_DEAD:
     case OBJ_TROLL_BRIDGE:
     case OBJ_DRAGON_CITY:
@@ -1182,10 +1181,10 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_LEAN_TO:
     case OBJ_MAGIC_GARDEN:
     case OBJ_WAGON:
-    case OBJ_TRAVELLERTENT:
-    case OBJ_ALCHEMYTOWER:
-    case OBJ_HUTMAGI:
-    case OBJ_EYEMAGI:
+    case OBJ_TRAVELLER_TENT:
+    case OBJ_ALCHEMIST_TOWER:
+    case OBJ_HUT_OF_MAGI:
+    case OBJ_EYE_OF_MAGI:
     case OBJ_MERCENARY_CAMP:
     case OBJ_WINDMILL:
     case OBJ_WATERING_HOLE:
@@ -1203,7 +1202,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_SPHINX:
     case OBJ_TEMPLE:
     case OBJ_FAERIE_RING:
-    case OBJ_BARROWMOUNDS:
+    case OBJ_BARROW_MOUNDS:
     case OBJ_STABLES:
     case OBJ_ABANDONED_MINE:
     case OBJ_MINES:
@@ -1215,10 +1214,10 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_XANADU:
     case OBJ_HALFLING_HOLE:
     case OBJ_WAGON_CAMP:
-    case OBJ_WATERALTAR:
-    case OBJ_AIRALTAR:
-    case OBJ_FIREALTAR:
-    case OBJ_EARTHALTAR:
+    case OBJ_WATER_ALTAR:
+    case OBJ_AIR_ALTAR:
+    case OBJ_FIRE_ALTAR:
+    case OBJ_EARTH_ALTAR:
     case OBJ_ARENA:
     case OBJ_SIRENS:
     case OBJ_MERMAID:

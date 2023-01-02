@@ -93,7 +93,7 @@ int ObjMul2::GetActionObject( uint32_t index )
     case 15:
         return MP2::OBJ_FOUNTAIN;
     case 26:
-        return MP2::OBJ_ALCHEMYTOWER;
+        return MP2::OBJ_ALCHEMIST_TOWER;
     case 54:
         return MP2::OBJ_DRAGON_CITY;
     case 58:

@@ -543,11 +543,11 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_TROLL_BRIDGE:
-        case MP2::OBJ_BARROWMOUNDS:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_WATERALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_WATER_ALTAR:
             name_object = ShowDwellingInfo( tile, kingdom.isVisited( tile ) );
             break;
 
@@ -598,7 +598,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
             name_object = ShowBarrierInfo( tile );
             break;
 
-        case MP2::OBJ_TRAVELLERTENT:
+        case MP2::OBJ_TRAVELLER_TENT:
             name_object = ShowTentInfo( tile, kingdom );
             break;
 

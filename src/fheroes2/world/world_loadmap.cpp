@@ -611,9 +611,9 @@ void World::ProcessNewMap()
         case MP2::OBJ_EVENT:
         case MP2::OBJ_BOAT:
         case MP2::OBJ_RANDOM_ARTIFACT:
-        case MP2::OBJ_RNDARTIFACT1:
-        case MP2::OBJ_RNDARTIFACT2:
-        case MP2::OBJ_RNDARTIFACT3:
+        case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+        case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+        case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
         case MP2::OBJ_RANDOM_RESOURCE:
         case MP2::OBJ_WATERCHEST:
         case MP2::OBJ_TREASURE_CHEST:
@@ -639,7 +639,7 @@ void World::ProcessNewMap()
         case MP2::OBJ_MINES:
         case MP2::OBJ_TREE_OF_KNOWLEDGE:
         case MP2::OBJ_BARRIER:
-        case MP2::OBJ_TRAVELLERTENT:
+        case MP2::OBJ_TRAVELLER_TENT:
         case MP2::OBJ_MONSTER:
         case MP2::OBJ_RANDOM_MONSTER:
         case MP2::OBJ_RANDOM_MONSTER_WEAK:
@@ -667,11 +667,11 @@ void World::ProcessNewMap()
             tile.QuantityUpdate();
             break;
 
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_WATER_ALTAR:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
             tile.QuantityReset();
             tile.QuantityUpdate();
             break;

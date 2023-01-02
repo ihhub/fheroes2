@@ -227,7 +227,7 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
     case MP2::OBJ_ARTESIAN_SPRING:
     case MP2::OBJ_FOUNTAIN:
         return LOOP0012;
-    case MP2::OBJ_WATERLAKE:
+    case MP2::OBJ_WATER_LAKE:
     case MP2::OBJ_WATERING_HOLE:
         return LOOP0013;
     case MP2::OBJ_MINES:

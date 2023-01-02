@@ -78,7 +78,7 @@ int ObjSnow::GetActionObject( uint32_t index )
     case 143:
         return MP2::OBJ_SIGN;
     case 150:
-        return MP2::OBJ_ALCHEMYTOWER;
+        return MP2::OBJ_ALCHEMIST_TOWER;
     case 160:
         return MP2::OBJ_GRAVEYARD;
     case 191:

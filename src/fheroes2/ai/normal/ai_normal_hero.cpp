@@ -279,7 +279,7 @@ namespace
         case MP2::OBJ_BARRIER:
             return kingdom.IsVisitTravelersTent( tile.QuantityColor() );
 
-        case MP2::OBJ_TRAVELLERTENT:
+        case MP2::OBJ_TRAVELLER_TENT:
             return !kingdom.IsVisitTravelersTent( tile.QuantityColor() );
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
@@ -402,11 +402,11 @@ namespace
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_DESERT_TENT:
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_WATER_ALTAR:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
         case MP2::OBJ_GENIE_LAMP: {
             const Troop & troop = tile.QuantityTroop();
             if ( !troop.isValid() ) {
@@ -555,17 +555,17 @@ namespace
 
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
-        case MP2::OBJ_HUTMAGI:
-            return !hero.isObjectTypeVisited( MP2::OBJ_HUTMAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true ).empty();
+        case MP2::OBJ_HUT_OF_MAGI:
+            return !hero.isObjectTypeVisited( MP2::OBJ_HUT_OF_MAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true ).empty();
         case MP2::OBJ_TRADING_POST:
         case MP2::OBJ_SPHINX:
             // TODO: AI doesn't know how it use it properly.
             return false;
         case MP2::OBJ_ORACLE:
-        case MP2::OBJ_EYEMAGI:
+        case MP2::OBJ_EYE_OF_MAGI:
             // No use of this object for AI.
             return false;
-        case MP2::OBJ_ALCHEMYTOWER: {
+        case MP2::OBJ_ALCHEMIST_TOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
             const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
             if ( cursed == 0 ) {
@@ -964,7 +964,7 @@ namespace AI
 
             return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
         }
-        else if ( objectType == MP2::OBJ_TRAVELLERTENT ) {
+        else if ( objectType == MP2::OBJ_TRAVELLER_TENT ) {
             // Most likely it'll lead to opening more land.
             return 1000;
         }
@@ -978,8 +978,8 @@ namespace AI
             // A free hero is always good and it could be very powerful.
             return 3000;
         }
-        else if ( objectType == MP2::OBJ_HUTMAGI ) {
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+        else if ( objectType == MP2::OBJ_HUT_OF_MAGI ) {
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
             const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
@@ -1251,7 +1251,7 @@ namespace AI
 
             return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
         }
-        else if ( objectType == MP2::OBJ_TRAVELLERTENT ) {
+        else if ( objectType == MP2::OBJ_TRAVELLER_TENT ) {
             // Most likely it'll lead to opening more land.
             return 1000;
         }
@@ -1265,8 +1265,8 @@ namespace AI
             // A free hero is always good and it could be very powerful.
             return 3000;
         }
-        else if ( objectType == MP2::OBJ_HUTMAGI ) {
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+        else if ( objectType == MP2::OBJ_HUT_OF_MAGI ) {
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
             const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
@@ -1471,7 +1471,7 @@ namespace AI
 
             return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
         }
-        else if ( objectType == MP2::OBJ_TRAVELLERTENT ) {
+        else if ( objectType == MP2::OBJ_TRAVELLER_TENT ) {
             // Most likely it'll lead to opening more land.
             return 1000;
         }

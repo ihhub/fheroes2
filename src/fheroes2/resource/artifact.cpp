@@ -116,7 +116,7 @@ int Artifact::LoyaltyLevel() const
     case SPADE_NECROMANCY:
     case HEART_FIRE:
     case HEART_ICE:
-        return ART_LEVEL2;
+        return ART_LEVEL_MINOR;
 
     case ARM_MARTYR:
     case HOLY_HAMMER:
@@ -124,7 +124,7 @@ int Artifact::LoyaltyLevel() const
     case STAFF_WIZARDRY:
     case SWORD_BREAKER:
     case CRYSTAL_BALL:
-        return ART_LEVEL3;
+        return ART_LEVEL_MAJOR;
 
     case SPELL_SCROLL:
     case BROACH_SHIELDING:
@@ -176,7 +176,7 @@ int Artifact::Level() const
     case GOLDEN_BOW:
     case TELESCOPE:
     case STATESMAN_QUILL:
-        return ART_LEVEL1;
+        return ART_LEVEL_TREASURE;
 
     case CASTER_BRACELET:
     case MAGE_RING:
@@ -200,7 +200,7 @@ int Artifact::Level() const
     case ENDLESS_CART_ORE:
     case SPIKED_HELM:
     case WHITE_PEARL:
-        return ART_LEVEL2;
+        return ART_LEVEL_MINOR;
 
     case ARCANE_NECKLACE:
     case WITCHES_BROACH:
@@ -223,7 +223,7 @@ int Artifact::Level() const
     case ENDLESS_POUCH_CRYSTAL:
     case SPIKED_SHIELD:
     case BLACK_PEARL:
-        return ART_LEVEL3;
+        return ART_LEVEL_MAJOR;
 
     // no random
     case MAGIC_BOOK:
@@ -456,15 +456,15 @@ Artifact Artifact::FromMP2IndexSprite( uint32_t index )
     else if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
         return Artifact( ( index - 1 ) / 2 );
     else if ( 0xA3 == index )
-        return Artifact( Rand( ART_LEVEL123 ) );
+        return Artifact( Rand( ART_LEVEL_ALL_NORMAL ) );
     else if ( 0xA4 == index )
         return Artifact( Rand( ART_ULTIMATE ) );
     else if ( 0xA7 == index )
-        return Artifact( Rand( ART_LEVEL1 ) );
+        return Artifact( Rand( ART_LEVEL_TREASURE ) );
     else if ( 0xA9 == index )
-        return Artifact( Rand( ART_LEVEL2 ) );
+        return Artifact( Rand( ART_LEVEL_MINOR ) );
     else if ( 0xAB == index )
-        return Rand( ART_LEVEL3 );
+        return Rand( ART_LEVEL_MAJOR );
 
     DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) )
 

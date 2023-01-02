@@ -355,7 +355,7 @@ void Maps::Tiles::QuantitySetColor( int col )
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_BARRIER:
-    case MP2::OBJ_TRAVELLERTENT:
+    case MP2::OBJ_TRAVELLER_TENT:
         quantity1 = col;
         break;
 
@@ -369,7 +369,7 @@ int Maps::Tiles::QuantityColor() const
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_BARRIER:
-    case MP2::OBJ_TRAVELLERTENT:
+    case MP2::OBJ_TRAVELLER_TENT:
         return quantity1;
 
     default:
@@ -420,15 +420,15 @@ Monster Maps::Tiles::QuantityMonster() const
         return Monster( Monster::GENIE );
 
     // loyalty version
-    case MP2::OBJ_WATERALTAR:
+    case MP2::OBJ_WATER_ALTAR:
         return Monster( Monster::WATER_ELEMENT );
-    case MP2::OBJ_AIRALTAR:
+    case MP2::OBJ_AIR_ALTAR:
         return Monster( Monster::AIR_ELEMENT );
-    case MP2::OBJ_FIREALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
         return Monster( Monster::FIRE_ELEMENT );
-    case MP2::OBJ_EARTHALTAR:
+    case MP2::OBJ_EARTH_ALTAR:
         return Monster( Monster::EARTH_ELEMENT );
-    case MP2::OBJ_BARROWMOUNDS:
+    case MP2::OBJ_BARROW_MOUNDS:
         return Monster( Monster::GHOST );
 
     case MP2::OBJ_MONSTER:
@@ -501,7 +501,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         percents.Push( 1, 20 );
 
         if ( percents.Get() )
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL123 ) );
+            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) );
         else
             QuantityReset();
         break;
@@ -520,7 +520,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
         switch ( percents.Get() ) {
         case 1:
-            QuantitySetArtifact( Artifact::Rand( Rand::Get( 1 ) ? Artifact::ART_LEVEL1 : Artifact::ART_LEVEL2 ) );
+            QuantitySetArtifact( Artifact::Rand( Rand::Get( 1 ) ? Artifact::ART_LEVEL_TREASURE : Artifact::ART_LEVEL_MINOR ) );
             break;
         case 2:
             QuantitySetResource( Resource::Rand( false ), Rand::Get( 2, 5 ) );
@@ -682,13 +682,13 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         // variant
         switch ( percents.Get() ) {
         case 1:
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL1 ) );
+            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_TREASURE ) );
             break;
         case 2:
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL2 ) );
+            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_MINOR ) );
             break;
         default:
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL3 ) );
+            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_MAJOR ) );
             break;
         }
         break;
@@ -715,7 +715,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             break;
         case 2:
             gold = 1000;
-            art = Artifact::Rand( Artifact::ART_LEVEL1 );
+            art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
             break;
         }
 
@@ -756,7 +756,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 gold = 1000;
                 break;
             default:
-                art = Artifact::Rand( Artifact::ART_LEVEL1 );
+                art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
                 break;
             }
 
@@ -783,14 +783,14 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         int cond = percents.Get();
 
         QuantitySetVariant( cond );
-        QuantitySetArtifact( cond == 4 ? Artifact::Rand( Artifact::ART_LEVEL123 ) : Artifact::UNKNOWN );
+        QuantitySetArtifact( cond == 4 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN );
         break;
     }
 
     case MP2::OBJ_GRAVEYARD:
         // 1000 gold + art
         QuantitySetResource( Resource::GOLD, 1000 );
-        QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL123 ) );
+        QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) );
         break;
 
     case MP2::OBJ_PYRAMID: {
@@ -804,7 +804,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         // 1000 exp or 1000 exp + 2500 gold or 1000 exp + art or (-2500 or remove hero)
         const int cond = Rand::Get( 1, 4 );
         QuantitySetVariant( cond );
-        QuantitySetArtifact( cond == 3 ? Artifact::Rand( Artifact::ART_LEVEL123 ) : Artifact::UNKNOWN );
+        QuantitySetArtifact( cond == 3 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN );
         break;
     }
 
@@ -826,7 +826,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         QuantitySetColor( Tiles::ColorFromBarrierSprite( objectTileset, objectIndex ) );
         break;
 
-    case MP2::OBJ_TRAVELLERTENT:
+    case MP2::OBJ_TRAVELLER_TENT:
         QuantitySetColor( Tiles::ColorFromTravellerTentSprite( objectTileset, objectIndex ) );
         break;
 
@@ -881,9 +881,9 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_RANDOM_ARTIFACT:
-    case MP2::OBJ_RNDARTIFACT1:
-    case MP2::OBJ_RNDARTIFACT2:
-    case MP2::OBJ_RNDARTIFACT3:
+    case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+    case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+    case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
         // modify rnd artifact sprite
         UpdateRNDArtifactSprite( *this );
         QuantityUpdate();
@@ -935,14 +935,14 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_TROLL_BRIDGE:
     case MP2::OBJ_DRAGON_CITY:
     case MP2::OBJ_CITY_OF_DEAD:
-    case MP2::OBJ_WATERALTAR:
-    case MP2::OBJ_AIRALTAR:
-    case MP2::OBJ_FIREALTAR:
-    case MP2::OBJ_EARTHALTAR:
+    case MP2::OBJ_WATER_ALTAR:
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_EARTH_ALTAR:
         UpdateDwellingPopulation( *this, isFirstLoad );
         break;
 
-    case MP2::OBJ_BARROWMOUNDS:
+    case MP2::OBJ_BARROW_MOUNDS:
         UpdateDwellingPopulation( *this, isFirstLoad );
         break;
 
@@ -1105,11 +1105,11 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
     case MP2::OBJ_RUINS:
         count += isFirstLoad ? Rand::Get( 3, 5 ) : Rand::Get( 1, 3 );
         break;
-    case MP2::OBJ_WATERALTAR:
-    case MP2::OBJ_AIRALTAR:
-    case MP2::OBJ_FIREALTAR:
-    case MP2::OBJ_EARTHALTAR:
-    case MP2::OBJ_BARROWMOUNDS:
+    case MP2::OBJ_WATER_ALTAR:
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_BARROW_MOUNDS:
         count += Rand::Get( 2, 5 );
         break;
 

@@ -485,11 +485,11 @@ namespace AI
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_DESERT_TENT:
         // loyalty ver
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_WATER_ALTAR:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
             AIToDwellingRecruitMonster( hero, objectType, dst_index );
             break;
 
@@ -515,24 +515,24 @@ namespace AI
         case MP2::OBJ_BARRIER:
             AIToBarrier( hero, dst_index );
             break;
-        case MP2::OBJ_TRAVELLERTENT:
+        case MP2::OBJ_TRAVELLER_TENT:
             AIToTravellersTent( hero, dst_index );
             break;
 
         case MP2::OBJ_JAIL:
             AIToJail( hero, dst_index );
             break;
-        case MP2::OBJ_HUTMAGI:
+        case MP2::OBJ_HUT_OF_MAGI:
             AIToHutMagi( hero, objectType, dst_index );
             break;
-        case MP2::OBJ_ALCHEMYTOWER:
+        case MP2::OBJ_ALCHEMIST_TOWER:
             AIToAlchemistTower( hero );
             break;
 
         // AI has no advantage or knowledge to use these objects
         case MP2::OBJ_ORACLE:
         case MP2::OBJ_TRADING_POST:
-        case MP2::OBJ_EYEMAGI:
+        case MP2::OBJ_EYE_OF_MAGI:
         case MP2::OBJ_SPHINX:
             break;
         case MP2::OBJ_SIRENS:
@@ -1907,7 +1907,7 @@ namespace AI
     {
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( tileIndex, Visit::GLOBAL );
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
             for ( const int32_t index : eyeMagiIndexes ) {
                 Maps::ClearFog( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
             }
