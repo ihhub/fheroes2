@@ -264,15 +264,27 @@ namespace Bin_Info
             frameXOffset[MOVE_MAIN].erase( frameXOffset[MOVE_MAIN].begin() );
         }
 
-        if ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) {
-            if ( frameXOffset[MOVE_START].size() == 2 && frameXOffset[MOVE_STOP].size() == 1 ) { // the original swordsman info
-                frameXOffset[MOVE_START][0] = 0;
-                frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
-                for ( size_t id = 0; id < frameXOffset[MOVE_MAIN].size(); ++id )
-                    frameXOffset[MOVE_MAIN][id] += CELLW / 4;
-
-                frameXOffset[MOVE_STOP][0] = CELLW;
+        // Some creatures needs their 'x' offset in moving animations to be bigger by 3px to avoid sprite shift in well and during diagonal movement.
+        if ( monsterID == Monster::OGRE || monsterID == Monster::OGRE_LORD || monsterID == Monster::GOBLIN || monsterID == Monster::ORC || monsterID == Monster::ORC_CHIEF
+             || monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL || monsterID == Monster::UNICORN || monsterID == Monster::BOAR
+             || monsterID == Monster::CENTAUR || monsterID == Monster::DWARF || monsterID == Monster::BATTLE_DWARF || monsterID == Monster::ROGUE ) {
+            for ( const int animType : { MOVE_START, MOVE_TILE_START, MOVE_MAIN, MOVE_TILE_END, MOVE_STOP } ) {
+                for ( int & xOffset : frameXOffset[animType] ) {
+                    xOffset += 3;
+                }
             }
+        }
+
+        // X offset fix for Swordsman.
+        if ( ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) && frameXOffset[MOVE_START].size() == 2
+             && frameXOffset[MOVE_STOP].size() == 1 ) {
+            frameXOffset[MOVE_START][0] = 0;
+            frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
+            for ( size_t id = 0; id < frameXOffset[MOVE_MAIN].size(); ++id ) {
+                frameXOffset[MOVE_MAIN][id] += CELLW / 4 + 3;
+            }
+
+            frameXOffset[MOVE_STOP][0] = CELLW;
         }
     }
 
