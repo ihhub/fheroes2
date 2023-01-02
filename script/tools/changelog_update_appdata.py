@@ -24,10 +24,10 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    
+
     changelog = open(args.changelog_file, encoding='utf-8').read()
     appdata = open(args.appdata_file, encoding='utf-8').read()
-    
+
     tpl = '''
     <release date="{}" version="v{}">
       <url>https://github.com/ihhub/fheroes2/releases/tag/{}</url>
@@ -39,7 +39,7 @@ def main():
       </description>
     </release>\n'''.lstrip("\r\n")
     tmp = ''
-    
+
     regex = r"version ([\d.]+) \(([\w ]+)\)\n(.*?)[\n]{2}"
     for match in re.findall(regex, changelog, re.MULTILINE | re.DOTALL):
         tmp += tpl.format(
@@ -50,12 +50,12 @@ def main():
             match[1],
             re.sub(r'- (.*)', r'          <li>\1</li>', escape(match[2]))
         )
-        
+
     new_appdata = re.sub(r'<releases>(.*?)</releases>', r'<releases>\n' + tmp + '  </releases>',
         appdata,
         flags=re.MULTILINE | re.DOTALL
     )
-    
+
     open(args.appdata_file, 'w', encoding='utf-8').write(new_appdata)
 
 if __name__ == "__main__":
