@@ -363,7 +363,7 @@ namespace MP2
         OBJ_NON_ACTION_EARTH_ALTAR = 126,
         OBJ_NON_ACTION_WATER_ALTAR = 127,
 
-        OBJ_WATERCHEST,
+        OBJ_WATERCHEST, // TODO: this is wrong ID for this object.
         OBJ_ALCHEMIST_LAB,
         OBJ_SIGN,
         OBJ_BUOY,
