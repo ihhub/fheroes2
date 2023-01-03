@@ -62,6 +62,7 @@
         <activity
             android:name=".ToolsetActivity"
             android:exported="true"
+            android:icon="@mipmap/ic_launcher_toolset"
             android:label="@string/activity_toolset_label"
             android:launchMode="singleInstance"
             android:taskAffinity="org.fheroes2.ToolsetActivityTask"
