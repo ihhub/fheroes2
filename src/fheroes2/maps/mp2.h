@@ -236,62 +236,62 @@ namespace MP2
     {
         OBJ_NONE = 0, // No object exist.
         OBJ_NON_ACTION_ALCHEMIST_LAB = 1,
-        OBJ_NON_ACTION_SIGN = 2,
-        OBJ_NON_ACTION_BUOY = 3,
-        OBJ_NON_ACTION_SKELETON = 4,
+        OBJ_NON_ACTION_SIGN = 2, // Never set in maps.
+        OBJ_NON_ACTION_BUOY = 3, // Never set in maps.
+        OBJ_NON_ACTION_SKELETON = 4, // Never set in maps.
         OBJ_NON_ACTION_DAEMON_CAVE = 5,
-        OBJ_NON_ACTION_TREASURE_CHEST = 6,
+        OBJ_NON_ACTION_TREASURE_CHEST = 6, // Never set in maps.
         OBJ_NON_ACTION_FAERIE_RING = 7,
-        OBJ_NON_ACTION_CAMPFIRE = 8,
-        OBJ_NON_ACTION_FOUNTAIN = 9,
+        OBJ_NON_ACTION_CAMPFIRE = 8, // Never set in maps.
+        OBJ_NON_ACTION_FOUNTAIN = 9, // Never set in maps.
         OBJ_NON_ACTION_GAZEBO = 10,
-        OBJ_NON_ACTION_GENIE_LAMP = 11,
+        OBJ_NON_ACTION_GENIE_LAMP = 11, // Never set in maps.
         OBJ_NON_ACTION_GRAVEYARD = 12,
         OBJ_NON_ACTION_ARCHER_HOUSE = 13,
-        OBJ_NON_ACTION_GOBLIN_HUT = 14,
+        OBJ_NON_ACTION_GOBLIN_HUT = 14, // Never set in maps.
         OBJ_NON_ACTION_DWARF_COTTAGE = 15,
         OBJ_NON_ACTION_PEASANT_HUT = 16,
-        OBJ_NON_ACTION_UNUSED_17 = 17, // Based on given information this was a monster dwelling called Log Cabin.
-        OBJ_NON_ACTION_UNUSED_18 = 18, // Based on given information this was Road.
-        OBJ_NON_ACTION_EVENT = 19,
+        OBJ_NON_ACTION_UNUSED_17 = 17, // Never set in maps. Based on given information this was a monster dwelling called Log Cabin.
+        OBJ_NON_ACTION_UNUSED_18 = 18, // Never set in maps. Based on given information this was Road.
+        OBJ_NON_ACTION_EVENT = 19, // Never set in maps.
         OBJ_NON_ACTION_DRAGON_CITY = 20,
         OBJ_NON_ACTION_LIGHTHOUSE = 21,
         OBJ_NON_ACTION_WATER_WHEEL = 22,
         OBJ_NON_ACTION_MINES = 23,
-        OBJ_NON_ACTION_MONSTER = 24,
+        OBJ_NON_ACTION_MONSTER = 24, // Never set in maps.
         OBJ_NON_ACTION_OBELISK = 25,
         OBJ_NON_ACTION_OASIS = 26,
-        OBJ_NON_ACTION_RESOURCE = 27,
+        OBJ_NON_ACTION_RESOURCE = 27, // Never set in maps.
         OBJ_COAST = 28, // This is the only object in non-action section which is considered as an action object (for some cases).
         OBJ_NON_ACTION_SAWMILL = 29,
         OBJ_NON_ACTION_ORACLE = 30,
-        OBJ_NON_ACTION_SHRINE_FIRST_CIRCLE = 31,
+        OBJ_NON_ACTION_SHRINE_FIRST_CIRCLE = 31, // Never set in maps.
         OBJ_NON_ACTION_SHIPWRECK = 32,
-        OBJ_NON_ACTION_UNUSED_33 = 33, // Based on given information this was a Sea Chest object.
+        OBJ_NON_ACTION_UNUSED_33 = 33, // Never set in maps. Based on given information this was a Sea Chest object.
         OBJ_NON_ACTION_DESERT_TENT = 34,
         OBJ_NON_ACTION_CASTLE = 35,
         OBJ_NON_ACTION_STONE_LITHS = 36,
         OBJ_NON_ACTION_WAGON_CAMP = 37,
-        OBJ_NON_ACTION_UNUSED_38 = 38, // Based on given information this was a Well object.
-        OBJ_NON_ACTION_WHIRLPOOL = 39,
+        OBJ_NON_ACTION_UNUSED_38 = 38, // Never set in maps. Based on given information this was a Well object.
+        OBJ_NON_ACTION_WHIRLPOOL = 39, // Never set in maps.
         OBJ_NON_ACTION_WINDMILL = 40,
-        OBJ_NON_ACTION_ARTIFACT = 41,
-        OBJ_NON_ACTION_UNUSED_42 = 42, // Based on given information this was a Hero.
-        OBJ_NON_ACTION_BOAT = 43,
-        OBJ_NON_ACTION_RANDOM_ULTIMATE_ARTIFACT = 44,
-        OBJ_NON_ACTION_RANDOM_ARTIFACT = 45,
-        OBJ_NON_ACTION_RANDOM_RESOURCE = 46,
-        OBJ_NON_ACTION_RANDOM_MONSTER = 47,
+        OBJ_NON_ACTION_ARTIFACT = 41, // Never set in maps.
+        OBJ_NON_ACTION_UNUSED_42 = 42, // Never set in maps. Based on given information this was a Hero.
+        OBJ_NON_ACTION_BOAT = 43, // Never set in maps.
+        OBJ_NON_ACTION_RANDOM_ULTIMATE_ARTIFACT = 44, // Never set in maps.
+        OBJ_NON_ACTION_RANDOM_ARTIFACT = 45, // Never set in maps.
+        OBJ_NON_ACTION_RANDOM_RESOURCE = 46, // Never set in maps.
+        OBJ_NON_ACTION_RANDOM_MONSTER = 47, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_TOWN = 48,
         OBJ_NON_ACTION_RANDOM_CASTLE = 49,
-        OBJ_NON_ACTION_UNUSED_50 = 50, // Not in use at all.
-        OBJ_NON_ACTION_RANDOM_MONSTER_WEAK = 51,
-        OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM = 52,
-        OBJ_NON_ACTION_RANDOM_MONSTER_STRONG = 53,
-        OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG = 54,
-        OBJ_NON_ACTION_HEROES = 55, // TODO: this suppose to be a random hero.
+        OBJ_NON_ACTION_UNUSED_50 = 50, // Never set in maps. Not in use at all.
+        OBJ_NON_ACTION_RANDOM_MONSTER_WEAK = 51, // Never set in maps.
+        OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM = 52, // Never set in maps.
+        OBJ_NON_ACTION_RANDOM_MONSTER_STRONG = 53, // Never set in maps.
+        OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG = 54, // Never set in maps.
+        OBJ_NON_ACTION_HEROES = 55, // Never set in maps. TODO: this suppose to be a random hero.
         OBJ_NON_ACTION_NOTHING_SPECIAL = 56,
-        OBJ_NON_ACTION_UNUSED_57 = 57, // Not in use at all.
+        OBJ_NON_ACTION_UNUSED_57 = 57, // TODO: it is used in some maps. Verify what it is.
         OBJ_NON_ACTION_WATCH_TOWER = 58,
         OBJ_NON_ACTION_TREE_HOUSE = 59,
         OBJ_NON_ACTION_TREE_CITY = 60,
@@ -299,22 +299,22 @@ namespace MP2
         OBJ_NON_ACTION_FORT = 62,
         OBJ_NON_ACTION_TRADING_POST = 63,
         OBJ_NON_ACTION_ABANDONED_MINE = 64,
-        OBJ_NON_ACTION_THATCHED_HUT = 65, // TODO: it is a peasant hut! Verify whether this object is used anywhere else. Alternative name of this object is Dwarf Cabin.
-        OBJ_NON_ACTION_STANDING_STONES = 66,
-        OBJ_NON_ACTION_IDOL = 67,
+        OBJ_NON_ACTION_THATCHED_HUT = 65, // Never set in maps. TODO: it is a peasant hut! It is used at least in one map. Alternative name is Dwarf Cabin.
+        OBJ_NON_ACTION_STANDING_STONES = 66, // Never set in maps.
+        OBJ_NON_ACTION_IDOL = 67, // Never set in maps.
         OBJ_NON_ACTION_TREE_OF_KNOWLEDGE = 68,
         OBJ_NON_ACTION_WITCH_DOCTORS_HUT = 69,
         OBJ_NON_ACTION_TEMPLE = 70,
         OBJ_NON_ACTION_HILL_FORT = 71,
         OBJ_NON_ACTION_HALFLING_HOLE = 72,
         OBJ_NON_ACTION_MERCENARY_CAMP = 73,
-        OBJ_NON_ACTION_SHRINE_SECOND_CIRCLE = 74,
-        OBJ_NON_ACTION_SHRINE_THIRD_CIRCLE = 75,
+        OBJ_NON_ACTION_SHRINE_SECOND_CIRCLE = 74, // Never set in maps.
+        OBJ_NON_ACTION_SHRINE_THIRD_CIRCLE = 75, // Never set in maps.
         OBJ_NON_ACTION_PYRAMID = 76,
         OBJ_NON_ACTION_CITY_OF_DEAD = 77,
         OBJ_NON_ACTION_EXCAVATION = 78,
         OBJ_NON_ACTION_SPHINX = 79,
-        OBJ_NON_ACTION_WAGON = 80,
+        OBJ_NON_ACTION_WAGON = 80, // Never set in maps.
         OBJ_NON_ACTION_TAR_PIT = 81,
         OBJ_NON_ACTION_ARTESIAN_SPRING = 82,
         OBJ_NON_ACTION_TROLL_BRIDGE = 83,
@@ -322,17 +322,17 @@ namespace MP2
         OBJ_NON_ACTION_WITCHS_HUT = 85,
         OBJ_NON_ACTION_XANADU = 86,
         OBJ_NON_ACTION_CAVE = 87,
-        OBJ_NON_ACTION_LEAN_TO = 88,
+        OBJ_NON_ACTION_LEAN_TO = 88, // Never set in maps.
         OBJ_NON_ACTION_MAGELLANS_MAPS = 89,
-        OBJ_NON_ACTION_FLOTSAM = 90,
+        OBJ_NON_ACTION_FLOTSAM = 90, // Never set in maps.
         OBJ_NON_ACTION_DERELICT_SHIP = 91,
-        OBJ_NON_ACTION_SHIPWRECK_SURVIVOR = 92,
-        OBJ_NON_ACTION_BOTTLE = 93,
+        OBJ_NON_ACTION_SHIPWRECK_SURVIVOR = 92, // Never set in maps.
+        OBJ_NON_ACTION_BOTTLE = 93, // Never set in maps.
         OBJ_NON_ACTION_MAGIC_WELL = 94,
-        OBJ_NON_ACTION_MAGIC_GARDEN = 95,
+        OBJ_NON_ACTION_MAGIC_GARDEN = 95, // Never set in maps.
         OBJ_NON_ACTION_OBSERVATION_TOWER = 96,
         OBJ_NON_ACTION_FREEMANS_FOUNDRY = 97,
-        OBJ_STREAM = 98, // Not in use within the original Editor.
+        OBJ_STREAM = 98, // Never set in maps. Not in use within the original Editor.
         OBJ_TREES = 99,
         OBJ_MOUNTAINS = 100,
         OBJ_VOLCANO = 101,
@@ -348,22 +348,22 @@ namespace MP2
         OBJ_DUNE = 111,
         OBJ_LAVAPOOL = 112,
         OBJ_SHRUB = 113,
-        OBJ_NON_ACTION_ARENA = 114, // TODO: verify whether it should be a Hole.
-        OBJ_NON_ACTION_BARROW_MOUNDS = 115,
-        OBJ_NON_ACTION_MERMAID = 116,
-        OBJ_NON_ACTION_SIRENS = 117,
-        OBJ_NON_ACTION_HUT_OF_MAGI = 118, // TODO: this object has wrong ID.
-        OBJ_NON_ACTION_EYE_OF_MAGI = 119, // TODO: this object has wrong ID.
+        OBJ_NON_ACTION_ARENA = 114, // Never set in maps. TODO: check the correct ID for this object.
+        OBJ_NON_ACTION_BARROW_MOUNDS = 115, // Never set in maps. TODO: check the correct ID for this object.
+        OBJ_NON_ACTION_MERMAID = 116, // Never set in maps. TODO: check the correct ID for this object.
+        OBJ_NON_ACTION_SIRENS = 117, // Never set in maps. TODO: check the correct ID for this object.
+        OBJ_NON_ACTION_HUT_OF_MAGI = 118, // Never set in maps. TODO: check the correct ID for this object.
+        OBJ_NON_ACTION_EYE_OF_MAGI = 119, // Never set in maps. TODO: check the correct ID for this object.
         OBJ_NON_ACTION_TRAVELLER_TENT = 120,
         OBJ_NON_ACTION_EXPANSION_DWELLING = 121,
         OBJ_NON_ACTION_EXPANSION_OBJECT = 122,
         OBJ_NON_ACTION_JAIL = 123,
-        OBJ_NON_ACTION_FIRE_ALTAR = 124,
-        OBJ_NON_ACTION_AIR_ALTAR = 125,
-        OBJ_NON_ACTION_EARTH_ALTAR = 126,
-        OBJ_NON_ACTION_WATER_ALTAR = 127,
+        OBJ_NON_ACTION_FIRE_ALTAR = 124, // Never set in maps. TODO: check the correct ID for this object.
+        OBJ_NON_ACTION_AIR_ALTAR = 125, // Never set in maps. TODO: check the correct ID for this object.
+        OBJ_NON_ACTION_EARTH_ALTAR = 126, // Never set in maps. TODO: check the correct ID for this object.
+        OBJ_NON_ACTION_WATER_ALTAR = 127, // Never set in maps. TODO: check the correct ID for this object.
 
-        OBJ_WATERCHEST, // TODO: this is wrong ID for this object.
+        OBJ_WATERCHEST, // Never set in maps. TODO: this is wrong ID for this object.
         OBJ_ALCHEMIST_LAB,
         OBJ_SIGN,
         OBJ_BUOY,
@@ -380,8 +380,8 @@ namespace MP2
         OBJ_GOBLIN_HUT,
         OBJ_DWARF_COTTAGE,
         OBJ_PEASANT_HUT,
-        OBJ_UNUSED_17,
-        OBJ_UNUSED_18,
+        OBJ_UNUSED_17, // Never set in maps.
+        OBJ_UNUSED_18, // Never set in maps.
         OBJ_EVENT,
         OBJ_DRAGON_CITY,
         OBJ_LIGHTHOUSE,
@@ -391,21 +391,21 @@ namespace MP2
         OBJ_OBELISK,
         OBJ_OASIS,
         OBJ_RESOURCE,
-        OBJ_ACTION_COAST,
+        OBJ_ACTION_COAST, // Never set in maps as Coast is not an action object.
         OBJ_SAWMILL,
         OBJ_ORACLE,
         OBJ_SHRINE_FIRST_CIRCLE,
         OBJ_SHIPWRECK,
-        OBJ_UNUSED_33,
+        OBJ_UNUSED_33, // Never set in maps.
         OBJ_DESERT_TENT,
         OBJ_CASTLE,
         OBJ_STONE_LITHS,
         OBJ_WAGON_CAMP,
-        OBJ_UNUSED_38,
+        OBJ_UNUSED_38, // Never set in maps.
         OBJ_WHIRLPOOL,
         OBJ_WINDMILL,
         OBJ_ARTIFACT,
-        OBJ_UNUSED_42,
+        OBJ_UNUSED_42, // Never set in maps.
         OBJ_BOAT,
         OBJ_RANDOM_ULTIMATE_ARTIFACT,
         OBJ_RANDOM_ARTIFACT,
@@ -413,14 +413,14 @@ namespace MP2
         OBJ_RANDOM_MONSTER,
         OBJ_RANDOM_TOWN,
         OBJ_RANDOM_CASTLE,
-        OBJ_UNUSED_50,
+        OBJ_UNUSED_50, // Never set in maps.
         OBJ_RANDOM_MONSTER_WEAK,
         OBJ_RANDOM_MONSTER_MEDIUM,
         OBJ_RANDOM_MONSTER_STRONG,
         OBJ_RANDOM_MONSTER_VERY_STRONG,
         OBJ_HEROES, // TODO: this suppose to be a random hero.
-        OBJ_NOTHING_SPECIAL,
-        OBJ_UNUSED_57,
+        OBJ_NOTHING_SPECIAL, // Never set in maps.
+        OBJ_UNUSED_57, // Never set in maps.
         OBJ_WATCH_TOWER,
         OBJ_TREE_HOUSE,
         OBJ_TREE_CITY,
@@ -428,7 +428,7 @@ namespace MP2
         OBJ_FORT,
         OBJ_TRADING_POST,
         OBJ_ABANDONED_MINE,
-        OBJ_THATCHED_HUT, // TODO: it is a peasant hut! Verify whether this object is used anywhere else. Alternative name of this object is Dwarf Cabin.
+        OBJ_THATCHED_HUT, // TODO: it is a peasant hut! It is used at least in one map. Alternative name is Dwarf Cabin.
         OBJ_STANDING_STONES,
         OBJ_IDOL,
         OBJ_TREE_OF_KNOWLEDGE,
@@ -444,7 +444,7 @@ namespace MP2
         OBJ_EXCAVATION,
         OBJ_SPHINX,
         OBJ_WAGON,
-        OBJ_TAR_PIT,
+        OBJ_TAR_PIT, // Never set in maps. This is not an action object.
         OBJ_ARTESIAN_SPRING,
         OBJ_TROLL_BRIDGE,
         OBJ_WATERING_HOLE,
@@ -461,24 +461,24 @@ namespace MP2
         OBJ_MAGIC_GARDEN,
         OBJ_OBSERVATION_TOWER,
         OBJ_FREEMANS_FOUNDRY,
-        OBJ_ACTION_UNUSED_226,
-        OBJ_ACTION_UNUSED_227,
-        OBJ_ACTION_UNUSED_228,
-        OBJ_ACTION_UNUSED_229,
-        OBJ_ACTION_UNUSED_230,
-        OBJ_ACTION_UNUSED_231,
-        OBJ_ACTION_UNUSED_232,
-        OBJ_REEFS,
-        OBJ_NON_ACTION_ALCHEMIST_TOWER,
-        OBJ_NON_ACTION_STABLES,
-        OBJ_MERMAID,
-        OBJ_SIRENS,
-        OBJ_HUT_OF_MAGI,
-        OBJ_EYE_OF_MAGI,
-        OBJ_ALCHEMIST_TOWER,
-        OBJ_STABLES,
-        OBJ_ARENA,
-        OBJ_BARROW_MOUNDS,
+        OBJ_ACTION_UNUSED_226, // Never set in maps.
+        OBJ_ACTION_UNUSED_227, // Never set in maps.
+        OBJ_ACTION_UNUSED_228, // Never set in maps.
+        OBJ_ACTION_UNUSED_229, // Never set in maps.
+        OBJ_ACTION_UNUSED_230, // Never set in maps.
+        OBJ_ACTION_UNUSED_231, // Never set in maps.
+        OBJ_ACTION_UNUSED_232, // Never set in maps.
+        OBJ_REEFS, // Never set in maps.
+        OBJ_NON_ACTION_ALCHEMIST_TOWER, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_NON_ACTION_STABLES, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_MERMAID, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_SIRENS, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_HUT_OF_MAGI, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_EYE_OF_MAGI, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_ALCHEMIST_TOWER, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_STABLES, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_ARENA, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_BARROW_MOUNDS, // Never set in maps. TODO: verify the correct ID for this object.
         OBJ_RANDOM_ARTIFACT_TREASURE,
         OBJ_RANDOM_ARTIFACT_MINOR,
         OBJ_RANDOM_ARTIFACT_MAJOR,
@@ -487,10 +487,10 @@ namespace MP2
         OBJ_EXPANSION_DWELLING,
         OBJ_EXPANSION_OBJECT,
         OBJ_JAIL,
-        OBJ_FIRE_ALTAR,
-        OBJ_AIR_ALTAR,
-        OBJ_EARTH_ALTAR,
-        OBJ_WATER_ALTAR
+        OBJ_FIRE_ALTAR, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_AIR_ALTAR, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_EARTH_ALTAR, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_WATER_ALTAR // Never set in maps. TODO: verify the correct ID for this object.
 
         // IMPORTANT!!! Do not use any of unused entries for new objects. Add new entries just above this line.
     };
