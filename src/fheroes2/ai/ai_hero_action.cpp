@@ -1436,7 +1436,7 @@ namespace AI
         tile.MonsterSetCount( availableTroopCount - recruitTroopCount );
         kingdom.OddFundsResource( troopToHire.GetTotalCost() );
 
-        // Remove ancient lamp sprite if no genies are available to hire.
+        // Remove genie lamp sprite if no genies are available to hire.
         if ( MP2::OBJ_GENIE_LAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
             tile.RemoveObjectSprite();
             tile.setAsEmpty();

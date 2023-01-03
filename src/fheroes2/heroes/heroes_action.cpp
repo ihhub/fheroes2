@@ -167,7 +167,7 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
 void ActionToGoodMoraleObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
-void ActionToAncientLamp( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
+void ActionToGenieLamp( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToTeleports( Heroes & hero, int32_t index_from );
 void ActionToWhirlpools( Heroes & hero, int32_t index_from );
 void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
@@ -453,7 +453,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToTreasureChest( *this, objectType, tileIndex );
             break;
         case MP2::OBJ_GENIE_LAMP:
-            ActionToAncientLamp( *this, objectType, tileIndex );
+            ActionToGenieLamp( *this, objectType, tileIndex );
             break;
         case MP2::OBJ_FLOTSAM:
             ActionToFlotSam( *this, objectType, tileIndex );
@@ -2045,7 +2045,7 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
 
-void ActionToAncientLamp( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+void ActionToGenieLamp( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const Troop & troop = tile.QuantityTroop();

@@ -82,7 +82,7 @@ namespace
 
         const MP2::MapObjectType objectType = tile.GetObject( false );
 
-        // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Stones.
+        // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Rock.
         if ( objectType == MP2::OBJ_ROCK && tile.containsSprite( 200, 183 ) ) {
             return M82::LOOP0019;
         }

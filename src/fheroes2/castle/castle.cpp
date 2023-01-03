@@ -143,12 +143,12 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     //     0000 0001 0000 0000 : Left Turret
     //     0000 0010 0000 0000 : Right Turret
     //     0000 0100 0000 0000 : Marketplace
-    //     0000 1000 0000 0000 : First monster level growth building.
+    //     0000 1000 0000 0000 : First monster level growth building
     //     0001 0000 0000 0000 : Moat
-    //     0010 0000 0000 0000 : Special building.
+    //     0010 0000 0000 0000 : Special building
     //
     // - uint16_t (2 bytes)
-    //     Bitfield containing information about build dwellings in the town / castle.
+    //     Bitfield containing information about built dwellings in the town / castle.
     //     0000 0000 0000 1000 : level 1 dwelling
     //     0000 0000 0001 0000 : level 2 dwelling
     //     0000 0000 0010 0000 : level 3 dwelling
