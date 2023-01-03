@@ -1686,16 +1686,17 @@ fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fhe
             // Get the horizontal and vertical movement projections.
             const int32_t moveX = _movingPos.x - unitPosition.x;
             const int32_t moveY = _movingPos.y - unitPosition.y;
-            const double movementProgress = _movingUnit->animation.movementProgress();
 
             // If it is a slowed flying creature, then it should smoothly move horizontally.
             if ( _movingUnit->isAbilityPresent( fheroes2::MonsterAbilityType::FLYING ) ) {
+                const double movementProgress = _movingUnit->animation.movementProgress();
                 offset.x += static_cast<int32_t>( movementProgress * moveX );
+                offset.y += static_cast<int32_t>( movementProgress * moveY );
             }
             // If the creature has to move diagonally.
             else if ( moveY != 0 ) {
-                offset.y += static_cast<int32_t>( movementProgress * moveY );
                 offset.x -= Sign( moveX ) * ( _movingUnit->animation.getCurrentFrameXOffset() ) / 2;
+                offset.y += static_cast<int32_t>( _movingUnit->animation.movementProgress() * moveY );
             }
         }
     }
