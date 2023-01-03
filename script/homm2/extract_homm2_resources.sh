@@ -21,7 +21,7 @@ function echo_stage {
 }
 
 function verify_homm2_path {
-    [[ ( -f "$1/HEROES2.EXE" || -f "$1/HEROES2W.EXE" ) && -d "$1/DATA" && -d "$1/MAPS" ]]
+    [[ -f "$1/DATA/HEROES2.AGG" && -d "$1/MAPS" ]]
 }
 
 echo_green "This script will extract and copy game resources from the original distribution of Heroes of Might and Magic II"
