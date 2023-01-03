@@ -69,11 +69,11 @@ if [[ -f "$HOMM2_PATH" ]]; then
 
     innoextract -e -s -d "$EXTRACT_DIR" -- "$HOMM2_PATH"
 
-    for SUBDIR in . app; do
-        if verify_homm2_path "$EXTRACT_DIR/$SUBDIR"; then
+    for ITEM in "$EXTRACT_DIR" "$EXTRACT_DIR"/*; do
+        if verify_homm2_path "$ITEM"; then
             echo_green "HoMM2 installer package: $HOMM2_PATH"
 
-            HOMM2_PATH="$EXTRACT_DIR/$SUBDIR"
+            HOMM2_PATH="$ITEM"
 
             break
         fi
