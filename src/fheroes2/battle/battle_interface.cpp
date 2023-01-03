@@ -5003,7 +5003,6 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
 
     // The last frame is the full power of spell effect. It will be used to produce other frames.
     spellEffect.push_back( fheroes2::CreateHolyShoutEffect( battleFieldCopy, 4, strength ) );
-    // const fheroes2::Image blurred = fheroes2::CreateHolyShoutEffect( battleFieldCopy, 4 , strength );
 
     const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / maxFrame;
     uint32_t frame = 0;
