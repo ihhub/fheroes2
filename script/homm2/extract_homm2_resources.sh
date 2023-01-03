@@ -54,7 +54,7 @@ echo_stage "[2/3] determining the HoMM2 directory or installer package"
 if [[ "$#" -gt "0" ]]; then
     HOMM2_PATH="$1"
 else
-    read -e -p "Please enter the full path to the HoMM2 directory or installer package (e.g. /home/user/GOG Games/HoMM 2 Gold): " HOMM2_PATH
+    read -e -p "Please enter the full path to the HoMM2 directory or installer package (e.g. /home/user/homm2 or /tmp/installer.exe): " HOMM2_PATH
 fi
 
 if [[ -f "$HOMM2_PATH" ]]; then

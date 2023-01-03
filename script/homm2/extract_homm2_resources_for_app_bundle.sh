@@ -11,7 +11,7 @@ fi
 if [[ "$#" == "1" ]]; then
     HOMM2_PATH="$1"
 else
-    read "HOMM2_PATH?Please enter the full path to the HoMM2 directory or installer package (e.g. /Users/user/GOG Games/HoMM 2 Gold): "
+    read "HOMM2_PATH?Please enter the full path to the HoMM2 directory or installer package (e.g. /home/user/homm2 or /tmp/installer.exe): "
 fi
 
 zsh "$(dirname "${(%):-%x}")/extract_homm2_resources.sh" "$HOMM2_PATH" "${HOME}/Library/Application Support/fheroes2"
