@@ -468,7 +468,7 @@ namespace MP2
         OBJ_ACTION_UNUSED_230, // Never set in maps.
         OBJ_ACTION_UNUSED_231, // Never set in maps.
         OBJ_ACTION_UNUSED_232, // Never set in maps.
-        OBJ_REEFS, // Never set in maps.
+        OBJ_REEFS, // Never set in maps. TODO: verify the correct ID for this object as it should not exist in action objects section.
         OBJ_NON_ACTION_ALCHEMIST_TOWER, // Never set in maps. TODO: verify the correct ID for this object.
         OBJ_NON_ACTION_STABLES, // Never set in maps. TODO: verify the correct ID for this object.
         OBJ_MERMAID, // Never set in maps. TODO: verify the correct ID for this object.
