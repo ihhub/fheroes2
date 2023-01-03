@@ -69,15 +69,17 @@ if [[ -f "$HOMM2_PATH" ]]; then
 
     innoextract -e -s -d "$EXTRACT_DIR" -- "$HOMM2_PATH"
 
-    if verify_homm2_path "$EXTRACT_DIR"; then
-        echo_green "HoMM2 installer package: $HOMM2_PATH"
+    for SUBDIR in . app; do
+        if verify_homm2_path "$EXTRACT_DIR/$SUBDIR"; then
+            echo_green "HoMM2 installer package: $HOMM2_PATH"
 
-        HOMM2_PATH="$EXTRACT_DIR"
-    elif verify_homm2_path "$EXTRACT_DIR/app"; then
-        echo_green "HoMM2 installer package: $HOMM2_PATH"
+            HOMM2_PATH="$EXTRACT_DIR/$SUBDIR"
 
-        HOMM2_PATH="$EXTRACT_DIR/app"
-    else
+            break
+        fi
+    done
+
+    if [[ -f "$HOMM2_PATH" ]]; then
         echo_red "Unable to find HoMM2 files in this installer package. Installation aborted."
         exit 1
     fi
