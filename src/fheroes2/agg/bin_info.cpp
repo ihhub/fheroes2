@@ -286,7 +286,7 @@ namespace Bin_Info
         }
 
         // Trolls needs their 'x' offset in moving animations to be bigger by 2px to avoid sprite shift in well and during diagonal movement.
-        if ( monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL && frameXOffset[MOVE_MAIN].size() == 14 && frameXOffset[MOVE_ONE].size() == 14 ) {
+        if ( ( monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL ) && frameXOffset[MOVE_MAIN].size() == 14 && frameXOffset[MOVE_ONE].size() == 14 ) {
             for ( const int animType : { MOVE_START, MOVE_TILE_START, MOVE_MAIN, MOVE_TILE_END, MOVE_STOP, MOVE_ONE } ) {
                 for ( int & xOffset : frameXOffset[animType] ) {
                     xOffset += 2;
