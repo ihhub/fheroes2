@@ -32,7 +32,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.io.IOUtils;
 
-public final class HoMM2AssetManagement
+final class HoMM2AssetManagement
 {
     static boolean isHoMM2AssetsPresent( final File externalFilesDir )
     {
