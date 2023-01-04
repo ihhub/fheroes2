@@ -4851,8 +4851,8 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     _currentUnit = nullptr;
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    // Set all non-dead troops animation to standing still without unit counters and redraw the '_mainSurface'.
-    SwitchAllUnitsAnimation( Monster_Info::STAND_STILL );
+    // Set all non-dead troops animation to static and redraw the '_mainSurface'.
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
     Redraw();
 
     fheroes2::Rect area = GetArea();
@@ -4975,8 +4975,8 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    // Set all non-dead troops animation to standing still without unit counters and redraw the '_mainSurface'.
-    SwitchAllUnitsAnimation( Monster_Info::STAND_STILL );
+    // Set all non-dead troops animation to static and redraw the '_mainSurface'.
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
     Redraw();
 
     const fheroes2::Image original( _mainSurface );
@@ -5009,8 +5009,6 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
             ++frame;
         }
     }
-
-    SwitchAllUnitsAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & targets )
