@@ -68,7 +68,7 @@ namespace
             channels = 2; // Support stereo audio.
             silence = 0;
 #if defined( ANDROID )
-            // TODO: a value greater than 1024 causes audio distortion on Android
+            // Value greater than 1024 causes audio distortion on Android
             samples = 1024;
 #else
             samples = 2048;
