@@ -494,7 +494,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             need_redraw = true;
                         }
 
-                        OpenMageGuild( hero );
+                        if ( !( hero != nullptr && !hero->HaveSpellBook() ) ) {
+                            OpenMageGuild( hero );
+                        }
                     }
                     else if ( isMonsterDwelling ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
