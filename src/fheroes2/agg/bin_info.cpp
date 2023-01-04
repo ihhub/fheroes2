@@ -266,14 +266,38 @@ namespace Bin_Info
         }
 
         // Some creatures needs their 'x' offset in moving animations to be bigger by 3px to avoid sprite shift in well and during diagonal movement.
-        if ( monsterID == Monster::GOBLIN || monsterID == Monster::ORC || monsterID == Monster::ORC_CHIEF || monsterID == Monster::OGRE || monsterID == Monster::OGRE_LORD
-             || monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL || monsterID == Monster::DWARF || monsterID == Monster::BATTLE_DWARF
-             || monsterID == Monster::UNICORN || monsterID == Monster::CENTAUR || monsterID == Monster::BOAR || monsterID == Monster::ROGUE ) {
-            for ( const int animType : { MOVE_START, MOVE_TILE_START, MOVE_MAIN, MOVE_TILE_END, MOVE_STOP } ) {
+        if ( monsterID == Monster::ORC || monsterID == Monster::ORC_CHIEF || monsterID == Monster::OGRE || monsterID == Monster::OGRE_LORD || monsterID == Monster::DWARF
+             || monsterID == Monster::BATTLE_DWARF || monsterID == Monster::UNICORN || monsterID == Monster::CENTAUR || monsterID == Monster::BOAR
+             || monsterID == Monster::ROGUE ) {
+            for ( const int animType : { MOVE_START, MOVE_TILE_START, MOVE_MAIN, MOVE_TILE_END, MOVE_STOP, MOVE_ONE } ) {
                 for ( int & xOffset : frameXOffset[animType] ) {
                     xOffset += 3;
                 }
             }
+        }
+
+        // Goblins needs their 'x' offset in moving animations to be bigger by 6px to avoid sprite shift in well and during diagonal movement.
+        if ( monsterID == Monster::GOBLIN ) {
+            for ( const int animType : { MOVE_START, MOVE_TILE_START, MOVE_MAIN, MOVE_TILE_END, MOVE_STOP, MOVE_ONE } ) {
+                for ( int & xOffset : frameXOffset[animType] ) {
+                    xOffset += 6;
+                }
+            }
+        }
+
+        // Trolls needs their 'x' offset in moving animations to be bigger by 2px to avoid sprite shift in well and during diagonal movement.
+        if ( monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL && frameXOffset[MOVE_MAIN].size() == 14 && frameXOffset[MOVE_ONE].size() == 14 ) {
+            for ( const int animType : { MOVE_START, MOVE_TILE_START, MOVE_MAIN, MOVE_TILE_END, MOVE_STOP, MOVE_ONE } ) {
+                for ( int & xOffset : frameXOffset[animType] ) {
+                    xOffset += 2;
+                }
+            }
+
+            // The 7th and 14th frames needs extra shift by 1 px.
+            ++frameXOffset[MOVE_MAIN][6];
+            ++frameXOffset[MOVE_ONE][6];
+            ++frameXOffset[MOVE_MAIN][13];
+            ++frameXOffset[MOVE_ONE][13];
         }
 
         // X offset fix for Swordsman.
