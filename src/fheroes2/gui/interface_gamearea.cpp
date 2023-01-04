@@ -1047,7 +1047,7 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
     fheroes2::Display & display = fheroes2::Display::instance();
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
-    while ( le.HandleEvents() && !info->isAnimationCompleted() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
         if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
             basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
             display.render();

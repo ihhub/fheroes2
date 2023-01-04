@@ -70,8 +70,11 @@ namespace Game
     // If custom delay (DelayType::CUSTOM_DELAY) is passed reset it and return true. Otherwise return false.
     bool validateCustomAnimationDelay( const uint64_t delayMs );
 
-    // Explicitly pass delay. Useful for loops when first iterator must pass.
+    // Explicitly pass delay. Useful for loops when first iterator must pass. DelayType::CUSTOM_DELAY must not be passed!
     void passAnimationDelay( const DelayType delayType );
+
+    // Explicitly pass custom delay. Useful for loops when first iterator must pass.
+    void passCustomAnimationDelay( const uint64_t delayMs );
 
     void AnimateResetDelay( const DelayType delayType );
     void UpdateGameSpeed();

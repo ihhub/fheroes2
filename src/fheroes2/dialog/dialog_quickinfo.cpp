@@ -613,7 +613,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
 
     outputInTextSupportMode( tile, name_object );
 
-    display.render();
+    display.render( restorer.rect() );
 
     // quick info loop
     while ( le.HandleEvents() && le.MousePressRight() )
@@ -621,7 +621,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
 
     // restore background
     restorer.restore();
-    display.render();
+    display.render( restorer.rect() );
 }
 
 void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position /* = {} */, const bool showOnRadar /* = false */,
