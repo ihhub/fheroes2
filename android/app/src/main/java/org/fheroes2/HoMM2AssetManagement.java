@@ -45,6 +45,8 @@ final class HoMM2AssetManagement
         // It is allowed to extract only files located in these subdirectories
         final Set<String> allowedSubdirNames = new HashSet<>();
         allowedSubdirNames.add( "anim" );
+        // ANIM2 directory is used in the Russian HoMM2 localization made by Buka
+        allowedSubdirNames.add( "anim2" );
         allowedSubdirNames.add( "data" );
         allowedSubdirNames.add( "maps" );
         allowedSubdirNames.add( "music" );
