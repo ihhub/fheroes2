@@ -58,7 +58,12 @@ namespace
         Spec()
             : SDL_AudioSpec()
         {
+#if defined( _WIN32 )
+            // Value 22050 causes audio distortion on Windows
+            freq = 44100;
+#else
             freq = 22050;
+#endif
             format = AUDIO_S16;
             channels = 2; // Support stereo audio.
             silence = 0;
