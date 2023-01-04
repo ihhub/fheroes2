@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -678,7 +678,7 @@ void World::ProcessNewMap()
 
         case MP2::OBJ_HEROES: {
             // remove map editor sprite
-            if ( MP2::GetICNObject( tile.GetObjectTileset() ) == ICN::MINIHERO )
+            if ( MP2::GetICNObject( tile.getObjectType() ) == ICN::MINIHERO )
                 tile.Remove( tile.GetObjectUID() );
 
             tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
