@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -437,9 +437,9 @@ uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) con
 }
 
 /* set visited cell */
-void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
+void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_NONE )
 {
-    if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_ZERO )
+    if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_NONE )
         visit_object.push_front( IndexObject( index, objectType ) );
 }
 

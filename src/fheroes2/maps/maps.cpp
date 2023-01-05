@@ -545,8 +545,8 @@ void Maps::ReplaceRandomCastleObjectId( const fheroes2::Point & center )
         for ( int32_t x = -2; x < 3; ++x ) {
             Maps::Tiles & tile = world.GetTiles( center.x + x, center.y + y );
 
-            if ( MP2::OBJN_RNDCASTLE == tile.GetObject() || MP2::OBJN_RNDTOWN == tile.GetObject() ) {
-                tile.SetObject( MP2::OBJN_CASTLE );
+            if ( MP2::OBJ_NON_ACTION_RANDOM_CASTLE == tile.GetObject() || MP2::OBJ_NON_ACTION_RANDOM_TOWN == tile.GetObject() ) {
+                tile.SetObject( MP2::OBJ_NON_ACTION_CASTLE );
             }
         }
     }
@@ -574,7 +574,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     const MP2::MapObjectType objectType = entranceTile.GetObject();
     const uint32_t castleID = entranceTile.GetObjectUID();
 
-    if ( isRandom && ( objectType != MP2::OBJ_RNDCASTLE && objectType != MP2::OBJ_RNDTOWN ) ) {
+    if ( isRandom && ( objectType != MP2::OBJ_RANDOM_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    "incorrect object"
                        << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) )

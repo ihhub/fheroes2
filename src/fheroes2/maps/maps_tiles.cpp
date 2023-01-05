@@ -359,33 +359,33 @@ namespace
         // TODO: find a better way to do not hardcode values here.
 
         switch ( objectType ) {
-        case MP2::OBJ_HALFLINGHOLE:
-        case MP2::OBJN_HALFLINGHOLE:
-        case MP2::OBJ_LEANTO:
-        case MP2::OBJ_WATERLAKE:
-        case MP2::OBJ_TARPIT:
-        case MP2::OBJ_MERCENARYCAMP:
-        case MP2::OBJN_MERCENARYCAMP:
-        case MP2::OBJ_STANDINGSTONES:
-        case MP2::OBJ_SHRINE1:
-        case MP2::OBJ_SHRINE2:
-        case MP2::OBJ_SHRINE3:
-        case MP2::OBJ_MAGICGARDEN:
+        case MP2::OBJ_HALFLING_HOLE:
+        case MP2::OBJ_NON_ACTION_HALFLING_HOLE:
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_WATER_LAKE:
+        case MP2::OBJ_TAR_PIT:
+        case MP2::OBJ_MERCENARY_CAMP:
+        case MP2::OBJ_NON_ACTION_MERCENARY_CAMP:
+        case MP2::OBJ_STANDING_STONES:
+        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+        case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+        case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_RUINS:
-        case MP2::OBJN_RUINS:
+        case MP2::OBJ_NON_ACTION_RUINS:
         case MP2::OBJ_SIGN:
         case MP2::OBJ_IDOL:
-        case MP2::OBJ_STONELITHS:
-        case MP2::OBJN_STONELITHS:
+        case MP2::OBJ_STONE_LITHS:
+        case MP2::OBJ_NON_ACTION_STONE_LITHS:
         case MP2::OBJ_WAGON:
-        case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJN_WAGONCAMP:
-        case MP2::OBJ_GOBLINHUT:
-        case MP2::OBJ_FAERIERING:
-        case MP2::OBJN_FAERIERING:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_NON_ACTION_WAGON_CAMP:
+        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_FAERIE_RING:
+        case MP2::OBJ_NON_ACTION_FAERIE_RING:
         case MP2::OBJ_BARRIER:
-        case MP2::OBJ_MAGICWELL:
-        case MP2::OBJ_NOTHINGSPECIAL:
+        case MP2::OBJ_MAGIC_WELL:
+        case MP2::OBJ_NOTHING_SPECIAL:
             return true;
         default:
             break;
@@ -399,14 +399,14 @@ namespace
         // Some objects do not take into account other objects below them.
         switch ( objectType ) {
         case MP2::OBJ_CASTLE:
-        case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJ_FAERIERING:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_FAERIE_RING:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
+        case MP2::OBJ_WATER_ALTAR:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
             return true;
         default:
             break;
@@ -504,75 +504,76 @@ bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const 
 
 MP2::MapObjectType Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex )
 {
+    // TODO: why we return non-action object types which are not equal to (action object type value - 128)?
     switch ( MP2::GetICNObject( tileset ) ) {
     case ICN::X_LOC1:
         if ( icnIndex == 3 )
-            return MP2::OBJ_ALCHEMYTOWER;
+            return MP2::OBJ_ALCHEMIST_TOWER;
         else if ( icnIndex < 3 )
-            return MP2::OBJN_ALCHEMYTOWER;
+            return MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
         else if ( 70 == icnIndex )
             return MP2::OBJ_ARENA;
         else if ( 3 < icnIndex && icnIndex < 72 )
-            return MP2::OBJN_ARENA;
+            return MP2::OBJ_NON_ACTION_ARENA;
         else if ( 77 == icnIndex )
-            return MP2::OBJ_BARROWMOUNDS;
+            return MP2::OBJ_BARROW_MOUNDS;
         else if ( 71 < icnIndex && icnIndex < 78 )
-            return MP2::OBJN_BARROWMOUNDS;
+            return MP2::OBJ_NON_ACTION_BARROW_MOUNDS;
         else if ( 94 == icnIndex )
-            return MP2::OBJ_EARTHALTAR;
+            return MP2::OBJ_EARTH_ALTAR;
         else if ( 77 < icnIndex && icnIndex < 112 )
-            return MP2::OBJN_EARTHALTAR;
+            return MP2::OBJ_NON_ACTION_EARTH_ALTAR;
         else if ( 118 == icnIndex )
-            return MP2::OBJ_AIRALTAR;
+            return MP2::OBJ_AIR_ALTAR;
         else if ( 111 < icnIndex && icnIndex < 120 )
-            return MP2::OBJN_AIRALTAR;
+            return MP2::OBJ_NON_ACTION_AIR_ALTAR;
         else if ( 127 == icnIndex )
-            return MP2::OBJ_FIREALTAR;
+            return MP2::OBJ_FIRE_ALTAR;
         else if ( 119 < icnIndex && icnIndex < 129 )
-            return MP2::OBJN_FIREALTAR;
+            return MP2::OBJ_NON_ACTION_FIRE_ALTAR;
         else if ( 135 == icnIndex )
-            return MP2::OBJ_WATERALTAR;
+            return MP2::OBJ_WATER_ALTAR;
         else if ( 128 < icnIndex && icnIndex < 137 )
-            return MP2::OBJN_WATERALTAR;
+            return MP2::OBJ_NON_ACTION_WATER_ALTAR;
         break;
 
     case ICN::X_LOC2:
         if ( icnIndex == 4 )
             return MP2::OBJ_STABLES;
         else if ( icnIndex < 4 )
-            return MP2::OBJN_STABLES;
+            return MP2::OBJ_NON_ACTION_STABLES;
         else if ( icnIndex == 9 )
             return MP2::OBJ_JAIL;
         else if ( 4 < icnIndex && icnIndex < 10 )
-            return MP2::OBJN_JAIL;
+            return MP2::OBJ_NON_ACTION_JAIL;
         else if ( icnIndex == 37 )
             return MP2::OBJ_MERMAID;
         else if ( 9 < icnIndex && icnIndex < 47 )
-            return MP2::OBJN_MERMAID;
+            return MP2::OBJ_NON_ACTION_MERMAID;
         else if ( icnIndex == 101 )
             return MP2::OBJ_SIRENS;
         else if ( 46 < icnIndex && icnIndex < 111 )
-            return MP2::OBJN_SIRENS;
+            return MP2::OBJ_NON_ACTION_SIRENS;
         else if ( ObjXlc2::isReefs( icnIndex ) )
             return MP2::OBJ_REEFS;
         break;
 
     case ICN::X_LOC3:
         if ( icnIndex == 30 )
-            return MP2::OBJ_HUTMAGI;
+            return MP2::OBJ_HUT_OF_MAGI;
         else if ( icnIndex < 32 )
-            return MP2::OBJN_HUTMAGI;
+            return MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
         else if ( icnIndex == 50 )
-            return MP2::OBJ_EYEMAGI;
+            return MP2::OBJ_EYE_OF_MAGI;
         else if ( 31 < icnIndex && icnIndex < 59 )
-            return MP2::OBJN_EYEMAGI;
+            return MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
         break;
 
     default:
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 bool Maps::TilesAddon::isRoad() const
@@ -755,7 +756,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     tileIsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( MP2::GetICNObject( mp2.objectName1 ) == ICN::ROAD );
 
     // If an object has priority 2 (shadow) or 3 (ground) then we put it as an addon.
-    if ( mp2.mapObjectType == MP2::OBJ_ZERO && ( _layerType >> 1 ) & 1 ) {
+    if ( mp2.mapObjectType == MP2::OBJ_NONE && ( _layerType >> 1 ) & 1 ) {
         AddonsPushLevel1( mp2 );
     }
     else {
@@ -783,7 +784,7 @@ void Maps::Tiles::SetHeroes( Heroes * hero )
 
         if ( hero ) {
             SetObject( hero->GetMapsObject() );
-            hero->SetMapsObject( MP2::OBJ_ZERO );
+            hero->SetMapsObject( MP2::OBJ_NONE );
         }
         else {
             setAsEmpty();
@@ -802,7 +803,7 @@ MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */
 {
     if ( !ignoreObjectUnderHero && MP2::OBJ_HEROES == mp2_object ) {
         const Heroes * hero = GetHeroes();
-        return hero ? hero->GetMapsObject() : MP2::OBJ_ZERO;
+        return hero ? hero->GetMapsObject() : MP2::OBJ_NONE;
     }
 
     return mp2_object;
@@ -1010,7 +1011,7 @@ void Maps::Tiles::updatePassability()
                         }
                     }
                 }
-                else if ( bottomTile.mp2_object != MP2::OBJ_ZERO && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
+                else if ( bottomTile.mp2_object != MP2::OBJ_NONE && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
                           && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                     tilePassable &= ~Direction::BOTTOM;
                 }
@@ -1079,7 +1080,7 @@ bool Maps::Tiles::isClearGround() const
     const MP2::MapObjectType objectType = GetObject( true );
 
     switch ( objectType ) {
-    case MP2::OBJ_ZERO:
+    case MP2::OBJ_NONE:
     case MP2::OBJ_COAST:
         return true;
     case MP2::OBJ_BOAT:
@@ -1491,7 +1492,7 @@ void Maps::Tiles::redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool 
     bool renderFlyingGhosts = false;
 
     const MP2::MapObjectType objectType = GetObject( false );
-    if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
+    if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
         renderFlyingGhosts = true;
     }
     else if ( objectType == MP2::OBJ_MINES ) {
@@ -1586,22 +1587,22 @@ std::string Maps::Tiles::String() const
 
     switch ( objectType ) {
     case MP2::OBJ_RUINS:
-    case MP2::OBJ_TREECITY:
-    case MP2::OBJ_WAGONCAMP:
-    case MP2::OBJ_DESERTTENT:
-    case MP2::OBJ_TROLLBRIDGE:
-    case MP2::OBJ_DRAGONCITY:
-    case MP2::OBJ_CITYDEAD:
-    case MP2::OBJ_WATCHTOWER:
+    case MP2::OBJ_TREE_CITY:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_TROLL_BRIDGE:
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_CITY_OF_DEAD:
+    case MP2::OBJ_WATCH_TOWER:
     case MP2::OBJ_EXCAVATION:
     case MP2::OBJ_CAVE:
-    case MP2::OBJ_TREEHOUSE:
-    case MP2::OBJ_ARCHERHOUSE:
-    case MP2::OBJ_GOBLINHUT:
-    case MP2::OBJ_DWARFCOTT:
-    case MP2::OBJ_HALFLINGHOLE:
-    case MP2::OBJ_PEASANTHUT:
-    case MP2::OBJ_THATCHEDHUT:
+    case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_PEASANT_HUT:
+    case MP2::OBJ_THATCHED_HUT:
     case MP2::OBJ_MONSTER:
         os << "monster count   : " << MonsterCount() << std::endl;
         break;
@@ -1611,7 +1612,7 @@ std::string Maps::Tiles::String() const
             os << hero->String();
         break;
     }
-    case MP2::OBJN_CASTLE:
+    case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( GetCenter() );
         if ( castle )
@@ -1647,7 +1648,7 @@ std::string Maps::Tiles::String() const
 
 void Maps::Tiles::FixObject()
 {
-    if ( MP2::OBJ_ZERO == mp2_object ) {
+    if ( MP2::OBJ_NONE == mp2_object ) {
         if ( std::any_of( addons_level1.begin(), addons_level1.end(), TilesAddon::isArtifact ) )
             SetObject( MP2::OBJ_ARTIFACT );
         else if ( std::any_of( addons_level1.begin(), addons_level1.end(), TilesAddon::isResource ) )
@@ -1700,7 +1701,7 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
 void Maps::Tiles::SetObjectPassable( bool pass )
 {
     switch ( GetObject( false ) ) {
-    case MP2::OBJ_TROLLBRIDGE:
+    case MP2::OBJ_TROLL_BRIDGE:
         if ( pass )
             tilePassable |= Direction::TOP_LEFT;
         else
@@ -1785,7 +1786,7 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
     }
 
     switch ( objectType ) {
-    case MP2::OBJ_MAGICGARDEN:
+    case MP2::OBJ_MAGIC_GARDEN:
         objectSpriteIndex += 128 + 14;
         updateFlag( color, objectSpriteIndex, _uid, false );
         objectSpriteIndex += 7;
@@ -1795,7 +1796,7 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
         }
         break;
 
-    case MP2::OBJ_WATERWHEEL:
+    case MP2::OBJ_WATER_WHEEL:
     case MP2::OBJ_MINES:
         objectSpriteIndex += 128 + 14;
         if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
@@ -1822,7 +1823,7 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
         updateFlag( color, objectSpriteIndex, _uid, false );
         break;
 
-    case MP2::OBJ_ALCHEMYLAB:
+    case MP2::OBJ_ALCHEMIST_LAB:
         objectSpriteIndex += 21;
         if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
@@ -1894,7 +1895,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
     // Left tile of a skeleton on Desert should be mark as non-action tile.
     if ( originalObjectType == MP2::OBJ_SKELETON && originalICN == ICN::OBJNDSRT && tile._imageIndex == 83 ) {
-        tile.SetObject( MP2::OBJN_SKELETON );
+        tile.SetObject( MP2::OBJ_NON_ACTION_SKELETON );
 
         // There is no need to check the rest of things as we fixed this object.
         return;
@@ -1902,22 +1903,22 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
     // Original Editor marks Reefs as Stones. We're fixing this issue by changing the type of the object without changing the content of a tile.
     // This is also required in order to properly calculate Reefs' passbility.
-    if ( originalObjectType == MP2::OBJ_STONES && isValidReefsSprite( originalICN, tile._imageIndex ) ) {
+    if ( originalObjectType == MP2::OBJ_ROCK && isValidReefsSprite( originalICN, tile._imageIndex ) ) {
         tile.SetObject( MP2::OBJ_REEFS );
 
         // There is no need to check the rest of things as we fixed this object.
         return;
     }
 
-    // Some maps have water tiles with OBJ_COAST, it shouldn't be, replace OBJ_COAST with OBJ_ZERO
+    // Some maps have water tiles with OBJ_COAST, it shouldn't be, replace OBJ_COAST with OBJ_NONE
     if ( originalObjectType == MP2::OBJ_COAST && tile.isWater() ) {
         Heroes * hero = tile.GetHeroes();
 
         if ( hero ) {
-            hero->SetMapsObject( MP2::OBJ_ZERO );
+            hero->SetMapsObject( MP2::OBJ_NONE );
         }
         else {
-            tile.SetObject( MP2::OBJ_ZERO );
+            tile.SetObject( MP2::OBJ_NONE );
         }
 
         // There is no need to check the rest of things as we fixed this object.
@@ -1934,23 +1935,23 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
         switch ( originalObjectSpriteIndex ) {
         // Random monster placeholder "MON"
         case 66:
-            monsterObjectType = MP2::OBJ_RNDMONSTER;
+            monsterObjectType = MP2::OBJ_RANDOM_MONSTER;
             break;
         // Random monster placeholder "MON 1"
         case 67:
-            monsterObjectType = MP2::OBJ_RNDMONSTER1;
+            monsterObjectType = MP2::OBJ_RANDOM_MONSTER_WEAK;
             break;
         // Random monster placeholder "MON 2"
         case 68:
-            monsterObjectType = MP2::OBJ_RNDMONSTER2;
+            monsterObjectType = MP2::OBJ_RANDOM_MONSTER_MEDIUM;
             break;
         // Random monster placeholder "MON 3"
         case 69:
-            monsterObjectType = MP2::OBJ_RNDMONSTER3;
+            monsterObjectType = MP2::OBJ_RANDOM_MONSTER_STRONG;
             break;
         // Random monster placeholder "MON 4"
         case 70:
-            monsterObjectType = MP2::OBJ_RNDMONSTER4;
+            monsterObjectType = MP2::OBJ_RANDOM_MONSTER_VERY_STRONG;
             break;
         default:
             break;
@@ -1970,12 +1971,12 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
     // Fix The Price of Loyalty objects even if the map is The Succession Wars type.
     switch ( originalObjectType ) {
-    case MP2::OBJ_UNKNW_79:
-    case MP2::OBJ_UNKNW_7A:
-    case MP2::OBJ_UNKNW_F9:
-    case MP2::OBJ_UNKNW_FA: {
+    case MP2::OBJ_NON_ACTION_EXPANSION_DWELLING:
+    case MP2::OBJ_NON_ACTION_EXPANSION_OBJECT:
+    case MP2::OBJ_EXPANSION_DWELLING:
+    case MP2::OBJ_EXPANSION_OBJECT: {
         MP2::MapObjectType objectType = Maps::Tiles::GetLoyaltyObject( tile._objectType, tile._imageIndex );
-        if ( objectType != MP2::OBJ_ZERO ) {
+        if ( objectType != MP2::OBJ_NONE ) {
             tile.SetObject( objectType );
             break;
         }
@@ -1983,22 +1984,22 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
         // Add-ons of level 1 shouldn't even exist if no top object. However, let's play safe and verify it as well.
         for ( const TilesAddon & addon : tile.addons_level1 ) {
             objectType = Maps::Tiles::GetLoyaltyObject( addon._objectType, addon._imageIndex );
-            if ( objectType != MP2::OBJ_ZERO )
+            if ( objectType != MP2::OBJ_NONE )
                 break;
         }
 
-        if ( objectType != MP2::OBJ_ZERO ) {
+        if ( objectType != MP2::OBJ_NONE ) {
             tile.SetObject( objectType );
             break;
         }
 
         for ( const TilesAddon & addon : tile.addons_level2 ) {
             objectType = Maps::Tiles::GetLoyaltyObject( addon._objectType, addon._imageIndex );
-            if ( objectType != MP2::OBJ_ZERO )
+            if ( objectType != MP2::OBJ_NONE )
                 break;
         }
 
-        if ( objectType != MP2::OBJ_ZERO ) {
+        if ( objectType != MP2::OBJ_NONE ) {
             tile.SetObject( objectType );
             break;
         }
@@ -2108,7 +2109,7 @@ void Maps::Tiles::RemoveObjectSprite()
             world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) ).Remove( uidArtifact );
         break;
     }
-    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_RESOURCE: {
         const uint32_t uidResource = getObjectIdByICNType( ICN::OBJNRSRC );
         Remove( uidResource );
@@ -2184,8 +2185,8 @@ void Maps::Tiles::UpdateAbandonedMineSprite( Tiles & tile )
             if ( mines )
                 Tiles::UpdateAbandonedMineRightSprite( mines->_objectType, mines->_imageIndex );
 
-            if ( tile2.GetObject() == MP2::OBJN_ABANDONEDMINE ) {
-                tile2.SetObject( MP2::OBJN_MINES );
+            if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+                tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
                 Tiles::UpdateAbandonedMineRightSprite( tile2._objectType, tile2._imageIndex );
             }
         }
@@ -2193,25 +2194,25 @@ void Maps::Tiles::UpdateAbandonedMineSprite( Tiles & tile )
 
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
         Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
-        if ( tile2.GetObject() == MP2::OBJN_ABANDONEDMINE )
-            tile2.SetObject( MP2::OBJN_MINES );
+        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+            tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::TOP ) ) {
         Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::TOP ) );
-        if ( tile2.GetObject() == MP2::OBJN_ABANDONEDMINE )
-            tile2.SetObject( MP2::OBJN_MINES );
+        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+            tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
 
         if ( Maps::isValidDirection( tile2._index, Direction::LEFT ) ) {
             Tiles & tile3 = world.GetTiles( Maps::GetDirectionIndex( tile2._index, Direction::LEFT ) );
-            if ( tile3.GetObject() == MP2::OBJN_ABANDONEDMINE )
-                tile3.SetObject( MP2::OBJN_MINES );
+            if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+                tile3.SetObject( MP2::OBJ_NON_ACTION_MINES );
         }
 
         if ( Maps::isValidDirection( tile2._index, Direction::RIGHT ) ) {
             Tiles & tile3 = world.GetTiles( Maps::GetDirectionIndex( tile2._index, Direction::RIGHT ) );
-            if ( tile3.GetObject() == MP2::OBJN_ABANDONEDMINE )
-                tile3.SetObject( MP2::OBJN_MINES );
+            if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+                tile3.SetObject( MP2::OBJ_NON_ACTION_MINES );
         }
     }
 }
@@ -2221,17 +2222,17 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
     Artifact art;
 
     switch ( tile.GetObject() ) {
-    case MP2::OBJ_RNDARTIFACT:
-        art = Artifact::Rand( Artifact::ART_LEVEL123 );
+    case MP2::OBJ_RANDOM_ARTIFACT:
+        art = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
         break;
-    case MP2::OBJ_RNDARTIFACT1:
-        art = Artifact::Rand( Artifact::ART_LEVEL1 );
+    case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+        art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
         break;
-    case MP2::OBJ_RNDARTIFACT2:
-        art = Artifact::Rand( Artifact::ART_LEVEL2 );
+    case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+        art = Artifact::Rand( Artifact::ART_LEVEL_MINOR );
         break;
-    case MP2::OBJ_RNDARTIFACT3:
-        art = Artifact::Rand( Artifact::ART_LEVEL3 );
+    case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+        art = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
         break;
     default:
         return;
@@ -2587,7 +2588,7 @@ void Maps::Tiles::updateTileById( Maps::Tiles & tile, const uint32_t uid, const 
 
 void Maps::Tiles::updateEmpty()
 {
-    if ( mp2_object == MP2::OBJ_ZERO ) {
+    if ( mp2_object == MP2::OBJ_NONE ) {
         setAsEmpty();
     }
 }
@@ -2597,7 +2598,7 @@ void Maps::Tiles::setAsEmpty()
     // If an object is removed we should validate if this tile a potential candidate to be a coast.
     // Check if this tile is not water and it has neighbouring water tiles.
     if ( isWater() ) {
-        SetObject( MP2::OBJ_ZERO );
+        SetObject( MP2::OBJ_NONE );
         return;
     }
 
@@ -2616,7 +2617,7 @@ void Maps::Tiles::setAsEmpty()
         }
     }
 
-    SetObject( isCoast ? MP2::OBJ_COAST : MP2::OBJ_ZERO );
+    SetObject( isCoast ? MP2::OBJ_COAST : MP2::OBJ_NONE );
 }
 
 uint32_t Maps::Tiles::getObjectIdByICNType( const int icnId ) const
@@ -2866,7 +2867,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile._uid >> tile._objectType >> tile._imageIndex;
 
     static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for reading MP2::MapObjectType object" );
-    uint8_t objectType = MP2::OBJ_ZERO;
+    uint8_t objectType = MP2::OBJ_NONE;
     msg >> objectType;
     tile.mp2_object = static_cast<MP2::MapObjectType>( objectType );
 

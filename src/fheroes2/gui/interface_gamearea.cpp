@@ -758,7 +758,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                         tile.drawByIcnId( dst, *this, ICN::OBJNTWBA );
 
                         const MP2::MapObjectType objectType = tile.GetObject( false );
-                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJN_CASTLE ) {
+                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
                             tile.drawByIcnId( dst, *this, ICN::OBJNTOWN );
                         }
                     }
