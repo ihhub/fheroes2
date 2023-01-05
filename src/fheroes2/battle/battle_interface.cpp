@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -2276,82 +2276,101 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
     const Cell * cell = Board::GetCell( index_pos );
 
     if ( cell && _currentUnit ) {
-        const Unit * b_enemy = cell->GetUnit();
+        auto formatViewInfoMsg = []( const Unit * unit ) {
+            assert( unit != nullptr );
 
-        if ( b_enemy ) {
-            if ( _currentUnit->GetCurrentColor() == b_enemy->GetColor() || ( _currentUnit == b_enemy ) ) {
-                statusMsg = _( "View %{monster} info" );
-                StringReplaceWithLowercase( statusMsg, "%{monster}", b_enemy->GetMultiName() );
-                return Cursor::WAR_INFO;
-            }
-            else {
-                if ( _currentUnit->isArchers() && !_currentUnit->isHandFighting() ) {
-                    statusMsg = _( "Shoot %{monster}" );
-                    statusMsg.append( " " );
-                    statusMsg.append( _n( "(1 shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
-                    StringReplaceWithLowercase( statusMsg, "%{monster}", b_enemy->GetMultiName() );
-                    StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
+            std::string msg = _( "View %{monster} info" );
+            StringReplaceWithLowercase( msg, "%{monster}", unit->GetMultiName() );
 
-                    return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
+            return msg;
+        };
+
+        const Unit * unit = cell->GetUnit();
+
+        if ( unit == nullptr || _currentUnit == unit ) {
+            const Position pos = Position::GetReachable( *_currentUnit, index_pos );
+
+            if ( pos.GetHead() != nullptr ) {
+                assert( !_currentUnit->isWide() || pos.GetTail() != nullptr );
+
+                if ( pos.GetHead()->GetIndex() == _currentUnit->GetHeadIndex() ) {
+                    statusMsg = formatViewInfoMsg( _currentUnit );
+
+                    return Cursor::WAR_INFO;
                 }
-                else {
-                    // Find all possible directions where the current monster can attack.
-                    std::set<int> availableAttackDirection;
 
-                    for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
-                        if ( Board::isValidDirection( index_pos, direction )
-                             && Board::CanAttackFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
-                            availableAttackDirection.emplace( direction );
-                        }
-                    }
+                statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here" ) : _( "Move %{monster} here" );
+                StringReplaceWithLowercase( statusMsg, "%{monster}", _currentUnit->GetName() );
 
-                    if ( !availableAttackDirection.empty() ) {
-                        int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
-                        if ( currentDirection == UNKNOWN ) {
-                            // This could happen when another window has popped up and the user moved the mouse.
-                            currentDirection = CENTER;
-                        }
-
-                        if ( availableAttackDirection.count( currentDirection ) == 0 ) {
-                            // This direction is not valid. Find the nearest one.
-                            if ( availableAttackDirection.size() == 1 ) {
-                                currentDirection = *availableAttackDirection.begin();
-                            }
-                            else {
-                                // First seach clockwise.
-                                direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
-                                direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
-
-                                while ( true ) {
-                                    ++clockWiseDirection;
-                                    if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
-                                        currentDirection = clockWiseDirection;
-                                        break;
-                                    }
-
-                                    --antiClockWiseDirection;
-                                    if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
-                                        currentDirection = antiClockWiseDirection;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        const int cursor = GetSwordCursorDirection( currentDirection );
-
-                        statusMsg = _( "Attack %{monster}" );
-                        StringReplaceWithLowercase( statusMsg, "%{monster}", b_enemy->GetName() );
-
-                        return cursor;
-                    }
-                }
+                return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
             }
         }
-        else if ( cell->isReachableForHead() || cell->isReachableForTail() ) {
-            statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here" ) : _( "Move %{monster} here" );
-            StringReplaceWithLowercase( statusMsg, "%{monster}", _currentUnit->GetName() );
-            return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
+        else {
+            if ( _currentUnit->GetCurrentColor() == unit->GetColor() ) {
+                statusMsg = formatViewInfoMsg( unit );
+
+                return Cursor::WAR_INFO;
+            }
+
+            if ( _currentUnit->isArchers() && !_currentUnit->isHandFighting() ) {
+                statusMsg = _( "Shoot %{monster}" );
+                statusMsg.append( " " );
+                statusMsg.append( _n( "(1 shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
+                StringReplaceWithLowercase( statusMsg, "%{monster}", unit->GetMultiName() );
+                StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
+
+                return arena.IsShootingPenalty( *_currentUnit, *unit ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
+            }
+
+            // Find all possible directions where the current monster can attack.
+            std::set<int> availableAttackDirection;
+
+            for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
+                if ( Board::isValidDirection( index_pos, direction ) && Board::CanAttackFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
+                    availableAttackDirection.emplace( direction );
+                }
+            }
+
+            if ( !availableAttackDirection.empty() ) {
+                int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
+                if ( currentDirection == UNKNOWN ) {
+                    // This could happen when another window has popped up and the user moved the mouse.
+                    currentDirection = CENTER;
+                }
+
+                if ( availableAttackDirection.count( currentDirection ) == 0 ) {
+                    // This direction is not valid. Find the nearest one.
+                    if ( availableAttackDirection.size() == 1 ) {
+                        currentDirection = *availableAttackDirection.begin();
+                    }
+                    else {
+                        // First seach clockwise.
+                        direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
+                        direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
+
+                        while ( true ) {
+                            ++clockWiseDirection;
+                            if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
+                                currentDirection = clockWiseDirection;
+                                break;
+                            }
+
+                            --antiClockWiseDirection;
+                            if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
+                                currentDirection = antiClockWiseDirection;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                const int cursor = GetSwordCursorDirection( currentDirection );
+
+                statusMsg = _( "Attack %{monster}" );
+                StringReplaceWithLowercase( statusMsg, "%{monster}", unit->GetName() );
+
+                return cursor;
+            }
         }
     }
 
