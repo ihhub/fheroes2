@@ -3379,9 +3379,6 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
     uint32_t lichCloudFrame = 0;
     const uint32_t lichCloudMaxFrame = fheroes2::AGG::GetICNCount( ICN::LICHCLOD );
 
-    // targets damage animation loop
-    bool finishedAnimation = false;
-
     if ( drawLichCloud ) {
         // Lich cloud sound.
         AudioManager::PlaySound( attacker->M82Expl() );
@@ -3391,11 +3388,6 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
-            if ( finishedAnimation && ( !drawLichCloud || ( lichCloudFrame == lichCloudMaxFrame ) ) ) {
-                // All unit frames are rendered and if it was a Lich attack also its cloud frames are rendered too.
-                break;
-            }
-
             bool redrawBattleField = false;
 
             if ( attacker != nullptr ) {
@@ -3465,8 +3457,8 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 }
             }
 
-            if ( finishedAnimation ) {
-                // All frames are rendered.
+            if ( finishedAnimation && ( !drawLichCloud || ( lichCloudFrame == lichCloudMaxFrame ) ) ) {
+                // All unit frames are rendered and if it was a Lich attack also its cloud frames are rendered too.
                 break;
             }
         }
