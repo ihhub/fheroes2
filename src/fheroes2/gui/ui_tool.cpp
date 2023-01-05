@@ -413,13 +413,16 @@ namespace fheroes2
         const uint8_t min = step + 5;
         const int stepDelay = ( delayMs * step ) / ( alpha - min );
 
+        const fheroes2::Rect roi{ pos.x, pos.y, shadow.width(), shadow.height() };
+
         while ( alpha > min + endAlpha ) {
             ApplyAlpha( top, shadow, alpha );
-            Copy( shadow, 0, 0, display, pos.x, pos.y, shadow.width(), shadow.height() );
+            Copy( shadow, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
 
-            display.render();
+            display.render( roi );
 
             alpha -= step;
+            // TODO: we should deduct from sleeping delay the time we spent for preparing and rendering the frame.
             delayforMs( stepDelay );
         }
     }
@@ -430,13 +433,14 @@ namespace fheroes2
         const int stepDelay = delayMs / frameCount;
 
         Image shadow = top;
+        const fheroes2::Rect roi{ pos.x, pos.y, shadow.width(), shadow.height() };
 
         for ( int i = 0; i < frameCount; ++i ) {
             ApplyPalette( shadow, paletteId );
-            Copy( shadow, 0, 0, display, pos.x, pos.y, shadow.width(), shadow.height() );
+            Copy( shadow, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
 
-            display.render();
-
+            display.render( roi );
+            // TODO: we should deduct from sleeping delay the time we spent for preparing and rendering the frame.
             delayforMs( stepDelay );
         }
     }
@@ -460,8 +464,8 @@ namespace fheroes2
         for ( int i = 0; i < frameCount; ++i ) {
             InvertedShadow( image, roi, excludedRoi, paletteId, 1 );
 
-            display.render();
-
+            display.render( roi );
+            // TODO: we should deduct from sleeping delay the time we spent for preparing and rendering the frame.
             delayforMs( stepDelay );
         }
     }

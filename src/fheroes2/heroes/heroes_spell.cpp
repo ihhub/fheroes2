@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -601,7 +601,7 @@ namespace
             if ( spell == Spell::HAUNT ) {
                 world.CaptureObject( tile.GetIndex(), Color::NONE );
                 tile.removeOwnershipFlag( MP2::OBJ_MINES );
-                hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
+                hero.SetMapsObject( MP2::OBJ_ABANDONED_MINE );
             }
 
             world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );

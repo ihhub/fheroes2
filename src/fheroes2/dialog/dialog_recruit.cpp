@@ -362,7 +362,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
     monsterSwitchLeft.draw();
     monsterSwitchRight.draw();
 
-    display.render();
+    display.render( back.rect() );
 
     std::vector<Monster> upgrades = { monster0 };
     while ( upgrades.back().GetDowngrade() != upgrades.back() ) {
@@ -528,7 +528,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
             monsterSwitchLeft.draw();
             monsterSwitchRight.draw();
 
-            display.render();
+            display.render( back.rect() );
         }
 
         if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) )
@@ -541,7 +541,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
     }
 
     back.restore();
-    display.render();
+    display.render( back.rect() );
 
     return Troop( monster, result );
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -116,7 +116,7 @@ int Artifact::LoyaltyLevel() const
     case SPADE_NECROMANCY:
     case HEART_FIRE:
     case HEART_ICE:
-        return ART_LEVEL2;
+        return ART_LEVEL_MINOR;
 
     case ARM_MARTYR:
     case HOLY_HAMMER:
@@ -124,7 +124,7 @@ int Artifact::LoyaltyLevel() const
     case STAFF_WIZARDRY:
     case SWORD_BREAKER:
     case CRYSTAL_BALL:
-        return ART_LEVEL3;
+        return ART_LEVEL_MAJOR;
 
     case SPELL_SCROLL:
     case BROACH_SHIELDING:
@@ -176,7 +176,7 @@ int Artifact::Level() const
     case GOLDEN_BOW:
     case TELESCOPE:
     case STATESMAN_QUILL:
-        return ART_LEVEL1;
+        return ART_LEVEL_TREASURE;
 
     case CASTER_BRACELET:
     case MAGE_RING:
@@ -200,7 +200,7 @@ int Artifact::Level() const
     case ENDLESS_CART_ORE:
     case SPIKED_HELM:
     case WHITE_PEARL:
-        return ART_LEVEL2;
+        return ART_LEVEL_MINOR;
 
     case ARCANE_NECKLACE:
     case WITCHES_BROACH:
@@ -223,7 +223,7 @@ int Artifact::Level() const
     case ENDLESS_POUCH_CRYSTAL:
     case SPIKED_SHIELD:
     case BLACK_PEARL:
-        return ART_LEVEL3;
+        return ART_LEVEL_MAJOR;
 
     // no random
     case MAGIC_BOOK:
@@ -456,15 +456,15 @@ Artifact Artifact::FromMP2IndexSprite( uint32_t index )
     else if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
         return Artifact( ( index - 1 ) / 2 );
     else if ( 0xA3 == index )
-        return Artifact( Rand( ART_LEVEL123 ) );
+        return { Rand( ART_LEVEL_ALL_NORMAL ) };
     else if ( 0xA4 == index )
-        return Artifact( Rand( ART_ULTIMATE ) );
+        return { Rand( ART_ULTIMATE ) };
     else if ( 0xA7 == index )
-        return Artifact( Rand( ART_LEVEL1 ) );
+        return { Rand( ART_LEVEL_TREASURE ) };
     else if ( 0xA9 == index )
-        return Artifact( Rand( ART_LEVEL2 ) );
+        return { Rand( ART_LEVEL_MINOR ) };
     else if ( 0xAB == index )
-        return Rand( ART_LEVEL3 );
+        return { ART_LEVEL_MAJOR };
 
     DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) )
 
@@ -1013,8 +1013,8 @@ uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {
     case MP2::OBJ_SKELETON:
-    case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_SHIPWRECKSURVIVOR:
+    case MP2::OBJ_TREASURE_CHEST:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
         return 1000;
     case MP2::OBJ_WATERCHEST:
         return 1500;

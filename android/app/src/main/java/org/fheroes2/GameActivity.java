@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,7 @@
 
 package org.fheroes2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import java.io.File;
@@ -31,19 +32,30 @@ import java.util.ArrayList;
 import org.apache.commons.io.IOUtils;
 import org.libsdl.app.SDLActivity;
 
-public final class MainActivity extends SDLActivity
+public final class GameActivity extends SDLActivity
 {
     @Override
     protected void onCreate( final Bundle savedInstanceState )
     {
+        final File filesDir = getFilesDir();
+        final File externalFilesDir = getExternalFilesDir( null );
+
         // Extract H2D and translations to the external app-specific storage (sdcard)
-        extractAssets( "files", getExternalFilesDir( null ) );
+        extractAssets( "files", externalFilesDir );
 
         // Extract TiMidity GUS patches and config file to the internal app-specific storage
-        extractAssets( "instruments", getFilesDir() );
-        extractAssets( "timidity.cfg", getFilesDir() );
+        extractAssets( "instruments", filesDir );
+        extractAssets( "timidity.cfg", filesDir );
 
         super.onCreate( savedInstanceState );
+
+        // If the minimum set of game assets has not been found, run the toolset activity instead
+        if ( !HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ) ) {
+            startActivity( new Intent( this, ToolsetActivity.class ) );
+
+            // Replace this activity with the newly launched activity
+            finish();
+        }
     }
 
     @Override
@@ -51,12 +63,11 @@ public final class MainActivity extends SDLActivity
     {
         super.onDestroy();
 
-        // TODO: When SDL_main() exits, the Android app can still remain in memory, and restarting it using Launcher may result in
-        // TODO: the following errors during SDL reinitialization:
-        // TODO:
-        // TODO: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x38 in tid 4397 (SDLThread), pid 4295 (SDLActivity)
-        // TODO:
-        // TODO: This workaround terminates the whole app when this Activity exits, allowing SDL to initialize normally on startup
+        // When SDL_main() exits, the app process can still remain in memory, and restarting it
+        // (for example, using Android Launcher) may result in various errors when SDL attempts
+        // to "reinitialize" already initialized things. This workaround terminates the whole
+        // process when this activity is destroyed, allowing SDL to initialize normally on the
+        // next startup.
         System.exit( 0 );
     }
 
@@ -77,9 +88,9 @@ public final class MainActivity extends SDLActivity
             try ( final InputStream in = getAssets().open( path ) ) {
                 final File outFile = new File( dstDir, path );
 
-                final String outFileDir = outFile.getParent();
+                final File outFileDir = outFile.getParentFile();
                 if ( outFileDir != null ) {
-                    ( new File( outFileDir ) ).mkdirs();
+                    outFileDir.mkdirs();
                 }
 
                 try ( final OutputStream out = new FileOutputStream( outFile ) ) {
