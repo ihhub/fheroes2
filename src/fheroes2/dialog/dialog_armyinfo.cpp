@@ -220,10 +220,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     LocalEvent & le = LocalEvent::Get();
     int result = Dialog::ZERO;
 
-    display.render();
+    display.render( restorer.rect() );
 
     // dialog menu loop
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
         if ( flags & BUTTONS ) {
             if ( buttonUpgrade.isEnabled() )
                 le.MousePressLeft( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
@@ -288,7 +288,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( buttonExit.isEnabled() )
                     buttonExit.draw();
 
-                display.render();
+                display.render( restorer.rect() );
             }
         }
         else {
@@ -635,7 +635,7 @@ int Dialog::ArmyJoinFree( const Troop & troop )
     const Text title( _( "Followers" ), Font::YELLOW_BIG );
 
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
-    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+    StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
     const int buttons = Dialog::YES | Dialog::NO;
@@ -689,7 +689,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
 
     StringReplace( message, "%{offer}", join );
     StringReplace( message, "%{total}", troop.GetCount() );
-    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetPluralName( join ) ) );
+    StringReplaceWithLowercase( message, "%{monster}", troop.GetPluralName( join ) );
     StringReplace( message, "%{gold}", gold );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -310,7 +310,7 @@ namespace
         const Maps::Addons & lowerTileAddons = tileBelow.getLevel2Addons();
 
         for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
-            if ( lowerAddon.uniq == uid ) {
+            if ( lowerAddon._uid == uid ) {
                 // This is a tall object.
                 return true;
             }
@@ -664,7 +664,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             topLayerTallObjects.clear();
             for ( const Maps::TilesAddon & addon : tile.getLevel2Addons() ) {
-                if ( isTallTopLayerObject( x, y, addon.uniq ) ) {
+                if ( isTallTopLayerObject( x, y, addon._uid ) ) {
                     topLayerTallObjects.emplace_back( &addon );
                 }
                 else {
@@ -758,7 +758,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                         tile.drawByIcnId( dst, *this, ICN::OBJNTWBA );
 
                         const MP2::MapObjectType objectType = tile.GetObject( false );
-                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJN_CASTLE ) {
+                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
                             tile.drawByIcnId( dst, *this, ICN::OBJNTOWN );
                         }
                     }
@@ -1047,7 +1047,7 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
     fheroes2::Display & display = fheroes2::Display::instance();
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
-    while ( le.HandleEvents() && !info->isAnimationCompleted() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
         if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
             basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
             display.render();

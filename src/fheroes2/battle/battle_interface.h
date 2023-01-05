@@ -109,7 +109,10 @@ namespace Battle
 
         fheroes2::Point GetCastPosition() const;
         void Redraw( fheroes2::Image & dst ) const;
-        void Update();
+
+        // Return true is animation state was changed.
+        bool updateAnimationState();
+
         void SetAnimation( int rule );
         void IncreaseAnimFrame( bool loop = false );
 
@@ -349,6 +352,7 @@ namespace Battle
 
         bool IdleTroopsAnimation() const;
         void ResetIdleTroopAnimation() const;
+        void SwitchAllUnitsAnimation( const int32_t animationState ) const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
         void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor );

@@ -20,6 +20,7 @@
 
 #include "ui_tool.h"
 
+#include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <cmath>
@@ -225,57 +226,65 @@ namespace fheroes2
         }
     }
 
-    Image CreateDeathWaveEffect( const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
+    void CreateDeathWaveEffect( Image & out, const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
     {
-        if ( in.empty() )
-            return Image();
+        if ( in.empty() ) {
+            return;
+        }
 
-        Image out = in;
+        const int32_t inWidth = in.width();
+        const int32_t waveLength = static_cast<int32_t>( deathWaveCurve.size() );
 
-        const int32_t width = in.width();
-        const int32_t waveWidth = static_cast<int32_t>( deathWaveCurve.size() );
+        // If the death wave curve is outside of the battlefield - return.
+        if ( x < 0 || ( x - waveLength ) >= inWidth || deathWaveCurve.empty() ) {
+            return;
+        }
 
-        // If the death wave curve is outside of the battlefield - return the original image.
-        if ( x < 0 || ( x - waveWidth ) >= width || deathWaveCurve.empty() )
-            return out;
+        const int32_t inHeight = in.height();
+        const int32_t outWaveWidth = x > waveLength ? ( x > inWidth ? ( waveLength - x + inWidth ) : waveLength ) : x;
 
-        const int32_t height = in.height();
+        // If the out image is small for the Death Wave spell effect, resize it anf fill the transform layer with "0".
+        if ( out.width() < outWaveWidth || out.height() < inHeight ) {
+            out.resize( outWaveWidth, inHeight );
+            std::fill( out.transform(), out.transform() + static_cast<size_t>( outWaveWidth * inHeight ), static_cast<uint8_t>( 0 ) );
+        }
 
-        // Set the image horizontal offset from where to draw the wave.
-        const int32_t offsetX = x < waveWidth ? 0 : x - waveWidth;
-        uint8_t * outImageX = out.image() + offsetX;
+        const int32_t outWidth = out.width();
+
+        // Set the input image horizontal offset from where to draw the wave.
+        const int32_t offsetX = x < waveLength ? 0 : x - waveLength;
         const uint8_t * inImageX = in.image() + offsetX;
 
+        uint8_t * outImageX = out.image();
+
         // Set pointers to the start and the end of the death wave curve.
-        std::vector<int32_t>::const_iterator pntX = deathWaveCurve.begin() + ( x < waveWidth ? waveWidth - x : 0 );
-        const std::vector<int32_t>::const_iterator endX = deathWaveCurve.end() - ( x > width ? x - width : 0 );
+        std::vector<int32_t>::const_iterator pntX = deathWaveCurve.begin() + ( x < waveLength ? waveLength - x : 0 );
+        const std::vector<int32_t>::const_iterator endX = deathWaveCurve.end() - ( x > inWidth ? x - inWidth : 0 );
 
         for ( ; pntX != endX; ++pntX, ++outImageX, ++inImageX ) {
             // The death curve should have only negative values and should not be higher, than the height of 'in' image.
-            if ( ( *pntX >= 0 ) || ( *pntX <= -height ) ) {
+            if ( ( *pntX >= 0 ) || ( *pntX <= -inHeight ) ) {
                 assert( 0 );
                 continue;
             }
 
-            const uint8_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( height + *pntX ) * width;
-            const uint8_t * inImageY = inImageX - static_cast<ptrdiff_t>( *pntX + 1 ) * width;
+            const uint8_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( inHeight + *pntX ) * outWidth;
+            const uint8_t * inImageY = inImageX - static_cast<ptrdiff_t>( *pntX + 1 ) * inWidth;
 
             // A loop to shift all horizontal pixels vertically.
             uint8_t * outImageY = outImageX;
-            for ( ; outImageY != outImageYEnd; outImageY += width ) {
-                inImageY += width;
+            for ( ; outImageY != outImageYEnd; outImageY += outWidth ) {
+                inImageY += inWidth;
                 *outImageY = *inImageY;
             }
 
             // Flip the image under the death wave to create a distortion effect.
             for ( int32_t i = 0; i > *pntX; --i ) {
                 *outImageY = *inImageY;
-                outImageY += width;
-                inImageY -= width;
+                outImageY += outWidth;
+                inImageY -= inWidth;
             }
         }
-
-        return out;
     }
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX, double waveFrequency )
@@ -328,13 +337,16 @@ namespace fheroes2
         const uint8_t min = step + 5;
         const int stepDelay = ( delayMs * step ) / ( alpha - min );
 
+        const fheroes2::Rect roi{ pos.x, pos.y, shadow.width(), shadow.height() };
+
         while ( alpha > min + endAlpha ) {
             ApplyAlpha( top, shadow, alpha );
-            Copy( shadow, 0, 0, display, pos.x, pos.y, shadow.width(), shadow.height() );
+            Copy( shadow, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
 
-            display.render();
+            display.render( roi );
 
             alpha -= step;
+            // TODO: we should deduct from sleeping delay the time we spent for preparing and rendering the frame.
             delayforMs( stepDelay );
         }
     }
@@ -345,13 +357,14 @@ namespace fheroes2
         const int stepDelay = delayMs / frameCount;
 
         Image shadow = top;
+        const fheroes2::Rect roi{ pos.x, pos.y, shadow.width(), shadow.height() };
 
         for ( int i = 0; i < frameCount; ++i ) {
             ApplyPalette( shadow, paletteId );
-            Copy( shadow, 0, 0, display, pos.x, pos.y, shadow.width(), shadow.height() );
+            Copy( shadow, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
 
-            display.render();
-
+            display.render( roi );
+            // TODO: we should deduct from sleeping delay the time we spent for preparing and rendering the frame.
             delayforMs( stepDelay );
         }
     }
@@ -375,8 +388,8 @@ namespace fheroes2
         for ( int i = 0; i < frameCount; ++i ) {
             InvertedShadow( image, roi, excludedRoi, paletteId, 1 );
 
-            display.render();
-
+            display.render( roi );
+            // TODO: we should deduct from sleeping delay the time we spent for preparing and rendering the frame.
             delayforMs( stepDelay );
         }
     }

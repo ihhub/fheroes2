@@ -69,13 +69,10 @@
 #include "ui_tool.h"
 #include "world.h"
 
-namespace Battle
-{
-    Arena * arena = nullptr;
-}
-
 namespace
 {
+    Battle::Arena * arena = nullptr;
+
     // Compute a new seed from a list of actions, so random actions happen differently depending on user inputs
     uint32_t UpdateRandomSeed( const uint32_t seed, const Battle::Actions & actions )
     {
@@ -396,9 +393,11 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         _interface->fullRedraw();
         display.render();
 
-        // Wait for the end of M82::PREBATTL playback
-        while ( LocalEvent::Get().HandleEvents() && Mixer::isPlaying( -1 ) )
-            ;
+        // Wait for the end of M82::PREBATTL playback. Make sure that we check the music status first as HandleEvents() call is not instant.
+        LocalEvent & le = LocalEvent::Get();
+        while ( Mixer::isPlaying( -1 ) && le.HandleEvents() ) {
+            // Do nothing.
+        }
     }
 }
 
@@ -1271,16 +1270,6 @@ Battle::Force & Battle::Arena::getEnemyForce( const int color ) const
 Battle::Force & Battle::Arena::GetCurrentForce() const
 {
     return getForce( current_color );
-}
-
-int Battle::Arena::GetICNCovr() const
-{
-    return icn_covr;
-}
-
-uint32_t Battle::Arena::GetCurrentTurn() const
-{
-    return current_turn;
 }
 
 Battle::Result & Battle::Arena::GetResult()

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -322,17 +322,17 @@ namespace AI
             break;
 
         case MP2::OBJ_WATERCHEST:
-        case MP2::OBJ_TREASURECHEST:
+        case MP2::OBJ_TREASURE_CHEST:
             AIToTreasureChest( hero, objectType, dst_index );
             break;
         case MP2::OBJ_ARTIFACT:
             AIToArtifact( hero, dst_index );
             break;
 
-        case MP2::OBJ_MAGICGARDEN:
-        case MP2::OBJ_LEANTO:
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_WATERWHEEL:
+        case MP2::OBJ_WATER_WHEEL:
             AIToObjectResource( hero, objectType, dst_index );
             break;
 
@@ -346,17 +346,17 @@ namespace AI
             AIToFlotSam( hero, dst_index );
             break;
 
-        case MP2::OBJ_ALCHEMYLAB:
+        case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_LIGHTHOUSE:
             AIToCaptureObject( hero, objectType, dst_index );
             break;
-        case MP2::OBJ_ABANDONEDMINE:
+        case MP2::OBJ_ABANDONED_MINE:
             AIToAbandonedMine( hero, objectType, dst_index );
             break;
 
-        case MP2::OBJ_SHIPWRECKSURVIVOR:
+        case MP2::OBJ_SHIPWRECK_SURVIVOR:
             AIToShipwreckSurvivor( hero, objectType, dst_index );
             break;
 
@@ -370,15 +370,15 @@ namespace AI
             break;
 
         // increase view
-        case MP2::OBJ_OBSERVATIONTOWER:
+        case MP2::OBJ_OBSERVATION_TOWER:
             AIToObservationTower( hero, dst_index );
             break;
-        case MP2::OBJ_MAGELLANMAPS:
+        case MP2::OBJ_MAGELLANS_MAPS:
             AIToMagellanMaps( hero, dst_index );
             break;
 
         // teleports
-        case MP2::OBJ_STONELITHS:
+        case MP2::OBJ_STONE_LITHS:
             AIToTeleports( hero, dst_index );
             break;
         case MP2::OBJ_WHIRLPOOL:
@@ -387,9 +387,9 @@ namespace AI
 
         // primary skill modification
         case MP2::OBJ_FORT:
-        case MP2::OBJ_MERCENARYCAMP:
-        case MP2::OBJ_DOCTORHUT:
-        case MP2::OBJ_STANDINGSTONES:
+        case MP2::OBJ_MERCENARY_CAMP:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
+        case MP2::OBJ_STANDING_STONES:
             AIToPrimarySkillObject( hero, objectType, dst_index );
             break;
 
@@ -399,20 +399,20 @@ namespace AI
             break;
 
         // witchs hut
-        case MP2::OBJ_WITCHSHUT:
+        case MP2::OBJ_WITCHS_HUT:
             AIToWitchsHut( hero, dst_index );
             break;
 
         // shrine circle
-        case MP2::OBJ_SHRINE1:
-        case MP2::OBJ_SHRINE2:
-        case MP2::OBJ_SHRINE3:
+        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+        case MP2::OBJ_SHRINE_THIRD_CIRCLE:
             AIToShrine( hero, dst_index );
             break;
 
         // luck modification
         case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_FAERIERING:
+        case MP2::OBJ_FAERIE_RING:
         case MP2::OBJ_IDOL:
         case MP2::OBJ_MERMAID:
             AIToGoodLuckObject( hero, dst_index );
@@ -421,7 +421,7 @@ namespace AI
         // morale modification
         case MP2::OBJ_OASIS:
         case MP2::OBJ_TEMPLE:
-        case MP2::OBJ_WATERINGHOLE:
+        case MP2::OBJ_WATERING_HOLE:
         case MP2::OBJ_BUOY:
             AIToGoodMoraleObject( hero, objectType, dst_index );
             break;
@@ -431,10 +431,10 @@ namespace AI
             break;
 
         // magic point
-        case MP2::OBJ_ARTESIANSPRING:
+        case MP2::OBJ_ARTESIAN_SPRING:
             AIToArtesianSpring( hero, objectType, dst_index );
             break;
-        case MP2::OBJ_MAGICWELL:
+        case MP2::OBJ_MAGIC_WELL:
             AIToMagicWell( hero, dst_index );
             break;
 
@@ -443,65 +443,65 @@ namespace AI
             AIToXanadu( hero, dst_index );
             break;
 
-        case MP2::OBJ_HILLFORT:
-        case MP2::OBJ_FREEMANFOUNDRY:
+        case MP2::OBJ_HILL_FORT:
+        case MP2::OBJ_FREEMANS_FOUNDRY:
             AIToUpgradeArmyObject( hero, objectType, dst_index );
             break;
 
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_DERELICTSHIP:
+        case MP2::OBJ_DERELICT_SHIP:
             AIToPoorMoraleObject( hero, objectType, dst_index );
             break;
 
         case MP2::OBJ_PYRAMID:
             AIToPyramid( hero, dst_index );
             break;
-        case MP2::OBJ_DAEMONCAVE:
+        case MP2::OBJ_DAEMON_CAVE:
             AIToDaemonCave( hero, dst_index );
             break;
 
-        case MP2::OBJ_TREEKNOWLEDGE:
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
             AIToTreeKnowledge( hero, dst_index );
             break;
 
         // accept army
-        case MP2::OBJ_WATCHTOWER:
+        case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREEHOUSE:
-        case MP2::OBJ_ARCHERHOUSE:
-        case MP2::OBJ_GOBLINHUT:
-        case MP2::OBJ_DWARFCOTT:
-        case MP2::OBJ_HALFLINGHOLE:
-        case MP2::OBJ_PEASANTHUT:
-        case MP2::OBJ_THATCHEDHUT:
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_ARCHER_HOUSE:
+        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_HALFLING_HOLE:
+        case MP2::OBJ_PEASANT_HUT:
+        case MP2::OBJ_THATCHED_HUT:
             AIToDwellingJoinMonster( hero, dst_index );
             break;
 
         // recruit army
         case MP2::OBJ_RUINS:
-        case MP2::OBJ_TREECITY:
-        case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJ_DESERTTENT:
+        case MP2::OBJ_TREE_CITY:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_DESERT_TENT:
         // loyalty ver
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_WATER_ALTAR:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
             AIToDwellingRecruitMonster( hero, objectType, dst_index );
             break;
 
         // recruit army (battle)
-        case MP2::OBJ_DRAGONCITY:
-        case MP2::OBJ_CITYDEAD:
-        case MP2::OBJ_TROLLBRIDGE:
+        case MP2::OBJ_DRAGON_CITY:
+        case MP2::OBJ_CITY_OF_DEAD:
+        case MP2::OBJ_TROLL_BRIDGE:
             AIToDwellingBattleMonster( hero, objectType, dst_index );
             break;
 
         // recruit genie
-        case MP2::OBJ_ANCIENTLAMP:
+        case MP2::OBJ_GENIE_LAMP:
             AIToDwellingRecruitMonster( hero, objectType, dst_index );
             break;
 
@@ -515,24 +515,24 @@ namespace AI
         case MP2::OBJ_BARRIER:
             AIToBarrier( hero, dst_index );
             break;
-        case MP2::OBJ_TRAVELLERTENT:
+        case MP2::OBJ_TRAVELLER_TENT:
             AIToTravellersTent( hero, dst_index );
             break;
 
         case MP2::OBJ_JAIL:
             AIToJail( hero, dst_index );
             break;
-        case MP2::OBJ_HUTMAGI:
+        case MP2::OBJ_HUT_OF_MAGI:
             AIToHutMagi( hero, objectType, dst_index );
             break;
-        case MP2::OBJ_ALCHEMYTOWER:
+        case MP2::OBJ_ALCHEMIST_TOWER:
             AIToAlchemistTower( hero );
             break;
 
         // AI has no advantage or knowledge to use these objects
         case MP2::OBJ_ORACLE:
-        case MP2::OBJ_TRADINGPOST:
-        case MP2::OBJ_EYEMAGI:
+        case MP2::OBJ_TRADING_POST:
+        case MP2::OBJ_EYE_OF_MAGI:
         case MP2::OBJ_SPHINX:
             break;
         case MP2::OBJ_SIRENS:
@@ -918,7 +918,7 @@ namespace AI
 
             if ( capture ) {
                 // restore the abandoned mine
-                if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
+                if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
                     Maps::Tiles::UpdateAbandonedMineSprite( tile );
                     hero.SetMapsObject( MP2::OBJ_MINES );
                 }
@@ -959,7 +959,7 @@ namespace AI
         const Funds payment( Resource::GOLD, 1000 );
         Kingdom & kingdom = hero.GetKingdom();
 
-        if ( !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
+        if ( !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANS_MAPS, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
             hero.setVisitedForAllies( dst_index );
             world.ActionForMagellanMaps( hero.GetColor() );
@@ -1037,13 +1037,13 @@ namespace AI
         case MP2::OBJ_FORT:
             skill = Skill::Primary::DEFENSE;
             break;
-        case MP2::OBJ_MERCENARYCAMP:
+        case MP2::OBJ_MERCENARY_CAMP:
             skill = Skill::Primary::ATTACK;
             break;
-        case MP2::OBJ_DOCTORHUT:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
             skill = Skill::Primary::KNOWLEDGE;
             break;
-        case MP2::OBJ_STANDINGSTONES:
+        case MP2::OBJ_STANDING_STONES:
             skill = Skill::Primary::POWER;
             break;
         case MP2::OBJ_ARENA:
@@ -1135,7 +1135,7 @@ namespace AI
         case MP2::OBJ_OASIS:
             move = 800;
             break;
-        case MP2::OBJ_WATERINGHOLE:
+        case MP2::OBJ_WATERING_HOLE:
             move = 400;
             break;
         default:
@@ -1160,7 +1160,7 @@ namespace AI
     {
         const uint32_t max = hero.GetMaxSpellPoints();
 
-        if ( hero.GetSpellPoints() < max && !hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) ) {
+        if ( hero.GetSpellPoints() < max && !hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) ) {
             hero.SetSpellPoints( max );
         }
 
@@ -1214,7 +1214,7 @@ namespace AI
             event_maps->SetVisited( hero.GetColor() );
 
             if ( event_maps->cancel ) {
-                hero.SetMapsObject( MP2::OBJ_ZERO );
+                hero.SetMapsObject( MP2::OBJ_NONE );
                 world.RemoveMapObject( event_maps );
             }
         }
@@ -1225,7 +1225,7 @@ namespace AI
     void AIToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t /*dst_index*/ )
     {
         switch ( objectType ) {
-        case MP2::OBJ_HILLFORT:
+        case MP2::OBJ_HILL_FORT:
             if ( hero.GetArmy().HasMonster( Monster::DWARF ) )
                 hero.GetArmy().UpgradeMonsters( Monster::DWARF );
             if ( hero.GetArmy().HasMonster( Monster::ORC ) )
@@ -1234,7 +1234,7 @@ namespace AI
                 hero.GetArmy().UpgradeMonsters( Monster::OGRE );
             break;
 
-        case MP2::OBJ_FREEMANFOUNDRY:
+        case MP2::OBJ_FREEMANS_FOUNDRY:
             if ( hero.GetArmy().HasMonster( Monster::PIKEMAN ) )
                 hero.GetArmy().UpgradeMonsters( Monster::PIKEMAN );
             if ( hero.GetArmy().HasMonster( Monster::SWORDSMAN ) )
@@ -1436,8 +1436,8 @@ namespace AI
         tile.MonsterSetCount( availableTroopCount - recruitTroopCount );
         kingdom.OddFundsResource( troopToHire.GetTotalCost() );
 
-        // Remove ancient lamp sprite if no genies are available to hire.
-        if ( MP2::OBJ_ANCIENTLAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
+        // Remove genie lamp sprite if no genies are available to hire.
+        if ( MP2::OBJ_GENIE_LAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
             tile.RemoveObjectSprite();
             tile.setAsEmpty();
         }
@@ -1610,7 +1610,7 @@ namespace AI
         hero.setDirection( world.GetTiles( dst_index ).getBoatDirection() );
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
-        hero.SetMapsObject( MP2::OBJ_ZERO );
+        hero.SetMapsObject( MP2::OBJ_NONE );
         world.GetTiles( dst_index ).resetObjectSprite();
         hero.SetShipMaster( true );
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
@@ -1907,7 +1907,7 @@ namespace AI
     {
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( tileIndex, Visit::GLOBAL );
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
             for ( const int32_t index : eyeMagiIndexes ) {
                 Maps::ClearFog( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
             }

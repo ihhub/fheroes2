@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 02:36+0000\n"
+"POT-Creation-Date: 2023-01-05 04:34+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -6975,11 +6975,50 @@ msgstr "Brak obiektu"
 msgid "Alchemist Lab"
 msgstr "Laboratorium"
 
+msgid "Sign"
+msgstr "Drogowskaz"
+
+msgid "Buoy"
+msgstr "Boja"
+
+msgid "Skeleton"
+msgstr "Szkielet"
+
 msgid "Daemon Cave"
 msgstr "Jaskinia demona"
 
+msgid "Treasure Chest"
+msgstr "Skrzynia ze skarbem"
+
 msgid "Faerie Ring"
 msgstr "Zaklęty krąg"
+
+msgid "Campfire"
+msgstr "Obozowisko"
+
+msgid "Fountain"
+msgstr "Fontanna"
+
+msgid "Gazebo"
+msgstr "Altana"
+
+msgid "Genie Lamp"
+msgstr "Lampa dżinna"
+
+msgid "Archer's House"
+msgstr "Dom łuczników"
+
+msgid "Goblin Hut"
+msgstr "Chata Goblinów"
+
+msgid "Dwarf Cottage"
+msgstr "Domek krasnoludów"
+
+msgid "Peasant Hut"
+msgstr "Chłopska chata"
+
+msgid "Event"
+msgstr "Zdarzenie"
 
 msgid "Dragon City"
 msgstr "Smocze Miasto"
@@ -6996,11 +7035,17 @@ msgstr[2] "Młynów wodnych"
 msgid "Mines"
 msgstr "Kopalnia"
 
+msgid "Monster"
+msgstr "Potwór"
+
 msgid "Obelisk"
 msgstr "Obelisk"
 
 msgid "Oasis"
 msgstr "Oaza"
+
+msgid "Resource"
+msgstr "Surowiec"
 
 msgid "Sawmill"
 msgstr "Tartak"
@@ -7008,11 +7053,26 @@ msgstr "Tartak"
 msgid "Oracle"
 msgstr "Wyrocznia"
 
+msgid "Shrine of the First Circle"
+msgstr "Kaplica pierwszego kręg"
+
+msgid "Shipwreck"
+msgstr "Wrak"
+
+msgid "Sea Chest"
+msgstr "Skrzynia"
+
 msgid "Desert Tent"
 msgstr "Namiot na pustyni"
 
+msgid "Stone Liths"
+msgstr "Głazy"
+
 msgid "Wagon Camp"
 msgstr "Tabor"
+
+msgid "Whirlpool"
+msgstr "Wir"
 
 msgid "Windmill"
 msgid_plural "Windmills"
@@ -7020,20 +7080,53 @@ msgstr[0] "Wiatrak"
 msgstr[1] "Wiatraki"
 msgstr[2] "Wiatraków"
 
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "Boat"
+msgstr "Łódź"
+
+msgid "Random Ultimate Artifact"
+msgstr "Losowy najpotężniejszy artefakt."
+
+msgid "Random Artifact"
+msgstr "Losowy artefakt"
+
+msgid "Random Resource"
+msgstr "Losowe zasoby"
+
+msgid "Random Monster"
+msgstr "Losowy potwór"
+
 msgid "Random Town"
 msgstr "Losowe miasto"
 
 msgid "Random Castle"
 msgstr "Losowy zamek"
 
+msgid "Random Monster - weak"
+msgstr "Losowy potwór - słaby"
+
+msgid "Random Monster - medium"
+msgstr "Losowy potwór - średni"
+
+msgid "Random Monster - strong"
+msgstr "Losowy potwór - silny"
+
+msgid "Random Monster - very strong"
+msgstr "Losowy potwór - bardzo silny"
+
+msgid "Nothing Special"
+msgstr "Nic specjalnego"
+
 msgid "Watch Tower"
 msgstr "Wieża strażnicza"
 
-msgid "Tree City"
-msgstr "Nadrzewne miasto"
-
 msgid "Tree House"
 msgstr "Dom na drzewie"
+
+msgid "Tree City"
+msgstr "Nadrzewne miasto"
 
 msgid "Ruins"
 msgstr "Ruiny"
@@ -7043,6 +7136,12 @@ msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Opuszczona kopalnia"
+
+msgid "Standing Stones"
+msgstr "Krąg kamieni"
+
+msgid "Idol"
+msgstr "Bożek"
 
 msgid "Tree of Knowledge"
 msgstr "Drzewo Wiedzy"
@@ -7062,14 +7161,32 @@ msgstr "Norka niziołków"
 msgid "Mercenary Camp"
 msgstr "Obóz najemników"
 
+msgid "Shrine of the Second Circle"
+msgstr "Kaplica drugiego kręgu"
+
+msgid "Shrine of the Third Circle"
+msgstr "Kaplica trzeciego kręgu"
+
 msgid "City of the Dead"
 msgstr "Miasto Umarłych"
 
 msgid "Sphinx"
 msgstr "Sfinks"
 
+msgid "Wagon"
+msgstr "Wóz"
+
+msgid "Tar Pit"
+msgstr "Smoła"
+
+msgid "Artesian Spring"
+msgstr "Studnia artezyjska"
+
 msgid "Troll Bridge"
 msgstr "Most trolli"
+
+msgid "Watering Hole"
+msgstr "Źródło"
 
 msgid "Witch's Hut"
 msgstr "Chatka wiedźmy"
@@ -7077,188 +7194,17 @@ msgstr "Chatka wiedźmy"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan's Maps"
-msgstr "Mapy Magellana"
-
-msgid "Derelict Ship"
-msgstr "Opuszczony statek"
-
-msgid "Shipwreck"
-msgstr "Wrak"
-
-msgid "Observation Tower"
-msgstr "Wieża obserwacyjna"
-
-msgid "Freeman's Foundry"
-msgstr "Odlewnia"
-
-msgid "Watering Hole"
-msgstr "Źródło"
-
-msgid "Artesian Spring"
-msgstr "Studnia artezyjska"
-
-msgid "Gazebo"
-msgstr "Altana"
-
-msgid "Archer's House"
-msgstr "Dom łuczników"
-
-msgid "Peasant Hut"
-msgstr "Chłopska chata"
-
-msgid "Dwarf Cottage"
-msgstr "Domek krasnoludów"
-
-msgid "Stone Liths"
-msgstr "Głazy"
-
-msgid "Magic Well"
-msgstr "Magiczna studnia"
-
-msgid "Sign"
-msgstr "Drogowskaz"
-
-msgid "Nothing Special"
-msgstr "Nic specjalnego"
-
-msgid "Tar Pit"
-msgstr "Smoła"
-
-msgid "Mound"
-msgstr "Kopiec"
-
-msgid "Dune"
-msgstr "Wydma"
-
-msgid "Stump"
-msgstr "Pieniek"
-
-msgid "Cactus"
-msgstr "Kaktus"
-
-msgid "Trees"
-msgstr "Drzewa"
-
-msgid "Dead Tree"
-msgstr "Martwe drzewo"
-
-msgid "Mountains"
-msgstr "Góry"
-
-msgid "Volcano"
-msgstr "Wulkan"
-
-msgid "Rock"
-msgstr "Kamień"
-
-msgid "Flowers"
-msgstr "Kwiaty"
-
-msgid "Water Lake"
-msgstr "Jezioro"
-
-msgid "Mandrake"
-msgstr "Mandragora"
-
-msgid "Crater"
-msgstr "Krater"
-
-msgid "Lava Pool"
-msgstr "Jezioro lawy"
-
-msgid "Shrub"
-msgstr "Krzak"
-
-msgid "Buoy"
-msgstr "Boja"
-
-msgid "Skeleton"
-msgstr "Szkielet"
-
-msgid "Treasure Chest"
-msgstr "Skrzynia ze skarbem"
-
-msgid "Sea Chest"
-msgstr "Skrzynia"
-
-msgid "Campfire"
-msgstr "Obozowisko"
-
-msgid "Fountain"
-msgstr "Fontanna"
-
-msgid "Genie Lamp"
-msgstr "Lampa dżinna"
-
-msgid "Goblin Hut"
-msgstr "Chata Goblinów"
-
-msgid "Monster"
-msgstr "Potwór"
-
-msgid "Resource"
-msgstr "Surowiec"
-
-msgid "Whirlpool"
-msgstr "Wir"
-
-msgid "Artifact"
-msgstr "Artefakt"
-
-msgid "Boat"
-msgstr "Łódź"
-
-msgid "Random Artifact"
-msgstr "Losowy artefakt"
-
-msgid "Random Resource"
-msgstr "Losowe zasoby"
-
-msgid "Random Monster - weak"
-msgstr "Losowy potwór - słaby"
-
-msgid "Random Monster - medium"
-msgstr "Losowy potwór - średni"
-
-msgid "Random Monster - strong"
-msgstr "Losowy potwór - silny"
-
-msgid "Random Monster - very strong"
-msgstr "Losowy potwór - bardzo silny"
-
-msgid "Standing Stones"
-msgstr "Krąg kamieni"
-
-msgid "Event"
-msgstr "Zdarzenie"
-
-msgid "Random Monster"
-msgstr "Losowy potwór"
-
-msgid "Random Ultimate Artifact"
-msgstr "Losowy najpotężniejszy artefakt."
-
-msgid "Idol"
-msgstr "Bożek"
-
-msgid "Shrine of the First Circle"
-msgstr "Kaplica pierwszego kręg"
-
-msgid "Shrine of the Second Circle"
-msgstr "Kaplica drugiego kręgu"
-
-msgid "Shrine of the Third Circle"
-msgstr "Kaplica trzeciego kręgu"
-
-msgid "Wagon"
-msgstr "Wóz"
-
 msgid "Lean-To"
 msgstr "Szopa"
 
+msgid "Magellan's Maps"
+msgstr "Mapy Magellana"
+
 msgid "Flotsam"
 msgstr "Szczątki statku"
+
+msgid "Derelict Ship"
+msgstr "Opuszczony statek"
 
 msgid "Shipwreck Survivor"
 msgstr "Ocalały rozbitek"
@@ -7266,29 +7212,86 @@ msgstr "Ocalały rozbitek"
 msgid "Bottle"
 msgstr "Butelka"
 
+msgid "Magic Well"
+msgstr "Magiczna studnia"
+
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Magiczny ogród"
 msgstr[1] "Magiczne ogrody"
 msgstr[2] "Magicznych ogrodów"
 
-msgid "Random Artifact - Treasure"
-msgstr "Losowy artefakt - skarb"
+msgid "Observation Tower"
+msgstr "Wieża obserwacyjna"
 
-msgid "Random Artifact - Minor"
-msgstr "Losowy artefakt - mniejszy"
+msgid "Freeman's Foundry"
+msgstr "Odlewnia"
 
-msgid "Random Artifact - Major"
-msgstr "Losowy artefakt - większy"
+msgid "Trees"
+msgstr "Drzewa"
 
-msgid "Jail"
-msgstr "Więzienie"
+msgid "Mountains"
+msgstr "Góry"
+
+msgid "Volcano"
+msgstr "Wulkan"
+
+msgid "Flowers"
+msgstr "Kwiaty"
+
+msgid "Rock"
+msgstr "Kamień"
+
+msgid "Water Lake"
+msgstr "Jezioro"
+
+msgid "Mandrake"
+msgstr "Mandragora"
+
+msgid "Dead Tree"
+msgstr "Martwe drzewo"
+
+msgid "Stump"
+msgstr "Pieniek"
+
+msgid "Crater"
+msgstr "Krater"
+
+msgid "Cactus"
+msgstr "Kaktus"
+
+msgid "Mound"
+msgstr "Kopiec"
+
+msgid "Dune"
+msgstr "Wydma"
+
+msgid "Lava Pool"
+msgstr "Jezioro lawy"
+
+msgid "Shrub"
+msgstr "Krzak"
+
+msgid "Barrow Mounds"
+msgstr "Kurhany"
+
+msgid "Mermaid"
+msgstr "Syrena"
+
+msgid "Sirens"
+msgstr "Syreny"
+
+msgid "Hut of the Magi"
+msgstr "Chata maga"
+
+msgid "Eye of the Magi"
+msgstr "Oko maga"
 
 msgid "Traveller's Tent"
 msgstr "Namiot podróżnika"
 
-msgid "Barrier"
-msgstr "Bariera"
+msgid "Jail"
+msgstr "Więzienie"
 
 msgid "Fire Summoning Altar"
 msgstr "Ołtarz Ognia"
@@ -7302,29 +7305,26 @@ msgstr "Ołtarz Ziemi"
 msgid "Water Summoning Altar"
 msgstr "Ołtarz Wody"
 
-msgid "Barrow Mounds"
-msgstr "Kurhany"
-
-msgid "Stables"
-msgstr "Stajnie"
+msgid "Reefs"
+msgstr "Rafy"
 
 msgid "Alchemist's Tower"
 msgstr "Wieża alchemika"
 
-msgid "Hut of the Magi"
-msgstr "Chata maga"
+msgid "Stables"
+msgstr "Stajnie"
 
-msgid "Eye of the Magi"
-msgstr "Oko maga"
+msgid "Random Artifact - Treasure"
+msgstr "Losowy artefakt - skarb"
 
-msgid "Mermaid"
-msgstr "Syrena"
+msgid "Random Artifact - Minor"
+msgstr "Losowy artefakt - mniejszy"
 
-msgid "Sirens"
-msgstr "Syreny"
+msgid "Random Artifact - Major"
+msgstr "Losowy artefakt - większy"
 
-msgid "Reefs"
-msgstr "Rafy"
+msgid "Barrier"
+msgstr "Bariera"
 
 msgid "Unknown Monster"
 msgstr "Nieznany potwór"
@@ -8058,7 +8058,7 @@ msgid "Armored Gauntlets of Protection"
 msgstr "Pancerne Rękawice Ochrony"
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr "%(name) zwiększa twoją obronę o %(count)."
+msgstr "%{name} zwiększa twoją obronę o %{count}."
 
 msgid ""
 "You encounter the infamous Black Knight!  After a grueling duel ending in a "
@@ -8094,7 +8094,7 @@ msgid "Ballista of Quickness"
 msgstr "Balista Szybkości"
 
 msgid "The %{name} lets your catapult fire twice per combat round."
-msgstr "%(name) pozwala twojej katapulcie strzelić dwa razy na rundę %(count)."
+msgstr "%{name} pozwala twojej katapulcie strzelić dwa razy na rundę %{count}."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -8355,7 +8355,7 @@ msgstr "Zaklęta Klepsydra"
 
 msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr ""
-"%{name} zwiększa czas trwania wszystkich twoich czarów o %(count) tury."
+"%{name} zwiększa czas trwania wszystkich twoich czarów o %{count} tury."
 
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene:  "
