@@ -100,7 +100,11 @@ namespace Battle
         bool AutoBattleInProgress() const;
         bool CanToggleAutoBattle() const;
 
-        uint32_t GetCurrentTurn() const;
+        uint32_t GetCurrentTurn() const
+        {
+            return current_turn;
+        }
+
         Result & GetResult();
 
         const HeroBase * getCommander( const int color ) const;
@@ -172,7 +176,11 @@ namespace Battle
         void ApplyActionSpellDefaults( Command &, const Spell & );
 
         bool IsShootingPenalty( const Unit &, const Unit & ) const;
-        int GetICNCovr() const;
+
+        int GetICNCovr() const
+        {
+            return icn_covr;
+        }
 
         uint32_t GetCastleTargetValue( int ) const;
 

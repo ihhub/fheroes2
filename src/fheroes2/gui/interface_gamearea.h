@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -80,7 +80,7 @@ namespace Interface
 
         int32_t tileId{ -1 };
 
-        MP2::MapObjectType type{ MP2::OBJ_ZERO };
+        MP2::MapObjectType type{ MP2::OBJ_NONE };
 
         uint8_t alphaValue{ 255 };
 

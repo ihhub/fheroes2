@@ -728,7 +728,7 @@ namespace Campaign
         case ScenarioBonusData::TROOP: {
             std::string description( _( "The main hero will have %{count} %{monster} at the start of the scenario." ) );
             StringReplace( description, "%{count}", std::to_string( _amount ) );
-            StringReplace( description, "%{monster}", Translation::StringLower( Monster( _subType ).GetPluralName( _amount ) ) );
+            StringReplaceWithLowercase( description, "%{monster}", Monster( _subType ).GetPluralName( _amount ) );
             return description;
         }
         case ScenarioBonusData::SPELL: {

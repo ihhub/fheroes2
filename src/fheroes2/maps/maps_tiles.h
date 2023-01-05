@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -69,7 +69,7 @@ namespace Maps
     struct TilesAddon
     {
         TilesAddon();
-        TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
+        TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint8_t index_ );
 
         TilesAddon( const TilesAddon & ) = default;
 
@@ -79,14 +79,14 @@ namespace Maps
 
         bool isUniq( const uint32_t id ) const
         {
-            return uniq == id;
+            return _uid == id;
         }
 
         bool isRoad() const;
 
         bool hasSpriteAnimation() const
         {
-            return object & 1;
+            return _objectType & 1;
         }
 
         std::string String( int level ) const;
@@ -98,10 +98,22 @@ namespace Maps
 
         static bool PredicateSortRules1( const TilesAddon & ta1, const TilesAddon & ta2 );
 
-        uint32_t uniq;
-        uint8_t level;
-        uint8_t object;
-        uint8_t index;
+        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
+        uint32_t _uid;
+
+        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
+        uint8_t _layerType;
+
+        // Structure containing a flag whether the object's image (sprite) has animation, a flag whether the object is road and
+        // the type of object which correlates to ICN id.
+        // The first bit is a flag whether the object's image (sprite) has animation.
+        // The second bit is a flag whether the object considered as road.
+        // The last 6 bits the type of object which correlates to ICN id. See MP2::GetICNObject() function for more details.
+        // TODO: move first 2 bits out of this member to keep only object type.
+        uint8_t _objectType;
+
+        // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
+        uint8_t _imageIndex;
     };
 
     using Addons = std::list<TilesAddon>;
@@ -122,19 +134,19 @@ namespace Maps
 
         MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
 
-        uint8_t GetObjectTileset() const
+        uint8_t getObjectType() const
         {
-            return objectTileset;
+            return _objectType;
         }
 
         uint8_t GetObjectSpriteIndex() const
         {
-            return objectIndex;
+            return _imageIndex;
         }
 
         uint32_t GetObjectUID() const
         {
-            return uniq;
+            return _uid;
         }
 
         // Get Tile metadata field #1 (used for things like monster count or resource amount)
@@ -180,7 +192,7 @@ namespace Maps
 
         bool hasSpriteAnimation() const
         {
-            return objectTileset & 1;
+            return _objectType & 1;
         }
 
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
@@ -216,8 +228,8 @@ namespace Maps
 
         void resetObjectSprite()
         {
-            objectTileset = 0;
-            objectIndex = 255;
+            _objectType = 0;
+            _imageIndex = 255;
         }
 
         void FixObject();
@@ -299,7 +311,6 @@ namespace Maps
             fog_colors &= ~colors;
         }
 
-        /* monster operation */
         void MonsterSetCount( uint32_t count );
         uint32_t MonsterCount() const;
 
@@ -346,10 +357,10 @@ namespace Maps
         Heroes * GetHeroes() const;
         void SetHeroes( Heroes * );
 
-        // If tile is empty (MP2::OBJ_ZERO) then verify whether it is a coast and update the tile if needed.
+        // If tile is empty (MP2::OBJ_NONE) then verify whether it is a coast and update the tile if needed.
         void updateEmpty();
 
-        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_ZERO)
+        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE)
         void setAsEmpty();
 
         uint32_t getObjectIdByICNType( const int icnId ) const;
@@ -422,10 +433,24 @@ namespace Maps
         int32_t _index = 0;
         uint16_t pack_sprite_index = 0;
 
-        uint32_t uniq = 0;
-        uint8_t objectTileset = 0;
-        uint8_t objectIndex = 255;
-        MP2::MapObjectType mp2_object = MP2::OBJ_ZERO;
+        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
+        uint32_t _uid{ 0 };
+
+        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
+        uint8_t _layerType{ OBJECT_LAYER };
+
+        // Structure containing a flag whether the object's image (sprite) has animation, a flag whether the object is road and
+        // the type of object which correlates to ICN id.
+        // The first bit is a flag whether the object's image (sprite) has animation.
+        // The second bit is a flag whether the object considered as road.
+        // The last 6 bits the type of object which correlates to ICN id. See MP2::GetICNObject() function for more details.
+        // TODO: move first 2 bits out of this member to keep only object type.
+        uint8_t _objectType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+
+        // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
+        uint8_t _imageIndex{ 255 };
+
+        MP2::MapObjectType mp2_object = MP2::OBJ_NONE;
         uint16_t tilePassable = DIRECTION_ALL;
         uint8_t fog_colors = Color::ALL;
 
@@ -442,8 +467,6 @@ namespace Maps
 
         // This field does not persist in savegame.
         uint32_t _region = REGION_NODE_BLOCKED;
-
-        uint8_t _level = 0;
     };
 
     StreamBase & operator<<( StreamBase &, const TilesAddon & );

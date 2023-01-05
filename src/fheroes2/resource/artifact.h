@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -45,10 +45,10 @@ public:
     enum level_t
     {
         ART_NONE = 0,
-        ART_LEVEL1 = 0x01,
-        ART_LEVEL2 = 0x02,
-        ART_LEVEL3 = 0x04,
-        ART_LEVEL123 = ART_LEVEL1 | ART_LEVEL2 | ART_LEVEL3,
+        ART_LEVEL_TREASURE = 0x01,
+        ART_LEVEL_MINOR = 0x02,
+        ART_LEVEL_MAJOR = 0x04,
+        ART_LEVEL_ALL_NORMAL = ART_LEVEL_TREASURE | ART_LEVEL_MINOR | ART_LEVEL_MAJOR,
         ART_ULTIMATE = 0x08,
         ART_LOYALTY = 0x10,
         ART_NORANDOM = 0x20
@@ -306,6 +306,7 @@ public:
     bool isFull() const;
     bool ContainUltimateArtifact() const;
 
+    // Automatically exchange artifacts between two heroes. The taker should get the best possible artifacts.
     void exchangeArtifacts( BagArtifacts & giftBag, const Heroes & taker, const Heroes & giver );
 
     double getArtifactValue() const;

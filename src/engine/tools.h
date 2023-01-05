@@ -55,6 +55,8 @@ std::string StringUpper( std::string str );
 
 std::vector<std::string> StringSplit( const std::string &, const std::string & );
 
+// Function to replace the pattern in workString with patternReplacement. Here the patternReplacement is converted to lowercase except for the first word in a sentence.
+void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement );
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );
 

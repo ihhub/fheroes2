@@ -32,6 +32,7 @@
 
 #include "logging.h"
 #include "tools.h"
+#include "translations.h"
 
 /* trim left right space */
 std::string StringTrim( std::string str )
@@ -141,9 +142,53 @@ int GetInt( const std::string & str )
     return res;
 }
 
+void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement )
+{
+    if ( pattern == nullptr ) {
+        return;
+    }
+
+    for ( size_t position = workString.find( pattern ); position != std::string::npos; position = workString.find( pattern ) ) {
+        // To determine if the end of a sentence was before this word we parse the character before it
+        // for the presence of full stop, question mark, or exclamation mark, skipping whitespace characters.
+        const char prevWordEnd = [&workString, position]() {
+            assert( position < workString.size() );
+
+            const auto iter = std::find_if_not( workString.rbegin() + static_cast<int32_t>( workString.size() - position ), workString.rend(),
+                                                []( const unsigned char c ) { return std::isspace( c ); } );
+            if ( iter != workString.rend() ) {
+                return *iter;
+            }
+
+            // Before 'position' there is nothing, or there are only spaces.
+            return '\0';
+        }();
+
+        // Also if the insert 'position' equals zero, then it is the first word in a sentence.
+        if ( position == 0 || prevWordEnd == '.' || prevWordEnd == '?' || prevWordEnd == '!' ) {
+            // Also, 'patternReplacement' can consist of two words (for example, "Power Liches") and if
+            // it is placed as the first word in sentence, then we have to lowercase only the second word.
+            // To detect this, we look for a space mark in 'patternReplacement'.
+            const size_t spacePosition = patternReplacement.find( ' ' );
+
+            // The first (and possibly only) word of 'patternReplacement' replaces 'pattern' in 'workString'.
+            workString.replace( position, std::strlen( pattern ), patternReplacement.substr( 0, spacePosition ) );
+
+            // Check if a space mark was found to insert the rest part of 'patternReplacement' with lowercase applied.
+            if ( spacePosition != std::string::npos ) {
+                workString.insert( position + spacePosition, Translation::StringLower( patternReplacement.substr( spacePosition ) ) );
+            }
+        }
+        else {
+            // For all other cases lowercase the 'patternReplacement' and replace the 'pattern' with it in 'workString'.
+            workString.replace( position, std::strlen( pattern ), Translation::StringLower( patternReplacement ) );
+        }
+    }
+}
+
 void StringReplace( std::string & dst, const char * pred, const std::string & src )
 {
-    size_t pos = std::string::npos;
+    size_t pos;
 
     while ( std::string::npos != ( pos = dst.find( pred ) ) )
         dst.replace( pos, std::strlen( pred ), src );
@@ -158,7 +203,7 @@ std::vector<std::string> StringSplit( const std::string & str, const std::string
 {
     std::vector<std::string> vec;
     size_t pos1 = 0;
-    size_t pos2 = std::string::npos;
+    size_t pos2;
 
     while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
         vec.push_back( str.substr( pos1, pos2 - pos1 ) );
