@@ -2993,18 +2993,24 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
     LocalEvent & le = LocalEvent::Get();
     const uint64_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
 
+    // As this function uses custom delay which cannot be checked outside the function and to avoid the loss of the last frame
+    // we render the first frame imediately and then wait for the delay, so every rendered frame will be shown to used for at least delay time.
+    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
+    Redraw();
+
+    // In a loop we wait for the delay and then display the next frame or
     while ( le.HandleEvents( Game::isCustomDelayNeeded( frameDelay ) ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateCustomAnimationDelay( frameDelay ) ) {
-            Redraw();
-
             if ( unit.isFinishAnimFrame() ) {
-                // We have reached the end of animation.
+                // We have reached the end of animation and waited for the delay after rendering the last frame.
                 break;
             }
 
             unit.IncreaseAnimFrame();
+
+            Redraw();
         }
     }
 }
