@@ -319,8 +319,8 @@ namespace fheroes2
         for ( int32_t y = 0; y < height; ++y ) {
             const int32_t startY = std::max( y - blurRadius, 0 );
             const int32_t rangeY = std::min( y + blurRadius + 1, height ) - startY;
-            const uint8_t * imageInXStart = imageIn + static_cast<size_t>( y * width );
-            const uint8_t * imageInYStart = imageIn + static_cast<size_t>( startY * width );
+            const uint8_t * imageInXStart = imageIn + static_cast<ptrdiff_t>( y ) * width;
+            const uint8_t * imageInYStart = imageIn + static_cast<ptrdiff_t>( startY ) * width;
 
             for ( int32_t x = 0; x < width; ++x, ++imageOutX ) {
                 const int32_t startX = std::max( x - blurRadius, 0 );
@@ -334,7 +334,7 @@ namespace fheroes2
                 const uint8_t * imageInXEnd = imageInX + rangeX;
 
                 for ( ; imageInX != imageInXEnd; ++imageInX ) {
-                    const uint8_t * palette = gamePalette + static_cast<size_t>( *imageInX * 3 );
+                    const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
 
                     sumRed += *palette;
                     sumGreen += *( palette + 1 );
@@ -342,12 +342,12 @@ namespace fheroes2
                 }
 
                 const uint8_t * imageInY = imageInYStart + x;
-                const uint8_t * imageInYEnd = imageInY + static_cast<size_t>( rangeY * width );
+                const uint8_t * imageInYEnd = imageInY + static_cast<ptrdiff_t>( rangeY ) * width;
                 const uint8_t * currentPixel = imageInXStart + x;
 
                 for ( ; imageInY != imageInYEnd; imageInY += width ) {
                     if ( imageInY != currentPixel ) {
-                        const uint8_t * palette = gamePalette + static_cast<size_t>( *imageInY * 3 );
+                        const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *imageInY ) * 3;
 
                         sumRed += *palette;
                         sumGreen += *( palette + 1 );

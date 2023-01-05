@@ -5045,12 +5045,20 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
 
     // A vector of frames to animate the increase of the spell effect. The decrease will be shown in reverse frames order.
     // Initialize a vector with copies of battle field to use them in making the spell effect increase animation.
-    // The initial vector size is smaller by 1 as the last frame will be diferent.
+    std::vector<fheroes2::Image> spellEffect;
+    assert( halfMaxFrame > 1 );
+    spellEffect.reserve( halfMaxFrame );
+
     const uint32_t spellEffectLastFrame = halfMaxFrame - 1;
-    std::vector<fheroes2::Image> spellEffect( spellEffectLastFrame, battleFieldCopy );
+
+    // The similar frames number is smaller than size by 1 as the last frame will be diferent.
+    spellEffect.emplace_back( std::move( battleFieldCopy ) );
+    while ( spellEffect.size() < spellEffectLastFrame ) {
+        spellEffect.push_back( spellEffect.front() );
+    }
 
     // The last frame is the full power of spell effect. It will be used to produce other frames.
-    spellEffect.push_back( fheroes2::CreateHolyShoutEffect( battleFieldCopy, 4, strength ) );
+    spellEffect.emplace_back( fheroes2::CreateHolyShoutEffect( spellEffect[0], 4, strength ) );
 
     const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / maxFrame;
     uint32_t frame = 0;
@@ -5064,7 +5072,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     Game::passCustomAnimationDelay( spellcastDelay );
     // Make sure that the first run is passed immediately.
     assert( !Game::isCustomDelayNeeded( spellcastDelay ) );
-    
+
     AudioManager::PlaySound( M82::MASSCURS );
 
     while ( le.HandleEvents( Game::isCustomDelayNeeded( spellcastDelay ) ) && frame < maxFrame ) {
@@ -5072,21 +5080,18 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
 
         if ( Game::validateCustomAnimationDelay( spellcastDelay ) ) {
             // Display the maximum spell effect for 1 more 'spellcastDelay' without rendering a frame.
-            if ( frame == halfMaxFrame ) {
-                ++frame;
-                continue;
+            if ( frame != halfMaxFrame ) {
+                // If the spell effect is increasing we generate the frame for it in the vector to use it later in decreasing animation.
+                if ( frame < spellEffectLastFrame ) {
+                    fheroes2::AlphaBlit( spellEffect[spellEffectLastFrame], spellEffect[frame], alpha );
+                    alpha += alphaStep;
+                }
+
+                const uint32_t spellEffectFrame = ( frame < halfMaxFrame ) ? frame : ( maxFrame - frame - 1 );
+                fheroes2::Copy( spellEffect[spellEffectFrame], area.x, area.y, display, renderArea.x, renderArea.y, renderArea.width, renderArea.height );
+
+                display.render( renderArea );
             }
-
-            // If the spell effect is increasing we generate the frame for it in the vector to use it also in decreasing animation.
-            if ( frame < spellEffectLastFrame ) {
-                fheroes2::AlphaBlit( spellEffect[spellEffectLastFrame], spellEffect[frame], alpha );
-                alpha += alphaStep;
-            }
-
-            const uint32_t spellEffectFrame = frame < halfMaxFrame ? frame : maxFrame - frame - 1;
-            fheroes2::Blit( spellEffect[spellEffectFrame], area.x, area.y, display, renderArea.x, renderArea.y, renderArea.width, renderArea.height );
-
-            display.render( renderArea );
 
             ++frame;
         }
