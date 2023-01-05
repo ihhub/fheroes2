@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 02:36+0000\n"
+"POT-Creation-Date: 2023-01-05 04:34+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6977,11 +6977,50 @@ msgstr "Няма обект"
 msgid "Alchemist Lab"
 msgstr "Алхимична лаборатория"
 
+msgid "Sign"
+msgstr "Знак"
+
+msgid "Buoy"
+msgstr "Шамандура"
+
+msgid "Skeleton"
+msgstr "Скелет"
+
 msgid "Daemon Cave"
 msgstr "Демонска пещера"
 
+msgid "Treasure Chest"
+msgstr "Сандък със съкровище"
+
 msgid "Faerie Ring"
 msgstr "Приказен пръстен"
+
+msgid "Campfire"
+msgstr "Лагерен огън"
+
+msgid "Fountain"
+msgstr "Фонтан"
+
+msgid "Gazebo"
+msgstr "Беседка"
+
+msgid "Genie Lamp"
+msgstr "Джин от лампа"
+
+msgid "Archer's House"
+msgstr "Къщата на стрелеца"
+
+msgid "Goblin Hut"
+msgstr "Хижата на гоблините"
+
+msgid "Dwarf Cottage"
+msgstr "Вила на джуджета"
+
+msgid "Peasant Hut"
+msgstr "Селска хижа"
+
+msgid "Event"
+msgstr "Събитие"
 
 msgid "Dragon City"
 msgstr "Драконов град"
@@ -6997,11 +7036,17 @@ msgstr[1] "Водни колела"
 msgid "Mines"
 msgstr "Мини"
 
+msgid "Monster"
+msgstr "Чудовище"
+
 msgid "Obelisk"
 msgstr "Обелиск"
 
 msgid "Oasis"
 msgstr "Оазис"
+
+msgid "Resource"
+msgstr "Ресурс"
 
 msgid "Sawmill"
 msgstr "Дъскорезница"
@@ -7009,16 +7054,49 @@ msgstr "Дъскорезница"
 msgid "Oracle"
 msgstr "Оракул"
 
+msgid "Shrine of the First Circle"
+msgstr "Светилището на първия кръг"
+
+msgid "Shipwreck"
+msgstr "Корабокрушение"
+
+msgid "Sea Chest"
+msgstr "Морски сандък"
+
 msgid "Desert Tent"
 msgstr "Пустинна палатка"
 
+msgid "Stone Liths"
+msgstr "Телепорт"
+
 msgid "Wagon Camp"
 msgstr "Вагонен лагер"
+
+msgid "Whirlpool"
+msgstr "Водовъртеж"
 
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Вятърна мелница"
 msgstr[1] "Вятърни мелници"
+
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "Boat"
+msgstr "Кораб"
+
+msgid "Random Ultimate Artifact"
+msgstr "Случаен върховен артефакт"
+
+msgid "Random Artifact"
+msgstr "Случаен артефакт"
+
+msgid "Random Resource"
+msgstr "Случаен ресурс"
+
+msgid "Random Monster"
+msgstr "Случайно чудовище"
 
 msgid "Random Town"
 msgstr "Случаен град"
@@ -7026,14 +7104,29 @@ msgstr "Случаен град"
 msgid "Random Castle"
 msgstr "Случаен замък"
 
+msgid "Random Monster - weak"
+msgstr "Случайно чудовище - слабо"
+
+msgid "Random Monster - medium"
+msgstr "Случайно чудовище - средно"
+
+msgid "Random Monster - strong"
+msgstr "Случайно чудовище - силно"
+
+msgid "Random Monster - very strong"
+msgstr "Случайно чудовище - мн. силно"
+
+msgid "Nothing Special"
+msgstr "Нищо специално"
+
 msgid "Watch Tower"
 msgstr "Стражева кула"
 
-msgid "Tree City"
-msgstr "Град на дърво"
-
 msgid "Tree House"
 msgstr "Къща на дърво"
+
+msgid "Tree City"
+msgstr "Град на дърво"
 
 msgid "Ruins"
 msgstr "Руини"
@@ -7043,6 +7136,12 @@ msgstr "Укрепление"
 
 msgid "Abandoned Mine"
 msgstr "Изоставена мина"
+
+msgid "Standing Stones"
+msgstr "Кромлех"
+
+msgid "Idol"
+msgstr "Идол"
 
 msgid "Tree of Knowledge"
 msgstr "Дърво на познанието"
@@ -7062,14 +7161,32 @@ msgstr "Дупка на Хобити"
 msgid "Mercenary Camp"
 msgstr "Лагер на наемниците"
 
+msgid "Shrine of the Second Circle"
+msgstr "Светилището на втория кръг"
+
+msgid "Shrine of the Third Circle"
+msgstr "Светилището на третия кръг"
+
 msgid "City of the Dead"
 msgstr "Градът на мъртвите"
 
 msgid "Sphinx"
 msgstr "Сфинкс"
 
+msgid "Wagon"
+msgstr "Вагон"
+
+msgid "Tar Pit"
+msgstr "Катранена яма"
+
+msgid "Artesian Spring"
+msgstr "Артезиански извор"
+
 msgid "Troll Bridge"
 msgstr "Мостът на троловете"
+
+msgid "Watering Hole"
+msgstr "Дупка за поливане"
 
 msgid "Witch's Hut"
 msgstr "Хижата на вещиците"
@@ -7077,188 +7194,17 @@ msgstr "Хижата на вещиците"
 msgid "Xanadu"
 msgstr "Ксанаду"
 
-msgid "Magellan's Maps"
-msgstr "Картите на Магелан"
-
-msgid "Derelict Ship"
-msgstr "Изоставен кораб"
-
-msgid "Shipwreck"
-msgstr "Корабокрушение"
-
-msgid "Observation Tower"
-msgstr "Наблюдателна кула"
-
-msgid "Freeman's Foundry"
-msgstr "Леярна на Фрийман"
-
-msgid "Watering Hole"
-msgstr "Дупка за поливане"
-
-msgid "Artesian Spring"
-msgstr "Артезиански извор"
-
-msgid "Gazebo"
-msgstr "Беседка"
-
-msgid "Archer's House"
-msgstr "Къщата на стрелеца"
-
-msgid "Peasant Hut"
-msgstr "Селска хижа"
-
-msgid "Dwarf Cottage"
-msgstr "Вила на джуджета"
-
-msgid "Stone Liths"
-msgstr "Телепорт"
-
-msgid "Magic Well"
-msgstr "Магически кладенец"
-
-msgid "Sign"
-msgstr "Знак"
-
-msgid "Nothing Special"
-msgstr "Нищо специално"
-
-msgid "Tar Pit"
-msgstr "Катранена яма"
-
-msgid "Mound"
-msgstr "Могила"
-
-msgid "Dune"
-msgstr "Дюна"
-
-msgid "Stump"
-msgstr "Пън"
-
-msgid "Cactus"
-msgstr "Кактус"
-
-msgid "Trees"
-msgstr "Дървета"
-
-msgid "Dead Tree"
-msgstr "Мъртво дърво"
-
-msgid "Mountains"
-msgstr "Планини"
-
-msgid "Volcano"
-msgstr "Вулкан"
-
-msgid "Rock"
-msgstr "Скала"
-
-msgid "Flowers"
-msgstr "Цветя"
-
-msgid "Water Lake"
-msgstr "Водно езеро"
-
-msgid "Mandrake"
-msgstr "Мандрагора"
-
-msgid "Crater"
-msgstr "Кратер"
-
-msgid "Lava Pool"
-msgstr "Басейн от лава"
-
-msgid "Shrub"
-msgstr "Храст"
-
-msgid "Buoy"
-msgstr "Шамандура"
-
-msgid "Skeleton"
-msgstr "Скелет"
-
-msgid "Treasure Chest"
-msgstr "Сандък със съкровище"
-
-msgid "Sea Chest"
-msgstr "Морски сандък"
-
-msgid "Campfire"
-msgstr "Лагерен огън"
-
-msgid "Fountain"
-msgstr "Фонтан"
-
-msgid "Genie Lamp"
-msgstr "Джин от лампа"
-
-msgid "Goblin Hut"
-msgstr "Хижата на гоблините"
-
-msgid "Monster"
-msgstr "Чудовище"
-
-msgid "Resource"
-msgstr "Ресурс"
-
-msgid "Whirlpool"
-msgstr "Водовъртеж"
-
-msgid "Artifact"
-msgstr "Артефакт"
-
-msgid "Boat"
-msgstr "Кораб"
-
-msgid "Random Artifact"
-msgstr "Случаен артефакт"
-
-msgid "Random Resource"
-msgstr "Случаен ресурс"
-
-msgid "Random Monster - weak"
-msgstr "Случайно чудовище - слабо"
-
-msgid "Random Monster - medium"
-msgstr "Случайно чудовище - средно"
-
-msgid "Random Monster - strong"
-msgstr "Случайно чудовище - силно"
-
-msgid "Random Monster - very strong"
-msgstr "Случайно чудовище - мн. силно"
-
-msgid "Standing Stones"
-msgstr "Кромлех"
-
-msgid "Event"
-msgstr "Събитие"
-
-msgid "Random Monster"
-msgstr "Случайно чудовище"
-
-msgid "Random Ultimate Artifact"
-msgstr "Случаен върховен артефакт"
-
-msgid "Idol"
-msgstr "Идол"
-
-msgid "Shrine of the First Circle"
-msgstr "Светилището на първия кръг"
-
-msgid "Shrine of the Second Circle"
-msgstr "Светилището на втория кръг"
-
-msgid "Shrine of the Third Circle"
-msgstr "Светилището на третия кръг"
-
-msgid "Wagon"
-msgstr "Вагон"
-
 msgid "Lean-To"
 msgstr "Наклонена"
 
+msgid "Magellan's Maps"
+msgstr "Картите на Магелан"
+
 msgid "Flotsam"
 msgstr "Сал"
+
+msgid "Derelict Ship"
+msgstr "Изоставен кораб"
 
 msgid "Shipwreck Survivor"
 msgstr "Корабокрушенец"
@@ -7266,28 +7212,85 @@ msgstr "Корабокрушенец"
 msgid "Bottle"
 msgstr "Бутилка"
 
+msgid "Magic Well"
+msgstr "Магически кладенец"
+
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Магическа градина"
 msgstr[1] "Магически градини"
 
-msgid "Random Artifact - Treasure"
-msgstr "Случаен артефакт - Съкровище"
+msgid "Observation Tower"
+msgstr "Наблюдателна кула"
 
-msgid "Random Artifact - Minor"
-msgstr "Случаен артефакт - незначителен"
+msgid "Freeman's Foundry"
+msgstr "Леярна на Фрийман"
 
-msgid "Random Artifact - Major"
-msgstr "Случаен артефакт - основен"
+msgid "Trees"
+msgstr "Дървета"
 
-msgid "Jail"
-msgstr "Затвор"
+msgid "Mountains"
+msgstr "Планини"
+
+msgid "Volcano"
+msgstr "Вулкан"
+
+msgid "Flowers"
+msgstr "Цветя"
+
+msgid "Rock"
+msgstr "Скала"
+
+msgid "Water Lake"
+msgstr "Водно езеро"
+
+msgid "Mandrake"
+msgstr "Мандрагора"
+
+msgid "Dead Tree"
+msgstr "Мъртво дърво"
+
+msgid "Stump"
+msgstr "Пън"
+
+msgid "Crater"
+msgstr "Кратер"
+
+msgid "Cactus"
+msgstr "Кактус"
+
+msgid "Mound"
+msgstr "Могила"
+
+msgid "Dune"
+msgstr "Дюна"
+
+msgid "Lava Pool"
+msgstr "Басейн от лава"
+
+msgid "Shrub"
+msgstr "Храст"
+
+msgid "Barrow Mounds"
+msgstr "Гробни могили"
+
+msgid "Mermaid"
+msgstr "Русалка"
+
+msgid "Sirens"
+msgstr "Сирени"
+
+msgid "Hut of the Magi"
+msgstr "Хижата на влъхвите"
+
+msgid "Eye of the Magi"
+msgstr "Окото на влъхвите"
 
 msgid "Traveller's Tent"
 msgstr "Палатка на пътешественик"
 
-msgid "Barrier"
-msgstr "Бариера"
+msgid "Jail"
+msgstr "Затвор"
 
 msgid "Fire Summoning Altar"
 msgstr "Олтар за призоваване на огън"
@@ -7301,29 +7304,26 @@ msgstr "Олтар за призоваване на земя"
 msgid "Water Summoning Altar"
 msgstr "Олтар за призоваване на вода"
 
-msgid "Barrow Mounds"
-msgstr "Гробни могили"
-
-msgid "Stables"
-msgstr "Конюшни"
+msgid "Reefs"
+msgstr "Рифове"
 
 msgid "Alchemist's Tower"
 msgstr "Кулата на алхимика"
 
-msgid "Hut of the Magi"
-msgstr "Хижата на влъхвите"
+msgid "Stables"
+msgstr "Конюшни"
 
-msgid "Eye of the Magi"
-msgstr "Окото на влъхвите"
+msgid "Random Artifact - Treasure"
+msgstr "Случаен артефакт - Съкровище"
 
-msgid "Mermaid"
-msgstr "Русалка"
+msgid "Random Artifact - Minor"
+msgstr "Случаен артефакт - незначителен"
 
-msgid "Sirens"
-msgstr "Сирени"
+msgid "Random Artifact - Major"
+msgstr "Случаен артефакт - основен"
 
-msgid "Reefs"
-msgstr "Рифове"
+msgid "Barrier"
+msgstr "Бариера"
 
 msgid "Unknown Monster"
 msgstr "Неизвестно чудовище"
