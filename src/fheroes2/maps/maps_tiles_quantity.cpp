@@ -51,7 +51,7 @@ bool Maps::Tiles::QuantityIsValid() const
     case MP2::OBJ_FLOTSAM:
     case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_TREASURE_CHEST:
-    case MP2::OBJ_WATERCHEST:
+    case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_ABANDONED_MINE:
         return true;
 
@@ -187,7 +187,7 @@ Artifact Maps::Tiles::QuantityArtifact() const
 
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_DAEMON_CAVE:
-    case MP2::OBJ_WATERCHEST:
+    case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SHIPWRECK:
@@ -245,7 +245,7 @@ uint32_t Maps::Tiles::QuantityGold() const
 
     case MP2::OBJ_FLOTSAM:
     case MP2::OBJ_CAMPFIRE:
-    case MP2::OBJ_WATERCHEST:
+    case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_DERELICT_SHIP:
     case MP2::OBJ_GRAVEYARD:
@@ -299,7 +299,7 @@ ResourceCount Maps::Tiles::QuantityResourceCount() const
         }
         break;
 
-    case MP2::OBJ_WATERCHEST:
+    case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST:
         return ResourceCount( Resource::GOLD, QuantityGold() );
 
@@ -336,7 +336,7 @@ Funds Maps::Tiles::QuantityFunds() const
     case MP2::OBJ_FLOTSAM:
         return Funds( Resource::GOLD, QuantityGold() ) + Funds( Resource::WOOD, quantity1 );
 
-    case MP2::OBJ_WATERCHEST:
+    case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_DERELICT_SHIP:
     case MP2::OBJ_SHIPWRECK:
@@ -397,7 +397,6 @@ Monster Maps::Tiles::QuantityMonster() const
     case MP2::OBJ_HALFLING_HOLE:
         return Monster( Monster::HALFLING );
     case MP2::OBJ_PEASANT_HUT:
-    case MP2::OBJ_THATCHED_HUT:
         return Monster( Monster::PEASANT );
 
     case MP2::OBJ_RUINS:
@@ -457,7 +456,7 @@ void Maps::Tiles::QuantityReset()
     case MP2::OBJ_WAGON:
     case MP2::OBJ_ARTIFACT:
     case MP2::OBJ_SHIPWRECK_SURVIVOR:
-    case MP2::OBJ_WATERCHEST:
+    case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
@@ -692,7 +691,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_WATERCHEST: {
+    case MP2::OBJ_SEA_CHEST: {
         Rand::Queue percents( 3 );
         // 20% - empty
         percents.Push( 0, 20 );
@@ -724,8 +723,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_TREASURE_CHEST:
         if ( isWater() ) {
-            // TODO: fix invalid object type!
-            SetObject( MP2::OBJ_WATERCHEST );
+            SetObject( MP2::OBJ_SEA_CHEST );
             QuantityUpdate();
         }
         else {
@@ -925,7 +923,6 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_DWARF_COTTAGE:
     case MP2::OBJ_HALFLING_HOLE:
     case MP2::OBJ_PEASANT_HUT:
-    case MP2::OBJ_THATCHED_HUT:
     // recruit dwelling
     case MP2::OBJ_RUINS:
     case MP2::OBJ_TREE_CITY:
@@ -1065,7 +1062,6 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
         count += isFirstLoad ? Rand::Get( 20, 40 ) : Rand::Get( 5, 10 );
         break;
     case MP2::OBJ_PEASANT_HUT:
-    case MP2::OBJ_THATCHED_HUT:
         count += isFirstLoad ? Rand::Get( 20, 50 ) : Rand::Get( 5, 10 );
         break;
     case MP2::OBJ_EXCAVATION:

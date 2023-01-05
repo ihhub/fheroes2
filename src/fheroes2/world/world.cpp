@@ -1148,8 +1148,7 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
     if ( conf.isCampaignGameType() ) {
         const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
         if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-            // TODO: why are we checking non-action object type here? Verify it!
-            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGON_CITY ) || kingdom.isVisited( MP2::OBJ_NON_ACTION_DRAGON_CITY );
+            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGON_CITY );
             if ( visited ) {
                 return GameOver::WINS_SIDE;
             }
