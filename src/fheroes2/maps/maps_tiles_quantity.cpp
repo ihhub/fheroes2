@@ -432,7 +432,7 @@ Monster Maps::Tiles::QuantityMonster() const
         return Monster( Monster::GHOST );
 
     case MP2::OBJ_MONSTER:
-        return Monster( objectIndex + 1 );
+        return Monster( _imageIndex + 1 );
 
     default:
         break;
@@ -533,7 +533,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     }
 
     case MP2::OBJ_ARTIFACT: {
-        const int art = Artifact::FromMP2IndexSprite( objectIndex ).GetID();
+        const int art = Artifact::FromMP2IndexSprite( _imageIndex ).GetID();
 
         if ( Artifact::UNKNOWN != art ) {
             if ( art == Artifact::SPELL_SCROLL ) {
@@ -563,23 +563,21 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_RESOURCE: {
         int resourceType = Resource::UNKNOWN;
-        // TODO: add a function opposite to MP2::GetICNObject() to return tileset ID.
-        const int resourceTileSet = 46;
 
-        if ( ( objectTileset >> 2 ) == resourceTileSet ) {
+        if ( ( _objectType >> 2 ) == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
             // The resource is located at the top.
-            resourceType = Resource::FromIndexSprite( objectIndex );
+            resourceType = Resource::FromIndexSprite( _imageIndex );
         }
         else {
             for ( TilesAddon & addon : addons_level1 ) {
-                if ( ( addon.object >> 2 ) == resourceTileSet ) {
-                    resourceType = Resource::FromIndexSprite( addon.index );
+                if ( ( addon._objectType >> 2 ) == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+                    resourceType = Resource::FromIndexSprite( addon._imageIndex );
                     // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
                     // Let's swap the addon and main tile objects
-                    std::swap( addon.object, objectTileset );
-                    std::swap( addon.index, objectIndex );
-                    std::swap( addon.uniq, uniq );
-                    std::swap( addon.level, _level );
+                    std::swap( addon._objectType, _objectType );
+                    std::swap( addon._imageIndex, _imageIndex );
+                    std::swap( addon._uid, _uid );
+                    std::swap( addon._layerType, _layerType );
 
                     break;
                 }
@@ -603,7 +601,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             break;
         default:
             // Some maps have broken resources being put which ideally we need to correct. Let's make them 0 Wood.
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << _index << " contains unknown resource type. Tileset " << objectTileset << ", object index " << objectIndex )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << _index << " contains unknown resource type. Object type " << _objectType << ", image index " << _imageIndex )
             resourceType = Resource::WOOD;
             count = 0;
             break;
@@ -823,11 +821,11 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARRIER:
-        QuantitySetColor( Tiles::ColorFromBarrierSprite( objectTileset, objectIndex ) );
+        QuantitySetColor( Tiles::ColorFromBarrierSprite( _objectType, _imageIndex ) );
         break;
 
     case MP2::OBJ_TRAVELLER_TENT:
-        QuantitySetColor( Tiles::ColorFromTravellerTentSprite( objectTileset, objectIndex ) );
+        QuantitySetColor( Tiles::ColorFromTravellerTentSprite( _objectType, _imageIndex ) );
         break;
 
     case MP2::OBJ_ALCHEMIST_LAB:
@@ -839,7 +837,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_MINES: {
-        switch ( objectIndex ) {
+        switch ( _imageIndex ) {
         case 0:
             QuantitySetResource( Resource::ORE, 2 );
             break;
@@ -872,8 +870,9 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     }
 
     case MP2::OBJ_BOAT:
-        objectTileset = 27;
-        objectIndex = 18;
+        // TODO: this is absolutely wrong to assign this value to object type!
+        _objectType = 27;
+        _imageIndex = 18;
         break;
 
     case MP2::OBJ_EVENT:
@@ -964,19 +963,20 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
 {
     tile.SetObject( MP2::OBJ_MONSTER );
 
-    const int icnId = MP2::GetICNObject( tile.objectTileset );
+    const int icnId = MP2::GetICNObject( tile._objectType );
 
     // If there was another object sprite here (shadow for example) push it down to Addons,
     // except when there is already MONS32.ICN here.
-    if ( tile.objectTileset != 0 && icnId != ICN::MONS32 && tile.objectIndex != 255 ) {
-        tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile.uniq, tile.objectTileset, tile.objectIndex ) );
+    if ( tile._objectType != 0 && icnId != ICN::MONS32 && tile._imageIndex != 255 ) {
+        tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile._uid, tile._objectType, tile._imageIndex ) );
 
-        // replace sprite with the one for the new monster
-        tile.uniq = 0;
-        tile.objectTileset = 48; // MONS32.ICN
+        // TODO: why are we setting UID to 0? It should be unique!
+        tile._uid = 0;
+        // TODO: we ignore first 2 bits which might be not 0!
+        tile._objectType = ( MP2::OBJ_ICN_TYPE_MONS32 << 2 );
     }
 
-    tile.objectIndex = mons.GetSpriteIndex();
+    tile._imageIndex = mons.GetSpriteIndex();
 
     const bool setDefinedCount = ( count > 0 );
 
@@ -1013,7 +1013,7 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
     Monster mons;
 
     if ( MP2::OBJ_MONSTER == tile.GetObject() ) {
-        mons = Monster( tile.objectIndex + 1 ); // ICN::MONS32 start from PEASANT
+        mons = Monster( tile._imageIndex + 1 ); // ICN::MONS32 start from PEASANT
     }
     else {
         switch ( tile.GetObject() ) {
@@ -1038,7 +1038,7 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 
         // fixed random sprite
         tile.SetObject( MP2::OBJ_MONSTER );
-        tile.objectIndex = mons.GetID() - 1; // ICN::MONS32 start from PEASANT
+        tile._imageIndex = mons.GetID() - 1; // ICN::MONS32 start from PEASANT
     }
 
     uint32_t count = 0;

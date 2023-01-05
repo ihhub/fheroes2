@@ -678,7 +678,7 @@ void World::ProcessNewMap()
 
         case MP2::OBJ_HEROES: {
             // remove map editor sprite
-            if ( MP2::GetICNObject( tile.GetObjectTileset() ) == ICN::MINIHERO )
+            if ( MP2::GetICNObject( tile.getObjectType() ) == ICN::MINIHERO )
                 tile.Remove( tile.GetObjectUID() );
 
             tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );

@@ -1,5 +1,25 @@
 #!/usr/bin/env bash
 
+###########################################################################
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
+#   Copyright (C) 2021 - 2023                                             #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
+
 set -e
 
 function echo_red {
@@ -18,6 +38,10 @@ function echo_stage {
     echo
     echo_green "$*"
     echo
+}
+
+function verify_homm2_path {
+    [[ -f "$1/DATA/HEROES2.AGG" && -d "$1/MAPS" ]]
 }
 
 echo_green "This script will extract and copy game resources from the original distribution of Heroes of Might and Magic II"
@@ -45,20 +69,46 @@ fi
 
 echo_green "Destination directory: $DEST_PATH"
 
-echo_stage "[2/3] determining the HoMM2 directory"
+echo_stage "[2/3] determining the HoMM2 directory or installer package"
 
 if [[ "$#" -gt "0" ]]; then
     HOMM2_PATH="$1"
 else
-    read -e -p "Please enter the full path to the HoMM2 directory (e.g. /home/user/GOG Games/HoMM 2 Gold): " HOMM2_PATH
+    read -e -p "Please enter the full path to the HoMM2 directory or installer package (e.g. /home/user/homm2 or /tmp/installer.exe): " HOMM2_PATH
 fi
 
-if [[ ( ! -f "$HOMM2_PATH/HEROES2.EXE" && ! -f "$HOMM2_PATH/HEROES2W.EXE" ) || ! -d "$HOMM2_PATH/DATA" || ! -d "$HOMM2_PATH/MAPS" ]]; then
-    echo_red "Unable to find the HoMM2 directory. Installation aborted."
+if [[ -f "$HOMM2_PATH" ]]; then
+    if [[ -z "$(command -v innoextract)" ]]; then
+        echo_red "innoextract was not found in your system. Unable to extract the installer package. Installation aborted."
+        exit 1
+    fi
+
+    EXTRACT_DIR="$(mktemp -d)"
+
+    echo_green "Verifying the installer package, please wait..."
+
+    innoextract -e -s -d "$EXTRACT_DIR" -- "$HOMM2_PATH"
+
+    for ITEM in "$EXTRACT_DIR" "$EXTRACT_DIR"/*; do
+        if verify_homm2_path "$ITEM"; then
+            echo_green "HoMM2 installer package: $HOMM2_PATH"
+
+            HOMM2_PATH="$ITEM"
+
+            break
+        fi
+    done
+
+    if [[ -f "$HOMM2_PATH" ]]; then
+        echo_red "Unable to find HoMM2 files in this installer package. Installation aborted."
+        exit 1
+    fi
+elif verify_homm2_path "$HOMM2_PATH"; then
+    echo_green "HoMM2 directory: $HOMM2_PATH"
+else
+    echo_red "Unable to find the HoMM2 directory or installer package. Installation aborted."
     exit 1
 fi
-
-echo_green "HoMM2 directory: $HOMM2_PATH"
 
 echo_stage "[3/3] copying game resources"
 

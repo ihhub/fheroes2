@@ -616,25 +616,26 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
             Tiles & tile = world.GetTiles( castleTile );
 
             if ( isRandom )
-                tile.ReplaceObjectSprite( castleID, 38, 35 * 4, lookupID, fullTownIndex ); // OBJNTWRD to OBJNTOWN
+                tile.ReplaceObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTWRD, ( MP2::OBJ_ICN_TYPE_OBJNTOWN << 2 ), lookupID, fullTownIndex ); // OBJNTWRD to OBJNTOWN
             else
-                tile.UpdateObjectSprite( castleID, 35, 35 * 4, -16 ); // no change in tileset
+                tile.UpdateObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTOWN, ( MP2::OBJ_ICN_TYPE_OBJNTOWN << 2 ), -16 ); // no change in tileset
 
             if ( index == 0 ) {
                 TilesAddon * addon = tile.FindAddonLevel2( castleID );
-                if ( addon && MP2::GetICNObject( addon->object ) == ICN::OBJNTWRD ) {
-                    addon->object -= 12;
-                    addon->index = fullTownIndex - 16;
+                if ( addon && MP2::GetICNObject( addon->_objectType ) == ICN::OBJNTWRD ) {
+                    addon->_objectType = MP2::OBJ_ICN_TYPE_OBJNTOWN + ( addon->_objectType % 4 );
+                    addon->_imageIndex = fullTownIndex - 16;
                 }
             }
         }
 
-        const int shadowTile = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );
-        if ( isValidAbsIndex( shadowTile ) ) {
+        const int shadowTileId = GetIndexFromAbsPoint( center.x + shadowCoordinates[index][0], center.y + shadowCoordinates[index][1] );
+        if ( isValidAbsIndex( shadowTileId ) ) {
+            Maps::Tiles & shadowTile = world.GetTiles( shadowTileId );
             if ( isRandom )
-                world.GetTiles( shadowTile ).ReplaceObjectSprite( castleID, 38, 37 * 4, lookupID + 32, fullTownIndex ); // OBJNTWRD to OBJNTWSH
+                shadowTile.ReplaceObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTWRD, ( MP2::OBJ_ICN_TYPE_OBJNTWSH << 2 ), lookupID + 32, fullTownIndex );
             else
-                world.GetTiles( shadowTile ).UpdateObjectSprite( castleID, 37, 37 * 4, -16 ); // no change in tileset
+                shadowTile.UpdateObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTWSH, ( MP2::OBJ_ICN_TYPE_OBJNTWSH << 2 ), -16 ); // no change in tileset
         }
     }
 }

@@ -37,164 +37,155 @@ int MP2::GetICNObject( const uint8_t tileset )
 {
     // First 2 bits are used for flags like animation.
     // TODO: separate these 2 bits and real tile (?) index into 2 variables to avoid this bit shifting operations all over the code.
-    switch ( tileset >> 2 ) {
-    // reserverd
-    case 0:
+    return getIcnIdFromObjectIcnType( tileset >> 2 );
+}
+
+int MP2::getIcnIdFromObjectIcnType( const uint8_t objectIcnType )
+{
+    switch ( objectIcnType ) {
+    case OBJ_ICN_TYPE_UNKNOWN:
         return ICN::UNKNOWN;
-    // custom: boat sprite
-    case 6:
+    case OBJ_ICN_TYPE_BOAT32:
         return ICN::BOAT32;
-    // artifact
-    case 11:
+    case OBJ_ICN_TYPE_OBJNARTI:
         return ICN::OBJNARTI;
-    // monster
-    case 12:
+    case OBJ_ICN_TYPE_MONS32:
         return ICN::MONS32;
-    // castle flags
-    case 14:
+    case OBJ_ICN_TYPE_FLAG32:
         return ICN::FLAG32;
-    // heroes
-    case 21:
+    case OBJ_ICN_TYPE_MINIHERO:
         return ICN::MINIHERO;
-    // mountains: snow
-    case 22:
+    case OBJ_ICN_TYPE_MTNSNOW:
         return ICN::MTNSNOW;
-    // mountains: swamp
-    case 23:
+    case OBJ_ICN_TYPE_MTNSWMP:
         return ICN::MTNSWMP;
-    // mountains: lava
-    case 24:
+    case OBJ_ICN_TYPE_MTNLAVA:
         return ICN::MTNLAVA;
-    // mountains: desert
-    case 25:
+    case OBJ_ICN_TYPE_MTNDSRT:
         return ICN::MTNDSRT;
-    // mountains: dirt
-    case 26:
+    case OBJ_ICN_TYPE_MTNDIRT:
         return ICN::MTNDIRT;
-    // mountains: all terrains
-    case 27:
+    case OBJ_ICN_TYPE_MTNMULT:
         return ICN::MTNMULT;
-    // mines
-    case 29:
+    case OBJ_ICN_TYPE_EXTRAOVR:
         return ICN::EXTRAOVR;
-    // road
-    case 30:
+    case OBJ_ICN_TYPE_ROAD:
         return ICN::ROAD;
-    // relief: crck
-    case 31:
+    case OBJ_ICN_TYPE_MTNCRCK:
         return ICN::MTNCRCK;
-    // relief: gras
-    case 32:
+    case OBJ_ICN_TYPE_MTNGRAS:
         return ICN::MTNGRAS;
-    // trees jungle
-    case 33:
+    case OBJ_ICN_TYPE_TREJNGL:
         return ICN::TREJNGL;
-    // trees evil
-    case 34:
+    case OBJ_ICN_TYPE_TREEVIL:
         return ICN::TREEVIL;
-    // castle and town sprites
-    case 35:
+    case OBJ_ICN_TYPE_OBJNTOWN:
         return ICN::OBJNTOWN;
-    // castle base
-    case 36:
+    case OBJ_ICN_TYPE_OBJNTWBA:
         return ICN::OBJNTWBA;
-    // castle shadow
-    case 37:
+    case OBJ_ICN_TYPE_OBJNTWSH:
         return ICN::OBJNTWSH;
-    // random castle
-    case 38:
+    case OBJ_ICN_TYPE_OBJNTWRD:
         return ICN::OBJNTWRD;
-    // mine guardians (elementals)
-    case 39:
+    case OBJ_ICN_TYPE_OBJNXTRA:
         return ICN::OBJNXTRA;
-    // water object
-    case 40:
+    case OBJ_ICN_TYPE_OBJNWAT2:
         return ICN::OBJNWAT2;
-    // object other
-    case 41:
+    case OBJ_ICN_TYPE_OBJNMUL2:
         return ICN::OBJNMUL2;
-    // trees snow
-    case 42:
+    case OBJ_ICN_TYPE_TRESNOW:
         return ICN::TRESNOW;
-    // trees trefir
-    case 43:
+    case OBJ_ICN_TYPE_TREFIR:
         return ICN::TREFIR;
-    // trees
-    case 44:
+    case OBJ_ICN_TYPE_TREFALL:
         return ICN::TREFALL;
-    // river
-    case 45:
+    case OBJ_ICN_TYPE_STREAM:
         return ICN::STREAM;
-    // resource
-    case 46:
+    case OBJ_ICN_TYPE_OBJNRSRC:
         return ICN::OBJNRSRC;
-    // gras object
-    case 48:
+    case OBJ_ICN_TYPE_OBJNGRA2:
         return ICN::OBJNGRA2;
-    // trees tredeci
-    case 49:
+    case OBJ_ICN_TYPE_TREDECI:
         return ICN::TREDECI;
-    // sea object
-    case 50:
+    case OBJ_ICN_TYPE_OBJNWATR:
         return ICN::OBJNWATR;
-    // vegetation gras
-    case 51:
+    case OBJ_ICN_TYPE_OBJNGRAS:
         return ICN::OBJNGRAS;
-    // object on snow
-    case 52:
+    case OBJ_ICN_TYPE_OBJNSNOW:
         return ICN::OBJNSNOW;
-    // object on swamp
-    case 53:
+    case OBJ_ICN_TYPE_OBJNSWMP:
         return ICN::OBJNSWMP;
-    // object on lava
-    case 54:
+    case OBJ_ICN_TYPE_OBJNLAVA:
         return ICN::OBJNLAVA;
-    // object on desert
-    case 55:
+    case OBJ_ICN_TYPE_OBJNDSRT:
         return ICN::OBJNDSRT;
-    // object on dirt
-    case 56:
+    case OBJ_ICN_TYPE_OBJNDIRT:
         return ICN::OBJNDIRT;
-    // object on crck
-    case 57:
+    case OBJ_ICN_TYPE_OBJNCRCK:
         return ICN::OBJNCRCK;
-    // object on lava
-    case 58:
+    case OBJ_ICN_TYPE_OBJNLAV3:
         return ICN::OBJNLAV3;
-    // object on earth
-    case 59:
+    case OBJ_ICN_TYPE_OBJNMULT:
         return ICN::OBJNMULT;
-    //  object on lava
-    case 60:
+    case OBJ_ICN_TYPE_OBJNLAV2:
         return ICN::OBJNLAV2;
-    // extra objects for loyalty version
-    case 61:
-        if ( Settings::Get().isPriceOfLoyaltySupported() )
+    case OBJ_ICN_TYPE_X_LOC1:
+        if ( Settings::Get().isPriceOfLoyaltySupported() ) {
             return ICN::X_LOC1;
+        }
         break;
-    // extra objects for loyalty version
-    case 62:
-        if ( Settings::Get().isPriceOfLoyaltySupported() )
+    case OBJ_ICN_TYPE_X_LOC2:
+        if ( Settings::Get().isPriceOfLoyaltySupported() ) {
             return ICN::X_LOC2;
+        }
         break;
-    // extra objects for loyalty version
-    case 63:
-        if ( Settings::Get().isPriceOfLoyaltySupported() )
+    case OBJ_ICN_TYPE_X_LOC3:
+        if ( Settings::Get().isPriceOfLoyaltySupported() ) {
             return ICN::X_LOC3;
+        }
         break;
     default:
         break;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown tileset: " << static_cast<int>( tileset ) )
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown object ICN type: " << static_cast<int>( objectIcnType ) )
     return ICN::UNKNOWN;
 }
 
 bool MP2::isHiddenForPuzzle( const int terrainType, uint8_t tileset, uint8_t index )
 {
-    const int icnID = tileset >> 2;
-    if ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) || ( icnID == 59 && index >= 124 && index <= 137 ) ) {
+    const int objectIcnType = tileset >> 2;
+    switch ( objectIcnType ) {
+    case OBJ_ICN_TYPE_UNKNOWN:
+    case OBJ_ICN_TYPE_UNUSED_1:
+    case OBJ_ICN_TYPE_UNUSED_2:
+    case OBJ_ICN_TYPE_UNUSED_3:
+    case OBJ_ICN_TYPE_UNUSED_4:
+    case OBJ_ICN_TYPE_UNUSED_5:
+    case OBJ_ICN_TYPE_BOAT32:
+    case OBJ_ICN_TYPE_UNUSED_7:
+    case OBJ_ICN_TYPE_UNUSED_8:
+    case OBJ_ICN_TYPE_UNUSED_9:
+    case OBJ_ICN_TYPE_OBJNHAUN:
+    case OBJ_ICN_TYPE_OBJNARTI:
+    case OBJ_ICN_TYPE_MONS32:
+    case OBJ_ICN_TYPE_UNUSED_13:
+    case OBJ_ICN_TYPE_FLAG32:
+    case OBJ_ICN_TYPE_UNUSED_15:
+    case OBJ_ICN_TYPE_UNUSED_16:
+    case OBJ_ICN_TYPE_UNUSED_17:
+    case OBJ_ICN_TYPE_UNUSED_18:
+    case OBJ_ICN_TYPE_UNUSED_19:
+    case OBJ_ICN_TYPE_MINIMON:
+    case OBJ_ICN_TYPE_MINIHERO:
+    case OBJ_ICN_TYPE_OBJNRSRC:
         return true;
+    case OBJ_ICN_TYPE_OBJNMULT:
+        // Campfire.
+        return ( index >= 124 && index <= 137 );
+    default:
+        // TODO: verify whether we need to show pickup objects in water.
+        break;
     }
 
     return isDiggingHoleSprite( terrainType, tileset, index );
@@ -1241,33 +1232,33 @@ bool MP2::getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint8_
 {
     switch ( terrainType ) {
     case Maps::Ground::DESERT:
-        tileSet = 0xDC; // ICN::OBJNDSRT
+        tileSet = ( OBJ_ICN_TYPE_OBJNDSRT << 2 );
         index = 68;
         return true;
     case Maps::Ground::SNOW:
-        tileSet = 208; // ICN::OBJNSNOW
+        tileSet = ( OBJ_ICN_TYPE_OBJNSNOW << 2 );
         index = 11;
         return true;
     case Maps::Ground::SWAMP:
-        tileSet = 212; // ICN::OBJNSWMP
+        tileSet = ( OBJ_ICN_TYPE_OBJNSWMP << 2 );
         index = 86;
         return true;
     case Maps::Ground::WASTELAND:
-        tileSet = 0xE4; // ICN::OBJNCRCK
+        tileSet = ( OBJ_ICN_TYPE_OBJNCRCK << 2 );
         index = 70;
         return true;
     case Maps::Ground::LAVA:
-        tileSet = 0xD8; // ICN::OBJNLAVA
+        tileSet = ( OBJ_ICN_TYPE_OBJNLAVA << 2 );
         index = 26;
         return true;
     case Maps::Ground::DIRT:
-        tileSet = 0xE0; // ICN::OBJNDIRT
+        tileSet = ( OBJ_ICN_TYPE_OBJNDIRT << 2 );
         index = 140;
         return true;
     case Maps::Ground::BEACH:
     case Maps::Ground::GRASS:
         // Beach doesn't have its digging hole so we use it from Grass terrain.
-        tileSet = 0xC0; // ICN::OBJNGRA2
+        tileSet = ( OBJ_ICN_TYPE_OBJNGRA2 << 2 );
         index = 9;
         return true;
     case Maps::Ground::WATER:
