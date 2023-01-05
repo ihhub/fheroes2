@@ -285,6 +285,19 @@ namespace Bin_Info
             }
         }
 
+        // Paladin/Crusader needs their 'x' offset in moving animations to be lover by 1px to avoid sprite shift in well and during diagonal movement.
+        if ( ( monsterID == Monster::PALADIN || monsterID == Monster::CRUSADER ) && frameXOffset[MOVE_MAIN].size() == 8 && animationFrames[MOVE_MAIN].size() == 8 ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                for ( int & xOffset : frameXOffset[animType] ) {
+                    --xOffset;
+                }
+
+                // The 5th and 8th frames needs extra shift by 2 and 1 pixel.
+                frameXOffset[animType][4] -= 2;
+                --frameXOffset[animType][7];
+            }
+        }
+
         // Goblins needs their 'x' offset in moving animations to be bigger by 6px to avoid sprite shift in well and during diagonal movement.
         if ( monsterID == Monster::GOBLIN ) {
             for ( const int animType : { MOVE_TILE_START, MOVE_MAIN, MOVE_STOP, MOVE_ONE } ) {
