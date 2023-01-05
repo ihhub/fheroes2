@@ -344,7 +344,7 @@ namespace Battle
         void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, int32_t size );
 
         void AnimateOpponents( OpponentSprite * target );
-        void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
+        void AnimateUnitWithDelay( Unit & unit );
         void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation );
         void RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount = 0 );

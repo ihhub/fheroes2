@@ -55,6 +55,7 @@ namespace Game
         BATTLE_POPUP_DELAY,
         BATTLE_COLOR_CYCLE_DELAY,
         BATTLE_SELECTED_UNIT_DELAY,
+        BATTLE_UNIT_MOVEMENT_DELAY,
 
         CURRENT_HERO_DELAY,
         CURRENT_AI_DELAY,
@@ -76,6 +77,9 @@ namespace Game
     // Explicitly pass custom delay. Useful for loops when first iterator must pass.
     void passCustomAnimationDelay( const uint64_t delayMs );
 
+    // Set the delay between frames of unit movement animation sequence on the battlefield.
+    void setUnitMovementDelay( const uint64_t delayMs );
+
     void AnimateResetDelay( const DelayType delayType );
     void UpdateGameSpeed();
 
@@ -83,6 +87,9 @@ namespace Game
 
     int HumanHeroAnimSkip();
     int AIHeroAnimSkip();
+
+    // Returns true if every of delay type has passed.
+    bool isDelayPassed( const std::vector<Game::DelayType> & delayTypes );
 
     // Returns true if every of delay type is not passed yet. DelayType::CUSTOM_DELAY must not be added in this function!
     bool isDelayNeeded( const std::vector<Game::DelayType> & delayTypes );
