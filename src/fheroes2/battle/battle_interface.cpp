@@ -5046,7 +5046,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     // A vector of frames to animate the increase of the spell effect. The decrease will be shown in reverse frames order.
     // Initialize a vector with copies of battle field to use them in making the spell effect increase animation.
     std::vector<fheroes2::Image> spellEffect;
-    assert( halfMaxFrame > 1 );
+    static_assert( halfMaxFrame > 1 );
     spellEffect.reserve( halfMaxFrame );
 
     const uint32_t spellEffectLastFrame = halfMaxFrame - 1;
