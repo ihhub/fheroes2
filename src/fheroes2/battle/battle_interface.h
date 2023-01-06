@@ -348,7 +348,7 @@ namespace Battle
         void WaitForActionsDelays();
 
         void AnimateOpponents( OpponentSprite * target );
-        void AnimateUnitWithDelay( Unit & unit );
+        void AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender = false );
         void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation );
         void RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount = 0 );

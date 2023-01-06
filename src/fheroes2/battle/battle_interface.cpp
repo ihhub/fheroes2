@@ -3005,7 +3005,7 @@ void Battle::Interface::WaitForActionsDelays()
     }
 }
 
-void Battle::Interface::AnimateUnitWithDelay( Unit & unit )
+void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender )
 {
     if ( unit.isFinishAnimFrame() && unit.animation.animationLength() != 1 ) {
         // If it is the last frame in the animation sequence whith more than one frame or if we have no frames.
@@ -3027,6 +3027,11 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit )
             }
 
             unit.IncreaseAnimFrame();
+
+            if ( skipLastFrameRender && unit.isFinishAnimFrame() ) {
+                // We have reached the last amination frame and do not render it.
+                break;
+            }
         }
     }
 }
@@ -3199,7 +3204,9 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
             // Set the delay between shooting animation frames.
             Game::setUnitMovementDelay( Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) / attacker.animation.animationLength() );
 
-            AnimateUnitWithDelay( attacker );
+            // We do not render the last frame of shooting animation as all frames besides this contains the projectile.
+            // The last frame will be rendered in RedrawMissileAnimation() function with the render of projectile.
+            AnimateUnitWithDelay( attacker, true );
         }
 
         const fheroes2::Point missileStart( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
