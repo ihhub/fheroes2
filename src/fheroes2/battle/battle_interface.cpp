@@ -3334,6 +3334,11 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
 
+    // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
+    // along with the unit kill/wince animation.
+    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
+                               && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
+
     for ( const Battle::TargetInfo & target : targets ) {
         Unit * unit = target.defender;
         if ( unit == nullptr ) {
@@ -3359,7 +3364,13 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         }
         else if ( target.damage ) {
             // wince animation
-            unit->SwitchAnimation( Monster_Info::WNCE );
+            if ( drawLichCloud ) {
+                // The Lich cloud causes units to freeze for some time in the maximum wince state. So we will devide the wince animation.
+                unit->SwitchAnimation( Monster_Info::WNCE_UP );
+            }
+            else {
+                unit->SwitchAnimation( Monster_Info::WNCE );
+            }
             AudioManager::PlaySound( unit->M82Wnce() );
             ++finish;
         }
@@ -3372,12 +3383,10 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     SetHeroAnimationReactionToTroopDeath( deathColor );
 
-    // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
-    // along with the unit kill/wince animation.
-    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
-                               && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
     uint32_t lichCloudFrame = 0;
     const uint32_t lichCloudMaxFrame = fheroes2::AGG::GetICNCount( ICN::LICHCLOD );
+    // The frame number after which the target animation under the Lich cloud will be switched to 'WNCE_DOWN'.
+    const uint32_t wnceDownStartFrame = lichCloudMaxFrame - 3;
 
     if ( drawLichCloud ) {
         // Lich cloud sound.
@@ -3433,7 +3442,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 }
 
                 const int animationState = info.defender->GetAnimationState();
-                if ( animationState == Monster_Info::WNCE ) {
+                if ( animationState == ( Monster_Info::WNCE || Monster_Info::WNCE_UP || Monster_Info::WNCE_DOWN ) ) {
                     return false;
                 }
 
@@ -3448,8 +3457,12 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
             for ( const Battle::TargetInfo & target : targets ) {
                 if ( target.defender ) {
-                    if ( target.defender->isFinishAnimFrame() && target.defender->GetAnimationState() == Monster_Info::WNCE ) {
+                    if ( target.defender->isFinishAnimFrame()
+                         && ( target.defender->GetAnimationState() == Monster_Info::WNCE || target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
                         target.defender->SwitchAnimation( Monster_Info::STATIC );
+                    }
+                    else if ( lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
+                        target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
                     }
                     else {
                         target.defender->IncreaseAnimFrame();
