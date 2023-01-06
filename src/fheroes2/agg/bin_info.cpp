@@ -331,6 +331,40 @@ namespace Bin_Info
             }
         }
 
+        // Nomad needs their 'x' offset in moving animations to be corrected avoid one sprite shift in well and during diagonal movement.
+        if ( monsterID == Monster::NOMAD && frameXOffset[MOVE_MAIN].size() == 8 && frameXOffset[MOVE_ONE].size() == 8 ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                frameXOffset[animType][2] -= 2;
+            }
+        }
+
+        // Nomad needs their 'x' offset in moving animations to be corrected avoid one sprite shift in well and during diagonal movement.
+        if ( monsterID == Monster::MEDUSA && frameXOffset[MOVE_MAIN].size() == 15 && frameXOffset[MOVE_ONE].size() == 15 ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                frameXOffset[animType][3] += 2;
+                frameXOffset[animType][4] += 2;
+                ++frameXOffset[animType][5];
+                ++frameXOffset[animType][9];
+                frameXOffset[animType][10] += 2;
+                ++frameXOffset[animType][11];
+                ++frameXOffset[animType][14];
+            }
+        }
+
+        // Elementals needs their 'x' offset in moving animations to be corrected avoid sprite shift in well and during diagonal movement.
+        if ( ( monsterID == Monster::EARTH_ELEMENT || monsterID == Monster::AIR_ELEMENT || monsterID == Monster::FIRE_ELEMENT || monsterID == Monster::WATER_ELEMENT )
+             && frameXOffset[MOVE_MAIN].size() == 8 && frameXOffset[MOVE_ONE].size() == 8 ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                frameXOffset[animType][0] += 3;
+                frameXOffset[animType][1] += 3;
+                frameXOffset[animType][2] += 5;
+                frameXOffset[animType][3] += 3;
+                --frameXOffset[animType][5];
+                ++frameXOffset[animType][6];
+                --frameXOffset[animType][7];
+            }
+        }
+
         // X offset fix for Swordsman.
         if ( ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) && frameXOffset[MOVE_START].size() == 2
              && frameXOffset[MOVE_STOP].size() == 1 ) {
