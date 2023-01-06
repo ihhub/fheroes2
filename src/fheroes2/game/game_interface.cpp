@@ -216,7 +216,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     LocalEvent & le = LocalEvent::Get();
     int32_t returnValue = -1;
 
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
         const fheroes2::Point & mp = le.GetMouseCursor();
 
         if ( radarRect & mp ) {

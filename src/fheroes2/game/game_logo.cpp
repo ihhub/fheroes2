@@ -20,6 +20,7 @@
 
 #include "game_logo.h"
 
+#include <cassert>
 #include <cstdint>
 
 #include "game_delays.h"
@@ -53,6 +54,11 @@ void fheroes2::showTeamInfo()
 
     uint8_t alpha = 250;
     const uint64_t animationDelay = 40;
+
+    // Immediately indicate that the delay has passed to render first frame immediately.
+    Game::passCustomAnimationDelay( animationDelay );
+    // Make sure that the first run is passed immediately.
+    assert( !Game::isCustomDelayNeeded( animationDelay ) );
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) && alpha > 20 ) {

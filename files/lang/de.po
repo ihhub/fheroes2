@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-30 15:06+0000\n"
+"POT-Creation-Date: 2023-01-05 04:34+0000\n"
 "PO-Revision-Date: 2022-12-22 21:39+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -7123,11 +7123,50 @@ msgstr "Kein Objekt"
 msgid "Alchemist Lab"
 msgstr "Alchemistenlabor"
 
+msgid "Sign"
+msgstr "Zeichen"
+
+msgid "Buoy"
+msgstr "Boje"
+
+msgid "Skeleton"
+msgstr "Skelett"
+
 msgid "Daemon Cave"
 msgstr "Dämonenhöhle"
 
+msgid "Treasure Chest"
+msgstr "Schatzkiste"
+
 msgid "Faerie Ring"
 msgstr "Feenring"
+
+msgid "Campfire"
+msgstr "Lagerfeuer"
+
+msgid "Fountain"
+msgstr "Brunnen"
+
+msgid "Gazebo"
+msgstr "Pavillon"
+
+msgid "Genie Lamp"
+msgstr "Antike Lampe"
+
+msgid "Archer's House"
+msgstr "Haus des Bogenschützen"
+
+msgid "Goblin Hut"
+msgstr "Goblinhütte"
+
+msgid "Dwarf Cottage"
+msgstr "Zwergenhaus"
+
+msgid "Peasant Hut"
+msgstr "Bauernhaus"
+
+msgid "Event"
+msgstr "Ereignis"
 
 msgid "Dragon City"
 msgstr "Drachenstadt"
@@ -7143,11 +7182,17 @@ msgstr[1] "Wasserräder"
 msgid "Mines"
 msgstr "Minen"
 
+msgid "Monster"
+msgstr "Monster"
+
 msgid "Obelisk"
 msgstr "Obelisk"
 
 msgid "Oasis"
 msgstr "Oase"
+
+msgid "Resource"
+msgstr "Ressource"
 
 msgid "Sawmill"
 msgstr "Sägemühle"
@@ -7155,16 +7200,49 @@ msgstr "Sägemühle"
 msgid "Oracle"
 msgstr "Orakel"
 
+msgid "Shrine of the First Circle"
+msgstr "Schrein des ersten Kreises"
+
+msgid "Shipwreck"
+msgstr "Schiffswrack"
+
+msgid "Sea Chest"
+msgstr "Seekiste"
+
 msgid "Desert Tent"
 msgstr "Wüstenzelt"
 
+msgid "Stone Liths"
+msgstr "Steinsäulen"
+
 msgid "Wagon Camp"
 msgstr "Wagenlager"
+
+msgid "Whirlpool"
+msgstr "Whirlpool"
 
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Windmühle"
 msgstr[1] "Windmühlen"
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "Boat"
+msgstr "Boot"
+
+msgid "Random Ultimate Artifact"
+msgstr "Zufälliges ultimatives Artefakt"
+
+msgid "Random Artifact"
+msgstr "Zufälliges Artefakt"
+
+msgid "Random Resource"
+msgstr "Zufällige Ressource"
+
+msgid "Random Monster"
+msgstr "Zufälliges Monster"
 
 msgid "Random Town"
 msgstr "Zufällige Stadt"
@@ -7172,14 +7250,29 @@ msgstr "Zufällige Stadt"
 msgid "Random Castle"
 msgstr "Zufälliges Burg"
 
+msgid "Random Monster - weak"
+msgstr "Zufälliges Monster - schwach"
+
+msgid "Random Monster - medium"
+msgstr "Zufälliges Monster - mittel"
+
+msgid "Random Monster - strong"
+msgstr "Zufälliges Monster - stark"
+
+msgid "Random Monster - very strong"
+msgstr "Zufälliges Monster - sehr stark"
+
+msgid "Nothing Special"
+msgstr "Nichts besonderes"
+
 msgid "Watch Tower"
 msgstr "Wachturm"
 
-msgid "Tree City"
-msgstr "Baumhausstadt"
-
 msgid "Tree House"
 msgstr "Baumhaus"
+
+msgid "Tree City"
+msgstr "Baumhausstadt"
 
 msgid "Ruins"
 msgstr "Ruinen"
@@ -7189,6 +7282,12 @@ msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Verlassene Mine"
+
+msgid "Standing Stones"
+msgstr "Stehende Steine"
+
+msgid "Idol"
+msgstr "Götzenbild"
 
 msgid "Tree of Knowledge"
 msgstr "Baum des Wissens"
@@ -7208,14 +7307,32 @@ msgstr "Loch des Halblings"
 msgid "Mercenary Camp"
 msgstr "Söldnerlager"
 
+msgid "Shrine of the Second Circle"
+msgstr "Schrein des zweiten Kreises"
+
+msgid "Shrine of the Third Circle"
+msgstr "Schrein des dritten Kreises"
+
 msgid "City of the Dead"
 msgstr "Stadt der Toten"
 
 msgid "Sphinx"
 msgstr "Sphinx"
 
+msgid "Wagon"
+msgstr "Waggon"
+
+msgid "Tar Pit"
+msgstr "Teergrube"
+
+msgid "Artesian Spring"
+msgstr "Artesische Quelle"
+
 msgid "Troll Bridge"
 msgstr "Trollbrücke"
+
+msgid "Watering Hole"
+msgstr "Wasserloch"
 
 msgid "Witch's Hut"
 msgstr "Hexenhütte"
@@ -7223,188 +7340,17 @@ msgstr "Hexenhütte"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan's Maps"
-msgstr "Magellans Karten"
-
-msgid "Derelict Ship"
-msgstr "Heruntergekommenes Schiff"
-
-msgid "Shipwreck"
-msgstr "Schiffswrack"
-
-msgid "Observation Tower"
-msgstr "Beobachtungsturm"
-
-msgid "Freeman's Foundry"
-msgstr "Freemans Giesserei"
-
-msgid "Watering Hole"
-msgstr "Wasserloch"
-
-msgid "Artesian Spring"
-msgstr "Artesische Quelle"
-
-msgid "Gazebo"
-msgstr "Pavillon"
-
-msgid "Archer's House"
-msgstr "Haus des Bogenschützen"
-
-msgid "Peasant Hut"
-msgstr "Bauernhaus"
-
-msgid "Dwarf Cottage"
-msgstr "Zwergenhaus"
-
-msgid "Stone Liths"
-msgstr "Steinsäulen"
-
-msgid "Magic Well"
-msgstr "Magischer Brunnen"
-
-msgid "Sign"
-msgstr "Zeichen"
-
-msgid "Nothing Special"
-msgstr "Nichts besonderes"
-
-msgid "Tar Pit"
-msgstr "Teergrube"
-
-msgid "Mound"
-msgstr "Erdhügel"
-
-msgid "Dune"
-msgstr "Düne"
-
-msgid "Stump"
-msgstr "Stumpf"
-
-msgid "Cactus"
-msgstr "Kaktus"
-
-msgid "Trees"
-msgstr "Bäume"
-
-msgid "Dead Tree"
-msgstr "Toter Baum"
-
-msgid "Mountains"
-msgstr "Berge"
-
-msgid "Volcano"
-msgstr "Vulkan"
-
-msgid "Rock"
-msgstr "Fels"
-
-msgid "Flowers"
-msgstr "Blumen"
-
-msgid "Water Lake"
-msgstr "See"
-
-msgid "Mandrake"
-msgstr "Mandragola"
-
-msgid "Crater"
-msgstr "Krater"
-
-msgid "Lava Pool"
-msgstr "Lavabecken"
-
-msgid "Shrub"
-msgstr "Strauch"
-
-msgid "Buoy"
-msgstr "Boje"
-
-msgid "Skeleton"
-msgstr "Skelett"
-
-msgid "Treasure Chest"
-msgstr "Schatzkiste"
-
-msgid "Sea Chest"
-msgstr "Seekiste"
-
-msgid "Campfire"
-msgstr "Lagerfeuer"
-
-msgid "Fountain"
-msgstr "Brunnen"
-
-msgid "Genie Lamp"
-msgstr "Antike Lampe"
-
-msgid "Goblin Hut"
-msgstr "Goblinhütte"
-
-msgid "Monster"
-msgstr "Monster"
-
-msgid "Resource"
-msgstr "Ressource"
-
-msgid "Whirlpool"
-msgstr "Whirlpool"
-
-msgid "Artifact"
-msgstr "Artefakt"
-
-msgid "Boat"
-msgstr "Boot"
-
-msgid "Random Artifact"
-msgstr "Zufälliges Artefakt"
-
-msgid "Random Resource"
-msgstr "Zufällige Ressource"
-
-msgid "Random Monster - weak"
-msgstr "Zufälliges Monster - schwach"
-
-msgid "Random Monster - medium"
-msgstr "Zufälliges Monster - mittel"
-
-msgid "Random Monster - strong"
-msgstr "Zufälliges Monster - stark"
-
-msgid "Random Monster - very strong"
-msgstr "Zufälliges Monster - sehr stark"
-
-msgid "Standing Stones"
-msgstr "Stehende Steine"
-
-msgid "Event"
-msgstr "Ereignis"
-
-msgid "Random Monster"
-msgstr "Zufälliges Monster"
-
-msgid "Random Ultimate Artifact"
-msgstr "Zufälliges ultimatives Artefakt"
-
-msgid "Idol"
-msgstr "Götzenbild"
-
-msgid "Shrine of the First Circle"
-msgstr "Schrein des ersten Kreises"
-
-msgid "Shrine of the Second Circle"
-msgstr "Schrein des zweiten Kreises"
-
-msgid "Shrine of the Third Circle"
-msgstr "Schrein des dritten Kreises"
-
-msgid "Wagon"
-msgstr "Waggon"
-
 msgid "Lean-To"
 msgstr "Anbau"
 
+msgid "Magellan's Maps"
+msgstr "Magellans Karten"
+
 msgid "Flotsam"
 msgstr "Treibgut"
+
+msgid "Derelict Ship"
+msgstr "Heruntergekommenes Schiff"
 
 msgid "Shipwreck Survivor"
 msgstr "Schiffbrüchiger"
@@ -7412,28 +7358,85 @@ msgstr "Schiffbrüchiger"
 msgid "Bottle"
 msgstr "Flasche"
 
+msgid "Magic Well"
+msgstr "Magischer Brunnen"
+
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Zaubergarten"
 msgstr[1] "Zaubergärten"
 
-msgid "Random Artifact - Treasure"
-msgstr "Zufälliges Artefakt - Schatz"
+msgid "Observation Tower"
+msgstr "Beobachtungsturm"
 
-msgid "Random Artifact - Minor"
-msgstr "Zufälliges Artefakt - Klein"
+msgid "Freeman's Foundry"
+msgstr "Freemans Giesserei"
 
-msgid "Random Artifact - Major"
-msgstr "Zufälliges Artefakt - Groß"
+msgid "Trees"
+msgstr "Bäume"
 
-msgid "Jail"
-msgstr "Gefängnis"
+msgid "Mountains"
+msgstr "Berge"
+
+msgid "Volcano"
+msgstr "Vulkan"
+
+msgid "Flowers"
+msgstr "Blumen"
+
+msgid "Rock"
+msgstr "Fels"
+
+msgid "Water Lake"
+msgstr "See"
+
+msgid "Mandrake"
+msgstr "Mandragola"
+
+msgid "Dead Tree"
+msgstr "Toter Baum"
+
+msgid "Stump"
+msgstr "Stumpf"
+
+msgid "Crater"
+msgstr "Krater"
+
+msgid "Cactus"
+msgstr "Kaktus"
+
+msgid "Mound"
+msgstr "Erdhügel"
+
+msgid "Dune"
+msgstr "Düne"
+
+msgid "Lava Pool"
+msgstr "Lavabecken"
+
+msgid "Shrub"
+msgstr "Strauch"
+
+msgid "Barrow Mounds"
+msgstr "Vergrabener Karren"
+
+msgid "Mermaid"
+msgstr "Meerjungfrau"
+
+msgid "Sirens"
+msgstr "Sirenen"
+
+msgid "Hut of the Magi"
+msgstr "Hütte des Magiers"
+
+msgid "Eye of the Magi"
+msgstr "Auge des Magiers"
 
 msgid "Traveller's Tent"
 msgstr "Zelt des Reisenden"
 
-msgid "Barrier"
-msgstr "Barriere"
+msgid "Jail"
+msgstr "Gefängnis"
 
 msgid "Fire Summoning Altar"
 msgstr "Feuerwesen-Altar"
@@ -7447,29 +7450,26 @@ msgstr "Erdwesen-Altar"
 msgid "Water Summoning Altar"
 msgstr "Wasserwesen-Altar"
 
-msgid "Barrow Mounds"
-msgstr "Vergrabener Karren"
-
-msgid "Stables"
-msgstr "Ställe"
+msgid "Reefs"
+msgstr "Riffe"
 
 msgid "Alchemist's Tower"
 msgstr "Turm des Alchemisten"
 
-msgid "Hut of the Magi"
-msgstr "Hütte des Magiers"
+msgid "Stables"
+msgstr "Ställe"
 
-msgid "Eye of the Magi"
-msgstr "Auge des Magiers"
+msgid "Random Artifact - Treasure"
+msgstr "Zufälliges Artefakt - Schatz"
 
-msgid "Mermaid"
-msgstr "Meerjungfrau"
+msgid "Random Artifact - Minor"
+msgstr "Zufälliges Artefakt - Klein"
 
-msgid "Sirens"
-msgstr "Sirenen"
+msgid "Random Artifact - Major"
+msgstr "Zufälliges Artefakt - Groß"
 
-msgid "Reefs"
-msgstr "Riffe"
+msgid "Barrier"
+msgstr "Barriere"
 
 msgid "Unknown Monster"
 msgstr "Unbekanntes Monster"

@@ -157,7 +157,15 @@ bool Game::validateAnimationDelay( const DelayType delayType )
 
 void Game::passAnimationDelay( const DelayType delayType )
 {
+    assert( delayType != Game::DelayType::CUSTOM_DELAY );
+
     delays[delayType].pass();
+}
+
+void Game::passCustomAnimationDelay( const uint64_t delayMs )
+{
+    delays[Game::DelayType::CUSTOM_DELAY].setDelay( delayMs );
+    delays[Game::DelayType::CUSTOM_DELAY].pass();
 }
 
 void Game::UpdateGameSpeed()

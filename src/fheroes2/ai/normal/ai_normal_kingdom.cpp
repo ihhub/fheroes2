@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -485,7 +485,7 @@ namespace AI
                 continue;
             }
 
-            if ( objectType == MP2::OBJ_ZERO || objectType == MP2::OBJ_COAST )
+            if ( objectType == MP2::OBJ_NONE || objectType == MP2::OBJ_COAST )
                 continue;
 
             stats.validObjects.emplace_back( idx, objectType );
@@ -556,7 +556,7 @@ namespace AI
             // Step 2. Do some hero stuff.
             // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
             for ( Heroes * hero : heroes ) {
-                HeroesActionComplete( *hero, hero->GetIndex(), MP2::OBJ_ZERO );
+                HeroesActionComplete( *hero, hero->GetIndex(), MP2::OBJ_NONE );
             }
 
             // Step 3. Reassign heroes roles
