@@ -2446,26 +2446,14 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
     popup.Reset();
 
-    // The array of possible delays of previous battlefield actions.
-    const std::vector<Game::DelayType> unitDelays{ Game::DelayType::BATTLE_FRAME_DELAY,          Game::DelayType::BATTLE_MISSILE_DELAY,
-                                                   Game::DelayType::BATTLE_SPELL_DELAY,          Game::DelayType::BATTLE_DISRUPTING_DELAY,
-                                                   Game::DelayType::BATTLE_CATAPULT_CLOUD_DELAY, Game::DelayType::BATTLE_BRIDGE_DELAY,
-                                                   Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY };
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForActionsDelays();
 
-    // Wait for the delay after previous render and only after it render a new frame and proceed to the rest of this function.
-    while ( le.HandleEvents( Game::isDelayNeeded( unitDelays ) ) ) {
-        CheckGlobalEvents( le );
-
-        if ( Game::isDelayPassed( unitDelays ) ) {
-            Redraw();
-            break;
-        }
-    }
+    ResetIdleTroopAnimation();
+    Redraw();
 
     std::string msg;
     animation_flags_frame = 0;
-
-    ResetIdleTroopAnimation();
 
     // TODO: update delay types within the loop to avoid rendering slowdown.
     const std::vector<Game::DelayType> delayTypes{ Game::BATTLE_FLAGS_DELAY };
@@ -2997,6 +2985,26 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
     }
 }
 
+void Battle::Interface::WaitForActionsDelays()
+{
+    LocalEvent & le = LocalEvent::Get();
+
+    // The array of possible delays of previous battlefield actions.
+    const std::vector<Game::DelayType> unitDelays{ Game::DelayType::BATTLE_FRAME_DELAY,          Game::DelayType::BATTLE_MISSILE_DELAY,
+                                                   Game::DelayType::BATTLE_SPELL_DELAY,          Game::DelayType::BATTLE_DISRUPTING_DELAY,
+                                                   Game::DelayType::BATTLE_CATAPULT_CLOUD_DELAY, Game::DelayType::BATTLE_BRIDGE_DELAY,
+                                                   Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY };
+
+    // Wait for the delay after previous render and only after it render a new frame and proceed to the rest of this function.
+    while ( le.HandleEvents( Game::isDelayNeeded( unitDelays ) ) ) {
+        CheckGlobalEvents( le );
+
+        if ( Game::isDelayPassed( unitDelays ) ) {
+            break;
+        }
+    }
+}
+
 void Battle::Interface::AnimateUnitWithDelay( Unit & unit )
 {
     if ( unit.isFinishAnimFrame() && unit.animation.animationLength() != 1 ) {
@@ -3091,6 +3099,9 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     // Lich/Power lich has projectile speed of 25
     const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
+
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForActionsDelays();
 
     // convert the following code into a function/event service
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
@@ -4124,6 +4135,11 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell,
 
 void Battle::Interface::RedrawActionLuck( const Unit & unit )
 {
+    // Reset the delay to wait till the next frame if is not already waiting.
+    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_MISSILE_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_MISSILE_DELAY );
+    }
+
     LocalEvent & le = LocalEvent::Get();
 
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
@@ -4330,6 +4346,9 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
 
 void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, const bool isHit )
 {
+    // Reset the delay before rendering the first frame of catapult animation.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_DELAY );
+
     LocalEvent & le = LocalEvent::Get();
 
     const fheroes2::Rect & area = GetArea();
@@ -4345,6 +4364,9 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
             ++catapult_frame;
         }
     }
+
+    // Reset the delay before rendering the first frame of catapult bouder animation.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_BOULDER_DELAY );
 
     // boulder animation
     fheroes2::Point pt1( 30, 290 );
@@ -4406,6 +4428,9 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
             }
         }
     }
+
+    // Reset the delay before rendering the catapult cloud.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_CLOUD_DELAY );
 
     // draw cloud
     const int32_t icn = isHit ? ICN::LICHCLOD : ICN::SMALCLOD;
@@ -5343,6 +5368,11 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
     if ( mirrorImages.empty() ) // nothing to animate
         return;
 
+    // Reset the delay to wait till the next frame if is not already waiting.
+    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+    }
+
     LocalEvent & le = LocalEvent::Get();
 
     uint8_t frameId = 10;
@@ -5528,9 +5558,10 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn );
     uint32_t frame = 0;
 
-    AudioManager::PlaySound( m82 );
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForActionsDelays();
 
-    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+    AudioManager::PlaySound( m82 );
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && ( frame < maxFrame || isDefenderAnimating ) ) {
         CheckGlobalEvents( le );
@@ -5616,9 +5647,10 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
         b.SwitchAnimation( Monster_Info::KILL, true );
     }
 
-    AudioManager::PlaySound( m82 );
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForActionsDelays();
 
-    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+    AudioManager::PlaySound( m82 );
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
@@ -5650,6 +5682,9 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
 
 void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
 {
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForActionsDelays();
+
     LocalEvent & le = LocalEvent::Get();
 
     _bridgeAnimation.animationIsRequired = true;
