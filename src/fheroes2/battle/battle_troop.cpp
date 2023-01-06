@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -117,18 +117,6 @@ uint32_t Battle::ModesAffected::FindZeroDuration() const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Battle::ModeDuration & v ) { return v.isZeroDuration(); } );
     return it == end() ? 0 : ( *it ).first;
-}
-
-void Battle::Unit::ResetOverlaySprite()
-{
-    overlaySprite.overlaySprite = nullptr;
-}
-
-void Battle::Unit::SetOverlaySprite( const fheroes2::Sprite & sprite, fheroes2::Point pos, bool flip )
-{
-    overlaySprite.overlaySprite = &sprite;
-    overlaySprite.position = pos;
-    overlaySprite.reflect = flip;
 }
 
 Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )

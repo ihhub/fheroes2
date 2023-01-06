@@ -94,6 +94,16 @@ namespace Battle
         CAPTAIN
     };
 
+    // Sprite to render over the unit (i.e. spell effect animation)
+    struct OverlaySprite
+    {
+        OverlaySprite( const uint32_t unitId, const bool reflect );
+        uint32_t unitId{ 0 };
+        const fheroes2::Sprite * overlaySprite{ nullptr };
+        fheroes2::Point position;
+        bool reflect{ false };
+    };
+
     class OpponentSprite
     {
     public:
@@ -439,6 +449,8 @@ namespace Battle
         };
 
         BridgeMovementAnimation _bridgeAnimation;
+
+        std::vector<OverlaySprite> _unitOverlaySprite;
     };
 }
 
