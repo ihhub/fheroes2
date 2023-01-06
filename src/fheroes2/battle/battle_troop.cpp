@@ -1619,15 +1619,14 @@ bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
         checkIdleDelay();
     }
 
-    animation.switchAnimation( rule, reverse );
-
-    return animation.isValid();
+    // We retun true if the animation was correctly changed adn if it is valid.
+    return ( animation.switchAnimation( rule, reverse ) && animation.isValid() );
 }
 
 bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
 {
-    animation.switchAnimation( animationList, reverse );
-    return animation.isValid();
+    // We retun true if the animation was correctly changed adn if it is valid.
+    return ( animation.switchAnimation( animationList, reverse ) && animation.isValid() );
 }
 
 int Battle::Unit::M82Attk() const

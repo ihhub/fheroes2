@@ -3537,9 +3537,11 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
         // Reflect the creature if it has to fly back.
         unit.SetReflection( !isFlyToRight );
-        unit.SwitchAnimation( Monster_Info::FLY_UP );
-        AudioManager::PlaySound( unit.M82Tkof() );
-        AnimateUnitWithDelay( unit );
+        // For creatures, that has no 'FLY_UP' animation, like Ghosts, we check if the animation was correctly set.
+        if ( unit.SwitchAnimation( Monster_Info::FLY_UP ) ) {
+            AudioManager::PlaySound( unit.M82Tkof() );
+            AnimateUnitWithDelay( unit );
+        }
         // If a wide flyer returns back it should skip one path position (its head bocomes its tail - it is already one move).
         if ( isWide && ( isFlyToRight == isFromRightArmy ) ) {
             ++dst;
@@ -3725,10 +3727,11 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = &unit;
     _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
 
-    unit.SwitchAnimation( Monster_Info::FLY_UP );
-    AudioManager::PlaySound( unit.M82Tkof() );
-
-    AnimateUnitWithDelay( unit );
+    // For creatures, that has no 'FLY_UP' animation, like Ghosts, we check if the animation was correctly set.
+    if ( unit.SwitchAnimation( Monster_Info::FLY_UP ) ) {
+        AudioManager::PlaySound( unit.M82Tkof() );
+        AnimateUnitWithDelay( unit );
+    }
 
     _movingUnit = nullptr;
     _flyingUnit = &unit;
