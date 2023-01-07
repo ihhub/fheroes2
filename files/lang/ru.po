@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-07 02:48+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -593,6 +593,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Показать информацию для %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr "%{monster}: лететь сюда"
+
+msgid "Move %{monster} here"
+msgstr "%{monster}: идти сюда"
+
 msgid "Shoot %{monster}"
 msgstr "Стрелять в %{monster}"
 
@@ -604,12 +610,6 @@ msgstr[2] "(ещё %{count} выстрелов)"
 
 msgid "Attack %{monster}"
 msgstr "Атаковать %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "%{monster}: лететь сюда"
-
-msgid "Move %{monster} here"
-msgstr "%{monster}: идти сюда"
 
 msgid "Turn %{turn}"
 msgstr "Раунд %{turn}"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-07 02:48+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -591,6 +591,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Visa information om %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr "Flyg %{monster} hit"
+
+msgid "Move %{monster} here"
+msgstr "Flytta %{monster} hit"
+
 #, fuzzy
 msgid "Shoot %{monster}"
 msgstr ""
@@ -604,12 +610,6 @@ msgstr[1] ""
 
 msgid "Attack %{monster}"
 msgstr "Attackera %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "Flyg %{monster} hit"
-
-msgid "Move %{monster} here"
-msgstr "Flytta %{monster} hit"
 
 msgid "Turn %{turn}"
 msgstr "Sväng %{turn}"

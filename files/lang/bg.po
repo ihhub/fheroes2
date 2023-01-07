@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-07 02:48+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -604,6 +604,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Виж информация за %{monster} "
 
+msgid "Fly %{monster} here"
+msgstr "Прелети %{monster} тук"
+
+msgid "Move %{monster} here"
+msgstr "Премести %{monster} тук"
+
 msgid "Shoot %{monster}"
 msgstr "Застреляй %{monster}"
 
@@ -614,12 +620,6 @@ msgstr[1] "(Остават %{count} изстрела)"
 
 msgid "Attack %{monster}"
 msgstr "Нападни %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "Прелети %{monster} тук"
-
-msgid "Move %{monster} here"
-msgstr "Премести %{monster} тук"
 
 msgid "Turn %{turn}"
 msgstr "Ход %{turn}"
