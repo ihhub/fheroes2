@@ -599,7 +599,7 @@ msgstr ""
 "%{price} szt. złota."
 
 msgid "View %{monster} info"
-msgstr "Informacje o jednostce: {monster}"
+msgstr "Informacje o jednostce: %{monster}"
 
 msgid "Shoot %{monster}"
 msgstr "Strzelaj do %{monster}"
@@ -7759,10 +7759,10 @@ msgid "2-hex monster"
 msgstr "Rozmiar 2-hex"
 
 msgid "Double strike"
-msgstr "Podwójny strzał"
+msgstr "Podwójny atak"
 
 msgid "Double damage to Undead"
-msgstr "Podwójne obrażenia Umarłym"
+msgstr "Podwójne obrażenia nieumarłym"
 
 msgid "% magic resistance"
 msgstr "% odporności magicznej"
