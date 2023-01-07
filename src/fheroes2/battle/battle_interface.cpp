@@ -5624,10 +5624,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                         }
 
                         // If not all damaged (and not killed) units are set to STATIC animation then set isDefenderAnimating to false.
-                        // IMPORTANT: The game engine can change STATIC animation to IDLE, especially for Ghosts and Zombies,
-                        // so we need to check IDLE where we check for STATIC.
-                        const int unitAnimState = target.defender->GetAnimationState();
-                        isDefenderAnimating |= !( ( unitAnimState == Monster_Info::STATIC ) || ( unitAnimState == Monster_Info::IDLE ) );
+                        isDefenderAnimating |= !( target.defender->GetAnimationState() == Monster_Info::STATIC );
                     }
                 }
             }
