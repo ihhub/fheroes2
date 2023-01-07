@@ -3365,13 +3365,14 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         else if ( target.damage ) {
             // wince animation
             if ( drawLichCloud ) {
-                // The Lich cloud causes units to freeze for some time in the maximum wince state. So we will devide the wince animation.
-                unit->SwitchAnimation( Monster_Info::WNCE_UP );
+                // The Lich cloud causes units to freeze for some time in the maximum wince state.
+                // So we will devide the wince animation. First part: the creature stands for couple frames before wincing.
+                unit->SwitchAnimation( Monster_Info::STAND_STILL );
             }
             else {
                 unit->SwitchAnimation( Monster_Info::WNCE );
+                AudioManager::PlaySound( unit->M82Wnce() );
             }
-            AudioManager::PlaySound( unit->M82Wnce() );
             ++finish;
         }
         else {
@@ -3385,7 +3386,9 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     uint32_t lichCloudFrame = 0;
     const uint32_t lichCloudMaxFrame = fheroes2::AGG::GetICNCount( ICN::LICHCLOD );
-    // The frame number after which the target animation under the Lich cloud will be switched to 'WNCE_DOWN'.
+    // Wince animation under the Lich cloud, second part: the frame number after which the target animation will be switched to 'WNCE_UP'.
+    const uint32_t wnceUpStartFrame = 1;
+    // Wince animation under the Lich cloud, third part: the frame number after which the target animation will be switched to 'WNCE_SOWN'.
     const uint32_t wnceDownStartFrame = lichCloudMaxFrame - 3;
 
     if ( drawLichCloud ) {
@@ -3442,7 +3445,8 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 }
 
                 const int animationState = info.defender->GetAnimationState();
-                if ( animationState == Monster_Info::WNCE || animationState == Monster_Info::WNCE_UP || animationState == Monster_Info::WNCE_DOWN ) {
+                if ( animationState == Monster_Info::WNCE || animationState == Monster_Info::WNCE_UP || animationState == Monster_Info::WNCE_DOWN
+                     || animationState == Monster_Info::STAND_STILL ) {
                     return false;
                 }
 
@@ -3461,7 +3465,11 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                          && ( target.defender->GetAnimationState() == Monster_Info::WNCE || target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
                         target.defender->SwitchAnimation( Monster_Info::STATIC );
                     }
-                    else if ( lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
+                    else if ( drawLichCloud && lichCloudFrame == wnceUpStartFrame && ( target.defender->GetAnimationState() == Monster_Info::STAND_STILL ) ) {
+                        target.defender->SwitchAnimation( Monster_Info::WNCE_UP );
+                        AudioManager::PlaySound( target.defender->M82Wnce() );
+                    }
+                    else if ( drawLichCloud && lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
                         target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
                     }
                     else {
