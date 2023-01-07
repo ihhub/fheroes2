@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-07 02:48+0000\n"
 "PO-Revision-Date: 2022-12-18 08:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -619,6 +619,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Vis info om %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr "Fly %{monster} hit"
+
+msgid "Move %{monster} here"
+msgstr "Flytt %{monster} hit"
+
 msgid "Shoot %{monster}"
 msgstr "Skyt på %{monster}"
 
@@ -629,12 +635,6 @@ msgstr[1] "(%{count} skudd igjen)"
 
 msgid "Attack %{monster}"
 msgstr "Angrip %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "Fly %{monster} hit"
-
-msgid "Move %{monster} here"
-msgstr "Flytt %{monster} hit"
 
 msgid "Turn %{turn}"
 msgstr "Runde %{turn}"

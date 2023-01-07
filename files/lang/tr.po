@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-07 02:48+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -591,6 +591,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "%{monster} bilgisini görüntüle"
 
+msgid "Fly %{monster} here"
+msgstr "%{monster} Buraya uçur"
+
+msgid "Move %{monster} here"
+msgstr "%{monster} Buraya hareket ettir"
+
 msgid "Shoot %{monster}"
 msgstr "%{monster} vur"
 
@@ -601,12 +607,6 @@ msgstr[1] "(%{count} vuruşlar kaldı)"
 
 msgid "Attack %{monster}"
 msgstr "%{monster} Saldır"
-
-msgid "Fly %{monster} here"
-msgstr "%{monster} Buraya uçur"
-
-msgid "Move %{monster} here"
-msgstr "%{monster} Buraya hareket ettir"
 
 msgid "Turn %{turn}"
 msgstr "%{turn} Dön"
