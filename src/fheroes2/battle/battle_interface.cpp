@@ -5066,7 +5066,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     const uint8_t alphaStep = 25;
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Rect renderArea( _interfacePosition.x + area.y, _interfacePosition.y + area.y, area.width, area.height );
+    const fheroes2::Rect renderArea( _interfacePosition.x + area.x, _interfacePosition.y + area.y, area.width, area.height );
 
     // Immediately indicate that the delay has passed to render first frame immediately.
     Game::passCustomAnimationDelay( spellcastDelay );
