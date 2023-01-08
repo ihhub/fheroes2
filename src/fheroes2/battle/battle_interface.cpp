@@ -3811,10 +3811,10 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
         break;
 
     case Spell::HOLYWORD:
-        RedrawActionHolyShoutSpell( 2 );
+        RedrawActionHolyShoutSpell( 16 );
         break;
     case Spell::HOLYSHOUT:
-        RedrawActionHolyShoutSpell( 4 );
+        RedrawActionHolyShoutSpell( 24 );
         break;
 
     case Spell::ELEMENTALSTORM:
@@ -5048,38 +5048,72 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     SwitchAllUnitsAnimation( Monster_Info::STATIC );
     Redraw();
 
-    const fheroes2::Image original( _mainSurface );
-    fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, 3 );
+    fheroes2::Rect area = GetArea();
+    // Cut out the battle log image so we don't use it in the death wave effect.
+    area.height -= status.height;
+    // And if listlog is open, then cut off it too.
+    if ( listlog && listlog->isOpenLog() ) {
+        area.height -= listlog->GetArea().height;
+    }
 
-    // Make the spell effect more dark-red.
-    fheroes2::Image blurredRed( blurred );
-    fheroes2::ApplyPalette( blurredRed, PAL::GetPalette( PAL::PaletteType::RED ) );
-    fheroes2::AlphaBlit( blurredRed, blurred, ( 10 * strength ) );
+    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
-    AudioManager::PlaySound( M82::MASSCURS );
 
-    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / 20;
+    const uint32_t maxFrame = 20;
+    const uint32_t halfMaxFrame = maxFrame / 2;
+
+    // A vector of frames to animate the increase of the spell effect. The decrease will be shown in reverse frames order.
+    // Initialize a vector with copies of battle field to use them in making the spell effect increase animation.
+    std::vector<fheroes2::Image> spellEffect;
+    static_assert( halfMaxFrame > 1 );
+    spellEffect.reserve( halfMaxFrame );
+
+    const uint32_t spellEffectLastFrame = halfMaxFrame - 1;
+
+    // The similar frames number is smaller than size by 1 as the last frame will be diferent.
+    spellEffect.emplace_back( std::move( battleFieldCopy ) );
+    while ( spellEffect.size() < spellEffectLastFrame ) {
+        spellEffect.push_back( spellEffect.front() );
+    }
+
+    // The last frame is the full power of spell effect. It will be used to produce other frames.
+    spellEffect.emplace_back( fheroes2::CreateHolyShoutEffect( spellEffect[0], 4, strength ) );
+
+    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / maxFrame;
     uint32_t frame = 0;
     uint8_t alpha = 30;
+    const uint8_t alphaStep = 25;
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Rect renderArea( _interfacePosition.x + area.x, _interfacePosition.y + area.y, area.width, area.height );
 
     // Immediately indicate that the delay has passed to render first frame immediately.
     Game::passCustomAnimationDelay( spellcastDelay );
     // Make sure that the first run is passed immediately.
     assert( !Game::isCustomDelayNeeded( spellcastDelay ) );
 
-    while ( le.HandleEvents( Game::isCustomDelayNeeded( spellcastDelay ) ) && frame < 20 ) {
+    AudioManager::PlaySound( M82::MASSCURS );
+
+    while ( le.HandleEvents( Game::isCustomDelayNeeded( spellcastDelay ) ) && frame < maxFrame ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateCustomAnimationDelay( spellcastDelay ) ) {
-            // stay at maximum blur for 2 frames
-            if ( frame < 9 || frame > 10 ) {
-                fheroes2::Copy( original, _mainSurface );
-                fheroes2::AlphaBlit( blurred, _mainSurface, alpha );
-                RedrawPartialFinish();
+            // Display the maximum spell effect for 1 more 'spellcastDelay' without rendering a frame.
+            if ( frame != halfMaxFrame ) {
+                // If the spell effect is increasing we generate the frame for it in the vector to use it later in decreasing animation.
+                if ( frame < spellEffectLastFrame ) {
+                    fheroes2::AlphaBlit( spellEffect[spellEffectLastFrame], spellEffect[frame], alpha );
+                    alpha += alphaStep;
+                }
 
-                alpha += ( frame < 10 ) ? 25 : -25;
+                const uint32_t spellEffectFrame = ( frame < halfMaxFrame ) ? frame : ( maxFrame - frame - 1 );
+                fheroes2::Copy( spellEffect[spellEffectFrame], area.x, area.y, display, renderArea.x, renderArea.y, renderArea.width, renderArea.height );
+
+                display.render( renderArea );
             }
+
             ++frame;
         }
     }
@@ -5540,7 +5574,10 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                         }
 
                         // If not all damaged (and not killed) units are set to STATIC animation then set isDefenderAnimating to false.
-                        isDefenderAnimating |= !( target.defender->GetAnimationState() == Monster_Info::STATIC );
+                        // IMPORTANT: The game engine can change STATIC animation to IDLE, especially for Ghosts and Zombies,
+                        // so we need to check IDLE where we check for STATIC.
+                        const int unitAnimState = target.defender->GetAnimationState();
+                        isDefenderAnimating |= !( ( unitAnimState == Monster_Info::STATIC ) || ( unitAnimState == Monster_Info::IDLE ) );
                     }
                 }
             }

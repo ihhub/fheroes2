@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,6 +32,7 @@
 #include <string>
 #include <utility>
 
+#include "image_palette.h"
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
@@ -285,6 +286,81 @@ namespace fheroes2
                 inImageY -= inWidth;
             }
         }
+    }
+
+    Image CreateHolyShoutEffect( const Image & in, const int32_t blurRadius, const uint8_t darkredStrength )
+    {
+        if ( in.empty() ) {
+            return {};
+        }
+
+        if ( blurRadius < 1 ) {
+            return in;
+        }
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+
+        // To properly call 'GetColorId' we need to multiply the RGB color values by a coefficient equal to 4. Also the Holy Word/Shout spell effect
+        // should have some dark + red effect. So we reduce all these coefficients for all colors, for green and blue we make a stronger reduction.
+        const double redCoeff = 4.0 - darkredStrength / 280.0;
+        const double greenBlueCoeff = 4.0 - darkredStrength / 80.0;
+
+        Image out( width, height );
+        std::fill( out.transform(), out.transform() + static_cast<size_t>( width * height ), static_cast<uint8_t>( 0 ) );
+
+        uint8_t * imageOutX = out.image();
+        const uint8_t * imageIn = in.image();
+
+        const uint8_t * gamePalette = getGamePalette();
+
+        // The spell effect represents as a blurry image. The blur algorithm should blur only horizontally and vertically from current pixel.
+        // So the color data is averaged in a "cross" around the current pixel (not a square or circle like other blur algorithms).
+        for ( int32_t y = 0; y < height; ++y ) {
+            const int32_t startY = std::max( y - blurRadius, 0 );
+            const int32_t rangeY = std::min( y + blurRadius + 1, height ) - startY;
+            const uint8_t * imageInXStart = imageIn + static_cast<ptrdiff_t>( y ) * width;
+            const uint8_t * imageInYStart = imageIn + static_cast<ptrdiff_t>( startY ) * width;
+
+            for ( int32_t x = 0; x < width; ++x, ++imageOutX ) {
+                const int32_t startX = std::max( x - blurRadius, 0 );
+                const int32_t rangeX = std::min( x + blurRadius + 1, width ) - startX;
+
+                uint32_t sumRed = 0;
+                uint32_t sumGreen = 0;
+                uint32_t sumBlue = 0;
+
+                const uint8_t * imageInX = imageInXStart + startX;
+                const uint8_t * imageInXEnd = imageInX + rangeX;
+
+                for ( ; imageInX != imageInXEnd; ++imageInX ) {
+                    const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
+
+                    sumRed += *palette;
+                    sumGreen += *( palette + 1 );
+                    sumBlue += *( palette + 2 );
+                }
+
+                const uint8_t * imageInY = imageInYStart + x;
+                const uint8_t * imageInYEnd = imageInY + static_cast<ptrdiff_t>( rangeY ) * width;
+                const uint8_t * currentPixel = imageInXStart + x;
+
+                for ( ; imageInY != imageInYEnd; imageInY += width ) {
+                    if ( imageInY != currentPixel ) {
+                        const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *imageInY ) * 3;
+
+                        sumRed += *palette;
+                        sumGreen += *( palette + 1 );
+                        sumBlue += *( palette + 2 );
+                    }
+                }
+
+                const uint32_t roiSize = static_cast<uint32_t>( rangeX + rangeY - 1 );
+                *imageOutX = GetColorId( static_cast<uint8_t>( redCoeff * sumRed / roiSize ), static_cast<uint8_t>( greenBlueCoeff * sumGreen / roiSize ),
+                                         static_cast<uint8_t>( greenBlueCoeff * sumBlue / roiSize ) );
+            }
+        }
+        return out;
     }
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX, double waveFrequency )
