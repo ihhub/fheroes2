@@ -308,7 +308,7 @@ namespace
     {
         const fheroes2::Rect & pos = target.GetRectPosition();
 
-        // Get the sprite for the first frame, so its center not shift if the creature is animating (instead of target.GetFrame()).
+        // Get the sprite for the first frame, so its center won't shift if the creature is animating (instead of target.GetFrame()).
         const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.animation.firstFrame() );
 
         // Bottom-left corner (default) position with spell offset applied
@@ -338,7 +338,7 @@ namespace
             result.x += pos.width / 2;
             break;
         case ICN::REDDEATH:
-            // Shift spell sprite position for wide ceature to its head.
+            // Shift spell sprite position for a wide ceature to its head.
             result.x += pos.width / 2 + ( target.isReflect() ? ( 1 - spellSprite.width() - 2 * spellSprite.x() - pos.width / 8 ) : ( pos.width / 8 ) );
             result.y -= pos.height - 4;
             break;
@@ -3366,7 +3366,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             // wince animation
             if ( drawLichCloud ) {
                 // The Lich cloud causes units to freeze for some time in the maximum wince state.
-                // So we will devide the wince animation. First part: the creature stands for couple frames before wincing.
+                // So we will divide the wince animation. First part: the creature stands for a couple of frames before wincing.
                 unit->SwitchAnimation( Monster_Info::STAND_STILL );
             }
             else {
