@@ -247,7 +247,7 @@ namespace Interface
 
         bool isDragScroll() const
         {
-            return _needRedrawByMouseDrag;
+            return _needRedrawByMouseDragging;
         }
 
     private:
