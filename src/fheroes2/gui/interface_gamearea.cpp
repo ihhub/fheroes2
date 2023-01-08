@@ -331,6 +331,7 @@ Interface::GameArea::GameArea( Basic & basic )
     , updateCursor( false )
     , _mouseDraggingInitiated( false )
     , _mouseDraggingMovement( false )
+    , _needRedrawByMouseDragging( false )
 {
     // Do nothing.
 }
@@ -902,6 +903,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     if ( !le.MousePressLeft() ) {
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
+        _needRedrawByMouseDragging = false;
     }
     else if ( !_mouseDraggingInitiated ) {
         _mouseDraggingInitiated = true;
@@ -914,8 +916,15 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     if ( _mouseDraggingMovement ) {
-        SetCenterInPixels( getCurrentCenterInPixels() + _startMouseDragPosition - mp );
-        _startMouseDragPosition = mp;
+        if ( _startMouseDragPosition == mp ) {
+            _needRedrawByMouseDragging = false;
+        }
+        else {
+            // Update the center coordinates and redraw the adventure map only if the mouse was moved.
+            _needRedrawByMouseDragging = true;
+            SetCenterInPixels( getCurrentCenterInPixels() + _startMouseDragPosition - mp );
+            _startMouseDragPosition = mp;
+        }
         return;
     }
 

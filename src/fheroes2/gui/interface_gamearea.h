@@ -247,7 +247,7 @@ namespace Interface
 
         bool isDragScroll() const
         {
-            return _mouseDraggingMovement;
+            return _needRedrawByMouseDrag;
         }
 
     private:
@@ -275,6 +275,7 @@ namespace Interface
 
         bool _mouseDraggingInitiated;
         bool _mouseDraggingMovement;
+        bool _needRedrawByMouseDragging;
         fheroes2::Point _startMouseDragPosition;
 
         // Returns middle point of window ROI.
