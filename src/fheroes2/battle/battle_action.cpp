@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -183,7 +183,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     TargetsApplyDamage( attacker, attackTargets );
 
     if ( _interface ) {
-        _interface->RedrawActionAttackPart2( attacker, attackTargets );
+        _interface->RedrawActionAttackPart2( attacker, defender, attackTargets );
     }
 
     // Then apply the attacker's built-in spell
