@@ -3557,8 +3557,12 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         // Every ground unit should start its movement from the special 'MOVE_START' animation
         // or if it moves only for one cell its animation must be 'MOVE_QUICK'. So a check for 1 cell path is made.
         // If a wide unit moves backwards for 1 cell, it turns twice, so it has 3 path points. And its first 'dst' point is equal to the last.
+        // If it moves back diagonally up or down, we check if the end of the path is the cell next to the first cell in the path.
         // TODO: try to rewrite path generation and movement of wide creatures to get more clear and unique path with non-wide (to get rid of of 'wide creature patches').
-        if ( isOneStepPath || ( isWide && path.size() == 3 && ( *dst == *( pathEnd - 1 ) ) ) ) {
+        if ( isOneStepPath
+             || ( isWide && path.size() == 3
+                  && ( ( *( pathEnd - 1 ) == *dst ) || ( *( pathEnd - 1 ) == ( *dst - ARENAW ) ) || ( *( pathEnd - 1 ) == ( *dst - ARENAW + 1 ) )
+                       || ( *( pathEnd - 1 ) == ( *dst + ARENAW ) ) || ( *( pathEnd - 1 ) == ( *dst + ARENAW + 1 ) ) ) ) ) {
             unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
         }
         else {
