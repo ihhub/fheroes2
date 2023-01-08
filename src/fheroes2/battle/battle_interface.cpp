@@ -3614,8 +3614,30 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     const bool canFly = unit.isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
     // If it is a wide creature (cache this boolean to use in the loop).
     const bool isWide = unit.isWide();
-    const bool isOneStepPath = ( path.size() == 1 );
     const Indexes::const_iterator pathEnd = path.end();
+
+    const bool isOneStepPath = [&unit, &path]() {
+        if ( path.size() == 1 ) {
+            return true;
+        }
+
+        if ( !unit.isWide() ) {
+            return false;
+        }
+
+        // If wide unit performs 3 movements and the first movement is a turn back, then it's
+        // path consists of only one "real" movement, because...
+        if ( path.size() == 3 && path[0] == unit.GetTailIndex() ) {
+            // ... its last movement should be a return to the normal position.
+            assert( Board::GetDirection( path[1], path[2] ) == ( unit.isReflect() ? LEFT : RIGHT ) );
+
+            return true;
+        }
+
+        return false;
+    }();
+
+    // TODO: make an analigic check with checks for wide creatures back step: is one step left before/after the bridge action.
 
     // Slowed flying creature has to fly off.
     if ( canFly ) {
@@ -3673,13 +3695,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     else {
         // Every ground unit should start its movement from the special 'MOVE_START' animation
         // or if it moves only for one cell its animation must be 'MOVE_QUICK'. So a check for 1 cell path is made.
-        // If a wide unit moves backwards for 1 cell, it turns twice, so it has 3 path points. And its first 'dst' point is equal to the last.
-        // If it moves back diagonally up or down, we check if the end of the path is the cell next to the first cell in the path.
-        // TODO: try to rewrite path generation and movement of wide creatures to get more clear and unique path with non-wide (to get rid of of 'wide creature patches').
-        if ( isOneStepPath
-             || ( isWide && path.size() == 3
-                  && ( ( *( pathEnd - 1 ) == *dst ) || ( *( pathEnd - 1 ) == ( *dst - ARENAW ) ) || ( *( pathEnd - 1 ) == ( *dst - ARENAW + 1 ) )
-                       || ( *( pathEnd - 1 ) == ( *dst + ARENAW ) ) || ( *( pathEnd - 1 ) == ( *dst + ARENAW + 1 ) ) ) ) ) {
+        if ( isOneStepPath ) {
             unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
         }
         else {
@@ -3712,13 +3728,13 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             unit.SwitchAnimation( Monster_Info::STAND_STILL );
             bridge->ActionDown();
             _movingUnit = &unit;
-            if ( dst != ( pathEnd - 1 ) ) {
-                // If the path has more than one step after the bridge action then begin the movement.
-                unit.SwitchAnimation( Monster_Info::MOVE_START );
-            }
-            else {
+            if ( dst == ( pathEnd - 1 ) ) {
                 // There is only one cell left to move after standing.
                 unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
+            }
+            else {
+                // If the path has more than one step after the bridge action then begin the movement.
+                unit.SwitchAnimation( Monster_Info::MOVE_START );
             }
         }
 
@@ -3732,6 +3748,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         AudioManager::PlaySound( unit.M82Move() );
         AnimateUnitWithDelay( unit );
         unit.SetPosition( *dst );
+
+        ++dst;
 
         // Do a post-move check for the bridge action and set the animation the movement to the next cell in the path.
         if ( canFly ) {
@@ -3747,16 +3765,16 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                 unit.SwitchAnimation( Monster_Info::STAND_STILL );
                 bridge->ActionUp();
                 _movingUnit = &unit;
-                if ( !isOneStepPath && dst != ( pathEnd - 2 ) ) {
-                    // If the path has more than one step after the bridge action then begin the movement.
-                    unit.SwitchAnimation( Monster_Info::MOVE_START );
-                }
-                else {
+                if ( path.size() > 1 && dst == ( pathEnd - 1 ) ) {
                     // There is only one cell left to move after standing.
                     unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
                 }
+                else {
+                    // If the path has more than one step after the bridge action then begin the movement.
+                    unit.SwitchAnimation( Monster_Info::MOVE_START );
+                }
             }
-            else if ( !isOneStepPath && dst == ( pathEnd - 2 ) ) {
+            else if ( path.size() > 1 && dst == ( pathEnd - 1 ) ) {
                 // There is only one cell left to move.
                 unit.SwitchAnimation( Monster_Info::MOVE_END );
             }
@@ -3764,8 +3782,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                 unit.SwitchAnimation( Monster_Info::MOVING );
             }
         }
-
-        ++dst;
     }
 
     // Slowed flying creature has to land.
