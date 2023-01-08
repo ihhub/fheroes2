@@ -3765,7 +3765,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                 unit.SwitchAnimation( Monster_Info::STAND_STILL );
                 bridge->ActionUp();
                 _movingUnit = &unit;
-                if ( path.size() > 1 && dst == ( pathEnd - 1 ) ) {
+                if ( dst == ( pathEnd - 1 ) ) {
                     // There is only one cell left to move after standing.
                     unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
                 }
@@ -3774,7 +3774,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                     unit.SwitchAnimation( Monster_Info::MOVE_START );
                 }
             }
-            else if ( path.size() > 1 && dst == ( pathEnd - 1 ) ) {
+            else if ( dst == ( pathEnd - 1 ) ) {
                 // There is only one cell left to move.
                 unit.SwitchAnimation( Monster_Info::MOVE_END );
             }
