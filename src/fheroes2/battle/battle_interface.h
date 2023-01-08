@@ -344,8 +344,8 @@ namespace Battle
         void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, int32_t size );
 
         // Wait for all possible battlefield action delays that could be set in previous functions to pass.
-        // Use this if your function may be called from other functions with different render delay types.
-        void WaitForActionsDelays();
+        // Use this if a function may be called from other functions with different render delay types.
+        void WaitForAllActionDelays();
 
         void AnimateOpponents( OpponentSprite * target );
         void AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender = false );

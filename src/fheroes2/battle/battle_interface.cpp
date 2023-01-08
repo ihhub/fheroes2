@@ -1672,8 +1672,8 @@ fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fhe
 
     if ( _movingUnit == &unit ) {
         // Monster is moving.
-        // Unit coordinates relevant to its position are set in Sprite coordinates 'x'  and 'y' (with bugs for some units).
-        // The offset data from BIN file is used in unit info dialog and to correct horizontal movement range when moving diagonally.
+        // Unit coordinates relevant to its position are set in Sprite coordinates 'x'  and 'y' (some values may be set incorrectly).
+        // The offset data from BIN file is used in Monster info dialog and to correct horizontal movement range when moving diagonally.
         // IMPORTANT: The 'x' offset from BIN file cannot be used in horizontal movement animation as
         // it does not take into account the uneven movement during the step. Use sprite 'x' coordinate for this purpose.
 
@@ -2447,7 +2447,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     popup.Reset();
 
     // Wait for previously set and not passed delays before rendering a new frame.
-    WaitForActionsDelays();
+    WaitForAllActionDelays();
 
     ResetIdleTroopAnimation();
     Redraw();
@@ -2985,21 +2985,24 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
     }
 }
 
-void Battle::Interface::WaitForActionsDelays()
+void Battle::Interface::WaitForAllActionDelays()
 {
     LocalEvent & le = LocalEvent::Get();
 
     // The array of possible delays of previous battlefield actions.
-    const std::vector<Game::DelayType> unitDelays{ Game::DelayType::BATTLE_FRAME_DELAY,          Game::DelayType::BATTLE_MISSILE_DELAY,
-                                                   Game::DelayType::BATTLE_SPELL_DELAY,          Game::DelayType::BATTLE_DISRUPTING_DELAY,
-                                                   Game::DelayType::BATTLE_CATAPULT_CLOUD_DELAY, Game::DelayType::BATTLE_BRIDGE_DELAY,
-                                                   Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY };
+    const std::vector<Game::DelayType> unitDelays{ Game::DelayType::BATTLE_FRAME_DELAY,
+                                                   Game::DelayType::BATTLE_MISSILE_DELAY,
+                                                   Game::DelayType::BATTLE_SPELL_DELAY,
+                                                   Game::DelayType::BATTLE_DISRUPTING_DELAY,
+                                                   Game::DelayType::BATTLE_CATAPULT_CLOUD_DELAY,
+                                                   Game::DelayType::BATTLE_BRIDGE_DELAY,
+                                                   Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY };
 
     // Wait for the delay after previous render and only after it render a new frame and proceed to the rest of this function.
     while ( le.HandleEvents( Game::isDelayNeeded( unitDelays ) ) ) {
         CheckGlobalEvents( le );
 
-        if ( Game::isDelayPassed( unitDelays ) ) {
+        if ( Game::hasEveryDelayPassed( unitDelays ) ) {
             break;
         }
     }
@@ -3014,11 +3017,11 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFr
 
     LocalEvent & le = LocalEvent::Get();
 
-    // In a loop we wait for the delay and then display the next frame.
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY } ) ) ) {
+    // In the loop below we wait for the delay and then display the next frame.
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) ) {
         CheckGlobalEvents( le );
 
-        if ( Game::validateAnimationDelay( Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY ) ) {
             Redraw();
 
             if ( unit.isFinishAnimFrame() ) {
@@ -3106,7 +3109,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     // Wait for previously set and not passed delays before rendering a new frame.
-    WaitForActionsDelays();
+    WaitForAllActionDelays();
 
     // convert the following code into a function/event service
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
@@ -3170,8 +3173,8 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     // long distance attack animation
     if ( archer ) {
         // Reset the delay to wait till the next frame if is not already waiting.
-        if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
-            Game::AnimateResetDelay( Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY );
+        if ( !Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
+            Game::AnimateResetDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY );
         }
 
         const fheroes2::Sprite & attackerSprite = fheroes2::AGG::GetICN( attacker.GetMonsterSprite(), attacker.GetFrame() );
@@ -3202,7 +3205,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         // redraw archer attack animation
         if ( attacker.SwitchAnimation( Monster_Info::RANG_TOP + direction * 2 ) ) {
             // Set the delay between shooting animation frames.
-            Game::setUnitMovementDelay( Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) / attacker.animation.animationLength() );
+            Game::setCustomUnitMovementDelay( Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) / attacker.animation.animationLength() );
 
             // We do not render the last frame of shooting animation as all frames besides this contains the projectile.
             // The last frame will be rendered in RedrawMissileAnimation() function with the render of projectile.
@@ -3459,8 +3462,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     }
 
     // Reset the delay to wait till the next frame if is not already waiting.
-    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
-        Game::AnimateResetDelay( Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY );
+    if ( !Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY );
     }
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
@@ -3479,7 +3482,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     // Set the delay between movement animation frames. This delay will be used for all types of movement animations.
     unit.SwitchAnimation( Monster_Info::MOVING );
-    Game::setUnitMovementDelay( frameDelay / unit.animation.animationLength() );
+    Game::setCustomUnitMovementDelay( frameDelay / unit.animation.animationLength() );
 
     std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
     StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
@@ -3604,6 +3607,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
 
         // Render the unit movement with the movement sound.
+        // TODO: adjust sounds calls and synchronize them with frames. Take into account that some sounds (like for Cavalry) consists of a sequence of steps.
         AudioManager::PlaySound( unit.M82Move() );
         AnimateUnitWithDelay( unit );
         unit.SetPosition( *dst );
@@ -3678,8 +3682,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     }
 
     // Reset the delay to wait till the next frame if is not already waiting.
-    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
-        Game::AnimateResetDelay( Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY );
+    if ( !Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY );
     }
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
@@ -3706,7 +3710,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     // Set the delay between movement animation frames. This delay will be used for all types of movement animations.
     unit.SwitchAnimation( Monster_Info::MOVING );
-    Game::setUnitMovementDelay( frameDelay / unit.animation.animationLength() );
+    Game::setCustomUnitMovementDelay( frameDelay / unit.animation.animationLength() );
 
     const std::vector<fheroes2::Point> points = GetEuclideanLine( destPos, targetPos, step );
     std::vector<fheroes2::Point>::const_iterator currentPoint = points.begin();
@@ -5569,7 +5573,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     uint32_t frame = 0;
 
     // Wait for previously set and not passed delays before rendering a new frame.
-    WaitForActionsDelays();
+    WaitForAllActionDelays();
 
     AudioManager::PlaySound( m82 );
 
@@ -5658,7 +5662,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     }
 
     // Wait for previously set and not passed delays before rendering a new frame.
-    WaitForActionsDelays();
+    WaitForAllActionDelays();
 
     AudioManager::PlaySound( m82 );
 
@@ -5693,7 +5697,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
 void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
 {
     // Wait for previously set and not passed delays before rendering a new frame.
-    WaitForActionsDelays();
+    WaitForAllActionDelays();
 
     LocalEvent & le = LocalEvent::Get();
 

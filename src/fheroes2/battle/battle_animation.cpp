@@ -104,15 +104,15 @@ int AnimationSequence::firstFrame() const
 
 double AnimationSequence::movementProgress() const
 {
-    if ( isValid() ) {
-        // We return the progress coefficient for moving creature sprite from one position to another.
-        // At the start and the end of the path we also have creature's static position,
-        // but there is no such position on the cells which creature path through.
-        // So to make the movement start and end more smoothly we add 0.5 to the frame number (since it starts from zero).
-        return ( static_cast<double>( _currentFrame ) + 0.5 ) / static_cast<double>( animationLength() );
+    if ( !isValid() ) {
+        return 0;
     }
 
-    return 0;
+    // We return the progress coefficient for moving creature sprite from one position to another.
+    // At the start and the end of the path we also have creature's static position,
+    // but there is no such position on the cells which creature path through.
+    // So to make the movement start and end more smoothly we add 0.5 to the frame number (since it starts from zero).
+    return ( static_cast<double>( _currentFrame ) + 0.5 ) / static_cast<double>( animationLength() );
 }
 
 bool AnimationSequence::isLastFrame() const
@@ -556,7 +556,7 @@ int32_t AnimationState::getCurrentFrameXOffset() const
     }
 
     // If there is no horizontal offset data for currentFrame, return 0 as offset.
-    DEBUG_LOG( DBG_GAME, DBG_WARN, " Frame " << currentFrame << " is outside _offsetX [0 - " << subequenceStart << "] for animation state " << _animState )
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Frame " << currentFrame << " is outside _offsetX [0 - " << subequenceStart << "] for animation state " << _animState )
     return 0;
 }
 

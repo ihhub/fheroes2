@@ -2203,26 +2203,28 @@ namespace fheroes2
                 }
                 return true;
             case ICN::GOLEM:
-            case ICN::GOLEM2: {
+            case ICN::GOLEM2:
                 LoadOriginalICN( id );
-                // Movement animation fix for Iron and Steel Golem: its 'MOVE_MAIN' animation is missing 1/4 of animation start.
-                // The 'MOVE_START' (for first and one cell move) has this 1/4 of animation, but 'MOVE_TILE_START` is empty,
-                // so we make a copy of 'MOVE_MAIN' frames to the end of sprite vector and correct their 'x' coordinate
-                // to cover the whole cell except the last frame, that has correct coordinates.
-                const size_t golemICNSize = _icnVsSprite[id].size();
-                // 'MOVE_MAIN' has 7 frames and we copy only first 6.
-                const int32_t copyFramesNum = 6;
-                // 'MOVE_MAIN' frames starts from the 6th frame in Golem ICN sprites.
-                const std::vector<fheroes2::Sprite>::const_iterator firstFrameToCopy = _icnVsSprite[id].begin() + 6;
-                _icnVsSprite[id].insert( _icnVsSprite[id].end(), firstFrameToCopy, firstFrameToCopy + copyFramesNum );
-                for ( int32_t i = 0; i < copyFramesNum; ++i ) {
-                    const size_t frameID = golemICNSize + i;
-                    // We have 7 'MOVE_MAIN' frames and 1/4 of cell to expand the horizontal movement, so we shift the first copied frame by "6*CELLW/(4*7)" to the left
-                    // and reduce this shift every next frame by "CELLW/(7*4)".
-                    _icnVsSprite[id][frameID].setPosition( _icnVsSprite[id][frameID].x() - ( copyFramesNum - i ) * CELLW / 28, _icnVsSprite[id][frameID].y() );
+                // Original Golem ICN contains 40 frames. We make the corrections only for original sprite.
+                if ( _icnVsSprite[id].size() == 40 ) {
+                    // Movement animation fix for Iron and Steel Golem: its 'MOVE_MAIN' animation is missing 1/4 of animation start.
+                    // The 'MOVE_START' (for first and one cell move) has this 1/4 of animation, but 'MOVE_TILE_START` is empty,
+                    // so we make a copy of 'MOVE_MAIN' frames to the end of sprite vector and correct their 'x' coordinate
+                    // to cover the whole cell except the last frame, that has correct coordinates.
+                    const size_t golemICNSize = _icnVsSprite[id].size();
+                    // 'MOVE_MAIN' has 7 frames and we copy only first 6.
+                    const int32_t copyFramesNum = 6;
+                    // 'MOVE_MAIN' frames starts from the 6th frame in Golem ICN sprites.
+                    const std::vector<fheroes2::Sprite>::const_iterator firstFrameToCopy = _icnVsSprite[id].begin() + 6;
+                    _icnVsSprite[id].insert( _icnVsSprite[id].end(), firstFrameToCopy, firstFrameToCopy + copyFramesNum );
+                    for ( int32_t i = 0; i < copyFramesNum; ++i ) {
+                        const size_t frameID = golemICNSize + i;
+                        // We have 7 'MOVE_MAIN' frames and 1/4 of cell to expand the horizontal movement, so we shift the first copied frame by "6*CELLW/(4*7)" to the
+                        // left and reduce this shift every next frame by "CELLW/(7*4)".
+                        _icnVsSprite[id][frameID].setPosition( _icnVsSprite[id][frameID].x() - ( copyFramesNum - i ) * CELLW / 28, _icnVsSprite[id][frameID].y() );
+                    }
                 }
                 return true;
-            }
             case ICN::LOCATORE:
             case ICN::LOCATORS:
                 LoadOriginalICN( id );

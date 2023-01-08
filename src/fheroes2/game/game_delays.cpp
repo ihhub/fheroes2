@@ -118,7 +118,7 @@ void Game::AnimateDelaysInitialize()
     delays[BATTLE_POPUP_DELAY].setDelay( 800 );
     delays[BATTLE_COLOR_CYCLE_DELAY].setDelay( 220 );
     delays[BATTLE_SELECTED_UNIT_DELAY].setDelay( 160 );
-    delays[BATTLE_UNIT_MOVEMENT_DELAY].setDelay( 10 );
+    delays[CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY].setDelay( 10 );
     delays[CURRENT_HERO_DELAY].setDelay( 10 );
     delays[CURRENT_AI_DELAY].setDelay( 10 );
 
@@ -169,9 +169,9 @@ void Game::passCustomAnimationDelay( const uint64_t delayMs )
     delays[Game::DelayType::CUSTOM_DELAY].pass();
 }
 
-void Game::setUnitMovementDelay( const uint64_t delayMs )
+void Game::setCustomUnitMovementDelay( const uint64_t delayMs )
 {
-    delays[Game::DelayType::BATTLE_UNIT_MOVEMENT_DELAY].setDelay( delayMs );
+    delays[Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY].setDelay( delayMs );
 }
 
 void Game::UpdateGameSpeed()
@@ -211,7 +211,7 @@ uint32_t Game::ApplyBattleSpeed( uint32_t delay )
     return static_cast<uint32_t>( battleSpeedAdjustment * ( 10 - Settings::Get().BattleSpeed() ) * delay );
 }
 
-bool Game::isDelayPassed( const std::vector<Game::DelayType> & delayTypes )
+bool Game::hasEveryDelayPassed( const std::vector<Game::DelayType> & delayTypes )
 {
     if ( delayTypes.empty() ) {
         return true;
