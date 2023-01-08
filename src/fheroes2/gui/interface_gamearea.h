@@ -276,7 +276,7 @@ namespace Interface
         bool _mouseDraggingInitiated;
         bool _mouseDraggingMovement;
         bool _needRedrawByMouseDragging;
-        fheroes2::Point _startMouseDragPosition;
+        fheroes2::Point _lastMouseDragPosition;
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const
