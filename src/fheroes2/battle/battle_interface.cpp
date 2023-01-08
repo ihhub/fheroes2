@@ -2294,6 +2294,8 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                 assert( !_currentUnit->isWide() || pos.GetTail() != nullptr );
 
                 if ( pos.GetHead()->GetIndex() == _currentUnit->GetHeadIndex() ) {
+                    assert( !_currentUnit->isWide() || pos.GetTail()->GetIndex() == _currentUnit->GetTailIndex() );
+
                     statusMsg = formatViewInfoMsg( _currentUnit );
 
                     return Cursor::WAR_INFO;
