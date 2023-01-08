@@ -82,11 +82,12 @@ namespace Battle
 
         enum
         {
-            ABOVE_BRIDGE_CELL = 39,
-            MOAT_CELL = 49,
-            GATES_CELL = 50,
+            CELL_ABOVE_BRIDGE = 39,
+            CELL_BEFORE_MOAT = 48,
+            CELL_MOAT = 49,
+            CELL_GATES = 50,
             CELL_AFTER_GATES = 51,
-            BELOW_BRIDGE_CELL = 61
+            CELL_BELOW_BRIDGE = 61
         };
     };
 }
