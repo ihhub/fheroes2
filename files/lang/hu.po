@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-07 02:48+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -584,6 +584,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Megmutatja %{monster} információját"
 
+msgid "Fly %{monster} here"
+msgstr "A %{monster} ide repül"
+
+msgid "Move %{monster} here"
+msgstr "A %{monster} ide menjen"
+
 #, fuzzy
 msgid "Shoot %{monster}"
 msgstr "%{monster} kiválasztása"
@@ -595,12 +601,6 @@ msgstr[1] ""
 
 msgid "Attack %{monster}"
 msgstr "%{monster} támad"
-
-msgid "Fly %{monster} here"
-msgstr "A %{monster} ide repül"
-
-msgid "Move %{monster} here"
-msgstr "A %{monster} ide menjen"
 
 msgid "Turn %{turn}"
 msgstr ""

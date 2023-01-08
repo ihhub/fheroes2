@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-07 02:48+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -601,6 +601,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Informacje o jednostce: {monster}"
 
+msgid "Fly %{monster} here"
+msgstr "Przefruń jednostką (%{monster}) tutaj"
+
+msgid "Move %{monster} here"
+msgstr "Przemieść jednostkę (%{monster}) tutaj"
+
 msgid "Shoot %{monster}"
 msgstr "Strzelaj do %{monster}"
 
@@ -612,12 +618,6 @@ msgstr[2] "(pozostało %{count} strzałów)"
 
 msgid "Attack %{monster}"
 msgstr "Zaatakuj jednostkę (%{monster})"
-
-msgid "Fly %{monster} here"
-msgstr "Przefruń jednostką (%{monster}) tutaj"
-
-msgid "Move %{monster} here"
-msgstr "Przemieść jednostkę (%{monster}) tutaj"
 
 msgid "Turn %{turn}"
 msgstr "Tura %{turn}"

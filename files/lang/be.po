@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-07 02:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -569,6 +569,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr ""
 
+msgid "Fly %{monster} here"
+msgstr ""
+
+msgid "Move %{monster} here"
+msgstr ""
+
 msgid "Shoot %{monster}"
 msgstr ""
 
@@ -579,12 +585,6 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Attack %{monster}"
-msgstr ""
-
-msgid "Fly %{monster} here"
-msgstr ""
-
-msgid "Move %{monster} here"
 msgstr ""
 
 msgid "Turn %{turn}"

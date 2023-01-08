@@ -303,6 +303,64 @@ namespace
         }
         return rainbow;
     }
+
+    fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
+    {
+        const fheroes2::Rect & pos = target.GetRectPosition();
+
+        // Get the sprite for the first frame, so its center won't shift if the creature is animating (instead of target.GetFrame()).
+        const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.animation.firstFrame() );
+
+        // Bottom-left corner (default) position with spell offset applied
+        fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.height + cellYOffset + spellSprite.y() );
+
+        switch ( spellICN ) {
+        case ICN::SHIELD:
+            // in front of the unit
+            result.x += target.isReflect() ? -pos.width / ( target.isWide() ? 2 : 1 ) : pos.width;
+            result.y += unitSprite.y() / 2;
+            break;
+        case ICN::BLIND: {
+            // unit's eyes
+            const fheroes2::Point & offset = target.animation.getBlindOffset();
+
+            // calculate OG Heroes2 unit position to apply offset to
+            const int rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.width * 3 / 4 : CELLW / 2;
+
+            // Overwrite result with custom blind value
+            result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
+            result.y += offset.y;
+            break;
+        }
+        case ICN::STONSKIN:
+        case ICN::STELSKIN:
+            // bottom center point
+            result.x += pos.width / 2;
+            break;
+        case ICN::REDDEATH:
+            // Shift spell sprite position for a wide ceature to its head.
+            result.x += pos.width / 2 + ( target.isReflect() ? ( 1 - spellSprite.width() - 2 * spellSprite.x() - pos.width / 8 ) : ( pos.width / 8 ) );
+            result.y -= pos.height - 4;
+            break;
+        case ICN::MAGIC08:
+            // Position shifts for the Holy Shout spell to be closer to OG.
+            result.x += pos.width / 2 + ( target.isReflect() ? 12 : 0 );
+            result.y += unitSprite.y() / 2 - 1;
+            break;
+        default:
+            // center point of the unit
+            result.x += pos.width / 2;
+            result.y += unitSprite.y() / 2;
+            break;
+        }
+
+        if ( result.y < 0 ) {
+            const int maximumY = fheroes2::AGG::GetAbsoluteICNHeight( spellICN );
+            result.y = maximumY + spellSprite.y();
+        }
+
+        return result;
+    }
 }
 
 namespace Battle
@@ -2276,82 +2334,103 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
     const Cell * cell = Board::GetCell( index_pos );
 
     if ( cell && _currentUnit ) {
-        const Unit * b_enemy = cell->GetUnit();
+        auto formatViewInfoMsg = []( const Unit * unit ) {
+            assert( unit != nullptr );
 
-        if ( b_enemy ) {
-            if ( _currentUnit->GetCurrentColor() == b_enemy->GetColor() || ( _currentUnit == b_enemy ) ) {
-                statusMsg = _( "View %{monster} info" );
-                StringReplaceWithLowercase( statusMsg, "%{monster}", b_enemy->GetMultiName() );
-                return Cursor::WAR_INFO;
-            }
-            else {
-                if ( _currentUnit->isArchers() && !_currentUnit->isHandFighting() ) {
-                    statusMsg = _( "Shoot %{monster}" );
-                    statusMsg.append( " " );
-                    statusMsg.append( _n( "(1 shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
-                    StringReplaceWithLowercase( statusMsg, "%{monster}", b_enemy->GetMultiName() );
-                    StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
+            std::string msg = _( "View %{monster} info" );
+            StringReplaceWithLowercase( msg, "%{monster}", unit->GetMultiName() );
 
-                    return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
+            return msg;
+        };
+
+        const Unit * unit = cell->GetUnit();
+
+        if ( unit == nullptr || _currentUnit == unit ) {
+            const Position pos = Position::GetReachable( *_currentUnit, index_pos );
+
+            if ( pos.GetHead() != nullptr ) {
+                assert( !_currentUnit->isWide() || pos.GetTail() != nullptr );
+
+                if ( pos.GetHead()->GetIndex() == _currentUnit->GetHeadIndex() ) {
+                    assert( !_currentUnit->isWide() || pos.GetTail()->GetIndex() == _currentUnit->GetTailIndex() );
+
+                    statusMsg = formatViewInfoMsg( _currentUnit );
+
+                    return Cursor::WAR_INFO;
                 }
-                else {
-                    // Find all possible directions where the current monster can attack.
-                    std::set<int> availableAttackDirection;
 
-                    for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
-                        if ( Board::isValidDirection( index_pos, direction )
-                             && Board::CanAttackFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
-                            availableAttackDirection.emplace( direction );
-                        }
-                    }
+                statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here" ) : _( "Move %{monster} here" );
+                StringReplaceWithLowercase( statusMsg, "%{monster}", _currentUnit->GetName() );
 
-                    if ( !availableAttackDirection.empty() ) {
-                        int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
-                        if ( currentDirection == UNKNOWN ) {
-                            // This could happen when another window has popped up and the user moved the mouse.
-                            currentDirection = CENTER;
-                        }
-
-                        if ( availableAttackDirection.count( currentDirection ) == 0 ) {
-                            // This direction is not valid. Find the nearest one.
-                            if ( availableAttackDirection.size() == 1 ) {
-                                currentDirection = *availableAttackDirection.begin();
-                            }
-                            else {
-                                // First seach clockwise.
-                                direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
-                                direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
-
-                                while ( true ) {
-                                    ++clockWiseDirection;
-                                    if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
-                                        currentDirection = clockWiseDirection;
-                                        break;
-                                    }
-
-                                    --antiClockWiseDirection;
-                                    if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
-                                        currentDirection = antiClockWiseDirection;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        const int cursor = GetSwordCursorDirection( currentDirection );
-
-                        statusMsg = _( "Attack %{monster}" );
-                        StringReplaceWithLowercase( statusMsg, "%{monster}", b_enemy->GetName() );
-
-                        return cursor;
-                    }
-                }
+                return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
             }
         }
-        else if ( cell->isReachableForHead() || cell->isReachableForTail() ) {
-            statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here" ) : _( "Move %{monster} here" );
-            StringReplaceWithLowercase( statusMsg, "%{monster}", _currentUnit->GetName() );
-            return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
+        else {
+            if ( _currentUnit->GetCurrentColor() == unit->GetColor() ) {
+                statusMsg = formatViewInfoMsg( unit );
+
+                return Cursor::WAR_INFO;
+            }
+
+            if ( _currentUnit->isArchers() && !_currentUnit->isHandFighting() ) {
+                statusMsg = _( "Shoot %{monster}" );
+                statusMsg.append( " " );
+                statusMsg.append( _n( "(1 shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
+                StringReplaceWithLowercase( statusMsg, "%{monster}", unit->GetMultiName() );
+                StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
+
+                return arena.IsShootingPenalty( *_currentUnit, *unit ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
+            }
+
+            // Find all possible directions where the current monster can attack.
+            std::set<int> availableAttackDirection;
+
+            for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
+                if ( Board::isValidDirection( index_pos, direction ) && Board::CanAttackFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
+                    availableAttackDirection.emplace( direction );
+                }
+            }
+
+            if ( !availableAttackDirection.empty() ) {
+                int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
+                if ( currentDirection == UNKNOWN ) {
+                    // This could happen when another window has popped up and the user moved the mouse.
+                    currentDirection = CENTER;
+                }
+
+                if ( availableAttackDirection.count( currentDirection ) == 0 ) {
+                    // This direction is not valid. Find the nearest one.
+                    if ( availableAttackDirection.size() == 1 ) {
+                        currentDirection = *availableAttackDirection.begin();
+                    }
+                    else {
+                        // First seach clockwise.
+                        direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
+                        direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
+
+                        while ( true ) {
+                            ++clockWiseDirection;
+                            if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
+                                currentDirection = clockWiseDirection;
+                                break;
+                            }
+
+                            --antiClockWiseDirection;
+                            if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
+                                currentDirection = antiClockWiseDirection;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                const int cursor = GetSwordCursorDirection( currentDirection );
+
+                statusMsg = _( "Attack %{monster}" );
+                StringReplaceWithLowercase( statusMsg, "%{monster}", unit->GetName() );
+
+                return cursor;
+            }
         }
     }
 
@@ -3234,14 +3313,9 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
             RedrawTroopDefaultDelay( attacker );
         }
     }
-
-    if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && archer ) {
-        // Lich cloud animation.
-        RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), NONE );
-    }
 }
 
-void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, Unit & defender, const TargetsInfo & targets )
 {
     // Reset the delay to wait till the next frame.
     if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
@@ -3256,8 +3330,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
     }
 
     // targets damage animation
-    RedrawActionWincesKills( targets, &attacker );
-
+    RedrawActionWincesKills( targets, &attacker, &defender );
     RedrawTroopDefaultDelay( attacker );
 
     attacker.SwitchAnimation( Monster_Info::STATIC );
@@ -3306,7 +3379,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
     _movingUnit = nullptr;
 }
 
-void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */ )
+void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */, const Unit * defender /* = nullptr */ )
 {
     // Reset the delay to wait till the next frame.
     if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
@@ -3322,43 +3395,68 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
 
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-        Unit * defender = it->defender;
-        if ( defender == nullptr ) {
+    // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
+    // along with the unit kill/wince animation.
+    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
+                               && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
+
+    for ( const Battle::TargetInfo & target : targets ) {
+        Unit * unit = target.defender;
+        if ( unit == nullptr ) {
             continue;
         }
 
-        if ( defender->isModes( CAP_MIRRORIMAGE ) )
-            mirrorImages.push_back( defender );
+        if ( unit->isModes( CAP_MIRRORIMAGE ) ) {
+            mirrorImages.push_back( unit );
+        }
 
         // kill animation
-        if ( !defender->isValid() ) {
+        if ( !unit->isValid() ) {
             // destroy linked mirror
-            if ( defender->isModes( CAP_MIRROROWNER ) )
-                mirrorImages.push_back( defender->GetMirror() );
+            if ( unit->isModes( CAP_MIRROROWNER ) ) {
+                mirrorImages.push_back( unit->GetMirror() );
+            }
 
-            defender->SwitchAnimation( Monster_Info::KILL );
-            AudioManager::PlaySound( defender->M82Kill() );
+            unit->SwitchAnimation( Monster_Info::KILL );
+            AudioManager::PlaySound( unit->M82Kill() );
             ++finish;
 
-            deathColor = defender->GetArmyColor();
+            deathColor = unit->GetArmyColor();
         }
-        else if ( it->damage ) {
+        else if ( target.damage ) {
             // wince animation
-            defender->SwitchAnimation( Monster_Info::WNCE );
-            AudioManager::PlaySound( defender->M82Wnce() );
+            if ( drawLichCloud ) {
+                // The Lich cloud causes units to freeze for some time in the maximum wince state.
+                // So we will divide the wince animation. First part: the creature stands for a couple of frames before wincing.
+                unit->SwitchAnimation( Monster_Info::STAND_STILL );
+            }
+            else {
+                unit->SwitchAnimation( Monster_Info::WNCE );
+                AudioManager::PlaySound( unit->M82Wnce() );
+            }
             ++finish;
         }
         else {
             // have immunity
-            resistantTarget.insert( it->defender );
+            resistantTarget.insert( target.defender );
             AudioManager::PlaySound( M82::RSBRYFZL );
         }
     }
 
     SetHeroAnimationReactionToTroopDeath( deathColor );
 
-    // targets damage animation loop
+    uint32_t lichCloudFrame = 0;
+    const uint32_t lichCloudMaxFrame = fheroes2::AGG::GetICNCount( ICN::LICHCLOD );
+    // Wince animation under the Lich cloud, second part: the frame number after which the target animation will be switched to 'WNCE_UP'.
+    const uint32_t wnceUpStartFrame = 1;
+    // Wince animation under the Lich cloud, third part: the frame number after which the target animation will be switched to 'WNCE_SOWN'.
+    const uint32_t wnceDownStartFrame = lichCloudMaxFrame - 3;
+
+    if ( drawLichCloud ) {
+        // Lich cloud sound.
+        AudioManager::PlaySound( attacker->M82Expl() );
+    }
+
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_FRAME_DELAY } ) ) ) {
         CheckGlobalEvents( le );
 
@@ -3376,8 +3474,8 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 redrawBattleField = true;
             }
             else {
-                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                    if ( ( *it ).defender ) {
+                for ( const Battle::TargetInfo & target : targets ) {
+                    if ( target.defender ) {
                         redrawBattleField = true;
                         break;
                     }
@@ -3386,6 +3484,15 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
             if ( redrawBattleField ) {
                 RedrawPartialStart();
+
+                if ( drawLichCloud ) {
+                    // Draw a Lich cloud above the target unit.
+                    const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, lichCloudFrame );
+                    const fheroes2::Point & pos = CalculateSpellPosition( *defender, ICN::LICHCLOD, spellSprite );
+                    fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, false );
+                    ++lichCloudFrame;
+                }
+
                 RedrawPartialFinish();
             }
 
@@ -3399,7 +3506,8 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 }
 
                 const int animationState = info.defender->GetAnimationState();
-                if ( animationState == Monster_Info::WNCE ) {
+                if ( animationState == Monster_Info::WNCE || animationState == Monster_Info::WNCE_UP || animationState == Monster_Info::WNCE_DOWN
+                     || animationState == Monster_Info::STAND_STILL ) {
                     return false;
                 }
 
@@ -3412,27 +3520,36 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
             const bool finishedAnimation = ( finish == static_cast<int>( finishedAnimationCount ) );
 
-            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                if ( ( *it ).defender ) {
-                    if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
-                        it->defender->SwitchAnimation( Monster_Info::STATIC );
+            for ( const Battle::TargetInfo & target : targets ) {
+                if ( target.defender ) {
+                    if ( target.defender->isFinishAnimFrame()
+                         && ( target.defender->GetAnimationState() == Monster_Info::WNCE || target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
+                        target.defender->SwitchAnimation( Monster_Info::STATIC );
+                    }
+                    else if ( drawLichCloud && lichCloudFrame == wnceUpStartFrame && ( target.defender->GetAnimationState() == Monster_Info::STAND_STILL ) ) {
+                        target.defender->SwitchAnimation( Monster_Info::WNCE_UP );
+                        AudioManager::PlaySound( target.defender->M82Wnce() );
+                    }
+                    else if ( drawLichCloud && lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
+                        target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
                     }
                     else {
-                        it->defender->IncreaseAnimFrame();
+                        target.defender->IncreaseAnimFrame();
                     }
                 }
             }
 
-            if ( finishedAnimation ) {
-                // All frames are rendered.
+            if ( finishedAnimation && ( !drawLichCloud || ( lichCloudFrame == lichCloudMaxFrame ) ) ) {
+                // All unit frames are rendered and if it was a Lich attack also its cloud frames are rendered too.
                 break;
             }
         }
     }
 
     // Fade away animation for destroyed mirror images
-    if ( !mirrorImages.empty() )
+    if ( !mirrorImages.empty() ) {
         RedrawActionRemoveMirrorImage( mirrorImages );
+    }
 }
 
 void Battle::Interface::SetHeroAnimationReactionToTroopDeath( const int32_t deathColor )
@@ -3883,10 +4000,10 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
         break;
 
     case Spell::HOLYWORD:
-        RedrawActionHolyShoutSpell( 2 );
+        RedrawActionHolyShoutSpell( 16 );
         break;
     case Spell::HOLYSHOUT:
-        RedrawActionHolyShoutSpell( 4 );
+        RedrawActionHolyShoutSpell( 24 );
         break;
 
     case Spell::ELEMENTALSTORM:
@@ -5134,38 +5251,72 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     SwitchAllUnitsAnimation( Monster_Info::STATIC );
     Redraw();
 
-    const fheroes2::Image original( _mainSurface );
-    fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, 3 );
+    fheroes2::Rect area = GetArea();
+    // Cut out the battle log image so we don't use it in the death wave effect.
+    area.height -= status.height;
+    // And if listlog is open, then cut off it too.
+    if ( listlog && listlog->isOpenLog() ) {
+        area.height -= listlog->GetArea().height;
+    }
 
-    // Make the spell effect more dark-red.
-    fheroes2::Image blurredRed( blurred );
-    fheroes2::ApplyPalette( blurredRed, PAL::GetPalette( PAL::PaletteType::RED ) );
-    fheroes2::AlphaBlit( blurredRed, blurred, ( 10 * strength ) );
+    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
-    AudioManager::PlaySound( M82::MASSCURS );
 
-    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / 20;
+    const uint32_t maxFrame = 20;
+    const uint32_t halfMaxFrame = maxFrame / 2;
+
+    // A vector of frames to animate the increase of the spell effect. The decrease will be shown in reverse frames order.
+    // Initialize a vector with copies of battle field to use them in making the spell effect increase animation.
+    std::vector<fheroes2::Image> spellEffect;
+    static_assert( halfMaxFrame > 1 );
+    spellEffect.reserve( halfMaxFrame );
+
+    const uint32_t spellEffectLastFrame = halfMaxFrame - 1;
+
+    // The similar frames number is smaller than size by 1 as the last frame will be diferent.
+    spellEffect.emplace_back( std::move( battleFieldCopy ) );
+    while ( spellEffect.size() < spellEffectLastFrame ) {
+        spellEffect.push_back( spellEffect.front() );
+    }
+
+    // The last frame is the full power of spell effect. It will be used to produce other frames.
+    spellEffect.emplace_back( fheroes2::CreateHolyShoutEffect( spellEffect[0], 4, strength ) );
+
+    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / maxFrame;
     uint32_t frame = 0;
     uint8_t alpha = 30;
+    const uint8_t alphaStep = 25;
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Rect renderArea( _interfacePosition.x + area.x, _interfacePosition.y + area.y, area.width, area.height );
 
     // Immediately indicate that the delay has passed to render first frame immediately.
     Game::passCustomAnimationDelay( spellcastDelay );
     // Make sure that the first run is passed immediately.
     assert( !Game::isCustomDelayNeeded( spellcastDelay ) );
 
-    while ( le.HandleEvents( Game::isCustomDelayNeeded( spellcastDelay ) ) && frame < 20 ) {
+    AudioManager::PlaySound( M82::MASSCURS );
+
+    while ( le.HandleEvents( Game::isCustomDelayNeeded( spellcastDelay ) ) && frame < maxFrame ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateCustomAnimationDelay( spellcastDelay ) ) {
-            // stay at maximum blur for 2 frames
-            if ( frame < 9 || frame > 10 ) {
-                fheroes2::Copy( original, _mainSurface );
-                fheroes2::AlphaBlit( blurred, _mainSurface, alpha );
-                RedrawPartialFinish();
+            // Display the maximum spell effect for 1 more 'spellcastDelay' without rendering a frame.
+            if ( frame != halfMaxFrame ) {
+                // If the spell effect is increasing we generate the frame for it in the vector to use it later in decreasing animation.
+                if ( frame < spellEffectLastFrame ) {
+                    fheroes2::AlphaBlit( spellEffect[spellEffectLastFrame], spellEffect[frame], alpha );
+                    alpha += alphaStep;
+                }
 
-                alpha += ( frame < 10 ) ? 25 : -25;
+                const uint32_t spellEffectFrame = ( frame < halfMaxFrame ) ? frame : ( maxFrame - frame - 1 );
+                fheroes2::Copy( spellEffect[spellEffectFrame], area.x, area.y, display, renderArea.x, renderArea.y, renderArea.width, renderArea.height );
+
+                display.render( renderArea );
             }
+
             ++frame;
         }
     }
@@ -5464,64 +5615,6 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
         }
 }
 
-fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
-{
-    const fheroes2::Rect & pos = target.GetRectPosition();
-
-    // Get the sprite for the first frame, so its center not shift if the creature is animating (instead of target.GetFrame()).
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.animation.firstFrame() );
-
-    // Bottom-left corner (default) position with spell offset applied
-    fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.height + cellYOffset + spellSprite.y() );
-
-    switch ( spellICN ) {
-    case ICN::SHIELD:
-        // in front of the unit
-        result.x += target.isReflect() ? -pos.width / ( target.isWide() ? 2 : 1 ) : pos.width;
-        result.y += unitSprite.y() / 2;
-        break;
-    case ICN::BLIND: {
-        // unit's eyes
-        const fheroes2::Point & offset = target.animation.getBlindOffset();
-
-        // calculate OG Heroes2 unit position to apply offset to
-        const int rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.width * 3 / 4 : CELLW / 2;
-
-        // Overwrite result with custom blind value
-        result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
-        result.y += offset.y;
-        break;
-    }
-    case ICN::STONSKIN:
-    case ICN::STELSKIN:
-        // bottom center point
-        result.x += pos.width / 2;
-        break;
-    case ICN::REDDEATH:
-        // Shift spell sprite position for wide ceature to its head.
-        result.x += pos.width / 2 + ( target.isReflect() ? ( 1 - spellSprite.width() - 2 * spellSprite.x() - pos.width / 8 ) : ( pos.width / 8 ) );
-        result.y -= pos.height - 4;
-        break;
-    case ICN::MAGIC08:
-        // Position shifts for the Holy Shout spell to be closer to OG.
-        result.x += pos.width / 2 + ( target.isReflect() ? 12 : 0 );
-        result.y += unitSprite.y() / 2 - 1;
-        break;
-    default:
-        // center point of the unit
-        result.x += pos.width / 2;
-        result.y += unitSprite.y() / 2;
-        break;
-    }
-
-    if ( result.y < 0 ) {
-        const int maximumY = fheroes2::AGG::GetAbsoluteICNHeight( spellICN );
-        result.y = maximumY + spellSprite.y();
-    }
-
-    return result;
-}
-
 void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & targets, int icn, int m82, bool wnce )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -5632,7 +5725,10 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                         }
 
                         // If not all damaged (and not killed) units are set to STATIC animation then set isDefenderAnimating to false.
-                        isDefenderAnimating |= !( target.defender->GetAnimationState() == Monster_Info::STATIC );
+                        // IMPORTANT: The game engine can change STATIC animation to IDLE, especially for Ghosts and Zombies,
+                        // so we need to check IDLE where we check for STATIC.
+                        const int unitAnimState = target.defender->GetAnimationState();
+                        isDefenderAnimating |= !( ( unitAnimState == Monster_Info::STATIC ) || ( unitAnimState == Monster_Info::IDLE ) );
                     }
                 }
             }
@@ -5647,53 +5743,59 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     }
 }
 
-void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation )
+void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int m82, CreatureSpellAnimation animation )
 {
     LocalEvent & le = LocalEvent::Get();
 
     uint32_t frame = 0;
-    const bool reflect = ( icn == ICN::SHIELD && b.isReflect() );
+    const bool reflect = ( icn == ICN::SHIELD && unit.isReflect() );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     if ( animation == WINCE ) {
         _currentUnit = nullptr;
-        b.SwitchAnimation( Monster_Info::WNCE );
+        unit.SwitchAnimation( Monster_Info::WNCE_UP );
     }
     else if ( animation == RESURRECT ) {
         _currentUnit = nullptr;
-        b.SwitchAnimation( Monster_Info::KILL, true );
+        unit.SwitchAnimation( Monster_Info::KILL, true );
     }
 
     // Wait for previously set and not passed delays before rendering a new frame.
     WaitForAllActionDelays();
 
+    const uint32_t maxICNFrame = fheroes2::AGG::GetICNCount( icn );
+
     AudioManager::PlaySound( m82 );
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && ( frame < maxICNFrame || unit.GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-            const fheroes2::Point & pos = CalculateSpellPosition( b, icn, spellSprite );
-            fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
+            if ( frame < maxICNFrame ) {
+                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
+                const fheroes2::Point & pos = CalculateSpellPosition( unit, icn, spellSprite );
+                fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
+            }
             RedrawPartialFinish();
 
             if ( animation != NONE ) {
-                if ( animation == RESURRECT ) {
-                    if ( b.isFinishAnimFrame() )
-                        b.SwitchAnimation( Monster_Info::STATIC );
+                if ( ( animation == RESURRECT || unit.GetAnimationState() == Monster_Info::WNCE_DOWN ) && unit.isFinishAnimFrame() ) {
+                    unit.SwitchAnimation( Monster_Info::STAND_STILL );
                 }
-                b.IncreaseAnimFrame( false );
+                unit.IncreaseAnimFrame( false );
+                if ( frame == maxICNFrame - 1 && animation == WINCE ) {
+                    unit.SwitchAnimation( Monster_Info::WNCE_DOWN );
+                }
             }
             ++frame;
         }
     }
 
     if ( animation != NONE ) {
-        b.SwitchAnimation( Monster_Info::STATIC );
+        unit.SwitchAnimation( Monster_Info::STATIC );
         _currentUnit = nullptr;
     }
 }
