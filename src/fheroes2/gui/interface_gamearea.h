@@ -247,6 +247,11 @@ namespace Interface
 
         bool isDragScroll() const
         {
+            return _mouseDraggingMovement;
+        }
+
+        bool needDragScrollRedraw() const
+        {
             return _needRedrawByMouseDragging;
         }
 
