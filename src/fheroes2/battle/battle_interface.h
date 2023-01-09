@@ -274,8 +274,8 @@ namespace Battle
         void FadeArena( bool clearMessageLog );
 
         void RedrawActionNewTurn() const;
-        void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
-        void RedrawActionAttackPart2( Unit & attacker, Unit & defender, const TargetsInfo & targets );
+        void RedrawActionAttackPart1( Unit & attacker, const Unit & defender, const TargetsInfo & targets );
+        void RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets );
         void RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
         void RedrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets );
         void RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets );

@@ -3195,7 +3195,7 @@ void Battle::Interface::RedrawActionNewTurn() const
     listlog->AddMessage( std::move( msg ) );
 }
 
-void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & defender, const TargetsInfo & targets )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
@@ -3275,7 +3275,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     }
 }
 
-void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets )
 {
     // Reset the delay to wait till the next frame.
     if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
