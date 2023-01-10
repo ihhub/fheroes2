@@ -533,7 +533,6 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_DWARF_COTTAGE:
         case MP2::OBJ_HALFLING_HOLE:
         case MP2::OBJ_PEASANT_HUT:
-        case MP2::OBJ_THATCHED_HUT:
         // recruit army
         case MP2::OBJ_RUINS:
         case MP2::OBJ_TREE_CITY:

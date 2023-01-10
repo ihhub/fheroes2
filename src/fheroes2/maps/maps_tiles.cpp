@@ -58,6 +58,7 @@
 #include "objwatr.h"
 #include "objxloc.h"
 #include "race.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "spell.h"
 #include "til.h"
@@ -504,7 +505,6 @@ bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const 
 
 MP2::MapObjectType Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex )
 {
-    // TODO: why we return non-action object types which are not equal to (action object type value - 128)?
     switch ( MP2::GetICNObject( tileset ) ) {
     case ICN::X_LOC1:
         if ( icnIndex == 3 )
@@ -1602,7 +1602,6 @@ std::string Maps::Tiles::String() const
     case MP2::OBJ_DWARF_COTTAGE:
     case MP2::OBJ_HALFLING_HOLE:
     case MP2::OBJ_PEASANT_HUT:
-    case MP2::OBJ_THATCHED_HUT:
     case MP2::OBJ_MONSTER:
         os << "monster count   : " << MonsterCount() << std::endl;
         break;
@@ -2869,6 +2868,75 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for reading MP2::MapObjectType object" );
     uint8_t objectType = MP2::OBJ_NONE;
     msg >> objectType;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
+        if ( objectType == 128 ) {
+            // This is an old Sea Chest object type.
+            objectType = MP2::OBJ_SEA_CHEST;
+        }
+        else if ( objectType == 235 ) {
+            // This is an old non-action Stables object type.
+            objectType = MP2::OBJ_NON_ACTION_STABLES;
+        }
+        else if ( objectType == 241 ) {
+            // This is an old action Stables object type.
+            objectType = MP2::OBJ_STABLES;
+        }
+        else if ( objectType == 234 ) {
+            // This is an old non-action Alchemist Tower object type.
+            objectType = MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
+        }
+        else if ( objectType == 240 ) {
+            // This is an old action Alchemist Tower object type.
+            objectType = MP2::OBJ_ALCHEMIST_TOWER;
+        }
+        else if ( objectType == 118 ) {
+            // This is an old non-action The Hut of Magi object type.
+            objectType = MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
+        }
+        else if ( objectType == 238 ) {
+            // This is an old action The Hut of Magi object type.
+            objectType = MP2::OBJ_HUT_OF_MAGI;
+        }
+        else if ( objectType == 119 ) {
+            // This is an old non-action The Eye of Magi object type.
+            objectType = MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
+        }
+        else if ( objectType == 239 ) {
+            // This is an old action The Eye of Magi object type.
+            objectType = MP2::OBJ_EYE_OF_MAGI;
+        }
+        else if ( objectType == 233 ) {
+            // This is an old non-action Reefs object type.
+            objectType = MP2::OBJ_REEFS;
+        }
+        else if ( objectType == 65 ) {
+            // This is an old non-action Thatched Hut object type.
+            objectType = MP2::OBJ_NON_ACTION_PEASANT_HUT;
+        }
+        else if ( objectType == 193 ) {
+            // This is an old action Thatched Hut object type.
+            objectType = MP2::OBJ_PEASANT_HUT;
+        }
+        else if ( objectType == 117 ) {
+            // This is an old non-action Sirens object type.
+            objectType = MP2::OBJ_NON_ACTION_SIRENS;
+        }
+        else if ( objectType == 237 ) {
+            // This is an old action Sirens object type.
+            objectType = MP2::OBJ_SIRENS;
+        }
+        else if ( objectType == 116 ) {
+            // This is an old non-action Mermaid object type.
+            objectType = MP2::OBJ_NON_ACTION_MERMAID;
+        }
+        else if ( objectType == 236 ) {
+            // This is an old non-action Mermaid object type.
+            objectType = MP2::OBJ_MERMAID;
+        }
+    }
+
     tile.mp2_object = static_cast<MP2::MapObjectType>( objectType );
 
     msg >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.additionalMetadata >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2

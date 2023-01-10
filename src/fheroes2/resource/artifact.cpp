@@ -1016,7 +1016,7 @@ uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType )
     case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_SHIPWRECK_SURVIVOR:
         return 1000;
-    case MP2::OBJ_WATERCHEST:
+    case MP2::OBJ_SEA_CHEST:
         return 1500;
     case MP2::OBJ_GRAVEYARD:
         return 2000;

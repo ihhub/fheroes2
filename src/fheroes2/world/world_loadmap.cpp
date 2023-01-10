@@ -217,6 +217,14 @@ bool World::LoadMapMP2( const std::string & filename )
 
         MP2::mp2tile_t mp2tile;
         MP2::loadTile( fs, mp2tile );
+        // There are some tiles which have object type as 65 and 193 which are Thatched Hut. This is exactly the same object as Peasant Hut.
+        // Since the original number of object types is limited and in order not to confuse players we will convert this type into Peasant Hut.
+        if ( mp2tile.mapObjectType == 65 ) {
+            mp2tile.mapObjectType = MP2::OBJ_NON_ACTION_PEASANT_HUT;
+        }
+        else if ( mp2tile.mapObjectType == 193 ) {
+            mp2tile.mapObjectType = MP2::OBJ_PEASANT_HUT;
+        }
 
         tile.Init( i, mp2tile );
 
@@ -615,7 +623,7 @@ void World::ProcessNewMap()
         case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
         case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
         case MP2::OBJ_RANDOM_RESOURCE:
-        case MP2::OBJ_WATERCHEST:
+        case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_TREASURE_CHEST:
         case MP2::OBJ_ARTIFACT:
         case MP2::OBJ_RESOURCE:
@@ -656,7 +664,6 @@ void World::ProcessNewMap()
         case MP2::OBJ_DWARF_COTTAGE:
         case MP2::OBJ_HALFLING_HOLE:
         case MP2::OBJ_PEASANT_HUT:
-        case MP2::OBJ_THATCHED_HUT:
         case MP2::OBJ_RUINS:
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_WAGON_CAMP:

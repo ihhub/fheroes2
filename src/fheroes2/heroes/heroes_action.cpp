@@ -448,7 +448,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToPickupResource( *this, objectType, tileIndex );
             break;
 
-        case MP2::OBJ_WATERCHEST:
+        case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_TREASURE_CHEST:
             ActionToTreasureChest( *this, objectType, tileIndex );
             break;
@@ -569,7 +569,6 @@ void Heroes::Action( int tileIndex, bool isDestination )
         case MP2::OBJ_DWARF_COTTAGE:
         case MP2::OBJ_HALFLING_HOLE:
         case MP2::OBJ_PEASANT_HUT:
-        case MP2::OBJ_THATCHED_HUT:
             ActionToDwellingJoinMonster( *this, objectType, tileIndex );
             break;
 
