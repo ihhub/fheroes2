@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,7 +27,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iterator>
-#include <map>
 #include <memory>
 #include <ostream>
 #include <set>
@@ -98,13 +97,14 @@ void Battle::Board::SetArea( const fheroes2::Rect & area )
 
 void Battle::Board::Reset()
 {
-    for ( iterator it = begin(); it != end(); ++it ) {
-        Unit * unit = it->GetUnit();
+    for ( Cell & cell : *this ) {
+        Unit * unit = cell.GetUnit();
+
         if ( unit && !unit->isValid() ) {
             unit->PostKilledAction();
         }
-        it->resetReachability();
-        it->ResetQuality();
+
+        cell.ResetQuality();
     }
 }
 
@@ -190,286 +190,6 @@ uint32_t Battle::Board::GetDistance( int32_t index1, int32_t index2 )
     }
 
     return 0;
-}
-
-void Battle::Board::SetScanPassability( const Unit & unit )
-{
-    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.resetReachability(); } );
-
-    at( unit.GetHeadIndex() ).setReachableForHead();
-
-    if ( unit.isWide() ) {
-        at( unit.GetTailIndex() ).setReachableForTail();
-    }
-
-    if ( unit.isFlying() ) {
-        const Bridge * bridge = Arena::GetBridge();
-        const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
-
-        for ( std::size_t i = 0; i < size(); ++i ) {
-            if ( at( i ).isPassableForUnit( unit ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
-                at( i ).setReachableForHead();
-
-                if ( unit.isWide() ) {
-                    at( i ).setReachableForTail();
-                }
-            }
-        }
-    }
-    else {
-        // Set passable cells.
-        for ( const int32_t idx : GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() ) ) {
-            GetPath( unit, Position::GetPosition( unit, idx ), false );
-        }
-    }
-}
-
-bool Battle::Board::GetPathForUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentCellId,
-                                    std::vector<bool> & visitedCells, Indexes & result ) const
-{
-    if ( remainingSteps == 0 ) {
-        return false;
-    }
-
-    const Castle * castle = Arena::GetCastle();
-    const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
-
-    const int32_t dstCellId = destination.GetHead()->GetIndex();
-
-    // Upper distance limit
-    if ( GetDistance( currentCellId, dstCellId ) > remainingSteps ) {
-        return false;
-    }
-
-    std::multimap<uint32_t, int32_t> cellCosts;
-
-    for ( const int32_t cellId : GetAroundIndexes( currentCellId ) ) {
-        const Cell & cell = at( cellId );
-
-        // Ignore already visited or impassable cell
-        if ( visitedCells.at( cellId ) || !cell.isPassableFromAdjacent( unit, at( currentCellId ) ) ) {
-            continue;
-        }
-
-        // Unit is already at its destination
-        if ( cellId == dstCellId ) {
-            result.push_back( cellId );
-
-            return true;
-        }
-
-        // Unit steps into the moat, do not let it pass through the moat
-        if ( isMoatBuilt && isMoatIndex( cellId, unit ) ) {
-            continue;
-        }
-
-        // Calculate the distance from the cell in question to the destination, sort cells by distance
-        cellCosts.emplace( GetDistance( cellId, dstCellId ), cellId );
-    }
-
-    // Scan the available cells recursively in ascending order of distance
-    for ( const auto & cellCost : cellCosts ) {
-        const int32_t cellId = cellCost.second;
-
-        // Mark the cell as visited for further steps
-        visitedCells.at( cellId ) = true;
-
-        if ( GetPathForUnit( unit, destination, remainingSteps - 1, cellId, visitedCells, result ) ) {
-            result.push_back( cellId );
-
-            return true;
-        }
-
-        // Unmark the cell as visited
-        visitedCells.at( cellId ) = false;
-    }
-
-    return false;
-}
-
-bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentHeadCellId,
-                                        const int32_t prevHeadCellId, std::vector<bool> & visitedCells, Indexes & result ) const
-{
-    if ( remainingSteps == 0 ) {
-        return false;
-    }
-
-    const Castle * castle = Arena::GetCastle();
-    const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
-
-    const int32_t dstHeadCellId = destination.GetHead()->GetIndex();
-    const int32_t dstTailCellId = destination.GetTail()->GetIndex();
-
-    const bool isCurrentLeftDirection = prevHeadCellId < 0 ? unit.isReflect() : ( ( GetDirection( prevHeadCellId, currentHeadCellId ) & LEFT_SIDE ) != 0 );
-    const int32_t currentTailCellId = isCurrentLeftDirection ? currentHeadCellId + 1 : currentHeadCellId - 1;
-
-    // Upper distance limit
-    if ( GetDistance( currentHeadCellId, dstHeadCellId ) > remainingSteps && GetDistance( currentTailCellId, dstHeadCellId ) > remainingSteps ) {
-        return false;
-    }
-
-    std::multimap<uint32_t, int32_t> cellCosts;
-
-    for ( const int32_t headCellId : GetMoveWideIndexes( currentHeadCellId, isCurrentLeftDirection ) ) {
-        const Cell & cell = at( headCellId );
-
-        // Ignore already visited or impassable cell
-        if ( visitedCells.at( headCellId ) || !cell.isPassableFromAdjacent( unit, at( currentHeadCellId ) ) ) {
-            continue;
-        }
-
-        const int32_t tailCellId = ( GetDirection( currentHeadCellId, headCellId ) & LEFT_SIDE ) ? headCellId + 1 : headCellId - 1;
-
-        // Unit is already at its destination
-        if ( headCellId == dstHeadCellId && tailCellId == dstTailCellId ) {
-            result.push_back( headCellId );
-
-            return true;
-        }
-
-        // Unit is already at its destination, but in the opposite direction
-        if ( headCellId == dstTailCellId && tailCellId == dstHeadCellId ) {
-            result.push_back( tailCellId );
-            result.push_back( headCellId );
-
-            return true;
-        }
-
-        // Unit steps into the moat
-        if ( isMoatBuilt && ( isMoatIndex( headCellId, unit ) || isMoatIndex( tailCellId, unit ) ) ) {
-            // In the moat it is only allowed to turn back, do not let the unit pass through the moat
-            if ( ( tailCellId != currentHeadCellId || !isMoatIndex( tailCellId, unit ) ) && ( headCellId != currentTailCellId || !isMoatIndex( headCellId, unit ) ) ) {
-                continue;
-            }
-        }
-
-        // Calculate the distance from the cell in question to the destination, sort cells by distance
-        cellCosts.emplace( GetDistance( headCellId, dstHeadCellId ) + GetDistance( tailCellId, dstTailCellId ), headCellId );
-    }
-
-    // Scan the available cells recursively in ascending order of distance
-    for ( const auto & cellCost : cellCosts ) {
-        const int32_t headCellId = cellCost.second;
-
-        // Mark the cell as visited for further steps
-        visitedCells.at( headCellId ) = true;
-
-        // Turning back is not a movement
-        const uint32_t steps = headCellId == currentTailCellId ? remainingSteps : remainingSteps - 1;
-
-        if ( GetPathForWideUnit( unit, destination, steps, headCellId, currentHeadCellId, visitedCells, result ) ) {
-            result.push_back( headCellId );
-
-            return true;
-        }
-
-        // Unmark the cell as visited
-        visitedCells.at( headCellId ) = false;
-    }
-
-    return false;
-}
-
-void Battle::Board::StraightenPathForUnit( const int32_t currentCellId, Indexes & path ) const
-{
-    // A path less than 2 steps long cannot contain detours, leave it as is
-    if ( path.size() < 2 ) {
-        return;
-    }
-
-    // Remember that the steps in the path are stored in reverse order
-    // Temporarily append the current cell of the unit to the end of the path
-    path.push_back( currentCellId );
-
-    for ( std::size_t curr = 0; path.size() > 2 && curr < path.size() - 2; ++curr ) {
-        const std::size_t next = curr + 1;
-
-        // Check whether we are passing through one of the neighboring cells at any of the future steps (excluding the next step)
-        for ( const int32_t cellId : GetAroundIndexes( path[curr] ) ) {
-            std::size_t pos;
-
-            // Search for the last occurence of the current neighboring cell in the path (excluding the next step)
-            // Using path.size() - 1 should be safe here, because, due to the condition in the outer loop, path should never be empty
-            assert( !path.empty() );
-            for ( pos = path.size() - 1; pos > next; --pos ) {
-                if ( path[pos] == cellId ) {
-                    break;
-                }
-            }
-
-            // If found, then remove the extra steps
-            if ( pos > next ) {
-                path.erase( path.begin() + next, path.begin() + pos );
-
-                break;
-            }
-        }
-    }
-
-    // Remove the current cell of the unit from the path
-    assert( !path.empty() );
-    path.pop_back();
-}
-
-Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & destination, const bool debug ) const
-{
-    Indexes result;
-
-    const bool isWideUnit = unit.isWide();
-
-    // Check if destination is valid
-    if ( destination.GetHead() == nullptr || ( isWideUnit && destination.GetTail() == nullptr ) ) {
-        return result;
-    }
-
-    result.reserve( 15 );
-
-    std::vector<bool> visitedCells( ARENASIZE, false );
-
-    // Mark the current cell of the unit as visited
-    visitedCells.at( unit.GetHeadIndex() ) = true;
-
-    if ( isWideUnit ) {
-        GetPathForWideUnit( unit, destination, unit.GetSpeed(), unit.GetHeadIndex(), -1, visitedCells, result );
-    }
-    else {
-        GetPathForUnit( unit, destination, unit.GetSpeed(), unit.GetHeadIndex(), visitedCells, result );
-
-        // Try to straighten the unit's path by eliminating possible detours
-        StraightenPathForUnit( unit.GetHeadIndex(), result );
-    }
-
-    if ( !result.empty() ) {
-        std::reverse( result.begin(), result.end() );
-
-        // Set direction info for cells
-        for ( std::size_t i = 0; i < result.size(); ++i ) {
-            const int32_t cellId = result[i];
-
-            Cell * headCell = GetCell( cellId );
-            assert( headCell != nullptr );
-
-            headCell->setReachableForHead();
-
-            if ( isWideUnit ) {
-                const int32_t prevCellId = i == 0 ? unit.GetHeadIndex() : result[i - 1];
-
-                Cell * tailCell = GetCell( cellId, LEFT_SIDE & GetDirection( cellId, prevCellId ) ? LEFT : RIGHT );
-                assert( tailCell != nullptr );
-
-                tailCell->setReachableForTail();
-            }
-        }
-    }
-
-    if ( debug && result.empty() ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "Path was not found for " << unit.String() << ", destination: "
-                                             << "(head cell ID: " << destination.GetHead()->GetIndex()
-                                             << ", tail cell ID: " << ( isWideUnit ? destination.GetTail()->GetIndex() : -1 ) << ")" )
-    }
-
-    return result;
 }
 
 std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
@@ -1135,13 +855,14 @@ bool Battle::Board::isValidMirrorImageIndex( const int32_t index, const Unit * u
 
 bool Battle::Board::CanAttackFromCell( const Unit & currentUnit, const int32_t from )
 {
-    const Cell * fromCell = GetCell( from );
-    assert( fromCell != nullptr );
+    const Position pos = Position::GetReachable( currentUnit, from );
 
     // Target unit cannot be attacked if out of reach
-    if ( !fromCell->isReachableForHead() && ( !currentUnit.isWide() || !fromCell->isReachableForTail() ) ) {
+    if ( pos.GetHead() == nullptr ) {
         return false;
     }
+
+    assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
 
     const Castle * castle = Arena::GetCastle();
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,6 +23,7 @@
 
 #include <cassert>
 
+#include "battle_arena.h"
 #include "battle_board.h"
 #include "battle_cell.h"
 #include "battle_troop.h"
@@ -138,20 +139,27 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
     return result;
 }
 
-Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const int32_t dst, const bool tryHeadFirst /* = true */ )
+Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const int32_t dst )
 {
-    Position result;
+    const Arena * arena = GetArena();
+    assert( arena != nullptr );
 
     if ( currentUnit.isWide() ) {
-        auto checkCells = []( Cell * headCell, Cell * tailCell ) {
-            Position res;
-
-            if ( headCell != nullptr && headCell->isReachableForHead() && tailCell != nullptr && tailCell->isReachableForTail() ) {
-                res.first = headCell;
-                res.second = tailCell;
+        auto checkCells = [arena]( Cell * headCell, Cell * tailCell ) -> Position {
+            if ( headCell == nullptr || tailCell == nullptr ) {
+                return {};
             }
 
-            return res;
+            Position pos;
+
+            pos.first = headCell;
+            pos.second = tailCell;
+
+            if ( arena->isPositionReachable( pos, true ) ) {
+                return pos;
+            }
+
+            return {};
         };
 
         auto tryHead = [&currentUnit, dst, &checkCells]() -> Position {
@@ -180,21 +188,30 @@ Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const
             return {};
         };
 
-        result = tryHeadFirst ? tryHead() : tryTail();
+        Position result = tryHead();
 
         if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
-            result = tryHeadFirst ? tryTail() : tryHead();
+            result = tryTail();
         }
-    }
-    else {
-        Cell * headCell = Board::GetCell( dst );
 
-        if ( headCell != nullptr && headCell->isReachableForHead() ) {
-            result.first = headCell;
-        }
+        return result;
     }
 
-    return result;
+    Cell * headCell = Board::GetCell( dst );
+
+    if ( headCell == nullptr ) {
+        return {};
+    }
+
+    Position pos;
+
+    pos.first = headCell;
+
+    if ( arena->isPositionReachable( pos, true ) ) {
+        return pos;
+    }
+
+    return {};
 }
 
 bool Battle::Position::isReflect() const
@@ -210,8 +227,6 @@ bool Battle::Position::contains( int cellIndex ) const
 Battle::Cell::Cell( int32_t ii )
     : index( ii )
     , object( 0 )
-    , _reachableForHead( false )
-    , _reachableForTail( false )
     , quality( 0 )
     , troop( nullptr )
 {
@@ -278,16 +293,6 @@ void Battle::Cell::SetObject( int val )
     object = val;
 }
 
-void Battle::Cell::setReachableForHead()
-{
-    _reachableForHead = true;
-}
-
-void Battle::Cell::setReachableForTail()
-{
-    _reachableForTail = true;
-}
-
 void Battle::Cell::SetQuality( uint32_t val )
 {
     quality = val;
@@ -316,16 +321,6 @@ Battle::Unit * Battle::Cell::GetUnit()
 void Battle::Cell::SetUnit( Unit * val )
 {
     troop = val;
-}
-
-bool Battle::Cell::isReachableForHead() const
-{
-    return _reachableForHead;
-}
-
-bool Battle::Cell::isReachableForTail() const
-{
-    return _reachableForTail;
 }
 
 bool Battle::Cell::isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const
@@ -373,10 +368,4 @@ bool Battle::Cell::isPassable( const bool checkForUnit ) const
 void Battle::Cell::ResetQuality()
 {
     quality = 0;
-}
-
-void Battle::Cell::resetReachability()
-{
-    _reachableForHead = false;
-    _reachableForTail = false;
 }

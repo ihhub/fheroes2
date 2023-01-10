@@ -44,7 +44,6 @@
 #include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_interface.h"
-#include "battle_pathfinding.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "bin_info.h"
@@ -220,24 +219,6 @@ namespace
                 fheroes2::DrawLine( surface, { first.x + xOffset * offset, first.y + yOffset * offset }, second, color, roi );
             }
         }
-    }
-
-    bool preferAttackFromHead( const Battle::Unit & attacker, const int /* theme */ )
-    {
-        if ( !attacker.isWide() ) {
-            return true;
-        }
-
-        return true;
-
-        /* TODO: example code for implementing direct up/down attacks
-        if ( attacker.isReflect() ) {
-            return theme != Cursor::SWORD_TOPRIGHT && theme != Cursor::SWORD_BOTTOMRIGHT;
-        }
-        else {
-            return theme != Cursor::SWORD_TOPLEFT && theme != Cursor::SWORD_BOTTOMLEFT;
-        }
-        */
     }
 
     void GetHalfArc( std::vector<int32_t> & arc, int32_t width, const int32_t height, const int32_t pow1, const int32_t pow2, const double pow2Ratio )
@@ -1339,18 +1320,18 @@ void Battle::Interface::RedrawPartialFinish()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( Settings::Get().BattleShowArmyOrder() )
+    if ( Settings::Get().BattleShowArmyOrder() ) {
         armies_order.Redraw( _currentUnit, _contourColor, _mainSurface );
+    }
 
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() ) {
-        const Board & board = *Arena::GetBoard();
-        for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-            uint32_t distance = arena.CalculateMoveDistance( it->GetIndex() );
-            if ( distance != MAX_MOVE_COST ) {
-                Text text( std::to_string( distance ), Font::SMALL );
-                text.Blit( ( *it ).GetPos().x + 20, ( *it ).GetPos().y + 22, _mainSurface );
-            }
+        const Board * board = Arena::GetBoard();
+        assert( board != nullptr );
+
+        for ( const Cell & cell : *board ) {
+            Text text( std::to_string( cell.GetIndex() ), Font::SMALL );
+            text.Blit( cell.GetPos().x + 20, cell.GetPos().y + 22, _mainSurface );
         }
     }
 #endif
@@ -1908,8 +1889,7 @@ void Battle::Interface::RedrawCover()
                 assert( 0 );
             }
 
-            const Position pos
-                = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ), preferAttackFromHead( *_currentUnit, cursorType ) );
+            const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) );
 
             assert( pos.GetHead() != nullptr );
 
@@ -2030,7 +2010,8 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
 
     const bool isGridEnabled = conf.BattleShowGrid();
 
-    if ( isGridEnabled ) { // grid
+    // grid
+    if ( isGridEnabled ) {
         for ( const Cell & cell : board ) {
             fheroes2::Blit( _hexagonGrid, _mainSurface, cell.GetPos().x, cell.GetPos().y );
         }
@@ -2047,10 +2028,16 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
         fheroes2::Blit( sprite2, _mainSurface, sprite2.x(), sprite2.y() );
     }
 
-    if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
+    // shadow
+    if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) {
         const fheroes2::Image & shadowImage = isGridEnabled ? _hexagonGridShadow : _hexagonShadow;
+
         for ( const Cell & cell : board ) {
-            if ( cell.isReachableForHead() || cell.isReachableForTail() ) {
+            const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
+
+            if ( pos.GetHead() != nullptr ) {
+                assert( !_currentUnit->isWide() || pos.GetTail() != nullptr );
+
                 fheroes2::Blit( shadowImage, _mainSurface, cell.GetPos().x, cell.GetPos().y );
             }
         }
@@ -2505,7 +2492,6 @@ void Battle::Interface::getPendingActions( Actions & actions )
 void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
-    LocalEvent & le = LocalEvent::Get();
 
     // Reset the cursor position to avoid forcing the cursor shadow to be drawn at the last position of the previous turn.
     index_pos = -1;
@@ -2518,11 +2504,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     // in case we moved the window
     _interfacePosition = border.GetArea();
 
-    Board * board = Arena::GetBoard();
-
-    board->Reset();
-    board->SetScanPassability( b );
-
     popup.Reset();
 
     Redraw();
@@ -2534,6 +2515,9 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
     // TODO: update delay types within the loop to avoid rendering slowdown.
     const std::vector<Game::DelayType> delayTypes{ Game::BATTLE_FLAGS_DELAY };
+
+    const Board * board = Arena::GetBoard();
+    LocalEvent & le = LocalEvent::Get();
 
     while ( !humanturn_exit && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
         // move cursor
@@ -2992,13 +2976,13 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
 
-    auto fixupDestinationCell = []( const Unit & unit, const int32_t dst, const bool tryHeadFirst ) {
+    auto fixupDestinationCell = []( const Unit & unit, const int32_t dst ) {
         // Only wide units may need this fixup
         if ( !unit.isWide() ) {
             return dst;
         }
 
-        const Position pos = Position::GetReachable( unit, dst, tryHeadFirst );
+        const Position pos = Position::GetReachable( unit, dst );
 
         assert( pos.GetHead() != nullptr && pos.GetTail() != nullptr );
 
@@ -3009,7 +2993,7 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
-            a.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index, true ) );
+            a.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index ) );
             a.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
             humanturn_exit = true;
             break;
@@ -3024,7 +3008,7 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
             const int dir = GetDirectionFromCursorSword( themes );
 
             if ( enemy && Board::isValidDirection( index, dir ) ) {
-                const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ), preferAttackFromHead( *_currentUnit, themes ) );
+                const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );
 
                 if ( _currentUnit->GetHeadIndex() != move ) {
                     a.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), move );

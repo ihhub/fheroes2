@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,7 +62,7 @@ namespace AI
     // Usual distance between units at the start of the battle is 10-14 tiles
     // 20% of maximum value lost for every tile travelled to make sure 4 tiles difference matters
     const double STRENGTH_DISTANCE_FACTOR = 5.0;
-    const std::vector<int> underWallsIndicies = { 7, 28, 49, 72, 95 };
+    const std::vector<int32_t> cellsUnderWallsIndexes = { 7, 28, 49, 72, 95 };
 
     struct MeleeAttackOutcome
     {
@@ -92,25 +92,30 @@ namespace AI
     {
         MeleeAttackOutcome bestOutcome;
 
-        Indexes around = Board::GetAroundIndexes( defender );
+        Indexes nearbyIndexes = Board::GetAroundIndexes( defender );
         // Shuffle to make equal quality moves a bit unpredictable
-        randomGenerator.Shuffle( around );
+        randomGenerator.Shuffle( nearbyIndexes );
 
-        for ( const int cell : around ) {
-            // Check if we can reach the target and pick best position to attack from
-            if ( !arena.hexIsPassable( cell ) )
+        // Check if we can reach the target and pick best position to attack from
+        for ( const int32_t nearbyIdx : nearbyIndexes ) {
+            const Position pos = Position::GetPosition( attacker, nearbyIdx );
+
+            if ( !arena.isPositionReachable( pos, false ) ) {
                 continue;
+            }
+
+            assert( pos.GetHead() != nullptr && ( !attacker.isWide() || pos.GetTail() != nullptr ) );
 
             MeleeAttackOutcome current;
-            current.positionValue = Board::GetCell( cell )->GetQuality();
-            current.attackValue = Board::OptimalAttackValue( attacker, defender, cell );
-            current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, cell );
+            current.positionValue = Board::GetCell( nearbyIdx )->GetQuality();
+            current.attackValue = Board::OptimalAttackValue( attacker, defender, nearbyIdx );
+            current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, nearbyIdx );
 
             // Pick target if either position has improved or unit is higher value at the same position quality
             if ( IsOutcomeImproved( current, bestOutcome ) ) {
                 bestOutcome.attackValue = current.attackValue;
                 bestOutcome.positionValue = current.positionValue;
-                bestOutcome.fromIndex = cell;
+                bestOutcome.fromIndex = nearbyIdx;
                 bestOutcome.canAttackImmediately = current.canAttackImmediately;
             }
         }
@@ -173,6 +178,36 @@ namespace AI
             }
         }
         return targetCell;
+    }
+
+    std::pair<int32_t, uint32_t> findNearestCellNextToUnit( const Arena & arena, const Unit & currentUnit, const Unit & target )
+    {
+        std::pair<int32_t, uint32_t> result = { -1, UINT32_MAX };
+
+        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( target ) ) {
+            const Position pos = Position::GetPosition( currentUnit, nearbyIdx );
+
+            if ( !arena.isPositionReachable( pos, false ) ) {
+                continue;
+            }
+
+            assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+
+            const uint32_t dist = arena.CalculateMoveDistance( pos );
+            if ( result.first == -1 || dist < result.second ) {
+                result = { nearbyIdx, dist };
+            }
+        }
+
+        return result;
+    }
+
+    int32_t getUnitMovementTarget( const Unit & currentUnit, const int32_t idx )
+    {
+        const Position pos = Position::GetPosition( currentUnit, idx );
+        assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+
+        return pos.GetHead()->GetIndex();
     }
 
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
@@ -334,15 +369,16 @@ namespace AI
             }
 
             // Melee unit final stage - add actions to the queue
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Melee phase end, targetCell is " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee phase end, target cell is " << target.cell )
 
             if ( target.cell != -1 ) {
-                const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, target.cell );
+                // The target cell of the movement must be the cell that the unit's head will occupy
+                const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, target.cell );
 
-                DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving to cell " << moveTargetIdx )
 
-                if ( currentUnit.GetHeadIndex() != reachableCell ) {
-                    actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
+                if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
+                    actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnit.GetUID(), moveTargetIdx );
                 }
 
                 if ( target.unit ) {
@@ -555,7 +591,8 @@ namespace AI
 
             if ( target.unit && target.cell != -1 ) {
                 // Melee attack selected target
-                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer decided to fight back: " << bestOutcome )
+
                 actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, -1 );
             }
             else {
@@ -563,14 +600,15 @@ namespace AI
                 target.cell = FindMoveToRetreat( arena.getAllAvailableMoves( currentUnit.GetMoveRange() ), currentUnit, enemies );
 
                 if ( target.cell != -1 ) {
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << target.cell )
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, target cell is " << target.cell )
 
-                    const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, target.cell );
+                    // The target cell of the movement must be the cell that the unit's head will occupy
+                    const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, target.cell );
 
-                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Nearest reachable cell is " << reachableCell )
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving to cell " << moveTargetIdx )
 
-                    if ( currentUnit.GetHeadIndex() != reachableCell ) {
-                        actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnit.GetUID(), reachableCell );
+                    if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
+                        actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnit.GetUID(), moveTargetIdx );
                     }
                 }
             }
@@ -649,7 +687,7 @@ namespace AI
 
             for ( const Unit * enemy : enemies ) {
                 // move node pair consists of move hex index and distance
-                const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
+                const std::pair<int, uint32_t> move = findNearestCellNextToUnit( arena, currentUnit, *enemy );
 
                 if ( move.first == -1 ) // Skip unit if no path found
                     continue;
@@ -664,7 +702,7 @@ namespace AI
                     const Indexes & path = arena.CalculateTwoMoveOverlap( move.first, currentUnitMoveRange );
                     if ( !path.empty() ) {
                         target.cell = FindNextTurnAttackMove( path, currentUnit, enemies );
-                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Going after target " << enemy->GetName() << " stopping at " << target.cell )
+                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping at " << target.cell )
                     }
                     else {
                         target.cell = move.first;
@@ -673,25 +711,29 @@ namespace AI
             }
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " is attacking " << target.unit->GetName() << " at " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " at " << target.cell )
         }
 
         // Walkers: move closer to the castle walls during siege
         if ( _attackingCastle && target.cell == -1 ) {
             uint32_t shortestDist = UINT32_MAX;
 
-            for ( const int wallIndex : underWallsIndicies ) {
-                if ( !arena.hexIsPassable( wallIndex ) ) {
+            for ( const int32_t cellIdx : cellsUnderWallsIndexes ) {
+                const Position pos = Position::GetPosition( currentUnit, cellIdx );
+
+                if ( !arena.isPositionReachable( pos, false ) ) {
                     continue;
                 }
 
-                const uint32_t dist = arena.CalculateMoveDistance( wallIndex );
-                if ( dist < shortestDist ) {
+                assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+
+                const uint32_t dist = arena.CalculateMoveDistance( pos );
+                if ( target.cell == -1 || dist < shortestDist ) {
                     shortestDist = dist;
-                    target.cell = wallIndex;
+                    target.cell = cellIdx;
                 }
             }
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Walker unit moving towards castle walls " << currentUnit.GetName() << " cell " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving towards castle walls, target cell is " << target.cell )
         }
 
         return target;
@@ -734,7 +776,7 @@ namespace AI
                 continue;
             }
 
-            const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *unitToDefend );
+            const std::pair<int, uint32_t> move = findNearestCellNextToUnit( arena, currentUnit, *unitToDefend );
             const uint32_t distanceToUnit = ( move.first != -1 ) ? move.second : Board::GetDistance( myHeadIndex, unitToDefend->GetHeadIndex() );
             const double archerValue = unitToDefend->GetStrength() - distanceToUnit * defenceDistanceModifier;
 
@@ -800,7 +842,7 @@ namespace AI
 
         // If the berserker is an archer, then just shoot at the nearest unit
         if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, will shoot" )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, will shoot" )
 
             const Unit * targetUnit = nearestUnits.front();
             assert( targetUnit != nullptr );
@@ -822,13 +864,17 @@ namespace AI
             const auto cacheItemIter = aroundIndexesCache.try_emplace( nearbyUnit, Board::GetAroundIndexes( *nearbyUnit ) ).first;
             assert( cacheItemIter != aroundIndexesCache.end() );
 
-            for ( const int cell : cacheItemIter->second ) {
-                if ( !arena.hexIsPassable( cell ) ) {
+            for ( const int32_t cellIdx : cacheItemIter->second ) {
+                const Position pos = Position::GetReachable( currentUnit, cellIdx );
+
+                if ( pos.GetHead() == nullptr ) {
                     continue;
                 }
 
-                if ( Board::CanAttackTargetFromPosition( currentUnit, *nearbyUnit, cell ) ) {
-                    targetInfo.cell = cell;
+                assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+
+                if ( Board::CanAttackTargetFromPosition( currentUnit, *nearbyUnit, cellIdx ) ) {
+                    targetInfo.cell = cellIdx;
                     targetInfo.unit = nearbyUnit;
 
                     break;
@@ -848,13 +894,21 @@ namespace AI
                 const auto cacheItemIter = aroundIndexesCache.find( nearbyUnit );
                 assert( cacheItemIter != aroundIndexesCache.end() );
 
-                for ( const int cell : cacheItemIter->second ) {
-                    if ( !arena.hexIsPassable( cell ) ) {
+                uint32_t shortestDist = UINT32_MAX;
+
+                for ( const int32_t cellIdx : cacheItemIter->second ) {
+                    const Position pos = Position::GetPosition( currentUnit, cellIdx );
+
+                    if ( !arena.isPositionReachable( pos, false ) ) {
                         continue;
                     }
 
-                    if ( targetInfo.cell == -1 || arena.CalculateMoveDistance( cell ) < arena.CalculateMoveDistance( targetInfo.cell ) ) {
-                        targetInfo.cell = cell;
+                    assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+
+                    const uint32_t dist = arena.CalculateMoveDistance( pos );
+                    if ( targetInfo.cell == -1 || dist < shortestDist ) {
+                        shortestDist = dist;
+                        targetInfo.cell = cellIdx;
                     }
                 }
             }
@@ -867,16 +921,15 @@ namespace AI
             return actions;
         }
 
-        const int targetCell = targetInfo.cell;
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, target cell is " << targetInfo.cell )
 
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is under Berserk spell, moving to " << targetCell )
+        // The target cell of the movement must be the cell that the unit's head will occupy
+        const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, targetInfo.cell );
 
-        const int32_t reachableCell = arena.GetNearestReachableCell( currentUnit, targetCell );
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving to cell " << moveTargetIdx )
 
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Nearest reachable cell is " << reachableCell )
-
-        if ( currentUnit.GetHeadIndex() != reachableCell ) {
-            actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnitUID, reachableCell );
+        if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
+            actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnitUID, moveTargetIdx );
         }
 
         if ( targetInfo.unit ) {
@@ -896,11 +949,6 @@ namespace AI
         if ( _battlePlanner.isLimitOfTurnsExceeded( arena, actions ) ) {
             return;
         }
-
-        Board * board = Arena::GetBoard();
-
-        board->Reset();
-        board->SetScanPassability( currentUnit );
 
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );

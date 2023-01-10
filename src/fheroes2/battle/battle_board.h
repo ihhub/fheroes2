@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -71,11 +71,9 @@ namespace Battle
 
         int32_t GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
-        Indexes GetPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
 
         void SetEnemyQuality( const Unit & ) const;
         void SetPositionQuality( const Unit & ) const;
-        void SetScanPassability( const Unit & );
 
         void SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen );
         void SetCovrObjects( int icn );
@@ -108,22 +106,16 @@ namespace Battle
         static bool isValidMirrorImageIndex( const int32_t index, const Unit * unit );
 
         // Checks that the current unit (to which the current passability information relates) is able (in principle)
-        // to attack from the cell with the given index
+        // to attack during the current turn from the cell with the given index
         static bool CanAttackFromCell( const Unit & currentUnit, const int32_t from );
         // Checks that the current unit (to which the current passability information relates) is able to attack the
-        // target from the position which corresponds to the given index
+        // target during the current turn from the position which corresponds to the given index
         static bool CanAttackTargetFromPosition( const Unit & currentUnit, const Unit & target, const int32_t dst );
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
     private:
         void SetCobjObject( const int icn, const int32_t dst );
-
-        bool GetPathForUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentCellId,
-                             std::vector<bool> & visitedCells, Indexes & result ) const;
-        bool GetPathForWideUnit( const Unit & unit, const Position & destination, const uint32_t remainingSteps, const int32_t currentHeadCellId,
-                                 const int32_t prevHeadCellId, std::vector<bool> & visitedCells, Indexes & result ) const;
-        void StraightenPathForUnit( const int32_t currentCellId, Indexes & path ) const;
     };
 }
 
