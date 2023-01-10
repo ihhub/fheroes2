@@ -550,6 +550,14 @@ namespace
 
         RenderEngine & operator=( const RenderEngine & ) = delete;
 
+        void toggleFullScreen() override
+        {
+            BaseRenderEngine::toggleFullScreen();
+
+            const fheroes2::Display & display = fheroes2::Display::instance();
+            _calculateScreenScaling( display.width(), display.height(), isFullScreen() );
+        }
+
         static RenderEngine * create()
         {
             return new RenderEngine;
@@ -650,35 +658,7 @@ namespace
             memset( _palettedTexturePointer, 0, width_ * height_ * sizeof( uint8_t ) );
             _createPalette();
 
-            // screen scaling calculation
-            _destRect.x = 0;
-            _destRect.y = 0;
-            _destRect.width = width_;
-            _destRect.height = height_;
-
-            if ( width_ != VITA_FULLSCREEN_WIDTH || height_ != VITA_FULLSCREEN_HEIGHT ) {
-                if ( isFullScreen ) {
-                    vita2d_texture_set_filters( _texBuffer, isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR,
-                                                isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR );
-                    if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
-                        const float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
-                        _destRect.width = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
-                        _destRect.height = VITA_FULLSCREEN_HEIGHT;
-                        _destRect.x = ( VITA_FULLSCREEN_WIDTH - _destRect.width ) / 2;
-                    }
-                    else {
-                        const float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
-                        _destRect.width = VITA_FULLSCREEN_WIDTH;
-                        _destRect.height = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
-                        _destRect.y = ( VITA_FULLSCREEN_HEIGHT - _destRect.height ) / 2;
-                    }
-                }
-                else {
-                    // center game area
-                    _destRect.x = ( VITA_FULLSCREEN_WIDTH - width_ ) / 2;
-                    _destRect.y = ( VITA_FULLSCREEN_HEIGHT - height_ ) / 2;
-                }
-            }
+            _calculateScreenScaling( width_, height_, isFullScreen );
 
             return true;
         }
@@ -696,6 +676,7 @@ namespace
             SDL_memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
 
             vita2d_start_drawing();
+            vita2d_draw_rectangle( 0, 0, VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT, 0xff000000 );
             vita2d_draw_texture_scale( _texBuffer, _destRect.x, _destRect.y, static_cast<float>( _destRect.width ) / width,
                                        static_cast<float>( _destRect.height ) / height );
             vita2d_end_drawing();
@@ -732,6 +713,38 @@ namespace
         void _createPalette()
         {
             updatePalette( StandardPaletteIndexes() );
+        }
+
+        void _calculateScreenScaling( int32_t width_, int32_t height_, bool isFullScreen )
+        {
+            _destRect.x = 0;
+            _destRect.y = 0;
+            _destRect.width = width_;
+            _destRect.height = height_;
+
+            if ( width_ != VITA_FULLSCREEN_WIDTH || height_ != VITA_FULLSCREEN_HEIGHT ) {
+                if ( isFullScreen ) {
+                    vita2d_texture_set_filters( _texBuffer, isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR,
+                                                isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR );
+                    if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
+                        const float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
+                        _destRect.width = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
+                        _destRect.height = VITA_FULLSCREEN_HEIGHT;
+                        _destRect.x = ( VITA_FULLSCREEN_WIDTH - _destRect.width ) / 2;
+                    }
+                    else {
+                        const float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
+                        _destRect.width = VITA_FULLSCREEN_WIDTH;
+                        _destRect.height = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
+                        _destRect.y = ( VITA_FULLSCREEN_HEIGHT - _destRect.height ) / 2;
+                    }
+                }
+                else {
+                    // center game area
+                    _destRect.x = ( VITA_FULLSCREEN_WIDTH - width_ ) / 2;
+                    _destRect.y = ( VITA_FULLSCREEN_HEIGHT - height_ ) / 2;
+                }
+            }
         }
     };
 #elif SDL_VERSION_ATLEAST( 2, 0, 0 )

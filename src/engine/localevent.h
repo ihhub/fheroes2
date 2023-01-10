@@ -389,6 +389,7 @@ private:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
     const double CONTROLLER_AXIS_SPEEDUP = 1.03;
+    const double CONTROLLER_TRIGGER_CURSOR_SPEEDUP = 2.0;
 
     SDL_GameController * _gameController = nullptr;
     fheroes2::Time _controllerTimer;

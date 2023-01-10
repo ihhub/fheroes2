@@ -1372,6 +1372,12 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
+#if defined( TARGET_PS_VITA )
+    // Ignore rear touchpad on PS Vita
+    if ( event.touchId != 0 )
+        return;
+#endif
+
     switch ( event.type ) {
     case SDL_FINGERDOWN:
         if ( !_fingerIds.first ) {
@@ -1571,16 +1577,23 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
                 key_value = fheroes2::Key::KEY_DOWN;
             }
+            else {
+                key_value = fheroes2::Key::NONE;
+            }
             return;
         }
 #endif
-        if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
+        if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+            _controllerPointerSpeed *= CONTROLLER_TRIGGER_CURSOR_SPEEDUP;
+            key_value = fheroes2::Key::NONE;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
             key_value = fheroes2::Key::KEY_SPACE;
         }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
+        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
             key_value = fheroes2::Key::KEY_H;
         }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
             key_value = fheroes2::Key::KEY_T;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_X ) {
@@ -1594,6 +1607,9 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_START ) {
             key_value = fheroes2::Key::KEY_ENTER;
+        }
+        else {
+            key_value = fheroes2::Key::NONE;
         }
 #if defined( TARGET_NINTENDO_SWITCH )
         // Custom button mapping for Nintendo Switch
@@ -1615,7 +1631,15 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         else if ( button.button == SWITCH_BUTTON_PLUS ) {
             key_value = fheroes2::Key::KEY_C;
         }
+        else {
+            key_value = fheroes2::Key::NONE;
+        }
 #endif
+    }
+    else {
+        if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+            _controllerPointerSpeed /= CONTROLLER_TRIGGER_CURSOR_SPEEDUP;
+        }
     }
 }
 
