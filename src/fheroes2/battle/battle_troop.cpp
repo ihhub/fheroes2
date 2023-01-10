@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1619,15 +1619,14 @@ bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
         checkIdleDelay();
     }
 
-    animation.switchAnimation( rule, reverse );
-
-    return animation.isValid();
+    // We retun true if the animation was correctly changed adn if it is valid.
+    return ( animation.switchAnimation( rule, reverse ) && animation.isValid() );
 }
 
 bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
 {
-    animation.switchAnimation( animationList, reverse );
-    return animation.isValid();
+    // We retun true if the animation was correctly changed adn if it is valid.
+    return ( animation.switchAnimation( animationList, reverse ) && animation.isValid() );
 }
 
 int Battle::Unit::M82Attk() const

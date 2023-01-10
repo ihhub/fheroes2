@@ -343,8 +343,12 @@ namespace Battle
         void RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi ); // helper function
         void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, int32_t size );
 
+        // Wait for all possible battlefield action delays that could be set in previous functions to pass.
+        // Use this if a function may be called from other functions with different render delay types.
+        void WaitForAllActionDelays();
+
         void AnimateOpponents( OpponentSprite * target );
-        void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
+        void AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender = false );
         void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit & unit, int icn, int m82, CreatureSpellAnimation animation );
         void RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount = 0 );
