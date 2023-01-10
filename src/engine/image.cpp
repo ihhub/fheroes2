@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1165,85 +1165,6 @@ namespace fheroes2
             return;
         }
         memcpy( out.transform(), in.transform(), in.width() * in.height() );
-    }
-
-    Image CreateBlurredImage( const Image & in, int32_t blurRadius )
-    {
-        if ( in.empty() )
-            return Image();
-
-        if ( blurRadius < 1 )
-            return in;
-
-        const int32_t width = in.width();
-        const int32_t height = in.height();
-        if ( blurRadius > width )
-            blurRadius = width;
-        if ( blurRadius > height )
-            blurRadius = height;
-
-        Image out( width, height );
-        std::fill( out.transform(), out.transform() + width * height, static_cast<uint8_t>( 0 ) );
-
-        uint8_t * imageOutY = out.image();
-        const uint8_t * imageIn = in.image();
-
-        const uint8_t * gamePalette = getGamePalette();
-
-        for ( int32_t y = 0; y < height; ++y, imageOutY += width ) {
-            uint8_t * imageOutX = imageOutY;
-
-            int32_t startY = y - blurRadius;
-            int32_t endY = y + blurRadius;
-            if ( startY < 0 )
-                startY = 0;
-            if ( endY > height )
-                endY = height;
-
-            const int32_t roiHeight = endY - startY;
-
-            const uint8_t * imageInStartY = imageIn + startY * width;
-
-            for ( int32_t x = 0; x < width; ++x, ++imageOutX ) {
-                int32_t startX = x - blurRadius;
-                int32_t endX = x + blurRadius;
-                if ( startX < 0 )
-                    startX = 0;
-                if ( endX > width )
-                    endX = width;
-
-                const int32_t roiWidth = endX - startX;
-
-                uint32_t sumRed = 0;
-                uint32_t sumGreen = 0;
-                uint32_t sumBlue = 0;
-
-                const uint8_t * imageInY = imageInStartY + startX;
-                const uint8_t * imageInYEnd = imageInY + roiHeight * width;
-
-                for ( ; imageInY != imageInYEnd; imageInY += width ) {
-                    const uint8_t * imageInX = imageInY;
-                    const uint8_t * imageInXEnd = imageInX + roiWidth;
-                    for ( ; imageInX != imageInXEnd; ++imageInX ) {
-                        const uint8_t * palette = gamePalette + *imageInX * 3;
-
-                        sumRed += ( *palette );
-                        ++palette;
-                        sumGreen += ( *palette );
-                        ++palette;
-                        sumBlue += ( *palette );
-                        ++palette;
-                    }
-                }
-
-                const uint32_t roiSize = static_cast<uint32_t>( roiWidth * roiHeight );
-
-                *imageOutX
-                    = GetPALColorId( static_cast<uint8_t>( sumRed / roiSize ), static_cast<uint8_t>( sumGreen / roiSize ), static_cast<uint8_t>( sumBlue / roiSize ) );
-            }
-        }
-
-        return out;
     }
 
     Sprite CreateContour( const Image & image, uint8_t value )
