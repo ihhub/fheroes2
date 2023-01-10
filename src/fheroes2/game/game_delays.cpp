@@ -213,10 +213,6 @@ uint32_t Game::ApplyBattleSpeed( uint32_t delay )
 
 bool Game::hasEveryDelayPassed( const std::vector<Game::DelayType> & delayTypes )
 {
-    if ( delayTypes.empty() ) {
-        return true;
-    }
-
     for ( const Game::DelayType type : delayTypes ) {
         if ( !delays[type].isPassed() ) {
             return false;
@@ -228,9 +224,6 @@ bool Game::hasEveryDelayPassed( const std::vector<Game::DelayType> & delayTypes 
 
 bool Game::isDelayNeeded( const std::vector<Game::DelayType> & delayTypes )
 {
-    if ( delayTypes.empty() )
-        return true;
-
     for ( const Game::DelayType type : delayTypes ) {
         assert( type != Game::DelayType::CUSTOM_DELAY );
 
