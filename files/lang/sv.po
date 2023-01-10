@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-07 02:48+0000\n"
+"POT-Creation-Date: 2023-01-10 05:45+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -6897,6 +6897,12 @@ msgstr "Dvärgstuga"
 msgid "Peasant Hut"
 msgstr "Bondehydda"
 
+msgid "Stables"
+msgstr "Stall"
+
+msgid "Alchemist's Tower"
+msgstr "Alkemistens torn"
+
 msgid "Event"
 msgstr ""
 
@@ -6952,6 +6958,9 @@ msgstr ""
 msgid "Wagon Camp"
 msgstr "Godsvagnläger"
 
+msgid "Hut of the Magi"
+msgstr "De vise männens stuga"
+
 msgid "Whirlpool"
 msgstr "Strömvirvel"
 
@@ -6963,6 +6972,9 @@ msgstr[1] "Väderkvarn"
 
 msgid "Artifact"
 msgstr "Artefakt"
+
+msgid "Mermaid"
+msgstr "Sjöjungfru"
 
 msgid "Boat"
 msgstr "Båt"
@@ -6989,6 +7001,9 @@ msgstr "Slumpartad stad"
 msgid "Random Castle"
 msgstr "Slumpartat slott"
 
+msgid "Eye of the Magi"
+msgstr "De vise männens öga"
+
 #, fuzzy
 msgid "Random Monster - weak"
 msgstr "Slumpartat slott"
@@ -7008,6 +7023,9 @@ msgstr "Slumpartat slott"
 msgid "Nothing Special"
 msgstr "Ingenting speciellt"
 
+msgid "Mossy Rock"
+msgstr ""
+
 msgid "Watch Tower"
 msgstr "Vakttorn"
 
@@ -7025,6 +7043,9 @@ msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Övergiven gruva"
+
+msgid "Sirens"
+msgstr "Sirener"
 
 msgid "Standing Stones"
 msgstr "Stenblock"
@@ -7116,6 +7137,9 @@ msgstr "Observationstorn"
 msgid "Freeman's Foundry"
 msgstr "Hedersmedborgarnas gjuteri"
 
+msgid "Reefs"
+msgstr "Rev"
+
 msgid "Trees"
 msgstr "Träd"
 
@@ -7164,17 +7188,17 @@ msgstr "Buske"
 msgid "Barrow Mounds"
 msgstr ""
 
-msgid "Mermaid"
-msgstr "Sjöjungfru"
+msgid "Random Artifact - Treasure"
+msgstr ""
 
-msgid "Sirens"
-msgstr "Sirener"
+msgid "Random Artifact - Minor"
+msgstr ""
 
-msgid "Hut of the Magi"
-msgstr "De vise männens stuga"
+msgid "Random Artifact - Major"
+msgstr ""
 
-msgid "Eye of the Magi"
-msgstr "De vise männens öga"
+msgid "Barrier"
+msgstr "Barriär"
 
 msgid "Traveller's Tent"
 msgstr "Resenärstält"
@@ -7193,27 +7217,6 @@ msgstr "Jordinkallnings-altare"
 
 msgid "Water Summoning Altar"
 msgstr "Vatteninkallnings-altare"
-
-msgid "Reefs"
-msgstr "Rev"
-
-msgid "Alchemist's Tower"
-msgstr "Alkemistens torn"
-
-msgid "Stables"
-msgstr "Stall"
-
-msgid "Random Artifact - Treasure"
-msgstr ""
-
-msgid "Random Artifact - Minor"
-msgstr ""
-
-msgid "Random Artifact - Major"
-msgstr ""
-
-msgid "Barrier"
-msgstr "Barriär"
 
 #, fuzzy
 msgid "Unknown Monster"
