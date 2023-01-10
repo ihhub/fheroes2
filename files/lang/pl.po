@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-07 02:48+0000\n"
+"POT-Creation-Date: 2023-01-10 05:45+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -7017,6 +7017,12 @@ msgstr "Domek krasnoludów"
 msgid "Peasant Hut"
 msgstr "Chłopska chata"
 
+msgid "Stables"
+msgstr "Stajnie"
+
+msgid "Alchemist's Tower"
+msgstr "Wieża alchemika"
+
 msgid "Event"
 msgstr "Zdarzenie"
 
@@ -7071,6 +7077,9 @@ msgstr "Głazy"
 msgid "Wagon Camp"
 msgstr "Tabor"
 
+msgid "Hut of the Magi"
+msgstr "Chata maga"
+
 msgid "Whirlpool"
 msgstr "Wir"
 
@@ -7082,6 +7091,9 @@ msgstr[2] "Wiatraków"
 
 msgid "Artifact"
 msgstr "Artefakt"
+
+msgid "Mermaid"
+msgstr "Syrena"
 
 msgid "Boat"
 msgstr "Łódź"
@@ -7104,6 +7116,9 @@ msgstr "Losowe miasto"
 msgid "Random Castle"
 msgstr "Losowy zamek"
 
+msgid "Eye of the Magi"
+msgstr "Oko maga"
+
 msgid "Random Monster - weak"
 msgstr "Losowy potwór - słaby"
 
@@ -7118,6 +7133,9 @@ msgstr "Losowy potwór - bardzo silny"
 
 msgid "Nothing Special"
 msgstr "Nic specjalnego"
+
+msgid "Mossy Rock"
+msgstr ""
 
 msgid "Watch Tower"
 msgstr "Wieża strażnicza"
@@ -7136,6 +7154,9 @@ msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Opuszczona kopalnia"
+
+msgid "Sirens"
+msgstr "Syreny"
 
 msgid "Standing Stones"
 msgstr "Krąg kamieni"
@@ -7227,6 +7248,9 @@ msgstr "Wieża obserwacyjna"
 msgid "Freeman's Foundry"
 msgstr "Odlewnia"
 
+msgid "Reefs"
+msgstr "Rafy"
+
 msgid "Trees"
 msgstr "Drzewa"
 
@@ -7275,17 +7299,17 @@ msgstr "Krzak"
 msgid "Barrow Mounds"
 msgstr "Kurhany"
 
-msgid "Mermaid"
-msgstr "Syrena"
+msgid "Random Artifact - Treasure"
+msgstr "Losowy artefakt - skarb"
 
-msgid "Sirens"
-msgstr "Syreny"
+msgid "Random Artifact - Minor"
+msgstr "Losowy artefakt - mniejszy"
 
-msgid "Hut of the Magi"
-msgstr "Chata maga"
+msgid "Random Artifact - Major"
+msgstr "Losowy artefakt - większy"
 
-msgid "Eye of the Magi"
-msgstr "Oko maga"
+msgid "Barrier"
+msgstr "Bariera"
 
 msgid "Traveller's Tent"
 msgstr "Namiot podróżnika"
@@ -7304,27 +7328,6 @@ msgstr "Ołtarz Ziemi"
 
 msgid "Water Summoning Altar"
 msgstr "Ołtarz Wody"
-
-msgid "Reefs"
-msgstr "Rafy"
-
-msgid "Alchemist's Tower"
-msgstr "Wieża alchemika"
-
-msgid "Stables"
-msgstr "Stajnie"
-
-msgid "Random Artifact - Treasure"
-msgstr "Losowy artefakt - skarb"
-
-msgid "Random Artifact - Minor"
-msgstr "Losowy artefakt - mniejszy"
-
-msgid "Random Artifact - Major"
-msgstr "Losowy artefakt - większy"
-
-msgid "Barrier"
-msgstr "Bariera"
 
 msgid "Unknown Monster"
 msgstr "Nieznany potwór"
