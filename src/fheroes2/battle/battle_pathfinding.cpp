@@ -248,7 +248,7 @@ namespace Battle
         Indexes result;
         result.reserve( boardIndexes.size() );
 
-        std::for_each( boardIndexes.cbegin(), boardIndexes.cend(), [&result]( const int32_t idx ) { result.push_back( idx ); } );
+        std::for_each( boardIndexes.begin(), boardIndexes.end(), [&result]( const int32_t idx ) { result.push_back( idx ); } );
 
         return result;
     }
