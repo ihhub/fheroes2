@@ -73,8 +73,8 @@ namespace Battle
         void evaluateForUnit( const Unit & unit );
         // Checks whether the given position is reachable, either on the current turn or in principle
         bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const;
-        // Returns the distance to the given position. If this position is unreachable, then the
-        // maximum possible value is returned.
+        // Returns the distance to the given position. It's the caller's responsibility to make sure
+        // that this position is reachable before calling this method.
         uint32_t getDistance( const Position & position ) const;
         // Builds and returns the path to the given position. If this position is unreachable, then
         // an empty path is returned.

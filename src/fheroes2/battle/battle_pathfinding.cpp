@@ -222,11 +222,11 @@ namespace Battle
         const BattleNodeIndex nodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
 
         const auto iter = _cache.find( nodeIdx );
-        if ( iter == _cache.end() ) {
-            return UINT32_MAX;
-        }
+        assert( iter != _cache.end() );
 
-        const auto & [dummy, node] = *iter;
+        const auto & [index, node] = *iter;
+        // MSVC 2017 fails to expand the assert() macro without additional parentheses
+        assert( ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) );
 
         return node._cost;
     }
