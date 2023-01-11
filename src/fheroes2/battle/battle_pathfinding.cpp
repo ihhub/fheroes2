@@ -81,7 +81,7 @@ namespace Battle
             return;
         }
 
-        // The index of that of the cells of the initial position of the block, which is located
+        // The index of that of the cells of the initial unit's position, which is located
         // in the moat (-1, if there is none)
         const int32_t pathStartMoatIndex = [this, &unit, isMoatBuilt, isUnitWide]() {
             if ( !isMoatBuilt ) {
