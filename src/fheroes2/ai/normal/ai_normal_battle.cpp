@@ -681,7 +681,6 @@ namespace AI
 
         // For walking units that don't have a target within reach, pick based on distance priority
         if ( target.unit == nullptr ) {
-            const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
             const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
             double maxMovePriority = attackDistanceModifier * ARENASIZE * -1;
 
