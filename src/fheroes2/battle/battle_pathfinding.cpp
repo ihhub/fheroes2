@@ -110,7 +110,7 @@ namespace Battle
         nodesToExplore.push_back( _pathStart );
 
         for ( size_t nodesToExploreIdx = 0; nodesToExploreIdx < nodesToExplore.size(); ++nodesToExploreIdx ) {
-            const BattleNodeIndex & currentNodeIdx = nodesToExplore[nodesToExploreIdx];
+            const BattleNodeIndex currentNodeIdx = nodesToExplore[nodesToExploreIdx];
             const BattleNode & currentNode = _cache[currentNodeIdx];
 
             if ( isUnitWide ) {
