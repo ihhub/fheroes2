@@ -225,7 +225,7 @@ namespace Battle
         assert( iter != _cache.end() );
 
         const auto & [index, node] = *iter;
-        // MSVC 2017 fails to expand the assert() macro without additional parentheses
+        // MSVC 2017 fails to properly expand the assert() macro without additional parentheses
         assert( ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) );
 
         return node._cost;
