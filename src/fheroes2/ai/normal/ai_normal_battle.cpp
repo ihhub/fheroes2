@@ -705,6 +705,11 @@ namespace AI
                     if ( path.empty() ) {
                         target.cell = move.first;
                     }
+                    // Unit rushes through the moat, step into the moat to get more freedom of action on the next turn
+                    else if ( Board::isMoatIndex( path.back(), currentUnit ) ) {
+                        target.cell = path.back();
+                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping in the moat at " << target.cell )
+                    }
                     else {
                         target.cell = FindNextTurnAttackMove( path, currentUnit, enemies );
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping at " << target.cell )
