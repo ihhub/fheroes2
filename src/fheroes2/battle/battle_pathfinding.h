@@ -21,7 +21,7 @@
 #pragma once
 
 #include <cstdint>
-#include <map>
+#include <unordered_map>
 #include <utility>
 
 #include "battle_board.h"
@@ -32,6 +32,19 @@ namespace Battle
     class Unit;
 
     using BattleNodeIndex = std::pair<int32_t, int32_t>;
+
+    struct BattleNodeIndexHash
+    {
+        std::size_t operator()( const BattleNodeIndex & index ) const noexcept
+        {
+            const uint64_t f = index.first;
+            const uint64_t s = index.second;
+
+            std::hash<uint64_t> hasher;
+
+            return hasher( ( f << 32 ) + s );
+        }
+    };
 
     struct BattleNode final
     {
@@ -69,7 +82,7 @@ namespace Battle
         Indexes getAllAvailableMoves( const uint32_t range ) const;
 
     private:
-        std::map<BattleNodeIndex, BattleNode> _cache;
+        std::unordered_map<BattleNodeIndex, BattleNode, BattleNodeIndexHash> _cache;
         BattleNodeIndex _pathStart = { -1, -1 };
         uint32_t _unitSpeed = 0;
     };
