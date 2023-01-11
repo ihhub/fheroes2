@@ -185,7 +185,7 @@ namespace
 
         switch ( objectType ) {
         case MP2::OBJ_SHIPWRECK_SURVIVOR:
-        case MP2::OBJ_WATERCHEST:
+        case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_BOTTLE:
         case MP2::OBJ_RESOURCE:
@@ -382,7 +382,6 @@ namespace
         case MP2::OBJ_GOBLIN_HUT:
         case MP2::OBJ_DWARF_COTTAGE:
         case MP2::OBJ_HALFLING_HOLE:
-        case MP2::OBJ_THATCHED_HUT:
         case MP2::OBJ_PEASANT_HUT: {
             const Troop & troop = tile.QuantityTroop();
             if ( !troop.isValid() ) {

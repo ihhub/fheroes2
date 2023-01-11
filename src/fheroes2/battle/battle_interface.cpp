@@ -1705,50 +1705,50 @@ void Battle::Interface::RedrawTroopSprite( const Unit & unit )
 
 fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite )
 {
-    const fheroes2::Rect & rt = unit.GetRectPosition();
-    fheroes2::Point sp = GetTroopPosition( unit, troopSprite );
+    const fheroes2::Rect & unitPosition = unit.GetRectPosition();
+    // Get the sprite rendering offset.
+    fheroes2::Point offset = GetTroopPosition( unit, troopSprite );
 
     if ( _movingUnit == &unit ) {
         // Monster is moving.
-        // Here we're getting the first frame and then based on the offset from the first frame we calculate the position of the current frame.
-        // TODO: verify if it's the correct way as we have issues for monster movement animation.
-        const int monsterIcnId = unit.GetMonsterSprite();
-        const fheroes2::Sprite & firstMonsterFrame = fheroes2::AGG::GetICN( monsterIcnId, _movingUnit->animation.firstFrame() );
-        const int32_t ox = troopSprite.x() - firstMonsterFrame.x();
+        // Unit coordinates relevant to its position are set in Sprite coordinates 'x'  and 'y' (some values may be set incorrectly).
+        // The offset data from BIN file is used in Monster info dialog and to correct horizontal movement range when moving diagonally.
+        // IMPORTANT: The 'x' offset from BIN file cannot be used in horizontal movement animation as
+        // it does not take into account the uneven movement during the step. Use sprite 'x' coordinate for this purpose.
 
         if ( _movingUnit->animation.animationLength() ) {
-            const int32_t cx = _movingPos.x - rt.x;
-            const int32_t cy = _movingPos.y - rt.y;
-            const double movementProgress = _movingUnit->animation.movementProgress();
+            // Get the horizontal and vertical movement projections.
+            const int32_t moveX = _movingPos.x - unitPosition.x;
+            const int32_t moveY = _movingPos.y - unitPosition.y;
 
-            // TODO: use offset X from bin file for ground movement
-            // cx/cy is sprite size
-            // Frame count: one tile of movement goes through all stages of animation
-            // sp is sprite drawing offset
-            sp.y += static_cast<int32_t>( movementProgress * cy );
             // If it is a slowed flying creature, then it should smoothly move horizontally.
             if ( _movingUnit->isAbilityPresent( fheroes2::MonsterAbilityType::FLYING ) ) {
-                sp.x += static_cast<int32_t>( movementProgress * cx );
+                const double movementProgress = _movingUnit->animation.movementProgress();
+                offset.x += static_cast<int32_t>( movementProgress * moveX );
+                offset.y += static_cast<int32_t>( movementProgress * moveY );
             }
-            else if ( 0 != Sign( cy ) ) {
-                sp.x -= Sign( cx ) * ox / 2;
+            // If the creature has to move diagonally.
+            else if ( moveY != 0 ) {
+                offset.x -= Sign( moveX ) * ( _movingUnit->animation.getCurrentFrameXOffset() ) / 2;
+                offset.y += static_cast<int32_t>( _movingUnit->animation.movementProgress() * moveY );
             }
         }
     }
     else if ( _flyingUnit == &unit ) {
         // Monster is flying.
-        const int32_t cx = _flyingPos.x - rt.x;
-        const int32_t cy = _flyingPos.y - rt.y;
+        // Get the horizontal and vertical movement projections.
+        const int32_t moveX = _flyingPos.x - unitPosition.x;
+        const int32_t moveY = _flyingPos.y - unitPosition.y;
 
         const double movementProgress = _flyingUnit->animation.movementProgress();
 
-        sp.x += cx + static_cast<int32_t>( ( _movingPos.x - _flyingPos.x ) * movementProgress );
-        sp.y += cy + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
+        offset.x += moveX + static_cast<int32_t>( ( _movingPos.x - _flyingPos.x ) * movementProgress );
+        offset.y += moveY + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
     }
 
-    fheroes2::AlphaBlit( troopSprite, _mainSurface, sp.x, sp.y, unit.GetCustomAlpha(), unit.isReflect() );
+    fheroes2::AlphaBlit( troopSprite, _mainSurface, offset.x, offset.y, unit.GetCustomAlpha(), unit.isReflect() );
 
-    return sp;
+    return offset;
 }
 
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
@@ -2506,12 +2506,14 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
     popup.Reset();
 
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
+
+    ResetIdleTroopAnimation();
     Redraw();
 
     std::string msg;
     animation_flags_frame = 0;
-
-    ResetIdleTroopAnimation();
 
     // TODO: update delay types within the loop to avoid rendering slowdown.
     const std::vector<Game::DelayType> delayTypes{ Game::BATTLE_FLAGS_DELAY };
@@ -3046,7 +3048,30 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
     }
 }
 
-void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
+void Battle::Interface::WaitForAllActionDelays()
+{
+    LocalEvent & le = LocalEvent::Get();
+
+    // The array of possible delays of previous battlefield actions.
+    const std::vector<Game::DelayType> unitDelays{ Game::DelayType::BATTLE_FRAME_DELAY,
+                                                   Game::DelayType::BATTLE_MISSILE_DELAY,
+                                                   Game::DelayType::BATTLE_SPELL_DELAY,
+                                                   Game::DelayType::BATTLE_DISRUPTING_DELAY,
+                                                   Game::DelayType::BATTLE_CATAPULT_CLOUD_DELAY,
+                                                   Game::DelayType::BATTLE_BRIDGE_DELAY,
+                                                   Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY };
+
+    // Wait for the delay after previous render and only after it render a new frame and proceed to the rest of this function.
+    while ( le.HandleEvents( Game::isDelayNeeded( unitDelays ) ) ) {
+        CheckGlobalEvents( le );
+
+        if ( Game::hasEveryDelayPassed( unitDelays ) ) {
+            break;
+        }
+    }
+}
+
+void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender )
 {
     if ( unit.isFinishAnimFrame() && unit.animation.animationLength() != 1 ) {
         // If it is the last frame in the animation sequence whith more than one frame or if we have no frames.
@@ -3054,20 +3079,25 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
     }
 
     LocalEvent & le = LocalEvent::Get();
-    const uint64_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
 
-    while ( le.HandleEvents( Game::isCustomDelayNeeded( frameDelay ) ) ) {
+    // In the loop below we wait for the delay and then display the next frame.
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) ) {
         CheckGlobalEvents( le );
 
-        if ( Game::validateCustomAnimationDelay( frameDelay ) ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY ) ) {
             Redraw();
 
             if ( unit.isFinishAnimFrame() ) {
-                // We have reached the end of animation.
+                // We have reached the end of animation and rendered the last frame.
                 break;
             }
 
             unit.IncreaseAnimFrame();
+
+            if ( skipLastFrameRender && unit.isFinishAnimFrame() ) {
+                // We have reached the last amination frame and do not render it.
+                break;
+            }
         }
     }
 }
@@ -3141,6 +3171,9 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
+
     // convert the following code into a function/event service
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
@@ -3179,7 +3212,7 @@ void Battle::Interface::RedrawActionNewTurn() const
     listlog->AddMessage( std::move( msg ) );
 }
 
-void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & defender, const TargetsInfo & targets )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
@@ -3202,6 +3235,11 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     // long distance attack animation
     if ( archer ) {
+        // Reset the delay to wait till the next frame if is not already waiting.
+        if ( !Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
+            Game::AnimateResetDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY );
+        }
+
         const fheroes2::Sprite & attackerSprite = fheroes2::AGG::GetICN( attacker.GetMonsterSprite(), attacker.GetFrame() );
         const fheroes2::Point attackerPos = GetTroopPosition( attacker, attackerSprite );
 
@@ -3229,10 +3267,12 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         // redraw archer attack animation
         if ( attacker.SwitchAnimation( Monster_Info::RANG_TOP + direction * 2 ) ) {
-            // Reset the delay to wait till the next frame.
-            Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
+            // Set the delay between shooting animation frames.
+            Game::setCustomUnitMovementDelay( Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) / attacker.animation.animationLength() );
 
-            AnimateUnitWithDelay( attacker, Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) );
+            // We do not render the last frame of shooting animation as all frames besides this contains the projectile.
+            // The last frame will be rendered in RedrawMissileAnimation() function with the render of projectile.
+            AnimateUnitWithDelay( attacker, true );
         }
 
         const fheroes2::Point missileStart( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
@@ -3259,7 +3299,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     }
 }
 
-void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets )
 {
     // Reset the delay to wait till the next frame.
     if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
@@ -3522,12 +3562,17 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         return;
     }
 
-    // Reset the delay to wait till the next frame.
-    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
+    // Reset the delay to wait till the next frame if is not already waiting.
+    if ( !Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY );
+    }
+
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     Indexes::const_iterator dst = path.begin();
     Bridge * bridge = Arena::GetBridge();
 
+    // Get the time to animate movement for one cell.
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
     if ( unit.Modes( SP_HASTE ) ) {
         frameDelay = frameDelay * 65 / 100; // by 35% faster
@@ -3536,7 +3581,9 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         frameDelay = frameDelay * 150 / 100; // by 50% slower
     }
 
-    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+    // Set the delay between movement animation frames. This delay will be used for all types of movement animations.
+    unit.SwitchAnimation( Monster_Info::MOVING );
+    Game::setCustomUnitMovementDelay( frameDelay / unit.animation.animationLength() );
 
     std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
     StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
@@ -3551,11 +3598,30 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     const bool canFly = unit.isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
     // If it is a wide creature (cache this boolean to use in the loop).
     const bool isWide = unit.isWide();
-    Indexes::const_iterator pathEnd = path.end();
+    const Indexes::const_iterator pathEnd = path.end();
 
-    // Get the number of frames for unit movement.
-    unit.SwitchAnimation( Monster_Info::MOVING );
-    const uint32_t movementFrames = static_cast<uint32_t>( unit.animation.animationLength() );
+    const bool isOneStepPath = [&unit, &path]() {
+        if ( path.size() == 1 ) {
+            return true;
+        }
+
+        if ( !unit.isWide() ) {
+            return false;
+        }
+
+        // If wide unit performs 3 movements and the first movement is a turn back, then it's
+        // path consists of only one "real" movement, because...
+        if ( path.size() == 3 && path[0] == unit.GetTailIndex() ) {
+            // ... its last movement should be a return to the normal position.
+            assert( Board::GetDirection( path[1], path[2] ) == ( unit.isReflect() ? LEFT : RIGHT ) );
+
+            return true;
+        }
+
+        return false;
+    }();
+
+    // TODO: make an analigic check with checks for wide creatures back step: is one step left before/after the bridge action.
 
     // Slowed flying creature has to fly off.
     if ( canFly ) {
@@ -3597,66 +3663,109 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
         // Reflect the creature if it has to fly back.
         unit.SetReflection( !isFlyToRight );
-        unit.SwitchAnimation( Monster_Info::FLY_UP );
-        AudioManager::PlaySound( unit.M82Tkof() );
-        // Take off animation should have the same between frame delay as the movement animation.
-        AnimateUnitWithDelay( unit, frameDelay * static_cast<uint32_t>( unit.animation.animationLength() ) / movementFrames );
+        // For creatures, that has no 'FLY_UP' animation, like Ghosts, we check if the animation was correctly set.
+        if ( unit.SwitchAnimation( Monster_Info::FLY_UP ) ) {
+            AudioManager::PlaySound( unit.M82Tkof() );
+            AnimateUnitWithDelay( unit );
+        }
         // If a wide flyer returns back it should skip one path position (its head bocomes its tail - it is already one move).
         if ( isWide && ( isFlyToRight == isFromRightArmy ) ) {
             ++dst;
         }
+
+        // Switch animation to MOVING before going through the path.
+        unit.SwitchAnimation( Monster_Info::MOVING );
+    }
+    else {
+        // Every ground unit should start its movement from the special 'MOVE_START' animation
+        // or if it moves only for one cell its animation must be 'MOVE_QUICK'. So a check for 1 cell path is made.
+        if ( isOneStepPath ) {
+            unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
+        }
+        else {
+            unit.SwitchAnimation( Monster_Info::MOVE_START );
+        }
     }
 
     while ( dst != pathEnd ) {
+        // Check if a wide unit changes its horizontal direction.
+        if ( isWide && unit.GetTailIndex() == *dst ) {
+            // We must not reflect the flyers at the and of the path (just before the landing).
+            if ( !canFly || ( dst != ( pathEnd - 1 ) ) ) {
+                unit.SetReflection( !unit.isReflect() );
+            }
+            // After changind the direction go to the next step in the path.
+            ++dst;
+            continue;
+        }
+
         const Cell * cell = Board::GetCell( *dst );
         _movingPos = cell->GetPos().getPosition();
-        bool show_anim = false;
+
+        if ( !isWide ) {
+            // Check for change the horizontal direction. Only for non-wide units, the wide units use their own algorithm.
+            unit.UpdateDirection( cell->GetPos() );
+        }
 
         if ( bridge && bridge->NeedDown( unit, *dst ) ) {
             _movingUnit = nullptr;
             unit.SwitchAnimation( Monster_Info::STAND_STILL );
             bridge->ActionDown();
             _movingUnit = &unit;
-        }
-
-        if ( isWide ) {
-            if ( unit.GetTailIndex() == *dst ) {
-                // We must not reflect the flyers at the and of the path (just before the landing).
-                if ( !canFly || ( pathEnd != ( dst + 1 ) ) ) {
-                    unit.SetReflection( !unit.isReflect() );
-                }
+            if ( dst == ( pathEnd - 1 ) ) {
+                // There is only one cell left to move after standing.
+                unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
             }
             else {
-                show_anim = true;
+                // If the path has more than one step after the bridge action then begin the movement.
+                unit.SwitchAnimation( Monster_Info::MOVE_START );
             }
         }
-        else {
-            unit.UpdateDirection( cell->GetPos() );
-            show_anim = true;
+
+        // If a wide flyer is flying to the right its visual horizontal destination should be shifted to the left by one cell.
+        if ( canFly && isWide && !unit.isReflect() ) {
+            _movingPos.x -= CELLW;
         }
 
-        if ( show_anim ) {
-            // If a wide flyer is flying to the left its horizontal position should be shifted to the left by one cell.
-            if ( canFly && isWide && !unit.isReflect() ) {
-                _movingPos.x -= CELLW;
-            }
-            AudioManager::PlaySound( unit.M82Move() );
-            unit.SwitchAnimation( Monster_Info::MOVING );
-            AnimateUnitWithDelay( unit, frameDelay );
-            unit.SetPosition( *dst );
-        }
-
-        // Check for possible bridge close action, after walking unit's end of movement to the next cell.
-        // This check should exclude the flying creature because it can't 'hang' here to wait
-        // for bridge to close. For this creature, the bridge should close after it lands.
-        if ( !canFly && bridge && bridge->AllowUp() ) {
-            _movingUnit = nullptr;
-            unit.SwitchAnimation( Monster_Info::STAND_STILL );
-            bridge->ActionUp();
-            _movingUnit = &unit;
-        }
+        // Render the unit movement with the movement sound.
+        // TODO: adjust sounds calls and synchronize them with frames. Take into account that some sounds (like for Cavalry) consists of a sequence of steps.
+        AudioManager::PlaySound( unit.M82Move() );
+        AnimateUnitWithDelay( unit );
+        unit.SetPosition( *dst );
 
         ++dst;
+
+        // Do a post-move check for the bridge action and set the animation the movement to the next cell in the path.
+        if ( canFly ) {
+            // The animation for the next step in the path of slowed flying creatures is always "MOVING".
+            unit.SwitchAnimation( Monster_Info::MOVING );
+        }
+        else {
+            // Check for possible bridge close action, after walking unit's end of movement to the next cell.
+            // This check should exclude the flying creature because it can't 'hang' here to wait
+            // for bridge to close. For this creature, the bridge should close after it lands.
+            if ( bridge && bridge->AllowUp() ) {
+                _movingUnit = nullptr;
+                unit.SwitchAnimation( Monster_Info::STAND_STILL );
+                bridge->ActionUp();
+                _movingUnit = &unit;
+                if ( dst == ( pathEnd - 1 ) ) {
+                    // There is only one cell left to move after standing.
+                    unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
+                }
+                else {
+                    // If the path has more than one step after the bridge action then begin the movement.
+                    unit.SwitchAnimation( Monster_Info::MOVE_START );
+                }
+            }
+            else if ( dst == ( pathEnd - 1 ) ) {
+                // There is only one cell left to move.
+                unit.SwitchAnimation( Monster_Info::MOVE_END );
+            }
+            else {
+                unit.SwitchAnimation( Monster_Info::MOVING );
+            }
+        }
     }
 
     // Slowed flying creature has to land.
@@ -3664,8 +3773,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         // IMPORTANT: do not combine into vector animations with the STATIC at the end: the game could randomly switch it to IDLE this way.
         unit.SwitchAnimation( { Monster_Info::FLY_LAND, Monster_Info::STAND_STILL } );
         AudioManager::PlaySound( unit.M82Land() );
-        // Landing animation should have the same between frame delay as the movement animation (plus 1 frame for standing still).
-        AnimateUnitWithDelay( unit, frameDelay * ( static_cast<uint32_t>( unit.animation.animationLength() ) + 1 ) / movementFrames );
+        AnimateUnitWithDelay( unit );
 
         // Close the bridge only after the creature lands.
         if ( bridge && bridge->AllowUp() ) {
@@ -3694,8 +3802,12 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         return;
     }
 
-    // Reset the delay to wait till the next frame.
-    Game::AnimateResetDelay( Game::DelayType::CUSTOM_DELAY );
+    // Reset the delay to wait till the next frame if is not already waiting.
+    if ( !Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY );
+    }
+
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     const fheroes2::Point destPos = unit.GetRectPosition().getPosition();
     fheroes2::Point targetPos = Board::GetCell( destIndex )->GetPos().getPosition();
@@ -3708,8 +3820,6 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
     StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
 
-    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
-
     const uint32_t step = unit.animation.getFlightSpeed();
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
     if ( unit.Modes( SP_HASTE ) ) {
@@ -3718,6 +3828,10 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     else if ( unit.Modes( SP_SLOW ) ) {
         frameDelay = frameDelay * 12 / 10; // 20% slower
     }
+
+    // Set the delay between movement animation frames. This delay will be used for all types of movement animations.
+    unit.SwitchAnimation( Monster_Info::MOVING );
+    Game::setCustomUnitMovementDelay( frameDelay / unit.animation.animationLength() );
 
     const std::vector<fheroes2::Point> points = GetEuclideanLine( destPos, targetPos, step );
     std::vector<fheroes2::Point>::const_iterator currentPoint = points.begin();
@@ -3738,15 +3852,11 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = &unit;
     _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
 
-    // Get the number of frames for unit movement.
-    unit.SwitchAnimation( Monster_Info::MOVING );
-    const uint32_t movementFrames = static_cast<uint32_t>( unit.animation.animationLength() );
-
-    unit.SwitchAnimation( Monster_Info::FLY_UP );
-    AudioManager::PlaySound( unit.M82Tkof() );
-
-    // Take off animation should have the same between frame delay as the movement animation.
-    AnimateUnitWithDelay( unit, frameDelay * static_cast<uint32_t>( unit.animation.animationLength() ) / movementFrames );
+    // For creatures, that has no 'FLY_UP' animation, like Ghosts, we check if the animation was correctly set.
+    if ( unit.SwitchAnimation( Monster_Info::FLY_UP ) ) {
+        AudioManager::PlaySound( unit.M82Tkof() );
+        AnimateUnitWithDelay( unit );
+    }
 
     _movingUnit = nullptr;
     _flyingUnit = &unit;
@@ -3762,7 +3872,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
         AudioManager::PlaySound( unit.M82Move() );
         unit.animation.restartAnimation();
-        AnimateUnitWithDelay( unit, frameDelay );
+        AnimateUnitWithDelay( unit );
 
         _flyingPos = _movingPos;
         ++currentPoint;
@@ -3778,8 +3888,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     // IMPORTANT: do not combine into vector animations with the STATIC at the end: the game could randomly switch it to IDLE this way.
     unit.SwitchAnimation( { Monster_Info::FLY_LAND, Monster_Info::STAND_STILL } );
     AudioManager::PlaySound( unit.M82Land() );
-    // Landing animation should have the same between frame delay as the movement animation (plus 1 frame for standing still).
-    AnimateUnitWithDelay( unit, frameDelay * ( static_cast<uint32_t>( unit.animation.animationLength() ) + 1 ) / movementFrames );
+    AnimateUnitWithDelay( unit );
     unit.SwitchAnimation( Monster_Info::STATIC );
 
     _movingUnit = nullptr;
@@ -4161,6 +4270,11 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell,
 
 void Battle::Interface::RedrawActionLuck( const Unit & unit )
 {
+    // Reset the delay to wait till the next frame if is not already waiting.
+    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_MISSILE_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_MISSILE_DELAY );
+    }
+
     LocalEvent & le = LocalEvent::Get();
 
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
@@ -4367,6 +4481,9 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
 
 void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, const bool isHit )
 {
+    // Reset the delay before rendering the first frame of catapult animation.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_DELAY );
+
     LocalEvent & le = LocalEvent::Get();
 
     const fheroes2::Rect & area = GetArea();
@@ -4382,6 +4499,9 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
             ++catapult_frame;
         }
     }
+
+    // Reset the delay before rendering the first frame of catapult bouder animation.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_BOULDER_DELAY );
 
     // boulder animation
     fheroes2::Point pt1( 30, 290 );
@@ -4443,6 +4563,9 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
             }
         }
     }
+
+    // Reset the delay before rendering the catapult cloud.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_CLOUD_DELAY );
 
     // draw cloud
     const int32_t icn = isHit ? ICN::LICHCLOD : ICN::SMALCLOD;
@@ -5414,6 +5537,11 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
     if ( mirrorImages.empty() ) // nothing to animate
         return;
 
+    // Reset the delay to wait till the next frame if is not already waiting.
+    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+    }
+
     LocalEvent & le = LocalEvent::Get();
 
     uint8_t frameId = 10;
@@ -5541,9 +5669,10 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn );
     uint32_t frame = 0;
 
-    AudioManager::PlaySound( m82 );
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
 
-    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+    AudioManager::PlaySound( m82 );
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && ( frame < maxFrame || isDefenderAnimating ) ) {
         CheckGlobalEvents( le );
@@ -5632,10 +5761,12 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int
         unit.SwitchAnimation( Monster_Info::KILL, true );
     }
 
-    AudioManager::PlaySound( m82 );
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
+
     const uint32_t maxICNFrame = fheroes2::AGG::GetICNCount( icn );
 
-    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+    AudioManager::PlaySound( m82 );
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && ( frame < maxICNFrame || unit.GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
         CheckGlobalEvents( le );
@@ -5671,6 +5802,9 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int
 
 void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
 {
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
+
     LocalEvent & le = LocalEvent::Get();
 
     _bridgeAnimation.animationIsRequired = true;

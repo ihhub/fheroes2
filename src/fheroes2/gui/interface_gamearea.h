@@ -250,6 +250,11 @@ namespace Interface
             return _mouseDraggingMovement;
         }
 
+        bool needDragScrollRedraw() const
+        {
+            return _needRedrawByMouseDragging;
+        }
+
     private:
         Basic & interface;
 
@@ -273,9 +278,10 @@ namespace Interface
         // This member needs to be mutable because it is modified during rendering.
         mutable std::vector<std::shared_ptr<BaseObjectAnimationInfo>> _animationInfo;
 
+        fheroes2::Point _lastMouseDragPosition;
         bool _mouseDraggingInitiated;
         bool _mouseDraggingMovement;
-        fheroes2::Point _startMouseDragPosition;
+        bool _needRedrawByMouseDragging;
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const

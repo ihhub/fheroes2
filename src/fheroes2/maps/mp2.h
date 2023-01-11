@@ -238,9 +238,11 @@ namespace MP2
     };
 
     // An object type could be action and non-action. If both parts are present the difference between them must be 128.
-    // TODO: right now some PoL objects do not follow this procedure leading to hacks in the code. We must fix it!
     enum MapObjectType : uint8_t
     {
+        // This section defines all types of NON-action objects which are present in the original game.
+        // If the object by nature is an action object name it with prefix OBJ_NON_ACTION_.
+        // Otherwise, name it with prefix OBJ_.
         OBJ_NONE = 0, // No object exist.
         OBJ_NON_ACTION_ALCHEMIST_LAB = 1,
         OBJ_NON_ACTION_SIGN = 2, // Never set in maps.
@@ -258,8 +260,8 @@ namespace MP2
         OBJ_NON_ACTION_GOBLIN_HUT = 14, // Never set in maps.
         OBJ_NON_ACTION_DWARF_COTTAGE = 15,
         OBJ_NON_ACTION_PEASANT_HUT = 16,
-        OBJ_NON_ACTION_UNUSED_17 = 17, // Never set in maps. Based on given information this was a monster dwelling called Log Cabin.
-        OBJ_NON_ACTION_UNUSED_18 = 18, // Never set in maps. Based on given information this was Road.
+        OBJ_NON_ACTION_STABLES = 17, // Never set in maps. Based on given information this was a monster dwelling called Log Cabin but set by the engine as Stables.
+        OBJ_NON_ACTION_ALCHEMIST_TOWER = 18, // Never set in maps. Based on given information this was Road but set by the engine as Alchemist Tower.
         OBJ_NON_ACTION_EVENT = 19, // Never set in maps.
         OBJ_NON_ACTION_DRAGON_CITY = 20,
         OBJ_NON_ACTION_LIGHTHOUSE = 21,
@@ -274,16 +276,16 @@ namespace MP2
         OBJ_NON_ACTION_ORACLE = 30,
         OBJ_NON_ACTION_SHRINE_FIRST_CIRCLE = 31, // Never set in maps.
         OBJ_NON_ACTION_SHIPWRECK = 32,
-        OBJ_NON_ACTION_UNUSED_33 = 33, // Never set in maps. Based on given information this was a Sea Chest object.
+        OBJ_NON_ACTION_SEA_CHEST = 33, // Never set in maps.
         OBJ_NON_ACTION_DESERT_TENT = 34,
         OBJ_NON_ACTION_CASTLE = 35,
         OBJ_NON_ACTION_STONE_LITHS = 36,
         OBJ_NON_ACTION_WAGON_CAMP = 37,
-        OBJ_NON_ACTION_UNUSED_38 = 38, // Never set in maps. Based on given information this was a Well object.
+        OBJ_NON_ACTION_HUT_OF_MAGI = 38, // Never set in maps. Based on given information this was a Well object.
         OBJ_NON_ACTION_WHIRLPOOL = 39, // Never set in maps.
         OBJ_NON_ACTION_WINDMILL = 40,
         OBJ_NON_ACTION_ARTIFACT = 41, // Never set in maps.
-        OBJ_NON_ACTION_UNUSED_42 = 42, // Never set in maps. Based on given information this was a Hero.
+        OBJ_NON_ACTION_MERMAID = 42, // Never set in maps. Based on given information this was a Hero.
         OBJ_NON_ACTION_BOAT = 43, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_ULTIMATE_ARTIFACT = 44, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_ARTIFACT = 45, // Never set in maps.
@@ -291,14 +293,14 @@ namespace MP2
         OBJ_NON_ACTION_RANDOM_MONSTER = 47, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_TOWN = 48,
         OBJ_NON_ACTION_RANDOM_CASTLE = 49,
-        OBJ_NON_ACTION_UNUSED_50 = 50, // Never set in maps. Not in use at all.
+        OBJ_NON_ACTION_EYE_OF_MAGI = 50, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_MONSTER_WEAK = 51, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM = 52, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_MONSTER_STRONG = 53, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG = 54, // Never set in maps.
-        OBJ_NON_ACTION_HEROES = 55, // Never set in maps. TODO: this suppose to be a random hero.
-        OBJ_NON_ACTION_NOTHING_SPECIAL = 56,
-        OBJ_NON_ACTION_UNUSED_57 = 57, // TODO: it is used in some maps. Verify what it is.
+        OBJ_NON_ACTION_HEROES = 55, // Never set in maps. This type is used for any types of heroes, including random.
+        OBJ_NOTHING_SPECIAL = 56,
+        OBJ_MOSSY_ROCK = 57, // It is a Rock with moss for Swamp terrain. ICN::OBJNSWMP, images 138-139. In the original game it has no name.
         OBJ_NON_ACTION_WATCH_TOWER = 58,
         OBJ_NON_ACTION_TREE_HOUSE = 59,
         OBJ_NON_ACTION_TREE_CITY = 60,
@@ -306,7 +308,7 @@ namespace MP2
         OBJ_NON_ACTION_FORT = 62,
         OBJ_NON_ACTION_TRADING_POST = 63,
         OBJ_NON_ACTION_ABANDONED_MINE = 64,
-        OBJ_NON_ACTION_THATCHED_HUT = 65, // Never set in maps. TODO: it is a peasant hut! It is used at least in one map. Alternative name is Dwarf Cabin.
+        OBJ_NON_ACTION_SIRENS = 65, // Originally it was Thatched Hut which is replaced by Peasant Hut for all original maps.
         OBJ_NON_ACTION_STANDING_STONES = 66, // Never set in maps.
         OBJ_NON_ACTION_IDOL = 67, // Never set in maps.
         OBJ_NON_ACTION_TREE_OF_KNOWLEDGE = 68,
@@ -322,7 +324,7 @@ namespace MP2
         OBJ_NON_ACTION_EXCAVATION = 78,
         OBJ_NON_ACTION_SPHINX = 79,
         OBJ_NON_ACTION_WAGON = 80, // Never set in maps.
-        OBJ_NON_ACTION_TAR_PIT = 81,
+        OBJ_TAR_PIT = 81,
         OBJ_NON_ACTION_ARTESIAN_SPRING = 82,
         OBJ_NON_ACTION_TROLL_BRIDGE = 83,
         OBJ_NON_ACTION_WATERING_HOLE = 84,
@@ -339,7 +341,7 @@ namespace MP2
         OBJ_NON_ACTION_MAGIC_GARDEN = 95, // Never set in maps.
         OBJ_NON_ACTION_OBSERVATION_TOWER = 96,
         OBJ_NON_ACTION_FREEMANS_FOUNDRY = 97,
-        OBJ_STREAM = 98, // Never set in maps. Not in use within the original Editor.
+        OBJ_REEFS = 98, // Never set in maps. Not in use within the original Editor.
         OBJ_TREES = 99,
         OBJ_MOUNTAINS = 100,
         OBJ_VOLCANO = 101,
@@ -355,151 +357,165 @@ namespace MP2
         OBJ_DUNE = 111,
         OBJ_LAVAPOOL = 112,
         OBJ_SHRUB = 113,
-        OBJ_NON_ACTION_ARENA = 114, // Never set in maps. TODO: check the correct ID for this object.
-        OBJ_NON_ACTION_BARROW_MOUNDS = 115, // Never set in maps. TODO: check the correct ID for this object.
-        OBJ_NON_ACTION_MERMAID = 116, // Never set in maps. TODO: check the correct ID for this object.
-        OBJ_NON_ACTION_SIRENS = 117, // Never set in maps. TODO: check the correct ID for this object.
-        OBJ_NON_ACTION_HUT_OF_MAGI = 118, // Never set in maps. TODO: check the correct ID for this object.
-        OBJ_NON_ACTION_EYE_OF_MAGI = 119, // Never set in maps. TODO: check the correct ID for this object.
+        OBJ_NON_ACTION_ARENA = 114, // Never set in maps.
+        OBJ_NON_ACTION_BARROW_MOUNDS = 115, // Never set in maps.
+        OBJ_NON_ACTION_RANDOM_ARTIFACT_TREASURE = 116, // Never set in maps.
+        OBJ_NON_ACTION_RANDOM_ARTIFACT_MINOR = 117, // Never set in maps.
+        OBJ_NON_ACTION_RANDOM_ARTIFACT_MAJOR = 118, // Never set in maps.
+        OBJ_NON_ACTION_BARRIER = 119, // Never set in maps.
         OBJ_NON_ACTION_TRAVELLER_TENT = 120,
         OBJ_NON_ACTION_EXPANSION_DWELLING = 121,
         OBJ_NON_ACTION_EXPANSION_OBJECT = 122,
         OBJ_NON_ACTION_JAIL = 123,
-        OBJ_NON_ACTION_FIRE_ALTAR = 124, // Never set in maps. TODO: check the correct ID for this object.
-        OBJ_NON_ACTION_AIR_ALTAR = 125, // Never set in maps. TODO: check the correct ID for this object.
-        OBJ_NON_ACTION_EARTH_ALTAR = 126, // Never set in maps. TODO: check the correct ID for this object.
-        OBJ_NON_ACTION_WATER_ALTAR = 127, // Never set in maps. TODO: check the correct ID for this object.
+        OBJ_NON_ACTION_FIRE_ALTAR = 124, // Never set in maps.
+        OBJ_NON_ACTION_AIR_ALTAR = 125, // Never set in maps.
+        OBJ_NON_ACTION_EARTH_ALTAR = 126, // Never set in maps.
+        OBJ_NON_ACTION_WATER_ALTAR = 127, // Never set in maps.
 
-        OBJ_WATERCHEST, // Never set in maps. TODO: this is wrong ID for this object.
-        OBJ_ALCHEMIST_LAB,
-        OBJ_SIGN,
-        OBJ_BUOY,
-        OBJ_SKELETON,
-        OBJ_DAEMON_CAVE,
-        OBJ_TREASURE_CHEST,
-        OBJ_FAERIE_RING,
-        OBJ_CAMPFIRE,
-        OBJ_FOUNTAIN,
-        OBJ_GAZEBO,
-        OBJ_GENIE_LAMP,
-        OBJ_GRAVEYARD,
-        OBJ_ARCHER_HOUSE,
-        OBJ_GOBLIN_HUT,
-        OBJ_DWARF_COTTAGE,
-        OBJ_PEASANT_HUT,
-        OBJ_UNUSED_17, // Never set in maps.
-        OBJ_UNUSED_18, // Never set in maps.
-        OBJ_EVENT,
-        OBJ_DRAGON_CITY,
-        OBJ_LIGHTHOUSE,
-        OBJ_WATER_WHEEL,
-        OBJ_MINES,
-        OBJ_MONSTER,
-        OBJ_OBELISK,
-        OBJ_OASIS,
-        OBJ_RESOURCE,
-        OBJ_ACTION_COAST, // Never set in maps as Coast is not an action object.
-        OBJ_SAWMILL,
-        OBJ_ORACLE,
-        OBJ_SHRINE_FIRST_CIRCLE,
-        OBJ_SHIPWRECK,
-        OBJ_UNUSED_33, // Never set in maps.
-        OBJ_DESERT_TENT,
-        OBJ_CASTLE,
-        OBJ_STONE_LITHS,
-        OBJ_WAGON_CAMP,
-        OBJ_UNUSED_38, // Never set in maps.
-        OBJ_WHIRLPOOL,
-        OBJ_WINDMILL,
-        OBJ_ARTIFACT,
-        OBJ_UNUSED_42, // Never set in maps.
-        OBJ_BOAT,
-        OBJ_RANDOM_ULTIMATE_ARTIFACT,
-        OBJ_RANDOM_ARTIFACT,
-        OBJ_RANDOM_RESOURCE,
-        OBJ_RANDOM_MONSTER,
-        OBJ_RANDOM_TOWN,
-        OBJ_RANDOM_CASTLE,
-        OBJ_UNUSED_50, // Never set in maps.
-        OBJ_RANDOM_MONSTER_WEAK,
-        OBJ_RANDOM_MONSTER_MEDIUM,
-        OBJ_RANDOM_MONSTER_STRONG,
-        OBJ_RANDOM_MONSTER_VERY_STRONG,
-        OBJ_HEROES, // TODO: this suppose to be a random hero.
-        OBJ_NOTHING_SPECIAL, // Never set in maps.
-        OBJ_UNUSED_57, // Never set in maps.
-        OBJ_WATCH_TOWER,
-        OBJ_TREE_HOUSE,
-        OBJ_TREE_CITY,
-        OBJ_RUINS,
-        OBJ_FORT,
-        OBJ_TRADING_POST,
-        OBJ_ABANDONED_MINE,
-        OBJ_THATCHED_HUT, // TODO: it is a peasant hut! It is used at least in one map. Alternative name is Dwarf Cabin.
-        OBJ_STANDING_STONES,
-        OBJ_IDOL,
-        OBJ_TREE_OF_KNOWLEDGE,
-        OBJ_WITCH_DOCTORS_HUT,
-        OBJ_TEMPLE,
-        OBJ_HILL_FORT,
-        OBJ_HALFLING_HOLE,
-        OBJ_MERCENARY_CAMP,
-        OBJ_SHRINE_SECOND_CIRCLE,
-        OBJ_SHRINE_THIRD_CIRCLE,
-        OBJ_PYRAMID,
-        OBJ_CITY_OF_DEAD,
-        OBJ_EXCAVATION,
-        OBJ_SPHINX,
-        OBJ_WAGON,
-        OBJ_TAR_PIT, // Never set in maps. This is not an action object.
-        OBJ_ARTESIAN_SPRING,
-        OBJ_TROLL_BRIDGE,
-        OBJ_WATERING_HOLE,
-        OBJ_WITCHS_HUT,
-        OBJ_XANADU,
-        OBJ_CAVE,
-        OBJ_LEAN_TO,
-        OBJ_MAGELLANS_MAPS,
-        OBJ_FLOTSAM,
-        OBJ_DERELICT_SHIP,
-        OBJ_SHIPWRECK_SURVIVOR,
-        OBJ_BOTTLE,
-        OBJ_MAGIC_WELL,
-        OBJ_MAGIC_GARDEN,
-        OBJ_OBSERVATION_TOWER,
-        OBJ_FREEMANS_FOUNDRY,
-        OBJ_ACTION_UNUSED_226, // Never set in maps.
-        OBJ_ACTION_UNUSED_227, // Never set in maps.
-        OBJ_ACTION_UNUSED_228, // Never set in maps.
-        OBJ_ACTION_UNUSED_229, // Never set in maps.
-        OBJ_ACTION_UNUSED_230, // Never set in maps.
-        OBJ_ACTION_UNUSED_231, // Never set in maps.
-        OBJ_ACTION_UNUSED_232, // Never set in maps.
-        OBJ_REEFS, // Never set in maps. TODO: verify the correct ID for this object as it should not exist in action objects section.
-        OBJ_NON_ACTION_ALCHEMIST_TOWER, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_NON_ACTION_STABLES, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_MERMAID, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_SIRENS, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_HUT_OF_MAGI, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_EYE_OF_MAGI, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_ALCHEMIST_TOWER, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_STABLES, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_ARENA, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_BARROW_MOUNDS, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_RANDOM_ARTIFACT_TREASURE,
-        OBJ_RANDOM_ARTIFACT_MINOR,
-        OBJ_RANDOM_ARTIFACT_MAJOR,
-        OBJ_BARRIER,
-        OBJ_TRAVELLER_TENT,
-        OBJ_EXPANSION_DWELLING,
-        OBJ_EXPANSION_OBJECT,
-        OBJ_JAIL,
-        OBJ_FIRE_ALTAR, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_AIR_ALTAR, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_EARTH_ALTAR, // Never set in maps. TODO: verify the correct ID for this object.
-        OBJ_WATER_ALTAR // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_ACTION_OBJECT_TYPE = 128, // NEVER use this object type to set in maps. This entry is used to determine if an object is action type.
 
-        // IMPORTANT!!! Do not use any of unused entries for new objects. Add new entries just above this line.
+        // This section defines all types of action objects which are present in the original game.
+        // If the object by nature is an action object name it with prefix OBJ_.
+        // Otherwise, name it with prefix OBJ_ACTON_.
+        // The value of the object must be: non-action object value + OBJ_ACTION_OBJECT_TYPE.
+        OBJ_ALCHEMIST_LAB = OBJ_NON_ACTION_ALCHEMIST_LAB + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_SIGN = OBJ_NON_ACTION_SIGN + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_BUOY = OBJ_NON_ACTION_BUOY + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_SKELETON = OBJ_NON_ACTION_SKELETON + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_DAEMON_CAVE = OBJ_NON_ACTION_DAEMON_CAVE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_TREASURE_CHEST = OBJ_NON_ACTION_TREASURE_CHEST + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_FAERIE_RING = OBJ_NON_ACTION_FAERIE_RING + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_CAMPFIRE = OBJ_NON_ACTION_CAMPFIRE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_FOUNTAIN = OBJ_NON_ACTION_FOUNTAIN + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_GAZEBO = OBJ_NON_ACTION_GAZEBO + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_GENIE_LAMP = OBJ_NON_ACTION_GENIE_LAMP + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_GRAVEYARD = OBJ_NON_ACTION_GRAVEYARD + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_ARCHER_HOUSE = OBJ_NON_ACTION_ARCHER_HOUSE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_GOBLIN_HUT = OBJ_NON_ACTION_GOBLIN_HUT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_DWARF_COTTAGE = OBJ_NON_ACTION_DWARF_COTTAGE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_PEASANT_HUT = OBJ_NON_ACTION_PEASANT_HUT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_STABLES = OBJ_NON_ACTION_STABLES + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ALCHEMIST_TOWER = OBJ_NON_ACTION_ALCHEMIST_TOWER + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_EVENT = OBJ_NON_ACTION_EVENT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_DRAGON_CITY = OBJ_NON_ACTION_DRAGON_CITY + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_LIGHTHOUSE = OBJ_NON_ACTION_LIGHTHOUSE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_WATER_WHEEL = OBJ_NON_ACTION_WATER_WHEEL + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_MINES = OBJ_NON_ACTION_MINES + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_MONSTER = OBJ_NON_ACTION_MONSTER + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_OBELISK = OBJ_NON_ACTION_OBELISK + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_OASIS = OBJ_NON_ACTION_OASIS + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RESOURCE = OBJ_NON_ACTION_RESOURCE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_ACTION_COAST = OBJ_COAST + OBJ_ACTION_OBJECT_TYPE, // Never set in maps as Coast is not an action object.
+        OBJ_SAWMILL = OBJ_NON_ACTION_SAWMILL + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_ORACLE = OBJ_NON_ACTION_ORACLE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_SHRINE_FIRST_CIRCLE = OBJ_NON_ACTION_SHRINE_FIRST_CIRCLE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_SHIPWRECK = OBJ_NON_ACTION_SHIPWRECK + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_SEA_CHEST = OBJ_NON_ACTION_SEA_CHEST + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_DESERT_TENT = OBJ_NON_ACTION_DESERT_TENT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_CASTLE = OBJ_NON_ACTION_CASTLE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_STONE_LITHS = OBJ_NON_ACTION_STONE_LITHS + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_WAGON_CAMP = OBJ_NON_ACTION_WAGON_CAMP + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_HUT_OF_MAGI = OBJ_NON_ACTION_HUT_OF_MAGI + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_WHIRLPOOL = OBJ_NON_ACTION_WHIRLPOOL + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_WINDMILL = OBJ_NON_ACTION_WINDMILL + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_ARTIFACT = OBJ_NON_ACTION_ARTIFACT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_MERMAID = OBJ_NON_ACTION_MERMAID + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_BOAT = OBJ_NON_ACTION_BOAT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_ULTIMATE_ARTIFACT = OBJ_NON_ACTION_RANDOM_ULTIMATE_ARTIFACT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_ARTIFACT = OBJ_NON_ACTION_RANDOM_ARTIFACT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_RESOURCE = OBJ_NON_ACTION_RANDOM_RESOURCE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_MONSTER = OBJ_NON_ACTION_RANDOM_MONSTER + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_TOWN = OBJ_NON_ACTION_RANDOM_TOWN + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_CASTLE = OBJ_NON_ACTION_RANDOM_CASTLE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_EYE_OF_MAGI = OBJ_NON_ACTION_EYE_OF_MAGI + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_RANDOM_MONSTER_WEAK = OBJ_NON_ACTION_RANDOM_MONSTER_WEAK + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_MONSTER_MEDIUM = OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_MONSTER_STRONG = OBJ_NON_ACTION_RANDOM_MONSTER_STRONG + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_MONSTER_VERY_STRONG = OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_HEROES, // This type is used for any types of heroes, including random.
+        OBJ_ACTION_NOTHING_SPECIAL = OBJ_NOTHING_SPECIAL + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_MOSSY_ROCK = OBJ_MOSSY_ROCK + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_WATCH_TOWER = OBJ_NON_ACTION_WATCH_TOWER + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_TREE_HOUSE = OBJ_NON_ACTION_TREE_HOUSE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_TREE_CITY = OBJ_NON_ACTION_TREE_CITY + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RUINS = OBJ_NON_ACTION_RUINS + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_FORT = OBJ_NON_ACTION_FORT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_TRADING_POST = OBJ_NON_ACTION_TRADING_POST + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_ABANDONED_MINE = OBJ_NON_ACTION_ABANDONED_MINE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_SIRENS = OBJ_NON_ACTION_SIRENS + OBJ_ACTION_OBJECT_TYPE, // Originally it was Thatched Hut which is replaced by Peasant Hut for all original maps.
+        OBJ_STANDING_STONES = OBJ_NON_ACTION_STANDING_STONES + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_IDOL = OBJ_NON_ACTION_IDOL + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_TREE_OF_KNOWLEDGE = OBJ_NON_ACTION_TREE_OF_KNOWLEDGE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_WITCH_DOCTORS_HUT = OBJ_NON_ACTION_WITCH_DOCTORS_HUT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_TEMPLE = OBJ_NON_ACTION_TEMPLE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_HILL_FORT = OBJ_NON_ACTION_HILL_FORT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_HALFLING_HOLE = OBJ_NON_ACTION_HALFLING_HOLE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_MERCENARY_CAMP = OBJ_NON_ACTION_MERCENARY_CAMP + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_SHRINE_SECOND_CIRCLE = OBJ_NON_ACTION_SHRINE_SECOND_CIRCLE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_SHRINE_THIRD_CIRCLE = OBJ_NON_ACTION_SHRINE_THIRD_CIRCLE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_PYRAMID = OBJ_NON_ACTION_PYRAMID + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_CITY_OF_DEAD = OBJ_NON_ACTION_CITY_OF_DEAD + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_EXCAVATION = OBJ_NON_ACTION_EXCAVATION + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_SPHINX = OBJ_NON_ACTION_SPHINX + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_WAGON = OBJ_NON_ACTION_WAGON + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_ACTION_TAR_PIT = OBJ_TAR_PIT + OBJ_ACTION_OBJECT_TYPE, // Never set in maps. This is not an action object.
+        OBJ_ARTESIAN_SPRING = OBJ_NON_ACTION_ARTESIAN_SPRING + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_TROLL_BRIDGE = OBJ_NON_ACTION_TROLL_BRIDGE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_WATERING_HOLE = OBJ_NON_ACTION_WATERING_HOLE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_WITCHS_HUT = OBJ_NON_ACTION_WITCHS_HUT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_XANADU = OBJ_NON_ACTION_XANADU + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_CAVE = OBJ_NON_ACTION_CAVE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_LEAN_TO = OBJ_NON_ACTION_LEAN_TO + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_MAGELLANS_MAPS = OBJ_NON_ACTION_MAGELLANS_MAPS + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_FLOTSAM = OBJ_NON_ACTION_FLOTSAM + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_DERELICT_SHIP = OBJ_NON_ACTION_DERELICT_SHIP + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_SHIPWRECK_SURVIVOR = OBJ_NON_ACTION_SHIPWRECK_SURVIVOR + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_BOTTLE = OBJ_NON_ACTION_BOTTLE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_MAGIC_WELL = OBJ_NON_ACTION_MAGIC_WELL + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_MAGIC_GARDEN = OBJ_NON_ACTION_MAGIC_GARDEN + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_OBSERVATION_TOWER = OBJ_NON_ACTION_OBSERVATION_TOWER + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_FREEMANS_FOUNDRY = OBJ_NON_ACTION_FREEMANS_FOUNDRY + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_ACTION_REEFS = OBJ_REEFS + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_TREES = OBJ_TREES + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_MOUNTAINS = OBJ_MOUNTAINS + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_VOLCANO = OBJ_VOLCANO + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_FLOWERS = OBJ_FLOWERS + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_ROCK = OBJ_ROCK + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_WATER_LAKE = OBJ_WATER_LAKE + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_MANDRAKE = OBJ_MANDRAKE + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_DEAD_TREE = OBJ_DEAD_TREE + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_STUMP = OBJ_STUMP + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_CRATER = OBJ_CRATER + OBJ_ACTION_OBJECT_TYPE, // Never set in maps. TODO: verify the correct ID for this object.
+        OBJ_ACTION_CACTUS = OBJ_CACTUS + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_MOUND = OBJ_MOUND + OBJ_ACTION_OBJECT_TYPE, // Never set in maps
+        OBJ_ACTION_DUNE = OBJ_DUNE + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_LAVAPOOL = OBJ_LAVAPOOL + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ACTION_SHRUB = OBJ_SHRUB + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_ARENA = OBJ_NON_ACTION_ARENA + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_BARROW_MOUNDS = OBJ_NON_ACTION_BARROW_MOUNDS + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_RANDOM_ARTIFACT_TREASURE = OBJ_NON_ACTION_RANDOM_ARTIFACT_TREASURE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_ARTIFACT_MINOR = OBJ_NON_ACTION_RANDOM_ARTIFACT_MINOR + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_RANDOM_ARTIFACT_MAJOR = OBJ_NON_ACTION_RANDOM_ARTIFACT_MAJOR + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_BARRIER = OBJ_NON_ACTION_BARRIER + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_TRAVELLER_TENT = OBJ_NON_ACTION_TRAVELLER_TENT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_EXPANSION_DWELLING = OBJ_NON_ACTION_EXPANSION_DWELLING + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_EXPANSION_OBJECT = OBJ_NON_ACTION_EXPANSION_OBJECT + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_JAIL = OBJ_NON_ACTION_JAIL + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_FIRE_ALTAR = OBJ_NON_ACTION_FIRE_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_AIR_ALTAR = OBJ_NON_ACTION_AIR_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_EARTH_ALTAR = OBJ_NON_ACTION_EARTH_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
+        OBJ_WATER_ALTAR = OBJ_NON_ACTION_WATER_ALTAR + OBJ_ACTION_OBJECT_TYPE // Never set in maps.
+
+        // IMPORTANT!!! Do not use any of unused entries for new objects. Add new entries below following the instruction.
+
+        // This section defines all types of NON-action objects which are not present in the original game.
+        // If the object by nature is an action object name it with prefix OBJ_NON_ACTION_.
+        // Otherwise, name it with prefix OBJ_.
+
+        // This section defines all types of action objects which are not present in the original game.
+        // If the object by nature is an action object name it with prefix OBJ_.
+        // Otherwise, name it with prefix OBJ_ACTON_.
+        // The value of the object must be: non-action object value + OBJ_ACTION_OBJECT_TYPE.
     };
 
     enum ObjectIcnType : uint8_t
@@ -577,7 +593,7 @@ namespace MP2
 
     int getIcnIdFromObjectIcnType( const uint8_t objectIcnType );
 
-    const char * StringObject( const MapObjectType objectType, const int count = 1 );
+    const char * StringObject( MapObjectType objectType, const int count = 1 );
 
     bool isHiddenForPuzzle( const int terrainType, uint8_t tileset, uint8_t index );
 

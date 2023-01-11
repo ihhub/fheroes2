@@ -321,7 +321,7 @@ namespace AI
             AIToPickupResource( hero, objectType, dst_index );
             break;
 
-        case MP2::OBJ_WATERCHEST:
+        case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_TREASURE_CHEST:
             AIToTreasureChest( hero, objectType, dst_index );
             break;
@@ -475,7 +475,6 @@ namespace AI
         case MP2::OBJ_DWARF_COTTAGE:
         case MP2::OBJ_HALFLING_HOLE:
         case MP2::OBJ_PEASANT_HUT:
-        case MP2::OBJ_THATCHED_HUT:
             AIToDwellingJoinMonster( hero, dst_index );
             break;
 
