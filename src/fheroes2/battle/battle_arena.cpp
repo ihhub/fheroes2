@@ -743,9 +743,9 @@ bool Battle::Arena::isPositionReachable( const Position & position, const bool o
     return _battlePathfinder.isPositionReachable( position, onCurrentTurn );
 }
 
-Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
+Battle::Indexes Battle::Arena::getAllAvailableMoves() const
 {
-    return _battlePathfinder.getAllAvailableMoves( moveRange );
+    return _battlePathfinder.getAllAvailableMoves();
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index )

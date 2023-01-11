@@ -51,7 +51,7 @@ namespace Battle
         _unitSpeed = unit.GetSpeed();
 
         _cache.clear();
-        _cache[_pathStart] = { { -1, -1 }, 0 };
+        _cache[_pathStart] = {};
 
         // Flying units can land wherever they can fit
         if ( unit.isFlying() ) {
@@ -75,7 +75,7 @@ namespace Battle
                     continue;
                 }
 
-                _cache.try_emplace( newNodeIdx, _pathStart, 1 );
+                _cache.try_emplace( newNodeIdx, _pathStart, 1, 1 );
             }
 
             return;
@@ -145,12 +145,14 @@ namespace Battle
                     }
 
                     // Turning back is not a movement
-                    const uint32_t movementCost = currentNode._cost + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : movementPenalty );
+                    const uint32_t cost = currentNode._cost + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : movementPenalty );
+                    const uint32_t distance = currentNode._distance + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : 1 );
 
-                    BattleNode & newNode = _cache.try_emplace( newNodeIdx, BattleNodeIndex{ -1, -1 }, 0 ).first->second;
-                    if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > movementCost ) {
+                    BattleNode & newNode = _cache.try_emplace( newNodeIdx ).first->second;
+                    if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
                         newNode._from = currentNodeIdx;
-                        newNode._cost = movementCost;
+                        newNode._cost = cost;
+                        newNode._distance = distance;
 
                         nodesToExplore.push_back( newNodeIdx );
                     }
@@ -182,12 +184,14 @@ namespace Battle
                         continue;
                     }
 
-                    const uint32_t movementCost = currentNode._cost + movementPenalty;
+                    const uint32_t cost = currentNode._cost + movementPenalty;
+                    const uint32_t distance = currentNode._distance + 1;
 
-                    BattleNode & newNode = _cache.try_emplace( newNodeIdx, BattleNodeIndex{ -1, -1 }, 0 ).first->second;
-                    if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > movementCost ) {
+                    BattleNode & newNode = _cache.try_emplace( newNodeIdx ).first->second;
+                    if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
                         newNode._from = currentNodeIdx;
-                        newNode._cost = movementCost;
+                        newNode._cost = cost;
+                        newNode._distance = distance;
 
                         nodesToExplore.push_back( newNodeIdx );
                     }
@@ -228,15 +232,15 @@ namespace Battle
         // MSVC 2017 fails to properly expand the assert() macro without additional parentheses
         assert( ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) );
 
-        return node._cost;
+        return node._distance;
     }
 
-    Indexes BattlePathfinder::getAllAvailableMoves( const uint32_t range ) const
+    Indexes BattlePathfinder::getAllAvailableMoves() const
     {
         std::set<int32_t> boardIndexes;
 
         for ( const auto & [index, node] : _cache ) {
-            if ( index == _pathStart || node._from == BattleNodeIndex{ -1, -1 } || node._cost > range ) {
+            if ( index == _pathStart || node._from == BattleNodeIndex{ -1, -1 } || node._cost > _unitSpeed ) {
                 continue;
             }
 

@@ -50,12 +50,16 @@ namespace Battle
     struct BattleNode final
     {
         BattleNodeIndex _from = { -1, -1 };
+        // The cost of moving to this cell. May differ from _distance due to penalties (e.g. moat penalty).
         uint32_t _cost = 0;
+        // The distance to this cell, measured in the number of cells that needs to be passed to get here.
+        uint32_t _distance = 0;
 
         BattleNode() = default;
-        BattleNode( BattleNodeIndex node, const uint32_t cost )
+        BattleNode( BattleNodeIndex node, const uint32_t cost, const uint32_t distance )
             : _from( std::move( node ) )
             , _cost( cost )
+            , _distance( distance )
         {}
     };
 
@@ -73,14 +77,15 @@ namespace Battle
         void evaluateForUnit( const Unit & unit );
         // Checks whether the given position is reachable, either on the current turn or in principle
         bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const;
-        // Returns the distance to the given position. It's the caller's responsibility to make sure
-        // that this position is reachable before calling this method.
+        // Returns the distance to the given position (i.e. the number of cells that needs to be passed).
+        // It's the caller's responsibility to make sure that this position is reachable before calling
+        // this method.
         uint32_t getDistance( const Position & position ) const;
-        // Builds and returns the path to the given position. If this position is unreachable, then
-        // an empty path is returned.
+        // Builds and returns a path (or its part) to the given position that can be traversed during the
+        // current turn. If this position is unreachable, then an empty path is returned.
         Indexes buildPath( const Position & position ) const;
-        // Returns the indexes of all cells in the given range that can be occupied by the unit's head
-        Indexes getAllAvailableMoves( const uint32_t range ) const;
+        // Returns the indexes of all cells that can be occupied by the unit's head on the current turn
+        Indexes getAllAvailableMoves() const;
 
     private:
         std::unordered_map<BattleNodeIndex, BattleNode, BattleNodeIndexHash> _cache;

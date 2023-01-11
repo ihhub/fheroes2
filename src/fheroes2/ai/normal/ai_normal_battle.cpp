@@ -597,7 +597,7 @@ namespace AI
             }
             else {
                 // Kiting enemy: Search for a safe spot unit can move to
-                target.cell = FindMoveToRetreat( arena.getAllAvailableMoves( currentUnit.GetMoveRange() ), currentUnit, enemies );
+                target.cell = FindMoveToRetreat( arena.getAllAvailableMoves(), currentUnit, enemies );
 
                 if ( target.cell != -1 ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, target cell is " << target.cell )

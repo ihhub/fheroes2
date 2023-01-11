@@ -141,7 +141,7 @@ namespace Battle
 
         uint32_t CalculateMoveDistance( const Position & position ) const;
         bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const;
-        Indexes getAllAvailableMoves( uint32_t moveRange ) const;
+        Indexes getAllAvailableMoves() const;
         Indexes GetPath( const Position & position ) const;
 
         void ApplyAction( Command & );
