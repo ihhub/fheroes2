@@ -562,6 +562,7 @@ namespace AI
         }
 
         _defensiveTactics = enemyArcherRatio < enemyArcherThreshold && ( _defendingCastle || _myShooterStr > _enemyShooterStr ) && !myOverpoweredArmy;
+
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    "Tactic " << _defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio )
     }
@@ -651,6 +652,7 @@ namespace AI
                 if ( highestStrength < attackPriority ) {
                     highestStrength = attackPriority;
                     target.unit = enemy;
+
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set priority on " << enemy->GetName() << " value " << attackPriority )
                 }
             }
@@ -715,10 +717,12 @@ namespace AI
                     // Unit rushes through the moat, step into the moat to get more freedom of action on the next turn
                     else if ( Board::isMoatIndex( path.back(), currentUnit ) ) {
                         target.cell = path.back();
+
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping in the moat at " << target.cell )
                     }
                     else {
                         target.cell = FindNextTurnAttackMove( path, currentUnit, enemies );
+
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping at " << target.cell )
                     }
                 }
@@ -747,6 +751,7 @@ namespace AI
                     target.cell = cellIdx;
                 }
             }
+
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving towards castle walls, target cell is " << target.cell )
         }
 
@@ -802,6 +807,7 @@ namespace AI
                 const Unit * enemy = Board::GetCell( cell )->GetUnit();
                 if ( !enemy ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetAdjacentEnemies returned a cell " << cell << " that does not contain a unit!" )
+
                     continue;
                 }
 
