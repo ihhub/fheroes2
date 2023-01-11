@@ -34,7 +34,7 @@ namespace Battle
 
     using BattleNodeIndex = std::pair<int32_t, int32_t>;
 
-    struct BattleNodeIndexHash
+    struct BattleNodeIndexHash final
     {
         std::size_t operator()( const BattleNodeIndex & index ) const noexcept
         {
