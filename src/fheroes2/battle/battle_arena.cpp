@@ -733,12 +733,6 @@ Battle::Indexes Battle::Arena::GetPath( const Position & position ) const
     return result;
 }
 
-Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t /* indexTo */, uint32_t /* movementRange = 0 */ ) const
-{
-    // TODO: Not implemented yet
-    return {};
-}
-
 uint32_t Battle::Arena::CalculateMoveDistance( const Position & position ) const
 {
     return _battlePathfinder.getDistance( position );

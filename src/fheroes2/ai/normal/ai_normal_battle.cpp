@@ -699,13 +699,16 @@ namespace AI
                 if ( unitPriority > maxMovePriority ) {
                     maxMovePriority = unitPriority;
 
-                    const Indexes & path = arena.CalculateTwoMoveOverlap( move.first, currentUnitMoveRange );
-                    if ( !path.empty() ) {
-                        target.cell = FindNextTurnAttackMove( path, currentUnit, enemies );
-                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping at " << target.cell )
+                    const Position pos = Position::GetPosition( currentUnit, move.first );
+                    assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+
+                    const Indexes path = arena.GetPath( pos );
+                    if ( path.empty() ) {
+                        target.cell = move.first;
                     }
                     else {
-                        target.cell = move.first;
+                        target.cell = FindNextTurnAttackMove( path, currentUnit, enemies );
+                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping at " << target.cell )
                     }
                 }
             }

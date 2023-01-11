@@ -142,7 +142,6 @@ namespace Battle
         uint32_t CalculateMoveDistance( const Position & position ) const;
         bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
-        Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
         Indexes GetPath( const Position & position ) const;
 
         void ApplyAction( Command & );
