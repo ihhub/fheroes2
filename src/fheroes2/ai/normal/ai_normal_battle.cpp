@@ -204,7 +204,14 @@ namespace AI
 
     int32_t getUnitMovementTarget( const Unit & currentUnit, const int32_t idx )
     {
-        const Position pos = Position::GetPosition( currentUnit, idx );
+        // First try to find the position that is reachable on the current turn
+        Position pos = Position::GetReachable( currentUnit, idx );
+
+        // If there is no such position, then use an abstract position that corresponds to the given index
+        if ( pos.GetHead() == nullptr ) {
+            pos = Position::GetPosition( currentUnit, idx );
+        }
+
         assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
         return pos.GetHead()->GetIndex();
