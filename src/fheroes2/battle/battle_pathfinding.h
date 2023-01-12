@@ -73,7 +73,7 @@ namespace Battle
 
         BattlePathfinder & operator=( const BattlePathfinder & ) = delete;
 
-        // Rebuilds the movements graph for the given unit
+        // Rebuilds the graph of available positions for the given unit
         void evaluateForUnit( const Unit & unit );
         // Checks whether the given position is reachable, either on the current turn or in principle
         bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const;

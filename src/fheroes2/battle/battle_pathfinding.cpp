@@ -106,7 +106,8 @@ namespace Battle
         }();
 
         std::vector<BattleNodeIndex> nodesToExplore;
-        nodesToExplore.reserve( ARENASIZE );
+
+        nodesToExplore.reserve( ARENASIZE * 2 );
         nodesToExplore.push_back( _pathStart );
 
         for ( size_t nodesToExploreIdx = 0; nodesToExploreIdx < nodesToExplore.size(); ++nodesToExploreIdx ) {
@@ -250,9 +251,9 @@ namespace Battle
         }
 
         Indexes result;
-        result.reserve( boardIndexes.size() );
 
-        std::for_each( boardIndexes.begin(), boardIndexes.end(), [&result]( const int32_t idx ) { result.push_back( idx ); } );
+        result.reserve( boardIndexes.size() );
+        result.assign( boardIndexes.begin(), boardIndexes.end() );
 
         return result;
     }
