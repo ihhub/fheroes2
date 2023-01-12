@@ -31,6 +31,7 @@
 #include "battle_pathfinding.h"
 #include "battle_troop.h"
 #include "castle.h"
+#include "speed.h"
 
 namespace
 {
@@ -265,6 +266,7 @@ namespace Battle
         const BattleNodeIndex targetNodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
 
         Indexes result;
+        result.reserve( Speed::INSTANT );
 
         BattleNodeIndex nodeIdx = targetNodeIdx;
         for ( auto iter = _cache.find( nodeIdx ); iter != _cache.end(); iter = _cache.find( nodeIdx ) ) {
