@@ -593,7 +593,7 @@ namespace AI
                     }
                 }
                 else {
-                    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetAdjacentEnemies returned a cell " << cell << " that does not contain a unit!" )
+                    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetAdjacentEnemies() returned a cell " << cell << " that does not contain a unit!" )
                 }
             }
 
@@ -697,8 +697,10 @@ namespace AI
                 // move node pair consists of move hex index and distance
                 const std::pair<int, uint32_t> move = findNearestCellNextToUnit( arena, currentUnit, *enemy );
 
-                if ( move.first == -1 ) // Skip unit if no path found
+                // Skip unit if no path found
+                if ( move.first == -1 ) {
                     continue;
+                }
 
                 // Do not chase after faster units that might kite away and avoid engagement
                 const uint32_t distance = ( !enemy->isArchers() && isUnitFaster( *enemy, currentUnit ) ) ? move.second + ARENAW + ARENAH : move.second;
@@ -711,8 +713,10 @@ namespace AI
                     assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
                     const Indexes path = arena.GetPath( pos );
+
+                    // Normally this shouldn't happen
                     if ( path.empty() ) {
-                        target.cell = move.first;
+                        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Arena::GetPath() returned an empty path to cell " << move.first << " for " << currentUnit.GetName() << "!" )
                     }
                     // Unit rushes through the moat, step into the moat to get more freedom of action on the next turn
                     else if ( Board::isMoatIndex( path.back(), currentUnit ) ) {
@@ -806,7 +810,7 @@ namespace AI
             for ( const int cell : adjacentEnemies ) {
                 const Unit * enemy = Board::GetCell( cell )->GetUnit();
                 if ( !enemy ) {
-                    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetAdjacentEnemies returned a cell " << cell << " that does not contain a unit!" )
+                    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetAdjacentEnemies() returned a cell " << cell << " that does not contain a unit!" )
 
                     continue;
                 }
@@ -853,7 +857,7 @@ namespace AI
         const std::vector<Unit *> nearestUnits = Arena::GetBoard()->GetNearestTroops( &currentUnit, {} );
         // Normally this shouldn't happen
         if ( nearestUnits.empty() ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetNearestTroops returned an empty result for " << currentUnit.GetName() << "!" )
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetNearestTroops() returned an empty result for " << currentUnit.GetName() << "!" )
 
             return actions;
         }
