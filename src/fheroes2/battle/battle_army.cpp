@@ -65,16 +65,16 @@ Battle::Units::Units( const Units & units, const bool isRemoveInvalidUnits )
     }
 }
 
-Battle::Units::Units( const Units & units, const Unit * unitToFilter )
+Battle::Units::Units( const Units & units, const Unit * unitToRemove )
 {
     reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
     assign( units.begin(), units.end() );
 
     erase( std::remove_if( begin(), end(),
-                           [unitToFilter]( const Unit * unit ) {
+                           [unitToRemove]( const Unit * unit ) {
                                assert( unit != nullptr );
 
-                               return !unit->isValid() || unit == unitToFilter;
+                               return !unit->isValid() || unit == unitToRemove;
                            } ),
            end() );
 }
