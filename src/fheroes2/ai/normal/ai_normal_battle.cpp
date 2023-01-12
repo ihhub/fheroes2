@@ -163,8 +163,9 @@ namespace AI
 
             for ( const Unit * enemy : enemies ) {
                 // Archers and Flyers are always threatning, skip
-                if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) )
+                if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
                     continue;
+                }
 
                 if ( Board::GetDistance( moveIndex, enemy->GetHeadIndex() ) <= enemy->GetMoveRange() + 1 ) {
                     cellThreatLevel += enemy->GetScoreQuality( currentUnit );
@@ -570,8 +571,10 @@ namespace AI
     Actions BattlePlanner::archerDecision( const Arena & arena, const Unit & currentUnit ) const
     {
         Actions actions;
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
         BattleTargetPair target;
+
+        // Current unit can be under the influence of the Hypnotize spell
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
 
         if ( currentUnit.isHandFighting() ) {
             // Current ranged unit is blocked by the enemy
@@ -672,7 +675,9 @@ namespace AI
     BattleTargetPair BattlePlanner::meleeUnitOffense( const Arena & arena, const Unit & currentUnit ) const
     {
         BattleTargetPair target;
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
+
+        // Current unit can be under the influence of the Hypnotize spell
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
 
         double attackHighestValue = -_enemyArmyStrength;
         double attackPositionValue = -_enemyArmyStrength;
@@ -766,8 +771,9 @@ namespace AI
     {
         BattleTargetPair target;
 
-        const Units friendly( arena.getForce( _myColor ).getUnits(), true );
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
+        const Units friendly( arena.getForce( _myColor ).getUnits(), &currentUnit );
+        // Current unit can be under the influence of the Hypnotize spell
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
 
         const int myHeadIndex = currentUnit.GetHeadIndex();
 
@@ -795,7 +801,7 @@ namespace AI
         // 2. Check if our archer units are under threat - overwrite target and protect
         MeleeAttackOutcome protectOption;
         for ( const Unit * unitToDefend : friendly ) {
-            if ( unitToDefend->GetUID() == currentUnit.GetUID() || !unitToDefend->isArchers() ) {
+            if ( !unitToDefend->isArchers() ) {
                 continue;
             }
 
@@ -854,7 +860,10 @@ namespace AI
 
         Actions actions;
 
-        const std::vector<Unit *> nearestUnits = Arena::GetBoard()->GetNearestTroops( &currentUnit, {} );
+        Board * board = Arena::GetBoard();
+        assert( board != nullptr );
+
+        const std::vector<Unit *> nearestUnits = board->GetNearestTroops( &currentUnit, {} );
         // Normally this shouldn't happen
         if ( nearestUnits.empty() ) {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetNearestTroops() returned an empty result for " << currentUnit.GetName() << "!" )
