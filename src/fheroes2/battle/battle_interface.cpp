@@ -5875,9 +5875,9 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             if ( frame < maxICNFrame ) {
                 _unitOverlaySprite.back().overlaySprite = &fheroes2::AGG::GetICN( icn, frame );
-                _unitOverlaySprite.back().position = CalculateSpellPosition( b, icn, *_unitOverlaySprite.back().overlaySprite );
+                _unitOverlaySprite.back().position = CalculateSpellPosition( unit, icn, *_unitOverlaySprite.back().overlaySprite );
             }
-            RedrawPartialFinish();
+            Redraw();
 
             if ( animation != NONE ) {
                 if ( ( animation == RESURRECT || unit.GetAnimationState() == Monster_Info::WNCE_DOWN ) && unit.isFinishAnimFrame() ) {
@@ -5889,11 +5889,12 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int
                 }
             }
             ++frame;
+            if ( frame == maxICNFrame ) {
+                // Spell animation is finished, so delete the overlay sprite from unit.
+                _unitOverlaySprite.pop_back();
+            }
         }
     }
-
-    // Spell animation is finished, so delete the overlay sprite from unit.
-    _unitOverlaySprite.pop_back();
 
     if ( animation != NONE ) {
         unit.SwitchAnimation( Monster_Info::STATIC );
