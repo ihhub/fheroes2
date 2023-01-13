@@ -286,28 +286,33 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
     return target.GetScoreQuality( attacker );
 }
 
-int Battle::Board::GetDirection( int32_t index1, int32_t index2 )
+int Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )
 {
-    if ( isValidIndex( index1 ) && isValidIndex( index2 ) ) {
-        if ( index1 == index2 )
-            return CENTER;
-        else
-            for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir )
-                if ( isValidDirection( index1, dir ) && index2 == GetIndexDirection( index1, dir ) )
-                    return dir;
+    if ( !isValidIndex( index1 ) || !isValidIndex( index2 ) ) {
+        return UNKNOWN;
+    }
+
+    if ( index1 == index2 ) {
+        return CENTER;
+    }
+
+    for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir ) {
+        if ( isValidDirection( index1, dir ) && index2 == GetIndexDirection( index1, dir ) ) {
+            return dir;
+        }
     }
 
     return UNKNOWN;
 }
 
-bool Battle::Board::isNearIndexes( int32_t index1, int32_t index2 )
+bool Battle::Board::isNearIndexes( const int32_t index1, const int32_t index2 )
 {
     return index1 != index2 && UNKNOWN != GetDirection( index1, index2 );
 }
 
-int Battle::Board::GetReflectDirection( int d )
+int Battle::Board::GetReflectDirection( const int dir )
 {
-    switch ( d ) {
+    switch ( dir ) {
     case TOP_LEFT:
         return BOTTOM_RIGHT;
     case TOP_RIGHT:
@@ -332,75 +337,80 @@ bool Battle::Board::IsLeftDirection( const int32_t startCellId, const int32_t en
     const int startX = startCellId % ARENAW;
     const int endX = endCellId % ARENAW;
 
-    if ( prevLeftDirection )
+    if ( prevLeftDirection ) {
         return endX <= startX;
-    else
-        return endX < startX;
+    }
+
+    return endX < startX;
 }
 
-bool Battle::Board::isNegativeDistance( int32_t index1, int32_t index2 )
+bool Battle::Board::isNegativeDistance( const int32_t index1, const int32_t index2 )
 {
     return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
 }
 
-int Battle::Board::DistanceFromOriginX( int32_t index, bool reflect )
+int Battle::Board::DistanceFromOriginX( const int32_t index, const bool reflect )
 {
     const int xPos = index % ARENAW;
     return std::max( 1, reflect ? ARENAW - xPos - 1 : xPos );
 }
 
-bool Battle::Board::isValidDirection( int32_t index, int dir )
+bool Battle::Board::isValidDirection( const int32_t index, const int dir )
 {
-    if ( isValidIndex( index ) ) {
-        const int32_t x = index % ARENAW;
-        const int32_t y = index / ARENAW;
+    if ( !isValidIndex( index ) ) {
+        return false;
+    }
 
-        switch ( dir ) {
-        case CENTER:
-            return true;
-        case TOP_LEFT:
-            return !( 0 == y || ( 0 == x && ( y % 2 ) ) );
-        case TOP_RIGHT:
-            return !( 0 == y || ( ( ARENAW - 1 ) == x && !( y % 2 ) ) );
-        case LEFT:
-            return !( 0 == x );
-        case RIGHT:
-            return !( ( ARENAW - 1 ) == x );
-        case BOTTOM_LEFT:
-            return !( ( ARENAH - 1 ) == y || ( 0 == x && ( y % 2 ) ) );
-        case BOTTOM_RIGHT:
-            return !( ( ARENAH - 1 ) == y || ( ( ARENAW - 1 ) == x && !( y % 2 ) ) );
-        default:
-            break;
-        }
+    const int32_t x = index % ARENAW;
+    const int32_t y = index / ARENAW;
+
+    switch ( dir ) {
+    case CENTER:
+        return true;
+    case TOP_LEFT:
+        return !( 0 == y || ( 0 == x && ( y % 2 ) ) );
+    case TOP_RIGHT:
+        return !( 0 == y || ( ( ARENAW - 1 ) == x && !( y % 2 ) ) );
+    case LEFT:
+        return !( 0 == x );
+    case RIGHT:
+        return !( ( ARENAW - 1 ) == x );
+    case BOTTOM_LEFT:
+        return !( ( ARENAH - 1 ) == y || ( 0 == x && ( y % 2 ) ) );
+    case BOTTOM_RIGHT:
+        return !( ( ARENAH - 1 ) == y || ( ( ARENAW - 1 ) == x && !( y % 2 ) ) );
+    default:
+        break;
     }
 
     return false;
 }
 
-int32_t Battle::Board::GetIndexDirection( int32_t index, int dir )
+int32_t Battle::Board::GetIndexDirection( const int32_t index, const int dir )
 {
-    if ( isValidIndex( index ) ) {
-        const int32_t y = index / ARENAW;
+    if ( !isValidIndex( index ) ) {
+        return -1;
+    }
 
-        switch ( dir ) {
-        case CENTER:
-            return index;
-        case TOP_LEFT:
-            return index - ( ( y % 2 ) ? ARENAW + 1 : ARENAW );
-        case TOP_RIGHT:
-            return index - ( ( y % 2 ) ? ARENAW : ARENAW - 1 );
-        case LEFT:
-            return index - 1;
-        case RIGHT:
-            return index + 1;
-        case BOTTOM_LEFT:
-            return index + ( ( y % 2 ) ? ARENAW - 1 : ARENAW );
-        case BOTTOM_RIGHT:
-            return index + ( ( y % 2 ) ? ARENAW : ARENAW + 1 );
-        default:
-            break;
-        }
+    const int32_t y = index / ARENAW;
+
+    switch ( dir ) {
+    case CENTER:
+        return index;
+    case TOP_LEFT:
+        return index - ( ( y % 2 ) ? ARENAW + 1 : ARENAW );
+    case TOP_RIGHT:
+        return index - ( ( y % 2 ) ? ARENAW : ARENAW - 1 );
+    case LEFT:
+        return index - 1;
+    case RIGHT:
+        return index + 1;
+    case BOTTOM_LEFT:
+        return index + ( ( y % 2 ) ? ARENAW - 1 : ARENAW );
+    case BOTTOM_RIGHT:
+        return index + ( ( y % 2 ) ? ARENAW : ARENAW + 1 );
+    default:
+        break;
     }
 
     return -1;
@@ -417,32 +427,32 @@ int32_t Battle::Board::GetIndexAbsPosition( const fheroes2::Point & pt ) const
     return it != end() ? ( *it ).GetIndex() : -1;
 }
 
-bool Battle::Board::isValidIndex( int32_t index )
+bool Battle::Board::isValidIndex( const int32_t index )
 {
     return 0 <= index && index < ARENASIZE;
 }
 
-bool Battle::Board::isCastleIndex( int32_t index )
+bool Battle::Board::isCastleIndex( const int32_t index )
 {
     return ( ( 8 < index && index <= 10 ) || ( 19 < index && index <= 21 ) || ( 29 < index && index <= 32 ) || ( 40 < index && index <= 43 )
              || ( 50 < index && index <= 54 ) || ( 62 < index && index <= 65 ) || ( 73 < index && index <= 76 ) || ( 85 < index && index <= 87 )
              || ( 96 < index && index <= 98 ) );
 }
 
-bool Battle::Board::isOutOfWallsIndex( int32_t index )
+bool Battle::Board::isOutOfWallsIndex( const int32_t index )
 {
     return ( ( index <= 8 ) || ( 11 <= index && index <= 19 ) || ( 22 <= index && index <= 29 ) || ( 33 <= index && index <= 40 ) || ( 44 <= index && index <= 50 )
              || ( 55 <= index && index <= 62 ) || ( 66 <= index && index <= 73 ) || ( 77 <= index && index <= 85 ) || ( 88 <= index && index <= 96 ) );
 }
 
-bool Battle::Board::isBridgeIndex( int32_t index, const Unit & b )
+bool Battle::Board::isBridgeIndex( const int32_t index, const Unit & unit )
 {
     const Bridge * bridge = Arena::GetBridge();
 
-    return ( index == 49 && !b.isFlying() && bridge && bridge->isPassable( b ) ) || index == 50;
+    return ( index == 49 && !unit.isFlying() && bridge && bridge->isPassable( unit ) ) || index == 50;
 }
 
-bool Battle::Board::isMoatIndex( int32_t index, const Unit & b )
+bool Battle::Board::isMoatIndex( const int32_t index, const Unit & unit )
 {
     switch ( index ) {
     case 7:
@@ -456,7 +466,7 @@ bool Battle::Board::isMoatIndex( int32_t index, const Unit & b )
         return true;
     case 49: {
         const Bridge * bridge = Arena::GetBridge();
-        return b.isFlying() || bridge == nullptr || !bridge->isPassable( b );
+        return unit.isFlying() || bridge == nullptr || !bridge->isPassable( unit );
     }
 
     default:
@@ -708,124 +718,194 @@ void Battle::Board::SetCovrObjects( int icn )
     }
 }
 
-Battle::Cell * Battle::Board::GetCell( int32_t position, int dir )
+Battle::Cell * Battle::Board::GetCell( const int32_t position, const int dir /* = CENTER */ )
 {
-    if ( isValidIndex( position ) && dir != UNKNOWN ) {
-        Board * board = Arena::GetBoard();
-        if ( dir == CENTER ) {
-            return &board->at( position );
-        }
-        if ( isValidDirection( position, dir ) ) {
-            return &board->at( GetIndexDirection( position, dir ) );
-        }
+    if ( !isValidDirection( position, dir ) ) {
+        return nullptr;
     }
 
-    return nullptr;
+    Board * board = Arena::GetBoard();
+    assert( board != nullptr );
+
+    const int32_t idx = GetIndexDirection( position, dir );
+    assert( isValidIndex( idx ) );
+
+    return &board->at( idx );
 }
 
-Battle::Indexes Battle::Board::GetMoveWideIndexes( int32_t center, bool reflect )
+Battle::Indexes Battle::Board::GetMoveWideIndexes( const int32_t head, const bool reflect )
 {
+    if ( !isValidIndex( head ) ) {
+        return {};
+    }
+
     Indexes result;
+    result.reserve( 4 );
 
-    if ( isValidIndex( center ) ) {
-        result.reserve( 4 );
+    if ( isValidDirection( head, LEFT ) ) {
+        result.push_back( GetIndexDirection( head, LEFT ) );
+    }
+    if ( isValidDirection( head, RIGHT ) ) {
+        result.push_back( GetIndexDirection( head, RIGHT ) );
+    }
 
-        if ( reflect ) {
-            if ( isValidDirection( center, LEFT ) )
-                result.push_back( GetIndexDirection( center, LEFT ) );
-            if ( isValidDirection( center, RIGHT ) )
-                result.push_back( GetIndexDirection( center, RIGHT ) );
-            if ( isValidDirection( center, TOP_LEFT ) )
-                result.push_back( GetIndexDirection( center, TOP_LEFT ) );
-            if ( isValidDirection( center, BOTTOM_LEFT ) )
-                result.push_back( GetIndexDirection( center, BOTTOM_LEFT ) );
+    if ( reflect ) {
+        if ( isValidDirection( head, TOP_LEFT ) ) {
+            result.push_back( GetIndexDirection( head, TOP_LEFT ) );
         }
-        else {
-            if ( isValidDirection( center, LEFT ) )
-                result.push_back( GetIndexDirection( center, LEFT ) );
-            if ( isValidDirection( center, RIGHT ) )
-                result.push_back( GetIndexDirection( center, RIGHT ) );
-            if ( isValidDirection( center, TOP_RIGHT ) )
-                result.push_back( GetIndexDirection( center, TOP_RIGHT ) );
-            if ( isValidDirection( center, BOTTOM_RIGHT ) )
-                result.push_back( GetIndexDirection( center, BOTTOM_RIGHT ) );
+        if ( isValidDirection( head, BOTTOM_LEFT ) ) {
+            result.push_back( GetIndexDirection( head, BOTTOM_LEFT ) );
         }
     }
-    return result;
-}
-
-Battle::Indexes Battle::Board::GetAroundIndexes( int32_t center, int32_t ignore )
-{
-    Indexes result;
-
-    if ( isValidIndex( center ) ) {
-        result.reserve( 12 );
-
-        for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir )
-            if ( isValidDirection( center, dir ) && GetIndexDirection( center, dir ) != ignore )
-                result.push_back( GetIndexDirection( center, dir ) );
+    else {
+        if ( isValidDirection( head, TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( head, TOP_RIGHT ) );
+        }
+        if ( isValidDirection( head, BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( head, BOTTOM_RIGHT ) );
+        }
     }
 
     return result;
 }
 
-Battle::Indexes Battle::Board::GetAroundIndexes( const Unit & b )
+Battle::Indexes Battle::Board::GetAroundIndexes( const int32_t center )
 {
-    return GetAroundIndexes( b.GetPosition() );
+    if ( !isValidIndex( center ) ) {
+        return {};
+    }
+
+    Indexes result;
+    result.reserve( 6 );
+
+    for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir ) {
+        if ( !isValidDirection( center, dir ) ) {
+            continue;
+        }
+
+        result.push_back( GetIndexDirection( center, dir ) );
+    }
+
+    return result;
+}
+
+Battle::Indexes Battle::Board::GetAroundIndexes( const Unit & unit )
+{
+    return GetAroundIndexes( unit.GetPosition() );
 }
 
 Battle::Indexes Battle::Board::GetAroundIndexes( const Position & position )
 {
-    const int headIdx = position.GetHead()->GetIndex();
-
-    if ( position.GetTail() ) {
-        const int tailIdx = position.GetTail()->GetIndex();
-
-        Indexes around = GetAroundIndexes( headIdx, tailIdx );
-        const Indexes & tail = GetAroundIndexes( tailIdx, headIdx );
-        around.insert( around.end(), tail.begin(), tail.end() );
-
-        std::sort( around.begin(), around.end() );
-        around.erase( std::unique( around.begin(), around.end() ), around.end() );
-
-        return around;
+    if ( position.GetHead() == nullptr ) {
+        return {};
     }
 
-    return GetAroundIndexes( headIdx );
+    const int32_t headIdx = position.GetHead()->GetIndex();
+
+    if ( position.GetTail() == nullptr ) {
+        return GetAroundIndexes( headIdx );
+    }
+
+    const int32_t tailIdx = position.GetTail()->GetIndex();
+
+    if ( !isValidIndex( headIdx ) || !isValidIndex( tailIdx ) ) {
+        return {};
+    }
+
+    Indexes result;
+    result.reserve( 8 );
+
+    // Traversing cells in a clockwise direction
+    if ( headIdx > tailIdx ) {
+        if ( isValidDirection( tailIdx, TOP_LEFT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, TOP_LEFT ) );
+        }
+        if ( isValidDirection( tailIdx, TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, TOP_RIGHT ) );
+        }
+        if ( isValidDirection( headIdx, TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, TOP_RIGHT ) );
+        }
+        if ( isValidDirection( headIdx, RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, RIGHT ) );
+        }
+        if ( isValidDirection( headIdx, BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, BOTTOM_RIGHT ) );
+        }
+        if ( isValidDirection( tailIdx, BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, BOTTOM_RIGHT ) );
+        }
+        if ( isValidDirection( tailIdx, BOTTOM_LEFT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, BOTTOM_LEFT ) );
+        }
+        if ( isValidDirection( tailIdx, LEFT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, LEFT ) );
+        }
+    }
+    else if ( headIdx < tailIdx ) {
+        if ( isValidDirection( headIdx, TOP_LEFT ) ) {
+            result.push_back( GetIndexDirection( headIdx, TOP_LEFT ) );
+        }
+        if ( isValidDirection( headIdx, TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, TOP_RIGHT ) );
+        }
+        if ( isValidDirection( tailIdx, TOP_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, TOP_RIGHT ) );
+        }
+        if ( isValidDirection( tailIdx, RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, RIGHT ) );
+        }
+        if ( isValidDirection( tailIdx, BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( tailIdx, BOTTOM_RIGHT ) );
+        }
+        if ( isValidDirection( headIdx, BOTTOM_RIGHT ) ) {
+            result.push_back( GetIndexDirection( headIdx, BOTTOM_RIGHT ) );
+        }
+        if ( isValidDirection( headIdx, BOTTOM_LEFT ) ) {
+            result.push_back( GetIndexDirection( headIdx, BOTTOM_LEFT ) );
+        }
+        if ( isValidDirection( headIdx, LEFT ) ) {
+            result.push_back( GetIndexDirection( headIdx, LEFT ) );
+        }
+    }
+
+    return result;
 }
 
-Battle::Indexes Battle::Board::GetDistanceIndexes( int32_t center, uint32_t radius )
+Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const uint32_t radius )
 {
+    if ( !isValidIndex( center ) ) {
+        return {};
+    }
+
+    const int32_t centerX = center % ARENAW;
+    const int32_t centerY = center / ARENAW;
+
+    // Axial coordinates
+    const int32_t centerQ = centerX - ( centerY + centerY % 2 ) / 2;
+    const int32_t centerR = centerY;
+
+    const int32_t intRadius = radius;
+
     Indexes result;
 
-    if ( isValidIndex( center ) ) {
-        std::set<int32_t> st;
-        Indexes abroad;
+    for ( int32_t dq = -intRadius; dq <= intRadius; ++dq ) {
+        for ( int32_t dr = std::max( -intRadius, -intRadius - dq ); dr <= std::min( intRadius, intRadius - dq ); ++dr ) {
+            const int32_t q = centerQ + dq;
+            const int32_t r = centerR + dr;
 
-        st.insert( center );
-        abroad.push_back( center );
+            const int32_t x = q + ( r + r % 2 ) / 2;
+            const int32_t y = r;
 
-        while ( !abroad.empty() && radius ) {
-            std::set<int32_t> tm = st;
-
-            for ( Indexes::const_iterator it = abroad.begin(); it != abroad.end(); ++it ) {
-                const Indexes around = GetAroundIndexes( *it );
-                tm.insert( around.begin(), around.end() );
+            if ( x < 0 || x >= ARENAW || y < 0 || y >= ARENAH ) {
+                continue;
             }
 
-            abroad.resize( tm.size() );
+            const int32_t idx = y * ARENAW + x;
+            assert( isValidIndex( idx ) );
 
-            Indexes::iterator abroad_end = std::set_difference( tm.begin(), tm.end(), st.begin(), st.end(), abroad.begin() );
-
-            abroad.resize( std::distance( abroad.begin(), abroad_end ) );
-
-            st.swap( tm );
-            --radius;
+            result.push_back( idx );
         }
-
-        st.erase( center );
-        result.reserve( st.size() );
-        std::copy( st.begin(), st.end(), std::back_inserter( result ) );
     }
 
     return result;

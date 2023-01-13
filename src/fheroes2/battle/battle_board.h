@@ -80,29 +80,29 @@ namespace Battle
 
         static std::string GetMoatInfo();
 
-        static Cell * GetCell( int32_t position, int dir = CENTER );
-        static bool isNearIndexes( int32_t, int32_t );
-        static bool isValidIndex( int32_t );
-        static bool isCastleIndex( int32_t );
-        static bool isMoatIndex( int32_t index, const Unit & b );
-        static bool isBridgeIndex( int32_t index, const Unit & b );
-        static bool isOutOfWallsIndex( int32_t );
+        static Cell * GetCell( const int32_t position, const int dir = CENTER );
+        static bool isNearIndexes( const int32_t index1, const int32_t index2 );
+        static bool isValidIndex( const int32_t index );
+        static bool isCastleIndex( const int32_t index );
+        static bool isMoatIndex( const int32_t index, const Unit & unit );
+        static bool isBridgeIndex( const int32_t index, const Unit & unit );
+        static bool isOutOfWallsIndex( const int32_t index );
         static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );
-        static bool isNegativeDistance( int32_t index1, int32_t index2 );
-        static int DistanceFromOriginX( int32_t index, bool reflect );
-        static int GetReflectDirection( int );
-        static int GetDirection( int32_t, int32_t );
+        static bool isNegativeDistance( const int32_t index1, const int32_t index2 );
+        static int DistanceFromOriginX( const int32_t index, const bool reflect );
+        static int GetReflectDirection( const int dir );
+        static int GetDirection( const int32_t index1, const int32_t index2 );
         static int32_t DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell );
         static int32_t OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from );
         static int32_t OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from );
         static uint32_t GetDistance( int32_t, int32_t );
-        static bool isValidDirection( int32_t, int );
-        static int32_t GetIndexDirection( int32_t, int );
-        static Indexes GetDistanceIndexes( int32_t, uint32_t );
-        static Indexes GetAroundIndexes( int32_t center, int32_t ignore = -1 );
+        static bool isValidDirection( const int32_t index, const int dir );
+        static int32_t GetIndexDirection( const int32_t index, const int dir );
+        static Indexes GetDistanceIndexes( const int32_t center, const uint32_t radius );
+        static Indexes GetAroundIndexes( const int32_t center );
         static Indexes GetAroundIndexes( const Unit & unit );
         static Indexes GetAroundIndexes( const Position & position );
-        static Indexes GetMoveWideIndexes( int32_t, bool reflect );
+        static Indexes GetMoveWideIndexes( const int32_t head, const bool reflect );
         static bool isValidMirrorImageIndex( const int32_t index, const Unit * unit );
 
         // Checks that the current unit (to which the current pathfinder graph relates) is able (in principle)
