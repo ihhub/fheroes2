@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-10 05:45+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -665,6 +665,13 @@ msgid "View %{monster} info"
 msgstr "Дізнатися про %{monster}"
 
 #, fuzzy
+msgid "Fly %{monster} here"
+msgstr "%{monster} летітиме сюди"
+
+msgid "Move %{monster} here"
+msgstr ""
+
+#, fuzzy
 msgid "Shoot %{monster}"
 msgstr "Вистрілити у %{monster}"
 
@@ -678,13 +685,6 @@ msgstr[2] "(Залишилося %{count} пострілів)"
 #, fuzzy
 msgid "Attack %{monster}"
 msgstr "Атакувати %{monster}"
-
-#, fuzzy
-msgid "Fly %{monster} here"
-msgstr "%{monster} летітиме сюди"
-
-msgid "Move %{monster} here"
-msgstr ""
 
 msgid "Turn %{turn}"
 msgstr ""
@@ -6803,6 +6803,14 @@ msgid "Peasant Hut"
 msgstr "Селянська хата"
 
 #, fuzzy
+msgid "Stables"
+msgstr "Стайні"
+
+#, fuzzy
+msgid "Alchemist's Tower"
+msgstr "Вежа Алхіміка"
+
+#, fuzzy
 msgid "Event"
 msgstr "Подія"
 
@@ -6874,6 +6882,10 @@ msgid "Wagon Camp"
 msgstr "Вагонний табір"
 
 #, fuzzy
+msgid "Hut of the Magi"
+msgstr "Хатина волхвів"
+
+#, fuzzy
 msgid "Whirlpool"
 msgstr "Водоверть"
 
@@ -6887,6 +6899,10 @@ msgstr[2] "Вітряки"
 #, fuzzy
 msgid "Artifact"
 msgstr "Артефакт"
+
+#, fuzzy
+msgid "Mermaid"
+msgstr "Русалка"
 
 #, fuzzy
 msgid "Boat"
@@ -6917,6 +6933,10 @@ msgid "Random Castle"
 msgstr "Випадковий замок"
 
 #, fuzzy
+msgid "Eye of the Magi"
+msgstr "Око волхвів"
+
+#, fuzzy
 msgid "Random Monster - weak"
 msgstr "Випадкова слаба потвора"
 
@@ -6935,6 +6955,9 @@ msgstr "Випадкова велична потвора"
 #, fuzzy
 msgid "Nothing Special"
 msgstr "Нічого особливого"
+
+msgid "Mossy Rock"
+msgstr ""
 
 #, fuzzy
 msgid "Watch Tower"
@@ -6959,6 +6982,10 @@ msgstr "Форт"
 #, fuzzy
 msgid "Abandoned Mine"
 msgstr "Штольня"
+
+#, fuzzy
+msgid "Sirens"
+msgstr "Сирени"
 
 #, fuzzy
 msgid "Standing Stones"
@@ -7080,6 +7107,10 @@ msgid "Freeman's Foundry"
 msgstr "Ливарня"
 
 #, fuzzy
+msgid "Reefs"
+msgstr "Рифи"
+
+#, fuzzy
 msgid "Trees"
 msgstr "Дерева"
 
@@ -7144,20 +7175,20 @@ msgid "Barrow Mounds"
 msgstr "Могильні кургани"
 
 #, fuzzy
-msgid "Mermaid"
-msgstr "Русалка"
+msgid "Random Artifact - Treasure"
+msgstr "Випадковий артефакт-скарб"
 
 #, fuzzy
-msgid "Sirens"
-msgstr "Сирени"
+msgid "Random Artifact - Minor"
+msgstr "Випадковий малий артефакт"
 
 #, fuzzy
-msgid "Hut of the Magi"
-msgstr "Хатина волхвів"
+msgid "Random Artifact - Major"
+msgstr "Випадковий великий артефакт"
 
 #, fuzzy
-msgid "Eye of the Magi"
-msgstr "Око волхвів"
+msgid "Barrier"
+msgstr "Бар'єр"
 
 #, fuzzy
 msgid "Traveller's Tent"
@@ -7182,34 +7213,6 @@ msgstr "Вівтар призову землі"
 #, fuzzy
 msgid "Water Summoning Altar"
 msgstr "Вівтар призову води"
-
-#, fuzzy
-msgid "Reefs"
-msgstr "Рифи"
-
-#, fuzzy
-msgid "Alchemist's Tower"
-msgstr "Вежа Алхіміка"
-
-#, fuzzy
-msgid "Stables"
-msgstr "Стайні"
-
-#, fuzzy
-msgid "Random Artifact - Treasure"
-msgstr "Випадковий артефакт-скарб"
-
-#, fuzzy
-msgid "Random Artifact - Minor"
-msgstr "Випадковий малий артефакт"
-
-#, fuzzy
-msgid "Random Artifact - Major"
-msgstr "Випадковий великий артефакт"
-
-#, fuzzy
-msgid "Barrier"
-msgstr "Бар'єр"
 
 #, fuzzy
 msgid "Unknown Monster"

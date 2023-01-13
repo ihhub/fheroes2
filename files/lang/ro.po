@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-10 05:45+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -598,6 +598,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Vezi %{monster} info"
 
+msgid "Fly %{monster} here"
+msgstr "Zboară %{monster} aici"
+
+msgid "Move %{monster} here"
+msgstr "Mută %{monster} aici"
+
 msgid "Shoot %{monster}"
 msgstr "Trage în %{monster}"
 
@@ -609,12 +615,6 @@ msgstr[2] "(%{count} lovituri rămase)"
 
 msgid "Attack %{monster}"
 msgstr "Atacă %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "Zboară %{monster} aici"
-
-msgid "Move %{monster} here"
-msgstr "Mută %{monster} aici"
 
 msgid "Turn %{turn}"
 msgstr "Runda %{turn}"
@@ -6264,6 +6264,12 @@ msgstr ""
 msgid "Peasant Hut"
 msgstr ""
 
+msgid "Stables"
+msgstr ""
+
+msgid "Alchemist's Tower"
+msgstr ""
+
 msgid "Event"
 msgstr ""
 
@@ -6318,6 +6324,9 @@ msgstr ""
 msgid "Wagon Camp"
 msgstr ""
 
+msgid "Hut of the Magi"
+msgstr ""
+
 msgid "Whirlpool"
 msgstr ""
 
@@ -6328,6 +6337,9 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Artifact"
+msgstr ""
+
+msgid "Mermaid"
 msgstr ""
 
 msgid "Boat"
@@ -6351,6 +6363,9 @@ msgstr ""
 msgid "Random Castle"
 msgstr ""
 
+msgid "Eye of the Magi"
+msgstr ""
+
 msgid "Random Monster - weak"
 msgstr ""
 
@@ -6364,6 +6379,9 @@ msgid "Random Monster - very strong"
 msgstr ""
 
 msgid "Nothing Special"
+msgstr ""
+
+msgid "Mossy Rock"
 msgstr ""
 
 msgid "Watch Tower"
@@ -6382,6 +6400,9 @@ msgid "Fort"
 msgstr ""
 
 msgid "Abandoned Mine"
+msgstr ""
+
+msgid "Sirens"
 msgstr ""
 
 msgid "Standing Stones"
@@ -6474,6 +6495,9 @@ msgstr ""
 msgid "Freeman's Foundry"
 msgstr ""
 
+msgid "Reefs"
+msgstr ""
+
 msgid "Trees"
 msgstr ""
 
@@ -6522,16 +6546,16 @@ msgstr ""
 msgid "Barrow Mounds"
 msgstr ""
 
-msgid "Mermaid"
+msgid "Random Artifact - Treasure"
 msgstr ""
 
-msgid "Sirens"
+msgid "Random Artifact - Minor"
 msgstr ""
 
-msgid "Hut of the Magi"
+msgid "Random Artifact - Major"
 msgstr ""
 
-msgid "Eye of the Magi"
+msgid "Barrier"
 msgstr ""
 
 msgid "Traveller's Tent"
@@ -6550,27 +6574,6 @@ msgid "Earth Summoning Altar"
 msgstr ""
 
 msgid "Water Summoning Altar"
-msgstr ""
-
-msgid "Reefs"
-msgstr ""
-
-msgid "Alchemist's Tower"
-msgstr ""
-
-msgid "Stables"
-msgstr ""
-
-msgid "Random Artifact - Treasure"
-msgstr ""
-
-msgid "Random Artifact - Minor"
-msgstr ""
-
-msgid "Random Artifact - Major"
-msgstr ""
-
-msgid "Barrier"
 msgstr ""
 
 msgid "Unknown Monster"

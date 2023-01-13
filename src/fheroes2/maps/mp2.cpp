@@ -33,6 +33,42 @@
 #include "settings.h"
 #include "translations.h"
 
+namespace
+{
+    bool isObjectCanBeAction( const MP2::MapObjectType objectType )
+    {
+        // This is a list of all objects which cannot be an action object.
+        switch ( objectType ) {
+        case MP2::OBJ_NONE:
+        case MP2::OBJ_COAST:
+        case MP2::OBJ_NOTHING_SPECIAL:
+        case MP2::OBJ_MOSSY_ROCK:
+        case MP2::OBJ_TAR_PIT:
+        case MP2::OBJ_REEFS:
+        case MP2::OBJ_TREES:
+        case MP2::OBJ_MOUNTAINS:
+        case MP2::OBJ_VOLCANO:
+        case MP2::OBJ_FLOWERS:
+        case MP2::OBJ_ROCK:
+        case MP2::OBJ_WATER_LAKE:
+        case MP2::OBJ_MANDRAKE:
+        case MP2::OBJ_DEAD_TREE:
+        case MP2::OBJ_STUMP:
+        case MP2::OBJ_CRATER:
+        case MP2::OBJ_CACTUS:
+        case MP2::OBJ_MOUND:
+        case MP2::OBJ_DUNE:
+        case MP2::OBJ_LAVAPOOL:
+        case MP2::OBJ_SHRUB:
+            return false;
+        default:
+            break;
+        }
+
+        return true;
+    }
+}
+
 int MP2::GetICNObject( const uint8_t tileset )
 {
     // First 2 bits are used for flags like animation.
@@ -191,304 +227,211 @@ bool MP2::isHiddenForPuzzle( const int terrainType, uint8_t tileset, uint8_t ind
     return isDiggingHoleSprite( terrainType, tileset, index );
 }
 
-const char * MP2::StringObject( const MapObjectType objectType, const int count )
+const char * MP2::StringObject( MapObjectType objectType, const int count )
 {
+    if ( ( objectType & OBJ_ACTION_OBJECT_TYPE ) == OBJ_ACTION_OBJECT_TYPE ) {
+        objectType = static_cast<MapObjectType>( objectType & ~OBJ_ACTION_OBJECT_TYPE );
+    }
+
     switch ( objectType ) {
     case OBJ_NONE:
         return _( "No object" );
     case OBJ_NON_ACTION_ALCHEMIST_LAB:
-    case OBJ_ALCHEMIST_LAB:
         return _( "Alchemist Lab" );
     case OBJ_NON_ACTION_SIGN:
-    case OBJ_SIGN:
         return _( "Sign" );
     case OBJ_NON_ACTION_BUOY:
-    case OBJ_BUOY:
         return _( "Buoy" );
     case OBJ_NON_ACTION_SKELETON:
-    case OBJ_SKELETON:
         return _( "Skeleton" );
     case OBJ_NON_ACTION_DAEMON_CAVE:
-    case OBJ_DAEMON_CAVE:
         return _( "Daemon Cave" );
     case OBJ_NON_ACTION_TREASURE_CHEST:
-    case OBJ_TREASURE_CHEST:
         return _( "Treasure Chest" );
     case OBJ_NON_ACTION_FAERIE_RING:
-    case OBJ_FAERIE_RING:
         return _( "Faerie Ring" );
     case OBJ_NON_ACTION_CAMPFIRE:
-    case OBJ_CAMPFIRE:
         return _( "Campfire" );
     case OBJ_NON_ACTION_FOUNTAIN:
-    case OBJ_FOUNTAIN:
         return _( "Fountain" );
     case OBJ_NON_ACTION_GAZEBO:
-    case OBJ_GAZEBO:
         return _( "Gazebo" );
     case OBJ_NON_ACTION_GENIE_LAMP:
-    case OBJ_GENIE_LAMP:
         return _( "Genie Lamp" );
     case OBJ_NON_ACTION_GRAVEYARD:
-    case OBJ_GRAVEYARD:
         return _( "Graveyard" );
     case OBJ_NON_ACTION_ARCHER_HOUSE:
-    case OBJ_ARCHER_HOUSE:
         return _( "Archer's House" );
     case OBJ_NON_ACTION_GOBLIN_HUT:
-    case OBJ_GOBLIN_HUT:
         return _( "Goblin Hut" );
     case OBJ_NON_ACTION_DWARF_COTTAGE:
-    case OBJ_DWARF_COTTAGE:
         return _( "Dwarf Cottage" );
     case OBJ_NON_ACTION_PEASANT_HUT:
-    case OBJ_PEASANT_HUT:
         return _( "Peasant Hut" );
-    case OBJ_NON_ACTION_UNUSED_17:
-    case OBJ_UNUSED_17:
-        return "Log Cabin";
-    case OBJ_NON_ACTION_UNUSED_18:
-    case OBJ_UNUSED_18:
-        return "Road";
+    case OBJ_NON_ACTION_STABLES:
+        return _( "Stables" );
+    case OBJ_NON_ACTION_ALCHEMIST_TOWER:
+        return _( "Alchemist's Tower" );
     case OBJ_NON_ACTION_EVENT:
-    case OBJ_EVENT:
         return _( "Event" );
     case OBJ_NON_ACTION_DRAGON_CITY:
-    case OBJ_DRAGON_CITY:
         return _( "Dragon City" );
     case OBJ_NON_ACTION_LIGHTHOUSE:
-    case OBJ_LIGHTHOUSE:
         return _( "Lighthouse" );
     case OBJ_NON_ACTION_WATER_WHEEL:
-    case OBJ_WATER_WHEEL:
         return _n( "Water Wheel", "Water Wheels", count );
     case OBJ_NON_ACTION_MINES:
-    case OBJ_MINES:
         return _( "Mines" );
     case OBJ_NON_ACTION_MONSTER:
-    case OBJ_MONSTER:
         return _( "Monster" );
     case OBJ_NON_ACTION_OBELISK:
-    case OBJ_OBELISK:
         return _( "Obelisk" );
     case OBJ_NON_ACTION_OASIS:
-    case OBJ_OASIS:
         return _( "Oasis" );
     case OBJ_NON_ACTION_RESOURCE:
-    case OBJ_RESOURCE:
         return _( "Resource" );
     case OBJ_COAST:
-    case OBJ_ACTION_COAST:
         return _( "Beach" );
     case OBJ_NON_ACTION_SAWMILL:
-    case OBJ_SAWMILL:
         return _( "Sawmill" );
     case OBJ_NON_ACTION_ORACLE:
-    case OBJ_ORACLE:
         return _( "Oracle" );
     case OBJ_NON_ACTION_SHRINE_FIRST_CIRCLE:
-    case OBJ_SHRINE_FIRST_CIRCLE:
         return _( "Shrine of the First Circle" );
     case OBJ_NON_ACTION_SHIPWRECK:
-    case OBJ_SHIPWRECK:
         return _( "Shipwreck" );
-    case OBJ_NON_ACTION_UNUSED_33:
-    case OBJ_UNUSED_33:
+    case OBJ_NON_ACTION_SEA_CHEST:
         return _( "Sea Chest" );
     case OBJ_NON_ACTION_DESERT_TENT:
-    case OBJ_DESERT_TENT:
         return _( "Desert Tent" );
     case OBJ_NON_ACTION_CASTLE:
-    case OBJ_CASTLE:
         return _( "Castle" );
     case OBJ_NON_ACTION_STONE_LITHS:
-    case OBJ_STONE_LITHS:
         return _( "Stone Liths" );
     case OBJ_NON_ACTION_WAGON_CAMP:
-    case OBJ_WAGON_CAMP:
         return _( "Wagon Camp" );
-    case OBJ_NON_ACTION_UNUSED_38:
-    case OBJ_UNUSED_38:
-        return "Well";
+    case OBJ_NON_ACTION_HUT_OF_MAGI:
+        return _( "Hut of the Magi" );
     case OBJ_NON_ACTION_WHIRLPOOL:
-    case OBJ_WHIRLPOOL:
         return _( "Whirlpool" );
     case OBJ_NON_ACTION_WINDMILL:
-    case OBJ_WINDMILL:
         return _n( "Windmill", "Windmills", count );
     case OBJ_NON_ACTION_ARTIFACT:
-    case OBJ_ARTIFACT:
         return _( "Artifact" );
-    case OBJ_NON_ACTION_UNUSED_42:
-    case OBJ_UNUSED_42:
-        return "Hero";
+    case OBJ_NON_ACTION_MERMAID:
+        return _( "Mermaid" );
     case OBJ_NON_ACTION_BOAT:
-    case OBJ_BOAT:
         return _( "Boat" );
     case OBJ_NON_ACTION_RANDOM_ULTIMATE_ARTIFACT:
-    case OBJ_RANDOM_ULTIMATE_ARTIFACT:
         return _( "Random Ultimate Artifact" );
     case OBJ_NON_ACTION_RANDOM_ARTIFACT:
-    case OBJ_RANDOM_ARTIFACT:
         return _( "Random Artifact" );
     case OBJ_NON_ACTION_RANDOM_RESOURCE:
-    case OBJ_RANDOM_RESOURCE:
         return _( "Random Resource" );
     case OBJ_NON_ACTION_RANDOM_MONSTER:
-    case OBJ_RANDOM_MONSTER:
         return _( "Random Monster" );
     case OBJ_NON_ACTION_RANDOM_TOWN:
-    case OBJ_RANDOM_TOWN:
         return _( "Random Town" );
     case OBJ_NON_ACTION_RANDOM_CASTLE:
-    case OBJ_RANDOM_CASTLE:
         return _( "Random Castle" );
-    case OBJ_NON_ACTION_UNUSED_50:
-    case OBJ_UNUSED_50:
-        return "Not in use object 50";
+    case OBJ_NON_ACTION_EYE_OF_MAGI:
+        return _( "Eye of the Magi" );
     case OBJ_NON_ACTION_RANDOM_MONSTER_WEAK:
-    case OBJ_RANDOM_MONSTER_WEAK:
         return _( "Random Monster - weak" );
     case OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM:
-    case OBJ_RANDOM_MONSTER_MEDIUM:
         return _( "Random Monster - medium" );
     case OBJ_NON_ACTION_RANDOM_MONSTER_STRONG:
-    case OBJ_RANDOM_MONSTER_STRONG:
         return _( "Random Monster - strong" );
     case OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG:
-    case OBJ_RANDOM_MONSTER_VERY_STRONG:
         return _( "Random Monster - very strong" );
     case OBJ_NON_ACTION_HEROES:
-    case OBJ_HEROES:
         return _( "Heroes" );
-    case OBJ_NON_ACTION_NOTHING_SPECIAL:
     case OBJ_NOTHING_SPECIAL:
         return _( "Nothing Special" );
-    case OBJ_NON_ACTION_UNUSED_57:
-    case OBJ_UNUSED_57:
-        return "Not in use object 57";
+    case OBJ_MOSSY_ROCK:
+        return _( "Mossy Rock" );
     case OBJ_NON_ACTION_WATCH_TOWER:
-    case OBJ_WATCH_TOWER:
         return _( "Watch Tower" );
     case OBJ_NON_ACTION_TREE_HOUSE:
-    case OBJ_TREE_HOUSE:
         return _( "Tree House" );
     case OBJ_NON_ACTION_TREE_CITY:
-    case OBJ_TREE_CITY:
         return _( "Tree City" );
     case OBJ_NON_ACTION_RUINS:
-    case OBJ_RUINS:
         return _( "Ruins" );
     case OBJ_NON_ACTION_FORT:
-    case OBJ_FORT:
         return _( "Fort" );
     case OBJ_NON_ACTION_TRADING_POST:
-    case OBJ_TRADING_POST:
         return _( "Trading Post" );
     case OBJ_NON_ACTION_ABANDONED_MINE:
-    case OBJ_ABANDONED_MINE:
         return _( "Abandoned Mine" );
-    case OBJ_NON_ACTION_THATCHED_HUT:
-    case OBJ_THATCHED_HUT:
-        return _( "Thatched Hut" );
+    case OBJ_NON_ACTION_SIRENS:
+        return _( "Sirens" );
     case OBJ_NON_ACTION_STANDING_STONES:
-    case OBJ_STANDING_STONES:
         return _( "Standing Stones" );
     case OBJ_NON_ACTION_IDOL:
-    case OBJ_IDOL:
         return _( "Idol" );
     case OBJ_NON_ACTION_TREE_OF_KNOWLEDGE:
-    case OBJ_TREE_OF_KNOWLEDGE:
         return _( "Tree of Knowledge" );
     case OBJ_NON_ACTION_WITCH_DOCTORS_HUT:
-    case OBJ_WITCH_DOCTORS_HUT:
         return _( "Witch Doctor's Hut" );
     case OBJ_NON_ACTION_TEMPLE:
-    case OBJ_TEMPLE:
         return _( "Temple" );
     case OBJ_NON_ACTION_HILL_FORT:
-    case OBJ_HILL_FORT:
         return _( "Hill Fort" );
     case OBJ_NON_ACTION_HALFLING_HOLE:
-    case OBJ_HALFLING_HOLE:
         return _( "Halfling Hole" );
     case OBJ_NON_ACTION_MERCENARY_CAMP:
-    case OBJ_MERCENARY_CAMP:
         return _( "Mercenary Camp" );
     case OBJ_NON_ACTION_SHRINE_SECOND_CIRCLE:
-    case OBJ_SHRINE_SECOND_CIRCLE:
         return _( "Shrine of the Second Circle" );
     case OBJ_NON_ACTION_SHRINE_THIRD_CIRCLE:
-    case OBJ_SHRINE_THIRD_CIRCLE:
         return _( "Shrine of the Third Circle" );
     case OBJ_NON_ACTION_PYRAMID:
-    case OBJ_PYRAMID:
         return _( "Pyramid" );
     case OBJ_NON_ACTION_CITY_OF_DEAD:
-    case OBJ_CITY_OF_DEAD:
         return _( "City of the Dead" );
     case OBJ_NON_ACTION_EXCAVATION:
-    case OBJ_EXCAVATION:
         return _( "Excavation" );
     case OBJ_NON_ACTION_SPHINX:
-    case OBJ_SPHINX:
         return _( "Sphinx" );
     case OBJ_NON_ACTION_WAGON:
-    case OBJ_WAGON:
         return _( "Wagon" );
-    case OBJ_NON_ACTION_TAR_PIT:
     case OBJ_TAR_PIT:
         return _( "Tar Pit" );
     case OBJ_NON_ACTION_ARTESIAN_SPRING:
-    case OBJ_ARTESIAN_SPRING:
         return _( "Artesian Spring" );
     case OBJ_NON_ACTION_TROLL_BRIDGE:
-    case OBJ_TROLL_BRIDGE:
         return _( "Troll Bridge" );
     case OBJ_NON_ACTION_WATERING_HOLE:
-    case OBJ_WATERING_HOLE:
         return _( "Watering Hole" );
     case OBJ_NON_ACTION_WITCHS_HUT:
-    case OBJ_WITCHS_HUT:
         return _( "Witch's Hut" );
     case OBJ_NON_ACTION_XANADU:
-    case OBJ_XANADU:
         return _( "Xanadu" );
     case OBJ_NON_ACTION_CAVE:
-    case OBJ_CAVE:
         return _( "Cave" );
     case OBJ_NON_ACTION_LEAN_TO:
-    case OBJ_LEAN_TO:
         return _( "Lean-To" );
     case OBJ_NON_ACTION_MAGELLANS_MAPS:
-    case OBJ_MAGELLANS_MAPS:
         return _( "Magellan's Maps" );
     case OBJ_NON_ACTION_FLOTSAM:
-    case OBJ_FLOTSAM:
         return _( "Flotsam" );
     case OBJ_NON_ACTION_DERELICT_SHIP:
-    case OBJ_DERELICT_SHIP:
         return _( "Derelict Ship" );
     case OBJ_NON_ACTION_SHIPWRECK_SURVIVOR:
-    case OBJ_SHIPWRECK_SURVIVOR:
         return _( "Shipwreck Survivor" );
     case OBJ_NON_ACTION_BOTTLE:
-    case OBJ_BOTTLE:
         return _( "Bottle" );
     case OBJ_NON_ACTION_MAGIC_WELL:
-    case OBJ_MAGIC_WELL:
         return _( "Magic Well" );
     case OBJ_NON_ACTION_MAGIC_GARDEN:
-    case OBJ_MAGIC_GARDEN:
         return _n( "Magic Garden", "Magic Gardens", count );
     case OBJ_NON_ACTION_OBSERVATION_TOWER:
-    case OBJ_OBSERVATION_TOWER:
         return _( "Observation Tower" );
     case OBJ_NON_ACTION_FREEMANS_FOUNDRY:
-    case OBJ_FREEMANS_FOUNDRY:
         return _( "Freeman's Foundry" );
-    case OBJ_STREAM:
-        return "Steam";
+    case OBJ_REEFS:
+        return _( "Reefs" );
     case OBJ_TREES:
         return _( "Trees" );
     case OBJ_MOUNTAINS:
@@ -520,78 +463,36 @@ const char * MP2::StringObject( const MapObjectType objectType, const int count 
     case OBJ_SHRUB:
         return _( "Shrub" );
     case OBJ_NON_ACTION_ARENA:
-    case OBJ_ARENA:
         return _( "Arena" );
     case OBJ_NON_ACTION_BARROW_MOUNDS:
-    case OBJ_BARROW_MOUNDS:
         return _( "Barrow Mounds" );
-    case OBJ_NON_ACTION_MERMAID:
-    case OBJ_MERMAID:
-        return _( "Mermaid" );
-    case OBJ_NON_ACTION_SIRENS:
-    case OBJ_SIRENS:
-        return _( "Sirens" );
-    case OBJ_NON_ACTION_HUT_OF_MAGI:
-    case OBJ_HUT_OF_MAGI:
-        return _( "Hut of the Magi" );
-    case OBJ_NON_ACTION_EYE_OF_MAGI:
-    case OBJ_EYE_OF_MAGI:
-        return _( "Eye of the Magi" );
+    case OBJ_NON_ACTION_RANDOM_ARTIFACT_TREASURE:
+        return _( "Random Artifact - Treasure" );
+    case OBJ_NON_ACTION_RANDOM_ARTIFACT_MINOR:
+        return _( "Random Artifact - Minor" );
+    case OBJ_NON_ACTION_RANDOM_ARTIFACT_MAJOR:
+        return _( "Random Artifact - Major" );
+    case OBJ_NON_ACTION_BARRIER:
+        return _( "Barrier" );
     case OBJ_NON_ACTION_TRAVELLER_TENT:
-    case OBJ_TRAVELLER_TENT:
         return _( "Traveller's Tent" );
     case OBJ_NON_ACTION_EXPANSION_DWELLING:
-    case OBJ_EXPANSION_DWELLING:
         return "Expansion Dwelling";
     case OBJ_NON_ACTION_EXPANSION_OBJECT:
-    case OBJ_EXPANSION_OBJECT:
         return "Expansion Object";
     case OBJ_NON_ACTION_JAIL:
-    case OBJ_JAIL:
         return _( "Jail" );
     case OBJ_NON_ACTION_FIRE_ALTAR:
-    case OBJ_FIRE_ALTAR:
         return _( "Fire Summoning Altar" );
     case OBJ_NON_ACTION_AIR_ALTAR:
-    case OBJ_AIR_ALTAR:
         return _( "Air Summoning Altar" );
     case OBJ_NON_ACTION_EARTH_ALTAR:
-    case OBJ_EARTH_ALTAR:
         return _( "Earth Summoning Altar" );
     case OBJ_NON_ACTION_WATER_ALTAR:
-    case OBJ_WATER_ALTAR:
         return _( "Water Summoning Altar" );
-    case OBJ_WATERCHEST:
-        return _( "Sea Chest" );
-    case OBJ_ACTION_UNUSED_227:
-        return "Not in use object 227";
-    case OBJ_ACTION_UNUSED_228:
-        return "Not in use object 228";
-    case OBJ_ACTION_UNUSED_229:
-        return "Not in use object 229";
-    case OBJ_ACTION_UNUSED_230:
-        return "Not in use object 230";
-    case OBJ_ACTION_UNUSED_231:
-        return "Not in use object 231";
-    case OBJ_ACTION_UNUSED_232:
-        return "Not in use object 232";
-    case OBJ_REEFS:
-        return _( "Reefs" );
-    case OBJ_NON_ACTION_ALCHEMIST_TOWER:
-    case OBJ_ALCHEMIST_TOWER:
-        return _( "Alchemist's Tower" );
-    case OBJ_NON_ACTION_STABLES:
-    case OBJ_STABLES:
-        return _( "Stables" );
-    case OBJ_RANDOM_ARTIFACT_TREASURE:
-        return _( "Random Artifact - Treasure" );
-    case OBJ_RANDOM_ARTIFACT_MINOR:
-        return _( "Random Artifact - Minor" );
-    case OBJ_RANDOM_ARTIFACT_MAJOR:
-        return _( "Random Artifact - Major" );
-    case OBJ_BARRIER:
-        return _( "Barrier" );
     default:
+        // Did you add a new object type? Add the logic above!
+        assert( 0 );
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown object type: " << static_cast<int>( objectType ) )
         break;
     }
@@ -601,16 +502,8 @@ const char * MP2::StringObject( const MapObjectType objectType, const int count 
 
 bool MP2::isDayLife( const MapObjectType objectType )
 {
-    // TODO: list day object life
-    switch ( objectType ) {
-    case OBJ_MAGIC_WELL:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
+    // Only one object on Adventure Map restores every day and this is Magic Well.
+    return ( objectType == OBJ_MAGIC_WELL );
 }
 
 bool MP2::isWeekLife( const MapObjectType objectType )
@@ -632,7 +525,6 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     case OBJ_DWARF_COTTAGE:
     case OBJ_HALFLING_HOLE:
     case OBJ_PEASANT_HUT:
-    case OBJ_THATCHED_HUT:
     // recruit army
     case OBJ_RUINS:
     case OBJ_TREE_CITY:
@@ -700,7 +592,7 @@ bool MP2::isActionObject( const MapObjectType objectType, const bool locatesOnWa
 bool MP2::isWaterActionObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
-    case OBJ_WATERCHEST:
+    case OBJ_SEA_CHEST:
     case OBJ_DERELICT_SHIP:
     case OBJ_SHIPWRECK:
     case OBJ_WHIRLPOOL:
@@ -730,207 +622,53 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
 
 bool MP2::isActionObject( const MapObjectType objectType )
 {
-    // check if first bit is set
-    if ( objectType < 128 ) {
+    if ( ( objectType & OBJ_ACTION_OBJECT_TYPE ) != OBJ_ACTION_OBJECT_TYPE ) {
+        // It is not an action object.
         return false;
     }
 
-    // TODO: These edge cases shouldn't exist! All PoL objects present here have incorrect values!
-    switch ( objectType ) {
-    case OBJ_EVENT:
-    case OBJ_NON_ACTION_STABLES:
-    case OBJ_NON_ACTION_ALCHEMIST_TOWER:
-    case OBJ_ACTION_UNUSED_226: // This type is not used anywhere
-    case OBJ_ACTION_UNUSED_227: // This type is not used anywhere
-    case OBJ_ACTION_UNUSED_228: // This type is not used anywhere
-    case OBJ_ACTION_UNUSED_229: // This type is not used anywhere
-    case OBJ_ACTION_UNUSED_230: // This type is not used anywhere
-    case OBJ_ACTION_UNUSED_231: // This type is not used anywhere
-    case OBJ_ACTION_UNUSED_232: // This type is not used anywhere
-    case OBJ_EXPANSION_DWELLING:
-    case OBJ_EXPANSION_OBJECT:
-    case OBJ_UNUSED_17: // Log Cabin
-    case OBJ_UNUSED_18: // Road
-    case OBJ_ACTION_COAST: // This type is not used anywhere
-    case OBJ_UNUSED_33: // Sea Chest
-    case OBJ_UNUSED_42: // Hero
-    case OBJ_UNUSED_50:
-    case OBJ_NOTHING_SPECIAL:
-    case OBJ_UNUSED_57:
-    case OBJ_TAR_PIT:
-    case OBJ_REEFS:
+    if ( objectType == OBJ_EVENT ) {
+        // This is the only edge case object type inherited from the original game.
         return false;
-    default:
-        break;
     }
 
-    return true;
+    return isObjectCanBeAction( static_cast<MapObjectType>( objectType & ~OBJ_ACTION_OBJECT_TYPE ) );
 }
 
 MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType )
 {
-    // TODO: this function should just check 8th bit in object type instead of having switch-case code.
-    switch ( objectType ) {
-    case OBJ_NON_ACTION_ALCHEMIST_LAB:
-        return OBJ_ALCHEMIST_LAB;
-    case OBJ_NON_ACTION_SKELETON:
-        return OBJ_SKELETON;
-    case OBJ_NON_ACTION_DAEMON_CAVE:
-        return OBJ_DAEMON_CAVE;
-    case OBJ_NON_ACTION_FAERIE_RING:
-        return OBJ_FAERIE_RING;
-    case OBJ_NON_ACTION_GAZEBO:
-        return OBJ_GAZEBO;
-    case OBJ_NON_ACTION_GRAVEYARD:
-        return OBJ_GRAVEYARD;
-    case OBJ_NON_ACTION_ARCHER_HOUSE:
-        return OBJ_ARCHER_HOUSE;
-    case OBJ_NON_ACTION_DWARF_COTTAGE:
-        return OBJ_DWARF_COTTAGE;
-    case OBJ_NON_ACTION_PEASANT_HUT:
-        return OBJ_PEASANT_HUT;
-    case OBJ_NON_ACTION_DRAGON_CITY:
-        return OBJ_DRAGON_CITY;
-    case OBJ_NON_ACTION_LIGHTHOUSE:
-        return OBJ_LIGHTHOUSE;
-    case OBJ_NON_ACTION_WATER_WHEEL:
-        return OBJ_WATER_WHEEL;
-    case OBJ_NON_ACTION_MINES:
-        return OBJ_MINES;
-    case OBJ_NON_ACTION_OBELISK:
-        return OBJ_OBELISK;
-    case OBJ_NON_ACTION_OASIS:
-        return OBJ_OASIS;
-    case OBJ_NON_ACTION_SAWMILL:
-        return OBJ_SAWMILL;
-    case OBJ_NON_ACTION_ORACLE:
-        return OBJ_ORACLE;
-    case OBJ_NON_ACTION_SHIPWRECK:
-        return OBJ_SHIPWRECK;
-    case OBJ_NON_ACTION_DESERT_TENT:
-        return OBJ_DESERT_TENT;
-    case OBJ_NON_ACTION_CASTLE:
-        return OBJ_CASTLE;
-    case OBJ_NON_ACTION_STONE_LITHS:
-        return OBJ_STONE_LITHS;
-    case OBJ_NON_ACTION_WAGON_CAMP:
-        return OBJ_WAGON_CAMP;
-    case OBJ_NON_ACTION_WINDMILL:
-        return OBJ_WINDMILL;
-    case OBJ_NON_ACTION_RANDOM_TOWN:
-        return OBJ_RANDOM_TOWN;
-    case OBJ_NON_ACTION_RANDOM_CASTLE:
-        return OBJ_RANDOM_CASTLE;
-    case OBJ_NON_ACTION_WATCH_TOWER:
-        return OBJ_WATCH_TOWER;
-    case OBJ_NON_ACTION_TREE_HOUSE:
-        return OBJ_TREE_HOUSE;
-    case OBJ_NON_ACTION_TREE_CITY:
-        return OBJ_TREE_CITY;
-    case OBJ_NON_ACTION_RUINS:
-        return OBJ_RUINS;
-    case OBJ_NON_ACTION_FORT:
-        return OBJ_FORT;
-    case OBJ_NON_ACTION_TRADING_POST:
-        return OBJ_TRADING_POST;
-    case OBJ_NON_ACTION_ABANDONED_MINE:
-        return OBJ_ABANDONED_MINE;
-    case OBJ_NON_ACTION_TREE_OF_KNOWLEDGE:
-        return OBJ_TREE_OF_KNOWLEDGE;
-    case OBJ_NON_ACTION_WITCH_DOCTORS_HUT:
-        return OBJ_WITCH_DOCTORS_HUT;
-    case OBJ_NON_ACTION_TEMPLE:
-        return OBJ_TEMPLE;
-    case OBJ_NON_ACTION_HILL_FORT:
-        return OBJ_HILL_FORT;
-    case OBJ_NON_ACTION_HALFLING_HOLE:
-        return OBJ_HALFLING_HOLE;
-    case OBJ_NON_ACTION_MERCENARY_CAMP:
-        return OBJ_MERCENARY_CAMP;
-    case OBJ_NON_ACTION_PYRAMID:
-        return OBJ_PYRAMID;
-    case OBJ_NON_ACTION_CITY_OF_DEAD:
-        return OBJ_CITY_OF_DEAD;
-    case OBJ_NON_ACTION_EXCAVATION:
-        return OBJ_EXCAVATION;
-    case OBJ_NON_ACTION_SPHINX:
-        return OBJ_SPHINX;
-    case OBJ_NON_ACTION_ARTESIAN_SPRING:
-        return OBJ_ARTESIAN_SPRING;
-    case OBJ_NON_ACTION_TROLL_BRIDGE:
-        return OBJ_TROLL_BRIDGE;
-    case OBJ_NON_ACTION_WATERING_HOLE:
-        return OBJ_WATERING_HOLE;
-    case OBJ_NON_ACTION_WITCHS_HUT:
-        return OBJ_WITCHS_HUT;
-    case OBJ_NON_ACTION_XANADU:
-        return OBJ_XANADU;
-    case OBJ_NON_ACTION_CAVE:
-        return OBJ_CAVE;
-    case OBJ_NON_ACTION_MAGELLANS_MAPS:
-        return OBJ_MAGELLANS_MAPS;
-    case OBJ_NON_ACTION_DERELICT_SHIP:
-        return OBJ_DERELICT_SHIP;
-    case OBJ_NON_ACTION_MAGIC_WELL:
-        return OBJ_MAGIC_WELL;
-    case OBJ_NON_ACTION_OBSERVATION_TOWER:
-        return OBJ_OBSERVATION_TOWER;
-    case OBJ_NON_ACTION_FREEMANS_FOUNDRY:
-        return OBJ_FREEMANS_FOUNDRY;
-    case OBJ_NON_ACTION_ARENA:
-        return OBJ_ARENA;
-    case OBJ_NON_ACTION_BARROW_MOUNDS:
-        return OBJ_BARROW_MOUNDS;
-    case OBJ_NON_ACTION_MERMAID:
-        return OBJ_MERMAID;
-    case OBJ_NON_ACTION_SIRENS:
-        return OBJ_SIRENS;
-    case OBJ_NON_ACTION_HUT_OF_MAGI:
-        return OBJ_HUT_OF_MAGI;
-    case OBJ_NON_ACTION_EYE_OF_MAGI:
-        return OBJ_EYE_OF_MAGI;
-    case OBJ_NON_ACTION_TRAVELLER_TENT:
-        return OBJ_TRAVELLER_TENT;
-    case OBJ_NON_ACTION_JAIL:
-        return OBJ_JAIL;
-    case OBJ_NON_ACTION_FIRE_ALTAR:
-        return OBJ_FIRE_ALTAR;
-    case OBJ_NON_ACTION_AIR_ALTAR:
-        return OBJ_AIR_ALTAR;
-    case OBJ_NON_ACTION_EARTH_ALTAR:
-        return OBJ_EARTH_ALTAR;
-    case OBJ_NON_ACTION_WATER_ALTAR:
-        return OBJ_WATER_ALTAR;
-    case OBJ_NON_ACTION_ALCHEMIST_TOWER:
-        return OBJ_ALCHEMIST_TOWER;
-    case OBJ_NON_ACTION_STABLES:
-        return OBJ_STABLES;
-    default:
-        break;
+    if ( ( objectType & OBJ_ACTION_OBJECT_TYPE ) == OBJ_ACTION_OBJECT_TYPE ) {
+        // This is an action object which is considered as base.
+        return objectType;
     }
 
-    return objectType;
+    if ( !isObjectCanBeAction( objectType ) ) {
+        return objectType;
+    }
+
+    return static_cast<MapObjectType>( objectType | OBJ_ACTION_OBJECT_TYPE );
 }
 
 bool MP2::isQuantityObject( const MapObjectType objectType )
 {
+    // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
+    case OBJ_ABANDONED_MINE:
+    case OBJ_CAMPFIRE:
+    case OBJ_DAEMON_CAVE:
+    case OBJ_DERELICT_SHIP:
+    case OBJ_FLOTSAM:
+    case OBJ_GRAVEYARD:
+    case OBJ_LEAN_TO:
+    case OBJ_MAGIC_GARDEN:
+    case OBJ_PYRAMID:
+    case OBJ_SEA_CHEST:
+    case OBJ_SHIPWRECK:
+    case OBJ_SHIPWRECK_SURVIVOR:
     case OBJ_SKELETON:
     case OBJ_WAGON:
-    case OBJ_MAGIC_GARDEN:
     case OBJ_WATER_WHEEL:
     case OBJ_WINDMILL:
-    case OBJ_LEAN_TO:
-    case OBJ_CAMPFIRE:
-    case OBJ_FLOTSAM:
-    case OBJ_SHIPWRECK_SURVIVOR:
-    case OBJ_WATERCHEST:
-    case OBJ_DERELICT_SHIP:
-    case OBJ_SHIPWRECK:
-    case OBJ_GRAVEYARD:
-    case OBJ_PYRAMID:
-    case OBJ_DAEMON_CAVE:
-    case OBJ_ABANDONED_MINE:
         return true;
     default:
         break;
@@ -944,13 +682,14 @@ bool MP2::isQuantityObject( const MapObjectType objectType )
 
 bool MP2::isCaptureObject( const MapObjectType objectType )
 {
+    // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_MINES:
     case OBJ_ABANDONED_MINE:
     case OBJ_ALCHEMIST_LAB:
-    case OBJ_SAWMILL:
-    case OBJ_LIGHTHOUSE:
     case OBJ_CASTLE:
+    case OBJ_LIGHTHOUSE:
+    case OBJ_MINES:
+    case OBJ_SAWMILL:
         return true;
     default:
         break;
@@ -961,16 +700,17 @@ bool MP2::isCaptureObject( const MapObjectType objectType )
 
 bool MP2::isPickupObject( const MapObjectType objectType )
 {
+    // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_WATERCHEST:
-    case OBJ_SHIPWRECK_SURVIVOR:
-    case OBJ_FLOTSAM:
-    case OBJ_BOTTLE:
-    case OBJ_TREASURE_CHEST:
-    case OBJ_GENIE_LAMP:
-    case OBJ_CAMPFIRE:
-    case OBJ_RESOURCE:
     case OBJ_ARTIFACT:
+    case OBJ_BOTTLE:
+    case OBJ_CAMPFIRE:
+    case OBJ_FLOTSAM:
+    case OBJ_GENIE_LAMP:
+    case OBJ_RESOURCE:
+    case OBJ_SEA_CHEST:
+    case OBJ_SHIPWRECK_SURVIVOR:
+    case OBJ_TREASURE_CHEST:
         return true;
     default:
         break;
@@ -981,16 +721,17 @@ bool MP2::isPickupObject( const MapObjectType objectType )
 
 bool MP2::isArtifactObject( const MapObjectType objectType )
 {
+    // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
     case OBJ_ARTIFACT:
-    case OBJ_WAGON:
-    case OBJ_SKELETON:
     case OBJ_DAEMON_CAVE:
-    case OBJ_WATERCHEST:
-    case OBJ_TREASURE_CHEST:
-    case OBJ_SHIPWRECK_SURVIVOR:
-    case OBJ_SHIPWRECK:
     case OBJ_GRAVEYARD:
+    case OBJ_SEA_CHEST:
+    case OBJ_SHIPWRECK:
+    case OBJ_SHIPWRECK_SURVIVOR:
+    case OBJ_SKELETON:
+    case OBJ_TREASURE_CHEST:
+    case OBJ_WAGON:
         return true;
     default:
         break;
@@ -1001,16 +742,17 @@ bool MP2::isArtifactObject( const MapObjectType objectType )
 
 bool MP2::isHeroUpgradeObject( const MapObjectType objectType )
 {
+    // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_GAZEBO:
-    case OBJ_TREE_OF_KNOWLEDGE:
-    case OBJ_MERCENARY_CAMP:
     case OBJ_FORT:
-    case OBJ_STANDING_STONES:
-    case OBJ_WITCH_DOCTORS_HUT:
+    case OBJ_GAZEBO:
+    case OBJ_MERCENARY_CAMP:
     case OBJ_SHRINE_FIRST_CIRCLE:
     case OBJ_SHRINE_SECOND_CIRCLE:
     case OBJ_SHRINE_THIRD_CIRCLE:
+    case OBJ_STANDING_STONES:
+    case OBJ_TREE_OF_KNOWLEDGE:
+    case OBJ_WITCH_DOCTORS_HUT:
     case OBJ_WITCHS_HUT:
     case OBJ_XANADU:
         return true;
@@ -1023,29 +765,29 @@ bool MP2::isHeroUpgradeObject( const MapObjectType objectType )
 
 bool MP2::isMonsterDwelling( const MapObjectType objectType )
 {
+    // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_WATCH_TOWER:
-    case OBJ_EXCAVATION:
-    case OBJ_CAVE:
-    case OBJ_TREE_HOUSE:
+    case OBJ_AIR_ALTAR:
     case OBJ_ARCHER_HOUSE:
-    case OBJ_GOBLIN_HUT:
+    case OBJ_BARROW_MOUNDS:
+    case OBJ_CAVE:
+    case OBJ_CITY_OF_DEAD:
+    case OBJ_DESERT_TENT:
+    case OBJ_DRAGON_CITY:
     case OBJ_DWARF_COTTAGE:
+    case OBJ_EARTH_ALTAR:
+    case OBJ_EXCAVATION:
+    case OBJ_FIRE_ALTAR:
+    case OBJ_GOBLIN_HUT:
     case OBJ_HALFLING_HOLE:
     case OBJ_PEASANT_HUT:
-    case OBJ_THATCHED_HUT:
     case OBJ_RUINS:
     case OBJ_TREE_CITY:
-    case OBJ_WAGON_CAMP:
-    case OBJ_DESERT_TENT:
-    case OBJ_WATER_ALTAR:
-    case OBJ_AIR_ALTAR:
-    case OBJ_FIRE_ALTAR:
-    case OBJ_EARTH_ALTAR:
-    case OBJ_BARROW_MOUNDS:
-    case OBJ_CITY_OF_DEAD:
+    case OBJ_TREE_HOUSE:
     case OBJ_TROLL_BRIDGE:
-    case OBJ_DRAGON_CITY:
+    case OBJ_WAGON_CAMP:
+    case OBJ_WATER_ALTAR:
+    case OBJ_WATCH_TOWER:
         return true;
     default:
         break;
@@ -1056,18 +798,19 @@ bool MP2::isMonsterDwelling( const MapObjectType objectType )
 
 bool MP2::isProtectedObject( const MapObjectType objectType )
 {
+    // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_MONSTER:
-    case OBJ_ARTIFACT:
-    case OBJ_DERELICT_SHIP:
-    case OBJ_SHIPWRECK:
-    case OBJ_GRAVEYARD:
-    case OBJ_PYRAMID:
-    case OBJ_DAEMON_CAVE:
     case OBJ_ABANDONED_MINE:
+    case OBJ_ARTIFACT:
     case OBJ_CITY_OF_DEAD:
-    case OBJ_TROLL_BRIDGE:
+    case OBJ_DAEMON_CAVE:
+    case OBJ_DERELICT_SHIP:
     case OBJ_DRAGON_CITY:
+    case OBJ_GRAVEYARD:
+    case OBJ_MONSTER:
+    case OBJ_PYRAMID:
+    case OBJ_SHIPWRECK:
+    case OBJ_TROLL_BRIDGE:
         return true;
     default:
         break;
@@ -1133,7 +876,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_CAMPFIRE:
     case OBJ_SHIPWRECK_SURVIVOR:
     case OBJ_FLOTSAM:
-    case OBJ_WATERCHEST:
+    case OBJ_SEA_CHEST:
     case OBJ_BUOY:
     case OBJ_WHIRLPOOL:
     case OBJ_BOTTLE:
@@ -1146,7 +889,6 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_ARCHER_HOUSE:
     case OBJ_WITCH_DOCTORS_HUT:
     case OBJ_DWARF_COTTAGE:
-    case OBJ_THATCHED_HUT:
     case OBJ_FOUNTAIN:
     case OBJ_IDOL:
     case OBJ_LIGHTHOUSE:

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-10 05:45+0000\n"
 "PO-Revision-Date: 2022-12-22 21:39+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -617,6 +617,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "%{monster}-Infos anzeigen"
 
+msgid "Fly %{monster} here"
+msgstr "%{monster} hier fliegen"
+
+msgid "Move %{monster} here"
+msgstr "Bewegen %{monster} hier"
+
 msgid "Shoot %{monster}"
 msgstr "An %{monster} schießen"
 
@@ -627,12 +633,6 @@ msgstr[1] "(%{count} Schüsse übrig)"
 
 msgid "Attack %{monster}"
 msgstr "Angriff auf %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "%{monster} hier fliegen"
-
-msgid "Move %{monster} here"
-msgstr "Bewegen %{monster} hier"
 
 msgid "Turn %{turn}"
 msgstr "Runde %{turn}"
@@ -7165,6 +7165,12 @@ msgstr "Zwergenhaus"
 msgid "Peasant Hut"
 msgstr "Bauernhaus"
 
+msgid "Stables"
+msgstr "Ställe"
+
+msgid "Alchemist's Tower"
+msgstr "Turm des Alchemisten"
+
 msgid "Event"
 msgstr "Ereignis"
 
@@ -7218,6 +7224,9 @@ msgstr "Steinsäulen"
 msgid "Wagon Camp"
 msgstr "Wagenlager"
 
+msgid "Hut of the Magi"
+msgstr "Hütte des Magiers"
+
 msgid "Whirlpool"
 msgstr "Whirlpool"
 
@@ -7228,6 +7237,9 @@ msgstr[1] "Windmühlen"
 
 msgid "Artifact"
 msgstr "Artefakt"
+
+msgid "Mermaid"
+msgstr "Meerjungfrau"
 
 msgid "Boat"
 msgstr "Boot"
@@ -7250,6 +7262,9 @@ msgstr "Zufällige Stadt"
 msgid "Random Castle"
 msgstr "Zufälliges Burg"
 
+msgid "Eye of the Magi"
+msgstr "Auge des Magiers"
+
 msgid "Random Monster - weak"
 msgstr "Zufälliges Monster - schwach"
 
@@ -7264,6 +7279,9 @@ msgstr "Zufälliges Monster - sehr stark"
 
 msgid "Nothing Special"
 msgstr "Nichts besonderes"
+
+msgid "Mossy Rock"
+msgstr ""
 
 msgid "Watch Tower"
 msgstr "Wachturm"
@@ -7282,6 +7300,9 @@ msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Verlassene Mine"
+
+msgid "Sirens"
+msgstr "Sirenen"
 
 msgid "Standing Stones"
 msgstr "Stehende Steine"
@@ -7372,6 +7393,9 @@ msgstr "Beobachtungsturm"
 msgid "Freeman's Foundry"
 msgstr "Freemans Giesserei"
 
+msgid "Reefs"
+msgstr "Riffe"
+
 msgid "Trees"
 msgstr "Bäume"
 
@@ -7420,17 +7444,17 @@ msgstr "Strauch"
 msgid "Barrow Mounds"
 msgstr "Vergrabener Karren"
 
-msgid "Mermaid"
-msgstr "Meerjungfrau"
+msgid "Random Artifact - Treasure"
+msgstr "Zufälliges Artefakt - Schatz"
 
-msgid "Sirens"
-msgstr "Sirenen"
+msgid "Random Artifact - Minor"
+msgstr "Zufälliges Artefakt - Klein"
 
-msgid "Hut of the Magi"
-msgstr "Hütte des Magiers"
+msgid "Random Artifact - Major"
+msgstr "Zufälliges Artefakt - Groß"
 
-msgid "Eye of the Magi"
-msgstr "Auge des Magiers"
+msgid "Barrier"
+msgstr "Barriere"
 
 msgid "Traveller's Tent"
 msgstr "Zelt des Reisenden"
@@ -7449,27 +7473,6 @@ msgstr "Erdwesen-Altar"
 
 msgid "Water Summoning Altar"
 msgstr "Wasserwesen-Altar"
-
-msgid "Reefs"
-msgstr "Riffe"
-
-msgid "Alchemist's Tower"
-msgstr "Turm des Alchemisten"
-
-msgid "Stables"
-msgstr "Ställe"
-
-msgid "Random Artifact - Treasure"
-msgstr "Zufälliges Artefakt - Schatz"
-
-msgid "Random Artifact - Minor"
-msgstr "Zufälliges Artefakt - Klein"
-
-msgid "Random Artifact - Major"
-msgstr "Zufälliges Artefakt - Groß"
-
-msgid "Barrier"
-msgstr "Barriere"
 
 msgid "Unknown Monster"
 msgstr "Unbekanntes Monster"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-10 05:45+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -584,6 +584,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Megmutatja %{monster} információját"
 
+msgid "Fly %{monster} here"
+msgstr "A %{monster} ide repül"
+
+msgid "Move %{monster} here"
+msgstr "A %{monster} ide menjen"
+
 #, fuzzy
 msgid "Shoot %{monster}"
 msgstr "%{monster} kiválasztása"
@@ -595,12 +601,6 @@ msgstr[1] ""
 
 msgid "Attack %{monster}"
 msgstr "%{monster} támad"
-
-msgid "Fly %{monster} here"
-msgstr "A %{monster} ide repül"
-
-msgid "Move %{monster} here"
-msgstr "A %{monster} ide menjen"
 
 msgid "Turn %{turn}"
 msgstr ""
@@ -6928,6 +6928,12 @@ msgstr ""
 msgid "Peasant Hut"
 msgstr "Tanya"
 
+msgid "Stables"
+msgstr "Istálló"
+
+msgid "Alchemist's Tower"
+msgstr "Alkímista torony"
+
 msgid "Event"
 msgstr ""
 
@@ -6984,6 +6990,9 @@ msgstr ""
 msgid "Wagon Camp"
 msgstr "Szekértábor"
 
+msgid "Hut of the Magi"
+msgstr "Máguskunyhó"
+
 msgid "Whirlpool"
 msgstr "Örvény"
 
@@ -6995,6 +7004,9 @@ msgstr[1] "Szélmalom"
 
 msgid "Artifact"
 msgstr "Varázstárgy"
+
+msgid "Mermaid"
+msgstr "Sellő"
 
 msgid "Boat"
 msgstr "Csónak"
@@ -7021,6 +7033,9 @@ msgstr "Véletlenszerű város"
 msgid "Random Castle"
 msgstr "Véletlenszerű kastély"
 
+msgid "Eye of the Magi"
+msgstr "Mágus Szem"
+
 #, fuzzy
 msgid "Random Monster - weak"
 msgstr "Véletlenszerű kastély"
@@ -7040,6 +7055,9 @@ msgstr "Véletlenszerű kastély"
 msgid "Nothing Special"
 msgstr "Semmi érdekes"
 
+msgid "Mossy Rock"
+msgstr ""
+
 msgid "Watch Tower"
 msgstr "Toronyóra"
 
@@ -7057,6 +7075,9 @@ msgstr "Erőd"
 
 msgid "Abandoned Mine"
 msgstr "Elhagyott bánya"
+
+msgid "Sirens"
+msgstr "Szirének"
 
 msgid "Standing Stones"
 msgstr "Álló Kövek"
@@ -7150,6 +7171,9 @@ msgstr "Kilátótorony"
 msgid "Freeman's Foundry"
 msgstr "Öntöde Műhely"
 
+msgid "Reefs"
+msgstr "Zátonyok"
+
 msgid "Trees"
 msgstr "Fák"
 
@@ -7198,17 +7222,17 @@ msgstr "Bozót"
 msgid "Barrow Mounds"
 msgstr "Barrow Dombság"
 
-msgid "Mermaid"
-msgstr "Sellő"
+msgid "Random Artifact - Treasure"
+msgstr ""
 
-msgid "Sirens"
-msgstr "Szirének"
+msgid "Random Artifact - Minor"
+msgstr ""
 
-msgid "Hut of the Magi"
-msgstr "Máguskunyhó"
+msgid "Random Artifact - Major"
+msgstr ""
 
-msgid "Eye of the Magi"
-msgstr "Mágus Szem"
+msgid "Barrier"
+msgstr ""
 
 msgid "Traveller's Tent"
 msgstr "Utazók Sátra"
@@ -7227,27 +7251,6 @@ msgstr "Földidéző oltár"
 
 msgid "Water Summoning Altar"
 msgstr "Vízidéző oltár"
-
-msgid "Reefs"
-msgstr "Zátonyok"
-
-msgid "Alchemist's Tower"
-msgstr "Alkímista torony"
-
-msgid "Stables"
-msgstr "Istálló"
-
-msgid "Random Artifact - Treasure"
-msgstr ""
-
-msgid "Random Artifact - Minor"
-msgstr ""
-
-msgid "Random Artifact - Major"
-msgstr ""
-
-msgid "Barrier"
-msgstr ""
 
 #, fuzzy
 msgid "Unknown Monster"

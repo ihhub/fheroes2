@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-10 05:45+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -604,6 +604,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Виж информация за %{monster} "
 
+msgid "Fly %{monster} here"
+msgstr "Прелети %{monster} тук"
+
+msgid "Move %{monster} here"
+msgstr "Премести %{monster} тук"
+
 msgid "Shoot %{monster}"
 msgstr "Застреляй %{monster}"
 
@@ -614,12 +620,6 @@ msgstr[1] "(Остават %{count} изстрела)"
 
 msgid "Attack %{monster}"
 msgstr "Нападни %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "Прелети %{monster} тук"
-
-msgid "Move %{monster} here"
-msgstr "Премести %{monster} тук"
 
 msgid "Turn %{turn}"
 msgstr "Ход %{turn}"
@@ -7019,6 +7019,12 @@ msgstr "Вила на джуджета"
 msgid "Peasant Hut"
 msgstr "Селска хижа"
 
+msgid "Stables"
+msgstr "Конюшни"
+
+msgid "Alchemist's Tower"
+msgstr "Кулата на алхимика"
+
 msgid "Event"
 msgstr "Събитие"
 
@@ -7072,6 +7078,9 @@ msgstr "Телепорт"
 msgid "Wagon Camp"
 msgstr "Вагонен лагер"
 
+msgid "Hut of the Magi"
+msgstr "Хижата на влъхвите"
+
 msgid "Whirlpool"
 msgstr "Водовъртеж"
 
@@ -7082,6 +7091,9 @@ msgstr[1] "Вятърни мелници"
 
 msgid "Artifact"
 msgstr "Артефакт"
+
+msgid "Mermaid"
+msgstr "Русалка"
 
 msgid "Boat"
 msgstr "Кораб"
@@ -7104,6 +7116,9 @@ msgstr "Случаен град"
 msgid "Random Castle"
 msgstr "Случаен замък"
 
+msgid "Eye of the Magi"
+msgstr "Окото на влъхвите"
+
 msgid "Random Monster - weak"
 msgstr "Случайно чудовище - слабо"
 
@@ -7118,6 +7133,9 @@ msgstr "Случайно чудовище - мн. силно"
 
 msgid "Nothing Special"
 msgstr "Нищо специално"
+
+msgid "Mossy Rock"
+msgstr ""
 
 msgid "Watch Tower"
 msgstr "Стражева кула"
@@ -7136,6 +7154,9 @@ msgstr "Укрепление"
 
 msgid "Abandoned Mine"
 msgstr "Изоставена мина"
+
+msgid "Sirens"
+msgstr "Сирени"
 
 msgid "Standing Stones"
 msgstr "Кромлех"
@@ -7226,6 +7247,9 @@ msgstr "Наблюдателна кула"
 msgid "Freeman's Foundry"
 msgstr "Леярна на Фрийман"
 
+msgid "Reefs"
+msgstr "Рифове"
+
 msgid "Trees"
 msgstr "Дървета"
 
@@ -7274,17 +7298,17 @@ msgstr "Храст"
 msgid "Barrow Mounds"
 msgstr "Гробни могили"
 
-msgid "Mermaid"
-msgstr "Русалка"
+msgid "Random Artifact - Treasure"
+msgstr "Случаен артефакт - Съкровище"
 
-msgid "Sirens"
-msgstr "Сирени"
+msgid "Random Artifact - Minor"
+msgstr "Случаен артефакт - незначителен"
 
-msgid "Hut of the Magi"
-msgstr "Хижата на влъхвите"
+msgid "Random Artifact - Major"
+msgstr "Случаен артефакт - основен"
 
-msgid "Eye of the Magi"
-msgstr "Окото на влъхвите"
+msgid "Barrier"
+msgstr "Бариера"
 
 msgid "Traveller's Tent"
 msgstr "Палатка на пътешественик"
@@ -7303,27 +7327,6 @@ msgstr "Олтар за призоваване на земя"
 
 msgid "Water Summoning Altar"
 msgstr "Олтар за призоваване на вода"
-
-msgid "Reefs"
-msgstr "Рифове"
-
-msgid "Alchemist's Tower"
-msgstr "Кулата на алхимика"
-
-msgid "Stables"
-msgstr "Конюшни"
-
-msgid "Random Artifact - Treasure"
-msgstr "Случаен артефакт - Съкровище"
-
-msgid "Random Artifact - Minor"
-msgstr "Случаен артефакт - незначителен"
-
-msgid "Random Artifact - Major"
-msgstr "Случаен артефакт - основен"
-
-msgid "Barrier"
-msgstr "Бариера"
 
 msgid "Unknown Monster"
 msgstr "Неизвестно чудовище"

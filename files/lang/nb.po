@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 04:34+0000\n"
+"POT-Creation-Date: 2023-01-10 05:45+0000\n"
 "PO-Revision-Date: 2022-12-18 08:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -619,6 +619,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Vis info om %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr "Fly %{monster} hit"
+
+msgid "Move %{monster} here"
+msgstr "Flytt %{monster} hit"
+
 msgid "Shoot %{monster}"
 msgstr "Skyt på %{monster}"
 
@@ -629,12 +635,6 @@ msgstr[1] "(%{count} skudd igjen)"
 
 msgid "Attack %{monster}"
 msgstr "Angrip %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "Fly %{monster} hit"
-
-msgid "Move %{monster} here"
-msgstr "Flytt %{monster} hit"
 
 msgid "Turn %{turn}"
 msgstr "Runde %{turn}"
@@ -7158,6 +7158,12 @@ msgstr "Dvergstue"
 msgid "Peasant Hut"
 msgstr "Bondehytte"
 
+msgid "Stables"
+msgstr "Stall"
+
+msgid "Alchemist's Tower"
+msgstr "Alkymistens tårn"
+
 msgid "Event"
 msgstr "Hendelse"
 
@@ -7212,6 +7218,9 @@ msgstr "Steinportal"
 msgid "Wagon Camp"
 msgstr "Vognleir"
 
+msgid "Hut of the Magi"
+msgstr "Spåmannens hytte"
+
 msgid "Whirlpool"
 msgstr "Virvelstrøm"
 
@@ -7222,6 +7231,9 @@ msgstr[1] "Vindmøller"
 
 msgid "Artifact"
 msgstr "Skatt"
+
+msgid "Mermaid"
+msgstr "Havfrue"
 
 msgid "Boat"
 msgstr "Skip"
@@ -7244,6 +7256,9 @@ msgstr "Vilkårlig by"
 msgid "Random Castle"
 msgstr "Vilkårlig borg"
 
+msgid "Eye of the Magi"
+msgstr "Spåmannens øye"
+
 msgid "Random Monster - weak"
 msgstr "Tilfeldig monster - svak"
 
@@ -7258,6 +7273,9 @@ msgstr "Tilfeldig monster - veldig sterk"
 
 msgid "Nothing Special"
 msgstr "Ingenting spesielt"
+
+msgid "Mossy Rock"
+msgstr ""
 
 msgid "Watch Tower"
 msgstr "Vakttårn"
@@ -7276,6 +7294,9 @@ msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Forlatt gruve"
+
+msgid "Sirens"
+msgstr "Sirener"
 
 msgid "Standing Stones"
 msgstr "Steinsøyler"
@@ -7369,6 +7390,9 @@ msgstr "Utkikkstårn"
 msgid "Freeman's Foundry"
 msgstr "Borgerens støperi"
 
+msgid "Reefs"
+msgstr "Rev"
+
 msgid "Trees"
 msgstr "Trær"
 
@@ -7417,17 +7441,17 @@ msgstr "Busk"
 msgid "Barrow Mounds"
 msgstr "Gravhaug"
 
-msgid "Mermaid"
-msgstr "Havfrue"
+msgid "Random Artifact - Treasure"
+msgstr "Tilfeldig skatt - Litt verdifull"
 
-msgid "Sirens"
-msgstr "Sirener"
+msgid "Random Artifact - Minor"
+msgstr "Tilfeldig skatt - Mer verdifull"
 
-msgid "Hut of the Magi"
-msgstr "Spåmannens hytte"
+msgid "Random Artifact - Major"
+msgstr "Tilfeldig skatt - Ekstremt verdifull"
 
-msgid "Eye of the Magi"
-msgstr "Spåmannens øye"
+msgid "Barrier"
+msgstr "Sperre"
 
 msgid "Traveller's Tent"
 msgstr "Vandrerens telt"
@@ -7446,27 +7470,6 @@ msgstr "Jordmanende alter"
 
 msgid "Water Summoning Altar"
 msgstr "Vannmanende alter"
-
-msgid "Reefs"
-msgstr "Rev"
-
-msgid "Alchemist's Tower"
-msgstr "Alkymistens tårn"
-
-msgid "Stables"
-msgstr "Stall"
-
-msgid "Random Artifact - Treasure"
-msgstr "Tilfeldig skatt - Litt verdifull"
-
-msgid "Random Artifact - Minor"
-msgstr "Tilfeldig skatt - Mer verdifull"
-
-msgid "Random Artifact - Major"
-msgstr "Tilfeldig skatt - Ekstremt verdifull"
-
-msgid "Barrier"
-msgstr "Sperre"
 
 msgid "Unknown Monster"
 msgstr "Ukjent monster"
