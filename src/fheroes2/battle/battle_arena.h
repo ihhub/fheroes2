@@ -139,19 +139,19 @@ namespace Battle
 
         void FadeArena( bool clearMessageLog ) const;
 
-        // Returns the distance to the given position (i.e. the number of cells that needs to be passed)
-        // for the current unit (to which the current passability information relates). It's the caller's
-        // responsibility to make sure that this position is reachable before calling this method.
+        // Returns the distance to the given position (i.e. the number of cells that needs to be passed) for the
+        // current unit (to which the current pathfinder graph relates). It's the caller's responsibility to make
+        // sure that this position is reachable before calling this method.
         uint32_t CalculateMoveDistance( const Position & position ) const;
-        // Checks whether the given position is reachable for the current unit (to which the current
-        // passability information relates), either on the current turn or in principle
+        // Checks whether the given position is reachable for the current unit (to which the current pathfinder
+        // graph relates), either on the current turn or in principle
         bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const;
-        // Returns the indexes of all cells that can be occupied by the head of the current unit (to which
-        // the current passability information relates) on the current turn
+        // Returns the indexes of all cells that can be occupied by the head of the current unit (to which the
+        // current pathfinder graph relates) on the current turn
         Indexes getAllAvailableMoves() const;
-        // Returns a path (or its part) for the current unit (to which the current passability information
-        // relates) to the given position that can be traversed during the current turn. If this position
-        // is unreachable, then an empty path is returned.
+        // Returns a path (or its part) for the current unit (to which the current pathfinder graph relates)
+        // to the given position that can be traversed during the current turn. If this position is unreachable,
+        // then an empty path is returned.
         Indexes GetPath( const Position & position ) const;
 
         void ApplyAction( Command & );

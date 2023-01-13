@@ -108,15 +108,15 @@ namespace Battle
         bool isReflect() const;
         bool contains( int cellIndex ) const;
 
-        // Returns the position that the given unit would occupy after moving to the
-        // cell with the given index (without taking into account the cell passability
-        // information) or an empty Position object if the given index is unreachable
-        // in principle for the given unit
+        // Returns the position that the given unit would occupy after moving to the cell
+        // with the given index (without taking into account the current pathfinder graph)
+        // or an empty Position object if the given index is unreachable in principle for
+        // the given unit
         static Position GetPosition( const Unit & unit, const int32_t dst );
 
         // Returns the reachable position for the current unit (to which the current
-        // passability information relates) which corresponds to the given index or an
-        // empty Position object if the given index is unreachable on the current turn
+        // pathfinder graph relates) which corresponds to the given index or an empty
+        // Position object if the given index is unreachable on the current turn
         static Position GetReachable( const Unit & currentUnit, const int32_t dst );
 
         fheroes2::Rect GetRect() const;
