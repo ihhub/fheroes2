@@ -26,7 +26,6 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <iterator>
 #include <memory>
 #include <ostream>
 #include <set>
