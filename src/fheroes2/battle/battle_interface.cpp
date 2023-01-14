@@ -6100,8 +6100,8 @@ void Battle::PopupDamageInfo::Redraw() const
         const HeroBase * hero = _attacker->GetCurrentOrArmyCommander();
         const uint32_t spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
 
-        uint32_t spellDmg = _defender->CalculateDamage(_spell, spoint, hero, 0 /* targetInfo damage */, true /* ignore defending hero */);
-        
+        uint32_t spellDmg = _defender->CalculateDamage( _spell, spoint, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
+
         minDamage = spellDmg;
         maxDamage = spellDmg;
     }

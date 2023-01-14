@@ -1318,8 +1318,8 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
 
 void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const HeroBase * hero, TargetInfo & target )
 {
-    uint32_t dmg = CalculateDamage(&spell, spoint, hero, target.damage, false /* ignore defending hero */);
-    
+    uint32_t dmg = CalculateDamage( &spell, spoint, hero, target.damage, false /* ignore defending hero */ );
+
     // apply damage
     if ( dmg ) {
         target.damage = dmg;
