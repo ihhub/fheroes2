@@ -884,9 +884,10 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const u
     const int32_t centerQ = centerX - ( centerY + centerY % 2 ) / 2;
     const int32_t centerR = centerY;
 
-    const int32_t intRadius = radius;
-
     Indexes result;
+    result.reserve( 3 * radius * ( radius + 1 ) + 1 );
+
+    const int32_t intRadius = radius;
 
     for ( int32_t dq = -intRadius; dq <= intRadius; ++dq ) {
         for ( int32_t dr = std::max( -intRadius, -intRadius - dq ); dr <= std::min( intRadius, intRadius - dq ); ++dr ) {
