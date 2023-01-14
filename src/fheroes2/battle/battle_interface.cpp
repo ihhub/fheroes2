@@ -5747,12 +5747,17 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     const bool isReflectICN = ( icn == ICN::SHIELD || icn == ICN::REDDEATH || icn == ICN::MAGIC08 );
 
     _unitOverlaySprite.reserve( targets.size() );
+    size_t overlaySpriteCount = _unitOverlaySprite.size();
+
     for ( const Battle::TargetInfo & target : targets ) {
         if ( target.defender ) {
             _unitOverlaySprite.emplace_back( target.defender->GetUID(), ( isReflectICN && target.defender->isReflect() ) );
         }
     }
-    const std::vector<Battle::OverlaySprite>::iterator overlaySpriteBegin = _unitOverlaySprite.end() - static_cast<ptrdiff_t>( targets.size() );
+
+    overlaySpriteCount = _unitOverlaySprite.size() - overlaySpriteCount;
+    const std::vector<Battle::OverlaySprite>::iterator overlaySpriteEnd = _unitOverlaySprite.end();
+    const std::vector<Battle::OverlaySprite>::iterator overlaySpriteBegin = overlaySpriteEnd - static_cast<ptrdiff_t>( overlaySpriteCount );
 
     // Set the defender wince animation state.
     bool isDefenderAnimating = wnce;
@@ -5769,14 +5774,14 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             if ( frame < maxFrame ) {
-                ptrdiff_t i = 0;
+                std::vector<Battle::OverlaySprite>::iterator overlaySprite = overlaySpriteBegin;
                 for ( const Battle::TargetInfo & target : targets ) {
                     if ( target.defender ) {
                         const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-                        ( *( overlaySpriteBegin + i ) ).position = CalculateSpellPosition( *target.defender, icn, spellSprite );
-                        ( *( overlaySpriteBegin + i ) ).overlaySprite = &spellSprite;
+                        ( *overlaySprite ).position = CalculateSpellPosition( *target.defender, icn, spellSprite );
+                        ( *overlaySprite ).overlaySprite = &spellSprite;
 
-                        ++i;
+                        ++overlaySprite;
                     }
                 }
             }
@@ -5805,7 +5810,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                         if ( !target.defender->isFinishAnimFrame() ) {
                             target.defender->IncreaseAnimFrame( false );
                         }
-                        else if ( frame >= maxFrame && target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) {
+                        else if ( frame >= ( maxFrame - 1 ) && target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) {
                             // If the main spell sprite animation and WNCE_UP are finised then switch unit animation to WNCE_DOWN.
                             target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
                         }
@@ -5818,20 +5823,16 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                         // IMPORTANT: The game engine can change STATIC animation to IDLE, especially for Ghosts and Zombies,
                         // so we need to check IDLE where we check for STATIC.
                         const int unitAnimState = target.defender->GetAnimationState();
-                        isDefenderAnimating |= !( ( unitAnimState == Monster_Info::STATIC ) || ( unitAnimState == Monster_Info::IDLE ) );
+                        isDefenderAnimating |= ( unitAnimState != Monster_Info::STATIC ) && ( unitAnimState != Monster_Info::IDLE );
                     }
                 }
             }
 
             ++frame;
 
+            // Remove all overlay sprites when the animation is finished.
             if ( frame == maxFrame ) {
-                for ( const Battle::TargetInfo & target : targets ) {
-                    if ( target.defender ) {
-                        // Spell animation is finished, so delete the overlay sprite from unit.
-                        _unitOverlaySprite.pop_back();
-                    }
-                }
+                _unitOverlaySprite.erase( overlaySpriteBegin, overlaySpriteEnd );
             }
         }
     }
@@ -5860,7 +5861,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int
         unit.SwitchAnimation( Monster_Info::KILL, true );
     }
 
-    _unitOverlaySprite.emplace_back( OverlaySprite( unit.GetUID(), reflect ) );
+    _unitOverlaySprite.emplace_back( unit.GetUID(), reflect );
 
     // Wait for previously set and not passed delays before rendering a new frame.
     WaitForAllActionDelays();
