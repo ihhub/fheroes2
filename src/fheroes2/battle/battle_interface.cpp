@@ -3388,9 +3388,9 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     LocalEvent & le = LocalEvent::Get();
 
-    // targets damage animation
-    int finish = 0;
-    int deathColor = Color::UNUSED;
+    // Number of targets to be animated with a wince or kill animation.
+    ptrdiff_t animatingTargets = 0;
+    int32_t deathColor = Color::UNUSED;
 
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
@@ -3419,7 +3419,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
             unit->SwitchAnimation( Monster_Info::KILL );
             AudioManager::PlaySound( unit->M82Kill() );
-            ++finish;
+            ++animatingTargets;
 
             deathColor = unit->GetArmyColor();
         }
@@ -3434,7 +3434,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 unit->SwitchAnimation( Monster_Info::WNCE );
                 AudioManager::PlaySound( unit->M82Wnce() );
             }
-            ++finish;
+            ++animatingTargets;
         }
         else {
             // have immunity
@@ -3496,6 +3496,25 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 RedrawPartialFinish();
             }
 
+            for ( const Battle::TargetInfo & target : targets ) {
+                if ( target.defender ) {
+                    if ( target.defender->isFinishAnimFrame()
+                         && ( target.defender->GetAnimationState() == Monster_Info::WNCE || target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
+                        target.defender->SwitchAnimation( Monster_Info::STATIC );
+                    }
+                    else if ( drawLichCloud && lichCloudFrame == wnceUpStartFrame && ( target.defender->GetAnimationState() == Monster_Info::STAND_STILL ) ) {
+                        target.defender->SwitchAnimation( Monster_Info::WNCE_UP );
+                        AudioManager::PlaySound( target.defender->M82Wnce() );
+                    }
+                    else if ( drawLichCloud && lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
+                        target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
+                    }
+                    else {
+                        target.defender->IncreaseAnimFrame();
+                    }
+                }
+            }
+
             const ptrdiff_t finishedAnimationCount = std::count_if( targets.begin(), targets.end(), [&resistantTarget]( const TargetInfo & info ) {
                 if ( info.defender == nullptr ) {
                     return false;
@@ -3518,29 +3537,8 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 return TargetInfo::isFinishAnimFrame( info );
             } );
 
-            const bool finishedAnimation = ( finish == static_cast<int>( finishedAnimationCount ) );
-
-            for ( const Battle::TargetInfo & target : targets ) {
-                if ( target.defender ) {
-                    if ( target.defender->isFinishAnimFrame()
-                         && ( target.defender->GetAnimationState() == Monster_Info::WNCE || target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
-                        target.defender->SwitchAnimation( Monster_Info::STATIC );
-                    }
-                    else if ( drawLichCloud && lichCloudFrame == wnceUpStartFrame && ( target.defender->GetAnimationState() == Monster_Info::STAND_STILL ) ) {
-                        target.defender->SwitchAnimation( Monster_Info::WNCE_UP );
-                        AudioManager::PlaySound( target.defender->M82Wnce() );
-                    }
-                    else if ( drawLichCloud && lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
-                        target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
-                    }
-                    else {
-                        target.defender->IncreaseAnimFrame();
-                    }
-                }
-            }
-
-            if ( finishedAnimation && ( !drawLichCloud || ( lichCloudFrame == lichCloudMaxFrame ) ) ) {
-                // All unit frames are rendered and if it was a Lich attack also its cloud frames are rendered too.
+            if ( ( animatingTargets == finishedAnimationCount ) && ( !drawLichCloud || ( lichCloudFrame >= lichCloudMaxFrame ) ) ) {
+                // All unit animation frames are rendered and if it was a Lich attack then also its cloud frames are rendered too.
                 break;
             }
         }
