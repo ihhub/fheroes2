@@ -1318,13 +1318,24 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
 
 void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const HeroBase * hero, TargetInfo & target )
 {
+    uint32_t dmg = CalculateDamage(&spell, spoint, hero, target.damage);
+    
+    // apply damage
+    if ( dmg ) {
+        target.damage = dmg;
+        target.killed = ApplyDamage( dmg );
+    }
+}
+
+uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, const HeroBase * hero, uint32_t target_damage ) const
+{
     // TODO: use fheroes2::getSpellDamage function to remove code duplication.
-    uint32_t dmg = spell.Damage() * spoint;
+    uint32_t dmg = spell->Damage() * spoint;
 
     switch ( GetID() ) {
     case Monster::IRON_GOLEM:
     case Monster::STEEL_GOLEM:
-        switch ( spell.GetID() ) {
+        switch ( spell->GetID() ) {
             // 50% damage
         case Spell::COLDRAY:
         case Spell::COLDRING:
@@ -1342,7 +1353,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
         break;
 
     case Monster::WATER_ELEMENT:
-        switch ( spell.GetID() ) {
+        switch ( spell->GetID() ) {
             // 200% damage
         case Spell::FIREBALL:
         case Spell::FIREBLAST:
@@ -1354,7 +1365,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
         break;
 
     case Monster::AIR_ELEMENT:
-        switch ( spell.GetID() ) {
+        switch ( spell->GetID() ) {
             // 200% damage
         case Spell::ELEMENTALSTORM:
         case Spell::LIGHTNINGBOLT:
@@ -1367,7 +1378,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
         break;
 
     case Monster::FIRE_ELEMENT:
-        switch ( spell.GetID() ) {
+        switch ( spell->GetID() ) {
             // 200% damage
         case Spell::COLDRAY:
         case Spell::COLDRING:
@@ -1386,7 +1397,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
     if ( hero ) {
         const HeroBase * defendingHero = GetCommander();
 
-        switch ( spell.GetID() ) {
+        switch ( spell->GetID() ) {
         case Spell::COLDRAY:
         case Spell::COLDRING: {
             std::vector<int32_t> extraDamagePercent
@@ -1450,8 +1461,8 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
             }
 
             // update orders damage
-            if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
-                switch ( target.damage ) {
+            if ( spell->GetID() == Spell::CHAINLIGHTNING ) {
+                switch ( target_damage ) {
                 case 0:
                     break;
                 case 1:
@@ -1487,11 +1498,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
         }
     }
 
-    // apply damage
-    if ( dmg ) {
-        target.damage = dmg;
-        target.killed = ApplyDamage( dmg );
-    }
+    return dmg;
 }
 
 void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, const HeroBase * hero )
