@@ -1318,7 +1318,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
 
 void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const HeroBase * hero, TargetInfo & target )
 {
-    uint32_t dmg = CalculateDamage(&spell, spoint, hero, target.damage);
+    uint32_t dmg = CalculateDamage(&spell, spoint, hero, target.damage, false /* ignore defending hero */);
     
     // apply damage
     if ( dmg ) {
@@ -1327,7 +1327,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
     }
 }
 
-uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, const HeroBase * hero, uint32_t target_damage ) const
+uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, const HeroBase * hero, uint32_t target_damage, bool ignoreDefendingHero ) const
 {
     // TODO: use fheroes2::getSpellDamage function to remove code duplication.
     uint32_t dmg = spell->Damage() * spoint;
@@ -1396,6 +1396,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, co
     // check artifact
     if ( hero ) {
         const HeroBase * defendingHero = GetCommander();
+        bool useDefendingHeroArts = defendingHero && !ignoreDefendingHero;
 
         switch ( spell->GetID() ) {
         case Spell::COLDRAY:
@@ -1406,7 +1407,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, co
                 dmg = dmg * ( 100 + value ) / 100;
             }
 
-            if ( defendingHero ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::COLD_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1429,7 +1430,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, co
                 dmg = dmg * ( 100 + value ) / 100;
             }
 
-            if ( defendingHero ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::FIRE_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1452,7 +1453,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, co
                 dmg = dmg * ( 100 + value ) / 100;
             }
 
-            if ( defendingHero != nullptr ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::LIGHTNING_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1483,7 +1484,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, co
         }
         case Spell::ELEMENTALSTORM:
         case Spell::ARMAGEDDON: {
-            if ( defendingHero != nullptr ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::ELEMENTAL_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
