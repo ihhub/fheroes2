@@ -3546,7 +3546,6 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         // There sould not be more Lich cloud animation frames than in corresponding ICN.
         assert( lichCloudFrame <= lichCloudMaxFrame );
 
-        // Important: 'lichCloudFrame' can be more than 'lichCloudMaxFrame' when performing some long 'KILL' animations.
         if ( ( animatingTargets == finishedAnimationCount ) && ( !drawLichCloud || ( lichCloudFrame == lichCloudMaxFrame ) ) ) {
             // All unit animation frames are rendered and if it was a Lich attack then also its cloud frames are rendered too.
             break;
