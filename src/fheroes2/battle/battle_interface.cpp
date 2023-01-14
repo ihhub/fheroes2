@@ -3190,6 +3190,9 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     // Wait for previously set and not passed delays before rendering a new frame.
     WaitForAllActionDelays();
 
+    // Shooter projectile rendering offset uses 'x' and 'y' from sprite data.
+    const fheroes2::Point missileOffset( reverse ? ( -missile.width() - missile.x() ) : missile.x(), ( angle > 0 ) ? ( -missile.height() - missile.y() ) : missile.y() );
+
     // convert the following code into a function/event service
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
@@ -3204,7 +3207,8 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
                 fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y + 2 }, { pnt->x, pnt->y + 2 }, 0x77 );
             }
             else {
-                fheroes2::Blit( missile, _mainSurface, reverse ? pnt->x - missile.width() : pnt->x, ( angle > 0 ) ? pnt->y - missile.height() : pnt->y, reverse );
+                // Coordinates in 'pnt' corresponds to the front side of the projectile (arrowhead).
+                fheroes2::Blit( missile, _mainSurface, pnt->x + missileOffset.x, pnt->y + missileOffset.y, reverse );
             }
             RedrawPartialFinish();
             ++pnt;
