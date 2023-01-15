@@ -881,7 +881,7 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const u
     const int32_t centerY = center / ARENAW;
 
     // Axial coordinates
-    const int32_t centerQ = centerX - ( centerY + centerY % 2 ) / 2;
+    const int32_t centerQ = centerX - ( centerY + ( centerY % 2 ) ) / 2;
     const int32_t centerR = centerY;
 
     Indexes result;
@@ -894,7 +894,7 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const u
             const int32_t q = centerQ + dq;
             const int32_t r = centerR + dr;
 
-            const int32_t x = q + ( r + r % 2 ) / 2;
+            const int32_t x = q + ( r + ( r % 2 ) ) / 2;
             const int32_t y = r;
 
             if ( x < 0 || x >= ARENAW || y < 0 || y >= ARENAH ) {

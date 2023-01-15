@@ -723,29 +723,18 @@ Battle::Indexes Battle::Arena::GetPath( const Position & position ) const
     const Indexes result = _battlePathfinder.buildPath( position );
 
     if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) && !result.empty() ) {
-        std::stringstream ss;
+        std::string pathStr;
+        pathStr.reserve( Speed::INSTANT * 4 );
 
-        std::for_each( result.begin(), result.end(), [&ss]( const int32_t item ) { ss << item << ", "; } );
+        std::for_each( result.begin(), result.end(), [&pathStr]( const int32_t item ) {
+            pathStr += std::to_string( item );
+            pathStr += ", ";
+        } );
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, pathStr )
     }
 
     return result;
-}
-
-uint32_t Battle::Arena::CalculateMoveDistance( const Position & position ) const
-{
-    return _battlePathfinder.getDistance( position );
-}
-
-bool Battle::Arena::isPositionReachable( const Position & position, const bool onCurrentTurn ) const
-{
-    return _battlePathfinder.isPositionReachable( position, onCurrentTurn );
-}
-
-Battle::Indexes Battle::Arena::getAllAvailableMoves() const
-{
-    return _battlePathfinder.getAllAvailableMoves();
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index )

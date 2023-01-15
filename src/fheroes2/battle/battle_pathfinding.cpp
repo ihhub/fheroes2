@@ -84,7 +84,7 @@ namespace Battle
 
         // The index of that of the cells of the initial unit's position, which is located
         // in the moat (-1, if there is none)
-        const int32_t pathStartMoatIndex = [this, &unit, isMoatBuilt, isUnitWide]() {
+        const int32_t pathStartMoatCellIdx = [this, &unit, isMoatBuilt, isUnitWide]() {
             if ( !isMoatBuilt ) {
                 return -1;
             }
@@ -124,12 +124,12 @@ namespace Battle
                 const Cell * currentHeadCell = Board::GetCell( currentHeadCellIdx );
                 assert( currentHeadCell != nullptr );
 
-                const bool isCurrentLeftDirection = ( Board::GetDirection( currentTailCellIdx, currentHeadCellIdx ) & LEFT_SIDE ) != 0;
+                const bool isCurrentLeftDirection = ( ( Board::GetDirection( currentTailCellIdx, currentHeadCellIdx ) & LEFT_SIDE ) != 0 );
                 // The moat restrictions can be ignored if the wide unit originally occupied a moat cell, and at the current step any part
                 // of this unit occupies the same moat cell
-                const bool isIgnoreMoat = currentHeadCellIdx == pathStartMoatIndex || currentTailCellIdx == pathStartMoatIndex;
+                const bool isIgnoreMoat = ( currentHeadCellIdx == pathStartMoatCellIdx || currentTailCellIdx == pathStartMoatCellIdx );
                 const bool isInMoat = isMoatBuilt && ( Board::isMoatIndex( currentHeadCellIdx, unit ) || Board::isMoatIndex( currentTailCellIdx, unit ) );
-                const uint32_t movementPenalty = !isIgnoreMoat && isInMoat ? MOAT_PENALTY : 1;
+                const uint32_t movementPenalty = ( !isIgnoreMoat && isInMoat ) ? MOAT_PENALTY : 1;
 
                 for ( const int32_t headCellIdx : Board::GetMoveWideIndexes( currentHeadCellIdx, isCurrentLeftDirection ) ) {
                     const Cell * cell = Board::GetCell( headCellIdx );
@@ -169,9 +169,9 @@ namespace Battle
                 assert( currentCell != nullptr );
 
                 // The moat restrictions can be ignored at the first step if the unit starts its movement from the moat
-                const bool isIgnoreMoat = currentCellIdx == pathStartMoatIndex;
+                const bool isIgnoreMoat = ( currentCellIdx == pathStartMoatCellIdx );
                 const bool isInMoat = isMoatBuilt && Board::isMoatIndex( currentCellIdx, unit );
-                const uint32_t movementPenalty = !isIgnoreMoat && isInMoat ? MOAT_PENALTY : 1;
+                const uint32_t movementPenalty = ( !isIgnoreMoat && isInMoat ) ? MOAT_PENALTY : 1;
 
                 for ( const int32_t cellIdx : Board::GetAroundIndexes( currentCellIdx ) ) {
                     const Cell * cell = Board::GetCell( cellIdx );

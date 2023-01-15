@@ -47,12 +47,15 @@ namespace Battle
     {
     public:
         Units();
+
         // Creates a shallow copy of 'units' (only pointers are copied), removing
         // invalid units (i.e. empty slots) if requested
         Units( const Units & units, const bool isRemoveInvalidUnits );
+
         // Creates a shallow copy of 'units' (only pointers are copied), removing
         // invalid units (i.e. empty slots) as well as the specified unit
         Units( const Units & units, const Unit * unitToRemove );
+
         Units( const Units & ) = delete;
 
         virtual ~Units() = default;

@@ -142,13 +142,25 @@ namespace Battle
         // Returns the distance to the given position (i.e. the number of cells that needs to be passed) for the
         // current unit (to which the current pathfinder graph relates). It's the caller's responsibility to make
         // sure that this position is reachable before calling this method.
-        uint32_t CalculateMoveDistance( const Position & position ) const;
+        uint32_t CalculateMoveDistance( const Position & position ) const
+        {
+            return _battlePathfinder.getDistance( position );
+        }
+
         // Checks whether the given position is reachable for the current unit (to which the current pathfinder
         // graph relates), either on the current turn or in principle
-        bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const;
+        bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const
+        {
+            return _battlePathfinder.isPositionReachable( position, onCurrentTurn );
+        }
+
         // Returns the indexes of all cells that can be occupied by the head of the current unit (to which the
         // current pathfinder graph relates) on the current turn
-        Indexes getAllAvailableMoves() const;
+        Indexes getAllAvailableMoves() const
+        {
+            return _battlePathfinder.getAllAvailableMoves();
+        }
+
         // Returns a path (or its part) for the current unit (to which the current pathfinder graph relates)
         // to the given position that can be traversed during the current turn. If this position is unreachable,
         // then an empty path is returned.

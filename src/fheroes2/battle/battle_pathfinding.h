@@ -75,15 +75,19 @@ namespace Battle
 
         // Rebuilds the graph of available positions for the given unit
         void evaluateForUnit( const Unit & unit );
+
         // Checks whether the given position is reachable, either on the current turn or in principle
         bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const;
+
         // Returns the distance to the given position (i.e. the number of cells that needs to be passed).
         // It's the caller's responsibility to make sure that this position is reachable before calling
         // this method.
         uint32_t getDistance( const Position & position ) const;
+
         // Builds and returns a path (or its part) to the given position that can be traversed during the
         // current turn. If this position is unreachable, then an empty path is returned.
         Indexes buildPath( const Position & position ) const;
+
         // Returns the indexes of all cells that can be occupied by the unit's head on the current turn
         Indexes getAllAvailableMoves() const;
 

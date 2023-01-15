@@ -188,13 +188,13 @@ Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const
             return {};
         };
 
-        Position result = tryHead();
+        Position headPos = tryHead();
 
-        if ( result.GetHead() == nullptr || result.GetTail() == nullptr ) {
-            result = tryTail();
+        if ( headPos.GetHead() != nullptr && headPos.GetTail() != nullptr ) {
+            return headPos;
         }
 
-        return result;
+        return tryTail();
     }
 
     Cell * headCell = Board::GetCell( dst );
