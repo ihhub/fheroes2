@@ -540,10 +540,6 @@ namespace AI
             const Unit * unit = arena.GraveyardLastTroop( idx );
             assert( unit != nullptr && !unit->isValid() );
 
-            if ( !unit->AllowApplySpell( spell, _commander ) ) {
-                continue;
-            }
-
             if ( !arena.GraveyardAllowResurrect( idx, spell ) ) {
                 continue;
             }

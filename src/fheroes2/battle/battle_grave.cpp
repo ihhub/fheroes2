@@ -71,7 +71,7 @@ void Battle::Graveyard::RemoveTroop( const Unit & unit )
 
         auto & [dummy, troopUIDs] = *idxIter;
 
-        auto troopUIDIter = std::find( troopUIDs.begin(), troopUIDs.end(), uid );
+        const auto troopUIDIter = std::find( troopUIDs.begin(), troopUIDs.end(), uid );
         if ( troopUIDIter != troopUIDs.end() ) {
             troopUIDs.erase( troopUIDIter );
         }

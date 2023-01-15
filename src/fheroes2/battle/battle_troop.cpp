@@ -655,7 +655,7 @@ uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
 
 void Battle::Unit::PostKilledAction()
 {
-    // kill mirror image (master)
+    // Remove mirror image (master)
     if ( Modes( CAP_MIRROROWNER ) ) {
         modes = 0;
         mirror->hp = 0;
@@ -664,7 +664,7 @@ void Battle::Unit::PostKilledAction()
         mirror = nullptr;
         ResetModes( CAP_MIRROROWNER );
     }
-    // kill mirror image (slave)
+    // Remove mirror image (slave)
     if ( Modes( CAP_MIRRORIMAGE ) && mirror != nullptr ) {
         mirror->ResetModes( CAP_MIRROROWNER );
         mirror = nullptr;
@@ -680,20 +680,24 @@ void Battle::Unit::PostKilledAction()
 
     SetModes( TR_MOVED );
 
-    // save troop to graveyard
-    // skip mirror and summon
-    if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) )
+    // Save to the graveyard if possible
+    if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) ) {
         Arena::GetGraveyard()->AddTroop( *this );
+    }
 
-    Cell * head = Board::GetCell( GetHeadIndex() );
-    Cell * tail = Board::GetCell( GetTailIndex() );
-    if ( head )
-        head->SetUnit( nullptr );
-    if ( tail )
+    Cell * head = position.GetHead();
+    assert( head != nullptr );
+
+    head->SetUnit( nullptr );
+
+    if ( isWide() ) {
+        Cell * tail = position.GetTail();
+        assert( tail != nullptr );
+
         tail->SetUnit( nullptr );
+    }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", is dead..." )
-    // possible also..
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << " is dead" )
 }
 
 uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool skip_dead )

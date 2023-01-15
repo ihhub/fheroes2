@@ -999,29 +999,31 @@ bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & 
         return false;
     }
 
-    const Unit * killed = GetTroopUID( graveyard.GetLastTroopUID( index ) );
-    if ( killed == nullptr ) {
+    const Unit * unit = GraveyardLastTroop( index );
+    if ( unit == nullptr ) {
         return false;
     }
 
-    if ( !killed->AllowApplySpell( spell, hero, nullptr ) ) {
+    if ( !unit->AllowApplySpell( spell, hero ) ) {
         return false;
     }
 
-    const int headIndex = killed->GetHeadIndex();
+    const int headIndex = unit->GetHeadIndex();
     assert( Board::isValidIndex( headIndex ) );
 
+    // No other unit should stand on a corpse
     if ( Board::GetCell( headIndex )->GetUnit() != nullptr ) {
         return false;
     }
 
-    if ( !killed->isWide() ) {
+    if ( !unit->isWide() ) {
         return true;
     }
 
-    const int tailIndex = killed->GetTailIndex();
+    const int tailIndex = unit->GetTailIndex();
     assert( Board::isValidIndex( tailIndex ) );
 
+    // No other unit should stand on a corpse
     if ( Board::GetCell( tailIndex )->GetUnit() != nullptr ) {
         return false;
     }
