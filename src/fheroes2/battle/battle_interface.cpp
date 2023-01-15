@@ -2832,8 +2832,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
         const Cell * cell = Board::GetCell( index_pos );
         if ( cell && _currentUnit && humanturn_spell.isSingleTarget() && humanturn_spell.isDamage() ) {
             const Unit * b_enemy = cell->GetUnit();
-            if ( b_enemy && b_enemy->AllowApplySpell( humanturn_spell, _currentUnit->GetCurrentOrArmyCommander() ) )
-            {
+            if ( b_enemy && b_enemy->AllowApplySpell( humanturn_spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
                 popup.SetInfo( cell, _currentUnit, b_enemy, &humanturn_spell );
                 resetPopup = false;
             }
