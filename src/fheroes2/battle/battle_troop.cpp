@@ -682,7 +682,10 @@ void Battle::Unit::PostKilledAction()
 
     // Save to the graveyard if possible
     if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) ) {
-        Arena::GetGraveyard()->AddTroop( *this );
+        Graveyard * graveyard = Arena::GetGraveyard();
+        assert( graveyard != nullptr );
+
+        graveyard->AddTroop( *this );
     }
 
     Cell * head = position.GetHead();
