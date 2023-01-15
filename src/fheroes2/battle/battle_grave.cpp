@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <type_traits>
 #include <utility>
 
 #include "battle_board.h"
@@ -64,13 +65,15 @@ void Battle::Graveyard::RemoveTroop( const Unit & unit )
 
     auto removeUIDFromIndex = [this]( const int32_t idx, const uint32_t uid ) {
         const auto idxIter = find( idx );
-        if ( idxIter != end() ) {
-            auto & [dummy, troopUIDs] = *idxIter;
+        if ( idxIter == end() ) {
+            return;
+        }
 
-            auto troopUIDIter = std::find( troopUIDs.begin(), troopUIDs.end(), uid );
-            if ( troopUIDIter != troopUIDs.end() ) {
-                troopUIDs.erase( troopUIDIter );
-            }
+        auto & [dummy, troopUIDs] = *idxIter;
+
+        auto troopUIDIter = std::find( troopUIDs.begin(), troopUIDs.end(), uid );
+        if ( troopUIDIter != troopUIDs.end() ) {
+            troopUIDs.erase( troopUIDIter );
         }
     };
 
