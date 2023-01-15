@@ -2830,16 +2830,16 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
         bool resetPopup = true;
         const Cell * cell = Board::GetCell( index_pos );
-        if (cell && _currentUnit && humanturn_spell.isSingleTarget() && humanturn_spell.isDamage()) {
+        if ( cell && _currentUnit && humanturn_spell.isSingleTarget() && humanturn_spell.isDamage() ) {
             const Unit * b_enemy = cell->GetUnit();
-            if (b_enemy && b_enemy->AllowApplySpell( humanturn_spell, _currentUnit->GetCurrentOrArmyCommander() ))
+            if ( b_enemy && b_enemy->AllowApplySpell( humanturn_spell, _currentUnit->GetCurrentOrArmyCommander() ) )
             {
                 popup.SetInfo( cell, _currentUnit, b_enemy, &humanturn_spell );
                 resetPopup = false;
             }
         }
 
-        if (resetPopup)
+        if ( resetPopup )
             popup.Reset();
 
         if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() ) {
@@ -6057,7 +6057,7 @@ void Battle::PopupDamageInfo::setBattleUIRect( const fheroes2::Rect & battleUIRe
 
 void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const Spell * spell )
 {
-    if ( (cell == nullptr || attacker == nullptr || defender == nullptr) && (cell == nullptr || spell == nullptr || defender == nullptr) ) {
+    if ( ( cell == nullptr || attacker == nullptr || defender == nullptr ) && ( cell == nullptr || spell == nullptr || defender == nullptr ) ) {
         return;
     }
 
@@ -6091,12 +6091,12 @@ void Battle::PopupDamageInfo::Redraw() const
         return;
     }
 
-    assert( (_cell != nullptr && _defender != nullptr && _attacker != nullptr) );
+    assert( ( _cell != nullptr && _defender != nullptr && _attacker != nullptr ) );
 
     uint32_t minDamage = 0;
     uint32_t maxDamage = 0;
 
-    if (_spell != nullptr && _spell->isSingleTarget() && _spell->isDamage()) {
+    if ( _spell != nullptr && _spell->isSingleTarget() && _spell->isDamage() ) {
         const HeroBase * hero = _attacker->GetCurrentOrArmyCommander();
         const uint32_t spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
 

@@ -232,7 +232,7 @@ namespace Battle
         PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
 
         void setBattleUIRect( const fheroes2::Rect & battleUIRect );
-        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const Spell * spell);
+        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const Spell * spell );
         void Reset();
         void Redraw() const;
 
