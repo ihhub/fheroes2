@@ -1038,14 +1038,19 @@ const Battle::Unit * Battle::Arena::GraveyardLastTroop( const int32_t index ) co
 
 std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32_t index ) const
 {
-    const TroopUIDs & ids = graveyard.GetTroopUIDs( index );
+    const TroopUIDs troopUIDs = graveyard.GetTroopUIDs( index );
 
-    std::vector<const Battle::Unit *> units( ids.size() );
-    for ( size_t i = 0; i < ids.size(); ++i ) {
-        units[i] = GetTroopUID( ids[i] );
-    }
+    std::vector<const Unit *> result;
+    result.reserve( troopUIDs.size() );
 
-    return units;
+    std::for_each( troopUIDs.begin(), troopUIDs.end(), [this, &result]( const uint32_t uid ) {
+        const Unit * unit = GetTroopUID( uid );
+        assert( unit != nullptr );
+
+        result.push_back( unit );
+    } );
+
+    return result;
 }
 
 Battle::Indexes Battle::Arena::GraveyardOccupiedCells() const
