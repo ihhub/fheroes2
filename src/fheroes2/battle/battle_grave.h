@@ -47,11 +47,11 @@ namespace Battle
 
         Graveyard & operator=( const Graveyard & ) = delete;
 
-        Indexes GetClosedCells() const;
-        void AddTroop( const Unit & );
-        void RemoveTroop( const Unit & );
-        uint32_t GetLastTroopUID( int32_t ) const;
-        TroopUIDs GetTroopUIDs( const int32_t hexIndex ) const;
+        Indexes GetOccupiedCells() const;
+        void AddTroop( const Unit & unit );
+        void RemoveTroop( const Unit & unit );
+        uint32_t GetLastTroopUID( const int32_t index ) const;
+        TroopUIDs GetTroopUIDs( const int32_t index ) const;
     };
 }
 

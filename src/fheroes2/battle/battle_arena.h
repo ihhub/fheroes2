@@ -161,10 +161,10 @@ namespace Battle
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
 
-        bool GraveyardAllowResurrect( int32_t, const Spell & ) const;
-        const Unit * GraveyardLastTroop( int32_t ) const;
-        std::vector<const Unit *> GetGraveyardTroops( const int32_t hexIndex ) const;
-        Indexes GraveyardClosedCells() const;
+        bool GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const;
+        const Unit * GraveyardLastTroop( const int32_t index ) const;
+        std::vector<const Unit *> GetGraveyardTroops( const int32_t index ) const;
+        Indexes GraveyardOccupiedCells() const;
 
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;

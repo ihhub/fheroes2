@@ -2315,7 +2315,7 @@ void Battle::Interface::RedrawHighObjects( int32_t cell_index )
 void Battle::Interface::RedrawKilled()
 {
     // redraw killed troop
-    const Indexes cells = arena.GraveyardClosedCells();
+    const Indexes cells = arena.GraveyardOccupiedCells();
 
     for ( Indexes::const_iterator it = cells.begin(); it != cells.end(); ++it ) {
         const std::vector<const Unit *> & units = arena.GetGraveyardTroops( *it );
