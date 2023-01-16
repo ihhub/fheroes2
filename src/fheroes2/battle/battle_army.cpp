@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -49,15 +49,34 @@ Battle::Units::Units()
     reserve( unitSizeCapacity );
 }
 
-Battle::Units::Units( const Units & units, const bool filter )
-    : std::vector<Unit *>()
+Battle::Units::Units( const Units & units, const bool isRemoveInvalidUnits )
 {
     reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
     assign( units.begin(), units.end() );
 
-    if ( filter ) {
-        erase( std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ), end() );
+    if ( isRemoveInvalidUnits ) {
+        erase( std::remove_if( begin(), end(),
+                               []( const Unit * unit ) {
+                                   assert( unit != nullptr );
+
+                                   return !unit->isValid();
+                               } ),
+               end() );
     }
+}
+
+Battle::Units::Units( const Units & units, const Unit * unitToRemove )
+{
+    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
+    assign( units.begin(), units.end() );
+
+    erase( std::remove_if( begin(), end(),
+                           [unitToRemove]( const Unit * unit ) {
+                               assert( unit != nullptr );
+
+                               return !unit->isValid() || unit == unitToRemove;
+                           } ),
+           end() );
 }
 
 void Battle::Units::SortFastest()

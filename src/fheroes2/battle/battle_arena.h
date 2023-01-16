@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,7 +29,6 @@
 #include <list>
 #include <memory>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "battle.h"
@@ -140,19 +139,32 @@ namespace Battle
 
         void FadeArena( bool clearMessageLog ) const;
 
-        // returns pair with move cell index and distance
-        std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target ) const;
+        // Returns the distance to the given position (i.e. the number of cells that needs to be passed) for the
+        // current unit (to which the current pathfinder graph relates). It's the caller's responsibility to make
+        // sure that this position is reachable before calling this method.
+        uint32_t CalculateMoveDistance( const Position & position ) const
+        {
+            return _battlePathfinder.getDistance( position );
+        }
 
-        uint32_t CalculateMoveDistance( int32_t indexTo ) const;
-        bool hexIsPassable( int32_t indexTo ) const;
-        Indexes getAllAvailableMoves( uint32_t moveRange ) const;
-        Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
-        Indexes GetPath( const Unit &, const Position & ) const;
+        // Checks whether the given position is reachable for the current unit (to which the current pathfinder
+        // graph relates), either on the current turn or in principle
+        bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const
+        {
+            return _battlePathfinder.isPositionReachable( position, onCurrentTurn );
+        }
 
-        // Returns the cell nearest to the end of the path to the cell with the given index (according to the AIBattlePathfinder)
-        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell with
-        // the given index is unreachable in principle
-        int32_t GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const;
+        // Returns the indexes of all cells that can be occupied by the head of the current unit (to which the
+        // current pathfinder graph relates) on the current turn
+        Indexes getAllAvailableMoves() const
+        {
+            return _battlePathfinder.getAllAvailableMoves();
+        }
+
+        // Returns a path (or its part) for the current unit (to which the current pathfinder graph relates)
+        // to the given position that can be traversed during the current turn. If this position is unreachable,
+        // then an empty path is returned.
+        Indexes GetPath( const Position & position ) const;
 
         void ApplyAction( Command & );
 
@@ -281,7 +293,7 @@ namespace Battle
         SpellStorage usage_spells;
 
         Board board;
-        AIBattlePathfinder _globalAIPathfinder;
+        BattlePathfinder _battlePathfinder;
         int icn_covr;
 
         uint32_t current_turn;
