@@ -60,7 +60,7 @@ void Interface::Basic::Reset()
     const bool isHideInterface = conf.isHideInterfaceEnabled();
 
     if ( isHideInterface ) {
-        conf.SetShowPanel( true );
+        conf.SetShowControlPanel( true );
 
         controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
 
@@ -164,9 +164,13 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const Settings & conf = Settings::Get();
+    Settings & conf = Settings::Get();
     const bool isEvilInterface = conf.isEvilInterfaceEnabled();
     const bool isHideInterface = conf.isHideInterfaceEnabled();
+    const bool isIconsVisible = conf.ShowIcons();
+    const bool isButtonsVisible = conf.ShowButtons();
+    const bool isStatusVisible = conf.ShowStatus();
+    const bool isControlPanelVisible = conf.ShowControlPanel();
 
     const fheroes2::Rect & radarRect = radar.GetRect();
     const fheroes2::Rect & radarArea = radar.GetArea();
@@ -184,12 +188,31 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     };
 
     const fheroes2::Rect & visibleArea = gameArea.GetROI();
-    const bool isFadingEnabled = ( gameArea.GetROI().width > TILEWIDTH * distance ) || ( gameArea.GetROI().height > TILEWIDTH * distance );
+    const bool isFadingEnabled = ( visibleArea.width > TILEWIDTH * distance ) || ( visibleArea.height > TILEWIDTH * distance );
 
-    // We need to add an extra one cell as a hero stands exactly in the middle of a cell
-    const fheroes2::Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
-    const fheroes2::Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
-    const fheroes2::Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
+    const fheroes2::Rect spellROI = [this, from, distance, isHideInterface, &visibleArea]() -> fheroes2::Rect {
+        const fheroes2::Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
+        const fheroes2::Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
+
+        const int32_t x = heroPosOffset.x;
+        const int32_t y = heroPosOffset.y;
+
+        // We need to add an extra cell since the hero stands exactly in the middle of a cell
+        const int32_t w = std::min( TILEWIDTH * ( distance + 1 ), visibleArea.width );
+        const int32_t h = std::min( TILEWIDTH * ( distance + 1 ), visibleArea.height );
+
+        return { isHideInterface ? x : std::max( x, BORDERWIDTH ), isHideInterface ? y : std::max( y, BORDERWIDTH ), w, h };
+    }();
+
+    if ( isHideInterface ) {
+        // There is no need to hide the radar because it will be replaced by the Dimension Door control panel
+        conf.SetShowIcons( false );
+        conf.SetShowButtons( false );
+        conf.SetShowStatus( false );
+        conf.SetShowControlPanel( false );
+
+        Redraw( REDRAW_GAMEAREA );
+    }
 
     if ( isFadingEnabled ) {
         if ( isHideInterface ) {
@@ -269,7 +292,16 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     }
 
     if ( isFadingEnabled ) {
-        gameArea.SetRedraw();
+        SetRedraw( REDRAW_GAMEAREA );
+    }
+
+    if ( isHideInterface ) {
+        conf.SetShowIcons( isIconsVisible );
+        conf.SetShowButtons( isButtonsVisible );
+        conf.SetShowStatus( isStatusVisible );
+        conf.SetShowControlPanel( isControlPanelVisible );
+
+        SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_GAMEAREA );
     }
 
     Redraw( REDRAW_RADAR );

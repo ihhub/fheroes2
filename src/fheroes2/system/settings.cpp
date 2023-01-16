@@ -60,7 +60,7 @@ namespace
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
         GLOBAL_MONOCHROME_CURSOR = 0x00000020,
-        GLOBAL_SHOW_CPANEL = 0x00000040,
+        GLOBAL_SHOW_CONTROL_PANEL = 0x00000040,
         GLOBAL_SHOW_RADAR = 0x00000080,
         GLOBAL_SHOW_ICONS = 0x00000100,
         GLOBAL_SHOW_BUTTONS = 0x00000200,
@@ -853,7 +853,7 @@ bool Settings::isEvilInterfaceEnabled() const
 
 bool Settings::ShowControlPanel() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOW_CPANEL );
+    return _optGlobal.Modes( GLOBAL_SHOW_CONTROL_PANEL );
 }
 
 bool Settings::ShowRadar() const
@@ -1003,9 +1003,9 @@ void Settings::SetBattleMouseShaded( bool f )
     f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
-void Settings::SetShowPanel( bool f )
+void Settings::SetShowControlPanel( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOW_CPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CPANEL );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_CONTROL_PANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CONTROL_PANEL );
 }
 
 void Settings::SetShowRadar( bool f )

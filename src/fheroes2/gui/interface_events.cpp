@@ -556,7 +556,7 @@ void Interface::Basic::EventSwitchShowControlPanel() const
     Settings & conf = Settings::Get();
 
     if ( conf.isHideInterfaceEnabled() ) {
-        conf.SetShowPanel( !conf.ShowControlPanel() );
+        conf.SetShowControlPanel( !conf.ShowControlPanel() );
         gameArea.SetRedraw();
     }
 }

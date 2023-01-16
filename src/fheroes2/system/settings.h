@@ -220,7 +220,7 @@ public:
     void SetBattleGrid( bool );
     void SetBattleMovementShaded( bool );
     void SetBattleMouseShaded( bool );
-    void SetShowPanel( bool );
+    void SetShowControlPanel( bool );
     void SetShowRadar( bool );
     void SetShowIcons( bool );
     void SetShowButtons( bool );
