@@ -98,10 +98,10 @@ namespace Battle
     // Sprite to render over the unit (spell effect animation)
     struct UnitSpellEffectImage
     {
-        UnitSpellEffectImage( const uint32_t unitId, const int32_t icnId, const bool isReflectedImage )
-            : unitId( unitId )
-            , icnId( icnId )
-            , isReflectedImage( isReflectedImage )
+        UnitSpellEffectImage( const uint32_t setUnitId, const int32_t setIcnId, const bool setReflectedImage )
+            : unitId( setUnitId )
+            , icnId( setIcnId )
+            , isReflectedImage( setReflectedImage )
         {}
 
         uint32_t unitId{ 0 };
