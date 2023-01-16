@@ -23,6 +23,8 @@
 
 #include "game_interface.h"
 
+#include <algorithm>
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
