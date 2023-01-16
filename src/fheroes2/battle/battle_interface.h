@@ -34,6 +34,7 @@
 #include "battle_board.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "icn.h"
 #include "image.h"
 #include "math_base.h"
 #include "spell.h"
@@ -94,14 +95,20 @@ namespace Battle
         CAPTAIN
     };
 
-    // Sprite to render over the unit (i.e. spell effect animation)
-    struct OverlaySprite
+    // Sprite to render over the unit (spell effect animation)
+    struct UnitSpellEffectImage
     {
-        OverlaySprite( const uint32_t unitId, const bool reflect );
+        UnitSpellEffectImage( const uint32_t unitId, const int32_t icnId, const bool isReflectedImage )
+            : unitId( unitId )
+            , icnId( icnId )
+            , isReflectedImage( isReflectedImage )
+        {}
+
         uint32_t unitId{ 0 };
-        const fheroes2::Sprite * overlaySprite{ nullptr };
+        int32_t icnId{ ICN::UNKNOWN };
+        uint32_t icnIndex{ 0 };
         fheroes2::Point position;
-        bool reflect{ false };
+        bool isReflectedImage{ false };
     };
 
     class OpponentSprite
@@ -454,7 +461,7 @@ namespace Battle
 
         BridgeMovementAnimation _bridgeAnimation;
 
-        std::vector<OverlaySprite> _unitOverlaySprite;
+        std::vector<UnitSpellEffectImage> _unitOverlaySprite;
     };
 }
 

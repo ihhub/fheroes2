@@ -574,11 +574,6 @@ namespace Battle
 
         return heroTypeAnim[heroType][animation];
     }
-
-    OverlaySprite::OverlaySprite( const uint32_t setUnitId, const bool setReflect )
-        : unitId( setUnitId )
-        , reflect( setReflect )
-    {}
 }
 
 bool CursorAttack( uint32_t theme )
@@ -1424,8 +1419,8 @@ void Battle::Interface::RedrawArmies()
 
             // Overlay sprites for troops (i.e. spell effect animation) should be rendered after rendereing all troops
             // for current row so the next troop will not be rendered over the overlay sprite.
-            std::vector<const OverlaySprite *> troopOverlaySpriteBeforeWall;
-            std::vector<const OverlaySprite *> troopOverlaySpriteAfterWall;
+            std::vector<const UnitSpellEffectImage *> troopOverlaySpriteBeforeWall;
+            std::vector<const UnitSpellEffectImage *> troopOverlaySpriteAfterWall;
 
             const int32_t wallCellId = wallCellIds[cellRowId];
 
@@ -1449,18 +1444,27 @@ void Battle::Interface::RedrawArmies()
                     if ( deadUnits[i] && cellId != deadUnits[i]->GetTailIndex() ) {
                         if ( isCellBefore ) {
                             deadTroopBeforeWall.emplace_back( deadUnits[i] );
+
                             // Check for overlay sprites of dead units (i.e. Resurrect spell).
-                            for ( const Battle::OverlaySprite & overlaySprite : _unitOverlaySprite ) {
-                                if ( overlaySprite.unitId == deadUnits[i]->GetUID() && overlaySprite.overlaySprite != nullptr ) {
+                            for ( Battle::UnitSpellEffectImage & overlaySprite : _unitOverlaySprite ) {
+                                if ( overlaySprite.unitId == deadUnits[i]->GetUID() && overlaySprite.icnId != ICN::UNKNOWN ) {
+                                    const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite.icnId, overlaySprite.icnIndex );
+                                    overlaySprite.position = CalculateSpellPosition( *deadUnits[i], overlaySprite.icnId, spellSprite );
+
                                     troopOverlaySpriteBeforeWall.emplace_back( &overlaySprite );
                                 }
                             }
                         }
                         else {
                             deadTroopAfterWall.emplace_back( deadUnits[i] );
-                            for ( const Battle::OverlaySprite & overlaySprite : _unitOverlaySprite ) {
-                                if ( overlaySprite.unitId == deadUnits[i]->GetUID() && overlaySprite.overlaySprite != nullptr ) {
-                                    troopOverlaySpriteBeforeWall.emplace_back( &overlaySprite );
+
+                            // Check for overlay sprites of dead units (i.e. Resurrect spell).
+                            for ( Battle::UnitSpellEffectImage & overlaySprite : _unitOverlaySprite ) {
+                                if ( overlaySprite.unitId == deadUnits[i]->GetUID() && overlaySprite.icnId != ICN::UNKNOWN ) {
+                                    const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite.icnId, overlaySprite.icnIndex );
+                                    overlaySprite.position = CalculateSpellPosition( *deadUnits[i], overlaySprite.icnId, spellSprite );
+
+                                    troopOverlaySpriteAfterWall.emplace_back( &overlaySprite );
                                 }
                             }
                         }
@@ -1499,8 +1503,11 @@ void Battle::Interface::RedrawArmies()
                 }
 
                 // Check for overlay sprites for 'unitOnCell'.
-                for ( const Battle::OverlaySprite & overlaySprite : _unitOverlaySprite ) {
-                    if ( overlaySprite.unitId == unitOnCell->GetUID() && overlaySprite.overlaySprite != nullptr ) {
+                for ( Battle::UnitSpellEffectImage & overlaySprite : _unitOverlaySprite ) {
+                    if ( overlaySprite.unitId == unitOnCell->GetUID() && overlaySprite.icnId != ICN::UNKNOWN ) {
+                        const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite.icnId, overlaySprite.icnIndex );
+                        overlaySprite.position = CalculateSpellPosition( *unitOnCell, overlaySprite.icnId, spellSprite );
+
                         if ( isCellBefore ) {
                             troopOverlaySpriteBeforeWall.emplace_back( &overlaySprite );
                         }
@@ -1527,9 +1534,10 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *movingTroopBeforeWall[i] );
             }
 
-            // Render the overlay srite for units in current cell row above all units in this and upper rows.
-            for ( const Battle::OverlaySprite * overlaySprite : troopOverlaySpriteBeforeWall ) {
-                fheroes2::Blit( *overlaySprite->overlaySprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->reflect );
+            // Render the overlay sprite for units in current cell row above all units in this and upper rows.
+            for ( const Battle::UnitSpellEffectImage * overlaySprite : troopOverlaySpriteBeforeWall ) {
+                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite->icnId, overlaySprite->icnIndex );
+                fheroes2::Blit( spellSprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->isReflectedImage );
             }
 
             RedrawCastle( *castle, wallCellId );
@@ -1550,16 +1558,17 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *movingTroopAfterWall[i] );
             }
 
-            // Render the overlay srite for units in current cell row above all units in this and upper rows.
-            for ( const Battle::OverlaySprite * overlaySprite : troopOverlaySpriteAfterWall ) {
-                fheroes2::Blit( *overlaySprite->overlaySprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->reflect );
+            // Render the overlay sprite for units in current cell row above all units in this and upper rows.
+            for ( const Battle::UnitSpellEffectImage * overlaySprite : troopOverlaySpriteAfterWall ) {
+                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite->icnId, overlaySprite->icnIndex );
+                fheroes2::Blit( spellSprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->isReflectedImage );
             }
         }
         else {
             std::vector<const Unit *> troopCounter;
             std::vector<const Unit *> troop;
             std::vector<const Unit *> movingTroop;
-            std::vector<const OverlaySprite *> troopOverlaySprite;
+            std::vector<const UnitSpellEffectImage *> troopOverlaySprite;
 
             // Redraw monsters.
             for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
@@ -1567,8 +1576,11 @@ void Battle::Interface::RedrawArmies()
 
                 // Check for overlay sprites of dead units (i.e. Resurrect spell).
                 for ( const Unit * deadUnit : arena.GetGraveyardTroops( cellId ) ) {
-                    for ( const Battle::OverlaySprite & overlaySprite : _unitOverlaySprite ) {
-                        if ( overlaySprite.unitId == deadUnit->GetUID() && overlaySprite.overlaySprite != nullptr ) {
+                    for ( Battle::UnitSpellEffectImage & overlaySprite : _unitOverlaySprite ) {
+                        if ( overlaySprite.unitId == deadUnit->GetUID() && overlaySprite.icnId != ICN::UNKNOWN ) {
+                            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite.icnId, overlaySprite.icnIndex );
+                            overlaySprite.position = CalculateSpellPosition( *deadUnit, overlaySprite.icnId, spellSprite );
+
                             troopOverlaySprite.emplace_back( &overlaySprite );
                         }
                     }
@@ -1593,8 +1605,11 @@ void Battle::Interface::RedrawArmies()
                 }
 
                 // Check for overlay sprites for 'unitOnCell'.
-                for ( const Battle::OverlaySprite & overlaySprite : _unitOverlaySprite ) {
-                    if ( overlaySprite.unitId == unitOnCell->GetUID() && overlaySprite.overlaySprite != nullptr ) {
+                for ( Battle::UnitSpellEffectImage & overlaySprite : _unitOverlaySprite ) {
+                    if ( overlaySprite.unitId == unitOnCell->GetUID() && overlaySprite.icnId != ICN::UNKNOWN ) {
+                        const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite.icnId, overlaySprite.icnIndex );
+                        overlaySprite.position = CalculateSpellPosition( *unitOnCell, overlaySprite.icnId, spellSprite );
+
                         troopOverlaySprite.emplace_back( &overlaySprite );
                     }
                 }
@@ -1614,8 +1629,9 @@ void Battle::Interface::RedrawArmies()
             }
 
             // Render the overlay srite for units in current cell row above all units in this and upper rows.
-            for ( const Battle::OverlaySprite * overlaySprite : troopOverlaySprite ) {
-                fheroes2::Blit( *overlaySprite->overlaySprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->reflect );
+            for ( const Battle::UnitSpellEffectImage * overlaySprite : troopOverlaySprite ) {
+                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite->icnId, overlaySprite->icnIndex );
+                fheroes2::Blit( spellSprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->isReflectedImage );
             }
         }
 
@@ -5751,13 +5767,13 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
     for ( const Battle::TargetInfo & target : targets ) {
         if ( target.defender ) {
-            _unitOverlaySprite.emplace_back( target.defender->GetUID(), ( isReflectICN && target.defender->isReflect() ) );
+            _unitOverlaySprite.emplace_back( target.defender->GetUID(), icn, ( isReflectICN && target.defender->isReflect() ) );
         }
     }
 
     overlaySpriteCount = _unitOverlaySprite.size() - overlaySpriteCount;
-    const std::vector<Battle::OverlaySprite>::iterator overlaySpriteEnd = _unitOverlaySprite.end();
-    const std::vector<Battle::OverlaySprite>::iterator overlaySpriteBegin = overlaySpriteEnd - static_cast<ptrdiff_t>( overlaySpriteCount );
+    const std::vector<Battle::UnitSpellEffectImage>::iterator overlaySpriteEnd = _unitOverlaySprite.end();
+    const std::vector<Battle::UnitSpellEffectImage>::iterator overlaySpriteBegin = overlaySpriteEnd - static_cast<ptrdiff_t>( overlaySpriteCount );
 
     // Set the defender wince animation state.
     bool isDefenderAnimating = wnce;
@@ -5774,14 +5790,12 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             if ( frame < maxFrame ) {
-                std::vector<Battle::OverlaySprite>::iterator overlaySprite = overlaySpriteBegin;
+                std::vector<Battle::UnitSpellEffectImage>::iterator overlaySpriteIter = overlaySpriteBegin;
                 for ( const Battle::TargetInfo & target : targets ) {
                     if ( target.defender ) {
-                        const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-                        ( *overlaySprite ).position = CalculateSpellPosition( *target.defender, icn, spellSprite );
-                        ( *overlaySprite ).overlaySprite = &spellSprite;
+                        ( *overlaySpriteIter ).icnIndex = frame;
 
-                        ++overlaySprite;
+                        ++overlaySpriteIter;
                     }
                 }
             }
@@ -5861,7 +5875,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int
         unit.SwitchAnimation( Monster_Info::KILL, true );
     }
 
-    _unitOverlaySprite.emplace_back( unit.GetUID(), reflect );
+    _unitOverlaySprite.emplace_back( unit.GetUID(), icn, reflect );
 
     // Wait for previously set and not passed delays before rendering a new frame.
     WaitForAllActionDelays();
@@ -5875,8 +5889,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             if ( frame < maxICNFrame ) {
-                _unitOverlaySprite.back().overlaySprite = &fheroes2::AGG::GetICN( icn, frame );
-                _unitOverlaySprite.back().position = CalculateSpellPosition( unit, icn, *_unitOverlaySprite.back().overlaySprite );
+                _unitOverlaySprite.back().icnIndex = frame;
             }
             Redraw();
 
