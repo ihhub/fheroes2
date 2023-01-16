@@ -187,10 +187,10 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         buttonExit.draw();
     };
 
-    const fheroes2::Rect & visibleArea = gameArea.GetROI();
-    const bool isFadingEnabled = ( visibleArea.width > TILEWIDTH * distance ) || ( visibleArea.height > TILEWIDTH * distance );
+    const fheroes2::Rect & gameAreaROI = gameArea.GetROI();
+    const bool isFadingEnabled = ( gameAreaROI.width > TILEWIDTH * distance ) || ( gameAreaROI.height > TILEWIDTH * distance );
 
-    const fheroes2::Rect spellROI = [this, from, distance, isHideInterface, &visibleArea]() -> fheroes2::Rect {
+    const fheroes2::Rect spellROI = [this, from, distance, isHideInterface, &gameAreaROI]() -> fheroes2::Rect {
         const fheroes2::Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
         const fheroes2::Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
 
@@ -198,8 +198,8 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         const int32_t y = heroPosOffset.y;
 
         // We need to add an extra cell since the hero stands exactly in the middle of a cell
-        const int32_t w = std::min( TILEWIDTH * ( distance + 1 ), visibleArea.width );
-        const int32_t h = std::min( TILEWIDTH * ( distance + 1 ), visibleArea.height );
+        const int32_t w = std::min( TILEWIDTH * ( distance + 1 ), gameAreaROI.width );
+        const int32_t h = std::min( TILEWIDTH * ( distance + 1 ), gameAreaROI.height );
 
         return { isHideInterface ? x : std::max( x, BORDERWIDTH ), isHideInterface ? y : std::max( y, BORDERWIDTH ), w, h };
     }();
@@ -216,14 +216,14 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
 
     if ( isFadingEnabled ) {
         if ( isHideInterface ) {
-            InvertedShadow( display, visibleArea, spellROI, 5, 9 );
+            InvertedShadow( display, gameAreaROI, spellROI, 5, 9 );
 
             drawControlPanel();
         }
         else {
             drawControlPanel();
 
-            fheroes2::InvertedFadeWithPalette( display, visibleArea, spellROI, 5, 300, 9 );
+            fheroes2::InvertedFadeWithPalette( display, gameAreaROI, spellROI, 5, 300, 9 );
         }
     }
     else {
@@ -250,7 +250,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
                 break;
             }
         }
-        else if ( visibleArea & mp ) {
+        else if ( gameAreaROI & mp ) {
             const int32_t dst = gameArea.GetValidTileIdFromPoint( mp );
 
             bool valid = ( dst >= 0 );
@@ -280,7 +280,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             Redraw( REDRAW_GAMEAREA );
 
             if ( isFadingEnabled ) {
-                InvertedShadow( display, visibleArea, spellROI, 5, 9 );
+                InvertedShadow( display, gameAreaROI, spellROI, 5, 9 );
 
                 if ( isHideInterface ) {
                     drawControlPanel();
