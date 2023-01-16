@@ -537,12 +537,12 @@ namespace AI
 
         // Then consider the stacks from the graveyard
         for ( const int32_t idx : arena.GraveyardOccupiedCells() ) {
-            const Unit * unit = arena.GraveyardLastTroop( idx );
-            assert( unit != nullptr && !unit->isValid() );
-
             if ( !arena.GraveyardAllowResurrect( idx, spell ) ) {
                 continue;
             }
+
+            const Unit * unit = arena.GraveyardLastTroop( idx );
+            assert( unit != nullptr && !unit->isValid() );
 
             updateBestOutcome( unit );
         }
