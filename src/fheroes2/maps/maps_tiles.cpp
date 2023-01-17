@@ -1173,19 +1173,19 @@ int Maps::Tiles::GetGround() const
     // list grounds from GROUND32.TIL
     if ( 30 > _terrainImageIndex )
         return Maps::Ground::WATER;
-    else if ( 92 > _terrainImageIndex )
+    if ( 92 > _terrainImageIndex )
         return Maps::Ground::GRASS;
-    else if ( 146 > _terrainImageIndex )
+    if ( 146 > _terrainImageIndex )
         return Maps::Ground::SNOW;
-    else if ( 208 > _terrainImageIndex )
+    if ( 208 > _terrainImageIndex )
         return Maps::Ground::SWAMP;
-    else if ( 262 > _terrainImageIndex )
+    if ( 262 > _terrainImageIndex )
         return Maps::Ground::LAVA;
-    else if ( 321 > _terrainImageIndex )
+    if ( 321 > _terrainImageIndex )
         return Maps::Ground::DESERT;
-    else if ( 361 > _terrainImageIndex )
+    if ( 361 > _terrainImageIndex )
         return Maps::Ground::DIRT;
-    else if ( 415 > _terrainImageIndex )
+    if ( 415 > _terrainImageIndex )
         return Maps::Ground::WASTELAND;
 
     return Maps::Ground::BEACH;
