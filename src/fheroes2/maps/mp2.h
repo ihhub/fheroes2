@@ -43,7 +43,8 @@ namespace MP2
     // Tile structure from the original map format.
     struct mp2tile_t
     {
-        uint16_t surfaceType; // Tile index representing a type of surface: ocean, grass, snow, swamp, lava, desert, dirt, wasteland, beach.
+        // Terrain image index used for terrain tile display on Adventure Map.
+        uint16_t terrainImageIndex;
 
         uint8_t objectName1; // Ground (bottom) level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
         uint8_t level1IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for ground (bottom) object. 255 means it's an empty object.
@@ -57,9 +58,13 @@ namespace MP2
         uint8_t objectName2; // Top level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
         uint8_t level2IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
 
-        // First 2 bits responsible for tile shape (0 - 3). Subsequent bits are still unknown. Possible values are 1 and 5. They are set only for tiles with transition
-        // between land and sea. They can be related to passabilities.
-        uint8_t flags;
+        // First 2 bits responsible for terrain shape (0 - 3).
+        // Third, forth and fifth bits belong to tiles of water touching land (beach). There are only two combinations of them (from lowest to highest):
+        // 1 0 0
+        // 1 0 1
+        // These two bit combinations are used to determine where water or land terrain can be drawn on the current tile.
+        // Most likely these values are used only in the original Editor and have no use within the game.
+        uint8_t terrainFlags;
 
         // The main object type for the tile. The tile can have multiple objects but the game can display information only about one.
         // Refer to MapObjectType enumeration below.
