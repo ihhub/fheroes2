@@ -153,7 +153,7 @@ namespace
 
     void LoadWAV( int m82, std::vector<uint8_t> & v )
     {
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) )
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, M82::GetString( m82 ) )
         const std::vector<uint8_t> & body = getDataFromAggFile( M82::GetString( m82 ), false );
 
         if ( !body.empty() ) {
@@ -181,7 +181,7 @@ namespace
 
     void LoadMID( int xmi, std::vector<uint8_t> & v )
     {
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) )
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, XMI::GetString( xmi ) )
         const std::vector<uint8_t> & body = getDataFromAggFile( XMI::GetString( xmi ), xmi >= XMI::MIDI_ORIGINAL_KNIGHT );
 
         if ( !body.empty() ) {
@@ -453,7 +453,7 @@ namespace
     {
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Try to play sound " << M82::GetString( m82 ) )
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, "Try to play sound " << M82::GetString( m82 ) )
 
         const std::vector<uint8_t> & v = GetWAV( m82 );
         if ( v.empty() ) {
@@ -494,7 +494,7 @@ namespace
 
         // Check if the music track is already available in the music database.
         if ( Music::Play( musicUID, playbackMode ) ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play music track " << trackId )
+            DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play music track " << trackId )
 
             currentMusicTrackId = trackId;
 
@@ -523,14 +523,14 @@ namespace
             }
 
             if ( filename.empty() ) {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Cannot find a file for " << trackId << " track." )
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "Cannot find a file for " << trackId << " track." )
             }
             else {
                 Music::Play( musicUID, filename, playbackMode );
 
                 currentMusicTrackId = trackId;
 
-                DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
+                DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
 
                 return;
             }
@@ -556,7 +556,7 @@ namespace
             }
         }
 
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
     }
 
     void getClosestSoundIdPairByAngle( const std::vector<AudioManager::AudioLoopEffectInfo> & soundToAdd, const std::vector<ChannelAudioLoopEffectInfo> & soundToReplace,
@@ -766,7 +766,7 @@ namespace
 
                 currentAudioLoopEffects[soundType].emplace_back( info, channelId );
 
-                DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Playing sound " << M82::GetString( soundType ) )
+                DEBUG_LOG( DBG_GAME, DBG_TRACE, "Playing sound " << M82::GetString( soundType ) )
             }
         }
     }
