@@ -193,11 +193,10 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     const bool isFadingEnabled = ( gameAreaROI.width > TILEWIDTH * distance ) || ( gameAreaROI.height > TILEWIDTH * distance );
 
     const fheroes2::Rect spellROI = [this, from, distance, isHideInterface, &gameAreaROI]() -> fheroes2::Rect {
-        const fheroes2::Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
-        const fheroes2::Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
+        const fheroes2::Point heroPos = gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) );
 
-        const int32_t x = heroPosOffset.x;
-        const int32_t y = heroPosOffset.y;
+        const int32_t x = heroPos.x - TILEWIDTH * ( distance / 2 );
+        const int32_t y = heroPos.y - TILEWIDTH * ( distance / 2 );
 
         // We need to add an extra cell since the hero stands exactly in the middle of a cell
         const int32_t w = std::min( TILEWIDTH * ( distance + 1 ), gameAreaROI.width );
