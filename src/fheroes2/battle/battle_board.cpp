@@ -331,18 +331,6 @@ int Battle::Board::GetReflectDirection( const int dir )
     return UNKNOWN;
 }
 
-bool Battle::Board::IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection )
-{
-    const int startX = startCellId % ARENAW;
-    const int endX = endCellId % ARENAW;
-
-    if ( prevLeftDirection ) {
-        return endX <= startX;
-    }
-
-    return endX < startX;
-}
-
 bool Battle::Board::isNegativeDistance( const int32_t index1, const int32_t index2 )
 {
     return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
@@ -442,13 +430,6 @@ bool Battle::Board::isOutOfWallsIndex( const int32_t index )
 {
     return ( ( index <= 8 ) || ( 11 <= index && index <= 19 ) || ( 22 <= index && index <= 29 ) || ( 33 <= index && index <= 40 ) || ( 44 <= index && index <= 50 )
              || ( 55 <= index && index <= 62 ) || ( 66 <= index && index <= 73 ) || ( 77 <= index && index <= 85 ) || ( 88 <= index && index <= 96 ) );
-}
-
-bool Battle::Board::isBridgeIndex( const int32_t index, const Unit & unit )
-{
-    const Bridge * bridge = Arena::GetBridge();
-
-    return ( index == 49 && !unit.isFlying() && bridge && bridge->isPassable( unit ) ) || index == 50;
 }
 
 bool Battle::Board::isMoatIndex( const int32_t index, const Unit & unit )
