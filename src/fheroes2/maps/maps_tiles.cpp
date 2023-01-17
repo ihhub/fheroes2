@@ -430,11 +430,6 @@ namespace
         return false;
     }
 
-    uint32_t PackTileSpriteIndex( uint32_t index, uint32_t shape )
-    {
-        return ( shape << 14 ) | ( 0x3FFF & index );
-    }
-
     bool isDirectRenderingRestricted( const int icnId )
     {
         switch ( icnId ) {
