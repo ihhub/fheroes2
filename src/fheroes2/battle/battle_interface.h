@@ -95,10 +95,10 @@ namespace Battle
         CAPTAIN
     };
 
-    // Sprite to render over the unit (spell effect animation)
-    struct UnitSpellEffectImage
+    // Sprite data to render over the unit (spell effect animation)
+    struct UnitSpellEffectInfo
     {
-        UnitSpellEffectImage( const uint32_t setUnitId, const int32_t setIcnId, const bool setReflectedImage )
+        UnitSpellEffectInfo( const uint32_t setUnitId, const int32_t setIcnId, const bool setReflectedImage )
             : unitId( setUnitId )
             , icnId( setIcnId )
             , isReflectedImage( setReflectedImage )
@@ -461,7 +461,7 @@ namespace Battle
 
         BridgeMovementAnimation _bridgeAnimation;
 
-        std::vector<UnitSpellEffectImage> _unitOverlaySprite;
+        std::vector<UnitSpellEffectInfo> _unitSpellEffectInfos;
     };
 }
 
