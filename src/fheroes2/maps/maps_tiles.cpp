@@ -430,11 +430,6 @@ namespace
         return false;
     }
 
-    uint32_t PackTileSpriteIndex( uint32_t index, uint32_t shape )
-    {
-        return ( shape << 14 ) | ( 0x3FFF & index );
-    }
-
     bool isDirectRenderingRestricted( const int icnId )
     {
         switch ( icnId ) {
@@ -744,8 +739,9 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     quantity2 = mp2.quantity2;
     additionalMetadata = 0;
     fog_colors = Color::ALL;
+    _terrainImageIndex = mp2.terrainImageIndex;
+    _terrainFlags = mp2.terrainFlags;
 
-    SetTerrain( mp2.surfaceType, mp2.flags );
     SetIndex( index );
     SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
@@ -890,15 +886,9 @@ int Maps::Tiles::getBoatDirection() const
     return Direction::UNKNOWN;
 }
 
-void Maps::Tiles::SetTerrain( uint32_t sprite_index, uint32_t shape )
-{
-    // TODO: verify the logic! The shape value can exceed 3, and the result will not fit into uint16_t
-    pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
-}
-
 const fheroes2::Image & Maps::Tiles::GetTileSurface() const
 {
-    return fheroes2::AGG::GetTIL( TIL::GROUND32, TileSpriteIndex(), TileSpriteShape() );
+    return fheroes2::AGG::GetTIL( TIL::GROUND32, _terrainImageIndex, ( _terrainFlags & 0x3 ) );
 }
 
 int Maps::Tiles::getOriginalPassability() const
@@ -1175,24 +1165,22 @@ void Maps::Tiles::AddonsSort()
 
 int Maps::Tiles::GetGround() const
 {
-    const uint32_t index = TileSpriteIndex();
-
     // list grounds from GROUND32.TIL
-    if ( 30 > index )
+    if ( 30 > _terrainImageIndex )
         return Maps::Ground::WATER;
-    else if ( 92 > index )
+    if ( 92 > _terrainImageIndex )
         return Maps::Ground::GRASS;
-    else if ( 146 > index )
+    if ( 146 > _terrainImageIndex )
         return Maps::Ground::SNOW;
-    else if ( 208 > index )
+    if ( 208 > _terrainImageIndex )
         return Maps::Ground::SWAMP;
-    else if ( 262 > index )
+    if ( 262 > _terrainImageIndex )
         return Maps::Ground::LAVA;
-    else if ( 321 > index )
+    if ( 321 > _terrainImageIndex )
         return Maps::Ground::DESERT;
-    else if ( 361 > index )
+    if ( 361 > _terrainImageIndex )
         return Maps::Ground::DIRT;
-    else if ( 415 > index )
+    if ( 415 > _terrainImageIndex )
         return Maps::Ground::WASTELAND;
 
     return Maps::Ground::BEACH;
@@ -2856,21 +2844,36 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
     static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for writing MP2::MapObjectType object" );
 
-    return msg << tile._index << tile.pack_sprite_index << tile.tilePassable << tile._uid << tile._objectType << tile._imageIndex
+    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid << tile._objectType << tile._imageIndex
                << static_cast<uint8_t>( tile.mp2_object ) << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata << tile.heroID
                << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
-    msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile._uid >> tile._objectType >> tile._imageIndex;
+    msg >> tile._index;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
+        // In old save format terrain information is stored in a very fuzzy way.
+        uint16_t temp = 0;
+        msg >> temp;
+
+        tile._terrainImageIndex = ( temp & 0x3FFF );
+        tile._terrainFlags = ( temp >> 14 );
+    }
+    else {
+        msg >> tile._terrainImageIndex >> tile._terrainFlags;
+    }
+
+    msg >> tile.tilePassable >> tile._uid >> tile._objectType >> tile._imageIndex;
 
     static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for reading MP2::MapObjectType object" );
     uint8_t objectType = MP2::OBJ_NONE;
     msg >> objectType;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_1001_RELEASE, "Remove the logic below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_1001_RELEASE ) {
         if ( objectType == 128 ) {
             // This is an old Sea Chest object type.
             objectType = MP2::OBJ_SEA_CHEST;
