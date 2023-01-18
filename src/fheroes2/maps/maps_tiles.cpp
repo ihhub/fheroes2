@@ -570,8 +570,8 @@ std::string Maps::TilesAddon::String( int lvl ) const
     std::ostringstream os;
     os << "--------- Level " << lvl << " --------" << std::endl
        << "UID             : " << _uid << std::endl
-       << "object type     : " << static_cast<int>( _objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( _objectIcnType >> 2 ) )
-                               << ")" << std::endl
+       << "object type     : " << static_cast<int>( _objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( _objectIcnType >> 2 ) ) << ")"
+       << std::endl
        << "image index     : " << static_cast<int>( _imageIndex ) << std::endl
        << "layer type      : " << static_cast<int>( _layerType ) << " (" << static_cast<int>( _layerType % 4 ) << ")"
        << " - " << getObjectLayerName( _layerType % 4 ) << std::endl
@@ -637,7 +637,7 @@ int Maps::Tiles::getColorFromBarrierSprite( const uint8_t nonCorrectedObjectIcnT
 int Maps::Tiles::getColorFromTravellerTentSprite( const uint8_t nonCorrectedObjectIcnType, const uint8_t icnIndex )
 {
     if ( ICN::X_LOC3 == MP2::getIcnIdFromObjectIcnType( nonCorrectedObjectIcnType >> 2 ) && 110 <= icnIndex && 138 >= icnIndex ) {
-    // 110, 114, 118, 122, 126, 130, 134, 138
+        // 110, 114, 118, 122, 126, 130, 134, 138
         return ( ( icnIndex - 110 ) / 4 ) + 1;
     }
 
@@ -1020,8 +1020,9 @@ void Maps::Tiles::updatePassability()
                           && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                     tilePassable &= ~Direction::BOTTOM;
                 }
-                else if ( isShortObject( bottomTileObjectType ) || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() ) &&
-                          ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
+                else if ( isShortObject( bottomTileObjectType )
+                          || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() )
+                               && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
                     tilePassable &= ~Direction::BOTTOM;
                 }
                 else {
@@ -1565,7 +1566,7 @@ std::string Maps::Tiles::String() const
        << "UID             : " << _uid << std::endl
        << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl
        << "object type     : " << static_cast<int>( _objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( _objectIcnType >> 2 ) ) << ")"
-                               << std::endl
+       << std::endl
        << "image index     : " << static_cast<int>( _imageIndex ) << " (animated: " << hasSpriteAnimation() << ")" << std::endl
        << "layer type      : " << static_cast<int>( _layerType ) << " - " << getObjectLayerName( _layerType ) << std::endl
        << "region          : " << _region << std::endl
