@@ -661,7 +661,7 @@ void Maps::Tiles::UpdateAbandonedMineLeftSprite( uint8_t & nonCorrectedObjectIcn
         nonCorrectedObjectIcnType = ( nonCorrectedObjectIcnType % 4 ) | ( MP2::OBJ_ICN_TYPE_MTNDIRT << 2 );
         imageIndex = 112;
     }
-    else if ( ICN::EXTRAOVR == objectIcnType && imageIndex == 5 ) {
+    else if ( MP2::OBJ_ICN_TYPE_EXTRAOVR == objectIcnType && imageIndex == 5 ) {
         switch ( resource ) {
         case Resource::ORE:
             imageIndex = 0;
