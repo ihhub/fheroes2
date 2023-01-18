@@ -942,58 +942,74 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
     return false;
 }
 
-bool Battle::Arena::GraveyardAllowResurrect( int32_t index, const Spell & spell ) const
+bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const
 {
-    if ( !spell.isResurrect() )
+    if ( !spell.isResurrect() ) {
         return false;
+    }
 
     const HeroBase * hero = GetCurrentCommander();
-    if ( hero == nullptr )
+    if ( hero == nullptr ) {
         return false;
+    }
 
-    const Unit * killed = GetTroopUID( graveyard.GetLastTroopUID( index ) );
-    if ( killed == nullptr )
+    const Unit * unit = GraveyardLastTroop( index );
+    if ( unit == nullptr ) {
         return false;
+    }
 
-    if ( !killed->AllowApplySpell( spell, hero, nullptr ) )
+    if ( !unit->AllowApplySpell( spell, hero ) ) {
         return false;
+    }
 
-    if ( Board::GetCell( index )->GetUnit() != nullptr )
+    const int headIndex = unit->GetHeadIndex();
+    assert( Board::isValidIndex( headIndex ) );
+
+    // No other unit should stand on a corpse
+    if ( Board::GetCell( headIndex )->GetUnit() != nullptr ) {
         return false;
+    }
 
-    if ( !killed->isWide() )
+    if ( !unit->isWide() ) {
         return true;
+    }
 
-    const int tailIndex = killed->GetTailIndex();
-    const int headIndex = killed->GetHeadIndex();
-    const int secondIndex = tailIndex == index ? headIndex : tailIndex;
+    const int tailIndex = unit->GetTailIndex();
+    assert( Board::isValidIndex( tailIndex ) );
 
-    if ( Board::GetCell( secondIndex )->GetUnit() != nullptr )
+    // No other unit should stand on a corpse
+    if ( Board::GetCell( tailIndex )->GetUnit() != nullptr ) {
         return false;
+    }
 
     return true;
 }
 
-const Battle::Unit * Battle::Arena::GraveyardLastTroop( int32_t index ) const
+const Battle::Unit * Battle::Arena::GraveyardLastTroop( const int32_t index ) const
 {
     return GetTroopUID( graveyard.GetLastTroopUID( index ) );
 }
 
-std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32_t hexIndex ) const
+std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32_t index ) const
 {
-    const TroopUIDs & ids = graveyard.GetTroopUIDs( hexIndex );
+    const TroopUIDs troopUIDs = graveyard.GetTroopUIDs( index );
 
-    std::vector<const Battle::Unit *> units( ids.size() );
-    for ( size_t i = 0; i < ids.size(); ++i ) {
-        units[i] = GetTroopUID( ids[i] );
-    }
+    std::vector<const Unit *> result;
+    result.reserve( troopUIDs.size() );
 
-    return units;
+    std::for_each( troopUIDs.begin(), troopUIDs.end(), [this, &result]( const uint32_t uid ) {
+        const Unit * unit = GetTroopUID( uid );
+        assert( unit != nullptr );
+
+        result.push_back( unit );
+    } );
+
+    return result;
 }
 
-Battle::Indexes Battle::Arena::GraveyardClosedCells() const
+Battle::Indexes Battle::Arena::GraveyardOccupiedCells() const
 {
-    return graveyard.GetClosedCells();
+    return graveyard.GetOccupiedCells();
 }
 
 void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
