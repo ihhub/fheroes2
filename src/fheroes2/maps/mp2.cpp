@@ -181,9 +181,8 @@ int MP2::getIcnIdFromObjectIcnType( const uint8_t objectIcnType )
     return ICN::UNKNOWN;
 }
 
-bool MP2::isHiddenForPuzzle( const int terrainType, uint8_t nonCorrectedObjectIcnType, uint8_t index )
+bool MP2::isHiddenForPuzzle( const int terrainType, const uint8_t objectIcnType, uint8_t index )
 {
-    const int objectIcnType = nonCorrectedObjectIcnType >> 2;
     switch ( objectIcnType ) {
     case OBJ_ICN_TYPE_UNKNOWN:
     case OBJ_ICN_TYPE_UNUSED_1:

@@ -154,14 +154,9 @@ namespace
         return false;
     }
 
-    bool isShadowSprite( const int icn, const uint8_t icnIndex )
-    {
-        return isValidShadowSprite( icn, icnIndex );
-    }
-
     bool isShadowSprite( const uint8_t nonCorrectedObjectIcnType, const uint8_t icnIndex )
     {
-        return isShadowSprite( MP2::getIcnIdFromObjectIcnType( nonCorrectedObjectIcnType >> 2 ), icnIndex );
+        return isValidShadowSprite( MP2::getIcnIdFromObjectIcnType( nonCorrectedObjectIcnType >> 2 ), icnIndex );
     }
 
     bool isValidReefsSprite( const uint8_t objectIcnType, const uint8_t icnIndex )
@@ -475,9 +470,9 @@ namespace
         return "Uknown layer";
     }
 
-    MP2::MapObjectType getLoyaltyObject( const uint8_t nonCorrectedObjectIcnType, const uint8_t icnIndex )
+    MP2::MapObjectType getLoyaltyObject( const uint8_t objectIcnType, const uint8_t icnIndex )
     {
-        switch ( nonCorrectedObjectIcnType >> 2 ) {
+        switch ( objectIcnType ) {
         case MP2::OBJ_ICN_TYPE_X_LOC1:
             if ( icnIndex == 3 )
                 return MP2::OBJ_ALCHEMIST_TOWER;
@@ -624,9 +619,9 @@ bool Maps::TilesAddon::isArtifact( const TilesAddon & ta )
     return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ( ta._objectIcnType >> 2 ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 ) );
 }
 
-int Maps::Tiles::getColorFromBarrierSprite( const uint8_t nonCorrectedObjectIcnType, const uint8_t icnIndex )
+int Maps::Tiles::getColorFromBarrierSprite( const uint8_t objectIcnType, const uint8_t icnIndex )
 {
-    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == ( nonCorrectedObjectIcnType >> 2 ) && 60 <= icnIndex && 102 >= icnIndex ) {
+    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 60 <= icnIndex && 102 >= icnIndex ) {
         // 60, 66, 72, 78, 84, 90, 96, 102
         return ( ( icnIndex - 60 ) / 6 ) + 1;
     }
@@ -634,9 +629,9 @@ int Maps::Tiles::getColorFromBarrierSprite( const uint8_t nonCorrectedObjectIcnT
     return 0;
 }
 
-int Maps::Tiles::getColorFromTravellerTentSprite( const uint8_t nonCorrectedObjectIcnType, const uint8_t icnIndex )
+int Maps::Tiles::getColorFromTravellerTentSprite( const uint8_t objectIcnType, const uint8_t icnIndex )
 {
-    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == ( nonCorrectedObjectIcnType >> 2 ) && 110 <= icnIndex && 138 >= icnIndex ) {
+    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 110 <= icnIndex && 138 >= icnIndex ) {
         // 110, 114, 118, 122, 126, 130, 134, 138
         return ( ( icnIndex - 110 ) / 4 ) + 1;
     }
@@ -1256,7 +1251,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
             continue;
         }
 
-        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( GetGround(), addon._objectIcnType, addon._imageIndex ) ) {
+        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( GetGround(), addon._objectIcnType >> 2, addon._imageIndex ) ) {
             continue;
         }
 
@@ -1272,7 +1267,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
         renderAddonObject( dst, area, mp, addon );
     }
 
-    if ( _objectIcnType != 0 && ( _layerType & 0x03 ) == level && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( GetGround(), _objectIcnType, _imageIndex ) ) ) {
+    if ( _objectIcnType != 0 && ( _layerType & 0x03 ) == level && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( GetGround(), _objectIcnType >> 2, _imageIndex ) ) ) {
         renderMainObject( dst, area, mp );
     }
 
@@ -1531,7 +1526,7 @@ void Maps::Tiles::redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool 
 
 void Maps::Tiles::redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const
 {
-    if ( isPuzzleDraw && MP2::isHiddenForPuzzle( GetGround(), addon._objectIcnType, addon._imageIndex ) ) {
+    if ( isPuzzleDraw && MP2::isHiddenForPuzzle( GetGround(), addon._objectIcnType >> 2, addon._imageIndex ) ) {
         return;
     }
 
@@ -1973,7 +1968,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
     case MP2::OBJ_NON_ACTION_EXPANSION_OBJECT:
     case MP2::OBJ_EXPANSION_DWELLING:
     case MP2::OBJ_EXPANSION_OBJECT: {
-        MP2::MapObjectType objectType = getLoyaltyObject( tile._objectIcnType, tile._imageIndex );
+        MP2::MapObjectType objectType = getLoyaltyObject( tile._objectIcnType >> 2, tile._imageIndex );
         if ( objectType != MP2::OBJ_NONE ) {
             tile.SetObject( objectType );
             break;
@@ -1981,7 +1976,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
         // Add-ons of level 1 shouldn't even exist if no top object. However, let's play safe and verify it as well.
         for ( const TilesAddon & addon : tile.addons_level1 ) {
-            objectType = getLoyaltyObject( addon._objectIcnType, addon._imageIndex );
+            objectType = getLoyaltyObject( addon._objectIcnType >> 2, addon._imageIndex );
             if ( objectType != MP2::OBJ_NONE )
                 break;
         }
@@ -1992,7 +1987,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
         }
 
         for ( const TilesAddon & addon : tile.addons_level2 ) {
-            objectType = getLoyaltyObject( addon._objectIcnType, addon._imageIndex );
+            objectType = getLoyaltyObject( addon._objectIcnType >> 2, addon._imageIndex );
             if ( objectType != MP2::OBJ_NONE )
                 break;
         }

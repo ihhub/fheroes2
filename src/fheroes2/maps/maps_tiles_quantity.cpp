@@ -819,11 +819,11 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARRIER:
-        QuantitySetColor( Tiles::getColorFromBarrierSprite( _objectIcnType, _imageIndex ) );
+        QuantitySetColor( Tiles::getColorFromBarrierSprite( _objectIcnType >> 2, _imageIndex ) );
         break;
 
     case MP2::OBJ_TRAVELLER_TENT:
-        QuantitySetColor( Tiles::getColorFromTravellerTentSprite( _objectIcnType, _imageIndex ) );
+        QuantitySetColor( Tiles::getColorFromTravellerTentSprite( _objectIcnType >> 2, _imageIndex ) );
         break;
 
     case MP2::OBJ_ALCHEMIST_LAB:
