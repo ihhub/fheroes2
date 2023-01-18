@@ -2064,7 +2064,7 @@ void Maps::Tiles::replaceObject( const uint32_t objectUid, const uint8_t origina
     }
 
     if ( _uid == objectUid && ( _objectIcnType >> 2 ) == originalObjectIcnType && _imageIndex == originalImageIndex ) {
-        _objectIcnType = ( _objectIcnType & 0x3 ) | ( newObjectIcnType << 2 );
+        _objectIcnType = ( _objectIcnType % 4 ) | ( newObjectIcnType << 2 );
         _imageIndex = newimageIndex;
     }
 }
