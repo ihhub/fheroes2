@@ -477,8 +477,8 @@ namespace
 
     MP2::MapObjectType getLoyaltyObject( const uint8_t nonCorrectedObjectIcnType, const uint8_t icnIndex )
     {
-        switch ( MP2::getIcnIdFromObjectIcnType( nonCorrectedObjectIcnType >> 2 ) ) {
-        case ICN::X_LOC1:
+        switch ( nonCorrectedObjectIcnType >> 2 ) {
+        case MP2::OBJ_ICN_TYPE_X_LOC1:
             if ( icnIndex == 3 )
                 return MP2::OBJ_ALCHEMIST_TOWER;
             else if ( icnIndex < 3 )
@@ -509,7 +509,7 @@ namespace
                 return MP2::OBJ_NON_ACTION_WATER_ALTAR;
             break;
 
-        case ICN::X_LOC2:
+        case MP2::OBJ_ICN_TYPE_X_LOC2:
             if ( icnIndex == 4 )
                 return MP2::OBJ_STABLES;
             else if ( icnIndex < 4 )
@@ -530,7 +530,7 @@ namespace
                 return MP2::OBJ_REEFS;
             break;
 
-        case ICN::X_LOC3:
+        case MP2::OBJ_ICN_TYPE_X_LOC3:
             if ( icnIndex == 30 )
                 return MP2::OBJ_HUT_OF_MAGI;
             else if ( icnIndex < 32 )
@@ -586,9 +586,9 @@ bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const 
 
 bool Maps::TilesAddon::isRoad() const
 {
-    switch ( MP2::getIcnIdFromObjectIcnType( _objectIcnType >> 2 ) ) {
+    switch ( _objectIcnType >> 2 ) {
     // road sprite
-    case ICN::ROAD:
+    case MP2::OBJ_ICN_TYPE_ROAD:
         if ( 1 == _imageIndex || 8 == _imageIndex || 10 == _imageIndex || 11 == _imageIndex || 15 == _imageIndex || 22 == _imageIndex || 23 == _imageIndex
              || 24 == _imageIndex || 25 == _imageIndex || 27 == _imageIndex )
             return false;
@@ -596,14 +596,14 @@ bool Maps::TilesAddon::isRoad() const
             return true;
 
     // castle or town gate
-    case ICN::OBJNTOWN:
+    case MP2::OBJ_ICN_TYPE_OBJNTOWN:
         if ( 13 == _imageIndex || 29 == _imageIndex || 45 == _imageIndex || 61 == _imageIndex || 77 == _imageIndex || 93 == _imageIndex || 109 == _imageIndex
              || 125 == _imageIndex || 141 == _imageIndex || 157 == _imageIndex || 173 == _imageIndex || 189 == _imageIndex )
             return true;
         break;
 
     // Random castle or town gate.
-    case ICN::OBJNTWRD:
+    case MP2::OBJ_ICN_TYPE_OBJNTWRD:
         return ( _imageIndex == 13 || _imageIndex == 29 );
 
     default:
@@ -615,18 +615,18 @@ bool Maps::TilesAddon::isRoad() const
 
 bool Maps::TilesAddon::isResource( const TilesAddon & ta )
 {
-    return ICN::OBJNRSRC == MP2::getIcnIdFromObjectIcnType( ta._objectIcnType >> 2 ) && ( ta._imageIndex % 2 );
+    return MP2::OBJ_ICN_TYPE_OBJNRSRC == ( ta._objectIcnType >> 2 ) && ( ta._imageIndex % 2 );
 }
 
 bool Maps::TilesAddon::isArtifact( const TilesAddon & ta )
 {
     // OBJNARTI (skip ultimate)
-    return ( ICN::OBJNARTI == MP2::getIcnIdFromObjectIcnType( ta._objectIcnType >> 2 ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 ) );
+    return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ( ta._objectIcnType >> 2 ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 ) );
 }
 
 int Maps::Tiles::getColorFromBarrierSprite( const uint8_t nonCorrectedObjectIcnType, const uint8_t icnIndex )
 {
-    if ( ICN::X_LOC3 == MP2::getIcnIdFromObjectIcnType( nonCorrectedObjectIcnType >> 2 ) && 60 <= icnIndex && 102 >= icnIndex ) {
+    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == ( nonCorrectedObjectIcnType >> 2 ) && 60 <= icnIndex && 102 >= icnIndex ) {
         // 60, 66, 72, 78, 84, 90, 96, 102
         return ( ( icnIndex - 60 ) / 6 ) + 1;
     }
@@ -636,7 +636,7 @@ int Maps::Tiles::getColorFromBarrierSprite( const uint8_t nonCorrectedObjectIcnT
 
 int Maps::Tiles::getColorFromTravellerTentSprite( const uint8_t nonCorrectedObjectIcnType, const uint8_t icnIndex )
 {
-    if ( ICN::X_LOC3 == MP2::getIcnIdFromObjectIcnType( nonCorrectedObjectIcnType >> 2 ) && 110 <= icnIndex && 138 >= icnIndex ) {
+    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == ( nonCorrectedObjectIcnType >> 2 ) && 110 <= icnIndex && 138 >= icnIndex ) {
         // 110, 114, 118, 122, 126, 130, 134, 138
         return ( ( icnIndex - 110 ) / 4 ) + 1;
     }
