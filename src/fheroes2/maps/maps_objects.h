@@ -96,7 +96,7 @@ struct MapSphinx : public MapObjectSimple
 {
     MapSphinx();
 
-    void LoadFromMP2( int32_t index, StreamBuf );
+    void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data );
 
     bool AnswerCorrect( const std::string & answer );
     void SetQuiet();

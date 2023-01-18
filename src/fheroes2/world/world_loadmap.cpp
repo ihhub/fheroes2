@@ -551,9 +551,9 @@ bool World::LoadMapMP2( const std::string & filename )
                 break;
             case MP2::OBJ_SPHINX:
                 // add riddle sphinx
-                if ( MP2::SIZEOFMP2RIDDLE - 1 < pblock.size() && 0x00 == pblock[0] ) {
+                if ( MP2::SIZEOFMP2RIDDLE < pblock.size() && 0x00 == pblock[0] ) {
                     MapSphinx * obj = new MapSphinx();
-                    obj->LoadFromMP2( findobject, StreamBuf( pblock ) );
+                    obj->LoadFromMP2( findobject, pblock );
                     map_objects.add( obj );
                 }
                 break;
@@ -685,7 +685,7 @@ void World::ProcessNewMap()
 
         case MP2::OBJ_HEROES: {
             // remove map editor sprite
-            if ( MP2::GetICNObject( tile.getObjectType() ) == ICN::MINIHERO )
+            if ( ( tile.getObjectIcnType() >> 2 ) == MP2::OBJ_ICN_TYPE_MINIHERO )
                 tile.Remove( tile.GetObjectUID() );
 
             tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
@@ -721,7 +721,7 @@ void World::ProcessNewMap()
 
     // Search for a tile with a predefined Ultimate Artifact
     const MapsTiles::iterator ultArtTileIter
-        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ); } );
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isSameMainObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ); } );
 
     auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
         const int32_t x = idx % width;

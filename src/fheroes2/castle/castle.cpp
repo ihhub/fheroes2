@@ -120,7 +120,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 
     // Structure containing information about town or castle.
     //
-    // - uint8 (1 byte)
+    // - uint8_t (1 byte)
     //     Owner color. Possible values:
     //     00 - blue
     //     01 - green

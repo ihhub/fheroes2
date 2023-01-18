@@ -468,7 +468,7 @@ void Maps::Tiles::QuantityReset()
         break;
     }
 
-    if ( MP2::isPickupObject( mp2_object ) )
+    if ( MP2::isPickupObject( _mainObjectType ) )
         setAsEmpty();
 }
 
@@ -563,17 +563,17 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_RESOURCE: {
         int resourceType = Resource::UNKNOWN;
 
-        if ( ( _objectType >> 2 ) == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+        if ( ( _objectIcnType >> 2 ) == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
             // The resource is located at the top.
             resourceType = Resource::FromIndexSprite( _imageIndex );
         }
         else {
             for ( TilesAddon & addon : addons_level1 ) {
-                if ( ( addon._objectType >> 2 ) == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+                if ( ( addon._objectIcnType >> 2 ) == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
                     resourceType = Resource::FromIndexSprite( addon._imageIndex );
                     // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
                     // Let's swap the addon and main tile objects
-                    std::swap( addon._objectType, _objectType );
+                    std::swap( addon._objectIcnType, _objectIcnType );
                     std::swap( addon._imageIndex, _imageIndex );
                     std::swap( addon._uid, _uid );
                     std::swap( addon._layerType, _layerType );
@@ -600,7 +600,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             break;
         default:
             // Some maps have broken resources being put which ideally we need to correct. Let's make them 0 Wood.
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << _index << " contains unknown resource type. Object type " << _objectType << ", image index " << _imageIndex )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << _index << " contains unknown resource type. Object ICN type " << _objectIcnType << ", image index " << _imageIndex )
             resourceType = Resource::WOOD;
             count = 0;
             break;
@@ -819,11 +819,11 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARRIER:
-        QuantitySetColor( Tiles::ColorFromBarrierSprite( _objectType, _imageIndex ) );
+        QuantitySetColor( Tiles::getColorFromBarrierSprite( _objectIcnType, _imageIndex ) );
         break;
 
     case MP2::OBJ_TRAVELLER_TENT:
-        QuantitySetColor( Tiles::ColorFromTravellerTentSprite( _objectType, _imageIndex ) );
+        QuantitySetColor( Tiles::getColorFromTravellerTentSprite( _objectIcnType, _imageIndex ) );
         break;
 
     case MP2::OBJ_ALCHEMIST_LAB:
@@ -869,7 +869,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_BOAT:
         // TODO: this is absolutely wrong to assign this value to object type!
-        _objectType = 27;
+        _objectIcnType = 27;
         _imageIndex = 18;
         break;
 
@@ -960,17 +960,17 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
 {
     tile.SetObject( MP2::OBJ_MONSTER );
 
-    const int icnId = MP2::GetICNObject( tile._objectType );
+    const uint8_t correctedObjectIcnType = ( tile._objectIcnType >> 2 );
 
     // If there was another object sprite here (shadow for example) push it down to Addons,
     // except when there is already MONS32.ICN here.
-    if ( tile._objectType != 0 && icnId != ICN::MONS32 && tile._imageIndex != 255 ) {
-        tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile._uid, tile._objectType, tile._imageIndex ) );
+    if ( tile._objectIcnType != 0 && correctedObjectIcnType != MP2::OBJ_ICN_TYPE_MONS32 && tile._imageIndex != 255 ) {
+        tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile._uid, tile._objectIcnType, tile._imageIndex ) );
 
         // TODO: why are we setting UID to 0? It should be unique!
         tile._uid = 0;
         // TODO: we ignore first 2 bits which might be not 0!
-        tile._objectType = ( MP2::OBJ_ICN_TYPE_MONS32 << 2 );
+        tile._objectIcnType = ( MP2::OBJ_ICN_TYPE_MONS32 << 2 );
     }
 
     tile._imageIndex = mons.GetSpriteIndex();

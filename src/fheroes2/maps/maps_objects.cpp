@@ -127,47 +127,114 @@ MapSphinx::MapSphinx()
     , valid( false )
 {}
 
-void MapSphinx::LoadFromMP2( int32_t index, StreamBuf st )
+void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data )
 {
-    // id
-    if ( 0 == st.get() ) {
-        SetIndex( index );
-        SetUID( index );
+    assert( data.size() >= MP2::SIZEOFMP2RIDDLE );
 
-        // resource
-        resources.wood = st.getLE32();
-        resources.mercury = st.getLE32();
-        resources.ore = st.getLE32();
-        resources.sulfur = st.getLE32();
-        resources.crystal = st.getLE32();
-        resources.gems = st.getLE32();
-        resources.gold = st.getLE32();
+    // Structure containing information about a Sphinx object.
+    //
+    // - uint8_t (1 byte)
+    //     Always 0 as an indicator that this indeed a Sphinx object.
+    //
+    // - uint32_t (4 bytes)
+    //     The amount of Wood to get upon a successful answer.
+    //
+    // - uint32_t (4 bytes)
+    //     The amount of Mercury to get upon a successful answer.
+    //
+    // - uint32_t (4 bytes)
+    //     The amount of Ore to get upon a successful answer.
+    //
+    // - uint32_t (4 bytes)
+    //     The amount of Sulfur to get upon a successful answer.
+    //
+    // - uint32_t (4 bytes)
+    //     The amount of Crystals to get upon a successful answer.
+    //
+    // - uint32_t (4 bytes)
+    //     The amount of Gems to get upon a successful answer.
+    //
+    // - uint32_t (4 bytes)
+    //     The amount of Gold to get upon a successful answer.
+    //
+    // - uint16_t (2 bytes)
+    //     An artifact to get upon a successful answer.
+    //
+    // - uint8_t (1 byte)
+    //     A number of correct answers.
+    //
+    // - string of 13 bytes
+    //    Null terminated string of first answer.
+    //
+    // - string of 13 bytes
+    //    Null terminated string of second answer.
+    //
+    // - string of 13 bytes
+    //    Null terminated string of third answer.
+    //
+    // - string of 13 bytes
+    //    Null terminated string of forth answer.
+    //
+    // - string of 13 bytes
+    //    Null terminated string of fifth answer.
+    //
+    // - string of 13 bytes
+    //    Null terminated string of sixth answer.
+    //
+    // - string of 13 bytes
+    //    Null terminated string of seventh answer.
+    //
+    // - string of 13 bytes
+    //    Null terminated string of eighth answer.
+    //
+    // - string
+    //    Question itself.
 
-        // artifact
-        artifact = st.getLE16();
+    StreamBuf dataStream( data );
+    const uint8_t magicNumber = dataStream.get();
+    if ( magicNumber != 0 ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx data magic number is incorrect " << static_cast<int>( magicNumber ) )
+        return;
+    }
 
-        // count answers
-        uint32_t count = st.get();
+    // Retrieve the amount of resources to be given while answering the Sphinx riddle correctly.
+    resources.wood = dataStream.getLE32();
+    resources.mercury = dataStream.getLE32();
+    resources.ore = dataStream.getLE32();
+    resources.sulfur = dataStream.getLE32();
+    resources.crystal = dataStream.getLE32();
+    resources.gems = dataStream.getLE32();
+    resources.gold = dataStream.getLE32();
 
-        // answers
-        for ( uint32_t i = 0; i < 8; ++i ) {
-            std::string answer = st.toString( 13 );
+    // Retrieve an artifact to be given while answering the Sphinx riddle correctly.
+    artifact = dataStream.getLE16();
 
-            if ( count-- && !answer.empty() )
+    uint8_t answerCount = dataStream.get();
+
+    // Get all possible answers.
+    for ( uint32_t i = 0; i < 8; ++i ) {
+        std::string answer = dataStream.toString( 13 );
+
+        if ( answerCount > 0 ) {
+            --answerCount;
+            if ( !answer.empty() ) {
                 answers.push_back( StringLower( answer ) );
+            }
         }
-
-        // message
-        message = st.toString();
-
-        valid = true;
-        DEBUG_LOG( DBG_GAME, DBG_INFO,
-                   "sphinx"
-                       << ": " << message )
     }
-    else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" )
+
+    message = dataStream.toString();
+    if ( !message.empty() ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx question is empty. Marking it as an invalid object." )
+        return;
     }
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sphinx question is '" << message << "'." )
+
+    valid = true;
+
+    SetIndex( tileIndex );
+    SetUID( tileIndex );
 }
 
 bool MapSphinx::AnswerCorrect( const std::string & answer )
