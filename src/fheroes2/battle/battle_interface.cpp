@@ -5750,8 +5750,8 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     // For certain spells reflect the spell sprite if the creature is reflected.
     const bool isReflectICN = ( icn == ICN::SHIELD || icn == ICN::REDDEATH || icn == ICN::MAGIC08 );
 
-    _unitSpellEffectInfos.reserve( targets.size() );
     size_t overlaySpriteCount = _unitSpellEffectInfos.size();
+    _unitSpellEffectInfos.reserve( overlaySpriteCount + targets.size() );
 
     for ( const Battle::TargetInfo & target : targets ) {
         if ( target.defender ) {
