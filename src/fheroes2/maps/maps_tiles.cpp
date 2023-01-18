@@ -832,8 +832,7 @@ void Maps::Tiles::setBoat( int direction )
         AddonsPushLevel1( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex ) );
     }
     SetObject( MP2::OBJ_BOAT );
-    // TODO: this is absolutely wrong to assign ICN id to object type!
-    _objectIcnType = ICN::BOAT32;
+    _objectIcnType = ( MP2::OBJ_ICN_TYPE_BOAT32 << 2 );
 
     // Left-side sprites have to flipped, add 128 to index
     switch ( direction ) {
@@ -872,8 +871,7 @@ void Maps::Tiles::setBoat( int direction )
 int Maps::Tiles::getBoatDirection() const
 {
     // Check if it really is a boat
-    // TODO: this is an incorrect check! We cannot directly compare object type with an ICN.
-    if ( _objectIcnType != ICN::BOAT32 )
+    if ( ( _objectIcnType >> 2 ) != MP2::OBJ_ICN_TYPE_BOAT32 )
         return Direction::UNKNOWN;
 
     // Left-side sprites have to flipped, add 128 to index
