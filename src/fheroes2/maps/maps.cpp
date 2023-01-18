@@ -633,7 +633,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
         if ( isValidAbsIndex( shadowTileId ) ) {
             Maps::Tiles & shadowTile = world.GetTiles( shadowTileId );
             if ( isRandom )
-                shadowTile.replaceObject( castleID, MP2::OBJ_ICN_TYPE_OBJNTWRD, ( MP2::OBJ_ICN_TYPE_OBJNTWSH << 2 ), lookupID + 32, fullTownIndex );
+                shadowTile.replaceObject( castleID, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWSH, lookupID + 32, fullTownIndex );
             else
                 shadowTile.updateObjectImageIndex( castleID, MP2::OBJ_ICN_TYPE_OBJNTWSH, -16 );
         }
