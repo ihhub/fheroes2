@@ -1742,7 +1742,6 @@ Maps::TilesAddon * Maps::Tiles::getAddonWithFlag( const uint32_t uid )
 void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const int color )
 {
     // All flags in FLAG32.ICN are actually the same except the fact of having different offset.
-    // 14, 21
     uint8_t objectSpriteIndex = 0;
 
     switch ( color ) {
@@ -1882,7 +1881,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 {
     const MP2::MapObjectType originalObjectType = tile.GetObject( false );
 
-    // Left tile of a skeleton on Desert should be mark as non-action tile.
+    // Left tile of a skeleton on Desert should be marked as non-action tile.
     if ( originalObjectType == MP2::OBJ_SKELETON && tile._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNDSRT && tile._imageIndex == 83 ) {
         tile.SetObject( MP2::OBJ_NON_ACTION_SKELETON );
 
@@ -1891,7 +1890,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
     }
 
     // Original Editor marks Reefs as Stones. We're fixing this issue by changing the type of the object without changing the content of a tile.
-    // This is also required in order to properly calculate Reefs' passbility.
+    // This is also required in order to properly calculate Reefs' passability.
     if ( originalObjectType == MP2::OBJ_ROCK && isValidReefsSprite( tile._objectIcnType, tile._imageIndex ) ) {
         tile.SetObject( MP2::OBJ_REEFS );
 
@@ -1914,7 +1913,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
         return;
     }
 
-    // On some maps (apparently created by some non-standard editor), the object type on tiles with random monsters does not match the index
+    // On some maps (apparently created by some non-standard editors), the object type on tiles with random monsters does not match the index
     // of the monster placeholder sprite. While this engine looks at the object type when placing an actual monster on a tile, the original
     // HoMM2 apparently looks at the placeholder sprite, so we need to keep them in sync.
     if ( tile._objectIcnType == MP2::OBJ_ICN_TYPE_MONS32 ) {
@@ -1965,7 +1964,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
             break;
         }
 
-        // Add-ons of level 1 shouldn't even exist if no top object. However, let's play safe and verify it as well.
+        // Add-ons of level 1 shouldn't even exist if no top object is present. However, let's play safe and verify it as well.
         for ( const TilesAddon & addon : tile.addons_level1 ) {
             objectType = getLoyaltyObject( addon._objectIcnType, addon._imageIndex );
             if ( objectType != MP2::OBJ_NONE )
@@ -2028,13 +2027,13 @@ void Maps::Tiles::Remove( uint32_t uniqID )
 }
 
 void Maps::Tiles::replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
-                                 const uint8_t originalImageIndex, const uint8_t newimageIndex )
+                                 const uint8_t originalImageIndex, const uint8_t newImageIndex )
 {
     // We can immediately return from the function as only one object per tile can have the same UID.
     for ( TilesAddon & addon : addons_level1 ) {
         if ( addon._uid == objectUid && addon._objectIcnType == originalObjectIcnType && addon._imageIndex == originalImageIndex ) {
             addon._objectIcnType = newObjectIcnType;
-            addon._imageIndex = newimageIndex;
+            addon._imageIndex = newImageIndex;
             return;
         }
     }
@@ -2042,14 +2041,14 @@ void Maps::Tiles::replaceObject( const uint32_t objectUid, const MP2::ObjectIcnT
     for ( TilesAddon & addon : addons_level2 ) {
         if ( addon._uid == objectUid && addon._objectIcnType == originalObjectIcnType && addon._imageIndex == originalImageIndex ) {
             addon._objectIcnType = newObjectIcnType;
-            addon._imageIndex = newimageIndex;
+            addon._imageIndex = newImageIndex;
             return;
         }
     }
 
     if ( _uid == objectUid && _objectIcnType == originalObjectIcnType && _imageIndex == originalImageIndex ) {
         _objectIcnType = newObjectIcnType;
-        _imageIndex = newimageIndex;
+        _imageIndex = newImageIndex;
     }
 }
 
@@ -2226,7 +2225,7 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
     }
 
     if ( !art.isValid() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown artifact" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact over a random articat on tile " << tile.GetIndex() )
         return;
     }
 

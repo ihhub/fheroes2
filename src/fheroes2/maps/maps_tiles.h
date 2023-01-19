@@ -293,7 +293,7 @@ namespace Maps
         void RemoveObjectSprite();
         void updateObjectImageIndex( const uint32_t objectUid, const MP2::ObjectIcnType objectIcnType, const int imageIndexOffset );
         void replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
-                            const uint8_t originalImageIndex, const uint8_t newimageIndex );
+                            const uint8_t originalImageIndex, const uint8_t newImageIndex );
 
         std::string String() const;
 
