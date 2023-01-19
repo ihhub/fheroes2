@@ -70,7 +70,8 @@ namespace Maps
     {
         TilesAddon() = default;
 
-        TilesAddon( const uint8_t layerType, const uint32_t uid, const uint8_t objectIcnType, const uint8_t imageIndex );
+        TilesAddon( const uint8_t layerType, const uint32_t uid, const uint8_t objectIcnType, const uint8_t imageIndex, const bool hasObjectAnimation,
+                    const bool isMarkedAsRoad );
 
         TilesAddon( const TilesAddon & ) = default;
 

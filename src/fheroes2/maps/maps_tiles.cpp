@@ -544,13 +544,14 @@ namespace
     }
 }
 
-Maps::TilesAddon::TilesAddon( const uint8_t layerType, const uint32_t uid, const uint8_t objectIcnType, const uint8_t imageIndex )
+Maps::TilesAddon::TilesAddon( const uint8_t layerType, const uint32_t uid, const uint8_t objectIcnType, const uint8_t imageIndex, const bool hasObjectAnimation,
+                              const bool isMarkedAsRoad )
     : _uid( uid )
     , _layerType( layerType )
     , _objectIcnType( objectIcnType )
     , _imageIndex( imageIndex )
-    , _hasObjectAnimation( false )
-    , _isMarkedAsRoad( false )
+    , _hasObjectAnimation( hasObjectAnimation )
+    , _isMarkedAsRoad( isMarkedAsRoad )
 {
     // Do nothing.
 }
@@ -819,7 +820,7 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 void Maps::Tiles::setBoat( int direction )
 {
     if ( _objectIcnType != 0 && _imageIndex != 255 ) {
-        AddonsPushLevel1( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex ) );
+        AddonsPushLevel1( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex, false, false ) );
     }
     SetObject( MP2::OBJ_BOAT );
     _objectIcnType = ( MP2::OBJ_ICN_TYPE_BOAT32 << 2 );
@@ -1098,7 +1099,7 @@ bool Maps::Tiles::isClearGround() const
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName1 != 0 && mt.level1IcnImageIndex != 0xFF ) {
-        addons_level1.emplace_back( mt.quantity1, mt.level1ObjectUID, mt.objectName1, mt.level1IcnImageIndex );
+        addons_level1.emplace_back( mt.quantity1, mt.level1ObjectUID, mt.objectName1, mt.level1IcnImageIndex, false, false );
     }
 
     // MP2 "objectName" is a bitfield
@@ -1110,7 +1111,7 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
 {
     if ( ma.objectNameN1 != 0 && ma.indexNameN1 != 0xFF ) {
-        addons_level1.emplace_back( ma.quantityN, ma.level1ObjectUID, ma.objectNameN1, ma.indexNameN1 );
+        addons_level1.emplace_back( ma.quantityN, ma.level1ObjectUID, ma.objectNameN1, ma.indexNameN1, false, false );
     }
 }
 
@@ -1123,7 +1124,7 @@ void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName2 != 0 && mt.level2IcnImageIndex != 0xFF ) {
         // TODO: does level 2 even need level value? Verify it.
-        addons_level2.emplace_back( mt.quantity1, mt.level2ObjectUID, mt.objectName2, mt.level2IcnImageIndex );
+        addons_level2.emplace_back( mt.quantity1, mt.level2ObjectUID, mt.objectName2, mt.level2IcnImageIndex, false, false );
     }
 }
 
@@ -1131,7 +1132,7 @@ void Maps::Tiles::AddonsPushLevel2( const MP2::mp2addon_t & ma )
 {
     if ( ma.objectNameN2 != 0 && ma.indexNameN2 != 0xFF ) {
         // TODO: why do we use the same quantityN member for both level 1 and 2?
-        addons_level2.emplace_back( ma.quantityN, ma.level2ObjectUID, ma.objectNameN2, ma.indexNameN2 );
+        addons_level2.emplace_back( ma.quantityN, ma.level2ObjectUID, ma.objectNameN2, ma.indexNameN2, false, false );
     }
 }
 
@@ -1139,7 +1140,7 @@ void Maps::Tiles::AddonsSort()
 {
     // Push everything to the container and sort it by level.
     if ( _objectIcnType != 0 && _imageIndex < 255 ) {
-        addons_level1.emplace_front( _layerType, _uid, _objectIcnType, _imageIndex );
+        addons_level1.emplace_front( _layerType, _uid, _objectIcnType, _imageIndex, false, false );
     }
 
     // Some original maps have issues with identifying tiles as roads. This code fixes it. It's not an ideal solution but works fine in most of cases.
@@ -1874,10 +1875,10 @@ void Maps::Tiles::updateFlag( const int color, const uint8_t objectSpriteIndex, 
         addon->_imageIndex = objectSpriteIndex;
     }
     else if ( setOnUpperLayer ) {
-        addons_level2.emplace_back( OBJECT_LAYER, uid, objectType, objectSpriteIndex );
+        addons_level2.emplace_back( OBJECT_LAYER, uid, objectType, objectSpriteIndex, false, false );
     }
     else {
-        addons_level1.emplace_back( OBJECT_LAYER, uid, objectType, objectSpriteIndex );
+        addons_level1.emplace_back( OBJECT_LAYER, uid, objectType, objectSpriteIndex, false, false );
     }
 }
 
