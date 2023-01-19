@@ -36,7 +36,7 @@ import java.util.Collections;
 
 public final class SaveFileManagerActivity extends Activity
 {
-    private static final String[] SAVE_FILE_EXTENSIONS = {".sav", ".savc", ".savh"};
+    private static final String[] SAVE_FILE_EXTENSIONS = { ".sav", ".savc", ".savh" };
 
     private File saveFileDir = null;
 
