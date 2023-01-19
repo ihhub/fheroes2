@@ -64,7 +64,7 @@
             android:exported="true"
             android:icon="@mipmap/ic_launcher_toolset"
             android:label="@string/activity_toolset_label"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:taskAffinity="org.fheroes2.ToolsetActivityTask"
             android:theme="@style/Theme.Material3.DayNight">
 
@@ -73,5 +73,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".SaveFileManagerActivity"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_toolset"
+            android:label="@string/activity_save_file_manager_label"
+            android:taskAffinity="org.fheroes2.ToolsetActivityTask"
+            android:theme="@style/Theme.Material3.DayNight" />
     </application>
 </manifest>
