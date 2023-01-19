@@ -2058,20 +2058,23 @@ void Maps::Tiles::updateObjectImageIndex( const uint32_t objectUid, const MP2::O
     // We can immediately return from the function as only one object per tile can have the same UID.
     for ( TilesAddon & addon : addons_level1 ) {
         if ( addon._uid == objectUid && addon._objectIcnType == objectIcnType ) {
-            addon._imageIndex = addon._imageIndex + imageIndexOffset;
+            assert( addon._imageIndex + imageIndexOffset >= 0 && addon._imageIndex + imageIndexOffset < 255 );
+            addon._imageIndex = static_cast<uint8_t>( addon._imageIndex + imageIndexOffset );
             return;
         }
     }
 
     for ( TilesAddon & addon : addons_level2 ) {
         if ( addon._uid == objectUid && addon._objectIcnType == objectIcnType ) {
-            addon._imageIndex = addon._imageIndex + imageIndexOffset;
+            assert( addon._imageIndex + imageIndexOffset >= 0 && addon._imageIndex + imageIndexOffset < 255 );
+            addon._imageIndex = static_cast<uint8_t>( addon._imageIndex + imageIndexOffset );
             return;
         }
     }
 
     if ( _uid == objectUid && _objectIcnType == objectIcnType ) {
-        _imageIndex += imageIndexOffset;
+        assert( _imageIndex + imageIndexOffset >= 0 && _imageIndex + imageIndexOffset < 255 );
+        _imageIndex = static_cast<uint8_t>( _imageIndex + imageIndexOffset );
     }
 }
 
@@ -2246,7 +2249,7 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 {
     tile.SetObject( MP2::OBJ_RESOURCE );
 
-    const uint32_t resourceSprite = Resource::GetIndexSprite( Resource::Rand( true ) );
+    const uint8_t resourceSprite = Resource::GetIndexSprite( Resource::Rand( true ) );
 
     uint32_t uidResource = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNRSRC );
     if ( uidResource == 0 ) {
@@ -2257,6 +2260,7 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 
     // Replace shadow of the resource.
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
+        assert( resourceSprite > 0 );
         updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidResource, resourceSprite - 1 );
     }
 }
