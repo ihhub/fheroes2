@@ -561,11 +561,11 @@ std::string Maps::TilesAddon::String( int lvl ) const
     std::ostringstream os;
     os << "--------- Level " << lvl << " --------" << std::endl
        << "UID             : " << _uid << std::endl
-       << "object type     : " << static_cast<int>( _objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( _objectIcnType ) ) << ")" << std::endl
+       << "ICN object type : " << static_cast<int>( _objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( _objectIcnType ) ) << ")" << std::endl
        << "image index     : " << static_cast<int>( _imageIndex ) << std::endl
        << "layer type      : " << static_cast<int>( _layerType ) << " (" << static_cast<int>( _layerType % 4 ) << ")"
        << " - " << getObjectLayerName( _layerType % 4 ) << std::endl
-       << "shadow          : " << ( isShadow( *this ) ? "true" : "false" ) << std::endl;
+       << "is shadow       : " << ( isShadow( *this ) ? "yes" : "no" ) << std::endl;
     return os.str();
 }
 
@@ -1555,7 +1555,7 @@ std::string Maps::Tiles::String() const
        << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
        << "UID             : " << _uid << std::endl
        << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl
-       << "object type     : " << static_cast<int>( _objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( _objectIcnType ) ) << ")" << std::endl
+       << "ICN object type : " << static_cast<int>( _objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( _objectIcnType ) ) << ")" << std::endl
        << "image index     : " << static_cast<int>( _imageIndex ) << " (animated: " << hasSpriteAnimation() << ")" << std::endl
        << "layer type      : " << static_cast<int>( _layerType ) << " - " << getObjectLayerName( _layerType ) << std::endl
        << "region          : " << _region << std::endl
