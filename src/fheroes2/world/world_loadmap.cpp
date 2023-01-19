@@ -406,10 +406,12 @@ bool World::LoadMapMP2( const std::string & filename )
             const Maps::Tiles & tile = vec_tiles[*it_index];
 
             // orders(quantity2, quantity1)
-            uint32_t orders = ( tile.GetQuantity2() ? tile.GetQuantity2() : 0 );
+            uint32_t orders = tile.GetQuantity2();
             orders <<= 8;
             orders |= tile.GetQuantity1();
 
+            // Witchcraft!!!
+            // TODO: change the code to be more readable.
             if ( orders && !( orders % 0x08 ) && ( ii + 1 == orders / 0x08 ) )
                 findobject = *it_index;
         }
