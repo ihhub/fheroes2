@@ -2649,7 +2649,7 @@ std::vector<MP2::ObjectIcnType> Maps::Tiles::getValidObjectIcnTypes() const
 
 bool Maps::Tiles::containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType> & objectIcnTypes ) const
 {
-    for ( const uint8_t objectIcnType : objectIcnTypes ) {
+    for ( const MP2::ObjectIcnType objectIcnType : objectIcnTypes ) {
         if ( _objectIcnType == objectIcnType ) {
             return true;
         }
