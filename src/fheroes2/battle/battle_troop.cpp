@@ -1318,7 +1318,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
 
 void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const HeroBase * hero, TargetInfo & target )
 {
-    uint32_t dmg = CalculateDamage( &spell, spoint, hero, target.damage, false /* ignore defending hero */ );
+    uint32_t dmg = CalculateDamage( spell, spoint, hero, target.damage, false /* ignore defending hero */ );
 
     // apply damage
     if ( dmg ) {
@@ -1327,15 +1327,15 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
     }
 }
 
-uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, const HeroBase * hero, uint32_t target_damage, bool ignoreDefendingHero ) const
+uint32_t Battle::Unit::CalculateDamage( const Spell & spell, uint32_t spoint, const HeroBase * hero, uint32_t target_damage, bool ignoreDefendingHero ) const
 {
     // TODO: use fheroes2::getSpellDamage function to remove code duplication.
-    uint32_t dmg = spell->Damage() * spoint;
+    uint32_t dmg = spell.Damage() * spoint;
 
     switch ( GetID() ) {
     case Monster::IRON_GOLEM:
     case Monster::STEEL_GOLEM:
-        switch ( spell->GetID() ) {
+        switch ( spell.GetID() ) {
             // 50% damage
         case Spell::COLDRAY:
         case Spell::COLDRING:
@@ -1353,7 +1353,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, co
         break;
 
     case Monster::WATER_ELEMENT:
-        switch ( spell->GetID() ) {
+        switch ( spell.GetID() ) {
             // 200% damage
         case Spell::FIREBALL:
         case Spell::FIREBLAST:
@@ -1365,7 +1365,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, co
         break;
 
     case Monster::AIR_ELEMENT:
-        switch ( spell->GetID() ) {
+        switch ( spell.GetID() ) {
             // 200% damage
         case Spell::ELEMENTALSTORM:
         case Spell::LIGHTNINGBOLT:
@@ -1378,7 +1378,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, co
         break;
 
     case Monster::FIRE_ELEMENT:
-        switch ( spell->GetID() ) {
+        switch ( spell.GetID() ) {
             // 200% damage
         case Spell::COLDRAY:
         case Spell::COLDRING:
@@ -1398,7 +1398,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, co
         const HeroBase * defendingHero = GetCommander();
         bool useDefendingHeroArts = defendingHero && !ignoreDefendingHero;
 
-        switch ( spell->GetID() ) {
+        switch ( spell.GetID() ) {
         case Spell::COLDRAY:
         case Spell::COLDRING: {
             std::vector<int32_t> extraDamagePercent
@@ -1462,7 +1462,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell * spell, uint32_t spoint, co
             }
 
             // update orders damage
-            if ( spell->GetID() == Spell::CHAINLIGHTNING ) {
+            if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                 switch ( target_damage ) {
                 case 0:
                     break;

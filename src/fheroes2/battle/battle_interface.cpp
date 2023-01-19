@@ -2777,7 +2777,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         if ( cell ) {
             if ( CursorAttack( themes ) ) {
                 const Unit * b_enemy = cell->GetUnit();
-                popup.SetInfo( cell, _currentUnit, b_enemy, nullptr );
+                popup.SetAttackInfo( cell, _currentUnit, b_enemy );
             }
             else
                 popup.Reset();
@@ -2828,18 +2828,13 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
         if ( cursor.Themes() != themes )
             cursor.SetThemes( themes );
 
-        bool resetPopup = true;
         const Cell * cell = Board::GetCell( index_pos );
-        if ( cell && _currentUnit && humanturn_spell.isSingleTarget() && humanturn_spell.isDamage() ) {
-            const Unit * b_enemy = cell->GetUnit();
-            if ( b_enemy && b_enemy->AllowApplySpell( humanturn_spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
-                popup.SetInfo( cell, _currentUnit, b_enemy, &humanturn_spell );
-                resetPopup = false;
-            }
+        if ( cell && _currentUnit && cell->GetUnit() ) {
+            popup.SetSpellAttackInfo( cell, _currentUnit, cell->GetUnit(), humanturn_spell );
         }
-
-        if ( resetPopup )
+        else {
             popup.Reset();
+        }
 
         if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() ) {
             if ( !Board::isValidIndex( index_pos ) ) {
@@ -6044,7 +6039,6 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
 Battle::PopupDamageInfo::PopupDamageInfo()
     : Dialog::FrameBorder( 5 )
     , _cell( nullptr )
-    , _attacker( nullptr )
     , _defender( nullptr )
     , _redraw( false )
 {}
@@ -6054,21 +6048,64 @@ void Battle::PopupDamageInfo::setBattleUIRect( const fheroes2::Rect & battleUIRe
     _battleUIRect = battleUIRect;
 }
 
-void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const Spell * spell )
+bool Battle::PopupDamageInfo::SetDamageInfoBase( const Cell * cell, const Unit * attacker, const Unit * defender )
 {
-    if ( ( cell == nullptr || attacker == nullptr || defender == nullptr ) && ( cell == nullptr || spell == nullptr || defender == nullptr ) ) {
-        return;
+    if ( cell == nullptr || attacker == nullptr || defender == nullptr ) {
+        return false;
     }
 
     if ( !Settings::Get().isBattleShowDamageInfoEnabled() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
+        return false;
+    }
+
+    _cell = cell;
+    _defender = defender;
+
+    return true;
+}
+
+void Battle::PopupDamageInfo::SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender )
+{
+    if ( !SetDamageInfoBase( cell, attacker, defender ) ) {
         return;
     }
 
     _redraw = true;
-    _cell = cell;
-    _attacker = attacker;
-    _defender = defender;
-    _spell = spell;
+    _minDamage = attacker->CalculateMinDamage( *defender );
+    _maxDamage = attacker->CalculateMaxDamage( *defender );
+
+    if ( attacker->Modes( SP_BLESS ) ) {
+        _minDamage = _maxDamage;
+    }
+    else if ( attacker->Modes( SP_CURSE ) ) {
+        _maxDamage = _minDamage;
+    }
+}
+
+void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const Spell spell )
+{
+    if ( !SetDamageInfoBase( cell, attacker, defender ) ) {
+        return;
+    }
+
+    // Only show popup for single target damage spells such as bolt, arrow, or cold ray
+    if ( !( spell.isSingleTarget() && spell.isDamage() ) ) {
+        return;
+    }
+
+    const HeroBase * hero = attacker->GetCurrentOrArmyCommander();
+
+    // if defender unit immune to magic, do not show the tooltip
+    if ( !defender->AllowApplySpell( spell, hero ) ) {
+        return;
+    }
+
+    const uint32_t spellPoints = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
+    const uint32_t spellDamage = defender->CalculateDamage( spell, spellPoints, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
+
+    _redraw = true;
+    _minDamage = spellDamage;
+    _maxDamage = spellDamage;
 }
 
 void Battle::PopupDamageInfo::Reset()
@@ -6076,9 +6113,9 @@ void Battle::PopupDamageInfo::Reset()
     if ( _redraw ) {
         _redraw = false;
         _cell = nullptr;
-        _attacker = nullptr;
         _defender = nullptr;
-        _spell = nullptr;
+        _minDamage = 0;
+        _maxDamage = 0;
     }
 
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
@@ -6090,41 +6127,17 @@ void Battle::PopupDamageInfo::Redraw() const
         return;
     }
 
-    assert( ( _cell != nullptr && _defender != nullptr && _attacker != nullptr ) );
+    assert( _cell != nullptr && _defender != nullptr );
 
-    uint32_t minDamage = 0;
-    uint32_t maxDamage = 0;
+    std::string str = _minDamage == _maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
-    if ( _spell != nullptr && _spell->isSingleTarget() && _spell->isDamage() ) {
-        const HeroBase * hero = _attacker->GetCurrentOrArmyCommander();
-        const uint32_t spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
-
-        uint32_t spellDmg = _defender->CalculateDamage( _spell, spoint, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
-
-        minDamage = spellDmg;
-        maxDamage = spellDmg;
-    }
-    else {
-        minDamage = _attacker->CalculateMinDamage( *_defender );
-        maxDamage = _attacker->CalculateMaxDamage( *_defender );
-
-        if ( _attacker->Modes( SP_BLESS ) ) {
-            minDamage = maxDamage;
-        }
-        else if ( _attacker->Modes( SP_CURSE ) ) {
-            maxDamage = minDamage;
-        }
-    }
-
-    std::string str = minDamage == maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
-
-    StringReplace( str, "%{min}", minDamage );
-    StringReplace( str, "%{max}", maxDamage );
+    StringReplace( str, "%{min}", _minDamage );
+    StringReplace( str, "%{max}", _maxDamage );
 
     Text damageText( str, Font::SMALL );
 
-    const uint32_t minNumKilled = _defender->HowManyWillKilled( minDamage );
-    const uint32_t maxNumKilled = _defender->HowManyWillKilled( maxDamage );
+    const uint32_t minNumKilled = _defender->HowManyWillKilled( _minDamage );
+    const uint32_t maxNumKilled = _defender->HowManyWillKilled( _maxDamage );
 
     assert( minNumKilled <= _defender->GetCount() && maxNumKilled <= _defender->GetCount() );
 
