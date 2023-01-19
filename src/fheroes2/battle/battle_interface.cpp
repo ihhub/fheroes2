@@ -5842,6 +5842,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
         }
     }
 
+    // TODO: When there is a need to display some permanent effects with '_unitSpellEffectInfos' - remove this assertion.
+    assert( _unitSpellEffectInfos.empty() );
+
     if ( !mirrorImages.empty() ) {
         // Fade away animation for destroyed mirror images.
         RedrawActionRemoveMirrorImage( mirrorImages );
@@ -5901,6 +5904,9 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int
             }
         }
     }
+
+    // TODO: When there is a need to display some permanent effects with '_unitSpellEffectInfos' - remove this assertion.
+    assert( _unitSpellEffectInfos.empty() );
 
     if ( animation != NONE ) {
         unit.SwitchAnimation( Monster_Info::STATIC );
