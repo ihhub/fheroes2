@@ -45,7 +45,7 @@
             android:preferMinimalPostProcessing="true"
             android:process=":GameActivityProcess"
             android:screenOrientation="sensorLandscape"
-            android:taskAffinity="org.fheroes2.GameActivityTask"
+            android:taskAffinity="org.fheroes2.GameTask"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
             <intent-filter>
@@ -65,7 +65,7 @@
             android:icon="@mipmap/ic_launcher_toolset"
             android:label="@string/activity_toolset_label"
             android:launchMode="singleTask"
-            android:taskAffinity="org.fheroes2.ToolsetActivityTask"
+            android:taskAffinity="org.fheroes2.ToolsetTask"
             android:theme="@style/Theme.Material3.DayNight">
 
             <intent-filter>
@@ -79,7 +79,7 @@
             android:exported="false"
             android:icon="@mipmap/ic_launcher_toolset"
             android:label="@string/activity_save_file_manager_label"
-            android:taskAffinity="org.fheroes2.ToolsetActivityTask"
+            android:taskAffinity="org.fheroes2.ToolsetTask"
             android:theme="@style/Theme.Material3.DayNight" />
     </application>
 </manifest>
