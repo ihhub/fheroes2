@@ -566,14 +566,14 @@ namespace MP2
         OBJ_ICN_TYPE_X_LOC2, // Objects from The Price of Loyalty expansion.
         OBJ_ICN_TYPE_X_LOC3 // Objects from The Price of Loyalty expansion.
 
-        // IMPORTANT!!! If you want to add new types use UNUSED entries first and only then add new entries in this enumeration.
+        // IMPORTANT!!! If you want to add new types use UNUSED entries only.
     };
 
-    int getIcnIdFromObjectIcnType( const uint8_t objectIcnType );
+    int getIcnIdFromObjectIcnType( const ObjectIcnType objectIcnType );
 
     const char * StringObject( MapObjectType objectType, const int count = 1 );
 
-    bool isHiddenForPuzzle( const int terrainType, const uint8_t objectIcnType, uint8_t index );
+    bool isHiddenForPuzzle( const int terrainType, const ObjectIcnType objectIcnType, uint8_t index );
 
     // The method check whether the object is an action object depending on its location. For example, castle can't be located on water.
     bool isActionObject( const MapObjectType objectType, const bool locatesOnWater );
@@ -607,8 +607,8 @@ namespace MP2
     // Make sure that you pass a valid action object.
     int getActionObjectDirection( const MapObjectType objectType );
 
-    bool getDiggingHoleSprite( const int terrainType, uint8_t & objectIcnType, uint8_t & index );
-    bool isDiggingHoleSprite( const int terrainType, const uint8_t objectIcnType, const uint8_t index );
+    bool getDiggingHoleSprite( const int terrainType, ObjectIcnType & objectIcnType, uint8_t & index );
+    bool isDiggingHoleSprite( const int terrainType, const ObjectIcnType objectIcnType, const uint8_t index );
 }
 
 #endif

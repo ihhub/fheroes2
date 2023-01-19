@@ -70,7 +70,7 @@ namespace Maps
     {
         TilesAddon() = default;
 
-        TilesAddon( const uint8_t layerType, const uint32_t uid, const uint8_t objectIcnType, const uint8_t imageIndex, const bool hasObjectAnimation,
+        TilesAddon( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex, const bool hasObjectAnimation,
                     const bool isMarkedAsRoad );
 
         TilesAddon( const TilesAddon & ) = default;
@@ -88,7 +88,7 @@ namespace Maps
 
         bool hasSpriteAnimation() const
         {
-            return _objectIcnType & 1;
+            return _hasObjectAnimation;
         }
 
         std::string String( int level ) const;
@@ -112,7 +112,7 @@ namespace Maps
         // The second bit is a flag whether the object considered as road.
         // The last 6 bits the type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
         // TODO: move first 2 bits out of this member to keep only object type.
-        uint8_t _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+        MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
         uint8_t _imageIndex{ 255 };
@@ -142,7 +142,7 @@ namespace Maps
 
         MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
 
-        uint8_t getObjectIcnType() const
+        MP2::ObjectIcnType getObjectIcnType() const
         {
             return _objectIcnType;
         }
@@ -226,7 +226,7 @@ namespace Maps
 
         void resetObjectSprite()
         {
-            _objectIcnType = 0;
+            _objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
             _imageIndex = 255;
         }
 
@@ -264,7 +264,7 @@ namespace Maps
         void RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const;
         void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
 
-        void drawByObjectIcnType( fheroes2::Image & output, const Interface::GameArea & area, const uint8_t objectIcnType ) const;
+        void drawByObjectIcnType( fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType ) const;
 
         std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterSpritesPerTile() const;
         std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterShadowSpritesPerTile() const;
@@ -291,9 +291,9 @@ namespace Maps
         void AddonsSort();
         void Remove( uint32_t uniqID );
         void RemoveObjectSprite();
-        void updateObjectImageIndex( const uint32_t objectUid, const uint8_t objectIcnType, const int imageIndexOffset );
-        void replaceObject( const uint32_t objectUid, const uint8_t originalObjectIcnType, const uint8_t newObjectIcnType, const uint8_t originalImageIndex,
-                            const uint8_t newimageIndex );
+        void updateObjectImageIndex( const uint32_t objectUid, const MP2::ObjectIcnType objectIcnType, const int imageIndexOffset );
+        void replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
+                            const uint8_t originalImageIndex, const uint8_t newimageIndex );
 
         std::string String() const;
 
@@ -362,20 +362,20 @@ namespace Maps
         // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE)
         void setAsEmpty();
 
-        uint32_t getObjectIdByObjectIcnType( const uint8_t objectIcnType ) const;
+        uint32_t getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const;
 
-        std::vector<uint8_t> getValidObjectIcnTypes() const;
+        std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
 
-        bool containsAnyObjectIcnType( const std::vector<uint8_t> & objectIcnTypes ) const;
+        bool containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType> & objectIcnTypes ) const;
 
-        bool containsSprite( const uint8_t objectIcnType, const uint32_t imageIdx ) const;
+        bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
 
-        static int getColorFromBarrierSprite( const uint8_t nonCorrectedObjectIcnType, const uint8_t icnIndex );
-        static int getColorFromTravellerTentSprite( const uint8_t nonCorrectedObjectIcnType, const uint8_t icnIndex );
+        static int getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
+        static int getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
 
-        static void UpdateAbandonedMineLeftSprite( uint8_t & nonCorrectedObjectIcnType, uint8_t & imageIndex, const int resource );
+        static void UpdateAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource );
 
-        static void UpdateAbandonedMineRightSprite( uint8_t & nonCorrectedObjectIcnType, uint8_t & imageIndex );
+        static void UpdateAbandonedMineRightSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex );
 
         static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
@@ -445,7 +445,7 @@ namespace Maps
         // The second bit is a flag whether the object considered as road.
         // The last 6 bits the type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
         // TODO: move first 2 bits out of this member to keep only object type.
-        uint8_t _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+        MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
         uint8_t _imageIndex{ 255 };

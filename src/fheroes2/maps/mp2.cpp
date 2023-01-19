@@ -69,7 +69,7 @@ namespace
     }
 }
 
-int MP2::getIcnIdFromObjectIcnType( const uint8_t objectIcnType )
+int MP2::getIcnIdFromObjectIcnType( const ObjectIcnType objectIcnType )
 {
     switch ( objectIcnType ) {
     case OBJ_ICN_TYPE_UNKNOWN:
@@ -181,7 +181,7 @@ int MP2::getIcnIdFromObjectIcnType( const uint8_t objectIcnType )
     return ICN::UNKNOWN;
 }
 
-bool MP2::isHiddenForPuzzle( const int terrainType, const uint8_t objectIcnType, uint8_t index )
+bool MP2::isHiddenForPuzzle( const int terrainType, const ObjectIcnType objectIcnType, uint8_t index )
 {
     switch ( objectIcnType ) {
     case OBJ_ICN_TYPE_UNKNOWN:
@@ -962,7 +962,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     return Direction::UNKNOWN;
 }
 
-bool MP2::getDiggingHoleSprite( const int terrainType, uint8_t & objectIcnType, uint8_t & index )
+bool MP2::getDiggingHoleSprite( const int terrainType, ObjectIcnType & objectIcnType, uint8_t & index )
 {
     switch ( terrainType ) {
     case Maps::Ground::DESERT:
@@ -1012,9 +1012,9 @@ bool MP2::getDiggingHoleSprite( const int terrainType, uint8_t & objectIcnType, 
     return false;
 }
 
-bool MP2::isDiggingHoleSprite( const int terrainType, const uint8_t objectIcnType, const uint8_t index )
+bool MP2::isDiggingHoleSprite( const int terrainType, const ObjectIcnType objectIcnType, const uint8_t index )
 {
-    uint8_t terrainObjectIcnType = 0;
+    ObjectIcnType terrainObjectIcnType = OBJ_ICN_TYPE_UNKNOWN;
     uint8_t correctIndex = 0;
 
     if ( !getDiggingHoleSprite( terrainType, terrainObjectIcnType, correctIndex ) ) {

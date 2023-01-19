@@ -562,13 +562,13 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_RESOURCE: {
         int resourceType = Resource::UNKNOWN;
 
-        if ( ( _objectIcnType >> 2 ) == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+        if ( _objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
             // The resource is located at the top.
             resourceType = Resource::FromIndexSprite( _imageIndex );
         }
         else {
             for ( TilesAddon & addon : addons_level1 ) {
-                if ( ( addon._objectIcnType >> 2 ) == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+                if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
                     resourceType = Resource::FromIndexSprite( addon._imageIndex );
                     // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
                     // Let's swap the addon and main tile objects
@@ -576,6 +576,8 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                     std::swap( addon._imageIndex, _imageIndex );
                     std::swap( addon._uid, _uid );
                     std::swap( addon._layerType, _layerType );
+                    std::swap( addon._hasObjectAnimation, _hasObjectAnimation );
+                    std::swap( addon._isMarkedAsRoad, _isMarkedAsRoad );
 
                     break;
                 }
@@ -818,11 +820,11 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARRIER:
-        QuantitySetColor( Tiles::getColorFromBarrierSprite( _objectIcnType >> 2, _imageIndex ) );
+        QuantitySetColor( Tiles::getColorFromBarrierSprite( _objectIcnType, _imageIndex ) );
         break;
 
     case MP2::OBJ_TRAVELLER_TENT:
-        QuantitySetColor( Tiles::getColorFromTravellerTentSprite( _objectIcnType >> 2, _imageIndex ) );
+        QuantitySetColor( Tiles::getColorFromTravellerTentSprite( _objectIcnType, _imageIndex ) );
         break;
 
     case MP2::OBJ_ALCHEMIST_LAB:
@@ -867,8 +869,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     }
 
     case MP2::OBJ_BOAT:
-        // TODO: this is absolutely wrong to assign this value to object type!
-        _objectIcnType = 27;
+        _objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
         _imageIndex = 18;
         break;
 
@@ -959,17 +960,14 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
 {
     tile.SetObject( MP2::OBJ_MONSTER );
 
-    const uint8_t correctedObjectIcnType = ( tile._objectIcnType >> 2 );
-
     // If there was another object sprite here (shadow for example) push it down to Addons,
     // except when there is already MONS32.ICN here.
-    if ( tile._objectIcnType != 0 && correctedObjectIcnType != MP2::OBJ_ICN_TYPE_MONS32 && tile._imageIndex != 255 ) {
+    if ( tile._objectIcnType != 0 && tile._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 && tile._imageIndex != 255 ) {
         tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile._uid, tile._objectIcnType, tile._imageIndex, false, false ) );
 
         // TODO: why are we setting UID to 0? It should be unique!
         tile._uid = 0;
-        // TODO: we ignore first 2 bits which might be not 0!
-        tile._objectIcnType = ( MP2::OBJ_ICN_TYPE_MONS32 << 2 );
+        tile._objectIcnType = MP2::OBJ_ICN_TYPE_MONS32;
     }
 
     tile._imageIndex = mons.GetSpriteIndex();
