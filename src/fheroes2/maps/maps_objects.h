@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <list>
 #include <string>
+#include <vector>
 
 #include "artifact.h"
 #include "position.h"

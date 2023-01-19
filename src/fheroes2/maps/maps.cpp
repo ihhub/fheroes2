@@ -31,7 +31,6 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
-#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps.h"

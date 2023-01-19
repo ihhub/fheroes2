@@ -29,7 +29,6 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
-#include "icn.h"
 #include "logging.h"
 #include "maps_tiles.h"
 #include "monster.h"

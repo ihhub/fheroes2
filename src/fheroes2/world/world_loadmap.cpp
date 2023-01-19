@@ -41,7 +41,6 @@
 #include "color.h"
 #include "game_over.h"
 #include "heroes.h"
-#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps.h"
