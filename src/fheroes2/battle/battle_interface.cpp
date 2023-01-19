@@ -6101,7 +6101,7 @@ void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const Unit 
     }
 
     const int spellPoints = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
-    const uint32_t spellDamage = defender->CalculateDamage( spell, (uint32_t)spellPoints, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
+    const uint32_t spellDamage = defender->CalculateDamage( spell, (uint32_t)spellPoints, hero, (uint32_t)0 /* targetInfo damage */, true /* ignore defending hero */ );
 
     _redraw = true;
     _minDamage = spellDamage;
