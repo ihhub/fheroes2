@@ -68,8 +68,9 @@ namespace Maps
 
     struct TilesAddon
     {
-        TilesAddon();
-        TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint8_t index_ );
+        TilesAddon() = default;
+
+        TilesAddon( const uint8_t layerType, const uint32_t uid, const uint8_t objectIcnType, const uint8_t imageIndex );
 
         TilesAddon( const TilesAddon & ) = default;
 
@@ -99,10 +100,10 @@ namespace Maps
         static bool PredicateSortRules1( const TilesAddon & ta1, const TilesAddon & ta2 );
 
         // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
-        uint32_t _uid;
+        uint32_t _uid{ 0 };
 
         // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
-        uint8_t _layerType;
+        uint8_t _layerType{ OBJECT_LAYER };
 
         // Structure containing a flag whether the object's image (sprite) has animation, a flag whether the object is road and
         // the type of object which correlates to ICN id.
@@ -110,16 +111,16 @@ namespace Maps
         // The second bit is a flag whether the object considered as road.
         // The last 6 bits the type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
         // TODO: move first 2 bits out of this member to keep only object type.
-        uint8_t _objectIcnType;
+        uint8_t _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
-        uint8_t _imageIndex;
+        uint8_t _imageIndex{ 255 };
 
         // An indicator where the object has extra animation frames on Adventure Map.
-        bool _hasObjectAnimation;
+        bool _hasObjectAnimation{ false };
 
         // An indicator that this tile is a road. Logically it shouldn't be set for addons.
-        bool _isMarkedAsRoad;
+        bool _isMarkedAsRoad{ false };
     };
 
     using Addons = std::list<TilesAddon>;

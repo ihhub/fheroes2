@@ -544,21 +544,16 @@ namespace
     }
 }
 
-Maps::TilesAddon::TilesAddon()
-    : _uid( 0 )
-    , _layerType( OBJECT_LAYER )
-    , _objectIcnType( MP2::OBJ_ICN_TYPE_UNKNOWN )
-    , _imageIndex( 255 )
-{}
-
-Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint8_t index_ )
+Maps::TilesAddon::TilesAddon( const uint8_t layerType, const uint32_t uid, const uint8_t objectIcnType, const uint8_t imageIndex )
     : _uid( uid )
-    , _layerType( lv )
-    , _objectIcnType( obj )
-    , _imageIndex( index_ )
+    , _layerType( layerType )
+    , _objectIcnType( objectIcnType )
+    , _imageIndex( imageIndex )
     , _hasObjectAnimation( false )
     , _isMarkedAsRoad( false )
-{}
+{
+    // Do nothing.
+}
 
 std::string Maps::TilesAddon::String( int lvl ) const
 {
