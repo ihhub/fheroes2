@@ -962,7 +962,7 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
 
     // If there was another object sprite here (shadow for example) push it down to Addons,
     // except when there is already MONS32.ICN here.
-    if ( tile._objectIcnType != 0 && tile._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 && tile._imageIndex != 255 ) {
+    if ( tile._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 && tile._imageIndex != 255 ) {
         tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile._uid, tile._objectIcnType, tile._imageIndex, false, false ) );
 
         // TODO: why are we setting UID to 0? It should be unique!

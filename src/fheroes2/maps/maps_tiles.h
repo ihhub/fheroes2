@@ -190,7 +190,7 @@ namespace Maps
 
         bool hasSpriteAnimation() const
         {
-            return _objectIcnType & 1;
+            return _hasObjectAnimation;
         }
 
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
