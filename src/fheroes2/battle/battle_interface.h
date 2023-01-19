@@ -462,7 +462,7 @@ namespace Battle
         BridgeMovementAnimation _bridgeAnimation;
 
         // TODO: While currently we don't need to persist 'UnitSpellEffectInfos' between render functions,
-        // htis may be needed in the future (for example, in expansion) to display some sprites over
+        // this may be needed in the future (for example, in expansion) to display some sprites over
         // troops for some time (e.g. long duration spell effects or other permanent effects).
         std::vector<UnitSpellEffectInfo> _unitSpellEffectInfos;
     };
