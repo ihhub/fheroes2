@@ -6131,8 +6131,8 @@ void Battle::PopupDamageInfo::Redraw() const
 
     std::string str = _minDamage == _maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
-    StringReplace( str, "%{min}", (int) _minDamage );
-    StringReplace( str, "%{max}", (int) _maxDamage );
+    StringReplace( str, "%{min}", (int)_minDamage );
+    StringReplace( str, "%{max}", (int)_maxDamage );
 
     Text damageText( str, Font::SMALL );
 
