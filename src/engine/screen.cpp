@@ -715,35 +715,39 @@ namespace
             updatePalette( StandardPaletteIndexes() );
         }
 
-        void _calculateScreenScaling( int32_t width_, int32_t height_, bool isFullScreen )
+        void _calculateScreenScaling( const int32_t width_, const int32_t height_, const bool isFullScreen )
         {
             _destRect.x = 0;
             _destRect.y = 0;
             _destRect.width = width_;
             _destRect.height = height_;
 
-            if ( width_ != VITA_FULLSCREEN_WIDTH || height_ != VITA_FULLSCREEN_HEIGHT ) {
-                if ( isFullScreen ) {
-                    vita2d_texture_set_filters( _texBuffer, isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR,
-                                                isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR );
-                    if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
-                        const float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
-                        _destRect.width = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
-                        _destRect.height = VITA_FULLSCREEN_HEIGHT;
-                        _destRect.x = ( VITA_FULLSCREEN_WIDTH - _destRect.width ) / 2;
-                    }
-                    else {
-                        const float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
-                        _destRect.width = VITA_FULLSCREEN_WIDTH;
-                        _destRect.height = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
-                        _destRect.y = ( VITA_FULLSCREEN_HEIGHT - _destRect.height ) / 2;
-                    }
-                }
-                else {
-                    // center game area
-                    _destRect.x = ( VITA_FULLSCREEN_WIDTH - width_ ) / 2;
-                    _destRect.y = ( VITA_FULLSCREEN_HEIGHT - height_ ) / 2;
-                }
+            if ( width_ == VITA_FULLSCREEN_WIDTH && height_ == VITA_FULLSCREEN_HEIGHT ) {
+                // Nothing to do more.
+                return;
+            }
+
+            if ( !isFullScreen ) {
+                // Center game area.
+                _destRect.x = ( VITA_FULLSCREEN_WIDTH - width_ ) / 2;
+                _destRect.y = ( VITA_FULLSCREEN_HEIGHT - height_ ) / 2;
+                return;
+            }
+
+            const SceGxmTextureFilter textureFilter = isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR;
+
+            vita2d_texture_set_filters( _texBuffer, textureFilter, textureFilter );
+            if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
+                const float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
+                _destRect.width = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
+                _destRect.height = VITA_FULLSCREEN_HEIGHT;
+                _destRect.x = ( VITA_FULLSCREEN_WIDTH - _destRect.width ) / 2;
+            }
+            else {
+                const float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
+                _destRect.width = VITA_FULLSCREEN_WIDTH;
+                _destRect.height = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
+                _destRect.y = ( VITA_FULLSCREEN_HEIGHT - _destRect.height ) / 2;
             }
         }
     };

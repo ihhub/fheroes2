@@ -1636,10 +1636,8 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         }
 #endif
     }
-    else {
-        if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
-            _controllerPointerSpeed /= CONTROLLER_TRIGGER_CURSOR_SPEEDUP;
-        }
+    else if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+        _controllerPointerSpeed /= CONTROLLER_TRIGGER_CURSOR_SPEEDUP;
     }
 }
 
