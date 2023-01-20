@@ -122,13 +122,92 @@ namespace Bin_Info
             projectileOffset.emplace_back( getValue<int16_t>( data, 174 + ( i * 4 ) ), getValue<int16_t>( data, 176 + ( i * 4 ) ) );
         }
 
-        // Elves and Grand Elves have incorrect start Y position for lower shooting attack
-        if ( monsterID == Monster::ELF || monsterID == Monster::GRAND_ELF ) {
-            if ( projectileOffset[2].y == -1 )
-                projectileOffset[2].y = -32;
+        // We change all projectile start positions to match the last projectile position in shooting animation,
+        // this position will be used to calculate the projectile path, but will not be used in rendering.
+        if ( monsterID == Monster::ARCHER || monsterID == Monster::RANGER ) {
+            projectileOffset[0].x -= 30;
+            projectileOffset[0].y += 5;
+            projectileOffset[1].x -= 46;
+            projectileOffset[1].y -= 5;
+            projectileOffset[2].x -= 30;
+            projectileOffset[2].y -= 40;
         }
 
-        uint8_t projectileCount = data[186];
+        if ( monsterID == Monster::ORC || monsterID == Monster::ORC_CHIEF ) {
+            for ( fheroes2::Point & offset : projectileOffset ) {
+                offset.x -= 20;
+                offset.y = -36;
+            }
+        }
+
+        if ( monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL ) {
+            for ( fheroes2::Point & offset : projectileOffset ) {
+                offset.x -= 25;
+                offset.y = -49;
+            }
+            projectileOffset[0].y -= 15;
+        }
+
+        if ( monsterID == Monster::ELF || monsterID == Monster::GRAND_ELF ) {
+            projectileOffset[0].x -= 19;
+            projectileOffset[0].y += 22;
+            projectileOffset[1].x -= 40;
+            --projectileOffset[1].y;
+            projectileOffset[2].x -= 19;
+            // IMPORTANT: In BIN file Elves and Grand Elves have incorrect start Y position for lower shooting attack ( -1 ).
+            projectileOffset[2].y = -54;
+        }
+
+        if ( monsterID == Monster::DRUID || monsterID == Monster::GREATER_DRUID ) {
+            projectileOffset[0].x -= 17;
+            projectileOffset[0].y += 23;
+            projectileOffset[1].x -= 20;
+            projectileOffset[2].x -= 7;
+            projectileOffset[2].y -= 21;
+        }
+
+        if ( monsterID == Monster::CENTAUR ) {
+            projectileOffset[0].x -= 24;
+            projectileOffset[0].y += 31;
+            projectileOffset[1].x -= 32;
+            projectileOffset[1].y += 2;
+            projectileOffset[2].x -= 24;
+            projectileOffset[2].y -= 27;
+        }
+
+        if ( monsterID == Monster::HALFLING ) {
+            projectileOffset[0].x -= 7;
+            projectileOffset[0].y += 11;
+            projectileOffset[1].x -= 21;
+            projectileOffset[1].y += 10;
+            projectileOffset[2].x -= 9;
+            projectileOffset[2].y -= 14;
+        }
+
+        if ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE ) {
+            projectileOffset[0].y -= 2;
+            projectileOffset[2].y += 2;
+        }
+
+        if ( monsterID == Monster::TITAN ) {
+            projectileOffset[0].x -= 16;
+            projectileOffset[0].y += 33;
+            projectileOffset[1].x -= 37;
+            projectileOffset[1].y += 8;
+            projectileOffset[2].x -= 20;
+            projectileOffset[2].y -= 38;
+        }
+
+         if ( monsterID == Monster::LICH || monsterID == Monster::POWER_LICH ) {
+            projectileOffset[0].x -= 5;
+            projectileOffset[0].y += 6;
+            projectileOffset[1].x -= 16;
+            projectileOffset[1].y -= 9;
+            projectileOffset[2].x -= 9;
+            projectileOffset[2].y -= 7;
+        }
+
+         uint8_t projectileCount = data[186];
         if ( projectileCount > 12u )
             projectileCount = 12u; // here we need to reset our object
         for ( uint8_t i = 0; i < projectileCount; ++i )

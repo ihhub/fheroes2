@@ -3178,20 +3178,27 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     const bool isMage = ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE );
 
     // Mage is channeling the bolt; doesn't have missile sprite
-    if ( isMage )
+    if ( isMage ) {
         fheroes2::delayforMs( Game::ApplyBattleSpeed( 115 ) );
-    else
+    }
+    else {
         missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
+    }
 
     // Lich/Power lich has projectile speed of 25
     const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
-    // Wait for previously set and not passed delays before rendering a new frame.
-    WaitForAllActionDelays();
+    // For all shooting creatures we do not render the first missile position.
+    if ( !isMage ) {
+        ++pnt;
+    }
 
     // Shooter projectile rendering offset uses 'x' and 'y' from sprite data.
     const fheroes2::Point missileOffset( reverse ? ( -missile.width() - missile.x() ) : missile.x(), ( angle > 0 ) ? ( -missile.height() - missile.y() ) : missile.y() );
+
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
 
     // convert the following code into a function/event service
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
