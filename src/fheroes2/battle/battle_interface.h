@@ -34,6 +34,7 @@
 #include "battle_board.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "icn.h"
 #include "image.h"
 #include "math_base.h"
 #include "spell.h"
@@ -92,6 +93,22 @@ namespace Battle
         WIZARD,
         NECROMANCER,
         CAPTAIN
+    };
+
+    // Sprite data to render over the unit (spell effect animation)
+    struct UnitSpellEffectInfo
+    {
+        UnitSpellEffectInfo( const uint32_t setUnitId, const int32_t setIcnId, const bool setReflectedImage )
+            : unitId( setUnitId )
+            , icnId( setIcnId )
+            , isReflectedImage( setReflectedImage )
+        {}
+
+        uint32_t unitId{ 0 };
+        int32_t icnId{ ICN::UNKNOWN };
+        uint32_t icnIndex{ 0 };
+        fheroes2::Point position;
+        bool isReflectedImage{ false };
     };
 
     class OpponentSprite
@@ -443,6 +460,11 @@ namespace Battle
         };
 
         BridgeMovementAnimation _bridgeAnimation;
+
+        // TODO: While currently we don't need to persist 'UnitSpellEffectInfos' between render functions,
+        // this may be needed in the future (for example, in expansion) to display some sprites over
+        // troops for some time (e.g. long duration spell effects or other permanent effects).
+        std::vector<UnitSpellEffectInfo> _unitSpellEffectInfos;
     };
 }
 
