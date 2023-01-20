@@ -2136,6 +2136,19 @@ namespace fheroes2
                     ApplyPalette( out, indexes );
                 }
                 return true;
+            case ICN::TITANMSL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 7 ) {
+                    // We need to shift Titan lightning arrow sprite position to correctly render it.
+                    _icnVsSprite[id][0].setPosition( _icnVsSprite[id][0].x(), _icnVsSprite[id][0].y() - 10 );
+                    _icnVsSprite[id][1].setPosition( _icnVsSprite[id][1].x() - 5, _icnVsSprite[id][1].y() - 5 );
+                    _icnVsSprite[id][2].setPosition( _icnVsSprite[id][2].x() - 10, _icnVsSprite[id][2].y() );
+                    _icnVsSprite[id][3].setPosition( _icnVsSprite[id][3].x() - 15, _icnVsSprite[id][3].y() );
+                    _icnVsSprite[id][4].setPosition( _icnVsSprite[id][4].x() - 10, _icnVsSprite[id][2].y() );
+                    _icnVsSprite[id][5].setPosition( _icnVsSprite[id][5].x() - 5, _icnVsSprite[id][5].y() - 5 );
+                    _icnVsSprite[id][6].setPosition( _icnVsSprite[id][6].x(), _icnVsSprite[id][0].y() - 10 );
+                }
+                return true;
             case ICN::TROLLMSL:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 1 ) {
