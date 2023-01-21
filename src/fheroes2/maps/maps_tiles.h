@@ -274,7 +274,12 @@ namespace Maps
 
         void AddonsPushLevel1( const MP2::mp2tile_t & mt );
         void AddonsPushLevel1( const MP2::mp2addon_t & ma );
-        void AddonsPushLevel1( const TilesAddon & ta );
+
+        void AddonsPushLevel1( TilesAddon ta )
+        {
+            addons_level1.emplace_back( std::move( ta ) );
+        }
+
         void AddonsPushLevel2( const MP2::mp2tile_t & mt );
         void AddonsPushLevel2( const MP2::mp2addon_t & ma );
 

@@ -1115,11 +1115,6 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
     }
 }
 
-void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
-{
-    addons_level1.emplace_back( ta );
-}
-
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName2 != 0 && mt.level2IcnImageIndex != 0xFF ) {
@@ -2636,15 +2631,17 @@ std::vector<MP2::ObjectIcnType> Maps::Tiles::getValidObjectIcnTypes() const
     }
 
     for ( const TilesAddon & addon : addons_level1 ) {
-        if ( addon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            objectIcnTypes.emplace_back( addon._objectIcnType );
-        }
+        // If this assertion blows up then you put an empty object into an addon which makes no sense!
+        assert( addon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN );
+
+        objectIcnTypes.emplace_back( addon._objectIcnType );
     }
 
     for ( const TilesAddon & addon : addons_level2 ) {
-        if ( addon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            objectIcnTypes.emplace_back( addon._objectIcnType );
-        }
+        // If this assertion blows up then you put an empty object into an addon which makes no sense!
+        assert( addon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN );
+
+        objectIcnTypes.emplace_back( addon._objectIcnType );
     }
 
     return objectIcnTypes;
