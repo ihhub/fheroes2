@@ -2083,6 +2083,7 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
 
     Interface::Basic & I = Interface::Basic::Get();
     I.GetGameArea().SetCenter( hero.GetCenter() );
+    I.GetRadar().SetMapRedraw();
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2116,6 +2117,7 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
 
     Interface::Basic & I = Interface::Basic::Get();
     I.GetGameArea().SetCenter( hero.GetCenter() );
+    I.GetRadar().SetMapRedraw();
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2680,6 +2682,7 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, i
             hero.setVisitedForAllies( dst_index );
 
             Interface::Basic & I = Interface::Basic::Get();
+            I.GetRadar().SetMapRedraw();
             I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
         }
     }
@@ -3153,6 +3156,7 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
                 Maps::ClearFog( eyeIndex, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
 
                 I.GetGameArea().SetCenter( Maps::GetPoint( eyeIndex ) );
+                I.GetRadar().SetMapRedraw();
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                 display.render();

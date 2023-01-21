@@ -226,6 +226,7 @@ namespace
         hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
+        I.GetRadar().SetMapRedraw();
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -384,6 +385,7 @@ namespace
         hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
+        I.GetRadar().SetMapRedraw();
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );

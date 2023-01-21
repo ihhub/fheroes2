@@ -686,6 +686,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     if ( player->isAIAutoControlMode() ) {
                         radar.SetHide( false );
+                        radar.SetMapRedraw();
                         radar.SetRedraw();
                     }
 
@@ -760,6 +761,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     }
 
     radar.SetHide( false );
+    radar.SetMapRedraw();
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
@@ -1110,6 +1112,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                         }
 
                         isMovingHero = true;
+                        radar.SetMapRedraw();
 
                         if ( hero->isAction() ) {
                             // check if the game is over after the hero's action

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -56,12 +56,16 @@ namespace Interface
 
         void SetPos( int32_t ox, int32_t oy ) override;
         void SetRedraw() const;
+        void SetMapRedraw()
+        {
+            _needMapRedraw = true;
+        }
         void Build();
         void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
 
         void SetHide( bool f )
         {
-            hide = f;
+            _hide = f;
         }
 
         void QueueEventProcessing();
@@ -82,22 +86,23 @@ namespace Interface
         };
 
         void SavePosition() override;
-        void Generate();
+        void SetZoom();
 
         // Do not call this method directly, use Interface::Basic::Redraw() instead
         // to avoid issues in the "no interface" mode
         void Redraw();
-        void RedrawObjects( int color, ViewWorldMode flags ) const;
+        void RedrawObjects( const int32_t playerColor, const ViewWorldMode flags );
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 
-        RadarType radarType;
-        Basic & interface;
+        RadarType _radarType;
+        Basic & _interface;
 
-        fheroes2::Image spriteArea;
-        fheroes2::MovableSprite cursorArea;
-        fheroes2::Point offset;
-        bool hide;
-        bool _mouseDraggingMovement;
+        fheroes2::Image _map{ area.width, area.height };
+        fheroes2::MovableSprite _cursorArea;
+        double _zoom{ 1.0 };
+        bool _hide;
+        bool _mouseDraggingMovement{ false };
+        bool _needMapRedraw{ true };
     };
 }
 
