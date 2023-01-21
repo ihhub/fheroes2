@@ -277,7 +277,7 @@ namespace Maps
 
         void AddonsPushLevel1( TilesAddon ta )
         {
-            addons_level1.emplace_back( std::move( ta ) );
+            addons_level1.emplace_back( ta );
         }
 
         void AddonsPushLevel2( const MP2::mp2tile_t & mt );
