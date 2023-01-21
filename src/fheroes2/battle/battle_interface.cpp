@@ -3585,8 +3585,11 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         // There sould not be more Lich cloud animation frames than in corresponding ICN.
         assert( lichCloudFrame <= lichCloudMaxFrame );
 
+        // IMPORTANT: The game engine can change STATIC animation to IDLE, especially for Ghosts and Zombies,
+        // so we need also to check for IDLE where we check for STATIC.
         if ( ( animatingTargets == finishedAnimationCount ) && ( !drawLichCloud || ( lichCloudFrame == lichCloudMaxFrame ) )
-             && ( ( attacker == nullptr ) || ( attacker->animation.getCurrentState() == Monster_Info::STATIC ) ) ) {
+             && ( ( attacker == nullptr ) || ( attacker->animation.getCurrentState() == Monster_Info::STATIC )
+                  || ( attacker->animation.getCurrentState() == Monster_Info::IDLE ) ) ) {
             // All unit animation frames are rendered and if it was a Lich attack then also its cloud frames are rendered too.
             break;
         }
