@@ -1483,7 +1483,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
-            if ( !world.LoadMapMP2( mapInfo.file ) ) {
+            const bool isSWCampaign = ( chosenCampaignID == Campaign::ROLAND_CAMPAIGN ) || ( chosenCampaignID == Campaign::ARCHIBALD_CAMPAIGN );
+
+            if ( !world.LoadMapMP2( mapInfo.file, isSWCampaign ) ) {
                 Dialog::Message( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ), Font::BIG, Dialog::OK );
 
                 // TODO: find a way to restore world for the current game after a failure.
