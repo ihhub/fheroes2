@@ -93,16 +93,16 @@ msgid "RESTART"
 msgstr "OD NOWA"
 
 msgid "S"
-msgstr "S"
-
-msgid "M"
 msgstr "M"
 
+msgid "M"
+msgstr "Ś"
+
 msgid "L"
-msgstr "L"
+msgstr "D"
 
 msgid "X-L"
-msgstr "X-L"
+msgstr "BD"
 
 msgid "ALL"
 msgstr "CAŁOŚĆ"
@@ -3082,7 +3082,7 @@ msgid "Number to buy:"
 msgstr "Rekrutuj:"
 
 msgid "Recruit selected monsters."
-msgstr "Rekrutuj wybrane stworzenia"
+msgstr "Rekrutuj wybrane stworzenia."
 
 msgid "Select maximum monsters to be recruited."
 msgstr "Ustaw maksymalną liczbę stworzeń możliwych do zrekrutowania."
@@ -6931,7 +6931,7 @@ msgid "maps|Large"
 msgstr "Duże"
 
 msgid "maps|Extra Large"
-msgstr "Olbrzymie"
+msgstr "Bardzo duże"
 
 msgid "maps|Custom Size"
 msgstr "Inny rozmiar"
