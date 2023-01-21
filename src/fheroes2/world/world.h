@@ -177,7 +177,7 @@ public:
     World & operator=( const World & other ) = delete;
     World & operator=( World && other ) = delete;
 
-    bool LoadMapMP2( const std::string & );
+    bool LoadMapMP2( const std::string & filename, const bool isOriginalMp2File );
 
     void NewMaps( int32_t, int32_t );
 

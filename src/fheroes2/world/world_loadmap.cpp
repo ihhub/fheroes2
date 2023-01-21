@@ -55,6 +55,7 @@
 #include "rand.h"
 #include "serialize.h"
 #include "settings.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -115,7 +116,7 @@ namespace GameStatic
     extern uint32_t uniq;
 }
 
-bool World::LoadMapMP2( const std::string & filename )
+bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2File )
 {
     Reset();
     Defaults();
@@ -192,6 +193,7 @@ bool World::LoadMapMP2( const std::string & filename )
     std::vector<MP2::mp2addon_t> vec_mp2addons( fs.getLE32() /* count mp2addon_t */ );
 
     for ( MP2::mp2addon_t & mp2addon : vec_mp2addons ) {
+        // TODO: add checks for a truncated file state.
         MP2::loadAddon( fs, mp2addon );
     }
 
@@ -211,6 +213,8 @@ bool World::LoadMapMP2( const std::string & filename )
     MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
     vec_object.reserve( 100 );
 
+    const bool checkPoLObjects = !Settings::Get().isPriceOfLoyaltySupported() && isOriginalMp2File;
+
     // read all tiles
     for ( int32_t i = 0; i < worldSize; ++i ) {
         Maps::Tiles & tile = vec_tiles[i];
@@ -224,6 +228,19 @@ bool World::LoadMapMP2( const std::string & filename )
         }
         else if ( mp2tile.mapObjectType == 193 ) {
             mp2tile.mapObjectType = MP2::OBJ_PEASANT_HUT;
+        }
+
+        if ( checkPoLObjects ) {
+            switch ( mp2tile.mapObjectType ) {
+            case MP2::OBJ_BARRIER:
+            case MP2::OBJ_TRAVELLER_TENT:
+            case MP2::OBJ_EXPANSION_DWELLING:
+            case MP2::OBJ_EXPANSION_OBJECT:
+            case MP2::OBJ_JAIL:
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Failed to load The Price of Loyalty '" << filename << "' map which is not supported by this version of the game." )
+                // You are trying to load a PoL map named as a MP2 file.
+                return false;
+            }
         }
 
         tile.Init( i, mp2tile );

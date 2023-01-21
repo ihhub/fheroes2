@@ -399,7 +399,7 @@ namespace
             std::string ext = lower.substr( lower.size() - 3 );
 
             if ( ext == "mp2" || ext == "mx2" ) {
-                return world.LoadMapMP2( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
+                return world.LoadMapMP2( conf.MapsFile(), ( ext == "mp2" ) ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
             }
 
             DEBUG_LOG( DBG_GAME, DBG_WARN,
