@@ -236,7 +236,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_EXPANSION_DWELLING:
             case MP2::OBJ_EXPANSION_OBJECT:
             case MP2::OBJ_JAIL:
-                DEBUG_LOG( DBG_GAME, DBG_INFO, "Failed to load The Price of Loyalty '" << filename << "' map which is not supported by this version of the game." )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Failed to load The Price of Loyalty map '" << filename << "' which is not supported by this version of the game." )
                 // You are trying to load a PoL map named as a MP2 file.
                 return false;
             default:
