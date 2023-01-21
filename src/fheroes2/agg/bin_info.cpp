@@ -198,7 +198,7 @@ namespace Bin_Info
             projectileOffset[2].y -= 38;
         }
 
-         if ( monsterID == Monster::LICH || monsterID == Monster::POWER_LICH ) {
+        if ( monsterID == Monster::LICH || monsterID == Monster::POWER_LICH ) {
             projectileOffset[0].x -= 5;
             projectileOffset[0].y += 6;
             projectileOffset[1].x -= 16;
@@ -207,7 +207,7 @@ namespace Bin_Info
             projectileOffset[2].y -= 7;
         }
 
-         uint8_t projectileCount = data[186];
+        uint8_t projectileCount = data[186];
         if ( projectileCount > 12u )
             projectileCount = 12u; // here we need to reset our object
         for ( uint8_t i = 0; i < projectileCount; ++i )
