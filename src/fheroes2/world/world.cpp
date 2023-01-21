@@ -53,7 +53,6 @@
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
@@ -1309,16 +1308,7 @@ StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 
 StreamBase & operator>>( StreamBase & msg, CapturedObject & obj )
 {
-    msg >> obj.objcol >> obj.guardians;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE1_1000_RELEASE ) {
-        int dummy;
-
-        msg >> dummy;
-    }
-
-    return msg;
+    return msg >> obj.objcol >> obj.guardians;
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
