@@ -55,7 +55,6 @@
 #include "rand.h"
 #include "serialize.h"
 #include "settings.h"
-#include "tools.h"
 #include "world.h"
 
 namespace
@@ -240,6 +239,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "Failed to load The Price of Loyalty '" << filename << "' map which is not supported by this version of the game." )
                 // You are trying to load a PoL map named as a MP2 file.
                 return false;
+            default:
+                break;
             }
         }
 
