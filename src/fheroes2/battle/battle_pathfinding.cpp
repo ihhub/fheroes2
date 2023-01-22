@@ -52,7 +52,7 @@ namespace Battle
         _unitSpeed = unit.GetSpeed();
 
         _cache.clear();
-        _cache[_pathStart] = {};
+        _cache.try_emplace( _pathStart );
 
         // Flying units can land wherever they can fit
         if ( unit.isFlying() ) {
@@ -150,7 +150,7 @@ namespace Battle
                     const uint32_t cost = currentNode._cost + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : movementPenalty );
                     const uint32_t distance = currentNode._distance + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : 1 );
 
-                    BattleNode & newNode = _cache.try_emplace( newNodeIdx ).first->second;
+                    BattleNode & newNode = _cache[newNodeIdx];
                     if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
                         newNode._from = currentNodeIdx;
                         newNode._cost = cost;
@@ -189,7 +189,7 @@ namespace Battle
                     const uint32_t cost = currentNode._cost + movementPenalty;
                     const uint32_t distance = currentNode._distance + 1;
 
-                    BattleNode & newNode = _cache.try_emplace( newNodeIdx ).first->second;
+                    BattleNode & newNode = _cache[newNodeIdx];
                     if ( newNode._from == BattleNodeIndex{ -1, -1 } || newNode._cost > cost ) {
                         newNode._from = currentNodeIdx;
                         newNode._cost = cost;
