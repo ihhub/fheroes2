@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-07 02:48+0000\n"
+"POT-Creation-Date: 2023-01-10 15:38+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -7014,6 +7014,12 @@ msgstr "Domek krasnoludów"
 msgid "Peasant Hut"
 msgstr "Chłopska chata"
 
+msgid "Stables"
+msgstr "Stajnie"
+
+msgid "Alchemist's Tower"
+msgstr "Wieża alchemika"
+
 msgid "Event"
 msgstr "Zdarzenie"
 
@@ -7068,6 +7074,9 @@ msgstr "Głazy"
 msgid "Wagon Camp"
 msgstr "Tabor"
 
+msgid "Hut of the Magi"
+msgstr "Chata maga"
+
 msgid "Whirlpool"
 msgstr "Wir"
 
@@ -7079,6 +7088,9 @@ msgstr[2] "Wiatraków"
 
 msgid "Artifact"
 msgstr "Artefakt"
+
+msgid "Mermaid"
+msgstr "Syrena"
 
 msgid "Boat"
 msgstr "Łódź"
@@ -7101,6 +7113,9 @@ msgstr "Losowe miasto"
 msgid "Random Castle"
 msgstr "Losowy zamek"
 
+msgid "Eye of the Magi"
+msgstr "Oko maga"
+
 msgid "Random Monster - weak"
 msgstr "Losowy potwór - słaby"
 
@@ -7115,6 +7130,9 @@ msgstr "Losowy potwór - bardzo silny"
 
 msgid "Nothing Special"
 msgstr "Nic specjalnego"
+
+msgid "Mossy Rock"
+msgstr ""
 
 msgid "Watch Tower"
 msgstr "Wieża strażnicza"
@@ -7133,6 +7151,9 @@ msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Opuszczona kopalnia"
+
+msgid "Sirens"
+msgstr "Syreny"
 
 msgid "Standing Stones"
 msgstr "Krąg kamieni"
@@ -7224,6 +7245,9 @@ msgstr "Wieża obserwacyjna"
 msgid "Freeman's Foundry"
 msgstr "Odlewnia"
 
+msgid "Reefs"
+msgstr "Rafy"
+
 msgid "Trees"
 msgstr "Drzewa"
 
@@ -7272,17 +7296,17 @@ msgstr "Krzak"
 msgid "Barrow Mounds"
 msgstr "Kurhany"
 
-msgid "Mermaid"
-msgstr "Syrena"
+msgid "Random Artifact - Treasure"
+msgstr "Losowy artefakt - skarb"
 
-msgid "Sirens"
-msgstr "Syreny"
+msgid "Random Artifact - Minor"
+msgstr "Losowy artefakt - mniejszy"
 
-msgid "Hut of the Magi"
-msgstr "Chata maga"
+msgid "Random Artifact - Major"
+msgstr "Losowy artefakt - większy"
 
-msgid "Eye of the Magi"
-msgstr "Oko maga"
+msgid "Barrier"
+msgstr "Bariera"
 
 msgid "Traveller's Tent"
 msgstr "Namiot podróżnika"
@@ -7301,27 +7325,6 @@ msgstr "Ołtarz Ziemi"
 
 msgid "Water Summoning Altar"
 msgstr "Ołtarz Wody"
-
-msgid "Reefs"
-msgstr "Rafy"
-
-msgid "Alchemist's Tower"
-msgstr "Wieża alchemika"
-
-msgid "Stables"
-msgstr "Stajnie"
-
-msgid "Random Artifact - Treasure"
-msgstr "Losowy artefakt - skarb"
-
-msgid "Random Artifact - Minor"
-msgstr "Losowy artefakt - mniejszy"
-
-msgid "Random Artifact - Major"
-msgstr "Losowy artefakt - większy"
-
-msgid "Barrier"
-msgstr "Bariera"
 
 msgid "Unknown Monster"
 msgstr "Nieznany potwór"
@@ -8567,7 +8570,8 @@ msgid "Holy Pendant"
 msgstr "Święty Medalion"
 
 msgid "The %{name} makes all your troops immune to curse spells."
-msgstr "%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary klątw."
+msgstr ""
+"%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary klątw."
 
 msgid ""
 "In your wanderings you come across a hermit living in a small, tidy hut. "
@@ -8583,7 +8587,8 @@ msgid "Pendant of Free Will"
 msgstr "Medalion Wolnej Woli"
 
 msgid "The %{name} makes all your troops immune to hypnotize spells."
-msgstr "%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary hipnozy."
+msgstr ""
+"%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary hipnozy."
 
 msgid ""
 "Responding to cries for help, you find river Sprites making a sport of "
@@ -8601,7 +8606,8 @@ msgid "Pendant of Life"
 msgstr "Medalion Życia"
 
 msgid "The %{name} makes all your troops immune to death spells."
-msgstr "%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary śmierci."
+msgstr ""
+"%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary śmierci."
 
 msgid ""
 "A brief roadside encounter with a small caravan and a game of knucklebones "
@@ -8616,7 +8622,8 @@ msgid "Serenity Pendant"
 msgstr "Medalion Spokoju"
 
 msgid "The %{name} makes all your troops immune to berserk spells."
-msgstr "%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary szału."
+msgstr ""
+"%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary szału."
 
 msgid ""
 "The sounds of combat draw you to the scene of a fight between an old "
@@ -8633,7 +8640,9 @@ msgid "Seeing-eye Pendant"
 msgstr "Medalion Wszystkowidzenia"
 
 msgid "The %{name} makes all your troops immune to blindness spells."
-msgstr "%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary oślepienia."
+msgstr ""
+"%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary "
+"oślepienia."
 
 msgid ""
 "You come upon a very old woman, long blind from cataracts and dying alone. "
@@ -8651,7 +8660,9 @@ msgid "Kinetic Pendant"
 msgstr "Kinetyczny Medalion"
 
 msgid "The %{name} makes all your troops immune to paralyze spells."
-msgstr "%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary paraliżu."
+msgstr ""
+"%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na czary "
+"paraliżu."
 
 msgid ""
 "You come across a golem wearing a glowing pendant and blocking your way. "
@@ -8666,7 +8677,8 @@ msgid "Pendant of Death"
 msgstr "Medalion Śmierci"
 
 msgid "The %{name} makes all your troops immune to holy spells."
-msgstr "%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na święte czary."
+msgstr ""
+"%{name} sprawia, że wszystkie twoje oddziały są niewrażliwe na święte czary."
 
 msgid ""
 "A quick and deadly battle with a Necromancer wins you his magical pendant. "

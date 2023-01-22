@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">fheroes2</string>
+    <string name="activity_toolset_label">fh2 Werkzeugkasten</string>
+    <string name="activity_toolset_game_logo_img_content_description">fheroes2 Logo</string>
+    <string name="activity_toolset_game_status_lbl_text"><b>Sie können das Spiel im Moment nicht ausführen, da einige Dateien des Originalspiels fehlen.</b>\n\nBitte kopieren Sie den Inhalt des Verzeichnisses mit dem Originalspiel Heroes of Might and Magic II (oder nur die <b>ANIM</b>, <b>DATA</b>, <b>MAPS</b> und <b>MUSIC</b> Ordner) in ein ZIP-Archiv, kopieren Sie dieses auf das Gerät, drücken Sie die \"<b>HoMM2-Assets extrahieren</b>\" Schaltfläche und wählen Sie das ZIP-Archiv.\n\nWenn Sie keine Kopie des Originalspiels haben, können Sie ein ZIP-Archiv der Demoversion herunterladen. Sobald der Download abgeschlossen ist, drücken Sie bitte die Schaltfläche \"<b>HoMM2-Assets extrahieren</b>\" und wählen Sie das neu heruntergeladene Demo-Archiv aus.</string>
+    <string name="activity_toolset_start_game_btn_name">Spiel starten</string>
+    <string name="activity_toolset_extract_homm2_assets_btn_name">HoMM2-Assets extrahieren</string>
+    <string name="activity_toolset_download_homm2_demo_btn_name">HoMM2-Demo herunterladen</string>
+    <string name="activity_toolset_extract_homm2_assets_chooser_title">Wählen Sie die ZIP-Datei mit den HoMM2-Assets</string>
+    <string name="activity_toolset_last_task_status_lbl_text_completed_successfully">Vorgang erfolgreich abgeschlossen.</string>
+    <string name="activity_toolset_last_task_status_lbl_text_no_assets_found">Vorgang erfolgreich abgeschlossen, aber es wurden keine HoMM2-Assets gefunden.</string>
+    <string name="activity_toolset_last_task_status_lbl_text_failed">Während des Vorgangs ist ein Fehler aufgetreten: %s</string>
+</resources>
