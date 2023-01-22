@@ -1316,9 +1316,9 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const HeroBase * hero, TargetInfo & target )
+void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, TargetInfo & target )
 {
-    uint32_t dmg = CalculateDamage( spell, spoint, hero, target.damage, false /* ignore defending hero */ );
+    const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, hero, target.damage, false /* ignore defending hero */ );
 
     // apply damage
     if ( dmg ) {
@@ -1327,10 +1327,10 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
     }
 }
 
-uint32_t Battle::Unit::CalculateDamage( const Spell & spell, uint32_t spoint, const HeroBase * hero, uint32_t target_damage, bool ignoreDefendingHero ) const
+uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const
 {
     // TODO: use fheroes2::getSpellDamage function to remove code duplication.
-    uint32_t dmg = spell.Damage() * spoint;
+    uint32_t dmg = spell.Damage() * spellPoints;
 
     switch ( GetID() ) {
     case Monster::IRON_GOLEM:
@@ -1396,7 +1396,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell & spell, uint32_t spoint, co
     // check artifact
     if ( hero ) {
         const HeroBase * defendingHero = GetCommander();
-        bool useDefendingHeroArts = defendingHero && !ignoreDefendingHero;
+        const bool useDefendingHeroArts = defendingHero && !ignoreDefendingHero;
 
         switch ( spell.GetID() ) {
         case Spell::COLDRAY:
@@ -1463,7 +1463,7 @@ uint32_t Battle::Unit::CalculateDamage( const Spell & spell, uint32_t spoint, co
 
             // update orders damage
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
-                switch ( target_damage ) {
+                switch ( targetDamage ) {
                 case 0:
                     break;
                 case 1:

@@ -2830,7 +2830,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
         const Cell * cell = Board::GetCell( index_pos );
         if ( cell && _currentUnit && cell->GetUnit() ) {
-            popup.SetSpellAttackInfo( cell, _currentUnit, cell->GetUnit(), humanturn_spell );
+            popup.SetSpellAttackInfo( cell, _currentUnit->GetCurrentOrArmyCommander(), cell->GetUnit(), humanturn_spell );
         }
         else {
             popup.Reset();
@@ -6040,6 +6040,8 @@ Battle::PopupDamageInfo::PopupDamageInfo()
     : Dialog::FrameBorder( 5 )
     , _cell( nullptr )
     , _defender( nullptr )
+    , _minDamage ( 0 )
+    , _maxDamage ( 0 )
     , _redraw( false )
 {}
 
@@ -6048,9 +6050,9 @@ void Battle::PopupDamageInfo::setBattleUIRect( const fheroes2::Rect & battleUIRe
     _battleUIRect = battleUIRect;
 }
 
-bool Battle::PopupDamageInfo::SetDamageInfoBase( const Cell * cell, const Unit * attacker, const Unit * defender )
+bool Battle::PopupDamageInfo::SetDamageInfoBase( const Cell * cell, const Unit * defender )
 {
-    if ( cell == nullptr || attacker == nullptr || defender == nullptr ) {
+    if ( cell == nullptr || defender == nullptr ) {
         return false;
     }
 
@@ -6066,7 +6068,7 @@ bool Battle::PopupDamageInfo::SetDamageInfoBase( const Cell * cell, const Unit *
 
 void Battle::PopupDamageInfo::SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender )
 {
-    if ( !SetDamageInfoBase( cell, attacker, defender ) ) {
+    if ( attacker == nullptr || !SetDamageInfoBase( cell, defender ) ) {
         return;
     }
 
@@ -6082,26 +6084,24 @@ void Battle::PopupDamageInfo::SetAttackInfo( const Cell * cell, const Unit * att
     }
 }
 
-void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const Spell spell )
+void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell )
 {
-    if ( !SetDamageInfoBase( cell, attacker, defender ) ) {
+    if ( hero == nullptr || !SetDamageInfoBase( cell, defender ) ) {
         return;
     }
 
     // Only show popup for single target damage spells such as bolt, arrow, or cold ray
-    if ( !( spell.isSingleTarget() && spell.isDamage() ) ) {
+    if ( !spell.isSingleTarget() || !spell.isDamage() ) {
         return;
     }
 
-    const HeroBase * hero = attacker->GetCurrentOrArmyCommander();
-
-    // if defender unit immune to magic, do not show the tooltip
+    // If defender unit immune to magic, do not show the tooltip
     if ( !defender->AllowApplySpell( spell, hero ) ) {
         return;
     }
 
     const int spellPoints = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
-    const uint32_t spellDamage = defender->CalculateDamage( spell, spellPoints, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
+    const uint32_t spellDamage = defender->CalculateSpellDamage( spell, spellPoints, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
 
     _redraw = true;
     _minDamage = spellDamage;
@@ -6131,8 +6131,8 @@ void Battle::PopupDamageInfo::Redraw() const
 
     std::string str = _minDamage == _maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
-    StringReplace( str, "%{min}", (int)_minDamage );
-    StringReplace( str, "%{max}", (int)_maxDamage );
+    StringReplace( str, "%{min}", _minDamage );
+    StringReplace( str, "%{max}", _maxDamage );
 
     Text damageText( str, Font::SMALL );
 

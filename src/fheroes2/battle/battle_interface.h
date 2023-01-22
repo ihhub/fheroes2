@@ -233,12 +233,13 @@ namespace Battle
 
         void setBattleUIRect( const fheroes2::Rect & battleUIRect );
         void SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
-        void SetSpellAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const Spell spell );
+        void SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell );
         void Reset();
         void Redraw() const;
 
     private:
-        bool SetDamageInfoBase( const Cell * cell, const Unit * attacker, const Unit * defender );
+        bool SetDamageInfoBase( const Cell * cell, const Unit * defender );
+
         fheroes2::Rect _battleUIRect;
         const Cell * _cell;
         const Unit * _defender;
