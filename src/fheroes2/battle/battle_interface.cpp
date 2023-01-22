@@ -6040,8 +6040,8 @@ Battle::PopupDamageInfo::PopupDamageInfo()
     : Dialog::FrameBorder( 5 )
     , _cell( nullptr )
     , _defender( nullptr )
-    , _minDamage ( 0 )
-    , _maxDamage ( 0 )
+    , _minDamage( 0 )
+    , _maxDamage( 0 )
     , _redraw( false )
 {}
 
