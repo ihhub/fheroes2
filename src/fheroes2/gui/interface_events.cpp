@@ -231,7 +231,7 @@ fheroes2::GameMode Interface::Basic::EventEndTurn() const
         GetFocusHeroes()->SetMove( false );
 
     if ( !myKingdom.HeroesMayStillMove()
-         || Dialog::YES == Dialog::Message( "", _( "One or more heroes may still move, are you sure you want to end your turn?" ), Font::BIG, Dialog::YES | Dialog::NO ) )
+         || Dialog::YES == fheroes2::showStandardTextMessage( "", _( "One or more heroes may still move, are you sure you want to end your turn?" ), Dialog::YES | Dialog::NO ) )
         return fheroes2::GameMode::END_TURN;
 
     return fheroes2::GameMode::CANCEL;
@@ -278,7 +278,7 @@ void Interface::Basic::EventSystemDialog() const
 
 fheroes2::GameMode Interface::Basic::EventExit()
 {
-    if ( Dialog::YES & Dialog::Message( "", _( "Are you sure you want to quit?" ), Font::BIG, Dialog::YES | Dialog::NO ) )
+    if ( Dialog::YES & fheroes2::showStandardTextMessage( "", _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) )
         return fheroes2::GameMode::QUIT_GAME;
 
     return fheroes2::GameMode::CANCEL;
@@ -306,7 +306,7 @@ void Interface::Basic::EventNextTown()
 
 fheroes2::GameMode Interface::Basic::EventNewGame() const
 {
-    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to restart? (Your current game will be lost.)" ), Font::BIG, Dialog::YES | Dialog::NO )
+    return Dialog::YES == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to restart? (Your current game will be lost.)" ), Dialog::YES | Dialog::NO )
                ? fheroes2::GameMode::NEW_GAME
                : fheroes2::GameMode::CANCEL;
 }
@@ -320,15 +320,15 @@ fheroes2::GameMode Interface::Basic::EventSaveGame() const
         }
 
         if ( System::IsFile( filename )
-             && Dialog::NO == Dialog::Message( "", _( "Are you sure you want to overwrite the save with this name?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+             && Dialog::NO == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to overwrite the save with this name?" ), Dialog::YES | Dialog::NO ) ) {
             continue;
         }
 
         if ( Game::Save( filename ) ) {
-            Dialog::Message( "", _( "Game saved successfully." ), Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", _( "Game saved successfully." ), Dialog::OK );
         }
         else {
-            Dialog::Message( "", _( "There was an issue during saving." ), Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", _( "There was an issue during saving." ), Dialog::OK );
         }
         return fheroes2::GameMode::CANCEL;
     }
@@ -336,7 +336,7 @@ fheroes2::GameMode Interface::Basic::EventSaveGame() const
 
 fheroes2::GameMode Interface::Basic::EventLoadGame() const
 {
-    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to load a new game? (Your current game will be lost.)" ), Font::BIG, Dialog::YES | Dialog::NO )
+    return Dialog::YES == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to load a new game? (Your current game will be lost.)" ), Dialog::YES | Dialog::NO )
                ? fheroes2::GameMode::LOAD_GAME
                : fheroes2::GameMode::CANCEL;
 }
@@ -392,22 +392,18 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     }
 
     if ( hero->isShipMaster() ) {
-        Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( "", _( "Try looking on land!!!" ), Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
     if ( hero->GetBagArtifacts().isFull() ) {
-        fheroes2::showMessage(
-            fheroes2::Text( "", {} ),
-            fheroes2::
-                Text( _( "Searching for the Ultimate Artifact is fruitless. Your hero could not carry it even if he found it - all his artifact slots are full." ),
-                      fheroes2::FontType::normalWhite() ),
-            Dialog::OK );
+        fheroes2::showStandardTextMessage( "",
+            _( "Searching for the Ultimate Artifact is fruitless. Your hero could not carry it even if he found it - all his artifact slots are full." ), Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
     if ( hero->GetMaxMovePoints() > hero->GetMovePoints() ) {
-        Dialog::Message( "", _( "Digging for artifacts requires a whole day, try again tomorrow." ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( "", _( "Digging for artifacts requires a whole day, try again tomorrow." ), Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
@@ -442,7 +438,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                                    fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
         }
         else {
-            Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", _( "Nothing here. Where could it be?" ), Dialog::OK );
         }
 
         Redraw( REDRAW_HEROES );
@@ -451,9 +447,8 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
         // check if the game is over due to conditions related to the ultimate artifact
         return GameOver::Result::Get().LocalCheckGameOver();
     }
-    else {
-        Dialog::Message( "", _( "Try searching on clear ground." ), Font::BIG, Dialog::OK );
-    }
+
+    fheroes2::showStandardTextMessage( "", _( "Try searching on clear ground." ), Dialog::OK );
 
     return fheroes2::GameMode::CANCEL;
 }
