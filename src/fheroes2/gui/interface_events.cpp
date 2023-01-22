@@ -231,7 +231,8 @@ fheroes2::GameMode Interface::Basic::EventEndTurn() const
         GetFocusHeroes()->SetMove( false );
 
     if ( !myKingdom.HeroesMayStillMove()
-         || Dialog::YES == fheroes2::showStandardTextMessage( "", _( "One or more heroes may still move, are you sure you want to end your turn?" ), Dialog::YES | Dialog::NO ) )
+         || Dialog::YES
+                == fheroes2::showStandardTextMessage( "", _( "One or more heroes may still move, are you sure you want to end your turn?" ), Dialog::YES | Dialog::NO ) )
         return fheroes2::GameMode::END_TURN;
 
     return fheroes2::GameMode::CANCEL;
@@ -336,7 +337,9 @@ fheroes2::GameMode Interface::Basic::EventSaveGame() const
 
 fheroes2::GameMode Interface::Basic::EventLoadGame() const
 {
-    return Dialog::YES == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to load a new game? (Your current game will be lost.)" ), Dialog::YES | Dialog::NO )
+    return Dialog::YES
+                   == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to load a new game? (Your current game will be lost.)" ),
+                                                         Dialog::YES | Dialog::NO )
                ? fheroes2::GameMode::LOAD_GAME
                : fheroes2::GameMode::CANCEL;
 }
@@ -397,8 +400,9 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     }
 
     if ( hero->GetBagArtifacts().isFull() ) {
-        fheroes2::showStandardTextMessage( "",
-            _( "Searching for the Ultimate Artifact is fruitless. Your hero could not carry it even if he found it - all his artifact slots are full." ), Dialog::OK );
+        fheroes2::showStandardTextMessage(
+            "", _( "Searching for the Ultimate Artifact is fruitless. Your hero could not carry it even if he found it - all his artifact slots are full." ),
+            Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
