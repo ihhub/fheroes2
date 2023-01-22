@@ -386,64 +386,73 @@ void Interface::Basic::EventSwitchHeroSleeping()
 fheroes2::GameMode Interface::Basic::EventDigArtifact()
 {
     Heroes * hero = GetFocusHeroes();
+    if ( hero == nullptr ) {
+        // TODO: verify how this method can be called if a hero is not selected.
+        return fheroes2::GameMode::CANCEL;
+    }
 
-    if ( hero ) {
-        if ( hero->isShipMaster() ) {
-            Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
-        }
-        else if ( hero->GetBagArtifacts().isFull() ) {
-            fheroes2::showMessage(
-                fheroes2::Text( "", {} ),
-                fheroes2::
-                    Text( _( "Searching for the Ultimate Artifact is fruitless. Your hero could not carry it even if he found it - all his artifact slots are full." ),
-                          fheroes2::FontType::normalWhite() ),
-                Dialog::OK );
-        }
-        else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
-            // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
-            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == hero->GetIndex() ) {
-                AudioManager::PlaySound( M82::DIGSOUND );
+    if ( hero->isShipMaster() ) {
+        Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
+        return fheroes2::GameMode::CANCEL;
+    }
 
-                hero->ResetMovePoints();
+    if ( hero->GetBagArtifacts().isFull() ) {
+        fheroes2::showMessage(
+            fheroes2::Text( "", {} ),
+            fheroes2::
+                Text( _( "Searching for the Ultimate Artifact is fruitless. Your hero could not carry it even if he found it - all his artifact slots are full." ),
+                      fheroes2::FontType::normalWhite() ),
+            Dialog::OK );
+        return fheroes2::GameMode::CANCEL;
+    }
 
-                if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-                    const AudioManager::MusicRestorer musicRestorer;
+    if ( hero->GetMaxMovePoints() > hero->GetMovePoints() ) {
+        Dialog::Message( "", _( "Digging for artifacts requires a whole day, try again tomorrow." ), Font::BIG, Dialog::OK );
+        return fheroes2::GameMode::CANCEL;
+    }
 
-                    if ( Settings::Get().MusicMIDI() ) {
-                        AudioManager::PlaySound( M82::TREASURE );
-                    }
-                    else {
-                        AudioManager::PlayMusic( MUS::ULTIMATE_ARTIFACT, Music::PlaybackMode::PLAY_ONCE );
-                    }
+    // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
+    const UltimateArtifact & ultimateArtifact = world.GetUltimateArtifact();
+    if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
+        AudioManager::PlaySound( M82::DIGSOUND );
 
-                    const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
+        hero->ResetMovePoints();
 
-                    if ( !hero->PickupArtifact( ultimate ) ) {
-                        assert( 0 );
-                    }
+        if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
+            const AudioManager::MusicRestorer musicRestorer;
 
-                    std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
-                    StringReplace( msg, "%{artifact}", ultimate.GetName() );
-
-                    const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
-                    fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
-                                           fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
-                }
-                else
-                    Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );
-
-                Redraw( REDRAW_HEROES );
-                fheroes2::Display::instance().render();
-
-                // check if the game is over due to conditions related to the ultimate artifact
-                return GameOver::Result::Get().LocalCheckGameOver();
+            if ( Settings::Get().MusicMIDI() ) {
+                AudioManager::PlaySound( M82::TREASURE );
             }
-            else
-                Dialog::Message( "", _( "Try searching on clear ground." ), Font::BIG, Dialog::OK );
+            else {
+                AudioManager::PlayMusic( MUS::ULTIMATE_ARTIFACT, Music::PlaybackMode::PLAY_ONCE );
+            }
+
+            const Artifact & ultimate = ultimateArtifact.GetArtifact();
+
+            if ( !hero->PickupArtifact( ultimate ) ) {
+                assert( 0 );
+            }
+
+            std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
+            StringReplace( msg, "%{artifact}", ultimate.GetName() );
+
+            const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
+            fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
         }
         else {
-            Dialog::Message( "", _( "Digging for artifacts requires a whole day, try again tomorrow." ), Font::BIG, Dialog::OK );
+            Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );
         }
+
+        Redraw( REDRAW_HEROES );
+        fheroes2::Display::instance().render();
+
+        // check if the game is over due to conditions related to the ultimate artifact
+        return GameOver::Result::Get().LocalCheckGameOver();
+    }
+    else {
+        Dialog::Message( "", _( "Try searching on clear ground." ), Font::BIG, Dialog::OK );
     }
 
     return fheroes2::GameMode::CANCEL;
