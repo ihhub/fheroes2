@@ -64,7 +64,6 @@
 #include "spell.h"
 #include "spell_book.h"
 #include "system.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
