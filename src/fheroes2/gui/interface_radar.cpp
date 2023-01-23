@@ -24,8 +24,8 @@
 #include "interface_radar.h"
 
 #include <algorithm>
-#include <assert.h>
-#include <stddef.h>
+#include <cassert>
+#include <cstddef>
 
 #include "agg_image.h"
 #include "castle.h"
