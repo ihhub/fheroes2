@@ -45,6 +45,7 @@
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_list.h"
+#include "interface_radar.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "logging.h"

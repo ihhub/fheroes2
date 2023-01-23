@@ -51,6 +51,7 @@
 #include "icn.h"
 #include "image.h"
 #include "interface_gamearea.h"
+#include "interface_radar.h"
 #include "interface_status.h"
 #include "kingdom.h"
 #include "localevent.h"
