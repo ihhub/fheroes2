@@ -101,17 +101,17 @@ namespace
             // Do nothing.
         }
 
-        void ActionListSingleClick( fheroes2::ResolutionInfo & ) override
+        void ActionListSingleClick( fheroes2::ResolutionInfo & /*unused*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListPressRight( fheroes2::ResolutionInfo & ) override
+        void ActionListPressRight( fheroes2::ResolutionInfo & /*unused*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListDoubleClick( fheroes2::ResolutionInfo & ) override
+        void ActionListDoubleClick( fheroes2::ResolutionInfo & /*unused*/ ) override
         {
             _isDoubleClicked = true;
         }
