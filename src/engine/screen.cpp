@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -155,7 +155,8 @@ namespace
                 newScaleFactorFound = false;
                 ++scaleFactor;
                 for ( const fheroes2::ResolutionInfo & biggerResolution : resolutions ) {
-                    if ( biggerResolution.scale == 1 && biggerResolution.width == resolution.width * scaleFactor && biggerResolution.height == resolution.height * scaleFactor ) {
+                    if ( biggerResolution.scale == 1 && biggerResolution.width == resolution.width * scaleFactor
+                         && biggerResolution.height == resolution.height * scaleFactor ) {
                         resolutions.emplace_back( resolution.width, resolution.height, scaleFactor );
                         newScaleFactorFound = true;
                         break;
@@ -701,8 +702,8 @@ namespace
                 if ( isFullScreen ) {
                     vita2d_texture_set_filters( _texBuffer, isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR,
                                                 isNearestScaling() ? SCE_GXM_TEXTURE_FILTER_POINT : SCE_GXM_TEXTURE_FILTER_LINEAR );
-                    if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >=
-                         ( static_cast<float>( resolutionInfo.width ) / resolutionInfo.height ) ) {
+                    if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT )
+                         >= ( static_cast<float>( resolutionInfo.width ) / resolutionInfo.height ) ) {
                         const float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / resolutionInfo.height;
                         _destRect.width = static_cast<int32_t>( static_cast<float>( resolutionInfo.width ) * scale );
                         _destRect.height = VITA_FULLSCREEN_HEIGHT;
@@ -1072,7 +1073,8 @@ namespace
             _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.width * resolutionInfo.scale,
                                         resolutionInfo.height * resolutionInfo.scale, flags );
             if ( _window == nullptr ) {
-                ERROR_LOG( "Failed to create an application window of " << resolutionInfo.width << " x " << resolutionInfo.height << " size. The error: " << SDL_GetError() )
+                ERROR_LOG( "Failed to create an application window of " << resolutionInfo.width << " x " << resolutionInfo.height
+                                                                        << " size. The error: " << SDL_GetError() )
                 clear();
                 return false;
             }
