@@ -45,7 +45,10 @@
 
 namespace
 {
-    const int editBoxLength = 266;
+    const int32_t editBoxLength = 266;
+    const int32_t resolutionItemHeight = 19;
+    // TODO: this is a hack over partially incorrect text height caclulation. Fix it later together with the Text classes.
+    const int32_t textOffsetYCorrection = 6;
     const std::string middleText = " x ";
 
     std::pair<std::string, std::string> getResolutionStrings( const fheroes2::ResolutionInfo & resolution )
@@ -79,10 +82,12 @@ namespace
             const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
             const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
-            const int32_t textOffsetX = offsetX + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
-
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
-            resolutionText.draw( textOffsetX, offsetY, fheroes2::Display::instance() );
+
+            const int32_t textOffsetX = offsetX + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetY = offsetY + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2;
+
+            resolutionText.draw( textOffsetX, textOffsetY, fheroes2::Display::instance() );
         }
 
         void RedrawBackground( const fheroes2::Point & dst ) override
@@ -140,7 +145,7 @@ namespace
             const int32_t textOffsetX = dst.x + 41 + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
 
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
-            resolutionText.draw( textOffsetX, dst.y + 287 + ( 19 - text.height() + 2 ) / 2, output );
+            resolutionText.draw( textOffsetX, dst.y + 287 + ( resolutionItemHeight - text.height() + textOffsetYCorrection ) / 2, output );
         }
     }
 }
@@ -183,8 +188,9 @@ namespace Dialog
                                                                                    { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
         resList.setScrollBarArea( { roi.x + 328, roi.y + 73, 12, 180 } );
         resList.setScrollBarImage( scrollbarSlider );
-        resList.SetAreaMaxItems( 11 );
-        resList.SetAreaItems( { roi.x + 41, roi.y + 55 + 5, editBoxLength, 215 } );
+        const int32_t maximumItems = 11;
+        resList.SetAreaMaxItems( maximumItems );
+        resList.SetAreaItems( { roi.x + 41, roi.y + 55 + 4, editBoxLength, resolutionItemHeight * maximumItems } );
 
         resList.SetListContent( resolutions );
 
