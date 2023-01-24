@@ -78,7 +78,7 @@ namespace
         {
             const fheroes2::FontType fontType = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
-            const auto & [leftText, rightText] = getResolutionStrings( resolution );
+            const auto [leftText, rightText] = getResolutionStrings( resolution );
             const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
             const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
@@ -138,7 +138,7 @@ namespace
         if ( resolution.width > 0 && resolution.height > 0 ) {
             const fheroes2::FontType fontType = fheroes2::FontType::normalYellow();
 
-            const auto & [leftText, rightText] = getResolutionStrings( resolution );
+            const auto [leftText, rightText] = getResolutionStrings( resolution );
             const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
             const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
@@ -257,9 +257,7 @@ namespace Dialog
             display.render();
         }
 
-        if ( selectedResolution.width > 0 && selectedResolution.height > 0 && selectedResolution.scale > 0
-             && ( selectedResolution.width != currentResolution.width || selectedResolution.height != currentResolution.height
-                  || selectedResolution.scale != currentResolution.scale ) ) {
+        if ( selectedResolution.width > 0 && selectedResolution.height > 0 && selectedResolution.scale > 0 && ( selectedResolution != currentResolution ) ) {
             display.setResolution( selectedResolution );
 
 #if !defined( MACOS_APP_BUNDLE )

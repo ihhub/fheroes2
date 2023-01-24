@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "image.h"
@@ -50,25 +51,14 @@ namespace fheroes2
             return width == info.width && height == info.height && scale == info.scale;
         }
 
+        bool operator!=( const ResolutionInfo & info ) const
+        {
+            return !operator==( info );
+        }
+
         bool operator<( const ResolutionInfo & info ) const
         {
-            if ( width < info.width ) {
-                return true;
-            }
-
-            if ( width > info.width ) {
-                return false;
-            }
-
-            if ( height < info.height ) {
-                return true;
-            }
-
-            if ( height > info.height ) {
-                return false;
-            }
-
-            return scale < info.scale;
+            return std::tie( width, height, scale ) < std::tie( info.width, info.height, info.scale );
         }
 
         int32_t width{ 0 };

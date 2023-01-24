@@ -86,23 +86,7 @@ namespace
 
     bool SortResolutions( const fheroes2::ResolutionInfo & first, const fheroes2::ResolutionInfo & second )
     {
-        if ( first.width > second.width ) {
-            return true;
-        }
-
-        if ( first.width < second.width ) {
-            return false;
-        }
-
-        if ( first.height > second.height ) {
-            return true;
-        }
-
-        if ( first.height < second.height ) {
-            return false;
-        }
-
-        return first.scale > second.scale;
+        return std::tie( first.width, first.height, first.scale ) > std::tie( second.width, second.height, second.scale );
     }
 
     bool IsLowerThanDefaultRes( const fheroes2::ResolutionInfo & value )
@@ -146,21 +130,33 @@ namespace
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         // Scaling is available only on SDL 2.
+        if ( resolutions.size() < 2 ) {
+            return resolutions;
+        }
 
-        // Add resolutions with scale factor.
-        for ( const fheroes2::ResolutionInfo & resolution : resolutions ) {
+        // Add resolutions with scale factor. No need to run through the newly added elements so we remember the size of the array.
+        const size_t resolutionCountBefore = resolutions.size();
+
+        // Since all resolutions are sorted then the first resolution (which is the highest) cannot have any scale factor.
+        for ( size_t currentId = resolutionCountBefore - 1; currentId > 1; --currentId ) {
             int32_t scaleFactor = 1;
             bool newScaleFactorFound = true;
             while ( newScaleFactorFound ) {
                 newScaleFactorFound = false;
                 ++scaleFactor;
-                for ( const fheroes2::ResolutionInfo & biggerResolution : resolutions ) {
-                    if ( biggerResolution.scale == 1 && biggerResolution.width == resolution.width * scaleFactor
-                         && biggerResolution.height == resolution.height * scaleFactor ) {
-                        resolutions.emplace_back( resolution.width, resolution.height, scaleFactor );
+                for ( size_t biggerId = currentId - 1; ; ) {
+                    if ( resolutions[biggerId].width == resolutions[currentId].width * scaleFactor
+                         && resolutions[biggerId].height == resolutions[currentId].height * scaleFactor ) {
+                        resolutions.emplace_back( resolutions[currentId].width, resolutions[currentId].height, scaleFactor );
                         newScaleFactorFound = true;
                         break;
                     }
+
+                    if ( biggerId == 0 ) {
+                        break;
+                    }
+
+                    --biggerId;
                 }
             }
         }
