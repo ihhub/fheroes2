@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-10 15:38+0000\n"
+"POT-Creation-Date: 2023-01-24 08:29+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -4256,6 +4256,9 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr "Szukanie artefaktu zajmuje cały dzień, spróbuj ponownie jutro."
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr "Po spędzeniu wielu godzin na kopaniu, odkryłeś %{artifact}."
@@ -4268,9 +4271,6 @@ msgstr "Nic tu nie ma. Gdzie to może być?"
 
 msgid "Try searching on clear ground."
 msgstr "Spróbuj szukać na czystym terenie."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr "Szukanie artefaktu zajmuje cały dzień, spróbuj ponownie jutro."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
