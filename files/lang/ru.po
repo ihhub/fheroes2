@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-10 05:45+0000\n"
+"POT-Creation-Date: 2023-01-24 08:29+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4241,6 +4241,9 @@ msgstr ""
 "его, то у него попросту нет места, чтобы его унести. Весь инвентарь героя "
 "занят."
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr "Раскопки артефакта занимают целый день. Попробуйте завтра."
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
@@ -4254,9 +4257,6 @@ msgstr "Здесь ничего. Где бы это могло быть?"
 
 msgid "Try searching on clear ground."
 msgstr "Попробуйте копать на нормальной земле."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr "Раскопки артефакта занимают целый день. Попробуйте завтра."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
