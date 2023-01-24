@@ -20,8 +20,8 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"

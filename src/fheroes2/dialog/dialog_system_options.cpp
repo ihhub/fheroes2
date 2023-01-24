@@ -22,7 +22,6 @@
 #include <cassert>
 #include <cstdint>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "agg_image.h"
