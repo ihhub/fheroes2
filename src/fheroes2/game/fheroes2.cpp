@@ -61,7 +61,6 @@
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
-#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
