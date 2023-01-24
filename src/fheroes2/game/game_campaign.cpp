@@ -704,7 +704,7 @@ namespace
                     hero->PickupArtifact( Artifact( awards[i]._subType ) );
                 }
 
-                // Since some artifacts change the Spell Power we have to set them to maximum.
+                // Some artifacts increase the Spell Power of the hero we have to set spell points to maximum.
                 hero->SetSpellPoints( std::max( hero->GetSpellPoints(), hero->GetMaxSpellPoints() ) );
 
                 break;
