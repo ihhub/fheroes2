@@ -57,7 +57,7 @@ namespace
     {
         enum
         {
-            IS_LOYALTY = 0x4000
+            IS_PICE_OF_LOYALTY_MAP = 0x4000
         };
 
         HeaderSAV()
@@ -75,7 +75,7 @@ namespace
             info.localtime = static_cast<uint32_t>( rawtime );
 
             if ( fi._version == GameVersion::PRICE_OF_LOYALTY )
-                status |= IS_LOYALTY;
+                status |= IS_PICE_OF_LOYALTY_MAP;
         }
 
         uint16_t status;
@@ -193,11 +193,11 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    if ( ( header.status & HeaderSAV::IS_LOYALTY ) && !conf.isPriceOfLoyaltySupported() ) {
-        fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
-                               fheroes2::Text( _( "This file was saved by the \"The Price of Loyalty\" version of the game.\nSome items may not be available." ),
-                                               fheroes2::FontType::normalWhite() ),
-                               Dialog::OK );
+    if ( ( header.status & HeaderSAV::IS_PICE_OF_LOYALTY_MAP ) && !conf.isPriceOfLoyaltySupported() ) {
+        fheroes2::showStandardTextMessage( _( "Warning" ),
+                                           _( "This file was saved for the \"The Price of Loyalty\" map which is not supported by this version of the game." ),
+                                           Dialog::OK );
+        return fheroes2::GameMode::CANCEL;
     }
 
     fz >> binver;
