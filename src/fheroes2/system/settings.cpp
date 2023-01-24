@@ -89,7 +89,7 @@ std::string Settings::GetVersion()
 }
 
 Settings::Settings()
-    : video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
+    : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
@@ -253,8 +253,8 @@ bool Settings::Read( const std::string & filePath )
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
         // default
-        video_mode.width = fheroes2::Display::DEFAULT_WIDTH;
-        video_mode.height = fheroes2::Display::DEFAULT_HEIGHT;
+        _resolutionInfo.width = fheroes2::Display::DEFAULT_WIDTH;
+        _resolutionInfo.height = fheroes2::Display::DEFAULT_HEIGHT;
 
         std::string value = StringLower( sval );
         const size_t pos = value.find( 'x' );
@@ -263,12 +263,16 @@ bool Settings::Read( const std::string & filePath )
             std::string width( value.substr( 0, pos ) );
             std::string height( value.substr( pos + 1, value.length() - pos - 1 ) );
 
-            video_mode.width = GetInt( width );
-            video_mode.height = GetInt( height );
+            _resolutionInfo.width = GetInt( width );
+            _resolutionInfo.height = GetInt( height );
         }
         else {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown video mode: " << value )
         }
+    }
+
+    if ( config.Exists( "screen scale ratio" ) ) {
+        _resolutionInfo.scale = std::clamp( config.IntParams( "screen scale ratio" ), 1, 10 ); // x10 scale is insane so we clamp it.
     }
 
     // full screen
@@ -380,8 +384,13 @@ std::string Settings::String() const
 
     os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
 
+    const fheroes2::Display & display = fheroes2::Display::instance();
+
     os << std::endl << "# video mode (game resolution)" << std::endl;
-    os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
+    os << "videomode = " << display.width() << "x" << display.height() << std::endl;
+
+    os << std::endl << "# screen scale ratio" << std::endl;
+    os << "screen scale ratio = " << display.scale() << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
