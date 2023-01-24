@@ -144,7 +144,7 @@ namespace
             while ( newScaleFactorFound ) {
                 newScaleFactorFound = false;
                 ++scaleFactor;
-                for ( size_t biggerId = currentId - 1; ; ) {
+                for ( size_t biggerId = currentId - 1;; ) {
                     if ( resolutions[biggerId].width == resolutions[currentId].width * scaleFactor
                          && resolutions[biggerId].height == resolutions[currentId].height * scaleFactor ) {
                         resolutions.emplace_back( resolutions[currentId].width, resolutions[currentId].height, scaleFactor );
