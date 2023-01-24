@@ -704,6 +704,9 @@ namespace
                     hero->PickupArtifact( Artifact( awards[i]._subType ) );
                 }
 
+                // Since some artifacts change the Spell Power we have to set them to maximum.
+                hero->SetSpellPoints( std::max( hero->GetSpellPoints(),  hero->GetMaxSpellPoints() ) );
+
                 break;
             }
             case Campaign::CampaignAwardData::TYPE_GET_SPELL: {
