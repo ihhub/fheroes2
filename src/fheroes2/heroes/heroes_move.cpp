@@ -628,12 +628,15 @@ bool Heroes::MoveStep( bool fast )
     const int32_t indexDest = path.GetDestinationIndex( true );
 
     if ( fast ) {
-        // Unveil fog before moving the hero.
-        Scoute( indexTo );
-        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) )
+        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
             MoveStep( *this, indexTo, false );
-        else
+        }
+        else {
+            // Unveil fog before moving the hero.
+            Scoute( indexTo );
+
             MoveStep( *this, indexTo, true );
+        }
 
         return true;
     }
