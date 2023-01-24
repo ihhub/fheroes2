@@ -705,7 +705,7 @@ namespace
                 }
 
                 // Since some artifacts change the Spell Power we have to set them to maximum.
-                hero->SetSpellPoints( std::max( hero->GetSpellPoints(),  hero->GetMaxSpellPoints() ) );
+                hero->SetSpellPoints( std::max( hero->GetSpellPoints(), hero->GetMaxSpellPoints() ) );
 
                 break;
             }
