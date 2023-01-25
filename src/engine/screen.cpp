@@ -138,26 +138,20 @@ namespace
         const size_t resolutionCountBefore = resolutions.size();
 
         // Since all resolutions are sorted then the first resolution (which is the highest) cannot have any scale factor.
-        for ( size_t currentId = resolutionCountBefore - 1; currentId > 1; --currentId ) {
-            int32_t scaleFactor = 1;
-            bool newScaleFactorFound = true;
-            while ( newScaleFactorFound ) {
-                newScaleFactorFound = false;
-                ++scaleFactor;
-                for ( size_t biggerId = currentId - 1;; ) {
-                    if ( resolutions[biggerId].width == resolutions[currentId].width * scaleFactor
-                         && resolutions[biggerId].height == resolutions[currentId].height * scaleFactor ) {
-                        resolutions.emplace_back( resolutions[currentId].width, resolutions[currentId].height, scaleFactor );
-                        newScaleFactorFound = true;
-                        break;
-                    }
+        for ( size_t currentId = resolutionCountBefore - 1; currentId > 0; --currentId ) {
+            assert( resolutions[currentId].width > 0 && resolutions[currentId].height > 0 );
 
-                    if ( biggerId == 0 ) {
-                        break;
-                    }
-
-                    --biggerId;
+            for ( size_t biggerId = currentId - 1;; ) {
+                if ( ( resolutions[biggerId].width % resolutions[currentId].width ) == 0 && ( resolutions[biggerId].height % resolutions[currentId].height ) == 0 &&
+                     ( resolutions[biggerId].width / resolutions[currentId].width ) == ( resolutions[biggerId].height / resolutions[currentId].height ) ) {
+                    resolutions.emplace_back( resolutions[currentId].width, resolutions[currentId].height, resolutions[biggerId].width / resolutions[currentId].width );
                 }
+
+                if ( biggerId == 0 ) {
+                    break;
+                }
+
+                --biggerId;
             }
         }
 
