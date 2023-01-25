@@ -257,7 +257,7 @@ namespace Dialog
             display.render();
         }
 
-        if ( selectedResolution.width > 0 && selectedResolution.height > 0 && selectedResolution.scale > 0 && ( selectedResolution != currentResolution ) ) {
+        if ( selectedResolution.width > 0 && selectedResolution.height > 0 && selectedResolution.scale > 0 && selectedResolution != currentResolution ) {
             display.setResolution( selectedResolution );
 
 #if !defined( MACOS_APP_BUNDLE )
