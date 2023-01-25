@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 02:36+0000\n"
+"POT-Creation-Date: 2023-01-24 08:29+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -589,6 +589,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Ver informação de %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr ""
+
+msgid "Move %{monster} here"
+msgstr "Mover %{monster} daqui"
+
 #, fuzzy
 msgid "Shoot %{monster}"
 msgstr ""
@@ -602,12 +608,6 @@ msgstr[1] "(Restam %{count} tiros"
 
 msgid "Attack %{monster}"
 msgstr "Atacar %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr ""
-
-msgid "Move %{monster} here"
-msgstr "Mover %{monster} daqui"
 
 msgid "Turn %{turn}"
 msgstr "Turno %{turn}"
@@ -4224,6 +4224,10 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr ""
+"Escavar em busca de artefatos requer um dia inteiro, tente novamente amanhã."
+
 #, fuzzy
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
@@ -4237,10 +4241,6 @@ msgstr "Nada aqui. Onde poderia estar?"
 
 msgid "Try searching on clear ground."
 msgstr "Tente achar no chão sem obstaculos."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr ""
-"Escavar em busca de artefatos requer um dia inteiro, tente novamente amanhã."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -6625,10 +6625,55 @@ msgstr ""
 msgid "Alchemist Lab"
 msgstr ""
 
+msgid "Sign"
+msgstr ""
+
+msgid "Buoy"
+msgstr ""
+
+msgid "Skeleton"
+msgstr ""
+
 msgid "Daemon Cave"
 msgstr ""
 
+msgid "Treasure Chest"
+msgstr ""
+
 msgid "Faerie Ring"
+msgstr ""
+
+msgid "Campfire"
+msgstr ""
+
+msgid "Fountain"
+msgstr ""
+
+msgid "Gazebo"
+msgstr ""
+
+msgid "Genie Lamp"
+msgstr ""
+
+msgid "Archer's House"
+msgstr ""
+
+msgid "Goblin Hut"
+msgstr ""
+
+msgid "Dwarf Cottage"
+msgstr ""
+
+msgid "Peasant Hut"
+msgstr ""
+
+msgid "Stables"
+msgstr ""
+
+msgid "Alchemist's Tower"
+msgstr ""
+
+msgid "Event"
 msgstr ""
 
 msgid "Dragon City"
@@ -6645,10 +6690,16 @@ msgstr[1] ""
 msgid "Mines"
 msgstr ""
 
+msgid "Monster"
+msgstr ""
+
 msgid "Obelisk"
 msgstr ""
 
 msgid "Oasis"
+msgstr ""
+
+msgid "Resource"
 msgstr ""
 
 msgid "Sawmill"
@@ -6657,10 +6708,28 @@ msgstr ""
 msgid "Oracle"
 msgstr ""
 
+msgid "Shrine of the First Circle"
+msgstr ""
+
+msgid "Shipwreck"
+msgstr ""
+
+msgid "Sea Chest"
+msgstr ""
+
 msgid "Desert Tent"
 msgstr ""
 
+msgid "Stone Liths"
+msgstr ""
+
 msgid "Wagon Camp"
+msgstr ""
+
+msgid "Hut of the Magi"
+msgstr ""
+
+msgid "Whirlpool"
 msgstr ""
 
 msgid "Windmill"
@@ -6668,19 +6737,69 @@ msgid_plural "Windmills"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Artifact"
+msgstr "Artefato"
+
+msgid "Mermaid"
+msgstr ""
+
+msgid "Boat"
+msgstr ""
+
+#, fuzzy
+msgid "Random Ultimate Artifact"
+msgstr "Escavar em busca do Artefato Supremo."
+
+#, fuzzy
+msgid "Random Artifact"
+msgstr "Artefato"
+
+#, fuzzy
+msgid "Random Resource"
+msgstr "Seus Recursos"
+
+#, fuzzy
+msgid "Random Monster"
+msgstr "Criaturas"
+
 msgid "Random Town"
 msgstr ""
 
 msgid "Random Castle"
 msgstr ""
 
+msgid "Eye of the Magi"
+msgstr ""
+
+#, fuzzy
+msgid "Random Monster - weak"
+msgstr "Criaturas"
+
+#, fuzzy
+msgid "Random Monster - medium"
+msgstr "Criaturas"
+
+#, fuzzy
+msgid "Random Monster - strong"
+msgstr "Criaturas"
+
+#, fuzzy
+msgid "Random Monster - very strong"
+msgstr "Criaturas"
+
+msgid "Nothing Special"
+msgstr ""
+
+msgid "Mossy Rock"
+msgstr ""
+
 msgid "Watch Tower"
 msgstr ""
 
-msgid "Tree City"
+msgid "Tree House"
 msgstr ""
 
-msgid "Tree House"
+msgid "Tree City"
 msgstr ""
 
 msgid "Ruins"
@@ -6690,6 +6809,15 @@ msgid "Fort"
 msgstr ""
 
 msgid "Abandoned Mine"
+msgstr ""
+
+msgid "Sirens"
+msgstr ""
+
+msgid "Standing Stones"
+msgstr ""
+
+msgid "Idol"
 msgstr ""
 
 msgid "Tree of Knowledge"
@@ -6710,13 +6838,31 @@ msgstr ""
 msgid "Mercenary Camp"
 msgstr ""
 
+msgid "Shrine of the Second Circle"
+msgstr ""
+
+msgid "Shrine of the Third Circle"
+msgstr ""
+
 msgid "City of the Dead"
 msgstr ""
 
 msgid "Sphinx"
 msgstr ""
 
+msgid "Wagon"
+msgstr ""
+
+msgid "Tar Pit"
+msgstr ""
+
+msgid "Artesian Spring"
+msgstr ""
+
 msgid "Troll Bridge"
+msgstr ""
+
+msgid "Watering Hole"
 msgstr ""
 
 msgid "Witch's Hut"
@@ -6725,195 +6871,16 @@ msgstr ""
 msgid "Xanadu"
 msgstr ""
 
-msgid "Magellan's Maps"
-msgstr ""
-
-msgid "Derelict Ship"
-msgstr ""
-
-msgid "Shipwreck"
-msgstr ""
-
-msgid "Observation Tower"
-msgstr ""
-
-msgid "Freeman's Foundry"
-msgstr ""
-
-msgid "Watering Hole"
-msgstr ""
-
-msgid "Artesian Spring"
-msgstr ""
-
-msgid "Gazebo"
-msgstr ""
-
-msgid "Archer's House"
-msgstr ""
-
-msgid "Peasant Hut"
-msgstr ""
-
-msgid "Dwarf Cottage"
-msgstr ""
-
-msgid "Stone Liths"
-msgstr ""
-
-msgid "Magic Well"
-msgstr ""
-
-msgid "Sign"
-msgstr ""
-
-msgid "Nothing Special"
-msgstr ""
-
-msgid "Tar Pit"
-msgstr ""
-
-msgid "Mound"
-msgstr ""
-
-msgid "Dune"
-msgstr ""
-
-msgid "Stump"
-msgstr ""
-
-msgid "Cactus"
-msgstr ""
-
-msgid "Trees"
-msgstr ""
-
-msgid "Dead Tree"
-msgstr ""
-
-msgid "Mountains"
-msgstr ""
-
-msgid "Volcano"
-msgstr ""
-
-msgid "Rock"
-msgstr ""
-
-msgid "Flowers"
-msgstr ""
-
-msgid "Water Lake"
-msgstr ""
-
-msgid "Mandrake"
-msgstr ""
-
-msgid "Crater"
-msgstr ""
-
-msgid "Lava Pool"
-msgstr ""
-
-msgid "Shrub"
-msgstr ""
-
-msgid "Buoy"
-msgstr ""
-
-msgid "Skeleton"
-msgstr ""
-
-msgid "Treasure Chest"
-msgstr ""
-
-msgid "Sea Chest"
-msgstr ""
-
-msgid "Campfire"
-msgstr ""
-
-msgid "Fountain"
-msgstr ""
-
-msgid "Genie Lamp"
-msgstr ""
-
-msgid "Goblin Hut"
-msgstr ""
-
-msgid "Monster"
-msgstr ""
-
-msgid "Resource"
-msgstr ""
-
-msgid "Whirlpool"
-msgstr ""
-
-msgid "Artifact"
-msgstr "Artefato"
-
-msgid "Boat"
-msgstr ""
-
-#, fuzzy
-msgid "Random Artifact"
-msgstr "Artefato"
-
-#, fuzzy
-msgid "Random Resource"
-msgstr "Seus Recursos"
-
-#, fuzzy
-msgid "Random Monster - weak"
-msgstr "Criaturas"
-
-#, fuzzy
-msgid "Random Monster - medium"
-msgstr "Criaturas"
-
-#, fuzzy
-msgid "Random Monster - strong"
-msgstr "Criaturas"
-
-#, fuzzy
-msgid "Random Monster - very strong"
-msgstr "Criaturas"
-
-msgid "Standing Stones"
-msgstr ""
-
-msgid "Event"
-msgstr ""
-
-#, fuzzy
-msgid "Random Monster"
-msgstr "Criaturas"
-
-#, fuzzy
-msgid "Random Ultimate Artifact"
-msgstr "Escavar em busca do Artefato Supremo."
-
-msgid "Idol"
-msgstr ""
-
-msgid "Shrine of the First Circle"
-msgstr ""
-
-msgid "Shrine of the Second Circle"
-msgstr ""
-
-msgid "Shrine of the Third Circle"
-msgstr ""
-
-msgid "Wagon"
-msgstr ""
-
 msgid "Lean-To"
 msgstr ""
 
+msgid "Magellan's Maps"
+msgstr ""
+
 msgid "Flotsam"
+msgstr ""
+
+msgid "Derelict Ship"
 msgstr ""
 
 msgid "Shipwreck Survivor"
@@ -6922,10 +6889,70 @@ msgstr ""
 msgid "Bottle"
 msgstr ""
 
+msgid "Magic Well"
+msgstr ""
+
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Observation Tower"
+msgstr ""
+
+msgid "Freeman's Foundry"
+msgstr ""
+
+msgid "Reefs"
+msgstr ""
+
+msgid "Trees"
+msgstr ""
+
+msgid "Mountains"
+msgstr ""
+
+msgid "Volcano"
+msgstr ""
+
+msgid "Flowers"
+msgstr ""
+
+msgid "Rock"
+msgstr ""
+
+msgid "Water Lake"
+msgstr ""
+
+msgid "Mandrake"
+msgstr ""
+
+msgid "Dead Tree"
+msgstr ""
+
+msgid "Stump"
+msgstr ""
+
+msgid "Crater"
+msgstr ""
+
+msgid "Cactus"
+msgstr ""
+
+msgid "Mound"
+msgstr ""
+
+msgid "Dune"
+msgstr ""
+
+msgid "Lava Pool"
+msgstr ""
+
+msgid "Shrub"
+msgstr ""
+
+msgid "Barrow Mounds"
+msgstr ""
 
 msgid "Random Artifact - Treasure"
 msgstr ""
@@ -6936,13 +6963,13 @@ msgstr ""
 msgid "Random Artifact - Major"
 msgstr ""
 
-msgid "Jail"
+msgid "Barrier"
 msgstr ""
 
 msgid "Traveller's Tent"
 msgstr ""
 
-msgid "Barrier"
+msgid "Jail"
 msgstr ""
 
 msgid "Fire Summoning Altar"
@@ -6955,30 +6982,6 @@ msgid "Earth Summoning Altar"
 msgstr ""
 
 msgid "Water Summoning Altar"
-msgstr ""
-
-msgid "Barrow Mounds"
-msgstr ""
-
-msgid "Stables"
-msgstr ""
-
-msgid "Alchemist's Tower"
-msgstr ""
-
-msgid "Hut of the Magi"
-msgstr ""
-
-msgid "Eye of the Magi"
-msgstr ""
-
-msgid "Mermaid"
-msgstr ""
-
-msgid "Sirens"
-msgstr ""
-
-msgid "Reefs"
 msgstr ""
 
 #, fuzzy

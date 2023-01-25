@@ -34,16 +34,19 @@
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        android:supportsRtl="false">
 
         <activity
-            android:name="MainActivity"
+            android:name=".GameActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="layoutDirection|locale|orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:exported="true"
             android:launchMode="singleInstance"
             android:preferMinimalPostProcessing="true"
-            android:screenOrientation="sensorLandscape">
+            android:process=":GameActivityProcess"
+            android:screenOrientation="sensorLandscape"
+            android:taskAffinity="org.fheroes2.GameActivityTask"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,6 +56,21 @@
             <!-- Let Android know that we can handle some USB devices and should receive this event -->
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ToolsetActivity"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_toolset"
+            android:label="@string/activity_toolset_label"
+            android:launchMode="singleInstance"
+            android:taskAffinity="org.fheroes2.ToolsetActivityTask"
+            android:theme="@style/Theme.Material3.DayNight">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>

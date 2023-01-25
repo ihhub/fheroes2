@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -82,8 +82,8 @@ namespace
 
         const MP2::MapObjectType objectType = tile.GetObject( false );
 
-        // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Stones.
-        if ( objectType == MP2::OBJ_STONES && tile.containsSprite( 200, 183 ) ) {
+        // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Rock.
+        if ( objectType == MP2::OBJ_ROCK && tile.containsSprite( 200, 183 ) ) {
             return M82::LOOP0019;
         }
 

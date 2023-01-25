@@ -1978,7 +1978,7 @@ version 0.8 (26 July 2020)
 - fix multiple memory leaks
 - add double quotes to surrender dialog
 
-version 0.7 (18th April 2020)
+version 0.7 (18 April 2020)
 - add an edge of the World Map
 - complete hero movement cell if a player stops it by any keyboard button
 - add hotkey 'N' to start a new game within the World Map like in the original game

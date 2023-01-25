@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -298,7 +298,7 @@ void WorldPathfinder::processWorldMap()
     for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
         _cache[idx].resetNode();
     }
-    _cache[_pathStart] = WorldNode( -1, 0, MP2::MapObjectType::OBJ_ZERO, _remainingMovePoints );
+    _cache[_pathStart] = WorldNode( -1, 0, MP2::OBJ_NONE, _remainingMovePoints );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( _pathStart );
@@ -837,7 +837,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
     }
 
     // Is the hero standing on Stoneliths?
-    return world.GetTiles( heroIndex ).GetObject( false ) == MP2::OBJ_STONELITHS;
+    return world.GetTiles( heroIndex ).GetObject( false ) == MP2::OBJ_STONE_LITHS;
 }
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent /* = false */ ) const
@@ -919,7 +919,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     const MP2::MapObjectType objectType = tile.GetObject( true );
 
     // Reserve spell points only if target isn't a well that will replenish lost SP
-    if ( objectType != MP2::OBJ_MAGICWELL && objectType != MP2::OBJ_ARTESIANSPRING ) {
+    if ( objectType != MP2::OBJ_MAGIC_WELL && objectType != MP2::OBJ_ARTESIAN_SPRING ) {
         if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved )
             return {};
 

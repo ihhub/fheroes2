@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -357,7 +357,7 @@ void World::ComputeStaticAnalysis()
             // connect regions through teleports
             MapsIndexes exits;
 
-            if ( node.mapObject == MP2::OBJ_STONELITHS ) {
+            if ( node.mapObject == MP2::OBJ_STONE_LITHS ) {
                 exits = GetTeleportEndPoints( node.index );
             }
             else if ( node.mapObject == MP2::OBJ_WHIRLPOOL ) {
