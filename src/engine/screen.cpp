@@ -142,6 +142,8 @@ namespace
             assert( resolutions[currentId].width > 0 && resolutions[currentId].height > 0 );
 
             for ( size_t biggerId = currentId - 1;; ) {
+                assert( resolutions[biggerId].width > 0 && resolutions[biggerId].height > 0 );
+
                 if ( ( resolutions[biggerId].width % resolutions[currentId].width ) == 0 && ( resolutions[biggerId].height % resolutions[currentId].height ) == 0 &&
                      ( resolutions[biggerId].width / resolutions[currentId].width ) == ( resolutions[biggerId].height / resolutions[currentId].height ) ) {
                     resolutions.emplace_back( resolutions[currentId].width, resolutions[currentId].height, resolutions[biggerId].width / resolutions[currentId].width );
