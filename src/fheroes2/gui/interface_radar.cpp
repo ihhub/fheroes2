@@ -155,6 +155,7 @@ Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display 
     : BorderWindow( { display.width() - BORDERWIDTH - RADARWIDTH, BORDERWIDTH, RADARWIDTH, RADARWIDTH } )
     , _radarType( RadarType::ViewWorld )
     , _interface( radar._interface )
+    , _roi( 0, 0, world.w(), world.h() )
     , _zoom( radar._zoom )
     , _hide( false )
 {
@@ -202,6 +203,21 @@ void Interface::Radar::SetRedraw() const
     _interface.SetRedraw( REDRAW_RADAR );
 }
 
+void Interface::Radar::SetMapRedraw()
+{
+    _needMapRedraw = true;
+    _roi = fheroes2::Rect( 0, 0, world.w(), world.h() );
+}
+
+void Interface::Radar::SetMapRedraw( const fheroes2::Rect & roi )
+{
+    _needMapRedraw = true;
+    _roi.width = roi.width > world.w() ? world.w() : roi.width;
+    _roi.height = roi.height > world.h() ? world.h() : roi.height;
+    _roi.x = roi.x < 0 ? 0 : roi.x;
+    _roi.y = roi.y < 0 ? 0 : roi.y;
+}
+
 void Interface::Radar::Redraw()
 {
     const Settings & conf = Settings::Get();
@@ -221,7 +237,6 @@ void Interface::Radar::Redraw()
             _cursorArea.hide();
 
             if ( _needMapRedraw ) {
-                // TODO: Add a ROI to redraw only changed objects area.
                 RedrawObjects( Players::FriendColors(), ViewWorldMode::OnlyVisible );
                 _needMapRedraw = false;
             }
@@ -262,8 +277,10 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
 
     uint8_t * radarImage = _map.image();
 
-    // Fill the radar map with black color ( 0 ).
-    std::fill( radarImage, radarImage + static_cast<ptrdiff_t>( area.width ) * area.height, COLOR_BLACK );
+    // Fill the radar map with black color ( 0 ) only if we are redrawing the entire map.
+    if ( _roi.x == 0 && _roi.y == 0 && _roi.width == world.w() && _roi.height == world.h() ) {
+        std::fill( radarImage, radarImage + static_cast<ptrdiff_t>( area.width ) * area.height, COLOR_BLACK );
+    }
 
     const bool revealMines = revealAll || ( flags == ViewWorldMode::ViewMines );
     const bool revealHeroes = revealAll || ( flags == ViewWorldMode::ViewHeroes );
@@ -273,18 +290,15 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
     const bool revealOnlyVisible = revealAll || ( flags == ViewWorldMode::OnlyVisible );
 
     const int32_t radarWidth = _map.width();
-    const int32_t worldWidth = world.w();
-    const int32_t worldHeight = world.h();
 
     const bool isZoomIn = _zoom > 1.0;
 
-    for ( int32_t y = 0; y < worldHeight; ++y ) {
-        int32_t tileIndex = y * worldWidth;
+    for ( int32_t y = _roi.y; y < _roi.height; ++y ) {
         uint8_t * radarY = radarImage + static_cast<ptrdiff_t>( y * _zoom ) * radarWidth;
         const ptrdiff_t radarYStep = isZoomIn ? ( static_cast<ptrdiff_t>( ( y + 1 ) * _zoom ) * radarWidth ) : 0;
 
-        for ( int32_t x = 0; x < worldWidth; ++x, ++tileIndex ) {
-            const Maps::Tiles & tile = world.GetTiles( tileIndex );
+        for ( int32_t x = _roi.x; x < _roi.width; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
             const bool visibleTile = revealAll || !tile.isFog( playerColor );
 
             uint8_t fillColor = 0;

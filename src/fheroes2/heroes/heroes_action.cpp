@@ -931,6 +931,15 @@ void ActionToBoat( Heroes & hero, int32_t dst_index )
     hero.SetShipMaster( true );
     hero.GetPath().Reset();
 
+    // We have to set radar roi here as the boat changes hero direction.
+    const fheroes2::Point heroPosition = Maps::GetPoint( dst_index );
+    // TODO: use hero direction to set socout area (roi) when boarding the boat.
+    const int32_t scoutRange = hero.GetScoute();
+    // Use Hero position and scout range to set the area to redraw the radar.
+    const fheroes2::Rect heroRoi( heroPosition.x - scoutRange, heroPosition.y - scoutRange, heroPosition.x + scoutRange + 1, heroPosition.y + scoutRange + 1 );
+    Interface::Basic::Get().GetRadar().SetMapRedraw( heroRoi );
+    Interface::Basic::Get().Redraw( Interface::REDRAW_RADAR );
+
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
 
@@ -2083,8 +2092,11 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     hero.Move2Dest( index_to );
 
     Interface::Basic & I = Interface::Basic::Get();
-    I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.GetRadar().SetMapRedraw();
+    const fheroes2::Point heroPosition = hero.GetCenter();
+    I.GetGameArea().SetCenter( heroPosition );
+    const int32_t scoutRange = hero.GetScoute();
+    const fheroes2::Rect heroRoi( heroPosition.x - scoutRange, heroPosition.y - scoutRange, heroPosition.x + scoutRange + 1, heroPosition.y + scoutRange + 1 );
+    I.GetRadar().SetMapRedraw(heroRoi);
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2117,8 +2129,11 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     hero.Move2Dest( index_to );
 
     Interface::Basic & I = Interface::Basic::Get();
-    I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.GetRadar().SetMapRedraw();
+    const fheroes2::Point heroPosition = hero.GetCenter();
+    I.GetGameArea().SetCenter( heroPosition );
+    const int32_t scoutRange = hero.GetScoute();
+    const fheroes2::Rect heroRoi( heroPosition.x - scoutRange, heroPosition.y - scoutRange, heroPosition.x + scoutRange + 1, heroPosition.y + scoutRange + 1 );
+    I.GetRadar().SetMapRedraw(heroRoi);
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -3154,10 +3169,17 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
             fheroes2::Display & display = fheroes2::Display::instance();
 
             for ( const int32_t eyeIndex : vec_eyes ) {
-                Maps::ClearFog( eyeIndex, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
+                const uint32_t & scouteRange = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
-                I.GetGameArea().SetCenter( Maps::GetPoint( eyeIndex ) );
-                I.GetRadar().SetMapRedraw();
+                Maps::ClearFog( eyeIndex, scouteRange, hero.GetColor() );
+
+                const fheroes2::Point & eyePosition = Maps::GetPoint( eyeIndex );
+
+                I.GetGameArea().SetCenter( eyePosition );
+
+                const fheroes2::Rect eyeRoi( eyePosition.x - scouteRange, eyePosition.y - scouteRange, eyePosition.x + scouteRange + 1, eyePosition.y + scouteRange + 1 );
+
+                I.GetRadar().SetMapRedraw( eyeRoi );
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                 display.render();
