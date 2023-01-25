@@ -284,6 +284,7 @@ namespace
                                         "Andrii Kurdiumov\n"
                                         "Arthusppp\n"
                                         "dimag0g\n"
+                                        "Sergei Ivanov\n"
                                         "tau3\n" );
 
         TextBox name( contributors, Font::BIG, textWidth );
@@ -713,6 +714,11 @@ void Game::ShowCredits()
     bool fadeInHeader = true;
 
     fheroes2::Display & display = fheroes2::Display::instance();
+
+    // Immediately indicate that the delay has passed to render first frame immediately.
+    Game::passCustomAnimationDelay( animationDelay );
+    // Make sure that the first run is passed immediately.
+    assert( !Game::isCustomDelayNeeded( animationDelay ) );
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) ) {

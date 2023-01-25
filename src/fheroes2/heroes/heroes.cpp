@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -87,18 +87,18 @@ namespace
                 if ( strs ) {
                     switch ( objectType ) {
                     case MP2::OBJ_GRAVEYARD:
-                    case MP2::OBJN_GRAVEYARD:
+                    case MP2::OBJ_NON_ACTION_GRAVEYARD:
                     case MP2::OBJ_SHIPWRECK:
-                    case MP2::OBJN_SHIPWRECK:
-                    case MP2::OBJ_DERELICTSHIP:
-                    case MP2::OBJN_DERELICTSHIP: {
+                    case MP2::OBJ_NON_ACTION_SHIPWRECK:
+                    case MP2::OBJ_DERELICT_SHIP:
+                    case MP2::OBJ_NON_ACTION_DERELICT_SHIP: {
                         std::string modRobber = _( "%{object} robber" );
                         StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRobber );
                         break;
                     }
                     case MP2::OBJ_PYRAMID:
-                    case MP2::OBJN_PYRAMID: {
+                    case MP2::OBJ_NON_ACTION_PYRAMID: {
                         std::string modRaided = _( "%{object} raided" );
                         StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRaided );
@@ -192,15 +192,10 @@ Heroes::Heroes()
     , _aiRole( Role::HUNTER )
 {}
 
-Heroes::Heroes( int heroID, int race, int initialLevel )
+Heroes::Heroes( const int heroID, const int race, const uint32_t additionalExperience )
     : Heroes( heroID, race )
 {
-    // level 1 is technically regarded as 0, so reduce the initial level by 1
-    experience = GetExperienceFromLevel( initialLevel - 1 );
-
-    for ( int i = 1; i < initialLevel; ++i ) {
-        LevelUp( false, true );
-    }
+    IncreaseExperience( additionalExperience, true );
 }
 
 Heroes::Heroes( int heroid, int rc )
@@ -212,7 +207,7 @@ Heroes::Heroes( int heroid, int rc )
     , hid( heroid )
     , portrait( heroid )
     , _race( rc )
-    , save_maps_object( MP2::OBJ_ZERO )
+    , save_maps_object( MP2::OBJ_NONE )
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
@@ -386,7 +381,7 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
 void Heroes::PostLoad()
 {
     // An object on which the hero currently stands
-    save_maps_object = MP2::OBJ_ZERO;
+    save_maps_object = MP2::OBJ_NONE;
 
     // Fix a custom hero without an army
     if ( !army.isValid() ) {
@@ -636,8 +631,8 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     // object visited
-    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_BUOY,      MP2::OBJ_OASIS,        MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE,
-                                                       MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
+    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_BUOY,      MP2::OBJ_OASIS,         MP2::OBJ_WATERING_HOLE, MP2::OBJ_TEMPLE,
+                                                       MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICT_SHIP, MP2::OBJ_SHIPWRECK };
     result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
     // bonus artifact
@@ -669,7 +664,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
+    const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIE_RING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
     result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
     // bonus artifact
@@ -733,7 +728,6 @@ bool Heroes::Recruit( const Castle & castle )
     }
 
     if ( castle.GetLevelMageGuild() ) {
-        // learn spells
         castle.MageGuildEducateHero( *this );
     }
 
@@ -744,34 +738,29 @@ bool Heroes::Recruit( const Castle & castle )
 
 void Heroes::ActionNewDay()
 {
-    // recovery move points
     move_point = GetMaxMovePoints();
 
-    // replenish spell points
-    ReplenishSpellPoints();
+    if ( world.CountDay() > 1 ) {
+        ReplenishSpellPoints();
+    }
 
-    // remove day visit object
     visit_object.remove_if( Visit::isDayLife );
 
-    // new day, new capacities
     ResetModes( SAVEMP );
 }
 
 void Heroes::ActionNewWeek()
 {
-    // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
 }
 
 void Heroes::ActionNewMonth()
 {
-    // remove month visit object
     visit_object.remove_if( Visit::isMonthLife );
 }
 
 void Heroes::ActionAfterBattle()
 {
-    // remove month visit object
     visit_object.remove_if( Visit::isBattleLife );
 
     SetModes( ACTION );
@@ -871,7 +860,7 @@ void Heroes::SetVisited( int32_t index, Visit::type_t type )
     if ( Visit::GLOBAL == type ) {
         GetKingdom().SetVisited( index, objectType );
     }
-    else if ( !isVisited( tile ) && MP2::OBJ_ZERO != objectType ) {
+    else if ( !isVisited( tile ) && MP2::OBJ_NONE != objectType ) {
         visit_object.push_front( IndexObject( index, objectType ) );
     }
 }
@@ -897,11 +886,11 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
     switch ( objectType ) {
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_OASIS:
-    case MP2::OBJ_STANDINGSTONES:
-    case MP2::OBJ_ARTESIANSPRING:
+    case MP2::OBJ_STANDING_STONES:
+    case MP2::OBJ_ARTESIAN_SPRING:
         wide = 2;
         break;
-    case MP2::OBJ_WATERINGHOLE:
+    case MP2::OBJ_WATERING_HOLE:
         wide = 4;
         break;
     default:
@@ -971,8 +960,9 @@ bool Heroes::IsFullBagArtifacts() const
 
 bool Heroes::PickupArtifact( const Artifact & art )
 {
-    if ( !art.isValid() )
+    if ( !art.isValid() ) {
         return false;
+    }
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
@@ -986,20 +976,16 @@ bool Heroes::PickupArtifact( const Artifact & art )
         return false;
     }
 
-    // check: artifact sets such as anduran garb
     const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
+
     if ( isControlHuman() ) {
-        for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
-            const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
-            fheroes2::showMessage( fheroes2::Text( Artifact( static_cast<int>( artifactSetData._assembledArtifactID ) ).GetName(), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
-        }
+        std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
     }
 
     return true;
 }
 
-void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
+void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect /* = false */ )
 {
     int oldLevel = GetLevelFromExperience( experience );
     int newLevel = GetLevelFromExperience( experience + amount );
@@ -1501,7 +1487,7 @@ MP2::MapObjectType Heroes::GetMapsObject() const
 
 void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
 {
-    save_maps_object = objectType != MP2::OBJ_HEROES ? objectType : MP2::OBJ_ZERO;
+    save_maps_object = objectType != MP2::OBJ_HEROES ? objectType : MP2::OBJ_NONE;
 }
 
 void Heroes::ActionPreBattle()
@@ -1721,27 +1707,27 @@ void AllHeroes::Init()
     for ( uint32_t hid = Heroes::ZOM; hid <= Heroes::CELIA; ++hid )
         push_back( new Heroes( hid, Race::NECR ) );
 
-    // from campain
-    push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5 ) );
-    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT, 5 ) );
-    push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5 ) );
-    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5 ) );
-    push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5 ) );
-    push_back( new Heroes( Heroes::BAX, Race::NECR, 5 ) );
+    // SW campaign
+    push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5000 ) );
+    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT, 5000 ) );
+    push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5000 ) );
+    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5000 ) );
+    push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5000 ) );
+    push_back( new Heroes( Heroes::BAX, Race::NECR, 5000 ) );
 
-    // loyalty version
+    // PoL
     if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
-        push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5 ) );
-        push_back( new Heroes( Heroes::MOG, Race::NECR, 5 ) );
-        push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5 ) );
-        push_back( new Heroes( Heroes::JOSEPH, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5 ) );
-        push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5 ) );
-        push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5 ) );
-        push_back( new Heroes( Heroes::DRAKONIA, Race::WZRD, 5 ) );
-        push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5 ) );
-        push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5 ) );
+        push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5000 ) );
+        push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5000 ) );
+        push_back( new Heroes( Heroes::MOG, Race::NECR, 5000 ) );
+        push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5000 ) );
+        push_back( new Heroes( Heroes::JOSEPH, Race::WZRD, 5000 ) );
+        push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5000 ) );
+        push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5000 ) );
+        push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5000 ) );
+        push_back( new Heroes( Heroes::DRAKONIA, Race::WZRD, 5000 ) );
+        push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5000 ) );
+        push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5000 ) );
     }
     else {
         // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones

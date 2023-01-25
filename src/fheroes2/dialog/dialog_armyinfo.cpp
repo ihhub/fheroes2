@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -151,7 +151,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     const fheroes2::Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
     const fheroes2::Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
 
-    fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
+    const fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
     fheroes2::Blit( spriteDialogShadow, display, dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
     fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
@@ -182,20 +182,23 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi );
 
     // button upgrade
+    const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
     fheroes2::Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
     dst_pt.x = pos_rt.x + 280;
     dst_pt.y = pos_rt.y + 192;
-    fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, viewarmy, 5, 6 );
+    fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, upgradeButtonIcnID, 0, 1 );
 
     // button dismiss
+    const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
     dst_pt.x = pos_rt.x + 280;
     dst_pt.y = pos_rt.y + 221;
-    fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, viewarmy, 1, 2 );
+    fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, dismissButtonIcnID, 0, 1 );
 
     // button exit
+    const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
     dst_pt.x = pos_rt.x + 415;
     dst_pt.y = pos_rt.y + 221;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, viewarmy, 3, 4 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
 
     if ( READONLY & flags ) {
         buttonDismiss.disable();
@@ -217,10 +220,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     LocalEvent & le = LocalEvent::Get();
     int result = Dialog::ZERO;
 
-    display.render();
+    display.render( restorer.rect() );
 
     // dialog menu loop
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
         if ( flags & BUTTONS ) {
             if ( buttonUpgrade.isEnabled() )
                 le.MousePressLeft( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
@@ -229,7 +232,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
             // upgrade
-            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::UPGRADE_TROOP ) ) ) {
+            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
                     const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
                     fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
@@ -245,7 +248,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 }
             }
             // dismiss
-            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DISMISS_TROOP ) )
+            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) )
                  && Dialog::YES
                         == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
                                             Dialog::YES | Dialog::NO ) ) {
@@ -285,7 +288,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( buttonExit.isEnabled() )
                     buttonExit.draw();
 
-                display.render();
+                display.render( restorer.rect() );
             }
         }
         else {
@@ -632,7 +635,7 @@ int Dialog::ArmyJoinFree( const Troop & troop )
     const Text title( _( "Followers" ), Font::YELLOW_BIG );
 
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
-    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+    StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
     const int buttons = Dialog::YES | Dialog::NO;
@@ -686,7 +689,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
 
     StringReplace( message, "%{offer}", join );
     StringReplace( message, "%{total}", troop.GetCount() );
-    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetPluralName( join ) ) );
+    StringReplaceWithLowercase( message, "%{monster}", troop.GetPluralName( join ) );
     StringReplace( message, "%{gold}", gold );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
@@ -710,6 +713,9 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
 
     posy += text.h() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
+
+    const fheroes2::Text goldText( std::to_string( gold ), fheroes2::FontType::smallWhite() );
+    goldText.draw( pos.x + ( pos.width - goldText.width() ) / 2, posy + sprite.height() + 5, display );
 
     fheroes2::ButtonGroup btnGroup( pos, buttons );
     btnGroup.draw();

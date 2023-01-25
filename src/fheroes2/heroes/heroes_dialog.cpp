@@ -300,13 +300,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // prev hero
         if ( buttonPrevHero.isEnabled()
-             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
             return Dialog::PREV;
         }
 
         // next hero
         if ( buttonNextHero.isEnabled()
-             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
             return Dialog::NEXT;
         }
 

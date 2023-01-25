@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -73,22 +73,22 @@ int ObjMnts2::GetPassable( int icn, const uint8_t index )
 
 bool ObjMnts1::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjMnts2::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 MP2::MapObjectType ObjMnts1::GetActionObject( uint32_t /* unused */ )
 {
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 MP2::MapObjectType ObjMnts2::GetActionObject( uint32_t /* unused */ )
 {
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 bool ObjMnts1::isShadow( const uint8_t index )

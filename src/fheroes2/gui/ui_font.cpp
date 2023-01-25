@@ -3565,12 +3565,21 @@ namespace
             letter.setPosition( buttonFontOffset.x, buttonFontOffset.y );
         }
         // Address symbols that should have even less space to neighboring symbols.
+        released[14].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[33].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
+        released[54].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
+        released[57].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
 
         // -
         released[13].resize( 6 + offset * 2, 6 + offset * 2 );
         released[13].reset();
         fheroes2::DrawLine( released[13], { offset + 0, offset + 5 }, { offset + 5, offset + 5 }, buttonGoodReleasedColor );
+
+        // .
+        released[14].resize( 2 + offset * 2, 10 + offset * 2 );
+        released[14].reset();
+        fheroes2::DrawLine( released[14], { offset + 0, offset + 8 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[14], { offset + 0, offset + 9 }, { offset + 1, offset + 9 }, buttonGoodReleasedColor );
 
         // 0
         released[16].resize( 9 + offset * 2, 10 + offset * 2 );
@@ -3592,6 +3601,16 @@ namespace
         fheroes2::SetPixel( released[17], offset + 1, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[17], offset + 0, offset + 2, buttonGoodReleasedColor );
 
+        // 2
+        released[18].resize( 7 + offset * 2, 10 + offset * 2 );
+        released[18].reset();
+        fheroes2::DrawLine( released[18], { offset + 1, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[18], { offset + 6, offset + 1 }, { offset + 6, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[18], { offset + 5, offset + 4 }, { offset + 0, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[18], { offset + 1, offset + 9 }, { offset + 6, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[18], { offset + 0, offset + 1 }, { offset + 0, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[18], offset + 6, offset + 8, buttonGoodReleasedColor );
+
         // 3
         released[19].resize( 7 + offset * 2, 10 + offset * 2 );
         released[19].reset();
@@ -3602,6 +3621,35 @@ namespace
         fheroes2::DrawLine( released[19], { offset + 1, offset + 9 }, { offset + 5, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[19], offset + 0, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[19], offset + 0, offset + 8, buttonGoodReleasedColor );
+
+        // 4
+        released[20].resize( 8 + offset * 2, 10 + offset * 2 );
+        released[20].reset();
+        fheroes2::DrawLine( released[20], { offset + 0, offset + 4 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[20], { offset + 5, offset + 0 }, { offset + 5, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[20], { offset + 5, offset + 6 }, { offset + 5, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[20], { offset + 0, offset + 5 }, { offset + 7, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[20], { offset + 3, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
+
+        // 5
+        released[21].resize( 7 + offset * 2, 10 + offset * 2 );
+        released[21].reset();
+        fheroes2::DrawLine( released[21], { offset + 0, offset + 0 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[21], { offset + 0, offset + 1 }, { offset + 0, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[21], { offset + 1, offset + 4 }, { offset + 5, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[21], { offset + 6, offset + 5 }, { offset + 6, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[21], { offset + 1, offset + 9 }, { offset + 5, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[21], offset + 0, offset + 8, buttonGoodReleasedColor );
+
+        // 6
+        released[22].resize( 7 + offset * 2, 10 + offset * 2 );
+        released[22].reset();
+        fheroes2::DrawLine( released[22], { offset + 1, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[22], { offset + 0, offset + 1 }, { offset + 0, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[22], { offset + 1, offset + 4 }, { offset + 5, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[22], { offset + 6, offset + 5 }, { offset + 6, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[22], { offset + 1, offset + 9 }, { offset + 5, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[22], offset + 6, offset + 1, buttonGoodReleasedColor );
 
         // A
         released[33].resize( 13 + offset * 2, 10 + offset * 2 );
@@ -3779,7 +3827,7 @@ namespace
         fheroes2::DrawLine( released[48], { offset + 10, offset + 1 }, { offset + 10, offset + 4 }, buttonGoodReleasedColor );
 
         // Q
-        released[49].resize( 13 + offset * 2, 11 + offset * 2 );
+        released[49].resize( 11 + offset * 2, 11 + offset * 2 );
         released[49].reset();
         fheroes2::DrawLine( released[49], { offset + 2, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[49], { offset + 0, offset + 2 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
@@ -4319,8 +4367,11 @@ namespace
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
 
-        // Offset letters with diacritics above them.
-        released[197 - 32].setPosition( buttonFontOffset.x, -2 );
+        // Change spacing relative to other characters.
+        released[192 - 32].setPosition( buttonFontOffset.x - 1, -3 );
+        released[193 - 32].setPosition( buttonFontOffset.x - 1, -3 );
+        released[197 - 32].setPosition( buttonFontOffset.x - 1, -2 );
+        released[200 - 32].setPosition( buttonFontOffset.x, -3 );
         released[201 - 32].setPosition( buttonFontOffset.x, -3 );
 
         // A with circle on top
@@ -4359,6 +4410,24 @@ namespace
         fheroes2::SetPixel( released[198 - 32], offset + 14, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[198 - 32], offset + 12, offset + 3, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[198 - 32], offset + 12, offset + 5, buttonGoodReleasedColor );
+
+        // A with grave.
+        released[192 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 3 );
+        released[192 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[192 - 32], 0, 3, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::DrawLine( released[192 - 32], { offset + 6, offset + 0 }, { offset + 7, offset + 1 }, buttonGoodReleasedColor );
+
+        // A with acute.
+        released[193 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 3 );
+        released[193 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[193 - 32], 0, 3, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::DrawLine( released[193 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+
+        // E with grave.
+        released[200 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 3 );
+        released[200 - 32].reset();
+        fheroes2::Copy( released[69 - 32], 0, 0, released[200 - 32], 0, 3, released[69 - 32].width(), released[69 - 32].height() );
+        fheroes2::DrawLine( released[200 - 32], { offset + 4, offset + 0 }, { offset + 5, offset + 1 }, buttonGoodReleasedColor );
 
         // E with acute.
         released[201 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 3 );

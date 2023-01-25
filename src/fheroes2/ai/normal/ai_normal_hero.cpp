@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,11 +37,13 @@
 #include "artifact.h"
 #include "castle.h"
 #include "color.h"
+#include "game_interface.h"
 #include "game_over.h"
 #include "game_static.h"
 #include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
+#include "interface_status.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
@@ -164,6 +166,8 @@ namespace
         const MP2::MapObjectType objectType = tile.GetObject();
 
         if ( !MP2::isActionObject( objectType ) ) {
+            // TODO: add logic to verify if all parts of puzzle are opened and the location is known.
+            // TODO: once it is done, check if the tile does not have a hole. If it does not mark it as a valid object.
             return false;
         }
 
@@ -180,13 +184,13 @@ namespace
         const Kingdom & kingdom = hero.GetKingdom();
 
         switch ( objectType ) {
-        case MP2::OBJ_SHIPWRECKSURVIVOR:
-        case MP2::OBJ_WATERCHEST:
+        case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_BOTTLE:
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_CAMPFIRE:
-        case MP2::OBJ_TREASURECHEST:
+        case MP2::OBJ_TREASURE_CHEST:
             return true;
 
         case MP2::OBJ_BUOY:
@@ -198,9 +202,9 @@ namespace
         case MP2::OBJ_SIRENS:
             return false;
 
-        case MP2::OBJ_MAGELLANMAPS:
+        case MP2::OBJ_MAGELLANS_MAPS:
             // TODO: avoid hardcoded resource values for objects.
-            return !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
+            return !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANS_MAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
 
         case MP2::OBJ_WHIRLPOOL:
             // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
@@ -213,7 +217,7 @@ namespace
 
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_MINES:
-        case MP2::OBJ_ALCHEMYLAB:
+        case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_LIGHTHOUSE:
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
@@ -224,7 +228,7 @@ namespace
             }
             break;
 
-        case MP2::OBJ_ABANDONEDMINE:
+        case MP2::OBJ_ABANDONED_MINE:
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
                     return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
@@ -235,10 +239,10 @@ namespace
             break;
 
         case MP2::OBJ_WAGON:
-        case MP2::OBJ_LEANTO:
+        case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_SKELETON:
-        case MP2::OBJ_MAGICGARDEN:
-        case MP2::OBJ_WATERWHEEL:
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL:
             return tile.QuantityIsValid();
 
@@ -265,7 +269,7 @@ namespace
             return true;
         }
 
-        case MP2::OBJ_OBSERVATIONTOWER:
+        case MP2::OBJ_OBSERVATION_TOWER:
             return Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() )
                    > 0;
 
@@ -275,12 +279,12 @@ namespace
         case MP2::OBJ_BARRIER:
             return kingdom.IsVisitTravelersTent( tile.QuantityColor() );
 
-        case MP2::OBJ_TRAVELLERTENT:
+        case MP2::OBJ_TRAVELLER_TENT:
             return !kingdom.IsVisitTravelersTent( tile.QuantityColor() );
 
-        case MP2::OBJ_SHRINE1:
-        case MP2::OBJ_SHRINE2:
-        case MP2::OBJ_SHRINE3: {
+        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+        case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
             const Spell & spell = tile.QuantitySpell();
             assert( spell.isValid() );
             if ( !spell.isValid() || !hero.HaveSpellBook() || hero.HaveSpell( spell )
@@ -299,15 +303,15 @@ namespace
 
         // primary skill
         case MP2::OBJ_FORT:
-        case MP2::OBJ_MERCENARYCAMP:
-        case MP2::OBJ_DOCTORHUT:
-        case MP2::OBJ_STANDINGSTONES:
+        case MP2::OBJ_MERCENARY_CAMP:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
+        case MP2::OBJ_STANDING_STONES:
         // exp
         case MP2::OBJ_GAZEBO:
             return !hero.isVisited( tile );
 
         // sec skill
-        case MP2::OBJ_WITCHSHUT: {
+        case MP2::OBJ_WITCHS_HUT: {
             const Skill::Secondary & skill = tile.QuantitySkill();
             const int skillType = skill.Skill();
 
@@ -328,32 +332,34 @@ namespace
             return true;
         }
 
-        case MP2::OBJ_TREEKNOWLEDGE:
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
             if ( !hero.isVisited( tile ) ) {
                 const ResourceCount & rc = tile.QuantityResourceCount();
-                if ( !rc.isValid() || kingdom.AllowPayment( Funds( rc ) ) )
+                // If the payment is required do not waste all resources from the kingdom. Use them wisely.
+                if ( !rc.isValid() || kingdom.AllowPayment( Funds( rc ) * 5 ) ) {
                     return true;
+                }
             }
             break;
 
         // good luck
         case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_FAERIERING:
+        case MP2::OBJ_FAERIE_RING:
         case MP2::OBJ_IDOL:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetLuck() < Luck::IRISH;
 
         // good morale
         case MP2::OBJ_OASIS:
-        case MP2::OBJ_WATERINGHOLE:
+        case MP2::OBJ_WATERING_HOLE:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD;
 
         case MP2::OBJ_TEMPLE:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
 
-        case MP2::OBJ_MAGICWELL:
-            return !hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
+        case MP2::OBJ_MAGIC_WELL:
+            return !hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
 
-        case MP2::OBJ_ARTESIANSPRING:
+        case MP2::OBJ_ARTESIAN_SPRING:
             return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
 
         case MP2::OBJ_XANADU: {
@@ -367,17 +373,16 @@ namespace
             break;
         }
 
-        // accept army
-        case MP2::OBJ_WATCHTOWER:
+        // Get a free army.
+        case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREEHOUSE:
-        case MP2::OBJ_ARCHERHOUSE:
-        case MP2::OBJ_GOBLINHUT:
-        case MP2::OBJ_DWARFCOTT:
-        case MP2::OBJ_HALFLINGHOLE:
-        case MP2::OBJ_THATCHEDHUT:
-        case MP2::OBJ_PEASANTHUT: {
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_ARCHER_HOUSE:
+        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_HALFLING_HOLE:
+        case MP2::OBJ_PEASANT_HUT: {
             const Troop & troop = tile.QuantityTroop();
             if ( !troop.isValid() ) {
                 return false;
@@ -393,15 +398,15 @@ namespace
 
         // recruit army
         case MP2::OBJ_RUINS:
-        case MP2::OBJ_TREECITY:
-        case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJ_DESERTTENT:
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS:
-        case MP2::OBJ_ANCIENTLAMP: {
+        case MP2::OBJ_TREE_CITY:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_WATER_ALTAR:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
+        case MP2::OBJ_GENIE_LAMP: {
             const Troop & troop = tile.QuantityTroop();
             if ( !troop.isValid() ) {
                 return false;
@@ -431,9 +436,9 @@ namespace
         }
 
         // recruit army (battle)
-        case MP2::OBJ_DRAGONCITY:
-        case MP2::OBJ_CITYDEAD:
-        case MP2::OBJ_TROLLBRIDGE: {
+        case MP2::OBJ_DRAGON_CITY:
+        case MP2::OBJ_CITY_OF_DEAD:
+        case MP2::OBJ_TROLL_BRIDGE: {
             if ( Color::NONE == tile.QuantityColor() ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
@@ -458,11 +463,11 @@ namespace
         }
 
         // upgrade army
-        case MP2::OBJ_HILLFORT:
+        case MP2::OBJ_HILL_FORT:
             return army.HasMonster( Monster::DWARF ) || army.HasMonster( Monster::ORC ) || army.HasMonster( Monster::OGRE );
 
         // upgrade army
-        case MP2::OBJ_FREEMANFOUNDRY:
+        case MP2::OBJ_FREEMANS_FOUNDRY:
             return army.HasMonster( Monster::PIKEMAN ) || army.HasMonster( Monster::SWORDSMAN ) || army.HasMonster( Monster::IRON_GOLEM );
 
         // loyalty obj
@@ -483,7 +488,7 @@ namespace
         // poor morale obj
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_DERELICTSHIP:
+        case MP2::OBJ_DERELICT_SHIP:
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
                 return enemy.isValid() && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, 2 );
@@ -498,7 +503,7 @@ namespace
             }
             break;
 
-        case MP2::OBJ_DAEMONCAVE:
+        case MP2::OBJ_DAEMON_CAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             break;
@@ -543,23 +548,23 @@ namespace
             // AI should never consider a boat as a destination point. It uses them only to make a path.
             return false;
 
-        case MP2::OBJ_STONELITHS:
+        case MP2::OBJ_STONE_LITHS:
             // AI should never consider a stone lith as a destination point. It uses them only to make a path.
             return false;
 
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
-        case MP2::OBJ_HUTMAGI:
-            return !hero.isObjectTypeVisited( MP2::OBJ_HUTMAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true ).empty();
-        case MP2::OBJ_TRADINGPOST:
+        case MP2::OBJ_HUT_OF_MAGI:
+            return !hero.isObjectTypeVisited( MP2::OBJ_HUT_OF_MAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true ).empty();
+        case MP2::OBJ_TRADING_POST:
         case MP2::OBJ_SPHINX:
             // TODO: AI doesn't know how it use it properly.
             return false;
         case MP2::OBJ_ORACLE:
-        case MP2::OBJ_EYEMAGI:
+        case MP2::OBJ_EYE_OF_MAGI:
             // No use of this object for AI.
             return false;
-        case MP2::OBJ_ALCHEMYTOWER: {
+        case MP2::OBJ_ALCHEMIST_TOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
             const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
             if ( cursed == 0 ) {
@@ -821,13 +826,13 @@ namespace AI
         else if ( objectType == MP2::OBJ_MONSTER ) {
             return 1000.0;
         }
-        else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMYLAB ) {
+        else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMIST_LAB ) {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 4000.0 : 2000.0;
         }
-        else if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
+        else if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
@@ -845,6 +850,11 @@ namespace AI
             return 1000.0 * art.getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectType ) ) {
+            if ( objectType == MP2::OBJ_BOTTLE ) {
+                // A bottle is useless to AI as it contains only a message.
+                return 0;
+            }
+
             return 850.0;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
@@ -854,7 +864,7 @@ namespace AI
         else if ( objectType == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
-        else if ( objectType == MP2::OBJ_SHRINE1 || objectType == MP2::OBJ_SHRINE2 || objectType == MP2::OBJ_SHRINE3 ) {
+        else if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE || objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE || objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
             const Spell & spell = tile.QuantitySpell();
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
@@ -864,12 +874,12 @@ namespace AI
         else if ( MP2::isMonsterDwelling( objectType ) ) {
             return tile.QuantityTroop().GetStrength();
         }
-        else if ( objectType == MP2::OBJ_STONELITHS ) {
+        else if ( objectType == MP2::OBJ_STONE_LITHS ) {
             // Stone lith is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
+        else if ( objectType == MP2::OBJ_OBSERVATION_TOWER ) {
             const int fogCountToUncover
                 = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
@@ -878,7 +888,7 @@ namespace AI
             }
             return fogCountToUncover;
         }
-        else if ( objectType == MP2::OBJ_MAGELLANMAPS ) {
+        else if ( objectType == MP2::OBJ_MAGELLANS_MAPS ) {
             // Very valuable object.
             return 5000;
         }
@@ -897,7 +907,7 @@ namespace AI
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        else if ( objectType == MP2::OBJ_MAGICWELL || objectType == MP2::OBJ_ARTESIANSPRING ) {
+        else if ( objectType == MP2::OBJ_MAGIC_WELL || objectType == MP2::OBJ_ARTESIAN_SPRING ) {
             if ( !hero.HaveSpellBook() ) {
                 return -dangerousTaskPenalty;
             }
@@ -939,36 +949,36 @@ namespace AI
             const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
             return movementBonus + freeMonsterUpgradeModifier * upgradeValue;
         }
-        else if ( objectType == MP2::OBJ_FREEMANFOUNDRY ) {
+        else if ( objectType == MP2::OBJ_FREEMANS_FOUNDRY ) {
             const double upgradePikemanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::PIKEMAN );
             const double upgradeSwordsmanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::SWORDSMAN );
             const double upgradeGolemValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::IRON_GOLEM );
 
             return freeMonsterUpgradeModifier * ( upgradePikemanValue + upgradeSwordsmanValue + upgradeGolemValue );
         }
-        else if ( objectType == MP2::OBJ_HILLFORT ) {
+        else if ( objectType == MP2::OBJ_HILL_FORT ) {
             const double upgradeDwarfValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::DWARF );
             const double upgradeOrcValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::ORC );
             const double upgradeOgreValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::OGRE );
 
             return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
         }
-        else if ( objectType == MP2::OBJ_TRAVELLERTENT ) {
+        else if ( objectType == MP2::OBJ_TRAVELLER_TENT ) {
             // Most likely it'll lead to opening more land.
             return 1000;
         }
         else if ( objectType == MP2::OBJ_OASIS ) {
             return std::max( 800.0 - 2.0 * distanceToObject, 0.0 );
         }
-        else if ( objectType == MP2::OBJ_WATERINGHOLE ) {
+        else if ( objectType == MP2::OBJ_WATERING_HOLE ) {
             return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
         }
         else if ( objectType == MP2::OBJ_JAIL ) {
             // A free hero is always good and it could be very powerful.
             return 3000;
         }
-        else if ( objectType == MP2::OBJ_HUTMAGI ) {
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+        else if ( objectType == MP2::OBJ_HUT_OF_MAGI ) {
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
             const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
@@ -1099,13 +1109,13 @@ namespace AI
         else if ( objectType == MP2::OBJ_MONSTER ) {
             return anotherFriendlyHeroPresent ? 4000.0 : 1000.0;
         }
-        else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMYLAB ) {
+        else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMIST_LAB ) {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 3000.0 : 1500.0;
         }
-        else if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
+        else if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
@@ -1122,11 +1132,16 @@ namespace AI
 
             return 1500.0 * art.getArtifactValue();
         }
-        else if ( objectType == MP2::OBJ_TREASURECHEST ) {
+        else if ( objectType == MP2::OBJ_TREASURE_CHEST ) {
             // Treasure chest without the artifact
             return std::max( tile.QuantityGold(), 1000U );
         }
         else if ( MP2::isPickupObject( objectType ) ) {
+            if ( objectType == MP2::OBJ_BOTTLE ) {
+                // A bottle is useless to AI as it contains only a message.
+                return 0;
+            }
+
             return anotherFriendlyHeroPresent ? 100.0 : 500.0;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
@@ -1136,7 +1151,7 @@ namespace AI
         else if ( objectType == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
-        else if ( objectType == MP2::OBJ_SHRINE1 || objectType == MP2::OBJ_SHRINE2 || objectType == MP2::OBJ_SHRINE3 ) {
+        else if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE || objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE || objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
             const Spell & spell = tile.QuantitySpell();
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
@@ -1146,12 +1161,12 @@ namespace AI
         else if ( MP2::isMonsterDwelling( objectType ) ) {
             return tile.QuantityTroop().GetStrength();
         }
-        else if ( objectType == MP2::OBJ_STONELITHS ) {
+        else if ( objectType == MP2::OBJ_STONE_LITHS ) {
             // Stone lith is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
+        else if ( objectType == MP2::OBJ_OBSERVATION_TOWER ) {
             const int fogCountToUncover
                 = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
@@ -1160,7 +1175,7 @@ namespace AI
             }
             return fogCountToUncover / 2;
         }
-        else if ( objectType == MP2::OBJ_MAGELLANMAPS ) {
+        else if ( objectType == MP2::OBJ_MAGELLANS_MAPS ) {
             // Very valuable object.
             return 5000;
         }
@@ -1179,7 +1194,7 @@ namespace AI
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        else if ( objectType == MP2::OBJ_MAGICWELL || objectType == MP2::OBJ_ARTESIANSPRING ) {
+        else if ( objectType == MP2::OBJ_MAGIC_WELL || objectType == MP2::OBJ_ARTESIAN_SPRING ) {
             if ( !hero.HaveSpellBook() ) {
                 return -dangerousTaskPenalty;
             }
@@ -1221,36 +1236,36 @@ namespace AI
             const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
             return movementBonus + freeMonsterUpgradeModifier * upgradeValue;
         }
-        else if ( objectType == MP2::OBJ_FREEMANFOUNDRY ) {
+        else if ( objectType == MP2::OBJ_FREEMANS_FOUNDRY ) {
             const double upgradePikemanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::PIKEMAN );
             const double upgradeSwordsmanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::SWORDSMAN );
             const double upgradeGolemValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::IRON_GOLEM );
 
             return freeMonsterUpgradeModifier * ( upgradePikemanValue + upgradeSwordsmanValue + upgradeGolemValue );
         }
-        else if ( objectType == MP2::OBJ_HILLFORT ) {
+        else if ( objectType == MP2::OBJ_HILL_FORT ) {
             const double upgradeDwarfValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::DWARF );
             const double upgradeOrcValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::ORC );
             const double upgradeOgreValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::OGRE );
 
             return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
         }
-        else if ( objectType == MP2::OBJ_TRAVELLERTENT ) {
+        else if ( objectType == MP2::OBJ_TRAVELLER_TENT ) {
             // Most likely it'll lead to opening more land.
             return 1000;
         }
         else if ( objectType == MP2::OBJ_OASIS ) {
             return std::max( 800.0 - 2.0 * distanceToObject, 0.0 );
         }
-        else if ( objectType == MP2::OBJ_WATERINGHOLE ) {
+        else if ( objectType == MP2::OBJ_WATERING_HOLE ) {
             return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
         }
         else if ( objectType == MP2::OBJ_JAIL ) {
             // A free hero is always good and it could be very powerful.
             return 3000;
         }
-        else if ( objectType == MP2::OBJ_HUTMAGI ) {
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+        else if ( objectType == MP2::OBJ_HUT_OF_MAGI ) {
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
             const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
@@ -1373,7 +1388,7 @@ namespace AI
         else if ( objectType == MP2::OBJ_MONSTER ) {
             return twoTiles;
         }
-        else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMYLAB ) {
+        else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMIST_LAB ) {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
@@ -1391,6 +1406,11 @@ namespace AI
             return 1000.0 * art.getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectType ) ) {
+            if ( objectType == MP2::OBJ_BOTTLE ) {
+                // A bottle is useless to AI as it contains only a message.
+                return 0;
+            }
+
             return twoTiles;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
@@ -1400,7 +1420,7 @@ namespace AI
         else if ( objectType == MP2::OBJ_XANADU ) {
             return fiveTiles;
         }
-        else if ( objectType == MP2::OBJ_SHRINE1 || objectType == MP2::OBJ_SHRINE2 || objectType == MP2::OBJ_SHRINE3 ) {
+        else if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE || objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE || objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
             const Spell & spell = tile.QuantitySpell();
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
@@ -1410,7 +1430,7 @@ namespace AI
         else if ( MP2::isMonsterDwelling( objectType ) ) {
             return tile.QuantityTroop().GetStrength();
         }
-        else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
+        else if ( objectType == MP2::OBJ_OBSERVATION_TOWER ) {
             const int fogCountToUncover
                 = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
@@ -1419,7 +1439,7 @@ namespace AI
             }
             return fogCountToUncover;
         }
-        else if ( objectType == MP2::OBJ_MAGICWELL || objectType == MP2::OBJ_ARTESIANSPRING ) {
+        else if ( objectType == MP2::OBJ_MAGIC_WELL || objectType == MP2::OBJ_ARTESIAN_SPRING ) {
             if ( !hero.HaveSpellBook() || hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
                 return -dangerousTaskPenalty; // no reason to visit the well with no magic book or with half of points
             }
@@ -1436,28 +1456,28 @@ namespace AI
             const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
             return movementBonus + freeMonsterUpgradeModifier * upgradeValue;
         }
-        else if ( objectType == MP2::OBJ_FREEMANFOUNDRY ) {
+        else if ( objectType == MP2::OBJ_FREEMANS_FOUNDRY ) {
             const double upgradePikemanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::PIKEMAN );
             const double upgradeSwordsmanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::SWORDSMAN );
             const double upgradeGolemValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::IRON_GOLEM );
 
             return freeMonsterUpgradeModifier * ( upgradePikemanValue + upgradeSwordsmanValue + upgradeGolemValue );
         }
-        else if ( objectType == MP2::OBJ_HILLFORT ) {
+        else if ( objectType == MP2::OBJ_HILL_FORT ) {
             const double upgradeDwarfValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::DWARF );
             const double upgradeOrcValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::ORC );
             const double upgradeOgreValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::OGRE );
 
             return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
         }
-        else if ( objectType == MP2::OBJ_TRAVELLERTENT ) {
+        else if ( objectType == MP2::OBJ_TRAVELLER_TENT ) {
             // Most likely it'll lead to opening more land.
             return 1000;
         }
         else if ( objectType == MP2::OBJ_OASIS ) {
             return std::max( 800.0 - 2.0 * distanceToObject, 0.0 );
         }
-        else if ( objectType == MP2::OBJ_WATERINGHOLE ) {
+        else if ( objectType == MP2::OBJ_WATERING_HOLE ) {
             return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
         }
         else if ( objectType == MP2::OBJ_JAIL ) {
@@ -1588,7 +1608,7 @@ namespace AI
         int priorityTarget = -1;
         maxPriority = lowestPossibleValue;
 #ifdef WITH_DEBUG
-        MP2::MapObjectType objectType = MP2::OBJ_ZERO;
+        MP2::MapObjectType objectType = MP2::OBJ_NONE;
 #endif
 
         // pre-cache the pathfinder
@@ -1742,7 +1762,7 @@ namespace AI
         }
     }
 
-    bool Normal::HeroesTurn( VecHeroes & heroes )
+    bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
     {
         if ( heroes.empty() ) {
             // No heroes so we indicate that all heroes moved.
@@ -1759,6 +1779,10 @@ namespace AI
 
         const int monsterStrengthMultiplierCount = 2;
         const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
+
+        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
+
+        uint32_t currentProgressValue = startProgressValue;
 
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
@@ -1860,12 +1884,26 @@ namespace AI
 
             _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
             _pathfinder.setSpellPointReserve( 0.5 );
+
+            // The size of heroes can be increased if a new hero is released from Jail.
+            const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
+
+            if ( maxHeroCount > 0 ) {
+                // At least one hero still exist in the kingdom.
+                const size_t progressValue = ( endProgressValue - startProgressValue ) * ( maxHeroCount - availableHeroes.size() ) / maxHeroCount + startProgressValue;
+                if ( currentProgressValue < progressValue ) {
+                    currentProgressValue = static_cast<uint32_t>( progressValue );
+                    status.DrawAITurnProgress( currentProgressValue );
+                }
+            }
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
 
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
         _pathfinder.setSpellPointReserve( 0.5 );
+
+        status.DrawAITurnProgress( endProgressValue );
 
         return allHeroesMoved;
     }

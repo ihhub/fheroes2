@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -167,6 +167,11 @@ namespace fheroes2
             return _height;
         }
 
+        Rect rect() const
+        {
+            return { _x, _y, _width, _height };
+        }
+
         void restore();
         void reset();
 
@@ -223,8 +228,6 @@ namespace fheroes2
 
     // Copies transform the layer from in to out. Both images must be of the same size.
     void CopyTransformLayer( const Image & in, Image & out );
-
-    Image CreateBlurredImage( const Image & in, int32_t blurRadius );
 
     Sprite CreateContour( const Image & image, uint8_t value );
 

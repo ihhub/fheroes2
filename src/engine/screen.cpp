@@ -358,7 +358,7 @@ namespace
 namespace
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    class RenderCursor : public fheroes2::Cursor
+    class RenderCursor final : public fheroes2::Cursor
     {
     public:
         RenderCursor( const RenderCursor & ) = delete;
@@ -518,7 +518,7 @@ namespace
     };
 #else
     // SDL 1 doesn't support hardware level cursor.
-    class RenderCursor : public fheroes2::Cursor
+    class RenderCursor final : public fheroes2::Cursor
     {
     public:
         RenderCursor() = default;
@@ -754,13 +754,10 @@ namespace
                 return;
             }
 
-            bool fullScreen = true;
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
                 flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
                 flags &= ~SDL_WINDOW_FULLSCREEN;
-
-                fullScreen = false;
             }
             else {
 #if defined( _WIN32 )
@@ -787,7 +784,9 @@ namespace
                 ERROR_LOG( "Failed to set fullscreen mode flags. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
 
-            if ( !fullScreen && _windowedSize.width != 0 && _windowedSize.height != 0 ) {
+            _syncFullScreen();
+
+            if ( !isFullScreen() && _windowedSize.width != 0 && _windowedSize.height != 0 ) {
                 SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
             }
 
@@ -900,6 +899,7 @@ namespace
             , _surface( nullptr )
             , _renderer( nullptr )
             , _texture( nullptr )
+            , _driverIndex( -1 )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
             , _isVSyncEnabled( false )
         {
@@ -935,6 +935,8 @@ namespace
             }
 
             _windowedSize = fheroes2::Size();
+
+            _driverIndex = -1;
         }
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
@@ -942,65 +944,54 @@ namespace
             if ( _surface == nullptr )
                 return;
 
-            copyImageToSurface( display, _surface, roi );
-
             if ( _texture == nullptr ) {
                 if ( _renderer != nullptr )
                     SDL_DestroyRenderer( _renderer );
 
                 // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-                _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
+                _renderer = SDL_CreateRenderer( _window, _driverIndex, renderFlags() );
                 if ( _renderer == nullptr ) {
                     ERROR_LOG( "Failed to create a window renderer. The error: " << SDL_GetError() )
                 }
+
+                return;
+            }
+
+            copyImageToSurface( display, _surface, roi );
+
+            const bool fullFrame = ( roi.width == display.width() ) && ( roi.height == display.height() );
+            if ( fullFrame ) {
+                const int returnCode = SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
+                if ( returnCode < 0 ) {
+                    ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                }
             }
             else {
-                const bool fullFrame = ( roi.width == display.width() ) && ( roi.height == display.height() );
-                if ( fullFrame ) {
-                    int returnCode = SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    }
+                SDL_Rect area;
+                area.x = roi.x;
+                area.y = roi.y;
+                area.w = roi.width;
+                area.h = roi.height;
 
-                    returnCode = SDL_SetRenderTarget( _renderer, nullptr );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to set render target. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        return;
-                    }
-
-                    returnCode = SDL_RenderClear( _renderer );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to clear render. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        return;
-                    }
-                }
-                else {
-                    SDL_Rect area;
-                    area.x = roi.x;
-                    area.y = roi.y;
-                    area.w = roi.width;
-                    area.h = roi.height;
-
-                    int returnCode = SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    }
-
-                    returnCode = SDL_SetRenderTarget( _renderer, nullptr );
-                    if ( returnCode < 0 ) {
-                        ERROR_LOG( "Failed to set render target. The error value: " << returnCode << ", description: " << SDL_GetError() )
-                        return;
-                    }
-                }
-
-                const int returnCode = SDL_RenderCopy( _renderer, _texture, nullptr, nullptr );
+                const int returnCode = SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
                 if ( returnCode < 0 ) {
-                    ERROR_LOG( "Failed to copy render.The error value: " << returnCode << ", description: " << SDL_GetError() )
-                    return;
+                    ERROR_LOG( "Failed to update texture. The error value: " << returnCode << ", description: " << SDL_GetError() )
                 }
-
-                SDL_RenderPresent( _renderer );
             }
+
+            int returnCode = SDL_RenderClear( _renderer );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to clear renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            returnCode = SDL_RenderCopy( _renderer, _texture, nullptr, nullptr );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to copy render.The error value: " << returnCode << ", description: " << SDL_GetError() )
+                return;
+            }
+
+            SDL_RenderPresent( _renderer );
         }
 
         bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
@@ -1045,19 +1036,42 @@ namespace
                 return false;
             }
 
+            _syncFullScreen();
+
             bool isPaletteModeSupported = false;
 
             SDL_RendererInfo rendererInfo;
-            int returnCode = SDL_GetRenderDriverInfo( 0, &rendererInfo );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
-            }
-            else {
+            _driverIndex = -1;
+
+            const uint32_t renderingFlags = renderFlags();
+
+            const int driverCount = SDL_GetNumRenderDrivers();
+            for ( int driverId = 0; driverId < driverCount; ++driverId ) {
+                int returnCode = SDL_GetRenderDriverInfo( driverId, &rendererInfo );
+                if ( returnCode < 0 ) {
+                    ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                    continue;
+                }
+
+                if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
+                    continue;
+                }
+
                 for ( uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i ) {
                     if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
+                        // Bingo! This is the best driver and format.
                         isPaletteModeSupported = true;
+                        _driverIndex = driverId;
                         break;
                     }
+                }
+
+                if ( isPaletteModeSupported ) {
+                    break;
+                }
+
+                if ( _driverIndex < 0 ) {
+                    _driverIndex = driverId;
                 }
             }
 
@@ -1102,6 +1116,7 @@ namespace
         SDL_Surface * _surface;
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
+        int _driverIndex;
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
@@ -1180,23 +1195,24 @@ namespace
 
         bool _createRenderer( const int32_t width_, const int32_t height_ )
         {
-            SDL_RendererInfo rendererInfo;
-            int returnCode = SDL_GetRenderDriverInfo( 0, &rendererInfo );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to get renderer driver info. The error value: " << returnCode << ", description: " << SDL_GetError() )
-            }
-
             const uint32_t renderingFlags = renderFlags();
-            if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
-                ERROR_LOG( "Chosen rendering driver does not support all rendering flags" )
-            }
 
             // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
-            _renderer = SDL_CreateRenderer( _window, -1, renderingFlags );
+            _renderer = SDL_CreateRenderer( _window, _driverIndex, renderingFlags );
             if ( _renderer == nullptr ) {
                 ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
                 clear();
                 return false;
+            }
+
+            int returnCode = SDL_SetRenderDrawColor( _renderer, 0, 0, 0, SDL_ALPHA_OPAQUE );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
+            }
+
+            returnCode = SDL_SetRenderTarget( _renderer, nullptr );
+            if ( returnCode < 0 ) {
+                ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
 
             if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
@@ -1229,6 +1245,15 @@ namespace
             _toggleMouseCaptureMode();
 
             return true;
+        }
+
+        void _syncFullScreen()
+        {
+            if ( isFullScreen() != BaseRenderEngine::isFullScreen() ) {
+                BaseRenderEngine::toggleFullScreen();
+
+                assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
+            }
         }
     };
 #else
@@ -1267,6 +1292,7 @@ namespace
                 _surface = SDL_SetVideoMode( 0, 0, _bitDepth, flags );
             }
 
+            _syncFullScreen();
             _createPalette();
         }
 
@@ -1371,6 +1397,8 @@ namespace
                 return false;
             }
 
+            _syncFullScreen();
+
             if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != width_ || _surface->h != height_ ) {
                 clear();
                 return false;
@@ -1430,6 +1458,15 @@ namespace
                         linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                     }
                 }
+            }
+        }
+
+        void _syncFullScreen()
+        {
+            if ( isFullScreen() != BaseRenderEngine::isFullScreen() ) {
+                BaseRenderEngine::toggleFullScreen();
+
+                assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
             }
         }
     };

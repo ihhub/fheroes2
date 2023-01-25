@@ -64,8 +64,6 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     if ( !hero )
         return Dialog::CANCEL;
 
-    const int system = ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM );
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
@@ -124,17 +122,22 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     rbs.SetPos( dst_pt.x, dst_pt.y + heroDescriptionText.h() + spacer );
     rbs.Redraw();
 
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const int okayButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
+
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
-    fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( okayButtonIcnID, 0 ).height();
+    fheroes2::Button button1( dst_pt.x, dst_pt.y, okayButtonIcnID, 0, 1 );
 
     if ( !AllowBuyHero() ) {
         button1.disable();
     }
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
-    fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
+    const int cancelButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
+
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
+    fheroes2::Button button2( dst_pt.x, dst_pt.y, cancelButtonIcnID, 0, 1 );
 
     button1.draw();
     button2.draw();
@@ -449,7 +452,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     // button exit
     dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALLER_EXIT, 0, 1 );
 
     if ( GetKingdom().GetCastles().size() < 2 ) {
         buttonPrevCastle.disable();
@@ -482,11 +485,11 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             break;
 
         if ( buttonPrevCastle.isEnabled()
-             && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
             return ConstructionDialogResult::PrevConstructionWindow;
         }
         if ( buttonNextCastle.isEnabled()
-             && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
             return ConstructionDialogResult::NextConstructionWindow;
         }
 

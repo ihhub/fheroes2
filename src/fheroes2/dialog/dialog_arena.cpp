@@ -168,11 +168,11 @@ int Dialog::SelectSkillFromArena()
 
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
             res = InfoSkillPrev( res );
             redraw = true;
         }
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) && Skill::Primary::UNKNOWN != InfoSkillNext( res ) ) {
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) && Skill::Primary::UNKNOWN != InfoSkillNext( res ) ) {
             res = InfoSkillNext( res );
             redraw = true;
         }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -140,7 +140,7 @@ std::string Army::TroopSizeString( const Troop & troop )
         break;
     }
 
-    StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+    StringReplaceWithLowercase( str, "%{monster}", troop.GetMultiName() );
     return str;
 }
 
@@ -177,15 +177,13 @@ std::string Army::SizeString( uint32_t size )
 Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
 {
-    *this = troops;
-}
+    reserve( troops.size() );
 
-Troops & Troops::operator=( const Troops & rhs )
-{
-    reserve( rhs.size() );
-    for ( const_iterator it = rhs.begin(); it != rhs.end(); ++it )
-        push_back( new Troop( **it ) );
-    return *this;
+    for ( const Troop * troop : troops ) {
+        assert( troop != nullptr );
+
+        push_back( new Troop( *troop ) );
+    }
 }
 
 Troops::~Troops()
@@ -899,7 +897,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
     }
 
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_DERELICT_SHIP:
         ArrangeForBattle( Monster::SKELETON, 200, tile.GetIndex(), false );
         break;
 
@@ -934,7 +932,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         }
         break;
 
-    case MP2::OBJ_CITYDEAD:
+    case MP2::OBJ_CITY_OF_DEAD:
         at( 0 )->Set( Monster::ZOMBIE, 20 );
         at( 1 )->Set( Monster::VAMPIRE_LORD, 5 );
         at( 2 )->Set( Monster::POWER_LICH, 5 );
@@ -942,7 +940,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 4 )->Set( Monster::ZOMBIE, 20 );
         break;
 
-    case MP2::OBJ_TROLLBRIDGE:
+    case MP2::OBJ_TROLL_BRIDGE:
         at( 0 )->Set( Monster::TROLL, 4 );
         at( 1 )->Set( Monster::WAR_TROLL, 4 );
         at( 2 )->Set( Monster::TROLL, 4 );
@@ -950,7 +948,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 4 )->Set( Monster::TROLL, 4 );
         break;
 
-    case MP2::OBJ_DRAGONCITY: {
+    case MP2::OBJ_DRAGON_CITY: {
         uint32_t monsterCount = 1;
         if ( Settings::Get().isCampaignGameType() ) {
             const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
@@ -967,14 +965,14 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
     }
 
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         at( 0 )->Set( Monster::EARTH_ELEMENT, 2 );
         at( 1 )->Set( Monster::EARTH_ELEMENT, 2 );
         at( 2 )->Set( Monster::EARTH_ELEMENT, 2 );
         at( 3 )->Set( Monster::EARTH_ELEMENT, 2 );
         break;
 
-    case MP2::OBJ_ABANDONEDMINE: {
+    case MP2::OBJ_ABANDONED_MINE: {
         const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
         assert( troop.isValid() );
 

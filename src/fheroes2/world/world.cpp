@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -53,7 +53,6 @@
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
@@ -287,7 +286,7 @@ void CapturedObjects::ClearFog( int colors )
 
             switch ( objcol.first ) {
             case MP2::OBJ_MINES:
-            case MP2::OBJ_ALCHEMYLAB:
+            case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_SAWMILL:
                 scoute = 2;
                 break;
@@ -409,15 +408,15 @@ void World::NewMaps( int32_t sw, int32_t sh )
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         MP2::mp2tile_t mp2tile;
 
-        mp2tile.surfaceType = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
+        mp2tile.terrainImageIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
         mp2tile.objectName1 = 0; // object sprite level 1
         mp2tile.level1IcnImageIndex = 0xff; // index sprite level 1
         mp2tile.quantity1 = 0;
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
         mp2tile.level2IcnImageIndex = 0xff; // index sprite level 2
-        mp2tile.flags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        mp2tile.mapObjectType = MP2::OBJ_ZERO;
+        mp2tile.terrainFlags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
+        mp2tile.mapObjectType = MP2::OBJ_NONE;
         mp2tile.nextAddonIndex = 0;
         mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.
         mp2tile.level2ObjectUID = 0;
@@ -788,7 +787,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
 
     const Maps::Tiles & entranceTile = GetTiles( index );
 
-    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONELITHS ) {
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONE_LITHS ) {
         return result;
     }
 
@@ -865,7 +864,7 @@ uint32_t World::CountCapturedMines( int type, int color ) const
     case Resource::WOOD:
         return CountCapturedObject( MP2::OBJ_SAWMILL, color );
     case Resource::MERCURY:
-        return CountCapturedObject( MP2::OBJ_ALCHEMYLAB, color );
+        return CountCapturedObject( MP2::OBJ_ALCHEMIST_LAB, color );
     default:
         break;
     }
@@ -932,19 +931,18 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
     Maps::Tiles & tile = GetTiles( center.x, center.y );
 
     // Get digging hole sprite.
-    uint8_t obj = 0;
-    uint32_t idx = 0;
+    uint8_t objectType = 0;
+    uint8_t imageIndex = 0;
 
-    if ( !MP2::getDiggingHoleSprite( tile.GetGround(), obj, idx ) ) {
+    if ( !MP2::getDiggingHoleSprite( tile.GetGround(), objectType, imageIndex ) ) {
         // Are you sure that you can dig here?
         assert( 0 );
 
         return false;
     }
 
-    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), obj, idx ) );
+    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), objectType, imageIndex ) );
 
-    // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
         return true;
@@ -1149,7 +1147,7 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
     if ( conf.isCampaignGameType() ) {
         const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
         if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
+            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGON_CITY );
             if ( visited ) {
                 return GameOver::WINS_SIDE;
             }
@@ -1262,7 +1260,7 @@ void World::PostLoad( const bool setTilePassabilities )
     // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
     _allTeleports.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true ) ) {
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS, true ) ) {
         _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
     }
 
@@ -1310,16 +1308,7 @@ StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 
 StreamBase & operator>>( StreamBase & msg, CapturedObject & obj )
 {
-    msg >> obj.objcol >> obj.guardians;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE1_1000_RELEASE ) {
-        int dummy;
-
-        msg >> dummy;
-    }
-
-    return msg;
+    return msg >> obj.objcol >> obj.guardians;
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )

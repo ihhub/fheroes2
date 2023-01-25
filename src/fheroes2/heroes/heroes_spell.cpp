@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -470,8 +470,8 @@ namespace
         listbox.RedrawBackground( activeArea.getPosition() );
         listbox.Redraw();
 
-        const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
-        const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
+        const int okIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        const int cancelIcnId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
         const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
         const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
 
@@ -601,7 +601,7 @@ namespace
             if ( spell == Spell::HAUNT ) {
                 world.CaptureObject( tile.GetIndex(), Color::NONE );
                 tile.removeOwnershipFlag( MP2::OBJ_MINES );
-                hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
+                hero.SetMapsObject( MP2::OBJ_ABANDONED_MINE );
             }
 
             world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );

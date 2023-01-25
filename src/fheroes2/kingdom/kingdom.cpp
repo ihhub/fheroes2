@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -53,7 +53,6 @@
 #include "profit.h"
 #include "race.h"
 #include "route.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -438,9 +437,9 @@ uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) con
 }
 
 /* set visited cell */
-void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
+void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_NONE )
 {
-    if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_ZERO )
+    if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_NONE )
         visit_object.push_front( IndexObject( index, objectType ) );
 }
 
@@ -686,7 +685,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     return getHandicapDependentIncome( totalIncome, player->getHandicapStatus() );
 }
 
-Heroes * Kingdom::GetBestHero()
+Heroes * Kingdom::GetBestHero() const
 {
     return !heroes.empty() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : nullptr;
 }
@@ -959,18 +958,9 @@ StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
-        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topCastleInKingdomView;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0921_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_0921_RELEASE ) {
-        msg >> kingdom._topHeroInKingdomView;
-    }
-    else {
-        kingdom._topHeroInKingdomView = -1;
-    }
-
-    return msg;
+    return msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
+           >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topCastleInKingdomView
+           >> kingdom._topHeroInKingdomView;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )

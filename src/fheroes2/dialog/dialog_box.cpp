@@ -175,7 +175,7 @@ Dialog::NonFixedFrameBox::~NonFixedFrameBox()
 {
     _restorer->restore();
 
-    fheroes2::Display::instance().render();
+    fheroes2::Display::instance().render( _restorer->rect() );
 }
 
 Dialog::FrameBox::FrameBox( int height, bool buttons )

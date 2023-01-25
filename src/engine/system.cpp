@@ -390,8 +390,9 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 {
     correctedPath.clear();
 
-    if ( path.empty() )
+    if ( path.empty() ) {
         return false;
+    }
 
     DIR * d;
     bool last = false;
@@ -399,10 +400,11 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
     const char * delimiter = "/";
 
     if ( path[0] == delimiter[0] ) {
+        correctedPath.append( delimiter );
+
         d = opendir( delimiter );
     }
     else {
-        correctedPath = curDir[0];
         d = opendir( curDir );
     }
 
@@ -417,7 +419,9 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
             return false;
         }
 
-        correctedPath.append( delimiter );
+        if ( subPathIter != splittedPath.begin() ) {
+            correctedPath.append( delimiter );
+        }
 
         // Avoid directory traversal and try to probe directory name directly.
         // Speeds up file lookup when intermediate directories have a lot of
@@ -464,8 +468,9 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
         }
     }
 
-    if ( d )
+    if ( d ) {
         closedir( d );
+    }
 
     return !last;
 }

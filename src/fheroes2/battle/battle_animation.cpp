@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -104,10 +104,15 @@ int AnimationSequence::firstFrame() const
 
 double AnimationSequence::movementProgress() const
 {
-    if ( _seq.size() > 1 )
-        return static_cast<double>( _currentFrame ) / ( static_cast<double>( animationLength() ) );
+    if ( !isValid() ) {
+        return 0;
+    }
 
-    return 0;
+    // We return the progress coefficient for moving creature sprite from one position to another.
+    // At the start and the end of the path we also have creature's static position,
+    // but there is no such position on the cells which creature path through.
+    // So to make the movement start and end more smoothly we add 0.5 to the frame number (since it starts from zero).
+    return ( static_cast<double>( _currentFrame ) + 0.5 ) / static_cast<double>( animationLength() );
 }
 
 bool AnimationSequence::isLastFrame() const
@@ -142,6 +147,8 @@ AnimationReference::AnimationReference( int monsterID )
     // Taking damage
     appendFrames( _wince, Bin_Info::MonsterAnimInfo::WINCE_UP );
     appendFrames( _wince, Bin_Info::MonsterAnimInfo::WINCE_END ); // TODO: play it back together for now
+    appendFrames( _winceUp, Bin_Info::MonsterAnimInfo::WINCE_UP );
+    appendFrames( _winceDown, Bin_Info::MonsterAnimInfo::WINCE_END );
     appendFrames( _death, Bin_Info::MonsterAnimInfo::DEATH );
 
     // Idle animations
@@ -164,8 +171,12 @@ AnimationReference::AnimationReference( int monsterID )
     if ( _monsterInfo.hasAnim( Bin_Info::MonsterAnimInfo::MOVE_ONE ) ) {
         appendFrames( _moveOneTile, Bin_Info::MonsterAnimInfo::MOVE_ONE );
     }
-    else { // TODO: this must be LICH or POWER_LICH. Check it!
-        _moveOneTile = _moving;
+    else {
+        // If there is no animation for one tile movement (fix for LICH and POWER_LICH)
+        // make it from sequent MOVE_START, MOVE_MAIN, MOVE_STOP.
+        appendFrames( _moveOneTile, Bin_Info::MonsterAnimInfo::MOVE_START );
+        appendFrames( _moveOneTile, Bin_Info::MonsterAnimInfo::MOVE_MAIN );
+        appendFrames( _moveOneTile, Bin_Info::MonsterAnimInfo::MOVE_STOP );
     }
 
     // First tile move: 1 + 3 + 4
@@ -228,6 +239,7 @@ bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
 const std::vector<int> & AnimationReference::getAnimationVector( int animState ) const
 {
     switch ( animState ) {
+    case Monster_Info::STAND_STILL:
     case Monster_Info::STATIC:
         return _static;
     case Monster_Info::IDLE:
@@ -279,6 +291,10 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
         return _ranged[Monster_Info::BOTTOM].start;
     case Monster_Info::RANG_BOT_END:
         return _ranged[Monster_Info::BOTTOM].end;
+    case Monster_Info::WNCE_UP:
+        return _winceUp;
+    case Monster_Info::WNCE_DOWN:
+        return _winceDown;
     case Monster_Info::WNCE:
         return _wince;
     case Monster_Info::KILL:
@@ -293,6 +309,7 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
 {
     std::vector<int> offset;
     switch ( animState ) {
+    case Monster_Info::STAND_STILL:
     case Monster_Info::STATIC:
         offset.resize( _static.size(), 0 );
         break;
@@ -315,7 +332,9 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
         offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].end() );
         break;
     case Monster_Info::MOVE_QUICK:
-        offset.resize( _moveOneTile.size(), 0 );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_START].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_MAIN].end() );
+        offset.insert( offset.end(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].begin(), _offsetX[Bin_Info::MonsterAnimInfo::MOVE_STOP].end() );
         break;
     case Monster_Info::FLY_UP:
         offset.resize( _flying.start.size(), 0 );
@@ -358,6 +377,12 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
         break;
     case Monster_Info::RANG_BOT_END:
         offset.resize( _ranged[Monster_Info::BOTTOM].end.size(), 0 );
+        break;
+    case Monster_Info::WNCE_UP:
+        offset.resize( _winceUp.size(), 0 );
+        break;
+    case Monster_Info::WNCE_DOWN:
+        offset.resize( _winceDown.size(), 0 );
         break;
     case Monster_Info::WNCE:
         offset.resize( _wince.size(), 0 );
@@ -486,6 +511,53 @@ size_t AnimationState::animationLength() const
 int AnimationState::firstFrame() const
 {
     return _currentSequence.firstFrame();
+}
+
+int32_t AnimationState::getCurrentFrameXOffset() const
+{
+    // Return the horizontal frame offset to use in rendering.
+    std::vector<int32_t> animSubsequences;
+
+    // The animations consist of some subsequences. Put into vector the animation subsequences queue.
+    switch ( _animState ) {
+    case Monster_Info::MOVE_START:
+        animSubsequences = { Bin_Info::MonsterAnimInfo::MOVE_START, Bin_Info::MonsterAnimInfo::MOVE_MAIN, Bin_Info::MonsterAnimInfo::MOVE_TILE_END };
+        break;
+    case Monster_Info::MOVING: {
+        animSubsequences = { Bin_Info::MonsterAnimInfo::MOVE_TILE_START, Bin_Info::MonsterAnimInfo::MOVE_MAIN, Bin_Info::MonsterAnimInfo::MOVE_TILE_END };
+        break;
+    }
+    case Monster_Info::MOVE_END: {
+        animSubsequences = { Bin_Info::MonsterAnimInfo::MOVE_TILE_START, Bin_Info::MonsterAnimInfo::MOVE_MAIN, Bin_Info::MonsterAnimInfo::MOVE_STOP };
+        break;
+    }
+    case Monster_Info::MOVE_QUICK: {
+        animSubsequences = { Bin_Info::MonsterAnimInfo::MOVE_START, Bin_Info::MonsterAnimInfo::MOVE_MAIN, Bin_Info::MonsterAnimInfo::MOVE_STOP };
+        break;
+    }
+    default:
+        // If there is no horizontal offset data for current animation state, return 0 as offset.
+        return 0;
+    }
+
+    // The frame number of current subsequence start.
+    size_t subequenceStart = 0;
+    // The frame number in the full animation sequence, which include subsequences.
+    const size_t currentFrame = _currentSequence.getCurrentFrameId();
+
+    // Get frame offset from _offsetX, analyzing in which subsequence it is.
+    for ( const int32_t animSubsequence : animSubsequences ) {
+        // Get the current subsequence end (it is the frame number after the last subsequence frame).
+        const size_t subequenceEnd = _offsetX[animSubsequence].size() + subequenceStart;
+        if ( currentFrame < subequenceEnd ) {
+            return _offsetX[animSubsequence][currentFrame - subequenceStart];
+        }
+        subequenceStart = subequenceEnd;
+    }
+
+    // If there is no horizontal offset data for currentFrame, return 0 as offset.
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Frame " << currentFrame << " is outside _offsetX [0 - " << subequenceStart << "] for animation state " << _animState )
+    return 0;
 }
 
 double AnimationState::movementProgress() const

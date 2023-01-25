@@ -40,12 +40,9 @@
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 
 #include <SDL_gamecontroller.h>
-#include <SDL_keycode.h>
-
-#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH ) || defined( ANDROID )
-#define TOUCH_SUPPORT
 #include <SDL_hints.h>
-#endif
+#include <SDL_keycode.h>
+#include <SDL_touch.h>
 
 #endif
 
@@ -842,7 +839,7 @@ namespace fheroes2
 
         switch ( key ) {
         // delete char
-        case fheroes2::Key::KEY_KP_4: {
+        case fheroes2::Key::KEY_LEFT: {
             if ( !res.empty() && pos ) {
                 res.resize( res.size() - 1 );
                 --pos;
@@ -850,7 +847,7 @@ namespace fheroes2
             break;
         }
         // add new char
-        case fheroes2::Key::KEY_KP_6: {
+        case fheroes2::Key::KEY_RIGHT: {
             currentUpper = res.empty();
             currentCharIndex = 0;
 
@@ -862,7 +859,7 @@ namespace fheroes2
             break;
         }
         // next char
-        case fheroes2::Key::KEY_KP_2: {
+        case fheroes2::Key::KEY_DOWN: {
             ++currentCharIndex;
             if ( currentCharIndex >= totalCharactersDPad )
                 currentCharIndex = 0;
@@ -881,7 +878,7 @@ namespace fheroes2
             break;
         }
         // previous char
-        case fheroes2::Key::KEY_KP_8: {
+        case fheroes2::Key::KEY_UP: {
             --currentCharIndex;
             if ( currentCharIndex < 0 )
                 currentCharIndex = totalCharactersDPad - 1;
@@ -998,7 +995,6 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
-#if defined( TOUCH_SUPPORT )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         fheroes2::cursor().enableSoftwareEmulation( true );
@@ -1006,7 +1002,6 @@ void LocalEvent::OpenTouchpad()
         SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
 #endif
     }
-#endif
 }
 
 #else
@@ -1237,6 +1232,18 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
                 }
             }
             break;
+        case SDL_JOYAXISMOTION:
+        case SDL_JOYBALLMOTION:
+        case SDL_JOYHATMOTION:
+        case SDL_JOYBUTTONDOWN:
+        case SDL_JOYBUTTONUP:
+        case SDL_JOYDEVICEADDED:
+        case SDL_JOYDEVICEREMOVED:
+        case SDL_CONTROLLERDEVICEREMAPPED:
+            // SDL requires joystick events to be enabled in order to handle controller events.
+            // This is because the controller related code depends on the joystick related code.
+            // See SDL_gamecontroller.c within SDL source code for implementation details.
+            break;
         case SDL_CONTROLLERAXISMOTION:
             HandleControllerAxisEvent( event.caxis );
             break;
@@ -1247,9 +1254,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
         case SDL_FINGERDOWN:
         case SDL_FINGERUP:
         case SDL_FINGERMOTION:
-#if defined( TOUCH_SUPPORT )
             HandleTouchEvent( event.tfinger );
-#endif
             break;
         case SDL_RENDER_TARGETS_RESET:
             // We need to just update the screen. This event usually happens when we switch between fullscreen and windowed modes.
@@ -1367,30 +1372,35 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
-    if ( _numTouches == 2 && _firstFingerId != event.fingerId && _secondFingerId != event.fingerId ) {
-        // We do not support more than 2 fingers.
+    switch ( event.type ) {
+    case SDL_FINGERDOWN:
+        if ( !_fingerIds.first ) {
+            _fingerIds.first = event.fingerId;
+        }
+        else if ( !_fingerIds.second ) {
+            _fingerIds.second = event.fingerId;
+        }
+        else {
+            // Gestures of more than two fingers are not supported, ignore
+            return;
+        }
+
+        break;
+    case SDL_FINGERUP:
+    case SDL_FINGERMOTION:
+        if ( event.fingerId != _fingerIds.first && event.fingerId != _fingerIds.second ) {
+            // An event from an unknown finger, ignore
+            return;
+        }
+
+        break;
+    default:
+        // Unknown event, this should never happen
+        assert( 0 );
         return;
     }
 
-    if ( event.type == SDL_FINGERDOWN ) {
-        if ( _numTouches == 0 ) {
-            _firstFingerId = event.fingerId;
-            ++_numTouches;
-        }
-        else if ( _numTouches == 1 ) {
-            _secondFingerId = event.fingerId;
-            ++_numTouches;
-        }
-    }
-    else if ( event.type == SDL_FINGERUP ) {
-        --_numTouches;
-    }
-
-    // Ignore first finger movement if the second finger is pressed.
-    const bool isFirstFinger = ( _numTouches < 2 && _firstFingerId == event.fingerId );
-    const bool isSecondFinger = ( _secondFingerId == event.fingerId );
-
-    if ( isFirstFinger || isSecondFinger ) {
+    if ( event.fingerId == _fingerIds.first ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
@@ -1407,44 +1417,42 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
         mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
-    }
 
-    if ( isFirstFinger ) {
         SetModes( MOUSE_MOTION );
 
         if ( _globalMouseMotionEventHook ) {
             _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
         }
 
-        if ( event.type == SDL_FINGERDOWN ) {
-            mouse_pl = mouse_cu;
+        // If there is a two-finger gesture in progress, the first finger is only used to move the cursor.
+        // The operation of the left mouse button is not simulated.
+        if ( !_isTwoFingerGestureInProgress ) {
+            if ( event.type == SDL_FINGERDOWN ) {
+                mouse_pl = mouse_cu;
 
-            SetModes( MOUSE_PRESSED );
-        }
-        else if ( event.type == SDL_FINGERUP ) {
-            mouse_rl = mouse_cu;
-
-            ResetModes( MOUSE_PRESSED );
-            SetModes( MOUSE_RELEASED );
-            SetModes( MOUSE_CLICKED );
-        }
-
-        mouse_button = SDL_BUTTON_LEFT;
-    }
-    else if ( isSecondFinger ) {
-        if ( _numTouches < 2 ) {
-            // Only the second finger is pressing.
-            SetModes( MOUSE_MOTION );
-
-            if ( _globalMouseMotionEventHook ) {
-                _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
+                SetModes( MOUSE_PRESSED );
             }
-        }
+            else if ( event.type == SDL_FINGERUP ) {
+                mouse_rl = mouse_cu;
 
+                ResetModes( MOUSE_PRESSED );
+                SetModes( MOUSE_RELEASED );
+                SetModes( MOUSE_CLICKED );
+            }
+
+            mouse_button = SDL_BUTTON_LEFT;
+        }
+    }
+    else if ( event.fingerId == _fingerIds.second ) {
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pr = mouse_cu;
 
             SetModes( MOUSE_PRESSED );
+
+            // When the second finger touches the screen, the two-finger gesture processing begins. This
+            // gesture simulates the operation of the right mouse button and ends when both fingers are
+            // removed from the screen.
+            _isTwoFingerGestureInProgress = true;
         }
         else if ( event.type == SDL_FINGERUP ) {
             mouse_rr = mouse_cu;
@@ -1455,6 +1463,25 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         }
 
         mouse_button = SDL_BUTTON_RIGHT;
+    }
+
+    // The finger no longer touches the screen, reset its state
+    if ( event.type == SDL_FINGERUP ) {
+        if ( event.fingerId == _fingerIds.first ) {
+            _fingerIds.first.reset();
+        }
+        else if ( event.fingerId == _fingerIds.second ) {
+            _fingerIds.second.reset();
+        }
+        else {
+            // An event from an unknown finger, this should never happen
+            assert( 0 );
+        }
+
+        // Both fingers are removed from the screen, cancel the two-finger gesture
+        if ( !_fingerIds.first && !_fingerIds.second ) {
+            _isTwoFingerGestureInProgress = false;
+        }
     }
 }
 
@@ -1533,16 +1560,16 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
                 key_value = fheroes2::Key::KEY_SHIFT;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
-                key_value = fheroes2::Key::KEY_KP_4;
+                key_value = fheroes2::Key::KEY_LEFT;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
-                key_value = fheroes2::Key::KEY_KP_6;
+                key_value = fheroes2::Key::KEY_RIGHT;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_UP ) {
-                key_value = fheroes2::Key::KEY_KP_8;
+                key_value = fheroes2::Key::KEY_UP;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
-                key_value = fheroes2::Key::KEY_KP_2;
+                key_value = fheroes2::Key::KEY_DOWN;
             }
             return;
         }
@@ -1632,13 +1659,13 @@ void LocalEvent::ProcessControllerAxisMotion()
         SetModes( KEY_PRESSED );
 
         if ( _controllerRightXAxis < 0 )
-            key_value = fheroes2::Key::KEY_KP_4;
+            key_value = fheroes2::Key::KEY_LEFT;
         else if ( _controllerRightXAxis > 0 )
-            key_value = fheroes2::Key::KEY_KP_6;
+            key_value = fheroes2::Key::KEY_RIGHT;
         else if ( _controllerRightYAxis < 0 )
-            key_value = fheroes2::Key::KEY_KP_8;
+            key_value = fheroes2::Key::KEY_UP;
         else if ( _controllerRightYAxis > 0 )
-            key_value = fheroes2::Key::KEY_KP_2;
+            key_value = fheroes2::Key::KEY_DOWN;
     }
     else if ( _controllerScrollActive ) {
         ResetModes( KEY_PRESSED );
@@ -1936,27 +1963,19 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_MOUSEBUTTONDOWN, true );
     setEventProcessingState( SDL_MOUSEBUTTONUP, true );
     setEventProcessingState( SDL_MOUSEWHEEL, true );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYAXISMOTION, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYBALLMOTION, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYHATMOTION, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYBUTTONDOWN, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYBUTTONUP, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYDEVICEADDED, false );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_JOYDEVICEREMOVED, false );
+    setEventProcessingState( SDL_JOYAXISMOTION, true );
+    setEventProcessingState( SDL_JOYBALLMOTION, true );
+    setEventProcessingState( SDL_JOYHATMOTION, true );
+    setEventProcessingState( SDL_JOYBUTTONDOWN, true );
+    setEventProcessingState( SDL_JOYBUTTONUP, true );
+    setEventProcessingState( SDL_JOYDEVICEADDED, true );
+    setEventProcessingState( SDL_JOYDEVICEREMOVED, true );
     setEventProcessingState( SDL_CONTROLLERAXISMOTION, true );
     setEventProcessingState( SDL_CONTROLLERBUTTONDOWN, true );
     setEventProcessingState( SDL_CONTROLLERBUTTONUP, true );
     setEventProcessingState( SDL_CONTROLLERDEVICEADDED, true );
     setEventProcessingState( SDL_CONTROLLERDEVICEREMOVED, true );
-    // TODO: verify why disabled processing of this event.
-    setEventProcessingState( SDL_CONTROLLERDEVICEREMAPPED, false );
+    setEventProcessingState( SDL_CONTROLLERDEVICEREMAPPED, true );
     // SDL_CONTROLLERTOUCHPADDOWN is supported from SDL 2.0.14
     // SDL_CONTROLLERTOUCHPADMOTION is supported from SDL 2.0.14
     // SDL_CONTROLLERTOUCHPADUP is supported from SDL 2.0.14
@@ -1995,15 +2014,11 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_MOUSEMOTION, true );
     setEventProcessingState( SDL_MOUSEBUTTONDOWN, true );
     setEventProcessingState( SDL_MOUSEBUTTONUP, true );
-    // TODO: verify why disabled processing of this event.
+    // SDL 1 does not support joysticks and controllers.
     setEventProcessingState( SDL_JOYAXISMOTION, false );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYBALLMOTION, false );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYHATMOTION, false );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYBUTTONDOWN, false );
-    // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_JOYBUTTONUP, false );
     setEventProcessingState( SDL_QUIT, true );
     // TODO: verify why disabled processing of this event.
