@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -116,9 +116,119 @@ Castle::Castle( int32_t cx, int32_t cy, int rc )
 
 void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 {
-    StreamBuf st( data );
+    assert( data.size() == MP2::SIZEOFMP2CASTLE );
 
-    switch ( st.get() ) {
+    // Structure containing information about town or castle.
+    //
+    // - uint8 (1 byte)
+    //     Owner color. Possible values:
+    //     00 - blue
+    //     01 - green
+    //     02 - red
+    //     03 - yellow
+    //     04 - orange
+    //     05 - purple
+    //     255 - none
+    //
+    // - uint8_t (1 byte)
+    //     Does the town / castle have custom buildings set by map creator?
+    //
+    // - uint16_t (2 bytes)
+    //    Bitfield containing common buildings within the town / castle.
+    //     0000 0000 0000 0010 : Thieves' Guild
+    //     0000 0000 0000 0100 : Tavern
+    //     0000 0000 0000 1000 : Shipyard
+    //     0000 0000 0001 0000 : Well
+    //     0000 0000 1000 0000 : Statue
+    //     0000 0001 0000 0000 : Left Turret
+    //     0000 0010 0000 0000 : Right Turret
+    //     0000 0100 0000 0000 : Marketplace
+    //     0000 1000 0000 0000 : First monster level growth building
+    //     0001 0000 0000 0000 : Moat
+    //     0010 0000 0000 0000 : Special building
+    //
+    // - uint16_t (2 bytes)
+    //     Bitfield containing information about built dwellings in the town / castle.
+    //     0000 0000 0000 1000 : level 1 dwelling
+    //     0000 0000 0001 0000 : level 2 dwelling
+    //     0000 0000 0010 0000 : level 3 dwelling
+    //     0000 0000 0100 0000 : level 4 dwelling
+    //     0000 0000 1000 0000 : level 5 dwelling
+    //     0000 0001 0000 0000 : level 6 dwelling
+    //     0000 0010 0000 0000 : upgraded level 2 dwelling
+    //     0000 0100 0000 0000 : upgraded level 3 dwelling
+    //     0000 1000 0000 0000 : upgraded level 4 dwelling
+    //     0001 0000 0000 0000 : upgraded level 5 dwelling
+    //     0010 0000 0000 0000 : upgraded level 6 dwelling
+    //
+    // - uint8_t (1 byte)
+    //     Magic Guild level.
+    //
+    // - uint8_t (1 byte)
+    //     Does the town / castle have custom set defenders?
+    //
+    // - uint8_t (1 byte)
+    //    Custom defender monster type in army slot 1.
+    //
+    // - uint8_t (1 byte)
+    //    Custom defender monster type in army slot 2.
+    //
+    // - uint8_t (1 byte)
+    //    Custom defender monster type in army slot 3.
+    //
+    // - uint8_t (1 byte)
+    //    Custom defender monster type in army slot 4.
+    //
+    // - uint8_t (1 byte)
+    //    Custom defender monster type in army slot 5.
+    //
+    // - uint16_t (2 bytes)
+    //    The number of custom defender monsters in army slot 1.
+    //
+    // - uint16_t (2 bytes)
+    //    The number of custom defender monsters in army slot 2.
+    //
+    // - uint16_t (2 bytes)
+    //    The number of custom defender monsters in army slot 3.
+    //
+    // - uint16_t (2 bytes)
+    //    The number of custom defender monsters in army slot 4.
+    //
+    // - uint16_t (2 bytes)
+    //    The number of custom defender monsters in army slot 5.
+    //
+    // - uint8_t (1 byte)
+    //     Does the town / castle have captain?
+    //
+    // - uint8_t (1 byte)
+    //     Does the town / castle have a specified name?
+    //
+    // - string of 13 bytes
+    //    Null terminated string of custom town / castle name.
+    //
+    // - uint8_t (1 byte)
+    //    Town / castle faction type. Possible values
+    //    00 - knight
+    //    01 - barbarian
+    //    02 - sorceress
+    //    03 - warlock
+    //    04 - wizard
+    //    05 - necromancer
+    //    06 - random
+    //
+    // - uint8_t (1 byte)
+    //    Is it a castle (is castle building being built)?
+    //
+    // - uint8_t (1 byte)
+    //    Is it allowed to build a castle?
+    //
+    // - unused 29 bytes
+    //    Always zeroes.
+
+    StreamBuf dataStream( data );
+
+    const uint8_t ownerColor = dataStream.get();
+    switch ( ownerColor ) {
     case 0:
         SetColor( Color::BLUE );
         break;
@@ -142,75 +252,76 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
         break;
     }
 
-    // custom building
-    if ( st.get() ) {
-        // building
-        int build = st.getLE16();
-        if ( 0x0002 & build )
+    const bool hasCustomBuildings = ( dataStream.get() != 0 );
+    if ( hasCustomBuildings ) {
+        // Common buildings.
+        const uint16_t commonBuildings = dataStream.getLE16();
+        if ( 0x0002 & commonBuildings )
             building |= BUILD_THIEVESGUILD;
-        if ( 0x0004 & build )
+        if ( 0x0004 & commonBuildings )
             building |= BUILD_TAVERN;
-        if ( 0x0008 & build )
+        if ( 0x0008 & commonBuildings )
             building |= BUILD_SHIPYARD;
-        if ( 0x0010 & build )
+        if ( 0x0010 & commonBuildings )
             building |= BUILD_WELL;
-        if ( 0x0080 & build )
+        if ( 0x0080 & commonBuildings )
             building |= BUILD_STATUE;
-        if ( 0x0100 & build )
+        if ( 0x0100 & commonBuildings )
             building |= BUILD_LEFTTURRET;
-        if ( 0x0200 & build )
+        if ( 0x0200 & commonBuildings )
             building |= BUILD_RIGHTTURRET;
-        if ( 0x0400 & build )
+        if ( 0x0400 & commonBuildings )
             building |= BUILD_MARKETPLACE;
-        if ( 0x1000 & build )
+        if ( 0x1000 & commonBuildings )
             building |= BUILD_MOAT;
-        if ( 0x0800 & build )
+        if ( 0x0800 & commonBuildings )
             building |= BUILD_WEL2;
-        if ( 0x2000 & build )
+        if ( 0x2000 & commonBuildings )
             building |= BUILD_SPEC;
 
-        // dwelling
-        int dwell = st.getLE16();
-        if ( 0x0008 & dwell )
+        // Existing dwellings.
+        const uint16_t existingDwellings = dataStream.getLE16();
+        if ( 0x0008 & existingDwellings )
             building |= DWELLING_MONSTER1;
-        if ( 0x0010 & dwell )
+        if ( 0x0010 & existingDwellings )
             building |= DWELLING_MONSTER2;
-        if ( 0x0020 & dwell )
+        if ( 0x0020 & existingDwellings )
             building |= DWELLING_MONSTER3;
-        if ( 0x0040 & dwell )
+        if ( 0x0040 & existingDwellings )
             building |= DWELLING_MONSTER4;
-        if ( 0x0080 & dwell )
+        if ( 0x0080 & existingDwellings )
             building |= DWELLING_MONSTER5;
-        if ( 0x0100 & dwell )
+        if ( 0x0100 & existingDwellings )
             building |= DWELLING_MONSTER6;
-        if ( 0x0200 & dwell )
+        if ( 0x0200 & existingDwellings )
             building |= DWELLING_UPGRADE2 | DWELLING_MONSTER2;
-        if ( 0x0400 & dwell )
+        if ( 0x0400 & existingDwellings )
             building |= DWELLING_UPGRADE3 | DWELLING_MONSTER3;
-        if ( 0x0800 & dwell )
+        if ( 0x0800 & existingDwellings )
             building |= DWELLING_UPGRADE4 | DWELLING_MONSTER4;
-        if ( 0x1000 & dwell )
+        if ( 0x1000 & existingDwellings )
             building |= DWELLING_UPGRADE5 | DWELLING_MONSTER5;
-        if ( 0x2000 & dwell )
+        if ( 0x2000 & existingDwellings )
             building |= DWELLING_UPGRADE6 | DWELLING_MONSTER6;
 
         // magic tower
-        int level = st.get();
-        if ( 0 < level )
+        const uint8_t magicGuildLevel = dataStream.get();
+        if ( 0 < magicGuildLevel )
             building |= BUILD_MAGEGUILD1;
-        if ( 1 < level )
+        if ( 1 < magicGuildLevel )
             building |= BUILD_MAGEGUILD2;
-        if ( 2 < level )
+        if ( 2 < magicGuildLevel )
             building |= BUILD_MAGEGUILD3;
-        if ( 3 < level )
+        if ( 3 < magicGuildLevel )
             building |= BUILD_MAGEGUILD4;
-        if ( 4 < level )
+        if ( 4 < magicGuildLevel )
             building |= BUILD_MAGEGUILD5;
     }
     else {
-        st.skip( 5 );
+        // Skip reading 5 bytes corresponding to custom buildings for the town / castle.
+        dataStream.skip( 5 );
 
-        // default building
+        // Set default buildings.
         building |= DWELLING_MONSTER1;
         uint32_t dwelling2 = 0;
         switch ( Game::getDifficulty() ) {
@@ -233,36 +344,42 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
             building |= DWELLING_MONSTER2;
     }
 
-    // custom troops
-    bool custom_troops = ( st.get() != 0 );
-    if ( custom_troops ) {
+    const bool customDefenders = ( dataStream.get() != 0 );
+    if ( customDefenders ) {
         Troop troops[5];
 
         // set monster id
         for ( Troop & troop : troops )
-            troop.SetMonster( st.get() + 1 );
+            troop.SetMonster( dataStream.get() + 1 );
 
         // set count
         for ( Troop & troop : troops )
-            troop.SetCount( st.getLE16() );
+            troop.SetCount( dataStream.getLE16() );
 
         army.Assign( troops, std::end( troops ) );
         SetModes( CUSTOMARMY );
     }
-    else
-        st.skip( 15 );
+    else {
+        // Skip 15 bytes as custom defenders are not set.
+        dataStream.skip( 15 );
+    }
 
-    // captain
-    if ( st.get() )
+    const bool isCaptainAvailable = ( dataStream.get() != 0 );
+    if ( isCaptainAvailable ) {
         building |= BUILD_CAPTAIN;
+    }
 
-    // custom name
-    st.skip( 1 );
-    name = st.toString( 13 );
+    const bool isCustomTownNameSet = ( dataStream.get() != 0 );
+    if ( isCustomTownNameSet ) {
+        name = dataStream.toString( 13 );
+    }
+    else {
+        // Skip 13 bytes since the name is not set.
+        dataStream.skip( 13 );
+    }
 
-    // race
-    uint32_t kingdom_race = Players::GetPlayerRace( GetColor() );
-    switch ( st.get() ) {
+    const uint8_t castleFaction = dataStream.get();
+    switch ( castleFaction ) {
     case 0:
         race = Race::KNGT;
         break;
@@ -281,22 +398,30 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     case 5:
         race = Race::NECR;
         break;
-    default:
-        race = ( Color::NONE != GetColor() && ( Race::ALL & kingdom_race ) ? kingdom_race : Race::Rand() );
+    default: {
+        const uint32_t kingdomRace = Players::GetPlayerRace( GetColor() );
+        race = ( Color::NONE != GetColor() && ( Race::ALL & kingdomRace ) ? kingdomRace : Race::Rand() );
         break;
     }
+    }
 
-    // castle
-    building |= st.get() ? BUILD_CASTLE : BUILD_TENT;
+    const bool isCastleBuilt = ( dataStream.get() != 0 );
+    if ( isCastleBuilt ) {
+        building |= BUILD_CASTLE;
+    }
+    else {
+        building |= BUILD_TENT;
+    }
 
-    // allow upgrade to castle (0 - true, 1 - false)
-    if ( st.get() )
+    const bool allowToBuildCastle = ( dataStream.get() != 0 );
+    if ( allowToBuildCastle ) {
         ResetModes( ALLOWCASTLE );
-    else
+    }
+    else {
         SetModes( ALLOWCASTLE );
+    }
 
-    // unknown 29 byte
-    //
+    // Skip the rest of 29 bytes.
 
     PostLoad();
 }
@@ -2363,17 +2488,17 @@ bool Castle::BuyBoat() const
     Maps::Tiles & middle = world.GetTiles( index );
     Kingdom & kingdom = GetKingdom();
 
-    if ( MP2::OBJ_ZERO == left.GetObject() && left.isWater() ) {
+    if ( MP2::OBJ_NONE == left.GetObject() && left.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
         left.setBoat( Direction::RIGHT );
     }
-    else if ( MP2::OBJ_ZERO == right.GetObject() && right.isWater() ) {
+    else if ( MP2::OBJ_NONE == right.GetObject() && right.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
         right.setBoat( Direction::RIGHT );
     }
-    else if ( MP2::OBJ_ZERO == middle.GetObject() && middle.isWater() ) {
+    else if ( MP2::OBJ_NONE == middle.GetObject() && middle.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
         middle.setBoat( Direction::RIGHT );

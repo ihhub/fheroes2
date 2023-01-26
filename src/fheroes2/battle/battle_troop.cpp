@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -655,7 +655,7 @@ uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
 
 void Battle::Unit::PostKilledAction()
 {
-    // kill mirror image (master)
+    // Remove mirror image (master)
     if ( Modes( CAP_MIRROROWNER ) ) {
         modes = 0;
         mirror->hp = 0;
@@ -664,7 +664,7 @@ void Battle::Unit::PostKilledAction()
         mirror = nullptr;
         ResetModes( CAP_MIRROROWNER );
     }
-    // kill mirror image (slave)
+    // Remove mirror image (slave)
     if ( Modes( CAP_MIRRORIMAGE ) && mirror != nullptr ) {
         mirror->ResetModes( CAP_MIRROROWNER );
         mirror = nullptr;
@@ -680,20 +680,27 @@ void Battle::Unit::PostKilledAction()
 
     SetModes( TR_MOVED );
 
-    // save troop to graveyard
-    // skip mirror and summon
-    if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) )
-        Arena::GetGraveyard()->AddTroop( *this );
+    // Save to the graveyard if possible
+    if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) ) {
+        Graveyard * graveyard = Arena::GetGraveyard();
+        assert( graveyard != nullptr );
 
-    Cell * head = Board::GetCell( GetHeadIndex() );
-    Cell * tail = Board::GetCell( GetTailIndex() );
-    if ( head )
-        head->SetUnit( nullptr );
-    if ( tail )
+        graveyard->AddTroop( *this );
+    }
+
+    Cell * head = position.GetHead();
+    assert( head != nullptr );
+
+    head->SetUnit( nullptr );
+
+    if ( isWide() ) {
+        Cell * tail = position.GetTail();
+        assert( tail != nullptr );
+
         tail->SetUnit( nullptr );
+    }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", is dead..." )
-    // possible also..
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << " is dead" )
 }
 
 uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool skip_dead )
@@ -1616,14 +1623,19 @@ bool Battle::Unit::isHaveDamage() const
 
 bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
 {
-    animation.switchAnimation( rule, reverse );
-    return animation.isValid();
+    if ( rule == Monster_Info::STATIC && GetAnimationState() != Monster_Info::IDLE ) {
+        // Reset the delay before switching to the 'IDLE' animation from 'STATIC'.
+        checkIdleDelay();
+    }
+
+    // We retun true if the animation was correctly changed adn if it is valid.
+    return ( animation.switchAnimation( rule, reverse ) && animation.isValid() );
 }
 
 bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
 {
-    animation.switchAnimation( animationList, reverse );
-    return animation.isValid();
+    // We retun true if the animation was correctly changed adn if it is valid.
+    return ( animation.switchAnimation( animationList, reverse ) && animation.isValid() );
 }
 
 int Battle::Unit::M82Attk() const

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 02:36+0000\n"
+"POT-Creation-Date: 2023-01-24 08:29+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -593,6 +593,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Показать информацию для %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr "%{monster}: лететь сюда"
+
+msgid "Move %{monster} here"
+msgstr "%{monster}: идти сюда"
+
 msgid "Shoot %{monster}"
 msgstr "Стрелять в %{monster}"
 
@@ -604,12 +610,6 @@ msgstr[2] "(ещё %{count} выстрелов)"
 
 msgid "Attack %{monster}"
 msgstr "Атаковать %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "%{monster}: лететь сюда"
-
-msgid "Move %{monster} here"
-msgstr "%{monster}: идти сюда"
 
 msgid "Turn %{turn}"
 msgstr "Раунд %{turn}"
@@ -4253,6 +4253,9 @@ msgstr ""
 "его, то у него попросту нет места, чтобы его унести. Весь инвентарь героя "
 "занят."
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr "Раскопки артефакта занимают целый день. Попробуйте завтра."
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
@@ -4266,9 +4269,6 @@ msgstr "Здесь ничего. Где бы это могло быть?"
 
 msgid "Try searching on clear ground."
 msgstr "Попробуйте копать на нормальной земле."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr "Раскопки артефакта занимают целый день. Попробуйте завтра."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -6939,11 +6939,56 @@ msgstr "Нет объекта"
 msgid "Alchemist Lab"
 msgstr "Лаборатория алхимика"
 
+msgid "Sign"
+msgstr "Указатель"
+
+msgid "Buoy"
+msgstr "Буй"
+
+msgid "Skeleton"
+msgstr "Скелет"
+
 msgid "Daemon Cave"
 msgstr "Пещера демона"
 
+msgid "Treasure Chest"
+msgstr "Ларец с сокровищами"
+
 msgid "Faerie Ring"
 msgstr "Кольцо фей"
+
+msgid "Campfire"
+msgstr "Костёр"
+
+msgid "Fountain"
+msgstr "Фонтан"
+
+msgid "Gazebo"
+msgstr "Беседка"
+
+msgid "Genie Lamp"
+msgstr "Древняя лампа"
+
+msgid "Archer's House"
+msgstr "Дом стрелков"
+
+msgid "Goblin Hut"
+msgstr "Хибара гоблина"
+
+msgid "Dwarf Cottage"
+msgstr "Избушка гномов"
+
+msgid "Peasant Hut"
+msgstr "Мазанка крестьян"
+
+msgid "Stables"
+msgstr "Конюшни"
+
+msgid "Alchemist's Tower"
+msgstr "Башня алхимика"
+
+msgid "Event"
+msgstr "Событие"
 
 msgid "Dragon City"
 msgstr "Драконий город"
@@ -6960,11 +7005,17 @@ msgstr[2] "Водяных колёс"
 msgid "Mines"
 msgstr "Шахты"
 
+msgid "Monster"
+msgstr "Отряд"
+
 msgid "Obelisk"
 msgstr "Обелиск"
 
 msgid "Oasis"
 msgstr "Оазис"
+
+msgid "Resource"
+msgstr "Ресурс"
 
 msgid "Sawmill"
 msgstr "Лесопилка"
@@ -6972,11 +7023,29 @@ msgstr "Лесопилка"
 msgid "Oracle"
 msgstr "Оракул"
 
+msgid "Shrine of the First Circle"
+msgstr "Святилище 1-го круга"
+
+msgid "Shipwreck"
+msgstr "Кораблекрушение"
+
+msgid "Sea Chest"
+msgstr "Морской сундук"
+
 msgid "Desert Tent"
 msgstr "Шатёр"
 
+msgid "Stone Liths"
+msgstr "Монолиты"
+
 msgid "Wagon Camp"
 msgstr "Вагоны"
+
+msgid "Hut of the Magi"
+msgstr "Лачуга волхва"
+
+msgid "Whirlpool"
+msgstr "Водоворот"
 
 msgid "Windmill"
 msgid_plural "Windmills"
@@ -6984,20 +7053,62 @@ msgstr[0] "Ветряная мельница"
 msgstr[1] "Ветряные мельницы"
 msgstr[2] "Ветряных мельниц"
 
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "Mermaid"
+msgstr "Русалка"
+
+msgid "Boat"
+msgstr "Корабль"
+
+msgid "Random Ultimate Artifact"
+msgstr "Случайный великий артефакт"
+
+msgid "Random Artifact"
+msgstr "Случайный артефакт"
+
+msgid "Random Resource"
+msgstr "Случайный ресурс"
+
+msgid "Random Monster"
+msgstr "Случайный Монстр"
+
 msgid "Random Town"
 msgstr "Случайный город"
 
 msgid "Random Castle"
 msgstr "Случайный замок"
 
+msgid "Eye of the Magi"
+msgstr "Око волхва"
+
+msgid "Random Monster - weak"
+msgstr "Случайный слабый монстр"
+
+msgid "Random Monster - medium"
+msgstr "Случайный средний монстр"
+
+msgid "Random Monster - strong"
+msgstr "Случайный сильный монстр"
+
+msgid "Random Monster - very strong"
+msgstr "Случайный великий монстр"
+
+msgid "Nothing Special"
+msgstr "Ничего особенного"
+
+msgid "Mossy Rock"
+msgstr ""
+
 msgid "Watch Tower"
 msgstr "Обзорная башня"
 
-msgid "Tree City"
-msgstr "Древо-город"
-
 msgid "Tree House"
 msgstr "Домик на дереве"
+
+msgid "Tree City"
+msgstr "Древо-город"
 
 msgid "Ruins"
 msgstr "Руины"
@@ -7007,6 +7118,15 @@ msgstr "Форт"
 
 msgid "Abandoned Mine"
 msgstr "Заброшенная шахта"
+
+msgid "Sirens"
+msgstr "Сирены"
+
+msgid "Standing Stones"
+msgstr "Стоячие камни"
+
+msgid "Idol"
+msgstr "Идол"
 
 msgid "Tree of Knowledge"
 msgstr "Древо знаний"
@@ -7026,14 +7146,32 @@ msgstr "Нора"
 msgid "Mercenary Camp"
 msgstr "Лагерь наёмников"
 
+msgid "Shrine of the Second Circle"
+msgstr "Святилище 2-го круга"
+
+msgid "Shrine of the Third Circle"
+msgstr "Святилище 3-го круга"
+
 msgid "City of the Dead"
 msgstr "Город мёртвых"
 
 msgid "Sphinx"
 msgstr "Сфинкс"
 
+msgid "Wagon"
+msgstr "Тележка"
+
+msgid "Tar Pit"
+msgstr "Смоляная яма"
+
+msgid "Artesian Spring"
+msgstr "Артезианский источник"
+
 msgid "Troll Bridge"
 msgstr "Мост троллей"
+
+msgid "Watering Hole"
+msgstr "Промоина"
 
 msgid "Witch's Hut"
 msgstr "Хижина ведьмы"
@@ -7041,188 +7179,17 @@ msgstr "Хижина ведьмы"
 msgid "Xanadu"
 msgstr "Ксанаду"
 
-msgid "Magellan's Maps"
-msgstr "Магеллан"
-
-msgid "Derelict Ship"
-msgstr "Заброшенный корабль"
-
-msgid "Shipwreck"
-msgstr "Кораблекрушение"
-
-msgid "Observation Tower"
-msgstr "Обзорная башня"
-
-msgid "Freeman's Foundry"
-msgstr "Литейная"
-
-msgid "Watering Hole"
-msgstr "Промоина"
-
-msgid "Artesian Spring"
-msgstr "Артезианский источник"
-
-msgid "Gazebo"
-msgstr "Беседка"
-
-msgid "Archer's House"
-msgstr "Дом стрелков"
-
-msgid "Peasant Hut"
-msgstr "Мазанка крестьян"
-
-msgid "Dwarf Cottage"
-msgstr "Избушка гномов"
-
-msgid "Stone Liths"
-msgstr "Монолиты"
-
-msgid "Magic Well"
-msgstr "Волшебный колодец"
-
-msgid "Sign"
-msgstr "Указатель"
-
-msgid "Nothing Special"
-msgstr "Ничего особенного"
-
-msgid "Tar Pit"
-msgstr "Смоляная яма"
-
-msgid "Mound"
-msgstr "Курган"
-
-msgid "Dune"
-msgstr "Дюна"
-
-msgid "Stump"
-msgstr "Пень"
-
-msgid "Cactus"
-msgstr "Кактус"
-
-msgid "Trees"
-msgstr "Деревья"
-
-msgid "Dead Tree"
-msgstr "Сушина"
-
-msgid "Mountains"
-msgstr "Горы"
-
-msgid "Volcano"
-msgstr "Вулкан"
-
-msgid "Rock"
-msgstr "Камень"
-
-msgid "Flowers"
-msgstr "Цветы"
-
-msgid "Water Lake"
-msgstr "Озеро"
-
-msgid "Mandrake"
-msgstr "Мандрагора"
-
-msgid "Crater"
-msgstr "Кратер"
-
-msgid "Lava Pool"
-msgstr "Лавовый бассейн"
-
-msgid "Shrub"
-msgstr "Кустарник"
-
-msgid "Buoy"
-msgstr "Буй"
-
-msgid "Skeleton"
-msgstr "Скелет"
-
-msgid "Treasure Chest"
-msgstr "Ларец с сокровищами"
-
-msgid "Sea Chest"
-msgstr "Морской сундук"
-
-msgid "Campfire"
-msgstr "Костёр"
-
-msgid "Fountain"
-msgstr "Фонтан"
-
-msgid "Genie Lamp"
-msgstr "Древняя лампа"
-
-msgid "Goblin Hut"
-msgstr "Хибара гоблина"
-
-msgid "Monster"
-msgstr "Отряд"
-
-msgid "Resource"
-msgstr "Ресурс"
-
-msgid "Whirlpool"
-msgstr "Водоворот"
-
-msgid "Artifact"
-msgstr "Артефакт"
-
-msgid "Boat"
-msgstr "Корабль"
-
-msgid "Random Artifact"
-msgstr "Случайный артефакт"
-
-msgid "Random Resource"
-msgstr "Случайный ресурс"
-
-msgid "Random Monster - weak"
-msgstr "Случайный слабый монстр"
-
-msgid "Random Monster - medium"
-msgstr "Случайный средний монстр"
-
-msgid "Random Monster - strong"
-msgstr "Случайный сильный монстр"
-
-msgid "Random Monster - very strong"
-msgstr "Случайный великий монстр"
-
-msgid "Standing Stones"
-msgstr "Стоячие камни"
-
-msgid "Event"
-msgstr "Событие"
-
-msgid "Random Monster"
-msgstr "Случайный Монстр"
-
-msgid "Random Ultimate Artifact"
-msgstr "Случайный великий артефакт"
-
-msgid "Idol"
-msgstr "Идол"
-
-msgid "Shrine of the First Circle"
-msgstr "Святилище 1-го круга"
-
-msgid "Shrine of the Second Circle"
-msgstr "Святилище 2-го круга"
-
-msgid "Shrine of the Third Circle"
-msgstr "Святилище 3-го круга"
-
-msgid "Wagon"
-msgstr "Тележка"
-
 msgid "Lean-To"
 msgstr "Навес"
 
+msgid "Magellan's Maps"
+msgstr "Магеллан"
+
 msgid "Flotsam"
 msgstr "Обломки"
+
+msgid "Derelict Ship"
+msgstr "Заброшенный корабль"
 
 msgid "Shipwreck Survivor"
 msgstr "Тонущий матрос"
@@ -7230,11 +7197,71 @@ msgstr "Тонущий матрос"
 msgid "Bottle"
 msgstr "Бутылка"
 
+msgid "Magic Well"
+msgstr "Волшебный колодец"
+
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Волшебный сад"
 msgstr[1] "Волшебных сада"
 msgstr[2] "Волшебных садов"
+
+msgid "Observation Tower"
+msgstr "Обзорная башня"
+
+msgid "Freeman's Foundry"
+msgstr "Литейная"
+
+msgid "Reefs"
+msgstr "Рифы"
+
+msgid "Trees"
+msgstr "Деревья"
+
+msgid "Mountains"
+msgstr "Горы"
+
+msgid "Volcano"
+msgstr "Вулкан"
+
+msgid "Flowers"
+msgstr "Цветы"
+
+msgid "Rock"
+msgstr "Камень"
+
+msgid "Water Lake"
+msgstr "Озеро"
+
+msgid "Mandrake"
+msgstr "Мандрагора"
+
+msgid "Dead Tree"
+msgstr "Сушина"
+
+msgid "Stump"
+msgstr "Пень"
+
+msgid "Crater"
+msgstr "Кратер"
+
+msgid "Cactus"
+msgstr "Кактус"
+
+msgid "Mound"
+msgstr "Курган"
+
+msgid "Dune"
+msgstr "Дюна"
+
+msgid "Lava Pool"
+msgstr "Лавовый бассейн"
+
+msgid "Shrub"
+msgstr "Кустарник"
+
+msgid "Barrow Mounds"
+msgstr "Могильные курганы"
 
 msgid "Random Artifact - Treasure"
 msgstr "Случайный артефакт-сокровище"
@@ -7245,14 +7272,14 @@ msgstr "Случайный малый артефакт"
 msgid "Random Artifact - Major"
 msgstr "Случайный сильный артефакт"
 
-msgid "Jail"
-msgstr "Тюрьма"
+msgid "Barrier"
+msgstr "Барьер"
 
 msgid "Traveller's Tent"
 msgstr "Шатёр путника"
 
-msgid "Barrier"
-msgstr "Барьер"
+msgid "Jail"
+msgstr "Тюрьма"
 
 msgid "Fire Summoning Altar"
 msgstr "Алтарь Огня"
@@ -7265,30 +7292,6 @@ msgstr "Алтарь Земли"
 
 msgid "Water Summoning Altar"
 msgstr "Алтарь Воды"
-
-msgid "Barrow Mounds"
-msgstr "Могильные курганы"
-
-msgid "Stables"
-msgstr "Конюшни"
-
-msgid "Alchemist's Tower"
-msgstr "Башня алхимика"
-
-msgid "Hut of the Magi"
-msgstr "Лачуга волхва"
-
-msgid "Eye of the Magi"
-msgstr "Око волхва"
-
-msgid "Mermaid"
-msgstr "Русалка"
-
-msgid "Sirens"
-msgstr "Сирены"
-
-msgid "Reefs"
-msgstr "Рифы"
 
 msgid "Unknown Monster"
 msgstr "Неизвестный Монстр"

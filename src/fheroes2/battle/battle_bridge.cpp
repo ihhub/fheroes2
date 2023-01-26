@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,9 +34,9 @@ bool Battle::Bridge::isOccupied()
 {
     const Battle::Graveyard * graveyard = Arena::GetGraveyard();
 
-    // Yes if there are any troops (alive or dead) on MOAT_CELL and GATES_CELL tiles
-    return Board::GetCell( MOAT_CELL )->GetUnit() || Board::GetCell( GATES_CELL )->GetUnit() || graveyard->GetLastTroopUID( MOAT_CELL )
-           || graveyard->GetLastTroopUID( GATES_CELL );
+    // Yes if there are any troops (alive or dead) on CELL_MOAT and CELL_GATES tiles
+    return Board::GetCell( CELL_MOAT )->GetUnit() || Board::GetCell( CELL_GATES )->GetUnit() || graveyard->GetLastTroopUID( CELL_MOAT )
+           || graveyard->GetLastTroopUID( CELL_GATES );
 }
 
 bool Battle::Bridge::NeedDown( const Unit & unit, const int32_t dstIdx ) const
@@ -47,16 +47,23 @@ bool Battle::Bridge::NeedDown( const Unit & unit, const int32_t dstIdx ) const
     }
 
     if ( unit.isFlying() ) {
-        return dstIdx == GATES_CELL;
+        return dstIdx == CELL_GATES;
     }
 
     const int32_t headIdx = unit.GetHeadIndex();
 
-    if ( dstIdx == GATES_CELL && ( headIdx == CELL_AFTER_GATES || headIdx == BELOW_BRIDGE_CELL || headIdx == ABOVE_BRIDGE_CELL ) ) {
+    if ( dstIdx == CELL_GATES && ( headIdx == CELL_AFTER_GATES || headIdx == CELL_BELOW_BRIDGE || headIdx == CELL_ABOVE_BRIDGE ) ) {
         return true;
     }
-    if ( dstIdx == MOAT_CELL && headIdx != GATES_CELL ) {
+    if ( dstIdx == CELL_MOAT && headIdx != CELL_GATES ) {
         return true;
+    }
+    if ( unit.isWide() ) {
+        const int32_t tailIdx = unit.GetTailIndex();
+
+        if ( dstIdx == CELL_BEFORE_MOAT && ( tailIdx == CELL_BELOW_BRIDGE || tailIdx == CELL_ABOVE_BRIDGE ) ) {
+            return true;
+        }
     }
 
     return false;
@@ -73,16 +80,16 @@ void Battle::Bridge::SetDestroyed()
     _isDestroyed = true;
     _isDown = true;
 
-    Board::GetCell( GATES_CELL )->SetObject( 0 );
+    Board::GetCell( CELL_GATES )->SetObject( 0 );
 }
 
 void Battle::Bridge::SetPassability( const Unit & unit ) const
 {
     if ( isPassable( unit ) ) {
-        Board::GetCell( GATES_CELL )->SetObject( 0 );
+        Board::GetCell( CELL_GATES )->SetObject( 0 );
     }
     else {
-        Board::GetCell( GATES_CELL )->SetObject( 1 );
+        Board::GetCell( CELL_GATES )->SetObject( 1 );
     }
 }
 

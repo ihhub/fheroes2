@@ -36,7 +36,7 @@ jobs:
     - name: Commit changes
       run: |
         git diff --name-only -z -- files/lang/*.po \
-        | xargs -r0 bash -c 'set -e; for NAME in "$@"; do if [[ "$(git diff "-I^\"POT-Creation-Date:[^\"]*\"$" -- "$NAME")" != "" ]]; then git add -- "$NAME"; fi; done' dummy
+        | xargs -r0 bash -c 'set -e; for NAME in "$@"; do if [[ -n "$(git diff "-I^\"POT-Creation-Date:[^\"]*\"$" -- "$NAME")" ]]; then git add -- "$NAME"; fi; done' dummy
         if git commit -m "Update translation files"; then git push origin HEAD; echo "CREATE_PR=YES" >> "$GITHUB_ENV"; fi
     - name: Create PR
       if: ${{ env.CREATE_PR == 'YES' }}

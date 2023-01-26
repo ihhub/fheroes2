@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,70 +20,80 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
+#include <unordered_map>
+#include <utility>
 
 #include "battle_board.h"
-#include "battle_cell.h"
-#include "pathfinding.h"
 
 namespace Battle
 {
+    class Position;
     class Unit;
 
-    const uint16_t MAX_MOVE_COST = ARENASIZE;
+    using BattleNodeIndex = std::pair<int32_t, int32_t>;
 
-    /* BattleNode, different situations
-     * default:  from: -1, isOpen: true, cost: MAX
-     * starting: from: -1, isOpen: false, cost: 0
-     * passable: from: 0-98, isOpen: true, cost: 1+
-     * oth.unit: from: 0-98, isOpen: false, cost: 0+
-     * terrain:  from: -1, isOpen: false, cost: MAX
-     * if tile wouldn't be reached it stays as default
-     */
-    struct BattleNode : public PathfindingNode<uint16_t>
+    struct BattleNodeIndexHash final
     {
-        bool _isOpen = true;
-        bool _isLeftDirection = false;
+        std::size_t operator()( const BattleNodeIndex & index ) const noexcept
+        {
+            const uint64_t f = index.first;
+            const uint64_t s = index.second;
 
-        // BattleNode uses different default values
-        BattleNode()
-            : PathfindingNode( -1, MAX_MOVE_COST, 0 )
-        {}
+            std::hash<uint64_t> hasher;
 
-        BattleNode( int node, uint16_t cost, bool isOpen, bool isLeftDirection )
-            : PathfindingNode( node, cost, 0 )
-            , _isOpen( isOpen )
-            , _isLeftDirection( isLeftDirection )
-        {}
-
-        BattleNode( const BattleNode & ) = delete;
-        BattleNode( BattleNode && ) = default;
-
-        BattleNode & operator=( const BattleNode & ) = delete;
-        BattleNode & operator=( BattleNode && ) = delete;
-
-        // Override the base version of the call to use proper values
-        void resetNode() override;
+            return hasher( ( f << 32 ) + s );
+        }
     };
 
-    class AIBattlePathfinder : public Pathfinder<BattleNode>
+    struct BattleNode final
+    {
+        BattleNodeIndex _from = { -1, -1 };
+        // The cost of moving to this cell. May differ from _distance due to penalties (e.g. moat penalty).
+        uint32_t _cost = 0;
+        // The distance to this cell, measured in the number of cells that needs to be passed to get here.
+        uint32_t _distance = 0;
+
+        BattleNode() = default;
+        BattleNode( BattleNodeIndex node, const uint32_t cost, const uint32_t distance )
+            : _from( std::move( node ) )
+            , _cost( cost )
+            , _distance( distance )
+        {}
+    };
+
+    class BattlePathfinder final
     {
     public:
-        AIBattlePathfinder();
-        AIBattlePathfinder( const AIBattlePathfinder & ) = delete;
+        BattlePathfinder() = default;
+        BattlePathfinder( const BattlePathfinder & ) = delete;
 
-        AIBattlePathfinder & operator=( const AIBattlePathfinder & ) = delete;
+        ~BattlePathfinder() = default;
 
-        void reset() override;
-        void calculate( const Unit & unit );
-        Indexes buildPath( int targetCell ) const;
-        Indexes findTwoMovesOverlap( int targetCell, uint32_t movementRange ) const;
-        bool hexIsPassable( int targetCell ) const;
-        Indexes getAllAvailableMoves( uint32_t moveRange ) const;
+        BattlePathfinder & operator=( const BattlePathfinder & ) = delete;
+
+        // Rebuilds the graph of available positions for the given unit
+        void evaluateForUnit( const Unit & unit );
+
+        // Checks whether the given position is reachable, either on the current turn or in principle
+        bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const;
+
+        // Returns the distance to the given position (i.e. the number of cells that needs to be passed).
+        // It's the caller's responsibility to make sure that this position is reachable before calling
+        // this method.
+        uint32_t getDistance( const Position & position ) const;
+
+        // Builds and returns a path (or its part) to the given position that can be traversed during the
+        // current turn. If this position is unreachable, then an empty path is returned.
+        Indexes buildPath( const Position & position ) const;
+
+        // Returns the indexes of all cells that can be occupied by the unit's head on the current turn
+        Indexes getAllAvailableMoves() const;
 
     private:
-        bool nodeIsPassable( const BattleNode & node ) const;
-
-        Position _start;
+        std::unordered_map<BattleNodeIndex, BattleNode, BattleNodeIndexHash> _cache;
+        BattleNodeIndex _pathStart = { -1, -1 };
+        uint32_t _unitSpeed = 0;
     };
 }

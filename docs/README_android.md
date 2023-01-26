@@ -7,8 +7,11 @@ do this.
 fheroes2 requires the data files from the original Heroes of Might and Magic II. If you do not have the original game you
 can download a demo version of the game from https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip
 
-From your original Heroes 2 installation copy the directories named "DATA", "MAPS", "ANIM" and "MUSIC" into the
-"internalStorage:Android/data/org.fheroes2/files/" folder.
+If you already have a legally purchased copy of the original game, then put the directories "ANIM", "DATA", "MAPS" and "MUSIC"
+from your original Heroes of Might and Magic II installation into a ZIP archive and copy this archive to your Android device.
+
+Run the "fh2 Toolset" app, press the "Extract HoMM2 assets" button and select either the ZIP archive of the demo version or the
+ZIP archive created by you in the previous step to extract the assets of the original game to the proper place.
 
 Depending on your version of Heroes 2, the music files that need to be placed in the "MUSIC" directory can either be on your
 original CD or in the installation folder (GOG and Ubisoft).

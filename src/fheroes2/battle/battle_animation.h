@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -70,6 +70,11 @@ public:
     bool isLastFrame() const;
     virtual bool isValid() const;
 
+    inline size_t getCurrentFrameId() const
+    {
+        return _currentFrame;
+    }
+
 protected:
     std::vector<int> _seq;
     size_t _currentFrame;
@@ -131,6 +136,7 @@ public:
 
     int getFrame() const;
     int firstFrame() const;
+    int32_t getCurrentFrameXOffset() const;
     size_t animationLength() const;
     double movementProgress() const;
     bool isLastFrame() const;

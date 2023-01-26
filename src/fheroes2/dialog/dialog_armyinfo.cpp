@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -151,7 +151,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     const fheroes2::Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
     const fheroes2::Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
 
-    fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
+    const fheroes2::ImageRestorer restorer( display, shadowOffset.x, dialogOffset.y, sprite_dialog.width() - shadowShift.x, sprite_dialog.height() + shadowShift.y );
     fheroes2::Blit( spriteDialogShadow, display, dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
     fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
@@ -220,10 +220,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     LocalEvent & le = LocalEvent::Get();
     int result = Dialog::ZERO;
 
-    display.render();
+    display.render( restorer.rect() );
 
     // dialog menu loop
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
         if ( flags & BUTTONS ) {
             if ( buttonUpgrade.isEnabled() )
                 le.MousePressLeft( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
@@ -288,7 +288,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( buttonExit.isEnabled() )
                     buttonExit.draw();
 
-                display.render();
+                display.render( restorer.rect() );
             }
         }
         else {
@@ -635,7 +635,7 @@ int Dialog::ArmyJoinFree( const Troop & troop )
     const Text title( _( "Followers" ), Font::YELLOW_BIG );
 
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
-    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+    StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
     const int buttons = Dialog::YES | Dialog::NO;
@@ -689,7 +689,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
 
     StringReplace( message, "%{offer}", join );
     StringReplace( message, "%{total}", troop.GetCount() );
-    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetPluralName( join ) ) );
+    StringReplaceWithLowercase( message, "%{monster}", troop.GetPluralName( join ) );
     StringReplace( message, "%{gold}", gold );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
