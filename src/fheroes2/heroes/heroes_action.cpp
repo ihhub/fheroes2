@@ -3169,15 +3169,15 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
             fheroes2::Display & display = fheroes2::Display::instance();
 
             for ( const int32_t eyeIndex : vec_eyes ) {
-                const uint32_t & scouteRange = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
+                const int32_t & scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
 
-                Maps::ClearFog( eyeIndex, scouteRange, hero.GetColor() );
+                Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
 
                 const fheroes2::Point & eyePosition = Maps::GetPoint( eyeIndex );
 
                 I.GetGameArea().SetCenter( eyePosition );
 
-                const fheroes2::Rect eyeRoi( eyePosition.x - scouteRange, eyePosition.y - scouteRange, eyePosition.x + scouteRange + 1, eyePosition.y + scouteRange + 1 );
+                const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, eyePosition.x + scoutRange + 1, eyePosition.y + scoutRange + 1 );
 
                 I.GetRadar().SetMapRedraw( eyeRoi );
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
