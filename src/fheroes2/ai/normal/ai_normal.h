@@ -154,7 +154,7 @@ namespace AI
     private:
         void analyzeBattleState( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
-        Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        static Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
         Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
 
         BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
@@ -181,7 +181,7 @@ namespace AI
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
         // the auto battle should be interrupted (one way or another)
-        const uint32_t MAX_TURNS_WITHOUT_DEATHS = 50;
+        static const uint32_t MAX_TURNS_WITHOUT_DEATHS = 50;
 
         // Member variables related to the logic of checking the limit of the number of turns
         uint32_t _currentTurnNumber = 0;
