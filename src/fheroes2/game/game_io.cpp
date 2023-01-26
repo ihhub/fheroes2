@@ -194,9 +194,9 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     if ( ( header.status & HeaderSAV::IS_PRICE_OF_LOYALTY_MAP ) && !conf.isPriceOfLoyaltySupported() ) {
-        fheroes2::showStandardTextMessage( _( "Warning" ),
-                                           _( "This file was saved for a \"The Price of Loyalty\" map, but the corresponding game assets have not been provided to the engine." ),
-                                           Dialog::OK );
+        fheroes2::showStandardTextMessage(
+            _( "Warning" ), _( "This file was saved for a \"The Price of Loyalty\" map, but the corresponding game assets have not been provided to the engine." ),
+            Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
