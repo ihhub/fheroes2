@@ -114,7 +114,7 @@ namespace
 
         // Some operating systems do not work well with SDL so they return very limited number of high resolutions.
         // Populate missing resolutions into the list.
-        const std::vector<fheroes2::ResolutionInfo> possibleResolutions
+        const std::set<fheroes2::ResolutionInfo> possibleResolutions
             = { { 640, 480, 1 },   { 800, 600, 1 },  { 1024, 768, 1 },  { 1152, 864, 1 }, { 1280, 600, 1 }, { 1280, 720, 1 },  { 1280, 768, 1 }, { 1280, 960, 1 },
                 { 1280, 1024, 1 }, { 1360, 768, 1 }, { 1400, 1050, 1 }, { 1440, 900, 1 }, { 1600, 900, 1 }, { 1680, 1050, 1 }, { 1920, 1080, 1 } };
 
