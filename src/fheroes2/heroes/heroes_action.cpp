@@ -2088,11 +2088,18 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     hero.GetPath().Hide();
     hero.FadeOut();
 
+    Interface::Basic & I = Interface::Basic::Get();
+    fheroes2::Point heroPosition = hero.GetCenter();
+    // Before entering a teleport the hero can be near it or already in teleport.
+    I.GetRadar().SetMapRedraw( fheroes2::Rect( heroPosition.x - 1, heroPosition.y - 1, heroPosition.x + 2, heroPosition.y + 2 ) );
+
     // No action and no penalty
     hero.Move2Dest( index_to );
 
-    Interface::Basic & I = Interface::Basic::Get();
-    const fheroes2::Point heroPosition = hero.GetCenter();
+    // Clear the previous hero position
+    I.Redraw( Interface::REDRAW_RADAR );
+
+    heroPosition = hero.GetCenter();
     I.GetGameArea().SetCenter( heroPosition );
     const int32_t scoutRange = hero.GetScoute();
     const fheroes2::Rect heroRoi( heroPosition.x - scoutRange, heroPosition.y - scoutRange, heroPosition.x + scoutRange + 1, heroPosition.y + scoutRange + 1 );
@@ -2125,11 +2132,18 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     hero.GetPath().Hide();
     hero.FadeOut();
 
+    Interface::Basic & I = Interface::Basic::Get();
+    fheroes2::Point heroPosition = hero.GetCenter();
+    // Before entering a teleport the hero can be near it or already in teleport.
+    I.GetRadar().SetMapRedraw( fheroes2::Rect( heroPosition.x - 1, heroPosition.y - 1, heroPosition.x + 2, heroPosition.y + 2 ) );
+
     // No action and no penalty
     hero.Move2Dest( index_to );
 
-    Interface::Basic & I = Interface::Basic::Get();
-    const fheroes2::Point heroPosition = hero.GetCenter();
+    // Clear the previous hero position
+    I.Redraw( Interface::REDRAW_RADAR );
+
+    heroPosition = hero.GetCenter();
     I.GetGameArea().SetCenter( heroPosition );
     const int32_t scoutRange = hero.GetScoute();
     const fheroes2::Rect heroRoi( heroPosition.x - scoutRange, heroPosition.y - scoutRange, heroPosition.x + scoutRange + 1, heroPosition.y + scoutRange + 1 );
