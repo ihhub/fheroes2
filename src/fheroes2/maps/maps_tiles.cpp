@@ -1916,18 +1916,23 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
         const uint8_t originalObjectSpriteIndex = tile.GetObjectSpriteIndex();
         switch ( originalObjectSpriteIndex ) {
+        // Random monster placeholder "MON"
         case 66:
             monsterObjectType = MP2::OBJ_RANDOM_MONSTER;
             break;
+        // Random monster placeholder "MON 1"
         case 67:
             monsterObjectType = MP2::OBJ_RANDOM_MONSTER_WEAK;
             break;
+        // Random monster placeholder "MON 2"
         case 68:
             monsterObjectType = MP2::OBJ_RANDOM_MONSTER_MEDIUM;
             break;
+        // Random monster placeholder "MON 3"
         case 69:
             monsterObjectType = MP2::OBJ_RANDOM_MONSTER_STRONG;
             break;
+        // Random monster placeholder "MON 4"
         case 70:
             monsterObjectType = MP2::OBJ_RANDOM_MONSTER_VERY_STRONG;
             break;
