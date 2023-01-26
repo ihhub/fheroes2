@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -353,10 +353,12 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
 
     buttonOk.draw();
     buttonCancel.draw();
-    if ( buttonMax.isEnabled() )
+    if ( buttonMax.isEnabled() ) {
         buttonMax.draw();
-    if ( buttonMin.isEnabled() )
+    }
+    if ( buttonMin.isEnabled() ) {
         buttonMin.draw();
+    }
     buttonUp.draw();
     buttonDn.draw();
     monsterSwitchLeft.draw();
@@ -373,8 +375,9 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
     while ( le.HandleEvents() ) {
         bool redraw = false;
 
-        if ( buttonOk.isEnabled() )
+        if ( buttonOk.isEnabled() ) {
             le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        }
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         le.MousePressLeft( buttonUp.area() ) ? buttonUp.drawOnPress() : buttonUp.drawOnRelease();
         le.MousePressLeft( buttonDn.area() ) ? buttonDn.drawOnPress() : buttonDn.drawOnRelease();
@@ -382,12 +385,15 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
         le.MousePressLeft( monsterSwitchLeft.area() ) ? monsterSwitchLeft.drawOnPress() : monsterSwitchLeft.drawOnRelease();
         le.MousePressLeft( monsterSwitchRight.area() ) ? monsterSwitchRight.drawOnPress() : monsterSwitchRight.drawOnRelease();
 
-        if ( buttonMax.isEnabled() )
+        if ( buttonMax.isEnabled() ) {
             le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
-        if ( buttonMin.isEnabled() )
+        }
+        if ( buttonMin.isEnabled() ) {
             le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
+        }
 
         bool updateCost = false;
+
         if ( allowDowngradedMonster && upgrades.size() > 1 ) {
             if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.KeyPress( fheroes2::Key::KEY_LEFT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
@@ -428,15 +434,21 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
             maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
         }
 
-        bool skipEventCheck = false;
+        bool skipHotKeyCheck = false;
+
         if ( le.MousePressRight( monsterArea ) ) {
-            Dialog::ArmyInfo( Troop( monster, available ), Dialog::READONLY );
-            redraw = true;
+            ArmyInfo( Troop( monster, available ), READONLY );
+
+            // Perform a full rendering to properly restore the parts of the screen outside of this dialog
+            display.render();
         }
         else if ( le.MouseClickLeft( monsterArea ) ) {
-            Dialog::ArmyInfo( Troop( monster, available ), Dialog::READONLY | Dialog::BUTTONS );
-            redraw = true;
-            skipEventCheck = true;
+            ArmyInfo( Troop( monster, available ), READONLY | BUTTONS );
+
+            skipHotKeyCheck = true;
+
+            // Perform a full rendering to properly restore the parts of the screen outside of this dialog
+            display.render();
         }
 
         if ( fheroes2::PressIntKey( max, result ) ) {
@@ -531,10 +543,11 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
             display.render( back.rect() );
         }
 
-        if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) )
+        if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) && !skipHotKeyCheck ) ) ) {
             break;
+        }
 
-        if ( le.MouseClickLeft( buttonCancel.area() ) || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) && !skipEventCheck ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) && !skipHotKeyCheck ) ) {
             result = 0;
             break;
         }

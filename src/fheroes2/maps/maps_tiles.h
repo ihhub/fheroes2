@@ -170,17 +170,7 @@ namespace Maps
 
         bool isWater() const
         {
-            return 30 > TileSpriteIndex();
-        }
-
-        uint32_t TileSpriteIndex() const
-        {
-            return pack_sprite_index & 0x3FFF;
-        }
-
-        uint32_t TileSpriteShape() const
-        {
-            return pack_sprite_index >> 14;
+            return 30 > _terrainImageIndex;
         }
 
         const fheroes2::Image & GetTileSurface() const;
@@ -406,8 +396,6 @@ namespace Maps
 
         bool isDetachedObject() const;
 
-        void SetTerrain( uint32_t sprite_index, uint32_t shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
-
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
         static void UpdateMonsterPopulation( Tiles & );
@@ -431,7 +419,10 @@ namespace Maps
         Addons addons_level2; // top layer
 
         int32_t _index = 0;
-        uint16_t pack_sprite_index = 0;
+
+        uint16_t _terrainImageIndex{ 0 };
+
+        uint8_t _terrainFlags{ 0 };
 
         // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
         uint32_t _uid{ 0 };

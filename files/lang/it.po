@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-07 02:48+0000\n"
+"POT-Creation-Date: 2023-01-10 05:45+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -6463,6 +6463,12 @@ msgstr "Casetta dei Nani"
 msgid "Peasant Hut"
 msgstr "Capanna dei Burini"
 
+msgid "Stables"
+msgstr "Stalla"
+
+msgid "Alchemist's Tower"
+msgstr "Torre dell'Alchimista"
+
 msgid "Event"
 msgstr "Evento"
 
@@ -6516,6 +6522,9 @@ msgstr "Monoliti"
 msgid "Wagon Camp"
 msgstr "Campo Carri"
 
+msgid "Hut of the Magi"
+msgstr "Capanna del Mago"
+
 msgid "Whirlpool"
 msgstr "Gorgo"
 
@@ -6526,6 +6535,9 @@ msgstr[1] "Mulini a Vento"
 
 msgid "Artifact"
 msgstr "Artefatto"
+
+msgid "Mermaid"
+msgstr "Sirenetta"
 
 msgid "Boat"
 msgstr "Nave"
@@ -6548,6 +6560,9 @@ msgstr "Città casuale"
 msgid "Random Castle"
 msgstr "Castello casuale"
 
+msgid "Eye of the Magi"
+msgstr "Occhio del Mago"
+
 msgid "Random Monster - weak"
 msgstr "Mostro casuale - debole"
 
@@ -6562,6 +6577,9 @@ msgstr "Mostra casuale - molto forte"
 
 msgid "Nothing Special"
 msgstr "Niente particolare"
+
+msgid "Mossy Rock"
+msgstr ""
 
 msgid "Watch Tower"
 msgstr "Torre di Guardia"
@@ -6580,6 +6598,9 @@ msgstr "Forte"
 
 msgid "Abandoned Mine"
 msgstr "Miniera Abbandonata"
+
+msgid "Sirens"
+msgstr "Sirene"
 
 msgid "Standing Stones"
 msgstr "Massi Eretti"
@@ -6670,6 +6691,9 @@ msgstr "Osservatorio"
 msgid "Freeman's Foundry"
 msgstr "Fucina dei Liberti"
 
+msgid "Reefs"
+msgstr "Barriera Corallina"
+
 msgid "Trees"
 msgstr "Alberi"
 
@@ -6718,17 +6742,17 @@ msgstr "Arbusto"
 msgid "Barrow Mounds"
 msgstr "Tumulo"
 
-msgid "Mermaid"
-msgstr "Sirenetta"
+msgid "Random Artifact - Treasure"
+msgstr "Artefatto casuale - tesoro"
 
-msgid "Sirens"
-msgstr "Sirene"
+msgid "Random Artifact - Minor"
+msgstr "Artefatto casuale - minore"
 
-msgid "Hut of the Magi"
-msgstr "Capanna del Mago"
+msgid "Random Artifact - Major"
+msgstr "Artefatto casuale - maggiore"
 
-msgid "Eye of the Magi"
-msgstr "Occhio del Mago"
+msgid "Barrier"
+msgstr "Barriera"
 
 msgid "Traveller's Tent"
 msgstr "Tenda del Viaggiatore"
@@ -6747,27 +6771,6 @@ msgstr "Altare Convocante di Terra"
 
 msgid "Water Summoning Altar"
 msgstr "Altare Convocante dell'Acqua"
-
-msgid "Reefs"
-msgstr "Barriera Corallina"
-
-msgid "Alchemist's Tower"
-msgstr "Torre dell'Alchimista"
-
-msgid "Stables"
-msgstr "Stalla"
-
-msgid "Random Artifact - Treasure"
-msgstr "Artefatto casuale - tesoro"
-
-msgid "Random Artifact - Minor"
-msgstr "Artefatto casuale - minore"
-
-msgid "Random Artifact - Major"
-msgstr "Artefatto casuale - maggiore"
-
-msgid "Barrier"
-msgstr "Barriera"
 
 msgid "Unknown Monster"
 msgstr "Mostro sconosciuto"

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,14 +26,14 @@ namespace MP2
 {
     void loadTile( StreamBase & stream, mp2tile_t & tile )
     {
-        tile.surfaceType = stream.getLE16();
+        tile.terrainImageIndex = stream.getLE16();
         tile.objectName1 = stream.get();
         tile.level1IcnImageIndex = stream.get();
         tile.quantity1 = stream.get();
         tile.quantity2 = stream.get();
         tile.objectName2 = stream.get();
         tile.level2IcnImageIndex = stream.get();
-        tile.flags = stream.get();
+        tile.terrainFlags = stream.get();
         tile.mapObjectType = stream.get();
         tile.nextAddonIndex = stream.getLE16();
         tile.level1ObjectUID = stream.getLE32();
