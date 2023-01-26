@@ -194,7 +194,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
     StreamBuf dataStream( data );
     const uint8_t magicNumber = dataStream.get();
     if ( magicNumber != 0 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx data magic number is incorrect " << static_cast<int>( magicNumber ) )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx data magic number " << static_cast<int>( magicNumber ) << " is incorrect." )
         return;
     }
 
@@ -225,7 +225,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
     }
 
     message = dataStream.toString();
-    if ( !message.empty() ) {
+    if ( message.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx question is empty. Marking it as an invalid object." )
         return;
     }

@@ -2220,7 +2220,7 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
     }
 
     if ( !art.isValid() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact over a random articat on tile " << tile.GetIndex() )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact over a random artifact on tile " << tile.GetIndex() )
         return;
     }
 
@@ -2824,7 +2824,7 @@ bool Maps::Tiles::isDetachedObject() const
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 {
-    return msg << ta._layerType << ta._uid << ta._objectIcnType << ta._imageIndex;
+    return msg << ta._layerType << ta._uid << ta._objectIcnType << ta._hasObjectAnimation << ta._isMarkedAsRoad << ta._imageIndex;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
@@ -2837,12 +2837,17 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
         msg >> temp;
 
         ta._objectIcnType = static_cast<MP2::ObjectIcnType>( temp >> 2 );
+
+        ta._hasObjectAnimation = false;
+        ta._isMarkedAsRoad = false;
     }
     else {
         uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> temp;
 
         ta._objectIcnType = static_cast<MP2::ObjectIcnType>( temp );
+
+        msg >> ta._hasObjectAnimation >> ta._isMarkedAsRoad;
     }
 
     msg >> ta._imageIndex;
@@ -2854,9 +2859,9 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
     static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for writing MP2::MapObjectType object" );
 
-    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid << tile._objectIcnType << tile._imageIndex
-               << static_cast<uint8_t>( tile._mainObjectType ) << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata << tile.heroID
-               << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType;
+    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid << tile._objectIcnType << tile._hasObjectAnimation
+               << tile._isMarkedAsRoad << tile._imageIndex << static_cast<uint8_t>( tile._mainObjectType ) << tile.fog_colors << tile.quantity1 << tile.quantity2
+               << tile.additionalMetadata << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -2883,12 +2888,17 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         msg >> temp;
 
         tile._objectIcnType = static_cast<MP2::ObjectIcnType>( temp >> 2 );
+
+        tile._hasObjectAnimation = false;
+        tile._isMarkedAsRoad = false;
     }
     else {
         uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> temp;
 
         tile._objectIcnType = static_cast<MP2::ObjectIcnType>( temp );
+
+        msg >> tile._hasObjectAnimation >> tile._isMarkedAsRoad;
     }
 
     msg >> tile._imageIndex;

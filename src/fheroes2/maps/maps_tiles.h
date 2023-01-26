@@ -106,12 +106,7 @@ namespace Maps
         // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
         uint8_t _layerType{ OBJECT_LAYER };
 
-        // Structure containing a flag whether the object's image (sprite) has animation, a flag whether the object is road and
-        // the type of object which correlates to ICN id.
-        // The first bit is a flag whether the object's image (sprite) has animation.
-        // The second bit is a flag whether the object considered as road.
-        // The last 6 bits the type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
-        // TODO: move first 2 bits out of this member to keep only object type.
+        // The type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
         MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
@@ -444,12 +439,7 @@ namespace Maps
         // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
         uint8_t _layerType{ OBJECT_LAYER };
 
-        // Structure containing a flag whether the object's image (sprite) has animation, a flag whether the object is road and
-        // the type of object which correlates to ICN id.
-        // The first bit is a flag whether the object's image (sprite) has animation.
-        // The second bit is a flag whether the object considered as road.
-        // The last 6 bits the type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
-        // TODO: move first 2 bits out of this member to keep only object type.
+        // The type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
         MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
