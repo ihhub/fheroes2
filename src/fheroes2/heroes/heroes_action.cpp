@@ -2096,7 +2096,7 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     I.GetGameArea().SetCenter( heroPosition );
     const int32_t scoutRange = hero.GetScoute();
     const fheroes2::Rect heroRoi( heroPosition.x - scoutRange, heroPosition.y - scoutRange, heroPosition.x + scoutRange + 1, heroPosition.y + scoutRange + 1 );
-    I.GetRadar().SetMapRedraw(heroRoi);
+    I.GetRadar().SetMapRedraw( heroRoi );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2133,7 +2133,7 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     I.GetGameArea().SetCenter( heroPosition );
     const int32_t scoutRange = hero.GetScoute();
     const fheroes2::Rect heroRoi( heroPosition.x - scoutRange, heroPosition.y - scoutRange, heroPosition.x + scoutRange + 1, heroPosition.y + scoutRange + 1 );
-    I.GetRadar().SetMapRedraw(heroRoi);
+    I.GetRadar().SetMapRedraw( heroRoi );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
