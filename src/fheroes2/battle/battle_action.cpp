@@ -452,7 +452,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             finalPos = pos;
         }
         else {
-            const Indexes path = GetPath( pos );
+            const Indexes path = GetPath( *unit, pos );
 
             if ( path.empty() ) {
                 DEBUG_LOG( DBG_BATTLE, DBG_WARN,

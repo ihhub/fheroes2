@@ -154,11 +154,11 @@ namespace AI
     private:
         void analyzeBattleState( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
-        Battle::Actions berserkTurn( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        Battle::Actions archerDecision( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
 
-        BattleTargetPair meleeUnitOffense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        BattleTargetPair meleeUnitDefense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
 
         SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
 

@@ -65,7 +65,7 @@ namespace Battle
         void SetDestroy();
         fheroes2::Point GetPortPosition() const;
 
-        // Returns a text description of the parameters of the towers of the given castle. Can be
+        // Returns a text description of the parameters of the towers of a given castle. Can be
         // called both during combat and outside of it. In the former case, the current state of
         // the towers destroyed during the siege will be reflected.
         static std::string GetInfo( const Castle & castle );
