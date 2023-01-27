@@ -98,6 +98,7 @@ namespace Battle
         uint32_t _speed = 0;
         bool _isWide = false;
         bool _isFlying = false;
+        int _color = 0;
         int _currentColor = 0;
     };
 }
