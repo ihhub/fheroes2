@@ -45,9 +45,9 @@ namespace Battle
     {
         assert( unit.GetHeadIndex() != -1 && ( !unit.isWide() || unit.GetTailIndex() != -1 ) );
 
-        auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color, _currentColor );
-        const auto newSettings = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetSpeed(), unit.isWide(), unit.isFlying(),
-                                                  unit.GetColor(), unit.GetCurrentColor() );
+        auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color );
+        const auto newSettings
+            = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetSpeed(), unit.isWide(), unit.isFlying(), unit.GetColor() );
 
         // If all the parameters of the specified unit match the parameters of the unit for which the current cache was built, then there is no need to rebuild it
         if ( currentSettings == newSettings ) {
