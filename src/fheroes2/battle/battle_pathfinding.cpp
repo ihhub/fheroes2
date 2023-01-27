@@ -210,7 +210,7 @@ namespace Battle
         }
     }
 
-    bool BattlePathfinder::isPositionReachable( const Unit & unit, const Position & position, const bool onCurrentTurn )
+    bool BattlePathfinder::isPositionReachable( const Unit & unit, const Position & position, const bool isOnCurrentTurn )
     {
         // Invalid positions are allowed here, but they are always unreachable
         if ( position.GetHead() == nullptr ) {
@@ -228,7 +228,7 @@ namespace Battle
 
         const auto & [index, node] = *iter;
 
-        return ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) && ( !onCurrentTurn || node._cost <= _speed );
+        return ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) && ( !isOnCurrentTurn || node._cost <= _speed );
     }
 
     uint32_t BattlePathfinder::getDistance( const Unit & unit, const Position & position )

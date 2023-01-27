@@ -74,7 +74,7 @@ namespace Battle
         BattlePathfinder & operator=( const BattlePathfinder & ) = delete;
 
         // Checks whether a given position is reachable for a given unit, either on the current turn or in principle
-        bool isPositionReachable( const Unit & unit, const Position & position, const bool onCurrentTurn );
+        bool isPositionReachable( const Unit & unit, const Position & position, const bool isOnCurrentTurn );
 
         // Returns the distance to a given position (i.e. the number of cells to be traversed) for a given unit.
         // It's the caller's responsibility to make sure that this position is reachable before calling this method.

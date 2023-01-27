@@ -147,9 +147,9 @@ namespace Battle
         }
 
         // Checks whether a given position is reachable for a given unit, either on the current turn or in principle
-        bool isPositionReachable( const Unit & unit, const Position & position, const bool onCurrentTurn )
+        bool isPositionReachable( const Unit & unit, const Position & position, const bool isOnCurrentTurn )
         {
-            return _battlePathfinder.isPositionReachable( unit, position, onCurrentTurn );
+            return _battlePathfinder.isPositionReachable( unit, position, isOnCurrentTurn );
         }
 
         // Returns the indexes of all cells that can be occupied by a given unit's head on the current turn
