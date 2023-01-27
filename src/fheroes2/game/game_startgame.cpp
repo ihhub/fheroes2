@@ -1079,15 +1079,16 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
                             RedrawFocus();
 
-                            const int32_t heroDirection = hero->GetDirection();
-                            const fheroes2::Point heroPosition = hero->GetCenter();
-                            const int32_t scoutRange = hero->GetScoute();
+                            const int32_t & heroDirection = hero->GetDirection();
+                            const fheroes2::Point & heroPosition = hero->GetCenter();
+                            const int32_t & scoutRange = hero->GetScoute();
                             // Use Hero position and scout range to set the area to redraw the radar. If hero moves not diagonally we can make this area smaller:
                             // redraw radar only in move direction and one pixel behind to clear Hero's previous position.
                             const fheroes2::Rect heroRoi( heroPosition.x - ( ( heroDirection == Direction::RIGHT ) ? 1 : scoutRange ),
                                                           heroPosition.y - ( ( heroDirection == Direction::BOTTOM ) ? 1 : scoutRange ),
                                                           heroPosition.x + ( ( heroDirection == Direction::LEFT ) ? 1 : scoutRange ) + 1,
                                                           heroPosition.y + ( ( heroDirection == Direction::TOP ) ? 1 : scoutRange ) + 1 );
+                            // Set update of radar image after Hero move.
                             radar.SetMapRedraw( heroRoi );
 
                             if ( stopHero ) {

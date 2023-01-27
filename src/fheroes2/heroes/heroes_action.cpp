@@ -918,6 +918,7 @@ void ActionToBoat( Heroes & hero, int32_t dst_index )
     // Get the direction of the boat so that the direction of the hero can be set to it after boarding
     const Maps::Tiles & from = world.GetTiles( dst_index );
     const int boatDirection = from.getBoatDirection();
+    const int32_t heroDirection = hero.GetDirection();
 
     AudioManager::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -931,14 +932,15 @@ void ActionToBoat( Heroes & hero, int32_t dst_index )
     hero.SetShipMaster( true );
     hero.GetPath().Reset();
 
-    // We have to set radar roi here as the boat changes hero direction.
-    const fheroes2::Point heroPosition = Maps::GetPoint( dst_index );
-    // TODO: use hero direction to set socout area (roi) when boarding the boat.
-    const int32_t scoutRange = hero.GetScoute();
     // Use Hero position and scout range to set the area to redraw the radar.
-    const fheroes2::Rect heroRoi( heroPosition.x - scoutRange, heroPosition.y - scoutRange, heroPosition.x + scoutRange + 1, heroPosition.y + scoutRange + 1 );
-    Interface::Basic::Get().GetRadar().SetMapRedraw( heroRoi );
-    Interface::Basic::Get().Redraw( Interface::REDRAW_RADAR );
+    const int32_t & scoutRange = hero.GetScoute();
+    const fheroes2::Rect heroRoi( destPos.x - ( ( heroDirection == Direction::RIGHT ) ? 1 : scoutRange ),
+                                  destPos.y - ( ( heroDirection == Direction::BOTTOM ) ? 1 : scoutRange ),
+                                  destPos.x + ( ( heroDirection == Direction::LEFT ) ? 1 : scoutRange ) + 1,
+                                  destPos.y + ( ( heroDirection == Direction::TOP ) ? 1 : scoutRange ) + 1 );
+    Interface::Basic & I = Interface::Basic::Get();
+    I.GetRadar().SetMapRedraw( heroRoi );
+    I.Redraw( Interface::REDRAW_RADAR );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
@@ -2089,9 +2091,15 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     hero.FadeOut();
 
     Interface::Basic & I = Interface::Basic::Get();
-    fheroes2::Point heroPosition = hero.GetCenter();
-    // Before entering a teleport the hero can be near it or already in teleport.
-    I.GetRadar().SetMapRedraw( fheroes2::Rect( heroPosition.x - 1, heroPosition.y - 1, heroPosition.x + 2, heroPosition.y + 2 ) );
+    const fheroes2::Point & fromPosition = Maps::GetPoint( index_from );
+    // Before entering a Teleport the Hero makes a move into it, so set the scout area of this move to update on radar image.
+    const int32_t & heroDirection = hero.GetDirection();
+    const int32_t & scoutRange = hero.GetScoute();
+    const fheroes2::Rect heroRoi( fromPosition.x - ( ( heroDirection == Direction::RIGHT ) ? 1 : scoutRange ),
+                                  fromPosition.y - ( ( heroDirection == Direction::BOTTOM ) ? 1 : scoutRange ),
+                                  fromPosition.x + ( ( heroDirection == Direction::LEFT ) ? 1 : scoutRange ) + 1,
+                                  fromPosition.y + ( ( heroDirection == Direction::TOP ) ? 1 : scoutRange ) + 1 );
+    I.GetRadar().SetMapRedraw( heroRoi );
 
     // No action and no penalty
     hero.Move2Dest( index_to );
@@ -2099,11 +2107,10 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     // Clear the previous hero position
     I.Redraw( Interface::REDRAW_RADAR );
 
-    heroPosition = hero.GetCenter();
-    I.GetGameArea().SetCenter( heroPosition );
-    const int32_t scoutRange = hero.GetScoute();
-    const fheroes2::Rect heroRoi( heroPosition.x - scoutRange, heroPosition.y - scoutRange, heroPosition.x + scoutRange + 1, heroPosition.y + scoutRange + 1 );
-    I.GetRadar().SetMapRedraw( heroRoi );
+    const fheroes2::Point & toPosition = Maps::GetPoint( index_to );
+    I.GetGameArea().SetCenter( toPosition );
+    const fheroes2::Rect teleportRoi( toPosition.x - scoutRange, toPosition.y - scoutRange, toPosition.x + scoutRange + 1, toPosition.y + scoutRange + 1 );
+    I.GetRadar().SetMapRedraw( teleportRoi );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2133,9 +2140,15 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     hero.FadeOut();
 
     Interface::Basic & I = Interface::Basic::Get();
-    fheroes2::Point heroPosition = hero.GetCenter();
-    // Before entering a teleport the hero can be near it or already in teleport.
-    I.GetRadar().SetMapRedraw( fheroes2::Rect( heroPosition.x - 1, heroPosition.y - 1, heroPosition.x + 2, heroPosition.y + 2 ) );
+    const fheroes2::Point & fromPosition = Maps::GetPoint( index_from );
+    // Before entering a Whirlpool the Hero makes a move into it, so set the scout area of this move to update on radar image.
+    const int32_t & heroDirection = hero.GetDirection();
+    const int32_t & scoutRange = hero.GetScoute();
+    const fheroes2::Rect heroRoi( fromPosition.x - ( ( heroDirection == Direction::RIGHT ) ? 1 : scoutRange ),
+                                  fromPosition.y - ( ( heroDirection == Direction::BOTTOM ) ? 1 : scoutRange ),
+                                  fromPosition.x + ( ( heroDirection == Direction::LEFT ) ? 1 : scoutRange ) + 1,
+                                  fromPosition.y + ( ( heroDirection == Direction::TOP ) ? 1 : scoutRange ) + 1 );
+    I.GetRadar().SetMapRedraw( heroRoi );
 
     // No action and no penalty
     hero.Move2Dest( index_to );
@@ -2143,11 +2156,10 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     // Clear the previous hero position
     I.Redraw( Interface::REDRAW_RADAR );
 
-    heroPosition = hero.GetCenter();
-    I.GetGameArea().SetCenter( heroPosition );
-    const int32_t scoutRange = hero.GetScoute();
-    const fheroes2::Rect heroRoi( heroPosition.x - scoutRange, heroPosition.y - scoutRange, heroPosition.x + scoutRange + 1, heroPosition.y + scoutRange + 1 );
-    I.GetRadar().SetMapRedraw( heroRoi );
+    const fheroes2::Point & toPosition = Maps::GetPoint( index_to );
+    I.GetGameArea().SetCenter( toPosition );
+    const fheroes2::Rect whirlpoolRoi( toPosition.x - scoutRange, toPosition.y - scoutRange, toPosition.x + scoutRange + 1, toPosition.y + scoutRange + 1 );
+    I.GetRadar().SetMapRedraw( whirlpoolRoi );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
