@@ -2843,8 +2843,8 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 
         ta._objectIcnType = static_cast<MP2::ObjectIcnType>( temp >> 2 );
 
-        ta._hasObjectAnimation = false;
-        ta._isMarkedAsRoad = false;
+        ta._hasObjectAnimation = ( temp & 1 ) != 0;
+        ta._isMarkedAsRoad = ( temp & 2 ) != 0;
     }
     else {
         uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
@@ -2894,8 +2894,8 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
         tile._objectIcnType = static_cast<MP2::ObjectIcnType>( temp >> 2 );
 
-        tile._hasObjectAnimation = false;
-        tile._isMarkedAsRoad = false;
+        tile._hasObjectAnimation = ( temp & 1 ) != 0;
+        tile._isMarkedAsRoad = ( temp & 2 ) != 0;
     }
     else {
         uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
