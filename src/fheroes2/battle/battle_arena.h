@@ -276,7 +276,7 @@ namespace Battle
         int _lastActiveUnitArmyColor;
 
         const Castle * castle;
-        // If the battle is in town (village or castle)
+        // Is the battle taking place in a town or a castle
         const bool _isTown;
 
         std::array<std::unique_ptr<Tower>, 3> _towers;
