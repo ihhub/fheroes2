@@ -43,6 +43,7 @@
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
+#include "direction.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
