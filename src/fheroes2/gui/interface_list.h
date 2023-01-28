@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -387,12 +387,23 @@ namespace Interface
                 return true;
             }
             if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
+                const fheroes2::Point mousePosition = le.GetMouseCursor();
+                const fheroes2::Rect scrollbarArea = _scrollbar.getArea();
+                const bool noScrollNeeded = scrollbarArea.width < scrollbarArea.height
+                                                ? ( ( ( scrollbarArea.y > mousePosition.y ) || ( ( scrollbarArea.y + scrollbarArea.height ) < mousePosition.y ) )
+                                                    || ( mousePosition.y == _mousePosition.y ) )
+                                                : ( ( ( scrollbarArea.x > mousePosition.x ) || ( ( scrollbarArea.x + scrollbarArea.width ) < mousePosition.x ) )
+                                                    || ( mousePosition.x == _mousePosition.x ) );
+                if ( noScrollNeeded ) {
+                    return false;
+                }
+
+                _mousePosition = mousePosition;
                 needRedraw = true;
 
                 UpdateScrollbarRange();
 
-                const fheroes2::Point & mousePos = le.GetMouseCursor();
-                _scrollbar.moveToPos( mousePos );
+                _scrollbar.moveToPos( mousePosition );
                 _topId = _scrollbar.currentIndex();
 
                 _updateScrollbar = true;
@@ -468,6 +479,7 @@ namespace Interface
         int maxItems;
 
         fheroes2::Point ptRedraw;
+        fheroes2::Point _mousePosition;
 
         bool useHotkeys;
 
