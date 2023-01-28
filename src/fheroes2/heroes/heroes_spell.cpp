@@ -231,14 +231,14 @@ namespace
         hero.Move2Dest( dst );
 
         // Clear previous hero position on radar.
-        I.GetRadar().SetMapRedraw( fromRoi );
+        I.GetRadar().SetRenderArea( fromRoi );
 
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
 
         // Update radar image in scout area around Hero after teleport.
-        I.GetRadar().SetMapRedraw( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -401,16 +401,14 @@ namespace
         hero.Move2Dest( dst );
 
         // Clear previous hero position on radar.
-        I.GetRadar().SetMapRedraw( fromRoi );
+        I.GetRadar().SetRenderArea( fromRoi );
 
         I.Redraw( Interface::REDRAW_RADAR );
 
-        const fheroes2::Point & toPosition = hero.GetCenter();
-        I.GetGameArea().SetCenter( toPosition );
-        const int32_t & scoutRange = hero.GetScoute();
-        // Set scout area to update around Hero after teleport.
-        const fheroes2::Rect toRoi( toPosition.x - scoutRange, toPosition.y - scoutRange, toPosition.x + scoutRange + 1, toPosition.y + scoutRange + 1 );
-        I.GetRadar().SetMapRedraw( toRoi );
+        I.GetGameArea().SetCenter( hero.GetCenter() );
+
+        // Update radar image in scout area around Hero after teleport.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );

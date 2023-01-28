@@ -686,7 +686,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     if ( player->isAIAutoControlMode() ) {
                         radar.SetHide( false );
-                        radar.SetMapRedraw();
+                        radar.SetRenderWholeMap();
                         radar.SetRedraw();
                     }
 
@@ -761,7 +761,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     }
 
     radar.SetHide( false );
-    radar.SetMapRedraw();
+    radar.SetRenderWholeMap();
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
@@ -1033,8 +1033,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             break;
         }
 
-        const bool isJumpHeroSpeed = ( 10 == conf.HeroesMoveSpeed() );
-
         // animation of the hero's movement
         if ( Game::validateAnimationDelay( Game::CURRENT_HERO_DELAY ) ) {
             Heroes * hero = GetFocusHeroes();
@@ -1070,7 +1068,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                     }
 
                     if ( hero->isMoveEnabled() ) {
-                        if ( hero->Move( isJumpHeroSpeed ) ) {
+                        if ( hero->Move( 10 == conf.HeroesMoveSpeed() ) ) {
                             // Do not generate a frame as we are going to do it later.
                             Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
 
@@ -1080,7 +1078,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                             RedrawFocus();
 
                             // Set update of radar image after Hero move.
-                            radar.SetMapRedraw( hero->GetScoutRoi() );
+                            radar.SetRenderArea( hero->GetScoutRoi() );
 
                             if ( stopHero ) {
                                 stopHero = false;

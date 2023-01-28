@@ -927,7 +927,7 @@ void ActionToBoat( Heroes & hero, int32_t dst_index )
 
     // Update radar image without checking for the direction as the boat may have different direction.
     Interface::Basic & I = Interface::Basic::Get();
-    I.GetRadar().SetMapRedraw( hero.GetScoutRoi() );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
     I.Redraw( Interface::REDRAW_RADAR );
 
     // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
@@ -2087,7 +2087,7 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
 
     Interface::Basic & I = Interface::Basic::Get();
     // Before entering a Teleport the Hero makes a move into it, so set the scout area of this move to update radar image.
-    I.GetRadar().SetMapRedraw( hero.GetScoutRoi() );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
 
     // No action and no penalty
     hero.Move2Dest( index_to );
@@ -2096,7 +2096,7 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     I.Redraw( Interface::REDRAW_RADAR );
 
     I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.GetRadar().SetMapRedraw( hero.GetScoutRoi( true ) );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2127,7 +2127,7 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
 
     Interface::Basic & I = Interface::Basic::Get();
     // Before entering a Whirlpool the Hero makes a move into it, so set the scout area of this move to update on radar image.
-    I.GetRadar().SetMapRedraw( hero.GetScoutRoi() );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
 
     // No action and no penalty
     hero.Move2Dest( index_to );
@@ -2136,7 +2136,7 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     I.Redraw( Interface::REDRAW_RADAR );
 
     I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.GetRadar().SetMapRedraw( hero.GetScoutRoi( true ) );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2701,7 +2701,7 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, i
             hero.setVisitedForAllies( dst_index );
 
             Interface::Basic & I = Interface::Basic::Get();
-            I.GetRadar().SetMapRedraw();
+            I.GetRadar().SetRenderWholeMap();
             I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
         }
     }
@@ -3182,7 +3182,7 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
 
                 const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, eyePosition.x + scoutRange + 1, eyePosition.y + scoutRange + 1 );
 
-                I.GetRadar().SetMapRedraw( eyeRoi );
+                I.GetRadar().SetRenderArea( eyeRoi );
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                 display.render();

@@ -145,7 +145,7 @@ Interface::Radar::Radar( Basic & basic )
     : BorderWindow( { 0, 0, RADARWIDTH, RADARWIDTH } )
     , _radarType( RadarType::WorldMap )
     , _interface( basic )
-    , _hide( true )
+    , _roi( 0, 0, world.w(), world.h() )
 {
     // Radar image can not be transparent so we disable the transform layer to speed up rendering.
     _map._disableTransformLayer();
@@ -203,13 +203,13 @@ void Interface::Radar::SetRedraw() const
     _interface.SetRedraw( REDRAW_RADAR );
 }
 
-void Interface::Radar::SetMapRedraw()
+void Interface::Radar::SetRenderWholeMap()
 {
     _needMapRedraw = true;
-    _roi = fheroes2::Rect( 0, 0, world.w(), world.h() );
+    _roi = { 0, 0, world.w(), world.h() };
 }
 
-void Interface::Radar::SetMapRedraw( const fheroes2::Rect & roi )
+void Interface::Radar::SetRenderArea( const fheroes2::Rect & roi )
 {
     _needMapRedraw = true;
     _roi.width = roi.width > world.w() ? world.w() : roi.width;
@@ -391,6 +391,9 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
             }
         }
     }
+
+    // Reset ROI to full radar image to be able to redraw the mini-map without calling 'SetMapRedraw()'.
+    _roi = { 0, 0, world.w(), world.h() };
 }
 
 // Redraw radar cursor. RoiRectangle is a rectangle in tile unit of the current radar view.

@@ -57,8 +57,11 @@ namespace Interface
 
         void SetPos( int32_t ox, int32_t oy ) override;
         void SetRedraw() const;
-        void SetMapRedraw();
-        void SetMapRedraw( const fheroes2::Rect & roi );
+
+        // Set to render the whole radar map on next radar Redraw call.
+        void SetRenderWholeMap();
+        // Set to render the radar map only in geven 'roi' on next radar Redraw call.
+        void SetRenderArea( const fheroes2::Rect & roi );
         void Build();
         void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
 
@@ -100,7 +103,7 @@ namespace Interface
         fheroes2::MovableSprite _cursorArea;
         fheroes2::Rect _roi;
         double _zoom{ 1.0 };
-        bool _hide;
+        bool _hide{ true };
         bool _mouseDraggingMovement{ false };
         bool _needMapRedraw{ true };
     };
