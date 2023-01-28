@@ -213,7 +213,7 @@ namespace
 
         Interface::Basic & I = Interface::Basic::Get();
 
-        const fheroes2::Point & fromPosition = hero.GetCenter();
+        const fheroes2::Point fromPosition = hero.GetCenter();
         // Position of Hero on radar before casting the spell to clear it after casting.
         const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, fromPosition.x + 1, fromPosition.y + 1 );
 
@@ -235,12 +235,10 @@ namespace
 
         I.Redraw( Interface::REDRAW_RADAR );
 
-        const fheroes2::Point & toPosition = hero.GetCenter();
-        I.GetGameArea().SetCenter( toPosition );
-        const int32_t & scoutRange = hero.GetScoute();
-        // Set scout area to update around Hero after teleport.
-        const fheroes2::Rect toRoi( toPosition.x - scoutRange, toPosition.y - scoutRange, toPosition.x + scoutRange + 1, toPosition.y + scoutRange + 1 );
-        I.GetRadar().SetMapRedraw( toRoi );
+        I.GetGameArea().SetCenter( hero.GetCenter() );
+
+        // Update radar image in scout area around Hero after teleport.
+        I.GetRadar().SetMapRedraw( hero.GetScoutRoi( true ) );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -378,7 +376,7 @@ namespace
     {
         Interface::Basic & I = Interface::Basic::Get();
 
-        const fheroes2::Point & fromPosition = hero.GetCenter();
+        const fheroes2::Point fromPosition = hero.GetCenter();
         // Position of Hero on radar before casting the spell to clear it after casting.
         const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, fromPosition.x + 1, fromPosition.y + 1 );
 

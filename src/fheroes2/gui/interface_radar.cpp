@@ -277,6 +277,8 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
 
     uint8_t * radarImage = _map.image();
 
+    assert( _roi.x >= 0 && _roi.y >= 0 && _roi.width <= world.w() && _roi.height <= world.h() );
+
     // Fill the radar map with black color ( 0 ) only if we are redrawing the entire map.
     if ( _roi.x == 0 && _roi.y == 0 && _roi.width == world.w() && _roi.height == world.h() ) {
         std::fill( radarImage, radarImage + static_cast<ptrdiff_t>( area.width ) * area.height, COLOR_BLACK );

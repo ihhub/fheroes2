@@ -43,7 +43,6 @@
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
-#include "direction.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
@@ -919,29 +918,24 @@ void ActionToBoat( Heroes & hero, int32_t dst_index )
     // Get the direction of the boat so that the direction of the hero can be set to it after boarding
     const Maps::Tiles & from = world.GetTiles( dst_index );
     const int boatDirection = from.getBoatDirection();
-    const int32_t heroDirection = hero.GetDirection();
 
     AudioManager::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeOut( offset );
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
+
+    // Update radar image without checking for the direction as the boat may have different direction.
+    Interface::Basic & I = Interface::Basic::Get();
+    I.GetRadar().SetMapRedraw( hero.GetScoutRoi() );
+    I.Redraw( Interface::REDRAW_RADAR );
+
     // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
     hero.setDirection( boatDirection );
     hero.SetMapsObject( MP2::OBJ_NONE );
     world.GetTiles( dst_index ).resetObjectSprite();
     hero.SetShipMaster( true );
     hero.GetPath().Reset();
-
-    // Use Hero position and scout range to set the area to redraw the radar.
-    const int32_t & scoutRange = hero.GetScoute();
-    const fheroes2::Rect heroRoi( destPos.x - ( ( heroDirection == Direction::RIGHT ) ? 1 : scoutRange ),
-                                  destPos.y - ( ( heroDirection == Direction::BOTTOM ) ? 1 : scoutRange ),
-                                  destPos.x + ( ( heroDirection == Direction::LEFT ) ? 1 : scoutRange ) + 1,
-                                  destPos.y + ( ( heroDirection == Direction::TOP ) ? 1 : scoutRange ) + 1 );
-    Interface::Basic & I = Interface::Basic::Get();
-    I.GetRadar().SetMapRedraw( heroRoi );
-    I.Redraw( Interface::REDRAW_RADAR );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
@@ -2092,15 +2086,8 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     hero.FadeOut();
 
     Interface::Basic & I = Interface::Basic::Get();
-    const fheroes2::Point & fromPosition = Maps::GetPoint( index_from );
-    // Before entering a Teleport the Hero makes a move into it, so set the scout area of this move to update on radar image.
-    const int32_t & heroDirection = hero.GetDirection();
-    const int32_t & scoutRange = hero.GetScoute();
-    const fheroes2::Rect heroRoi( fromPosition.x - ( ( heroDirection == Direction::RIGHT ) ? 1 : scoutRange ),
-                                  fromPosition.y - ( ( heroDirection == Direction::BOTTOM ) ? 1 : scoutRange ),
-                                  fromPosition.x + ( ( heroDirection == Direction::LEFT ) ? 1 : scoutRange ) + 1,
-                                  fromPosition.y + ( ( heroDirection == Direction::TOP ) ? 1 : scoutRange ) + 1 );
-    I.GetRadar().SetMapRedraw( heroRoi );
+    // Before entering a Teleport the Hero makes a move into it, so set the scout area of this move to update radar image.
+    I.GetRadar().SetMapRedraw( hero.GetScoutRoi() );
 
     // No action and no penalty
     hero.Move2Dest( index_to );
@@ -2108,10 +2095,8 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     // Clear the previous hero position
     I.Redraw( Interface::REDRAW_RADAR );
 
-    const fheroes2::Point & toPosition = Maps::GetPoint( index_to );
-    I.GetGameArea().SetCenter( toPosition );
-    const fheroes2::Rect teleportRoi( toPosition.x - scoutRange, toPosition.y - scoutRange, toPosition.x + scoutRange + 1, toPosition.y + scoutRange + 1 );
-    I.GetRadar().SetMapRedraw( teleportRoi );
+    I.GetGameArea().SetCenter( hero.GetCenter() );
+    I.GetRadar().SetMapRedraw( hero.GetScoutRoi( true ) );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2141,15 +2126,8 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     hero.FadeOut();
 
     Interface::Basic & I = Interface::Basic::Get();
-    const fheroes2::Point & fromPosition = Maps::GetPoint( index_from );
     // Before entering a Whirlpool the Hero makes a move into it, so set the scout area of this move to update on radar image.
-    const int32_t & heroDirection = hero.GetDirection();
-    const int32_t & scoutRange = hero.GetScoute();
-    const fheroes2::Rect heroRoi( fromPosition.x - ( ( heroDirection == Direction::RIGHT ) ? 1 : scoutRange ),
-                                  fromPosition.y - ( ( heroDirection == Direction::BOTTOM ) ? 1 : scoutRange ),
-                                  fromPosition.x + ( ( heroDirection == Direction::LEFT ) ? 1 : scoutRange ) + 1,
-                                  fromPosition.y + ( ( heroDirection == Direction::TOP ) ? 1 : scoutRange ) + 1 );
-    I.GetRadar().SetMapRedraw( heroRoi );
+    I.GetRadar().SetMapRedraw( hero.GetScoutRoi() );
 
     // No action and no penalty
     hero.Move2Dest( index_to );
@@ -2157,10 +2135,8 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     // Clear the previous hero position
     I.Redraw( Interface::REDRAW_RADAR );
 
-    const fheroes2::Point & toPosition = Maps::GetPoint( index_to );
-    I.GetGameArea().SetCenter( toPosition );
-    const fheroes2::Rect whirlpoolRoi( toPosition.x - scoutRange, toPosition.y - scoutRange, toPosition.x + scoutRange + 1, toPosition.y + scoutRange + 1 );
-    I.GetRadar().SetMapRedraw( whirlpoolRoi );
+    I.GetGameArea().SetCenter( hero.GetCenter() );
+    I.GetRadar().SetMapRedraw( hero.GetScoutRoi( true ) );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -3196,11 +3172,11 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
             fheroes2::Display & display = fheroes2::Display::instance();
 
             for ( const int32_t eyeIndex : vec_eyes ) {
-                const int32_t & scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
+                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
 
                 Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
 
-                const fheroes2::Point & eyePosition = Maps::GetPoint( eyeIndex );
+                const fheroes2::Point eyePosition = Maps::GetPoint( eyeIndex );
 
                 I.GetGameArea().SetCenter( eyePosition );
 

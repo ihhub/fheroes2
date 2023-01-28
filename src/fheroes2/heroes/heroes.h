@@ -493,6 +493,11 @@ public:
     void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
     void Scoute( const int tileIndex ) const;
     int GetScoute() const;
+
+    // Returns the area to render the minimap image around Hero's position in his scout range.
+    // For non-diagonal move the area is set only in move direction and one pixel behind (to clear Hero's previous position).
+    fheroes2::Rect GetScoutRoi( const bool noDirection = false ) const;
+    
     uint32_t GetVisionsDistance() const;
 
     bool isShipMaster() const;
