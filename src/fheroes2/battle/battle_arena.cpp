@@ -457,8 +457,6 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
                 _bridge->SetPassability( *troop );
             }
 
-            _battlePathfinder.evaluateForUnit( *troop );
-
             if ( troop->isControlRemote() ) {
                 RemoteTurn( *troop, actions );
             }
@@ -718,9 +716,9 @@ void Battle::Arena::CatapultAction()
     }
 }
 
-Battle::Indexes Battle::Arena::GetPath( const Position & position ) const
+Battle::Indexes Battle::Arena::GetPath( const Unit & unit, const Position & position )
 {
-    const Indexes result = _battlePathfinder.buildPath( position );
+    const Indexes result = _battlePathfinder.buildPath( unit, position );
 
     if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) && !result.empty() ) {
         std::string pathStr;
