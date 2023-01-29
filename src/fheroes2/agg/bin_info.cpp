@@ -191,12 +191,12 @@ namespace Bin_Info
         }
 
         if ( monsterID == Monster::TITAN ) {
-            projectileOffset[0].x -= 16;
-            projectileOffset[0].y += 33;
-            projectileOffset[1].x -= 37;
+            projectileOffset[0].x -= 10;
+            projectileOffset[0].y += 22;
+            projectileOffset[1].x -= 20;
             projectileOffset[1].y += 8;
-            projectileOffset[2].x -= 20;
-            projectileOffset[2].y -= 38;
+            projectileOffset[2].x -= 15;
+            projectileOffset[2].y -= 22;
         }
 
         if ( monsterID == Monster::LICH || monsterID == Monster::POWER_LICH ) {
