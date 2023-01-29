@@ -3189,8 +3189,8 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
-    // For all shooting creatures we do not render the first missile position.
-    if ( !isMage ) {
+    // For most shooting creatures we do not render the first missile position to better imitate start position change depending on shooting angle.
+    if ( !isMage && ( monsterID != Monster::TROLL ) && ( monsterID != Monster::WAR_TROLL ) ) {
         ++pnt;
     }
 

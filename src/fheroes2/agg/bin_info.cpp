@@ -141,11 +141,12 @@ namespace Bin_Info
         }
 
         if ( monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL ) {
-            for ( fheroes2::Point & offset : projectileOffset ) {
-                offset.x -= 25;
-                offset.y = -49;
-            }
-            projectileOffset[0].y -= 15;
+            projectileOffset[0].x -= 30;
+            projectileOffset[0].y -= 5;
+            projectileOffset[1].x -= 14;
+            --projectileOffset[1].y;
+            projectileOffset[2].x -= 15;
+            projectileOffset[2].y -= 19;
         }
 
         if ( monsterID == Monster::ELF || monsterID == Monster::GRAND_ELF ) {
