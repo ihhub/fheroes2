@@ -2901,7 +2901,7 @@ msgid "Fullscreen"
 msgstr "Pełny ekran"
 
 msgid "window|Mode"
-msgstr "Widok "
+msgstr "Widok"
 
 msgid "Windowed"
 msgstr "W oknie"
