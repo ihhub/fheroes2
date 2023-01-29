@@ -388,24 +388,22 @@ namespace Interface
             }
             if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
                 const fheroes2::Point mousePosition = le.GetMouseCursor();
-                const fheroes2::Rect scrollbarArea = _scrollbar.getArea();
-                const bool noScrollNeeded = scrollbarArea.width < scrollbarArea.height
-                                                ? ( ( ( scrollbarArea.y > mousePosition.y ) || ( ( scrollbarArea.y + scrollbarArea.height ) < mousePosition.y ) )
-                                                    || ( mousePosition.y == _mousePosition.y ) )
-                                                : ( ( ( scrollbarArea.x > mousePosition.x ) || ( ( scrollbarArea.x + scrollbarArea.width ) < mousePosition.x ) )
-                                                    || ( mousePosition.x == _mousePosition.x ) );
-                if ( noScrollNeeded ) {
-                    return false;
-                }
 
-                _mousePosition = mousePosition;
-                needRedraw = true;
+                int32_t prevX = _scrollbar.x();
+                int32_t prevY = _scrollbar.y();
 
                 UpdateScrollbarRange();
 
                 _scrollbar.moveToPos( mousePosition );
+
+                // We don't need to render the scrollbar if it's position is not changed.
+                if ( ( _scrollbar.x() == prevX ) && ( _scrollbar.y() == prevY ) ) {
+                    return false;
+                }
+
                 _topId = _scrollbar.currentIndex();
 
+                needRedraw = true;
                 _updateScrollbar = true;
 
                 return true;
@@ -479,7 +477,6 @@ namespace Interface
         int maxItems;
 
         fheroes2::Point ptRedraw;
-        fheroes2::Point _mousePosition;
 
         bool useHotkeys;
 
