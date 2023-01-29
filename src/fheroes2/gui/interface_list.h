@@ -389,15 +389,15 @@ namespace Interface
             if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
                 const fheroes2::Point mousePosition = le.GetMouseCursor();
 
-                int32_t prevX = _scrollbar.x();
-                int32_t prevY = _scrollbar.y();
+                const int32_t prevScrollbarX = _scrollbar.x();
+                const int32_t prevScrollbarY = _scrollbar.y();
 
                 UpdateScrollbarRange();
 
                 _scrollbar.moveToPos( mousePosition );
 
                 // We don't need to render the scrollbar if it's position is not changed.
-                if ( ( _scrollbar.x() == prevX ) && ( _scrollbar.y() == prevY ) ) {
+                if ( ( _scrollbar.x() == prevScrollbarX ) && ( _scrollbar.y() == prevScrollbarY ) ) {
                     return false;
                 }
 
