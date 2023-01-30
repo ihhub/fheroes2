@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -73,7 +73,7 @@ namespace Maps
     bool isValidForDimensionDoor( int32_t targetIndex, bool isWater );
     // Checks if the tile is guarded by a monster
     bool isTileUnderProtection( const int32_t tileIndex );
-    // Returns a list of indexes of tiles with monsters guarding the given tile
+    // Returns a list of indexes of tiles with monsters guarding the specified tile
     Indexes getMonstersProtectingTile( const int32_t tileIndex );
 
     Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );

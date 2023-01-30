@@ -756,11 +756,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     tile.drawFog( dst, friendColors, *this );
 
                     if ( drawTowns ) {
-                        tile.drawByIcnId( dst, *this, ICN::OBJNTWBA );
+                        tile.drawByObjectIcnType( dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
 
                         const MP2::MapObjectType objectType = tile.GetObject( false );
                         if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
-                            tile.drawByIcnId( dst, *this, ICN::OBJNTOWN );
+                            tile.drawByObjectIcnType( dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
                         }
                     }
                 }

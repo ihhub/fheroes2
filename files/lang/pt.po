@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-10 05:45+0000\n"
+"POT-Creation-Date: 2023-01-29 12:11+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3688,8 +3688,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -4224,6 +4224,10 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr ""
+"Escavar em busca de artefatos requer um dia inteiro, tente novamente amanhã."
+
 #, fuzzy
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
@@ -4237,10 +4241,6 @@ msgstr "Nada aqui. Onde poderia estar?"
 
 msgid "Try searching on clear ground."
 msgstr "Tente achar no chão sem obstaculos."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr ""
-"Escavar em busca de artefatos requer um dia inteiro, tente novamente amanhã."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""

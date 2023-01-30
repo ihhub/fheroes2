@@ -103,12 +103,10 @@ namespace Battle
         static Indexes GetMoveWideIndexes( const int32_t head, const bool reflect );
         static bool isValidMirrorImageIndex( const int32_t index, const Unit * unit );
 
-        // Checks that the current unit (to which the current pathfinder graph relates) is able (in principle)
-        // to attack during the current turn from the cell with the given index
-        static bool CanAttackFromCell( const Unit & currentUnit, const int32_t from );
-        // Checks that the current unit (to which the current pathfinder graph relates) is able to attack the
-        // target during the current turn from the position which corresponds to the given index
-        static bool CanAttackTargetFromPosition( const Unit & currentUnit, const Unit & target, const int32_t dst );
+        // Checks whether a given unit is (in principle) capable of attacking during the current turn from a cell with a given index
+        static bool CanAttackFromCell( const Unit & unit, const int32_t from );
+        // Checks whether this attacker is able to attack the target during the current turn from a position corresponding to a given index
+        static bool CanAttackTargetFromPosition( const Unit & attacker, const Unit & target, const int32_t dst );
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
