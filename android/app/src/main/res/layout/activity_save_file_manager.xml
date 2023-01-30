@@ -5,6 +5,46 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <ToggleButton
+            android:id="@+id/activity_save_file_manager_filter_standard_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:enabled="false"
+            android:onClick="filterButtonClicked"
+            android:textOff="@string/activity_save_file_manager_filter_standard_btn_text"
+            android:textOn="@string/activity_save_file_manager_filter_standard_btn_text" />
+
+        <ToggleButton
+            android:id="@+id/activity_save_file_manager_filter_campaign_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:enabled="false"
+            android:onClick="filterButtonClicked"
+            android:textOff="@string/activity_save_file_manager_filter_campaign_btn_text"
+            android:textOn="@string/activity_save_file_manager_filter_campaign_btn_text" />
+
+        <ToggleButton
+            android:id="@+id/activity_save_file_manager_filter_multiplayer_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:enabled="false"
+            android:onClick="filterButtonClicked"
+            android:textOff="@string/activity_save_file_manager_filter_multiplayer_btn_text"
+            android:textOn="@string/activity_save_file_manager_filter_multiplayer_btn_text" />
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
