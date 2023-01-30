@@ -6086,12 +6086,15 @@ void Battle::PopupDamageInfo::SetAttackInfo( const Cell * cell, const Unit * att
 
 void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell )
 {
-    if ( hero == nullptr || !SetDamageInfoBase( cell, defender ) ) {
+    assert( hero != nullptr );
+
+    // TODO: Currently, this functionality only supports a simple single-target spell case
+    // We should refactor this to apply to all cases
+    if ( !spell.isSingleTarget() || !spell.isDamage() ) {
         return;
     }
 
-    // Only show popup for single target damage spells such as bolt, arrow, or cold ray
-    if ( !spell.isSingleTarget() || !spell.isDamage() ) {
+    if ( !SetDamageInfoBase( cell, defender ) ) {
         return;
     }
 
