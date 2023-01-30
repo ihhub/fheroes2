@@ -969,8 +969,8 @@ bool Heroes::PickupArtifact( const Artifact & art )
                 GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
                 Dialog::OK )
-                                                : fheroes2::showStandardTextMessage( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ),
-                                                                   Dialog::OK );
+                                                : fheroes2::showStandardTextMessage( art.GetName(),
+                                                                                     _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
         }
         return false;
     }
