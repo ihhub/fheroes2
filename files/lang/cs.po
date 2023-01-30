@@ -572,7 +572,7 @@ msgstr "Velitel %{name} říká:"
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
-msgstr "\" Příjmu tvou kapitulaci a umožním tobě a tvým jednotkám bezpečný průchod "
+msgstr "\"Příjmu tvou kapitulaci a umožním tobě a tvým jednotkám bezpečný průchod "
 "za cenu %{price} zlaťáků.\""
 
 msgid "View %{monster} info"
