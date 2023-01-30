@@ -32,7 +32,7 @@ msgstr ""
 msgid ""
 "SAVE\n"
 "GAME"
-msgstr "Uložit hru"
+msgstr "ULOŽIT\nHRU"
 
 msgid ""
 "LOAD\n"
