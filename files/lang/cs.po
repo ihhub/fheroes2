@@ -731,100 +731,101 @@ msgstr "%{spell} působí %{damage} škod, %{count} stvoření bylo zahubeno."
 msgid "The %{spell} does %{damage} damage."
 msgstr "%{spell} působí %{damage} škod."
 
-#, fuzzy
+#, corrected
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr "%{spell} způsobil %{value} škod."
+msgstr "%{spell} působí %{damage} škod na vybrané žijící stvoření."
 
-#, fuzzy
+#, corrected
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr "%{spell} způsobil %{value} škod."
+msgstr "%{spell} působí %{damage} škod všem žijícím stvořením."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgstr "Útok %{attacker} oslepil %{target}!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgstr "Upřený pohled %{attacker}' proměnil %{target} na kámen!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr ""
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgstr "%{target} jsou paralyzovaní úderem %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "%{attacker} zrušil všechna kladná kouzla na %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgstr "%{attacker} zeslal %{spell} na %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "%{attacker} postihlo neštěstí."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "Na %{attacker} se usmálo štěstí."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "Dobrá morálka způsobila, že %{monster} může zaútočit znovu."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr ""
+msgstr "Chabá morálka způsobila, že %{monster} zpanikařili a neumůžou se hnout."
 
-#, fuzzy
+#, corrected
 msgid "%{tower} does %{damage} damage."
-msgstr "%{tower} způsobila %{dmg} škod."
+msgstr "%{tower} působí %{damage} škod."
 
 msgid "The mirror image is created."
-msgstr ""
+msgstr "Zrcadlová jednotka je vytvořena."
 
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "Zrcadlová jednotka byla zničena!"
 
-#, fuzzy
+#, corrected
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr "Jsi si jist, že chceš utéct?"
+msgstr "Jsi si jist, že chceš přerušit automatický boj?"
 
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Nic ke kouzlení."
 
 msgid "Are you sure you want to retreat?"
-msgstr "Jsi si jist, že chceš utéct?"
+msgstr "Jsi si jist, že chceš utéct z boje?"
 
-#, fuzzy
+#, corrected
 msgid "Retreat disabled"
-msgstr "Ústup"
+msgstr "Není kam utéct"
 
 #, fuzzy
 msgid "Surrender disabled"
-msgstr "Vzdát se"
+msgstr "Nelze se vzdát"
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Škody: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Škody: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Úhyn: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Úhyn: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
-msgstr ""
+msgstr "Za pomoci orlího oka byl %{name} schopen odpozorovat a naučit se kouzlo "
+"%{spell}."
 
 msgid "Human"
-msgstr ""
+msgstr "Člověk"
 
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Vyber jiného hrdinu."
 
 msgid "Set Attack Skill"
 msgstr ""
@@ -847,12 +848,12 @@ msgstr "Zobrazit %{name}"
 msgid "vs"
 msgstr ""
 
-#, fuzzy
+#, translation deleted
 msgid "%{race2} %{name2}"
-msgstr "Zobrazit %{name}"
+msgstr ""
 
 msgid "Monsters"
-msgstr ""
+msgstr "Monstra"
 
 msgid "N/A"
 msgstr ""
@@ -864,114 +865,122 @@ msgid "Right Turret"
 msgstr "Pravá věž"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} střílí silou %{count} Lučišníků"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "každý s +%{attack} bonusem k jejich útočné síle."
 
-#, fuzzy
+#, corrected
 msgid "The %{name} is destroyed."
-msgstr "%{name} je již postaven."
+msgstr "%{name} byl zničen."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
-msgstr ""
+msgstr "Tuhle bitvu ovlivňuje artefakt %{artifact} a znemožňuje použití kouzla %{spell}."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{count} %{name} vstává z mrtvých!"
+msgstr[1] "%{count} %{name} vstájí z mrtvých!!"
 msgstr[2] ""
 
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Škřítčí Aliance"
 
-#, fuzzy
+#, corrected
 msgid "Sorceress Guild"
-msgstr "Cech zlodějů"
+msgstr "Cech čarodějů"
 
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Cech Nekromantů"
 
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Zlobří Aliance"
 
 msgid "Dwarfbane"
-msgstr ""
+msgstr "Škřítčí prokletí"
 
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Dračí Aliance"
 
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Elfí Aliance"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Kreager poražen"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Waywardův syn"
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Strýc Ivan"
 
-#, fuzzy
+#, corrected
 msgid "Annexation"
-msgstr "animace"
+msgstr "Zabrání"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Síla Armády"
 
 msgid "Save the Dwarves"
-msgstr ""
+msgstr "Zachraň Škřítky"
 
 msgid "Carator Mines"
-msgstr ""
+msgstr "Caratrovy Doly"
 
 msgid "Turning Point"
-msgstr ""
+msgstr "Bod zlomu"
 
 msgid "scenarioName|Defender"
 msgstr ""
 
 msgid "Corlagon's Defense"
-msgstr ""
+msgstr "Corlagonova Obrana"
 
 msgid "The Crown"
-msgstr ""
+msgstr "Koruna"
 
 msgid "The Gauntlet"
-msgstr ""
+msgstr "Rukavice"
 
 msgid "Betrayal"
-msgstr ""
+msgstr "Zrada"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Poslední zůčtování"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
 "rebellion against his brother.  They are not allied with each other, so they "
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
-msgstr ""
+msgstr "Roland potřebuje abys porazil šlechtice poblíž jeho hradu a tím začal povstání "
+"proti jeho bratrovi. Protivníci nemají mezi sebou smluvené spojenectví, proto "
+"asi budou po většinu času bojovat mezi sebou. Vítězství bude tvoje "
+"když dobiješ všechny jejich města a porazíš všechny hrdiny."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
-msgstr ""
+msgstr "Místní šlechta odmíta odpřísáhnout Rolandovi svou věrnost, proto musí být potlačena. "
+"Panství jsou mocná a bohatá, musíš být připraven na tězký odpor. Zmocni se všech "
+"nepřátelských hradů a tím vyhraješ."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
-msgstr ""
+msgstr "Tvým úkolem je ochránít Škřítky před Archibaldovými vojsky. Zmocni se všech "
+"nepřátelských hradů a vesnic, zároveň dej pozor abys neztratil všechny vesnice "
+"škřitků najednou, jinak zvítězí náš protivník."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
-msgstr ""
+msgstr "Budeš vystaven přímému souboji o suroviny a zdroje se čtyřmi spojeneckými 
+"protivníky. Zaber všechny nepřátelské hrady a vyhraješ. "
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
