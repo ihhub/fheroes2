@@ -48,7 +48,6 @@
 #include "spell_book.h"
 #include "spell_storage.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
