@@ -2701,7 +2701,7 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, i
             hero.setVisitedForAllies( dst_index );
 
             Interface::Basic & I = Interface::Basic::Get();
-            I.GetRadar().SetRenderWholeMap();
+            I.GetRadar().SetRenderMap();
             I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
         }
     }

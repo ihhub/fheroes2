@@ -686,7 +686,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     if ( player->isAIAutoControlMode() ) {
                         radar.SetHide( false );
-                        radar.SetRenderWholeMap();
+                        radar.SetRenderMap();
                         radar.SetRedraw();
                     }
 
@@ -761,7 +761,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     }
 
     radar.SetHide( false );
-    radar.SetRenderWholeMap();
+    radar.SetRenderMap();
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );

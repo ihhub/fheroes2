@@ -145,7 +145,6 @@ Interface::Radar::Radar( Basic & basic )
     : BorderWindow( { 0, 0, RADARWIDTH, RADARWIDTH } )
     , _radarType( RadarType::WorldMap )
     , _interface( basic )
-    , _roi( 0, 0, world.w(), world.h() )
 {
     // Radar image can not be transparent so we disable the transform layer to speed up rendering.
     _map._disableTransformLayer();
@@ -180,6 +179,7 @@ void Interface::Radar::Build()
 {
     SetZoom();
     SetRedraw();
+    _roi = { 0, 0, world.w(), world.h() };
 }
 
 void Interface::Radar::SetZoom()
@@ -201,12 +201,6 @@ void Interface::Radar::SetZoom()
 void Interface::Radar::SetRedraw() const
 {
     _interface.SetRedraw( REDRAW_RADAR );
-}
-
-void Interface::Radar::SetRenderWholeMap()
-{
-    _needMapRedraw = true;
-    _roi = { 0, 0, world.w(), world.h() };
 }
 
 void Interface::Radar::SetRenderArea( const fheroes2::Rect & roi )

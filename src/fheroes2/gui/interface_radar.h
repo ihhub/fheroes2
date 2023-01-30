@@ -56,11 +56,19 @@ namespace Interface
         Radar & operator=( const Radar & ) = delete;
 
         void SetPos( int32_t ox, int32_t oy ) override;
+
+        // Set the render of radar image. If 'SetRenderMap()' or 'SetRenderArea()' was not previously
+        // called only the cursor will be rendered over the previously drawn radar map.
+        // To redraw the map call 'SetRenderMap()' or 'SetRenderArea()' if you nedd to redraw only a part of the map.
         void SetRedraw() const;
 
-        // Set to render the whole radar map on next radar Redraw call.
-        void SetRenderWholeMap();
-        // Set to render the radar map only in geven 'roi' on next radar Redraw call.
+        // Set the "need" of render the radar map on next radar Redraw call.
+        void SetRenderMap()
+        {
+            _needMapRedraw = true;
+        }
+
+        // Set the "need" of render the radar map only in geven 'roi' on next radar Redraw call.
         void SetRenderArea( const fheroes2::Rect & roi );
         void Build();
         void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
