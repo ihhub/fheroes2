@@ -94,7 +94,7 @@ namespace
         return value.width < fheroes2::Display::DEFAULT_WIDTH || value.height < fheroes2::Display::DEFAULT_HEIGHT;
     }
 
-    std::vector<fheroes2::ResolutionInfo> FilterResolutions( const std::set<fheroes2::ResolutionInfo> & resolutionSet )
+    std::set<fheroes2::ResolutionInfo> FilterResolutions( const std::set<fheroes2::ResolutionInfo> & resolutionSet )
     {
         static_assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480, "Default resolution must be 640 x 480" );
 
@@ -126,13 +126,13 @@ namespace
             resolutions.emplace_back( resolution );
         }
 
-        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
-
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         // Scaling is available only on SDL 2.
         if ( resolutions.size() < 2 ) {
-            return resolutions;
+            return { resolutions.begin(), resolutions.end() };
         }
+
+        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
 
         // Add resolutions with scale factor. No need to run through the newly added elements so we remember the size of the array.
         const size_t resolutionCountBefore = resolutions.size();
@@ -156,11 +156,9 @@ namespace
                 --biggerId;
             }
         }
-
-        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
 #endif
 
-        return resolutions;
+        return { resolutions.begin(), resolutions.end() };
     }
 
     std::vector<uint8_t> StandardPaletteIndexes()
@@ -610,7 +608,9 @@ namespace
                 resolutionSet.emplace( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 );
                 resolutionSet.emplace( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 );
                 resolutionSet.emplace( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT, 1 );
-                filteredResolutions = FilterResolutions( resolutionSet );
+                resolutionSet = FilterResolutions( resolutionSet );
+
+                filteredResolutions = { resolutionSet.rbegin(), resolutionSet.rend() };
             }
 
             return filteredResolutions;
@@ -866,7 +866,9 @@ namespace
                 // 848x480 is the smallest resolution supported by fheroes2
                 resolutionSet.emplace( 848, 480, 1 );
 #endif
-                filteredResolutions = FilterResolutions( resolutionSet );
+                resolutionSet = FilterResolutions( resolutionSet );
+
+                filteredResolutions = { resolutionSet.rbegin(), resolutionSet.rend() };
             }
 
             return filteredResolutions;
@@ -1352,7 +1354,9 @@ namespace
                     }
                 }
 
-                filteredResolutions = FilterResolutions( resolutionSet );
+                resolutionSet = FilterResolutions( resolutionSet );
+
+                filteredResolutions = { resolutionSet.rbegin(), resolutionSet.rend() };
             }
 
             return filteredResolutions;
