@@ -1305,7 +1305,7 @@ bool ArtifactsBar::isMagicBook( const Artifact & artifact )
 
 void ArtifactsBar::messageMagicBookAbortTrading() const
 {
-    Dialog::Message( "", _( "This item can't be traded." ), Font::BIG, Dialog::OK );
+    fheroes2::showStandardTextMessage( "", _( "This item can't be traded." ), Dialog::OK );
 }
 
 ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage )
