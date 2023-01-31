@@ -963,7 +963,7 @@ msgstr "Tvým úkolem je ochránít Škřítky před Archibaldovými vojsky. Zmo
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
-msgstr "Budeš vystaven přímému souboji o suroviny a zdroje se čtyřmi spojeneckými 
+msgstr "Budeš vystaven přímému souboji o suroviny a zdroje se čtyřmi spojeneckými "
 "protivníky. Zaber všechny nepřátelské hrady a vyhraješ. "
 
 msgid ""
