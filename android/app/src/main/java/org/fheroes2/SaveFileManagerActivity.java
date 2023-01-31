@@ -97,7 +97,7 @@ public final class SaveFileManagerActivity extends Activity
         activeFiltersCount += filterMultiplayerToggleButton.isChecked() ? 1 : 0;
 
         // Do not allow all filters to be turned off at the same time.
-        // TODO: Try disabling the button instead by changing its style so that it doesn't look disabled.
+        // TODO: Try disabling the button instead and changing its style so that it doesn't look disabled.
         if ( activeFiltersCount < 1 && !filterToggleButton.isChecked() ) {
             filterToggleButton.setChecked( true );
         }
