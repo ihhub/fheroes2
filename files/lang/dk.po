@@ -8811,25 +8811,3 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Vent med denne enhed"
-
-#~ msgid "Wait"
-#~ msgstr "Vent"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Dette lader nuværende enhed vente med at udspille sin tur, indtil alle "
-#~ "andre enheder har spillet deres tur."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} venter med deres tur."
-
-#~ msgid "world: Scouting skill shows extended content info"
-#~ msgstr "verden: Opdager-evnen giver adgang til flere informationer"
-
-#~ msgid "heroes: allow to choose any primary skill in Arena"
-#~ msgstr "helte: tillad at vælge hvilken som helst primær evne i Arena"
