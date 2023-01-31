@@ -83,17 +83,29 @@ public final class SaveFileManagerActivity extends Activity
     {
         super.onResume();
 
-        updateUI();
         updateSaveFileList();
     }
 
     public void filterButtonClicked( final View view )
     {
+        final ToggleButton filterToggleButton = (ToggleButton)view;
+
+        int activeFiltersCount = 0;
+
+        activeFiltersCount += filterStandardToggleButton.isChecked() ? 1 : 0;
+        activeFiltersCount += filterCampaignToggleButton.isChecked() ? 1 : 0;
+        activeFiltersCount += filterMultiplayerToggleButton.isChecked() ? 1 : 0;
+
+        // Do not allow all filters to be turned off at the same time.
+        // TODO: Try disabling the button instead by changing its style so that it doesn't look disabled.
+        if ( activeFiltersCount < 1 && !filterToggleButton.isChecked() ) {
+            filterToggleButton.setChecked( true );
+        }
+
         for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
             saveFileListView.setItemChecked( i, false );
         }
 
-        updateUI();
         updateSaveFileList();
     }
 
@@ -243,7 +255,6 @@ public final class SaveFileManagerActivity extends Activity
                 runOnUiThread( () -> {
                     backgroundTask = null;
 
-                    updateUI();
                     updateSaveFileList();
                 } );
             }
@@ -259,17 +270,9 @@ public final class SaveFileManagerActivity extends Activity
         // A quick and dirty way to avoid the re-creation of this activity due to the screen orientation change while running a background task
         setRequestedOrientation( backgroundTask == null ? ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED : ActivityInfo.SCREEN_ORIENTATION_LOCKED );
 
-        int activeFiltersCount = 0;
-
-        activeFiltersCount += filterStandardToggleButton.isChecked() ? 1 : 0;
-        activeFiltersCount += filterCampaignToggleButton.isChecked() ? 1 : 0;
-        activeFiltersCount += filterMultiplayerToggleButton.isChecked() ? 1 : 0;
-
-        // Do not allow all filters to be turned off at the same time
-        filterStandardToggleButton.setEnabled( backgroundTask == null && ( activeFiltersCount != 1 || !filterStandardToggleButton.isChecked() ) );
-        filterCampaignToggleButton.setEnabled( backgroundTask == null && ( activeFiltersCount != 1 || !filterCampaignToggleButton.isChecked() ) );
-        filterMultiplayerToggleButton.setEnabled( backgroundTask == null && ( activeFiltersCount != 1 || !filterMultiplayerToggleButton.isChecked() ) );
-
+        filterStandardToggleButton.setEnabled( backgroundTask == null );
+        filterCampaignToggleButton.setEnabled( backgroundTask == null );
+        filterMultiplayerToggleButton.setEnabled( backgroundTask == null );
         saveFileListView.setEnabled( backgroundTask == null );
         selectAllButton.setEnabled( backgroundTask == null );
         unselectAllButton.setEnabled( backgroundTask == null );
