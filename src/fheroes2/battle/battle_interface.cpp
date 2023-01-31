@@ -3231,14 +3231,24 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     const bool isMage = ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE );
 
     // Mage is channeling the bolt; doesn't have missile sprite
-    if ( isMage )
+    if ( isMage ) {
         fheroes2::delayforMs( Game::ApplyBattleSpeed( 115 ) );
-    else
+    }
+    else {
         missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
+    }
 
     // Lich/Power lich has projectile speed of 25
     const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
+
+    // For most shooting creatures we do not render the first missile position to better imitate start position change depending on shooting angle.
+    if ( !isMage && ( monsterID != Monster::TROLL ) && ( monsterID != Monster::WAR_TROLL ) ) {
+        ++pnt;
+    }
+
+    // Shooter projectile rendering offset uses 'x' and 'y' from sprite data.
+    const fheroes2::Point missileOffset( reverse ? ( -missile.width() - missile.x() ) : missile.x(), ( angle > 0 ) ? ( -missile.height() - missile.y() ) : missile.y() );
 
     // Wait for previously set and not passed delays before rendering a new frame.
     WaitForAllActionDelays();
@@ -3257,7 +3267,8 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
                 fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y + 2 }, { pnt->x, pnt->y + 2 }, 0x77 );
             }
             else {
-                fheroes2::Blit( missile, _mainSurface, reverse ? pnt->x - missile.width() : pnt->x, ( angle > 0 ) ? pnt->y - missile.height() : pnt->y, reverse );
+                // Coordinates in 'pnt' corresponds to the front side of the projectile (arrowhead).
+                fheroes2::Blit( missile, _mainSurface, pnt->x + missileOffset.x, pnt->y + missileOffset.y, reverse );
             }
             RedrawPartialFinish();
             ++pnt;
