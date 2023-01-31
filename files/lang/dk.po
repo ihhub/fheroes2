@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-16 13:44+0000\n"
-"PO-Revision-Date: 2023-01-25 17:06+0100\n"
+"PO-Revision-Date: 2023-01-31 16:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da_DK\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Loco-Source-Locale: da_DK\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Loco-Parser: loco_parse_po\n"
 
 msgid ""
@@ -1245,226 +1245,227 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
 msgid "campaignBonus|Ballista"
-msgstr ""
+msgstr "Ballisten"
 
 msgid "campaignBonus|Black Pearl"
-msgstr ""
+msgstr "Den sorte perle"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr ""
+msgstr "Besværgelsesarmbåndet"
 
 msgid "campaignBonus|Defender Helm"
-msgstr ""
+msgstr "Forsvarshjelmen"
 
 msgid "campaignBonus|Breastplate"
-msgstr ""
+msgstr "Brystpladen"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr ""
+msgstr "Dragesværdet"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr ""
+msgstr "Fizbin-medaljen"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr ""
+msgstr "Yppersteskriftrullen"
 
 msgid "campaignBonus|Hideous Mask"
-msgstr ""
+msgstr "Den hæslige maske"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr ""
+msgstr "Magikerens ring"
 
 msgid "campaignBonus|Major Scroll"
-msgstr ""
+msgstr "Den store skriftrulle"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr ""
+msgstr "Æresmedaljen"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr ""
+msgstr "Tapperhedsmedaljen"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr ""
+msgstr "Den lille skriftrulle"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr ""
+msgstr "Nomadens støvler"
 
 msgid "campaignBonus|Power Axe"
-msgstr ""
+msgstr "Kraftøksen"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr ""
+msgstr "Pigskjoldet"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr ""
+msgstr "Snigskjoldet"
 
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Skattepant"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr ""
+msgstr "Torden-morgenstjernen"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr ""
+msgstr "Traverens støvler"
 
 msgid "campaignBonus|White Pearl"
-msgstr ""
+msgstr "Den hvide perle"
 
 msgid "campaignBonus|Basic Archery"
-msgstr ""
+msgstr "Begynder skytte"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr ""
+msgstr "Øvet skytte"
 
 msgid "campaignBonus|Expert Archery"
-msgstr ""
+msgstr "Ekspert skytte"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr ""
+msgstr "Begynder ballistik"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr ""
+msgstr "Øvet ballistik"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr ""
+msgstr "Ekspert ballistik"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr ""
+msgstr "Begynder diplomati"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr ""
+msgstr "Øvet diplomati"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr ""
+msgstr "Ekspert diplomati"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Begynder Ørneblik"
+msgstr "Begynder ørneblik"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Avanceret Ørneblik"
+msgstr "Øvet ørneblik"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Ekspert Ørneblik"
+msgstr "Ekspert ørneblik"
 
 msgid "campaignBonus|Basic Estates"
-msgstr ""
+msgstr "Begynder adelskab"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr ""
+msgstr "Øvet adelskab"
 
 msgid "campaignBonus|Expert Estates"
-msgstr ""
+msgstr "Ekspert adelskab"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr ""
+msgstr "Begynder lederskab"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr ""
+msgstr "Øvet lederskab"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr ""
+msgstr "Ekspert lederskab"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr ""
+msgstr "Begynder logistik"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr ""
+msgstr "Øvet logistik"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr ""
+msgstr "Ekspert logistik"
 
 msgid "campaignBonus|Basic Luck"
-msgstr ""
+msgstr "Begynder held"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr ""
+msgstr "Øvet held"
 
 msgid "campaignBonus|Expert Luck"
-msgstr ""
+msgstr "Ekspert held"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr ""
+msgstr "Begynder mysticisme"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr ""
+msgstr "Øvet mysticisme"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr ""
+msgstr "Ekspert mysticisme"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr ""
+msgstr "Begynder navigation"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr ""
+msgstr "Øvet navigation"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr ""
+msgstr "Ekspert navigation"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr ""
+msgstr "Begynder nekromantik"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr ""
+msgstr "Øvet nekromantik"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr ""
+msgstr "Ekspert nekromantik"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr ""
+msgstr "Begynder stifinder"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr ""
+msgstr "Øvet stifinder"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr ""
+msgstr "Ekspert stifinder"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr ""
+msgstr "Begynder opdager"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr ""
+msgstr "Øvet opdager"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr ""
+msgstr "Ekspert opdager"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr ""
+msgstr "Begynder visdom"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr ""
+msgstr "Øvet visdom"
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr ""
+msgstr "Ekspert visdom"
 
 msgid "campaignBonus|Animate Dead"
-msgstr ""
+msgstr "Dødebesjæling"
 
 msgid "campaignBonus|Chain Lightning"
-msgstr ""
+msgstr "Kædelyn"
 
+# I PokéMON kaldes "fireblast" for "flammebrag" i tegnefilmen med dansk tale
 msgid "campaignBonus|Fireblast"
-msgstr ""
+msgstr "Flammebrag"
 
 msgid "campaignBonus|Mass Curse"
-msgstr ""
+msgstr "Masseforbandelse"
 
 msgid "campaignBonus|Mass Haste"
-msgstr ""
+msgstr "Masseforhastning"
 
 msgid "campaignBonus|Mirror Image"
-msgstr ""
+msgstr "Spejlbillede"
 
 msgid "campaignBonus|Resurrect"
-msgstr ""
+msgstr "Genoplivelse"
 
 msgid "campaignBonus|Steelskin"
-msgstr ""
+msgstr "Stålhud"
 
 msgid "campaignBonus|Summon Earth"
-msgstr ""
+msgstr "Hidkald Jord-elemental"
 
 msgid "campaignBonus|View Heroes"
-msgstr ""
+msgstr "Vis helte"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -5396,7 +5397,7 @@ msgid "skill|Basic"
 msgstr "Begynder"
 
 msgid "skill|Advanced"
-msgstr "Avanceret"
+msgstr "Øvet"
 
 msgid "skill|Expert"
 msgstr "Ekspert"
@@ -5414,157 +5415,157 @@ msgid "Scouting"
 msgstr ""
 
 msgid "Diplomacy"
-msgstr ""
+msgstr "Diplomati"
 
 msgid "Navigation"
-msgstr ""
+msgstr "Navigation"
 
 msgid "Leadership"
-msgstr ""
+msgstr "Lederskab"
 
 msgid "Wisdom"
-msgstr ""
+msgstr "Visdom"
 
 msgid "Mysticism"
 msgstr ""
 
 msgid "Ballistics"
-msgstr ""
+msgstr "Ballistik"
 
 msgid "Eagle Eye"
 msgstr "Ørneblik"
 
 msgid "Necromancy"
-msgstr ""
+msgstr "Nekromantik"
 
 msgid "Estates"
 msgstr ""
 
 msgid "Advanced Archery"
-msgstr "Avanceret Skytte"
+msgstr "Øvet skytte"
 
 msgid "Advanced Pathfinding"
-msgstr "Avanceret Stifinder"
+msgstr "Øvet stifinder"
 
 msgid "Basic Archery"
-msgstr "Begynder Skytte"
+msgstr "Begynder skytte"
 
 msgid "Basic Pathfinding"
-msgstr "Begynder Stifinder"
+msgstr "Begynder stifinder"
 
 msgid "Expert Pathfinding"
-msgstr "Ekspert Stifinder"
+msgstr "Ekspert stifinder"
 
 msgid "Advanced Logistics"
-msgstr "Avanceret Logistik"
+msgstr "Øvet logistik"
 
 msgid "Basic Logistics"
-msgstr "Begynder Logistik"
+msgstr "Begynder logistik"
 
 msgid "Basic Scouting"
-msgstr "Begynder Opdager"
+msgstr "Begynder opdager"
 
 msgid "Expert Archery"
-msgstr "Ekspert Skytte"
+msgstr "Ekspert skytte"
 
 msgid "Expert Logistics"
-msgstr "Ekspert Logistik"
+msgstr "Ekspert logistik"
 
 msgid "Advanced Diplomacy"
-msgstr "Avanceret Diplomatik"
+msgstr "Øvet diplomati"
 
 msgid "Advanced Scouting"
-msgstr "Avanceret Opdager"
+msgstr "Øvet opdager"
 
 msgid "Basic Diplomacy"
-msgstr "Begynder Diplomatik"
+msgstr "Begynder diplomati"
 
 msgid "Expert Diplomacy"
-msgstr "Ekspert Diplomatik"
+msgstr "Ekspert diplomati"
 
 msgid "Expert Scouting"
-msgstr "Ekspert Opdager"
+msgstr "Ekspert opdager"
 
 msgid "Advanced Leadership"
-msgstr "Avanceret Lederskab"
+msgstr "Øvet lederskab"
 
 msgid "Advanced Navigation"
-msgstr "Avanceret Navigation"
+msgstr "Øvet navigation"
 
 msgid "Basic Leadership"
-msgstr "Begynder Lederskab"
+msgstr "Begynder lederskab"
 
 msgid "Basic Navigation"
-msgstr "Begynder Navigation"
+msgstr "Begynder navigation"
 
 msgid "Expert Navigation"
-msgstr "Ekspert Navigation"
+msgstr "Ekspert navigation"
 
 msgid "Advanced Wisdom"
-msgstr "Avanceret Visdom"
+msgstr "Øvet visdom"
 
 msgid "Basic Mysticism"
-msgstr "Begynder Mysticisme"
+msgstr "Begynder mysticisme"
 
 msgid "Basic Wisdom"
-msgstr "Begynder Visdom"
+msgstr "Begynder visdom"
 
 msgid "Expert Leadership"
-msgstr "Ekspert Lederskab"
+msgstr "Ekspert lederskab"
 
 msgid "Expert Wisdom"
-msgstr "Ekspert Visdom"
+msgstr "Ekspert visdom"
 
 msgid "Advanced Luck"
-msgstr "Avanceret Held"
+msgstr "Øvet held"
 
 msgid "Advanced Mysticism"
-msgstr "Avanceret Mysticisme"
+msgstr "Øvet mysticisme"
 
 msgid "Basic Luck"
-msgstr "Begynder Held"
+msgstr "Begynder held"
 
 msgid "Expert Luck"
-msgstr "Ekspert Held"
+msgstr "Ekspert held"
 
 msgid "Expert Mysticism"
-msgstr "Ekspert Mysticisme"
+msgstr "Ekspert mysticisme"
 
 msgid "Advanced Ballistics"
-msgstr "Avanceret Ballistik"
+msgstr "Øvet ballistik"
 
 msgid "Advanced Eagle Eye"
-msgstr "Avanceret Ørneblik"
+msgstr "Øvet ørneblik"
 
 msgid "Basic Ballistics"
-msgstr "Begynder Ballistik"
+msgstr "Begynder ballistik"
 
 msgid "Basic Eagle Eye"
-msgstr "Begynder Ørneblik"
+msgstr "Begynder ørneblik"
 
 msgid "Expert Ballistics"
-msgstr "Ekspert Ballistik"
+msgstr "Ekspert ballistik"
 
 msgid "Advanced Necromancy"
-msgstr "Avanceret Nekromantik"
+msgstr "Øvet nekromantik"
 
 msgid "Basic Estates"
-msgstr "Begynder Adelskab"
+msgstr "Begynder adelskab"
 
 msgid "Basic Necromancy"
-msgstr "Begynder Nekromantik"
+msgstr "Begynder nekromantik"
 
 msgid "Expert Eagle Eye"
-msgstr "Ekspert Ørneblik"
+msgstr "Ekspert ørneblik"
 
 msgid "Expert Necromancy"
-msgstr "Ekspert Nekromantik"
+msgstr "Ekspert nekromantik"
 
 msgid "Advanced Estates"
-msgstr "Avanceret Adelskab"
+msgstr "Øvet adelskab"
 
 msgid "Expert Estates"
-msgstr "Ekspert Adelskab"
+msgstr "Ekspert adelskab"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
@@ -8177,7 +8178,7 @@ msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
 
 msgid "Resurrect True"
-msgstr "Sand Genoplivelse"
+msgstr "Sand genoplivelse"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
 msgstr ""
@@ -8238,7 +8239,7 @@ msgstr ""
 "Stenskin."
 
 msgid "Steelskin"
-msgstr "Stålskind"
+msgstr "Stålhud"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr ""
@@ -8377,7 +8378,7 @@ msgid "Increases a unit's attack skill."
 msgstr "Øger en trops angrebsevne."
 
 msgid "Animate Dead"
-msgstr "Animer døde"
+msgstr "Dødebesjæling"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
