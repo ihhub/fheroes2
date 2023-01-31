@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,6 +28,7 @@
 #include <iterator>
 #include <ostream>
 #include <random>
+#include <utility>
 
 #include "ai.h"
 #include "army.h"
@@ -69,13 +70,10 @@
 #include "ui_tool.h"
 #include "world.h"
 
-namespace Battle
-{
-    Arena * arena = nullptr;
-}
-
 namespace
 {
+    Battle::Arena * arena = nullptr;
+
     // Compute a new seed from a list of actions, so random actions happen differently depending on user inputs
     uint32_t UpdateRandomSeed( const uint32_t seed, const Battle::Actions & actions )
     {
@@ -396,9 +394,11 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         _interface->fullRedraw();
         display.render();
 
-        // Wait for the end of M82::PREBATTL playback
-        while ( LocalEvent::Get().HandleEvents() && Mixer::isPlaying( -1 ) )
-            ;
+        // Wait for the end of M82::PREBATTL playback. Make sure that we check the music status first as HandleEvents() call is not instant.
+        LocalEvent & le = LocalEvent::Get();
+        while ( Mixer::isPlaying( -1 ) && le.HandleEvents() ) {
+            // Do nothing.
+        }
     }
 }
 
@@ -421,6 +421,16 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
     bool endOfTurn = false;
 
     while ( !endOfTurn ) {
+        // All cells on the board should be properly reset at the beginning of each iteration
+        assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) {
+            const Unit * unit = cell.GetUnit();
+            if ( unit && !unit->isValid() ) {
+                return false;
+            }
+
+            return cell.GetQuality() == 0;
+        } ) );
+
         Actions actions;
 
         if ( _interface ) {
@@ -443,7 +453,9 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             // This unit will certainly perform at least one full-fledged action
             _lastActiveUnitArmyColor = troop->GetArmyColor();
 
-            _globalAIPathfinder.calculate( *troop );
+            if ( _bridge ) {
+                _bridge->SetPassability( *troop );
+            }
 
             if ( troop->isControlRemote() ) {
                 RemoteTurn( *troop, actions );
@@ -462,6 +474,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         while ( !actions.empty() ) {
             ApplyAction( actions.front() );
             actions.pop_front();
+
+            board.Reset();
 
             if ( _orderOfUnits ) {
                 // Applied action could kill someone or affect the speed of some unit, update the order of units
@@ -577,10 +591,6 @@ void Battle::Arena::Turns()
                 }
             }
 
-            if ( _bridge ) {
-                _bridge->SetPassable( *troop );
-            }
-
             TurnTroop( troop, orderHistory );
         }
     }
@@ -628,7 +638,16 @@ void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
 
 void Battle::Arena::TowerAction( const Tower & twr )
 {
-    board.Reset();
+    // All cells on the board should be properly reset here
+    assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) {
+        const Unit * unit = cell.GetUnit();
+        if ( unit && !unit->isValid() ) {
+            return false;
+        }
+
+        return cell.GetQuality() == 0;
+    } ) );
+
     board.SetEnemyQuality( twr );
 
     // Target unit and its quality
@@ -655,6 +674,8 @@ void Battle::Arena::TowerAction( const Tower & twr )
     Command cmd( CommandType::MSG_BATTLE_TOWER, twr.GetType(), targetInfo.first->GetUID() );
 
     ApplyAction( cmd );
+
+    board.Reset();
 }
 
 void Battle::Arena::CatapultAction()
@@ -695,93 +716,23 @@ void Battle::Arena::CatapultAction()
     }
 }
 
-Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) const
+Battle::Indexes Battle::Arena::GetPath( const Unit & unit, const Position & position )
 {
-    Indexes result = board.GetPath( b, dst );
+    const Indexes result = _battlePathfinder.buildPath( unit, position );
 
-    if ( !result.empty() && IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
-        std::stringstream ss;
-        for ( uint32_t ii = 0; ii < result.size(); ++ii )
-            ss << result[ii] << ", ";
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() )
+    if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) && !result.empty() ) {
+        std::string pathStr;
+        pathStr.reserve( Speed::INSTANT * 4 );
+
+        std::for_each( result.begin(), result.end(), [&pathStr]( const int32_t item ) {
+            pathStr += std::to_string( item );
+            pathStr += ", ";
+        } );
+
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, pathStr )
     }
 
     return result;
-}
-
-Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange ) const
-{
-    return _globalAIPathfinder.findTwoMovesOverlap( indexTo, movementRange );
-}
-
-std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target ) const
-{
-    std::pair<int, uint32_t> result = { -1, 65535 };
-
-    const Position & pos = target.GetPosition();
-    const Cell * head = pos.GetHead();
-    const Cell * tail = pos.GetTail();
-
-    if ( head ) {
-        const BattleNode & headNode = _globalAIPathfinder.getNode( head->GetIndex() );
-        if ( headNode._from != -1 ) {
-            result.first = headNode._from;
-            result.second = headNode._cost;
-        }
-    }
-
-    if ( tail ) {
-        const BattleNode & tailNode = _globalAIPathfinder.getNode( tail->GetIndex() );
-        if ( tailNode._from != -1 && tailNode._cost < result.second ) {
-            result.first = tailNode._from;
-            result.second = tailNode._cost;
-        }
-    }
-
-    return result;
-}
-
-uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
-{
-    return Board::isValidIndex( indexTo ) ? _globalAIPathfinder.getDistance( indexTo ) : 65535;
-}
-
-bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
-{
-    return Board::isValidIndex( indexTo ) && _globalAIPathfinder.hexIsPassable( indexTo );
-}
-
-Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
-{
-    return _globalAIPathfinder.getAllAvailableMoves( moveRange );
-}
-
-int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const
-{
-    const Position dstPos = Position::GetReachable( currentUnit, dst );
-
-    if ( dstPos.GetHead() != nullptr && ( !currentUnit.isWide() || dstPos.GetTail() != nullptr ) ) {
-        // Destination cell is already reachable
-        return dstPos.GetHead()->GetIndex();
-    }
-
-    const Indexes path = _globalAIPathfinder.buildPath( dst );
-
-    // Destination cell is unreachable in principle according to the AIBattlePathfinder
-    if ( path.empty() ) {
-        return -1;
-    }
-
-    // Search for the reachable cell nearest to the end of the path
-    for ( auto it = path.crbegin(); it != path.crend(); ++it ) {
-        const Position pos = Position::GetReachable( currentUnit, *it );
-
-        if ( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) ) {
-            return pos.GetHead()->GetIndex();
-        }
-    }
-
-    return -1;
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index )
@@ -989,58 +940,74 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
     return false;
 }
 
-bool Battle::Arena::GraveyardAllowResurrect( int32_t index, const Spell & spell ) const
+bool Battle::Arena::GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const
 {
-    if ( !spell.isResurrect() )
+    if ( !spell.isResurrect() ) {
         return false;
+    }
 
     const HeroBase * hero = GetCurrentCommander();
-    if ( hero == nullptr )
+    if ( hero == nullptr ) {
         return false;
+    }
 
-    const Unit * killed = GetTroopUID( graveyard.GetLastTroopUID( index ) );
-    if ( killed == nullptr )
+    const Unit * unit = GraveyardLastTroop( index );
+    if ( unit == nullptr ) {
         return false;
+    }
 
-    if ( !killed->AllowApplySpell( spell, hero, nullptr ) )
+    if ( !unit->AllowApplySpell( spell, hero ) ) {
         return false;
+    }
 
-    if ( Board::GetCell( index )->GetUnit() != nullptr )
+    const int headIndex = unit->GetHeadIndex();
+    assert( Board::isValidIndex( headIndex ) );
+
+    // No other unit should stand on a corpse
+    if ( Board::GetCell( headIndex )->GetUnit() != nullptr ) {
         return false;
+    }
 
-    if ( !killed->isWide() )
+    if ( !unit->isWide() ) {
         return true;
+    }
 
-    const int tailIndex = killed->GetTailIndex();
-    const int headIndex = killed->GetHeadIndex();
-    const int secondIndex = tailIndex == index ? headIndex : tailIndex;
+    const int tailIndex = unit->GetTailIndex();
+    assert( Board::isValidIndex( tailIndex ) );
 
-    if ( Board::GetCell( secondIndex )->GetUnit() != nullptr )
+    // No other unit should stand on a corpse
+    if ( Board::GetCell( tailIndex )->GetUnit() != nullptr ) {
         return false;
+    }
 
     return true;
 }
 
-const Battle::Unit * Battle::Arena::GraveyardLastTroop( int32_t index ) const
+const Battle::Unit * Battle::Arena::GraveyardLastTroop( const int32_t index ) const
 {
     return GetTroopUID( graveyard.GetLastTroopUID( index ) );
 }
 
-std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32_t hexIndex ) const
+std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32_t index ) const
 {
-    const TroopUIDs & ids = graveyard.GetTroopUIDs( hexIndex );
+    const TroopUIDs troopUIDs = graveyard.GetTroopUIDs( index );
 
-    std::vector<const Battle::Unit *> units( ids.size() );
-    for ( size_t i = 0; i < ids.size(); ++i ) {
-        units[i] = GetTroopUID( ids[i] );
-    }
+    std::vector<const Unit *> result;
+    result.reserve( troopUIDs.size() );
 
-    return units;
+    std::for_each( troopUIDs.begin(), troopUIDs.end(), [this, &result]( const uint32_t uid ) {
+        const Unit * unit = GetTroopUID( uid );
+        assert( unit != nullptr );
+
+        result.push_back( unit );
+    } );
+
+    return result;
 }
 
-Battle::Indexes Battle::Arena::GraveyardClosedCells() const
+Battle::Indexes Battle::Arena::GraveyardOccupiedCells() const
 {
-    return graveyard.GetClosedCells();
+    return graveyard.GetOccupiedCells();
 }
 
 void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
@@ -1074,8 +1041,7 @@ void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
 
     case CAT_BRIDGE:
         if ( _bridge->isValid() ) {
-            _bridge->SetDown( true );
-            _bridge->SetDestroy();
+            _bridge->SetDestroyed();
         }
         break;
 
@@ -1272,16 +1238,6 @@ Battle::Force & Battle::Arena::getEnemyForce( const int color ) const
 Battle::Force & Battle::Arena::GetCurrentForce() const
 {
     return getForce( current_color );
-}
-
-int Battle::Arena::GetICNCovr() const
-{
-    return icn_covr;
-}
-
-uint32_t Battle::Arena::GetCurrentTurn() const
-{
-    return current_turn;
 }
 
 Battle::Result & Battle::Arena::GetResult()

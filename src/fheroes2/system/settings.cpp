@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -60,7 +60,7 @@ namespace
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
         GLOBAL_MONOCHROME_CURSOR = 0x00000020,
-        GLOBAL_SHOW_CPANEL = 0x00000040,
+        GLOBAL_SHOW_CONTROL_PANEL = 0x00000040,
         GLOBAL_SHOW_RADAR = 0x00000080,
         GLOBAL_SHOW_ICONS = 0x00000100,
         GLOBAL_SHOW_BUTTONS = 0x00000200,
@@ -79,7 +79,7 @@ namespace
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
         GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GLOBAL_SCREEN_NEAREST_SCALING = 0x20000000
+        GLOBAL_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
     };
 }
 
@@ -113,7 +113,7 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
-    _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+    _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
 
     if ( System::isHandheldDevice() ) {
         // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
@@ -337,7 +337,7 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "screen scaling type" ) ) {
-        setNearestLinearScaling( config.StrParams( "screen scaling type" ) == "nearest" );
+        setScreenScalingTypeNearest( config.StrParams( "screen scaling type" ) == "nearest" );
     }
 
     return true;
@@ -483,7 +483,7 @@ std::string Settings::String() const
     os << "cursor soft rendering = " << ( _optGlobal.Modes( GLOBAL_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
-    os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_NEAREST_SCALING ) ? "nearest" : "linear" ) << std::endl;
+    os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
 
     return os.str();
 }
@@ -789,14 +789,14 @@ void Settings::setEvilInterface( const bool enable )
     }
 }
 
-void Settings::setNearestLinearScaling( const bool enable )
+void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_SCREEN_NEAREST_SCALING );
+        _optGlobal.SetModes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST );
         fheroes2::engine().setNearestScaling( true );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_SCREEN_NEAREST_SCALING );
+        _optGlobal.ResetModes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST );
         fheroes2::engine().setNearestScaling( false );
     }
 }
@@ -853,7 +853,7 @@ bool Settings::isEvilInterfaceEnabled() const
 
 bool Settings::ShowControlPanel() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOW_CPANEL );
+    return _optGlobal.Modes( GLOBAL_SHOW_CONTROL_PANEL );
 }
 
 bool Settings::ShowRadar() const
@@ -1003,9 +1003,9 @@ void Settings::SetBattleMouseShaded( bool f )
     f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
-void Settings::SetShowPanel( bool f )
+void Settings::SetShowControlPanel( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOW_CPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CPANEL );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_CONTROL_PANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CONTROL_PANEL );
 }
 
 void Settings::SetShowRadar( bool f )

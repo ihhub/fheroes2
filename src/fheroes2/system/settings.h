@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -220,7 +220,7 @@ public:
     void SetBattleGrid( bool );
     void SetBattleMovementShaded( bool );
     void SetBattleMouseShaded( bool );
-    void SetShowPanel( bool );
+    void SetShowControlPanel( bool );
     void SetShowRadar( bool );
     void SetShowIcons( bool );
     void SetShowButtons( bool );
@@ -245,7 +245,7 @@ public:
     void setBattleDamageInfo( const bool enable );
     void setHideInterface( const bool enable );
     void setEvilInterface( const bool enable );
-    void setNearestLinearScaling( const bool enable );
+    void setScreenScalingTypeNearest( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

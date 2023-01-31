@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -206,7 +206,7 @@ void Interface::Radar::Generate()
                 color = GetPaletteIndexFromGround( tile.GetGround() );
 
                 const MP2::MapObjectType objectType = tile.GetObject();
-                if ( objectType == MP2::OBJ_MOUNTS || objectType == MP2::OBJ_TREES )
+                if ( objectType == MP2::OBJ_MOUNTAINS || objectType == MP2::OBJ_TREES )
                     color += 3;
             }
 
@@ -343,9 +343,9 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-            case MP2::OBJ_DRAGONCITY:
+            case MP2::OBJ_DRAGON_CITY:
             case MP2::OBJ_LIGHTHOUSE:
-            case MP2::OBJ_ALCHEMYLAB:
+            case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_MINES:
             case MP2::OBJ_SAWMILL:
                 // TODO: why Dragon City and Lighthouse are in this category? Verify the logic!
@@ -353,11 +353,11 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                 }
                 break;
-            case MP2::OBJN_DRAGONCITY:
-            case MP2::OBJN_LIGHTHOUSE:
-            case MP2::OBJN_ALCHEMYLAB:
-            case MP2::OBJN_MINES:
-            case MP2::OBJN_SAWMILL:
+            case MP2::OBJ_NON_ACTION_DRAGON_CITY:
+            case MP2::OBJ_NON_ACTION_LIGHTHOUSE:
+            case MP2::OBJ_NON_ACTION_ALCHEMIST_LAB:
+            case MP2::OBJ_NON_ACTION_MINES:
+            case MP2::OBJ_NON_ACTION_SAWMILL:
                 // TODO: why Dragon City and Lighthouse are in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
                     const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );

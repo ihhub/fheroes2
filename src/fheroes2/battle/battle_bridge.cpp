@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -30,62 +30,38 @@
 #include "battle_troop.h"
 #include "castle.h"
 
-Battle::Bridge::Bridge()
-    : destroy( false )
-    , down( false )
-{}
-
-bool Battle::Bridge::isValid() const
-{
-    return !isDestroy();
-}
-
-bool Battle::Bridge::isDestroy() const
-{
-    return destroy;
-}
-
-bool Battle::Bridge::isDown() const
-{
-    return down || isDestroy();
-}
-
-void Battle::Bridge::SetDown( bool f )
-{
-    down = f;
-}
-
-bool Battle::Bridge::AllowUp() const
-{
-    // yes if not destroyed and lowered and there are no any troops (alive or dead) on or under the bridge
-    return isValid() && isDown() && !isBridgeOccupied();
-}
-
-bool Battle::Bridge::isBridgeOccupied() const
+bool Battle::Bridge::isOccupied()
 {
     const Battle::Graveyard * graveyard = Arena::GetGraveyard();
 
-    // yes if there are any troops (alive or dead) on MOAT_CELL and GATES_CELL tiles
-    return Board::GetCell( MOAT_CELL )->GetUnit() || Board::GetCell( GATES_CELL )->GetUnit() || graveyard->GetLastTroopUID( MOAT_CELL )
-           || graveyard->GetLastTroopUID( GATES_CELL );
+    // Yes if there are any troops (alive or dead) on CELL_MOAT and CELL_GATES tiles
+    return Board::GetCell( CELL_MOAT )->GetUnit() || Board::GetCell( CELL_GATES )->GetUnit() || graveyard->GetLastTroopUID( CELL_MOAT )
+           || graveyard->GetLastTroopUID( CELL_GATES );
 }
 
-bool Battle::Bridge::NeedDown( const Unit & b, int32_t dstPos ) const
+bool Battle::Bridge::NeedDown( const Unit & unit, const int32_t dstIdx ) const
 {
-    // no if bridge is destroyed or already lowered or unit does not belong to the castle or there are any troops (alive or dead) on or under the bridge
-    if ( !isValid() || isDown() || b.GetColor() != Arena::GetCastle()->GetColor() || isBridgeOccupied() )
+    // No if bridge is destroyed or already lowered or unit does not belong to the castle or there are any troops (alive or dead) on or under the bridge
+    if ( !isValid() || isDown() || unit.GetColor() != Arena::GetCastle()->GetColor() || isOccupied() ) {
         return false;
-
-    if ( b.isFlying() ) {
-        return dstPos == GATES_CELL;
     }
-    else {
-        const int32_t prevPos = b.GetHeadIndex();
 
-        if ( dstPos == GATES_CELL && ( prevPos == CELL_AFTER_GATES || prevPos == BELOW_BRIDGE_CELL || prevPos == ABOVE_BRIDGE_CELL ) ) {
-            return true;
-        }
-        else if ( dstPos == MOAT_CELL && prevPos != GATES_CELL ) {
+    if ( unit.isFlying() ) {
+        return dstIdx == CELL_GATES;
+    }
+
+    const int32_t headIdx = unit.GetHeadIndex();
+
+    if ( dstIdx == CELL_GATES && ( headIdx == CELL_AFTER_GATES || headIdx == CELL_BELOW_BRIDGE || headIdx == CELL_ABOVE_BRIDGE ) ) {
+        return true;
+    }
+    if ( dstIdx == CELL_MOAT && headIdx != CELL_GATES ) {
+        return true;
+    }
+    if ( unit.isWide() ) {
+        const int32_t tailIdx = unit.GetTailIndex();
+
+        if ( dstIdx == CELL_BEFORE_MOAT && ( tailIdx == CELL_BELOW_BRIDGE || tailIdx == CELL_ABOVE_BRIDGE ) ) {
             return true;
         }
     }
@@ -93,38 +69,48 @@ bool Battle::Bridge::NeedDown( const Unit & b, int32_t dstPos ) const
     return false;
 }
 
-bool Battle::Bridge::isPassable( const Unit & b ) const
+bool Battle::Bridge::isPassable( const Unit & unit ) const
 {
-    // yes if bridge is lowered (or destroyed), or unit belongs to the castle and there are no any troops (alive or dead) on or under the bridge
-    return isDown() || ( b.GetColor() == Arena::GetCastle()->GetColor() && !isBridgeOccupied() );
+    // Yes if bridge is lowered (or destroyed), or unit belongs to the castle and there are no any troops (alive or dead) on or under the bridge
+    return isDown() || ( unit.GetColor() == Arena::GetCastle()->GetColor() && !isOccupied() );
 }
 
-void Battle::Bridge::SetDestroy()
+void Battle::Bridge::SetDestroyed()
 {
-    destroy = true;
+    _isDestroyed = true;
+    _isDown = true;
 
-    Board::GetCell( GATES_CELL )->SetObject( 0 );
+    Board::GetCell( CELL_GATES )->SetObject( 0 );
 }
 
-void Battle::Bridge::SetPassable( const Unit & b ) const
+void Battle::Bridge::SetPassability( const Unit & unit ) const
 {
-    if ( isPassable( b ) ) {
-        Board::GetCell( GATES_CELL )->SetObject( 0 );
+    if ( isPassable( unit ) ) {
+        Board::GetCell( CELL_GATES )->SetObject( 0 );
     }
     else {
-        Board::GetCell( GATES_CELL )->SetObject( 1 );
+        Board::GetCell( CELL_GATES )->SetObject( 1 );
     }
 }
 
-void Battle::Bridge::Action( const Unit & b, int32_t dst )
+void Battle::Bridge::ActionUp()
 {
-    ForceAction( NeedDown( b, dst ) );
+    assert( AllowUp() );
+
+    if ( Arena::GetInterface() ) {
+        Arena::GetInterface()->RedrawBridgeAnimation( false );
+    }
+
+    _isDown = false;
 }
 
-void Battle::Bridge::ForceAction( const bool actionDown )
+void Battle::Bridge::ActionDown()
 {
-    if ( Arena::GetInterface() )
-        Arena::GetInterface()->RedrawBridgeAnimation( actionDown );
+    assert( isValid() && !isDown() && !isOccupied() );
 
-    SetDown( actionDown );
+    if ( Arena::GetInterface() ) {
+        Arena::GetInterface()->RedrawBridgeAnimation( true );
+    }
+
+    _isDown = true;
 }

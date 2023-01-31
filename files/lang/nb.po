@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 02:36+0000\n"
+"POT-Creation-Date: 2023-01-29 12:11+0000\n"
 "PO-Revision-Date: 2022-12-18 08:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -619,6 +619,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Vis info om %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr "Fly %{monster} hit"
+
+msgid "Move %{monster} here"
+msgstr "Flytt %{monster} hit"
+
 msgid "Shoot %{monster}"
 msgstr "Skyt på %{monster}"
 
@@ -629,12 +635,6 @@ msgstr[1] "(%{count} skudd igjen)"
 
 msgid "Attack %{monster}"
 msgstr "Angrip %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "Fly %{monster} hit"
-
-msgid "Move %{monster} here"
-msgstr "Flytt %{monster} hit"
 
 msgid "Turn %{turn}"
 msgstr "Runde %{turn}"
@@ -3788,9 +3788,10 @@ msgstr "Vis rekordtavle for felttog."
 msgid "This file contains a save with an invalid game type."
 msgstr "Denne filen inneholder et lagringspunkt med en ugyldig spillversjon."
 
+#, fuzzy
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 "Denne filen ble lagret i spillutgaven \"Prisen for trofasthet\".\n"
 "Enkelte ting kan mangle."
@@ -4344,6 +4345,9 @@ msgstr ""
 "Det vil være nytteløst å lete etter den sjeldneste skatten fordi helten din "
 "vil ikke kunne ta den med seg - det er ikke plass til mer."
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr "Graving etter sjeldne skatter krever en hel dag. Prøv igjen i morgen."
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr "Etter mange timer med graving her, oppdager du %{artifact}."
@@ -4356,9 +4360,6 @@ msgstr "Ingenting her. Hvor kan den være?"
 
 msgid "Try searching on clear ground."
 msgstr "Prøv å let på bar bakke."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr "Graving etter sjeldne skatter krever en hel dag. Prøv igjen i morgen."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -7116,11 +7117,56 @@ msgstr "Ingen objekt"
 msgid "Alchemist Lab"
 msgstr "Alkymistlab"
 
+msgid "Sign"
+msgstr "Skilt"
+
+msgid "Buoy"
+msgstr "Bøye"
+
+msgid "Skeleton"
+msgstr "Skjelett"
+
 msgid "Daemon Cave"
 msgstr "Djevelens hule"
 
+msgid "Treasure Chest"
+msgstr "Skattekiste"
+
 msgid "Faerie Ring"
 msgstr "Feenes ring"
+
+msgid "Campfire"
+msgstr "Leirbål"
+
+msgid "Fountain"
+msgstr "Fontene"
+
+msgid "Gazebo"
+msgstr "Lysthus"
+
+msgid "Genie Lamp"
+msgstr "Magisk lampe"
+
+msgid "Archer's House"
+msgstr "Bueskytternes hus"
+
+msgid "Goblin Hut"
+msgstr "Vettehytte"
+
+msgid "Dwarf Cottage"
+msgstr "Dvergstue"
+
+msgid "Peasant Hut"
+msgstr "Bondehytte"
+
+msgid "Stables"
+msgstr "Stall"
+
+msgid "Alchemist's Tower"
+msgstr "Alkymistens tårn"
+
+msgid "Event"
+msgstr "Hendelse"
 
 msgid "Dragon City"
 msgstr "Dragenes landsby"
@@ -7136,11 +7182,17 @@ msgstr[1] "Vannhjul"
 msgid "Mines"
 msgstr "Gruver"
 
+msgid "Monster"
+msgstr "Monster"
+
 msgid "Obelisk"
 msgstr "Obelisk"
 
 msgid "Oasis"
 msgstr "Oase"
+
+msgid "Resource"
+msgstr "Råvare"
 
 msgid "Sawmill"
 msgstr "Sagbruk"
@@ -7148,16 +7200,56 @@ msgstr "Sagbruk"
 msgid "Oracle"
 msgstr "Orakel"
 
+# Sirkel? Ring?
+msgid "Shrine of the First Circle"
+msgstr "Tempel av den første sirkelen"
+
+msgid "Shipwreck"
+msgstr "Skipbrudd"
+
+msgid "Sea Chest"
+msgstr "Sjøkiste"
+
 msgid "Desert Tent"
 msgstr "Ørkentelt"
 
+msgid "Stone Liths"
+msgstr "Steinportal"
+
 msgid "Wagon Camp"
 msgstr "Vognleir"
+
+msgid "Hut of the Magi"
+msgstr "Spåmannens hytte"
+
+msgid "Whirlpool"
+msgstr "Virvelstrøm"
 
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Vindmølle"
 msgstr[1] "Vindmøller"
+
+msgid "Artifact"
+msgstr "Skatt"
+
+msgid "Mermaid"
+msgstr "Havfrue"
+
+msgid "Boat"
+msgstr "Skip"
+
+msgid "Random Ultimate Artifact"
+msgstr "Tilfeldig sjeldneste skatt"
+
+msgid "Random Artifact"
+msgstr "Tilfeldig skatt"
+
+msgid "Random Resource"
+msgstr "Tilfeldig råvare"
+
+msgid "Random Monster"
+msgstr "Tilfeldig monster"
 
 msgid "Random Town"
 msgstr "Vilkårlig by"
@@ -7165,14 +7257,35 @@ msgstr "Vilkårlig by"
 msgid "Random Castle"
 msgstr "Vilkårlig borg"
 
+msgid "Eye of the Magi"
+msgstr "Spåmannens øye"
+
+msgid "Random Monster - weak"
+msgstr "Tilfeldig monster - svak"
+
+msgid "Random Monster - medium"
+msgstr "Tilfeldig monster - middels"
+
+msgid "Random Monster - strong"
+msgstr "Tilfeldig monster - sterk"
+
+msgid "Random Monster - very strong"
+msgstr "Tilfeldig monster - veldig sterk"
+
+msgid "Nothing Special"
+msgstr "Ingenting spesielt"
+
+msgid "Mossy Rock"
+msgstr ""
+
 msgid "Watch Tower"
 msgstr "Vakttårn"
 
-msgid "Tree City"
-msgstr "Trærenes landsby"
-
 msgid "Tree House"
 msgstr "Trehytte"
+
+msgid "Tree City"
+msgstr "Trærenes landsby"
 
 msgid "Ruins"
 msgstr "Ruiner"
@@ -7182,6 +7295,16 @@ msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Forlatt gruve"
+
+msgid "Sirens"
+msgstr "Sirener"
+
+msgid "Standing Stones"
+msgstr "Steinsøyler"
+
+# idol har ikke samme betydning på norsk.
+msgid "Idol"
+msgstr "Gudestatue"
 
 msgid "Tree of Knowledge"
 msgstr "Kunnskapstre"
@@ -7203,14 +7326,32 @@ msgstr "Halvinghule"
 msgid "Mercenary Camp"
 msgstr "Leiesoldatleir"
 
+msgid "Shrine of the Second Circle"
+msgstr "Tempel av den andre sirkelen"
+
+msgid "Shrine of the Third Circle"
+msgstr "Tempel av den tredje sirkelen"
+
 msgid "City of the Dead"
 msgstr "De dødes by"
 
 msgid "Sphinx"
 msgstr "Sfinks"
 
+msgid "Wagon"
+msgstr "Vogn"
+
+msgid "Tar Pit"
+msgstr "Tjærepytt"
+
+msgid "Artesian Spring"
+msgstr "Artesisk brønn"
+
 msgid "Troll Bridge"
 msgstr "Trollbru"
+
+msgid "Watering Hole"
+msgstr "Vannkilde"
 
 msgid "Witch's Hut"
 msgstr "Heksehytte"
@@ -7218,190 +7359,17 @@ msgstr "Heksehytte"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan's Maps"
-msgstr "Magellanske kart"
-
-msgid "Derelict Ship"
-msgstr "Havarert skip"
-
-msgid "Shipwreck"
-msgstr "Skipbrudd"
-
-msgid "Observation Tower"
-msgstr "Utkikkstårn"
-
-msgid "Freeman's Foundry"
-msgstr "Borgerens støperi"
-
-msgid "Watering Hole"
-msgstr "Vannkilde"
-
-msgid "Artesian Spring"
-msgstr "Artesisk brønn"
-
-msgid "Gazebo"
-msgstr "Lysthus"
-
-msgid "Archer's House"
-msgstr "Bueskytternes hus"
-
-msgid "Peasant Hut"
-msgstr "Bondehytte"
-
-msgid "Dwarf Cottage"
-msgstr "Dvergstue"
-
-msgid "Stone Liths"
-msgstr "Steinportal"
-
-msgid "Magic Well"
-msgstr "Magisk brønn"
-
-msgid "Sign"
-msgstr "Skilt"
-
-msgid "Nothing Special"
-msgstr "Ingenting spesielt"
-
-msgid "Tar Pit"
-msgstr "Tjærepytt"
-
-msgid "Mound"
-msgstr "Haug"
-
-msgid "Dune"
-msgstr "Sanddyne"
-
-msgid "Stump"
-msgstr "Stubbe"
-
-msgid "Cactus"
-msgstr "Kaktus"
-
-msgid "Trees"
-msgstr "Trær"
-
-msgid "Dead Tree"
-msgstr "Trestubbe"
-
-msgid "Mountains"
-msgstr "Fjell"
-
-msgid "Volcano"
-msgstr "Vulkan"
-
-msgid "Rock"
-msgstr "Stein"
-
-msgid "Flowers"
-msgstr "Blomster"
-
-msgid "Water Lake"
-msgstr "Innsjø"
-
-msgid "Mandrake"
-msgstr "Alrune"
-
-msgid "Crater"
-msgstr "Krater"
-
-msgid "Lava Pool"
-msgstr "Lavadam"
-
-msgid "Shrub"
-msgstr "Busk"
-
-msgid "Buoy"
-msgstr "Bøye"
-
-msgid "Skeleton"
-msgstr "Skjelett"
-
-msgid "Treasure Chest"
-msgstr "Skattekiste"
-
-msgid "Sea Chest"
-msgstr "Sjøkiste"
-
-msgid "Campfire"
-msgstr "Leirbål"
-
-msgid "Fountain"
-msgstr "Fontene"
-
-msgid "Genie Lamp"
-msgstr "Magisk lampe"
-
-msgid "Goblin Hut"
-msgstr "Vettehytte"
-
-msgid "Monster"
-msgstr "Monster"
-
-msgid "Resource"
-msgstr "Råvare"
-
-msgid "Whirlpool"
-msgstr "Virvelstrøm"
-
-msgid "Artifact"
-msgstr "Skatt"
-
-msgid "Boat"
-msgstr "Skip"
-
-msgid "Random Artifact"
-msgstr "Tilfeldig skatt"
-
-msgid "Random Resource"
-msgstr "Tilfeldig råvare"
-
-msgid "Random Monster - weak"
-msgstr "Tilfeldig monster - svak"
-
-msgid "Random Monster - medium"
-msgstr "Tilfeldig monster - middels"
-
-msgid "Random Monster - strong"
-msgstr "Tilfeldig monster - sterk"
-
-msgid "Random Monster - very strong"
-msgstr "Tilfeldig monster - veldig sterk"
-
-msgid "Standing Stones"
-msgstr "Steinsøyler"
-
-msgid "Event"
-msgstr "Hendelse"
-
-msgid "Random Monster"
-msgstr "Tilfeldig monster"
-
-msgid "Random Ultimate Artifact"
-msgstr "Tilfeldig sjeldneste skatt"
-
-# idol har ikke samme betydning på norsk.
-msgid "Idol"
-msgstr "Gudestatue"
-
-# Sirkel? Ring?
-msgid "Shrine of the First Circle"
-msgstr "Tempel av den første sirkelen"
-
-msgid "Shrine of the Second Circle"
-msgstr "Tempel av den andre sirkelen"
-
-msgid "Shrine of the Third Circle"
-msgstr "Tempel av den tredje sirkelen"
-
-msgid "Wagon"
-msgstr "Vogn"
-
 msgid "Lean-To"
 msgstr "Gapahuk"
 
+msgid "Magellan's Maps"
+msgstr "Magellanske kart"
+
 msgid "Flotsam"
 msgstr "Vrakgods"
+
+msgid "Derelict Ship"
+msgstr "Havarert skip"
 
 msgid "Shipwreck Survivor"
 msgstr "Skipbruddent menneske"
@@ -7409,10 +7377,70 @@ msgstr "Skipbruddent menneske"
 msgid "Bottle"
 msgstr "Flaskepost"
 
+msgid "Magic Well"
+msgstr "Magisk brønn"
+
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Magisk hage"
 msgstr[1] "Magiske hager"
+
+msgid "Observation Tower"
+msgstr "Utkikkstårn"
+
+msgid "Freeman's Foundry"
+msgstr "Borgerens støperi"
+
+msgid "Reefs"
+msgstr "Rev"
+
+msgid "Trees"
+msgstr "Trær"
+
+msgid "Mountains"
+msgstr "Fjell"
+
+msgid "Volcano"
+msgstr "Vulkan"
+
+msgid "Flowers"
+msgstr "Blomster"
+
+msgid "Rock"
+msgstr "Stein"
+
+msgid "Water Lake"
+msgstr "Innsjø"
+
+msgid "Mandrake"
+msgstr "Alrune"
+
+msgid "Dead Tree"
+msgstr "Trestubbe"
+
+msgid "Stump"
+msgstr "Stubbe"
+
+msgid "Crater"
+msgstr "Krater"
+
+msgid "Cactus"
+msgstr "Kaktus"
+
+msgid "Mound"
+msgstr "Haug"
+
+msgid "Dune"
+msgstr "Sanddyne"
+
+msgid "Lava Pool"
+msgstr "Lavadam"
+
+msgid "Shrub"
+msgstr "Busk"
+
+msgid "Barrow Mounds"
+msgstr "Gravhaug"
 
 msgid "Random Artifact - Treasure"
 msgstr "Tilfeldig skatt - Litt verdifull"
@@ -7423,14 +7451,14 @@ msgstr "Tilfeldig skatt - Mer verdifull"
 msgid "Random Artifact - Major"
 msgstr "Tilfeldig skatt - Ekstremt verdifull"
 
-msgid "Jail"
-msgstr "Fengsel"
+msgid "Barrier"
+msgstr "Sperre"
 
 msgid "Traveller's Tent"
 msgstr "Vandrerens telt"
 
-msgid "Barrier"
-msgstr "Sperre"
+msgid "Jail"
+msgstr "Fengsel"
 
 msgid "Fire Summoning Altar"
 msgstr "Ildmanende alter"
@@ -7443,30 +7471,6 @@ msgstr "Jordmanende alter"
 
 msgid "Water Summoning Altar"
 msgstr "Vannmanende alter"
-
-msgid "Barrow Mounds"
-msgstr "Gravhaug"
-
-msgid "Stables"
-msgstr "Stall"
-
-msgid "Alchemist's Tower"
-msgstr "Alkymistens tårn"
-
-msgid "Hut of the Magi"
-msgstr "Spåmannens hytte"
-
-msgid "Eye of the Magi"
-msgstr "Spåmannens øye"
-
-msgid "Mermaid"
-msgstr "Havfrue"
-
-msgid "Sirens"
-msgstr "Sirener"
-
-msgid "Reefs"
-msgstr "Rev"
 
 msgid "Unknown Monster"
 msgstr "Ukjent monster"

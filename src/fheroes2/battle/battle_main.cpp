@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <memory>
 #include <ostream>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -285,7 +286,15 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
             // if the other army also had a hero, some artifacts may be captured by them
             if ( winnerHero != nullptr ) {
-                transferArtifacts( winnerHero->GetBagArtifacts(), artifactsToTransfer );
+                BagArtifacts & bag = winnerHero->GetBagArtifacts();
+
+                transferArtifacts( bag, artifactsToTransfer );
+
+                const auto assembledArtifacts = bag.assembleArtifactSetIfPossible();
+
+                if ( winnerHero->isControlHuman() ) {
+                    std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
+                }
             }
         }
 

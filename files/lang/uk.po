@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 02:36+0000\n"
+"POT-Creation-Date: 2023-01-29 12:11+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -665,6 +665,13 @@ msgid "View %{monster} info"
 msgstr "Дізнатися про %{monster}"
 
 #, fuzzy
+msgid "Fly %{monster} here"
+msgstr "%{monster} летітиме сюди"
+
+msgid "Move %{monster} here"
+msgstr ""
+
+#, fuzzy
 msgid "Shoot %{monster}"
 msgstr "Вистрілити у %{monster}"
 
@@ -678,13 +685,6 @@ msgstr[2] "(Залишилося %{count} пострілів)"
 #, fuzzy
 msgid "Attack %{monster}"
 msgstr "Атакувати %{monster}"
-
-#, fuzzy
-msgid "Fly %{monster} here"
-msgstr "%{monster} летітиме сюди"
-
-msgid "Move %{monster} here"
-msgstr ""
 
 msgid "Turn %{turn}"
 msgstr ""
@@ -3881,8 +3881,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -4356,6 +4356,9 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr ""
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
@@ -4367,9 +4370,6 @@ msgid "Nothing here. Where could it be?"
 msgstr ""
 
 msgid "Try searching on clear ground."
-msgstr ""
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
 msgstr ""
 
 msgid "A miniature view of the known world. Left click to move viewing area."
@@ -6747,12 +6747,72 @@ msgid "Alchemist Lab"
 msgstr "Алхімічна лабораторія"
 
 #, fuzzy
+msgid "Sign"
+msgstr "Показчик"
+
+#, fuzzy
+msgid "Buoy"
+msgstr "Буй"
+
+#, fuzzy
+msgid "Skeleton"
+msgstr "Скелет"
+
+#, fuzzy
 msgid "Daemon Cave"
 msgstr "Печера Демона"
 
 #, fuzzy
+msgid "Treasure Chest"
+msgstr "Сундук зі скарбом"
+
+#, fuzzy
 msgid "Faerie Ring"
 msgstr "Коло Фей"
+
+#, fuzzy
+msgid "Campfire"
+msgstr "Вогнище"
+
+#, fuzzy
+msgid "Fountain"
+msgstr "Фонтан"
+
+#, fuzzy
+msgid "Gazebo"
+msgstr "Альтанка"
+
+#, fuzzy
+msgid "Genie Lamp"
+msgstr "Лампа джина"
+
+#, fuzzy
+msgid "Archer's House"
+msgstr "Дім стрільця"
+
+#, fuzzy
+msgid "Goblin Hut"
+msgstr "Гоблінска хатина"
+
+#, fuzzy
+msgid "Dwarf Cottage"
+msgstr "Хатинка гнома"
+
+#, fuzzy
+msgid "Peasant Hut"
+msgstr "Селянська хата"
+
+#, fuzzy
+msgid "Stables"
+msgstr "Стайні"
+
+#, fuzzy
+msgid "Alchemist's Tower"
+msgstr "Вежа Алхіміка"
+
+#, fuzzy
+msgid "Event"
+msgstr "Подія"
 
 #, fuzzy
 msgid "Dragon City"
@@ -6774,12 +6834,20 @@ msgid "Mines"
 msgstr "Шахти"
 
 #, fuzzy
+msgid "Monster"
+msgstr "Потвора"
+
+#, fuzzy
 msgid "Obelisk"
 msgstr "Обеліск"
 
 #, fuzzy
 msgid "Oasis"
 msgstr "Оазіс"
+
+#, fuzzy
+msgid "Resource"
+msgstr "Ресурс"
 
 #, fuzzy
 msgid "Sawmill"
@@ -6790,12 +6858,36 @@ msgid "Oracle"
 msgstr "Оракул"
 
 #, fuzzy
+msgid "Shrine of the First Circle"
+msgstr "Cвятиня 1-го кола"
+
+#, fuzzy
+msgid "Shipwreck"
+msgstr "Уламки корабля"
+
+#, fuzzy
+msgid "Sea Chest"
+msgstr "Морський сундук"
+
+#, fuzzy
 msgid "Desert Tent"
 msgstr "Пустельний намет"
 
 #, fuzzy
+msgid "Stone Liths"
+msgstr "Моноліти"
+
+#, fuzzy
 msgid "Wagon Camp"
 msgstr "Вагонний табір"
+
+#, fuzzy
+msgid "Hut of the Magi"
+msgstr "Хатина волхвів"
+
+#, fuzzy
+msgid "Whirlpool"
+msgstr "Водоверть"
 
 #, fuzzy
 msgid "Windmill"
@@ -6803,6 +6895,34 @@ msgid_plural "Windmills"
 msgstr[0] "Вітряк"
 msgstr[1] "Вітряки"
 msgstr[2] "Вітряки"
+
+#, fuzzy
+msgid "Artifact"
+msgstr "Артефакт"
+
+#, fuzzy
+msgid "Mermaid"
+msgstr "Русалка"
+
+#, fuzzy
+msgid "Boat"
+msgstr "Човен"
+
+#, fuzzy
+msgid "Random Ultimate Artifact"
+msgstr "Випадковий Унікальний артефакт"
+
+#, fuzzy
+msgid "Random Artifact"
+msgstr "Випадковий артефакт"
+
+#, fuzzy
+msgid "Random Resource"
+msgstr "Випадковий ресурс"
+
+#, fuzzy
+msgid "Random Monster"
+msgstr "Випадкова потвора"
 
 #, fuzzy
 msgid "Random Town"
@@ -6813,16 +6933,43 @@ msgid "Random Castle"
 msgstr "Випадковий замок"
 
 #, fuzzy
+msgid "Eye of the Magi"
+msgstr "Око волхвів"
+
+#, fuzzy
+msgid "Random Monster - weak"
+msgstr "Випадкова слаба потвора"
+
+#, fuzzy
+msgid "Random Monster - medium"
+msgstr "Випадкова середня потвора"
+
+#, fuzzy
+msgid "Random Monster - strong"
+msgstr "Випадкова сильна потвора"
+
+#, fuzzy
+msgid "Random Monster - very strong"
+msgstr "Випадкова велична потвора"
+
+#, fuzzy
+msgid "Nothing Special"
+msgstr "Нічого особливого"
+
+msgid "Mossy Rock"
+msgstr ""
+
+#, fuzzy
 msgid "Watch Tower"
 msgstr "Вартова вежа"
 
 #, fuzzy
-msgid "Tree City"
-msgstr "Деревоград"
-
-#, fuzzy
 msgid "Tree House"
 msgstr "Будинок на дереві"
+
+#, fuzzy
+msgid "Tree City"
+msgstr "Деревоград"
 
 #, fuzzy
 msgid "Ruins"
@@ -6835,6 +6982,18 @@ msgstr "Форт"
 #, fuzzy
 msgid "Abandoned Mine"
 msgstr "Штольня"
+
+#, fuzzy
+msgid "Sirens"
+msgstr "Сирени"
+
+#, fuzzy
+msgid "Standing Stones"
+msgstr "Стоячі камені"
+
+#, fuzzy
+msgid "Idol"
+msgstr "Ідол"
 
 #, fuzzy
 msgid "Tree of Knowledge"
@@ -6861,6 +7020,14 @@ msgid "Mercenary Camp"
 msgstr "Табір найманців"
 
 #, fuzzy
+msgid "Shrine of the Second Circle"
+msgstr "Cвятиня 2-го кола"
+
+#, fuzzy
+msgid "Shrine of the Third Circle"
+msgstr "Cвятиня 3-го кола"
+
+#, fuzzy
 msgid "City of the Dead"
 msgstr "Місто Мертвих"
 
@@ -6869,8 +7036,24 @@ msgid "Sphinx"
 msgstr "Сфінкс"
 
 #, fuzzy
+msgid "Wagon"
+msgstr "Віз"
+
+#, fuzzy
+msgid "Tar Pit"
+msgstr "Смоляна яма"
+
+#, fuzzy
+msgid "Artesian Spring"
+msgstr "Артезіанське джерело"
+
+#, fuzzy
 msgid "Troll Bridge"
 msgstr "Троль під мостом"
+
+#, fuzzy
+msgid "Watering Hole"
+msgstr "Яма з водою"
 
 #, fuzzy
 msgid "Witch's Hut"
@@ -6881,248 +7064,20 @@ msgid "Xanadu"
 msgstr "Ксанаду"
 
 #, fuzzy
-msgid "Magellan's Maps"
-msgstr "Мапи Магеллана"
-
-#, fuzzy
-msgid "Derelict Ship"
-msgstr "Покинутий корабель"
-
-#, fuzzy
-msgid "Shipwreck"
-msgstr "Уламки корабля"
-
-#, fuzzy
-msgid "Observation Tower"
-msgstr "Оглядова вежа"
-
-#, fuzzy
-msgid "Freeman's Foundry"
-msgstr "Ливарня"
-
-#, fuzzy
-msgid "Watering Hole"
-msgstr "Яма з водою"
-
-#, fuzzy
-msgid "Artesian Spring"
-msgstr "Артезіанське джерело"
-
-#, fuzzy
-msgid "Gazebo"
-msgstr "Альтанка"
-
-#, fuzzy
-msgid "Archer's House"
-msgstr "Дім стрільця"
-
-#, fuzzy
-msgid "Peasant Hut"
-msgstr "Селянська хата"
-
-#, fuzzy
-msgid "Dwarf Cottage"
-msgstr "Хатинка гнома"
-
-#, fuzzy
-msgid "Stone Liths"
-msgstr "Моноліти"
-
-#, fuzzy
-msgid "Magic Well"
-msgstr "Чарівна криниця"
-
-#, fuzzy
-msgid "Sign"
-msgstr "Показчик"
-
-#, fuzzy
-msgid "Nothing Special"
-msgstr "Нічого особливого"
-
-#, fuzzy
-msgid "Tar Pit"
-msgstr "Смоляна яма"
-
-#, fuzzy
-msgid "Mound"
-msgstr "Курган"
-
-#, fuzzy
-msgid "Dune"
-msgstr "Дюна"
-
-#, fuzzy
-msgid "Stump"
-msgstr "Пень"
-
-#, fuzzy
-msgid "Cactus"
-msgstr "Кактус"
-
-#, fuzzy
-msgid "Trees"
-msgstr "Дерева"
-
-#, fuzzy
-msgid "Dead Tree"
-msgstr "Мертве дерево"
-
-#, fuzzy
-msgid "Mountains"
-msgstr "Гори"
-
-#, fuzzy
-msgid "Volcano"
-msgstr "Вулкан"
-
-#, fuzzy
-msgid "Rock"
-msgstr "Скеля"
-
-#, fuzzy
-msgid "Flowers"
-msgstr "Квіти"
-
-#, fuzzy
-msgid "Water Lake"
-msgstr "Озеро"
-
-#, fuzzy
-msgid "Mandrake"
-msgstr "Мандрагора"
-
-#, fuzzy
-msgid "Crater"
-msgstr "Кратер"
-
-#, fuzzy
-msgid "Lava Pool"
-msgstr "Лавовий басейн"
-
-#, fuzzy
-msgid "Shrub"
-msgstr "Кущі"
-
-#, fuzzy
-msgid "Buoy"
-msgstr "Буй"
-
-#, fuzzy
-msgid "Skeleton"
-msgstr "Скелет"
-
-#, fuzzy
-msgid "Treasure Chest"
-msgstr "Сундук зі скарбом"
-
-#, fuzzy
-msgid "Sea Chest"
-msgstr "Морський сундук"
-
-#, fuzzy
-msgid "Campfire"
-msgstr "Вогнище"
-
-#, fuzzy
-msgid "Fountain"
-msgstr "Фонтан"
-
-#, fuzzy
-msgid "Genie Lamp"
-msgstr "Лампа джина"
-
-#, fuzzy
-msgid "Goblin Hut"
-msgstr "Гоблінска хатина"
-
-#, fuzzy
-msgid "Monster"
-msgstr "Потвора"
-
-#, fuzzy
-msgid "Resource"
-msgstr "Ресурс"
-
-#, fuzzy
-msgid "Whirlpool"
-msgstr "Водоверть"
-
-#, fuzzy
-msgid "Artifact"
-msgstr "Артефакт"
-
-#, fuzzy
-msgid "Boat"
-msgstr "Човен"
-
-#, fuzzy
-msgid "Random Artifact"
-msgstr "Випадковий артефакт"
-
-#, fuzzy
-msgid "Random Resource"
-msgstr "Випадковий ресурс"
-
-#, fuzzy
-msgid "Random Monster - weak"
-msgstr "Випадкова слаба потвора"
-
-#, fuzzy
-msgid "Random Monster - medium"
-msgstr "Випадкова середня потвора"
-
-#, fuzzy
-msgid "Random Monster - strong"
-msgstr "Випадкова сильна потвора"
-
-#, fuzzy
-msgid "Random Monster - very strong"
-msgstr "Випадкова велична потвора"
-
-#, fuzzy
-msgid "Standing Stones"
-msgstr "Стоячі камені"
-
-#, fuzzy
-msgid "Event"
-msgstr "Подія"
-
-#, fuzzy
-msgid "Random Monster"
-msgstr "Випадкова потвора"
-
-#, fuzzy
-msgid "Random Ultimate Artifact"
-msgstr "Випадковий Унікальний артефакт"
-
-#, fuzzy
-msgid "Idol"
-msgstr "Ідол"
-
-#, fuzzy
-msgid "Shrine of the First Circle"
-msgstr "Cвятиня 1-го кола"
-
-#, fuzzy
-msgid "Shrine of the Second Circle"
-msgstr "Cвятиня 2-го кола"
-
-#, fuzzy
-msgid "Shrine of the Third Circle"
-msgstr "Cвятиня 3-го кола"
-
-#, fuzzy
-msgid "Wagon"
-msgstr "Віз"
-
-#, fuzzy
 msgid "Lean-To"
 msgstr "Навіс"
 
 #, fuzzy
+msgid "Magellan's Maps"
+msgstr "Мапи Магеллана"
+
+#, fuzzy
 msgid "Flotsam"
 msgstr "Уламки"
+
+#, fuzzy
+msgid "Derelict Ship"
+msgstr "Покинутий корабель"
 
 #, fuzzy
 msgid "Shipwreck Survivor"
@@ -7133,11 +7088,91 @@ msgid "Bottle"
 msgstr "Пляшка"
 
 #, fuzzy
+msgid "Magic Well"
+msgstr "Чарівна криниця"
+
+#, fuzzy
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Чарівний сад"
 msgstr[1] "Чарівні сади"
 msgstr[2] "Чарівних садів"
+
+#, fuzzy
+msgid "Observation Tower"
+msgstr "Оглядова вежа"
+
+#, fuzzy
+msgid "Freeman's Foundry"
+msgstr "Ливарня"
+
+#, fuzzy
+msgid "Reefs"
+msgstr "Рифи"
+
+#, fuzzy
+msgid "Trees"
+msgstr "Дерева"
+
+#, fuzzy
+msgid "Mountains"
+msgstr "Гори"
+
+#, fuzzy
+msgid "Volcano"
+msgstr "Вулкан"
+
+#, fuzzy
+msgid "Flowers"
+msgstr "Квіти"
+
+#, fuzzy
+msgid "Rock"
+msgstr "Скеля"
+
+#, fuzzy
+msgid "Water Lake"
+msgstr "Озеро"
+
+#, fuzzy
+msgid "Mandrake"
+msgstr "Мандрагора"
+
+#, fuzzy
+msgid "Dead Tree"
+msgstr "Мертве дерево"
+
+#, fuzzy
+msgid "Stump"
+msgstr "Пень"
+
+#, fuzzy
+msgid "Crater"
+msgstr "Кратер"
+
+#, fuzzy
+msgid "Cactus"
+msgstr "Кактус"
+
+#, fuzzy
+msgid "Mound"
+msgstr "Курган"
+
+#, fuzzy
+msgid "Dune"
+msgstr "Дюна"
+
+#, fuzzy
+msgid "Lava Pool"
+msgstr "Лавовий басейн"
+
+#, fuzzy
+msgid "Shrub"
+msgstr "Кущі"
+
+#, fuzzy
+msgid "Barrow Mounds"
+msgstr "Могильні кургани"
 
 #, fuzzy
 msgid "Random Artifact - Treasure"
@@ -7152,16 +7187,16 @@ msgid "Random Artifact - Major"
 msgstr "Випадковий великий артефакт"
 
 #, fuzzy
-msgid "Jail"
-msgstr "В'язниця"
+msgid "Barrier"
+msgstr "Бар'єр"
 
 #, fuzzy
 msgid "Traveller's Tent"
 msgstr "Намет мандрівника"
 
 #, fuzzy
-msgid "Barrier"
-msgstr "Бар'єр"
+msgid "Jail"
+msgstr "В'язниця"
 
 #, fuzzy
 msgid "Fire Summoning Altar"
@@ -7178,38 +7213,6 @@ msgstr "Вівтар призову землі"
 #, fuzzy
 msgid "Water Summoning Altar"
 msgstr "Вівтар призову води"
-
-#, fuzzy
-msgid "Barrow Mounds"
-msgstr "Могильні кургани"
-
-#, fuzzy
-msgid "Stables"
-msgstr "Стайні"
-
-#, fuzzy
-msgid "Alchemist's Tower"
-msgstr "Вежа Алхіміка"
-
-#, fuzzy
-msgid "Hut of the Magi"
-msgstr "Хатина волхвів"
-
-#, fuzzy
-msgid "Eye of the Magi"
-msgstr "Око волхвів"
-
-#, fuzzy
-msgid "Mermaid"
-msgstr "Русалка"
-
-#, fuzzy
-msgid "Sirens"
-msgstr "Сирени"
-
-#, fuzzy
-msgid "Reefs"
-msgstr "Рифи"
 
 #, fuzzy
 msgid "Unknown Monster"

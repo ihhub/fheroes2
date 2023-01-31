@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -78,7 +78,7 @@ namespace
             multiplier = 4;
             break;
         default:
-            delay.setDelay( 0 );
+            delay.setDelay( 1 );
             multiplier = 4;
         }
     }
@@ -118,6 +118,7 @@ void Game::AnimateDelaysInitialize()
     delays[BATTLE_POPUP_DELAY].setDelay( 800 );
     delays[BATTLE_COLOR_CYCLE_DELAY].setDelay( 220 );
     delays[BATTLE_SELECTED_UNIT_DELAY].setDelay( 160 );
+    delays[CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY].setDelay( 10 );
     delays[CURRENT_HERO_DELAY].setDelay( 10 );
     delays[CURRENT_AI_DELAY].setDelay( 10 );
 
@@ -157,7 +158,20 @@ bool Game::validateAnimationDelay( const DelayType delayType )
 
 void Game::passAnimationDelay( const DelayType delayType )
 {
+    assert( delayType != Game::DelayType::CUSTOM_DELAY );
+
     delays[delayType].pass();
+}
+
+void Game::passCustomAnimationDelay( const uint64_t delayMs )
+{
+    delays[Game::DelayType::CUSTOM_DELAY].setDelay( delayMs );
+    delays[Game::DelayType::CUSTOM_DELAY].pass();
+}
+
+void Game::setCustomUnitMovementDelay( const uint64_t delayMs )
+{
+    delays[Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY].setDelay( delayMs );
 }
 
 void Game::UpdateGameSpeed()
@@ -197,11 +211,19 @@ uint32_t Game::ApplyBattleSpeed( uint32_t delay )
     return static_cast<uint32_t>( battleSpeedAdjustment * ( 10 - Settings::Get().BattleSpeed() ) * delay );
 }
 
+bool Game::hasEveryDelayPassed( const std::vector<Game::DelayType> & delayTypes )
+{
+    for ( const Game::DelayType type : delayTypes ) {
+        if ( !delays[type].isPassed() ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool Game::isDelayNeeded( const std::vector<Game::DelayType> & delayTypes )
 {
-    if ( delayTypes.empty() )
-        return true;
-
     for ( const Game::DelayType type : delayTypes ) {
         assert( type != Game::DelayType::CUSTOM_DELAY );
 
