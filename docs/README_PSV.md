@@ -37,7 +37,7 @@ make -f Makefile.vita
 - △ - Open spellbook
 - D-Pad left - Next hero
 - D-Pad right - Next castle
-- D-Pad down - Re-visit the field that hero stands on
+- D-Pad down - Re-visit the object that hero stands on
 - R1 - Cursor acceleration
 - SELECT - System menu
 - START - Enter
