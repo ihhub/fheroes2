@@ -160,7 +160,7 @@ namespace Bin_Info
         }
 
         if ( monsterID == Monster::DRUID || monsterID == Monster::GREATER_DRUID ) {
-            projectileOffset[0].x -= 17;
+            projectileOffset[0].x -= 12;
             projectileOffset[0].y += 23;
             projectileOffset[1].x -= 20;
             projectileOffset[2].x -= 7;
