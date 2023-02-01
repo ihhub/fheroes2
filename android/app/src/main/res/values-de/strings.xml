@@ -14,6 +14,9 @@
     <string name="activity_toolset_last_task_status_lbl_text_no_assets_found">Vorgang erfolgreich abgeschlossen, aber es wurden keine HoMM2-Assets gefunden.</string>
     <string name="activity_toolset_last_task_status_lbl_text_failed">Während des Vorgangs ist ein Fehler aufgetreten: %s</string>
     <string name="activity_save_file_manager_label">fh2 Spielstand-Verwaltung</string>
+    <string name="activity_save_file_manager_filter_standard_btn_text">Standard</string>
+    <string name="activity_save_file_manager_filter_campaign_btn_text">Feldzug</string>
+    <string name="activity_save_file_manager_filter_multiplayer_btn_text">Multi</string>
     <string name="activity_save_file_manager_save_file_list_empty_lbl_text">Keine Spielstände verfügbar</string>
     <string name="activity_save_file_manager_select_all_btn_content_description">Alle Spielstände auswählen</string>
     <string name="activity_save_file_manager_unselect_all_btn_content_description">Alle Spielstände abwählen</string>
@@ -26,6 +29,6 @@
         <item quantity="one">Sind Sie sicher, dass Sie die ausgewählte Datei löschen möchten?</item>
         <item quantity="other">Sind Sie sicher, dass Sie %d ausgewählte Dateien löschen möchten?</item>
     </plurals>
-    <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Ja</string>
-    <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">Nein</string>
+    <string name="activity_save_file_manager_delete_confirmation_positive_button_text">Ja</string>
+    <string name="activity_save_file_manager_delete_confirmation_negative_button_text">Nein</string>
 </resources>
