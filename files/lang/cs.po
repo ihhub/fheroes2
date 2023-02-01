@@ -98,7 +98,7 @@ msgid "X-L"
 msgstr "X-L"
 
 msgid "ALL"
-msgstr "VŠECHNO"
+msgstr "VŠE"
 
 msgid ""
 "STANDARD\n"
