@@ -35,6 +35,7 @@
 #include "army_bar.h"
 #include "army_troop.h"
 #include "artifact.h"
+#include "artifact_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
