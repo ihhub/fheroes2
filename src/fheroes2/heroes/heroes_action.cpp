@@ -838,7 +838,8 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
 
 void ActionToCastle( Heroes & hero, int32_t dst_index )
 {
-    Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
+    const fheroes2::Point castlePosition = Maps::GetPoint( dst_index );
+    Castle * castle = world.getCastleEntrance( castlePosition );
 
     if ( !castle ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, "castle not found " << dst_index )
@@ -879,7 +880,10 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
                 hero.GetKingdom().AddCastle( castle );
                 world.CaptureObject( dst_index, hero.GetColor() );
                 castle->Scoute();
-                Interface::Basic::Get().SetRedraw( Interface::REDRAW_CASTLES );
+                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
+                Interface::Basic & I = Interface::Basic::Get();
+                I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
+                I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
 
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
             }
@@ -896,7 +900,10 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
             hero.GetKingdom().AddCastle( castle );
             world.CaptureObject( dst_index, hero.GetColor() );
             castle->Scoute();
-            Interface::Basic::Get().SetRedraw( Interface::REDRAW_CASTLES );
+            const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
+            Interface::Basic & I = Interface::Basic::Get();
+            I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
+            I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
 
             castle->MageGuildEducateHero( hero );
             Game::OpenCastleDialog( *castle );
@@ -925,7 +932,7 @@ void ActionToBoat( Heroes & hero, int32_t dst_index )
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
 
-    // Update radar image without checking for the direction as the boat may have different direction.
+    // Update the radar map image before changing the direction of the hero.
     Interface::Basic & I = Interface::Basic::Get();
     I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
     I.Redraw( Interface::REDRAW_RADAR );
@@ -1305,6 +1312,13 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
+}
+
+void Heroes::ScoutRadar() const
+{
+    Interface::Basic & I = Interface::Basic::Get();
+    I.GetRadar().SetRenderArea( this->GetScoutRoi() );
+    I.SetRedraw( Interface::REDRAW_RADAR );
 }
 
 void ActionToGoodLuckObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -2086,8 +2100,15 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     hero.FadeOut();
 
     Interface::Basic & I = Interface::Basic::Get();
-    // Before entering a Teleport the Hero makes a move into it, so set the scout area of this move to update radar image.
-    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+    const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
+    if ( hero.GetCenter() == fromPoint ) {
+        // If hero was already in Teleport and player hit the space bar.
+        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
+    }
+    else {
+        // Before entering a Teleport the hero may make a move into it, so we update the radar map image of this move.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+    }
 
     // No action and no penalty
     hero.Move2Dest( index_to );
@@ -2096,7 +2117,7 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     I.Redraw( Interface::REDRAW_RADAR );
 
     I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2126,8 +2147,15 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     hero.FadeOut();
 
     Interface::Basic & I = Interface::Basic::Get();
-    // Before entering a Whirlpool the Hero makes a move into it, so set the scout area of this move to update on radar image.
-    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+    const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
+    if ( hero.GetCenter() == fromPoint ) {
+        // If hero was already in Whirlpool and player hit the space bar.
+        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
+    }
+    else {
+        // Before entering a Whirlpool the hero may make a move into it, so we update the radar map image of this move.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+    }
 
     // No action and no penalty
     hero.Move2Dest( index_to );
@@ -2136,7 +2164,7 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     I.Redraw( Interface::REDRAW_RADAR );
 
     I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2463,7 +2491,14 @@ void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType obj
 {
     Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
 
-    Maps::ClearFog( dst_index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
+    const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ) );
+    Maps::ClearFog( dst_index, scoutRange, hero.GetColor() );
+
+    Interface::Basic & I = Interface::Basic::Get();
+    const fheroes2::Point towerPosition = Maps::GetPoint( dst_index );
+    const fheroes2::Rect towerRoi( towerPosition.x - scoutRange, towerPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
+    I.GetRadar().SetRenderArea( towerRoi );
+    I.SetRedraw( Interface::REDRAW_RADAR );
 }
 
 void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -3180,7 +3215,7 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
 
                 I.GetGameArea().SetCenter( eyePosition );
 
-                const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, eyePosition.x + scoutRange + 1, eyePosition.y + scoutRange + 1 );
+                const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
 
                 I.GetRadar().SetRenderArea( eyeRoi );
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );

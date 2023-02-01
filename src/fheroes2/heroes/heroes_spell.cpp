@@ -215,7 +215,7 @@ namespace
 
         const fheroes2::Point fromPosition = hero.GetCenter();
         // Position of Hero on radar before casting the spell to clear it after casting.
-        const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, fromPosition.x + 1, fromPosition.y + 1 );
+        const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, 1, 1 );
 
         // Before casting the spell, make sure that the game area is centered on the hero
         I.GetGameArea().SetCenter( fromPosition );
@@ -238,7 +238,7 @@ namespace
         I.GetGameArea().SetCenter( hero.GetCenter() );
 
         // Update radar image in scout area around Hero after teleport.
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -378,7 +378,7 @@ namespace
 
         const fheroes2::Point fromPosition = hero.GetCenter();
         // Position of Hero on radar before casting the spell to clear it after casting.
-        const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, fromPosition.x + 1, fromPosition.y + 1 );
+        const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, 1, 1 );
 
         // Before casting the spell, make sure that the game area is centered on the hero
         I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -408,7 +408,7 @@ namespace
         I.GetGameArea().SetCenter( hero.GetCenter() );
 
         // Update radar image in scout area around Hero after teleport.
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );

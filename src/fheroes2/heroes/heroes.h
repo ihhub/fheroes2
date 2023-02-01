@@ -463,6 +463,9 @@ public:
     void ApplyPenaltyMovement( uint32_t penalty );
     void ActionSpellCast( const Spell & spell );
 
+    // Update map in the scout area around the Hero on radar (mini-map).
+    void ScoutRadar() const;
+
     bool MayCastAdventureSpells() const;
 
     // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
@@ -495,8 +498,7 @@ public:
     int GetScoute() const;
 
     // Returns the area to render the minimap image around Hero's position in his scout range.
-    // For non-diagonal move the area is set only in move direction and one pixel behind (to clear Hero's previous position).
-    fheroes2::Rect GetScoutRoi( const bool noDirection = false ) const;
+    fheroes2::Rect GetScoutRoi() const;
 
     uint32_t GetVisionsDistance() const;
 

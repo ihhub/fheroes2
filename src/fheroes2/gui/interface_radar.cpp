@@ -206,8 +206,8 @@ void Interface::Radar::SetRedraw() const
 void Interface::Radar::SetRenderArea( const fheroes2::Rect & roi )
 {
     _needMapRedraw = true;
-    _roi.width = roi.width > world.w() ? world.w() : roi.width;
-    _roi.height = roi.height > world.h() ? world.h() : roi.height;
+    _roi.width = ( roi.width + roi.x ) > world.w() ? ( world.w() - roi.x ) : roi.width;
+    _roi.height = ( roi.height + roi.y ) > world.h() ? ( world.h() - roi.y ) : roi.height;
     _roi.x = roi.x < 0 ? 0 : roi.x;
     _roi.y = roi.y < 0 ? 0 : roi.y;
 }
@@ -271,7 +271,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
 
     uint8_t * radarImage = _map.image();
 
-    assert( _roi.x >= 0 && _roi.y >= 0 && _roi.width <= world.w() && _roi.height <= world.h() );
+    assert( _roi.x >= 0 && _roi.y >= 0 && ( _roi.width + _roi.x ) <= world.w() && ( _roi.height + _roi.y ) <= world.h() );
 
     // Fill the radar map with black color ( 0 ) only if we are redrawing the entire map.
     if ( _roi.x == 0 && _roi.y == 0 && _roi.width == world.w() && _roi.height == world.h() ) {
@@ -289,11 +289,14 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
 
     const bool isZoomIn = _zoom > 1.0;
 
-    for ( int32_t y = _roi.y; y < _roi.height; ++y ) {
+    const int32_t maxRoiX = _roi.width + _roi.x;
+    const int32_t maxRoiY = _roi.height + _roi.y;
+
+    for ( int32_t y = _roi.y; y < maxRoiY; ++y ) {
         uint8_t * radarY = radarImage + static_cast<ptrdiff_t>( y * _zoom ) * radarWidth;
         const ptrdiff_t radarYStep = isZoomIn ? ( static_cast<ptrdiff_t>( ( y + 1 ) * _zoom ) * radarWidth ) : 0;
 
-        for ( int32_t x = _roi.x; x < _roi.width; ++x ) {
+        for ( int32_t x = _roi.x; x < maxRoiX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
             const bool visibleTile = revealAll || !tile.isFog( playerColor );
 
@@ -346,7 +349,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                 // Castles and Towns can be partially covered by other non-action objects so we need to rely on special storage of castle's tiles.
                 if ( visibleTile ) {
                     if ( !getCastleColor( fillColor, tile.GetCenter() ) ) {
-                        // This is a visible tile and not covered by other objets, so fill it with the ground tile data.
+                        // This is a visible tile and not covered by other objects, so fill it with the ground tile data.
                         if ( tile.isRoad() ) {
                             fillColor = COLOR_ROAD;
                         }
