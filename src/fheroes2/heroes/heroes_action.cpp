@@ -930,6 +930,11 @@ void ActionToBoat( Heroes & hero, int32_t dst_index )
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
 
+    // Update the radar map image before changing the direction of the hero.
+    Interface::Basic & I = Interface::Basic::Get();
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+    I.Redraw( Interface::REDRAW_RADAR );
+
     // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
     hero.setDirection( boatDirection );
     hero.SetMapsObject( MP2::OBJ_NONE );
@@ -1291,6 +1296,11 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
         else {
             hero.LearnSkill( skill );
 
+            // When Scouting skill is learned we need to redraw radar image in a new sout area of the hero.
+            if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
+                hero.ScoutRadar();
+            }
+
             msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
             StringReplace( msg, "%{skill}", skill_name );
 
@@ -1307,7 +1317,7 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
 void Heroes::ScoutRadar() const
 {
     Interface::Basic & I = Interface::Basic::Get();
-    I.GetRadar().SetRenderArea( this->GetScoutRoi() );
+    I.GetRadar().SetRenderArea( this->GetScoutRoi( true ) );
     I.SetRedraw( Interface::REDRAW_RADAR );
 }
 
@@ -2107,7 +2117,7 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     I.Redraw( Interface::REDRAW_RADAR );
 
     I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -2154,7 +2164,7 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     I.Redraw( Interface::REDRAW_RADAR );
 
     I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
@@ -3170,6 +3180,9 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, int
 
         if ( prisoner ) {
             prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
+            // Scout the area around the freed hero.
+            prisoner->Scoute( prisoner->GetIndex() );
+            prisoner->ScoutRadar();
         }
     }
     else {

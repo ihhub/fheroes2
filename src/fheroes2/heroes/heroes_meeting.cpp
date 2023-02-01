@@ -400,6 +400,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     display.render();
 
+    const int32_t hero1ScoutAreaBonus = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
+    const int32_t hero2ScoutAreaBonus = otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
+
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
@@ -650,5 +653,16 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     armyCountBackgroundRestorerLeft.reset();
     armyCountBackgroundRestorerRight.reset();
     restorer.restore();
+
+    // If the scout area bonus is increased with the new artifact we reveal the fog and update the radar.
+    if ( hero1ScoutAreaBonus < bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
+        Scoute( this->GetIndex() );
+        ScoutRadar();
+    }
+    if ( hero2ScoutAreaBonus < otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
+        Scoute( otherHero.GetIndex() );
+        otherHero.ScoutRadar();
+    }
+
     display.render();
 }

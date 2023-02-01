@@ -980,6 +980,12 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( isControlHuman() ) {
         std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
+        // If the scout area bonus is increased with the new artifact we update the radar.
+        const std::vector<fheroes2::ArtifactBonus> bonuses = fheroes2::getArtifactData( art.GetID() ).bonuses;
+        if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) != bonuses.end() ) {
+            Scoute( this->GetIndex() );
+            ScoutRadar();
+        }
     }
 
     return true;
@@ -1257,12 +1263,18 @@ int Heroes::GetScoute() const
                              + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
 }
 
-fheroes2::Rect Heroes::GetScoutRoi() const
+fheroes2::Rect Heroes::GetScoutRoi( const bool ignoreDirection /* = false */ ) const
 {
     const int32_t scoutRange = GetScoute();
     const fheroes2::Point heroPosition = GetCenter();
 
-    return { heroPosition.x - scoutRange, heroPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 };
+    if ( ignoreDirection ) {
+        return { heroPosition.x - scoutRange, heroPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 };
+    }
+
+    return { heroPosition.x - ( ( direction == Direction::RIGHT ) ? 1 : scoutRange ), heroPosition.y - ( ( direction == Direction::BOTTOM ) ? 1 : scoutRange ),
+             ( ( direction == Direction::LEFT || direction == Direction::RIGHT ) ? 0 : scoutRange ) + scoutRange + 1,
+             ( ( direction == Direction::TOP || direction == Direction::BOTTOM ) ? 0 : scoutRange ) + scoutRange + 1 };
 }
 
 uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
