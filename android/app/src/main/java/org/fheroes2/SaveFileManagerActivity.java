@@ -30,15 +30,18 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ToggleButton;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public final class SaveFileManagerActivity extends Activity
 {
-    private static final String[] SAVE_FILE_EXTENSIONS = { ".sav", ".savc", ".savh" };
-
     private File saveFileDir = null;
+
+    private ToggleButton filterStandardToggleButton = null;
+    private ToggleButton filterCampaignToggleButton = null;
+    private ToggleButton filterMultiplayerToggleButton = null;
 
     private ListView saveFileListView = null;
 
@@ -59,6 +62,10 @@ public final class SaveFileManagerActivity extends Activity
 
         saveFileDir = new File( getExternalFilesDir( null ), "files" + File.separator + "save" );
 
+        filterStandardToggleButton = findViewById( R.id.activity_save_file_manager_filter_standard_btn );
+        filterCampaignToggleButton = findViewById( R.id.activity_save_file_manager_filter_campaign_btn );
+        filterMultiplayerToggleButton = findViewById( R.id.activity_save_file_manager_filter_multiplayer_btn );
+
         saveFileListView = findViewById( R.id.activity_save_file_manager_save_file_list );
 
         selectAllButton = findViewById( R.id.activity_save_file_manager_select_all_btn );
@@ -76,7 +83,29 @@ public final class SaveFileManagerActivity extends Activity
     {
         super.onResume();
 
-        updateUI();
+        updateSaveFileList();
+    }
+
+    public void filterButtonClicked( final View view )
+    {
+        final ToggleButton filterToggleButton = (ToggleButton)view;
+
+        int activeFiltersCount = 0;
+
+        activeFiltersCount += filterStandardToggleButton.isChecked() ? 1 : 0;
+        activeFiltersCount += filterCampaignToggleButton.isChecked() ? 1 : 0;
+        activeFiltersCount += filterMultiplayerToggleButton.isChecked() ? 1 : 0;
+
+        // Do not allow all filters to be turned off at the same time.
+        // TODO: Try disabling the button instead and changing its style so that it doesn't look disabled.
+        if ( activeFiltersCount < 1 && !filterToggleButton.isChecked() ) {
+            filterToggleButton.setChecked( true );
+        }
+
+        for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
+            saveFileListView.setItemChecked( i, false );
+        }
+
         updateSaveFileList();
     }
 
@@ -132,6 +161,18 @@ public final class SaveFileManagerActivity extends Activity
             return;
         }
 
+        final ArrayList<String> allowedSaveFileExtensions = new ArrayList<>();
+
+        if ( filterStandardToggleButton.isChecked() ) {
+            allowedSaveFileExtensions.add( ".sav" );
+        }
+        if ( filterCampaignToggleButton.isChecked() ) {
+            allowedSaveFileExtensions.add( ".savc" );
+        }
+        if ( filterMultiplayerToggleButton.isChecked() ) {
+            allowedSaveFileExtensions.add( ".savh" );
+        }
+
         backgroundTask = new Thread( () -> {
             try {
                 final ArrayList<String> saveFileNames = new ArrayList<>();
@@ -141,7 +182,7 @@ public final class SaveFileManagerActivity extends Activity
                         return false;
                     }
 
-                    for ( final String extension : SAVE_FILE_EXTENSIONS ) {
+                    for ( final String extension : allowedSaveFileExtensions ) {
                         if ( name.endsWith( extension ) ) {
                             return true;
                         }
@@ -214,7 +255,6 @@ public final class SaveFileManagerActivity extends Activity
                 runOnUiThread( () -> {
                     backgroundTask = null;
 
-                    updateUI();
                     updateSaveFileList();
                 } );
             }
@@ -230,6 +270,9 @@ public final class SaveFileManagerActivity extends Activity
         // A quick and dirty way to avoid the re-creation of this activity due to the screen orientation change while running a background task
         setRequestedOrientation( backgroundTask == null ? ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED : ActivityInfo.SCREEN_ORIENTATION_LOCKED );
 
+        filterStandardToggleButton.setEnabled( backgroundTask == null );
+        filterCampaignToggleButton.setEnabled( backgroundTask == null );
+        filterMultiplayerToggleButton.setEnabled( backgroundTask == null );
         saveFileListView.setEnabled( backgroundTask == null );
         selectAllButton.setEnabled( backgroundTask == null );
         unselectAllButton.setEnabled( backgroundTask == null );
