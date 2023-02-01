@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,8 +34,8 @@
 #include "localevent.h"
 #include "route.h"
 #include "settings.h"
-#include "text.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "world.h"
 
 Interface::ButtonsArea::ButtonsArea( Basic & basic )
@@ -191,21 +191,22 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
     }
 
     if ( le.MousePressRight( nextHeroRect ) )
-        Dialog::Message( _( "Next Hero" ), _( "Select the next Hero." ), Font::BIG );
+        fheroes2::showStandardTextMessage( _( "Next Hero" ), _( "Select the next Hero." ), Dialog::ZERO );
     else if ( le.MousePressRight( movementRect ) )
-        Dialog::Message( _( "Continue Movement" ), _( "Continue the Hero's movement along the current path." ), Font::BIG );
+        fheroes2::showStandardTextMessage( _( "Continue Movement" ), _( "Continue the Hero's movement along the current path." ), Dialog::ZERO );
     else if ( le.MousePressRight( kingdomRect ) )
-        Dialog::Message( _( "Kingdom Summary" ), _( "View a Summary of your Kingdom." ), Font::BIG );
+        fheroes2::showStandardTextMessage( _( "Kingdom Summary" ), _( "View a Summary of your Kingdom." ), Dialog::ZERO );
     else if ( le.MousePressRight( spellRect ) )
-        Dialog::Message( _( "Cast Spell" ), _( "Cast an adventure spell." ), Font::BIG );
+        fheroes2::showStandardTextMessage( _( "Cast Spell" ), _( "Cast an adventure spell." ), Dialog::ZERO );
     else if ( le.MousePressRight( endTurnRect ) )
-        Dialog::Message( _( "End Turn" ), _( "End your turn and left the computer take its turn." ), Font::BIG );
+        fheroes2::showStandardTextMessage( _( "End Turn" ), _( "End your turn and left the computer take its turn." ), Dialog::ZERO );
     else if ( le.MousePressRight( adventureRect ) )
-        Dialog::Message( _( "Adventure Options" ), _( "Bring up the adventure options menu." ), Font::BIG );
+        fheroes2::showStandardTextMessage( _( "Adventure Options" ), _( "Bring up the adventure options menu." ), Dialog::ZERO );
     else if ( le.MousePressRight( fileRect ) )
-        Dialog::Message( _( "File Options" ), _( "Bring up the file options menu, allowing you to load, save, start a new game or quit." ), Font::BIG );
+        fheroes2::showStandardTextMessage( _( "File Options" ), _( "Bring up the file options menu, allowing you to load, save, start a new game or quit." ),
+                                           Dialog::ZERO );
     else if ( le.MousePressRight( systemRect ) )
-        Dialog::Message( _( "System Options" ), _( "Bring up the system options menu, allowing you to customize your game." ), Font::BIG );
+        fheroes2::showStandardTextMessage( _( "System Options" ), _( "Bring up the system options menu, allowing you to customize your game." ), Dialog::ZERO );
 
     return res;
 }
