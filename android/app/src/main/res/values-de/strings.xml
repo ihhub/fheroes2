@@ -26,6 +26,6 @@
         <item quantity="one">Sind Sie sicher, dass Sie die ausgewählte Datei löschen möchten?</item>
         <item quantity="other">Sind Sie sicher, dass Sie %d ausgewählte Dateien löschen möchten?</item>
     </plurals>
-    <string name="activity_save_file_manager_delete_confirmation_positive_button_text">Ja</string>
-    <string name="activity_save_file_manager_delete_confirmation_negative_button_text">Nein</string>
+    <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Ja</string>
+    <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">Nein</string>
 </resources>

@@ -30,6 +30,6 @@
         <item quantity="one">Are you sure you want to delete the selected file?</item>
         <item quantity="other">Are you sure you want to delete %d selected files?</item>
     </plurals>
-    <string name="activity_save_file_manager_delete_confirmation_positive_button_text">Yes</string>
-    <string name="activity_save_file_manager_delete_confirmation_negative_button_text">No</string>
+    <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Yes</string>
+    <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">No</string>
 </resources>

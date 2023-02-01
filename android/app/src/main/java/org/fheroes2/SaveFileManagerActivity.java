@@ -136,7 +136,7 @@ public final class SaveFileManagerActivity extends Activity
         ( new AlertDialog.Builder( this ) )
             .setTitle( res.getQuantityString( R.plurals.activity_save_file_manager_delete_confirmation_title, selectedSaveFilesCount ) )
             .setMessage( res.getQuantityString( R.plurals.activity_save_file_manager_delete_confirmation_message, selectedSaveFilesCount, selectedSaveFilesCount ) )
-            .setPositiveButton( R.string.activity_save_file_manager_delete_confirmation_positive_button_text,
+            .setPositiveButton( R.string.activity_save_file_manager_delete_confirmation_positive_btn_text,
                                 ( dialog, which ) -> {
                                     final ArrayList<String> saveFileNames = new ArrayList<>();
 
@@ -150,7 +150,7 @@ public final class SaveFileManagerActivity extends Activity
 
                                     deleteSaveFiles( saveFileNames );
                                 } )
-            .setNegativeButton( R.string.activity_save_file_manager_delete_confirmation_negative_button_text, ( dialog, which ) -> {} )
+            .setNegativeButton( R.string.activity_save_file_manager_delete_confirmation_negative_btn_text, ( dialog, which ) -> {} )
             .create()
             .show();
     }
