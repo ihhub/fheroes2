@@ -362,7 +362,6 @@ msgstr "Rychlost"
 msgid "Army Order"
 msgstr "Uspořádání jednotek"
 
-
 msgid "Off"
 msgstr "Vyp"
 
@@ -831,12 +830,14 @@ msgstr "Síla kouzel"
 msgid "Set Knowledge Skill"
 msgstr "Znalosti"
 
+#, fuzzy
 msgid "%{race1} %{name1}"
 msgstr ""
 
 msgid "vs"
 msgstr ""
 
+#, fuzzy
 msgid "%{race2} %{name2}"
 msgstr ""
 
@@ -869,7 +870,7 @@ msgstr "Tuhle bitvu ovlivňuje artefakt %{artifact} a znemožňuje použití kou
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} vstává z mrtvých!"
-msgstr[1] "%{count} %{name} vstájí z mrtvých!!"
+msgstr[1] "%{count} %{name} vstájí z mrtvých!"
 msgstr[2] ""
 
 msgid "Dwarven Alliance"
@@ -897,7 +898,7 @@ msgid "Kraeger defeated"
 msgstr "Kreager poražen"
 
 msgid "Wayward Son"
-msgstr "Waywardův syn"
+msgstr "Scestný syn"
 
 msgid "Uncle Ivan"
 msgstr "Strýc Ivan"
@@ -927,7 +928,7 @@ msgid "The Crown"
 msgstr "Koruna"
 
 msgid "The Gauntlet"
-msgstr "Rukavice"
+msgstr "Hozená Rukavice"
 
 msgid "Betrayal"
 msgstr "Zrada"
