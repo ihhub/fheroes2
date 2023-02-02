@@ -8,8 +8,27 @@
     <string name="activity_toolset_start_game_btn_text">Spiel starten</string>
     <string name="activity_toolset_extract_homm2_assets_btn_text">HoMM2-Assets extrahieren</string>
     <string name="activity_toolset_download_homm2_demo_btn_text">HoMM2-Demo herunterladen</string>
+    <string name="activity_toolset_save_file_manager_btn_text">Spielstand-Verwaltung</string>
     <string name="activity_toolset_extract_homm2_assets_chooser_title">Wählen Sie die ZIP-Datei mit den HoMM2-Assets</string>
     <string name="activity_toolset_last_task_status_lbl_text_completed_successfully">Vorgang erfolgreich abgeschlossen.</string>
     <string name="activity_toolset_last_task_status_lbl_text_no_assets_found">Vorgang erfolgreich abgeschlossen, aber es wurden keine HoMM2-Assets gefunden.</string>
     <string name="activity_toolset_last_task_status_lbl_text_failed">Während des Vorgangs ist ein Fehler aufgetreten: %s</string>
+    <string name="activity_save_file_manager_label">fh2 Spielstand-Verwaltung</string>
+    <string name="activity_save_file_manager_filter_standard_btn_text">Standard</string>
+    <string name="activity_save_file_manager_filter_campaign_btn_text">Feldzug</string>
+    <string name="activity_save_file_manager_filter_multiplayer_btn_text">Multi</string>
+    <string name="activity_save_file_manager_save_file_list_empty_lbl_text">Keine Spielstände verfügbar</string>
+    <string name="activity_save_file_manager_select_all_btn_content_description">Alle Spielstände auswählen</string>
+    <string name="activity_save_file_manager_unselect_all_btn_content_description">Alle Spielstände abwählen</string>
+    <string name="activity_save_file_manager_delete_btn_content_description">Ausgewählte Spielstände löschen</string>
+    <plurals name="activity_save_file_manager_delete_confirmation_title">
+        <item quantity="one">Spielstand löschen</item>
+        <item quantity="other">Spielstände löschen</item>
+    </plurals>
+    <plurals name="activity_save_file_manager_delete_confirmation_message">
+        <item quantity="one">Sind Sie sicher, dass Sie die ausgewählte Datei löschen möchten?</item>
+        <item quantity="other">Sind Sie sicher, dass Sie %d ausgewählte Dateien löschen möchten?</item>
+    </plurals>
+    <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Ja</string>
+    <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">Nein</string>
 </resources>
