@@ -661,7 +661,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         ScoutRadar();
     }
     if ( hero2ScoutAreaBonus < otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
-        Scoute( otherHero.GetIndex() );
+        otherHero.Scoute( otherHero.GetIndex() );
         otherHero.ScoutRadar();
     }
 
