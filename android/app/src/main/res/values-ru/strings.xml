@@ -29,6 +29,6 @@
         <item quantity="few">Вы действительно хотите удалить %d выбранных файла?</item>
         <item quantity="many">Вы действительно хотите удалить %d выбранных файлов?</item>
     </plurals>
-    <string name="activity_save_file_manager_delete_confirmation_positive_button_text">Да</string>
-    <string name="activity_save_file_manager_delete_confirmation_negative_button_text">Нет</string>
+    <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Да</string>
+    <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">Нет</string>
 </resources>
