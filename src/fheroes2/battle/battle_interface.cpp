@@ -6134,8 +6134,8 @@ void Battle::PopupDamageInfo::Redraw() const
 
     std::string str = _minDamage == _maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
-    StringReplace( str, "%{min}", _minDamage );
-    StringReplace( str, "%{max}", _maxDamage );
+    StringReplace( str, "%{min}", std::to_string( _minDamage ) );
+    StringReplace( str, "%{max}", std::to_string( _maxDamage ) );
 
     Text damageText( str, Font::SMALL );
 
@@ -6146,8 +6146,8 @@ void Battle::PopupDamageInfo::Redraw() const
 
     str = minNumKilled == maxNumKilled ? _( "Perish: %{max}" ) : _( "Perish: %{min} - %{max}" );
 
-    StringReplace( str, "%{min}", minNumKilled );
-    StringReplace( str, "%{max}", maxNumKilled );
+    StringReplace( str, "%{min}", std::to_string( minNumKilled ) );
+    StringReplace( str, "%{max}", std::to_string( maxNumKilled ) );
 
     Text killedText( str, Font::SMALL );
 

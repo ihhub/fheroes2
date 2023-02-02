@@ -59,7 +59,6 @@ std::vector<std::string> StringSplit( const std::string &, const std::string & )
 void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement );
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );
-void StringReplace( std::string & dst, const char * pred, uint32_t value );
 
 int CountBits( uint32_t );
 

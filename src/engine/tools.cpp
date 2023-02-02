@@ -199,11 +199,6 @@ void StringReplace( std::string & dst, const char * pred, int value )
     StringReplace( dst, pred, std::to_string( value ) );
 }
 
-void StringReplace( std::string & dst, const char * pred, uint32_t value )
-{
-    StringReplace( dst, pred, std::to_string( value ) );
-}
-
 std::vector<std::string> StringSplit( const std::string & str, const std::string & sep )
 {
     std::vector<std::string> vec;
