@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -61,14 +61,18 @@ namespace Interface
 {
     enum redraw_t : uint32_t
     {
-        REDRAW_RADAR = 0x01,
-        REDRAW_HEROES = 0x02,
-        REDRAW_CASTLES = 0x04,
-        REDRAW_BUTTONS = 0x08,
-        REDRAW_STATUS = 0x10,
-        REDRAW_BORDER = 0x20,
-        REDRAW_GAMEAREA = 0x40,
+        // To render the cursor in the previously generated radar map image.
+        REDRAW_RADAR_CURSOR = 0x01,
+        // To render radar map fully or in ROI and then the curcor over it.
+        REDRAW_RADAR_MAP = 0x02,
+        REDRAW_HEROES = 0x04,
+        REDRAW_CASTLES = 0x08,
+        REDRAW_BUTTONS = 0x10,
+        REDRAW_STATUS = 0x20,
+        REDRAW_BORDER = 0x40,
+        REDRAW_GAMEAREA = 0x80,
 
+        REDRAW_RADAR = REDRAW_RADAR_CURSOR | REDRAW_RADAR_MAP,
         REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
         REDRAW_ALL = 0xFF
     };

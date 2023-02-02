@@ -57,21 +57,14 @@ namespace Interface
 
         void SetPos( int32_t ox, int32_t oy ) override;
 
-        // Set the render of radar image. If 'SetRenderMap()' or 'SetRenderArea()' was not previously
-        // called only the cursor will be rendered over the previously drawn radar map.
-        // To redraw the map call 'SetRenderMap()' or 'SetRenderArea()' if you nedd to redraw only a part of the map.
+        // Set the render the cursor over the previously generated radar map image.
+        // To redraw the radar map image and render a cursor over it call "Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );".
         void SetRedraw() const;
-
-        // Set the "need" of render the radar map on next radar Redraw call.
-        void SetRenderMap()
-        {
-            _needMapRedraw = true;
-        }
 
         // Set the "need" of render the radar map only in geven 'roi' on next radar Redraw call.
         void SetRenderArea( const fheroes2::Rect & roi );
         void Build();
-        void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
+        void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode, const bool renderMapObjects );
 
         void SetHide( bool f )
         {
@@ -100,7 +93,7 @@ namespace Interface
 
         // Do not call this method directly, use Interface::Basic::Redraw() instead
         // to avoid issues in the "no interface" mode
-        void Redraw();
+        void Redraw( const bool redrawMapObjects );
         void RedrawObjects( const int32_t playerColor, const ViewWorldMode flags );
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 
@@ -113,7 +106,6 @@ namespace Interface
         double _zoom{ 1.0 };
         bool _hide{ true };
         bool _mouseDraggingMovement{ false };
-        bool _needMapRedraw{ true };
     };
 }
 

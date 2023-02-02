@@ -686,8 +686,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     if ( player->isAIAutoControlMode() ) {
                         radar.SetHide( false );
-                        radar.SetRenderMap();
-                        radar.SetRedraw();
+                        Redraw( REDRAW_RADAR );
                     }
 
                     Redraw();
@@ -761,7 +760,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     }
 
     radar.SetHide( false );
-    radar.SetRenderMap();
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
@@ -1077,8 +1075,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
                             RedrawFocus();
 
-                            // Set update of radar image after Hero move.
+                            // Update the radar map image after Hero move in hero sout area.
                             radar.SetRenderArea( hero->GetScoutRoi() );
+                            Redraw( REDRAW_RADAR );
 
                             if ( stopHero ) {
                                 stopHero = false;

@@ -364,7 +364,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         Interface::Basic & I = Interface::Basic::Get();
 
         I.GetGameArea().SetCenter( GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
     }
 
     if ( list ) {
@@ -838,8 +838,7 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
 
 void ActionToCastle( Heroes & hero, int32_t dst_index )
 {
-    const fheroes2::Point castlePosition = Maps::GetPoint( dst_index );
-    Castle * castle = world.getCastleEntrance( castlePosition );
+    Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
 
     if ( !castle ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, "castle not found " << dst_index )
@@ -855,6 +854,18 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
     else {
         Army & army = castle->GetActualArmy();
 
+        auto captureCastle = [&hero, &dst_index, &castle]() {
+            castle->GetKingdom().RemoveCastle( castle );
+            hero.GetKingdom().AddCastle( castle );
+            world.CaptureObject( dst_index, hero.GetColor() );
+            castle->Scoute();
+            const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
+            const fheroes2::Point castlePosition = Maps::GetPoint( dst_index );
+            Interface::Basic & I = Interface::Basic::Get();
+            I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
+            I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
+        };
+
         if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() )
 
@@ -862,7 +873,7 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
             castle->ActionPreBattle();
 
             // new battle
-            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
             castle->ActionAfterBattle( res.AttackerWins() );
 
@@ -876,14 +887,7 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
 
             // wins attacker
             if ( res.AttackerWins() ) {
-                castle->GetKingdom().RemoveCastle( castle );
-                hero.GetKingdom().AddCastle( castle );
-                world.CaptureObject( dst_index, hero.GetColor() );
-                castle->Scoute();
-                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
-                Interface::Basic & I = Interface::Basic::Get();
-                I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
-                I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
+                captureCastle();
 
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
             }
@@ -896,14 +900,7 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
         else {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " capture enemy castle " << castle->GetName() )
 
-            castle->GetKingdom().RemoveCastle( castle );
-            hero.GetKingdom().AddCastle( castle );
-            world.CaptureObject( dst_index, hero.GetColor() );
-            castle->Scoute();
-            const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
-            Interface::Basic & I = Interface::Basic::Get();
-            I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
-            I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
+            captureCastle();
 
             castle->MageGuildEducateHero( hero );
             Game::OpenCastleDialog( *castle );
@@ -2737,7 +2734,6 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, i
             hero.setVisitedForAllies( dst_index );
 
             Interface::Basic & I = Interface::Basic::Get();
-            I.GetRadar().SetRenderMap();
             I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
         }
     }
@@ -3233,7 +3229,7 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
                     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                         ++delay;
                         Game::updateAdventureMapAnimationIndex();
-                        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+                        I.Redraw( Interface::REDRAW_GAMEAREA );
 
                         display.render();
                     }
@@ -3241,7 +3237,7 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
             }
 
             I.GetGameArea().SetCenter( hero.GetCenter() );
-            I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+            I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
             display.render();
         }

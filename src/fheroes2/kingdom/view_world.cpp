@@ -577,7 +577,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     Interface::GameBorderRedraw( true );
 
     // Draw radar
-    radar.RedrawForViewWorld( currentROI, mode );
+    radar.RedrawForViewWorld( currentROI, mode, true );
 
     // "View world" sprite
     const fheroes2::Sprite & viewWorldSprite = fheroes2::AGG::GetICN( GetSpriteResource( mode, isEvilInterface ), 0 );
@@ -646,7 +646,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             DrawWorld( currentROI, cache );
             DrawObjectsIcons( color, mode, currentROI );
             Interface::GameBorderRedraw( true );
-            radar.RedrawForViewWorld( currentROI, mode );
+            radar.RedrawForViewWorld( currentROI, mode, false );
             drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
             display.render();
         }

@@ -178,7 +178,6 @@ void Interface::Radar::SetPos( int32_t ox, int32_t oy )
 void Interface::Radar::Build()
 {
     SetZoom();
-    SetRedraw();
     _roi = { 0, 0, world.w(), world.h() };
 }
 
@@ -194,25 +193,22 @@ void Interface::Radar::SetZoom()
 
     // Currently we have and support only maps with 36 - 144 tiles width and height.
     assert( ( _zoom >= 1.0 ) && ( _zoom <= 4.0 ) );
-
-    _needMapRedraw = true;
 }
 
 void Interface::Radar::SetRedraw() const
 {
-    _interface.SetRedraw( REDRAW_RADAR );
+    _interface.SetRedraw( REDRAW_RADAR_CURSOR );
 }
 
 void Interface::Radar::SetRenderArea( const fheroes2::Rect & roi )
 {
-    _needMapRedraw = true;
     _roi.width = ( roi.width + roi.x ) > world.w() ? ( world.w() - roi.x ) : roi.width;
     _roi.height = ( roi.height + roi.y ) > world.h() ? ( world.h() - roi.y ) : roi.height;
     _roi.x = roi.x < 0 ? 0 : roi.x;
     _roi.y = roi.y < 0 ? 0 : roi.y;
 }
 
-void Interface::Radar::Redraw()
+void Interface::Radar::Redraw( const bool redrawMapObjects )
 {
     const Settings & conf = Settings::Get();
     const bool hideInterface = conf.isHideInterfaceEnabled();
@@ -230,9 +226,8 @@ void Interface::Radar::Redraw()
         else {
             _cursorArea.hide();
 
-            if ( _needMapRedraw ) {
+            if ( redrawMapObjects ) {
                 RedrawObjects( Players::FriendColors(), ViewWorldMode::OnlyVisible );
-                _needMapRedraw = false;
             }
 
             fheroes2::Copy( _map, 0, 0, display, rect.x, rect.y, _map.width(), _map.height() );
@@ -243,15 +238,14 @@ void Interface::Radar::Redraw()
     }
 }
 
-void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, const ViewWorldMode mode )
+void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, const ViewWorldMode mode, const bool renderMapObjects )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Rect & rect = GetArea();
     _cursorArea.hide();
 
-    if ( _needMapRedraw ) {
+    if ( renderMapObjects ) {
         RedrawObjects( Players::FriendColors(), mode );
-        _needMapRedraw = false;
     }
 
     fheroes2::Copy( _map, 0, 0, display, rect.x, rect.y, _map.width(), _map.height() );
@@ -439,7 +433,7 @@ void Interface::Radar::QueueEventProcessing()
     // Move border window
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
         _cursorArea.hide();
-        SetRedraw();
+        _interface.SetRedraw( REDRAW_RADAR_CURSOR );
     }
     else if ( le.MouseCursor( rect ) ) {
         // move cursor
@@ -454,7 +448,7 @@ void Interface::Radar::QueueEventProcessing()
                 gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
-                    SetRedraw();
+                    _interface.SetRedraw( REDRAW_RADAR_CURSOR );
                     gamearea.SetRedraw();
                 }
             }

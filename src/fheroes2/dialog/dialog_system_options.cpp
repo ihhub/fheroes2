@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -431,7 +431,7 @@ namespace fheroes2
                 basicInterface.Reset();
 
                 // We need to redraw radar first due to the nature of restorers. Only then we can redraw everything.
-                basicInterface.Redraw( Interface::REDRAW_RADAR );
+                basicInterface.Redraw( Interface::REDRAW_RADAR_CURSOR );
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
                 action = DialogAction::Open;

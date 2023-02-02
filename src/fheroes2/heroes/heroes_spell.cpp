@@ -219,7 +219,7 @@ namespace
 
         // Before casting the spell, make sure that the game area is centered on the hero
         I.GetGameArea().SetCenter( fromPosition );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
         const int32_t dst = castle->GetIndex();
         assert( Maps::isValidAbsIndex( dst ) );
@@ -382,7 +382,7 @@ namespace
 
         // Before casting the spell, make sure that the game area is centered on the hero
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
         const int32_t src = hero.GetIndex();
         assert( Maps::isValidAbsIndex( src ) );
