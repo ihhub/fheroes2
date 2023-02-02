@@ -1273,8 +1273,8 @@ fheroes2::Rect Heroes::GetScoutRoi( const bool ignoreDirection /* = false */ ) c
     }
 
     return { heroPosition.x - ( ( direction == Direction::RIGHT ) ? 1 : scoutRange ), heroPosition.y - ( ( direction == Direction::BOTTOM ) ? 1 : scoutRange ),
-             ( ( direction == Direction::LEFT || direction == Direction::RIGHT ) ? 0 : scoutRange ) + scoutRange + 1,
-             ( ( direction == Direction::TOP || direction == Direction::BOTTOM ) ? 0 : scoutRange ) + scoutRange + 1 };
+             ( ( direction == Direction::LEFT || direction == Direction::RIGHT ) ? 1 : scoutRange ) + scoutRange + 1,
+             ( ( direction == Direction::TOP || direction == Direction::BOTTOM ) ? 1 : scoutRange ) + scoutRange + 1 };
 }
 
 uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
