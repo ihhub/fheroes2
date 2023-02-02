@@ -133,8 +133,9 @@ void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
         }
     }
 
-    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) ) {
-        radar.Redraw( combinedRedraw & REDRAW_RADAR_MAP );
+    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) ) {
+        // Redraw radar map only if `REDRAW_RADAR` is set.
+        radar.Redraw( combinedRedraw & REDRAW_RADAR );
     }
 
     if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) ) {
