@@ -198,7 +198,7 @@ void Interface::Radar::SetZoom()
 void Interface::Radar::SetRedraw( const uint32_t redrawMode ) const
 {
     // Only radar redraws are allowed here.
-    assert( redrawMode & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) );
+    assert( ( redrawMode & ~( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) == 0 );
 
     _interface.SetRedraw( redrawMode );
 }
