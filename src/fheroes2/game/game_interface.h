@@ -63,7 +63,7 @@ namespace Interface
     {
         // To render the cursor over the previously generated radar map image.
         REDRAW_RADAR_CURSOR = 0x01,
-        // To render radar map fully or in ROI and then the curcor over it.
+        // To render radar map fully or in ROI and then the cursor over it.
         REDRAW_RADAR = 0x02,
         REDRAW_HEROES = 0x04,
         REDRAW_CASTLES = 0x08,
@@ -197,7 +197,7 @@ namespace Interface
         void EventContinueMovement() const;
         void EventKingdomInfo() const;
         void EventCastSpell();
-        void EventSwitchShowRadar() const;
+        void EventSwitchShowRadar();
         void EventSwitchShowStatus() const;
         void EventSwitchShowButtons() const;
         void EventSwitchShowIcons() const;

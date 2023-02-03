@@ -239,7 +239,7 @@ namespace
 
         // Update radar image in scout area around Hero after teleport.
         I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
@@ -409,7 +409,7 @@ namespace
 
         // Update radar image in scout area around Hero after teleport.
         I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();

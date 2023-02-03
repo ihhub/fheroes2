@@ -57,9 +57,9 @@ namespace Interface
 
         void SetPos( int32_t ox, int32_t oy ) override;
 
-        // Set the render the cursor over the previously generated radar map image.
-        // To redraw the radar map image and render a cursor over it call "Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );".
-        void SetRedraw() const;
+        // Set the render redraw flag: 'REDRAW_RADAR' - to redraw the radar map image fully or in ROI and render the cursor over it,
+        // 'REDRAW_RADAR_CURSOR' - to render the previously generated radar map image and the cursor over it.
+        void SetRedraw( const uint32_t redrawMode ) const;
 
         // Set the "need" of render the radar map only in geven 'roi' on next radar Redraw call.
         void SetRenderArea( const fheroes2::Rect & roi );

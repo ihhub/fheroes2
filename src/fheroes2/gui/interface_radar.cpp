@@ -195,9 +195,12 @@ void Interface::Radar::SetZoom()
     assert( ( _zoom >= 1.0 ) && ( _zoom <= 4.0 ) );
 }
 
-void Interface::Radar::SetRedraw() const
+void Interface::Radar::SetRedraw( const uint32_t redrawMode ) const
 {
-    _interface.SetRedraw( REDRAW_RADAR_CURSOR );
+    // Only radar redraws are allowed here.
+    assert( redrawMode & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) );
+
+    _interface.SetRedraw( redrawMode );
 }
 
 void Interface::Radar::SetRenderArea( const fheroes2::Rect & roi )

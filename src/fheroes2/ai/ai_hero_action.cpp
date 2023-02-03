@@ -1772,6 +1772,12 @@ namespace AI
                         if ( hero.Move( noMovementAnimation ) ) {
                             if ( AIHeroesShowAnimation( hero, colors ) ) {
                                 gameArea.SetCenter( hero.GetCenter() );
+#if defined( WITH_DEBUG )
+                                // If player gave control to AI we need to update radar after every AI move.
+                                if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+                                    basicInterface.SetRedraw( Interface::REDRAW_RADAR );
+                                }
+#endif
                             }
                         }
                         else {
@@ -1834,6 +1840,12 @@ namespace AI
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
+#if defined( WITH_DEBUG )
+            // If player gave control to AI we need to update radar after every AI move.
+            if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+                Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
+            }
+#endif
         }
 
         hero.ActionNewPosition( false );

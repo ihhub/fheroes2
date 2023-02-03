@@ -626,7 +626,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
 
                 radar.SetHide( true );
-                radar.SetRedraw();
+                radar.SetRedraw( REDRAW_RADAR_CURSOR );
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -686,7 +686,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     if ( player->isAIAutoControlMode() ) {
                         radar.SetHide( false );
-                        Redraw( REDRAW_RADAR );
+                        radar.SetRedraw( REDRAW_RADAR );
                     }
 
                     Redraw();
@@ -1073,11 +1073,11 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                             gameArea.SetCenter( hero->GetCenter() );
                             ResetFocus( GameFocus::HEROES );
 
-                            RedrawFocus();
-
-                            // Update the radar map image after Hero move in hero sout area.
+                            // Update the radar map image in the area that is visible to the hero after his movement.
                             radar.SetRenderArea( hero->GetScoutRoi() );
-                            Redraw( REDRAW_RADAR );
+                            radar.SetRedraw( REDRAW_RADAR );
+
+                            RedrawFocus();
 
                             if ( stopHero ) {
                                 stopHero = false;
@@ -1150,7 +1150,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 gameArea.Scroll();
 
                 gameArea.SetRedraw();
-                radar.SetRedraw();
+                radar.SetRedraw( REDRAW_RADAR_CURSOR );
             }
         }
 

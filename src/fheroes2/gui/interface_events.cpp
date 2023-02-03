@@ -487,7 +487,7 @@ void Interface::Basic::EventOpenFocus() const
         Game::OpenCastleDialog( *GetFocusCastle() );
 }
 
-void Interface::Basic::EventSwitchShowRadar() const
+void Interface::Basic::EventSwitchShowRadar()
 {
     Settings & conf = Settings::Get();
 
@@ -498,10 +498,9 @@ void Interface::Basic::EventSwitchShowRadar() const
         }
         else {
             conf.SetShowRadar( true );
-            Basic & I = Basic::Get();
             // We have to force set ROI to full map as it could be previously set to hero scout area on the last move.
-            I.GetRadar().SetRenderArea( { 0, 0, world.w(), world.h() } );
-            I.SetRedraw( REDRAW_RADAR );
+            radar.SetRenderArea( { 0, 0, world.w(), world.h() } );
+            radar.SetRedraw( REDRAW_RADAR );
         }
     }
 }

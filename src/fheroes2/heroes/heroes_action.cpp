@@ -854,13 +854,15 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
     else {
         Army & army = castle->GetActualArmy();
 
-        auto captureCastle = [&hero, &dst_index, &castle]() {
+        auto captureCastle = [&hero, dst_index, castle]() {
             castle->GetKingdom().RemoveCastle( castle );
             hero.GetKingdom().AddCastle( castle );
             world.CaptureObject( dst_index, hero.GetColor() );
+
             castle->Scoute();
             const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
             const fheroes2::Point castlePosition = Maps::GetPoint( dst_index );
+
             Interface::Basic & I = Interface::Basic::Get();
             I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
             I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
@@ -2116,7 +2118,7 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
 
     I.GetGameArea().SetCenter( hero.GetCenter() );
     I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
-    I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+    I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -2163,7 +2165,7 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
 
     I.GetGameArea().SetCenter( hero.GetCenter() );
     I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
-    I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+    I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
