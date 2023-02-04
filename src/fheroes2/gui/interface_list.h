@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -387,14 +387,23 @@ namespace Interface
                 return true;
             }
             if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
-                needRedraw = true;
+                const fheroes2::Point mousePosition = le.GetMouseCursor();
+
+                const int32_t prevScrollbarX = _scrollbar.x();
+                const int32_t prevScrollbarY = _scrollbar.y();
 
                 UpdateScrollbarRange();
 
-                const fheroes2::Point & mousePos = le.GetMouseCursor();
-                _scrollbar.moveToPos( mousePos );
+                _scrollbar.moveToPos( mousePosition );
+
+                // We don't need to render the scrollbar if it's position is not changed.
+                if ( ( _scrollbar.x() == prevScrollbarX ) && ( _scrollbar.y() == prevScrollbarY ) ) {
+                    return false;
+                }
+
                 _topId = _scrollbar.currentIndex();
 
+                needRedraw = true;
                 _updateScrollbar = true;
 
                 return true;

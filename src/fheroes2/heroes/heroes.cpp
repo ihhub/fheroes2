@@ -65,7 +65,6 @@
 #include "settings.h"
 #include "speed.h"
 #include "spell_book.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -966,12 +965,12 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
-            art.GetID() == Artifact::MAGIC_BOOK ? Dialog::Message(
+            art.GetID() == Artifact::MAGIC_BOOK ? fheroes2::showStandardTextMessage(
                 GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Font::BIG, Dialog::OK )
-                                                : Dialog::Message( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG,
-                                                                   Dialog::OK );
+                Dialog::OK )
+                                                : fheroes2::showStandardTextMessage( art.GetName(),
+                                                                                     _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
         }
         return false;
     }

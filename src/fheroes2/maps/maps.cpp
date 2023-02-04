@@ -31,7 +31,6 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
-#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps.h"
@@ -616,14 +615,14 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
             Tiles & tile = world.GetTiles( castleTile );
 
             if ( isRandom )
-                tile.ReplaceObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTWRD, ( MP2::OBJ_ICN_TYPE_OBJNTOWN << 2 ), lookupID, fullTownIndex ); // OBJNTWRD to OBJNTOWN
+                tile.replaceObject( castleID, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTOWN, lookupID, fullTownIndex ); // OBJNTWRD to OBJNTOWN
             else
-                tile.UpdateObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTOWN, ( MP2::OBJ_ICN_TYPE_OBJNTOWN << 2 ), -16 ); // no change in tileset
+                tile.updateObjectImageIndex( castleID, MP2::OBJ_ICN_TYPE_OBJNTOWN, -16 );
 
             if ( index == 0 ) {
                 TilesAddon * addon = tile.FindAddonLevel2( castleID );
-                if ( addon && MP2::GetICNObject( addon->_objectType ) == ICN::OBJNTWRD ) {
-                    addon->_objectType = MP2::OBJ_ICN_TYPE_OBJNTOWN + ( addon->_objectType % 4 );
+                if ( addon && addon->_objectIcnType == MP2::OBJ_ICN_TYPE_OBJNTWRD ) {
+                    addon->_objectIcnType = MP2::OBJ_ICN_TYPE_OBJNTOWN;
                     addon->_imageIndex = fullTownIndex - 16;
                 }
             }
@@ -633,9 +632,9 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
         if ( isValidAbsIndex( shadowTileId ) ) {
             Maps::Tiles & shadowTile = world.GetTiles( shadowTileId );
             if ( isRandom )
-                shadowTile.ReplaceObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTWRD, ( MP2::OBJ_ICN_TYPE_OBJNTWSH << 2 ), lookupID + 32, fullTownIndex );
+                shadowTile.replaceObject( castleID, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWSH, lookupID + 32, fullTownIndex );
             else
-                shadowTile.UpdateObjectSprite( castleID, MP2::OBJ_ICN_TYPE_OBJNTWSH, ( MP2::OBJ_ICN_TYPE_OBJNTWSH << 2 ), -16 ); // no change in tileset
+                shadowTile.updateObjectImageIndex( castleID, MP2::OBJ_ICN_TYPE_OBJNTWSH, -16 );
         }
     }
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -57,7 +57,7 @@ namespace
     {
         enum
         {
-            IS_LOYALTY = 0x4000
+            IS_PRICE_OF_LOYALTY_MAP = 0x4000
         };
 
         HeaderSAV()
@@ -75,7 +75,7 @@ namespace
             info.localtime = static_cast<uint32_t>( rawtime );
 
             if ( fi._version == GameVersion::PRICE_OF_LOYALTY )
-                status |= IS_LOYALTY;
+                status |= IS_PRICE_OF_LOYALTY_MAP;
         }
 
         uint16_t status;
@@ -193,11 +193,11 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    if ( ( header.status & HeaderSAV::IS_LOYALTY ) && !conf.isPriceOfLoyaltySupported() ) {
-        fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
-                               fheroes2::Text( _( "This file was saved by the \"The Price of Loyalty\" version of the game.\nSome items may not be available." ),
-                                               fheroes2::FontType::normalWhite() ),
-                               Dialog::OK );
+    if ( ( header.status & HeaderSAV::IS_PRICE_OF_LOYALTY_MAP ) && !conf.isPriceOfLoyaltySupported() ) {
+        fheroes2::showStandardTextMessage(
+            _( "Warning" ), _( "This file was saved for a \"The Price of Loyalty\" map, but the corresponding game assets have not been provided to the engine." ),
+            Dialog::OK );
+        return fheroes2::GameMode::CANCEL;
     }
 
     fz >> binver;
