@@ -163,9 +163,6 @@ namespace
         // Compute complete world map, and save it for all zoom levels
         explicit CacheForMapWithResources( const ViewWorldMode viewMode )
         {
-            fheroes2::Time counter;
-            counter.reset();
-
             cachedImages.resize( zoomLevels );
 
             for ( size_t i = 0; i < cachedImages.size(); ++i ) {
@@ -214,10 +211,6 @@ namespace
             drawingFlags ^= Interface::RedrawLevelType::LEVEL_HEROES;
 #endif
 
-            double tmp = counter.getS() * 1000;
-            VERBOSE_LOG( "Pre draw time: " << tmp << " ms." )
-            counter.reset();
-
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int32_t x = 0; x < worldWidth; x += blockSizeX ) {
                 for ( int32_t y = 0; y < worldHeight; y += blockSizeY ) {
@@ -234,8 +227,6 @@ namespace
 #if defined( SAVE_WORLD_MAP )
             fheroes2::Save( cachedImages[3], Settings::Get().MapsName() + saveFilePrefix + ".bmp" );
 #endif
-            tmp = counter.getS() * 1000;
-            VERBOSE_LOG( "Draw time: " << tmp << " ms." )
         }
     };
 
@@ -287,7 +278,6 @@ namespace
 
     void DrawObjectsIcons( const int32_t color, const ViewWorldMode mode, CacheForMapWithResources & cache )
     {
-        int32_t zoomLevelId = 0;
         const bool revealAll = mode == ViewWorldMode::ViewAll;
         const bool revealMines = revealAll || ( mode == ViewWorldMode::ViewMines );
         const bool revealHeroes = revealAll || ( mode == ViewWorldMode::ViewHeroes );
@@ -299,7 +289,7 @@ namespace
         const int32_t worldHeight = world.h();
         assert( worldWidth >= 0 && worldHeight >= 0 );
 
-        // Initialize variables before the inner loops to avoid many memory allocations inside the loop.
+        // Initialize variables before the loop to avoid many memory allocations inside the loop.
         int32_t index{ -1 };
         uint32_t letterIndex{ 0 };
         // There could be maximum 2 objects.
@@ -307,10 +297,7 @@ namespace
         uint32_t objects{ 0 };
         bool isCastle{ false };
 
-        for ( fheroes2::Image & mapImage : cache.cachedImages ) {
-            fheroes2::Time counter;
-            counter.reset();
-
+        for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
             const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
             const int32_t icnBase = icnPerZoomLevel[zoomLevelId];
             const int32_t icnLetterId = icnLetterPerZoomLevel[zoomLevelId];
@@ -321,10 +308,6 @@ namespace
                     const Maps::Tiles & tile = world.GetTiles( posX, posY );
 
                     objectTypes[0] = tile.GetObject( false );
-
-                    if ( objectTypes[0] == MP2::OBJ_NONE ) {
-                        continue;
-                    }
 
                     if ( objectTypes[0] != tile.GetObject( true ) ) {
                         objectTypes[1] = tile.GetObject( true );
@@ -391,9 +374,9 @@ namespace
                                 const int32_t dstx = posX * tileSize + ( tileSize - sprite.width() ) / 2;
                                 const int32_t dsty = posY * tileSize + ( tileSize - sprite.height() ) / 2 + 1;
 
-                                fheroes2::Blit( sprite, mapImage, dstx + tileSize, dsty, false );
+                                fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx + tileSize, dsty, false );
                                 // We place a second flag, flipped horizontally.
-                                fheroes2::Blit( sprite, mapImage, dstx - tileSize, dsty, true );
+                                fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx - tileSize, dsty, true );
 
                                 isCastle = false;
                             }
@@ -402,7 +385,7 @@ namespace
                                 const int32_t dsty = posY * tileSize + tileSize / 2;
 
                                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnBase, index );
-                                fheroes2::Blit( sprite, mapImage, dstx - sprite.width() / 2, dsty - sprite.height() / 2 );
+                                fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx - sprite.width() / 2, dsty - sprite.height() / 2 );
 
                                 if ( letterIndex > 0 ) {
                                     switch ( letterIndex ) {
@@ -432,7 +415,7 @@ namespace
                                     }
 
                                     const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
-                                    fheroes2::Blit( letter, mapImage, dstx - letter.width() / 2, dsty - letter.height() / 2 );
+                                    fheroes2::Blit( letter, cache.cachedImages[zoomLevelId], dstx - letter.width() / 2, dsty - letter.height() / 2 );
 
                                     // Restore 'letterIndex' to its initial state.
                                     letterIndex = 0;
@@ -444,11 +427,6 @@ namespace
                     }
                 }
             }
-
-            const double tmp = counter.getS() * 1000;
-            VERBOSE_LOG( "Time: " << tmp << " ms." )
-
-            ++zoomLevelId;
         }
     }
 
@@ -673,9 +651,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         else if ( le.MousePressLeft( visibleScreenInPixels ) ) {
             if ( isDrag ) {
                 const fheroes2::Point & newMousePos = le.GetMouseCursor();
-                const fheroes2::Point
-                    newRoiCenter( initRoiCenter.x - ( newMousePos.x - initMousePos.x ) * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( currentROI._zoomLevel )],
-                                  initRoiCenter.y - ( newMousePos.y - initMousePos.y ) * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( currentROI._zoomLevel )] );
+                const fheroes2::Point newRoiCenter( initRoiCenter.x - ( newMousePos.x - initMousePos.x ) * TILEWIDTH / tileSizePerZoomLevel[currentROI._zoomLevel],
+                                                    initRoiCenter.y - ( newMousePos.y - initMousePos.y ) * TILEWIDTH / tileSizePerZoomLevel[currentROI._zoomLevel] );
                 changed = currentROI.changeCenter( newRoiCenter );
             }
             else {
@@ -696,18 +673,9 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         }
 
         if ( changed ) {
-            fheroes2::Time counter;
-            counter.reset();
-
             DrawWorld( currentROI, cache );
-            // DrawObjectsIcons( color, mode, currentROI );
-            // Interface::GameBorderRedraw( true );
             radar.RedrawForViewWorld( currentROI, mode );
-            // drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
             display.render();
-
-            const double tmp = counter.getS() * 1000;
-            VERBOSE_LOG( "Time: " << tmp << " ms." )
         }
     }
 
