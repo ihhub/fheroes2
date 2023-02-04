@@ -132,7 +132,7 @@ namespace
         }
 
         std::sort( resolutions.begin(), resolutions.end(),
-            []( const fheroes2::ResolutionInfo & first, const fheroes2::ResolutionInfo & second ) { return first < second; } );
+                   []( const fheroes2::ResolutionInfo & first, const fheroes2::ResolutionInfo & second ) { return first < second; } );
 
         // Add resolutions with scale factor. No need to run through the newly added elements so we remember the size of the array.
         const size_t resolutionCountBefore = resolutions.size();
