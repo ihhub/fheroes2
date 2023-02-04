@@ -21,6 +21,9 @@
 #ifndef H2VIEWWORLD_H
 #define H2VIEWWORLD_H
 
+#include <cstdint>
+#include <vector>
+
 #include "math_base.h"
 
 namespace Interface
