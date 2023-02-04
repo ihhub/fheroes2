@@ -998,11 +998,9 @@ bool Heroes::PickupArtifact( const Artifact & art )
         }
 
         // If there were artifacts assembled we check them for scout area bonus.
-        if ( !assembledArtifacts.empty() ) {
-            for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
-                if ( scout( static_cast<int32_t>( assembledArtifact._assembledArtifactID ) ) ) {
-                    return true;
-                }
+        for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
+            if ( scout( static_cast<int32_t>( assembledArtifact._assembledArtifactID ) ) ) {
+                return true;
             }
         }
     }
