@@ -78,7 +78,7 @@ namespace
             multiplier = 4;
             break;
         default:
-            delay.setDelay( 0 );
+            delay.setDelay( 1 );
             multiplier = 4;
         }
     }

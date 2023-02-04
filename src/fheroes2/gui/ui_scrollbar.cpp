@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -125,7 +125,7 @@ namespace fheroes2
         if ( _isVertical() ) {
             const int32_t scrollbarImageMiddle = height() / 2;
             const int32_t minYPos = _area.y + scrollbarImageMiddle;
-            const int32_t maxYPos = _area.y + roiHeight + height() - scrollbarImageMiddle - 1;
+            const int32_t maxYPos = _area.y + roiHeight + scrollbarImageMiddle;
 
             int32_t posY = position.y;
             if ( posY < minYPos )
@@ -141,7 +141,7 @@ namespace fheroes2
         else {
             const int32_t scrollbarImageMiddle = width() / 2;
             const int32_t minXPos = _area.x + scrollbarImageMiddle;
-            const int32_t maxXPos = _area.x + roiWidth + width() - scrollbarImageMiddle - 1;
+            const int32_t maxXPos = _area.x + roiWidth + scrollbarImageMiddle;
 
             int32_t posX = position.x;
             if ( posX < minXPos )

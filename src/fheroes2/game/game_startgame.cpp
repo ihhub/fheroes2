@@ -74,7 +74,6 @@
 #include "route.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -328,7 +327,7 @@ void ShowNewWeekDialog()
     else
         message += _( " All dwellings increase population." );
 
-    Dialog::Message( "", message, Font::BIG, Dialog::OK );
+    fheroes2::showStandardTextMessage( "", message, Dialog::OK );
 }
 
 void ShowEventDayDialog()
@@ -342,7 +341,7 @@ void ShowEventDayDialog()
                                            fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, event.resource );
         }
         else if ( !event.message.empty() ) {
-            Dialog::Message( event.title, event.message, Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
         }
     }
 }

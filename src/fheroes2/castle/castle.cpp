@@ -65,9 +65,9 @@
 #include "skill.h"
 #include "spell.h"
 #include "spell_storage.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "week.h"
 #include "world.h"
 
@@ -1052,7 +1052,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
 
         if ( hero == nullptr || !hero->GetArmy().JoinTroop( troop ) ) {
             if ( showDialog ) {
-                Dialog::Message( "", _( "There is no room in the garrison for this army." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "There is no room in the garrison for this army." ), Dialog::OK );
             }
             return false;
         }

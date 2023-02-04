@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -46,9 +46,9 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "world.h"
 
 namespace
@@ -109,7 +109,7 @@ namespace
         AudioManager::PlayMusic( MUS::VICTORY, Music::PlaybackMode::PLAY_ONCE );
 
         if ( !body.empty() )
-            Dialog::Message( "", body, Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", body, Dialog::OK );
     }
 
     void DialogLoss( uint32_t cond )
@@ -165,7 +165,7 @@ namespace
         AudioManager::PlayMusic( MUS::LOSTGAME, Music::PlaybackMode::PLAY_ONCE );
 
         if ( !body.empty() )
-            Dialog::Message( "", body, Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", body, Dialog::OK );
     }
 }
 
