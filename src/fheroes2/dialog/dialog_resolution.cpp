@@ -47,7 +47,7 @@ namespace
 {
     const int32_t editBoxLength = 266;
     const int32_t resolutionItemHeight = 19;
-    // TODO: this is a hack over partially incorrect text height caclulation. Fix it later together with the Text classes.
+    // TODO: this is a hack over partially incorrect text height calculation. Fix it later together with the Text classes.
     const int32_t textOffsetYCorrection = 6;
     const std::string middleText = " x ";
 
