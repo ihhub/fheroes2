@@ -832,7 +832,8 @@ namespace
 
                 const fheroes2::Display & display = fheroes2::Display::instance();
                 if ( display.width() != 0 && display.height() != 0 ) {
-                    SDL_SetWindowSize( _window, display.width(), display.height() );
+                    assert( display.scale() > 0 );
+                    SDL_SetWindowSize( _window, display.width() * display.scale(), display.height() * display.scale() );
                 }
             }
 
