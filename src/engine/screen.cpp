@@ -102,15 +102,21 @@ namespace
             return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 } };
         }
 
-        std::vector<fheroes2::ResolutionInfo> resolutions( resolutionSet.begin(), resolutionSet.end() );
-        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
+        std::vector<fheroes2::ResolutionInfo> resolutions;
+        resolutions.reserve( resolutionSet.size() );
+        for ( const auto & resolution : resolutionSet ) {
+            if ( IsLowerThanDefaultRes( resolution ) ) {
+                continue;
+            }
 
-        // Remove all resolutions lower than the original.
-        resolutions.erase( std::remove_if( resolutions.begin(), resolutions.end(), IsLowerThanDefaultRes ), resolutions.end() );
+            resolutions.emplace_back( resolution );
+        }
 
         if ( resolutions.empty() ) {
             return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 } };
         }
+
+        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
 
         // Some operating systems do not work well with SDL so they return very limited number of high resolutions.
         // Populate missing resolutions into the list.
