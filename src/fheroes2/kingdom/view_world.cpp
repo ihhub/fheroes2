@@ -185,13 +185,6 @@ namespace
             const int32_t redrawAreaCenterX = blockSizeX * TILEWIDTH / 2;
             const int32_t redrawAreaCenterY = blockSizeY * TILEWIDTH / 2;
 
-            std::vector<int32_t> blockSizeResizedX( zoomLevels );
-            std::vector<int32_t> blockSizeResizedY( zoomLevels );
-            for ( size_t i = 0; i < zoomLevels; ++i ) {
-                blockSizeResizedX[i] = blockSizeX * tileSizePerZoomLevel[i];
-                blockSizeResizedY[i] = blockSizeY * tileSizePerZoomLevel[i];
-            }
-
             // Create temporary image where we will draw blocks of the main map on
             fheroes2::Image temporaryImg( redrawAreaWidth, redrawAreaHeight );
             temporaryImg._disableTransformLayer();
@@ -219,7 +212,7 @@ namespace
 
                     for ( size_t i = 0; i < zoomLevels; ++i ) {
                         fheroes2::Resize( temporaryImg, 0, 0, temporaryImg.width(), temporaryImg.height(), cachedImages[i], x * tileSizePerZoomLevel[i],
-                                          y * tileSizePerZoomLevel[i], blockSizeResizedX[i], blockSizeResizedY[i] );
+                                          y * tileSizePerZoomLevel[i], blockSizeX * tileSizePerZoomLevel[i], blockSizeY * tileSizePerZoomLevel[i] );
                     }
                 }
             }
