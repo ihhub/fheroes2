@@ -50,7 +50,6 @@
 #include "view_world.h"
 #include "world.h"
 
-#include "logging.h"
 // #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
 
 #if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
