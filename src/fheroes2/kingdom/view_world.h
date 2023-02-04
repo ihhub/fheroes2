@@ -60,7 +60,7 @@ public:
 
         bool zoomIn( const bool cycle );
         bool zoomOut( const bool cycle );
-        bool changeCenter( const fheroes2::Point & centerInPixels );
+        bool ChangeCenter( const fheroes2::Point & centerInPixels );
 
         const fheroes2::Rect & GetROIinPixels() const;
         fheroes2::Rect GetROIinTiles() const;

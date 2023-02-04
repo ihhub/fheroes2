@@ -493,10 +493,10 @@ void ViewWorld::ZoomROIs::_updateZoomLevels()
 
 bool ViewWorld::ZoomROIs::_updateCenter()
 {
-    return changeCenter( _center );
+    return ChangeCenter( _center );
 }
 
-bool ViewWorld::ZoomROIs::changeCenter( const fheroes2::Point & centerInPixels )
+bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
 {
     const fheroes2::Rect & currentRect = GetROIinPixels();
     const fheroes2::Size worldSize( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
@@ -653,7 +653,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
                 const fheroes2::Point & newMousePos = le.GetMouseCursor();
                 const fheroes2::Point newRoiCenter( initRoiCenter.x - ( newMousePos.x - initMousePos.x ) * TILEWIDTH / tileSizePerZoomLevel[currentROI._zoomLevel],
                                                     initRoiCenter.y - ( newMousePos.y - initMousePos.y ) * TILEWIDTH / tileSizePerZoomLevel[currentROI._zoomLevel] );
-                changed = currentROI.changeCenter( newRoiCenter );
+                changed = currentROI.ChangeCenter( newRoiCenter );
             }
             else {
                 isDrag = true;
