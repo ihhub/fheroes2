@@ -84,11 +84,6 @@ namespace
         return resolutions[id];
     }
 
-    bool SortResolutions( const fheroes2::ResolutionInfo & first, const fheroes2::ResolutionInfo & second )
-    {
-        return std::tie( first.width, first.height, first.scale ) > std::tie( second.width, second.height, second.scale );
-    }
-
     bool IsLowerThanDefaultRes( const fheroes2::ResolutionInfo & value )
     {
         return value.width < fheroes2::Display::DEFAULT_WIDTH || value.height < fheroes2::Display::DEFAULT_HEIGHT;
@@ -136,28 +131,23 @@ namespace
             return { resolutions.begin(), resolutions.end() };
         }
 
-        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
+        std::sort( resolutions.begin(), resolutions.end(),
+            []( const fheroes2::ResolutionInfo & first, const fheroes2::ResolutionInfo & second ) { return first < second; } );
 
         // Add resolutions with scale factor. No need to run through the newly added elements so we remember the size of the array.
         const size_t resolutionCountBefore = resolutions.size();
 
-        // Since all resolutions are sorted then the first resolution (which is the highest) cannot have any scale factor.
-        for ( size_t currentId = resolutionCountBefore - 1; currentId > 0; --currentId ) {
+        // Since all resolutions are sorted then the last resolution (which is the highest) cannot have any scale factor.
+        for ( size_t currentId = 0; currentId < resolutionCountBefore - 1; ++currentId ) {
             assert( resolutions[currentId].width > 0 && resolutions[currentId].height > 0 );
 
-            for ( size_t biggerId = currentId - 1;; ) {
+            for ( size_t biggerId = currentId + 1; biggerId < resolutionCountBefore; ++biggerId ) {
                 assert( resolutions[biggerId].width > 0 && resolutions[biggerId].height > 0 );
 
                 if ( ( resolutions[biggerId].width % resolutions[currentId].width ) == 0 && ( resolutions[biggerId].height % resolutions[currentId].height ) == 0
                      && ( resolutions[biggerId].width / resolutions[currentId].width ) == ( resolutions[biggerId].height / resolutions[currentId].height ) ) {
                     resolutions.emplace_back( resolutions[currentId].width, resolutions[currentId].height, resolutions[biggerId].width / resolutions[currentId].width );
                 }
-
-                if ( biggerId == 0 ) {
-                    break;
-                }
-
-                --biggerId;
             }
         }
 #endif
