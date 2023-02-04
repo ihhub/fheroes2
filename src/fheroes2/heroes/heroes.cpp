@@ -980,11 +980,30 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( isControlHuman() ) {
         std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
+
+        // The function to check the artifact for scout area bonus and returns true if it has and the area around hero was scouted.
+        auto scout = [this]( const int32_t artifactID ) {
+            const std::vector<fheroes2::ArtifactBonus> bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
+            if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) != bonuses.end() ) {
+                Scoute( this->GetIndex() );
+                ScoutRadar();
+                return true;
+            }
+            return false;
+        };
+
         // If the scout area bonus is increased with the new artifact we update the radar.
-        const std::vector<fheroes2::ArtifactBonus> bonuses = fheroes2::getArtifactData( art.GetID() ).bonuses;
-        if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) != bonuses.end() ) {
-            Scoute( this->GetIndex() );
-            ScoutRadar();
+        if ( scout( art.GetID() ) ) {
+            return true;
+        }
+
+        // If there were artifacts assembled we check them for scout area bonus.
+        if ( !assembledArtifacts.empty() ) {
+            for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
+                if ( scout( static_cast<int32_t>( assembledArtifact._assembledArtifactID ) ) ) {
+                    return true;
+                }
+            }
         }
     }
 

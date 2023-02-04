@@ -1295,7 +1295,7 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
         else {
             hero.LearnSkill( skill );
 
-            // When Scouting skill is learned we reveal the fog and redraw the radar map image in a new sout area of the hero.
+            // When Scouting skill is learned we reveal the fog and redraw the radar map image in a new scout area of the hero.
             if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
                 hero.Scoute( hero.GetIndex() );
                 hero.ScoutRadar();
@@ -1317,7 +1317,7 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
 void Heroes::ScoutRadar() const
 {
     Interface::Basic & I = Interface::Basic::Get();
-    I.GetRadar().SetRenderArea( this->GetScoutRoi( true ) );
+    I.GetRadar().SetRenderArea( GetScoutRoi( true ) );
     I.SetRedraw( Interface::REDRAW_RADAR );
 }
 

@@ -498,8 +498,6 @@ void Interface::Basic::EventSwitchShowRadar()
         }
         else {
             conf.SetShowRadar( true );
-            // We have to force set ROI to full map as it could be previously set to hero scout area on the last move.
-            radar.SetRenderArea( { 0, 0, world.w(), world.h() } );
             radar.SetRedraw( REDRAW_RADAR );
         }
     }
