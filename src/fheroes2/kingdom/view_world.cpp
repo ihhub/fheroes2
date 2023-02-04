@@ -485,13 +485,10 @@ namespace
 
     void drawViewWorldSprite( const fheroes2::Sprite & viewWorldSprite, fheroes2::Display & display, const bool isEvilInterface )
     {
-        fheroes2::Time counter;
-        counter.reset();
-
         const int32_t dstX = display.width() - viewWorldSprite.width() - BORDERWIDTH;
         int32_t dstY = 2 * BORDERWIDTH + RADARWIDTH;
         const int32_t cutHeight = 275;
-        fheroes2::Blit( viewWorldSprite, 0, 0, display, dstX, dstY, viewWorldSprite.width(), cutHeight );
+        fheroes2::Copy( viewWorldSprite, 0, 0, display, dstX, dstY, viewWorldSprite.width(), cutHeight );
         dstY += cutHeight;
 
         if ( display.height() > fheroes2::Display::DEFAULT_HEIGHT ) {
@@ -501,17 +498,14 @@ namespace
             const int32_t repeatHeight = display.height() - BORDERWIDTH - dstY - ( viewWorldSprite.height() - cutHeight );
             const int32_t repeatCount = repeatHeight / copyHeight;
             for ( int32_t i = 0; i < repeatCount; ++i ) {
-                fheroes2::Blit( icnston, 0, startY, display, dstX, dstY, icnston.width(), copyHeight );
+                fheroes2::Copy( icnston, 0, startY, display, dstX, dstY, icnston.width(), copyHeight );
                 dstY += copyHeight;
             }
-            fheroes2::Blit( icnston, 0, startY, display, dstX, dstY, icnston.width(), repeatHeight % copyHeight );
+            fheroes2::Copy( icnston, 0, startY, display, dstX, dstY, icnston.width(), repeatHeight % copyHeight );
             dstY += repeatHeight % copyHeight;
         }
 
-        fheroes2::Blit( viewWorldSprite, 0, cutHeight, display, dstX, dstY, viewWorldSprite.width(), viewWorldSprite.height() - cutHeight );
-
-        const double tmp = counter.getS() * 1000;
-        VERBOSE_LOG( "Time: " << tmp << " ms." )
+        fheroes2::Copy( viewWorldSprite, 0, cutHeight, display, dstX, dstY, viewWorldSprite.width(), viewWorldSprite.height() - cutHeight );
     }
 }
 
@@ -585,12 +579,12 @@ bool ViewWorld::ZoomROIs::zoomOut( const bool cycle )
 
 const fheroes2::Rect & ViewWorld::ZoomROIs::GetROIinPixels() const
 {
-    return _roiForZoomLevels[static_cast<int>( _zoomLevel )];
+    return _roiForZoomLevels[_zoomLevel];
 }
 
 fheroes2::Rect ViewWorld::ZoomROIs::GetROIinTiles() const
 {
-    fheroes2::Rect result = _roiForZoomLevels[static_cast<int>( _zoomLevel )];
+    fheroes2::Rect result = _roiForZoomLevels[_zoomLevel];
     result.x = result.x / TILEWIDTH;
     result.y = result.y / TILEWIDTH;
     result.width = ( result.width + TILEWIDTH - 1 ) / TILEWIDTH;
@@ -631,8 +625,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.width / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.height / 2 );
 
     // Special case: full map picture can be contained within the window -> center view on center of the map
-    if ( world.w() * tileSizePerZoomLevel[static_cast<int>( ZoomLevel::ZoomLevel2 )] <= visibleScreenInPixels.width
-         && world.h() * tileSizePerZoomLevel[static_cast<int>( ZoomLevel::ZoomLevel2 )] <= visibleScreenInPixels.height ) {
+    if ( world.w() * tileSizePerZoomLevel[ZoomLevel::ZoomLevel2] <= visibleScreenInPixels.width
+         && world.h() * tileSizePerZoomLevel[ZoomLevel::ZoomLevel2] <= visibleScreenInPixels.height ) {
         viewCenterInPixels.x = world.w() * TILEWIDTH / 2;
         viewCenterInPixels.y = world.h() * TILEWIDTH / 2;
     }
