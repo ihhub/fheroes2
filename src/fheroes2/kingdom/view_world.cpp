@@ -285,11 +285,9 @@ namespace
         }
     }
 
-    void DrawObjectsIcons( const int32_t color, const ViewWorldMode mode, const ViewWorld::ZoomROIs & ROI )
+    void DrawObjectsIcons( const int32_t color, const ViewWorldMode mode, CacheForMapWithResources & cache )
     {
-        fheroes2::Time counter;
-        counter.reset();
-
+        int32_t zoomLevelId = 0;
         const bool revealAll = mode == ViewWorldMode::ViewAll;
         const bool revealMines = revealAll || ( mode == ViewWorldMode::ViewMines );
         const bool revealHeroes = revealAll || ( mode == ViewWorldMode::ViewHeroes );
@@ -297,32 +295,11 @@ namespace
         const bool revealArtifacts = revealAll || ( mode == ViewWorldMode::ViewArtifacts );
         const bool revealResources = revealAll || ( mode == ViewWorldMode::ViewResources );
 
-        const int32_t zoomLevelId = ROI._zoomLevel;
-        const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
-        const int32_t icnBase = icnPerZoomLevel[zoomLevelId];
-        const int32_t icnLetterId = icnLetterPerZoomLevel[zoomLevelId];
-        const int32_t icnFlagsBase = icnPerZoomLevelFlags[zoomLevelId];
-
-        fheroes2::Display & display = fheroes2::Display::instance();
-
         const int32_t worldWidth = world.w();
         const int32_t worldHeight = world.h();
-
-        const fheroes2::Rect & roiPixels = ROI.GetROIinPixels();
-
-        const int32_t offsetX = roiPixels.x * tileSize / TILEWIDTH - BORDERWIDTH;
-        const int32_t offsetY = roiPixels.y * tileSize / TILEWIDTH - BORDERWIDTH;
-
-        const fheroes2::Rect roiTiles = ROI.GetROIinTiles();
-
-        // add a margin of 2 tiles because icons outside of view can still show on the view
         assert( worldWidth >= 0 && worldHeight >= 0 );
-        const int32_t minTileX = std::clamp( roiTiles.x - 2, 0, worldWidth );
-        const int32_t maxTileX = std::clamp( roiTiles.x + roiTiles.width + 2, 0, worldWidth );
-        const int32_t minTileY = std::clamp( roiTiles.y - 2, 0, worldHeight );
-        const int32_t maxTileY = std::clamp( roiTiles.y + roiTiles.height + 2, 0, worldHeight );
 
-        // Initialize variables before the loops to avoid many memory allocations inside the loop.
+        // Initialize variables before the inner loops to avoid many memory allocations inside the loop.
         int32_t index{ -1 };
         uint32_t letterIndex{ 0 };
         // There could be maximum 2 objects.
@@ -330,137 +307,149 @@ namespace
         uint32_t objects{ 0 };
         bool isCastle{ false };
 
-        for ( int32_t posY = minTileY; posY < maxTileY; ++posY ) {
-            for ( int32_t posX = minTileX; posX < maxTileX; ++posX ) {
-                const Maps::Tiles & tile = world.GetTiles( posX, posY );
+        for ( fheroes2::Image & mapImage : cache.cachedImages ) {
+            fheroes2::Time counter;
+            counter.reset();
 
-                objectTypes[0] = tile.GetObject( false );
+            const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
+            const int32_t icnBase = icnPerZoomLevel[zoomLevelId];
+            const int32_t icnLetterId = icnLetterPerZoomLevel[zoomLevelId];
+            const int32_t icnFlagsBase = icnPerZoomLevelFlags[zoomLevelId];
 
-                if ( objectTypes[0] == MP2::OBJ_NONE ) {
-                    continue;
-                }
+            for ( int32_t posY = 0; posY < worldWidth; ++posY ) {
+                for ( int32_t posX = 0; posX < worldHeight; ++posX ) {
+                    const Maps::Tiles & tile = world.GetTiles( posX, posY );
 
-                if ( objectTypes[0] != tile.GetObject( true ) ) {
-                    objectTypes[1] = tile.GetObject( true );
-                    objects = 2;
-                }
-                else {
-                    objects = 1;
-                }
+                    objectTypes[0] = tile.GetObject( false );
 
-                for ( uint32_t i = 0; i < objects; ++i ) {
-                    switch ( objectTypes[i] ) {
-                    case MP2::OBJ_HEROES: {
-                        if ( revealHeroes || !tile.isFog( color ) ) {
-                            const Heroes * hero = world.GetHeroes( tile.GetCenter() );
-                            if ( hero ) {
-                                const int32_t colorOffset = colorToOffsetICN( hero->GetColor() );
-                                index = colorOffset >= 0 ? 7 + colorOffset : -1;
-                            }
-                        }
-                        break;
-                    }
-
-                    case MP2::OBJ_CASTLE: {
-                        if ( revealTowns || !tile.isFog( color ) ) {
-                            const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
-                            if ( castle ) {
-                                isCastle = true;
-                                index = colorToOffsetICN( castle->GetColor() );
-                            }
-                        }
-                        break;
-                    }
-
-                    case MP2::OBJ_ALCHEMIST_LAB:
-                    case MP2::OBJ_MINES:
-                    case MP2::OBJ_SAWMILL:
-                        if ( revealMines || !tile.isFog( color ) ) {
-                            index = colorToOffsetICN( tile.QuantityColor() );
-                            letterIndex = tile.QuantityResourceCount().first;
-                        }
-                        break;
-
-                    case MP2::OBJ_ARTIFACT:
-                        if ( revealArtifacts || !tile.isFog( color ) ) {
-                            index = 14;
-                        }
-                        break;
-
-                    case MP2::OBJ_RESOURCE:
-                        if ( revealResources || !tile.isFog( color ) ) {
-                            index = 13;
-                            letterIndex = tile.GetQuantity1();
-                        }
-                        break;
-
-                    default:
+                    if ( objectTypes[0] == MP2::OBJ_NONE ) {
                         continue;
                     }
 
-                    if ( index >= 0 ) {
-                        // Castle flag needs an extra horozontal shift and a second flipped flag to render.
-                        if ( isCastle ) {
-                            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnFlagsBase, index );
-                            const int32_t dstx = posX * tileSize - offsetX + ( tileSize - sprite.width() ) / 2;
-                            const int32_t dsty = posY * tileSize - offsetY + ( tileSize - sprite.height() ) / 2 + 1;
+                    if ( objectTypes[0] != tile.GetObject( true ) ) {
+                        objectTypes[1] = tile.GetObject( true );
+                        objects = 2;
+                    }
+                    else {
+                        objects = 1;
+                    }
 
-                            fheroes2::Blit( sprite, display, dstx + tileSize, dsty, false );
-                            // We place a second flag, flipped horizontally.
-                            fheroes2::Blit( sprite, display, dstx - tileSize, dsty, true );
-
-                            isCastle = false;
-                        }
-                        else {
-                            const int32_t dstx = posX * tileSize + tileSize / 2 - offsetX;
-                            const int32_t dsty = posY * tileSize + tileSize / 2 - offsetY;
-
-                            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnBase, index );
-                            fheroes2::Blit( sprite, display, dstx - sprite.width() / 2, dsty - sprite.height() / 2 );
-
-                            if ( letterIndex > 0 ) {
-                                switch ( letterIndex ) {
-                                case Resource::WOOD:
-                                    letterIndex = 0;
-                                    break;
-                                case Resource::MERCURY:
-                                    letterIndex = 1;
-                                    break;
-                                case Resource::ORE:
-                                    letterIndex = 2;
-                                    break;
-                                case Resource::SULFUR:
-                                    letterIndex = 3;
-                                    break;
-                                case Resource::CRYSTAL:
-                                    letterIndex = 4;
-                                    break;
-                                case Resource::GEMS:
-                                    letterIndex = 5;
-                                    break;
-                                case Resource::GOLD:
-                                    letterIndex = 6;
-                                    break;
-                                default:
-                                    break;
+                    for ( uint32_t i = 0; i < objects; ++i ) {
+                        switch ( objectTypes[i] ) {
+                        case MP2::OBJ_HEROES: {
+                            if ( revealHeroes || !tile.isFog( color ) ) {
+                                const Heroes * hero = world.GetHeroes( tile.GetCenter() );
+                                if ( hero ) {
+                                    const int32_t colorOffset = colorToOffsetICN( hero->GetColor() );
+                                    index = colorOffset >= 0 ? 7 + colorOffset : -1;
                                 }
-
-                                const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
-                                fheroes2::Blit( letter, display, dstx - letter.width() / 2, dsty - letter.height() / 2 );
-
-                                // Restore 'letterIndex' to its initial state.
-                                letterIndex = 0;
                             }
+                            break;
                         }
-                        // Restore 'index' to its initial state.
-                        index = -1;
+
+                        case MP2::OBJ_CASTLE: {
+                            if ( revealTowns || !tile.isFog( color ) ) {
+                                const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
+                                if ( castle ) {
+                                    isCastle = true;
+                                    index = colorToOffsetICN( castle->GetColor() );
+                                }
+                            }
+                            break;
+                        }
+
+                        case MP2::OBJ_ALCHEMIST_LAB:
+                        case MP2::OBJ_MINES:
+                        case MP2::OBJ_SAWMILL:
+                            if ( revealMines || !tile.isFog( color ) ) {
+                                index = colorToOffsetICN( tile.QuantityColor() );
+                                letterIndex = tile.QuantityResourceCount().first;
+                            }
+                            break;
+
+                        case MP2::OBJ_ARTIFACT:
+                            if ( revealArtifacts || !tile.isFog( color ) ) {
+                                index = 14;
+                            }
+                            break;
+
+                        case MP2::OBJ_RESOURCE:
+                            if ( revealResources || !tile.isFog( color ) ) {
+                                index = 13;
+                                letterIndex = tile.GetQuantity1();
+                            }
+                            break;
+
+                        default:
+                            continue;
+                        }
+
+                        if ( index >= 0 ) {
+                            // Castle flag needs an extra horozontal shift and a second flipped flag to render.
+                            if ( isCastle ) {
+                                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnFlagsBase, index );
+                                const int32_t dstx = posX * tileSize + ( tileSize - sprite.width() ) / 2;
+                                const int32_t dsty = posY * tileSize + ( tileSize - sprite.height() ) / 2 + 1;
+
+                                fheroes2::Blit( sprite, mapImage, dstx + tileSize, dsty, false );
+                                // We place a second flag, flipped horizontally.
+                                fheroes2::Blit( sprite, mapImage, dstx - tileSize, dsty, true );
+
+                                isCastle = false;
+                            }
+                            else {
+                                const int32_t dstx = posX * tileSize + tileSize / 2;
+                                const int32_t dsty = posY * tileSize + tileSize / 2;
+
+                                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnBase, index );
+                                fheroes2::Blit( sprite, mapImage, dstx - sprite.width() / 2, dsty - sprite.height() / 2 );
+
+                                if ( letterIndex > 0 ) {
+                                    switch ( letterIndex ) {
+                                    case Resource::WOOD:
+                                        letterIndex = 0;
+                                        break;
+                                    case Resource::MERCURY:
+                                        letterIndex = 1;
+                                        break;
+                                    case Resource::ORE:
+                                        letterIndex = 2;
+                                        break;
+                                    case Resource::SULFUR:
+                                        letterIndex = 3;
+                                        break;
+                                    case Resource::CRYSTAL:
+                                        letterIndex = 4;
+                                        break;
+                                    case Resource::GEMS:
+                                        letterIndex = 5;
+                                        break;
+                                    case Resource::GOLD:
+                                        letterIndex = 6;
+                                        break;
+                                    default:
+                                        break;
+                                    }
+
+                                    const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
+                                    fheroes2::Blit( letter, mapImage, dstx - letter.width() / 2, dsty - letter.height() / 2 );
+
+                                    // Restore 'letterIndex' to its initial state.
+                                    letterIndex = 0;
+                                }
+                            }
+                            // Restore 'index' to its initial state.
+                            index = -1;
+                        }
                     }
                 }
             }
-        }
 
-        const double tmp = counter.getS() * 1000;
-        VERBOSE_LOG( "Time: " << tmp << " ms." )
+            const double tmp = counter.getS() * 1000;
+            VERBOSE_LOG( "Time: " << tmp << " ms." )
+
+            ++zoomLevelId;
+        }
     }
 
     int32_t GetSpriteResource( const ViewWorldMode mode, const bool evil )
@@ -635,8 +624,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
 
     CacheForMapWithResources cache( mode );
 
+    DrawObjectsIcons( color, mode, cache );
     DrawWorld( currentROI, cache );
-    DrawObjectsIcons( color, mode, currentROI );
     Interface::GameBorderRedraw( true );
 
     // Draw radar
@@ -707,12 +696,18 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         }
 
         if ( changed ) {
+            fheroes2::Time counter;
+            counter.reset();
+
             DrawWorld( currentROI, cache );
-            DrawObjectsIcons( color, mode, currentROI );
+            // DrawObjectsIcons( color, mode, currentROI );
             // Interface::GameBorderRedraw( true );
             radar.RedrawForViewWorld( currentROI, mode );
             // drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
             display.render();
+
+            const double tmp = counter.getS() * 1000;
+            VERBOSE_LOG( "Time: " << tmp << " ms." )
         }
     }
 
