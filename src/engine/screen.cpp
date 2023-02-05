@@ -876,7 +876,7 @@ namespace
 #endif
                 resolutionSet = FilterResolutions( resolutionSet );
 
-                return std::vector<fheroes2::ResolutionInfo> { resolutionSet.rbegin(), resolutionSet.rend() };
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
             }();
 
             return filteredResolutions;
@@ -1362,7 +1362,7 @@ namespace
 
                 resolutionSet = FilterResolutions( resolutionSet );
 
-                return  std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
             }();
 
             return filteredResolutions;
