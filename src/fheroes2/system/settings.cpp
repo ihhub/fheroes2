@@ -252,27 +252,30 @@ bool Settings::Read( const std::string & filePath )
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
-        // default
-        _resolutionInfo.width = fheroes2::Display::DEFAULT_WIDTH;
-        _resolutionInfo.height = fheroes2::Display::DEFAULT_HEIGHT;
+        const std::string value = StringLower( sval );
+        size_t pos = value.find( 'x' );
 
-        std::string value = StringLower( sval );
-        const size_t pos = value.find( 'x' );
+        if ( pos != std::string::npos ) {
+            _resolutionInfo.width = GetInt( value.substr( 0, pos ) );
 
-        if ( std::string::npos != pos ) {
-            std::string width( value.substr( 0, pos ) );
-            std::string height( value.substr( pos + 1, value.length() - pos - 1 ) );
-
-            _resolutionInfo.width = GetInt( width );
-            _resolutionInfo.height = GetInt( height );
+            const size_t prevXPos = pos;
+            pos = value.find( 'x', prevXPos + 1 );
+            if ( pos != std::string::npos ) {
+                _resolutionInfo.height = GetInt( value.substr( prevXPos + 1, pos - prevXPos - 1 ) );
+                _resolutionInfo.scale = GetInt( value.substr( pos + 1, value.length() - pos - 1 ) );
+            }
+            else {
+                // This is old video mode setting without scale.
+                _resolutionInfo.height = GetInt( value.substr( prevXPos + 1, value.length() - prevXPos - 1 ) );
+                _resolutionInfo.scale = 1;
+            }
         }
         else {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown video mode: " << value )
+            _resolutionInfo.width = fheroes2::Display::DEFAULT_WIDTH;
+            _resolutionInfo.height = fheroes2::Display::DEFAULT_HEIGHT;
+            _resolutionInfo.scale = 1;
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown video mode: " << value )
         }
-    }
-
-    if ( config.Exists( "screen scale ratio" ) ) {
-        _resolutionInfo.scale = std::clamp( config.IntParams( "screen scale ratio" ), 1, 10 ); // x10 scale is insane so we clamp it.
     }
 
     // full screen
@@ -387,10 +390,7 @@ std::string Settings::String() const
     const fheroes2::Display & display = fheroes2::Display::instance();
 
     os << std::endl << "# video mode (game resolution)" << std::endl;
-    os << "videomode = " << display.width() << "x" << display.height() << std::endl;
-
-    os << std::endl << "# screen scale ratio" << std::endl;
-    os << "screen scale ratio = " << display.scale() << std::endl;
+    os << "videomode = " << display.width() << "x" << display.height() << "x" << display.scale() << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;

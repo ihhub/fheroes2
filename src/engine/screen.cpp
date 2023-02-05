@@ -117,7 +117,9 @@ namespace
             = { { 640, 480, 1 },   { 800, 600, 1 },  { 1024, 768, 1 },  { 1152, 864, 1 }, { 1280, 600, 1 }, { 1280, 720, 1 },  { 1280, 768, 1 }, { 1280, 960, 1 },
                 { 1280, 1024, 1 }, { 1360, 768, 1 }, { 1400, 1050, 1 }, { 1440, 900, 1 }, { 1600, 900, 1 }, { 1680, 1050, 1 }, { 1920, 1080, 1 } };
 
-        const fheroes2::ResolutionInfo lowestResolution = *std::min_element( resolutions.begin(), resolutions.end() );
+        const fheroes2::ResolutionInfo lowestResolution = resolutions.front();
+        assert( *std::min_element( resolutions.begin(), resolutions.end() ) == resolutions.front() );
+
         for ( const fheroes2::ResolutionInfo & resolution : possibleResolutions ) {
             if ( lowestResolution.width < resolution.width || lowestResolution.height < resolution.height || resolution == lowestResolution ) {
                 continue;
@@ -131,8 +133,7 @@ namespace
             return { resolutions.begin(), resolutions.end() };
         }
 
-        std::sort( resolutions.begin(), resolutions.end(),
-                   []( const fheroes2::ResolutionInfo & first, const fheroes2::ResolutionInfo & second ) { return first < second; } );
+        std::sort( resolutions.begin(), resolutions.end() );
 
         // Add resolutions with scale factor. No need to run through the newly added elements so we remember the size of the array.
         const size_t resolutionCountBefore = resolutions.size();
@@ -603,17 +604,15 @@ namespace
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         {
-            static std::vector<fheroes2::ResolutionInfo> filteredResolutions;
-
-            if ( filteredResolutions.empty() ) {
+            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
                 std::set<fheroes2::ResolutionInfo> resolutionSet;
                 resolutionSet.emplace( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 );
                 resolutionSet.emplace( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 );
                 resolutionSet.emplace( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT, 1 );
                 resolutionSet = FilterResolutions( resolutionSet );
 
-                filteredResolutions = { resolutionSet.rbegin(), resolutionSet.rend() };
-            }
+                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }();
 
             return filteredResolutions;
         }
@@ -852,9 +851,7 @@ namespace
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         {
-            static std::vector<fheroes2::ResolutionInfo> filteredResolutions;
-
-            if ( filteredResolutions.empty() ) {
+            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
                 std::set<fheroes2::ResolutionInfo> resolutionSet;
 
                 const int displayCount = SDL_GetNumVideoDisplays();
@@ -879,8 +876,8 @@ namespace
 #endif
                 resolutionSet = FilterResolutions( resolutionSet );
 
-                filteredResolutions = { resolutionSet.rbegin(), resolutionSet.rend() };
-            }
+                return std::vector<fheroes2::ResolutionInfo> { resolutionSet.rbegin(), resolutionSet.rend() };
+            }();
 
             return filteredResolutions;
         }
@@ -1354,9 +1351,7 @@ namespace
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         {
-            static std::vector<fheroes2::ResolutionInfo> filteredResolutions;
-
-            if ( filteredResolutions.empty() ) {
+            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
                 std::set<fheroes2::ResolutionInfo> resolutionSet;
                 SDL_Rect ** modes = SDL_ListModes( nullptr, SDL_FULLSCREEN | SDL_HWSURFACE );
                 if ( modes != nullptr && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
@@ -1367,8 +1362,8 @@ namespace
 
                 resolutionSet = FilterResolutions( resolutionSet );
 
-                filteredResolutions = { resolutionSet.rbegin(), resolutionSet.rend() };
-            }
+                return  std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
+            }();
 
             return filteredResolutions;
         }
