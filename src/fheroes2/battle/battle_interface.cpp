@@ -3441,7 +3441,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
 
         if ( resurrects != 0 ) {
             auto log = []( Battle::Status & uiEl, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
-                StringReplace( localMsg, "%{count}", localRes );
+                StringReplace( localMsg, "%{count}", static_cast<int32_t>( localRes ) );
                 StringReplace( localMsg, "%{unit}", localUnit );
 
                 uiEl.SetMessage( localMsg, true );
