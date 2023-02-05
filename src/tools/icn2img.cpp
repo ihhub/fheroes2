@@ -107,12 +107,13 @@ namespace
         std::error_code ec;
         // Using the non-throwing overload
         if ( !std::filesystem::is_directory( dir, ec ) ) {
+            fileNames.emplace_back( arg );
             return;
         }
 
         const std::string pattern = argPath.filename().string();
 
-        if ( ignoreGlob || ( pattern.find( '*' ) == std::string_view::npos && pattern.find( '?' ) == std::string_view::npos ) ) {
+        if ( pattern.find( '*' ) == std::string_view::npos && pattern.find( '?' ) == std::string_view::npos ) {
             fileNames.emplace_back( arg );
             return;
         }
@@ -153,7 +154,12 @@ int main( int argc, char ** argv )
 
     std::vector<std::string> inputFileNames;
     for ( int i = 3; i < argc; ++i ) {
-        globFiles( argv[i], inputFileNames );
+        if ( ignoreGlob ) {
+            inputFileNames.emplace_back( argv[i] );
+        }
+        else {
+            globFiles( argv[i], inputFileNames );
+        }
     }
 
     for ( const std::string & inputFileName : inputFileNames ) {
