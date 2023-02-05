@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,6 +23,7 @@
 
 #include "statusbar.h"
 #include "screen.h"
+#include "tools.h"
 
 void StatusBar::SetCenter( int32_t cx, int32_t cy )
 {
@@ -33,10 +34,12 @@ void StatusBar::SetCenter( int32_t cx, int32_t cy )
 void StatusBar::ShowMessage( const std::string & msg )
 {
     if ( msg != prev ) {
+        const fheroes2::Rect prevRoi = GetRect();
         SetText( msg );
         SetPos( center.x - w() / 2, center.y - h() / 2 );
         Show();
-        fheroes2::Display::instance().render( GetRect() );
+
+        fheroes2::Display::instance().render( fheroes2::getBoundaryRect( prevRoi, GetRect() ) );
         prev = msg;
     }
 }
