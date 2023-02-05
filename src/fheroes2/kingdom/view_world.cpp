@@ -251,7 +251,7 @@ namespace
         const bool revealAll = mode == ViewWorldMode::ViewAll;
         const bool revealMines = revealAll || ( mode == ViewWorldMode::ViewMines );
         const bool revealHeroes = revealAll || ( mode == ViewWorldMode::ViewHeroes );
-        const bool revealTowns = revealAll || ( mode == ViewWorldMode::ViewTowns );
+        const bool revealTowns = mode == ViewWorldMode::ViewTowns;
         const bool revealArtifacts = revealAll || ( mode == ViewWorldMode::ViewArtifacts );
         const bool revealResources = revealAll || ( mode == ViewWorldMode::ViewResources );
 
@@ -265,7 +265,6 @@ namespace
         // There could be maximum 2 objects to analyze on the tile (a Hero and a Catle).
         std::array<MP2::MapObjectType, 2> objectTypes{};
         uint32_t objectCount{ 0 };
-        bool isCastle{ false };
 
         for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
             const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
@@ -295,18 +294,26 @@ namespace
                         }
 
                         case MP2::OBJ_CASTLE: {
-                            if ( revealTowns || !tile.isFog( color ) ) {
+                            const bool isFog = tile.isFog( color );
+                            // We do not render flags for visible castles at 1:1 scale level, as there are already normal flags.
+                            if ( ( ( revealAll || !isFog ) && ( tileSize != 32 ) ) || ( revealTowns && isFog ) ) {
                                 const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
 
-                                // We do not render flags for visible castles at 1:1 scale level, as there are already normal flags.
-                                if ( castle && ( ( tileSize != 32 ) || tile.isFog( color ) ) ) {
-                                    isCastle = true;
+                                if ( castle ) {
+                                    // In 'ICN::FLAG32' we use different index than in 'ICN::VWFLAG*'.
+                                    const int32_t flagIndex
+                                        = ( icnFlagsBase == ICN::FLAG32 ) ? ( 2 * colorToOffsetICN( castle->GetColor() ) + 1 ) : colorToOffsetICN( castle->GetColor() );
+                                    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnFlagsBase, flagIndex );
 
-                                    // For 1:1 scale we use different index in ICN.
-                                    index = ( tileSize == 32 ) ? ( 2 * colorToOffsetICN( castle->GetColor() ) + 1 ) : colorToOffsetICN( castle->GetColor() );
+                                    const int32_t dstx = posX * tileSize + ( tileSize - sprite.width() ) / 2;
+                                    const int32_t dsty = posY * tileSize + ( tileSize - sprite.height() ) / 2 + 1;
+
+                                    fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx + tileSize, dsty, false );
+                                    // We place a second flag, flipped horizontally.
+                                    fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx - tileSize, dsty, true );
                                 }
                             }
-                            break;
+                            continue;
                         }
 
                         case MP2::OBJ_ALCHEMIST_LAB:
@@ -336,58 +343,44 @@ namespace
                         }
 
                         if ( index >= 0 ) {
-                            // Castle flag needs an extra horozontal shift and a second flipped flag to render.
-                            if ( isCastle ) {
-                                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnFlagsBase, index );
-                                const int32_t dstx = posX * tileSize + ( tileSize - sprite.width() ) / 2;
-                                const int32_t dsty = posY * tileSize + ( tileSize - sprite.height() ) / 2 + 1;
+                            const int32_t dstx = posX * tileSize + tileSize / 2;
+                            const int32_t dsty = posY * tileSize + tileSize / 2;
 
-                                fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx + tileSize, dsty, false );
-                                // We place a second flag, flipped horizontally.
-                                fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx - tileSize, dsty, true );
+                            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnBase, index );
+                            fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx - sprite.width() / 2, dsty - sprite.height() / 2 );
 
-                                isCastle = false;
-                            }
-                            else {
-                                const int32_t dstx = posX * tileSize + tileSize / 2;
-                                const int32_t dsty = posY * tileSize + tileSize / 2;
-
-                                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnBase, index );
-                                fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx - sprite.width() / 2, dsty - sprite.height() / 2 );
-
-                                if ( letterIndex > 0 ) {
-                                    switch ( letterIndex ) {
-                                    case Resource::WOOD:
-                                        letterIndex = 0;
-                                        break;
-                                    case Resource::MERCURY:
-                                        letterIndex = 1;
-                                        break;
-                                    case Resource::ORE:
-                                        letterIndex = 2;
-                                        break;
-                                    case Resource::SULFUR:
-                                        letterIndex = 3;
-                                        break;
-                                    case Resource::CRYSTAL:
-                                        letterIndex = 4;
-                                        break;
-                                    case Resource::GEMS:
-                                        letterIndex = 5;
-                                        break;
-                                    case Resource::GOLD:
-                                        letterIndex = 6;
-                                        break;
-                                    default:
-                                        break;
-                                    }
-
-                                    const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
-                                    fheroes2::Blit( letter, cache.cachedImages[zoomLevelId], dstx - letter.width() / 2, dsty - letter.height() / 2 );
-
-                                    // Restore 'letterIndex' to its initial state.
+                            if ( letterIndex > 0 ) {
+                                switch ( letterIndex ) {
+                                case Resource::WOOD:
                                     letterIndex = 0;
+                                    break;
+                                case Resource::MERCURY:
+                                    letterIndex = 1;
+                                    break;
+                                case Resource::ORE:
+                                    letterIndex = 2;
+                                    break;
+                                case Resource::SULFUR:
+                                    letterIndex = 3;
+                                    break;
+                                case Resource::CRYSTAL:
+                                    letterIndex = 4;
+                                    break;
+                                case Resource::GEMS:
+                                    letterIndex = 5;
+                                    break;
+                                case Resource::GOLD:
+                                    letterIndex = 6;
+                                    break;
+                                default:
+                                    break;
                                 }
+
+                                const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
+                                fheroes2::Blit( letter, cache.cachedImages[zoomLevelId], dstx - letter.width() / 2, dsty - letter.height() / 2 );
+
+                                // Restore 'letterIndex' to its initial state.
+                                letterIndex = 0;
                             }
                             // Restore 'index' to its initial state.
                             index = -1;
