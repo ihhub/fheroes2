@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <initializer_list>
+#include <system_error>
 #include <utility>
 
 #if defined( _WIN32 )

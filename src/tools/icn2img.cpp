@@ -21,7 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
@@ -30,7 +29,6 @@
 #include <memory>
 #include <sstream> // IWYU pragma: keep
 #include <string>
-#include <string_view>
 #include <system_error>
 #include <type_traits>
 #include <vector>
