@@ -101,7 +101,7 @@ namespace
 
         std::filesystem::path dir = argPath.parent_path();
         if ( dir.empty() ) {
-            dir = { "." };
+            dir = std::filesystem::path{ "." };
         }
 
         std::error_code ec;
