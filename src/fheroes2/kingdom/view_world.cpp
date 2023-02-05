@@ -264,12 +264,12 @@ namespace
             // TODO: make castle flag rendering only by 'gamearea.Redraw()' for 1:1 scale.
             for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
                 const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
-                
+
                 // We do not render flags for visible castles at 1:1 scale level, as there are already normal flags placed by 'gamearea.Redraw()'.
                 if ( skipMaxZoomLevel && tileSize == 32 ) {
                     continue;
                 }
-                
+
                 // In 'ICN::FLAG32' we have different flag indexes than in 'ICN::VWFLAG*'.
                 const int32_t icnFlagsBase = icnPerZoomLevelFlags[zoomLevelId];
                 const uint32_t flagIndex = ( icnFlagsBase == ICN::FLAG32 ) ? ( 2 * colorToOffsetICN( castle->GetColor() ) + 1 ) : colorToOffsetICN( castle->GetColor() );
