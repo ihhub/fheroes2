@@ -93,8 +93,10 @@ namespace
             return ViewWorld::ZoomLevel::ZoomLevel1;
         case ViewWorld::ZoomLevel::ZoomLevel1:
             return ViewWorld::ZoomLevel::ZoomLevel2;
+        case ViewWorld::ZoomLevel::ZoomLevel2:
+            return ViewWorld::ZoomLevel::ZoomLevel3;
         default:
-            return cycle ? ViewWorld::ZoomLevel::ZoomLevel0 : ViewWorld::ZoomLevel::ZoomLevel2;
+            return cycle ? ViewWorld::ZoomLevel::ZoomLevel0 : ViewWorld::ZoomLevel::ZoomLevel3;
         }
     }
 
