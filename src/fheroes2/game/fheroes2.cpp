@@ -61,7 +61,6 @@
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
-#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -131,7 +130,7 @@ namespace
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            display.resize( conf.VideoMode().width, conf.VideoMode().height );
+            display.setResolution( conf.currentResolutionInfo() );
             display.fill( 0 ); // start from a black screen
 
             fheroes2::engine().setTitle( GetCaption() );

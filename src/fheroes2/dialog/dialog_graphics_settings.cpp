@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,7 +64,13 @@ namespace
     void drawResolution( const fheroes2::Rect & optionRoi )
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
-        std::string resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
+        std::string resolutionName;
+        if ( display.scale() > 1 ) {
+            resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() ) + " (x" + std::to_string( display.scale() ) + ')';
+        }
+        else {
+            resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
+        }
 
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), _( "Resolution" ),
                               std::move( resolutionName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
