@@ -23,7 +23,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 
 #include "agg_image.h"
 #include "castle.h"
