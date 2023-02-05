@@ -2864,9 +2864,10 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
     static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for writing MP2::MapObjectType object" );
 
-    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid << tile._objectIcnType << tile._hasObjectAnimation
-               << tile._isMarkedAsRoad << tile._imageIndex << static_cast<uint8_t>( tile._mainObjectType ) << tile.fog_colors << tile.quantity1 << tile.quantity2
-               << tile.additionalMetadata << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType;
+    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid << static_cast<uint8_t>( tile._objectIcnType )
+               << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex << static_cast<uint8_t>( tile._mainObjectType ) << tile.fog_colors
+               << tile.quantity1 << tile.quantity2 << tile.additionalMetadata << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2
+               << tile._layerType;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
