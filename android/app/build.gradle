@@ -3,13 +3,13 @@ apply plugin: 'com.android.application'
 android {
     namespace 'org.fheroes2'
 
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId 'org.fheroes2'
 
         minSdkVersion 22
-        targetSdkVersion 31
+        targetSdkVersion 33
 
         // These paths are set relative to the android project directory
         versionCode((new File('../version_code.txt')).getText('UTF-8').trim().toInteger())
