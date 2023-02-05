@@ -25,12 +25,6 @@
 #include "screen.h"
 #include "tools.h"
 
-void StatusBar::SetCenter( int32_t cx, int32_t cy )
-{
-    center.x = cx;
-    center.y = cy;
-}
-
 void StatusBar::ShowMessage( const std::string & msg )
 {
     if ( msg != prev ) {
