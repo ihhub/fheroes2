@@ -32,6 +32,7 @@
 #include <string>
 #include <string_view>
 #include <system_error>
+#include <type_traits>
 #include <vector>
 
 #include "agg_file.h"
@@ -211,6 +212,9 @@ int main( int argc, char ** argv )
             else {
                 dstFileName += ".bmp";
             }
+
+            static_assert( std::is_same_v<decltype( header.offsetX ), uint16_t> && std::is_same_v<decltype( header.offsetY ), uint16_t>,
+                           "Offset types have been changed, check the casts below" );
 
             std::cout << "Image " << spriteIdx + 1 << " has offset of [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY )
                       << "]" << std::endl;
