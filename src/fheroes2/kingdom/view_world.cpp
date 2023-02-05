@@ -19,11 +19,11 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
-#include <vector>
 
 #include "agg_image.h"
 #include "castle.h"
@@ -50,10 +50,9 @@
 #include "view_world.h"
 #include "world.h"
 
-// #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
+// #define SAVE_WORLD_MAP // Activate this when you want save the map to a "*.bmp" file at 1:1 scale level.
 
-#if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
-#define SAVE_WORLD_MAP
+#if defined( SAVE_WORLD_MAP )
 #include "image_tool.h"
 
 namespace
@@ -65,16 +64,12 @@ namespace
 
 namespace
 {
-    const std::vector<int32_t> tileSizePerZoomLevel{ 4, 6, 12, 32 };
-    const std::vector<int32_t> icnPerZoomLevel{ ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 };
-    const std::vector<int32_t> icnLetterPerZoomLevel{ ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
-    const std::vector<int32_t> icnPerZoomLevelFlags{ ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12 };
-
-#ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
     const int32_t zoomLevels = 4;
-#else
-    const int32_t zoomLevels = 3;
-#endif
+
+    const std::array<int32_t, zoomLevels> tileSizePerZoomLevel{ 4, 6, 12, 32 };
+    const std::array<int32_t, zoomLevels> icnPerZoomLevel{ ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 };
+    const std::array<int32_t, zoomLevels> icnLetterPerZoomLevel{ ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
+    const std::array<int32_t, zoomLevels> icnPerZoomLevelFlags{ ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::FLAG32 };
 
     // Compute a rectangle that defines which world pixels we can see in the "view world" window,
     // based on given zoom level and initial center
@@ -99,28 +94,16 @@ namespace
             return ViewWorld::ZoomLevel::ZoomLevel1;
         case ViewWorld::ZoomLevel::ZoomLevel1:
             return ViewWorld::ZoomLevel::ZoomLevel2;
-#ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
-        case ViewWorld::ZoomLevel::ZoomLevel2:
-            return ViewWorld::ZoomLevel::ZoomLevel3;
-        default:
-            return cycle ? ViewWorld::ZoomLevel::ZoomLevel0 : ViewWorld::ZoomLevel::ZoomLevel3;
-#else
         default:
             return cycle ? ViewWorld::ZoomLevel::ZoomLevel0 : ViewWorld::ZoomLevel::ZoomLevel2;
-#endif
         }
     }
 
     ViewWorld::ZoomLevel GetPreviousZoomLevel( const ViewWorld::ZoomLevel level, const bool cycle )
     {
         switch ( level ) {
-#ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
         case ViewWorld::ZoomLevel::ZoomLevel0:
             return cycle ? ViewWorld::ZoomLevel::ZoomLevel3 : ViewWorld::ZoomLevel::ZoomLevel0;
-#else
-        case ViewWorld::ZoomLevel::ZoomLevel0:
-            return cycle ? ViewWorld::ZoomLevel::ZoomLevel2 : ViewWorld::ZoomLevel::ZoomLevel0;
-#endif
         case ViewWorld::ZoomLevel::ZoomLevel1:
             return ViewWorld::ZoomLevel::ZoomLevel0;
         case ViewWorld::ZoomLevel::ZoomLevel2:
@@ -155,16 +138,14 @@ namespace
 
     struct CacheForMapWithResources
     {
-        std::vector<fheroes2::Image> cachedImages; // One image per zoom Level
+        std::array<fheroes2::Image, zoomLevels> cachedImages; // One image per zoom Level
 
         CacheForMapWithResources() = delete;
 
         // Compute complete world map, and save it for all zoom levels
         explicit CacheForMapWithResources( const ViewWorldMode viewMode )
         {
-            cachedImages.resize( zoomLevels );
-
-            for ( size_t i = 0; i < cachedImages.size(); ++i ) {
+            for ( size_t i = 0; i < zoomLevels; ++i ) {
                 cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
                 cachedImages[i]._disableTransformLayer();
             }
@@ -199,17 +180,13 @@ namespace
                 drawingFlags |= Interface::RedrawLevelType::LEVEL_TOWNS;
             }
 
-#if !defined( SAVE_WORLD_MAP )
-            drawingFlags ^= Interface::RedrawLevelType::LEVEL_HEROES;
-#endif
-
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int32_t x = 0; x < worldWidth; x += blockSizeX ) {
                 for ( int32_t y = 0; y < worldHeight; y += blockSizeY ) {
                     gamearea.SetCenterInPixels( { x * TILEWIDTH + redrawAreaCenterX, y * TILEWIDTH + redrawAreaCenterY } );
                     gamearea.Redraw( temporaryImg, drawingFlags );
 
-                    for ( size_t i = 0; i < zoomLevels; ++i ) {
+                    for ( int32_t i = 0; i < zoomLevels; ++i ) {
                         fheroes2::Resize( temporaryImg, 0, 0, temporaryImg.width(), temporaryImg.height(), cachedImages[i], x * tileSizePerZoomLevel[i],
                                           y * tileSizePerZoomLevel[i], blockSizeX * tileSizePerZoomLevel[i], blockSizeY * tileSizePerZoomLevel[i] );
                     }
@@ -284,9 +261,9 @@ namespace
         // Initialize variables before the loop to avoid many memory allocations inside the loop.
         int32_t index{ -1 };
         uint32_t letterIndex{ 0 };
-        // There could be maximum 2 objects.
-        std::vector<MP2::MapObjectType> objectTypes( 2 );
-        uint32_t objects{ 0 };
+        // There could be maximum 2 objects to analyze on the tile (a Hero and a Catle).
+        std::array<MP2::MapObjectType, 2> objectTypes{};
+        uint32_t objectCount{ 0 };
         bool isCastle{ false };
 
         for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
@@ -300,16 +277,10 @@ namespace
                     const Maps::Tiles & tile = world.GetTiles( posX, posY );
 
                     objectTypes[0] = tile.GetObject( false );
+                    objectTypes[1] = tile.GetObject( true );
+                    objectCount = ( objectTypes[0] == objectTypes[1] ) ? 1 : 2;
 
-                    if ( objectTypes[0] != tile.GetObject( true ) ) {
-                        objectTypes[1] = tile.GetObject( true );
-                        objects = 2;
-                    }
-                    else {
-                        objects = 1;
-                    }
-
-                    for ( uint32_t i = 0; i < objects; ++i ) {
+                    for ( uint32_t i = 0; i < objectCount; ++i ) {
                         switch ( objectTypes[i] ) {
                         case MP2::OBJ_HEROES: {
                             if ( revealHeroes || !tile.isFog( color ) ) {
@@ -325,9 +296,13 @@ namespace
                         case MP2::OBJ_CASTLE: {
                             if ( revealTowns || !tile.isFog( color ) ) {
                                 const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
-                                if ( castle ) {
+
+                                // We do not render flags for visible castles at 1:1 scale level, as there are already normal flags.
+                                if ( castle && ( ( tileSize != 32 ) || tile.isFog( color ) ) ) {
                                     isCastle = true;
-                                    index = colorToOffsetICN( castle->GetColor() );
+
+                                    // For 1:1 scale we use different index in ICN.
+                                    index = ( tileSize == 32 ) ? ( 2 * colorToOffsetICN( castle->GetColor() ) + 1 ) : colorToOffsetICN( castle->GetColor() );
                                 }
                             }
                             break;

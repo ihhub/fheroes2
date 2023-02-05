@@ -21,8 +21,8 @@
 #ifndef H2VIEWWORLD_H
 #define H2VIEWWORLD_H
 
+#include <array>
 #include <cstdint>
-#include <vector>
 
 #include "math_base.h"
 
@@ -70,7 +70,7 @@ public:
 
         ZoomLevel _zoomLevel{ ZoomLevel2 };
         fheroes2::Point _center;
-        std::vector<fheroes2::Rect> _roiForZoomLevels{ 4 };
+        std::array<fheroes2::Rect, 4> _roiForZoomLevels;
 
     private:
         void _updateZoomLevels();
