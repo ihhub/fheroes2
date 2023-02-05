@@ -170,7 +170,9 @@ int main( int argc, char ** argv )
 
         const std::filesystem::path prefix = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).stem();
 
-        if ( !std::filesystem::exists( prefix ) && !std::filesystem::create_directories( prefix ) ) {
+        std::error_code ec;
+        // Using the non-throwing overloads
+        if ( !std::filesystem::exists( prefix, ec ) && !std::filesystem::create_directories( prefix, ec ) ) {
             std::cerr << "Cannot create directory " << prefix << std::endl;
             return EXIT_FAILURE;
         }
