@@ -31,6 +31,7 @@
 #include <sstream> // IWYU pragma: keep
 #include <string>
 #include <string_view>
+#include <system_error>
 #include <vector>
 
 #include "agg_file.h"
@@ -98,7 +99,7 @@ namespace
         const std::filesystem::path argPath( arg );
 
         const std::filesystem::path dir = [&argPath]() -> std::filesystem::path {
-            const std::filesystem::path parentPath = argPath.parent_path();
+            std::filesystem::path parentPath = argPath.parent_path();
             if ( !parentPath.empty() ) {
                 return parentPath;
             }
@@ -115,7 +116,7 @@ namespace
         const std::string pattern = argPath.filename().string();
 
         if ( ignoreGlob || ( pattern.find( '*' ) == std::string_view::npos && pattern.find( '?' ) == std::string_view::npos ) ) {
-            fileNames.push_back( std::string{ arg } );
+            fileNames.emplace_back( arg );
             return;
         }
 
@@ -197,7 +198,7 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const fheroes2::Sprite image = fheroes2::decodeICNSprite( &buf[0], dataSize, header.width, header.height, header.offsetX, header.offsetY );
+            const fheroes2::Sprite image = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
 
             std::ostringstream os;
             os << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;
