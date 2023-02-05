@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 12:11+0000\n"
+"POT-Creation-Date: 2023-02-05 15:51+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3521,14 +3521,14 @@ msgstr "Количество дней, потраченных на эту кам
 msgid "Project Coordination and Core Development"
 msgstr "Координатор проекта и основной разработчик"
 
-msgid "QA and Support"
-msgstr "Контроль качества и поддержка"
+msgid "Development"
+msgstr "Разработчик"
 
 msgid "Visit us at "
 msgstr "Посетите нас"
 
-msgid "Development"
-msgstr "Разработчик"
+msgid "QA and Support"
+msgstr "Контроль качества и поддержка"
 
 msgid "Dev and Support"
 msgstr "Разработка и поддержка"
