@@ -2863,6 +2863,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
     static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for writing MP2::MapObjectType object" );
+    static_assert( sizeof( uint8_t ) == sizeof( MP2::ObjectIcnType ), "Incorrect type for writing MP2::ObjectIcnType object" );
 
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid << static_cast<uint8_t>( tile._objectIcnType )
                << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex << static_cast<uint8_t>( tile._mainObjectType ) << tile.fog_colors
