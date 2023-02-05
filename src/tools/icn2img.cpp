@@ -99,14 +99,10 @@ namespace
     {
         const std::filesystem::path argPath( arg );
 
-        const std::filesystem::path dir = [&argPath]() -> std::filesystem::path {
-            std::filesystem::path parentPath = argPath.parent_path();
-            if ( !parentPath.empty() ) {
-                return parentPath;
-            }
-
-            return { "." };
-        }();
+        std::filesystem::path dir = argPath.parent_path();
+        if ( dir.empty() ) {
+            dir = { "." };
+        }
 
         std::error_code ec;
         // Using the non-throwing overload
