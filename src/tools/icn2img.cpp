@@ -40,93 +40,7 @@
 #include "image_palette.h"
 #include "image_tool.h"
 #include "serialize.h"
-
-namespace
-{
-#if defined( _WIN32 )
-    // On Windows there is no support for shell-level globbing, so we need to resolve wildcard patterns ourselves
-    constexpr bool ignoreGlob = false;
-#else
-    // On Unix-like platforms, POSIX-compatible shells perform globbing themselves, we only see the resulting filenames
-    constexpr bool ignoreGlob = true;
-#endif
-
-    bool globMatch( const std::string_view string, const std::string_view wildcard )
-    {
-        size_t stringIdx = 0;
-        size_t wildcardIdx = 0;
-
-        size_t fallbackStringIdx = std::string_view::npos;
-        size_t fallbackWildcardIdx = std::string_view::npos;
-
-        while ( stringIdx < string.length() ) {
-            const bool isWildcardNotEnded = ( wildcardIdx < wildcard.length() );
-
-            if ( isWildcardNotEnded && wildcard[wildcardIdx] == '*' ) {
-                ++wildcardIdx;
-
-                fallbackStringIdx = stringIdx;
-                fallbackWildcardIdx = wildcardIdx;
-            }
-            else if ( isWildcardNotEnded && ( wildcard[wildcardIdx] == '?' || wildcard[wildcardIdx] == string[stringIdx] ) ) {
-                ++stringIdx;
-                ++wildcardIdx;
-            }
-            else {
-                if ( fallbackWildcardIdx == std::string_view::npos ) {
-                    return false;
-                }
-
-                assert( fallbackStringIdx != std::string_view::npos );
-
-                ++fallbackStringIdx;
-
-                stringIdx = fallbackStringIdx;
-                wildcardIdx = fallbackWildcardIdx;
-            }
-        }
-
-        for ( ; wildcardIdx < wildcard.length(); ++wildcardIdx ) {
-            if ( wildcard[wildcardIdx] != '*' ) {
-                break;
-            }
-        }
-
-        return wildcardIdx == wildcard.length();
-    }
-
-    void globFiles( const std::string_view arg, std::vector<std::string> & fileNames )
-    {
-        const std::filesystem::path argPath( arg );
-
-        std::filesystem::path dir = argPath.parent_path();
-        if ( dir.empty() ) {
-            dir = std::filesystem::path{ "." };
-        }
-
-        std::error_code ec;
-        // Using the non-throwing overload
-        if ( !std::filesystem::is_directory( dir, ec ) ) {
-            fileNames.emplace_back( arg );
-            return;
-        }
-
-        const std::string pattern = argPath.filename().string();
-
-        if ( pattern.find( '*' ) == std::string_view::npos && pattern.find( '?' ) == std::string_view::npos ) {
-            fileNames.emplace_back( arg );
-            return;
-        }
-
-        for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( dir ) ) {
-            const std::filesystem::path & entryPath = entry.path();
-
-            if ( globMatch( entryPath.filename().string(), pattern ) ) {
-                fileNames.push_back( entryPath.string() );
-            }
-        }
-    }
-}
+#include "system.h"
 
 int main( int argc, char ** argv )
 {
@@ -154,11 +68,11 @@ int main( int argc, char ** argv )
 
     std::vector<std::string> inputFileNames;
     for ( int i = 3; i < argc; ++i ) {
-        if ( ignoreGlob ) {
+        if ( System::isShellLevelGlobbingSupported() ) {
             inputFileNames.emplace_back( argv[i] );
         }
         else {
-            globFiles( argv[i], inputFileNames );
+            System::globFiles( argv[i], inputFileNames );
         }
     }
 

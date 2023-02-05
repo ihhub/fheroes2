@@ -32,6 +32,9 @@
 namespace System
 {
     bool isHandheldDevice();
+    // Returns true if target platform supports shell-level globbing (Unix-like platforms with POSIX-compatible shells).
+    // Otherwise returns false, which means that app need to resolve wildcard patterns itself (for example, on Windows).
+    bool isShellLevelGlobbingSupported();
 
     bool MakeDirectory( const std::string & path );
     std::string concatPath( const std::string_view left, const std::string_view right );
@@ -48,6 +51,12 @@ namespace System
     bool Unlink( const std::string & path );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
+
+    // Resolves the wildcard pattern 'glob' and appends matching paths to 'fileNames'. Supported wildcards are '?' and '*'.
+    // These wildcards are resolved only if they are in the last element of the path. For example, they will be resolved
+    // in the case of the 'foo/b*r?' pattern, but they will be ignored (used as is) in the case of '*/bar' pattern. If there
+    // are no files matching the pattern, it will be appended to the 'fileNames' as is.
+    void globFiles( const std::string_view glob, std::vector<std::string> & fileNames );
 
     std::string FileNameToUTF8( const std::string & name );
 
