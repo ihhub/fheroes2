@@ -2891,6 +2891,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> tile.tilePassable >> tile._uid;
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
+        static_assert( sizeof( uint8_t ) == sizeof( MP2::ObjectIcnType ), "Incorrect type for reading MP2::ObjectIcnType object" );
         uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> temp;
 
@@ -2900,6 +2901,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         tile._isMarkedAsRoad = ( temp & 2 ) != 0;
     }
     else {
+        static_assert( sizeof( uint8_t ) == sizeof( MP2::ObjectIcnType ), "Incorrect type for reading MP2::ObjectIcnType object" );
         uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> temp;
 
