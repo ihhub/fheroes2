@@ -176,8 +176,8 @@ int main( int argc, char ** argv )
 
         std::cout << std::endl << "Processing " << inputFileName << "..." << std::endl << std::endl;
 
-        const int spritesCount = sf.getLE16();
-        const int totalSize = sf.getLE32();
+        const uint16_t spritesCount = sf.getLE16();
+        const uint32_t totalSize = sf.getLE32();
 
         const size_t beginPos = sf.tell();
 
@@ -186,12 +186,12 @@ int main( int argc, char ** argv )
             sf >> header;
         }
 
-        for ( int spriteIdx = 0; spriteIdx < spritesCount; ++spriteIdx ) {
+        for ( uint16_t spriteIdx = 0; spriteIdx < spritesCount; ++spriteIdx ) {
             const fheroes2::ICNHeader & header = headers[spriteIdx];
 
             sf.seek( beginPos + header.offsetData );
 
-            const uint32_t dataSize = ( spriteIdx + 1 != spritesCount ? headers[spriteIdx + 1].offsetData - header.offsetData : totalSize - header.offsetData );
+            const uint32_t dataSize = ( spriteIdx + 1 < spritesCount ? headers[spriteIdx + 1].offsetData - header.offsetData : totalSize - header.offsetData );
 
             const std::vector<uint8_t> buf = sf.getRaw( dataSize );
             if ( buf.empty() ) {
@@ -212,7 +212,7 @@ int main( int argc, char ** argv )
                 dstFileName += ".bmp";
             }
 
-            std::cout << "Image " << spriteIdx + 1 << " has offset of [" << static_cast<int32_t>( header.offsetX ) << ", " << static_cast<int32_t>( header.offsetY )
+            std::cout << "Image " << spriteIdx + 1 << " has offset of [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY )
                       << "]" << std::endl;
 
             fheroes2::Save( image, dstFileName, 23 );
