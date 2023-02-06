@@ -2863,10 +2863,12 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
     static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for writing MP2::MapObjectType object" );
+    static_assert( sizeof( uint8_t ) == sizeof( MP2::ObjectIcnType ), "Incorrect type for writing MP2::ObjectIcnType object" );
 
-    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid << tile._objectIcnType << tile._hasObjectAnimation
-               << tile._isMarkedAsRoad << tile._imageIndex << static_cast<uint8_t>( tile._mainObjectType ) << tile.fog_colors << tile.quantity1 << tile.quantity2
-               << tile.additionalMetadata << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType;
+    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid << static_cast<uint8_t>( tile._objectIcnType )
+               << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex << static_cast<uint8_t>( tile._mainObjectType ) << tile.fog_colors
+               << tile.quantity1 << tile.quantity2 << tile.additionalMetadata << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2
+               << tile._layerType;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -2889,6 +2891,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> tile.tilePassable >> tile._uid;
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
+        static_assert( sizeof( uint8_t ) == sizeof( MP2::ObjectIcnType ), "Incorrect type for reading MP2::ObjectIcnType object" );
         uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> temp;
 
@@ -2898,6 +2901,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         tile._isMarkedAsRoad = ( temp & 2 ) != 0;
     }
     else {
+        static_assert( sizeof( uint8_t ) == sizeof( MP2::ObjectIcnType ), "Incorrect type for reading MP2::ObjectIcnType object" );
         uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> temp;
 
