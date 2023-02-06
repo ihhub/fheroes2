@@ -114,7 +114,8 @@ namespace
         }
     }
 
-    int32_t colorToOffsetICN( const int32_t color )
+    // Convert the color to 'ICN::VWFLAG*' or 'ICN::MISC*' index, returns 7 for unknown color.
+    uint32_t colorToOffsetICN( const int32_t color )
     {
         switch ( color ) {
         case Color::BLUE:
@@ -133,7 +134,7 @@ namespace
         case Color::UNUSED:
             return 6;
         default:
-            return -1;
+            return 7;
         }
     }
 
@@ -283,7 +284,7 @@ namespace
         assert( worldWidth >= 0 && worldHeight >= 0 );
 
         // Render two flags to the left and to the right of Castle/Town entrance.
-        auto renderCastleFlags = [&cache]( const Castle * castle, const int32_t posX, const int32_t posY, const bool skipMaxZoomLevel ) {
+        auto renderCastleFlags = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY, const bool skipMaxZoomLevel ) {
             // TODO: make castle flag rendering only by 'gamearea.Redraw()' for 1:1 scale.
             for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
                 const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
@@ -295,7 +296,7 @@ namespace
 
                 // In 'ICN::FLAG32' we have different flag indexes than in 'ICN::VWFLAG*'.
                 const int32_t icnFlagsBase = icnPerZoomLevelFlags[zoomLevelId];
-                const uint32_t flagIndex = ( icnFlagsBase == ICN::FLAG32 ) ? ( 2 * colorToOffsetICN( castle->GetColor() ) + 1 ) : colorToOffsetICN( castle->GetColor() );
+                const uint32_t flagIndex = ( icnFlagsBase == ICN::FLAG32 ) ? ( 2 * icnIndex + 1 ) : icnIndex;
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnFlagsBase, flagIndex );
 
                 const int32_t dstx = posX * tileSize + ( tileSize - sprite.width() ) / 2;
@@ -356,8 +357,11 @@ namespace
                         if ( revealHeroes || !tile.isFog( color ) ) {
                             const Heroes * hero = world.GetHeroes( tile.GetCenter() );
                             if ( hero ) {
-                                const int32_t colorOffset = colorToOffsetICN( hero->GetColor() );
-                                renderIcon( ( colorOffset >= 0 ) ? ( 7 + colorOffset ) : -1, posX, posY );
+                                const uint32_t colorOffset = colorToOffsetICN( hero->GetColor() );
+                                // Do not render an unknown color.
+                                if ( colorOffset != 7 ) {
+                                    renderIcon( 7 + colorOffset, posX, posY );
+                                }
                             }
                         }
                         break;
@@ -368,7 +372,11 @@ namespace
                         if ( revealTowns || !isFog ) {
                             const Castle * castle = world.getCastleEntrance( tile.GetCenter() );
                             if ( castle ) {
-                                renderCastleFlags( castle, posX, posY, ( !isFog || revealAll ) );
+                                const uint32_t colorOffset = colorToOffsetICN( castle->GetColor() );
+                                // Do not render an unknown color.
+                                if ( colorOffset != 7 ) {
+                                    renderCastleFlags( colorOffset, posX, posY, ( !isFog || revealAll ) );
+                                }
                             }
                         }
                         break;
@@ -378,8 +386,12 @@ namespace
                     case MP2::OBJ_MINES:
                     case MP2::OBJ_SAWMILL:
                         if ( revealMines || !tile.isFog( color ) ) {
-                            renderIcon( colorToOffsetICN( tile.QuantityColor() ), posX, posY );
-                            renderLetter( tile.QuantityResourceCount().first, posX, posY );
+                            const uint32_t colorOffset = colorToOffsetICN( tile.QuantityColor() );
+                            // Do not render an unknown color.
+                            if ( colorOffset != 7 ) {
+                                renderIcon( colorOffset, posX, posY );
+                                renderLetter( tile.QuantityResourceCount().first, posX, posY );
+                            }
                         }
                         break;
 
