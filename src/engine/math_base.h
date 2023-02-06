@@ -264,4 +264,20 @@ namespace fheroes2
     using Point = PointBase2D<int32_t>;
     using Size = SizeBase2D<int32_t>;
     using Rect = RectBase2D<int32_t, int32_t>;
+
+    inline int32_t GCD(int32_t a, int32_t b)
+    {
+        while (a != 0 && b != 0) 
+        {
+            if (a > b) 
+            {
+                a %= b;
+            }
+            else 
+            {
+                b %= a;
+            }
+        }
+        return a | b;
+    }
 }
