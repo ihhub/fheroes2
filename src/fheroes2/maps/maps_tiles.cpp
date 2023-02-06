@@ -2830,22 +2830,22 @@ bool Maps::Tiles::isDetachedObject() const
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 {
-    static_assert( std::is_same_v<std::underlying_type_t<decltype( ta._objectIcnType )>, uint8_t>,
-                   "Type of Maps::TilesAddon::_objectIcnType has been changed, check the cast below" );
+    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
 
-    return msg << ta._layerType << ta._uid << static_cast<uint8_t>( ta._objectIcnType ) << ta._hasObjectAnimation << ta._isMarkedAsRoad << ta._imageIndex;
+    return msg << ta._layerType << ta._uid << static_cast<ObjectIcnTypeUnderlyingType>( ta._objectIcnType ) << ta._hasObjectAnimation << ta._isMarkedAsRoad
+               << ta._imageIndex;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
     msg >> ta._layerType >> ta._uid;
 
+    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
+    static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
+
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
-        static_assert( std::is_same_v<std::underlying_type_t<decltype( ta._objectIcnType )>, uint8_t>,
-                       "Type of Maps::TilesAddon::_objectIcnType has been changed, check the logic below" );
-
-        uint8_t objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> objectIcnType;
 
         ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
@@ -2854,10 +2854,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
         ta._isMarkedAsRoad = ( objectIcnType & 2 ) != 0;
     }
     else {
-        static_assert( std::is_same_v<std::underlying_type_t<decltype( ta._objectIcnType )>, uint8_t>,
-                       "Type of Maps::TilesAddon::_objectIcnType has been changed, check the logic below" );
-
-        uint8_t objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> objectIcnType;
 
         ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
@@ -2872,15 +2869,13 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
-    static_assert( std::is_same_v<std::underlying_type_t<decltype( tile._objectIcnType )>, uint8_t>,
-                   "Type of Maps::Tiles::_objectIcnType has been changed, check the cast below" );
-    static_assert( std::is_same_v<std::underlying_type_t<decltype( tile._mainObjectType )>, uint8_t>,
-                   "Type of Maps::Tiles::_mainObjectType has been changed, check the cast below" );
+    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._objectIcnType )>;
+    using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
 
-    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid << static_cast<uint8_t>( tile._objectIcnType )
-               << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex << static_cast<uint8_t>( tile._mainObjectType ) << tile.fog_colors
-               << tile.quantity1 << tile.quantity2 << tile.additionalMetadata << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2
-               << tile._layerType;
+    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
+               << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
+               << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -2902,12 +2897,12 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
     msg >> tile.tilePassable >> tile._uid;
 
+    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._objectIcnType )>;
+    static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
+
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
-        static_assert( std::is_same_v<std::underlying_type_t<decltype( tile._objectIcnType )>, uint8_t>,
-                       "Type of Maps::Tiles::_objectIcnType has been changed, check the logic below" );
-
-        uint8_t objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> objectIcnType;
 
         tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
@@ -2916,10 +2911,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         tile._isMarkedAsRoad = ( objectIcnType & 2 ) != 0;
     }
     else {
-        static_assert( std::is_same_v<std::underlying_type_t<decltype( tile._objectIcnType )>, uint8_t>,
-                       "Type of Maps::Tiles::_objectIcnType has been changed, check the logic below" );
-
-        uint8_t objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> objectIcnType;
 
         tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
@@ -2929,10 +2921,10 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
     msg >> tile._imageIndex;
 
-    static_assert( std::is_same_v<std::underlying_type_t<decltype( tile._mainObjectType )>, uint8_t>,
-                   "Type of Maps::Tiles::_mainObjectType has been changed, check the logic below" );
+    using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
+    static_assert( std::is_same_v<MainObjectTypeUnderlyingType, uint8_t>, "Type of _mainObjectType has been changed, check the logic below" );
 
-    uint8_t mainObjectType = MP2::OBJ_NONE;
+    MainObjectTypeUnderlyingType mainObjectType = MP2::OBJ_NONE;
     msg >> mainObjectType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1001_RELEASE, "Remove the logic below." );
