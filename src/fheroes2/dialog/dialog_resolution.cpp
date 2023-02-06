@@ -50,6 +50,7 @@ namespace
     // TODO: this is a hack over partially incorrect text height calculation. Fix it later together with the Text classes.
     const int32_t textOffsetYCorrection = 6;
     const std::string middleText = " x ";
+    const int32_t textPadding = 6;
 
     std::pair<std::string, std::string> getResolutionStrings( const fheroes2::ResolutionInfo & resolution )
     {
@@ -84,10 +85,17 @@ namespace
 
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
 
-            const int32_t textOffsetX = offsetX + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetX = offsetX + textPadding;
             const int32_t textOffsetY = offsetY + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2;
 
             resolutionText.draw( textOffsetX, textOffsetY, fheroes2::Display::instance() );
+
+            const int32_t gcd = fheroes2::GCD( resolution.width, resolution.height );
+            const auto aspectRatioString = std::to_string( resolution.width / gcd ) + " : " + std::to_string( resolution.height / gcd );
+            const int32_t aspectRatioWidth = fheroes2::Text( aspectRatioString, fontType ).width();
+            const fheroes2::Text aspectRatioText( aspectRatioString, fontType );
+
+            aspectRatioText.draw( offsetX + editBoxLength - aspectRatioWidth - textPadding, textOffsetY, fheroes2::Display::instance() );
         }
 
         void RedrawBackground( const fheroes2::Point & dst ) override
@@ -142,10 +150,18 @@ namespace
             const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
             const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
-            const int32_t textOffsetX = dst.x + 41 + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetX = dst.x + 41 + textPadding;
+            const int32_t textOffsetY = dst.y + 287 + ( resolutionItemHeight - text.height() + textOffsetYCorrection ) / 2;
 
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
-            resolutionText.draw( textOffsetX, dst.y + 287 + ( resolutionItemHeight - text.height() + textOffsetYCorrection ) / 2, output );
+            resolutionText.draw( textOffsetX, textOffsetY, output );
+
+            const int32_t gcd = fheroes2::GCD( resolution.width, resolution.height );
+            const auto aspectRatioString = std::to_string( resolution.width / gcd ) + " : " + std::to_string( resolution.height / gcd );
+            const int32_t aspectRatioWidth = fheroes2::Text( aspectRatioString, fontType ).width();
+            const fheroes2::Text aspectRatioText( aspectRatioString, fontType );
+
+            aspectRatioText.draw( dst.x + 41 + editBoxLength - aspectRatioWidth - textPadding, textOffsetY, output );
         }
     }
 }
