@@ -35,6 +35,63 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-02-07" version="v1.0.1">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.1</url>
+      <description>
+        <p>Changes in v1.0.1 (07 February 2023):</p>
+        <ul>
+          <li>add support for scaled resolutions</li>
+          <li>instantly update status bar in battle for hero's dialog options</li>
+          <li>fix invalid Kingdom income calculation</li>
+          <li>fix incorrect status bar update call</li>
+          <li>update Czech translation</li>
+          <li>add German and Russian translations of Android Toolset</li>
+          <li>Android Save File Manager: implement filtering of save files by type</li>
+          <li>fix scroll bar bottom position when dragging and fix high FPS rate when dragging scroll bar by mouse</li>
+          <li>make a narrower button font for cp-1251 (Cyrillic) characters</li>
+          <li>fix Druid projectile start position for shooting up</li>
+          <li>add PS Vita fixes and gamepad mapping improvements</li>
+          <li>add Danish translation</li>
+          <li>fix shooters projectile position during battle</li>
+          <li>fix high CPU load on Adventure map when Hero speed is set to Jump</li>
+          <li>Android toolset: add the ability to browse &amp; delete save files</li>
+          <li>fix loss of the first frame in the after attack unit animation</li>
+          <li>update spell points for campaign heroes at the start of a scenario</li>
+          <li>uncover the fog during the hero's instantaneous movement only if the hero is actually moving</li>
+          <li>do not allow to dig for Ultimate Artifact second time</li>
+          <li>show spell effect animation so as not to cover the front troops</li>
+          <li>fix screen restoration after closing monster infor dialog</li>
+          <li>fix the AI resurrect spell logic</li>
+          <li>fix the Dimension Door shadow on resolutions 640+x480 &amp; 640x480+, temporarily hide auxiliary panels in "no interface" mode</li>
+          <li>rework pathfinding algorithm during battle to fix non-optimal paths for monsters</li>
+          <li>add Mossy Rock object which appears only on Swamp terrain while in the original game this object has no name</li>
+          <li>optimize Adventure Map rendering</li>
+          <li>do not do redundant redraws when dragging Adventure Map with the mouse</li>
+          <li>fix walking animations of certain monsters</li>
+          <li>fix the bridge operation when a wide friendly unit steps on it from the moat</li>
+          <li>fix creature wince animation for low morale and Lich cloud cases during battle</li>
+          <li>optimize Holy Shout spell effect rendering during battle</li>
+          <li>allow wide units to take a step back during battle</li>
+          <li>fix certain Peasant Huts being displayed as Thatched Huts with no ambient sounds on Adventure Map</li>
+          <li>update Polish translation</li>
+          <li>avoid excessing CPU usage for multiple windows in the game</li>
+          <li>set audio frequency to 44100 on Windows to avoid cracking sounds during playback</li>
+          <li>add fh2 toolset application on Android to help with setting up the main application</li>
+          <li>update French translation</li>
+          <li>reduce CPU usage in Select Language dialog</li>
+          <li>fix a case when external music was not being played on Ubuntu</li>
+          <li>fix incorrect logic for monster placement on Adventure Map</li>
+          <li>update German translation</li>
+          <li>do not lowercase creature name (or other string) when it is put first in phrase</li>
+          <li>fix forced Idle animation after switching to Static animation</li>
+          <li>fix screen flickering in SDL2</li>
+          <li>optimize Death Wave spell effect rendering during battle</li>
+          <li>automatically assemble artifacts sets if their parts were captured in the battle</li>
+          <li>fix controller support for PS Vita</li>
+          <li>add a full stop, A and E characters with accents for CP1252 button font</li>
+        </ul>
+      </description>
+    </release>
     <release date="2022-12-21" version="v1.0.0">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.0</url>
       <description>
