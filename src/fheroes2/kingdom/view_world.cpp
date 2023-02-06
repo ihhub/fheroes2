@@ -138,6 +138,29 @@ namespace
         }
     }
 
+    // Convert the resource type to 'ICN::LETTER*' index, returns 7 for unknown resource.
+    uint32_t resourceToOffsetICN( const uint32_t resource )
+    {
+        switch ( resource ) {
+        case Resource::WOOD:
+            return 0;
+        case Resource::MERCURY:
+            return 1;
+        case Resource::ORE:
+            return 2;
+        case Resource::SULFUR:
+            return 3;
+        case Resource::CRYSTAL:
+            return 4;
+        case Resource::GEMS:
+            return 5;
+        case Resource::GOLD:
+            return 6;
+        default:
+            return 7;
+        }
+    }
+
     struct CacheForMapWithResources
     {
         std::array<fheroes2::Image, zoomLevels> cachedImages; // One image per zoom Level
@@ -298,12 +321,8 @@ namespace
         };
 
         // Render resource letter inside the resource/mine icon.
-        auto renderLetter = [&cache]( const uint32_t resourceType, const int32_t posX, const int32_t posY ) {
-            // Convert 'resourceType' to ICN index.
-            const std::array<uint32_t, 7> resourceIndex{ Resource::WOOD,    Resource::MERCURY, Resource::ORE, Resource::SULFUR,
-                                                         Resource::CRYSTAL, Resource::GEMS,    Resource::GOLD };
-            const uint32_t letterIndex
-                = static_cast<uint32_t>( std::distance( resourceIndex.begin(), std::find( resourceIndex.begin(), resourceIndex.end(), resourceType ) ) );
+        auto renderLetter = [&cache]( const uint32_t resource, const int32_t posX, const int32_t posY ) {
+            const uint32_t letterIndex = resourceToOffsetICN( resource );
 
             if ( letterIndex == 7 ) {
                 // This is an unknown resource.
