@@ -547,6 +547,7 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     }
 
     std::error_code ec;
+
     // Using the non-throwing overload
     if ( !std::filesystem::is_directory( dir, ec ) ) {
         fileNames.emplace_back( glob );
@@ -562,7 +563,8 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
 
     bool isNoMatches = true;
 
-    for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( dir ) ) {
+    // Using the non-throwing overload
+    for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( dir, ec ) ) {
         const std::filesystem::path & entryPath = entry.path();
 
         if ( globMatch( entryPath.filename().string(), pattern ) ) {
