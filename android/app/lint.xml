@@ -2,5 +2,5 @@
 
 <lint>
     <issue id="MissingTranslation" severity="warning" />
-    <issue id="OldTargetApi" severity="ignore" />
+    <issue id="UsingOnClickInXml" severity="ignore" />
 </lint>
