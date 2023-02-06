@@ -185,7 +185,7 @@ namespace M82
         LOOP0023, // UNUSED: a moving wooden structure with water. The most suitable for Water Wheel which uses LOOP0009.
         LOOP0024,
         LOOP0025,
-        LOOP0026, // moving mechanical parts, ideally for a factory. It is used for Freeman's Foundry.
+        LOOP0026, // Moving (rusty?) mechanical parts, originally used for Abandoned Mine. In fheroes2, it is used also for Freeman's Foundry.
         LOOP0027,
 
         MAGCAROW,
