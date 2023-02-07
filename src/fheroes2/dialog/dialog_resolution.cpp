@@ -81,8 +81,6 @@ namespace
             const fheroes2::FontType fontType = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
             const auto [leftText, rightText] = getResolutionStrings( resolution );
-            const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
-            const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
 
