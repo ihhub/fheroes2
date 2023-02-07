@@ -19,8 +19,15 @@
  ***************************************************************************/
 
 #include "ui_kingdom.h"
+#include <cstdint>
+#include <algorithm>
+#include <memory>
+#include <string>
 #include "agg_image.h"
 #include "icn.h"
+#include "image.h"
+#include "kingdom.h"
+#include "mp2.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
