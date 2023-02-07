@@ -19,10 +19,6 @@
  ***************************************************************************/
 
 #include "ui_kingdom.h"
-#include <cstdint>
-#include <algorithm>
-#include <memory>
-#include <string>
 #include "agg_image.h"
 #include "icn.h"
 #include "image.h"
@@ -32,6 +28,10 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
+#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <string>
 
 namespace fheroes2
 {
