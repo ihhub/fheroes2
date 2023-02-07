@@ -25,4 +25,5 @@ class Kingdom;
 namespace fheroes2
 {
     void showKingdomIncome( const Kingdom & kingdom, const int buttons );
+    void showLighthouseInfo( const Kingdom & kingdom, const int buttons );
 }

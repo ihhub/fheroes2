@@ -19,10 +19,13 @@
  ***************************************************************************/
 
 #include "ui_kingdom.h"
+#include "agg_image.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "world.h"
 
 namespace fheroes2
 {
@@ -32,5 +35,17 @@ namespace fheroes2
         const Text body( _( "Kingdom Income per day." ), FontType::normalWhite() );
 
         showResourceMessage( header, body, buttons, kingdom.GetIncome( Kingdom::INCOME_ALL ) );
+    }
+
+    void showLighthouseInfo( const Kingdom & kingdom, const int buttons )
+    {
+        const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
+        const std::string header( _( "Lighhouses" ) );
+        const std::string body( _( "For every lighthouse controlled, your heroes moves further on water." ) );
+
+        const CustomImageDialogElement lighthouseImageElement( AGG::GetICN( ICN::OBJNMUL2, 61 ) );
+        const Text lighthouseControlledText( _( "Controlled: " + std::to_string( lighthouseCount ) ), FontType::smallWhite() );
+        const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( lighthouseControlledText ) );
+        showMessage( Text( header, FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons, { &lighthouseImageElement, &lighthouseControlledElement } );
     }
 }

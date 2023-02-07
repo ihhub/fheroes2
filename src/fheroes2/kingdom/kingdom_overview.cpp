@@ -737,6 +737,9 @@ void Kingdom::openOverviewDialog()
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
 
+    const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
+    const fheroes2::Rect rectLighthouse( cur_pt.x + 100 - lighthouse.width(), cur_pt.y + 459, lighthouse.width() + 10, lighthouse.height() );
+
     Interface::ListBasic * listStats = nullptr;
 
     if ( Modes( KINGDOM_OVERVIEW_CASTLE_SELECTION ) ) {
@@ -785,6 +788,9 @@ void Kingdom::openOverviewDialog()
         else if ( le.MousePressRight( rectIncome ) ) {
             fheroes2::showKingdomIncome( *this, 0 );
         }
+        else if (le.MousePressRight(rectLighthouse)) {
+            fheroes2::showLighthouseInfo( *this, 0 );
+        }
 
         // Exit this dialog.
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
@@ -811,6 +817,10 @@ void Kingdom::openOverviewDialog()
 
         if ( le.MouseClickLeft( rectIncome ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::OK );
+        }
+
+        if ( le.MouseClickLeft( rectLighthouse ) ) {
+            fheroes2::showLighthouseInfo( *this, Dialog::OK );
         }
 
         if ( !listStats->IsNeedRedraw() && !redraw ) {
