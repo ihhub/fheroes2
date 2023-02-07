@@ -30,6 +30,7 @@
 #include "image.h"
 #include "kingdom.h"
 #include "mp2.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
@@ -52,8 +53,12 @@ namespace fheroes2
         const std::string body( _( "For every lighthouse controlled, your heroes can move further on water." ) );
 
         const CustomImageDialogElement lighthouseImageElement( AGG::GetICN( ICN::OBJNMUL2, 61 ) );
-        const Text lighthouseControlledText( _( "Controlled: " ) + std::to_string( lighthouseCount ), FontType::smallWhite() );
+
+        std::string lighthouseControlledString = _( "Controlled: %{count}" );
+        StringReplace( lighthouseControlledString, "%{count}", std::to_string( lighthouseCount ) );
+        const Text lighthouseControlledText( lighthouseControlledString, FontType::smallWhite() );
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( lighthouseControlledText ) );
+
         showMessage( Text( header, FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
                      { &lighthouseImageElement, &lighthouseControlledElement } );
     }
