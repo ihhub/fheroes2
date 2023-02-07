@@ -23,6 +23,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <numeric>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -89,8 +90,8 @@ namespace
             const int32_t textOffsetY = offsetY + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2;
 
             resolutionText.draw( textOffsetX, textOffsetY, fheroes2::Display::instance() );
-
-            const int32_t gcd = fheroes2::GCD( resolution.width, resolution.height );
+            
+            const int32_t gcd = std::gcd( resolution.width, resolution.height );
             const auto aspectRatioString = std::to_string( resolution.width / gcd ) + " : " + std::to_string( resolution.height / gcd );
             const int32_t aspectRatioWidth = fheroes2::Text( aspectRatioString, fontType ).width();
             const fheroes2::Text aspectRatioText( aspectRatioString, fontType );
@@ -156,7 +157,7 @@ namespace
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
             resolutionText.draw( textOffsetX, textOffsetY, output );
 
-            const int32_t gcd = fheroes2::GCD( resolution.width, resolution.height );
+            const int32_t gcd = std::gcd( resolution.width, resolution.height );
             const auto aspectRatioString = std::to_string( resolution.width / gcd ) + " : " + std::to_string( resolution.height / gcd );
             const int32_t aspectRatioWidth = fheroes2::Text( aspectRatioString, fontType ).width();
             const fheroes2::Text aspectRatioText( aspectRatioString, fontType );
