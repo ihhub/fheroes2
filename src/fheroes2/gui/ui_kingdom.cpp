@@ -21,7 +21,6 @@
 #include "ui_kingdom.h"
 #include "agg_image.h"
 #include "icn.h"
-#include "kingdom.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
@@ -41,7 +40,7 @@ namespace fheroes2
     {
         const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
         const std::string header( _( "Lighthouses" ) );
-        const std::string body( _( "For every lighthouse controlled, your heroes moves further on water." ) );
+        const std::string body( _( "For every lighthouse controlled, your heroes can move further on water." ) );
 
         const CustomImageDialogElement lighthouseImageElement( AGG::GetICN( ICN::OBJNMUL2, 61 ) );
         const Text lighthouseControlledText( _( "Controlled: " + std::to_string( lighthouseCount ) ), FontType::smallWhite() );
