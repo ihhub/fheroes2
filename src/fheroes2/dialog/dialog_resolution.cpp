@@ -148,8 +148,6 @@ namespace
             const fheroes2::FontType fontType = fheroes2::FontType::normalYellow();
 
             const auto [leftText, rightText] = getResolutionStrings( resolution );
-            const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
-            const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
             const int32_t textOffsetX = dst.x + 41 + textPadding;
             const int32_t textOffsetY = dst.y + 287 + ( resolutionItemHeight - text.height() + textOffsetYCorrection ) / 2;
