@@ -46,6 +46,7 @@ namespace fheroes2
         const CustomImageDialogElement lighthouseImageElement( AGG::GetICN( ICN::OBJNMUL2, 61 ) );
         const Text lighthouseControlledText( _( "Controlled: " + std::to_string( lighthouseCount ) ), FontType::smallWhite() );
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( lighthouseControlledText ) );
-        showMessage( Text( header, FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons, { &lighthouseImageElement, &lighthouseControlledElement } );
+        showMessage( Text( header, FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
+                     { &lighthouseImageElement, &lighthouseControlledElement } );
     }
 }

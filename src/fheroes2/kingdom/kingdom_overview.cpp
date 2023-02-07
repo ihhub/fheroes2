@@ -788,7 +788,7 @@ void Kingdom::openOverviewDialog()
         else if ( le.MousePressRight( rectIncome ) ) {
             fheroes2::showKingdomIncome( *this, 0 );
         }
-        else if (le.MousePressRight(rectLighthouse)) {
+        else if ( le.MousePressRight( rectLighthouse ) ) {
             fheroes2::showLighthouseInfo( *this, 0 );
         }
 
