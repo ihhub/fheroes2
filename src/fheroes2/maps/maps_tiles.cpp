@@ -29,6 +29,7 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <type_traits>
 
 #include "agg_image.h"
 #include "army.h"
@@ -2829,28 +2830,34 @@ bool Maps::Tiles::isDetachedObject() const
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 {
-    return msg << ta._layerType << ta._uid << ta._objectIcnType << ta._hasObjectAnimation << ta._isMarkedAsRoad << ta._imageIndex;
+    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
+
+    return msg << ta._layerType << ta._uid << static_cast<ObjectIcnTypeUnderlyingType>( ta._objectIcnType ) << ta._hasObjectAnimation << ta._isMarkedAsRoad
+               << ta._imageIndex;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
     msg >> ta._layerType >> ta._uid;
 
+    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
+    static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
+
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
-        uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
-        msg >> temp;
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        msg >> objectIcnType;
 
-        ta._objectIcnType = static_cast<MP2::ObjectIcnType>( temp >> 2 );
+        ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
 
-        ta._hasObjectAnimation = ( temp & 1 ) != 0;
-        ta._isMarkedAsRoad = ( temp & 2 ) != 0;
+        ta._hasObjectAnimation = ( objectIcnType & 1 ) != 0;
+        ta._isMarkedAsRoad = ( objectIcnType & 2 ) != 0;
     }
     else {
-        uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
-        msg >> temp;
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        msg >> objectIcnType;
 
-        ta._objectIcnType = static_cast<MP2::ObjectIcnType>( temp );
+        ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
 
         msg >> ta._hasObjectAnimation >> ta._isMarkedAsRoad;
     }
@@ -2862,13 +2869,13 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
-    static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for writing MP2::MapObjectType object" );
-    static_assert( sizeof( uint8_t ) == sizeof( MP2::ObjectIcnType ), "Incorrect type for writing MP2::ObjectIcnType object" );
+    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._objectIcnType )>;
+    using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
 
-    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid << static_cast<uint8_t>( tile._objectIcnType )
-               << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex << static_cast<uint8_t>( tile._mainObjectType ) << tile.fog_colors
-               << tile.quantity1 << tile.quantity2 << tile.additionalMetadata << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2
-               << tile._layerType;
+    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
+               << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
+               << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -2889,102 +2896,106 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     }
 
     msg >> tile.tilePassable >> tile._uid;
+
+    using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._objectIcnType )>;
+    static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
+
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
-        static_assert( sizeof( uint8_t ) == sizeof( MP2::ObjectIcnType ), "Incorrect type for reading MP2::ObjectIcnType object" );
-        uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
-        msg >> temp;
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        msg >> objectIcnType;
 
-        tile._objectIcnType = static_cast<MP2::ObjectIcnType>( temp >> 2 );
+        tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
 
-        tile._hasObjectAnimation = ( temp & 1 ) != 0;
-        tile._isMarkedAsRoad = ( temp & 2 ) != 0;
+        tile._hasObjectAnimation = ( objectIcnType & 1 ) != 0;
+        tile._isMarkedAsRoad = ( objectIcnType & 2 ) != 0;
     }
     else {
-        static_assert( sizeof( uint8_t ) == sizeof( MP2::ObjectIcnType ), "Incorrect type for reading MP2::ObjectIcnType object" );
-        uint8_t temp = MP2::OBJ_ICN_TYPE_UNKNOWN;
-        msg >> temp;
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        msg >> objectIcnType;
 
-        tile._objectIcnType = static_cast<MP2::ObjectIcnType>( temp );
+        tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
 
         msg >> tile._hasObjectAnimation >> tile._isMarkedAsRoad;
     }
 
     msg >> tile._imageIndex;
 
-    static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for reading MP2::MapObjectType object" );
-    uint8_t objectType = MP2::OBJ_NONE;
-    msg >> objectType;
+    using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
+    static_assert( std::is_same_v<MainObjectTypeUnderlyingType, uint8_t>, "Type of _mainObjectType has been changed, check the logic below" );
+
+    MainObjectTypeUnderlyingType mainObjectType = MP2::OBJ_NONE;
+    msg >> mainObjectType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1001_RELEASE, "Remove the logic below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE1_1001_RELEASE ) {
-        if ( objectType == 128 ) {
+        if ( mainObjectType == 128 ) {
             // This is an old Sea Chest object type.
-            objectType = MP2::OBJ_SEA_CHEST;
+            mainObjectType = MP2::OBJ_SEA_CHEST;
         }
-        else if ( objectType == 235 ) {
+        else if ( mainObjectType == 235 ) {
             // This is an old non-action Stables object type.
-            objectType = MP2::OBJ_NON_ACTION_STABLES;
+            mainObjectType = MP2::OBJ_NON_ACTION_STABLES;
         }
-        else if ( objectType == 241 ) {
+        else if ( mainObjectType == 241 ) {
             // This is an old action Stables object type.
-            objectType = MP2::OBJ_STABLES;
+            mainObjectType = MP2::OBJ_STABLES;
         }
-        else if ( objectType == 234 ) {
+        else if ( mainObjectType == 234 ) {
             // This is an old non-action Alchemist Tower object type.
-            objectType = MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
+            mainObjectType = MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
         }
-        else if ( objectType == 240 ) {
+        else if ( mainObjectType == 240 ) {
             // This is an old action Alchemist Tower object type.
-            objectType = MP2::OBJ_ALCHEMIST_TOWER;
+            mainObjectType = MP2::OBJ_ALCHEMIST_TOWER;
         }
-        else if ( objectType == 118 ) {
+        else if ( mainObjectType == 118 ) {
             // This is an old non-action The Hut of Magi object type.
-            objectType = MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
+            mainObjectType = MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
         }
-        else if ( objectType == 238 ) {
+        else if ( mainObjectType == 238 ) {
             // This is an old action The Hut of Magi object type.
-            objectType = MP2::OBJ_HUT_OF_MAGI;
+            mainObjectType = MP2::OBJ_HUT_OF_MAGI;
         }
-        else if ( objectType == 119 ) {
+        else if ( mainObjectType == 119 ) {
             // This is an old non-action The Eye of Magi object type.
-            objectType = MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
+            mainObjectType = MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
         }
-        else if ( objectType == 239 ) {
+        else if ( mainObjectType == 239 ) {
             // This is an old action The Eye of Magi object type.
-            objectType = MP2::OBJ_EYE_OF_MAGI;
+            mainObjectType = MP2::OBJ_EYE_OF_MAGI;
         }
-        else if ( objectType == 233 ) {
+        else if ( mainObjectType == 233 ) {
             // This is an old non-action Reefs object type.
-            objectType = MP2::OBJ_REEFS;
+            mainObjectType = MP2::OBJ_REEFS;
         }
-        else if ( objectType == 65 ) {
+        else if ( mainObjectType == 65 ) {
             // This is an old non-action Thatched Hut object type.
-            objectType = MP2::OBJ_NON_ACTION_PEASANT_HUT;
+            mainObjectType = MP2::OBJ_NON_ACTION_PEASANT_HUT;
         }
-        else if ( objectType == 193 ) {
+        else if ( mainObjectType == 193 ) {
             // This is an old action Thatched Hut object type.
-            objectType = MP2::OBJ_PEASANT_HUT;
+            mainObjectType = MP2::OBJ_PEASANT_HUT;
         }
-        else if ( objectType == 117 ) {
+        else if ( mainObjectType == 117 ) {
             // This is an old non-action Sirens object type.
-            objectType = MP2::OBJ_NON_ACTION_SIRENS;
+            mainObjectType = MP2::OBJ_NON_ACTION_SIRENS;
         }
-        else if ( objectType == 237 ) {
+        else if ( mainObjectType == 237 ) {
             // This is an old action Sirens object type.
-            objectType = MP2::OBJ_SIRENS;
+            mainObjectType = MP2::OBJ_SIRENS;
         }
-        else if ( objectType == 116 ) {
+        else if ( mainObjectType == 116 ) {
             // This is an old non-action Mermaid object type.
-            objectType = MP2::OBJ_NON_ACTION_MERMAID;
+            mainObjectType = MP2::OBJ_NON_ACTION_MERMAID;
         }
-        else if ( objectType == 236 ) {
+        else if ( mainObjectType == 236 ) {
             // This is an old non-action Mermaid object type.
-            objectType = MP2::OBJ_MERMAID;
+            mainObjectType = MP2::OBJ_MERMAID;
         }
     }
 
-    tile._mainObjectType = static_cast<MP2::MapObjectType>( objectType );
+    tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
 
     msg >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.additionalMetadata >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2
         >> tile._layerType;
