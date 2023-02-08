@@ -75,6 +75,12 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
   by running the `download_demo_version.bat` script supplied in the ZIP archive.
 
+If you see complaints about missing DLLs when running fheroes2, then you may need to install the Microsoft Visual C++ redistributable
+package. You can download it using the following URLs:
+
+[**https://aka.ms/vs/17/release/vc_redist.x86.exe**](https://aka.ms/vs/17/release/vc_redist.x86.exe) - for 32-bit x86 fheroes2 builds;<br>
+[**https://aka.ms/vs/17/release/vc_redist.x64.exe**](https://aka.ms/vs/17/release/vc_redist.x64.exe) - for 64-bit x64 fheroes2 builds.
+
 <a name="macos"></a>
 ## macOS
 
