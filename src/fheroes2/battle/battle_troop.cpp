@@ -755,8 +755,9 @@ void Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg, uint32_t & killed, u
         break;
     }
 
-    if ( resurrected > 0 )
+    if ( resurrected > 0 ) {
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrected );
+    }
 }
 
 bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg, bool forceApplyToAlly ) const
