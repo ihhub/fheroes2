@@ -302,5 +302,6 @@ You can download the precompiled binaries of the latest commit (snapshot) for
 [**Android**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-android),
 [**PlayStation Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev) and
 [**Nintendo Switch**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-switch-sdl2_dev).
-**These binaries incorporate all the latest changes, but also all the latest bugs, and are mainly intended for developers.
-DON'T EXPECT THEM TO WORK PROPERLY.**
+**These binaries incorporate all the latest changes, but also all the latest bugs, and are mainly intended for developers.**
+
+**DON'T EXPECT THEM TO WORK PROPERLY.**
