@@ -250,6 +250,7 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
     case MP2::OBJ_DWARF_COTTAGE:
     case MP2::OBJ_ARCHER_HOUSE:
         return LOOP0025;
+    case MP2::OBJ_ABANDONED_MINE:
     case MP2::OBJ_FREEMANS_FOUNDRY:
         return LOOP0026;
     case MP2::OBJ_VOLCANO:
