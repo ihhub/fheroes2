@@ -49,9 +49,10 @@
 #include "view_world.h"
 #include "world.h"
 
-// #define SAVE_WORLD_MAP // Activate this when you want save the map to a "*.bmp" file at 1:1 scale level.
+// #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
 
-#if defined( SAVE_WORLD_MAP )
+#if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
+#define SAVE_WORLD_MAP
 #include "image_tool.h"
 
 namespace
@@ -63,12 +64,16 @@ namespace
 
 namespace
 {
-    const int32_t zoomLevels = 4;
+    const std::array<int32_t, 4> tileSizePerZoomLevel{ 4, 6, 12, 32 };
+    const std::array<int32_t, 4> icnPerZoomLevel{ ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 };
+    const std::array<int32_t, 4> icnLetterPerZoomLevel{ ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
+    const std::array<int32_t, 4> icnPerZoomLevelFlags{ ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12 };
 
-    const std::array<int32_t, zoomLevels> tileSizePerZoomLevel{ 4, 6, 12, 32 };
-    const std::array<int32_t, zoomLevels> icnPerZoomLevel{ ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 };
-    const std::array<int32_t, zoomLevels> icnLetterPerZoomLevel{ ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
-    const std::array<int32_t, zoomLevels> icnPerZoomLevelFlags{ ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::FLAG32 };
+#ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
+    const int32_t zoomLevels = 4;
+#else
+    const int32_t zoomLevels = 3;
+#endif
 
     // Compute a rectangle that defines which world pixels we can see in the "view world" window,
     // based on given zoom level and initial center
@@ -93,18 +98,28 @@ namespace
             return ViewWorld::ZoomLevel::ZoomLevel1;
         case ViewWorld::ZoomLevel::ZoomLevel1:
             return ViewWorld::ZoomLevel::ZoomLevel2;
+#ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
         case ViewWorld::ZoomLevel::ZoomLevel2:
             return ViewWorld::ZoomLevel::ZoomLevel3;
         default:
             return cycle ? ViewWorld::ZoomLevel::ZoomLevel0 : ViewWorld::ZoomLevel::ZoomLevel3;
+#else
+        default:
+            return cycle ? ViewWorld::ZoomLevel::ZoomLevel0 : ViewWorld::ZoomLevel::ZoomLevel2;
+#endif
         }
     }
 
     ViewWorld::ZoomLevel GetPreviousZoomLevel( const ViewWorld::ZoomLevel level, const bool cycle )
     {
         switch ( level ) {
+#ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
         case ViewWorld::ZoomLevel::ZoomLevel0:
             return cycle ? ViewWorld::ZoomLevel::ZoomLevel3 : ViewWorld::ZoomLevel::ZoomLevel0;
+#else
+        case ViewWorld::ZoomLevel::ZoomLevel0:
+            return cycle ? ViewWorld::ZoomLevel::ZoomLevel2 : ViewWorld::ZoomLevel::ZoomLevel0;
+#endif
         case ViewWorld::ZoomLevel::ZoomLevel1:
             return ViewWorld::ZoomLevel::ZoomLevel0;
         case ViewWorld::ZoomLevel::ZoomLevel2:
@@ -205,6 +220,10 @@ namespace
                 drawingFlags |= Interface::RedrawLevelType::LEVEL_TOWNS;
             }
 
+#if !defined( SAVE_WORLD_MAP )
+            drawingFlags ^= Interface::RedrawLevelType::LEVEL_HEROES;
+#endif
+
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int32_t x = 0; x < worldWidth; x += blockSizeX ) {
                 for ( int32_t y = 0; y < worldHeight; y += blockSizeY ) {
@@ -284,17 +303,10 @@ namespace
         assert( worldWidth >= 0 && worldHeight >= 0 );
 
         // Render two flags to the left and to the right of Castle/Town entrance.
-        auto renderCastleFlags = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY, const bool skipMaxZoomLevel ) {
-            // TODO: make castle flag rendering only by 'gamearea.Redraw()' for 1:1 scale.
+        auto renderCastleFlags = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY ) {
             for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
                 const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
 
-                // We do not render flags for visible castles at 1:1 scale level, as there are already normal flags placed by 'gamearea.Redraw()'.
-                if ( skipMaxZoomLevel && tileSize == 32 ) {
-                    continue;
-                }
-
-                // In 'ICN::FLAG32' we have different flag indexes than in 'ICN::VWFLAG*'.
                 const int32_t icnFlagsBase = icnPerZoomLevelFlags[zoomLevelId];
                 const uint32_t flagIndex = ( icnFlagsBase == ICN::FLAG32 ) ? ( 2 * icnIndex + 1 ) : icnIndex;
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnFlagsBase, flagIndex );
@@ -375,7 +387,7 @@ namespace
                                 const uint32_t colorOffset = colorToOffsetICN( castle->GetColor() );
                                 // Do not render an unknown color.
                                 if ( colorOffset != 7 ) {
-                                    renderCastleFlags( colorOffset, posX, posY, ( !isFog || revealAll ) );
+                                    renderCastleFlags( colorOffset, posX, posY );
                                 }
                             }
                         }
