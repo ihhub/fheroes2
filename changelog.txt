@@ -1,4 +1,4 @@
-version 1.0.1 (07 February 2023)
+version 1.0.1 (08 February 2023)
 - add support for scaled resolutions
 - instantly update status bar in battle for hero's dialog options
 - fix invalid Kingdom income calculation
@@ -19,7 +19,7 @@ version 1.0.1 (07 February 2023)
 - uncover the fog during the hero's instantaneous movement only if the hero is actually moving
 - do not allow to dig for Ultimate Artifact second time
 - show spell effect animation so as not to cover the front troops
-- fix screen restoration after closing monster infor dialog
+- fix screen restoration after closing monster info dialog
 - fix the AI resurrect spell logic
 - fix the Dimension Door shadow on resolutions 640+x480 & 640x480+, temporarily hide auxiliary panels in "no interface" mode
 - rework pathfinding algorithm during battle to fix non-optimal paths for monsters

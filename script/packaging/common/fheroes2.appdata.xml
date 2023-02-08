@@ -35,10 +35,10 @@
     <control>touch</control>
   </recommends>
   <releases>
-    <release date="2023-02-07" version="v1.0.1">
+    <release date="2023-02-08" version="v1.0.1">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.1</url>
       <description>
-        <p>Changes in v1.0.1 (07 February 2023):</p>
+        <p>Changes in v1.0.1 (08 February 2023):</p>
         <ul>
           <li>add support for scaled resolutions</li>
           <li>instantly update status bar in battle for hero's dialog options</li>
@@ -60,7 +60,7 @@
           <li>uncover the fog during the hero's instantaneous movement only if the hero is actually moving</li>
           <li>do not allow to dig for Ultimate Artifact second time</li>
           <li>show spell effect animation so as not to cover the front troops</li>
-          <li>fix screen restoration after closing monster infor dialog</li>
+          <li>fix screen restoration after closing monster info dialog</li>
           <li>fix the AI resurrect spell logic</li>
           <li>fix the Dimension Door shadow on resolutions 640+x480 &amp; 640x480+, temporarily hide auxiliary panels in "no interface" mode</li>
           <li>rework pathfinding algorithm during battle to fix non-optimal paths for monsters</li>
