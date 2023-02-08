@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "view_world.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -46,7 +48,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "ui_button.h"
-#include "view_world.h"
 #include "world.h"
 
 // #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
