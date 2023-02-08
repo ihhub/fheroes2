@@ -40,6 +40,7 @@
       <description>
         <p>Changes in v1.0.1 (08 February 2023):</p>
         <ul>
+          <li>add the ambient sound for Abandoned Mine</li>
           <li>add support for scaled resolutions</li>
           <li>instantly update status bar in battle for hero's dialog options</li>
           <li>fix invalid Kingdom income calculation</li>

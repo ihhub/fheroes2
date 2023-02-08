@@ -1,4 +1,5 @@
 version 1.0.1 (08 February 2023)
+- add the ambient sound for Abandoned Mine
 - add support for scaled resolutions
 - instantly update status bar in battle for hero's dialog options
 - fix invalid Kingdom income calculation
