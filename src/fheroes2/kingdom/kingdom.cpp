@@ -81,7 +81,16 @@ namespace
     Funds getHandicapDependentIncome( const Funds & original, const Player::HandicapStatus handicapStatus )
     {
         const int32_t handicapPercentage = getHandicapIncomePercentage( handicapStatus );
-        return ( original * handicapPercentage + Funds( 99, 99, 99, 99, 99, 99, 99 ) ) / 100;
+        Funds corrected( original );
+        corrected.wood = std::min( corrected.wood, ( corrected.wood * handicapPercentage + 99 ) / 100 );
+        corrected.mercury = std::min( corrected.mercury, ( corrected.mercury * handicapPercentage + 99 ) / 100 );
+        corrected.ore = std::min( corrected.ore, ( corrected.ore * handicapPercentage + 99 ) / 100 );
+        corrected.sulfur = std::min( corrected.sulfur, ( corrected.sulfur * handicapPercentage + 99 ) / 100 );
+        corrected.crystal = std::min( corrected.crystal, ( corrected.crystal * handicapPercentage + 99 ) / 100 );
+        corrected.gems = std::min( corrected.gems, ( corrected.gems * handicapPercentage + 99 ) / 100 );
+        corrected.gold = std::min( corrected.gold, ( corrected.gold * handicapPercentage + 99 ) / 100 );
+
+        return corrected;
     }
 }
 
