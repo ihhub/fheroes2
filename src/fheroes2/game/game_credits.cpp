@@ -290,11 +290,10 @@ namespace
                                         "vincent-grosbois\n"
                                         "eos428\n"
                                         "felix642\n"
+                                        "Arthusppp\n"
                                         "Vasilenko Alexey\n"
                                         "Andrii Kurdiumov\n"
-                                        "Arthusppp\n"
                                         "dimag0g\n"
-                                        "Sergei Ivanov\n"
                                         "tau3\n" );
 
         TextBox name( contributors, Font::BIG, textWidth );
