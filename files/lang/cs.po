@@ -54,22 +54,22 @@ msgid "QUIT"
 msgstr "KONEC"
 
 msgid "CANCEL"
-msgstr "ZPĚT"
+msgstr "ZRUSIT"
 
 msgid "OKAY"
-msgstr "OK"
+msgstr "OKAY"
 
 msgid "ACCEPT"
-msgstr "PŘIJMOUT"
+msgstr "PŘIJMI"
 
 msgid "DECLINE"
 msgstr "ZRUŠIT"
 
 msgid "LEARN"
-msgstr "NAUČIT"
+msgstr "UČIT"
 
 msgid "TRADE"
-msgstr "OBCHOD"
+msgstr "ZAMEN"
 
 msgid "YES"
 msgstr "ANO"
@@ -78,13 +78,13 @@ msgid "NO"
 msgstr "NE"
 
 msgid "EXIT"
-msgstr "ODCHOD"
+msgstr "PRYC"
 
 msgid "DISMISS"
-msgstr "PROPUSTIT"
+msgstr "PROPUST"
 
 msgid "UPGRADE"
-msgstr "VYLEPŠIT"
+msgstr "VYLEPŠI"
 
 msgid "RESTART"
 msgstr "RESTART"
@@ -108,7 +108,7 @@ msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
-"STANDARDNÍ\n"
+"STANDARD\n"
 "HRA"
 
 msgid ""
@@ -128,13 +128,13 @@ msgstr ""
 "HRA"
 
 msgid "CONFIG"
-msgstr "KONFIGURACE"
+msgstr "CONFIG"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
-"ORIGINÁLNÍ\n"
+"PUVODNI\n"
 "KAMPAŇ"
 
 msgid ""
@@ -163,7 +163,7 @@ msgid "6 PLAYERS"
 msgstr ""
 
 msgid "GIFT"
-msgstr "DÁREK"
+msgstr "DARUJ"
 
 msgid "DIFFICULTY"
 msgstr "OBTÍŽNOST"
