@@ -16,10 +16,10 @@ Precompiled binaries of the release version are currently available for the foll
   * [**Windows installer**](#windows-installer)
   * [**Windows ZIP archive**](#windows-zip-archive)
 * [**macOS**](#macos)
-  * [**MacPorts**](#macports)
   * [**Homebrew**](#homebrew-mac)
-  * [**macOS native app**](#macos-native-app)
+  * [**MacPorts**](#macports)
   * [**macOS ZIP archive**](#macos-zip-archive)
+  * [**macOS native app**](#macos-native-app)
 * [**Linux**](#linux)
   * [**AUR package**](#aur-package)
   * [**Homebrew**](#homebrew-linux)
@@ -78,6 +78,17 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 <a name="macos"></a>
 ## macOS
 
+<a name="homebrew-mac"></a>
+### Homebrew
+
+If you are using [**Homebrew**](https://brew.sh/), you can install the game by running the following command:
+
+```sh
+brew install fheroes2
+```
+
+Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
+
 <a name="macports"></a>
 ### MacPorts
 
@@ -91,14 +102,16 @@ Then follow the instructions on the screen.
 
 Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
 
-<a name="homebrew-mac"></a>
-### Homebrew
+<a name="macos-zip-archive"></a>
+### macOS ZIP archive
 
-If you are using [**Homebrew**](https://brew.sh/), you can install the game by running the following command:
+* Download the [**macOS ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_macos_x86-64_SDL2.zip).
+  Currently only x86-64 binaries are provided. If you use a machine with an Apple Silicon chip, you should choose another installation
+  method (using [**MacPorts**](#macports) or [**Homebrew**](#homebrew-mac)), or
+  [**build the project from source**](DEVELOPMENT.md#macos-and-linux).
 
-```sh
-brew install fheroes2
-```
+* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_2.sh` from
+  the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
 
 Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
 
@@ -111,19 +124,6 @@ Follow the [instructions below](#macos-resources) to gather resources necessary 
 make FHEROES2_MACOS_APP_BUNDLE=ON
 make FHEROES2_MACOS_APP_BUNDLE=ON bundle
 ```
-
-Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
-
-<a name="macos-zip-archive"></a>
-### macOS ZIP archive
-
-* Download the [**macOS ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_macos_x86-64_SDL2.zip).
-  Currently only x86-64 binaries are provided. If you use a machine with an Apple Silicon chip, you should choose another installation
-  method (using [**MacPorts**](#macports) or [**Homebrew**](#homebrew-mac)), or
-  [**build the project from source**](DEVELOPMENT.md#macos-and-linux).
-
-* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_2.sh` from
-  the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
 
 Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
 
