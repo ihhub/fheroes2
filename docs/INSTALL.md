@@ -21,9 +21,9 @@ Precompiled binaries of the release version are currently available for the foll
   * [**macOS ZIP archive**](#macos-zip-archive)
   * [**macOS native app**](#macos-native-app)
 * [**Linux**](#linux)
-  * [**AUR package**](#aur-package)
-  * [**Homebrew**](#homebrew-linux)
   * [**Flatpak**](#flatpak-linux)
+  * [**Homebrew**](#homebrew-linux)
+  * [**AUR package**](#aur-package)
   * [**Linux ZIP archive**](#linux-zip-archive)
 * [**Android**](#android)
 * [**PlayStation Vita**](#playstation-vita)
@@ -157,45 +157,6 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
 <a name="linux"></a>
 ## Linux
 
-<a name="aur-package"></a>
-### AUR package
-
-If you are using Arch Linux or compatible distribution, you can install [fheroes2 package](https://aur.archlinux.org/packages/fheroes2)
-from AUR (Arch User Repository).
-
-#### Install using AUR helper
-
-If you use one of AUR helpers, e.g. `yay`, you can install the game by running the following command:
-
-```sh
-yay -S aur/fheroes2
-```
-
-#### Install using official guide
-
-Follow [official guide](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages).
-One of possible command sets:
-
-```sh
-git clone https://aur.archlinux.org/fheroes2.git
-cd fheroes2
-makepkg -si
-```
-
-<a name="homebrew-linux"></a>
-### Homebrew
-
-If you are using [**Homebrew**](https://brew.sh/), you can install the game by running the following command:
-
-```sh
-brew install fheroes2
-```
-
-If you have a legally purchased copy of the original game, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
-be missing depending on the version of the original game) from the original game directory to the `$XDG_DATA_HOME/fheroes2` (usually
-`~/.local/share/fheroes2`) directory. Otherwise, you can download and install the demo version of the original game by running the
-`/usr/share/fheroes2/download_demo_version.sh` script.
-
 <a name="flatpak-linux"></a>
 ### Flatpak
 
@@ -223,6 +184,45 @@ The recommended option requires the Heroes of Might and Magic II installer file 
 
 For the manual installation you have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the
 `~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory. The destination folder will be opened when this option is selected.
+
+<a name="homebrew-linux"></a>
+### Homebrew
+
+If you are using [**Homebrew**](https://brew.sh/), you can install the game by running the following command:
+
+```sh
+brew install fheroes2
+```
+
+If you have a legally purchased copy of the original game, copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
+be missing depending on the version of the original game) from the original game directory to the `$XDG_DATA_HOME/fheroes2` (usually
+`~/.local/share/fheroes2`) directory. Otherwise, you can download and install the demo version of the original game by running the
+`/usr/share/fheroes2/download_demo_version.sh` script.
+
+<a name="aur-package"></a>
+### AUR package
+
+If you are using Arch Linux or compatible distribution, you can install [fheroes2 package](https://aur.archlinux.org/packages/fheroes2)
+from AUR (Arch User Repository).
+
+#### Install using AUR helper
+
+If you use one of AUR helpers, e.g. `yay`, you can install the game by running the following command:
+
+```sh
+yay -S aur/fheroes2
+```
+
+#### Install using official guide
+
+Follow [official guide](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages).
+One of possible command sets:
+
+```sh
+git clone https://aur.archlinux.org/fheroes2.git
+cd fheroes2
+makepkg -si
+```
 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive
