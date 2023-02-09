@@ -2144,7 +2144,7 @@ msgid "Green Tower"
 msgstr "Zelená Věž"
 
 msgid "warlock|Red Tower"
-msgstr "warlock|Červená Věž"
+msgstr "Červená Věž"
 
 msgid "Black Tower"
 msgstr "Černá Věž"
