@@ -1076,7 +1076,7 @@ msgid "Dragon Master"
 msgstr "Pán Draků"
 
 msgid "Rebellion"
-msgstr "Povstáví"
+msgstr "Povstání"
 
 msgid "Apocalypse"
 msgstr "Apokalypsa"
