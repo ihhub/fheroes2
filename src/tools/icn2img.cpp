@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <memory>
@@ -43,26 +44,32 @@
 int main( int argc, char ** argv )
 {
     if ( argc < 4 ) {
-        std::cerr << argv[0] << " destinationDirectory paletteFileName.pal inputFile.icn ..." << std::endl;
+        std::string baseName = System::GetBasename( argv[0] );
+
+        std::cerr << baseName << " extracts images in BMP or PNG format (if supported) and their offsets from the specified ICN file(s) using the specified palette."
+                  << std::endl
+                  << "Syntax: " << baseName << " dst_dir palette_file.pal input_file.icn ..." << std::endl;
         return EXIT_FAILURE;
     }
 
     const char * dstDir = argv[1];
     const char * paletteFileName = argv[2];
 
-    StreamFile paletteFile;
-    if ( !paletteFile.open( paletteFileName, "rb" ) ) {
-        std::cerr << "Cannot open " << paletteFileName << std::endl;
-        return EXIT_FAILURE;
-    }
+    {
+        StreamFile paletteStream;
+        if ( !paletteStream.open( paletteFileName, "rb" ) ) {
+            std::cerr << "Cannot open file " << paletteFileName << std::endl;
+            return EXIT_FAILURE;
+        }
 
-    const std::vector<uint8_t> palette = paletteFile.getRaw();
-    if ( palette.size() != 768 ) {
-        std::cerr << "Invalid palette size of " << palette.size() << " instead of 768." << std::endl;
-        return EXIT_FAILURE;
-    }
+        const std::vector<uint8_t> palette = paletteStream.getRaw();
+        if ( palette.size() != 768 ) {
+            std::cerr << "Invalid palette size of " << palette.size() << " instead of 768" << std::endl;
+            return EXIT_FAILURE;
+        }
 
-    fheroes2::setGamePalette( palette );
+        fheroes2::setGamePalette( palette );
+    }
 
     std::vector<std::string> inputFileNames;
     for ( int i = 3; i < argc; ++i ) {
@@ -75,10 +82,9 @@ int main( int argc, char ** argv )
     }
 
     for ( const std::string & inputFileName : inputFileNames ) {
-        StreamFile sf;
-
-        if ( !sf.open( inputFileName, "rb" ) ) {
-            std::cerr << "Cannot open " << inputFileName << std::endl;
+        StreamFile inputStream;
+        if ( !inputStream.open( inputFileName, "rb" ) ) {
+            std::cerr << "Cannot open file " << inputFileName << std::endl;
             return EXIT_FAILURE;
         }
 
@@ -92,26 +98,34 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        std::cout << std::endl << "Processing " << inputFileName << "..." << std::endl << std::endl;
+        const std::filesystem::path offsetFileName = prefix / "offsets.txt";
 
-        const uint16_t spritesCount = sf.getLE16();
-        const uint32_t totalSize = sf.getLE32();
+        std::ofstream offsetStream( offsetFileName, std::ios_base::out | std::ios_base::trunc );
+        if ( !offsetStream ) {
+            std::cerr << "Cannot create file " << offsetFileName << std::endl;
+            return EXIT_FAILURE;
+        }
 
-        const size_t beginPos = sf.tell();
+        std::cout << "Processing " << inputFileName << "..." << std::endl;
+
+        const uint16_t spritesCount = inputStream.getLE16();
+        const uint32_t totalSize = inputStream.getLE32();
+
+        const size_t beginPos = inputStream.tell();
 
         std::vector<fheroes2::ICNHeader> headers( spritesCount );
         for ( fheroes2::ICNHeader & header : headers ) {
-            sf >> header;
+            inputStream >> header;
         }
 
         for ( uint16_t spriteIdx = 0; spriteIdx < spritesCount; ++spriteIdx ) {
             const fheroes2::ICNHeader & header = headers[spriteIdx];
 
-            sf.seek( beginPos + header.offsetData );
+            inputStream.seek( beginPos + header.offsetData );
 
             const uint32_t dataSize = ( spriteIdx + 1 < spritesCount ? headers[spriteIdx + 1].offsetData - header.offsetData : totalSize - header.offsetData );
 
-            const std::vector<uint8_t> buf = sf.getRaw( dataSize );
+            const std::vector<uint8_t> buf = inputStream.getRaw( dataSize );
             if ( buf.empty() ) {
                 continue;
             }
@@ -133,8 +147,8 @@ int main( int argc, char ** argv )
             static_assert( std::is_same_v<decltype( header.offsetX ), uint16_t> && std::is_same_v<decltype( header.offsetY ), uint16_t>,
                            "Offset types have been changed, check the casts below" );
 
-            std::cout << "Image " << spriteIdx + 1 << " has offset of [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY )
-                      << "]" << std::endl;
+            offsetStream << "Image " << spriteIdx + 1 << " has an offset of [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY )
+                         << "]" << std::endl;
 
             fheroes2::Save( image, dstFileName, 23 );
         }

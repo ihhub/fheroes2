@@ -21,8 +21,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cctype>
 #include <cstdint>
 #include <cstdlib>
+#include <filesystem>
 #include <iostream>
 #include <map>
 #include <string>
@@ -33,71 +35,117 @@
 #include "system.h"
 #include "tools.h"
 
-#define FATSIZENAME 15
-
-#if defined( _WIN32 )
-#undef main
-#endif
-
-struct aggfat_t
+namespace
 {
-    uint32_t crc;
-    uint32_t offset;
-    uint32_t size;
-};
+    constexpr size_t AGGItemNameLen = 15;
+
+    struct AGGItemInfo
+    {
+        // Hash of this item's name, see calculateHash() for details
+        uint32_t hash;
+        uint32_t offset;
+        uint32_t size;
+    };
+
+    uint32_t calculateHash( const std::string & str )
+    {
+        uint32_t hash = 0;
+        int32_t sum = 0;
+
+        for ( auto iter = str.rbegin(); iter != str.rend(); ++iter ) {
+            const char c = static_cast<char>( std::toupper( static_cast<unsigned char>( *iter ) ) );
+
+            hash = ( hash << 5 ) + ( hash >> 25 );
+
+            sum += c;
+            hash += sum + c;
+        }
+
+        return hash;
+    }
+}
 
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {
-        std::cout << argv[0] << " path_heroes2.agg extract_to_dir" << std::endl;
+        std::string baseName = System::GetBasename( argv[0] );
 
-        return EXIT_SUCCESS;
+        std::cerr << baseName << " extracts the contents of the specified AGG file." << std::endl << "Syntax: " << baseName << " input_file.agg dst_dir" << std::endl;
+        return EXIT_FAILURE;
     }
 
-    StreamFile sf1;
-    StreamFile sf2;
-
-    if ( !sf1.open( argv[1], "rb" ) ) {
-        std::cout << "error open file: " << argv[1] << std::endl;
-        return EXIT_SUCCESS;
+    StreamFile inputStream;
+    if ( !inputStream.open( argv[1], "rb" ) ) {
+        std::cerr << "Cannot open file " << argv[1] << std::endl;
+        return EXIT_FAILURE;
     }
 
-    System::MakeDirectory( argv[2] );
+    std::error_code ec;
 
-    const size_t size = sf1.size();
-    int total = 0;
-    int count_items = sf1.getLE16();
-
-    StreamBuf fats = sf1.toStreamBuf( count_items * 4 * 3 /* crc, offset, size */ );
-    sf1.seek( size - FATSIZENAME * count_items );
-    StreamBuf names = sf1.toStreamBuf( FATSIZENAME * count_items );
-
-    std::map<std::string, aggfat_t> maps;
-
-    for ( int ii = 0; ii < count_items; ++ii ) {
-        aggfat_t & f = maps[StringLower( names.toString( FATSIZENAME ) )];
-
-        f.crc = fats.getLE32();
-        f.offset = fats.getLE32();
-        f.size = fats.getLE32();
+    // Using the non-throwing overloads
+    if ( !std::filesystem::exists( argv[2], ec ) && !std::filesystem::create_directories( argv[2], ec ) ) {
+        std::cerr << "Cannot create directory " << argv[2] << std::endl;
+        return EXIT_FAILURE;
     }
 
-    for ( std::map<std::string, aggfat_t>::const_iterator it = maps.begin(); it != maps.end(); ++it ) {
-        const aggfat_t & fat = ( *it ).second;
-        const std::string & fn = System::concatPath( argv[2], ( *it ).first );
-        sf1.seek( fat.offset );
-        std::vector<uint8_t> buf = sf1.getRaw( fat.size );
+    const size_t inputStreamSize = inputStream.size();
+    const uint16_t itemsCount = inputStream.getLE16();
 
-        if ( !buf.empty() && sf2.open( fn, "wb" ) ) {
-            sf2.putRaw( reinterpret_cast<char *>( &buf[0] ), buf.size() );
-            sf2.close();
+    StreamBuf itemsStream = inputStream.toStreamBuf( itemsCount * 4 * 3 /* hash, offset, size */ );
+    inputStream.seek( inputStreamSize - AGGItemNameLen * itemsCount );
+    StreamBuf namesStream = inputStream.toStreamBuf( AGGItemNameLen * itemsCount );
 
-            ++total;
-            std::cout << "extract: " << fn << std::endl;
+    std::map<std::string, AGGItemInfo> aggItemsMap;
+
+    for ( uint16_t i = 0; i < itemsCount; ++i ) {
+        AGGItemInfo & info = aggItemsMap[StringLower( namesStream.toString( AGGItemNameLen ) )];
+
+        info.hash = itemsStream.getLE32();
+        info.offset = itemsStream.getLE32();
+        info.size = itemsStream.getLE32();
+    }
+
+    uint16_t itemsExtracted = 0;
+    uint16_t itemsFailed = 0;
+
+    for ( const auto & item : aggItemsMap ) {
+        const auto & [name, info] = item;
+
+        std::cout << "Processing " << name << "..." << std::endl;
+
+        const uint32_t hash = calculateHash( name );
+        if ( hash != info.hash ) {
+            ++itemsFailed;
+
+            std::cerr << "Invalid hash for item " << name << ": expected " << GetHexString( info.hash ) << ", got " << GetHexString( hash ) << std::endl;
+            continue;
         }
+
+        inputStream.seek( info.offset );
+
+        const std::vector<uint8_t> buf = inputStream.getRaw( info.size );
+        if ( buf.empty() ) {
+            ++itemsFailed;
+
+            std::cerr << "Empty item " << name << std::endl;
+            continue;
+        }
+
+        const std::filesystem::path outputFileName = std::filesystem::path( argv[2] ) / std::filesystem::path( name );
+
+        StreamFile outputStream;
+        if ( !outputStream.open( outputFileName.string(), "wb" ) ) {
+            ++itemsFailed;
+
+            std::cerr << "Cannot open file " << outputFileName << std::endl;
+            continue;
+        }
+
+        outputStream.putRaw( reinterpret_cast<const char *>( buf.data() ), buf.size() );
+
+        ++itemsExtracted;
     }
 
-    sf1.close();
-    std::cout << "total: " << total << std::endl;
+    std::cout << "Total extracted: " << itemsExtracted << ", failed: " << itemsFailed << std::endl;
     return EXIT_SUCCESS;
 }
