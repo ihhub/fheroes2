@@ -345,7 +345,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
     const int humanColors = Players::HumanColors();
 
     int activeHumanColors = 0;
-    int activeColors = 0;
 
     for ( const int color : Colors( colors ) ) {
         if ( !world.GetKingdom( color ).isPlay() ) {
@@ -354,11 +353,8 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             }
             colors &= ( ~color );
         }
-        else {
-            ++activeColors;
-            if ( color & humanColors ) {
-                ++activeHumanColors;
-            }
+        else if ( color & humanColors ) {
+            ++activeHumanColors;
         }
     }
 
