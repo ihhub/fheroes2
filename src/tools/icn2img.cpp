@@ -41,6 +41,11 @@
 #include "serialize.h"
 #include "system.h"
 
+namespace
+{
+    constexpr uint8_t spriteBackground = 23;
+}
+
 int main( int argc, char ** argv )
 {
     if ( argc < 4 ) {
@@ -81,13 +86,16 @@ int main( int argc, char ** argv )
         }
     }
 
+    uint32_t spritesExtracted = 0;
+    uint32_t spritesFailed = 0;
+
     for ( const std::string & inputFileName : inputFileNames ) {
         std::cout << "Processing " << inputFileName << "..." << std::endl;
 
         StreamFile inputStream;
         if ( !inputStream.open( inputFileName, "rb" ) ) {
             std::cerr << "Cannot open file " << inputFileName << std::endl;
-            return EXIT_FAILURE;
+            continue;
         }
 
         const std::filesystem::path prefix = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).stem();
@@ -97,7 +105,7 @@ int main( int argc, char ** argv )
         // Using the non-throwing overloads
         if ( !std::filesystem::exists( prefix, ec ) && !std::filesystem::create_directories( prefix, ec ) ) {
             std::cerr << "Cannot create directory " << prefix << std::endl;
-            return EXIT_FAILURE;
+            continue;
         }
 
         const std::filesystem::path offsetFileName = prefix / "offsets.txt";
@@ -105,7 +113,7 @@ int main( int argc, char ** argv )
         std::ofstream offsetStream( offsetFileName, std::ios_base::out | std::ios_base::trunc );
         if ( !offsetStream ) {
             std::cerr << "Cannot create file " << offsetFileName << std::endl;
-            return EXIT_FAILURE;
+            continue;
         }
 
         const uint16_t spritesCount = inputStream.getLE16();
@@ -127,6 +135,9 @@ int main( int argc, char ** argv )
 
             const std::vector<uint8_t> buf = inputStream.getRaw( dataSize );
             if ( buf.empty() ) {
+                ++spritesFailed;
+
+                std::cerr << "Empty sprite " << spriteIdx << std::endl;
                 continue;
             }
 
@@ -150,9 +161,18 @@ int main( int argc, char ** argv )
             offsetStream << "Image " << spriteIdx + 1 << " has an offset of [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY )
                          << "]" << std::endl;
 
-            fheroes2::Save( image, dstFileName, 23 );
+            if ( !fheroes2::Save( image, dstFileName, spriteBackground ) ) {
+                ++spritesFailed;
+
+                std::cerr << "Error saving sprite " << spriteIdx << std::endl;
+                continue;
+            }
+
+            ++spritesExtracted;
         }
     }
 
-    return EXIT_SUCCESS;
+    std::cout << "Total extracted: " << spritesExtracted << ", failed: " << spritesFailed << std::endl;
+
+    return ( spritesExtracted > 0 && spritesFailed == 0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

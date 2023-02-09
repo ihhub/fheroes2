@@ -107,7 +107,7 @@ int main( int argc, char ** argv )
         StreamFile inputStream;
         if ( !inputStream.open( inputFileName, "rb" ) ) {
             std::cerr << "Cannot open file " << inputFileName << std::endl;
-            return EXIT_FAILURE;
+            continue;
         }
 
         const size_t inputStreamSize = inputStream.size();
@@ -166,5 +166,5 @@ int main( int argc, char ** argv )
 
     std::cout << "Total extracted: " << itemsExtracted << ", failed: " << itemsFailed << std::endl;
 
-    return itemsFailed == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
+    return ( itemsExtracted > 0 && itemsFailed == 0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
