@@ -91,7 +91,7 @@ int main( int argc, char ** argv )
     const size_t inputStreamSize = inputStream.size();
     const uint16_t itemsCount = inputStream.getLE16();
 
-    StreamBuf itemsStream = inputStream.toStreamBuf( itemsCount * 4 * 3 /* hash, offset, size */ );
+    StreamBuf itemsStream = inputStream.toStreamBuf( static_cast<size_t>( itemsCount ) * 4 * 3 /* hash, offset, size */ );
     inputStream.seek( inputStreamSize - AGGItemNameLen * itemsCount );
     StreamBuf namesStream = inputStream.toStreamBuf( AGGItemNameLen * itemsCount );
 
