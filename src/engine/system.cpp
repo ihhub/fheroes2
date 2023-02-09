@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "system.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
@@ -65,8 +67,6 @@
 #include <SDL_filesystem.h>
 #include <SDL_stdinc.h>
 #endif
-
-#include "system.h"
 
 #if defined( _WIN32 )
 #define SEPARATOR '\\'
