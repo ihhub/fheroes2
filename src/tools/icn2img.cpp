@@ -82,6 +82,8 @@ int main( int argc, char ** argv )
     }
 
     for ( const std::string & inputFileName : inputFileNames ) {
+        std::cout << "Processing " << inputFileName << "..." << std::endl;
+
         StreamFile inputStream;
         if ( !inputStream.open( inputFileName, "rb" ) ) {
             std::cerr << "Cannot open file " << inputFileName << std::endl;
@@ -105,8 +107,6 @@ int main( int argc, char ** argv )
             std::cerr << "Cannot create file " << offsetFileName << std::endl;
             return EXIT_FAILURE;
         }
-
-        std::cout << "Processing " << inputFileName << "..." << std::endl;
 
         const uint16_t spritesCount = inputStream.getLE16();
         const uint32_t totalSize = inputStream.getLE32();
