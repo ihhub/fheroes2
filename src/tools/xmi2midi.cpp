@@ -27,10 +27,10 @@
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
-#include <memory>
 #include <sstream>
 #include <string>
 #include <system_error>
+#include <type_traits>
 #include <vector>
 
 #include "audio.h"
@@ -84,6 +84,8 @@ int main( int argc, char ** argv )
 
         const size_t size = pos;
 
+        static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+
         std::vector<uint8_t> buf( size );
 
         inputStream.seekg( 0, std::ios_base::beg );
@@ -93,17 +95,17 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
+        buf = Music::Xmi2Mid( buf );
+        if ( buf.empty() ) {
+            std::cerr << "Failed to convert file " << inputFileName << std::endl;
+            return EXIT_FAILURE;
+        }
+
         const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).filename().replace_extension( "mid" );
 
         std::ofstream outputStream( outputFilePath, std::ios_base::binary | std::ios_base::trunc );
         if ( !outputStream ) {
             std::cerr << "Cannot open file " << outputFilePath << std::endl;
-            return EXIT_FAILURE;
-        }
-
-        buf = Music::Xmi2Mid( buf );
-        if ( buf.empty() ) {
-            std::cerr << "Failed to convert file " << outputFilePath << std::endl;
             return EXIT_FAILURE;
         }
 

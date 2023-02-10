@@ -152,6 +152,8 @@ int main( int argc, char ** argv )
 
             inputStream.seek( info.offset );
 
+            static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+
             const std::vector<uint8_t> buf = inputStream.getRaw( info.size );
             assert( buf.size() == info.size );
 

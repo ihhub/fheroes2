@@ -31,6 +31,7 @@
 #include <sstream>
 #include <string>
 #include <system_error>
+#include <type_traits>
 #include <vector>
 
 #include "serialize.h"
@@ -99,6 +100,8 @@ int main( int argc, char ** argv )
             std::cerr << "Cannot open file " << outputFilePath << std::endl;
             return EXIT_FAILURE;
         }
+
+        static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
 
         StreamBuf wavHeader( 44 );
         wavHeader.putLE32( 0x46464952 ); // RIFF
