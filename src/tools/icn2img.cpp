@@ -21,6 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
@@ -133,14 +134,15 @@ int main( int argc, char ** argv )
             inputStream.seek( beginPos + header.offsetData );
 
             const uint32_t dataSize = ( spriteIdx + 1 < spritesCount ? headers[spriteIdx + 1].offsetData - header.offsetData : totalSize - header.offsetData );
-
-            const std::vector<uint8_t> buf = inputStream.getRaw( dataSize );
-            if ( buf.empty() ) {
+            if ( dataSize == 0 ) {
                 ++spritesFailed;
 
                 std::cerr << "Empty sprite " << spriteIdx << std::endl;
                 continue;
             }
+
+            const std::vector<uint8_t> buf = inputStream.getRaw( dataSize );
+            assert( buf.size() == dataSize );
 
             const fheroes2::Sprite sprite = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
 
