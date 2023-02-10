@@ -13,7 +13,7 @@ jobs:
           dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
           package_name: fheroes2_ubuntu_x86-64_SDL1.zip
-          package_files: fheroes2 LICENSE script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          package_files: extractor fheroes2 icn2img LICENSE script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu x86-64 (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-sdl1_dev
         - name: Linux x86-64 SDL1 Debug
@@ -25,7 +25,7 @@ jobs:
           dependencies: libsdl2-dev libsdl2-mixer-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
           package_name: fheroes2_ubuntu_x86-64_SDL2.zip
-          package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          package_files: extractor fheroes2 icn2img LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux x86-64 SDL2 Debug
@@ -37,7 +37,7 @@ jobs:
           dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl1.2-dev:arm64 libsdl-mixer1.2-dev:arm64 gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
           package_name: fheroes2_ubuntu_arm64_SDL1.zip
-          package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          package_files: extractor fheroes2 icn2img LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu ARM64 (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-arm-sdl1_dev
         - name: Linux ARM64 SDL1 Debug
@@ -49,7 +49,7 @@ jobs:
           dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, CC: aarch64-linux-gnu-gcc, CXX: aarch64-linux-gnu-g++, AR: aarch64-linux-gnu-ar }
           package_name: fheroes2_ubuntu_arm64_SDL2.zip
-          package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          package_files: extractor fheroes2 icn2img LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-arm-sdl2_dev
         - name: Linux ARM64 SDL2 Debug
@@ -61,7 +61,7 @@ jobs:
           dependencies: sdl sdl_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
           package_name: fheroes2_macos_x86-64_SDL1.zip
-          package_files: fheroes2 LICENSE script/macos/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          package_files: extractor fheroes2 icn2img LICENSE script/macos/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: macOS x86-64 build with SDL1 (latest commit)
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
@@ -73,7 +73,7 @@ jobs:
           dependencies: sdl2 sdl2_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
           package_name: fheroes2_macos_x86-64_SDL2.zip
-          package_files: fheroes2 LICENSE script/macos/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
+          package_files: extractor fheroes2 icn2img LICENSE script/macos/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
@@ -120,7 +120,7 @@ jobs:
     - name: Create package
       if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
       run: |
-        cp docs/README.txt script/demo/download_demo_version.sh script/homm2/extract_homm2_resources.sh .
+        cp docs/README.txt script/agg/extract_agg.sh script/demo/download_demo_version.sh script/homm2/extract_homm2_resources.sh src/tools/extractor src/tools/icn2img .
         zip ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' && matrix.config.package_name != '' }}
