@@ -321,7 +321,7 @@ jobs:
     - name: Create package
       run: |
         # Translations and H2D files are already included in fheroes2.vpk
-        7z a -bb1 -tzip -- fheroes2_psv.zip fheroes2.vpk ./docs/LICENSE changelog.txt README.txt ./docs/README_PSV.md
+        7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
@@ -353,7 +353,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get -y update
-        sudo apt-get -y install gettext
+        sudo apt-get -y install gettext p7zip-full
     - name: Build
       run: |
         export PATH="$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH"
@@ -366,7 +366,7 @@ jobs:
         make -C files/lang -j 2
     - name: Create package
       run: |
-        7z a -bb1 -tzip -- fheroes2_switch.zip fheroes2.nro LICENSE changelog.txt ./docs/README.txt ./docs/README_switch.md files/lang/*.mo files/data/*.h2d
+        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/lang/*.mo files/data/*.h2d
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
