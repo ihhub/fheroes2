@@ -108,6 +108,7 @@ int main( int argc, char ** argv )
         StreamFile inputStream;
         if ( !inputStream.open( inputFileName, "rb" ) ) {
             std::cerr << "Cannot open file " << inputFileName << std::endl;
+            // A non-existent or inaccessible file is not considered a fatal error
             continue;
         }
 

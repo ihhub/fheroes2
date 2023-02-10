@@ -95,6 +95,7 @@ int main( int argc, char ** argv )
         StreamFile inputStream;
         if ( !inputStream.open( inputFileName, "rb" ) ) {
             std::cerr << "Cannot open file " << inputFileName << std::endl;
+            // A non-existent or inaccessible file is not considered a fatal error
             continue;
         }
 
@@ -105,7 +106,7 @@ int main( int argc, char ** argv )
         // Using the non-throwing overloads
         if ( !std::filesystem::exists( prefix, ec ) && !std::filesystem::create_directories( prefix, ec ) ) {
             std::cerr << "Cannot create directory " << prefix << std::endl;
-            continue;
+            return EXIT_FAILURE;
         }
 
         const std::filesystem::path offsetFileName = prefix / "offsets.txt";
@@ -113,7 +114,7 @@ int main( int argc, char ** argv )
         std::ofstream offsetStream( offsetFileName, std::ios_base::out | std::ios_base::trunc );
         if ( !offsetStream ) {
             std::cerr << "Cannot create file " << offsetFileName << std::endl;
-            continue;
+            return EXIT_FAILURE;
         }
 
         const uint16_t spritesCount = inputStream.getLE16();
