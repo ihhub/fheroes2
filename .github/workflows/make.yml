@@ -21,12 +21,12 @@ jobs:
             changelog.txt
             fheroes2
             ./docs/README.txt
-            files/lang/*.mo
             files/data/*.h2d
-            script/linux/install_sdl_1.sh
+            files/lang/*.mo
             ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
+            script/linux/install_sdl_1.sh
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: Ubuntu x86-64 (Linux) build with SDL1 (latest commit)
@@ -53,12 +53,12 @@ jobs:
             changelog.txt
             fheroes2
             ./docs/README.txt
-            files/lang/*.mo
             files/data/*.h2d
-            script/linux/install_sdl_2.sh
+            files/lang/*.mo
             ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
+            script/linux/install_sdl_2.sh
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
@@ -88,12 +88,12 @@ jobs:
             changelog.txt
             fheroes2
             ./docs/README.txt
-            files/lang/*.mo
             files/data/*.h2d
-            script/linux/install_sdl_1.sh
+            files/lang/*.mo
             ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
+            script/linux/install_sdl_1.sh
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: Ubuntu ARM64 (Linux) build with SDL1 (latest commit)
@@ -126,12 +126,12 @@ jobs:
             changelog.txt
             fheroes2
             ./docs/README.txt
-            files/lang/*.mo
             files/data/*.h2d
-            script/linux/install_sdl_2.sh
+            files/lang/*.mo
             ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
+            script/linux/install_sdl_2.sh
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
@@ -161,12 +161,12 @@ jobs:
             changelog.txt
             fheroes2
             ./docs/README.txt
-            files/lang/*.mo
             files/data/*.h2d
-            script/macos/install_sdl_1.sh
+            files/lang/*.mo
             ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
+            script/macos/install_sdl_1.sh
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: macOS x86-64 build with SDL1 (latest commit)
@@ -192,12 +192,12 @@ jobs:
             changelog.txt
             fheroes2
             ./docs/README.txt
-            files/lang/*.mo
             files/data/*.h2d
-            script/macos/install_sdl_2.sh
+            files/lang/*.mo
             ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
+            script/macos/install_sdl_2.sh
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: macOS x86-64 build with SDL2 (latest commit)
@@ -366,7 +366,7 @@ jobs:
         make -C files/lang -j 2
     - name: Create package
       run: |
-        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/lang/*.mo files/data/*.h2d
+        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:

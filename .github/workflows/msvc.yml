@@ -100,8 +100,8 @@ jobs:
                                LICENSE \
                                changelog.txt \
                                .\\docs\\README.txt \
-                               files\\lang\\*.mo \
                                files\\data\\*.h2d \
+                               files\\lang\\*.mo \
                                .\\script\\agg\\*.bat \
                                .\\script\\demo\\*.bat \
                                .\\script\\demo\\*.ps1 \
