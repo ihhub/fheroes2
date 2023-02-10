@@ -27,6 +27,7 @@
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <system_error>
@@ -75,7 +76,13 @@ int main( int argc, char ** argv )
             continue;
         }
 
-        const size_t size = inputStream.tellg();
+        const std::streampos pos = inputStream.tellg();
+        if ( pos <= 0 ) {
+            std::cerr << "File " << inputFileName << " is empty" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const size_t size = pos;
         const auto buf = std::make_unique<char[]>( size );
 
         inputStream.seekg( 0, std::ios_base::beg );

@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cctype>
 #include <cstdint>
 #include <cstdlib>
@@ -132,6 +133,13 @@ int main( int argc, char ** argv )
         for ( const auto & item : aggItemsMap ) {
             const auto & [name, info] = item;
 
+            if ( info.size == 0 ) {
+                ++itemsFailed;
+
+                std::cerr << "Item " << name << " is empty" << std::endl;
+                continue;
+            }
+
             const uint32_t hash = calculateHash( name );
             if ( hash != info.hash ) {
                 ++itemsFailed;
@@ -143,12 +151,7 @@ int main( int argc, char ** argv )
             inputStream.seek( info.offset );
 
             const std::vector<uint8_t> buf = inputStream.getRaw( info.size );
-            if ( buf.empty() ) {
-                ++itemsFailed;
-
-                std::cerr << "Empty item " << name << std::endl;
-                continue;
-            }
+            assert( buf.size() == info.size );
 
             const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( name );
 

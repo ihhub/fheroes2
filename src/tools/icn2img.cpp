@@ -137,7 +137,7 @@ int main( int argc, char ** argv )
             if ( dataSize == 0 ) {
                 ++spritesFailed;
 
-                std::cerr << "Empty sprite " << spriteIdx << std::endl;
+                std::cerr << "Sprite " << spriteIdx << " is empty" << std::endl;
                 continue;
             }
 
