@@ -27,7 +27,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream>
+#include <fstream> // IWYU pragma: keep
 #include <iostream>
 #include <map>
 #include <sstream>
