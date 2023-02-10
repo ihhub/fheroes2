@@ -23,7 +23,6 @@
 
 #include "system.h"
 
-#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <filesystem>

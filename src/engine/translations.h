@@ -24,6 +24,7 @@
 #ifndef H2TRANSLATIONS_H
 #define H2TRANSLATIONS_H
 
+#include <cstddef>
 #include <string>
 
 namespace Translation
