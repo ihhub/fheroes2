@@ -18,7 +18,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-TARGETS := extractor 82m2wav til2img icn2img xmi2mid_cli bin2txt
+TARGETS := 82m2wav bin2txt extractor icn2img til2img xmi2midi
 
 LIBENGINE := ../engine/libengine.a
 CCFLAGS := $(CCFLAGS) -I../engine

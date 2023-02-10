@@ -33,7 +33,7 @@
 #include <system_error>
 #include <vector>
 
-#include "serialize.h"
+#include "audio.h"
 #include "system.h"
 
 int main( int argc, char ** argv )
@@ -41,8 +41,8 @@ int main( int argc, char ** argv )
     if ( argc < 3 ) {
         std::string baseName = System::GetBasename( argv[0] );
 
-        std::cerr << baseName << " converts the specified 82M file(s) to WAV format." << std::endl
-                  << "Syntax: " << baseName << " dst_dir input_file.82m ..." << std::endl;
+        std::cerr << baseName << " converts the specified XMI file(s) to MIDI format." << std::endl
+                  << "Syntax: " << baseName << " dst_dir input_file.xmi ..." << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -83,16 +83,17 @@ int main( int argc, char ** argv )
         }
 
         const size_t size = pos;
-        const auto buf = std::make_unique<char[]>( size );
+
+        std::vector<uint8_t> buf( size );
 
         inputStream.seekg( 0, std::ios_base::beg );
-        inputStream.read( buf.get(), size );
+        inputStream.read( reinterpret_cast<char *>( buf.data() ), buf.size() );
         if ( !inputStream ) {
             std::cerr << "Error reading from file " << inputFileName << std::endl;
             return EXIT_FAILURE;
         }
 
-        const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).filename().replace_extension( "wav" );
+        const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).filename().replace_extension( "mid" );
 
         std::ofstream outputStream( outputFilePath, std::ios_base::binary | std::ios_base::trunc );
         if ( !outputStream ) {
@@ -100,23 +101,13 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        StreamBuf wavHeader( 44 );
-        wavHeader.putLE32( 0x46464952 ); // RIFF
-        wavHeader.putLE32( static_cast<uint32_t>( size ) + 0x24 ); // size
-        wavHeader.putLE32( 0x45564157 ); // WAVE
-        wavHeader.putLE32( 0x20746D66 ); // FMT
-        wavHeader.putLE32( 0x10 ); // size_t
-        wavHeader.putLE16( 0x01 ); // format
-        wavHeader.putLE16( 0x01 ); // channels
-        wavHeader.putLE32( 22050 ); // samples
-        wavHeader.putLE32( 22050 ); // byteper
-        wavHeader.putLE16( 0x01 ); // align
-        wavHeader.putLE16( 0x08 ); // bitsper
-        wavHeader.putLE32( 0x61746164 ); // DATA
-        wavHeader.putLE32( static_cast<uint32_t>( size ) ); // size
+        buf = Music::Xmi2Mid( buf );
+        if ( buf.empty() ) {
+            std::cerr << "Failed to convert file " << outputFilePath << std::endl;
+            return EXIT_FAILURE;
+        }
 
-        outputStream.write( reinterpret_cast<const char *>( wavHeader.data() ), wavHeader.size() );
-        outputStream.write( buf.get(), size );
+        outputStream.write( reinterpret_cast<char *>( buf.data() ), buf.size() );
         if ( !outputStream ) {
             std::cerr << "Error writing to file " << outputFilePath << std::endl;
             return EXIT_FAILURE;
