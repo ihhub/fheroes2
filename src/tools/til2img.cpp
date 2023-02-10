@@ -89,7 +89,7 @@ int main( int argc, char ** argv )
 
         const uint16_t spritesCount = inputStream.getLE16();
         if ( spritesCount == 0 ) {
-            std::cerr << "No sprites found" << std::endl;
+            std::cerr << inputFileName << ": no sprites found" << std::endl;
             return EXIT_FAILURE;
         }
 
@@ -98,7 +98,7 @@ int main( int argc, char ** argv )
 
         const size_t spriteSize = static_cast<size_t>( spriteWidth ) * spriteHeight;
         if ( spriteSize == 0 ) {
-            std::cerr << "Invalid sprite size " << spriteWidth << "x" << spriteHeight << std::endl;
+            std::cerr << inputFileName << ": invalid sprite size " << spriteWidth << "x" << spriteHeight << std::endl;
             return EXIT_FAILURE;
         }
 
@@ -110,7 +110,7 @@ int main( int argc, char ** argv )
             if ( spriteOffset + spriteSize > buf.size() ) {
                 ++spritesFailed;
 
-                std::cerr << "Invalid offset for sprite " << spriteIdx << std::endl;
+                std::cerr << inputFileName << ": invalid offset for sprite " << spriteIdx << std::endl;
                 continue;
             }
 
@@ -135,7 +135,7 @@ int main( int argc, char ** argv )
             if ( !fheroes2::Save( sprite, outputFileName, spriteBackground ) ) {
                 ++spritesFailed;
 
-                std::cerr << "Error saving sprite " << spriteIdx << std::endl;
+                std::cerr << inputFileName << ": error saving sprite " << spriteIdx << std::endl;
                 continue;
             }
 

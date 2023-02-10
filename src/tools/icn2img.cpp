@@ -137,7 +137,7 @@ int main( int argc, char ** argv )
             if ( dataSize == 0 ) {
                 ++spritesFailed;
 
-                std::cerr << "Sprite " << spriteIdx << " is empty" << std::endl;
+                std::cerr << inputFileName << ": sprite " << spriteIdx << " is empty" << std::endl;
                 continue;
             }
 
@@ -171,7 +171,7 @@ int main( int argc, char ** argv )
             if ( !fheroes2::Save( sprite, outputFileName, spriteBackground ) ) {
                 ++spritesFailed;
 
-                std::cerr << "Error saving sprite " << spriteIdx << std::endl;
+                std::cerr << inputFileName << ": error saving sprite " << spriteIdx << std::endl;
                 continue;
             }
 

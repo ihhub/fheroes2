@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -136,7 +137,7 @@ int main( int argc, char ** argv )
             if ( info.size == 0 ) {
                 ++itemsFailed;
 
-                std::cerr << "Item " << name << " is empty" << std::endl;
+                std::cerr << inputFileName << ": item " << name << " is empty" << std::endl;
                 continue;
             }
 
@@ -144,7 +145,8 @@ int main( int argc, char ** argv )
             if ( hash != info.hash ) {
                 ++itemsFailed;
 
-                std::cerr << "Invalid hash for item " << name << ": expected " << GetHexString( info.hash ) << ", got " << GetHexString( hash ) << std::endl;
+                std::cerr << inputFileName << ": invalid hash for item " << name << ": expected " << GetHexString( info.hash ) << ", got " << GetHexString( hash )
+                          << std::endl;
                 continue;
             }
 
@@ -155,15 +157,17 @@ int main( int argc, char ** argv )
 
             const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( name );
 
-            StreamFile outputStream;
-            if ( !outputStream.open( outputFilePath.string(), "wb" ) ) {
-                ++itemsFailed;
-
+            std::ofstream outputStream( outputFilePath, std::ios_base::binary | std::ios_base::trunc );
+            if ( !outputStream ) {
                 std::cerr << "Cannot open file " << outputFilePath << std::endl;
-                continue;
+                return EXIT_FAILURE;
             }
 
-            outputStream.putRaw( reinterpret_cast<const char *>( buf.data() ), buf.size() );
+            outputStream.write( reinterpret_cast<const char *>( buf.data() ), buf.size() );
+            if ( !outputStream ) {
+                std::cerr << "Error writing to file " << outputFilePath << std::endl;
+                return EXIT_FAILURE;
+            }
 
             ++itemsExtracted;
         }
