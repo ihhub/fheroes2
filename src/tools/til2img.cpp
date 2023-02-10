@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
@@ -103,6 +104,7 @@ int main( int argc, char ** argv )
         }
 
         const std::vector<uint8_t> buf = inputStream.getRaw( spriteSize * spritesCount );
+        assert( buf.size() == spriteSize * spritesCount );
 
         for ( uint16_t spriteIdx = 0; spriteIdx < spritesCount; ++spriteIdx ) {
             const size_t spriteOffset = spriteSize * spriteIdx;
