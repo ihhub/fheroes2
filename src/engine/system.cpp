@@ -43,6 +43,8 @@
 #include <unistd.h>
 
 #if defined( TARGET_PS_VITA )
+#include <algorithm>
+
 #include <psp2/io/stat.h>
 #else
 #include <sys/stat.h>
