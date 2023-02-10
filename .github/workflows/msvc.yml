@@ -92,9 +92,21 @@ jobs:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
     - name: Create ZIP package
       run: |
-        7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip .\\"$BUILD_DIR"\\extractor.exe .\\"$BUILD_DIR"\\fheroes2.exe \
-                               .\\"$BUILD_DIR"\\icn2img.exe .\\"$BUILD_DIR"\\*.dll .\\script\\agg\\*.bat .\\script\\demo\\*.bat .\\script\\demo\\*.ps1 \
-                               .\\script\\homm2\\*.bat .\\script\\homm2\\*.ps1 .\\docs\\README.txt LICENSE changelog.txt files\\lang\\*.mo files\\data\\*.h2d
+        7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip \
+                               .\\"$BUILD_DIR"\\extractor.exe \
+                               .\\"$BUILD_DIR"\\fheroes2.exe \
+                               .\\"$BUILD_DIR"\\icn2img.exe \
+                               .\\"$BUILD_DIR"\\*.dll \
+                               LICENSE \
+                               changelog.txt \
+                               .\\docs\\README.txt \
+                               files\\lang\\*.mo \
+                               files\\data\\*.h2d \
+                               .\\script\\agg\\*.bat \
+                               .\\script\\demo\\*.bat \
+                               .\\script\\demo\\*.ps1 \
+                               .\\script\\homm2\\*.bat \
+                               .\\script\\homm2\\*.ps1 
         if [[ ${{ matrix.config.deploy_config }} == SDL2 ]]; then
             7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\soundfonts\\*
         fi
