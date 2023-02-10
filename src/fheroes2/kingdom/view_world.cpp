@@ -321,7 +321,7 @@ namespace
             }
         };
 
-        // Render hero/resource/mine/atrifact icon.
+        // Render hero/atrifact icon.
         auto renderIcon = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY ) {
             for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
                 const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
@@ -333,8 +333,8 @@ namespace
             }
         };
 
-        // Render resource letter inside the resource/mine icon.
-        auto renderLetter = [&cache]( const uint32_t resource, const int32_t posX, const int32_t posY ) {
+        // Render resource/mine icon with letter inside.
+        auto renderResourceIcon = [&cache]( const uint32_t icnIndex, const uint32_t resource, const int32_t posX, const int32_t posY ) {
             const uint32_t letterIndex = resourceToOffsetICN( resource );
 
             if ( letterIndex == 7 ) {
@@ -347,6 +347,8 @@ namespace
                 const int32_t dstx = posX * tileSize + tileSize / 2;
                 const int32_t dsty = posY * tileSize + tileSize / 2;
 
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnPerZoomLevel[zoomLevelId], icnIndex );
+                fheroes2::Blit( sprite, cache.cachedImages[zoomLevelId], dstx - sprite.width() / 2, dsty - sprite.height() / 2 );
                 const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterPerZoomLevel[zoomLevelId], letterIndex );
                 fheroes2::Blit( letter, cache.cachedImages[zoomLevelId], dstx - letter.width() / 2, dsty - letter.height() / 2 );
             }
@@ -402,8 +404,7 @@ namespace
                             const uint32_t colorOffset = colorToOffsetICN( tile.QuantityColor() );
                             // Do not render an unknown color.
                             if ( colorOffset != 7 ) {
-                                renderIcon( colorOffset, posX, posY );
-                                renderLetter( tile.QuantityResourceCount().first, posX, posY );
+                                renderResourceIcon( colorOffset, tile.QuantityResourceCount().first, posX, posY );
                             }
                         }
                         break;
@@ -416,8 +417,7 @@ namespace
 
                     case MP2::OBJ_RESOURCE:
                         if ( revealResources || !tile.isFog( color ) ) {
-                            renderIcon( 13, posX, posY );
-                            renderLetter( tile.GetQuantity1(), posX, posY );
+                            renderResourceIcon( 13, tile.GetQuantity1(), posX, posY );
                         }
                         break;
 
