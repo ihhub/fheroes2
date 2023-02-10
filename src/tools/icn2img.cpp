@@ -111,7 +111,7 @@ int main( int argc, char ** argv )
 
         const std::filesystem::path offsetFilePath = prefixPath / "offsets.txt";
 
-        std::ofstream offsetStream( offsetFilePath, std::ios_base::out | std::ios_base::trunc );
+        std::ofstream offsetStream( offsetFilePath, std::ios_base::trunc );
         if ( !offsetStream ) {
             std::cerr << "Cannot create file " << offsetFilePath << std::endl;
             return EXIT_FAILURE;
@@ -161,6 +161,10 @@ int main( int argc, char ** argv )
                            "Offset types have been changed, check the casts below" );
 
             offsetStream << spriteIdxStr << " [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY ) << "]" << std::endl;
+            if ( !offsetStream ) {
+                std::cerr << "Error writing to file " << offsetFilePath << std::endl;
+                return EXIT_FAILURE;
+            }
 
             if ( !fheroes2::Save( sprite, outputFileName, spriteBackground ) ) {
                 ++spritesFailed;
