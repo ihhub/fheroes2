@@ -75,9 +75,10 @@ jobs:
     - name: Build tools
       run: |
         cd src/tools
+        MSBuild.exe bin2txt-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
         MSBuild.exe extractor-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
         MSBuild.exe icn2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
-        MSBuild.exe bin2txt-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+        MSBuild.exe til2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
     - name: Generate translations
       run: |
         set PATH=C:\msys64\usr\bin;%PATH%
