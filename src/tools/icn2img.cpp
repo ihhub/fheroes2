@@ -99,21 +99,21 @@ int main( int argc, char ** argv )
             continue;
         }
 
-        const std::filesystem::path prefix = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).stem();
+        const std::filesystem::path prefixPath = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).stem();
 
         std::error_code ec;
 
         // Using the non-throwing overloads
-        if ( !std::filesystem::exists( prefix, ec ) && !std::filesystem::create_directories( prefix, ec ) ) {
-            std::cerr << "Cannot create directory " << prefix << std::endl;
+        if ( !std::filesystem::exists( prefixPath, ec ) && !std::filesystem::create_directories( prefixPath, ec ) ) {
+            std::cerr << "Cannot create directory " << prefixPath << std::endl;
             return EXIT_FAILURE;
         }
 
-        const std::filesystem::path offsetFileName = prefix / "offsets.txt";
+        const std::filesystem::path offsetFilePath = prefixPath / "offsets.txt";
 
-        std::ofstream offsetStream( offsetFileName, std::ios_base::out | std::ios_base::trunc );
+        std::ofstream offsetStream( offsetFilePath, std::ios_base::out | std::ios_base::trunc );
         if ( !offsetStream ) {
-            std::cerr << "Cannot create file " << offsetFileName << std::endl;
+            std::cerr << "Cannot create file " << offsetFilePath << std::endl;
             return EXIT_FAILURE;
         }
 
@@ -144,25 +144,25 @@ int main( int argc, char ** argv )
 
             const fheroes2::Sprite sprite = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
 
-            std::ostringstream os;
-            os << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;
+            std::ostringstream spriteIdxStream;
+            spriteIdxStream << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;
 
-            std::string dstFileName = ( prefix / os.str() ).string();
+            const std::string spriteIdxStr = spriteIdxStream.str();
+            std::string outputFileName = ( prefixPath / spriteIdxStr ).string();
 
             if ( fheroes2::isPNGFormatSupported() ) {
-                dstFileName += ".png";
+                outputFileName += ".png";
             }
             else {
-                dstFileName += ".bmp";
+                outputFileName += ".bmp";
             }
 
             static_assert( std::is_same_v<decltype( header.offsetX ), uint16_t> && std::is_same_v<decltype( header.offsetY ), uint16_t>,
                            "Offset types have been changed, check the casts below" );
 
-            offsetStream << "Sprite " << spriteIdx << " has an offset of [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY )
-                         << "]" << std::endl;
+            offsetStream << spriteIdxStr << " [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY ) << "]" << std::endl;
 
-            if ( !fheroes2::Save( sprite, dstFileName, spriteBackground ) ) {
+            if ( !fheroes2::Save( sprite, outputFileName, spriteBackground ) ) {
                 ++spritesFailed;
 
                 std::cerr << "Error saving sprite " << spriteIdx << std::endl;

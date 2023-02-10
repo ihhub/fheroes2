@@ -150,13 +150,13 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const std::filesystem::path outputFileName = std::filesystem::path( dstDir ) / std::filesystem::path( name );
+            const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( name );
 
             StreamFile outputStream;
-            if ( !outputStream.open( outputFileName.string(), "wb" ) ) {
+            if ( !outputStream.open( outputFilePath.string(), "wb" ) ) {
                 ++itemsFailed;
 
-                std::cerr << "Cannot open file " << outputFileName << std::endl;
+                std::cerr << "Cannot open file " << outputFilePath << std::endl;
                 continue;
             }
 
