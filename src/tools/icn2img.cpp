@@ -159,8 +159,8 @@ int main( int argc, char ** argv )
             static_assert( std::is_same_v<decltype( header.offsetX ), uint16_t> && std::is_same_v<decltype( header.offsetY ), uint16_t>,
                            "Offset types have been changed, check the casts below" );
 
-            offsetStream << "Sprite " << spriteIdx + 1 << " has an offset of [" << static_cast<int16_t>( header.offsetX ) << ", "
-                         << static_cast<int16_t>( header.offsetY ) << "]" << std::endl;
+            offsetStream << "Sprite " << spriteIdx << " has an offset of [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY )
+                         << "]" << std::endl;
 
             if ( !fheroes2::Save( sprite, dstFileName, spriteBackground ) ) {
                 ++spritesFailed;
