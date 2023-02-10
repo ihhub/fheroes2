@@ -51,7 +51,7 @@ int main( int argc, char ** argv )
     if ( argc < 4 ) {
         std::string baseName = System::GetBasename( argv[0] );
 
-        std::cerr << baseName << " extracts images in BMP or PNG format (if supported) and their offsets from the specified ICN file(s) using the specified palette."
+        std::cerr << baseName << " extracts sprites in BMP or PNG format (if supported) and their offsets from the specified ICN file(s) using the specified palette."
                   << std::endl
                   << "Syntax: " << baseName << " dst_dir palette_file.pal input_file.icn ..." << std::endl;
         return EXIT_FAILURE;
@@ -141,7 +141,7 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const fheroes2::Sprite image = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
+            const fheroes2::Sprite sprite = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
 
             std::ostringstream os;
             os << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;
@@ -158,10 +158,10 @@ int main( int argc, char ** argv )
             static_assert( std::is_same_v<decltype( header.offsetX ), uint16_t> && std::is_same_v<decltype( header.offsetY ), uint16_t>,
                            "Offset types have been changed, check the casts below" );
 
-            offsetStream << "Image " << spriteIdx + 1 << " has an offset of [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY )
-                         << "]" << std::endl;
+            offsetStream << "Sprite " << spriteIdx + 1 << " has an offset of [" << static_cast<int16_t>( header.offsetX ) << ", "
+                         << static_cast<int16_t>( header.offsetY ) << "]" << std::endl;
 
-            if ( !fheroes2::Save( image, dstFileName, spriteBackground ) ) {
+            if ( !fheroes2::Save( sprite, dstFileName, spriteBackground ) ) {
                 ++spritesFailed;
 
                 std::cerr << "Error saving sprite " << spriteIdx << std::endl;
