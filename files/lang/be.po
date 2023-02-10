@@ -24,39 +24,49 @@ msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
+"АСОБНЫ\n"
+"БОЙ"
 
 msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"НОВАЯ\n"
+"ГУЛЬНЯ"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"ЗАХАВАЦЬ\n"
+"ГУЛЬНЮ"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"ЗАГРУЗІЦЬ\n"
+"ГУЛЬНЮ"
 
 msgid "INFO"
-msgstr ""
+msgstr "ДАВЕДКА"
 
 msgid "QUIT"
 msgstr ""
+"СКОНЧЫЦЬ\n"
+"ГУЛЬНЮ"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "НАЗАД"
 
 msgid "OKAY"
-msgstr ""
+msgstr "ДОБРА"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ПРЫНЯЦЬ"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "АДМОВІЦЬ"
 
 msgid "LEARN"
 msgstr ""
@@ -65,22 +75,23 @@ msgid "TRADE"
 msgstr ""
 
 msgid "YES"
-msgstr ""
+msgstr "ТАК"
 
 msgid "NO"
-msgstr ""
+msgstr "НЕ"
 
 msgid "EXIT"
-msgstr ""
+msgstr "ВЫЙСЦІ"
 
 msgid "DISMISS"
 msgstr ""
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "ПАЛЕПШЫЦЬ"
 
 msgid "RESTART"
-msgstr ""
+msgstr "НАНОВА"
+
 
 msgid "S"
 msgstr ""
@@ -95,26 +106,30 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
-msgstr ""
+msgstr "УСЕ"
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"ЗВЫЧАЙНАЯ\n"
+"ГУЛЬНЯ"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr ""
+"КАМПАНІЯ"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
-msgstr ""
+msgstr "МУЛЬТЫ\n"
+"ПЛЭЕР"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "НАЛАДЫ"
 
 msgid ""
 "ORIGINAL\n"
@@ -128,21 +143,23 @@ msgstr ""
 
 msgid "HOT SEAT"
 msgstr ""
+"ЗА АДНЫМ\n"
+"КАМПУТАРАМ"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 ГУЛЬЦА"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 ГУЛЬЦЫ"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 ГУЛЬЦЫ"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 ГУЛЬЦОЎ"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 ГУЛЬЦОЎ"
 
 msgid "GIFT"
 msgstr "АДДАЦЬ"
@@ -370,16 +387,16 @@ msgid "Shadow Cursor"
 msgstr ""
 
 msgid "Audio"
-msgstr ""
+msgstr "Аўдыё"
 
 msgid "Settings"
-msgstr ""
+msgstr "Налады"
 
 msgid "Configure"
-msgstr ""
+msgstr "Наладзіць"
 
 msgid "Hot Keys"
-msgstr ""
+msgstr "Гарачыя клавішы"
 
 #, fuzzy
 msgid "Damage Info"
@@ -412,10 +429,10 @@ msgid ""
 msgstr ""
 
 msgid "Change the audio settings of the game."
-msgstr ""
+msgstr "Змяніць налады аўдыё гульні."
 
 msgid "Check and configure all the hot keys present in the game."
-msgstr ""
+msgstr "Праглядзець і наладзіць спалучэнні клавіш у гульні."
 
 msgid "Toggle to display damage information during the battle."
 msgstr ""
@@ -424,7 +441,7 @@ msgid "Exit this menu."
 msgstr "Выйсці з меню"
 
 msgid "Okay"
-msgstr "Ок"
+msgstr "Добра"
 
 msgid "The enemy has surrendered!"
 msgstr "Вораг здаўся!"
@@ -508,7 +525,7 @@ msgid "Spell Points"
 msgstr "Адзінкі магіі"
 
 msgid "Hero's Options"
-msgstr "Наладкі героя"
+msgstr "Налады героя"
 
 msgid "Cast Spell"
 msgstr ""
@@ -520,7 +537,7 @@ msgid "Surrender"
 msgstr ""
 
 msgid "Cancel"
-msgstr "Скасаваць"
+msgstr "Назад"
 
 msgid "Hero Screen"
 msgstr "Экран героя"
@@ -817,7 +834,7 @@ msgid "%{race1} %{name1}"
 msgstr ""
 
 msgid "vs"
-msgstr ""
+msgstr "супраць"
 
 msgid "%{race2} %{name2}"
 msgstr ""
@@ -2437,7 +2454,7 @@ msgid "Digging"
 msgstr ""
 
 msgid "Exit this menu without doing anything."
-msgstr ""
+msgstr "Выйсці з меню, нічога не змяняючы."
 
 msgid "Arena"
 msgstr ""
@@ -2516,13 +2533,13 @@ msgid "(Rate: %{percent})"
 msgstr ""
 
 msgid "off"
-msgstr ""
+msgstr "выкл."
 
 msgid "Music"
-msgstr ""
+msgstr "Музыка"
 
 msgid "Effects"
-msgstr ""
+msgstr "Эфекты"
 
 msgid "MIDI"
 msgstr ""
@@ -2531,25 +2548,25 @@ msgid "MIDI Expansion"
 msgstr ""
 
 msgid "External"
-msgstr ""
+msgstr "Вонкавы"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Тып Музыкі"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D Аўдыё"
 
 msgid "Toggle ambient music level."
-msgstr ""
+msgstr "Змяніць гучнасць фонавай музыкі."
 
 msgid "Toggle foreground sounds level."
-msgstr ""
+msgstr "Змяніць гучнасць гукаў."
 
 msgid "Change the type of music."
-msgstr ""
+msgstr "Змяніць тым музыкі."
 
 msgid "Toggle 3D effects of foreground sounds."
-msgstr ""
+msgstr "Укл/Выкл эфект аб’ёму гукаў."
 
 msgid "Build a new ship:"
 msgstr ""
@@ -2564,19 +2581,19 @@ msgid "Need: "
 msgstr ""
 
 msgid "Load Game"
-msgstr ""
+msgstr "Загрузіць гульню"
 
 msgid "No save files to load."
 msgstr ""
 
 msgid "New Game"
-msgstr ""
+msgstr "Новая гульня"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Пачаць новую адна/шматкарыстальніцкую гульню."
 
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Працягнуць захаваную гульню."
 
 msgid "Save Game"
 msgstr ""
@@ -2585,48 +2602,49 @@ msgid "Save the current game."
 msgstr ""
 
 msgid "Quit"
-msgstr ""
+msgstr "Скончыць"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr ""
+msgstr "Выйсці з Heroes of Might and Magic II."
 
 msgid "Language"
-msgstr ""
+msgstr "Мова"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Графічныя"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Чорна-белы"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Курсор мышы"
 
 msgid "Color"
-msgstr ""
+msgstr "Каляровы"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Тэкставыя падказкі"
 
 msgid "Change the language of the game."
-msgstr ""
+msgstr "Змяніць мову гульні."
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Мова"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
+msgstr "Наладзіць графіку."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
+msgstr "Укл/Выкл каляровы курсор. Гэта ўплывае толькі на візуал."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
-msgstr ""
+msgstr "Укл/Выкл тэкставыя падказкі з дадатковай інфармацыяй пра вокны і "
+"падзеі ў гульні."
 
 msgid "Attention"
-msgstr ""
+msgstr "Увага"
 
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any other "
@@ -2650,10 +2668,10 @@ msgid "Map Size"
 msgstr ""
 
 msgid "Opponents"
-msgstr ""
+msgstr "Супраціўнікі"
 
 msgid "Class"
-msgstr ""
+msgstr "Клас"
 
 msgid ""
 "Victory\n"
@@ -2687,54 +2705,54 @@ msgid "Gift from %{name}"
 msgstr ""
 
 msgid "Resolution"
-msgstr ""
+msgstr "Раздзяленне экрана"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Поўнаэкранны"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Рэжым адлюстравання"
 
 msgid "Windowed"
-msgstr ""
+msgstr "Аконны"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "Вертыкальная сінхранізацыя"
 
 msgid "on"
-msgstr ""
+msgstr "укл."
 
 msgid "FPS"
 msgstr ""
 
 msgid "System Info"
-msgstr ""
+msgstr "Сістэмная інфармацыя"
 
 msgid "Change the resolution of the game."
-msgstr ""
+msgstr "Змяніць раздзяленне экранa."
 
 msgid "Select Game Resolution"
-msgstr ""
+msgstr "Абраць раздзяленне экрана"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Пераключыцца паміж поўнаэкранным і аконным рэжымам."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
-msgstr ""
+msgstr "Можаш уключыць вертакальную сінхранізацыю, каб прыбраць мігаценне экрана."
 
 msgid "Show extra information such as FPS and current time."
-msgstr ""
+msgstr "Паказваць FPS і бягучы час."
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Гарачыя клавішы:"
 
 msgid "Select Game Language:"
-msgstr ""
+msgstr "Абяры Мову"
 
 msgid "Click to choose the selected language."
-msgstr ""
+msgstr "Націсні, каб ухваліць выбар мовы."
 
 msgid "%{name} has gained a level."
 msgstr ""
@@ -2879,10 +2897,10 @@ msgid "Select only 1 monster to be recruited."
 msgstr ""
 
 msgid "Select Game Resolution:"
-msgstr ""
+msgstr "Абряры раздзяленне экранa:"
 
 msgid "Click to apply the selected resolution."
-msgstr ""
+msgstr "Націсні, каб ухваліць абранае раздзяленне."
 
 msgid "How many troops to move?"
 msgstr ""
@@ -2945,87 +2963,89 @@ msgid "The Succession Wars"
 msgstr ""
 
 msgid "Lose all your heroes and towns."
-msgstr ""
+msgstr "Страціціь усіх герояў і гарады."
 
 msgid "Lose a specific town."
-msgstr ""
+msgstr "Страціць канкрэтны горад."
 
 msgid "Lose a specific hero."
-msgstr ""
+msgstr "Страціць канкрэтнага героя."
 
 msgid "Run out of time. Fail to win by a certain point."
-msgstr ""
+msgstr "Вычарпаць час. Не перамагчы за дадзены час."
 
 msgid "Loss Condition"
-msgstr ""
+msgstr "Умовы паразы"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr ""
+msgstr "Знішчыць усіх герояў супраціўніка і захапіць усе яго гарады."
 
 msgid "Capture a specific town."
-msgstr ""
+msgstr "Захапіць дадзены горад."
 
 msgid "Defeat a specific hero."
-msgstr ""
+msgstr "Перамагчы дадзенага героя."
 
 msgid "Find a specific artifact."
-msgstr ""
+msgstr "Адшукаць дадзены артэфакт."
 
 msgid "Your side defeats the opposing side."
-msgstr ""
+msgstr "Твой бок знішчае супраціўнікаў."
 
 msgid "Accumulate a large amount of gold."
-msgstr ""
+msgstr "Назапасіць вялікую колькасць золата."
 
 msgid "Victory Condition"
-msgstr ""
+msgstr "Умова перамогі"
 
 msgid "Map difficulty:"
-msgstr ""
+msgstr "Складанасць мапы:"
 
 msgid "N"
 msgstr ""
 
 msgid "No maps exist at that size"
-msgstr ""
+msgstr "Няма мап абранага памеру"
 
 msgid "Small Maps"
-msgstr ""
+msgstr "Малыя мапы"
 
 msgid "View only maps of size small (36 x 36)."
-msgstr ""
+msgstr "Паказваць толькі малыя мапы (36 х 36)."
 
 msgid "Medium Maps"
-msgstr ""
+msgstr "Сярэднія мапы"
 
 msgid "View only maps of size medium (72 x 72)."
-msgstr ""
+msgstr "Паказваць толькі сярэднія мапы (72 х 72)."
 
 msgid "Large Maps"
-msgstr ""
+msgstr "Вялікія мапы"
 
 msgid "View only maps of size large (108 x 108)."
-msgstr ""
+msgstr "Паказваць толькі вялікія мапы (108х 108)."
 
 msgid "Extra Large Maps"
-msgstr ""
+msgstr "Звышвялікія мапы"
 
 msgid "View only maps of size extra large (144 x 144)."
-msgstr ""
+msgstr "Паказваць толькі звышвялікія мапы (144 х 144)."
 
 msgid "All Maps"
-msgstr ""
+msgstr "Усе мапы"
 
 msgid "View all maps, regardless of size."
-msgstr ""
+msgstr "Паказваць усе мапы, незалежна ад памеру."
 
 msgid "Players Icon"
-msgstr ""
+msgstr "Іконка гульцоў"
 
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
 "occupied by humans will be occupied by computer players."
 msgstr ""
+"Паказвае колькасць гульцоў у сцэнары. За не занятыя гульцамі-людзьмі пазіцыі "
+"будзе гуляць кампутар."
 
 msgid ""
 "Indicates whether the map\n"
@@ -3033,26 +3053,32 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
+"Паказвае памер мапы:\n"
+"маленькі (36 х 36), сярэдні\n"
+"(72 x 72), вялікі (108 x 108)"
+"ці звышвялікі (144 х 144)."
 
 msgid "Size Icon"
-msgstr ""
+msgstr "Іконка памеру"
 
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
+"Паказвае для якой версіі гульні зроблена мапа: для \"The Succession Wars\" ці "
+"\"The Price of Loyalty\""
 
 msgid "Map Type"
-msgstr ""
+msgstr "Тып мапы"
 
 msgid "Selected Name"
-msgstr ""
+msgstr "Назва мапы"
 
 msgid "The name of the currently selected map."
-msgstr ""
+msgstr "Назва абранай мапы"
 
 msgid "Selected Map Difficulty"
-msgstr ""
+msgstr "Складанасць мапы"
 
 msgid ""
 "The map difficulty of the currently selected map.  The map difficulty is "
@@ -3060,15 +3086,17 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
+"Складанасць мапы вызначаецца аўтарам. Цяжэйшыя мапы могуць утрымліваць больш "
+"ворагаў, менш рэсурсаў ці іншыя адмысловыя акалічнасці."
 
 msgid "Selected Description"
-msgstr ""
+msgstr "Апісанне"
 
 msgid "The description of the currently selected map."
-msgstr ""
+msgstr "Апісанне абранай мапы."
 
 msgid "Accept the choice made."
-msgstr ""
+msgstr "Ухваліць выбар."
 
 msgid "Jump"
 msgstr ""
@@ -3228,19 +3256,19 @@ msgid "Best Monster:"
 msgstr ""
 
 msgid "difficulty|Easy"
-msgstr ""
+msgstr "Лёгка"
 
 msgid "difficulty|Normal"
-msgstr ""
+msgstr "Нармальна"
 
 msgid "difficulty|Hard"
-msgstr ""
+msgstr "Цяжка"
 
 msgid "difficulty|Expert"
-msgstr ""
+msgstr "Эксперт"
 
 msgid "difficulty|Impossible"
-msgstr ""
+msgstr "Немагчыма"
 
 msgid "and more..."
 msgstr ""
@@ -3500,24 +3528,25 @@ msgid "' language, but the current language of the game is '"
 msgstr ""
 
 msgid "Hot Seat"
-msgstr "Гарачы стул"
+msgstr "За адным кампутарам"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
-msgstr ""
+msgstr "Згуляй з двума-чатырма гульцымі з адным кампутарам, перасаджваючыся "
+"на 'Гарачае крэсла' ў сваю чагу."
 
 msgid "Cancel back to the main menu."
-msgstr ""
+msgstr "Вярнуцца ў галоўнае меню."
 
 msgid "A single player game playing out a single map."
-msgstr ""
+msgstr "Аднакарыстальніцкая гульня на абранай мапе."
 
 msgid "Standard Game"
 msgstr "Звычайная гульня"
 
 msgid "A single player game playing through a series of maps."
-msgstr ""
+msgstr "Аднакарыстальніцкая гульня на шэрагу мапаў."
 
 msgid "Campaign Game"
 msgstr "Кампанія"
@@ -3525,10 +3554,10 @@ msgstr "Кампанія"
 msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
-msgstr ""
+msgstr "Гульня з некалькімі гульцамі-людзьмі, якія спаборнічаюць на абранай мапе."
 
 msgid "Multi-Player Game"
-msgstr ""
+msgstr "Мультыплэер"
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "fheroes2 Resurrection Team прадстаўляе"
@@ -3567,19 +3596,19 @@ msgid "Credits"
 msgstr "Звесткі пра каманду"
 
 msgid "View the credits screen."
-msgstr ""
+msgstr "Праглядзець звесткі пра распрацоўшчыкаў."
 
 msgid "High Scores"
-msgstr "Лепшыя дасягненні"
+msgstr "Найепшыя дасягненні"
 
 msgid "View the high scores screen."
-msgstr "Праглядзець лепшыя дасягненні."
+msgstr "Праглядзець найлепшыя дасягненні."
 
 msgid "Change language, resolution and settings of the game."
-msgstr "Змяніць мову, экран і наладкі гульні."
+msgstr "Змяніць мову, раздзяленне экрана і налады гульні."
 
 msgid "Game Settings"
-msgstr "Наладкі гульні"
+msgstr "Налады гульні"
 
 msgid ""
 "Required video files for campaign selection window are missing. Please make "
@@ -3619,48 +3648,51 @@ msgid ""
 msgstr ""
 
 msgid "Battle Only"
-msgstr ""
+msgstr "Асобны бой"
 
 msgid "Setup and play a battle without loading any map."
-msgstr ""
+msgstr "Наладзь і згуляй бітву, не загружаючы мапу."
 
 msgid "2 Players"
-msgstr ""
+msgstr "2 Гульца"
 
 msgid ""
 "Play with 2 human players, and optionally, up to 4 additional computer "
 "players."
 msgstr ""
+"Гульня двух гульцоў-людзей і, па жаданні, да чатырох кампутарных."
 
 msgid "3 Players"
-msgstr ""
+msgstr "3 Гульцы"
 
 msgid ""
 "Play with 3 human players, and optionally, up to 3 additional computer "
 "players."
 msgstr ""
+"Гульня трох гульцоў-людзей і, па жаданні, да трох кампутарных."
 
 msgid "4 Players"
-msgstr ""
+msgstr "4 Гульцы"
 
 msgid ""
 "Play with 4 human players, and optionally, up to 2 additional computer "
 "players."
 msgstr ""
+"Гульня чатырох гульцоў-людзей і, па жаданні, да двух кампутарных."
 
 msgid "5 Players"
-msgstr ""
+msgstr "5 Гульцоў"
 
 msgid ""
 "Play with 5 human players, and optionally, up to 1 additional computer "
 "player."
-msgstr ""
+msgstr "Гульня пяці гульцоў-людзей і, па жаданні, аднаго камутарнага."
 
 msgid "6 Players"
-msgstr ""
+msgstr "6 Гульцоў"
 
 msgid "Play with 6 human players."
-msgstr ""
+msgstr "Гульня шасці гульцоў-людзей."
 
 msgid "Dragon city has fallen!  You are now the Master of the Dragons."
 msgstr ""
@@ -3805,6 +3837,9 @@ msgid ""
 "difficulty levels start you of with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
+"Дазваляе змяніць пачаткувую складанасць гульні. З павышэннем узроўню "
+"складанасці змяншаюцца пачатковыя рэсурсы, і на вышэйшых узроўнях дадатковыя "
+"рэсурсы атрымае кампутар."
 
 msgid "Difficulty Rating"
 msgstr "Рэйтынг складанасці"
@@ -3813,12 +3848,13 @@ msgid ""
 "The difficulty rating reflects a combination of various settings for your "
 "game. This number will be applied to your final score."
 msgstr ""
+"Рэйтынг складанасці улічваецца ў фінальнай адзнаке."
 
 msgid "Click to accept these settings and start a new game."
-msgstr ""
+msgstr "Націсні, каб ухваліць налады і пачаць новую гульню."
 
 msgid "Click to return to the main menu."
-msgstr ""
+msgstr "Націсні, каб вярнуцца ў галоўнае меню."
 
 msgid "No maps available!"
 msgstr ""
@@ -3928,7 +3964,7 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to quit?"
-msgstr ""
+msgstr "Даклана хочаш скончыць гуляць?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
@@ -4005,15 +4041,21 @@ msgid ""
 "color will always start in a particular location. Some positions may only be "
 "played by a computer player or only by a human player."
 msgstr ""
+"Дазваляе змяніць пачатковую пазіцыю і колеры гульцоў. Ад абранага колеру залежыць "
+"пачатковая лакацыя. За некаторыя пазіцыі могуць гуляць толькі гульцы-людзі, "
+"альбо кампутарныя гульцы."
 
 msgid ""
 "This lets you change the class of a player. Classes are not always "
 "changeable. Depending on the scenario, a player may receive additional towns "
 "and/or heroes not of their primary alignment."
 msgstr ""
+"Дазваляе змяніць клас гульца, але ня кожны сцэнар дазваляе змену."
+"У залежнасці ад сцэнара гулец можа атрымаць дадатковыя гарады і/альбо герояў "
+"з прыхільнасцю, якая не адпавядае асноўнай."
 
 msgid "Handicap"
-msgstr ""
+msgstr "Перашкода"
 
 #
 msgid ""
@@ -4021,6 +4063,9 @@ msgid ""
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
 "30% fewer resources per turn for mild and severe handicaps, respectively."
 msgstr ""
+"Дазваляе перашкодзіць гульцу-чалавеку. Ён пачне з меншай колькасцю рэсурсаў "
+"і будзе атрымліваць на 15, альбо 30% менш рэсурсаў за ход з лёгкай і "
+"сур’ёзнай перашкодай адпаведна."
 
 msgid "%{color} player"
 msgstr "%{color} гулец"
@@ -5784,22 +5829,22 @@ msgid ""
 msgstr ""
 
 msgid "Blue"
-msgstr ""
+msgstr "Сіні"
 
 msgid "Green"
-msgstr ""
+msgstr "Зялёны"
 
 msgid "Red"
-msgstr ""
+msgstr "Чырвоны"
 
 msgid "Yellow"
-msgstr ""
+msgstr "Жоўты"
 
 msgid "Orange"
-msgstr ""
+msgstr "Аранжавы"
 
 msgid "Purple"
-msgstr ""
+msgstr "Фіялетавы"
 
 msgid "barrier|Aqua"
 msgstr ""
@@ -5826,28 +5871,28 @@ msgid "barrier|Red"
 msgstr ""
 
 msgid "tent|Aqua"
-msgstr ""
+msgstr "Блакітны"
 
 msgid "tent|Blue"
-msgstr ""
+msgstr "Сіні"
 
 msgid "tent|Brown"
-msgstr ""
+msgstr "Карычневы"
 
 msgid "tent|Gold"
-msgstr ""
+msgstr "Залаты"
 
 msgid "tent|Green"
-msgstr ""
+msgstr "Зялёны"
 
 msgid "tent|Orange"
-msgstr ""
+msgstr "Аранжавы"
 
 msgid "tent|Purple"
-msgstr ""
+msgstr "Фіялетавы"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Чырвоны"
 
 msgid "Experience"
 msgstr ""
@@ -5977,7 +6022,7 @@ msgid "Multi"
 msgstr ""
 
 msgid "race|Random"
-msgstr ""
+msgstr "Абраць выпадкова"
 
 msgid "race|Neutral"
 msgstr ""
@@ -6010,7 +6055,7 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
+msgstr "Выпадко-\nвы"
 
 msgid "doubleLinedRace|Neutral"
 msgstr ""
