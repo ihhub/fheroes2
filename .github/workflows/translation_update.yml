@@ -64,7 +64,7 @@ jobs:
             else
                 COLOR="green"
             fi
-            echo "{ \"schemaVersion\": 1, \"label\": \"$LABEL\", \"message\": \"$PERCENT%\", \"color\": \"$COLOR\" }" > "docs/json/lang_$LANGUAGE.json"
+            jq -n -c --arg lbl "$LABEL" --arg msg "$PERCENT%" --arg clr "$COLOR" "{ schemaVersion: 1, label: \$lbl, message: \$msg, color: \$clr }" > "docs/json/lang_$LANGUAGE.json"
         done
     - name: Commit changes
       run: |
