@@ -18,13 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "image.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <type_traits>
 
-#include "image.h"
 #include "image_palette.h"
 
 namespace
@@ -2285,7 +2286,8 @@ namespace fheroes2
             const int32_t halfWidth = width / 2;
 
             for ( int32_t x = 0; x < halfWidth; ++x ) {
-                const int32_t stepY = 1 << ( ( halfWidth - x ) / 2 + 1 ); //static_cast<int32_t>( std::pow( 2, ( halfWidth - x ) / 2 + 1 ) );
+                // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
+                const int32_t stepY = 1 << ( ( halfWidth - x ) / 2 + 1 );
                 const int32_t offsetY = stepY / 2 * ( ( x + halfWidth ) % 2 );
 
                 for ( int32_t y = 0; y < height; ++y ) {
@@ -2334,7 +2336,8 @@ namespace fheroes2
                 transformIn += widthIn;
             }
             for ( int32_t y = 0; y < halfHeight; ++y ) {
-                const int32_t stepX = 1 << ( ( halfHeight - y ) / 2 + 1 ); // static_cast<int32_t>( std::pow( 2, ( halfHeight - y ) / 2 + 1 ) );
+                // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
+                const int32_t stepX = 1 << ( ( halfHeight - y ) / 2 + 1 );
                 const int32_t offsetX = stepX / 2 * ( ( y + halfHeight ) % 2 );
 
                 for ( int32_t x = 0; x < width; ++x ) {
