@@ -244,7 +244,7 @@ namespace fheroes2
         const int32_t inHeight = in.height();
         const int32_t outWaveWidth = x > waveLength ? ( x > inWidth ? ( waveLength - x + inWidth ) : waveLength ) : x;
 
-        // If the out image is small for the Death Wave spell effect, resize it anf fill the transform layer with "0".
+        // If the out image is small for the Death Wave spell effect, resize it and fill the transform layer with "0".
         if ( out.width() < outWaveWidth || out.height() < inHeight ) {
             out.resize( outWaveWidth, inHeight );
             std::fill( out.transform(), out.transform() + static_cast<size_t>( outWaveWidth * inHeight ), static_cast<uint8_t>( 0 ) );

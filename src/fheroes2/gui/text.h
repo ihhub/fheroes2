@@ -88,7 +88,7 @@ public:
 
     static int32_t getCharacterWidth( const uint8_t character, const int fontType );
 
-    // Use this method when you need to find the maximum width of of a string to be fit within given width
+    // Use this method when you need to find the maximum width of a string to be fit within given width
     static int32_t getFitWidth( const std::string & text, const int fontId, const int32_t width_ );
 
 protected:

@@ -65,7 +65,7 @@ namespace
         }
 
         if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) ) {
-            damagePotential *= 1.15; // 15% of all Monsters are Undead, deals double dmg
+            damagePotential *= 1.15; // 15% of all Monsters are Undead, deals double damage.
         }
 
         if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
@@ -130,7 +130,7 @@ namespace
         const int speedDiff = battleStats.speed - Speed::AVERAGE;
         monsterSpecial += ( speedDiff < 0 ) ? speedDiff * 0.1 : speedDiff * 0.05;
 
-        // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
+        // Additional HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
         return sqrt( damagePotential * effectiveHP ) * monsterSpecial;
     }
 

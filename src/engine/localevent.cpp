@@ -896,7 +896,7 @@ namespace fheroes2
 
             break;
         }
-        // switch uppler/lowercase
+        // switch upper/lowercase
         case fheroes2::Key::KEY_SHIFT: {
             currentUpper = !currentUpper;
 

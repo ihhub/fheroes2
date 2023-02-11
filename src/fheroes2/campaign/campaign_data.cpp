@@ -112,7 +112,7 @@ namespace
             obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::HELMET_ANDURAN );
             break;
         case 6:
-            // Will assemble Battle Garb of Anduran along with the previous anduran set pieces
+            // Will assemble Battle Garb of Anduran along with the previous Anduran set pieces
             // If we get all the parts, we'll obtain the Battle Garb award while removing the awards for the individual parts
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SWORD_ANDURAN );
 

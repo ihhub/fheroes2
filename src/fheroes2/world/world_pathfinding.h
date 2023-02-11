@@ -90,7 +90,7 @@ protected:
     // the hero's remaining movement points. The default implementation can be overridden by a derived class.
     virtual uint32_t getMovementPenalty( int src, int dst, int direction ) const;
 
-    // Substracts movement points taking the transition between turns into account
+    // Subtracts movement points taking the transition between turns into account
     uint32_t substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const;
 
     uint8_t _pathfindingSkill = Skill::Level::EXPERT;

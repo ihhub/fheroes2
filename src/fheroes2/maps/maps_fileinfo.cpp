@@ -527,7 +527,7 @@ std::string Maps::FileInfo::String() const
        << "kingdom colors: " << static_cast<int>( kingdom_colors ) << ", "
        << "allow human colors: " << static_cast<int>( allow_human_colors ) << ", "
        << "allow comp colors: " << static_cast<int>( allow_comp_colors ) << ", "
-       << "rnd races: " << static_cast<int>( rnd_races ) << ", "
+       << "random races: " << static_cast<int>( rnd_races ) << ", "
        << "conditions wins: " << static_cast<int>( conditions_wins ) << ", "
        << "comp also wins: " << ( comp_also_wins ? "true" : "false" ) << ", "
        << "allow normal victory: " << ( allow_normal_victory ? "true" : "false" ) << ", "

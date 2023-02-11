@@ -410,7 +410,7 @@ void Interface::StatusWindow::DrawBackground() const
             fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         }
 
-        // botom
+        // bottom
         srcrt = fheroes2::Rect( 0, startY, icnston.width(), icnston.height() - startY );
         dstpt = fheroes2::Point( pos.x, pos.y + pos.height - ( icnston.height() - startY ) );
         fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );

@@ -324,7 +324,7 @@ void Game::EnvironmentSoundMixer()
 
             // We need to swap X and Y axes and invert Y axis as on screen Y axis goes from top to bottom.
             angle = static_cast<int16_t>( std::atan2( actualPosition.x, -actualPosition.y ) * 180 / M_PI );
-            // It is exteremely important to normalize the angle.
+            // It is extremely important to normalize the angle.
             if ( angle < 0 ) {
                 angle = 360 + angle;
             }

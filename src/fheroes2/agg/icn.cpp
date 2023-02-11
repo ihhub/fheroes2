@@ -347,7 +347,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         return ticket % 15;
     case OBJNWATR:
         switch ( start ) {
-        // buttle
+        // bottle
         case 0x00:
             return start + ( ticket % 11 ) + 1;
         // shadow
@@ -472,14 +472,14 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0x3F:
         case 0x46:
         case 0x4D:
-        // archerhouse
+        // Archer House
         case 0x54:
         // smoke from chimney
         case 0x5D:
         case 0x64:
         // shadow smoke
         case 0x6B:
-        // peasanthunt
+        // Peasant Hut
         case 0x72:
             return start + ( ticket % 6 ) + 1;
         default:
@@ -546,14 +546,14 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         // lighthouse
         case 0x3D:
             return start + ( ticket % 9 ) + 1;
-        // alchemytower
+        // Alchemist Tower
         case 0x1B:
         // watermill
         case 0x53:
         case 0x5A:
         case 0x62:
         case 0x69:
-        // fire in wagoncamp
+        // fire in Wagon Camp
         case 0x81:
         // smoke smithy (2 chimney)
         case 0xA6:
@@ -595,9 +595,9 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         }
     case OBJNSNOW:
         switch ( start ) {
-        // firecamp
+        // fire camp
         case 0x04:
-        // alchemytower
+        // Alchemist Tower
         case 0x97:
         // watermill
         case 0xA2:

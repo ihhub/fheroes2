@@ -319,7 +319,7 @@ namespace
             result.x += pos.width / 2;
             break;
         case ICN::REDDEATH:
-            // Shift spell sprite position for a wide ceature to its head.
+            // Shift spell sprite position for a wide creature to its head.
             result.x += pos.width / 2 + ( target.isReflect() ? ( 1 - spellSprite.width() - 2 * spellSprite.x() - pos.width / 8 ) : ( pos.width / 8 ) );
             result.y -= pos.height - 4;
             break;
@@ -1398,7 +1398,7 @@ void Battle::Interface::RedrawArmies()
             std::vector<const Unit *> movingTroopBeforeWall;
             std::vector<const Unit *> movingTroopAfterWall;
 
-            // Overlay sprites for troops (i.e. spell effect animation) should be rendered after rendereing all troops
+            // Overlay sprites for troops (i.e. spell effect animation) should be rendered after rendering all troops
             // for current row so the next troop will not be rendered over the overlay sprite.
             std::vector<const UnitSpellEffectInfo *> troopOverlaySpriteBeforeWall;
             std::vector<const UnitSpellEffectInfo *> troopOverlaySpriteAfterWall;
@@ -1596,7 +1596,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *movingTroop[i] );
             }
 
-            // Render the overlay srite for units in current cell row above all units in this and upper rows.
+            // Render the overlay sprite for units in current cell row above all units in this and upper rows.
             for ( const Battle::UnitSpellEffectInfo * overlaySprite : troopOverlaySprite ) {
                 assert( overlaySprite->icnId != ICN::UNKNOWN );
                 const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite->icnId, overlaySprite->icnIndex );
@@ -2460,7 +2460,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                         currentDirection = *availableAttackDirection.begin();
                     }
                     else {
-                        // First seach clockwise.
+                        // First search clockwise.
                         direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
                         direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
 
@@ -3143,7 +3143,7 @@ void Battle::Interface::WaitForAllActionDelays()
 void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender )
 {
     if ( unit.isFinishAnimFrame() && unit.animation.animationLength() != 1 ) {
-        // If it is the last frame in the animation sequence whith more than one frame or if we have no frames.
+        // If it is the last frame in the animation sequence with more than one frame or if we have no frames.
         return;
     }
 
@@ -3164,7 +3164,7 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFr
             unit.IncreaseAnimFrame();
 
             if ( skipLastFrameRender && unit.isFinishAnimFrame() ) {
-                // We have reached the last amination frame and do not render it.
+                // We have reached the last animation frame and do not render it.
                 break;
             }
         }
@@ -3324,7 +3324,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
         const fheroes2::Point attackerPos = GetTroopPosition( attacker, attackerSprite );
 
         // For shooter position we need bottom center position of rear tile
-        // Use cell coordinates for X because sprite width is very inconsistent (e.g. halfling)
+        // Use cell coordinates for X because sprite width is very inconsistent (e.g. Halfling)
         const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.width * 3 / 4 : CELLW / 2;
         const fheroes2::Point shooterPos( pos1.x + rearCenterX, attackerPos.y - attackerSprite.y() );
 
@@ -3590,10 +3590,10 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             return TargetInfo::isFinishAnimFrame( info );
         } );
 
-        // There sould not be more finished animations than we started.
+        // There should not be more finished animations than we started.
         assert( finishedAnimationCount <= animatingTargets );
 
-        // There sould not be more Lich cloud animation frames than in corresponding ICN.
+        // There should not be more Lich cloud animation frames than in corresponding ICN.
         assert( lichCloudFrame <= lichCloudMaxFrame );
 
         // IMPORTANT: The game engine can change STATIC animation to IDLE, especially for Ghosts and Zombies,
@@ -3697,11 +3697,11 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         return false;
     }();
 
-    // TODO: make an analigic check with checks for wide creatures back step: is one step left before/after the bridge action.
+    // TODO: make an analytic check with checks for wide creatures back step: is one step left before/after the bridge action.
 
     // Slowed flying creature has to fly off.
     if ( canFly ) {
-        // If a flying creature has to cross the bridge during its path we have to open it before the creature flyes up.
+        // If a flying creature has to cross the bridge during its path we have to open it before the creature flyers up.
         // Otherwise it will freeze during the movement, waiting for the bridge to open. So we have to go the whole path
         // to analyze if the bridge needs to open for this creature.
         if ( bridge ) {
@@ -3744,7 +3744,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             AudioManager::PlaySound( unit.M82Tkof() );
             AnimateUnitWithDelay( unit );
         }
-        // If a wide flyer returns back it should skip one path position (its head bocomes its tail - it is already one move).
+        // If a wide flyer returns back it should skip one path position (its head becomes its tail - it is already one move).
         if ( isWide && ( isFlyToRight == isFromRightArmy ) ) {
             ++dst;
         }
@@ -3770,7 +3770,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             if ( !canFly || ( dst != ( pathEnd - 1 ) ) ) {
                 unit.SetReflection( !unit.isReflect() );
             }
-            // After changind the direction go to the next step in the path.
+            // After changing the direction go to the next step in the path.
             ++dst;
             continue;
         }
@@ -4380,7 +4380,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 
         // Declare rainbow generation parameters and set default values:
         // Rainbow arc parameters for: y = (1-pow2ratio)*k1*(x-x0)^pow1+pow2ratio*k2*(x-x0)^pow2.
-        // Parametars pow3, pow4, pow4ratio are the same as pow1, pow2, pow2ratio, but for the second part of the arc.
+        // Parameters pow3, pow4, pow4ratio are the same as pow1, pow2, pow2ratio, but for the second part of the arc.
         const int32_t pow1{ 2 };
         int32_t pow2{ 10 };
         double pow2ratio{ 0.16 };
@@ -4576,7 +4576,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
         }
     }
 
-    // Reset the delay before rendering the first frame of catapult bouder animation.
+    // Reset the delay before rendering the first frame of catapult boulder animation.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_BOULDER_DELAY );
 
     // boulder animation
@@ -4683,7 +4683,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
 
 void Battle::Interface::RedrawActionCatapultPart2( const int catapultTargetId )
 {
-    // Finish the smoke cloud animation after the building's state has changed after the hit and it is drawed as demolished.
+    // Finish the smoke cloud animation after the building's state has changed after the hit and it is drawn as demolished.
 
     const fheroes2::Point pt1 = Catapult::GetTargetPosition( catapultTargetId, true ) + GetArea().getPosition();
     fheroes2::Point pt2;
@@ -4699,7 +4699,7 @@ void Battle::Interface::RedrawActionCatapultPart2( const int catapultTargetId )
         pt2 = pt1 + bridgeDestroySmokeOffset;
         // Increase maxAnimationFrame to finish the second smoke animation.
         maxAnimationFrame += bridgeDestroySmokeDelay;
-        // Bridge smoke animation should contionue from the 7th frame.
+        // Bridge smoke animation should continue from the 7th frame.
         frame = bridgeDestroyFrame;
     }
 
@@ -5222,7 +5222,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     std::vector<int32_t> deathWaveCurve;
     deathWaveCurve.reserve( waveLength );
 
-    // Calculate the "Death Wave" curve as one period of cosine, which starts from 0 with an amlutude of 1/2 and shifted down by 0.5.
+    // Calculate the "Death Wave" curve as one period of cosine, which starts from 0 with an amplitude of 1/2 and shifted down by 0.5.
     // So we get a smooth hill, which is the multiplied with 'strength' and shifted after that by -1px.
     // (The "Death Wave" curve has to shift the image and cosine starts from 0 so we add extra 1px).
     for ( int32_t posX = 0; posX < waveLength; ++posX ) {
@@ -5351,7 +5351,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
 
     const uint32_t spellEffectLastFrame = halfMaxFrame - 1;
 
-    // The similar frames number is smaller than size by 1 as the last frame will be diferent.
+    // The similar frames number is smaller than size by 1 as the last frame will be different.
     spellEffect.emplace_back( std::move( battleFieldCopy ) );
     while ( spellEffect.size() < spellEffectLastFrame ) {
         spellEffect.push_back( spellEffect.front() );
@@ -5807,7 +5807,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                             target.defender->IncreaseAnimFrame( false );
                         }
                         else if ( frame >= ( maxFrame - 1 ) && target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) {
-                            // If the main spell sprite animation and WNCE_UP are finised then switch unit animation to WNCE_DOWN.
+                            // If the main spell sprite animation and WNCE_UP are finished then switch unit animation to WNCE_DOWN.
                             target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
                         }
                         else if ( target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) {

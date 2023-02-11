@@ -469,7 +469,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
-    // TODO: Dragon City with tilset 164 (OBJNMUL2.ICN) and object index 46 is a bottom layer sprite.
+    // TODO: Dragon City with Object ICN Type OBJ_ICN_TYPE_OBJNMUL2 and object index 46 is a bottom layer sprite.
     // TODO: When a hero standing besides this turns a part of the hero is visible. This can be fixed only by some hack.
 
     // Run through all visible tiles and find all tile-unfit objects.
@@ -660,7 +660,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
             // Since some objects are taller than 2 tiles their top layer sprites must be drawn at the very end.
-            // For now what we need to do is to run throught all level 2 objects and verify that the tile below doesn't have
+            // For now what we need to do is to run through all level 2 objects and verify that the tile below doesn't have
             // any other level 2 objects with the same UID.
 
             topLayerTallObjects.clear();
@@ -703,7 +703,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             --greenColorSteps;
         }
 
-        // Not all arrows and their shadows fit in 1 tile. We need to consider by 1 tile bigger area to properly render eveything.
+        // Not all arrows and their shadows fit in 1 tile. We need to consider by 1 tile bigger area to properly render everything.
         const fheroes2::Rect extendedVisibleRoi{ tileROI.x - 1, tileROI.y - 1, tileROI.width + 2, tileROI.height + 2 };
 
         for ( ; currentStep != path.end(); ++currentStep ) {

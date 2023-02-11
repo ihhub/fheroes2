@@ -2578,7 +2578,7 @@ msgstr ""
 "slagmarken med minst ett ledig felt mellom hver enkelt tropp."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "\"Gruppert\" kampoppstilling setter styrkene dine tett sammen i midten av "
@@ -3796,7 +3796,7 @@ msgstr ""
 "Denne filen ble lagret i spillutgaven \"Prisen for trofasthet\".\n"
 "Enkelte ting kan mangle."
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr "Ustøttet lagringsformat: "
 
 msgid "Current game version: "

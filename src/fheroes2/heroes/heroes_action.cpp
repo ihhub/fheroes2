@@ -473,7 +473,6 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToShrine( *this, tileIndex );
             break;
 
-        // witchs hut
         case MP2::OBJ_WITCHS_HUT:
             ActionToWitchsHut( *this, objectType, tileIndex );
             break;
@@ -539,7 +538,6 @@ void Heroes::Action( int tileIndex, bool isDestination )
                 ActionToWhirlpools( *this, tileIndex );
             break;
 
-        // obsv tower
         case MP2::OBJ_OBSERVATION_TOWER:
             ActionToObservationTower( *this, objectType, tileIndex );
             break;
@@ -1823,7 +1821,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
             }
         }
         else
-            // 4,5 - need have skill wisard or leadership,
+            // 4,5 - need have skill wizard or leadership,
             if ( 3 < cond && cond < 6 ) {
             const Skill::Secondary & skill = tile.QuantitySkill();
 

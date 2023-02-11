@@ -316,7 +316,7 @@ namespace fheroes2
             }
         }
         else {
-            // Otherwise we calculate the equclidean line, using the dermined parameters.
+            // Otherwise we calculate the euclidean line, using the determined parameters.
             const double moveX = dx / static_cast<double>( length );
             const double moveY = dy / static_cast<double>( length );
 

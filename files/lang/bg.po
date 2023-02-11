@@ -2522,7 +2522,7 @@ msgstr ""
 "бойното поле, с поне едно празно пространство между всяка армия."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "\"Групираната\" бойна формация обединява армията ти в центъра от твоята "
@@ -3724,7 +3724,7 @@ msgstr ""
 "Този файл е запазен от версията на играта \"The Price of Loyalty\".\n"
 "Някои артикули може да не са налични."
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr "Неподдържан формат за запис: "
 
 msgid "Current game version: "

@@ -380,14 +380,14 @@ private:
 
     fheroes2::Rect _mouseCursorRenderArea;
 
-    // used to convert user-friendly pointer speed values into more useable ones
+    // used to convert user-friendly pointer speed values into more usable ones
     const double CONTROLLER_SPEED_MOD = 2000000.0;
     double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
     double _emulatedPointerPosX = 0;
     double _emulatedPointerPosY = 0;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
+    // bigger value corresponds to faster pointer movement speed with bigger stick axis values
     const double CONTROLLER_AXIS_SPEEDUP = 1.03;
     const double CONTROLLER_TRIGGER_CURSOR_SPEEDUP = 2.0;
 

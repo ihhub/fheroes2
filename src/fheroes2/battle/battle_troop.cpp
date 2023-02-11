@@ -616,7 +616,7 @@ uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
     if ( dmg && GetCount() ) {
         uint32_t killed = HowManyWillKilled( dmg );
 
-        // mirror image dies if recieves any damage
+        // mirror image dies if receives any damage
         if ( Modes( CAP_MIRRORIMAGE ) ) {
             dmg = hp;
             killed = GetCount();
@@ -885,7 +885,7 @@ bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
 
 bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, TargetInfo & target )
 {
-    // HACK!!! Chain lightining is the only spell which can't be casted on allies but could be applied on them
+    // HACK!!! Chain lightning is the only spell which can't be casted on allies but could be applied on them
     const bool isForceApply = ( spell.GetID() == Spell::CHAINLIGHTNING );
 
     if ( !AllowApplySpell( spell, hero, nullptr, isForceApply ) )
@@ -1152,7 +1152,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
     if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) ) {
         attackerThreat *= -1;
     }
-    // Otherwise heavy penalty for hiting our own units
+    // Otherwise heavy penalty for hitting our own units
     else if ( attacker.GetArmyColor() == defender.GetArmyColor() ) {
         const bool isTower = ( dynamic_cast<const Battle::Tower *>( this ) != nullptr );
         if ( !isTower ) {
@@ -1626,13 +1626,13 @@ bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
         checkIdleDelay();
     }
 
-    // We retun true if the animation was correctly changed adn if it is valid.
+    // We return true if the animation was correctly changed and if it is valid.
     return ( animation.switchAnimation( rule, reverse ) && animation.isValid() );
 }
 
 bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
 {
-    // We retun true if the animation was correctly changed adn if it is valid.
+    // We return true if the animation was correctly changed and if it is valid.
     return ( animation.switchAnimation( animationList, reverse ) && animation.isValid() );
 }
 

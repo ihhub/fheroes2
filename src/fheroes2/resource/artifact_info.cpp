@@ -573,7 +573,7 @@ namespace
 
         assert( artifactData.size() == ( Artifact::UNKNOWN + 1 ) );
 
-        // Artifact bonus and curse 'value' is signed integer. However, it should not be negvative.
+        // Artifact bonus and curse 'value' is signed integer. However, it should not be negative.
 
         artifactData[Artifact::ULTIMATE_BOOK].bonuses.emplace_back( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL, 12 );
 
@@ -1112,7 +1112,7 @@ namespace fheroes2
                     os << "Improve Resurrection spell effectiveness by " << bonus.value << " percent" << std::endl;
                     break;
                 case ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
-                    os << "Improve Sumonnining spell effectiveness by " << bonus.value << " percent" << std::endl;
+                    os << "Improve Summoning spell effectiveness by " << bonus.value << " percent" << std::endl;
                     break;
                 case ArtifactBonusType::CURSE_SPELL_IMMUNITY:
                     os << "Add immunity to Curse spells" << std::endl;
@@ -1210,16 +1210,16 @@ namespace fheroes2
                     os << "Add Undead Penalty to army's Morale" << std::endl;
                     break;
                 case ArtifactCurseType::GOLD_PENALTY:
-                    os << "Deducts " << curse.value << " gold from kindgom daily" << std::endl;
+                    os << "Deducts " << curse.value << " gold from kingdom daily" << std::endl;
                     break;
                 case ArtifactCurseType::SPELL_POWER_SKILL:
                     os << "Reduces Spell Power by " << curse.value << std::endl;
                     break;
                 case ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT:
-                    os << "Icreases Damage from Fire spells by " << curse.value << " percent" << std::endl;
+                    os << "Increases Damage from Fire spells by " << curse.value << " percent" << std::endl;
                     break;
                 case ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT:
-                    os << "Icreases Damage from Cold spells by " << curse.value << " percent" << std::endl;
+                    os << "Increases Damage from Cold spells by " << curse.value << " percent" << std::endl;
                     break;
                 default:
                     // Did you add a new curse type? Add the logic above!

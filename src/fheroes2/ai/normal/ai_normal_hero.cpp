@@ -256,7 +256,7 @@ namespace
             if ( 1 <= variants && 3 >= variants )
                 return kingdom.AllowPayment( tile.QuantityFunds() );
 
-            // 4,5 - need have skill wisard or leadership,
+            // 4,5 - need have skill wizard or leadership,
             if ( 3 < variants && 6 > variants )
                 return hero.HasSecondarySkill( tile.QuantitySkill().Skill() );
 
@@ -736,7 +736,7 @@ namespace AI
 
     double Normal::getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
-        // Hunter has almost equal priorities to all kind of objects. Scout posseses the same priorities but has much higher priority to discover fog.
+        // Hunter has almost equal priorities to all kind of objects. Scout possesses the same priorities but has much higher priority to discover fog.
         assert( ( hero.getAIRole() == Heroes::Role::HUNTER ) || ( hero.getAIRole() == Heroes::Role::SCOUT ) );
 
         // In the future these hardcoded values could be configured by the mod
@@ -820,7 +820,7 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            // focus on enemy hero if there's priority set (i.e. hero is threatning our castle)
+            // focus on enemy hero if there's priority set (i.e. hero is threating our castle)
             return isCriticalTask( index ) ? 12000.0 : 5000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
@@ -927,7 +927,7 @@ namespace AI
                 return -dangerousTaskPenalty; // no reason to visit with a maximum moral
             }
             if ( moral == 2 ) {
-                return -4000; // moral is good enough to avoid visting this object
+                return -4000; // moral is good enough to avoid visiting this object
             }
             if ( moral == 1 ) {
                 return -2000; // is it worth to visit this object with little better than neutral moral?
@@ -990,7 +990,7 @@ namespace AI
             return fogCountToUncover;
         }
         else if ( objectType == MP2::OBJ_GAZEBO ) {
-            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valueable this object is.
+            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valuable this object is.
             const uint32_t heroExperience = hero.GetExperience();
             const uint32_t nextLevelExperience = Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( heroExperience ) );
             const uint32_t neededExperience = nextLevelExperience - heroExperience;
@@ -1180,7 +1180,7 @@ namespace AI
             return 5000;
         }
         else if ( objectType == MP2::OBJ_COAST ) {
-            // Coast is not an object. If this assertion blows up something is wrong the the logic.
+            // Coast is not an object. If this assertion blows up something is wrong the logic.
             assert( 0 );
             return -dangerousTaskPenalty;
         }
@@ -1190,7 +1190,7 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
-            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong the the logic.
+            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong the logic.
             assert( 0 );
             return -dangerousTaskPenalty;
         }
@@ -1214,7 +1214,7 @@ namespace AI
                 return -dangerousTaskPenalty; // no reason to visit with a maximum moral
             }
             if ( moral == 2 ) {
-                return -4000; // moral is good enough to avoid visting this object
+                return -4000; // moral is good enough to avoid visiting this object
             }
             if ( moral == 1 ) {
                 return -2000; // is it worth to visit this object with little better than neutral moral?
@@ -1277,7 +1277,7 @@ namespace AI
             return fogCountToUncover / 2;
         }
         else if ( objectType == MP2::OBJ_GAZEBO ) {
-            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valueable this object is.
+            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valuable this object is.
             const uint32_t heroExperience = hero.GetExperience();
             const uint32_t nextLevelExperience = Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( heroExperience ) );
             const uint32_t neededExperience = nextLevelExperience - heroExperience;
@@ -1382,7 +1382,7 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            // focus on enemy hero if there's priority set (i.e. hero is threatning our castle)
+            // focus on enemy hero if there's priority set (i.e. hero is threating our castle)
             return isCriticalTask( index ) ? 10000.0 : tenTiles;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
@@ -1485,7 +1485,7 @@ namespace AI
             return fiveTiles;
         }
         else if ( objectType == MP2::OBJ_GAZEBO ) {
-            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valueable this object is.
+            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valuable this object is.
             const uint32_t heroExperience = hero.GetExperience();
             const uint32_t nextLevelExperience = Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( heroExperience ) );
             const uint32_t neededExperience = nextLevelExperience - heroExperience;
