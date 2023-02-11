@@ -23,12 +23,9 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
-            ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/linux/install_sdl_1.sh
-            ./src/tools/extractor
-            ./src/tools/icn2img
           release_name: Ubuntu x86-64 (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-sdl1_dev
         - name: Linux x86-64 SDL1 Debug
@@ -55,10 +52,12 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
-            ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/linux/install_sdl_2.sh
+          tools_package_name: fheroes2_tools_ubuntu_x86-64_SDL2.zip
+          tools_package_files: >-
+            LICENSE
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
@@ -90,12 +89,9 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
-            ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/linux/install_sdl_1.sh
-            ./src/tools/extractor
-            ./src/tools/icn2img
           release_name: Ubuntu ARM64 (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-arm-sdl1_dev
         - name: Linux ARM64 SDL1 Debug
@@ -128,10 +124,12 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
-            ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/linux/install_sdl_2.sh
+          tools_package_name: fheroes2_tools_ubuntu_arm64_SDL2.zip
+          tools_package_files: >-
+            LICENSE
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
@@ -163,12 +161,9 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
-            ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/macos/install_sdl_1.sh
-            ./src/tools/extractor
-            ./src/tools/icn2img
           release_name: macOS x86-64 build with SDL1 (latest commit)
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
@@ -194,10 +189,12 @@ jobs:
             ./docs/README.txt
             files/data/*.h2d
             files/lang/*.mo
-            ./script/agg/extract_agg.sh
             ./script/demo/download_demo_version.sh
             ./script/homm2/extract_homm2_resources.sh
             script/macos/install_sdl_2.sh
+          tools_package_name: fheroes2_tools_macos_x86-64_SDL2.zip
+          tools_package_files: >-
+            LICENSE
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: macOS x86-64 build with SDL2 (latest commit)
@@ -250,16 +247,38 @@ jobs:
       if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
       run: |
         7z a -bb1 -tzip -- ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
+    - name: Create tools package
+      if: ${{ matrix.config.tools_package_name != '' && matrix.config.tools_package_files != '' }}
+      run: |
+        7z a -bb1 -tzip -- ${{ matrix.config.tools_package_name }} ${{ matrix.config.tools_package_files }}
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' && matrix.config.package_name != '' }}
       with:
         name: ${{ matrix.config.package_name }}
         path: ${{ matrix.config.package_name }}
         if-no-files-found: error
+    - uses: actions/upload-artifact@v3
+      if: ${{ github.event_name == 'pull_request' && matrix.config.tools_package_name != '' }}
+      with:
+        name: ${{ matrix.config.tools_package_name }}
+        path: ${{ matrix.config.tools_package_name }}
+        if-no-files-found: error
     - uses: ncipollo/release-action@v1
-      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
+      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.tools_package_name == '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
       with:
         artifacts: ${{ matrix.config.package_name }}
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ matrix.config.release_name }}
+        tag: ${{ matrix.config.release_tag }}
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.tools_package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
+      with:
+        artifacts: ${{ matrix.config.package_name }}, ${{ matrix.config.tools_package_name }}
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ matrix.config.release_name }}

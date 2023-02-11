@@ -202,6 +202,11 @@ int main( int argc, char ** argv )
 
             outputStream << std::endl;
         }
+
+        if ( !outputStream ) {
+            std::cerr << "Error writing to file " << outputFilePath << std::endl;
+            return EXIT_FAILURE;
+        }
     }
 
     return EXIT_SUCCESS;
