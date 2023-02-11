@@ -1,6 +1,9 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
+ *                                                                         *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,135 +21,180 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cstdint>
 #include <cstdlib>
+#include <filesystem>
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
+#include <memory>
+#include <sstream>
 #include <string>
+#include <system_error>
+#include <type_traits>
 #include <vector>
 
 #include "serialize.h"
+#include "system.h"
+
+namespace
+{
+    constexpr size_t correctBINSize = 821;
+}
 
 int main( int argc, char ** argv )
 {
-    if ( argc < 2 ) {
-        std::cout << "Please specify input file: " << argv[0] << " <input_monster_frame.bin>" << std::endl;
-        return EXIT_SUCCESS;
-    }
+    if ( argc < 3 ) {
+        std::string baseName = System::GetBasename( argv[0] );
 
-    const std::string fileName = argv[1];
-    std::fstream file;
-    file.open( fileName, std::fstream::in | std::fstream::binary );
-
-    if ( !file ) {
-        std::cout << "Cannot open " << fileName << std::endl;
+        std::cerr << baseName << " extracts various data from monster animation files." << std::endl
+                  << "Syntax: " << baseName << " dst_dir input_file.bin ..." << std::endl;
         return EXIT_FAILURE;
     }
 
-    file.seekg( 0, std::fstream::end );
-    std::streamoff length = file.tellg();
+    const char * dstDir = argv[1];
 
-    const std::streamoff correctLength = 821;
-
-    if ( length != correctLength ) {
-        std::cout << "Size of " << fileName << " is not equal to " << correctLength << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    file.seekg( 0, std::fstream::beg );
-
-    std::vector<char> data( correctLength, 0 );
-
-    file.read( data.data(), static_cast<std::streamsize>( correctLength ) );
-    file.close();
-
-    if ( data[0] != 0x01 ) {
-        std::cout << "This is not a BIN file for monster animation" << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    file.open( fileName + ".txt", std::fstream::out );
-    if ( !file ) {
-        std::cout << "Cannot create a new file" << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    file << "Monster eye position: [" << fheroes2::getLEValue<int16_t>( data.data(), 1 ) << ", " << fheroes2::getLEValue<int16_t>( data.data(), 3 ) << "]\n\n";
-
-    file << "Animation frame offsets:\n";
-    for ( size_t setId = 0u; setId < 7; ++setId ) {
-        file << setId + 1 << " : ";
-        for ( size_t frameId = 0; frameId < 16; ++frameId ) {
-            const int frameValue = static_cast<int>( data[5 + setId * 16 + frameId] );
-            if ( frameValue < 10 )
-                file << " " << frameValue << " ";
-            else
-                file << frameValue << " ";
+    std::vector<std::string> inputFileNames;
+    for ( int i = 2; i < argc; ++i ) {
+        if ( System::isShellLevelGlobbingSupported() ) {
+            inputFileNames.emplace_back( argv[i] );
         }
-        file << "\n";
+        else {
+            System::globFiles( argv[i], inputFileNames );
+        }
     }
 
-    file << "\n";
+    std::error_code ec;
 
-    const int idleAnimationCount = static_cast<int>( *( data.data() + 117 ) );
-    if ( idleAnimationCount > 5 ) {
-        std::cout << "Idle animation count cannot be more than 5" << std::endl;
+    // Using the non-throwing overloads
+    if ( !std::filesystem::exists( dstDir, ec ) && !std::filesystem::create_directories( dstDir, ec ) ) {
+        std::cerr << "Cannot create directory " << dstDir << std::endl;
         return EXIT_FAILURE;
     }
 
-    file << "Number of idle animations is " << idleAnimationCount << "\n\n";
-
-    file << "Probabilities of each idle animation:\n";
-    for ( int i = 0; i < idleAnimationCount; ++i ) {
-        file << i + 1 << ": " << fheroes2::getLEValue<float>( data.data(), 118 ) << "\n";
-    }
-    file << "\n";
-
-    file << "Idle animation delay (?) (ms): " << fheroes2::getLEValue<uint32_t>( data.data(), 138, 0 ) << " " << fheroes2::getLEValue<uint32_t>( data.data(), 138, 1 )
-         << " " << fheroes2::getLEValue<uint32_t>( data.data(), 138, 2 ) << " " << fheroes2::getLEValue<uint32_t>( data.data(), 138, 3 ) << " "
-         << fheroes2::getLEValue<uint32_t>( data.data(), 138, 4 ) << "\n\n";
-
-    file << "Idle animation delay (?) (ms): " << fheroes2::getLEValue<uint32_t>( data.data(), 158 ) << "\n\n";
-
-    file << "Walking animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data.data(), 162 ) << "\n\n";
-
-    file << "Shooting animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data.data(), 166 ) << "\n\n";
-
-    file << "Flying animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data.data(), 170 ) << "\n\n";
-
-    file << "Projectile start positions:\n";
-    file << "[" << fheroes2::getLEValue<int16_t>( data.data(), 174, 0 ) << ", " << fheroes2::getLEValue<int16_t>( data.data(), 174, 1 ) << "]\n";
-    file << "[" << fheroes2::getLEValue<int16_t>( data.data(), 174, 2 ) << ", " << fheroes2::getLEValue<int16_t>( data.data(), 174, 3 ) << "]\n";
-    file << "[" << fheroes2::getLEValue<int16_t>( data.data(), 174, 4 ) << ", " << fheroes2::getLEValue<int16_t>( data.data(), 174, 5 ) << "]\n\n";
-
-    file << "Number of projectile frames is " << static_cast<int>( *( data.data() + 186 ) ) << "\n\n";
-
-    file << "Projectile angles:\n";
-    for ( size_t angleId = 0; angleId < 12; ++angleId )
-        file << fheroes2::getLEValue<float>( data.data(), 187, angleId ) << "\n";
-    file << "\n";
-
-    file << "Troop count offset: [" << fheroes2::getLEValue<int32_t>( data.data(), 235 ) << ", " << fheroes2::getLEValue<int32_t>( data.data(), 239 ) << "]\n\n";
-
-    file << "Animation sequence (frame IDs):\n";
-    const char invalidFrameId = '\xFF';
-    for ( size_t setId = 0u; setId < 34; ++setId ) {
-        file << setId + 1 << " : ";
-        int frameCount = 0;
-        for ( size_t frameId = 0; frameId < 16; ++frameId ) {
-            const char frameValue = data[277 + setId * 16 + frameId];
-            if ( frameValue == invalidFrameId )
-                break;
-
-            file << static_cast<int>( frameValue ) << " ";
-            ++frameCount;
+    for ( const std::string & inputFileName : inputFileNames ) {
+        std::ifstream inputStream( inputFileName, std::ios_base::binary | std::ios_base::ate );
+        if ( !inputStream ) {
+            std::cerr << "Cannot open file " << inputFileName << std::endl;
+            // A non-existent or inaccessible file is not considered a fatal error
+            continue;
         }
 
-        if ( frameCount != static_cast<int>( data[243 + setId] ) )
-            std::cout << "WARNING: In " << fileName << " file number of for animation frames for animation " << setId + 1 << " should be "
-                      << static_cast<int>( data[243 + setId] ) << " while found number is " << frameCount << std::endl;
+        const std::streampos pos = inputStream.tellg();
+        if ( pos <= 0 ) {
+            std::cerr << "File " << inputFileName << " is empty" << std::endl;
+            return EXIT_FAILURE;
+        }
 
-        file << "\n";
+        const size_t size = pos;
+        if ( size != correctBINSize ) {
+            continue;
+        }
+
+        std::cout << "Processing " << inputFileName << "..." << std::endl;
+
+        std::vector<char> buf( size );
+
+        inputStream.seekg( 0, std::ios_base::beg );
+        inputStream.read( buf.data(), buf.size() );
+        if ( !inputStream ) {
+            std::cerr << "Error reading from file " << inputFileName << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).filename().replace_extension( "txt" );
+
+        std::ofstream outputStream( outputFilePath, std::ios_base::trunc );
+        if ( !outputStream ) {
+            std::cerr << "Cannot open file " << outputFilePath << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const char * data = buf.data();
+
+        outputStream << "Monster eye position: [" << fheroes2::getLEValue<int16_t>( data, 1 ) << ", " << fheroes2::getLEValue<int16_t>( data, 3 ) << "]" << std::endl
+                     << std::endl;
+
+        outputStream << "Animation frame offsets:" << std::endl;
+        for ( size_t setId = 0u; setId < 7; ++setId ) {
+            outputStream << setId + 1 << " : ";
+            for ( size_t frameId = 0; frameId < 16; ++frameId ) {
+                const int frameValue = static_cast<int>( data[5 + setId * 16 + frameId] );
+                if ( frameValue < 10 )
+                    outputStream << " " << frameValue << " ";
+                else
+                    outputStream << frameValue << " ";
+            }
+            outputStream << std::endl;
+        }
+        outputStream << std::endl;
+
+        constexpr size_t maxIdleAnimationCount = 5;
+
+        size_t idleAnimationCount = static_cast<size_t>( *( data + 117 ) );
+        outputStream << "Number of idle animations is " << idleAnimationCount;
+        if ( idleAnimationCount > maxIdleAnimationCount ) {
+            outputStream << " (INVALID, maximum number should be " << maxIdleAnimationCount << ")";
+
+            idleAnimationCount = maxIdleAnimationCount;
+        }
+        outputStream << std::endl << std::endl;
+
+        outputStream << "Probabilities of each idle animation:" << std::endl;
+        for ( size_t animId = 0; animId < idleAnimationCount; ++animId ) {
+            outputStream << animId + 1 << ": " << fheroes2::getLEValue<float>( data, 118, animId ) << std::endl;
+        }
+        outputStream << std::endl;
+
+        outputStream << "Idle animation delay (?) (ms): " << fheroes2::getLEValue<uint32_t>( data, 138, 0 ) << " " << fheroes2::getLEValue<uint32_t>( data, 138, 1 )
+                     << " " << fheroes2::getLEValue<uint32_t>( data, 138, 2 ) << " " << fheroes2::getLEValue<uint32_t>( data, 138, 3 ) << " "
+                     << fheroes2::getLEValue<uint32_t>( data, 138, 4 ) << std::endl
+                     << std::endl;
+
+        outputStream << "Idle animation delay (?) (ms): " << fheroes2::getLEValue<uint32_t>( data, 158 ) << std::endl << std::endl;
+        outputStream << "Walking animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data, 162 ) << std::endl << std::endl;
+        outputStream << "Shooting animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data, 166 ) << std::endl << std::endl;
+        outputStream << "Flying animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data, 170 ) << std::endl << std::endl;
+
+        outputStream << "Projectile start positions:" << std::endl;
+        outputStream << "[" << fheroes2::getLEValue<int16_t>( data, 174, 0 ) << ", " << fheroes2::getLEValue<int16_t>( data, 174, 1 ) << "]" << std::endl;
+        outputStream << "[" << fheroes2::getLEValue<int16_t>( data, 174, 2 ) << ", " << fheroes2::getLEValue<int16_t>( data, 174, 3 ) << "]" << std::endl;
+        outputStream << "[" << fheroes2::getLEValue<int16_t>( data, 174, 4 ) << ", " << fheroes2::getLEValue<int16_t>( data, 174, 5 ) << "]" << std::endl;
+        outputStream << std::endl;
+
+        outputStream << "Number of projectile frames is " << static_cast<int>( *( data + 186 ) ) << std::endl << std::endl;
+
+        outputStream << "Projectile angles:" << std::endl;
+        for ( size_t angleId = 0; angleId < 12; ++angleId ) {
+            outputStream << fheroes2::getLEValue<float>( data, 187, angleId ) << std::endl;
+        }
+        outputStream << std::endl;
+
+        outputStream << "Troop count offset: [" << fheroes2::getLEValue<int32_t>( data, 235 ) << ", " << fheroes2::getLEValue<int32_t>( data, 239 ) << "]" << std::endl
+                     << std::endl;
+
+        outputStream << "Animation sequence (frame IDs):" << std::endl;
+        const char invalidFrameId = '\xFF';
+        for ( size_t setId = 0u; setId < 34; ++setId ) {
+            outputStream << setId + 1 << " : ";
+
+            int frameCount = 0;
+            for ( size_t frameId = 0; frameId < 16; ++frameId ) {
+                const char frameValue = data[277 + setId * 16 + frameId];
+                if ( frameValue == invalidFrameId )
+                    break;
+
+                outputStream << static_cast<int>( frameValue ) << " ";
+                ++frameCount;
+            }
+
+            if ( frameCount != static_cast<int>( data[243 + setId] ) ) {
+                std::cerr << "WARNING: In " << inputFileName << " file number of animation frames for animation " << setId + 1 << " should be "
+                          << static_cast<int>( data[243 + setId] ) << " while found number is " << frameCount << std::endl;
+            }
+
+            outputStream << std::endl;
+        }
     }
 
     return EXIT_SUCCESS;

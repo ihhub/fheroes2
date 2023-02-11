@@ -1,4 +1,5 @@
 82m2wav   - converts the specified 82M file(s) to WAV format.
+bin2txt   - extracts various data from monster animation files.
 extractor - extracts the contents of the specified AGG file(s).
 icn2img   - extracts sprites in BMP or PNG format (if supported) and their offsets from the specified ICN file(s).
 til2img   - extracts sprites in BMP or PNG format (if supported) from the specified TIL file(s).
