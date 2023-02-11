@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_interface.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -43,7 +45,6 @@
 #include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
-#include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "bin_info.h"
@@ -1298,7 +1299,7 @@ void Battle::Interface::UpdateContourColor()
 void Battle::Interface::fullRedraw()
 {
     if ( !_background ) {
-        _background.reset( new fheroes2::StandardWindow( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false ) );
+        _background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
     }
 
     Redraw();
