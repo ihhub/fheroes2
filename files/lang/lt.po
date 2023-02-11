@@ -8950,6 +8950,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Wait this unit"
-#~ msgstr "Šis karys palauks"

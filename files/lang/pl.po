@@ -9974,28 +9974,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Nekromanta"
-
-#~ msgid "Cyberlore Studios"
-#~ msgstr "Cyberlore Studios"
-
-#~ msgid "New World Computing"
-#~ msgstr "New World Computing"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Zatrzymaj tę jednostkę"
-
-#~ msgid "Wait"
-#~ msgstr "Czekaj"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Aktualna jednostka czeka. Aktualna jednostka wstrzymuje się dopóki "
-#~ "wszystkie inne jednostki nie ruszą się."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} czeka na swoją kolej."

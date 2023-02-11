@@ -9562,9 +9562,3 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Vänta denna enhet"
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} inväntar runda."

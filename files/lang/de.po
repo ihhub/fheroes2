@@ -10168,22 +10168,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Totenbesc"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Auf diesen Zug warten"
-
-#~ msgid "Wait"
-#~ msgstr "Warten"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Wartet die aktuelle Kreatur. Die aktuelle Kreatur verzögert ihren Zug, "
-#~ "bis alle anderen Kreaturen dran waren."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} wartet auf den Zug."

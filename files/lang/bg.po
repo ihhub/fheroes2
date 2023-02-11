@@ -9940,25 +9940,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Некромант"
-
-#~ msgid "Cyberlore Studios"
-#~ msgstr "Студия Cyberlore"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Нека тази единица да изчака"
-
-#~ msgid "Wait"
-#~ msgstr "Изчакай"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Изчаква текущото създание. Текущото създание отлага реда си, докато не "
-#~ "дойде редът на всички други същества."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} чакат своя ред."

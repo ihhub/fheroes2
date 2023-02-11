@@ -8907,19 +8907,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Wait this unit"
-#~ msgstr "Wacht deze eenheid"
-
-#~ msgid "Wait"
-#~ msgstr "Wacht"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Wacht op het huidige schepsel. Het huidige schepsel stelt zijn beurt uit "
-#~ "tot alle andere schepsels aan de beurt zijn geweest."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} wacht op hun beurt"

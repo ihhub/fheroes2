@@ -9252,14 +9252,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Necroman"
-#~ msgstr "Necromante:"
-
-#, fuzzy
-#~ msgid "Wait this unit"
-#~ msgstr "Passar a vez desta criatura"
-
-#, fuzzy
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} a %{race}."

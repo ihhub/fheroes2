@@ -10144,22 +10144,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Sortekunstner"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Avvent denne stryken"
-
-#~ msgid "Wait"
-#~ msgstr "Avvent"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Lar den nåværende skapningen vente. Den nåværende skapningen utsetter "
-#~ "turen sin til etter alle andre skapninger har gjort turen sin."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "Troppen med %{name} avventet turen sin."

@@ -9877,20 +9877,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Некромант"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Подождать"
-
-#~ msgid "Wait"
-#~ msgstr "Ожидание"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr "Текущий отряд пропускает свой ход в ожидании, пока походят другие."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name}: ожидание хода."

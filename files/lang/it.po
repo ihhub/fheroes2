@@ -9083,22 +9083,3 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Negromante"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Aspetta questa unità"
-
-#~ msgid "Wait"
-#~ msgstr "Salta"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Fa aspettare questa unità. L'unità rimanda il suo turno per dopo che "
-#~ "tutte le altre unità hanno finito i loro turni."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} rimanda il suo turno."
