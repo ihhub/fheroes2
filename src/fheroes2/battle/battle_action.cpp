@@ -167,7 +167,8 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     }
     // This is a shot, update the direction for the attacker only
     else {
-        attacker.UpdateDirection( board[dst].GetPos() );
+        // For shooters we get the target position (not the 'dst') to take into account the wide units.
+        attacker.UpdateDirection( defender.GetRectPosition() );
     }
 
     // Update the attacker's luck right before the attack
@@ -452,7 +453,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             finalPos = pos;
         }
         else {
-            const Indexes path = GetPath( pos );
+            const Indexes path = GetPath( *unit, pos );
 
             if ( path.empty() ) {
                 DEBUG_LOG( DBG_BATTLE, DBG_WARN,

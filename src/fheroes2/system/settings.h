@@ -34,6 +34,7 @@
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "players.h"
+#include "screen.h"
 
 class StreamBase;
 
@@ -205,9 +206,9 @@ public:
     bool isFirstGameRun() const;
     void resetFirstGameRun();
 
-    const fheroes2::Size & VideoMode() const
+    const fheroes2::ResolutionInfo & currentResolutionInfo() const
     {
-        return video_mode;
+        return _resolutionInfo;
     }
 
     void EnablePriceOfLoyaltySupport( const bool set );
@@ -428,7 +429,7 @@ private:
     // Global game options (GLOBAL_)
     BitModes _optGlobal;
 
-    fheroes2::Size video_mode;
+    fheroes2::ResolutionInfo _resolutionInfo;
     int game_difficulty;
 
     std::string path_program;

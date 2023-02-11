@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -32,9 +32,9 @@
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 
 int Dialog::AdventureOptions( bool enabledig )
 {
@@ -107,15 +107,15 @@ int Dialog::AdventureOptions( bool enabledig )
 
         // right info
         if ( le.MousePressRight( buttonWorld.area() ) )
-            Dialog::Message( _( "View World" ), _( "View the entire world." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "View World" ), _( "View the entire world." ), Dialog::ZERO );
         if ( le.MousePressRight( buttonPuzzle.area() ) )
-            Dialog::Message( _( "Puzzle" ), _( "View the obelisk puzzle." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Puzzle" ), _( "View the obelisk puzzle." ), Dialog::ZERO );
         if ( le.MousePressRight( buttonInfo.area() ) )
-            Dialog::Message( _( "Scenario Information" ), _( "View information on the scenario you are currently playing." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Scenario Information" ), _( "View information on the scenario you are currently playing." ), Dialog::ZERO );
         if ( le.MousePressRight( buttonDig.area() ) )
-            Dialog::Message( _( "Digging" ), _( "Dig for the Ultimate Artifact." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Digging" ), _( "Dig for the Ultimate Artifact." ), Dialog::ZERO );
         if ( le.MousePressRight( buttonCancel.area() ) )
-            Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
     }
 
     // restore background

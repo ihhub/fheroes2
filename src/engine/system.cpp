@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,7 +24,9 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
+#include <filesystem>
 #include <initializer_list>
+#include <system_error>
 #include <utility>
 
 #if defined( _WIN32 )
@@ -166,6 +168,50 @@ namespace
 
         return path;
     }
+
+    bool globMatch( const std::string_view string, const std::string_view wildcard )
+    {
+        size_t stringIdx = 0;
+        size_t wildcardIdx = 0;
+
+        size_t fallbackStringIdx = std::string_view::npos;
+        size_t fallbackWildcardIdx = std::string_view::npos;
+
+        while ( stringIdx < string.length() ) {
+            const bool isWildcardNotEnded = ( wildcardIdx < wildcard.length() );
+
+            if ( isWildcardNotEnded && wildcard[wildcardIdx] == '*' ) {
+                ++wildcardIdx;
+
+                fallbackStringIdx = stringIdx;
+                fallbackWildcardIdx = wildcardIdx;
+            }
+            else if ( isWildcardNotEnded && ( wildcard[wildcardIdx] == '?' || wildcard[wildcardIdx] == string[stringIdx] ) ) {
+                ++stringIdx;
+                ++wildcardIdx;
+            }
+            else {
+                if ( fallbackWildcardIdx == std::string_view::npos ) {
+                    return false;
+                }
+
+                assert( fallbackStringIdx != std::string_view::npos );
+
+                ++fallbackStringIdx;
+
+                stringIdx = fallbackStringIdx;
+                wildcardIdx = fallbackWildcardIdx;
+            }
+        }
+
+        for ( ; wildcardIdx < wildcard.length(); ++wildcardIdx ) {
+            if ( wildcard[wildcardIdx] != '*' ) {
+                break;
+            }
+        }
+
+        return wildcardIdx == wildcard.length();
+    }
 }
 
 bool System::isHandheldDevice()
@@ -174,6 +220,15 @@ bool System::isHandheldDevice()
     return true;
 #else
     return false;
+#endif
+}
+
+bool System::isShellLevelGlobbingSupported()
+{
+#if defined( _WIN32 )
+    return false;
+#else
+    return true;
 #endif
 }
 
@@ -481,6 +536,48 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
     return true;
 }
 #endif
+
+void System::globFiles( const std::string_view glob, std::vector<std::string> & fileNames )
+{
+    const std::filesystem::path globPath( glob );
+
+    std::filesystem::path dir = globPath.parent_path();
+    if ( dir.empty() ) {
+        dir = std::filesystem::path{ "." };
+    }
+
+    std::error_code ec;
+
+    // Using the non-throwing overload
+    if ( !std::filesystem::is_directory( dir, ec ) ) {
+        fileNames.emplace_back( glob );
+        return;
+    }
+
+    const std::string pattern = globPath.filename().string();
+
+    if ( pattern.find( '*' ) == std::string_view::npos && pattern.find( '?' ) == std::string_view::npos ) {
+        fileNames.emplace_back( glob );
+        return;
+    }
+
+    bool isNoMatches = true;
+
+    // Using the non-throwing overload
+    for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( dir, ec ) ) {
+        const std::filesystem::path & entryPath = entry.path();
+
+        if ( globMatch( entryPath.filename().string(), pattern ) ) {
+            fileNames.push_back( entryPath.string() );
+
+            isNoMatches = false;
+        }
+    }
+
+    if ( isNoMatches ) {
+        fileNames.emplace_back( glob );
+    }
+}
 
 std::string System::FileNameToUTF8( const std::string & name )
 {

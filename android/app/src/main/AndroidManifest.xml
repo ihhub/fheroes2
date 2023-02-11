@@ -33,7 +33,7 @@
         android:fullBackupContent="@xml/full_backup_content"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/app_label"
         android:supportsRtl="false">
 
         <activity
@@ -45,7 +45,7 @@
             android:preferMinimalPostProcessing="true"
             android:process=":GameActivityProcess"
             android:screenOrientation="sensorLandscape"
-            android:taskAffinity="org.fheroes2.GameActivityTask"
+            android:taskAffinity="org.fheroes2.GameTask"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
             <intent-filter>
@@ -64,14 +64,22 @@
             android:exported="true"
             android:icon="@mipmap/ic_launcher_toolset"
             android:label="@string/activity_toolset_label"
-            android:launchMode="singleInstance"
-            android:taskAffinity="org.fheroes2.ToolsetActivityTask"
-            android:theme="@style/Theme.Material3.DayNight">
+            android:launchMode="singleTask"
+            android:taskAffinity="org.fheroes2.ToolsetTask"
+            android:theme="@style/Theme.MaterialComponents.DayNight">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".SaveFileManagerActivity"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_toolset"
+            android:label="@string/activity_save_file_manager_label"
+            android:taskAffinity="org.fheroes2.ToolsetTask"
+            android:theme="@style/Theme.MaterialComponents.DayNight" />
     </application>
 </manifest>

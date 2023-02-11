@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-10 05:45+0000\n"
+"POT-Creation-Date: 2023-02-05 15:51+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -23,107 +23,126 @@ msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
+"VOLNÝ\n"
+"BOJ"
 
 msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"NOVÁ\n"
+"HRA"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"ULOŽIT\n"
+"HRU"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"NAHRÁT\n"
+"HRU"
 
 msgid "INFO"
-msgstr ""
+msgstr "INFO"
 
 msgid "QUIT"
-msgstr ""
+msgstr "KONEC"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ZPĚT"
 
 msgid "OKAY"
-msgstr ""
+msgstr "OK"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "PŘIJMOUT"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "ZRUŠIT"
 
 msgid "LEARN"
-msgstr ""
+msgstr "NAUČIT SE"
 
 msgid "TRADE"
-msgstr ""
+msgstr "OBCHODOVAT"
 
 msgid "YES"
-msgstr ""
+msgstr "ANO"
 
 msgid "NO"
-msgstr ""
+msgstr "NE"
 
 msgid "EXIT"
-msgstr ""
+msgstr "ODCHOD"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "PROPUSTIT"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "VYLEPŠIT"
 
 msgid "RESTART"
-msgstr ""
+msgstr "RESTART"
 
 msgid "S"
-msgstr ""
+msgstr "S"
 
 msgid "M"
-msgstr ""
+msgstr "M"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "X-L"
-msgstr ""
+msgstr "X-L"
 
 msgid "ALL"
-msgstr ""
+msgstr "VŠE"
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"STANDARDNÍ\n"
+"HRA"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr ""
+"HRÁT\n"
+"KAMPAŇ"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"MULTI-\n"
+"PLAYER\n"
+"HRA"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "KONFIGURACE"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"ORIGINÁLNÍ\n"
+"KAMPAŇ"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"DATADISK\n"
+"KAMPAŇ"
 
 msgid "HOT SEAT"
 msgstr ""
@@ -144,10 +163,10 @@ msgid "6 PLAYERS"
 msgstr ""
 
 msgid "GIFT"
-msgstr ""
+msgstr "DÁREČEK"
 
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "OBTÍŽNOST"
 
 msgid "MIN"
 msgstr ""
@@ -156,59 +175,73 @@ msgid "MAX"
 msgstr ""
 
 msgid "Warrior"
-msgstr ""
+msgstr "Válečník"
 
 msgid "Builder"
-msgstr ""
+msgstr "Stavitel"
 
 msgid "Explorer"
-msgstr ""
+msgstr "Průzkumník"
 
 msgid "None"
-msgstr ""
+msgstr "Nic"
 
 msgid "Warning"
-msgstr ""
+msgstr "Varování"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
-msgstr ""
+msgstr "Chceš převzít kontrolu od AI? Bude zavedeno až v dalším tahu."
 
 msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
+"Málo\n"
+"%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
+"Několik\n"
+"%{monster}"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
+"Banda\n"
+"%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
+"Mnoho\n"
+"%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
+"Horda\n"
+"%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
+"Zástup\n"
+"%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
+"Dav\n"
+"%{monster}"
 
 msgid ""
 "Zounds of\n"
@@ -225,31 +258,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr ""
+msgstr "Málo"
 
 msgid "army|Several"
-msgstr ""
+msgstr "Několik"
 
 msgid "army|Pack"
-msgstr ""
+msgstr "Banda"
 
 msgid "army|Lots"
-msgstr ""
+msgstr "Mnoho"
 
 msgid "army|Horde"
-msgstr ""
+msgstr "Horda"
 
 msgid "army|Throng"
-msgstr ""
+msgstr "Zástup"
 
 msgid "army|Swarm"
-msgstr ""
+msgstr "Dav"
 
 msgid "army|Zounds"
-msgstr ""
+msgstr "Mračna"
 
 msgid "army|Legion"
-msgstr ""
+msgstr "Legie"
 
 msgid "All %{race} troops +1"
 msgstr "Všechny %{race} jednotky +1"
@@ -266,31 +299,29 @@ msgstr ""
 msgid "View %{name}"
 msgstr "Zobrazit %{name}"
 
-#, fuzzy
 msgid "Move the %{name} "
-msgstr "Zobrazit %{name}"
+msgstr "Přesunout %{name}"
 
 msgid "Move or right click to redistribute %{name}"
 msgstr ""
 
 msgid "Combine %{name} armies"
-msgstr ""
+msgstr "Sloučit vojska %{name}"
 
 msgid "Exchange %{name2} with %{name}"
-msgstr ""
+msgstr "Zaměnit %{name2} s %{name}"
 
 msgid "Select %{name}"
 msgstr "Vybrat %{name}"
 
 msgid "Cannot move last troop"
-msgstr ""
+msgstr "Poslední jednotku nelze přesunout"
 
-#, fuzzy
 msgid "Move the %{name}"
-msgstr "Zobrazit %{name}"
+msgstr "Přesunout %{name}"
 
 msgid "Set Count"
-msgstr ""
+msgstr "Zadat počet"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
@@ -298,75 +329,75 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "Zpět do bitvy."
+msgstr "%{name} vypnul automatickou bitvu"
 
-#, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "Zpět do bitvy."
+msgstr "%{name} zapnul automatickou bitvu"
 
 msgid "Spell failed!"
-msgstr ""
+msgstr "Kouzlo selhalo!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
-msgstr ""
+msgstr "Artefakt Sféra Negace znemožňuje v této bitvě použít jakékoliv kouzla."
 
 msgid "You have already cast a spell this round."
-msgstr ""
+msgstr "V tomto kole si již kouzlil."
 
 msgid "That spell will affect no one!"
 msgstr "Toto kouzlo nebude na nikoho učinkovat!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr ""
+msgstr "V této bitvě můžeš přivolat pouze jeden druh elementálů."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
 msgstr ""
+"Tvému hrdinovi nepřipadá žádné místo, kam by se dali Elemantálové přivolat"
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
+"Příkop redukuje obrannou sílu útočícíchjednotek o -%{count} a zpomaluje o "
+"polovinu jejich perimetr pohybu."
 
 msgid "Speed: %{speed}"
-msgstr ""
+msgstr "Rychlost: %{speed}"
 
 msgid "Speed"
 msgstr "Rychlost"
 
 msgid "Army Order"
-msgstr ""
+msgstr "Uspořádání jednotek"
 
-#, fuzzy
 msgid "Off"
-msgstr "off"
+msgstr "Vyp"
 
 msgid "On"
-msgstr ""
+msgstr "Zap"
 
 msgid "Auto Spell Casting"
 msgstr ""
 
 msgid "Grid"
-msgstr ""
+msgstr "Mřížka"
 
 msgid "Shadow Movement"
-msgstr ""
+msgstr "Stín pohybu"
 
 msgid "Shadow Cursor"
 msgstr ""
 
 msgid "Audio"
-msgstr ""
+msgstr "Audio"
 
 msgid "Settings"
-msgstr ""
+msgstr "Nastavení"
 
 msgid "Configure"
-msgstr ""
+msgstr "Konfigurovat"
 
 msgid "Hot Keys"
 msgstr ""
@@ -375,10 +406,10 @@ msgid "Damage Info"
 msgstr ""
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Nastavit rychlost akcí a animací v bitvě"
 
 msgid "Toggle to display army order during the battle."
-msgstr ""
+msgstr "Zapnout zobrazení pořadí tahu jednotek v bitvě."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -401,7 +432,7 @@ msgid ""
 msgstr ""
 
 msgid "Change the audio settings of the game."
-msgstr ""
+msgstr "Změnit nastavení zvuku"
 
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
@@ -409,39 +440,38 @@ msgstr ""
 msgid "Toggle to display damage information during the battle."
 msgstr ""
 
-#, fuzzy
 msgid "Exit this menu."
-msgstr "Přeskočit tuto jednotku"
+msgstr "Odejít z menu."
 
 msgid "Okay"
 msgstr "OK"
 
 msgid "The enemy has surrendered!"
-msgstr ""
+msgstr "Nepřítel se Ti vzdal!"
 
 msgid "The enemy has fled!"
-msgstr ""
+msgstr "Nepřítel prchnul!"
 
 msgid "A glorious victory!"
 msgstr "Slavné vítězství!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr ""
+msgstr "Za statečnost v boji získává %{name} %{exp} zkušeností."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr ""
+msgstr "%{name} zbaběle utíká z bitvy."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} se vzdal nepříteli a odchází v hanbě."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr ""
+msgstr "Tvá armáda utrpěla hořkou porážku a %{name} tvé řady opouští."
 
 msgid "Your force suffer a bitter defeat."
-msgstr ""
+msgstr "Tvá armáda utrpěla hořkou porážku."
 
 msgid "Battlefield Casualties"
-msgstr "Ztráty"
+msgstr "Ztráty na bojišti"
 
 msgid "Attacker"
 msgstr "Útočník"
@@ -456,15 +486,17 @@ msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
 
 msgid "You have captured an enemy artifact!"
-msgstr ""
+msgstr "Ukořistil si artefakt nepřítele!"
 
 msgid "Necromancy!"
-msgstr ""
+msgstr "Nekromantie!"
 
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
+"Nácvikem temného umění nekromantie si schopen oživit až %{count} usmrcených "
+"nepřátelských jednotek a povolat je do služby jako %{monster}."
 
 msgid "%{name} the %{race}"
 msgstr ""
@@ -492,11 +524,10 @@ msgid "Luck"
 msgstr "Štěstí"
 
 msgid "Spell Points"
-msgstr ""
+msgstr "Body Kouzla"
 
-#, fuzzy
 msgid "Hero's Options"
-msgstr "Nastavení systému"
+msgstr "Hrdina Možnosti"
 
 msgid "Cast Spell"
 msgstr "Seslat kouzlo"
@@ -513,14 +544,15 @@ msgstr "Zrušit"
 msgid "Hero Screen"
 msgstr ""
 
-#, fuzzy
 msgid "Captain's Options"
-msgstr "Nastavení systému"
+msgstr "Možnosti velení"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
+"Zeslat magické kouzlo. Můžeš použít jenom jednou za kolo.Nové kolo začne až "
+"když všechna stvoření provedou svůj tah."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
@@ -538,40 +570,38 @@ msgstr ""
 "armáda bude k dispozici k opětovnému najmutí."
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr ""
+msgstr "Pro zobrazení kompletní informace a hrdinovi Otevři Obrzovku Hrdniny."
 
 msgid "Return to the battle."
 msgstr "Zpět do bitvy."
 
 msgid "Not enough gold (%{gold})"
-msgstr ""
+msgstr "Nemáš dost zlaťáků (%{gold})"
 
 msgid "%{name} states:"
-msgstr ""
+msgstr "%{name} říká:"
 
-#, fuzzy
 msgid "Captain of %{name} states:"
-msgstr "Není možné postavit %{name}"
+msgstr "Velitel %{name} říká:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
+"\"Příjmu tvou kapitulaci a umožním tobě a tvým jednotkám bezpečný průchod za "
+"cenu %{price} zlaťáků.\""
 
 msgid "View %{monster} info"
-msgstr ""
+msgstr "Zobraz info o %{monster}"
 
 msgid "Fly %{monster} here"
-msgstr ""
+msgstr "Přeleť s %{monster} sem"
 
 msgid "Move %{monster} here"
-msgstr ""
+msgstr "Projdi s %{monster} sem"
 
-#, fuzzy
 msgid "Shoot %{monster}"
-msgstr ""
-"Mračna\n"
-"%{monster}"
+msgstr "Vystřel %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
@@ -580,47 +610,46 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Attack %{monster}"
-msgstr ""
+msgstr "Zaútoč %{monster}"
 
 msgid "Turn %{turn}"
-msgstr ""
+msgstr "Pohnout %{turn}"
 
 msgid "Teleport here"
-msgstr ""
+msgstr "Teleportovat sem"
 
 msgid "Invalid teleport destination"
-msgstr ""
+msgstr "Nesprávné místo teleportace"
 
 msgid "Cast %{spell} on %{monster}"
-msgstr ""
+msgstr "Zešli %{spell} na %{monster}"
 
 msgid "Cast %{spell}"
-msgstr ""
+msgstr "Zešli %{spell}"
 
 msgid "Select spell target"
-msgstr ""
+msgstr "Vyber na koho seslat"
 
-#, fuzzy
 msgid "View Ballista info"
-msgstr "Zobrazit informace o %{name}."
+msgstr "Zobrazit informace o Katapultu."
 
 msgid "Ballista"
-msgstr ""
+msgstr "Katapult"
 
 msgid "Enable auto combat"
-msgstr ""
+msgstr "Zapnout automatický boj"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Umožňuje počítači vybojovat bitvu za tebe"
 
 msgid "Auto Combat"
-msgstr ""
+msgstr "Automatický boj"
 
 msgid "Customize system options"
-msgstr ""
+msgstr "Upravit systémové nastavení"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Umožňuje upravit obrazovku bojiště."
 
 msgid "System Options"
 msgstr "Nastavení systému"
@@ -629,12 +658,14 @@ msgid "Skip this unit"
 msgstr "Přeskočit tuto jednotku"
 
 msgid "Skip"
-msgstr ""
+msgstr "Přeskočit"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Přeskočí stvoření na tahu. Stvoření tím ukončí svůj tah a k boji sepřidá "
+"znovu až v dalším kole."
 
 msgid "View Captain's options"
 msgstr ""
@@ -660,12 +691,11 @@ msgstr ""
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
-#, fuzzy
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Jsi si jist, že chceš utéct?"
+msgstr "Jsi si jist, že chceš dokončit boj v automatickém módu?"
 
 msgid "%{name} skip their turn."
-msgstr ""
+msgstr "%{name} nebudou táhnout."
 
 #, fuzzy
 msgid "%{attacker} does %{damage} damage."
@@ -692,7 +722,7 @@ msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
 
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "%{name} kouzlu odolali!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
 msgstr ""
@@ -700,115 +730,109 @@ msgstr ""
 msgid "%{name} casts %{spell}."
 msgstr ""
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "%{spell} způsobil %{value} škod."
+msgstr "%{spell} působí %{damage} škod na vybrané nemrtvé stvoření."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr "%{spell} způsobil %{value} škod."
+msgstr "%{spell} působí %{damage} škod na všechny nemrtvé stvoření."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr "%{spell} způsobil %{value} škod."
+msgstr "%{spell} působí %{damage} škod, %{count} stvoření bylo zahubeno."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr ""
+msgstr "%{spell} působí %{damage} škod."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr "%{spell} způsobil %{value} škod."
+msgstr "%{spell} působí %{damage} škod na vybrané žijící stvoření."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr "%{spell} způsobil %{value} škod."
+msgstr "%{spell} působí %{damage} škod všem žijícím stvořením."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgstr "Útok %{attacker} oslepil %{target}!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgstr "Upřený pohled %{attacker}' proměnil %{target} na kámen!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr ""
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgstr "%{target} jsou paralyzovaní úderem %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "%{attacker} zrušil všechna kladná kouzla na %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgstr "%{attacker} zeslal %{spell} na %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "%{attacker} postihlo neštěstí."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "Na %{attacker} se usmálo štěstí."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "Dobrá morálka způsobila, že %{monster} může zaútočit znovu."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
 msgstr ""
+"Chabá morálka způsobila, že %{monster} zpanikařili a neumůžou se hnout."
 
-#, fuzzy
 msgid "%{tower} does %{damage} damage."
-msgstr "%{tower} způsobila %{dmg} škod."
+msgstr "%{tower} působí %{damage} škod."
 
 msgid "The mirror image is created."
-msgstr ""
+msgstr "Zrcadlová jednotka je vytvořena."
 
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "Zrcadlová jednotka byla zničena!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr "Jsi si jist, že chceš utéct?"
+msgstr "Jsi si jist, že chceš přerušit automatický boj?"
 
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Nic ke kouzlení."
 
 msgid "Are you sure you want to retreat?"
-msgstr "Jsi si jist, že chceš utéct?"
+msgstr "Jsi si jist, že chceš utéct z boje?"
 
-#, fuzzy
 msgid "Retreat disabled"
-msgstr "Ústup"
+msgstr "Není kam utéct"
 
-#, fuzzy
 msgid "Surrender disabled"
-msgstr "Vzdát se"
+msgstr "Nelze se vzdát"
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Škody: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Škody: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Úhyn: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Úhyn: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
+"Za pomoci orlího oka byl %{name} schopen odpozorovat a naučit se kouzlo "
+"%{spell}."
 
 msgid "Human"
-msgstr ""
+msgstr "Člověk"
 
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Vyber jiného hrdinu."
 
 msgid "Set Attack Skill"
 msgstr ""
@@ -816,27 +840,23 @@ msgstr ""
 msgid "Set Defense Skill"
 msgstr ""
 
-#, fuzzy
 msgid "Set Power Skill"
 msgstr "Síla kouzel"
 
-#, fuzzy
 msgid "Set Knowledge Skill"
 msgstr "Znalosti"
 
-#, fuzzy
 msgid "%{race1} %{name1}"
-msgstr "Zobrazit %{name}"
+msgstr ""
 
 msgid "vs"
 msgstr ""
 
-#, fuzzy
 msgid "%{race2} %{name2}"
-msgstr "Zobrazit %{name}"
+msgstr ""
 
 msgid "Monsters"
-msgstr ""
+msgstr "Monstra"
 
 msgid "N/A"
 msgstr ""
@@ -848,90 +868,89 @@ msgid "Right Turret"
 msgstr "Pravá věž"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} střílí silou %{count} Lučišníků"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "každý s +%{attack} bonusem k jejich útočné síle."
 
-#, fuzzy
 msgid "The %{name} is destroyed."
-msgstr "%{name} je již postaven."
+msgstr "%{name} byl zničen."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr ""
+"Tuhle bitvu ovlivňuje artefakt %{artifact} a znemožňuje použití kouzla "
+"%{spell}."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{count} %{name} vstává z mrtvých!"
+msgstr[1] "%{count} %{name} vstájí z mrtvých!"
 msgstr[2] ""
 
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Škřítčí Aliance"
 
-#, fuzzy
 msgid "Sorceress Guild"
-msgstr "Cech zlodějů"
+msgstr "Cech čarodějů"
 
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Cech Nekromantů"
 
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Zlobří Aliance"
 
 msgid "Dwarfbane"
-msgstr ""
+msgstr "Škřítčí prokletí"
 
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Dračí Aliance"
 
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Elfí Aliance"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Kreager poražen"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Scestný syn"
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Strýc Ivan"
 
-#, fuzzy
 msgid "Annexation"
-msgstr "animace"
+msgstr "Zabrání"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Síla Armády"
 
 msgid "Save the Dwarves"
-msgstr ""
+msgstr "Zachraň Škřítky"
 
 msgid "Carator Mines"
-msgstr ""
+msgstr "Caratrovy Doly"
 
 msgid "Turning Point"
-msgstr ""
+msgstr "Bod zlomu"
 
 msgid "scenarioName|Defender"
 msgstr ""
 
 msgid "Corlagon's Defense"
-msgstr ""
+msgstr "Corlagonova Obrana"
 
 msgid "The Crown"
-msgstr ""
+msgstr "Koruna"
 
 msgid "The Gauntlet"
-msgstr ""
+msgstr "Hozená Rukavice"
 
 msgid "Betrayal"
-msgstr ""
+msgstr "Zrada"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Poslední zůčtování"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -939,23 +958,35 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Roland potřebuje abys porazil šlechtice poblíž jeho hradu a tím začal "
+"povstání proti jeho bratrovi. Protivníci nemají mezi sebou smluvené "
+"spojenectví, proto asi budou po většinu času bojovat mezi sebou. Vítězství "
+"bude tvoje když dobiješ všechny jejich města a porazíš všechny hrdiny."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Místní šlechta odmíta odpřísáhnout Rolandovi svou věrnost, proto musí být "
+"potlačena. Panství jsou mocná a bohatá, musíš být připraven na tězký odpor. "
+"Zmocni se všech nepřátelských hradů a tím vyhraješ."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"Tvým úkolem je ochránít Škřítky před Archibaldovými vojsky. Zmocni se všech "
+"nepřátelských hradů a vesnic, zároveň dej pozor abys neztratil všechny "
+"vesnice škřitků najednou, jinak zvítězí náš protivník."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"Budeš vystaven přímému souboji o suroviny a zdroje se čtyřmi spojeneckými "
+"protivníky. Zaber všechny nepřátelské hrady a vyhraješ. "
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
@@ -3401,13 +3432,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 msgid "Dev and Support"
@@ -3582,8 +3613,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -4056,6 +4087,9 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr ""
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
@@ -4067,9 +4101,6 @@ msgid "Nothing here. Where could it be?"
 msgstr ""
 
 msgid "Try searching on clear ground."
-msgstr ""
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
 msgstr ""
 
 msgid "A miniature view of the known world. Left click to move viewing area."

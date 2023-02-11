@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -154,11 +154,11 @@ namespace AI
     private:
         void analyzeBattleState( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
-        Battle::Actions berserkTurn( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        Battle::Actions archerDecision( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        static Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
 
-        BattleTargetPair meleeUnitOffense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        BattleTargetPair meleeUnitDefense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
 
         SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
 
@@ -181,7 +181,7 @@ namespace AI
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
         // the auto battle should be interrupted (one way or another)
-        const uint32_t MAX_TURNS_WITHOUT_DEATHS = 50;
+        static const uint32_t MAX_TURNS_WITHOUT_DEATHS = 50;
 
         // Member variables related to the logic of checking the limit of the number of turns
         uint32_t _currentTurnNumber = 0;

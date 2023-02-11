@@ -3231,14 +3231,24 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     const bool isMage = ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE );
 
     // Mage is channeling the bolt; doesn't have missile sprite
-    if ( isMage )
+    if ( isMage ) {
         fheroes2::delayforMs( Game::ApplyBattleSpeed( 115 ) );
-    else
+    }
+    else {
         missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
+    }
 
     // Lich/Power lich has projectile speed of 25
     const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
+
+    // For most shooting creatures we do not render the first missile position to better imitate start position change depending on shooting angle.
+    if ( !isMage && ( monsterID != Monster::TROLL ) && ( monsterID != Monster::WAR_TROLL ) ) {
+        ++pnt;
+    }
+
+    // Shooter projectile rendering offset uses 'x' and 'y' from sprite data.
+    const fheroes2::Point missileOffset( reverse ? ( -missile.width() - missile.x() ) : missile.x(), ( angle > 0 ) ? ( -missile.height() - missile.y() ) : missile.y() );
 
     // Wait for previously set and not passed delays before rendering a new frame.
     WaitForAllActionDelays();
@@ -3257,7 +3267,8 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
                 fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y + 2 }, { pnt->x, pnt->y + 2 }, 0x77 );
             }
             else {
-                fheroes2::Blit( missile, _mainSurface, reverse ? pnt->x - missile.width() : pnt->x, ( angle > 0 ) ? pnt->y - missile.height() : pnt->y, reverse );
+                // Coordinates in 'pnt' corresponds to the front side of the projectile (arrowhead).
+                fheroes2::Blit( missile, _mainSurface, pnt->x + missileOffset.x, pnt->y + missileOffset.y, reverse );
             }
             RedrawPartialFinish();
             ++pnt;
@@ -3502,7 +3513,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
     const uint32_t lichCloudMaxFrame = fheroes2::AGG::GetICNCount( ICN::LICHCLOD );
     // Wince animation under the Lich cloud, second part: the frame number after which the target animation will be switched to 'WNCE_UP'.
     const uint32_t wnceUpStartFrame = 1;
-    // Wince animation under the Lich cloud, third part: the frame number after which the target animation will be switched to 'WNCE_SOWN'.
+    // Wince animation under the Lich cloud, third part: the frame number after which the target animation will be switched to 'WNCE_DOWN'.
     const uint32_t wnceDownStartFrame = lichCloudMaxFrame - 3;
 
     if ( drawLichCloud ) {
@@ -3517,7 +3528,17 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             continue;
         }
 
-        bool redrawBattleField = false;
+        RedrawPartialStart();
+
+        // Render a Lich cloud above the target unit if it is a Lich attack and if the cloud animation is not already finished.
+        if ( drawLichCloud && lichCloudFrame < lichCloudMaxFrame ) {
+            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, lichCloudFrame );
+            const fheroes2::Point & pos = CalculateSpellPosition( *defender, ICN::LICHCLOD, spellSprite );
+            fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, false );
+            ++lichCloudFrame;
+        }
+
+        RedrawPartialFinish();
 
         if ( attacker != nullptr ) {
             if ( attacker->isFinishAnimFrame() ) {
@@ -3526,30 +3547,6 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             else {
                 attacker->IncreaseAnimFrame();
             }
-
-            redrawBattleField = true;
-        }
-        else {
-            for ( const Battle::TargetInfo & target : targets ) {
-                if ( target.defender ) {
-                    redrawBattleField = true;
-                    break;
-                }
-            }
-        }
-
-        if ( redrawBattleField ) {
-            RedrawPartialStart();
-
-            // Render a Lich cloud above the target unit if it is a Lich attack and if the cloud animation is not already finished.
-            if ( drawLichCloud && lichCloudFrame < lichCloudMaxFrame ) {
-                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, lichCloudFrame );
-                const fheroes2::Point & pos = CalculateSpellPosition( *defender, ICN::LICHCLOD, spellSprite );
-                fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, false );
-                ++lichCloudFrame;
-            }
-
-            RedrawPartialFinish();
         }
 
         for ( const Battle::TargetInfo & target : targets ) {
@@ -3599,7 +3596,11 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         // There sould not be more Lich cloud animation frames than in corresponding ICN.
         assert( lichCloudFrame <= lichCloudMaxFrame );
 
-        if ( ( animatingTargets == finishedAnimationCount ) && ( !drawLichCloud || ( lichCloudFrame == lichCloudMaxFrame ) ) ) {
+        // IMPORTANT: The game engine can change STATIC animation to IDLE, especially for Ghosts and Zombies,
+        // so we need also to check for IDLE where we check for STATIC.
+        if ( ( animatingTargets == finishedAnimationCount ) && ( !drawLichCloud || ( lichCloudFrame == lichCloudMaxFrame ) )
+             && ( ( attacker == nullptr ) || ( attacker->animation.getCurrentState() == Monster_Info::STATIC )
+                  || ( attacker->animation.getCurrentState() == Monster_Info::IDLE ) ) ) {
             // All unit animation frames are rendered and if it was a Lich attack then also its cloud frames are rendered too.
             break;
         }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-10 05:45+0000\n"
+"POT-Creation-Date: 2023-02-05 15:51+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3588,13 +3588,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 #, fuzzy
@@ -3775,8 +3775,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -4328,6 +4328,9 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr "Excavar artefactos requiere un día entero, inténtalo mañana."
+
 #, fuzzy
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
@@ -4342,9 +4345,6 @@ msgstr "No hay nada aquí. ¿Dónde puede estar?"
 
 msgid "Try searching on clear ground."
 msgstr "Prueba buscando en terreno despejado"
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr "Excavar artefactos requiere un día entero, inténtalo mañana."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
