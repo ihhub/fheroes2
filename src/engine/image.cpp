@@ -2295,14 +2295,42 @@ namespace fheroes2
                     const int32_t offsetInX = y * widthIn;
 
                     if ( isReverse ? ( ( y % stepY ) != offsetY ) : ( ( y % stepY ) == offsetY ) ) {
+                        if ( !in.singleLayer() && out.singleLayer() && ( *( transformIn + offsetInX ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
                         // First part of transition: we copy single pixels.
                         *( imageOut + offsetOutX ) = *( imageIn + offsetInX );
-                        *( transformOut + offsetOutX ) = *( transformIn + offsetInX );
+
+                        if ( !out.singleLayer() ) {
+                            if ( in.singleLayer() ) {
+                                // Set the copied pixel visible.
+                                *( transformOut + offsetOutX ) = 0;
+                            }
+                            else {
+                                *( transformOut + offsetOutX ) = *( transformIn + offsetInX );
+                            }
+                        }
                     }
                     else {
+                        if ( !in.singleLayer() && out.singleLayer() && ( *( transformIn2 + offsetInX ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
                         // Second part of transition: we coppy image excluding single pixels.
                         *( imageOut2 + offsetOutX ) = *( imageIn2 + offsetInX );
-                        *( transformOut2 + offsetOutX ) = *( transformIn2 + offsetInX );
+
+                        if ( !out.singleLayer() ) {
+                            if ( in.singleLayer() ) {
+                                // Set the copied pixel visible.
+                                *( transformOut2 + offsetOutX ) = 0;
+                            }
+                            else {
+                                *( transformOut2 + offsetOutX ) = *( transformIn2 + offsetInX );
+                            }
+                        }
                     }
                 }
 
@@ -2342,14 +2370,44 @@ namespace fheroes2
 
                 for ( int32_t x = 0; x < width; ++x ) {
                     if ( isReverse ? ( ( x % stepX ) != offsetX ) : ( ( x % stepX ) == offsetX ) ) {
+                        if ( !in.singleLayer() && out.singleLayer() && ( *( transformIn + x ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
                         // First part of transition: we copy single pixels.
                         *( imageOut + x ) = *( imageIn + x );
+
+                        if ( !out.singleLayer() ) {
+                            if ( in.singleLayer() ) {
+                                // Set the copied pixel visible.
+                                *( transformOut + x ) = 0;
+                            }
+                            else {
+                                *( transformOut + x ) = *( transformIn + x );
+                            }
+                        }
+
                         *( transformOut + x ) = *( transformIn + x );
                     }
                     else {
+                        if ( !in.singleLayer() && out.singleLayer() && ( *( transformIn2 + x ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
                         // Second part of transition: we coppy image excluding single pixels.
                         *( imageOut2 + x ) = *( imageIn2 + x );
-                        *( transformOut2 + x ) = *( transformIn2 + x );
+
+                        if ( !out.singleLayer() ) {
+                            if ( in.singleLayer() ) {
+                                // Set the copied pixel visible.
+                                *( transformOut2 + x ) = 0;
+                            }
+                            else {
+                                *( transformOut2 + x ) = *( transformIn2 + x );
+                            }
+                        }
                     }
                 }
 
