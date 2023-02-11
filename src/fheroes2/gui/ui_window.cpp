@@ -20,15 +20,25 @@
 
 #include "ui_window.h"
 
-#include <utility>
+#include <algorithm>
 
 #include "agg_image.h"
+#include "gamedefs.h"
 #include "icn.h"
 #include "settings.h"
 
 namespace
 {
-    const int32_t borderSize = BORDERWIDTH;
+    const int32_t borderSize{ BORDERWIDTH };
+
+    // Offset from border egdes (size of evil interface corners is 43 pixels) - this egdes (corners) will not be copied to fill the border.
+    const int32_t borderEdgeOffset{ 43 };
+
+    // Size in pixels of dithered transition from one image to another.
+    const int32_t transitionSize{ 10 };
+
+    // Offset from window edges to background copy area.
+    const int32_t backgroungOffset{ 22 };
 }
 
 namespace fheroes2
@@ -59,19 +69,13 @@ namespace fheroes2
         const fheroes2::Sprite & horizontalSprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
         const fheroes2::Sprite & verticalSprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
 
-        // Offset from border egdes (size of evil interface corners is 43 pixels) - this egdes (corners) will not be copied to fill the border.
-        const int32_t borderEdgeOffset{ 43 };
-
         // Offset from window edges to background copy area and also the size of corners to render.
-        const int32_t cornerSize{ _hasBackground ? 22 : borderSize };
+        const int32_t cornerSize = _hasBackground ? backgroungOffset : borderSize;
 
-        // Size in pixels of dithered transition from one image to another.
-        const int32_t transitionSize{ 10 };
-
-        const int32_t horizontalSpriteWidth{ horizontalSprite.width() - BORDERWIDTH };
-        const int32_t horizontalSpriteHeight{ horizontalSprite.height() - BORDERWIDTH };
-        const int32_t verticalSpriteHeight{ verticalSprite.height() };
-        const int32_t verticalSpriteWidth{ verticalSprite.width() };
+        const int32_t horizontalSpriteWidth = horizontalSprite.width() - BORDERWIDTH;
+        const int32_t horizontalSpriteHeight = horizontalSprite.height() - BORDERWIDTH;
+        const int32_t verticalSpriteHeight = verticalSprite.height();
+        const int32_t verticalSpriteWidth = verticalSprite.width();
 
         // Render window corners. The corners are the same in used original images, so we use only 'verticalSprite'.
         const int32_t rightCornerOffsetX = _windowArea.x + _windowArea.width - cornerSize;
