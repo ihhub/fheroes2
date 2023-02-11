@@ -2285,7 +2285,7 @@ namespace fheroes2
             const int32_t halfWidth = width / 2;
 
             for ( int32_t x = 0; x < halfWidth; ++x ) {
-                const int32_t stepY = static_cast<int32_t>( std::pow( 2, ( halfWidth - x ) / 2 + 1 ) );
+                const int32_t stepY = 1 << ( ( halfWidth - x ) / 2 + 1 ); //static_cast<int32_t>( std::pow( 2, ( halfWidth - x ) / 2 + 1 ) );
                 const int32_t offsetY = stepY / 2 * ( ( x + halfWidth ) % 2 );
 
                 for ( int32_t y = 0; y < height; ++y ) {
@@ -2334,7 +2334,7 @@ namespace fheroes2
                 transformIn += widthIn;
             }
             for ( int32_t y = 0; y < halfHeight; ++y ) {
-                const int32_t stepX = static_cast<int32_t>( std::pow( 2, ( halfHeight - y ) / 2 + 1 ) );
+                const int32_t stepX = 1 << ( ( halfHeight - y ) / 2 + 1 ); // static_cast<int32_t>( std::pow( 2, ( halfHeight - y ) / 2 + 1 ) );
                 const int32_t offsetX = stepX / 2 * ( ( y + halfHeight ) % 2 );
 
                 for ( int32_t x = 0; x < width; ++x ) {
