@@ -147,7 +147,7 @@ msgstr ""
 "КАМПУТАРАМ"
 
 msgid "2 PLAYERS"
-msgstr "2 ГУЛЬЦА"
+msgstr "2 ГУЛЬЦЫ"
 
 msgid "3 PLAYERS"
 msgstr "3 ГУЛЬЦЫ"
@@ -2563,7 +2563,7 @@ msgid "Toggle foreground sounds level."
 msgstr "Змяніць гучнасць гукаў."
 
 msgid "Change the type of music."
-msgstr "Змяніць тым музыкі."
+msgstr "Змяніць тып музыкі."
 
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "Укл/Выкл эфект аб’ёму гукаў."
@@ -2732,7 +2732,7 @@ msgid "Change the resolution of the game."
 msgstr "Змяніць раздзяленне экранa."
 
 msgid "Select Game Resolution"
-msgstr "Абраць раздзяленне экрана"
+msgstr "Раздзяленне экрана"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Пераключыцца паміж поўнаэкранным і аконным рэжымам."
@@ -2740,7 +2740,8 @@ msgstr "Пераключыцца паміж поўнаэкранным і ако
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
-msgstr "Можаш уключыць вертакальную сінхранізацыю, каб прыбраць мігаценне экрана."
+msgstr "Вертыкальная сінхранізацыя можа вырашыць праблемы з мігаценнем на "
+"некаторых маніторах. "
 
 msgid "Show extra information such as FPS and current time."
 msgstr "Паказваць FPS і бягучы час."
@@ -2749,7 +2750,7 @@ msgid "Hot Keys:"
 msgstr "Гарачыя клавішы:"
 
 msgid "Select Game Language:"
-msgstr "Абяры Мову"
+msgstr "Мова"
 
 msgid "Click to choose the selected language."
 msgstr "Націсні, каб ухваліць выбар мовы."
@@ -2966,31 +2967,31 @@ msgid "Lose all your heroes and towns."
 msgstr "Страціціь усіх герояў і гарады."
 
 msgid "Lose a specific town."
-msgstr "Страціць канкрэтны горад."
+msgstr "Страціць акрэслены горад."
 
 msgid "Lose a specific hero."
-msgstr "Страціць канкрэтнага героя."
+msgstr "Страціць акрэсленага героя."
 
 msgid "Run out of time. Fail to win by a certain point."
-msgstr "Вычарпаць час. Не перамагчы за дадзены час."
+msgstr "Вычарпаць час. Не перамагчы за акрэслены час."
 
 msgid "Loss Condition"
-msgstr "Умовы паразы"
+msgstr "Умова паразы"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr "Знішчыць усіх герояў супраціўніка і захапіць усе яго гарады."
+msgstr "Знішчыць усіх варожых герояў і захапіць усе варожыя гарады."
 
 msgid "Capture a specific town."
-msgstr "Захапіць дадзены горад."
+msgstr "Захапіць акрэслены горад."
 
 msgid "Defeat a specific hero."
-msgstr "Перамагчы дадзенага героя."
+msgstr "Перамагчы акрэсленага героя."
 
 msgid "Find a specific artifact."
-msgstr "Адшукаць дадзены артэфакт."
+msgstr "Адшукаць акрэслены артэфакт."
 
 msgid "Your side defeats the opposing side."
-msgstr "Твой бок знішчае супраціўнікаў."
+msgstr "Ваш бок перамагае супрацьлеглы."
 
 msgid "Accumulate a large amount of gold."
 msgstr "Назапасіць вялікую колькасць золата."
@@ -3054,7 +3055,7 @@ msgid ""
 "or extra large (144 x 144)."
 msgstr ""
 "Паказвае памер мапы:\n"
-"маленькі (36 х 36), сярэдні\n"
+"малы (36 х 36), сярэдні\n"
 "(72 x 72), вялікі (108 x 108)"
 "ці звышвялікі (144 х 144)."
 
@@ -3065,8 +3066,8 @@ msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
-"Паказвае для якой версіі гульні зроблена мапа: для \"The Succession Wars\" ці "
-"\"The Price of Loyalty\""
+"Паказвае, для якой версіі гульні зроблена мапа: для \"The Succession Wars\" "
+"альбо \"The Price of Loyalty\""
 
 msgid "Map Type"
 msgstr "Тып мапы"
@@ -3075,7 +3076,7 @@ msgid "Selected Name"
 msgstr "Назва мапы"
 
 msgid "The name of the currently selected map."
-msgstr "Назва абранай мапы"
+msgstr "Назва абранай мапы."
 
 msgid "Selected Map Difficulty"
 msgstr "Складанасць мапы"
@@ -3533,7 +3534,7 @@ msgstr "За адным кампутарам"
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
-msgstr "Згуляй з двума-чатырма гульцымі з адным кампутарам, перасаджваючыся "
+msgstr "Згуляй з двума-чатырма гульцамі за адным кампутарам, перасаджваючыся "
 "на 'Гарачае крэсла' ў сваю чагу."
 
 msgid "Cancel back to the main menu."
@@ -3599,7 +3600,7 @@ msgid "View the credits screen."
 msgstr "Праглядзець звесткі пра распрацоўшчыкаў."
 
 msgid "High Scores"
-msgstr "Найепшыя дасягненні"
+msgstr "Найлепшыя дасягненні"
 
 msgid "View the high scores screen."
 msgstr "Праглядзець найлепшыя дасягненні."
@@ -3654,7 +3655,7 @@ msgid "Setup and play a battle without loading any map."
 msgstr "Наладзь і згуляй бітву, не загружаючы мапу."
 
 msgid "2 Players"
-msgstr "2 Гульца"
+msgstr "2 гульцы"
 
 msgid ""
 "Play with 2 human players, and optionally, up to 4 additional computer "
