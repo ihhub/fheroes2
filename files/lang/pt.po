@@ -5771,11 +5771,6 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} a %{race}"
 
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr ""
 

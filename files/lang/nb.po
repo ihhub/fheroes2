@@ -6202,13 +6202,6 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}en %{name} (level %{level})"
 
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"\"Gruppert\" kampoppstilling setter styrkene dine tett sammen i midten av "
-"din side av slagmarken."
-
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Er du sikker på at du ønsker å bortvise denne helten?"
 

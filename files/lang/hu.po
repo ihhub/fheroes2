@@ -5899,13 +5899,6 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{level} szint"
 
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"'Szoros' csataalakzatban az egységeid szorosan egymás mellett helyezkednek "
-"el a harcmező oldalának közepén."
-
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Biztos, hogy elbocsátod ezt a Hőst?"
 
