@@ -3179,9 +3179,6 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, int
 
         if ( prisoner ) {
             prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
-            // Scout the area around the freed hero.
-            prisoner->Scoute( prisoner->GetIndex() );
-            prisoner->ScoutRadar();
         }
     }
     else {

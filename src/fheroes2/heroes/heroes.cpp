@@ -717,6 +717,10 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     // Update the set of recruits in the kingdom
     kingdom.GetRecruits();
 
+    // After recruiting a hero we reveal map and radar image in hero scout area.
+    Scoute( GetIndex() );
+    ScoutRadar();
+
     return true;
 }
 
@@ -731,7 +735,7 @@ bool Heroes::Recruit( const Castle & castle )
     }
 
     SetVisited( GetIndex() );
-
+    
     return true;
 }
 
