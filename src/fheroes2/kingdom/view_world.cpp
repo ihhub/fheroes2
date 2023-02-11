@@ -65,6 +65,9 @@ namespace
 
 namespace
 {
+    // This constant is used to mark the unknown color or resource index.
+    const uint32_t unknownIndex = UINT32_MAX;
+
     const std::array<int32_t, 4> tileSizePerZoomLevel{ 4, 6, 12, 32 };
     const std::array<int32_t, 4> icnPerZoomLevel{ ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12 };
     const std::array<int32_t, 4> icnLetterPerZoomLevel{ ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
@@ -130,7 +133,7 @@ namespace
         }
     }
 
-    // Convert the color to 'ICN::VWFLAG*' or 'ICN::MISC*' index, returns 7 for unknown color.
+    // Convert the color to 'ICN::VWFLAG*' or 'ICN::MISC*' index, returns 'unknownIndex' for unknown color.
     uint32_t colorToOffsetICN( const int32_t color )
     {
         switch ( color ) {
@@ -150,11 +153,11 @@ namespace
         case Color::UNUSED:
             return 6;
         default:
-            return 7;
+            return unknownIndex;
         }
     }
 
-    // Convert the resource type to 'ICN::LETTER*' index, returns 7 for unknown resource.
+    // Convert the resource type to 'ICN::LETTER*' index, returns 'unknownIndex' for unknown resource.
     uint32_t resourceToOffsetICN( const uint32_t resource )
     {
         switch ( resource ) {
@@ -173,7 +176,7 @@ namespace
         case Resource::GOLD:
             return 6;
         default:
-            return 7;
+            return unknownIndex;
         }
     }
 
@@ -186,7 +189,7 @@ namespace
         // Compute complete world map, and save it for all zoom levels
         explicit CacheForMapWithResources( const ViewWorldMode viewMode )
         {
-            for ( size_t i = 0; i < zoomLevels; ++i ) {
+            for ( int32_t i = 0; i < zoomLevels; ++i ) {
                 cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
                 cachedImages[i]._disableTransformLayer();
             }
@@ -321,7 +324,7 @@ namespace
             }
         };
 
-        // Render hero/atrifact icon.
+        // Render hero/artifact icon.
         auto renderIcon = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY ) {
             for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
                 const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
@@ -337,7 +340,7 @@ namespace
         auto renderResourceIcon = [&cache]( const uint32_t icnIndex, const uint32_t resource, const int32_t posX, const int32_t posY ) {
             const uint32_t letterIndex = resourceToOffsetICN( resource );
 
-            if ( letterIndex == 7 ) {
+            if ( letterIndex == unknownIndex ) {
                 // This is an unknown resource.
                 return;
             }
@@ -354,7 +357,7 @@ namespace
             }
         };
 
-        // There could be maximum 2 objects on the tile to analyze (in example: a Hero and a Catle).
+        // There could be maximum 2 objects on the tile to analyze (in example: a Hero and a Castle).
         std::array<MP2::MapObjectType, 2> objectTypes{};
         uint32_t objectCount{ 0 };
 
@@ -374,7 +377,7 @@ namespace
                             if ( hero ) {
                                 const uint32_t colorOffset = colorToOffsetICN( hero->GetColor() );
                                 // Do not render an unknown color.
-                                if ( colorOffset != 7 ) {
+                                if ( colorOffset != unknownIndex ) {
                                     renderIcon( 7 + colorOffset, posX, posY );
                                 }
                             }
@@ -389,7 +392,7 @@ namespace
                             if ( castle ) {
                                 const uint32_t colorOffset = colorToOffsetICN( castle->GetColor() );
                                 // Do not render an unknown color.
-                                if ( colorOffset != 7 ) {
+                                if ( colorOffset != unknownIndex ) {
                                     renderCastleFlags( colorOffset, posX, posY );
                                 }
                             }
@@ -403,7 +406,7 @@ namespace
                         if ( revealMines || !tile.isFog( color ) ) {
                             const uint32_t colorOffset = colorToOffsetICN( tile.QuantityColor() );
                             // Do not render an unknown color.
-                            if ( colorOffset != 7 ) {
+                            if ( colorOffset != unknownIndex ) {
                                 renderResourceIcon( colorOffset, tile.QuantityResourceCount().first, posX, posY );
                             }
                         }
