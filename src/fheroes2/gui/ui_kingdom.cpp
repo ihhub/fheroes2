@@ -50,13 +50,32 @@ namespace fheroes2
     {
         const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
         const std::string header( _( "Lighthouses" ) );
-        const std::string body( _( "For every lighthouse controlled, your heroes can move further on water." ) );
+        const std::string body( _( "For every lighthouse controlled, your ships will move further each day." ) );
 
-        const CustomImageDialogElement lighthouseImageElement( AGG::GetICN( ICN::OBJNMUL2, 61 ) );
+        Image combined( 128, 69 );
+        combined.reset();
 
-        std::string lighthouseControlledString = _( "Controlled: %{count}" );
+        // shadow top
+        Blit( AGG::GetICN( ICN::OBJNMUL2, 60 ), combined, 2, 33 );
+        // shadow middle
+        Blit( AGG::GetICN( ICN::OBJNMUL2, 71 ), combined, 3, 37 );
+        // shadow bottom
+        Blit( AGG::GetICN( ICN::OBJNMUL2, 72 ), combined, 17, 39 );
+
+        // lighthouse top
+        Blit( AGG::GetICN( ICN::OBJNMUL2, 59 ), combined, 63, 0 );
+        // lighthouse middle
+        Blit( AGG::GetICN( ICN::OBJNMUL2, 61 ), combined, 57, 5 );
+        // lighthouse bottom
+        Blit( AGG::GetICN( ICN::OBJNMUL2, 73 ), combined, 49, 37 );
+        // lighthouse light
+        Blit( AGG::GetICN( ICN::OBJNMUL2, 62 ), combined, 61, 10 );
+
+        const CustomImageDialogElement lighthouseImageElement( combined );
+
+        std::string lighthouseControlledString = _( "%{count}" );
         StringReplace( lighthouseControlledString, "%{count}", std::to_string( lighthouseCount ) );
-        const Text lighthouseControlledText( lighthouseControlledString, FontType::smallWhite() );
+        const Text lighthouseControlledText( lighthouseControlledString, FontType::normalWhite() );
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( lighthouseControlledText ) );
 
         showMessage( Text( header, FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
