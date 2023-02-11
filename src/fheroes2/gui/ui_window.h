@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,8 +32,8 @@ namespace fheroes2
     class StandardWindow
     {
     public:
-        StandardWindow( const int32_t width, const int32_t height, Image & output = Display::instance() );
-        StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, Image & output = Display::instance() );
+        StandardWindow( const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
+        StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
 
         const Rect & activeArea() const
         {
@@ -52,5 +52,6 @@ namespace fheroes2
         const Rect _activeArea;
         const Rect _windowArea;
         ImageRestorer _restorer;
+        const bool _hasBackground{ true };
     };
 }

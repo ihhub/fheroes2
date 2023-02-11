@@ -2250,6 +2250,119 @@ namespace fheroes2
         return out;
     }
 
+    void DitheringTransition( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool isVertical,
+                              const bool isReverse )
+    {
+        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
+            return;
+        }
+
+        const int32_t widthIn = in.width();
+        const int32_t offsetIn = inY * widthIn + inX;
+        const uint8_t * imageIn = in.image() + offsetIn;
+        const uint8_t * transformIn = in.transform() + offsetIn;
+
+        const int32_t widthOut = out.width();
+        const int32_t offsetOut = outY * widthOut + outX;
+        uint8_t * imageOut = out.image() + offsetOut;
+        uint8_t * transformOut = out.transform() + offsetOut;
+
+        if ( isVertical ) {
+            // We make a symmetric transition and if width is odd we shift one line right.
+            if ( width % 2 ) {
+                ++imageOut;
+                ++transformOut;
+                ++imageIn;
+                ++transformIn;
+            }
+
+            const uint8_t * imageIn2 = imageIn + width - 1;
+            const uint8_t * transformIn2 = transformIn + width - 1;
+
+            uint8_t * imageOut2 = imageOut + width - 1;
+            uint8_t * transformOut2 = transformOut + width - 1;
+
+            const int32_t halfWidth = width / 2;
+
+            for ( int32_t x = 0; x < halfWidth; ++x ) {
+                const int32_t stepY = static_cast<int32_t>( std::pow( 2, ( halfWidth - x ) / 2 + 1 ) );
+                const int32_t offsetY = stepY / 2 * ( ( x + halfWidth ) % 2 );
+
+                for ( int32_t y = 0; y < height; ++y ) {
+                    const int32_t offsetOutX = y * widthOut;
+                    const int32_t offsetInX = y * widthIn;
+
+                    if ( isReverse ? ( ( y % stepY ) != offsetY ) : ( ( y % stepY ) == offsetY ) ) {
+                        // First part of transition: we copy single pixels.
+                        *( imageOut + offsetOutX ) = *( imageIn + offsetInX );
+                        *( transformOut + offsetOutX ) = *( transformIn + offsetInX );
+                    }
+                    else {
+                        // Second part of transition: we coppy image excluding single pixels.
+                        *( imageOut2 + offsetOutX ) = *( imageIn2 + offsetInX );
+                        *( transformOut2 + offsetOutX ) = *( transformIn2 + offsetInX );
+                    }
+                }
+
+                ++imageOut;
+                --imageOut2;
+                ++transformOut;
+                --transformOut2;
+
+                ++imageIn;
+                --imageIn2;
+                ++transformIn;
+                --transformIn2;
+            }
+        }
+        else {
+            const int32_t offsetInY2 = ( height - 1 ) * widthIn;
+            const uint8_t * imageIn2 = imageIn + offsetInY2;
+            const uint8_t * transformIn2 = transformIn + offsetInY2;
+
+            const int32_t offsetOutY2 = ( height - 1 ) * widthOut;
+            uint8_t * imageOut2 = imageOut + offsetOutY2;
+            uint8_t * transformOut2 = transformOut + offsetOutY2;
+
+            const int32_t halfHeight = height / 2;
+
+            // We make a symmetric transition and if width is odd we shift one line down.
+            if ( height % 2 ) {
+                imageOut += widthOut;
+                transformOut += widthOut;
+                imageIn += widthIn;
+                transformIn += widthIn;
+            }
+            for ( int32_t y = 0; y < halfHeight; ++y ) {
+                const int32_t stepX = static_cast<int32_t>( std::pow( 2, ( halfHeight - y ) / 2 + 1 ) );
+                const int32_t offsetX = stepX / 2 * ( ( y + halfHeight ) % 2 );
+
+                for ( int32_t x = 0; x < width; ++x ) {
+                    if ( isReverse ? ( ( x % stepX ) != offsetX ) : ( ( x % stepX ) == offsetX ) ) {
+                        // First part of transition: we copy single pixels.
+                        *( imageOut + x ) = *( imageIn + x );
+                        *( transformOut + x ) = *( transformIn + x );
+                    }
+                    else {
+                        // Second part of transition: we coppy image excluding single pixels.
+                        *( imageOut2 + x ) = *( imageIn2 + x );
+                        *( transformOut2 + x ) = *( transformIn2 + x );
+                    }
+                }
+
+                imageOut += widthOut;
+                imageOut2 -= widthOut;
+                transformOut += widthOut;
+                transformOut2 -= widthOut;
+
+                imageIn += widthIn;
+                imageIn2 -= widthIn;
+                transformIn += widthIn;
+                transformIn2 -= widthIn;
+            }
+        }
+    }
+
     void Transpose( const Image & in, Image & out )
     {
         assert( !out.empty() );

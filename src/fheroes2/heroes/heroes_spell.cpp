@@ -444,7 +444,7 @@ namespace
             return false;
         }
 
-        std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 290, 252 );
+        std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 290, 252, true );
         const fheroes2::Rect & windowArea = frameborder->windowArea();
         const fheroes2::Rect & activeArea = frameborder->activeArea();
 

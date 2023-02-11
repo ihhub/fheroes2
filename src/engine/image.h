@@ -293,6 +293,9 @@ namespace fheroes2
 
     Image Stretch( const Image & in, int32_t inX, int32_t inY, int32_t widthIn, int32_t heightIn, int32_t widthOut, int32_t heightOut );
 
+    void DitheringTransition( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool isVertical,
+                              const bool isReverse );
+
     void Transpose( const Image & in, Image & out );
 
     void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId );

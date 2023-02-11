@@ -1298,7 +1298,7 @@ void Battle::Interface::UpdateContourColor()
 void Battle::Interface::fullRedraw()
 {
     if ( !_background ) {
-        _background.reset( new fheroes2::StandardWindow( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+        _background.reset( new fheroes2::StandardWindow( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false ) );
     }
 
     Redraw();
