@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "heroes.h"
+
 #include <array>
 #include <cmath>
 #include <cstddef>
@@ -44,7 +46,6 @@
 #include "game_static.h"
 #include "gamedefs.h"
 #include "ground.h"
-#include "heroes.h"
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
@@ -735,7 +736,6 @@ bool Heroes::Recruit( const Castle & castle )
     }
 
     SetVisited( GetIndex() );
-    
     return true;
 }
 
