@@ -27,11 +27,9 @@
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
-#include <memory>
 #include <sstream>
 #include <string>
 #include <system_error>
-#include <type_traits>
 #include <vector>
 
 #include "serialize.h"
@@ -83,11 +81,13 @@ int main( int argc, char ** argv )
         const std::streampos pos = inputStream.tellg();
         if ( pos <= 0 ) {
             std::cerr << "File " << inputFileName << " is empty" << std::endl;
-            return EXIT_FAILURE;
+            // Ignore files of invalid size
+            continue;
         }
 
         const size_t size = pos;
         if ( size != correctBINSize ) {
+            // Ignore files of invalid size
             continue;
         }
 
@@ -116,14 +116,17 @@ int main( int argc, char ** argv )
                      << std::endl;
 
         outputStream << "Animation frame offsets:" << std::endl;
-        for ( size_t setId = 0u; setId < 7; ++setId ) {
+        for ( size_t setId = 0; setId < 7; ++setId ) {
             outputStream << setId + 1 << " : ";
             for ( size_t frameId = 0; frameId < 16; ++frameId ) {
-                const int frameValue = static_cast<int>( data[5 + setId * 16 + frameId] );
-                if ( frameValue < 10 )
+                const int frameValue = static_cast<unsigned char>( data[5 + setId * 16 + frameId] );
+
+                if ( frameValue < 10 ) {
                     outputStream << " " << frameValue << " ";
-                else
+                }
+                else {
                     outputStream << frameValue << " ";
+                }
             }
             outputStream << std::endl;
         }
@@ -131,7 +134,7 @@ int main( int argc, char ** argv )
 
         constexpr size_t maxIdleAnimationCount = 5;
 
-        size_t idleAnimationCount = static_cast<size_t>( *( data + 117 ) );
+        size_t idleAnimationCount = static_cast<unsigned char>( *( data + 117 ) );
         outputStream << "Number of idle animations is " << idleAnimationCount;
         if ( idleAnimationCount > maxIdleAnimationCount ) {
             outputStream << " (INVALID, maximum number should be " << maxIdleAnimationCount << ")";
@@ -162,7 +165,8 @@ int main( int argc, char ** argv )
         outputStream << "[" << fheroes2::getLEValue<int16_t>( data, 174, 4 ) << ", " << fheroes2::getLEValue<int16_t>( data, 174, 5 ) << "]" << std::endl;
         outputStream << std::endl;
 
-        outputStream << "Number of projectile frames is " << static_cast<int>( *( data + 186 ) ) << std::endl << std::endl;
+        const int projectileFramesCount = static_cast<unsigned char>( *( data + 186 ) );
+        outputStream << "Number of projectile frames is " << projectileFramesCount << std::endl << std::endl;
 
         outputStream << "Projectile angles:" << std::endl;
         for ( size_t angleId = 0; angleId < 12; ++angleId ) {
@@ -173,24 +177,30 @@ int main( int argc, char ** argv )
         outputStream << "Troop count offset: [" << fheroes2::getLEValue<int32_t>( data, 235 ) << ", " << fheroes2::getLEValue<int32_t>( data, 239 ) << "]" << std::endl
                      << std::endl;
 
+        constexpr char invalidFrameId = '\xFF';
+
         outputStream << "Animation sequence (frame IDs):" << std::endl;
-        const char invalidFrameId = '\xFF';
-        for ( size_t setId = 0u; setId < 34; ++setId ) {
+        for ( size_t setId = 0; setId < 34; ++setId ) {
             outputStream << setId + 1 << " : ";
 
             int frameCount = 0;
             for ( size_t frameId = 0; frameId < 16; ++frameId ) {
-                const char frameValue = data[277 + setId * 16 + frameId];
-                if ( frameValue == invalidFrameId )
-                    break;
+                const size_t offset = 277 + setId * 16 + frameId;
 
-                outputStream << static_cast<int>( frameValue ) << " ";
+                if ( data[offset] == invalidFrameId ) {
+                    break;
+                }
+
+                const int frameValue = static_cast<unsigned char>( data[offset] );
+                outputStream << frameValue << " ";
+
                 ++frameCount;
             }
 
-            if ( frameCount != static_cast<int>( data[243 + setId] ) ) {
-                std::cerr << "WARNING: In " << inputFileName << " file number of animation frames for animation " << setId + 1 << " should be "
-                          << static_cast<int>( data[243 + setId] ) << " while found number is " << frameCount << std::endl;
+            const int expectedFrameCount = static_cast<unsigned char>( data[243 + setId] );
+            if ( frameCount != expectedFrameCount ) {
+                std::cerr << "WARNING: In " << inputFileName << " file number of animation frames for animation " << setId + 1 << " should be " << expectedFrameCount
+                          << " while found number is " << frameCount << std::endl;
             }
 
             outputStream << std::endl;
