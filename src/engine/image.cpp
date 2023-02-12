@@ -1447,6 +1447,211 @@ namespace fheroes2
         DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
+    void DitheringTransition( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool isVertical,
+                              const bool isReverse )
+    {
+        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
+            return;
+        }
+
+        const int32_t widthIn = in.width();
+        const int32_t offsetIn = inY * widthIn + inX;
+        const uint8_t * imageIn = in.image() + offsetIn;
+        const uint8_t * transformIn = in.transform() + offsetIn;
+
+        const int32_t widthOut = out.width();
+        const int32_t offsetOut = outY * widthOut + outX;
+        uint8_t * imageOut = out.image() + offsetOut;
+        uint8_t * transformOut = out.transform() + offsetOut;
+
+        const bool isInNonSinglelayerToOutSinglelayer = !in.singleLayer() && out.singleLayer();
+
+        if ( isVertical ) {
+            // We also go in a loop from the right part of the image to its center.
+            const uint8_t * imageInRightPoint = imageIn + width - 1;
+            const uint8_t * transformInRightPoint = transformIn + width - 1;
+
+            uint8_t * imageOutRightPoint = imageOut + width - 1;
+            uint8_t * transformOutRightPoint = transformOut + width - 1;
+
+            const int32_t halfWidth = width / 2;
+
+            // We make a symmetric transition and if width is odd we shift one line right.
+            if ( ( width % 2 ) == 1 ) {
+                if ( isReverse ) {
+                    --imageOutRightPoint;
+                    --transformOutRightPoint;
+                    --imageInRightPoint;
+                    --transformInRightPoint;
+                }
+                else {
+                    ++imageOut;
+                    ++transformOut;
+                    ++imageIn;
+                    ++transformIn;
+                }
+            }
+
+            for ( int32_t x = 0; x < halfWidth; ++x ) {
+                // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
+                // We limit the step power to 30 to not overflow the 32 bit 'stepY'.
+                const int32_t stepPower = std::min( 30, ( halfWidth - x ) / 2 + 1 );
+                const int32_t stepY = 1 << stepPower;
+
+                // The point position in dithered pattern.
+                const int32_t patternPoint = stepY / 2 * ( ( x + halfWidth ) % 2 );
+
+                for ( int32_t y = 0; y < height; ++y ) {
+                    const int32_t offsetOutX = y * widthOut;
+                    const int32_t offsetInX = y * widthIn;
+                    const int32_t offsetY = y % stepY;
+
+                    if ( isReverse == ( patternPoint != offsetY ) ) {
+                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformIn + offsetInX ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
+                        // First part of transition: we copy single pixels.
+                        *( imageOut + offsetOutX ) = *( imageIn + offsetInX );
+
+                        if ( !out.singleLayer() ) {
+                            if ( in.singleLayer() ) {
+                                // Set the copied pixel visible.
+                                *( transformOut + offsetOutX ) = 0;
+                            }
+                            else {
+                                *( transformOut + offsetOutX ) = *( transformIn + offsetInX );
+                            }
+                        }
+                    }
+                    else {
+                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformInRightPoint + offsetInX ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
+                        // Second part of transition: we copy image excluding single pixels.
+                        *( imageOutRightPoint + offsetOutX ) = *( imageInRightPoint + offsetInX );
+
+                        if ( !out.singleLayer() ) {
+                            if ( in.singleLayer() ) {
+                                // Set the copied pixel visible.
+                                *( transformOutRightPoint + offsetOutX ) = 0;
+                            }
+                            else {
+                                *( transformOutRightPoint + offsetOutX ) = *( transformInRightPoint + offsetInX );
+                            }
+                        }
+                    }
+                }
+
+                ++imageOut;
+                --imageOutRightPoint;
+                ++transformOut;
+                --transformOutRightPoint;
+
+                ++imageIn;
+                --imageInRightPoint;
+                ++transformIn;
+                --transformInRightPoint;
+            }
+        }
+        else {
+            // We also go in a loop from the bottom part of the image to its center.
+            const int32_t offsetInBottomOffset = ( height - 1 ) * widthIn;
+            const uint8_t * imageInBottomPoint = imageIn + offsetInBottomOffset;
+            const uint8_t * transformInBottomPoint = transformIn + offsetInBottomOffset;
+
+            const int32_t offsetOutYBottomOffset = ( height - 1 ) * widthOut;
+            uint8_t * imageOutBottomPoint = imageOut + offsetOutYBottomOffset;
+            uint8_t * transformOutBottomPoint = transformOut + offsetOutYBottomOffset;
+
+            const int32_t halfHeight = height / 2;
+
+            // We make a symmetric transition and if width is odd we shift one line down.
+            if ( ( height % 2 ) == 1 ) {
+                if ( isReverse ) {
+                    imageOutBottomPoint -= widthOut;
+                    transformOutBottomPoint -= widthOut;
+                    imageInBottomPoint -= widthIn;
+                    transformInBottomPoint -= widthIn;
+                }
+                else {
+                    imageOut += widthOut;
+                    transformOut += widthOut;
+                    imageIn += widthIn;
+                    transformIn += widthIn;
+                }
+            }
+
+            for ( int32_t y = 0; y < halfHeight; ++y ) {
+                // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
+                // We limit the step power to 30 to not overflow the 32 bit 'stepX'.
+                const int32_t stepPower = std::min( 30, ( halfHeight - y ) / 2 + 1 );
+                const int32_t stepX = 1 << stepPower;
+
+                // The point position in dithered pattern.
+                const int32_t patternPoint = stepX / 2 * ( ( y + halfHeight ) % 2 );
+
+                for ( int32_t x = 0; x < width; ++x ) {
+                    const int32_t offsetX = x % stepX;
+
+                    if ( isReverse == ( patternPoint != offsetX ) ) {
+                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformIn + x ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
+                        // First part of transition: we copy single pixels.
+                        *( imageOut + x ) = *( imageIn + x );
+
+                        if ( !out.singleLayer() ) {
+                            if ( in.singleLayer() ) {
+                                // Set the copied pixel visible.
+                                *( transformOut + x ) = 0;
+                            }
+                            else {
+                                *( transformOut + x ) = *( transformIn + x );
+                            }
+                        }
+
+                        *( transformOut + x ) = *( transformIn + x );
+                    }
+                    else {
+                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformInBottomPoint + x ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
+                        // Second part of transition: we copy image excluding single pixels.
+                        *( imageOutBottomPoint + x ) = *( imageInBottomPoint + x );
+
+                        if ( !out.singleLayer() ) {
+                            if ( in.singleLayer() ) {
+                                // Set the copied pixel visible.
+                                *( transformOutBottomPoint + x ) = 0;
+                            }
+                            else {
+                                *( transformOutBottomPoint + x ) = *( transformInBottomPoint + x );
+                            }
+                        }
+                    }
+                }
+
+                imageOut += widthOut;
+                imageOutBottomPoint -= widthOut;
+                transformOut += widthOut;
+                transformOutBottomPoint -= widthOut;
+
+                imageIn += widthIn;
+                imageInBottomPoint -= widthIn;
+                transformIn += widthIn;
+                transformInBottomPoint -= widthIn;
+            }
+        }
+    }
+
     void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, const bool flip,
                                std::vector<std::pair<Point, Sprite>> & output )
     {
@@ -2249,179 +2454,6 @@ namespace fheroes2
         Copy( in, inX + widthIn - cornerWidth, inY + heightIn - cornerHeight, out, widthOut - cornerWidth, heightOut - cornerHeight, cornerWidth, cornerHeight );
 
         return out;
-    }
-
-    void DitheringTransition( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool isVertical,
-                              const bool isReverse )
-    {
-        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
-            return;
-        }
-
-        const int32_t widthIn = in.width();
-        const int32_t offsetIn = inY * widthIn + inX;
-        const uint8_t * imageIn = in.image() + offsetIn;
-        const uint8_t * transformIn = in.transform() + offsetIn;
-
-        const int32_t widthOut = out.width();
-        const int32_t offsetOut = outY * widthOut + outX;
-        uint8_t * imageOut = out.image() + offsetOut;
-        uint8_t * transformOut = out.transform() + offsetOut;
-
-        if ( isVertical ) {
-            // We make a symmetric transition and if width is odd we shift one line right.
-            if ( width % 2 ) {
-                ++imageOut;
-                ++transformOut;
-                ++imageIn;
-                ++transformIn;
-            }
-
-            const uint8_t * imageIn2 = imageIn + width - 1;
-            const uint8_t * transformIn2 = transformIn + width - 1;
-
-            uint8_t * imageOut2 = imageOut + width - 1;
-            uint8_t * transformOut2 = transformOut + width - 1;
-
-            const int32_t halfWidth = width / 2;
-
-            for ( int32_t x = 0; x < halfWidth; ++x ) {
-                // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
-                const int32_t stepY = 1 << ( ( halfWidth - x ) / 2 + 1 );
-                const int32_t offsetY = stepY / 2 * ( ( x + halfWidth ) % 2 );
-
-                for ( int32_t y = 0; y < height; ++y ) {
-                    const int32_t offsetOutX = y * widthOut;
-                    const int32_t offsetInX = y * widthIn;
-
-                    if ( isReverse ? ( ( y % stepY ) != offsetY ) : ( ( y % stepY ) == offsetY ) ) {
-                        if ( !in.singleLayer() && out.singleLayer() && ( *( transformIn + offsetInX ) == 1 ) ) {
-                            // Skip pixel.
-                            continue;
-                        }
-
-                        // First part of transition: we copy single pixels.
-                        *( imageOut + offsetOutX ) = *( imageIn + offsetInX );
-
-                        if ( !out.singleLayer() ) {
-                            if ( in.singleLayer() ) {
-                                // Set the copied pixel visible.
-                                *( transformOut + offsetOutX ) = 0;
-                            }
-                            else {
-                                *( transformOut + offsetOutX ) = *( transformIn + offsetInX );
-                            }
-                        }
-                    }
-                    else {
-                        if ( !in.singleLayer() && out.singleLayer() && ( *( transformIn2 + offsetInX ) == 1 ) ) {
-                            // Skip pixel.
-                            continue;
-                        }
-
-                        // Second part of transition: we coppy image excluding single pixels.
-                        *( imageOut2 + offsetOutX ) = *( imageIn2 + offsetInX );
-
-                        if ( !out.singleLayer() ) {
-                            if ( in.singleLayer() ) {
-                                // Set the copied pixel visible.
-                                *( transformOut2 + offsetOutX ) = 0;
-                            }
-                            else {
-                                *( transformOut2 + offsetOutX ) = *( transformIn2 + offsetInX );
-                            }
-                        }
-                    }
-                }
-
-                ++imageOut;
-                --imageOut2;
-                ++transformOut;
-                --transformOut2;
-
-                ++imageIn;
-                --imageIn2;
-                ++transformIn;
-                --transformIn2;
-            }
-        }
-        else {
-            const int32_t offsetInY2 = ( height - 1 ) * widthIn;
-            const uint8_t * imageIn2 = imageIn + offsetInY2;
-            const uint8_t * transformIn2 = transformIn + offsetInY2;
-
-            const int32_t offsetOutY2 = ( height - 1 ) * widthOut;
-            uint8_t * imageOut2 = imageOut + offsetOutY2;
-            uint8_t * transformOut2 = transformOut + offsetOutY2;
-
-            const int32_t halfHeight = height / 2;
-
-            // We make a symmetric transition and if width is odd we shift one line down.
-            if ( height % 2 ) {
-                imageOut += widthOut;
-                transformOut += widthOut;
-                imageIn += widthIn;
-                transformIn += widthIn;
-            }
-            for ( int32_t y = 0; y < halfHeight; ++y ) {
-                // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
-                const int32_t stepX = 1 << ( ( halfHeight - y ) / 2 + 1 );
-                const int32_t offsetX = stepX / 2 * ( ( y + halfHeight ) % 2 );
-
-                for ( int32_t x = 0; x < width; ++x ) {
-                    if ( isReverse ? ( ( x % stepX ) != offsetX ) : ( ( x % stepX ) == offsetX ) ) {
-                        if ( !in.singleLayer() && out.singleLayer() && ( *( transformIn + x ) == 1 ) ) {
-                            // Skip pixel.
-                            continue;
-                        }
-
-                        // First part of transition: we copy single pixels.
-                        *( imageOut + x ) = *( imageIn + x );
-
-                        if ( !out.singleLayer() ) {
-                            if ( in.singleLayer() ) {
-                                // Set the copied pixel visible.
-                                *( transformOut + x ) = 0;
-                            }
-                            else {
-                                *( transformOut + x ) = *( transformIn + x );
-                            }
-                        }
-
-                        *( transformOut + x ) = *( transformIn + x );
-                    }
-                    else {
-                        if ( !in.singleLayer() && out.singleLayer() && ( *( transformIn2 + x ) == 1 ) ) {
-                            // Skip pixel.
-                            continue;
-                        }
-
-                        // Second part of transition: we coppy image excluding single pixels.
-                        *( imageOut2 + x ) = *( imageIn2 + x );
-
-                        if ( !out.singleLayer() ) {
-                            if ( in.singleLayer() ) {
-                                // Set the copied pixel visible.
-                                *( transformOut2 + x ) = 0;
-                            }
-                            else {
-                                *( transformOut2 + x ) = *( transformIn2 + x );
-                            }
-                        }
-                    }
-                }
-
-                imageOut += widthOut;
-                imageOut2 -= widthOut;
-                transformOut += widthOut;
-                transformOut2 -= widthOut;
-
-                imageIn += widthIn;
-                imageIn2 -= widthIn;
-                transformIn += widthIn;
-                transformIn2 -= widthIn;
-            }
-        }
     }
 
     void Transpose( const Image & in, Image & out )

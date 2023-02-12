@@ -241,6 +241,10 @@ namespace fheroes2
 
     void DrawRect( Image & image, const Rect & roi, uint8_t value );
 
+    // Make a transition to "in" image from left to right or vertically - from top to bottom. The direction of transition can be reversed.
+    void DitheringTransition( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool isVertical,
+                              const bool isReverse );
+
     void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, const bool flip,
                                std::vector<std::pair<Point, Sprite>> & output );
 
@@ -292,9 +296,6 @@ namespace fheroes2
     void SetTransformPixel( Image & image, int32_t x, int32_t y, uint8_t value );
 
     Image Stretch( const Image & in, int32_t inX, int32_t inY, int32_t widthIn, int32_t heightIn, int32_t widthOut, int32_t heightOut );
-
-    void DitheringTransition( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool isVertical,
-                              const bool isReverse );
 
     void Transpose( const Image & in, Image & out );
 

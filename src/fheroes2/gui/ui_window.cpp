@@ -31,7 +31,7 @@ namespace
 {
     const int32_t borderSize{ BORDERWIDTH };
 
-    // Offset from border egdes (size of evil interface corners is 43 pixels) - this egdes (corners) will not be copied to fill the border.
+    // Offset from border edges (size of evil interface corners is 43 pixels) - this edges (corners) will not be copied to fill the border.
     const int32_t borderEdgeOffset{ 43 };
 
     // Size in pixels of dithered transition from one image to another.
@@ -65,9 +65,11 @@ namespace fheroes2
 
     void StandardWindow::render()
     {
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
         // Notice: ICN::SURDRBKE and ICN::SURDRBKG has 16 (equals to BORDERWIDTH) pixels shadow from the left and the bottom sides.
-        const fheroes2::Sprite & horizontalSprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
-        const fheroes2::Sprite & verticalSprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
+        const Sprite & horizontalSprite = AGG::GetICN( ( isEvilInterface ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
+        const Sprite & verticalSprite = AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
 
         // Offset from window edges to background copy area and also the size of corners to render.
         const int32_t cornerSize = _hasBackground ? backgroungOffset : borderSize;
@@ -82,33 +84,31 @@ namespace fheroes2
         const int32_t bottomCornerOffsetY = _windowArea.y + _windowArea.height - cornerSize;
         const int32_t rightCornerSpriteOffsetX = verticalSpriteWidth - cornerSize;
         const int32_t bottomCornerSpriteOffsetY = verticalSpriteHeight - cornerSize;
-        fheroes2::Blit( verticalSprite, 0, 0, _output, _windowArea.x, _windowArea.y, cornerSize, cornerSize );
-        fheroes2::Blit( verticalSprite, rightCornerSpriteOffsetX, 0, _output, rightCornerOffsetX, _windowArea.y, cornerSize, cornerSize );
-        fheroes2::Blit( verticalSprite, 0, bottomCornerSpriteOffsetY, _output, _windowArea.x, bottomCornerOffsetY, cornerSize, cornerSize );
-        fheroes2::Blit( verticalSprite, rightCornerSpriteOffsetX, bottomCornerSpriteOffsetY, _output, rightCornerOffsetX, bottomCornerOffsetY, cornerSize, cornerSize );
+        Blit( verticalSprite, 0, 0, _output, _windowArea.x, _windowArea.y, cornerSize, cornerSize );
+        Blit( verticalSprite, rightCornerSpriteOffsetX, 0, _output, rightCornerOffsetX, _windowArea.y, cornerSize, cornerSize );
+        Blit( verticalSprite, 0, bottomCornerSpriteOffsetY, _output, _windowArea.x, bottomCornerOffsetY, cornerSize, cornerSize );
+        Blit( verticalSprite, rightCornerSpriteOffsetX, bottomCornerSpriteOffsetY, _output, rightCornerOffsetX, bottomCornerOffsetY, cornerSize, cornerSize );
 
         // Render additional part of border corners. This part will not be repeated to fill the border length.
         const int32_t extraCornerSize = borderEdgeOffset - cornerSize;
 
-        fheroes2::Blit( verticalSprite, cornerSize, 0, _output, _windowArea.x + cornerSize, _windowArea.y, extraCornerSize, cornerSize );
-        fheroes2::Blit( verticalSprite, 0, cornerSize, _output, _windowArea.x, _windowArea.y + cornerSize, cornerSize, extraCornerSize );
+        Blit( verticalSprite, cornerSize, 0, _output, _windowArea.x + cornerSize, _windowArea.y, extraCornerSize, cornerSize );
+        Blit( verticalSprite, 0, cornerSize, _output, _windowArea.x, _windowArea.y + cornerSize, cornerSize, extraCornerSize );
 
-        fheroes2::Blit( verticalSprite, verticalSpriteWidth - borderEdgeOffset, 0, _output, rightCornerOffsetX - extraCornerSize, _windowArea.y, extraCornerSize,
-                        cornerSize );
-        fheroes2::Blit( verticalSprite, rightCornerSpriteOffsetX, cornerSize, _output, rightCornerOffsetX, _windowArea.y + cornerSize, cornerSize, extraCornerSize );
+        Blit( verticalSprite, verticalSpriteWidth - borderEdgeOffset, 0, _output, rightCornerOffsetX - extraCornerSize, _windowArea.y, extraCornerSize, cornerSize );
+        Blit( verticalSprite, rightCornerSpriteOffsetX, cornerSize, _output, rightCornerOffsetX, _windowArea.y + cornerSize, cornerSize, extraCornerSize );
 
-        fheroes2::Blit( verticalSprite, cornerSize, bottomCornerSpriteOffsetY, _output, _windowArea.x + cornerSize, bottomCornerOffsetY, extraCornerSize, cornerSize );
-        fheroes2::Blit( verticalSprite, 0, verticalSpriteHeight - borderEdgeOffset, _output, _windowArea.x, bottomCornerOffsetY - extraCornerSize, cornerSize,
-                        extraCornerSize );
+        Blit( verticalSprite, cornerSize, bottomCornerSpriteOffsetY, _output, _windowArea.x + cornerSize, bottomCornerOffsetY, extraCornerSize, cornerSize );
+        Blit( verticalSprite, 0, verticalSpriteHeight - borderEdgeOffset, _output, _windowArea.x, bottomCornerOffsetY - extraCornerSize, cornerSize, extraCornerSize );
 
-        fheroes2::Blit( verticalSprite, verticalSpriteWidth - borderEdgeOffset, bottomCornerSpriteOffsetY, _output, rightCornerOffsetX - extraCornerSize,
-                        bottomCornerOffsetY, extraCornerSize, cornerSize );
-        fheroes2::Blit( verticalSprite, rightCornerSpriteOffsetX, verticalSpriteHeight - borderEdgeOffset, _output, rightCornerOffsetX,
-                        bottomCornerOffsetY - extraCornerSize, cornerSize, extraCornerSize );
+        Blit( verticalSprite, verticalSpriteWidth - borderEdgeOffset, bottomCornerSpriteOffsetY, _output, rightCornerOffsetX - extraCornerSize, bottomCornerOffsetY,
+              extraCornerSize, cornerSize );
+        Blit( verticalSprite, rightCornerSpriteOffsetX, verticalSpriteHeight - borderEdgeOffset, _output, rightCornerOffsetX, bottomCornerOffsetY - extraCornerSize,
+              cornerSize, extraCornerSize );
 
         // Render the background.
         if ( _hasBackground ) {
-            const fheroes2::Sprite & backgroundSprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONEBAK_EVIL : ICN::STONEBAK ), 0 );
+            const Sprite & backgroundSprite = AGG::GetICN( ( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK ), 0 );
             const int32_t backgroundSpriteWidth{ backgroundSprite.width() };
             const int32_t backgroundSpriteHeight{ backgroundSprite.height() };
 
@@ -123,20 +123,20 @@ namespace fheroes2
             const int32_t backgroundOffsetY = _windowArea.y + cornerSize;
 
             // We do a copy as the background image does not have transparent pixels.
-            fheroes2::Copy( backgroundSprite, 0, 0, _output, backgroundOffsetX, backgroundOffsetY, backgroundCopyWidth, backgroundCopyHeight );
+            Copy( backgroundSprite, 0, 0, _output, backgroundOffsetX, backgroundOffsetY, backgroundCopyWidth, backgroundCopyHeight );
 
             // If we need more copies to fill background horizontally we make a transition and copy existing image.
             if ( backgroundHorizontalCopies > 0 ) {
                 int32_t toOffsetX = cornerSize + backgroundSpriteWidth;
-                fheroes2::DitheringTransition( backgroundSprite, 0, 0, _output, _windowArea.x + toOffsetX - transitionSize, backgroundOffsetY, transitionSize,
-                                               backgroundCopyHeight, true, false );
+                DitheringTransition( backgroundSprite, 0, 0, _output, _windowArea.x + toOffsetX - transitionSize, backgroundOffsetY, transitionSize, backgroundCopyHeight,
+                                     true, false );
 
                 const int32_t stepX = backgroundSpriteWidth - transitionSize;
                 const int32_t fromOffsetX = cornerSize + transitionSize;
 
                 for ( int32_t i = 0; i < backgroundHorizontalCopies; ++i ) {
-                    fheroes2::Copy( _output, _windowArea.x + fromOffsetX, backgroundOffsetY, _output, _windowArea.x + toOffsetX, backgroundOffsetY,
-                                    std::min( backgroundSpriteWidth, _windowArea.width - cornerSize - toOffsetX ), backgroundCopyHeight );
+                    Copy( _output, _windowArea.x + fromOffsetX, backgroundOffsetY, _output, _windowArea.x + toOffsetX, backgroundOffsetY,
+                          std::min( backgroundSpriteWidth, _windowArea.width - cornerSize - toOffsetX ), backgroundCopyHeight );
                     toOffsetX += stepX;
                 }
             }
@@ -144,39 +144,39 @@ namespace fheroes2
             // If we need more copies to fill background vertically we make a transition and copy existing image in full background width.
             if ( backgroundVerticalCopies > 0 ) {
                 int32_t toOffsetY = cornerSize + backgroundSpriteHeight;
-                fheroes2::DitheringTransition( _output, backgroundOffsetX, backgroundOffsetY, _output, backgroundOffsetX, _windowArea.y + toOffsetY - transitionSize,
-                                               backgroundWidth, transitionSize, false, false );
+                DitheringTransition( _output, backgroundOffsetX, backgroundOffsetY, _output, backgroundOffsetX, _windowArea.y + toOffsetY - transitionSize,
+                                     backgroundWidth, transitionSize, false, false );
 
                 const int32_t stepY = backgroundSpriteHeight - transitionSize;
                 const int32_t fromOffsetY = cornerSize + transitionSize;
 
                 for ( int32_t i = 0; i < backgroundVerticalCopies; ++i ) {
-                    fheroes2::Copy( _output, backgroundOffsetX, _windowArea.y + fromOffsetY, _output, backgroundOffsetX, _windowArea.y + toOffsetY, backgroundWidth,
-                                    std::min( backgroundSpriteHeight, _windowArea.height - cornerSize - toOffsetY ) );
+                    Copy( _output, backgroundOffsetX, _windowArea.y + fromOffsetY, _output, backgroundOffsetX, _windowArea.y + toOffsetY, backgroundWidth,
+                          std::min( backgroundSpriteHeight, _windowArea.height - cornerSize - toOffsetY ) );
                     toOffsetY += stepY;
                 }
             }
 
             // Make a transition from borders to the background in the corners.
-            fheroes2::DitheringTransition( verticalSprite, cornerSize, cornerSize, _output, _windowArea.x + cornerSize, _windowArea.y + cornerSize, extraCornerSize,
-                                           transitionSize, false, true );
-            fheroes2::DitheringTransition( verticalSprite, cornerSize, cornerSize, _output, _windowArea.x + cornerSize, _windowArea.y + cornerSize, transitionSize,
-                                           extraCornerSize, true, true );
+            DitheringTransition( verticalSprite, cornerSize, cornerSize, _output, _windowArea.x + cornerSize, _windowArea.y + cornerSize, extraCornerSize, transitionSize,
+                                 false, true );
+            DitheringTransition( verticalSprite, cornerSize, cornerSize, _output, _windowArea.x + cornerSize, _windowArea.y + cornerSize, transitionSize, extraCornerSize,
+                                 true, true );
 
-            fheroes2::DitheringTransition( verticalSprite, verticalSpriteWidth - borderEdgeOffset, cornerSize, _output, rightCornerOffsetX - extraCornerSize,
-                                           _windowArea.y + cornerSize, extraCornerSize, transitionSize, false, true );
-            fheroes2::DitheringTransition( verticalSprite, rightCornerSpriteOffsetX - transitionSize, cornerSize, _output, rightCornerOffsetX - transitionSize,
-                                           _windowArea.y + cornerSize, transitionSize, extraCornerSize, true, false );
+            DitheringTransition( verticalSprite, verticalSpriteWidth - borderEdgeOffset, cornerSize, _output, rightCornerOffsetX - extraCornerSize,
+                                 _windowArea.y + cornerSize, extraCornerSize, transitionSize, false, true );
+            DitheringTransition( verticalSprite, rightCornerSpriteOffsetX - transitionSize, cornerSize, _output, rightCornerOffsetX - transitionSize,
+                                 _windowArea.y + cornerSize, transitionSize, extraCornerSize, true, false );
 
-            fheroes2::DitheringTransition( verticalSprite, cornerSize, bottomCornerSpriteOffsetY - transitionSize, _output, _windowArea.x + cornerSize,
-                                           bottomCornerOffsetY - transitionSize, extraCornerSize, transitionSize, false, false );
-            fheroes2::DitheringTransition( verticalSprite, cornerSize, verticalSpriteHeight - borderEdgeOffset, _output, _windowArea.x + cornerSize,
-                                           bottomCornerOffsetY - extraCornerSize, transitionSize, extraCornerSize, true, true );
+            DitheringTransition( verticalSprite, cornerSize, bottomCornerSpriteOffsetY - transitionSize, _output, _windowArea.x + cornerSize,
+                                 bottomCornerOffsetY - transitionSize, extraCornerSize, transitionSize, false, false );
+            DitheringTransition( verticalSprite, cornerSize, verticalSpriteHeight - borderEdgeOffset, _output, _windowArea.x + cornerSize,
+                                 bottomCornerOffsetY - extraCornerSize, transitionSize, extraCornerSize, true, true );
 
-            fheroes2::DitheringTransition( verticalSprite, verticalSpriteWidth - borderEdgeOffset, bottomCornerSpriteOffsetY - transitionSize, _output,
-                                           rightCornerOffsetX - extraCornerSize, bottomCornerOffsetY - transitionSize, extraCornerSize, transitionSize, false, false );
-            fheroes2::DitheringTransition( verticalSprite, rightCornerSpriteOffsetX - transitionSize, verticalSpriteHeight - borderEdgeOffset, _output,
-                                           rightCornerOffsetX - transitionSize, bottomCornerOffsetY - extraCornerSize, transitionSize, extraCornerSize, true, false );
+            DitheringTransition( verticalSprite, verticalSpriteWidth - borderEdgeOffset, bottomCornerSpriteOffsetY - transitionSize, _output,
+                                 rightCornerOffsetX - extraCornerSize, bottomCornerOffsetY - transitionSize, extraCornerSize, transitionSize, false, false );
+            DitheringTransition( verticalSprite, rightCornerSpriteOffsetX - transitionSize, verticalSpriteHeight - borderEdgeOffset, _output,
+                                 rightCornerOffsetX - transitionSize, bottomCornerOffsetY - extraCornerSize, transitionSize, extraCornerSize, true, false );
         }
 
         // Render vertical borders.
@@ -186,25 +186,25 @@ namespace fheroes2
         const int32_t rightBorderOffsetX = _windowArea.x + _windowArea.width - cornerSize;
         const int32_t rightBorderSpriteOffsetX = verticalSpriteWidth - cornerSize;
 
-        fheroes2::Blit( verticalSprite, 0, borderEdgeOffset, _output, _windowArea.x, _windowArea.y + borderEdgeOffset, cornerSize, verticalSpriteCopyHeight );
-        fheroes2::Blit( verticalSprite, rightBorderSpriteOffsetX, borderEdgeOffset, _output, rightBorderOffsetX, _windowArea.y + borderEdgeOffset, cornerSize,
-                        verticalSpriteCopyHeight );
+        Blit( verticalSprite, 0, borderEdgeOffset, _output, _windowArea.x, _windowArea.y + borderEdgeOffset, cornerSize, verticalSpriteCopyHeight );
+        Blit( verticalSprite, rightBorderSpriteOffsetX, borderEdgeOffset, _output, rightBorderOffsetX, _windowArea.y + borderEdgeOffset, cornerSize,
+              verticalSpriteCopyHeight );
 
         // Render a transition to the background.
         if ( _hasBackground ) {
-            fheroes2::DitheringTransition( verticalSprite, cornerSize, borderEdgeOffset, _output, _windowArea.x + cornerSize, _windowArea.y + borderEdgeOffset,
-                                           transitionSize, verticalSpriteCopyHeight, true, true );
-            fheroes2::DitheringTransition( verticalSprite, rightBorderSpriteOffsetX - transitionSize, borderEdgeOffset, _output, rightBorderOffsetX - transitionSize,
-                                           _windowArea.y + borderEdgeOffset, transitionSize, verticalSpriteCopyHeight, true, false );
+            DitheringTransition( verticalSprite, cornerSize, borderEdgeOffset, _output, _windowArea.x + cornerSize, _windowArea.y + borderEdgeOffset, transitionSize,
+                                 verticalSpriteCopyHeight, true, true );
+            DitheringTransition( verticalSprite, rightBorderSpriteOffsetX - transitionSize, borderEdgeOffset, _output, rightBorderOffsetX - transitionSize,
+                                 _windowArea.y + borderEdgeOffset, transitionSize, verticalSpriteCopyHeight, true, false );
         }
 
         // If we need more copies to fill vertical borders we make a transition and copy the central part of the border.
         if ( verticalSpriteCopies > 0 ) {
             int32_t toOffsetY = borderEdgeOffset + verticalSpriteCopyHeight;
             const int32_t outputY = _windowArea.y + toOffsetY - transitionSize;
-            fheroes2::DitheringTransition( verticalSprite, 0, borderEdgeOffset, _output, _windowArea.x, outputY, cornerSize, transitionSize, false, false );
-            fheroes2::DitheringTransition( verticalSprite, rightBorderSpriteOffsetX, borderEdgeOffset, _output, rightBorderOffsetX, outputY, cornerSize, transitionSize,
-                                           false, false );
+            DitheringTransition( verticalSprite, 0, borderEdgeOffset, _output, _windowArea.x, outputY, cornerSize, transitionSize, false, false );
+            DitheringTransition( verticalSprite, rightBorderSpriteOffsetX, borderEdgeOffset, _output, rightBorderOffsetX, outputY, cornerSize, transitionSize, false,
+                                 false );
 
             const int32_t stepY = verticalSpriteCopyHeight - transitionSize;
             const int32_t fromOffsetY = borderEdgeOffset + transitionSize;
@@ -213,15 +213,14 @@ namespace fheroes2
                 const int32_t copyHeight = std::min( verticalSpriteCopyHeight, _windowArea.height - borderEdgeOffset - toOffsetY );
                 const int32_t toY = _windowArea.y + toOffsetY;
 
-                fheroes2::Blit( verticalSprite, 0, fromOffsetY, _output, _windowArea.x, toY, cornerSize, copyHeight );
-                fheroes2::Blit( verticalSprite, rightBorderSpriteOffsetX, fromOffsetY, _output, rightBorderOffsetX, toY, cornerSize, copyHeight );
+                Blit( verticalSprite, 0, fromOffsetY, _output, _windowArea.x, toY, cornerSize, copyHeight );
+                Blit( verticalSprite, rightBorderSpriteOffsetX, fromOffsetY, _output, rightBorderOffsetX, toY, cornerSize, copyHeight );
 
                 // Render a transition to the background.
                 if ( _hasBackground ) {
-                    fheroes2::DitheringTransition( verticalSprite, cornerSize, fromOffsetY, _output, _windowArea.x + cornerSize, toY, transitionSize, copyHeight, true,
-                                                   true );
-                    fheroes2::DitheringTransition( verticalSprite, rightBorderSpriteOffsetX - transitionSize, fromOffsetY, _output, rightBorderOffsetX - transitionSize,
-                                                   toY, transitionSize, copyHeight, true, false );
+                    DitheringTransition( verticalSprite, cornerSize, fromOffsetY, _output, _windowArea.x + cornerSize, toY, transitionSize, copyHeight, true, true );
+                    DitheringTransition( verticalSprite, rightBorderSpriteOffsetX - transitionSize, fromOffsetY, _output, rightBorderOffsetX - transitionSize, toY,
+                                         transitionSize, copyHeight, true, false );
                 }
 
                 toOffsetY += stepY;
@@ -231,10 +230,10 @@ namespace fheroes2
         // Make a transition to the bottom corners.
         const int32_t verticalSpriteBottomCornerEdgeY = verticalSpriteHeight - borderEdgeOffset - transitionSize;
         const int32_t optputBottomCornerEdgeY = _windowArea.y + _windowArea.height - borderEdgeOffset - transitionSize;
-        fheroes2::DitheringTransition( verticalSprite, 0, verticalSpriteBottomCornerEdgeY, _output, _windowArea.x, optputBottomCornerEdgeY, cornerSize, transitionSize,
-                                       false, false );
-        fheroes2::DitheringTransition( verticalSprite, rightBorderSpriteOffsetX, verticalSpriteBottomCornerEdgeY, _output, rightBorderOffsetX, optputBottomCornerEdgeY,
-                                       cornerSize, transitionSize, false, false );
+        DitheringTransition( verticalSprite, 0, verticalSpriteBottomCornerEdgeY, _output, _windowArea.x, optputBottomCornerEdgeY, cornerSize, transitionSize, false,
+                             false );
+        DitheringTransition( verticalSprite, rightBorderSpriteOffsetX, verticalSpriteBottomCornerEdgeY, _output, rightBorderOffsetX, optputBottomCornerEdgeY, cornerSize,
+                             transitionSize, false, false );
 
         // Render horizontal borders. We have to remember that 'verticalSprite' has 16 (equals to BORDERWIDTH) pixels of shadow at the left and bottom sides.
         const int32_t horizontalSpriteCopyWidth = std::min( _windowArea.width, horizontalSpriteWidth ) - borderEdgeOffset * 2;
@@ -244,27 +243,25 @@ namespace fheroes2
         const int32_t bottomBorderSpriteOffsetY = horizontalSpriteHeight - cornerSize;
         const int32_t horizontalSpriteCopyStartX = borderEdgeOffset + BORDERWIDTH;
 
-        fheroes2::Blit( horizontalSprite, horizontalSpriteCopyStartX, 0, _output, _windowArea.x + borderEdgeOffset, _windowArea.y, horizontalSpriteCopyWidth,
-                        cornerSize );
-        fheroes2::Blit( horizontalSprite, horizontalSpriteCopyStartX, bottomBorderSpriteOffsetY, _output, _windowArea.x + borderEdgeOffset, bottomBorderOffsetY,
-                        horizontalSpriteCopyWidth, cornerSize );
+        Blit( horizontalSprite, horizontalSpriteCopyStartX, 0, _output, _windowArea.x + borderEdgeOffset, _windowArea.y, horizontalSpriteCopyWidth, cornerSize );
+        Blit( horizontalSprite, horizontalSpriteCopyStartX, bottomBorderSpriteOffsetY, _output, _windowArea.x + borderEdgeOffset, bottomBorderOffsetY,
+              horizontalSpriteCopyWidth, cornerSize );
 
         // Render a transition to the background.
         if ( _hasBackground ) {
-            fheroes2::DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, cornerSize, _output, _windowArea.x + borderEdgeOffset,
-                                           _windowArea.y + cornerSize, horizontalSpriteCopyWidth, transitionSize, false, true );
-            fheroes2::DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, bottomBorderSpriteOffsetY - transitionSize, _output,
-                                           _windowArea.x + borderEdgeOffset, bottomBorderOffsetY - transitionSize, horizontalSpriteCopyWidth, transitionSize, false,
-                                           false );
+            DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, cornerSize, _output, _windowArea.x + borderEdgeOffset, _windowArea.y + cornerSize,
+                                 horizontalSpriteCopyWidth, transitionSize, false, true );
+            DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, bottomBorderSpriteOffsetY - transitionSize, _output, _windowArea.x + borderEdgeOffset,
+                                 bottomBorderOffsetY - transitionSize, horizontalSpriteCopyWidth, transitionSize, false, false );
         }
 
         // If we need more copies to fill horizontal borders we make a transition and copy the central part of the border.
         if ( horizontalSpriteCopies > 0 ) {
             int32_t toOffsetX = borderEdgeOffset + horizontalSpriteCopyWidth;
             const int32_t outputX = _windowArea.x + toOffsetX - transitionSize;
-            fheroes2::DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, 0, _output, outputX, _windowArea.y, transitionSize, cornerSize, true, false );
-            fheroes2::DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, bottomBorderSpriteOffsetY, _output, outputX, bottomBorderOffsetY, transitionSize,
-                                           cornerSize, true, false );
+            DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, 0, _output, outputX, _windowArea.y, transitionSize, cornerSize, true, false );
+            DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, bottomBorderSpriteOffsetY, _output, outputX, bottomBorderOffsetY, transitionSize,
+                                 cornerSize, true, false );
 
             const int32_t stepX = horizontalSpriteCopyWidth - transitionSize;
             const int32_t fromOffsetX = horizontalSpriteCopyStartX + transitionSize;
@@ -273,15 +270,14 @@ namespace fheroes2
                 const int32_t copyWidth = std::min( horizontalSpriteCopyWidth, _windowArea.width - borderEdgeOffset - toOffsetX );
                 const int32_t toX = _windowArea.x + toOffsetX;
 
-                fheroes2::Blit( horizontalSprite, fromOffsetX, 0, _output, toX, _windowArea.y, copyWidth, cornerSize );
-                fheroes2::Blit( horizontalSprite, fromOffsetX, bottomBorderSpriteOffsetY, _output, toX, bottomBorderOffsetY, copyWidth, cornerSize );
+                Blit( horizontalSprite, fromOffsetX, 0, _output, toX, _windowArea.y, copyWidth, cornerSize );
+                Blit( horizontalSprite, fromOffsetX, bottomBorderSpriteOffsetY, _output, toX, bottomBorderOffsetY, copyWidth, cornerSize );
 
                 // Render a transition to the background.
                 if ( _hasBackground ) {
-                    fheroes2::DitheringTransition( horizontalSprite, fromOffsetX, cornerSize, _output, toX, _windowArea.y + cornerSize, copyWidth, transitionSize, false,
-                                                   true );
-                    fheroes2::DitheringTransition( horizontalSprite, fromOffsetX, bottomBorderSpriteOffsetY - transitionSize, _output, toX,
-                                                   bottomBorderOffsetY - transitionSize, copyWidth, transitionSize, false, false );
+                    DitheringTransition( horizontalSprite, fromOffsetX, cornerSize, _output, toX, _windowArea.y + cornerSize, copyWidth, transitionSize, false, true );
+                    DitheringTransition( horizontalSprite, fromOffsetX, bottomBorderSpriteOffsetY - transitionSize, _output, toX, bottomBorderOffsetY - transitionSize,
+                                         copyWidth, transitionSize, false, false );
                 }
 
                 toOffsetX += stepX;
@@ -291,17 +287,17 @@ namespace fheroes2
         // Make a transition to the right corners.
         const int32_t horizontalSpriteRightCornerEdgeX = horizontalSprite.width() - borderEdgeOffset - transitionSize;
         const int32_t optputRightCornerEdgeX = _windowArea.x + _windowArea.width - borderEdgeOffset - transitionSize;
-        fheroes2::DitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, 0, _output, optputRightCornerEdgeX, _windowArea.y, transitionSize, cornerSize,
-                                       true, false );
-        fheroes2::DitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, bottomBorderSpriteOffsetY, _output, optputRightCornerEdgeX,
-                                       bottomBorderOffsetY, transitionSize, cornerSize, true, false );
+        DitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, 0, _output, optputRightCornerEdgeX, _windowArea.y, transitionSize, cornerSize, true,
+                             false );
+        DitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, bottomBorderSpriteOffsetY, _output, optputRightCornerEdgeX, bottomBorderOffsetY,
+                             transitionSize, cornerSize, true, false );
 
         // Render shadow.
-        fheroes2::ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + borderSize, 1, _windowArea.height - borderSize, 5 );
-        fheroes2::ApplyTransform( _output, _windowArea.x - borderSize + 1, _windowArea.y + borderSize, 1, _windowArea.height - borderSize, 4 );
-        fheroes2::ApplyTransform( _output, _windowArea.x - borderSize + 2, _windowArea.y + borderSize, borderSize - 2, _windowArea.height - borderSize, 3 );
-        fheroes2::ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height, _windowArea.width, borderSize - 2, 3 );
-        fheroes2::ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height + borderSize - 2, _windowArea.width, 1, 4 );
-        fheroes2::ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height + borderSize - 1, _windowArea.width, 1, 5 );
+        ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + borderSize, 1, _windowArea.height - borderSize, 5 );
+        ApplyTransform( _output, _windowArea.x - borderSize + 1, _windowArea.y + borderSize, 1, _windowArea.height - borderSize, 4 );
+        ApplyTransform( _output, _windowArea.x - borderSize + 2, _windowArea.y + borderSize, borderSize - 2, _windowArea.height - borderSize, 3 );
+        ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height, _windowArea.width, borderSize - 2, 3 );
+        ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height + borderSize - 2, _windowArea.width, 1, 4 );
+        ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height + borderSize - 1, _windowArea.width, 1, 5 );
     }
 }
