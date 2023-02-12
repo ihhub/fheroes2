@@ -21,7 +21,9 @@
 #pragma once
 
 #include <cstdint>
+#include <stddef.h>
 #include <string>
+#include <vector>
 
 #include "image.h"
 
