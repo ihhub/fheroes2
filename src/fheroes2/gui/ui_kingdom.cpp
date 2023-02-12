@@ -30,7 +30,6 @@
 #include "image.h"
 #include "kingdom.h"
 #include "mp2.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
