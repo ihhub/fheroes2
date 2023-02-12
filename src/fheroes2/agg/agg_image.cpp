@@ -3421,15 +3421,15 @@ namespace fheroes2
 
                 StreamBuf buffer( data );
 
-                const int32_t count = buffer.getLE16();
+                const size_t count = buffer.getLE16();
                 const int32_t width = buffer.getLE16();
                 const int32_t height = buffer.getLE16();
-                if ( count < 1 || width < 1 || height < 0 || ( headerSize + static_cast<size_t>( count * width * height ) ) != data.size() ) {
+                if ( count < 1 || width < 1 || height < 1 || ( headerSize + count * width * height ) != data.size() ) {
                     return 0;
                 }
 
                 std::vector<Image> & originalTIL = _tilVsImage[id][0];
-                decodeTILImages( data.data() + headerSize, static_cast<size_t>( count ), width, height, originalTIL );
+                decodeTILImages( data.data() + headerSize, count, width, height, originalTIL );
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
                     std::vector<Image> & currentTIL = _tilVsImage[id][shapeId];
@@ -3438,7 +3438,7 @@ namespace fheroes2
                     const bool horizontalFlip = ( shapeId & 2 ) != 0;
                     const bool verticalFlip = ( shapeId & 1 ) != 0;
 
-                    for ( int32_t i = 0; i < count; ++i ) {
+                    for ( size_t i = 0; i < count; ++i ) {
                         currentTIL[i] = Flip( originalTIL[i], horizontalFlip, verticalFlip );
                     }
                 }

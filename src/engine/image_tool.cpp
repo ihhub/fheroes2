@@ -331,7 +331,7 @@ namespace fheroes2
 
         output.resize( imageCount );
 
-        const size_t imageSize = static_cast<size_t>( width * height );
+        const size_t imageSize = static_cast<size_t>( width ) * height;
 
         for ( size_t i = 0; i < imageCount; ++i ) {
             Image & tilImage = output[i];
