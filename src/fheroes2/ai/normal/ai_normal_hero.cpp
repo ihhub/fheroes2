@@ -1180,7 +1180,7 @@ namespace AI
             return 5000;
         }
         else if ( objectType == MP2::OBJ_COAST ) {
-            // Coast is not an object. If this assertion blows up something is wrong the logic.
+            // Coast is not an object. If this assertion blows up something is wrong with the logic.
             assert( 0 );
             return -dangerousTaskPenalty;
         }
@@ -1190,7 +1190,7 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
-            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong the logic.
+            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
             assert( 0 );
             return -dangerousTaskPenalty;
         }
