@@ -237,7 +237,7 @@ namespace Maps
         // Set initial passability based on information read from mp2 and addon structures.
         void setInitialPassability();
 
-        // Update passability based on neigbhours around.
+        // Update passability based on neighbours around.
         void updatePassability();
 
         int getOriginalPassability() const;

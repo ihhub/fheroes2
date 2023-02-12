@@ -398,7 +398,7 @@ namespace AI
             AIToExperienceObject( hero, objectType, dst_index );
             break;
 
-        // witchs hut
+        // Witch's hut
         case MP2::OBJ_WITCHS_HUT:
             AIToWitchsHut( hero, dst_index );
             break;
@@ -483,7 +483,7 @@ namespace AI
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_DESERT_TENT:
-        // loyalty ver
+        // loyalty version objects
         case MP2::OBJ_WATER_ALTAR:
         case MP2::OBJ_AIR_ALTAR:
         case MP2::OBJ_FIRE_ALTAR:
@@ -1299,7 +1299,7 @@ namespace AI
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
-                // check magick book
+                // check magic book
                 if ( hero.HaveSpellBook() &&
                      // check skill level for wisdom
                      Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {

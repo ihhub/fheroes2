@@ -1734,7 +1734,6 @@ void AllHeroes::Init()
             push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
     }
 
-    // devel
     if ( IS_DEVEL() ) {
         push_back( new Heroes( Heroes::DEBUG_HERO, Race::WRLK ) );
     }

@@ -221,7 +221,7 @@ namespace fheroes2
         void release(); // to release all allocated resources. Should be used at the end of the application
 
         // Change the whole color representation on the screen. Make sure that palette exists all the time!!!
-        // nullptr input parameter is used to reset pallette to default one.
+        // nullptr input parameter is used to reset palette to default one.
         void changePalette( const uint8_t * palette = nullptr, const bool forceDefaultPaletteUpdate = false ) const;
 
         int32_t scale() const

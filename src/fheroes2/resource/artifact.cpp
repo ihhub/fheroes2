@@ -948,7 +948,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
                     }
 
                     if ( !giftBag.PushArtifact( *iter ) ) {
-                        // The bag is full. No need to proceeed further.
+                        // The bag is full. No need to proceed further.
                         break;
                     }
 

@@ -836,7 +836,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
         return true;
     }
 
-    // Is the hero standing on Stoneliths?
+    // Is the hero standing on Stone Liths?
     return world.GetTiles( heroIndex ).GetObject( false ) == MP2::OBJ_STONE_LITHS;
 }
 
