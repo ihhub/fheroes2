@@ -49,7 +49,6 @@ namespace fheroes2
     void showLighthouseInfo( const Kingdom & kingdom, const int buttons )
     {
         const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
-        const std::string header( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ) );
         const std::string body( _( "For every lighthouse controlled, your ships will move further each day." ) );
 
         Image combined( 128, 69 );
@@ -76,7 +75,7 @@ namespace fheroes2
         const Text lighthouseControlledText( std::to_string( lighthouseCount ), FontType::normalWhite() );
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( lighthouseControlledText ) );
 
-        showMessage( Text( header, FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
+        showMessage( Text( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
                      { &lighthouseImageElement, &lighthouseControlledElement } );
     }
 }
