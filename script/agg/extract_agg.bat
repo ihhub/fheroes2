@@ -24,7 +24,7 @@ set PATH=%~dp0;%PATH%
 
 set EXIT_CODE=0
 
-call :extract_sprites || ^
+call :extract_icn || ^
 set EXIT_CODE=1
 
 if not "%CI%" == "true" (
@@ -33,9 +33,9 @@ if not "%CI%" == "true" (
 
 exit /B %EXIT_CODE%
 
-:extract_sprites
+:extract_icn
 
 extractor agg *.AGG *.agg || exit /B 1
-icn2img sprites agg\kb.pal agg\*.icn || exit /B 1
+icn2img icn agg\kb.pal agg\*.icn || exit /B 1
 
 exit /B

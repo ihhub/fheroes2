@@ -25,4 +25,4 @@ set -e
 PATH="$(dirname "$0"):$PATH"
 
 extractor agg *.AGG *.agg
-icn2img sprites agg/kb.pal agg/*.icn
+icn2img icn agg/kb.pal agg/*.icn
