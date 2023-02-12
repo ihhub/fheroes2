@@ -1,9 +1,8 @@
 # Russian translation of fheroes2
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
-# Igor Orlov <igororlov@inbox.ru>, 2009.
-# Andrey Afletdinov <afletdinov@gmail.com>, 2009.
+# Copyright (C) 2021 - 2022 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2009 Igor Orlov <igororlov@inbox.ru>
+# Copyright (C) 2009 Andrey Afletdinov <afletdinov@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
