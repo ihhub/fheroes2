@@ -249,15 +249,14 @@ void Interface::Radar::Redraw( const bool redrawMapObjects )
 
 void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, const ViewWorldMode mode, const bool renderMapObjects )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Rect & rect = GetArea();
     _cursorArea.hide();
 
     if ( renderMapObjects ) {
         RedrawObjects( Players::FriendColors(), mode );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Rect & rect = GetArea();
+        fheroes2::Copy( _map, 0, 0, display, rect.x, rect.y, _map.width(), _map.height() );
     }
-
-    fheroes2::Copy( _map, 0, 0, display, rect.x, rect.y, _map.width(), _map.height() );
 
     const fheroes2::Rect roiInTiles = roi.GetROIinTiles();
     _cursorArea.show();
