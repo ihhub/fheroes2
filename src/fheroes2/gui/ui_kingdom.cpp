@@ -73,9 +73,7 @@ namespace fheroes2
 
         const CustomImageDialogElement lighthouseImageElement( combined );
 
-        std::string lighthouseControlledString = _( "%{count}" );
-        StringReplace( lighthouseControlledString, "%{count}", std::to_string( lighthouseCount ) );
-        const Text lighthouseControlledText( lighthouseControlledString, FontType::normalWhite() );
+        const Text lighthouseControlledText( std::to_string( lighthouseCount ), FontType::normalWhite() );
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( lighthouseControlledText ) );
 
         showMessage( Text( header, FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
