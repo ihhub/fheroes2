@@ -2556,7 +2556,7 @@ msgstr ""
 "champ de bataille, avec au moins un espace vide entre chaque armée."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "La formation de combat 'groupée' regroupe votre armée au centre du champ de "
@@ -3773,7 +3773,7 @@ msgstr ""
 "Ce fichier est enregistré au format \"The Price of Loyalty\".\n"
 "Certains éléments peuvent ne pas être disponibles."
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr "Format de sauvegarde non supporté : "
 
 msgid "Current game version: "
@@ -6209,13 +6209,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} le %{race} (niveau %{level})"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"La formation de combat 'groupée' regroupe votre armée au centre du champ de "
-"bataille, de votre coté."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Voulez-vous vraiment renvoyer ce héros ?"

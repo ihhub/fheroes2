@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -470,7 +470,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
     const bool isSameTroopType = destTroop.isValid() && destTroop.GetID() == selectedTroop.GetID();
 
     // specifically for shift hotkey, handle this logic before anything else
-    // this will ensure that clicking on a different troop type while shift key is pressed will not show the split dialogue, which can be ambiguous
+    // this will ensure that clicking on a different troop type while shift key is pressed will not show the split dialog, which can be ambiguous
     if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF ) ) {
         if ( destTroop.isEmpty() || isSameTroopType ) {
             RedistributeArmy( selectedTroop, destTroop, _army );

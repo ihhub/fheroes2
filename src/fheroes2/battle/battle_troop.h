@@ -192,7 +192,8 @@ namespace Battle
         void ResetBlind();
         void SetBlindAnswer( bool value );
         void SpellModesAction( const Spell &, uint32_t, const HeroBase * );
-        void SpellApplyDamage( const Spell &, uint32_t, const HeroBase *, TargetInfo & );
+        void SpellApplyDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, TargetInfo & target );
+        uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const;
         void SpellRestoreAction( const Spell &, uint32_t, const HeroBase * );
         uint32_t Resurrect( uint32_t, bool, bool );
 

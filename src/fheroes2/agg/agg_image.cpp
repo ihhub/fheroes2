@@ -3421,24 +3421,15 @@ namespace fheroes2
 
                 StreamBuf buffer( data );
 
-                const uint32_t count = buffer.getLE16();
-                const uint32_t width = buffer.getLE16();
-                const uint32_t height = buffer.getLE16();
-                const uint32_t size = width * height;
-                if ( headerSize + count * size != data.size() ) {
+                const size_t count = buffer.getLE16();
+                const int32_t width = buffer.getLE16();
+                const int32_t height = buffer.getLE16();
+                if ( count < 1 || width < 1 || height < 1 || ( headerSize + count * width * height ) != data.size() ) {
                     return 0;
                 }
 
                 std::vector<Image> & originalTIL = _tilVsImage[id][0];
-
-                originalTIL.resize( count );
-                for ( uint32_t i = 0; i < count; ++i ) {
-                    Image & tilImage = originalTIL[i];
-                    tilImage.resize( width, height );
-                    tilImage._disableTransformLayer();
-                    memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
-                    std::fill( tilImage.transform(), tilImage.transform() + width * height, static_cast<uint8_t>( 0 ) );
-                }
+                decodeTILImages( data.data() + headerSize, count, width, height, originalTIL );
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
                     std::vector<Image> & currentTIL = _tilVsImage[id][shapeId];
@@ -3447,7 +3438,7 @@ namespace fheroes2
                     const bool horizontalFlip = ( shapeId & 2 ) != 0;
                     const bool verticalFlip = ( shapeId & 1 ) != 0;
 
-                    for ( uint32_t i = 0; i < count; ++i ) {
+                    for ( size_t i = 0; i < count; ++i ) {
                         currentTIL[i] = Flip( originalTIL[i], horizontalFlip, verticalFlip );
                     }
                 }

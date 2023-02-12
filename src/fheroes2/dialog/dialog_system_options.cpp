@@ -288,7 +288,7 @@ namespace
                 saveHeroSpeed = true;
             }
 
-            // set ai speed
+            // set AI speed
             bool saveAISpeed = false;
             if ( le.MouseClickLeft( aiSpeedRoi ) ) {
                 conf.SetAIMoveSpeed( ( conf.AIMoveSpeed() + 1 ) % 11 );

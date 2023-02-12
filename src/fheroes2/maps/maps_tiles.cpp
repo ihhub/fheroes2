@@ -468,7 +468,7 @@ namespace
             break;
         }
 
-        return "Uknown layer";
+        return "Unknown layer";
     }
 
     MP2::MapObjectType getLoyaltyObject( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
