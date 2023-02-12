@@ -3429,7 +3429,7 @@ namespace fheroes2
                 }
 
                 std::vector<Image> & originalTIL = _tilVsImage[id][0];
-                decodeTILImages( data.data() + headerSize, count, width, height, originalTIL );
+                decodeTILImages( data.data() + headerSize, static_cast<size_t>( count ), width, height, originalTIL );
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
                     std::vector<Image> & currentTIL = _tilVsImage[id][shapeId];
