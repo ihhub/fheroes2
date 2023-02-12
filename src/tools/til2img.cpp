@@ -33,6 +33,7 @@
 #include <vector>
 
 #include "image.h"
+#include "image_palette.h"
 #include "image_tool.h"
 #include "serialize.h"
 #include "system.h"
@@ -44,18 +45,35 @@ namespace
 
 int main( int argc, char ** argv )
 {
-    if ( argc < 3 ) {
+    if ( argc < 4 ) {
         std::string baseName = System::GetBasename( argv[0] );
 
-        std::cerr << baseName << " extracts sprites in BMP or PNG format (if supported) from the specified TIL file(s)." << std::endl
-                  << "Syntax: " << baseName << " dst_dir input_file.til ..." << std::endl;
+        std::cerr << baseName << " extracts sprites in BMP or PNG format (if supported) from the specified TIL file(s) using the specified palette." << std::endl
+                  << "Syntax: " << baseName << " dst_dir palette_file.pal input_file.til ..." << std::endl;
         return EXIT_FAILURE;
     }
 
     const char * dstDir = argv[1];
+    const char * paletteFileName = argv[2];
+
+    {
+        StreamFile paletteStream;
+        if ( !paletteStream.open( paletteFileName, "rb" ) ) {
+            std::cerr << "Cannot open file " << paletteFileName << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const std::vector<uint8_t> palette = paletteStream.getRaw();
+        if ( palette.size() != 768 ) {
+            std::cerr << "Invalid palette size of " << palette.size() << " instead of 768" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        fheroes2::setGamePalette( palette );
+    }
 
     std::vector<std::string> inputFileNames;
-    for ( int i = 2; i < argc; ++i ) {
+    for ( int i = 3; i < argc; ++i ) {
         if ( System::isShellLevelGlobbingSupported() ) {
             inputFileNames.emplace_back( argv[i] );
         }
