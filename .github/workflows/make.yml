@@ -58,6 +58,7 @@ jobs:
           tools_package_name: fheroes2_tools_ubuntu_x86-64_SDL2.zip
           tools_package_files: >-
             LICENSE
+            ./script/agg/extract_agg.sh
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
@@ -130,6 +131,7 @@ jobs:
           tools_package_name: fheroes2_tools_ubuntu_arm64_SDL2.zip
           tools_package_files: >-
             LICENSE
+            ./script/agg/extract_agg.sh
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
@@ -195,6 +197,7 @@ jobs:
           tools_package_name: fheroes2_tools_macos_x86-64_SDL2.zip
           tools_package_files: >-
             LICENSE
+            ./script/agg/extract_agg.sh
             ./src/tools/extractor
             ./src/tools/icn2img
           release_name: macOS x86-64 build with SDL2 (latest commit)

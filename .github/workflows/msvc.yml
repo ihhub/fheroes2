@@ -124,7 +124,8 @@ jobs:
         7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.tools_package_name }} \
                                .\\"$BUILD_DIR"\\extractor.exe \
                                .\\"$BUILD_DIR"\\icn2img.exe \
-                               LICENSE
+                               LICENSE \
+                               .\\script\\agg\\extract_agg.bat
         if [[ ${{ matrix.config.deploy_config }} == SDL2 ]]; then
             7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.tools_package_name }} \
                                    .\\"$BUILD_DIR"\\SDL2.dll \
