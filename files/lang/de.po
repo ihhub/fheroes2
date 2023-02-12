@@ -3769,7 +3769,7 @@ msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
-"Diese Datei wurde für eine \"The Price of Loyalty\"-Karte gespeichert, "
+"Diese Datei wurde als \"The Price of Loyalty\"-Karte gespeichert, "
 "aber die entsprechenden Spiel-Assets wurden der Engine nicht zur Verfügung gestellt."
 
 msgid "Usupported save format: "
