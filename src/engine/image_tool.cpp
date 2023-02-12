@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <cstring>
@@ -235,7 +236,7 @@ namespace fheroes2
         return true;
     }
 
-    Sprite decodeICNSprite( const uint8_t * data, uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY )
+    Sprite decodeICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY )
     {
         Sprite sprite( width, height, offsetX, offsetY );
         sprite.reset();
@@ -323,6 +324,23 @@ namespace fheroes2
         }
 
         return sprite;
+    }
+
+    void decodeTILImages( const uint8_t * data, const size_t imageCount, const int32_t width, const int32_t height, std::vector<Image> & output )
+    {
+        assert( data != nullptr && imageCount > 0 && width > 0 && height > 0 );
+
+        output.resize( imageCount );
+
+        const size_t imageSize = static_cast<size_t>( width ) * height;
+
+        for ( size_t i = 0; i < imageCount; ++i ) {
+            Image & tilImage = output[i];
+            tilImage.resize( width, height );
+            tilImage._disableTransformLayer();
+            memcpy( tilImage.image(), data + i * imageSize, imageSize );
+            std::fill( tilImage.transform(), tilImage.transform() + imageSize, static_cast<uint8_t>( 0 ) );
+        }
     }
 
     bool isPNGFormatSupported()
