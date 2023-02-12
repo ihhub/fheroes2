@@ -1433,7 +1433,7 @@ void EventDate::LoadFromMP2( StreamBuf st )
         // allow computer
         computer = ( st.getLE16() != 0 );
 
-        // day of first occurent
+        // day of first occurrence
         first = st.getLE16();
 
         // subsequent occurrences

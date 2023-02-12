@@ -1152,7 +1152,7 @@ namespace
         }
     }
 
-    // CP-1251 supports Russian, Ukranian, Belarussian, Bulgarian, Serbian Cyrillic, Macedonian and English.
+    // CP-1251 supports Russian, Ukrainian, Belarussian, Bulgarian, Serbian Cyrillic, Macedonian and English.
     void generateCP1251Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // TODO: add support for Serbian Cyrillic and Macedonian languages by generating missing letters.
@@ -1461,7 +1461,7 @@ namespace
             fheroes2::SetTransformPixel( font[227 - 32], 4, 2, 1 );
             updateNormalFontLetterShadow( font[227 - 32] );
 
-            // The same letter as above but with a verical line at the top.
+            // The same letter as above but with a vertical line at the top.
             font[180 - 32].resize( font[227 - 32].width(), font[227 - 32].height() + 1 );
             font[180 - 32].reset();
             fheroes2::Copy( font[227 - 32], 0, 0, font[180 - 32], 0, 1, font[227 - 32].width(), font[227 - 32].height() );

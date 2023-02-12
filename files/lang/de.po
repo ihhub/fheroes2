@@ -1,4 +1,4 @@
-# German translation for fheroes2
+# German translation of fheroes2
 # Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
@@ -2563,11 +2563,11 @@ msgstr ""
 "bleibt."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
-"Die \"Gruppierte\" Kampfformation bündelt eure Armee in der Mitte eurer "
-"Seite des Schlachtfelds."
+"Die 'Gruppierte' Kampfformation bündelt Ihre Armee in der Mitte Ihrer Seite "
+"des Schlachtfelds."
 
 msgid "Spread Formation"
 msgstr "Ausbreitende Formation"
@@ -3764,15 +3764,14 @@ msgstr "Bestenliste für Feldzüge anzeigen."
 msgid "This file contains a save with an invalid game type."
 msgstr "Diese Datei enthält einen Spielstand mit einem ungültigen Spieltyp."
 
-#, fuzzy
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
-"Diese Datei ist in der \"The Price of Loyalty\"-Version gespeichert.\n"
-"Einige Objekte sind möglicherweise nicht mehr verfügbar."
+"Diese Datei wurde als \"The Price of Loyalty\"-Karte gespeichert, "
+"aber die entsprechenden Spiel-Assets wurden der Engine nicht zur Verfügung gestellt."
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr "Unterstütztes Speicherformat: "
 
 msgid "Current game version: "
@@ -6224,13 +6223,6 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} (Stufe %{level} %{race})"
 
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"Die 'Gruppierte' Kampfformation bündelt Ihre Armee in der Mitte Ihrer Seite "
-"des Schlachtfelds."
-
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Sind Sie sicher, dass Sie diesen Helden entlassen wollen?"
 
@@ -7281,7 +7273,7 @@ msgid "Nothing Special"
 msgstr "Nichts besonderes"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Moosiger Felsen"
 
 msgid "Watch Tower"
 msgstr "Wachturm"
@@ -10174,22 +10166,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Totenbesc"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Auf diesen Zug warten"
-
-#~ msgid "Wait"
-#~ msgstr "Warten"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Wartet die aktuelle Kreatur. Die aktuelle Kreatur verzögert ihren Zug, "
-#~ "bis alle anderen Kreaturen dran waren."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} wartet auf den Zug."

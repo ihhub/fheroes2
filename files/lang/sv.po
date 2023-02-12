@@ -2499,7 +2499,7 @@ msgstr ""
 "minst en tomt mellanrum mellan varje armé."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "'Grupperad' stridsformation buntar ihop din armé till mitten av din sida av "
@@ -3737,7 +3737,7 @@ msgid ""
 "corresponding game assets have not been provided to the engine."
 msgstr ""
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 msgid "Current game version: "
@@ -5973,13 +5973,6 @@ msgstr ""
 #, fuzzy
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} av %{race} ( Level %{level} )"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"'Grupperad' stridsformation samlar ihop din armé tillsammans i mitten på din "
-"sida av stridsfältet."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Är du säker på att du vill avsätta denna hjälte?"
@@ -9568,9 +9561,3 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Vänta denna enhet"
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} inväntar runda."

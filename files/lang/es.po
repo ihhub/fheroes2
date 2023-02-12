@@ -2538,7 +2538,7 @@ msgstr ""
 "entre unidades."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
@@ -3778,7 +3778,7 @@ msgid ""
 "corresponding game assets have not been provided to the engine."
 msgstr ""
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 #, fuzzy
@@ -6136,13 +6136,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
-"lado del campo de batalla."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "¿Estas seguro que quieres despedir este Héroe?"
@@ -9835,13 +9828,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Nigromante"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Esta unidad espera"
-
-#, fuzzy
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} esperando turno."

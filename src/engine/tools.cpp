@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -316,7 +316,7 @@ namespace fheroes2
             }
         }
         else {
-            // Otherwise we calculate the equclidean line, using the dermined parameters.
+            // Otherwise we calculate the euclidean line, using the determined parameters.
             const double moveX = dx / static_cast<double>( length );
             const double moveY = dy / static_cast<double>( length );
 

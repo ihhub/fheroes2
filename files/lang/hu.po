@@ -2524,7 +2524,7 @@ msgstr ""
 "egyik oldalán (legalább 1 üres hely van közöttük)."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "'Szoros' csataalakzatban az egységeid szorosan egymás mellett helyezkednek "
@@ -3773,7 +3773,7 @@ msgid ""
 "corresponding game assets have not been provided to the engine."
 msgstr ""
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 msgid "Current game version: "
@@ -5897,13 +5897,6 @@ msgstr ""
 #, fuzzy
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{level} szint"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"'Szoros' csataalakzatban az egységeid szorosan egymás mellett helyezkednek "
-"el a harcmező oldalának közepén."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Biztos, hogy elbocsátod ezt a Hőst?"
@@ -9626,10 +9619,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Nekromanta"
-
-#, fuzzy
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} várakozik."

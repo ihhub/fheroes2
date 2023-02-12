@@ -204,7 +204,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
 
     // check version: false
     if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION ) {
-        std::string errorMessage( _( "Usupported save format: " ) );
+        std::string errorMessage( _( "Unsupported save format: " ) );
         errorMessage += std::to_string( binver );
         errorMessage += ".\n";
         errorMessage += _( "Current game version: " );
