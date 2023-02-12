@@ -786,10 +786,10 @@ void Kingdom::openOverviewDialog()
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
         else if ( le.MousePressRight( rectIncome ) ) {
-            fheroes2::showKingdomIncome( *this, 0 );
+            fheroes2::showKingdomIncome( *this, Dialog::ZERO );
         }
         else if ( le.MousePressRight( rectLighthouse ) ) {
-            fheroes2::showLighthouseInfo( *this, 0 );
+            fheroes2::showLighthouseInfo( *this, Dialog::ZERO );
         }
 
         // Exit this dialog.
