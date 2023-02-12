@@ -29,6 +29,7 @@
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
+#include "maps.h"
 #include "mp2.h"
 #include "translations.h"
 #include "ui_dialog.h"
