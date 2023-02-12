@@ -65,7 +65,7 @@ example creature names or castle buildings.
 Once the translation files have been modified, for Linux/MacOS run the `make` command below in the `files/lang` subdirectory to create
 machine object (MO) binary files which can be used by the fheroes2 engine.
 
-For exmaple, for the German PO file, `de.po`, the following would be the command:
+For example, for the German PO file, `de.po`, the following would be the command:
 ```bash
 make de.mo
 ```
