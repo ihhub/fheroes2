@@ -18,13 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "image.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <type_traits>
 
-#include "image.h"
 #include "image_palette.h"
 
 namespace
@@ -1116,6 +1117,11 @@ namespace fheroes2
     {
         out.resize( in.width(), in.height() );
         Copy( in, 0, 0, out, 0, 0, in.width(), in.height() );
+    }
+
+    void Copy( const Image & in, Image & out, int32_t outX, int32_t outY )
+    {
+        Copy( in, 0, 0, out, outX, outY, in.width(), in.height() );
     }
 
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )

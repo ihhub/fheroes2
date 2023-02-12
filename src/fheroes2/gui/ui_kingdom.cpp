@@ -63,13 +63,13 @@ namespace fheroes2
         Image combined( 5 * TILEWIDTH, 2 * TILEWIDTH + lighthouse_top.height() );
         combined.reset();
 
-        Copy( shadow_top, 0, 0, combined, shadow_top.x(), TILEWIDTH + shadow_top.y() - top_offset, TILEWIDTH, TILEWIDTH );
-        Blit( shadow_middle, combined, shadow_middle.x(), TILEWIDTH * 2 + shadow_middle.y() - top_offset );
-        Blit( shadow_bottom, combined, shadow_bottom.x() + TILEWIDTH, TILEWIDTH * 2 + shadow_bottom.y() - top_offset );
-        Blit( lighthouse_top, combined, lighthouse_top.x() + TILEWIDTH * 2, lighthouse_top.y() - top_offset );
-        Blit( lighthouse_middle, combined, lighthouse_middle.x() + TILEWIDTH * 2, TILEWIDTH + lighthouse_middle.y() - top_offset );
-        Blit( lighthouse_bottom, combined, lighthouse_bottom.x() + TILEWIDTH * 2, TILEWIDTH * 2 + lighthouse_bottom.y() - top_offset );
-        Blit( lighthouse_light, combined, lighthouse_light.x() + TILEWIDTH * 2, TILEWIDTH + lighthouse_light.y() - top_offset );
+        Copy( shadow_top, combined, shadow_top.x(), TILEWIDTH + shadow_top.y() - top_offset );
+        Copy( shadow_middle, combined, shadow_middle.x(), TILEWIDTH * 2 + shadow_middle.y() - top_offset );
+        Copy( shadow_bottom, combined, shadow_bottom.x() + TILEWIDTH, TILEWIDTH * 2 + shadow_bottom.y() - top_offset );
+        Copy( lighthouse_top, combined, lighthouse_top.x() + TILEWIDTH * 2, lighthouse_top.y() - top_offset );
+        Copy( lighthouse_middle, combined, lighthouse_middle.x() + TILEWIDTH * 2, TILEWIDTH + lighthouse_middle.y() - top_offset );
+        Copy( lighthouse_bottom, combined, lighthouse_bottom.x() + TILEWIDTH * 2, TILEWIDTH * 2 + lighthouse_bottom.y() - top_offset );
+        Copy( lighthouse_light, combined, lighthouse_light.x() + TILEWIDTH * 2, TILEWIDTH + lighthouse_light.y() - top_offset );
 
         const CustomImageDialogElement lighthouseImageElement( combined );
 
