@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -235,7 +235,7 @@ namespace fheroes2
         return true;
     }
 
-    Sprite decodeICNSprite( const uint8_t * data, uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY )
+    Sprite decodeICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY )
     {
         Sprite sprite( width, height, offsetX, offsetY );
         sprite.reset();
@@ -323,6 +323,24 @@ namespace fheroes2
         }
 
         return sprite;
+    }
+
+    void decodeTILImages( const uint8_t * data, const int32_t imageCount, const int32_t width, const int32_t height, std::vector<Image> & output )
+    {
+        assert( data != nullptr && imageCount > 0 && width > 0 && height > 0 );
+
+        output.clear();
+        output.resize( imageCount );
+
+        const int32_t imageSize = width * height;
+
+        for ( int32_t i = 0; i < imageCount; ++i ) {
+            Image & tilImage = output[i];
+            tilImage.resize( width, height );
+            tilImage._disableTransformLayer();
+            memcpy( tilImage.image(), data + i * imageSize, imageSize );
+            std::fill( tilImage.transform(), tilImage.transform() + width * height, static_cast<uint8_t>( 0 ) );
+        }
     }
 
     bool isPNGFormatSupported()
