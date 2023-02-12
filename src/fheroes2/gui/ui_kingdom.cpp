@@ -50,24 +50,26 @@ namespace fheroes2
         const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
         const std::string body( _( "For every lighthouse controlled, your ships will move further each day." ) );
 
-        Image combined( 128, 69 );
+        const Sprite & shadow_top = AGG::GetICN( ICN::OBJNMUL2, 60 );
+        const Sprite & shadow_middle = AGG::GetICN( ICN::OBJNMUL2, 71 );
+        const Sprite & shadow_bottom = AGG::GetICN( ICN::OBJNMUL2, 72 );
+        const Sprite & lighthouse_top = AGG::GetICN( ICN::OBJNMUL2, 59 );
+        const Sprite & lighthouse_middle = AGG::GetICN( ICN::OBJNMUL2, 61 );
+        const Sprite & lighthouse_bottom = AGG::GetICN( ICN::OBJNMUL2, 73 );
+        const Sprite & lighthouse_light = AGG::GetICN( ICN::OBJNMUL2, 62 );
+
+        const int32_t top_offset = TILEWIDTH - lighthouse_top.height();
+
+        Image combined( 5 * TILEWIDTH, 2 * TILEWIDTH + lighthouse_top.height() );
         combined.reset();
 
-        // shadow top
-        Blit( AGG::GetICN( ICN::OBJNMUL2, 60 ), combined, 2, 33 );
-        // shadow middle
-        Blit( AGG::GetICN( ICN::OBJNMUL2, 71 ), combined, 3, 37 );
-        // shadow bottom
-        Blit( AGG::GetICN( ICN::OBJNMUL2, 72 ), combined, 17, 39 );
-
-        // lighthouse top
-        Blit( AGG::GetICN( ICN::OBJNMUL2, 59 ), combined, 63, 0 );
-        // lighthouse middle
-        Blit( AGG::GetICN( ICN::OBJNMUL2, 61 ), combined, 57, 5 );
-        // lighthouse bottom
-        Blit( AGG::GetICN( ICN::OBJNMUL2, 73 ), combined, 49, 37 );
-        // lighthouse light
-        Blit( AGG::GetICN( ICN::OBJNMUL2, 62 ), combined, 61, 10 );
+        Copy( shadow_top, 0, 0, combined, shadow_top.x(), TILEWIDTH + shadow_top.y() - top_offset, TILEWIDTH, TILEWIDTH );
+        Blit( shadow_middle, combined, shadow_middle.x(), TILEWIDTH * 2 + shadow_middle.y() - top_offset );
+        Blit( shadow_bottom, combined, shadow_bottom.x() + TILEWIDTH, TILEWIDTH * 2 + shadow_bottom.y() - top_offset );
+        Blit( lighthouse_top, combined, lighthouse_top.x() + TILEWIDTH * 2, lighthouse_top.y() - top_offset );
+        Blit( lighthouse_middle, combined, lighthouse_middle.x() + TILEWIDTH * 2, TILEWIDTH + lighthouse_middle.y() - top_offset );
+        Blit( lighthouse_bottom, combined, lighthouse_bottom.x() + TILEWIDTH * 2, TILEWIDTH * 2 + lighthouse_bottom.y() - top_offset );
+        Blit( lighthouse_light, combined, lighthouse_light.x() + TILEWIDTH * 2, TILEWIDTH + lighthouse_light.y() - top_offset );
 
         const CustomImageDialogElement lighthouseImageElement( combined );
 
