@@ -3765,13 +3765,12 @@ msgstr "Bestenliste für Feldzüge anzeigen."
 msgid "This file contains a save with an invalid game type."
 msgstr "Diese Datei enthält einen Spielstand mit einem ungültigen Spieltyp."
 
-#, fuzzy
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
-"Diese Datei ist in der \"The Price of Loyalty\"-Version gespeichert.\n"
-"Einige Objekte sind möglicherweise nicht mehr verfügbar."
+"Diese Datei wurde für eine \"The Price of Loyalty\"-Karte gespeichert, "
+"aber die entsprechenden Spiel-Assets wurden der Engine nicht zur Verfügung gestellt."
 
 msgid "Usupported save format: "
 msgstr "Unterstütztes Speicherformat: "
@@ -7282,7 +7281,7 @@ msgid "Nothing Special"
 msgstr "Nichts besonderes"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Moosiger Felsen"
 
 msgid "Watch Tower"
 msgstr "Wachturm"
