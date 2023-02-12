@@ -22,7 +22,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cassert>
 #include <cctype>
 #include <cstdint>
 #include <cstdlib>
@@ -155,7 +154,12 @@ int main( int argc, char ** argv )
             static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
 
             const std::vector<uint8_t> buf = inputStream.getRaw( info.size );
-            assert( buf.size() == info.size );
+            if ( buf.size() != info.size ) {
+                ++itemsFailed;
+
+                std::cerr << inputFileName << ": item " << name << " has an invalid size of " << info.size << std::endl;
+                continue;
+            }
 
             const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( name );
 

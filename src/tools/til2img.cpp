@@ -22,7 +22,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cassert>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
@@ -65,9 +64,6 @@ int main( int argc, char ** argv )
         }
     }
 
-    uint32_t spritesExtracted = 0;
-    uint32_t spritesFailed = 0;
-
     for ( const std::string & inputFileName : inputFileNames ) {
         std::cout << "Processing " << inputFileName << "..." << std::endl;
 
@@ -104,23 +100,21 @@ int main( int argc, char ** argv )
         }
 
         const std::vector<uint8_t> buf = inputStream.getRaw( spriteSize * spritesCount );
-        assert( buf.size() == spriteSize * spritesCount );
+        if ( buf.size() != spriteSize * spritesCount ) {
+            std::cerr << inputFileName << ": failed to extract sprites" << std::endl;
+            return EXIT_FAILURE;
+        }
 
-        for ( uint16_t spriteIdx = 0; spriteIdx < spritesCount; ++spriteIdx ) {
-            const size_t spriteOffset = spriteSize * spriteIdx;
+        std::vector<fheroes2::Image> sprites;
+        sprites.reserve( spritesCount );
 
-            if ( spriteOffset + spriteSize > buf.size() ) {
-                ++spritesFailed;
+        fheroes2::decodeTILImages( buf.data(), spritesCount, spriteWidth, spriteHeight, sprites );
+        if ( sprites.size() != spritesCount ) {
+            std::cerr << inputFileName << ": failed to extract sprites" << std::endl;
+            return EXIT_FAILURE;
+        }
 
-                std::cerr << inputFileName << ": invalid offset for sprite " << spriteIdx << std::endl;
-                continue;
-            }
-
-            fheroes2::Image sprite( spriteWidth, spriteHeight );
-
-            std::copy( buf.data() + spriteOffset, buf.data() + spriteOffset + spriteSize, sprite.image() );
-            std::fill( sprite.transform(), sprite.transform() + spriteSize, static_cast<uint8_t>( 0 ) );
-
+        for ( size_t spriteIdx = 0; spriteIdx < sprites.size(); ++spriteIdx ) {
             std::ostringstream spriteIdxStream;
             spriteIdxStream << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;
 
@@ -134,18 +128,12 @@ int main( int argc, char ** argv )
                 outputFileName += ".bmp";
             }
 
-            if ( !fheroes2::Save( sprite, outputFileName, spriteBackground ) ) {
-                ++spritesFailed;
-
+            if ( !fheroes2::Save( sprites[spriteIdx], outputFileName, spriteBackground ) ) {
                 std::cerr << inputFileName << ": error saving sprite " << spriteIdx << std::endl;
-                continue;
+                return EXIT_FAILURE;
             }
-
-            ++spritesExtracted;
         }
     }
 
-    std::cout << "Total extracted: " << spritesExtracted << ", failed: " << spritesFailed << std::endl;
-
-    return ( spritesExtracted > 0 && spritesFailed == 0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }

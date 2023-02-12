@@ -21,7 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
@@ -142,7 +141,12 @@ int main( int argc, char ** argv )
             }
 
             const std::vector<uint8_t> buf = inputStream.getRaw( dataSize );
-            assert( buf.size() == dataSize );
+            if ( buf.size() != dataSize ) {
+                ++spritesFailed;
+
+                std::cerr << inputFileName << ": sprite " << spriteIdx << " has an invalid size of " << dataSize << std::endl;
+                continue;
+            }
 
             const fheroes2::Sprite sprite = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
 
