@@ -2830,7 +2830,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         if ( cell ) {
             if ( CursorAttack( themes ) ) {
                 const Unit * b_enemy = cell->GetUnit();
-                popup.SetInfo( cell, _currentUnit, b_enemy );
+                popup.SetAttackInfo( cell, _currentUnit, b_enemy );
             }
             else
                 popup.Reset();
@@ -2880,6 +2880,14 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
         if ( cursor.Themes() != themes )
             cursor.SetThemes( themes );
+
+        const Cell * cell = Board::GetCell( index_pos );
+        if ( cell && _currentUnit && cell->GetUnit() ) {
+            popup.SetSpellAttackInfo( cell, _currentUnit->GetCurrentOrArmyCommander(), cell->GetUnit(), humanturn_spell );
+        }
+        else {
+            popup.Reset();
+        }
 
         if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() ) {
             if ( !Board::isValidIndex( index_pos ) ) {
@@ -6114,8 +6122,9 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
 Battle::PopupDamageInfo::PopupDamageInfo()
     : Dialog::FrameBorder( 5 )
     , _cell( nullptr )
-    , _attacker( nullptr )
     , _defender( nullptr )
+    , _minDamage( 0 )
+    , _maxDamage( 0 )
     , _redraw( false )
 {}
 
@@ -6124,20 +6133,65 @@ void Battle::PopupDamageInfo::setBattleUIRect( const fheroes2::Rect & battleUIRe
     _battleUIRect = battleUIRect;
 }
 
-void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender )
+bool Battle::PopupDamageInfo::SetDamageInfoBase( const Cell * cell, const Unit * defender )
 {
-    if ( cell == nullptr || attacker == nullptr || defender == nullptr ) {
-        return;
+    if ( cell == nullptr || defender == nullptr ) {
+        return false;
     }
 
     if ( !Settings::Get().isBattleShowDamageInfoEnabled() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
+        return false;
+    }
+
+    _cell = cell;
+    _defender = defender;
+
+    return true;
+}
+
+void Battle::PopupDamageInfo::SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender )
+{
+    if ( attacker == nullptr || !SetDamageInfoBase( cell, defender ) ) {
         return;
     }
 
     _redraw = true;
-    _cell = cell;
-    _attacker = attacker;
-    _defender = defender;
+    _minDamage = attacker->CalculateMinDamage( *defender );
+    _maxDamage = attacker->CalculateMaxDamage( *defender );
+
+    if ( attacker->Modes( SP_BLESS ) ) {
+        _minDamage = _maxDamage;
+    }
+    else if ( attacker->Modes( SP_CURSE ) ) {
+        _maxDamage = _minDamage;
+    }
+}
+
+void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell )
+{
+    assert( hero != nullptr );
+
+    // TODO: Currently, this functionality only supports a simple single-target spell case
+    // We should refactor this to apply to all cases
+    if ( !spell.isSingleTarget() || !spell.isDamage() ) {
+        return;
+    }
+
+    if ( !SetDamageInfoBase( cell, defender ) ) {
+        return;
+    }
+
+    // If defender unit immune to magic, do not show the tooltip
+    if ( !defender->AllowApplySpell( spell, hero ) ) {
+        return;
+    }
+
+    const int spellPoints = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
+    const uint32_t spellDamage = defender->CalculateSpellDamage( spell, spellPoints, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
+
+    _redraw = true;
+    _minDamage = spellDamage;
+    _maxDamage = spellDamage;
 }
 
 void Battle::PopupDamageInfo::Reset()
@@ -6145,8 +6199,9 @@ void Battle::PopupDamageInfo::Reset()
     if ( _redraw ) {
         _redraw = false;
         _cell = nullptr;
-        _attacker = nullptr;
         _defender = nullptr;
+        _minDamage = 0;
+        _maxDamage = 0;
     }
 
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
@@ -6158,34 +6213,24 @@ void Battle::PopupDamageInfo::Redraw() const
         return;
     }
 
-    assert( _cell != nullptr && _attacker != nullptr && _defender != nullptr );
+    assert( _cell != nullptr && _defender != nullptr );
 
-    uint32_t minDamage = _attacker->CalculateMinDamage( *_defender );
-    uint32_t maxDamage = _attacker->CalculateMaxDamage( *_defender );
+    std::string str = _minDamage == _maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
-    if ( _attacker->Modes( SP_BLESS ) ) {
-        minDamage = maxDamage;
-    }
-    else if ( _attacker->Modes( SP_CURSE ) ) {
-        maxDamage = minDamage;
-    }
-
-    std::string str = minDamage == maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
-
-    StringReplace( str, "%{min}", minDamage );
-    StringReplace( str, "%{max}", maxDamage );
+    StringReplace( str, "%{min}", std::to_string( _minDamage ) );
+    StringReplace( str, "%{max}", std::to_string( _maxDamage ) );
 
     Text damageText( str, Font::SMALL );
 
-    const uint32_t minNumKilled = _defender->HowManyWillKilled( minDamage );
-    const uint32_t maxNumKilled = _defender->HowManyWillKilled( maxDamage );
+    const uint32_t minNumKilled = _defender->HowManyWillKilled( _minDamage );
+    const uint32_t maxNumKilled = _defender->HowManyWillKilled( _maxDamage );
 
     assert( minNumKilled <= _defender->GetCount() && maxNumKilled <= _defender->GetCount() );
 
     str = minNumKilled == maxNumKilled ? _( "Perish: %{max}" ) : _( "Perish: %{min} - %{max}" );
 
-    StringReplace( str, "%{min}", minNumKilled );
-    StringReplace( str, "%{max}", maxNumKilled );
+    StringReplace( str, "%{min}", std::to_string( minNumKilled ) );
+    StringReplace( str, "%{max}", std::to_string( maxNumKilled ) );
 
     Text killedText( str, Font::SMALL );
 
