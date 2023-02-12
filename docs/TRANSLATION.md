@@ -57,7 +57,7 @@ to navigate once too many changes, comments and so on are present within the sam
 In addition, we have decided on a minimum amount of 15 changed strings for a translation PR. For languages that have translations that are more
 or less complete, less than this amount can be accepted.
 
-Preferrably a PR should contain a small amount of changes, about 100 lines, all focused on translating a specific of the game - for
+Preferrably a PR should contain a small amount of changes, about 100 lines, all focused on translating a specific part of the game - for
 example creature names or castle buildings.
 
 ## Build binary translation files
