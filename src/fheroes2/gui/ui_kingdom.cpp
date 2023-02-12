@@ -49,7 +49,7 @@ namespace fheroes2
     void showLighthouseInfo( const Kingdom & kingdom, const int buttons )
     {
         const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
-        const std::string header( _( "Lighthouses" ) );
+        const std::string header( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ) );
         const std::string body( _( "For every lighthouse controlled, your ships will move further each day." ) );
 
         Image combined( 128, 69 );
