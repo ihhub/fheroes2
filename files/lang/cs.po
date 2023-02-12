@@ -54,7 +54,7 @@ msgid "QUIT"
 msgstr "KONEC"
 
 msgid "CANCEL"
-msgstr "ZRUSIT"
+msgstr "ZRUŠIT"
 
 msgid "OKAY"
 msgstr "OKAY"
@@ -69,7 +69,7 @@ msgid "LEARN"
 msgstr "UČIT"
 
 msgid "TRADE"
-msgstr "ZAMEN"
+msgstr "ZAMĚŇ"
 
 msgid "YES"
 msgstr "ANO"
@@ -78,10 +78,10 @@ msgid "NO"
 msgstr "NE"
 
 msgid "EXIT"
-msgstr "PRYC"
+msgstr "PRYČ"
 
 msgid "DISMISS"
-msgstr "PROPUST"
+msgstr "PROPUSŤ"
 
 msgid "UPGRADE"
 msgstr "VYLEPŠI"
@@ -134,7 +134,7 @@ msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
-"PUVODNI\n"
+"PUVODNÍ\n"
 "KAMPAŇ"
 
 msgid ""
