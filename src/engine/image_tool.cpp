@@ -329,7 +329,6 @@ namespace fheroes2
     {
         assert( data != nullptr && imageCount > 0 && width > 0 && height > 0 );
 
-        output.clear();
         output.resize( imageCount );
 
         const size_t imageSize = static_cast<size_t>( width * height );
