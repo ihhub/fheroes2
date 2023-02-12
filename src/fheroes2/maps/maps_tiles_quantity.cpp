@@ -542,7 +542,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             else {
                 // 0: 70% none
                 // 1,2,3 - 2000g, 2500g+3res, 3000g+5res,
-                // 4,5 - need have skill wizard or leadership,
+                // 4,5 - need to have skill wisdom or leadership,
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
                 // 15 - spell
                 int cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;

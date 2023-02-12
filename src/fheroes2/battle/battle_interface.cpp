@@ -3590,10 +3590,10 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             return TargetInfo::isFinishAnimFrame( info );
         } );
 
-        // There should not be more finished animations than we started.
+        // There should not be more finished animations than when we started.
         assert( finishedAnimationCount <= animatingTargets );
 
-        // There should not be more Lich cloud animation frames than in corresponding ICN.
+        // There should not be more Lich cloud animation frames than in the corresponding ICN.
         assert( lichCloudFrame <= lichCloudMaxFrame );
 
         // IMPORTANT: The game engine can change STATIC animation to IDLE, especially for Ghosts and Zombies,
@@ -3701,7 +3701,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     // Slowed flying creature has to fly off.
     if ( canFly ) {
-        // If a flying creature has to cross the bridge during its path we have to open it before the creature flyers up.
+        // If a flying creature has to cross the bridge during its path we have to open it before the creature flies up.
         // Otherwise it will freeze during the movement, waiting for the bridge to open. So we have to go the whole path
         // to analyze if the bridge needs to open for this creature.
         if ( bridge ) {

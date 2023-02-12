@@ -162,7 +162,7 @@ namespace AI
             double cellThreatLevel = 0.0;
 
             for ( const Unit * enemy : enemies ) {
-                // Archers and Flyers are always threating, skip
+                // Archers and Flyers are always threatening, skip
                 if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
                     continue;
                 }

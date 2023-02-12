@@ -703,7 +703,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             --greenColorSteps;
         }
 
-        // Not all arrows and their shadows fit in 1 tile. We need to consider by 1 tile bigger area to properly render everything.
+        // Not all arrows and their shadows fit in 1 tile. We need to consider an area of 1 tile bigger area to properly render everything.
         const fheroes2::Rect extendedVisibleRoi{ tileROI.x - 1, tileROI.y - 1, tileROI.width + 2, tileROI.height + 2 };
 
         for ( ; currentStep != path.end(); ++currentStep ) {

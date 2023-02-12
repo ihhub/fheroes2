@@ -616,7 +616,7 @@ uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
     if ( dmg && GetCount() ) {
         uint32_t killed = HowManyWillKilled( dmg );
 
-        // mirror image dies if receives any damage
+        // mirror image dies if it receives any damage
         if ( Modes( CAP_MIRRORIMAGE ) ) {
             dmg = hp;
             killed = GetCount();
@@ -885,7 +885,7 @@ bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
 
 bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, TargetInfo & target )
 {
-    // HACK!!! Chain lightning is the only spell which can't be casted on allies but could be applied on them
+    // HACK!!! Chain lightning is the only spell which can't be cast on allies but could be applied on them
     const bool isForceApply = ( spell.GetID() == Spell::CHAINLIGHTNING );
 
     if ( !AllowApplySpell( spell, hero, nullptr, isForceApply ) )

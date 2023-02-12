@@ -1821,7 +1821,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
             }
         }
         else
-            // 4,5 - need have skill wizard or leadership,
+            // 4,5 - need to have skill wisdom or leadership
             if ( 3 < cond && cond < 6 ) {
             const Skill::Secondary & skill = tile.QuantitySkill();
 

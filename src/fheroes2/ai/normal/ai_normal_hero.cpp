@@ -256,7 +256,7 @@ namespace
             if ( 1 <= variants && 3 >= variants )
                 return kingdom.AllowPayment( tile.QuantityFunds() );
 
-            // 4,5 - need have skill wizard or leadership,
+            // 4,5 - need to have skill wisdom or leadership
             if ( 3 < variants && 6 > variants )
                 return hero.HasSecondarySkill( tile.QuantitySkill().Skill() );
 
@@ -820,7 +820,7 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            // focus on enemy hero if there's priority set (i.e. hero is threating our castle)
+            // focus on enemy hero if there's priority set (i.e. hero is threatening our castle)
             return isCriticalTask( index ) ? 12000.0 : 5000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
@@ -1382,7 +1382,7 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            // focus on enemy hero if there's priority set (i.e. hero is threating our castle)
+            // focus on enemy hero if there's priority set (i.e. hero is threatening our castle)
             return isCriticalTask( index ) ? 10000.0 : tenTiles;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
