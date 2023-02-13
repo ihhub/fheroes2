@@ -66,8 +66,8 @@ namespace fheroes2
             , offsetData( 0 )
         {}
 
-        uint16_t offsetX;
-        uint16_t offsetY;
+        int16_t offsetX;
+        int16_t offsetY;
         uint16_t width;
         uint16_t height;
         uint8_t animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
