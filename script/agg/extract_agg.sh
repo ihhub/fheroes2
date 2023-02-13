@@ -25,4 +25,11 @@ set -e
 PATH="$(dirname "$0"):$PATH"
 
 extractor agg *.AGG *.agg
-icn2img icn agg/kb.pal agg/*.icn
+
+for DIR in agg/*; do
+    if [[ ! -d "$DIR" ]]; then
+        continue
+    fi
+
+    icn2img "icn/$(basename "$DIR")" agg/*/kb.pal "$DIR"/*.icn
+done
