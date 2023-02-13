@@ -61,7 +61,7 @@ namespace
 
     std::string getAspectRatio( const fheroes2::ResolutionInfo & resolution )
     {
-        const double ratio = static_cast<double>( resolution.width ) / static_cast<double> (resolution.height);
+        const double ratio = static_cast<double>( resolution.width ) / static_cast<double>( resolution.height );
         double bestDelta = DBL_MAX;
         std::int32_t i = 1;
         std::int32_t j = 1;
@@ -69,7 +69,6 @@ namespace
         std::int32_t best_j = 0;
 
         for ( int iterations = 0; iterations < 100; iterations++ ) {
-
             if ( const double delta = static_cast<double>( i ) / static_cast<double>( j ) - ratio; delta < 0 ) {
                 i++;
             }
@@ -77,7 +76,7 @@ namespace
                 j++;
             }
 
-            if (const std::double_t new_delta = std::abs( static_cast<double>( i ) / static_cast<double>( j ) - ratio ); new_delta < bestDelta ) {
+            if ( const std::double_t new_delta = std::abs( static_cast<double>( i ) / static_cast<double>( j ) - ratio ); new_delta < bestDelta ) {
                 bestDelta = new_delta;
                 best_i = i;
                 best_j = j;
