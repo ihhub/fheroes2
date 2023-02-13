@@ -414,22 +414,31 @@ void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nul
     }
 
     const fheroes2::Rect & viewableWorldArea = ( roiRectangle == nullptr ) ? interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
-    const fheroes2::Rect radarWorldArea = worldSize ^ viewableWorldArea;
 
-    const fheroes2::Rect & totalRenderingArea = GetArea();
-    const fheroes2::Size actualRenderingArea{ totalRenderingArea.width - 2 * offset.x, totalRenderingArea.height - 2 * offset.y };
-
-    const fheroes2::Size cursorSize{ ( radarWorldArea.width * actualRenderingArea.width ) / worldSize.width,
-                                     ( radarWorldArea.height * actualRenderingArea.height ) / worldSize.height };
-
-    if ( cursorArea.width() != cursorSize.width || cursorArea.height() != cursorSize.height ) {
-        cursorArea.resize( cursorSize.width, cursorSize.height );
+    if ( ( viewableWorldArea.width > worldSize.width ) && ( viewableWorldArea.height > worldSize.height ) ) {
+        // We hide the cursor if the whole map is displayed.
+        cursorArea.resize( 0, 0 );
         cursorArea.reset();
-        fheroes2::DrawBorder( cursorArea, RADARCOLOR, 6 );
+        cursorArea.setPosition( 0, 0 );
     }
+    else {
+        const fheroes2::Rect radarWorldArea = worldSize ^ viewableWorldArea;
 
-    cursorArea.setPosition( totalRenderingArea.x + offset.x + ( radarWorldArea.x * actualRenderingArea.width ) / worldSize.width,
-                            totalRenderingArea.y + offset.y + ( radarWorldArea.y * actualRenderingArea.height ) / worldSize.height );
+        const fheroes2::Rect & totalRenderingArea = GetArea();
+        const fheroes2::Size actualRenderingArea{ totalRenderingArea.width - 2 * offset.x, totalRenderingArea.height - 2 * offset.y };
+
+        const fheroes2::Size cursorSize{ ( radarWorldArea.width * actualRenderingArea.width ) / worldSize.width,
+                                         ( radarWorldArea.height * actualRenderingArea.height ) / worldSize.height };
+
+        if ( cursorArea.width() != cursorSize.width || cursorArea.height() != cursorSize.height ) {
+            cursorArea.resize( cursorSize.width, cursorSize.height );
+            cursorArea.reset();
+            fheroes2::DrawBorder( cursorArea, RADARCOLOR, 6 );
+        }
+
+        cursorArea.setPosition( totalRenderingArea.x + offset.x + ( radarWorldArea.x * actualRenderingArea.width ) / worldSize.width,
+                                totalRenderingArea.y + offset.y + ( radarWorldArea.y * actualRenderingArea.height ) / worldSize.height );
+    }
 }
 
 void Interface::Radar::QueueEventProcessing()

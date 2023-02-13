@@ -505,14 +505,14 @@ bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
     fheroes2::Point newCenter;
 
     if ( worldSize.width <= currentRect.width ) {
-        newCenter.x = worldSize.width / 2;
+        newCenter.x = ( worldSize.width - 1 ) / 2;
     }
     else {
         newCenter.x = std::clamp( centerInPixels.x, currentRect.width / 2, worldSize.width - currentRect.width / 2 );
     }
 
     if ( worldSize.height <= currentRect.height ) {
-        newCenter.y = worldSize.height / 2;
+        newCenter.y = ( worldSize.height - 1 ) / 2;
     }
     else {
         newCenter.y = std::clamp( centerInPixels.y, currentRect.height / 2, worldSize.height - currentRect.height / 2 );
@@ -591,7 +591,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     const fheroes2::Rect visibleScreenInPixels = gameArea.GetROI();
 
     // Initial view is centered on where the player is centered
-    fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.width / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.height / 2 );
+    fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + ( visibleScreenInPixels.width + TILEWIDTH ) / 2,
+                                        worldMapROI.y * TILEWIDTH + ( visibleScreenInPixels.height + TILEWIDTH ) / 2 );
 
     // Special case: full map picture can be contained within the window -> center view on center of the map
     if ( world.w() * tileSizePerZoomLevel[ZoomLevel::ZoomLevel2] <= visibleScreenInPixels.width
