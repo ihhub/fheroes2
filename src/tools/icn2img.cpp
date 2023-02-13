@@ -31,7 +31,6 @@
 #include <sstream>
 #include <string>
 #include <system_error>
-#include <type_traits>
 #include <vector>
 
 #include "agg_file.h"
