@@ -1,8 +1,7 @@
 # Lithuanian translation for fheroes2
-# Copyright (c) 2012 fheroes2 team
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2012-2014 Mantas Kriaučiūnas <mantas@akl.lt>
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
-# Mantas Kriaučiūnas <mantas@akl.lt>, 2012-2014.
 #
 msgid ""
 msgstr ""
