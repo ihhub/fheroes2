@@ -20,9 +20,10 @@
 
 #include "dialog_resolution.h"
 
+#include <cfloat>
 #include <cstddef>
 #include <cstdint>
-#include <numeric>
+#include <cstdlib>
 #include <string>
 #include <utility>
 #include <vector>
@@ -36,6 +37,7 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "math.h"
 #include "math_base.h"
 #include "screen.h"
 #include "translations.h"
