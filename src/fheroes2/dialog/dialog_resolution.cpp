@@ -117,11 +117,11 @@ namespace
             resolutionText.draw( textOffsetX, textOffsetY, fheroes2::Display::instance() );
 
             const fheroes2::Text aspectRatioText( getAspectRatio( resolution ), fontType );
-            aspectRatioText.draw( offsetX + textPadding, textOffsetY, fheroes2::Display::instance() );
+            aspectRatioText.draw( offsetX + editBoxLength - aspectRatioText.width() - textPadding, textOffsetY, fheroes2::Display::instance() );
 
             if ( resolution.scale > 1 ) {
                 const fheroes2::Text scaleText( "x" + std::to_string( resolution.scale ), fontType );
-                scaleText.draw( offsetX + editBoxLength - scaleText.width() - textPadding, textOffsetY, fheroes2::Display::instance() );
+                scaleText.draw( offsetX + textPadding, textOffsetY, fheroes2::Display::instance() );
             }
         }
 
@@ -184,11 +184,11 @@ namespace
             resolutionText.draw( textOffsetX, textOffsetY, output );
 
             const fheroes2::Text aspectRatioText( getAspectRatio( resolution ), fontType );
-            aspectRatioText.draw( dst.x + 41 + textPadding, textOffsetY, output );
+            aspectRatioText.draw( dst.x + 41 + editBoxLength - aspectRatioText.width() - textPadding, textOffsetY, output );
 
             if ( resolution.scale > 1 ) {
                 const fheroes2::Text scaleText( "x" + std::to_string( resolution.scale ), fontType );
-                scaleText.draw( dst.x + 41 + editBoxLength - scaleText.width() - textPadding, textOffsetY, fheroes2::Display::instance() );
+                scaleText.draw( dst.x + 41 + textPadding, textOffsetY, fheroes2::Display::instance() );
             }
         }
     }
