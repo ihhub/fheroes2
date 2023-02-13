@@ -35,11 +35,6 @@
 #include "serialize.h"
 #include "system.h"
 
-namespace
-{
-    constexpr uint8_t spriteBackground = 0;
-}
-
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
