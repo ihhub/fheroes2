@@ -32,10 +32,10 @@
 
 int main( int argc, char ** argv )
 {
-    if ( argc < 3 ) {
+    if ( argc != 3 ) {
         std::string baseName = System::GetBasename( argv[0] );
 
-        std::cerr << baseName << " generate an image with colors based on a provided palette file." << std::endl
+        std::cerr << baseName << " generates an image with colors based on a provided palette file." << std::endl
                   << "Syntax: " << baseName << " palette_file.pal output.bmp" << std::endl;
         return EXIT_FAILURE;
     }
