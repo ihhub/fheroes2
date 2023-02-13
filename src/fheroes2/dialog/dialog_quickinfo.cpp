@@ -799,9 +799,9 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
     // mini port heroes
     const fheroes2::Sprite & port = isActiveHero ? activeHero->GetPortrait( PORT_SMALL ) : activeCaptain->GetPortrait( PORT_SMALL );
     if ( !port.empty() ) {
-        dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
-        dst_pt.y = cur_rt.y + 13;
-        fheroes2::Blit( port, display, dst_pt.x, dst_pt.y );
+        const fheroes2::Sprite & frame = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 22 );
+        fheroes2::Blit( frame, display, cur_rt.x + ( cur_rt.width - frame.width() ) / 2, cur_rt.y + 13 );
+        fheroes2::Blit( port, display, cur_rt.x + ( cur_rt.width - port.width() ) / 2, cur_rt.y + 17 );
     }
 
     // luck
