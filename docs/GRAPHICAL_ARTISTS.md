@@ -46,15 +46,15 @@ The folder named `agg` contains the untouched contents of the AGG containers.
 Meanwhile, the folder named `icn` contains the PNG-converted graphical assets. These assets will be stored within folders named according to what
 ICN they were stored in. The `icn` folder is the most relevant one for graphical artists.
 
-To convert the palette...
+To generate an image of the palette...
 
 ## Where is help needed
 
-We have labled and tracked some issues that need help from graphical artists.
+We have labelled and tracked some issues that need help from graphical artists.
 These can be found [here](https://github.com/ihhub/fheroes2/issues?q=is%3Aopen+is%3Aissue+label%3Aassets).
 
-NOTE! Before starting to work on an issue make sure to check if someone isn't already assigned to them by looking at the relevant place
-within the issue, and to make the fheroes2 team aware that you wish to work on it so that we avoid duplicate work.
+NOTE! Before starting to work on an issue make sure to check if someone isn't already assigned to it by looking at the relevant place
+within the issue. Also notify the fheroes2 team that you wish to work on the issue. This is to avoid duplicate work.
 
 ## The work process
 
@@ -64,4 +64,5 @@ within the issue, and to make the fheroes2 team aware that you wish to work on i
 4. Address the given feedback if any.
 5. Repeat steps 3-4 until approval.
 6. Expand the review team to 3-4 members and steps 3-4 are repeated.
-7. Once everyone agrees on the outcome we will add this file into `resurrection.h2d` data file and change the code in fheroes2 source code to use it.
+7. Once everyone approves we will add this file into the `resurrection.h2d` data file and change the code in the fheroes2 source code to use it.
+
