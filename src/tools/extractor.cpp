@@ -92,14 +92,6 @@ int main( int argc, char ** argv )
         }
     }
 
-    std::error_code ec;
-
-    // Using the non-throwing overloads
-    if ( !std::filesystem::exists( dstDir, ec ) && !std::filesystem::create_directories( dstDir, ec ) ) {
-        std::cerr << "Cannot create directory " << dstDir << std::endl;
-        return EXIT_FAILURE;
-    }
-
     uint32_t itemsExtracted = 0;
     uint32_t itemsFailed = 0;
 
@@ -111,6 +103,16 @@ int main( int argc, char ** argv )
             std::cerr << "Cannot open file " << inputFileName << std::endl;
             // A non-existent or inaccessible file is not considered a fatal error
             continue;
+        }
+
+        const std::filesystem::path prefixPath = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).stem();
+
+        std::error_code ec;
+
+        // Using the non-throwing overloads
+        if ( !std::filesystem::exists( prefixPath, ec ) && !std::filesystem::create_directories( prefixPath, ec ) ) {
+            std::cerr << "Cannot create directory " << prefixPath << std::endl;
+            return EXIT_FAILURE;
         }
 
         const size_t inputStreamSize = inputStream.size();
@@ -161,7 +163,7 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( name );
+            const std::filesystem::path outputFilePath = prefixPath / std::filesystem::path( name );
 
             std::ofstream outputStream( outputFilePath, std::ios_base::binary | std::ios_base::trunc );
             if ( !outputStream ) {
