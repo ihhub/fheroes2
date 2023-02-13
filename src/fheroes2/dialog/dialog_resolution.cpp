@@ -21,12 +21,13 @@
 #include "dialog_resolution.h"
 
 #include <cfloat>
-#include <cstddef>
 #include <cstdint>
 #include <cstdlib>
 #include <string>
 #include <utility>
 #include <vector>
+
+#include <math.h>
 
 #include "agg_image.h"
 #include "cursor.h"
