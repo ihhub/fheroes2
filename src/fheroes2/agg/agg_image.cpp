@@ -3391,6 +3391,12 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::GAME_OPTION_ICON: {
+                _icnVsSprite[id].resize( 1 );
+
+                h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
+                break;
+            }
             default:
                 break;
             }
