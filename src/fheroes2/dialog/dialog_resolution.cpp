@@ -37,7 +37,7 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
-#include "math.h"
+#include <cmath>
 #include "math_base.h"
 #include "screen.h"
 #include "translations.h"
