@@ -51,32 +51,33 @@ namespace fheroes2
         const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, kingdom.GetColor() );
         const std::string body( _( "For every lighthouse controlled, your ships will move further each day." ) );
 
-        const Sprite & shadow_top = AGG::GetICN( ICN::OBJNMUL2, 60 );
-        const Sprite & shadow_middle = AGG::GetICN( ICN::OBJNMUL2, 71 );
-        const Sprite & shadow_bottom = AGG::GetICN( ICN::OBJNMUL2, 72 );
-        const Sprite & lighthouse_top = AGG::GetICN( ICN::OBJNMUL2, 59 );
-        const Sprite & lighthouse_middle = AGG::GetICN( ICN::OBJNMUL2, 61 );
-        const Sprite & lighthouse_bottom = AGG::GetICN( ICN::OBJNMUL2, 73 );
-        const Sprite & lighthouse_light = AGG::GetICN( ICN::OBJNMUL2, 62 );
+        const Sprite & shadowTop = AGG::GetICN( ICN::OBJNMUL2, 60 );
+        const Sprite & shadowMiddle = AGG::GetICN( ICN::OBJNMUL2, 71 );
+        const Sprite & shadowBottom = AGG::GetICN( ICN::OBJNMUL2, 72 );
+        const Sprite & lighthouseTop = AGG::GetICN( ICN::OBJNMUL2, 59 );
+        const Sprite & lighthouseMiddle = AGG::GetICN( ICN::OBJNMUL2, 61 );
+        const Sprite & lighthouseBottom = AGG::GetICN( ICN::OBJNMUL2, 73 );
+        const Sprite & lighthouseLight = AGG::GetICN( ICN::OBJNMUL2, 62 );
 
-        const int32_t top_offset = TILEWIDTH - lighthouse_top.height();
+        const int32_t top_offset = TILEWIDTH - lighthouseTop.height();
 
-        Image combined( 5 * TILEWIDTH, 2 * TILEWIDTH + lighthouse_top.height() );
+        Image combined( 5 * TILEWIDTH, 2 * TILEWIDTH + lighthouseTop.height() );
         combined.reset();
 
-        Copy( shadow_top, combined, shadow_top.x(), TILEWIDTH + shadow_top.y() - top_offset );
-        Copy( shadow_middle, combined, shadow_middle.x(), TILEWIDTH * 2 + shadow_middle.y() - top_offset );
-        Copy( shadow_bottom, combined, TILEWIDTH + shadow_bottom.x(), TILEWIDTH * 2 + shadow_bottom.y() - top_offset );
-        Copy( lighthouse_top, combined, TILEWIDTH * 2 + lighthouse_top.x(), lighthouse_top.y() - top_offset );
-        Copy( lighthouse_middle, combined, TILEWIDTH * 2 + lighthouse_middle.x(), TILEWIDTH + lighthouse_middle.y() - top_offset );
-        Copy( lighthouse_bottom, combined, TILEWIDTH * 2 + lighthouse_bottom.x(), TILEWIDTH * 2 + lighthouse_bottom.y() - top_offset );
-        Copy( lighthouse_light, combined, TILEWIDTH * 2 + lighthouse_light.x(), TILEWIDTH + lighthouse_light.y() - top_offset );
+        Copy( shadowTop, 0, 0, combined, shadowTop.x(), TILEWIDTH + shadowTop.y() - top_offset, TILEWIDTH, TILEWIDTH );
+        Copy( shadowMiddle, 0, 0, combined, shadowMiddle.x(), TILEWIDTH * 2 + shadowMiddle.y() - top_offset, TILEWIDTH, TILEWIDTH );
+        Copy( shadowBottom, 0, 0, combined, TILEWIDTH + shadowBottom.x(), TILEWIDTH * 2 + shadowBottom.y() - top_offset, TILEWIDTH, TILEWIDTH );
+        Copy( lighthouseTop, 0, 0, combined, TILEWIDTH * 2 + lighthouseTop.x(), lighthouseTop.y() - top_offset, TILEWIDTH, TILEWIDTH );
+        Copy( lighthouseMiddle, 0, 0, combined, TILEWIDTH * 2 + lighthouseMiddle.x(), TILEWIDTH + lighthouseMiddle.y() - top_offset, TILEWIDTH, TILEWIDTH );
+        Copy( lighthouseBottom, 0, 0, combined, TILEWIDTH * 2 + lighthouseBottom.x(), TILEWIDTH * 2 + lighthouseBottom.y() - top_offset, TILEWIDTH, TILEWIDTH );
+        Copy( lighthouseLight, 0, 0, combined, TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - top_offset, TILEWIDTH, TILEWIDTH );
 
         const CustomImageDialogElement lighthouseImageElement( combined );
 
         const Text lighthouseControlledText( std::to_string( lighthouseCount ), FontType::normalWhite() );
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( lighthouseControlledText ) );
 
+        // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
         showMessage( Text( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
                      { &lighthouseImageElement, &lighthouseControlledElement } );
     }
