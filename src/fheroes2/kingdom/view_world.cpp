@@ -554,8 +554,8 @@ const fheroes2::Rect & ViewWorld::ZoomROIs::GetROIinPixels() const
 fheroes2::Rect ViewWorld::ZoomROIs::GetROIinTiles() const
 {
     fheroes2::Rect result = _roiForZoomLevels[_zoomLevel];
-    result.x = result.x / TILEWIDTH;
-    result.y = result.y / TILEWIDTH;
+    result.x = ( result.x + TILEWIDTH / 2 ) / TILEWIDTH;
+    result.y = ( result.y + TILEWIDTH / 2 ) / TILEWIDTH;
     result.width = ( result.width + TILEWIDTH - 1 ) / TILEWIDTH;
     result.height = ( result.height + TILEWIDTH - 1 ) / TILEWIDTH;
     return result;
