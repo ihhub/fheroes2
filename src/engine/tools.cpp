@@ -34,7 +34,6 @@
 #include "tools.h"
 #include "translations.h"
 
-/* trim left right space */
 std::string StringTrim( std::string str )
 {
     if ( str.empty() ) {

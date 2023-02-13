@@ -24,10 +24,11 @@
 #include <cstdint>
 #include <cstdlib>
 #include <filesystem>
+#include <fstream> // IWYU pragma: keep
 #include <iomanip>
 #include <iostream>
 #include <memory>
-#include <sstream> // IWYU pragma: keep
+#include <sstream>
 #include <string>
 #include <system_error>
 #include <type_traits>
@@ -40,29 +41,40 @@
 #include "serialize.h"
 #include "system.h"
 
+namespace
+{
+    constexpr uint8_t spriteBackground = 23;
+}
+
 int main( int argc, char ** argv )
 {
     if ( argc < 4 ) {
-        std::cerr << argv[0] << " destinationDirectory paletteFileName.pal inputFile.icn ..." << std::endl;
+        std::string baseName = System::GetBasename( argv[0] );
+
+        std::cerr << baseName << " extracts sprites in BMP or PNG format (if supported) and their offsets from the specified ICN file(s) using the specified palette."
+                  << std::endl
+                  << "Syntax: " << baseName << " dst_dir palette_file.pal input_file.icn ..." << std::endl;
         return EXIT_FAILURE;
     }
 
     const char * dstDir = argv[1];
     const char * paletteFileName = argv[2];
 
-    StreamFile paletteFile;
-    if ( !paletteFile.open( paletteFileName, "rb" ) ) {
-        std::cerr << "Cannot open " << paletteFileName << std::endl;
-        return EXIT_FAILURE;
-    }
+    {
+        StreamFile paletteStream;
+        if ( !paletteStream.open( paletteFileName, "rb" ) ) {
+            std::cerr << "Cannot open file " << paletteFileName << std::endl;
+            return EXIT_FAILURE;
+        }
 
-    const std::vector<uint8_t> palette = paletteFile.getRaw();
-    if ( palette.size() != 768 ) {
-        std::cerr << "Invalid palette size of " << palette.size() << " instead of 768." << std::endl;
-        return EXIT_FAILURE;
-    }
+        const std::vector<uint8_t> palette = paletteStream.getRaw();
+        if ( palette.size() != 768 ) {
+            std::cerr << "Invalid palette size of " << palette.size() << " instead of 768" << std::endl;
+            return EXIT_FAILURE;
+        }
 
-    fheroes2::setGamePalette( palette );
+        fheroes2::setGamePalette( palette );
+    }
 
     std::vector<std::string> inputFileNames;
     for ( int i = 3; i < argc; ++i ) {
@@ -74,71 +86,104 @@ int main( int argc, char ** argv )
         }
     }
 
-    for ( const std::string & inputFileName : inputFileNames ) {
-        StreamFile sf;
+    uint32_t spritesExtracted = 0;
+    uint32_t spritesFailed = 0;
 
-        if ( !sf.open( inputFileName, "rb" ) ) {
-            std::cerr << "Cannot open " << inputFileName << std::endl;
-            return EXIT_FAILURE;
+    for ( const std::string & inputFileName : inputFileNames ) {
+        std::cout << "Processing " << inputFileName << "..." << std::endl;
+
+        StreamFile inputStream;
+        if ( !inputStream.open( inputFileName, "rb" ) ) {
+            std::cerr << "Cannot open file " << inputFileName << std::endl;
+            // A non-existent or inaccessible file is not considered a fatal error
+            continue;
         }
 
-        const std::filesystem::path prefix = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).stem();
+        const std::filesystem::path prefixPath = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).stem();
 
         std::error_code ec;
 
         // Using the non-throwing overloads
-        if ( !std::filesystem::exists( prefix, ec ) && !std::filesystem::create_directories( prefix, ec ) ) {
-            std::cerr << "Cannot create directory " << prefix << std::endl;
+        if ( !std::filesystem::exists( prefixPath, ec ) && !std::filesystem::create_directories( prefixPath, ec ) ) {
+            std::cerr << "Cannot create directory " << prefixPath << std::endl;
             return EXIT_FAILURE;
         }
 
-        std::cout << std::endl << "Processing " << inputFileName << "..." << std::endl << std::endl;
+        const std::filesystem::path offsetFilePath = prefixPath / "offsets.txt";
 
-        const uint16_t spritesCount = sf.getLE16();
-        const uint32_t totalSize = sf.getLE32();
+        std::ofstream offsetStream( offsetFilePath, std::ios_base::trunc );
+        if ( !offsetStream ) {
+            std::cerr << "Cannot create file " << offsetFilePath << std::endl;
+            return EXIT_FAILURE;
+        }
 
-        const size_t beginPos = sf.tell();
+        const uint16_t spritesCount = inputStream.getLE16();
+        const uint32_t totalSize = inputStream.getLE32();
+
+        const size_t beginPos = inputStream.tell();
 
         std::vector<fheroes2::ICNHeader> headers( spritesCount );
         for ( fheroes2::ICNHeader & header : headers ) {
-            sf >> header;
+            inputStream >> header;
         }
 
         for ( uint16_t spriteIdx = 0; spriteIdx < spritesCount; ++spriteIdx ) {
             const fheroes2::ICNHeader & header = headers[spriteIdx];
 
-            sf.seek( beginPos + header.offsetData );
+            inputStream.seek( beginPos + header.offsetData );
 
             const uint32_t dataSize = ( spriteIdx + 1 < spritesCount ? headers[spriteIdx + 1].offsetData - header.offsetData : totalSize - header.offsetData );
+            if ( dataSize == 0 ) {
+                ++spritesFailed;
 
-            const std::vector<uint8_t> buf = sf.getRaw( dataSize );
-            if ( buf.empty() ) {
+                std::cerr << inputFileName << ": sprite " << spriteIdx << " is empty" << std::endl;
                 continue;
             }
 
-            const fheroes2::Sprite image = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
+            const std::vector<uint8_t> buf = inputStream.getRaw( dataSize );
+            if ( buf.size() != dataSize ) {
+                ++spritesFailed;
 
-            std::ostringstream os;
-            os << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;
+                std::cerr << inputFileName << ": sprite " << spriteIdx << " has an invalid size of " << dataSize << std::endl;
+                continue;
+            }
 
-            std::string dstFileName = ( prefix / os.str() ).string();
+            const fheroes2::Sprite sprite = fheroes2::decodeICNSprite( buf.data(), dataSize, header.width, header.height, header.offsetX, header.offsetY );
+
+            std::ostringstream spriteIdxStream;
+            spriteIdxStream << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;
+
+            const std::string spriteIdxStr = spriteIdxStream.str();
+            std::string outputFileName = ( prefixPath / spriteIdxStr ).string();
 
             if ( fheroes2::isPNGFormatSupported() ) {
-                dstFileName += ".png";
+                outputFileName += ".png";
             }
             else {
-                dstFileName += ".bmp";
+                outputFileName += ".bmp";
             }
 
             static_assert( std::is_same_v<decltype( header.offsetX ), uint16_t> && std::is_same_v<decltype( header.offsetY ), uint16_t>,
                            "Offset types have been changed, check the casts below" );
 
-            std::cout << "Image " << spriteIdx + 1 << " has offset of [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY )
-                      << "]" << std::endl;
+            offsetStream << spriteIdxStr << " [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY ) << "]" << std::endl;
+            if ( !offsetStream ) {
+                std::cerr << "Error writing to file " << offsetFilePath << std::endl;
+                return EXIT_FAILURE;
+            }
 
-            fheroes2::Save( image, dstFileName, 23 );
+            if ( !fheroes2::Save( sprite, outputFileName, spriteBackground ) ) {
+                ++spritesFailed;
+
+                std::cerr << inputFileName << ": error saving sprite " << spriteIdx << std::endl;
+                continue;
+            }
+
+            ++spritesExtracted;
         }
     }
 
-    return EXIT_SUCCESS;
+    std::cout << "Total extracted: " << spritesExtracted << ", failed: " << spritesFailed << std::endl;
+
+    return ( spritesExtracted > 0 && spritesFailed == 0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
