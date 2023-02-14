@@ -226,7 +226,6 @@ namespace MUS
         case MP2::OBJ_MERCENARY_CAMP:
         case MP2::OBJ_WITCH_DOCTORS_HUT:
         case MP2::OBJ_STANDING_STONES:
-        case MP2::OBJ_WITCHS_HUT:
             return SKILL;
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:

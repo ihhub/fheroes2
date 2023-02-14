@@ -1316,6 +1316,12 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
             msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
             StringReplace( msg, "%{skill}", skill_name );
 
+            const MusicEffectPlayer musicEffectPlayer;
+
+            if ( !Settings::Get().MusicMIDI() ) {
+                musicEffectPlayer.play( MUS::EXPERIENCE );
+            }
+
             const fheroes2::SecondarySkillDialogElement secondarySkillUI( skill, hero );
             fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                    { &secondarySkillUI } );
