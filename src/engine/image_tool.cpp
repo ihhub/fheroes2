@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <cstring>
 #include <ostream>
+#include <string_view>
 #include <vector>
 
 #include <SDL_error.h>
@@ -48,10 +49,10 @@
 
 namespace
 {
-    bool isPNGFilePath( const std::string & path )
+    bool isPNGFilePath( const std::string_view path )
     {
         const std::string pngExtension( ".png" );
-        return path.size() > pngExtension.size() && ( path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 );
+        return path.size() >= pngExtension.size() && ( path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 );
     }
 
     std::vector<uint8_t> PALPalette()
