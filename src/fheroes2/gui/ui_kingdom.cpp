@@ -59,18 +59,18 @@ namespace fheroes2
         const Sprite & lighthouseBottom = AGG::GetICN( ICN::OBJNMUL2, 73 );
         const Sprite & lighthouseLight = AGG::GetICN( ICN::OBJNMUL2, 62 );
 
-        const int32_t top_offset = TILEWIDTH - lighthouseTop.height();
+        const int32_t topOffset = TILEWIDTH - lighthouseTop.height();
 
         Image combined( 5 * TILEWIDTH, 2 * TILEWIDTH + lighthouseTop.height() );
         combined.reset();
 
-        Copy( shadowTop, 0, 0, combined, shadowTop.x(), TILEWIDTH + shadowTop.y() - top_offset, TILEWIDTH, TILEWIDTH );
-        Copy( shadowMiddle, 0, 0, combined, shadowMiddle.x(), TILEWIDTH * 2 + shadowMiddle.y() - top_offset, TILEWIDTH, TILEWIDTH );
-        Copy( shadowBottom, 0, 0, combined, TILEWIDTH + shadowBottom.x(), TILEWIDTH * 2 + shadowBottom.y() - top_offset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseTop, 0, 0, combined, TILEWIDTH * 2 + lighthouseTop.x(), lighthouseTop.y() - top_offset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseMiddle, 0, 0, combined, TILEWIDTH * 2 + lighthouseMiddle.x(), TILEWIDTH + lighthouseMiddle.y() - top_offset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseBottom, 0, 0, combined, TILEWIDTH * 2 + lighthouseBottom.x(), TILEWIDTH * 2 + lighthouseBottom.y() - top_offset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseLight, 0, 0, combined, TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - top_offset, TILEWIDTH, TILEWIDTH );
+        Copy( shadowTop, 0, 0, combined, shadowTop.x(), TILEWIDTH + shadowTop.y() - topOffset, TILEWIDTH, TILEWIDTH );
+        Copy( shadowMiddle, 0, 0, combined, shadowMiddle.x(), TILEWIDTH * 2 + shadowMiddle.y() - topOffset, TILEWIDTH, TILEWIDTH );
+        Copy( shadowBottom, 0, 0, combined, TILEWIDTH + shadowBottom.x(), TILEWIDTH * 2 + shadowBottom.y() - topOffset, TILEWIDTH, TILEWIDTH );
+        Copy( lighthouseTop, 0, 0, combined, TILEWIDTH * 2 + lighthouseTop.x(), lighthouseTop.y() - topOffset, TILEWIDTH, TILEWIDTH );
+        Copy( lighthouseMiddle, 0, 0, combined, TILEWIDTH * 2 + lighthouseMiddle.x(), TILEWIDTH + lighthouseMiddle.y() - topOffset, TILEWIDTH, TILEWIDTH );
+        Copy( lighthouseBottom, 0, 0, combined, TILEWIDTH * 2 + lighthouseBottom.x(), TILEWIDTH * 2 + lighthouseBottom.y() - topOffset, TILEWIDTH, TILEWIDTH );
+        Copy( lighthouseLight, 0, 0, combined, TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset, TILEWIDTH, TILEWIDTH );
 
         const CustomImageDialogElement lighthouseImageElement( combined );
 
