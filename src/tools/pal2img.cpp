@@ -36,7 +36,7 @@ int main( int argc, char ** argv )
         std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " generates an image with colors based on a provided palette file." << std::endl
-                  << "Syntax: " << baseName << " palette_file.pal output.bmp" << std::endl;
+                  << "Syntax: " << baseName << " palette_file.pal output.[bmp|png]" << std::endl;
         return EXIT_FAILURE;
     }
 
