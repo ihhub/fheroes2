@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "image.h"
 
 #include <algorithm>
 #include <cassert>
@@ -26,6 +25,7 @@
 #include <cstring>
 #include <type_traits>
 
+#include "image.h"
 #include "image_palette.h"
 
 namespace
