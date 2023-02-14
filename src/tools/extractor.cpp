@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
+#include <functional>
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -123,7 +124,7 @@ int main( int argc, char ** argv )
         inputStream.seek( inputStreamSize - AGGItemNameLen * itemsCount );
         StreamBuf namesStream = inputStream.toStreamBuf( AGGItemNameLen * itemsCount );
 
-        std::map<std::string, AGGItemInfo> aggItemsMap;
+        std::map<std::string, AGGItemInfo, std::less<>> aggItemsMap;
 
         for ( uint16_t i = 0; i < itemsCount; ++i ) {
             AGGItemInfo & info = aggItemsMap[StringLower( namesStream.toString( AGGItemNameLen ) )];
