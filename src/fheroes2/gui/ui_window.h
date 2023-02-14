@@ -53,5 +53,7 @@ namespace fheroes2
         const Rect _windowArea;
         ImageRestorer _restorer;
         const bool _hasBackground{ true };
+
+        void _renderBackground( const bool isEvilInterface );
     };
 }

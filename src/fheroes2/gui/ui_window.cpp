@@ -38,7 +38,7 @@ namespace
     const int32_t transitionSize{ 10 };
 
     // Offset from window edges to background copy area.
-    const int32_t backgroungOffset{ 22 };
+    const int32_t backgroundOffset{ 22 };
 }
 
 namespace fheroes2
@@ -72,7 +72,7 @@ namespace fheroes2
         const Sprite & verticalSprite = AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
 
         // Offset from window edges to background copy area and also the size of corners to render.
-        const int32_t cornerSize = _hasBackground ? backgroungOffset : borderSize;
+        const int32_t cornerSize = _hasBackground ? backgroundOffset : borderSize;
 
         const int32_t horizontalSpriteWidth = horizontalSprite.width() - BORDERWIDTH;
         const int32_t horizontalSpriteHeight = horizontalSprite.height() - BORDERWIDTH;
@@ -106,77 +106,30 @@ namespace fheroes2
         Blit( verticalSprite, rightCornerSpriteOffsetX, verticalSpriteHeight - borderEdgeOffset, _output, rightCornerOffsetX, bottomCornerOffsetY - extraCornerSize,
               cornerSize, extraCornerSize );
 
-        // Render the background.
         if ( _hasBackground ) {
-            const Sprite & backgroundSprite = AGG::GetICN( ( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK ), 0 );
-            const int32_t backgroundSpriteWidth{ backgroundSprite.width() };
-            const int32_t backgroundSpriteHeight{ backgroundSprite.height() };
-
-            const int32_t backgroundWidth = _windowArea.width - cornerSize * 2;
-            const int32_t backgroundHeight = _windowArea.height - cornerSize * 2;
-            const int32_t backgroundHorizontalCopies = ( backgroundWidth - 1 - transitionSize ) / ( backgroundSpriteWidth - transitionSize );
-            const int32_t backgroundVerticalCopies = ( backgroundHeight - 1 - transitionSize ) / ( backgroundSpriteHeight - transitionSize );
-
-            const int32_t backgroundCopyWidth = std::min( backgroundSpriteWidth, backgroundWidth );
-            const int32_t backgroundCopyHeight = std::min( backgroundSpriteHeight, backgroundHeight );
-            const int32_t backgroundOffsetX = _windowArea.x + cornerSize;
-            const int32_t backgroundOffsetY = _windowArea.y + cornerSize;
-
-            // We do a copy as the background image does not have transparent pixels.
-            Copy( backgroundSprite, 0, 0, _output, backgroundOffsetX, backgroundOffsetY, backgroundCopyWidth, backgroundCopyHeight );
-
-            // If we need more copies to fill background horizontally we make a transition and copy existing image.
-            if ( backgroundHorizontalCopies > 0 ) {
-                int32_t toOffsetX = cornerSize + backgroundSpriteWidth;
-                DitheringTransition( backgroundSprite, 0, 0, _output, _windowArea.x + toOffsetX - transitionSize, backgroundOffsetY, transitionSize, backgroundCopyHeight,
-                                     true, false );
-
-                const int32_t stepX = backgroundSpriteWidth - transitionSize;
-                const int32_t fromOffsetX = cornerSize + transitionSize;
-
-                for ( int32_t i = 0; i < backgroundHorizontalCopies; ++i ) {
-                    Copy( _output, _windowArea.x + fromOffsetX, backgroundOffsetY, _output, _windowArea.x + toOffsetX, backgroundOffsetY,
-                          std::min( backgroundSpriteWidth, _windowArea.width - cornerSize - toOffsetX ), backgroundCopyHeight );
-                    toOffsetX += stepX;
-                }
-            }
-
-            // If we need more copies to fill background vertically we make a transition and copy existing image in full background width.
-            if ( backgroundVerticalCopies > 0 ) {
-                int32_t toOffsetY = cornerSize + backgroundSpriteHeight;
-                DitheringTransition( _output, backgroundOffsetX, backgroundOffsetY, _output, backgroundOffsetX, _windowArea.y + toOffsetY - transitionSize,
-                                     backgroundWidth, transitionSize, false, false );
-
-                const int32_t stepY = backgroundSpriteHeight - transitionSize;
-                const int32_t fromOffsetY = cornerSize + transitionSize;
-
-                for ( int32_t i = 0; i < backgroundVerticalCopies; ++i ) {
-                    Copy( _output, backgroundOffsetX, _windowArea.y + fromOffsetY, _output, backgroundOffsetX, _windowArea.y + toOffsetY, backgroundWidth,
-                          std::min( backgroundSpriteHeight, _windowArea.height - cornerSize - toOffsetY ) );
-                    toOffsetY += stepY;
-                }
-            }
+            // Render the background image.
+            _renderBackground( isEvilInterface );
 
             // Make a transition from borders to the background in the corners.
-            DitheringTransition( verticalSprite, cornerSize, cornerSize, _output, _windowArea.x + cornerSize, _windowArea.y + cornerSize, extraCornerSize, transitionSize,
-                                 false, true );
-            DitheringTransition( verticalSprite, cornerSize, cornerSize, _output, _windowArea.x + cornerSize, _windowArea.y + cornerSize, transitionSize, extraCornerSize,
-                                 true, true );
+            CreateDitheringTransition( verticalSprite, cornerSize, cornerSize, _output, _windowArea.x + cornerSize, _windowArea.y + cornerSize, extraCornerSize,
+                                       transitionSize, false, true );
+            CreateDitheringTransition( verticalSprite, cornerSize, cornerSize, _output, _windowArea.x + cornerSize, _windowArea.y + cornerSize, transitionSize,
+                                       extraCornerSize, true, true );
 
-            DitheringTransition( verticalSprite, verticalSpriteWidth - borderEdgeOffset, cornerSize, _output, rightCornerOffsetX - extraCornerSize,
-                                 _windowArea.y + cornerSize, extraCornerSize, transitionSize, false, true );
-            DitheringTransition( verticalSprite, rightCornerSpriteOffsetX - transitionSize, cornerSize, _output, rightCornerOffsetX - transitionSize,
-                                 _windowArea.y + cornerSize, transitionSize, extraCornerSize, true, false );
+            CreateDitheringTransition( verticalSprite, verticalSpriteWidth - borderEdgeOffset, cornerSize, _output, rightCornerOffsetX - extraCornerSize,
+                                       _windowArea.y + cornerSize, extraCornerSize, transitionSize, false, true );
+            CreateDitheringTransition( verticalSprite, rightCornerSpriteOffsetX - transitionSize, cornerSize, _output, rightCornerOffsetX - transitionSize,
+                                       _windowArea.y + cornerSize, transitionSize, extraCornerSize, true, false );
 
-            DitheringTransition( verticalSprite, cornerSize, bottomCornerSpriteOffsetY - transitionSize, _output, _windowArea.x + cornerSize,
-                                 bottomCornerOffsetY - transitionSize, extraCornerSize, transitionSize, false, false );
-            DitheringTransition( verticalSprite, cornerSize, verticalSpriteHeight - borderEdgeOffset, _output, _windowArea.x + cornerSize,
-                                 bottomCornerOffsetY - extraCornerSize, transitionSize, extraCornerSize, true, true );
+            CreateDitheringTransition( verticalSprite, cornerSize, bottomCornerSpriteOffsetY - transitionSize, _output, _windowArea.x + cornerSize,
+                                       bottomCornerOffsetY - transitionSize, extraCornerSize, transitionSize, false, false );
+            CreateDitheringTransition( verticalSprite, cornerSize, verticalSpriteHeight - borderEdgeOffset, _output, _windowArea.x + cornerSize,
+                                       bottomCornerOffsetY - extraCornerSize, transitionSize, extraCornerSize, true, true );
 
-            DitheringTransition( verticalSprite, verticalSpriteWidth - borderEdgeOffset, bottomCornerSpriteOffsetY - transitionSize, _output,
-                                 rightCornerOffsetX - extraCornerSize, bottomCornerOffsetY - transitionSize, extraCornerSize, transitionSize, false, false );
-            DitheringTransition( verticalSprite, rightCornerSpriteOffsetX - transitionSize, verticalSpriteHeight - borderEdgeOffset, _output,
-                                 rightCornerOffsetX - transitionSize, bottomCornerOffsetY - extraCornerSize, transitionSize, extraCornerSize, true, false );
+            CreateDitheringTransition( verticalSprite, verticalSpriteWidth - borderEdgeOffset, bottomCornerSpriteOffsetY - transitionSize, _output,
+                                       rightCornerOffsetX - extraCornerSize, bottomCornerOffsetY - transitionSize, extraCornerSize, transitionSize, false, false );
+            CreateDitheringTransition( verticalSprite, rightCornerSpriteOffsetX - transitionSize, verticalSpriteHeight - borderEdgeOffset, _output,
+                                       rightCornerOffsetX - transitionSize, bottomCornerOffsetY - extraCornerSize, transitionSize, extraCornerSize, true, false );
         }
 
         // Render vertical borders.
@@ -192,19 +145,19 @@ namespace fheroes2
 
         // Render a transition to the background.
         if ( _hasBackground ) {
-            DitheringTransition( verticalSprite, cornerSize, borderEdgeOffset, _output, _windowArea.x + cornerSize, _windowArea.y + borderEdgeOffset, transitionSize,
-                                 verticalSpriteCopyHeight, true, true );
-            DitheringTransition( verticalSprite, rightBorderSpriteOffsetX - transitionSize, borderEdgeOffset, _output, rightBorderOffsetX - transitionSize,
-                                 _windowArea.y + borderEdgeOffset, transitionSize, verticalSpriteCopyHeight, true, false );
+            CreateDitheringTransition( verticalSprite, cornerSize, borderEdgeOffset, _output, _windowArea.x + cornerSize, _windowArea.y + borderEdgeOffset,
+                                       transitionSize, verticalSpriteCopyHeight, true, true );
+            CreateDitheringTransition( verticalSprite, rightBorderSpriteOffsetX - transitionSize, borderEdgeOffset, _output, rightBorderOffsetX - transitionSize,
+                                       _windowArea.y + borderEdgeOffset, transitionSize, verticalSpriteCopyHeight, true, false );
         }
 
         // If we need more copies to fill vertical borders we make a transition and copy the central part of the border.
         if ( verticalSpriteCopies > 0 ) {
             int32_t toOffsetY = borderEdgeOffset + verticalSpriteCopyHeight;
             const int32_t outputY = _windowArea.y + toOffsetY - transitionSize;
-            DitheringTransition( verticalSprite, 0, borderEdgeOffset, _output, _windowArea.x, outputY, cornerSize, transitionSize, false, false );
-            DitheringTransition( verticalSprite, rightBorderSpriteOffsetX, borderEdgeOffset, _output, rightBorderOffsetX, outputY, cornerSize, transitionSize, false,
-                                 false );
+            CreateDitheringTransition( verticalSprite, 0, borderEdgeOffset, _output, _windowArea.x, outputY, cornerSize, transitionSize, false, false );
+            CreateDitheringTransition( verticalSprite, rightBorderSpriteOffsetX, borderEdgeOffset, _output, rightBorderOffsetX, outputY, cornerSize, transitionSize,
+                                       false, false );
 
             const int32_t stepY = verticalSpriteCopyHeight - transitionSize;
             const int32_t fromOffsetY = borderEdgeOffset + transitionSize;
@@ -218,9 +171,10 @@ namespace fheroes2
 
                 // Render a transition to the background.
                 if ( _hasBackground ) {
-                    DitheringTransition( verticalSprite, cornerSize, fromOffsetY, _output, _windowArea.x + cornerSize, toY, transitionSize, copyHeight, true, true );
-                    DitheringTransition( verticalSprite, rightBorderSpriteOffsetX - transitionSize, fromOffsetY, _output, rightBorderOffsetX - transitionSize, toY,
-                                         transitionSize, copyHeight, true, false );
+                    CreateDitheringTransition( verticalSprite, cornerSize, fromOffsetY, _output, _windowArea.x + cornerSize, toY, transitionSize, copyHeight, true,
+                                               true );
+                    CreateDitheringTransition( verticalSprite, rightBorderSpriteOffsetX - transitionSize, fromOffsetY, _output, rightBorderOffsetX - transitionSize, toY,
+                                               transitionSize, copyHeight, true, false );
                 }
 
                 toOffsetY += stepY;
@@ -230,10 +184,10 @@ namespace fheroes2
         // Make a transition to the bottom corners.
         const int32_t verticalSpriteBottomCornerEdgeY = verticalSpriteHeight - borderEdgeOffset - transitionSize;
         const int32_t optputBottomCornerEdgeY = _windowArea.y + _windowArea.height - borderEdgeOffset - transitionSize;
-        DitheringTransition( verticalSprite, 0, verticalSpriteBottomCornerEdgeY, _output, _windowArea.x, optputBottomCornerEdgeY, cornerSize, transitionSize, false,
-                             false );
-        DitheringTransition( verticalSprite, rightBorderSpriteOffsetX, verticalSpriteBottomCornerEdgeY, _output, rightBorderOffsetX, optputBottomCornerEdgeY, cornerSize,
-                             transitionSize, false, false );
+        CreateDitheringTransition( verticalSprite, 0, verticalSpriteBottomCornerEdgeY, _output, _windowArea.x, optputBottomCornerEdgeY, cornerSize, transitionSize, false,
+                                   false );
+        CreateDitheringTransition( verticalSprite, rightBorderSpriteOffsetX, verticalSpriteBottomCornerEdgeY, _output, rightBorderOffsetX, optputBottomCornerEdgeY,
+                                   cornerSize, transitionSize, false, false );
 
         // Render horizontal borders. We have to remember that 'verticalSprite' has 16 (equals to BORDERWIDTH) pixels of shadow at the left and bottom sides.
         const int32_t horizontalSpriteCopyWidth = std::min( _windowArea.width, horizontalSpriteWidth ) - borderEdgeOffset * 2;
@@ -249,19 +203,19 @@ namespace fheroes2
 
         // Render a transition to the background.
         if ( _hasBackground ) {
-            DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, cornerSize, _output, _windowArea.x + borderEdgeOffset, _windowArea.y + cornerSize,
-                                 horizontalSpriteCopyWidth, transitionSize, false, true );
-            DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, bottomBorderSpriteOffsetY - transitionSize, _output, _windowArea.x + borderEdgeOffset,
-                                 bottomBorderOffsetY - transitionSize, horizontalSpriteCopyWidth, transitionSize, false, false );
+            CreateDitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, cornerSize, _output, _windowArea.x + borderEdgeOffset, _windowArea.y + cornerSize,
+                                       horizontalSpriteCopyWidth, transitionSize, false, true );
+            CreateDitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, bottomBorderSpriteOffsetY - transitionSize, _output,
+                                       _windowArea.x + borderEdgeOffset, bottomBorderOffsetY - transitionSize, horizontalSpriteCopyWidth, transitionSize, false, false );
         }
 
         // If we need more copies to fill horizontal borders we make a transition and copy the central part of the border.
         if ( horizontalSpriteCopies > 0 ) {
             int32_t toOffsetX = borderEdgeOffset + horizontalSpriteCopyWidth;
             const int32_t outputX = _windowArea.x + toOffsetX - transitionSize;
-            DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, 0, _output, outputX, _windowArea.y, transitionSize, cornerSize, true, false );
-            DitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, bottomBorderSpriteOffsetY, _output, outputX, bottomBorderOffsetY, transitionSize,
-                                 cornerSize, true, false );
+            CreateDitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, 0, _output, outputX, _windowArea.y, transitionSize, cornerSize, true, false );
+            CreateDitheringTransition( horizontalSprite, horizontalSpriteCopyStartX, bottomBorderSpriteOffsetY, _output, outputX, bottomBorderOffsetY, transitionSize,
+                                       cornerSize, true, false );
 
             const int32_t stepX = horizontalSpriteCopyWidth - transitionSize;
             const int32_t fromOffsetX = horizontalSpriteCopyStartX + transitionSize;
@@ -275,9 +229,10 @@ namespace fheroes2
 
                 // Render a transition to the background.
                 if ( _hasBackground ) {
-                    DitheringTransition( horizontalSprite, fromOffsetX, cornerSize, _output, toX, _windowArea.y + cornerSize, copyWidth, transitionSize, false, true );
-                    DitheringTransition( horizontalSprite, fromOffsetX, bottomBorderSpriteOffsetY - transitionSize, _output, toX, bottomBorderOffsetY - transitionSize,
-                                         copyWidth, transitionSize, false, false );
+                    CreateDitheringTransition( horizontalSprite, fromOffsetX, cornerSize, _output, toX, _windowArea.y + cornerSize, copyWidth, transitionSize, false,
+                                               true );
+                    CreateDitheringTransition( horizontalSprite, fromOffsetX, bottomBorderSpriteOffsetY - transitionSize, _output, toX,
+                                               bottomBorderOffsetY - transitionSize, copyWidth, transitionSize, false, false );
                 }
 
                 toOffsetX += stepX;
@@ -287,10 +242,10 @@ namespace fheroes2
         // Make a transition to the right corners.
         const int32_t horizontalSpriteRightCornerEdgeX = horizontalSprite.width() - borderEdgeOffset - transitionSize;
         const int32_t optputRightCornerEdgeX = _windowArea.x + _windowArea.width - borderEdgeOffset - transitionSize;
-        DitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, 0, _output, optputRightCornerEdgeX, _windowArea.y, transitionSize, cornerSize, true,
-                             false );
-        DitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, bottomBorderSpriteOffsetY, _output, optputRightCornerEdgeX, bottomBorderOffsetY,
-                             transitionSize, cornerSize, true, false );
+        CreateDitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, 0, _output, optputRightCornerEdgeX, _windowArea.y, transitionSize, cornerSize,
+                                   true, false );
+        CreateDitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, bottomBorderSpriteOffsetY, _output, optputRightCornerEdgeX, bottomBorderOffsetY,
+                                   transitionSize, cornerSize, true, false );
 
         // Render shadow.
         ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + borderSize, 1, _windowArea.height - borderSize, 5 );
@@ -299,5 +254,57 @@ namespace fheroes2
         ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height, _windowArea.width, borderSize - 2, 3 );
         ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height + borderSize - 2, _windowArea.width, 1, 4 );
         ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height + borderSize - 1, _windowArea.width, 1, 5 );
+    }
+
+    void StandardWindow::_renderBackground( const bool isEvilInterface )
+    {
+        const Sprite & backgroundSprite = AGG::GetICN( ( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK ), 0 );
+        const int32_t backgroundSpriteWidth{ backgroundSprite.width() };
+        const int32_t backgroundSpriteHeight{ backgroundSprite.height() };
+
+        const int32_t backgroundWidth = _windowArea.width - backgroundOffset * 2;
+        const int32_t backgroundHeight = _windowArea.height - backgroundOffset * 2;
+        const int32_t backgroundHorizontalCopies = ( backgroundWidth - 1 - transitionSize ) / ( backgroundSpriteWidth - transitionSize );
+        const int32_t backgroundVerticalCopies = ( backgroundHeight - 1 - transitionSize ) / ( backgroundSpriteHeight - transitionSize );
+
+        const int32_t backgroundCopyWidth = std::min( backgroundSpriteWidth, backgroundWidth );
+        const int32_t backgroundCopyHeight = std::min( backgroundSpriteHeight, backgroundHeight );
+        const int32_t backgroundOffsetX = _windowArea.x + backgroundOffset;
+        const int32_t backgroundOffsetY = _windowArea.y + backgroundOffset;
+
+        // We do a copy as the background image does not have transparent pixels.
+        Copy( backgroundSprite, 0, 0, _output, backgroundOffsetX, backgroundOffsetY, backgroundCopyWidth, backgroundCopyHeight );
+
+        // If we need more copies to fill background horizontally we make a transition and copy existing image.
+        if ( backgroundHorizontalCopies > 0 ) {
+            int32_t toOffsetX = backgroundOffset + backgroundSpriteWidth;
+            CreateDitheringTransition( backgroundSprite, 0, 0, _output, _windowArea.x + toOffsetX - transitionSize, backgroundOffsetY, transitionSize,
+                                       backgroundCopyHeight, true, false );
+
+            const int32_t stepX = backgroundSpriteWidth - transitionSize;
+            const int32_t fromOffsetX = backgroundOffset + transitionSize;
+
+            for ( int32_t i = 0; i < backgroundHorizontalCopies; ++i ) {
+                Copy( _output, _windowArea.x + fromOffsetX, backgroundOffsetY, _output, _windowArea.x + toOffsetX, backgroundOffsetY,
+                      std::min( backgroundSpriteWidth, _windowArea.width - backgroundOffset - toOffsetX ), backgroundCopyHeight );
+                toOffsetX += stepX;
+            }
+        }
+
+        // If we need more copies to fill background vertically we make a transition and copy existing image in full background width.
+        if ( backgroundVerticalCopies > 0 ) {
+            int32_t toOffsetY = backgroundOffset + backgroundSpriteHeight;
+            CreateDitheringTransition( _output, backgroundOffsetX, backgroundOffsetY, _output, backgroundOffsetX, _windowArea.y + toOffsetY - transitionSize,
+                                       backgroundWidth, transitionSize, false, false );
+
+            const int32_t stepY = backgroundSpriteHeight - transitionSize;
+            const int32_t fromOffsetY = backgroundOffset + transitionSize;
+
+            for ( int32_t i = 0; i < backgroundVerticalCopies; ++i ) {
+                Copy( _output, backgroundOffsetX, _windowArea.y + fromOffsetY, _output, backgroundOffsetX, _windowArea.y + toOffsetY, backgroundWidth,
+                      std::min( backgroundSpriteHeight, _windowArea.height - backgroundOffset - toOffsetY ) );
+                toOffsetY += stepY;
+            }
+        }
     }
 }
