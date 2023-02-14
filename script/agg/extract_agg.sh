@@ -33,3 +33,5 @@ for DIR in agg/*; do
 
     icn2img "icn/$(basename "$DIR")" agg/*/kb.pal "$DIR"/*.icn
 done
+
+pal2img agg/*/kb.pal kb.png
