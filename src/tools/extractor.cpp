@@ -29,6 +29,7 @@
 #include <fstream> // IWYU pragma: keep
 #include <functional>
 #include <iostream>
+#include <iterator>
 #include <map>
 #include <sstream>
 #include <string>

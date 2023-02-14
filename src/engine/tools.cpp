@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "tools.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cctype>
@@ -30,8 +32,6 @@
 #include <fstream> // IWYU pragma: keep
 #include <memory>
 
-#include "logging.h"
-#include "tools.h"
 #include "translations.h"
 
 std::string StringTrim( std::string str )
