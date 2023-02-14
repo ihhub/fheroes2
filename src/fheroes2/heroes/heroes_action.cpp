@@ -88,6 +88,43 @@
 
 namespace
 {
+    struct MusicalEffectPlayer
+    {
+        MusicalEffectPlayer() = default;
+
+        MusicalEffectPlayer( const int trackId )
+        {
+            play( trackId );
+        }
+
+        MusicalEffectPlayer( const MusicalEffectPlayer & ) = delete;
+
+        ~MusicalEffectPlayer()
+        {
+            Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
+        }
+
+        MusicalEffectPlayer & operator=( const MusicalEffectPlayer & ) = delete;
+
+        void play( const int trackId ) const
+        {
+            if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
+                return;
+            }
+
+            // "Musical" sound effects should use the volume of the sound effects instead of the volume of the music
+            const int soundVolume = Settings::Get().SoundVolume();
+
+            // Play the sound effect only if the volume of the sound effect is not set to 0
+            if ( soundVolume <= 0 ) {
+                return;
+            }
+
+            Music::setVolume( 100 * soundVolume / 10 );
+            AudioManager::PlayMusic( trackId, Music::PlaybackMode::PLAY_ONCE );
+        }
+    };
+
     void DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t resourceType )
     {
         const payment_t info = ProfitConditions::FromMine( resourceType );
@@ -142,44 +179,6 @@ namespace
         fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ),
                                Dialog::OK, { &resourceUI } );
     }
-
-    // "Musical" sounds use the volume of sounds instead of the volume of music, reset the music volume after completing the action
-    struct MusicEffectPlayer
-    {
-        MusicEffectPlayer() = default;
-
-        MusicEffectPlayer( const int trackId )
-        {
-            play( trackId );
-        }
-
-        MusicEffectPlayer( const MusicEffectPlayer & ) = delete;
-
-        ~MusicEffectPlayer()
-        {
-            Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
-        }
-
-        MusicEffectPlayer & operator=( const MusicEffectPlayer & ) = delete;
-
-        void play( const int trackId ) const
-        {
-            if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
-                return;
-            }
-
-            // "Musical" sounds should use the volume of the sounds instead of the volume of the music
-            const int32_t soundVolume = Settings::Get().SoundVolume();
-
-            // Play the sound only if sound volume is not set to 0.
-            if ( soundVolume <= 0 ) {
-                return;
-            }
-
-            Music::setVolume( 100 * soundVolume / 10 );
-            AudioManager::PlayMusic( trackId, Music::PlaybackMode::PLAY_ONCE );
-        }
-    };
 }
 
 void ActionToCastle( Heroes & hero, int32_t dst_index );
@@ -361,7 +360,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
-    const MusicEffectPlayer musicEffectPlayer( MUS::FromMapObject( objectType ) );
+    const MusicalEffectPlayer musicalEffectPlayer( MUS::FromMapObject( objectType ) );
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
         SetModes( ACTION );
@@ -1053,11 +1052,11 @@ void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objec
     }
 
     if ( rc.isValid() ) {
-        const MusicEffectPlayer musicEffectPlayer;
+        const MusicalEffectPlayer musicalEffectPlayer;
 
         // The Magic Garden has a special sound
         if ( objectType == MP2::OBJ_MAGIC_GARDEN && !Settings::Get().MusicMIDI() ) {
-            musicEffectPlayer.play( MUS::TREEHOUSE );
+            musicalEffectPlayer.play( MUS::TREEHOUSE );
         }
         // The Lean-To has a special sound
         else if ( objectType == MP2::OBJ_LEAN_TO ) {
@@ -1316,10 +1315,10 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
             msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
             StringReplace( msg, "%{skill}", skill_name );
 
-            const MusicEffectPlayer musicEffectPlayer;
+            const MusicalEffectPlayer musicalEffectPlayer;
 
             if ( !Settings::Get().MusicMIDI() ) {
-                musicEffectPlayer.play( MUS::EXPERIENCE );
+                musicalEffectPlayer.play( MUS::EXPERIENCE );
             }
 
             const fheroes2::SecondarySkillDialogElement secondarySkillUI( skill, hero );
@@ -1744,13 +1743,13 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
         Dialog::Message( title, msg, Font::BIG, Dialog::OK );
     }
     else {
-        const MusicEffectPlayer musicEffectPlayer;
+        const MusicalEffectPlayer musicalEffectPlayer;
 
         if ( Settings::Get().MusicMIDI() ) {
             AudioManager::PlaySound( M82::EXPERNCE );
         }
         else {
-            musicEffectPlayer.play( MUS::EXPERIENCE );
+            musicalEffectPlayer.play( MUS::EXPERIENCE );
         }
 
         const fheroes2::ExperienceDialogElement experienceUI( exp );
@@ -2310,11 +2309,11 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
             Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
 
-            const MusicEffectPlayer musicEffectPlayer;
+            const MusicalEffectPlayer musicalEffectPlayer;
 
             // The Lighthouse has a special sound
             if ( objectType == MP2::OBJ_LIGHTHOUSE && !Settings::Get().MusicMIDI() ) {
-                musicEffectPlayer.play( MUS::XANADU );
+                musicalEffectPlayer.play( MUS::XANADU );
             }
 
             if ( resource == Resource::UNKNOWN ) {
@@ -2540,13 +2539,13 @@ void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType,
                          Dialog::OK );
     }
     else {
-        const MusicEffectPlayer musicEffectPlayer;
+        const MusicalEffectPlayer musicalEffectPlayer;
 
         if ( Settings::Get().MusicMIDI() ) {
             AudioManager::PlaySound( M82::EXPERNCE );
         }
         else {
-            musicEffectPlayer.play( MUS::WATERSPRING );
+            musicalEffectPlayer.play( MUS::WATERSPRING );
         }
 
         hero.SetSpellPoints( max * 2 );
@@ -2724,11 +2723,11 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
             offsetX += border.width() + 4;
         }
 
-        const MusicEffectPlayer musicEffectPlayer;
+        const MusicalEffectPlayer musicalEffectPlayer;
 
         // The Hill Fort has a special sound
         if ( objectType == MP2::OBJ_HILL_FORT && !Settings::Get().MusicMIDI() ) {
-            musicEffectPlayer.play( MUS::HILLFORT );
+            musicalEffectPlayer.play( MUS::HILLFORT );
         }
 
         const fheroes2::CustomImageDialogElement imageUI( std::move( surface ) );
