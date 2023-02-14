@@ -31,7 +31,6 @@
 #include <sstream>
 #include <string>
 #include <system_error>
-#include <type_traits>
 #include <vector>
 
 #include "agg_file.h"
@@ -163,10 +162,7 @@ int main( int argc, char ** argv )
                 outputFileName += ".bmp";
             }
 
-            static_assert( std::is_same_v<decltype( header.offsetX ), uint16_t> && std::is_same_v<decltype( header.offsetY ), uint16_t>,
-                           "Offset types have been changed, check the casts below" );
-
-            offsetStream << spriteIdxStr << " [" << static_cast<int16_t>( header.offsetX ) << ", " << static_cast<int16_t>( header.offsetY ) << "]" << std::endl;
+            offsetStream << spriteIdxStr << " [" << header.offsetX << ", " << header.offsetY << "]" << std::endl;
             if ( !offsetStream ) {
                 std::cerr << "Error writing to file " << offsetFilePath << std::endl;
                 return EXIT_FAILURE;
