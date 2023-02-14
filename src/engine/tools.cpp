@@ -233,54 +233,6 @@ int Sign( int s )
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
 }
 
-bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path )
-{
-    std::fstream file;
-    file.open( path, std::fstream::out | std::fstream::trunc | std::fstream::binary );
-
-    if ( !file ) {
-        ERROR_LOG( "Unable to open file for writing: " << path )
-        return false;
-    }
-
-    file.write( reinterpret_cast<const char *>( data.data() ), static_cast<std::streamsize>( data.size() ) );
-
-    return true;
-}
-
-std::vector<uint8_t> LoadFileToMem( const std::string & path )
-{
-    std::fstream file;
-    file.open( path, std::fstream::in | std::fstream::binary );
-    if ( !file ) {
-        return {};
-    }
-
-    file.seekg( 0, std::fstream::end );
-    std::streamoff length = file.tellg();
-    if ( length < 1 ) {
-        return {};
-    }
-
-    std::vector<uint8_t> data( length );
-
-    size_t dataToRead = static_cast<size_t>( length );
-    size_t dataAlreadyRead = 0;
-
-    const size_t blockSize = 4 * 1024 * 1024; // read by 4 MB blocks
-
-    while ( dataToRead > 0 ) {
-        size_t readSize = dataToRead > blockSize ? blockSize : dataToRead;
-
-        file.read( reinterpret_cast<char *>( data.data() + dataAlreadyRead ), static_cast<std::streamsize>( readSize ) );
-
-        dataAlreadyRead += readSize;
-        dataToRead -= readSize;
-    }
-
-    return data;
-}
-
 namespace fheroes2
 {
     double GetAngle( const Point & start, const Point & target )
