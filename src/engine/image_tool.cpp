@@ -195,6 +195,7 @@ namespace fheroes2
                 for ( ; inX != inXEnd; ++inX, ++outX, ++transformX ) {
                     assert( *inX < palette->ncolors );
                     const SDL_Color * color = palette->colors + *inX;
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
                     if ( color->a < 255 ) {
                         if ( color->a == 0 ) {
                             *transformX = 1;
@@ -211,6 +212,11 @@ namespace fheroes2
                         *outX = GetColorId( color->r, color->g, color->b );
                         *transformX = 0;
                     }
+#else
+                    // SDL 1 doesn't support RGBA colors.
+                    *outX = GetColorId( color->r, color->g, color->b );
+                    *transformX = 0;
+#endif
                 }
             }
         }
