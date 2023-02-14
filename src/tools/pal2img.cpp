@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,30 +24,53 @@
 #include <string>
 #include <vector>
 
-#include "audio.h"
-#include "tools.h"
-
-#if defined( _WIN32 )
-#undef main
-#endif
+#include "image.h"
+#include "image_palette.h"
+#include "image_tool.h"
+#include "serialize.h"
+#include "system.h"
 
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {
-        std::cout << argv[0] << " infile.xmi outfile.mid" << std::endl;
-        return EXIT_SUCCESS;
+        std::string baseName = System::GetBasename( argv[0] );
+
+        std::cerr << baseName << " generates an image with colors based on a provided palette file." << std::endl
+                  << "Syntax: " << baseName << " palette_file.pal output.[bmp|png]" << std::endl;
+        return EXIT_FAILURE;
     }
 
-    std::vector<uint8_t> buf = LoadFileToMem( argv[1] );
+    const char * paletteFileName = argv[1];
+    const char * outputImage = argv[2];
 
-    if ( !buf.empty() ) {
-        buf = Music::Xmi2Mid( buf );
+    {
+        StreamFile paletteStream;
+        if ( !paletteStream.open( paletteFileName, "rb" ) ) {
+            std::cerr << "Cannot open file " << paletteFileName << std::endl;
+            return EXIT_FAILURE;
+        }
 
-        if ( buf.empty() )
-            std::cerr << ", file: " << argv[1] << std::endl;
-        else
-            SaveMemToFile( buf, std::string( argv[2] ) );
+        const std::vector<uint8_t> palette = paletteStream.getRaw();
+        if ( palette.size() != 768 ) {
+            std::cerr << "Invalid palette size of " << palette.size() << " instead of 768" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        fheroes2::setGamePalette( palette );
     }
 
-    return 0;
+    fheroes2::Image output( 256, 256 );
+    output.reset();
+    // We do not need to care about the transform layer.
+    output._disableTransformLayer();
+
+    for ( uint8_t y = 0; y < 16; ++y ) {
+        for ( uint8_t x = 0; x < 16; ++x ) {
+            fheroes2::Fill( output, x * 16, y * 16, 16, 16, x + y * 16 );
+        }
+    }
+
+    fheroes2::Save( output, outputImage );
+
+    return EXIT_SUCCESS;
 }

@@ -21,7 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
+#include "system.h"
+
 #include <cassert>
 #include <cstdlib>
 #include <filesystem>
@@ -42,6 +43,8 @@
 #include <unistd.h>
 
 #if defined( TARGET_PS_VITA )
+#include <algorithm>
+
 #include <psp2/io/stat.h>
 #else
 #include <sys/stat.h>
@@ -65,8 +68,6 @@
 #include <SDL_filesystem.h>
 #include <SDL_stdinc.h>
 #endif
-
-#include "system.h"
 
 #if defined( _WIN32 )
 #define SEPARATOR '\\'
@@ -541,15 +542,15 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
 {
     const std::filesystem::path globPath( glob );
 
-    std::filesystem::path dir = globPath.parent_path();
-    if ( dir.empty() ) {
-        dir = std::filesystem::path{ "." };
+    std::filesystem::path dirPath = globPath.parent_path();
+    if ( dirPath.empty() ) {
+        dirPath = std::filesystem::path{ "." };
     }
 
     std::error_code ec;
 
     // Using the non-throwing overload
-    if ( !std::filesystem::is_directory( dir, ec ) ) {
+    if ( !std::filesystem::is_directory( dirPath, ec ) ) {
         fileNames.emplace_back( glob );
         return;
     }
@@ -564,7 +565,7 @@ void System::globFiles( const std::string_view glob, std::vector<std::string> & 
     bool isNoMatches = true;
 
     // Using the non-throwing overload
-    for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( dir, ec ) ) {
+    for ( const std::filesystem::directory_entry & entry : std::filesystem::directory_iterator( dirPath, ec ) ) {
         const std::filesystem::path & entryPath = entry.path();
 
         if ( globMatch( entryPath.filename().string(), pattern ) ) {

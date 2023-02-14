@@ -45,6 +45,7 @@
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_list.h"
+#include "interface_radar.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "logging.h"
@@ -212,9 +213,13 @@ namespace
 
         Interface::Basic & I = Interface::Basic::Get();
 
+        const fheroes2::Point fromPosition = hero.GetCenter();
+        // Position of Hero on radar before casting the spell to clear it after casting.
+        const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, 1, 1 );
+
         // Before casting the spell, make sure that the game area is centered on the hero
-        I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.GetGameArea().SetCenter( fromPosition );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
         const int32_t dst = castle->GetIndex();
         assert( Maps::isValidAbsIndex( dst ) );
@@ -225,8 +230,16 @@ namespace
 
         hero.Move2Dest( dst );
 
+        // Clear previous hero position on radar.
+        I.GetRadar().SetRenderArea( fromRoi );
+
+        I.Redraw( Interface::REDRAW_RADAR );
+
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+        // Update radar image in scout area around Hero after teleport.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
@@ -363,9 +376,13 @@ namespace
     {
         Interface::Basic & I = Interface::Basic::Get();
 
+        const fheroes2::Point fromPosition = hero.GetCenter();
+        // Position of Hero on radar before casting the spell to clear it after casting.
+        const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, 1, 1 );
+
         // Before casting the spell, make sure that the game area is centered on the hero
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
         const int32_t src = hero.GetIndex();
         assert( Maps::isValidAbsIndex( src ) );
@@ -383,8 +400,16 @@ namespace
 
         hero.Move2Dest( dst );
 
+        // Clear previous hero position on radar.
+        I.GetRadar().SetRenderArea( fromRoi );
+
+        I.Redraw( Interface::REDRAW_RADAR );
+
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+        // Update radar image in scout area around Hero after teleport.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();

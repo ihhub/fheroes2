@@ -1,13 +1,12 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
+# German translation of fheroes2
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 15:51+0000\n"
+"POT-Creation-Date: 2023-02-12 22:59+0000\n"
 "PO-Revision-Date: 2022-12-22 21:39+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3765,13 +3764,12 @@ msgstr "Bestenliste für Feldzüge anzeigen."
 msgid "This file contains a save with an invalid game type."
 msgstr "Diese Datei enthält einen Spielstand mit einem ungültigen Spieltyp."
 
-#, fuzzy
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
-"Diese Datei ist in der \"The Price of Loyalty\"-Version gespeichert.\n"
-"Einige Objekte sind möglicherweise nicht mehr verfügbar."
+"Diese Datei wurde als \"The Price of Loyalty\"-Karte gespeichert, aber die "
+"entsprechenden Spiel-Assets wurden der Engine nicht zur Verfügung gestellt."
 
 msgid "Unsupported save format: "
 msgstr "Unterstütztes Speicherformat: "
@@ -7275,7 +7273,7 @@ msgid "Nothing Special"
 msgstr "Nichts besonderes"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Moosiger Felsen"
 
 msgid "Watch Tower"
 msgstr "Wachturm"

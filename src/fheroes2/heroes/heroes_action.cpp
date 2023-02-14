@@ -51,6 +51,7 @@
 #include "icn.h"
 #include "image.h"
 #include "interface_gamearea.h"
+#include "interface_radar.h"
 #include "interface_status.h"
 #include "kingdom.h"
 #include "localevent.h"
@@ -363,7 +364,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         Interface::Basic & I = Interface::Basic::Get();
 
         I.GetGameArea().SetCenter( GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
     }
 
     if ( list ) {
@@ -851,6 +852,20 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
     else {
         Army & army = castle->GetActualArmy();
 
+        auto captureCastle = [&hero, dst_index, castle]() {
+            castle->GetKingdom().RemoveCastle( castle );
+            hero.GetKingdom().AddCastle( castle );
+            world.CaptureObject( dst_index, hero.GetColor() );
+
+            castle->Scoute();
+            const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
+            const fheroes2::Point castlePosition = Maps::GetPoint( dst_index );
+
+            Interface::Basic & I = Interface::Basic::Get();
+            I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
+            I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
+        };
+
         if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() )
 
@@ -858,7 +873,7 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
             castle->ActionPreBattle();
 
             // new battle
-            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
             castle->ActionAfterBattle( res.AttackerWins() );
 
@@ -872,11 +887,7 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
 
             // wins attacker
             if ( res.AttackerWins() ) {
-                castle->GetKingdom().RemoveCastle( castle );
-                hero.GetKingdom().AddCastle( castle );
-                world.CaptureObject( dst_index, hero.GetColor() );
-                castle->Scoute();
-                Interface::Basic::Get().SetRedraw( Interface::REDRAW_CASTLES );
+                captureCastle();
 
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
             }
@@ -889,11 +900,7 @@ void ActionToCastle( Heroes & hero, int32_t dst_index )
         else {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " capture enemy castle " << castle->GetName() )
 
-            castle->GetKingdom().RemoveCastle( castle );
-            hero.GetKingdom().AddCastle( castle );
-            world.CaptureObject( dst_index, hero.GetColor() );
-            castle->Scoute();
-            Interface::Basic::Get().SetRedraw( Interface::REDRAW_CASTLES );
+            captureCastle();
 
             castle->MageGuildEducateHero( hero );
             Game::OpenCastleDialog( *castle );
@@ -909,18 +916,22 @@ void ActionToBoat( Heroes & hero, int32_t dst_index )
 
     hero.setLastGroundRegion( world.GetTiles( hero.GetIndex() ).GetRegion() );
 
-    const fheroes2::Point & destPos = Maps::GetPoint( dst_index );
-    const fheroes2::Point offset( destPos - hero.GetCenter() );
+    const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
     // Get the direction of the boat so that the direction of the hero can be set to it after boarding
-    const Maps::Tiles & from = world.GetTiles( dst_index );
-    const int boatDirection = from.getBoatDirection();
+    const int boatDirection = world.GetTiles( dst_index ).getBoatDirection();
 
     AudioManager::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeOut( offset );
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
+
+    // Update the radar map image before changing the direction of the hero.
+    Interface::Basic & I = Interface::Basic::Get();
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+    I.Redraw( Interface::REDRAW_RADAR );
+
     // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
     hero.setDirection( boatDirection );
     hero.SetMapsObject( MP2::OBJ_NONE );
@@ -937,14 +948,11 @@ void ActionToCoast( Heroes & hero, int32_t dst_index )
         return;
 
     const int fromIndex = hero.GetIndex();
-    Maps::Tiles & from = world.GetTiles( fromIndex );
-
-    const fheroes2::Point & destPos = Maps::GetPoint( dst_index );
-    const fheroes2::Point offset( destPos - hero.GetCenter() );
+    const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
-    from.setBoat( Maps::GetDirection( fromIndex, dst_index ) );
+    world.GetTiles( fromIndex ).setBoat( Maps::GetDirection( fromIndex, dst_index ) );
     hero.SetShipMaster( false );
     AudioManager::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -1285,6 +1293,12 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
         else {
             hero.LearnSkill( skill );
 
+            // When Scouting skill is learned we reveal the fog and redraw the radar map image in a new scout area of the hero.
+            if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
+                hero.Scoute( hero.GetIndex() );
+                hero.ScoutRadar();
+            }
+
             msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
             StringReplace( msg, "%{skill}", skill_name );
 
@@ -1296,6 +1310,13 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
+}
+
+void Heroes::ScoutRadar() const
+{
+    Interface::Basic & I = Interface::Basic::Get();
+    I.GetRadar().SetRenderArea( GetScoutRoi( true ) );
+    I.SetRedraw( Interface::REDRAW_RADAR );
 }
 
 void ActionToGoodLuckObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -2076,12 +2097,26 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     hero.GetPath().Hide();
     hero.FadeOut();
 
+    Interface::Basic & I = Interface::Basic::Get();
+    const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
+    if ( hero.GetCenter() == fromPoint ) {
+        // If hero was already in Teleport and player hit the space bar.
+        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
+    }
+    else {
+        // Before entering a Teleport the hero may make a move into it, so we update the radar map image of this move.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+    }
+
     // No action and no penalty
     hero.Move2Dest( index_to );
 
-    Interface::Basic & I = Interface::Basic::Get();
+    // Clear the previous hero position
+    I.Redraw( Interface::REDRAW_RADAR );
+
     I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+    I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -2109,12 +2144,26 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     hero.GetPath().Hide();
     hero.FadeOut();
 
+    Interface::Basic & I = Interface::Basic::Get();
+    const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
+    if ( hero.GetCenter() == fromPoint ) {
+        // If hero was already in Whirlpool and player hit the space bar.
+        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
+    }
+    else {
+        // Before entering a Whirlpool the hero may make a move into it, so we update the radar map image of this move.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+    }
+
     // No action and no penalty
     hero.Move2Dest( index_to );
 
-    Interface::Basic & I = Interface::Basic::Get();
+    // Clear the previous hero position
+    I.Redraw( Interface::REDRAW_RADAR );
+
     I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+    I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+    I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -2440,7 +2489,14 @@ void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType obj
 {
     Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
 
-    Maps::ClearFog( dst_index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
+    const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ) );
+    Maps::ClearFog( dst_index, scoutRange, hero.GetColor() );
+
+    Interface::Basic & I = Interface::Basic::Get();
+    const fheroes2::Point towerPosition = Maps::GetPoint( dst_index );
+    const fheroes2::Rect towerRoi( towerPosition.x - scoutRange, towerPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
+    I.GetRadar().SetRenderArea( towerRoi );
+    I.SetRedraw( Interface::REDRAW_RADAR );
 }
 
 void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -3148,9 +3204,17 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
             fheroes2::Display & display = fheroes2::Display::instance();
 
             for ( const int32_t eyeIndex : vec_eyes ) {
-                Maps::ClearFog( eyeIndex, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
+                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
 
-                I.GetGameArea().SetCenter( Maps::GetPoint( eyeIndex ) );
+                Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
+
+                const fheroes2::Point eyePosition = Maps::GetPoint( eyeIndex );
+
+                I.GetGameArea().SetCenter( eyePosition );
+
+                const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
+
+                I.GetRadar().SetRenderArea( eyeRoi );
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                 display.render();
@@ -3162,7 +3226,7 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
                     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                         ++delay;
                         Game::updateAdventureMapAnimationIndex();
-                        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+                        I.Redraw( Interface::REDRAW_GAMEAREA );
 
                         display.render();
                     }
@@ -3170,7 +3234,7 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
             }
 
             I.GetGameArea().SetCenter( hero.GetCenter() );
-            I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+            I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
             display.render();
         }

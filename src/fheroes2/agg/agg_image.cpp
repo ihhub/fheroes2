@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "agg_image.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -33,7 +35,6 @@
 
 #include "agg.h"
 #include "agg_file.h"
-#include "agg_image.h"
 #include "battle_cell.h"
 #include "h2d.h"
 #include "icn.h"
@@ -548,8 +549,7 @@ namespace fheroes2
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
-                _icnVsSprite[id][i]
-                    = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
+                _icnVsSprite[id][i] = decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
             }
         }
 
@@ -3389,6 +3389,12 @@ namespace fheroes2
                     Fill( pressed, 27, 16, 42, 27, getButtonFillingColor( false, isGoodInterface ) );
                 }
 
+                break;
+            }
+            case ICN::GAME_OPTION_ICON: {
+                _icnVsSprite[id].resize( 1 );
+
+                h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
                 break;
             }
             default:

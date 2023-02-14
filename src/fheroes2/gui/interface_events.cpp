@@ -209,7 +209,7 @@ void Interface::Basic::EventCastSpell()
 
     // Center on the hero before opening the spell book
     gameArea.SetCenter( hero->GetCenter() );
-    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR );
+    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
     if ( spell.isValid() ) {
@@ -494,7 +494,7 @@ void Interface::Basic::EventOpenFocus() const
         Game::OpenCastleDialog( *GetFocusCastle() );
 }
 
-void Interface::Basic::EventSwitchShowRadar() const
+void Interface::Basic::EventSwitchShowRadar()
 {
     Settings & conf = Settings::Get();
 
@@ -505,7 +505,7 @@ void Interface::Basic::EventSwitchShowRadar() const
         }
         else {
             conf.SetShowRadar( true );
-            radar.SetRedraw();
+            radar.SetRedraw( REDRAW_RADAR );
         }
     }
 }

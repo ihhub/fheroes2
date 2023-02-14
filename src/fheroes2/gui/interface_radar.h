@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,6 +26,7 @@
 
 #include <cstdint>
 
+#include "gamedefs.h"
 #include "image.h"
 #include "interface_border.h"
 #include "math_base.h"
@@ -55,13 +56,20 @@ namespace Interface
         Radar & operator=( const Radar & ) = delete;
 
         void SetPos( int32_t ox, int32_t oy ) override;
-        void SetRedraw() const;
+
+        // Set the render redraw flag from Interface::redraw_t enumeration:
+        // - 'REDRAW_RADAR' - to redraw the radar map image fully or in ROI and render the cursor over it.
+        // - 'REDRAW_RADAR_CURSOR' - to render the previously generated radar map image and the cursor over it.
+        void SetRedraw( const uint32_t redrawMode ) const;
+
+        // Set the "need" of render the radar map only in the given 'roi' on next radar Redraw call.
+        void SetRenderArea( const fheroes2::Rect & roi );
         void Build();
-        void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
+        void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode, const bool renderMapObjects );
 
         void SetHide( bool f )
         {
-            hide = f;
+            _hide = f;
         }
 
         void QueueEventProcessing();
@@ -82,22 +90,23 @@ namespace Interface
         };
 
         void SavePosition() override;
-        void Generate();
+        void SetZoom();
 
         // Do not call this method directly, use Interface::Basic::Redraw() instead
         // to avoid issues in the "no interface" mode
-        void Redraw();
-        void RedrawObjects( int color, ViewWorldMode flags ) const;
+        void Redraw( const bool redrawMapObjects );
+        void RedrawObjects( const int32_t playerColor, const ViewWorldMode flags );
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 
-        RadarType radarType;
-        Basic & interface;
+        RadarType _radarType;
+        Basic & _interface;
 
-        fheroes2::Image spriteArea;
-        fheroes2::MovableSprite cursorArea;
-        fheroes2::Point offset;
-        bool hide;
-        bool _mouseDraggingMovement;
+        fheroes2::Image _map{ RADARWIDTH, RADARWIDTH };
+        fheroes2::MovableSprite _cursorArea;
+        fheroes2::Rect _roi;
+        double _zoom{ 1.0 };
+        bool _hide{ true };
+        bool _mouseDraggingMovement{ false };
     };
 }
 

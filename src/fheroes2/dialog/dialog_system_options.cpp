@@ -68,7 +68,7 @@ namespace
         fheroes2::drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Hot keys.
-        const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, 5 );
+        const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 );
         fheroes2::drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         // Cursor Type.
@@ -431,8 +431,9 @@ namespace fheroes2
                 basicInterface.Reset();
 
                 // We need to redraw radar first due to the nature of restorers. Only then we can redraw everything.
+                // And we do a full radar redraw as it could be hidden in "Hide Interface" mode so it was not updated.
                 basicInterface.Redraw( Interface::REDRAW_RADAR );
-                basicInterface.Redraw( Interface::REDRAW_ALL );
+                basicInterface.Redraw( Interface::REDRAW_ALL & ~( Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_RADAR ) );
 
                 action = DialogAction::Open;
                 break;

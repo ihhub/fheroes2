@@ -38,13 +38,22 @@ jobs:
         mkdir -p docs/json
         for PO_FILE in files/lang/*.po; do
             STATISTICS="$(msgfmt --statistics --output-file=/dev/null -- "$PO_FILE" 2>&1)"
-            if [[ ! "$STATISTICS" =~ ^([0-9]+)\ translated\ messages?,\ ([0-9]+)\ fuzzy\ translations?,\ ([0-9]+)\ untranslated\ messages?.$ ]]; then
-                echo "Failed to parse the following msgfmt output: \"$STATISTICS\""
-                false
+            echo "$PO_FILE: $STATISTICS"
+            if [[ "$STATISTICS" =~ ([0-9]+)\ translated\ messages? ]]; then
+                TRANSLATED="${BASH_REMATCH[1]}"
+            else
+                TRANSLATED=0
             fi
-            TRANSLATED="${BASH_REMATCH[1]}"
-            FUZZY="${BASH_REMATCH[2]}"
-            UNTRANSLATED="${BASH_REMATCH[3]}"
+            if [[ "$STATISTICS" =~ ([0-9]+)\ fuzzy\ translations? ]]; then
+                FUZZY="${BASH_REMATCH[1]}"
+            else
+                FUZZY=0
+            fi
+            if [[ "$STATISTICS" =~ ([0-9]+)\ untranslated\ messages? ]]; then
+                UNTRANSLATED="${BASH_REMATCH[1]}"
+            else
+                UNTRANSLATED=0
+            fi
             OVERALL=$((TRANSLATED + FUZZY + UNTRANSLATED))
             if ((OVERALL == 0)); then
                 PERCENT=0
