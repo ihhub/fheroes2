@@ -39,14 +39,20 @@ This tool generates a PNG image from the palette file `KB.PAL`. It displays it a
 ## How to use the tools to extract the images
 
 Place the `HEROES2.agg` and optionally the `HEROES2X.agg` containers in the same folder as you extracted the tools to.
-Then run the script called `extract_agg`. This will create two folders: `agg` and `icn`.
+Then run the script called `extract_agg`. This will create two folders: `agg` and `icn`, both with a subdirectories named according
+to which AGG containers they were supplied, e.g. `HEROES2` and `HEROES2X`.
 
 The folder named `agg` contains the untouched contents of the AGG containers.
 
 Meanwhile, the folder named `icn` contains the PNG-converted graphical assets. These assets will be stored within folders named according to what
 ICN they were stored in. The `icn` folder is the most relevant one for graphical artists.
 
-To generate an image of the palette...
+To generate an image of the palette you need to run the `pal2img` tool in a command line. You will first need to have extracted the palette file
+called `KB.PAL` from the `HEROES2.agg` container using the above mentioned script.
+The syntax of this tool is:
+````bash
+pal2img palette_file.pal output.[bmp|png]
+````
 
 ## Where is help needed
 
