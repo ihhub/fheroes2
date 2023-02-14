@@ -205,7 +205,6 @@ namespace MUS
         case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_TROLL_BRIDGE:
             return DUNGEON;
-        case MP2::OBJ_ARTESIAN_SPRING:
         case MP2::OBJ_MAGIC_WELL:
         case MP2::OBJ_ORACLE:
             return WATERSPRING;

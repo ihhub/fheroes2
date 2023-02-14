@@ -2528,29 +2528,30 @@ void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType obj
 
 void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
-    const uint32_t max = hero.GetMaxSpellPoints();
-    const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIAN_SPRING );
+    const std::string title( MP2::StringObject( MP2::OBJ_ARTESIAN_SPRING ) );
 
     if ( world.isAnyKingdomVisited( objectType, dst_index ) ) {
-        Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
-    }
-    else if ( hero.GetSpellPoints() == max * 2 ) {
-        Dialog::Message( name, _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ), Font::BIG,
-                         Dialog::OK );
+        Dialog::Message( title, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
     else {
         const MusicalEffectPlayer musicalEffectPlayer;
 
-        if ( Settings::Get().MusicMIDI() ) {
-            AudioManager::PlaySound( M82::EXPERNCE );
-        }
-        else {
+        if ( !Settings::Get().MusicMIDI() ) {
             MusicalEffectPlayer::play( MUS::WATERSPRING );
         }
 
-        hero.SetSpellPoints( max * 2 );
+        const uint32_t max = hero.GetMaxSpellPoints();
 
-        Dialog::Message( name, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Font::BIG, Dialog::OK );
+        if ( hero.GetSpellPoints() >= max * 2 ) {
+            Dialog::Message( title, _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ), Font::BIG,
+                             Dialog::OK );
+        }
+        else {
+            hero.SetSpellPoints( max * 2 );
+
+            Dialog::Message( title, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Font::BIG,
+                             Dialog::OK );
+        }
     }
 
     hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
