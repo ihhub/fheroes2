@@ -360,6 +360,8 @@ void Heroes::Action( int tileIndex, bool isDestination )
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
+    // Play a permanent musical effect associated with the visited object, if any, and in any case restore the music volume on exit.
+    // Auxiliary functions can play other musical effects depending on the situation.
     const MusicalEffectPlayer musicalEffectPlayer( MUS::FromMapObject( objectType ) );
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
@@ -1052,8 +1054,6 @@ void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objec
     }
 
     if ( rc.isValid() ) {
-        const MusicalEffectPlayer musicalEffectPlayer;
-
         // The Magic Garden has a special sound
         if ( objectType == MP2::OBJ_MAGIC_GARDEN && !Settings::Get().MusicMIDI() ) {
             MusicalEffectPlayer::play( MUS::TREEHOUSE );
@@ -1314,8 +1314,6 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
 
             msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
             StringReplace( msg, "%{skill}", skill_name );
-
-            const MusicalEffectPlayer musicalEffectPlayer;
 
             if ( !Settings::Get().MusicMIDI() ) {
                 MusicalEffectPlayer::play( MUS::EXPERIENCE );
@@ -1743,8 +1741,6 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
         Dialog::Message( title, msg, Font::BIG, Dialog::OK );
     }
     else {
-        const MusicalEffectPlayer musicalEffectPlayer;
-
         if ( Settings::Get().MusicMIDI() ) {
             AudioManager::PlaySound( M82::EXPERNCE );
         }
@@ -2309,8 +2305,6 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
             Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
 
-            const MusicalEffectPlayer musicalEffectPlayer;
-
             // The Lighthouse has a special sound
             if ( objectType == MP2::OBJ_LIGHTHOUSE && !Settings::Get().MusicMIDI() ) {
                 MusicalEffectPlayer::play( MUS::XANADU );
@@ -2534,8 +2528,6 @@ void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType,
         Dialog::Message( title, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
     else {
-        const MusicalEffectPlayer musicalEffectPlayer;
-
         if ( !Settings::Get().MusicMIDI() ) {
             MusicalEffectPlayer::play( MUS::WATERSPRING );
         }
@@ -2723,8 +2715,6 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
 
             offsetX += border.width() + 4;
         }
-
-        const MusicalEffectPlayer musicalEffectPlayer;
 
         // The Hill Fort has a special sound
         if ( objectType == MP2::OBJ_HILL_FORT && !Settings::Get().MusicMIDI() ) {
