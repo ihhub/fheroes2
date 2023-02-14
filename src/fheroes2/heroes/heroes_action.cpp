@@ -3372,15 +3372,17 @@ void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, 
     const std::string title = MP2::StringObject( objectType );
 
     if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
+        AudioManager::PlaySound( M82::EXPERNCE );
+
         Dialog::Message(
             title,
             _( "A magical barrier stands tall before you, blocking your way. Runes on the arch read,\n\"Speak the key and you may pass.\"\nAs you speak the magic word, the glowing barrier dissolves into nothingness." ),
             Font::BIG, Dialog::OK );
 
+        AudioManager::PlaySound( M82::KILLFADE );
+
         Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
             std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-        AudioManager::PlaySound( M82::KILLFADE );
     }
     else {
         Dialog::Message(
@@ -3395,6 +3397,7 @@ void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, 
 void ActionToTravellersTent( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     AudioManager::PlaySound( M82::EXPERNCE );
+
     Dialog::Message(
         MP2::StringObject( objectType ),
         _( "You enter the tent and see an old woman gazing into a magic gem. She looks up and says,\n\"In my travels, I have learned much in the way of arcane magic. A great oracle taught me his skill. I have the answer you seek.\"" ),
