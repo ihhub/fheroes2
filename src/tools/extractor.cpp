@@ -31,6 +31,7 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <system_error>
 #include <type_traits>
 #include <utility>
@@ -52,7 +53,7 @@ namespace
         uint32_t size;
     };
 
-    uint32_t calculateHash( const std::string & str )
+    uint32_t calculateHash( const std::string_view str )
     {
         uint32_t hash = 0;
         int32_t sum = 0;
