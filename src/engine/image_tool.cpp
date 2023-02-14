@@ -175,7 +175,7 @@ namespace fheroes2
         }
 
         if ( surface->format->BytesPerPixel == 1 ) {
-            SDL_Palette * palette = surface->format->palette;
+            const SDL_Palette * palette = surface->format->palette;
             assert( palette != nullptr );
 
             image.resize( surface->w, surface->h );
@@ -194,7 +194,7 @@ namespace fheroes2
 
                 for ( ; inX != inXEnd; ++inX, ++outX, ++transformX ) {
                     assert( *inX < palette->ncolors );
-                    SDL_Color * color = palette->colors + *inX;
+                    const SDL_Color * color = palette->colors + *inX;
                     if ( color->a < 255 ) {
                         if ( color->a == 0 ) {
                             *transformX = 1;
