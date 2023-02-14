@@ -57,6 +57,9 @@ namespace
 
     std::pair<std::string, std::string> getResolutionStrings( const fheroes2::ResolutionInfo & resolution )
     {
+        if ( resolution.scale > 1 ) {
+            return std::make_pair( std::to_string( resolution.width ), std::to_string( resolution.height ) + " (x" + std::to_string( resolution.scale ) + ")" );
+        }
         return std::make_pair( std::to_string( resolution.width ), std::to_string( resolution.height ) );
     }
 
@@ -117,12 +120,7 @@ namespace
             resolutionText.draw( textOffsetX, textOffsetY, fheroes2::Display::instance() );
 
             const fheroes2::Text aspectRatioText( getAspectRatio( resolution ), fontType );
-            aspectRatioText.draw( offsetX + editBoxLength - aspectRatioText.width() - textPadding, textOffsetY, fheroes2::Display::instance() );
-
-            if ( resolution.scale > 1 ) {
-                const fheroes2::Text scaleText( "x" + std::to_string( resolution.scale ), fontType );
-                scaleText.draw( offsetX + textPadding, textOffsetY, fheroes2::Display::instance() );
-            }
+            aspectRatioText.draw( offsetX + editBoxLength - editBoxLength / 3, textOffsetY, fheroes2::Display::instance() );
         }
 
         void RedrawBackground( const fheroes2::Point & dst ) override
@@ -177,19 +175,14 @@ namespace
             const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
             const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
-            const int32_t textOffsetX = dst.x + 41 + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetX = dst.x + 41 + editBoxLength / 3 - leftTextSize - middleTextSize / 2;
             const int32_t textOffsetY = dst.y + 287 + ( resolutionItemHeight - text.height() + textOffsetYCorrection ) / 2;
 
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
             resolutionText.draw( textOffsetX, textOffsetY, output );
 
             const fheroes2::Text aspectRatioText( getAspectRatio( resolution ), fontType );
-            aspectRatioText.draw( dst.x + 41 + editBoxLength - aspectRatioText.width() - textPadding, textOffsetY, output );
-
-            if ( resolution.scale > 1 ) {
-                const fheroes2::Text scaleText( "x" + std::to_string( resolution.scale ), fontType );
-                scaleText.draw( dst.x + 41 + textPadding, textOffsetY, fheroes2::Display::instance() );
-            }
+            aspectRatioText.draw( dst.x + 41 + editBoxLength - editBoxLength / 3, textOffsetY, output );
         }
     }
 }
