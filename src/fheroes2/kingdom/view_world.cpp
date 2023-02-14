@@ -600,7 +600,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         viewCenterInPixels.y = world.h() * TILEWIDTH / 2;
     }
 
-    ZoomROIs currentROI( ZoomLevel::ZoomLevel2, viewCenterInPixels );
+    ZoomROIs currentROI( ZoomLevel( conf.ViewWorldZoomLevel() ), viewCenterInPixels );
 
     CacheForMapWithResources cache( mode );
 
@@ -686,6 +686,9 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         conf.setHideInterface( true );
         interface.Reset();
     }
+
+    // Memorize the last zoom level value.
+    conf.SetViewWorldZoomLevel( currentROI._zoomLevel );
 
     LocalEvent::ResumeCycling();
 }

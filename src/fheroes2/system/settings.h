@@ -408,6 +408,16 @@ public:
         current_maps_file.file = file;
     }
 
+    int32_t ViewWorldZoomLevel() const
+    {
+        return _viewWorldZoomLevel;
+    }
+
+    void SetViewWorldZoomLevel( int32_t zoomLevel )
+    {
+        _viewWorldZoomLevel = zoomLevel;
+    }
+
     void SetProgramPath( const char * );
 
     static std::string GetVersion();
@@ -451,6 +461,7 @@ private:
 
     int game_type;
     int preferably_count_players;
+    int32_t _viewWorldZoomLevel{ 2 };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };

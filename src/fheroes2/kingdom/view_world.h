@@ -68,7 +68,7 @@ public:
         const fheroes2::Rect & GetROIinPixels() const;
         fheroes2::Rect GetROIinTiles() const;
 
-        ZoomLevel _zoomLevel{ ZoomLevel2 };
+        ZoomLevel _zoomLevel;
         fheroes2::Point _center;
         std::array<fheroes2::Rect, 4> _roiForZoomLevels;
 
