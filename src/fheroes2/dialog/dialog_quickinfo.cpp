@@ -796,12 +796,13 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
     dst_pt.y = cur_rt.y + 2;
     text.draw( dst_pt.x, dst_pt.y, display );
 
+    const fheroes2::Sprite & frame = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 22 );
+
     // mini port heroes
     const fheroes2::Sprite & port = isActiveHero ? activeHero->GetPortrait( PORT_SMALL ) : activeCaptain->GetPortrait( PORT_SMALL );
     if ( !port.empty() ) {
-        const fheroes2::Sprite & frame = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 22 );
-        fheroes2::Blit( frame, display, cur_rt.x + ( cur_rt.width - frame.width() ) / 2, cur_rt.y + 13 );
-        fheroes2::Blit( port, display, cur_rt.x + ( cur_rt.width - port.width() ) / 2, cur_rt.y + 17 );
+        fheroes2::Blit( frame, display, cur_rt.x + ( cur_rt.width - frame.width() ) / 2, cur_rt.y + 12 );
+        fheroes2::Blit( port, display, cur_rt.x + ( cur_rt.width - port.width() ) / 2, cur_rt.y + 16 );
     }
 
     // luck
@@ -871,13 +872,13 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
     }
 
     const uint16_t statNumberColumn = 89;
-    const uint16_t statRow = 12;
+    const uint16_t statRow = 11;
 
     if ( showFullInfo ) {
         // attack
         text.set( _( "Attack:" ), smallWhite );
         dst_pt.x = cur_rt.x + 10;
-        dst_pt.y += port.height() + 2;
+        dst_pt.y += frame.height();
         text.draw( dst_pt.x, dst_pt.y, display );
 
         text.set( std::to_string( hero.GetAttack() ), smallWhite );
@@ -936,7 +937,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
             text.draw( dst_pt.x, dst_pt.y, display );
         }
 
-        Army::drawSingleDetailedMonsterLine( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 117, 160 );
+        Army::drawSingleDetailedMonsterLine( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 118, 160 );
     }
     else {
         // show limited
