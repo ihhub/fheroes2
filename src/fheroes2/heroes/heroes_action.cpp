@@ -106,7 +106,7 @@ namespace
 
         MusicalEffectPlayer & operator=( const MusicalEffectPlayer & ) = delete;
 
-        void play( const int trackId ) const
+        static void play( const int trackId )
         {
             if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
                 return;
@@ -1056,7 +1056,7 @@ void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objec
 
         // The Magic Garden has a special sound
         if ( objectType == MP2::OBJ_MAGIC_GARDEN && !Settings::Get().MusicMIDI() ) {
-            musicalEffectPlayer.play( MUS::TREEHOUSE );
+            MusicalEffectPlayer::play( MUS::TREEHOUSE );
         }
         // The Lean-To has a special sound
         else if ( objectType == MP2::OBJ_LEAN_TO ) {
@@ -1318,7 +1318,7 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int3
             const MusicalEffectPlayer musicalEffectPlayer;
 
             if ( !Settings::Get().MusicMIDI() ) {
-                musicalEffectPlayer.play( MUS::EXPERIENCE );
+                MusicalEffectPlayer::play( MUS::EXPERIENCE );
             }
 
             const fheroes2::SecondarySkillDialogElement secondarySkillUI( skill, hero );
@@ -1749,7 +1749,7 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
             AudioManager::PlaySound( M82::EXPERNCE );
         }
         else {
-            musicalEffectPlayer.play( MUS::EXPERIENCE );
+            MusicalEffectPlayer::play( MUS::EXPERIENCE );
         }
 
         const fheroes2::ExperienceDialogElement experienceUI( exp );
@@ -2313,7 +2313,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
             // The Lighthouse has a special sound
             if ( objectType == MP2::OBJ_LIGHTHOUSE && !Settings::Get().MusicMIDI() ) {
-                musicalEffectPlayer.play( MUS::XANADU );
+                MusicalEffectPlayer::play( MUS::XANADU );
             }
 
             if ( resource == Resource::UNKNOWN ) {
@@ -2545,7 +2545,7 @@ void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType,
             AudioManager::PlaySound( M82::EXPERNCE );
         }
         else {
-            musicalEffectPlayer.play( MUS::WATERSPRING );
+            MusicalEffectPlayer::play( MUS::WATERSPRING );
         }
 
         hero.SetSpellPoints( max * 2 );
@@ -2727,7 +2727,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
 
         // The Hill Fort has a special sound
         if ( objectType == MP2::OBJ_HILL_FORT && !Settings::Get().MusicMIDI() ) {
-            musicalEffectPlayer.play( MUS::HILLFORT );
+            MusicalEffectPlayer::play( MUS::HILLFORT );
         }
 
         const fheroes2::CustomImageDialogElement imageUI( std::move( surface ) );
