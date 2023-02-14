@@ -20,7 +20,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-set -e
+set -e -o pipefail
 
 PATH="$(dirname "$0"):$PATH"
 
