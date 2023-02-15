@@ -198,9 +198,11 @@ namespace fheroes2
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
                     if ( color->a < 255 ) {
                         if ( color->a == 0 ) {
+                            *outX = 0;
                             *transformX = 1;
                         }
                         else if ( color->r == 0 && color->g == 0 && color->b == 0 ) {
+                            *outX = 0;
                             *transformX = 2;
                         }
                         else {
@@ -259,9 +261,11 @@ namespace fheroes2
                     const uint8_t alpha = *( inX + 3 );
                     if ( alpha < 255 ) {
                         if ( alpha == 0 ) {
+                            *outX = 0;
                             *transformX = 1;
                         }
                         else if ( *inX == 0 && *( inX + 1 ) == 0 && *( inX + 2 ) == 0 ) {
+                            *outX = 0;
                             *transformX = 2;
                         }
                         else {
