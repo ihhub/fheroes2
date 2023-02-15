@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 16:41+0000\n"
+"POT-Creation-Date: 2023-02-15 00:41+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -1479,6 +1479,10 @@ msgstr ""
 
 msgid "campaignBonus|Foremost Scroll"
 msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Tržiště"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr ""

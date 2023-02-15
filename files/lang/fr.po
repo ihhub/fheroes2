@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 15:51+0000\n"
+"POT-Creation-Date: 2023-02-15 00:41+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -1604,6 +1604,10 @@ msgstr "Médaille Fizbin"
 
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Parchemin ultime"
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Baliste"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Masque sinistre"
