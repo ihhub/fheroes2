@@ -20,7 +20,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-set -e
+set -e -o pipefail
 
 PATH="$(dirname "$0"):$PATH"
 
@@ -33,3 +33,5 @@ for DIR in agg/*; do
 
     icn2img "icn/$(basename "$DIR")" agg/*/kb.pal "$DIR"/*.icn
 done
+
+pal2img agg/*/kb.pal palette.png

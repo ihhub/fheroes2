@@ -494,7 +494,7 @@ void Interface::Basic::EventOpenFocus() const
         Game::OpenCastleDialog( *GetFocusCastle() );
 }
 
-void Interface::Basic::EventSwitchShowRadar()
+void Interface::Basic::EventSwitchShowRadar() const
 {
     Settings & conf = Settings::Get();
 

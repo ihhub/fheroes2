@@ -27,10 +27,13 @@
 #include <cstdlib>
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
+#include <functional>
 #include <iostream>
+#include <iterator>
 #include <map>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <system_error>
 #include <type_traits>
 #include <utility>
@@ -52,7 +55,7 @@ namespace
         uint32_t size;
     };
 
-    uint32_t calculateHash( const std::string & str )
+    uint32_t calculateHash( const std::string_view str )
     {
         uint32_t hash = 0;
         int32_t sum = 0;
@@ -122,7 +125,7 @@ int main( int argc, char ** argv )
         inputStream.seek( inputStreamSize - AGGItemNameLen * itemsCount );
         StreamBuf namesStream = inputStream.toStreamBuf( AGGItemNameLen * itemsCount );
 
-        std::map<std::string, AGGItemInfo> aggItemsMap;
+        std::map<std::string, AGGItemInfo, std::less<>> aggItemsMap;
 
         for ( uint16_t i = 0; i < itemsCount; ++i ) {
             AGGItemInfo & info = aggItemsMap[StringLower( namesStream.toString( AGGItemNameLen ) )];
