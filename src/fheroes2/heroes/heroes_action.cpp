@@ -1475,7 +1475,7 @@ namespace
                     Dialog::Message( title, msg, Font::BIG, Dialog::OK );
                 }
             }
-            // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
+            // 6 - 50 rogues, 7 - 1 genie, 8,9,10,11,12,13 - 1 monster level4
             else if ( 5 < cond && cond < 14 ) {
                 bool battle = true;
                 Army army( tile );

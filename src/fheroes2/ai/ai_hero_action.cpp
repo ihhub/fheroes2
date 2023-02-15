@@ -1289,13 +1289,12 @@ namespace
                     hero.GetKingdom().OddFundsResource( payment );
                 }
             }
+            // 4,5 - bypass wisdom and leadership requirement
             else if ( 3 < cond && cond < 6 ) {
-                // 4,5 - bypass wisdom and leadership requirement
                 result = true;
             }
-            else
-                // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
-                if ( 5 < cond && cond < 14 ) {
+            // 6 - 50 rogues, 7 - 1 genie, 8,9,10,11,12,13 - 1 monster level4
+            else if ( 5 < cond && cond < 14 ) {
                 Army army( tile );
 
                 // new battle
