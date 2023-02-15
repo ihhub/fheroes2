@@ -3040,8 +3040,8 @@ void Heroes::Action( int tileIndex, bool isDestination )
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
-    // Play a permanent musical effect associated with the visited object, if any, and in any case restore the music volume on exit.
-    // Auxiliary functions can play other musical effects depending on the situation.
+    // Play a permanent musical effect (that is, independent of the state of the object or actions with it) associated with the visited object,
+    // if any, and in any case restore the music volume on exit. Auxiliary functions can play other musical effects depending on the situation.
     const MusicalEffectPlayer musicalEffectPlayer( MUS::FromMapObject( objectType ) );
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
@@ -3091,7 +3091,6 @@ void Heroes::Action( int tileIndex, bool isDestination )
         }
     }
 
-    /* default actions */
     if ( cancel_default ) {
         if ( MP2::isPickupObject( objectType ) ) {
             Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
