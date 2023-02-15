@@ -53,7 +53,6 @@ namespace
     // TODO: this is a hack over partially incorrect text height calculation. Fix it later together with the Text classes.
     const int32_t textOffsetYCorrection = 6;
     const std::string middleText = " x ";
-    const int32_t textPadding = 6;
 
     std::pair<std::string, std::string> getResolutionStrings( const fheroes2::ResolutionInfo & resolution )
     {
