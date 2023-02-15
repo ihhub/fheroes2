@@ -1578,9 +1578,8 @@ msgstr "Медал Физбин"
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Най-могъщият свитък"
 
-#, fuzzy
 msgid "campaignBonus|Gauntlets"
-msgstr "Катапулт"
+msgstr "Ръкавици"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Отвратителна маска"
@@ -3719,13 +3718,12 @@ msgstr "Вижте високите резултати за кампании."
 msgid "This file contains a save with an invalid game type."
 msgstr "Този файл съдържа запис с невалиден тип игра."
 
-#, fuzzy
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
-"Този файл е запазен от версията на играта \"The Price of Loyalty\".\n"
-"Някои артикули може да не са налични."
+"Този файл е запазен за „Цената на лоялността“, но съответните активи на "
+"играта не са предоставени на двигателя."
 
 msgid "Unsupported save format: "
 msgstr "Неподдържан формат за запис: "
@@ -4400,11 +4398,10 @@ msgstr "Приходи на царството"
 msgid "Kingdom Income per day."
 msgstr "Приходи на царството за ден."
 
-#, fuzzy
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
-"Фарът сега е под твой контрол и всички твой кораби сега ще се движат все по-"
-"далеч всеки ден."
+"За всеки контролиран фар, твойте кораби ще се придвижват все повече всеки "
+"ден."
 
 msgid "English"
 msgstr "Английски"
@@ -7034,11 +7031,10 @@ msgstr "Събитие"
 msgid "Dragon City"
 msgstr "Драконов град"
 
-#, fuzzy
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
 msgstr[0] "Фар"
-msgstr[1] "Фар"
+msgstr[1] "Фарове"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
