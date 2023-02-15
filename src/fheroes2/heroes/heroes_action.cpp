@@ -2636,19 +2636,20 @@ namespace
         if ( cursed ) {
             const payment_t payment = PaymentConditions::ForAlchemist();
 
-            if ( hero.GetKingdom().AllowPayment( payment ) ) {
-                std::string msg = _( "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak makes his way towards you." );
-                msg += '\n';
-                msg.append(
-                    _n( "He checks your pack, and sees that you have 1 cursed item.", "He checks your pack, and sees that you have %{count} cursed items.", cursed ) );
-                StringReplace( msg, "%{count}", cursed );
-                msg += '\n';
-                msg.append( _n( "For %{gold} gold, the alchemist will remove it for you. Do you pay?",
-                                "For %{gold} gold, the alchemist will remove them for you. Do you pay?", cursed ) );
-                StringReplace( msg, "%{gold}", payment.gold );
+            std::string msg = _( "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak makes his way towards you." );
+            msg += '\n';
+            msg.append(
+                _n( "He checks your pack, and sees that you have 1 cursed item.", "He checks your pack, and sees that you have %{count} cursed items.", cursed ) );
+            StringReplace( msg, "%{count}", cursed );
+            msg += '\n';
+            msg.append( _n( "For %{gold} gold, the alchemist will remove it for you. Do you pay?",
+                            "For %{gold} gold, the alchemist will remove them for you. Do you pay?", cursed ) );
+            StringReplace( msg, "%{gold}", payment.gold );
 
-                if ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                    AudioManager::PlaySound( M82::GOODLUCK );
+            AudioManager::PlaySound( M82::EXPERNCE );
+
+            if ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                if ( hero.GetKingdom().AllowPayment( payment ) ) {
                     hero.GetKingdom().OddFundsResource( payment );
 
                     for ( Artifact & artifact : bag ) {
@@ -2662,12 +2663,14 @@ namespace
                         "After you consent to pay the requested amount of gold, the alchemist grabs all cursed artifacts and throws them into his magical cauldron.",
                         cursed );
 
+                    AudioManager::PlaySound( M82::GOODLUCK );
+
                     Dialog::Message( title, msg, Font::BIG, Dialog::OK );
                 }
-            }
-            else {
-                Dialog::Message( title, _( "You hear a voice from behind the locked door, \"You don't have enough gold to pay for my services.\"" ), Font::BIG,
-                                 Dialog::OK );
+                else {
+                    Dialog::Message( title, _( "You hear a voice from behind the locked door, \"You don't have enough gold to pay for my services.\"" ), Font::BIG,
+                                     Dialog::OK );
+                }
             }
         }
         else {
