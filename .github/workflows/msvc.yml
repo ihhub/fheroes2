@@ -125,6 +125,7 @@ jobs:
                                .\\"$BUILD_DIR"\\extractor.exe \
                                .\\"$BUILD_DIR"\\icn2img.exe \
                                LICENSE \
+                               .\\docs\\GRAPHICAL_ARTISTS.md \
                                .\\script\\agg\\extract_agg.bat
         if [[ ${{ matrix.config.deploy_config }} == SDL2 ]]; then
             7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.tools_package_name }} \
