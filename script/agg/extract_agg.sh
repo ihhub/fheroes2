@@ -32,6 +32,8 @@ for DIR in agg/*; do
     fi
 
     icn2img "icn/$(basename "$DIR")" agg/*/kb.pal "$DIR"/*.icn
+    82m2wav "wav/$(basename "$DIR")" "$DIR"/*.82m
+    xmi2midi "midi/$(basename "$DIR")" "$DIR"/*.xmi
 done
 
 pal2img agg/*/kb.pal palette.png
