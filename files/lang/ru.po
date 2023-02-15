@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 15:51+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -1564,6 +1564,10 @@ msgstr "Символ Неудачи"
 
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Высший Свиток"
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Баллиста"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Ужасная Маска"
@@ -4366,6 +4370,12 @@ msgstr "Доход королевства"
 msgid "Kingdom Income per day."
 msgstr "Ежедневный доход королевства."
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Вы стали хозяином маяка, теперь все Ваши корабли будут передвигаться по морю "
+"гораздо дальше."
+
 msgid "English"
 msgstr "Английский"
 
@@ -6974,8 +6984,12 @@ msgstr "Событие"
 msgid "Dragon City"
 msgstr "Драконий город"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Маяк"
+msgid_plural "Lighthouses"
+msgstr[0] "Маяк"
+msgstr[1] "Маяк"
+msgstr[2] "Маяк"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"

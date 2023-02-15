@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 22:59+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-12-22 21:39+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1613,6 +1613,10 @@ msgstr "Fizbin des Pechs"
 
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Herausragendste Schriftrolle"
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Ballista"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Scheußliche Maske"
@@ -4469,6 +4473,12 @@ msgstr "Einkommen"
 msgid "Kingdom Income per day."
 msgstr "Einkommen des Königreichs pro Tag."
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Der Leuchtturm ist nun unter Ihrer Kontrolle, und alle Ihre Schiffe bewegen "
+"sich nun jeden Tag weiter."
+
 msgid "English"
 msgstr "Englisch"
 
@@ -7169,8 +7179,11 @@ msgstr "Ereignis"
 msgid "Dragon City"
 msgstr "Drachenstadt"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Leuchtturm"
+msgid_plural "Lighthouses"
+msgstr[0] "Leuchtturm"
+msgstr[1] "Leuchtturm"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 15:51+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1490,6 +1490,10 @@ msgstr ""
 #, fuzzy
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Särskild Kunskapsrulle"
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Bröstharnesk"
 
 #, fuzzy
 msgid "campaignBonus|Hideous Mask"
@@ -4388,6 +4392,12 @@ msgstr "Inkomst"
 msgid "Kingdom Income per day."
 msgstr "Inkomst"
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Fyret är nu under din kontroll och alla dina skepp kommer nu förflytta sig "
+"längre varje runda."
+
 msgid "English"
 msgstr ""
 
@@ -6901,8 +6911,11 @@ msgstr ""
 msgid "Dragon City"
 msgstr "Drakstad"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Fyr"
+msgid_plural "Lighthouses"
+msgstr[0] "Fyr"
+msgstr[1] "Fyr"
 
 #, fuzzy
 msgid "Water Wheel"

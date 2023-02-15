@@ -27,10 +27,13 @@
 #include <cstdlib>
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
+#include <functional>
 #include <iostream>
+#include <iterator>
 #include <map>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <system_error>
 #include <type_traits>
 #include <utility>
@@ -52,7 +55,7 @@ namespace
         uint32_t size;
     };
 
-    uint32_t calculateHash( const std::string & str )
+    uint32_t calculateHash( const std::string_view str )
     {
         uint32_t hash = 0;
         int32_t sum = 0;
@@ -92,14 +95,6 @@ int main( int argc, char ** argv )
         }
     }
 
-    std::error_code ec;
-
-    // Using the non-throwing overloads
-    if ( !std::filesystem::exists( dstDir, ec ) && !std::filesystem::create_directories( dstDir, ec ) ) {
-        std::cerr << "Cannot create directory " << dstDir << std::endl;
-        return EXIT_FAILURE;
-    }
-
     uint32_t itemsExtracted = 0;
     uint32_t itemsFailed = 0;
 
@@ -113,6 +108,16 @@ int main( int argc, char ** argv )
             continue;
         }
 
+        const std::filesystem::path prefixPath = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).stem();
+
+        std::error_code ec;
+
+        // Using the non-throwing overloads
+        if ( !std::filesystem::exists( prefixPath, ec ) && !std::filesystem::create_directories( prefixPath, ec ) ) {
+            std::cerr << "Cannot create directory " << prefixPath << std::endl;
+            return EXIT_FAILURE;
+        }
+
         const size_t inputStreamSize = inputStream.size();
         const uint16_t itemsCount = inputStream.getLE16();
 
@@ -120,7 +125,7 @@ int main( int argc, char ** argv )
         inputStream.seek( inputStreamSize - AGGItemNameLen * itemsCount );
         StreamBuf namesStream = inputStream.toStreamBuf( AGGItemNameLen * itemsCount );
 
-        std::map<std::string, AGGItemInfo> aggItemsMap;
+        std::map<std::string, AGGItemInfo, std::less<>> aggItemsMap;
 
         for ( uint16_t i = 0; i < itemsCount; ++i ) {
             AGGItemInfo & info = aggItemsMap[StringLower( namesStream.toString( AGGItemNameLen ) )];
@@ -161,7 +166,7 @@ int main( int argc, char ** argv )
                 continue;
             }
 
-            const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( name );
+            const std::filesystem::path outputFilePath = prefixPath / std::filesystem::path( name );
 
             std::ofstream outputStream( outputFilePath, std::ios_base::binary | std::ios_base::trunc );
             if ( !outputStream ) {

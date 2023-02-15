@@ -20,7 +20,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-set -e
+set -e -o pipefail
 
 PKG_FILE="android.zip"
 PKG_FILE_SHA256="03f12b08f30a9ac7640a2903caeced755aa1113fb078a18a88946872d0108fe9"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 15:51+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -1419,6 +1419,10 @@ msgstr ""
 
 msgid "campaignBonus|Foremost Scroll"
 msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "La Perla Bianca"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr ""
@@ -4218,6 +4222,12 @@ msgstr "Rendita"
 msgid "Kingdom Income per day."
 msgstr "Rendita"
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Hai catturato un faro, e ora i punti di movimento in nave si aumentano per "
+"tutti i tuoi eroi."
+
 msgid "English"
 msgstr ""
 
@@ -6469,8 +6479,11 @@ msgstr "Evento"
 msgid "Dragon City"
 msgstr "Dragon City"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Faro"
+msgid_plural "Lighthouses"
+msgstr[0] "Faro"
+msgstr[1] "Faro"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"

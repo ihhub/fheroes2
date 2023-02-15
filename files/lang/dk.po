@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 15:51+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2023-01-25 17:06+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -1434,6 +1434,10 @@ msgstr ""
 
 msgid "campaignBonus|Foremost Scroll"
 msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Avanceret Ørneblik"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr ""
@@ -4041,6 +4045,9 @@ msgstr ""
 msgid "Kingdom Income per day."
 msgstr ""
 
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+
 msgid "English"
 msgstr ""
 
@@ -6265,7 +6272,9 @@ msgid "Dragon City"
 msgstr ""
 
 msgid "Lighthouse"
-msgstr ""
+msgid_plural "Lighthouses"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"

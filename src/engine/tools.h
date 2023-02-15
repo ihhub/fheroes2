@@ -64,9 +64,6 @@ int CountBits( uint32_t );
 
 std::string InsertString( const std::string &, size_t, const char * );
 
-bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path );
-std::vector<uint8_t> LoadFileToMem( const std::string & path );
-
 namespace fheroes2
 {
     double GetAngle( const Point & start, const Point & target );

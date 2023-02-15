@@ -269,7 +269,7 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
     case OBJ_NON_ACTION_DRAGON_CITY:
         return _( "Dragon City" );
     case OBJ_NON_ACTION_LIGHTHOUSE:
-        return _( "Lighthouse" );
+        return _n( "Lighthouse", "Lighthouses", count );
     case OBJ_NON_ACTION_WATER_WHEEL:
         return _n( "Water Wheel", "Water Wheels", count );
     case OBJ_NON_ACTION_MINES:
