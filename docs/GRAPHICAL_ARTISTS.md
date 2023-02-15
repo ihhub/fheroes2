@@ -1,10 +1,10 @@
 # [**fheroes2**](README.md) graphical artist guide
 
-The original game has its graphical assets stored in the `HEROES2.agg` container and potentially the `HEROES2X.agg` container if the expansion
-pack Price of Loyalty is present. These two AGG containers are located in the `DATA` folder of the original Heroes 2 installation.
+The original game has its graphical assets stored in the `HEROES2.agg` file and potentially the `HEROES2X.agg` file if the expansion
+pack The Price of Loyalty is present. These two AGG files are located in the `DATA` folder of the original Heroes 2 installation.
 
 For convenience's sake the fheroes2 project provides a set of tools and a script that artists can use to easily extract and convert the original
-graphical assets into viewable PNG image files.
+graphical assets into viewable PNG files.
 
 New assets that the fheroes2 project adds to the game are included in the `files/data/resurrection.h2d` data file.
 
@@ -12,7 +12,7 @@ This guide is designed for Linux, MacOS and Windows users. The source files to t
 
 ## Where to get the tools
 
-You can download the precompiled tools for your OS of choice here:
+You can download the precompiled tools for your operating system (OS) of choice here:
 [Windows 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-windows-x64-SDL2/fheroes2_tools_windows_x64_SDL2.zip)
 [Windows 32-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-windows-x86-SDL2/fheroes2_tools_windows_x86_SDL2.zip)
 
@@ -26,33 +26,28 @@ Here is a list and short description of the various graphical artist tools:
 
 - extractor
 
-This tool extracts all the contents of the AGG containers mentioned above. Among these are ICN containers that hold the graphical assets.
+This tool extracts all the contents of the AGG files mentioned above. Among the extracted files are the ICNs which hold the graphical assets.
 
 - icn2img
 
-This tool converts the various graphical assets contained within the ICNs into PNG format images.
+This tool converts the various graphical assets contained within the ICNs into PNG or BMP files.
 
 - pal2img
 
-This tool generates a PNG image from the palette file `KB.PAL`. It displays it as 16x16 tiles of 16 pixels each.
+This tool generates a PNG or BMP file from the palette file `KB.PAL`. It displays it as 16x16 tiles of 16 pixels each.
 
 ## How to use the tools to extract the images
 
-Place the `HEROES2.agg` and optionally the `HEROES2X.agg` containers in the same folder as you extracted the tools to.
-Then run the script called `extract_agg`. This will create two folders: `agg` and `icn`, both with a subdirectories named according
-to which AGG containers they were supplied, e.g. `HEROES2` and `HEROES2X`.
+Place the `HEROES2.agg` and optionally the `HEROES2X.agg` files in the same folder as you extracted the tools to.
+Then run the script called `extract_agg`. This will create two folders: `agg` and `icn`. Both of them have a subdirectory named `HEROES2`,
+and potentially a `HEROES2X` one, reflecting what AGG file the contents come from. In addition running the script will generate a PNG file
+of the palette of the game with the name `palette.png` in the same directory as the folders `agg` and `icn`.
 
-The folder named `agg` contains the untouched contents of the AGG containers.
+The folder named `agg` contains the untouched contents of the AGG files.
 
 Meanwhile, the folder named `icn` contains the PNG-converted graphical assets. These assets will be stored within folders named according to what
-ICN they were stored in. The `icn` folder is the most relevant one for graphical artists.
-
-To generate an image of the palette you need to run the `pal2img` tool in a command line. You will first need to have extracted the palette file
-called `KB.PAL` from the `HEROES2.agg` container using the above mentioned script.
-The syntax of this tool is:
-````bash
-pal2img palette_file.pal output.[bmp|png]
-````
+ICN they were stored in, e.g. the folder `apanel` came from the ICN `apanel.icn`. The `icn` folder is in other words the most relevant one for
+graphical artists.
 
 ## Where is help needed
 
