@@ -38,6 +38,6 @@ exit /B %EXIT_CODE%
 extractor agg *.AGG *.agg || exit /B 1
 icn2img icn\HEROES2 agg\HEROES2\kb.pal agg\HEROES2\*.icn || exit /B 1
 icn2img icn\HEROES2X agg\HEROES2\kb.pal agg\HEROES2X\*.icn || exit /B 1
-pal2img agg\HEROES2\kb.pal kb.png || exit /B 1
+pal2img agg\HEROES2\kb.pal palette.png || exit /B 1
 
 exit /B
