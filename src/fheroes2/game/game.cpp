@@ -83,7 +83,7 @@ namespace
         const MP2::MapObjectType objectType = tile.GetObject( false );
 
         // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Rock.
-        if ( objectType == MP2::OBJ_ROCK && tile.containsSprite( 200, 183 ) ) {
+        if ( objectType == MP2::OBJ_ROCK && tile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNWATR, 183 ) ) {
             return M82::LOOP0019;
         }
 
@@ -324,7 +324,7 @@ void Game::EnvironmentSoundMixer()
 
             // We need to swap X and Y axes and invert Y axis as on screen Y axis goes from top to bottom.
             angle = static_cast<int16_t>( std::atan2( actualPosition.x, -actualPosition.y ) * 180 / M_PI );
-            // It is exteremely important to normalize the angle.
+            // It is extremely important to normalize the angle.
             if ( angle < 0 ) {
                 angle = 360 + angle;
             }

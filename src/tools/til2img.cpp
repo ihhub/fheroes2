@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,86 +24,134 @@
 #include <algorithm>
 #include <cstdint>
 #include <cstdlib>
-#include <cstring>
+#include <filesystem>
 #include <iomanip>
 #include <iostream>
-#include <sstream> // IWYU pragma: keep
+#include <sstream>
 #include <string>
+#include <system_error>
 #include <vector>
 
 #include "image.h"
+#include "image_palette.h"
 #include "image_tool.h"
 #include "serialize.h"
 #include "system.h"
 
+namespace
+{
+    constexpr uint8_t spriteBackground = 0;
+}
+
 int main( int argc, char ** argv )
 {
-    if ( argc != 3 ) {
-        std::cout << argv[0] << " [-d] infile.til extract_to_dir" << std::endl;
-        return EXIT_SUCCESS;
+    if ( argc < 4 ) {
+        std::string baseName = System::GetBasename( argv[0] );
+
+        std::cerr << baseName << " extracts sprites in BMP or PNG format (if supported) from the specified TIL file(s) using the specified palette." << std::endl
+                  << "Syntax: " << baseName << " dst_dir palette_file.pal input_file.til ..." << std::endl;
+        return EXIT_FAILURE;
     }
 
-    StreamFile sf;
+    const char * dstDir = argv[1];
+    const char * paletteFileName = argv[2];
 
-    if ( !sf.open( argv[1], "rb" ) ) {
-        std::cout << "error open file: " << argv[1] << std::endl;
-        return EXIT_SUCCESS;
+    {
+        StreamFile paletteStream;
+        if ( !paletteStream.open( paletteFileName, "rb" ) ) {
+            std::cerr << "Cannot open file " << paletteFileName << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const std::vector<uint8_t> palette = paletteStream.getRaw();
+        if ( palette.size() != 768 ) {
+            std::cerr << "Invalid palette size of " << palette.size() << " instead of 768" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        fheroes2::setGamePalette( palette );
     }
 
-    std::string prefix( argv[2] );
-    std::string shortname( argv[1] );
-
-    bool debugMode = false;
-    if ( shortname == "-d" ) {
-        debugMode = true;
-    }
-
-    shortname.replace( shortname.find( "." ), 4, "" );
-    prefix = System::concatPath( prefix, shortname );
-
-    if ( 0 != System::MakeDirectory( prefix ) ) {
-        std::cout << "error mkdir: " << prefix << std::endl;
-        return EXIT_SUCCESS;
-    }
-
-    int size = sf.size();
-    int count = sf.getLE16();
-    int width = sf.getLE16();
-    int height = sf.getLE16();
-    std::vector<uint8_t> buf = sf.getRaw( width * height * count );
-    if ( debugMode ) {
-        std::cout << "Size of stream " << size << "(" << buf.size() << ")" << std::endl;
-        std::cout << "Count of images " << count << "(" << width << "," << height << ")" << std::endl;
-    }
-
-    for ( int cur = 0; cur < count; ++cur ) {
-        uint32_t offset = width * height * cur;
-        if ( offset < buf.size() ) {
-            fheroes2::Image image( width, height );
-            memcpy( image.image(), &buf[offset], static_cast<size_t>( width * height ) );
-            std::fill( image.transform(), image.transform() + width * height, 0 );
-
-            std::ostringstream stream;
-            stream << std::setw( 3 ) << std::setfill( '0' ) << cur;
-            std::string dstfile = System::concatPath( prefix, stream.str() );
-
-            if ( fheroes2::isPNGFormatSupported() ) {
-                dstfile += ".png";
-            }
-            else {
-                dstfile += ".bmp";
-            }
-
-            if ( debugMode ) {
-                std::cout << "Saving " << dstfile << std::endl;
-            }
-
-            if ( !fheroes2::Save( image, dstfile, 0 ) )
-                std::cout << "error" << std::endl;
+    std::vector<std::string> inputFileNames;
+    for ( int i = 3; i < argc; ++i ) {
+        if ( System::isShellLevelGlobbingSupported() ) {
+            inputFileNames.emplace_back( argv[i] );
+        }
+        else {
+            System::globFiles( argv[i], inputFileNames );
         }
     }
 
-    sf.close();
-    std::cout << "expand to: " << prefix << std::endl;
+    for ( const std::string & inputFileName : inputFileNames ) {
+        std::cout << "Processing " << inputFileName << "..." << std::endl;
+
+        StreamFile inputStream;
+        if ( !inputStream.open( inputFileName, "rb" ) ) {
+            std::cerr << "Cannot open file " << inputFileName << std::endl;
+            // A non-existent or inaccessible file is not considered a fatal error
+            continue;
+        }
+
+        const std::filesystem::path prefixPath = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).stem();
+
+        std::error_code ec;
+
+        // Using the non-throwing overloads
+        if ( !std::filesystem::exists( prefixPath, ec ) && !std::filesystem::create_directories( prefixPath, ec ) ) {
+            std::cerr << "Cannot create directory " << prefixPath << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const uint16_t spritesCount = inputStream.getLE16();
+        if ( spritesCount == 0 ) {
+            std::cerr << inputFileName << ": no sprites found" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const uint16_t spriteWidth = inputStream.getLE16();
+        const uint16_t spriteHeight = inputStream.getLE16();
+
+        const size_t spriteSize = static_cast<size_t>( spriteWidth ) * spriteHeight;
+        if ( spriteSize == 0 ) {
+            std::cerr << inputFileName << ": invalid sprite size " << spriteWidth << "x" << spriteHeight << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const std::vector<uint8_t> buf = inputStream.getRaw( spriteSize * spritesCount );
+        if ( buf.size() != spriteSize * spritesCount ) {
+            std::cerr << inputFileName << ": failed to extract sprites" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        std::vector<fheroes2::Image> sprites;
+        sprites.reserve( spritesCount );
+
+        fheroes2::decodeTILImages( buf.data(), spritesCount, spriteWidth, spriteHeight, sprites );
+        if ( sprites.size() != spritesCount ) {
+            std::cerr << inputFileName << ": failed to extract sprites" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        for ( size_t spriteIdx = 0; spriteIdx < sprites.size(); ++spriteIdx ) {
+            std::ostringstream spriteIdxStream;
+            spriteIdxStream << std::setw( 3 ) << std::setfill( '0' ) << spriteIdx;
+
+            const std::string spriteIdxStr = spriteIdxStream.str();
+            std::string outputFileName = ( prefixPath / spriteIdxStr ).string();
+
+            if ( fheroes2::isPNGFormatSupported() ) {
+                outputFileName += ".png";
+            }
+            else {
+                outputFileName += ".bmp";
+            }
+
+            if ( !fheroes2::Save( sprites[spriteIdx], outputFileName, spriteBackground ) ) {
+                std::cerr << inputFileName << ": error saving sprite " << spriteIdx << std::endl;
+                return EXIT_FAILURE;
+            }
+        }
+    }
+
     return EXIT_SUCCESS;
 }

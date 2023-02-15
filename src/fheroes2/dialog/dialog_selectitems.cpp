@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -436,7 +436,7 @@ Monster Dialog::SelectMonster( int id )
     std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
 
     for ( size_t i = 0; i < monsters.size(); ++i )
-        monsters[i] = static_cast<int>( i + 1 ); // skip Monser::UNKNOWN, safe to do this as the monsters of spells can't be more than 2 billion
+        monsters[i] = static_cast<int>( i + 1 ); // skip Monster::UNKNOWN, safe to do this as the monsters of spells can't be more than 2 billion
 
     Dialog::FrameBorder frameborder( { 260, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();

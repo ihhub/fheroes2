@@ -74,7 +74,6 @@
 #include "route.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -328,7 +327,7 @@ void ShowNewWeekDialog()
     else
         message += _( " All dwellings increase population." );
 
-    Dialog::Message( "", message, Font::BIG, Dialog::OK );
+    fheroes2::showStandardTextMessage( "", message, Dialog::OK );
 }
 
 void ShowEventDayDialog()
@@ -342,7 +341,7 @@ void ShowEventDayDialog()
                                            fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, event.resource );
         }
         else if ( !event.message.empty() ) {
-            Dialog::Message( event.title, event.message, Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
         }
     }
 }
@@ -626,7 +625,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
 
                 radar.SetHide( true );
-                radar.SetRedraw();
+                radar.SetRedraw( REDRAW_RADAR_CURSOR );
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -686,7 +685,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     if ( player->isAIAutoControlMode() ) {
                         radar.SetHide( false );
-                        radar.SetRedraw();
+                        radar.SetRedraw( REDRAW_RADAR );
                     }
 
                     Redraw();
@@ -1073,6 +1072,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                             gameArea.SetCenter( hero->GetCenter() );
                             ResetFocus( GameFocus::HEROES );
 
+                            // Update the radar map image in the area that is visible to the hero after his movement.
+                            radar.SetRenderArea( hero->GetScoutRoi() );
+                            radar.SetRedraw( REDRAW_RADAR );
+
                             RedrawFocus();
 
                             if ( stopHero ) {
@@ -1146,7 +1149,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 gameArea.Scroll();
 
                 gameArea.SetRedraw();
-                radar.SetRedraw();
+                radar.SetRedraw( REDRAW_RADAR_CURSOR );
             }
         }
 

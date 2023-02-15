@@ -1,13 +1,12 @@
 # Turkish translation for fheroes2
-# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-24 08:29+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -1426,6 +1425,9 @@ msgstr ""
 msgid "campaignBonus|Foremost Scroll"
 msgstr ""
 
+msgid "campaignBonus|Gauntlets"
+msgstr ""
+
 msgid "campaignBonus|Hideous Mask"
 msgstr ""
 
@@ -2328,7 +2330,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 
@@ -3281,13 +3283,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 msgid "Dev and Support"
@@ -3456,11 +3458,11 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 msgid "Current game version: "
@@ -4026,6 +4028,9 @@ msgid "Kingdom Income"
 msgstr ""
 
 msgid "Kingdom Income per day."
+msgstr ""
+
+msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
 
 msgid "English"
@@ -5331,11 +5336,6 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr ""
 
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr ""
 
@@ -6216,7 +6216,9 @@ msgid "Dragon City"
 msgstr ""
 
 msgid "Lighthouse"
-msgstr ""
+msgid_plural "Lighthouses"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -8746,19 +8748,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Wait this unit"
-#~ msgstr "Bu birimi bekle"
-
-#~ msgid "Wait"
-#~ msgstr "Bekle"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Mevcut yaratığı bekletir. Mevcut yaratık, diğer tüm yaratıkların sırası "
-#~ "gelene kadar sırasını erteler."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} sırasını bekledi."

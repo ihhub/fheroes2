@@ -133,8 +133,9 @@ void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
         }
     }
 
-    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) ) {
-        radar.Redraw();
+    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) ) {
+        // Redraw radar map only if `REDRAW_RADAR` is set.
+        radar.Redraw( combinedRedraw & REDRAW_RADAR );
     }
 
     if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) ) {
@@ -305,7 +306,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_GAMEAREA );
     }
 
-    Redraw( REDRAW_RADAR );
+    Redraw( REDRAW_RADAR_CURSOR );
     display.render();
 
     return returnValue;

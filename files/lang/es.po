@@ -1,13 +1,12 @@
 # Spanish translation for fheroes2
-# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-24 08:29+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1524,6 +1523,10 @@ msgstr ""
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Principal Pergamino de Conocimiento"
 
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Peto de Anduran"
+
 msgid "campaignBonus|Hideous Mask"
 msgstr "Máscara Horrenda"
 
@@ -2539,7 +2542,7 @@ msgstr ""
 "entre unidades."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
@@ -3588,13 +3591,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 #, fuzzy
@@ -3775,11 +3778,11 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 #, fuzzy
@@ -4451,6 +4454,12 @@ msgstr "Ingresos:"
 #, fuzzy
 msgid "Kingdom Income per day."
 msgstr "Ingresos:"
+
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"El faro está ahora bajo tu control, todos tus barcos podrán recorrer mayor "
+"distancia por turno."
 
 msgid "English"
 msgstr ""
@@ -6138,13 +6147,6 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
 
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
-"lado del campo de batalla."
-
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "¿Estas seguro que quieres despedir este Héroe?"
 
@@ -7099,8 +7101,11 @@ msgstr ""
 msgid "Dragon City"
 msgstr "Ciudad Dragón"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Faro"
+msgid_plural "Lighthouses"
+msgstr[0] "Faro"
+msgstr[1] "Faro"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -9836,13 +9841,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Nigromante"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Esta unidad espera"
-
-#, fuzzy
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} esperando turno."

@@ -41,7 +41,6 @@
 #include "color.h"
 #include "game_over.h"
 #include "heroes.h"
-#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps.h"
@@ -425,10 +424,12 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             const Maps::Tiles & tile = vec_tiles[*it_index];
 
             // orders(quantity2, quantity1)
-            uint32_t orders = ( tile.GetQuantity2() ? tile.GetQuantity2() : 0 );
+            uint32_t orders = tile.GetQuantity2();
             orders <<= 8;
             orders |= tile.GetQuantity1();
 
+            // Witchcraft!!!
+            // TODO: change the code to be more readable.
             if ( orders && !( orders % 0x08 ) && ( ii + 1 == orders / 0x08 ) )
                 findobject = *it_index;
         }
@@ -552,7 +553,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 break;
             case MP2::OBJ_SIGN:
             case MP2::OBJ_BOTTLE:
-                // add sign or buttle
+                // add sign or bottle
                 if ( MP2::SIZEOFMP2SIGN - 1 < pblock.size() && 0x01 == pblock[0] ) {
                     MapSign * obj = new MapSign();
                     obj->LoadFromMP2( findobject, StreamBuf( pblock ) );
@@ -569,9 +570,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 break;
             case MP2::OBJ_SPHINX:
                 // add riddle sphinx
-                if ( MP2::SIZEOFMP2RIDDLE - 1 < pblock.size() && 0x00 == pblock[0] ) {
+                if ( MP2::SIZEOFMP2RIDDLE < pblock.size() && 0x00 == pblock[0] ) {
                     MapSphinx * obj = new MapSphinx();
-                    obj->LoadFromMP2( findobject, StreamBuf( pblock ) );
+                    obj->LoadFromMP2( findobject, pblock );
                     map_objects.add( obj );
                 }
                 break;
@@ -703,7 +704,7 @@ void World::ProcessNewMap()
 
         case MP2::OBJ_HEROES: {
             // remove map editor sprite
-            if ( MP2::GetICNObject( tile.getObjectType() ) == ICN::MINIHERO )
+            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO )
                 tile.Remove( tile.GetObjectUID() );
 
             tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
@@ -739,7 +740,7 @@ void World::ProcessNewMap()
 
     // Search for a tile with a predefined Ultimate Artifact
     const MapsTiles::iterator ultArtTileIter
-        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ); } );
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isSameMainObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ); } );
 
     auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
         const int32_t x = idx % width;

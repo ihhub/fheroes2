@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -527,7 +527,7 @@ std::string Maps::FileInfo::String() const
        << "kingdom colors: " << static_cast<int>( kingdom_colors ) << ", "
        << "allow human colors: " << static_cast<int>( allow_human_colors ) << ", "
        << "allow comp colors: " << static_cast<int>( allow_comp_colors ) << ", "
-       << "rnd races: " << static_cast<int>( rnd_races ) << ", "
+       << "random races: " << static_cast<int>( rnd_races ) << ", "
        << "conditions wins: " << static_cast<int>( conditions_wins ) << ", "
        << "comp also wins: " << ( comp_also_wins ? "true" : "false" ) << ", "
        << "allow normal victory: " << ( allow_normal_victory ? "true" : "false" ) << ", "

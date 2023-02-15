@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -65,7 +65,7 @@ namespace Battle
         void SetDestroy();
         fheroes2::Point GetPortPosition() const;
 
-        // Returns a text description of the parameters of the towers of the given castle. Can be
+        // Returns a text description of the parameters of the towers of a given castle. Can be
         // called both during combat and outside of it. In the former case, the current state of
         // the towers destroyed during the siege will be reflected.
         static std::string GetInfo( const Castle & castle );

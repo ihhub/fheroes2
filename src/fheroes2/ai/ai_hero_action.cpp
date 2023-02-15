@@ -398,7 +398,7 @@ namespace AI
             AIToExperienceObject( hero, objectType, dst_index );
             break;
 
-        // witchs hut
+        // Witch's hut
         case MP2::OBJ_WITCHS_HUT:
             AIToWitchsHut( hero, dst_index );
             break;
@@ -483,7 +483,7 @@ namespace AI
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_DESERT_TENT:
-        // loyalty ver
+        // loyalty version objects
         case MP2::OBJ_WATER_ALTAR:
         case MP2::OBJ_AIR_ALTAR:
         case MP2::OBJ_FIRE_ALTAR:
@@ -1299,7 +1299,7 @@ namespace AI
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
-                // check magick book
+                // check magic book
                 if ( hero.HaveSpellBook() &&
                      // check skill level for wisdom
                      Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
@@ -1772,6 +1772,12 @@ namespace AI
                         if ( hero.Move( noMovementAnimation ) ) {
                             if ( AIHeroesShowAnimation( hero, colors ) ) {
                                 gameArea.SetCenter( hero.GetCenter() );
+#if defined( WITH_DEBUG )
+                                // If player gave control to AI we need to update radar after every AI move.
+                                if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+                                    basicInterface.SetRedraw( Interface::REDRAW_RADAR );
+                                }
+#endif
                             }
                         }
                         else {
@@ -1834,6 +1840,12 @@ namespace AI
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
+#if defined( WITH_DEBUG )
+            // If player gave control to AI we need to update radar after every AI move.
+            if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+                Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
+            }
+#endif
         }
 
         hero.ActionNewPosition( false );

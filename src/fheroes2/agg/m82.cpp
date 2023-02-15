@@ -250,10 +250,11 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
     case MP2::OBJ_DWARF_COTTAGE:
     case MP2::OBJ_ARCHER_HOUSE:
         return LOOP0025;
+    case MP2::OBJ_ABANDONED_MINE:
     case MP2::OBJ_FREEMANS_FOUNDRY:
         return LOOP0026;
     case MP2::OBJ_VOLCANO:
-        // TODO: LOOP0005 is for all volcanos in the original game while LOOP0027 is used only for tall volcanos. Figure our how to use 2 sounds together.
+        // TODO: LOOP0005 is for all volcanoes in the original game while LOOP0027 is used only for tall volcanoes. Figure our how to use 2 sounds together.
         return LOOP0027;
     default:
         break;

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,9 @@
 #ifndef H2VIEWWORLD_H
 #define H2VIEWWORLD_H
 
+#include <array>
+#include <cstdint>
+
 #include "math_base.h"
 
 namespace Interface
@@ -28,7 +31,7 @@ namespace Interface
     class Basic;
 }
 
-enum class ViewWorldMode : int
+enum class ViewWorldMode : int32_t
 {
     OnlyVisible = 0, // Only show what is currently not under fog of war
 
@@ -44,7 +47,7 @@ enum class ViewWorldMode : int
 class ViewWorld
 {
 public:
-    enum ZoomLevel : int
+    enum ZoomLevel : int32_t
     {
         ZoomLevel0 = 0,
         ZoomLevel1 = 1,
@@ -52,7 +55,7 @@ public:
         ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
     };
 
-    static void ViewWorldWindow( const int color, const ViewWorldMode type, Interface::Basic & interface );
+    static void ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::Basic & interface );
 
     struct ZoomROIs
     {
@@ -65,14 +68,14 @@ public:
         const fheroes2::Rect & GetROIinPixels() const;
         fheroes2::Rect GetROIinTiles() const;
 
-        ZoomLevel _zoomLevel;
+        ZoomLevel _zoomLevel{ ZoomLevel2 };
         fheroes2::Point _center;
-        fheroes2::Rect _roiForZoomLevels[4];
+        std::array<fheroes2::Rect, 4> _roiForZoomLevels;
 
     private:
-        void updateZoomLevels();
-        bool updateCenter();
-        bool changeZoom( const ZoomLevel newLevel );
+        void _updateZoomLevels();
+        bool _updateCenter();
+        bool _changeZoom( const ZoomLevel newLevel );
     };
 };
 
