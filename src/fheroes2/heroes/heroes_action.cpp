@@ -2795,20 +2795,22 @@ namespace
 
     void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
+        AudioManager::PlaySound( M82::EXPERNCE );
+
         Dialog::Message( MP2::StringObject( objectType ),
                          _( "You enter a rickety hut and talk to the magician who lives there. He tells you of places near and far which may aid you in your journeys." ),
                          Font::BIG, Dialog::OK );
 
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
-            MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
 
-            if ( !vec_eyes.empty() ) {
+            const MapsIndexes eyeIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
+            if ( !eyeIndexes.empty() ) {
                 Interface::Basic & I = Interface::Basic::Get();
 
                 fheroes2::Display & display = fheroes2::Display::instance();
 
-                for ( const int32_t eyeIndex : vec_eyes ) {
+                for ( const int32_t eyeIndex : eyeIndexes ) {
                     const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
 
                     Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
