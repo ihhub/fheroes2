@@ -87,10 +87,10 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Blit( sf, display, dstx, dsty );
-
         // Immediately reveal the entire puzzle in developer mode
         if ( IS_DEVEL() ) {
+            fheroes2::Blit( sf, display, dstx, dsty );
+
             return;
         }
 
