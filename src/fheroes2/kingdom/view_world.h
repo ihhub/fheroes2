@@ -25,6 +25,7 @@
 #include <cstdint>
 
 #include "math_base.h"
+#include "settings.h"
 
 namespace Interface
 {
@@ -47,14 +48,6 @@ enum class ViewWorldMode : int32_t
 class ViewWorld
 {
 public:
-    enum ZoomLevel : int32_t
-    {
-        ZoomLevel0 = 0,
-        ZoomLevel1 = 1,
-        ZoomLevel2 = 2,
-        ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
-    };
-
     static void ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::Basic & interface );
 
     struct ZoomROIs
@@ -68,7 +61,7 @@ public:
         const fheroes2::Rect & GetROIinPixels() const;
         fheroes2::Rect GetROIinTiles() const;
 
-        ZoomLevel _zoomLevel;
+        ZoomLevel _zoomLevel{ ZoomLevel::ZoomLevel1 };
         fheroes2::Point _center;
         std::array<fheroes2::Rect, 4> _roiForZoomLevels;
 
