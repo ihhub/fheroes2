@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 00:41+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-12-18 08:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4476,6 +4476,12 @@ msgstr "Kongedømmets inntekt"
 msgid "Kingdom Income per day."
 msgstr "Dette er den daglige inntekten til kongedømmet ditt."
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Fyrtårnet er herved under din kontroll og alle skipene dine vil fra nå av "
+"kunne flytte seg lengre hver dag."
+
 msgid "English"
 msgstr "Engelsk"
 
@@ -7167,8 +7173,11 @@ msgstr "Hendelse"
 msgid "Dragon City"
 msgstr "Dragenes landsby"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Fyrtårn"
+msgid_plural "Lighthouses"
+msgstr[0] "Fyrtårn"
+msgstr[1] "Fyrtårn"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
