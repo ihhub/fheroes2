@@ -31,7 +31,7 @@ namespace
 {
     const int32_t borderSize{ BORDERWIDTH };
 
-    // Offset from border edges (size of evil interface corners is 43 pixels) - this edges (corners) will not be copied to fill the border.
+    // Offset from border edges (size of evil interface corners is 43 pixels) - these edges (corners) will not be copied to fill the border.
     const int32_t borderEdgeOffset{ 43 };
 
     // Size in pixels of dithered transition from one image to another.
