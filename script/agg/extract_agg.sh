@@ -37,3 +37,5 @@ for DIR in agg/*; do
 done
 
 pal2img agg/*/kb.pal palette.png
+
+echo -e "\nAsset extraction completed successfully."
