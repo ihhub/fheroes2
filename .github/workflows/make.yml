@@ -61,7 +61,7 @@ jobs:
             ./script/agg/extract_agg.sh
             ./src/tools/extractor
             ./src/tools/icn2img
-            ./docs/GRAPHICAL_ARTISTS.md
+            ./docs/GRAPHICAL_ASSETS.md
             ./src/tools/pal2img
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
@@ -136,7 +136,7 @@ jobs:
             ./script/agg/extract_agg.sh
             ./src/tools/extractor
             ./src/tools/icn2img
-            ./docs/GRAPHICAL_ARTISTS.md
+            ./docs/GRAPHICAL_ASSETS.md
             ./src/tools/pal2img
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-arm-sdl2_dev
@@ -204,7 +204,7 @@ jobs:
             ./script/agg/extract_agg.sh
             ./src/tools/extractor
             ./src/tools/icn2img
-            ./docs/GRAPHICAL_ARTISTS.md
+            ./docs/GRAPHICAL_ASSETS.md
             ./src/tools/pal2img
           release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
