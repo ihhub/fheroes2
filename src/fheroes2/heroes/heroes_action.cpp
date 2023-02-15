@@ -1996,10 +1996,16 @@ namespace
 
         const std::string title( MP2::StringObject( objectType ) );
 
-        if ( !troop.isValid() )
+        if ( !troop.isValid() ) {
             Dialog::Message( title, msg_void, Font::BIG, Dialog::OK );
-        else if ( Dialog::YES == Dialog::Message( title, msg_full, Font::BIG, Dialog::YES | Dialog::NO ) )
-            RecruitMonsterFromTile( hero, tile, title, troop, false );
+        }
+        else {
+            AudioManager::PlaySound( M82::EXPERNCE );
+
+            if ( Dialog::YES == Dialog::Message( title, msg_full, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                RecruitMonsterFromTile( hero, tile, title, troop, false );
+            }
+        }
 
         hero.SetVisited( dst_index, Visit::GLOBAL );
 
