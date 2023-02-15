@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 00:41+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4466,6 +4466,12 @@ msgstr "Revenu du royaume"
 msgid "Kingdom Income per day."
 msgstr "Revenu du royaume par jour."
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Le phare est à présent sous votre contrôle, et tous vos navires se "
+"déplaceront maintenant plus loin chaque jour."
+
 msgid "English"
 msgstr "Anglais"
 
@@ -7158,8 +7164,11 @@ msgstr "Événement"
 msgid "Dragon City"
 msgstr "Cité des dragons"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Phare"
+msgid_plural "Lighthouses"
+msgstr[0] "Phare"
+msgstr[1] "Phare"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"

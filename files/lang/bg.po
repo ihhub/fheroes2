@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 00:41+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4400,6 +4400,12 @@ msgstr "Приходи на царството"
 msgid "Kingdom Income per day."
 msgstr "Приходи на царството за ден."
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Фарът сега е под твой контрол и всички твой кораби сега ще се движат все по-"
+"далеч всеки ден."
+
 msgid "English"
 msgstr "Английски"
 
@@ -7028,8 +7034,11 @@ msgstr "Събитие"
 msgid "Dragon City"
 msgstr "Драконов град"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Фар"
+msgid_plural "Lighthouses"
+msgstr[0] "Фар"
+msgstr[1] "Фар"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"

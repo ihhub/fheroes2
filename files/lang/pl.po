@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 00:41+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -4390,6 +4390,12 @@ msgstr "Przychód"
 msgid "Kingdom Income per day."
 msgstr "Dzienny przychód królestwa."
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Latarnia morska jest teraz pod twoją kontrolą i twoje okręty zwiększają "
+"zasięg swego ruchu w każdej turze."
+
 msgid "English"
 msgstr "Angielski"
 
@@ -7027,8 +7033,12 @@ msgstr "Zdarzenie"
 msgid "Dragon City"
 msgstr "Smocze Miasto"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Latarnia morska"
+msgid_plural "Lighthouses"
+msgstr[0] "Latarnia morska"
+msgstr[1] "Latarnia morska"
+msgstr[2] "Latarnia morska"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"

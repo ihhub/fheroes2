@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 00:41+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4402,6 +4402,12 @@ msgstr "Jövedelem:"
 msgid "Kingdom Income per day."
 msgstr "Jövedelem:"
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"A kilátótorony a fennhatóságod alá került, és minden hajód többet mozoghat "
+"minden körben."
+
 msgid "English"
 msgstr ""
 
@@ -6938,7 +6944,9 @@ msgstr "Sárkányváros"
 
 #, fuzzy
 msgid "Lighthouse"
-msgstr "Világítótorony"
+msgid_plural "Lighthouses"
+msgstr[0] "Világítótorony"
+msgstr[1] "Világítótorony"
 
 #, fuzzy
 msgid "Water Wheel"

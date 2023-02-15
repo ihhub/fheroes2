@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 00:41+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4463,6 +4463,9 @@ msgstr ""
 msgid "Kingdom Income per day."
 msgstr ""
 
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+
 msgid "English"
 msgstr ""
 
@@ -6818,7 +6821,10 @@ msgstr "Місто Драконів"
 
 #, fuzzy
 msgid "Lighthouse"
-msgstr "Маяк"
+msgid_plural "Lighthouses"
+msgstr[0] "Маяк"
+msgstr[1] "Маяк"
+msgstr[2] "Маяк"
 
 #, fuzzy
 msgid "Water Wheel"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 00:41+0000\n"
+"POT-Creation-Date: 2023-02-15 02:54+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4455,6 +4455,12 @@ msgstr "Ingresos:"
 msgid "Kingdom Income per day."
 msgstr "Ingresos:"
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"El faro está ahora bajo tu control, todos tus barcos podrán recorrer mayor "
+"distancia por turno."
+
 msgid "English"
 msgstr ""
 
@@ -7095,8 +7101,11 @@ msgstr ""
 msgid "Dragon City"
 msgstr "Ciudad Dragón"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Faro"
+msgid_plural "Lighthouses"
+msgstr[0] "Faro"
+msgstr[1] "Faro"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
