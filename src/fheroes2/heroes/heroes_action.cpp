@@ -2804,13 +2804,13 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
 
-            const MapsIndexes eyeIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
-            if ( !eyeIndexes.empty() ) {
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
+            if ( !eyeMagiIndexes.empty() ) {
                 Interface::Basic & I = Interface::Basic::Get();
 
                 fheroes2::Display & display = fheroes2::Display::instance();
 
-                for ( const int32_t eyeIndex : eyeIndexes ) {
+                for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                     const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
 
                     Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
