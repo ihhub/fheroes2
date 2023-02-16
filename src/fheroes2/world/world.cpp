@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "world.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -43,7 +45,6 @@
 #include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
-#include "maps_actions.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "mp2.h"
@@ -53,12 +54,12 @@
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
-#include "world.h"
 
 namespace
 {
@@ -144,18 +145,6 @@ namespace
 namespace GameStatic
 {
     extern uint32_t uniq;
-}
-
-ListActions::~ListActions()
-{
-    clear();
-}
-
-void ListActions::clear()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
-    std::list<ActionSimple *>::clear();
 }
 
 MapObjects::~MapObjects()
@@ -364,7 +353,6 @@ void World::Reset()
 
     // extra
     map_captureobj.clear();
-    map_actions.clear();
     map_objects.clear();
 
     ultimate_artifact.Reset();
@@ -892,12 +880,6 @@ int World::ColorCapturedObject( int32_t index ) const
     return map_captureobj.GetColor( index );
 }
 
-ListActions * World::GetListActions( int32_t index )
-{
-    MapActions::iterator it = map_actions.find( index );
-    return it != map_actions.end() ? &( *it ).second : nullptr;
-}
-
 CapturedObject & World::GetCapturedObject( int32_t index )
 {
     return map_captureobj.Get( index );
@@ -1394,7 +1376,192 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t height = static_cast<uint16_t>( w.height );
 
     return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
+               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_objects << w._seed;
+}
+
+namespace
+{
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the contents of this namespace." );
+
+    enum
+    {
+        ACTION_UNKNOWN = 0,
+        ACTION_DEFAULT,
+        ACTION_ACCESS,
+        ACTION_MESSAGE,
+        ACTION_RESOURCES,
+        ACTION_ARTIFACT
+    };
+
+    class ActionSimple
+    {
+    public:
+        explicit ActionSimple( int v = 0 )
+            : uid( 0 )
+            , type( v )
+        {}
+        virtual ~ActionSimple() = default;
+
+    protected:
+        friend StreamBase & operator>>( StreamBase &, ActionSimple & );
+
+        uint32_t uid;
+        int type;
+    };
+
+    struct ActionMessage : public ActionSimple
+    {
+        std::string message;
+
+        ActionMessage()
+            : ActionSimple( ACTION_MESSAGE )
+        {}
+    };
+
+    struct ActionDefault : public ActionSimple
+    {
+        bool enabled;
+        std::string message;
+
+        ActionDefault()
+            : ActionSimple( ACTION_DEFAULT )
+            , enabled( true )
+        {}
+    };
+
+    struct ActionAccess : public ActionSimple
+    {
+        int allowPlayers;
+        bool allowComputer;
+        bool cancelAfterFirstVisit;
+        std::string message;
+
+        ActionAccess()
+            : ActionSimple( ACTION_ACCESS )
+            , allowPlayers( Color::ALL )
+            , allowComputer( true )
+            , cancelAfterFirstVisit( false )
+        {}
+    };
+
+    struct ActionArtifact : public ActionSimple
+    {
+        Artifact artifact;
+        std::string message;
+
+        ActionArtifact()
+            : ActionSimple( ACTION_ARTIFACT )
+        {}
+    };
+
+    struct ActionResources : public ActionSimple
+    {
+        Funds resources;
+        std::string message;
+
+        ActionResources()
+            : ActionSimple( ACTION_RESOURCES )
+        {}
+    };
+
+    using ListActions = std::list<ActionSimple *>;
+    using MapActions = std::map<int32_t, ListActions>;
+
+    StreamBase & operator>>( StreamBase & sb, ActionSimple & st )
+    {
+        return sb >> st.type >> st.uid;
+    }
+
+    StreamBase & operator>>( StreamBase & sb, ActionResources & st )
+    {
+        return sb >> static_cast<ActionSimple &>( st ) >> st.resources >> st.message;
+    }
+
+    StreamBase & operator>>( StreamBase & sb, ActionArtifact & st )
+    {
+        return sb >> static_cast<ActionSimple &>( st ) >> st.artifact >> st.message;
+    }
+
+    StreamBase & operator>>( StreamBase & sb, ActionAccess & st )
+    {
+        return sb >> static_cast<ActionSimple &>( st ) >> st.allowPlayers >> st.allowComputer >> st.cancelAfterFirstVisit >> st.message;
+    }
+
+    StreamBase & operator>>( StreamBase & sb, ActionDefault & st )
+    {
+        return sb >> static_cast<ActionSimple &>( st ) >> st.enabled >> st.message;
+    }
+
+    StreamBase & operator>>( StreamBase & sb, ActionMessage & st )
+    {
+        return sb >> static_cast<ActionSimple &>( st ) >> st.message;
+    }
+
+    StreamBase & operator>>( StreamBase & sb, ListActions & st )
+    {
+        uint32_t size = 0;
+        sb >> size;
+
+        st.clear();
+
+        for ( uint32_t i = 0; i < size; ++i ) {
+            int type;
+            sb >> type;
+
+            switch ( type ) {
+            case ACTION_DEFAULT: {
+                ActionDefault * ptr = new ActionDefault();
+
+                sb >> *ptr;
+                st.push_back( ptr );
+
+                break;
+            }
+            case ACTION_ACCESS: {
+                ActionAccess * ptr = new ActionAccess();
+
+                sb >> *ptr;
+                st.push_back( ptr );
+
+                break;
+            }
+            case ACTION_MESSAGE: {
+                ActionMessage * ptr = new ActionMessage();
+
+                sb >> *ptr;
+                st.push_back( ptr );
+
+                break;
+            }
+            case ACTION_RESOURCES: {
+                ActionResources * ptr = new ActionResources();
+
+                sb >> *ptr;
+                st.push_back( ptr );
+
+                break;
+            }
+            case ACTION_ARTIFACT: {
+                ActionArtifact * ptr = new ActionArtifact();
+
+                sb >> *ptr;
+                st.push_back( ptr );
+
+                break;
+            }
+            default: {
+                ActionSimple * ptr = new ActionSimple();
+
+                sb >> *ptr;
+                st.push_back( ptr );
+
+                break;
+            }
+            }
+        }
+
+        return sb;
+    }
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1408,7 +1575,16 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the logic below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_1002_RELEASE ) {
+        MapActions dummy;
+
+        msg >> dummy;
+    }
+
+    msg >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 
