@@ -59,9 +59,11 @@ jobs:
           tools_package_files: >-
             LICENSE
             ./script/agg/extract_agg.sh
+            ./src/tools/82m2wav
             ./src/tools/extractor
             ./src/tools/icn2img
             ./src/tools/pal2img
+            ./src/tools/xmi2midi
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux x86-64 SDL2 Debug
@@ -133,9 +135,11 @@ jobs:
           tools_package_files: >-
             LICENSE
             ./script/agg/extract_agg.sh
+            ./src/tools/82m2wav
             ./src/tools/extractor
             ./src/tools/icn2img
             ./src/tools/pal2img
+            ./src/tools/xmi2midi
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-arm-sdl2_dev
         - name: Linux ARM64 SDL2 Debug
@@ -200,9 +204,11 @@ jobs:
           tools_package_files: >-
             LICENSE
             ./script/agg/extract_agg.sh
+            ./src/tools/82m2wav
             ./src/tools/extractor
             ./src/tools/icn2img
             ./src/tools/pal2img
+            ./src/tools/xmi2midi
           release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
