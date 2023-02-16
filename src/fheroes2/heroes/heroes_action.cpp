@@ -92,7 +92,7 @@ namespace
     {
         MusicalEffectPlayer() = default;
 
-        MusicalEffectPlayer( const int trackId )
+        explicit MusicalEffectPlayer( const int trackId )
         {
             play( trackId );
         }
