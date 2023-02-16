@@ -123,9 +123,11 @@ jobs:
       if: ${{ matrix.config.tools_package_name != '' }}
       run: |
         7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.tools_package_name }} \
+                               .\\"$BUILD_DIR"\\82m2wav.exe \
                                .\\"$BUILD_DIR"\\extractor.exe \
                                .\\"$BUILD_DIR"\\icn2img.exe \
                                .\\"$BUILD_DIR"\\pal2img.exe \
+                               .\\"$BUILD_DIR"\\xmi2midi.exe \
                                LICENSE \
                                .\\script\\agg\\extract_agg.bat
         if [[ ${{ matrix.config.deploy_config }} == SDL2 ]]; then
