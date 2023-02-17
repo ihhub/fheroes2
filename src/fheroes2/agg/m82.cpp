@@ -233,14 +233,16 @@ M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
         return LOOP0004;
     case MP2::OBJ_VOLCANO:
         switch ( tile.getObjectIcnType() ) {
+        // Tile with volcanic steam only
         case MP2::OBJ_ICN_TYPE_UNKNOWN:
             return UNKNOWN;
+        // Small volcanoes
         case MP2::OBJ_ICN_TYPE_OBJNLAVA:
             return LOOP0005;
         default:
             break;
         }
-
+        // Other volcanoes
         return LOOP0027;
     case MP2::OBJ_LAVAPOOL:
         return LOOP0006;
