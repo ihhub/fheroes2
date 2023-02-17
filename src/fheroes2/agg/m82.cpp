@@ -208,19 +208,11 @@ int M82::FromSpell( const int spellID )
 // TODO: noticeable with 3D Audio mode on.
 M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
 {
-    // Check stream first
     if ( tile.isStream() ) {
-        return M82::LOOP0014;
+        return LOOP0014;
     }
 
-    const MP2::MapObjectType objectType = tile.GetObject( false );
-
-    // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Rock
-    if ( objectType == MP2::OBJ_ROCK && tile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNWATR, 183 ) ) {
-        return M82::LOOP0019;
-    }
-
-    switch ( objectType ) {
+    switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_BUOY:
         return LOOP0000;
     case MP2::OBJ_SHIPWRECK:
@@ -271,6 +263,12 @@ M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
         return LOOP0018;
+    case MP2::OBJ_ROCK:
+        // This sound should only be played for a specific sprite belonging to Rock
+        if ( tile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNWATR, 183 ) ) {
+            return LOOP0019;
+        }
+        break;
     case MP2::OBJ_TAR_PIT:
         return LOOP0021;
     case MP2::OBJ_TRADING_POST:
