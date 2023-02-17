@@ -247,13 +247,23 @@ namespace fheroes2
         CreateDitheringTransition( horizontalSprite, horizontalSpriteRightCornerEdgeX, bottomBorderSpriteOffsetY, _output, optputRightCornerEdgeX, bottomBorderOffsetY,
                                    transitionSize, cornerSize, true, false );
 
-        // Render shadow.
-        ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + borderSize, 1, _windowArea.height - borderSize, 5 );
-        ApplyTransform( _output, _windowArea.x - borderSize + 1, _windowArea.y + borderSize, 1, _windowArea.height - borderSize, 4 );
-        ApplyTransform( _output, _windowArea.x - borderSize + 2, _windowArea.y + borderSize, borderSize - 2, _windowArea.height - borderSize, 3 );
-        ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height, _windowArea.width, borderSize - 2, 3 );
-        ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height + borderSize - 2, _windowArea.width, 1, 4 );
+        // Render shadow at the left side of the window.
+        ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + borderSize, borderSize, 1, 5 );
+        ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + borderSize + 1, 1, _windowArea.height - 2, 5 );
+        ApplyTransform( _output, _windowArea.x - borderSize + 1, _windowArea.y + borderSize + 1, borderSize - 1, 1, 4 );
+        ApplyTransform( _output, _windowArea.x - borderSize + 1, _windowArea.y + borderSize + 2, 1, _windowArea.height - 4, 4 );
+        ApplyTransform( _output, _windowArea.x - borderSize + 2, _windowArea.y + borderSize + 2, borderSize - 2, 1, 3 );
+        ApplyTransform( _output, _windowArea.x - borderSize + 2, _windowArea.y + borderSize + 3, 1, _windowArea.height - 6, 3 );
+        ApplyTransform( _output, _windowArea.x - borderSize + 3, _windowArea.y + borderSize + 3, borderSize - 3, _windowArea.height - borderSize - 3, 2 );
+
+        // Render shadow at the bottom side of the window.
+        ApplyTransform( _output, _windowArea.x - borderSize + 3, _windowArea.y + _windowArea.height, _windowArea.width - 6, borderSize - 3, 2 );
+        ApplyTransform( _output, _windowArea.x - borderSize + 2, _windowArea.y + _windowArea.height + borderSize - 3, _windowArea.width - 4, 1, 3 );
+        ApplyTransform( _output, _windowArea.x + _windowArea.width - borderSize - 3, _windowArea.y + _windowArea.height, 1, borderSize - 3, 3 );
+        ApplyTransform( _output, _windowArea.x - borderSize + 1, _windowArea.y + _windowArea.height + borderSize - 2, _windowArea.width - 2, 1, 4 );
+        ApplyTransform( _output, _windowArea.x + _windowArea.width - borderSize - 2, _windowArea.y + _windowArea.height, 1, borderSize - 2, 4 );
         ApplyTransform( _output, _windowArea.x - borderSize, _windowArea.y + _windowArea.height + borderSize - 1, _windowArea.width, 1, 5 );
+        ApplyTransform( _output, _windowArea.x + _windowArea.width - borderSize - 1, _windowArea.y + _windowArea.height, 1, borderSize - 1, 5 );
     }
 
     void StandardWindow::_renderBackground( const bool isEvilInterface )
