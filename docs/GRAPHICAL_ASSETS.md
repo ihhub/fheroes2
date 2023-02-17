@@ -12,13 +12,13 @@ This guide is designed for Linux, MacOS and Windows users. The source files to t
 
 ## Where to get the tools
 
-You can download the precompiled tools for your operating system (OS) of choice here: 
-[Windows 32-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-windows-x86-SDL2/fheroes2_tools_windows_x86_SDL2.zip) 
+You can download the precompiled tools for your operating system (OS) of choice here:\
+[Windows 32-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-windows-x86-SDL2/fheroes2_tools_windows_x86_SDL2.zip)\
 [Windows 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-windows-x64-SDL2/fheroes2_tools_windows_x64_SDL2.zip)
 
 [MacOS](https://github.com/ihhub/fheroes2/releases/download/fheroes2-osx-sdl2_dev/fheroes2_tools_macos_x86-64_SDL2.zip)
 
-[Linux Ubuntu 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-linux-sdl2_dev/fheroes2_tools_ubuntu_x86-64_SDL2.zip) 
+[Linux Ubuntu 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-linux-sdl2_dev/fheroes2_tools_ubuntu_x86-64_SDL2.zip)\
 [Linux Ubuntu ARM 64-bit](https://github.com/ihhub/fheroes2/releases/download/fheroes2-linux-arm-sdl2_dev/fheroes2_tools_ubuntu_arm64_SDL2.zip)
 
 
