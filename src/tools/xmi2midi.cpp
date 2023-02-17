@@ -82,7 +82,13 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        const size_t size = pos;
+        const std::make_unsigned_t<std::streamoff> posOffset = pos;
+        if ( posOffset > std::numeric_limits<size_t>::max() ) {
+            std::cerr << "File " << inputFileName << " is too large" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const size_t size = static_cast<size_t>( posOffset );
 
         static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
 

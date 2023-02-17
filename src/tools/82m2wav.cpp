@@ -83,7 +83,13 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        const size_t size = pos;
+        const std::make_unsigned_t<std::streamoff> posOffset = pos;
+        if ( posOffset > std::numeric_limits<size_t>::max() ) {
+            std::cerr << "File " << inputFileName << " is too large" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const size_t size = static_cast<size_t>( posOffset );
         const auto buf = std::make_unique<char[]>( size );
 
         inputStream.seekg( 0, std::ios_base::beg );
