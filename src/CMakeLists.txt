@@ -30,8 +30,6 @@ set(
 set(
 	MSVC_CC_WARN_OPTS
 	/W4
-	/wd4244 # Suppress C4244 - possible data loss during conversion
-	/wd4267 # Suppress C4267 - possible data loss during conversion from size_t
 	)
 
 add_subdirectory(thirdparty)

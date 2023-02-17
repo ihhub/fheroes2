@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "maps_tiles.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -42,7 +44,6 @@
 #include "interface_gamearea.h"
 #include "logging.h"
 #include "maps.h"
-#include "maps_tiles.h"
 #include "monster.h"
 #include "monster_anim.h"
 #include "mounts.h"
@@ -776,8 +777,14 @@ Heroes * Maps::Tiles::GetHeroes() const
 void Maps::Tiles::SetHeroes( Heroes * hero )
 {
     if ( hero ) {
+        using HeroIDType = decltype( heroID );
+        static_assert( std::is_same_v<HeroIDType, uint8_t>, "Type of heroID has been changed, check the logic below" );
+
         hero->SetMapsObject( _mainObjectType );
-        heroID = hero->GetID() + 1;
+
+        assert( hero->GetID() >= std::numeric_limits<HeroIDType>::min() && hero->GetID() < std::numeric_limits<HeroIDType>::max() );
+        heroID = static_cast<HeroIDType>( hero->GetID() + 1 );
+
         SetObject( MP2::OBJ_HEROES );
     }
     else {
@@ -924,7 +931,13 @@ int Maps::Tiles::getOriginalPassability() const
 
 void Maps::Tiles::setInitialPassability()
 {
-    tilePassable = getOriginalPassability();
+    using TilePassableType = decltype( tilePassable );
+    static_assert( std::is_same_v<TilePassableType, uint16_t>, "Type of tilePassable has been changed, check the logic below" );
+
+    const int passability = getOriginalPassability();
+    assert( passability >= std::numeric_limits<TilePassableType>::min() && passability <= std::numeric_limits<TilePassableType>::max() );
+
+    tilePassable = static_cast<TilePassableType>( passability );
 }
 
 void Maps::Tiles::updatePassability()
@@ -2237,11 +2250,16 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
         uidArtifact = tile._uid;
     }
 
-    updateTileById( tile, uidArtifact, art.IndexSprite() );
+    static_assert( std::is_same_v<decltype( updateTileById ), void( Tiles &, uint32_t, uint8_t )>, "Type of updateTileById() has been changed, check the logic below" );
+
+    const uint32_t artSpriteIndex = art.IndexSprite();
+    assert( artSpriteIndex > std::numeric_limits<uint8_t>::min() && artSpriteIndex <= std::numeric_limits<uint8_t>::max() );
+
+    updateTileById( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
 
     // replace artifact shadow
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidArtifact, art.IndexSprite() - 1 );
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidArtifact, static_cast<uint8_t>( artSpriteIndex - 1 ) );
     }
 }
 

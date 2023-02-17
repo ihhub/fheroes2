@@ -104,7 +104,7 @@ namespace
         return Color::NONE;
     }
 
-    int ByteToRace( const int byte )
+    uint8_t ByteToRace( const int byte )
     {
         switch ( byte ) {
         case 0x00:
@@ -330,7 +330,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
     // race color
     for ( const int color : colors ) {
-        const int race = ByteToRace( fs.get() );
+        const uint8_t race = ByteToRace( fs.get() );
 
         races[Color::GetIndex( color )] = race;
 
@@ -410,14 +410,21 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
 void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 {
+    using UnionsItemType = std::remove_extent_t<decltype( unions )>;
+    static_assert( std::is_same_v<UnionsItemType, uint8_t>, "Type of unions has been changed, check the logic below" );
+
     for ( int i = 0; i < KINGDOMMAX; ++i ) {
         const uint8_t color = ByteToColor( i );
 
         if ( side1Colors & color ) {
-            unions[i] = side1Colors;
+            assert( side1Colors >= std::numeric_limits<UnionsItemType>::min() && side1Colors <= std::numeric_limits<UnionsItemType>::max() );
+
+            unions[i] = static_cast<UnionsItemType>( side1Colors );
         }
         else if ( side2Colors & color ) {
-            unions[i] = side2Colors;
+            assert( side2Colors >= std::numeric_limits<UnionsItemType>::min() && side2Colors <= std::numeric_limits<UnionsItemType>::max() );
+
+            unions[i] = static_cast<UnionsItemType>( side2Colors );
         }
         else {
             unions[i] = color;
