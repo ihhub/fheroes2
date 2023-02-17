@@ -1394,9 +1394,13 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the logic below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_1002_RELEASE ) {
-        uint32_t dummy;
+        uint32_t dummy = 0xDEADBEEF;
 
         msg >> dummy;
+
+        if ( dummy != 0 ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid number of MapActions items: " << dummy )
+        }
     }
 
     msg >> w.map_objects >> w._seed;
