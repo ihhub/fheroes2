@@ -24,6 +24,7 @@
 #ifndef H2M82_H
 #define H2M82_H
 
+#include "maps_tiles.h"
 #include "mp2.h"
 
 namespace M82
@@ -353,7 +354,7 @@ namespace M82
     const char * GetString( int m82 );
     int FromSpell( const int spellID );
 
-    SoundType getAdventureMapObjectSound( const MP2::MapObjectType objectType );
+    SoundType getAdventureMapTileSound( const Maps::Tiles & tile );
 }
 
 #endif

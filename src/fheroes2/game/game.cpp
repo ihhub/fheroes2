@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -36,7 +38,6 @@
 #include "color.h"
 #include "cursor.h"
 #include "difficulty.h"
-#include "game.h"
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -69,26 +70,6 @@ namespace
     bool updateSoundsOnFocusUpdate = true;
 
     uint32_t maps_animation_frame = 0;
-
-    // TODO: this function returns a sound track based on a provided tile. It works fine for most of objects as they have only one "main" tile.
-    // However, some objects like Oracle or Volcano can be bigger than 1 tile leading to multiple sounds coming from the same object and these
-    // sounds might not be synchronized. This is mostly noticeable with 3D Audio mode on.
-    M82::SoundType getSoundTypeFromTile( const Maps::Tiles & tile )
-    {
-        // check stream first
-        if ( tile.isStream() ) {
-            return M82::LOOP0014;
-        }
-
-        const MP2::MapObjectType objectType = tile.GetObject( false );
-
-        // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Rock.
-        if ( objectType == MP2::OBJ_ROCK && tile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNWATR, 183 ) ) {
-            return M82::LOOP0019;
-        }
-
-        return M82::getAdventureMapObjectSound( objectType );
-    }
 }
 
 namespace Game
@@ -290,7 +271,7 @@ void Game::EnvironmentSoundMixer()
     const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
 
     for ( const fheroes2::Point & pos : positions ) {
-        const M82::SoundType soundType = getSoundTypeFromTile( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
+        const M82::SoundType soundType = M82::getAdventureMapTileSound( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
         if ( soundType == M82::UNKNOWN ) {
             continue;
         }

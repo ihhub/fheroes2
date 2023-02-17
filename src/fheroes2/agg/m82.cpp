@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include "m82.h"
+
 #include "mp2.h"
 #include "spell.h"
 
@@ -200,8 +201,23 @@ int M82::FromSpell( const int spellID )
     return UNKNOWN;
 }
 
-M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectType )
+// TODO: this function returns a sound track based on a provided tile. It works fine for most of objects as they have only one "main" tile.
+// However, some objects like Oracle or Volcano can be bigger than 1 tile leading to multiple sounds coming from the same object and these
+// sounds might not be synchronized. This is mostly noticeable with 3D Audio mode on.
+M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
 {
+    // Check stream first
+    if ( tile.isStream() ) {
+        return M82::LOOP0014;
+    }
+
+    const MP2::MapObjectType objectType = tile.GetObject( false );
+
+    // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Rock
+    if ( objectType == MP2::OBJ_ROCK && tile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNWATR, 183 ) ) {
+        return M82::LOOP0019;
+    }
+
     switch ( objectType ) {
     case MP2::OBJ_BUOY:
         return LOOP0000;
@@ -214,6 +230,17 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
         return LOOP0003;
     case MP2::OBJ_STONE_LITHS:
         return LOOP0004;
+    case MP2::OBJ_VOLCANO:
+        switch ( tile.getObjectIcnType() ) {
+        case MP2::OBJ_ICN_TYPE_UNKNOWN:
+            return UNKNOWN;
+        case MP2::OBJ_ICN_TYPE_OBJNLAVA:
+            return LOOP0005;
+        default:
+            break;
+        }
+
+        return LOOP0027;
     case MP2::OBJ_LAVAPOOL:
         return LOOP0006;
     case MP2::OBJ_ALCHEMIST_LAB:
@@ -253,9 +280,6 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
     case MP2::OBJ_ABANDONED_MINE:
     case MP2::OBJ_FREEMANS_FOUNDRY:
         return LOOP0026;
-    case MP2::OBJ_VOLCANO:
-        // TODO: LOOP0005 is for all volcanoes in the original game while LOOP0027 is used only for tall volcanoes. Figure our how to use 2 sounds together.
-        return LOOP0027;
     default:
         break;
     }
