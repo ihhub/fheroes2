@@ -21,9 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cstdint>
+#include <limits>
 #include <list>
 #include <ostream>
+#include <type_traits>
 #include <utility>
 
 #include "army_troop.h"

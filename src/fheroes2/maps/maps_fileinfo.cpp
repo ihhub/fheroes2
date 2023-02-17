@@ -27,10 +27,12 @@
 #include <algorithm>
 #include <cassert>
 #include <cstring>
+#include <limits>
 #include <list>
 #include <locale>
 #include <map>
 #include <ostream>
+#include <type_traits>
 #include <utility>
 
 #include "artifact.h"
