@@ -188,6 +188,11 @@ namespace
 
         hero.FadeOut();
         hero.SetFreeman( reason );
+
+        // If the enemy is vanquished we fully redraw the radar map image as there might be color reset of enemy's objects.
+        if ( hero.GetKingdom().isLoss() ) {
+            Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
+        }
     }
 
     void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -399,16 +404,23 @@ namespace
             Army & army = castle->GetActualArmy();
 
             auto captureCastle = [&hero, dst_index, castle]() {
-                castle->GetKingdom().RemoveCastle( castle );
+                Kingdom & enemyKingdom = castle->GetKingdom();
+                enemyKingdom.RemoveCastle( castle );
                 hero.GetKingdom().AddCastle( castle );
                 world.CaptureObject( dst_index, hero.GetColor() );
 
                 castle->Scoute();
-                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
-                const fheroes2::Point castlePosition = Maps::GetPoint( dst_index );
 
                 Interface::Basic & I = Interface::Basic::Get();
-                I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
+
+                // If the enemy is not vanquished we update only the area around the castle on radar.
+                if ( !enemyKingdom.isLoss() ) {
+                    const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
+                    const fheroes2::Point castlePosition = Maps::GetPoint( dst_index );
+
+                    I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
+                }
+                // Otherwise we fully redraw the radar map image as there might be color reset of enemy's objects.
                 I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
             };
 
