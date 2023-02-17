@@ -27,6 +27,7 @@
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <sstream>
 #include <string>
