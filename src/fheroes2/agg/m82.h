@@ -24,8 +24,10 @@
 #ifndef H2M82_H
 #define H2M82_H
 
-#include "maps_tiles.h"
-#include "mp2.h"
+namespace Maps
+{
+    class Tiles;
+}
 
 namespace M82
 {

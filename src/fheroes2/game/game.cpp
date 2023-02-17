@@ -49,7 +49,6 @@
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "math_base.h"
-#include "mp2.h"
 #include "mus.h"
 #include "players.h"
 #include "rand.h"

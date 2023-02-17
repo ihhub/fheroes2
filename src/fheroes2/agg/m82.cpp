@@ -23,6 +23,7 @@
 
 #include "m82.h"
 
+#include "maps_tiles.h"
 #include "mp2.h"
 #include "spell.h"
 
