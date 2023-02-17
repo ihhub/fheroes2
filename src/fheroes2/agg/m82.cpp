@@ -202,9 +202,10 @@ int M82::FromSpell( const int spellID )
     return UNKNOWN;
 }
 
-// TODO: this function returns a sound track based on a provided tile. It works fine for most of objects as they have only one "main" tile.
-// However, some objects like Oracle or Volcano can be bigger than 1 tile leading to multiple sounds coming from the same object and these
-// sounds might not be synchronized. This is mostly noticeable with 3D Audio mode on.
+// TODO: This function works fine for most of objects as they have only one "main" tile. However,
+// TODO: some objects like Oracle or Volcano can be bigger than 1 tile leading to multiple sounds
+// TODO: coming from the same object and these sounds might not be synchronized. This is mostly
+// TODO: noticeable with 3D Audio mode on.
 M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
 {
     // Check stream first

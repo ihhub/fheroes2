@@ -356,6 +356,7 @@ namespace M82
     const char * GetString( int m82 );
     int FromSpell( const int spellID );
 
+    // Returns the ambient soundtrack for a given tile or M82::UNKNOWN if there is no track
     SoundType getAdventureMapTileSound( const Maps::Tiles & tile );
 }
 
