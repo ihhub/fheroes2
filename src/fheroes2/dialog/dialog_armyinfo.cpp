@@ -452,7 +452,7 @@ namespace
 int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 {
     // Unit in combat cannot be dismissed or upgraded
-    assert( !troop.isBattle() || !( flags & BUTTONS ) || ( ( flags & READONLY ) && !( flags & UPGRADE ) ) );
+    assert( !troop.isBattle() || !( flags & BUTTONS ) || !( flags & ( UPGRADE | DISMISS ) ) );
 
     // The active size of the window is 520 by 256 pixels
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -529,7 +529,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
         buttonUpgrade.disable();
     }
 
-    if ( ( flags & BUTTONS ) && !( flags & READONLY ) ) {
+    if ( ( flags & ( BUTTONS | DISMISS ) ) == ( BUTTONS | DISMISS ) ) {
         buttonDismiss.enable();
         buttonDismiss.draw();
     }

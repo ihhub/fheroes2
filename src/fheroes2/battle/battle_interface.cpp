@@ -987,10 +987,10 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
         const Unit & unit = *( unitPos.first );
 
         if ( le.MouseClickLeft( unitRoi ) ) {
-            Dialog::ArmyInfo( unit, Dialog::READONLY | Dialog::BUTTONS, unit.isReflect() );
+            Dialog::ArmyInfo( unit, Dialog::BUTTONS, unit.isReflect() );
         }
         else if ( le.MousePressRight( unitRoi ) ) {
-            Dialog::ArmyInfo( unit, Dialog::READONLY, unit.isReflect() );
+            Dialog::ArmyInfo( unit, Dialog::ZERO, unit.isReflect() );
         }
     }
 }
@@ -3040,12 +3040,12 @@ void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
     const Unit * unitOnCell = cell.GetUnit();
 
     if ( unitOnCell != nullptr ) {
-        Dialog::ArmyInfo( *unitOnCell, Dialog::READONLY, unitOnCell->isReflect() );
+        Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect() );
     }
     else {
         unitOnCell = arena.GraveyardLastTroop( cell.GetIndex() );
         if ( unitOnCell != nullptr ) {
-            Dialog::ArmyInfo( *unitOnCell, Dialog::READONLY, unitOnCell->isReflect() );
+            Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect() );
         }
     }
 }
@@ -3113,7 +3113,7 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
 
         case Cursor::WAR_INFO: {
             if ( b ) {
-                Dialog::ArmyInfo( *b, Dialog::BUTTONS | Dialog::READONLY, b->isReflect() );
+                Dialog::ArmyInfo( *b, Dialog::BUTTONS, b->isReflect() );
                 humanturn_redraw = true;
             }
             break;
