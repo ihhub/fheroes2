@@ -452,8 +452,10 @@ namespace
 
 int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 {
-    // Unit in combat cannot be dismissed or upgraded
+    // Unit cannot be dismissed or upgraded during combat
     assert( !troop.isBattle() || !( flags & BUTTONS ) || !( flags & ( UPGRADE | DISMISS ) ) );
+    // This function should not be called with the UPGRADE flag for a non-upgradeable unit
+    assert( !( flags & BUTTONS ) || !( flags & UPGRADE ) || troop.isAllowUpgrade() );
 
     // The active size of the window is 520 by 256 pixels
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -522,7 +524,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     dst_pt.y = pos_rt.y + 221;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
 
-    if ( ( flags & ( BUTTONS | UPGRADE ) ) == ( BUTTONS | UPGRADE ) && troop.isAllowUpgrade() ) {
+    if ( ( flags & ( BUTTONS | UPGRADE ) ) == ( BUTTONS | UPGRADE ) ) {
         buttonUpgrade.enable();
         buttonUpgrade.draw();
     }
