@@ -9,6 +9,10 @@
 		Open, close, query, render, advance and seek an smk
 */
 
+#ifdef _MSC_VER
+#pragma warning( disable : 4244 ) // C4244 - possible data loss during conversion
+#endif
+
 #include "smacker.h"
 
 #include "smk_malloc.h"
