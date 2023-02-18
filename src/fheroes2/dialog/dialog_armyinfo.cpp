@@ -167,34 +167,33 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     std::vector<std::pair<fheroes2::Rect, Spell>> spellAreas;
 
     const fheroes2::Point battleStatOffset( pos_rt.x + 395, pos_rt.y + 184 );
-    if ( troop.isBattle() )
+    if ( troop.isBattle() ) {
         spellAreas = DrawBattleStats( battleStatOffset, troop );
+    }
 
     DrawMonsterInfo( pos_rt.getPosition(), troop );
 
     const bool isAnimated = ( flags & BUTTONS ) != 0;
     fheroes2::RandomMonsterAnimation monsterAnimation( troop );
     const fheroes2::Point monsterOffset( pos_rt.x + 520 / 4 + 16, pos_rt.y + 175 );
-    if ( !isAnimated )
+    if ( !isAnimated ) {
         monsterAnimation.reset();
+    }
 
     const fheroes2::Rect dialogRoi( pos_rt.x, pos_rt.y + SHADOWWIDTH, sprite_dialog.width(), sprite_dialog.height() - 2 * SHADOWWIDTH );
     DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, isAnimated, dialogRoi );
 
-    // button upgrade
     const int upgradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_UPGRADE_EVIL : ICN::BUTTON_SMALL_UPGRADE_GOOD;
     fheroes2::Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
     dst_pt.x = pos_rt.x + 280;
     dst_pt.y = pos_rt.y + 192;
     fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, upgradeButtonIcnID, 0, 1 );
 
-    // button dismiss
     const int dismissButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_DISMISS_EVIL : ICN::BUTTON_SMALL_DISMISS_GOOD;
     dst_pt.x = pos_rt.x + 280;
     dst_pt.y = pos_rt.y + 221;
     fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, dismissButtonIcnID, 0, 1 );
 
-    // button exit
     const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
     dst_pt.x = pos_rt.x + 415;
     dst_pt.y = pos_rt.y + 221;
@@ -208,12 +207,15 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
         buttonUpgrade.enable();
         buttonUpgrade.draw();
     }
-    else
+    else {
         buttonUpgrade.disable();
+    }
 
     if ( BUTTONS & flags ) {
-        if ( !troop.isBattle() && !( READONLY & flags ) )
+        if ( !troop.isBattle() && !( READONLY & flags ) ) {
             buttonDismiss.draw();
+        }
+
         buttonExit.draw();
     }
 
@@ -223,77 +225,82 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     display.render( restorer.rect() );
 
     // dialog menu loop
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
-        if ( flags & BUTTONS ) {
-            if ( buttonUpgrade.isEnabled() )
-                le.MousePressLeft( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
-            if ( buttonDismiss.isEnabled() )
-                le.MousePressLeft( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
-            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-
-            // upgrade
-            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
-                if ( UPGRADE_DISABLE & flags ) {
-                    const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
-                    fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
-                }
-                else {
-                    const fheroes2::Text description( _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" ),
-                                                      fheroes2::FontType::normalWhite() );
-
-                    if ( fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::YES | Dialog::NO, troop.GetTotalUpgradeCost() ) == Dialog::YES ) {
-                        result = Dialog::UPGRADE;
-                        break;
-                    }
-                }
-            }
-            // dismiss
-            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) )
-                 && Dialog::YES
-                        == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
-                                            Dialog::YES | Dialog::NO ) ) {
-                result = Dialog::DISMISS;
-                break;
-            }
-            // exit
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
-                result = Dialog::CANCEL;
+    while ( le.HandleEvents( ( flags & BUTTONS ) ? Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) : true ) ) {
+        if ( !( flags & BUTTONS ) ) {
+            if ( !le.MousePressRight() ) {
                 break;
             }
 
-            for ( const auto & spellInfo : spellAreas ) {
-                if ( le.MousePressRight( spellInfo.first ) ) {
-                    fheroes2::SpellDialogElement( spellInfo.second, nullptr ).showPopup( Dialog::ZERO );
+            continue;
+        }
+
+        if ( buttonUpgrade.isEnabled() ) {
+            le.MousePressLeft( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
+        }
+        if ( buttonDismiss.isEnabled() ) {
+            le.MousePressLeft( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
+        }
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+
+        if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
+            if ( UPGRADE_DISABLE & flags ) {
+                const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
+                fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
+            }
+            else {
+                const fheroes2::Text description( _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" ),
+                                                  fheroes2::FontType::normalWhite() );
+
+                if ( fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::YES | Dialog::NO, troop.GetTotalUpgradeCost() ) == Dialog::YES ) {
+                    result = Dialog::UPGRADE;
                     break;
                 }
             }
+        }
+        if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) )
+             && Dialog::YES
+                    == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
+                                        Dialog::YES | Dialog::NO ) ) {
+            result = Dialog::DISMISS;
+            break;
+        }
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            result = Dialog::CANCEL;
+            break;
+        }
 
-            if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
-                fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
-
-                DrawMonsterStats( monsterStatOffset, troop );
-
-                if ( troop.isBattle() )
-                    spellAreas = DrawBattleStats( battleStatOffset, troop );
-
-                DrawMonsterInfo( pos_rt.getPosition(), troop );
-                DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
-
-                if ( buttonUpgrade.isEnabled() )
-                    buttonUpgrade.draw();
-
-                if ( buttonDismiss.isEnabled() )
-                    buttonDismiss.draw();
-
-                if ( buttonExit.isEnabled() )
-                    buttonExit.draw();
-
-                display.render( restorer.rect() );
+        for ( const auto & spellInfo : spellAreas ) {
+            if ( le.MousePressRight( spellInfo.first ) ) {
+                fheroes2::SpellDialogElement( spellInfo.second, nullptr ).showPopup( Dialog::ZERO );
+                break;
             }
         }
-        else {
-            if ( !le.MousePressRight() )
-                break;
+
+        if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
+            fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
+
+            DrawMonsterStats( monsterStatOffset, troop );
+
+            if ( troop.isBattle() ) {
+                spellAreas = DrawBattleStats( battleStatOffset, troop );
+            }
+
+            DrawMonsterInfo( pos_rt.getPosition(), troop );
+            DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
+
+            if ( buttonUpgrade.isEnabled() ) {
+                buttonUpgrade.draw();
+            }
+
+            if ( buttonDismiss.isEnabled() ) {
+                buttonDismiss.draw();
+            }
+
+            if ( buttonExit.isEnabled() ) {
+                buttonExit.draw();
+            }
+
+            display.render( restorer.rect() );
         }
     }
 
