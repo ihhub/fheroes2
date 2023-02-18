@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <bitset>
 #include <cstddef>
 #include <cstdint>
 #include <unordered_map>
@@ -100,5 +101,6 @@ namespace Battle
         bool _isFlying = false;
         // The unit's color (or rather, the unit's army color) affects the ability to pass the castle bridge
         int _color = 0;
+        std::bitset<ARENASIZE> _boardStatus;
     };
 }
