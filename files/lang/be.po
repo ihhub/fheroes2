@@ -3960,7 +3960,7 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to quit?"
-msgstr "Даклана хочаш скончыць гуляць?"
+msgstr "Вы ўпэўненыя, што хочаце выйсці?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
@@ -4039,7 +4039,7 @@ msgid ""
 msgstr ""
 "Дазваляе змяніць пачатковую пазіцыю і колеры гульцоў. Ад абранага колеру залежыць "
 "пачатковая лакацыя. За некаторыя пазіцыі могуць гуляць толькі асобы, "
-"альбо кампутарныя гульцы."
+"альбо толькі кампутарныя гульцы."
 
 msgid ""
 "This lets you change the class of a player. Classes are not always "
