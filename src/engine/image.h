@@ -231,6 +231,11 @@ namespace fheroes2
 
     Sprite CreateContour( const Image & image, uint8_t value );
 
+    // Make a transition to "in" image from left to right or vertically - from top to bottom using dithering (https://en.wikipedia.org/wiki/Dither).
+    // The direction of transition can be reversed.
+    void CreateDitheringTransition( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
+                                    const bool isVertical, const bool isReverse );
+
     Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height );
 
     // skipFactor is responsible for non-solid line. You can interpret it as skip every N pixel

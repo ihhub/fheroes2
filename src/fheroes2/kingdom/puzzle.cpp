@@ -186,7 +186,7 @@ namespace
         const fheroes2::Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
 
         const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() - BORDERWIDTH * 2 ) / 2,
-                                               gameArea.y + ( gameArea.height - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height() );
+                                               gameArea.y + ( gameArea.height - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height(), false );
 
         fheroes2::Rect blitArea = border.activeArea();
 

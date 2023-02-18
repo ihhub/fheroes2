@@ -709,7 +709,7 @@ void Kingdom::openOverviewDialog()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
+    fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
 
     const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt );

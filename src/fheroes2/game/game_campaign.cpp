@@ -892,7 +892,7 @@ namespace
 
     int32_t setCampaignDifficulty( int32_t currentDifficulty, const bool isSelectionAllowed )
     {
-        const fheroes2::StandardWindow frameborder( 234, 270 );
+        const fheroes2::StandardWindow frameborder( 234, 270, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
