@@ -35,11 +35,12 @@ make -f Makefile.vita
 - ○ - Right mouse button
 - □ - End turn
 - △ - Open spellbook
-- L1 - Next hero
-- R1 - Next castle
+- D-Pad left - Next hero
+- D-Pad right - Next castle
+- D-Pad down - Re-visit the object that hero stands on
+- R1 - Cursor acceleration
 - SELECT - System menu
 - START - Enter
-- D-Pad down - re-visit the field that hero stands on
 
 Text input is done with D-Pad.
 

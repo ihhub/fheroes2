@@ -139,13 +139,13 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
     return result;
 }
 
-Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const int32_t dst )
+Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_t dst )
 {
-    const Arena * arena = GetArena();
+    Arena * arena = GetArena();
     assert( arena != nullptr );
 
-    if ( currentUnit.isWide() ) {
-        auto checkCells = [arena]( Cell * headCell, Cell * tailCell ) -> Position {
+    if ( unit.isWide() ) {
+        auto checkCells = [&unit, arena]( Cell * headCell, Cell * tailCell ) -> Position {
             if ( headCell == nullptr || tailCell == nullptr ) {
                 return {};
             }
@@ -155,15 +155,15 @@ Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const
             pos.first = headCell;
             pos.second = tailCell;
 
-            if ( arena->isPositionReachable( pos, true ) ) {
+            if ( arena->isPositionReachable( unit, pos, true ) ) {
                 return pos;
             }
 
             return {};
         };
 
-        auto tryHead = [&currentUnit, dst, &checkCells]() -> Position {
-            const int tailDirection = currentUnit.isReflect() ? RIGHT : LEFT;
+        auto tryHead = [&unit, dst, &checkCells]() -> Position {
+            const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
 
             if ( Board::isValidDirection( dst, tailDirection ) ) {
                 Cell * headCell = Board::GetCell( dst );
@@ -175,8 +175,8 @@ Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const
             return {};
         };
 
-        auto tryTail = [&currentUnit, dst, &checkCells]() -> Position {
-            const int headDirection = currentUnit.isReflect() ? LEFT : RIGHT;
+        auto tryTail = [&unit, dst, &checkCells]() -> Position {
+            const int headDirection = unit.isReflect() ? LEFT : RIGHT;
 
             if ( Board::isValidDirection( dst, headDirection ) ) {
                 Cell * headCell = Board::GetCell( Board::GetIndexDirection( dst, headDirection ) );
@@ -207,7 +207,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const
 
     pos.first = headCell;
 
-    if ( arena->isPositionReachable( pos, true ) ) {
+    if ( arena->isPositionReachable( unit, pos, true ) ) {
         return pos;
     }
 

@@ -1060,6 +1060,8 @@ namespace ICN
         BUTTON_MAPSIZE_XLARGE,
         BUTTON_MAPSIZE_ALL,
 
+        GAME_OPTION_ICON,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

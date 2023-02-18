@@ -1,13 +1,12 @@
 # Romanian translation of fheroes2
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-24 08:29+0000\n"
+"POT-Creation-Date: 2023-02-16 15:09+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1478,6 +1477,9 @@ msgstr ""
 msgid "campaignBonus|Foremost Scroll"
 msgstr ""
 
+msgid "campaignBonus|Gauntlets"
+msgstr ""
+
 msgid "campaignBonus|Hideous Mask"
 msgstr ""
 
@@ -2380,7 +2382,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 
@@ -3333,13 +3335,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 msgid "Dev and Support"
@@ -3508,11 +3510,11 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 msgid "Current game version: "
@@ -4083,6 +4085,9 @@ msgstr ""
 msgid "Kingdom Income per day."
 msgstr ""
 
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+
 msgid "English"
 msgstr ""
 
@@ -4540,12 +4545,12 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr ""
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr ""
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
-msgstr ""
-
-msgid "You enter the faerie ring, but nothing happens."
 msgstr ""
 
 msgid ""
@@ -4833,11 +4838,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -4881,6 +4881,11 @@ msgid ""
 msgstr ""
 
 msgid "You gain control of a %{name}."
+msgstr ""
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
 msgstr ""
 
 msgid ""
@@ -5387,11 +5392,6 @@ msgid ""
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
-msgstr ""
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
 msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -6277,7 +6277,10 @@ msgid "Dragon City"
 msgstr ""
 
 msgid "Lighthouse"
-msgstr ""
+msgid_plural "Lighthouses"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -8810,19 +8813,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Wait this unit"
-#~ msgstr "Așteaptă această unitate"
-
-#~ msgid "Wait"
-#~ msgstr "Așteaptă"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Așteaptă creatura curentă. Creatura curentă își amână rândul până după ce "
-#~ "toate celelalte creaturi și-au avut rândul."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} își așteaptă rândul."

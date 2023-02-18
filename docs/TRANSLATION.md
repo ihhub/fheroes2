@@ -3,6 +3,28 @@
 This project uses portable object (PO) files to handle localization in various languages. The PO files are located in the `files/lang`
 subdirectory of the project source tree. The current instruction is designed for Linux, MacOS and Windows users.
 
+## Current status
+
+![Belarusian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_be.json)
+![Bulgarian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_bg.json)
+![Czech](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_cs.json)
+![German](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_de.json)
+![Danish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_dk.json)
+![Spanish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_es.json)
+![French](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_fr.json)
+![Hungarian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_hu.json)
+![Italian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_it.json)
+![Lithuanian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_lt.json)
+![Norwegian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_nb.json)
+![Dutch](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_nl.json)
+![Polish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_pl.json)
+![Brazilian Portuguese](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_pt.json)
+![Romanian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_ro.json)
+![Russian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_ru.json)
+![Swedish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_sv.json)
+![Turkish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_tr.json)
+![Ukrainian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_uk.json)
+
 ## Finding translatable strings in the codebase
 
 Translatable strings can be found in the source code as arguments to the `_` function (a short name for `gettext`),
@@ -35,7 +57,7 @@ to navigate once too many changes, comments and so on are present within the sam
 In addition, we have decided on a minimum amount of 15 changed strings for a translation PR. For languages that have translations that are more
 or less complete, less than this amount can be accepted.
 
-Preferrably a PR should contain a small amount of changes, about 100 lines, all focused on translating a specific of the game - for
+Preferrably a PR should contain a small amount of changes, about 100 lines, all focused on translating a specific part of the game - for
 example creature names or castle buildings.
 
 ## Build binary translation files
@@ -43,7 +65,7 @@ example creature names or castle buildings.
 Once the translation files have been modified, for Linux/MacOS run the `make` command below in the `files/lang` subdirectory to create
 machine object (MO) binary files which can be used by the fheroes2 engine.
 
-For exmaple, for the German PO file, `de.po`, the following would be the command:
+For example, for the German PO file, `de.po`, the following would be the command:
 ```bash
 make de.mo
 ```

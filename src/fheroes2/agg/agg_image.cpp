@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "agg_image.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -33,7 +35,6 @@
 
 #include "agg.h"
 #include "agg_file.h"
-#include "agg_image.h"
 #include "battle_cell.h"
 #include "h2d.h"
 #include "icn.h"
@@ -550,8 +551,7 @@ namespace fheroes2
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
-                _icnVsSprite[id][i]
-                    = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
+                _icnVsSprite[id][i] = decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
             }
         }
 
@@ -2191,6 +2191,19 @@ namespace fheroes2
                     ApplyPalette( out, indexes );
                 }
                 return true;
+            case ICN::TITANMSL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 7 ) {
+                    // We need to shift Titan lightning arrow sprite position to correctly render it.
+                    _icnVsSprite[id][0].setPosition( _icnVsSprite[id][0].x(), _icnVsSprite[id][0].y() - 5 );
+                    _icnVsSprite[id][1].setPosition( _icnVsSprite[id][1].x() - 5, _icnVsSprite[id][1].y() - 5 );
+                    _icnVsSprite[id][2].setPosition( _icnVsSprite[id][2].x() - 10, _icnVsSprite[id][2].y() );
+                    _icnVsSprite[id][3].setPosition( _icnVsSprite[id][3].x() - 15, _icnVsSprite[id][3].y() );
+                    _icnVsSprite[id][4].setPosition( _icnVsSprite[id][4].x() - 10, _icnVsSprite[id][2].y() );
+                    _icnVsSprite[id][5].setPosition( _icnVsSprite[id][5].x() - 5, _icnVsSprite[id][5].y() - 5 );
+                    _icnVsSprite[id][6].setPosition( _icnVsSprite[id][6].x(), _icnVsSprite[id][6].y() - 5 );
+                }
+                return true;
             case ICN::TROLLMSL:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 1 ) {
@@ -3433,6 +3446,12 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::GAME_OPTION_ICON: {
+                _icnVsSprite[id].resize( 1 );
+
+                h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
+                break;
+            }
             default:
                 break;
             }
@@ -3463,24 +3482,15 @@ namespace fheroes2
 
                 StreamBuf buffer( data );
 
-                const uint32_t count = buffer.getLE16();
-                const uint32_t width = buffer.getLE16();
-                const uint32_t height = buffer.getLE16();
-                const uint32_t size = width * height;
-                if ( headerSize + count * size != data.size() ) {
+                const size_t count = buffer.getLE16();
+                const int32_t width = buffer.getLE16();
+                const int32_t height = buffer.getLE16();
+                if ( count < 1 || width < 1 || height < 1 || ( headerSize + count * width * height ) != data.size() ) {
                     return 0;
                 }
 
                 std::vector<Image> & originalTIL = _tilVsImage[id][0];
-
-                originalTIL.resize( count );
-                for ( uint32_t i = 0; i < count; ++i ) {
-                    Image & tilImage = originalTIL[i];
-                    tilImage.resize( width, height );
-                    tilImage._disableTransformLayer();
-                    memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
-                    std::fill( tilImage.transform(), tilImage.transform() + width * height, static_cast<uint8_t>( 0 ) );
-                }
+                decodeTILImages( data.data() + headerSize, count, width, height, originalTIL );
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
                     std::vector<Image> & currentTIL = _tilVsImage[id][shapeId];
@@ -3489,7 +3499,7 @@ namespace fheroes2
                     const bool horizontalFlip = ( shapeId & 2 ) != 0;
                     const bool verticalFlip = ( shapeId & 1 ) != 0;
 
-                    for ( uint32_t i = 0; i < count; ++i ) {
+                    for ( size_t i = 0; i < count; ++i ) {
                         currentTIL[i] = Flip( originalTIL[i], horizontalFlip, verticalFlip );
                     }
                 }

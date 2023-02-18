@@ -68,9 +68,9 @@ namespace Battle
 
         void SetArea( const fheroes2::Rect & );
 
-        // Checks that the cell is passable for the given unit located in a certain adjacent cell
+        // Checks that the cell is passable for a given unit located in a certain adjacent cell
         bool isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const;
-        // Checks that the cell is passable for the given unit, i.e. unit can occupy it with his head or tail
+        // Checks that the cell is passable for a given unit, i.e. unit can occupy it with his head or tail
         bool isPassableForUnit( const Unit & unit ) const;
         // Checks that the cell is passable, i.e. does not contain an obstacle or (optionally) a unit
         bool isPassable( const bool checkForUnit ) const;
@@ -108,16 +108,15 @@ namespace Battle
         bool isReflect() const;
         bool contains( int cellIndex ) const;
 
-        // Returns the position that the given unit would occupy after moving to the cell
-        // with the given index (without taking into account the current pathfinder graph)
-        // or an empty Position object if the given index is unreachable in principle for
-        // the given unit
+        // Returns the position that a given unit would occupy after moving to the cell
+        // with a given index (without taking into account the pathfinder's info) or an
+        // empty Position object if this index is unreachable in principle for this unit
         static Position GetPosition( const Unit & unit, const int32_t dst );
 
-        // Returns the reachable position for the current unit (to which the current
-        // pathfinder graph relates) which corresponds to the given index or an empty
-        // Position object if the given index is unreachable on the current turn
-        static Position GetReachable( const Unit & currentUnit, const int32_t dst );
+        // Returns the reachable position for a given unit, which corresponds to a given
+        // index, or an empty Position object if this index is unreachable for this unit
+        // on the current turn
+        static Position GetReachable( const Unit & unit, const int32_t dst );
 
         fheroes2::Rect GetRect() const;
         Cell * GetHead();

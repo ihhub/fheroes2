@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "heroes.h"
+
 #include <array>
 #include <cmath>
 #include <cstddef>
@@ -44,7 +46,6 @@
 #include "game_static.h"
 #include "gamedefs.h"
 #include "ground.h"
-#include "heroes.h"
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
@@ -65,7 +66,6 @@
 #include "settings.h"
 #include "speed.h"
 #include "spell_book.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -718,6 +718,13 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     // Update the set of recruits in the kingdom
     kingdom.GetRecruits();
 
+    // After recruiting a hero we reveal map in hero scout area.
+    Scoute( GetIndex() );
+    if ( isControlHuman() ) {
+        // And the radar image map for human player.
+        ScoutRadar();
+    }
+
     return true;
 }
 
@@ -732,7 +739,6 @@ bool Heroes::Recruit( const Castle & castle )
     }
 
     SetVisited( GetIndex() );
-
     return true;
 }
 
@@ -966,12 +972,12 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
-            art.GetID() == Artifact::MAGIC_BOOK ? Dialog::Message(
+            art.GetID() == Artifact::MAGIC_BOOK ? fheroes2::showStandardTextMessage(
                 GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Font::BIG, Dialog::OK )
-                                                : Dialog::Message( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG,
-                                                                   Dialog::OK );
+                Dialog::OK )
+                                                : fheroes2::showStandardTextMessage( art.GetName(),
+                                                                                     _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
         }
         return false;
     }
@@ -980,6 +986,29 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( isControlHuman() ) {
         std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
+
+        // The function to check the artifact for scout area bonus and returns true if it has and the area around hero was scouted.
+        auto scout = [this]( const int32_t artifactID ) {
+            const std::vector<fheroes2::ArtifactBonus> bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
+            if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) != bonuses.end() ) {
+                Scoute( this->GetIndex() );
+                ScoutRadar();
+                return true;
+            }
+            return false;
+        };
+
+        // If the scout area bonus is increased with the new artifact we update the radar.
+        if ( scout( art.GetID() ) ) {
+            return true;
+        }
+
+        // If there were artifacts assembled we check them for scout area bonus.
+        for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
+            if ( scout( static_cast<int32_t>( assembledArtifact._assembledArtifactID ) ) ) {
+                return true;
+            }
+        }
     }
 
     return true;
@@ -1257,6 +1286,20 @@ int Heroes::GetScoute() const
                              + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
 }
 
+fheroes2::Rect Heroes::GetScoutRoi( const bool ignoreDirection /* = false */ ) const
+{
+    const int32_t scoutRange = GetScoute();
+    const fheroes2::Point heroPosition = GetCenter();
+
+    if ( ignoreDirection ) {
+        return { heroPosition.x - scoutRange, heroPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 };
+    }
+
+    return { heroPosition.x - ( ( direction == Direction::RIGHT ) ? 1 : scoutRange ), heroPosition.y - ( ( direction == Direction::BOTTOM ) ? 1 : scoutRange ),
+             ( ( direction == Direction::LEFT || direction == Direction::RIGHT ) ? 1 : scoutRange ) + scoutRange + 1,
+             ( ( direction == Direction::TOP || direction == Direction::BOTTOM ) ? 1 : scoutRange ) + scoutRange + 1 };
+}
+
 uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
 {
     const int level = GetLevelSkill( skill );
@@ -1388,6 +1431,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         // post action
         if ( selected.Skill() == Skill::Secondary::SCOUTING ) {
             Scoute( GetIndex() );
+            ScoutRadar();
         }
     }
 }
@@ -1735,7 +1779,6 @@ void AllHeroes::Init()
             push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
     }
 
-    // devel
     if ( IS_DEVEL() ) {
         push_back( new Heroes( Heroes::DEBUG_HERO, Race::WRLK ) );
     }
