@@ -148,7 +148,7 @@ public:
     void ActionListPressRight( int & index ) override
     {
         Troop troop( Monster( index ), 1 );
-        Dialog::ArmyInfo( troop, 0 );
+        Dialog::ArmyInfo( troop, Dialog::ZERO );
     }
 };
 

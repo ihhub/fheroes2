@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 15:09+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2663,19 +2663,6 @@ msgstr ""
 "déchaînés de la foule. Impressionné par votre talent, l'entraîneur des "
 "gladiateurs vous propose d'entraîner le talent de votre choix."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr "Vous n'avez pas les moyens d'améliorer vos troupes !"
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Vos troupes peuvent être améliorées, mais cela vous coûtera cher. Souhaitez-"
-"vous les améliorer ?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Voulez-vous vraiment renvoyer cette troupe ?"
-
 msgid "Attack Skill"
 msgstr "Attaque"
 
@@ -2696,6 +2683,19 @@ msgstr "Points de vie"
 
 msgid "Hit Points Left"
 msgstr "PV restants"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr "Vous n'avez pas les moyens d'améliorer vos troupes !"
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Vos troupes peuvent être améliorées, mais cela vous coûtera cher. Souhaitez-"
+"vous les améliorer ?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Voulez-vous vraiment renvoyer cette troupe ?"
 
 msgid "Followers"
 msgstr "Alliés"

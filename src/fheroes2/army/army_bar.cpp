@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "army_bar.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -28,7 +30,6 @@
 
 #include "agg_image.h"
 #include "army.h"
-#include "army_bar.h"
 #include "army_troop.h"
 #include "castle.h"
 #include "dialog.h"
@@ -530,16 +531,24 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
     assert( troop2 != nullptr );
 
     if ( &troop == troop2 ) {
-        int flags = ( read_only || _army->SaveLastTroop() ? Dialog::READONLY | Dialog::BUTTONS : Dialog::BUTTONS );
-        const Castle * castle = _army->inCastle();
+        int flags = Dialog::BUTTONS;
 
-        if ( troop.isAllowUpgrade() &&
-             // allow upgrade
-             castle && castle->GetRace() == troop.GetRace() && castle->isBuild( troop.GetUpgrade().GetDwelling() ) ) {
-            flags |= Dialog::UPGRADE;
+        if ( !read_only ) {
+            if ( !_army->SaveLastTroop() ) {
+                flags |= Dialog::DISMISS;
+            }
 
-            if ( !world.GetKingdom( _army->GetColor() ).AllowPayment( troop.GetTotalUpgradeCost() ) )
-                flags |= Dialog::UPGRADE_DISABLE;
+            if ( troop.isAllowUpgrade() ) {
+                const Castle * castle = _army->inCastle();
+
+                if ( castle && castle->GetRace() == troop.GetRace() && castle->isBuild( troop.GetUpgrade().GetDwelling() ) ) {
+                    flags |= Dialog::UPGRADE;
+
+                    if ( !world.GetKingdom( _army->GetColor() ).AllowPayment( troop.GetTotalUpgradeCost() ) ) {
+                        flags |= Dialog::UPGRADE_DISABLE;
+                    }
+                }
+            }
         }
 
         switch ( Dialog::ArmyInfo( troop, flags ) ) {
@@ -605,10 +614,12 @@ bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
     if ( troop.isValid() ) {
         ResetSelected();
 
-        if ( can_change && !_army->SaveLastTroop() )
+        if ( can_change && !_army->SaveLastTroop() ) {
             troop.Reset();
-        else
-            Dialog::ArmyInfo( troop, 0 );
+        }
+        else {
+            Dialog::ArmyInfo( troop, Dialog::ZERO );
+        }
     }
 
     return true;
