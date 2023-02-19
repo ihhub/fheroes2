@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "puzzle.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -46,7 +48,6 @@
 #include "logging.h"
 #include "math_base.h"
 #include "mus.h"
-#include "puzzle.h"
 #include "rand.h"
 #include "screen.h"
 #include "serialize.h"
@@ -82,19 +83,38 @@ namespace
         }
     }
 
-    void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty, const std::function<fheroes2::Rect()> * drawControlPanel = nullptr )
+    void drawPuzzle( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        // show all for debug
-        if ( IS_DEVEL() )
-            return;
+        // Immediately reveal the entire puzzle in developer mode
+        if ( IS_DEVEL() ) {
+            fheroes2::Blit( sf, display, dstx, dsty );
 
-        int alpha = 250;
+            return;
+        }
+
+        for ( size_t i = 0; i < pzl.size(); ++i ) {
+            const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
+
+            fheroes2::Blit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH );
+        }
+    }
+
+    void revealPuzzle( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty, const std::function<fheroes2::Rect()> * drawControlPanel = nullptr )
+    {
+        // In developer mode, the entire puzzle should already be revealed
+        if ( IS_DEVEL() ) {
+            return;
+        }
+
+        fheroes2::Display & display = fheroes2::Display::instance();
         LocalEvent & le = LocalEvent::Get();
 
         const std::vector<Game::DelayType> delayTypes = { Game::PUZZLE_FADE_DELAY };
         Game::passAnimationDelay( Game::PUZZLE_FADE_DELAY );
+
+        int alpha = 250;
 
         while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
             if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
@@ -138,14 +158,15 @@ namespace
         fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
 
         fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarArea.x, radarArea.y );
-        fheroes2::Blit( sf, display, BORDERWIDTH, BORDERWIDTH );
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
         buttonExit.draw();
 
-        PuzzlesDraw( pzl, sf, BORDERWIDTH, BORDERWIDTH );
+        drawPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH );
 
         display.render();
+
+        revealPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH );
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -165,7 +186,7 @@ namespace
         const fheroes2::Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
 
         const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() - BORDERWIDTH * 2 ) / 2,
-                                               gameArea.y + ( gameArea.height - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height() );
+                                               gameArea.y + ( gameArea.height - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height(), false );
 
         fheroes2::Rect blitArea = border.activeArea();
 
@@ -183,7 +204,6 @@ namespace
         }
 
         fheroes2::Blit( background, display, blitArea.x, blitArea.y );
-        fheroes2::Blit( sf, display, blitArea.x, blitArea.y );
 
         const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
         const fheroes2::Rect & radarRect = radar.GetRect();
@@ -203,11 +223,12 @@ namespace
             return radarRect;
         };
 
+        drawPuzzle( pzl, sf, blitArea.x, blitArea.y );
         drawControlPanel();
 
-        PuzzlesDraw( pzl, sf, blitArea.x, blitArea.y, isHideInterface ? &drawControlPanel : nullptr );
-
         display.render();
+
+        revealPuzzle( pzl, sf, blitArea.x, blitArea.y, isHideInterface ? &drawControlPanel : nullptr );
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -280,10 +301,12 @@ void Puzzle::ShowMapsDialog() const
 
     AudioManager::PlayMusic( MUS::PUZZLE, Music::PlaybackMode::PLAY_ONCE );
 
-    if ( display.isDefaultSize() && !Settings::Get().isHideInterfaceEnabled() )
+    if ( display.isDefaultSize() && !Settings::Get().isHideInterfaceEnabled() ) {
         ShowStandardDialog( *this, sf );
-    else
+    }
+    else {
         ShowExtendedDialog( *this, sf );
+    }
 }
 
 StreamBase & operator<<( StreamBase & msg, const Puzzle & pzl )

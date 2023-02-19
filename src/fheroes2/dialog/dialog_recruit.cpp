@@ -437,13 +437,13 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
         bool skipHotKeyCheck = false;
 
         if ( le.MousePressRight( monsterArea ) ) {
-            ArmyInfo( Troop( monster, available ), READONLY );
+            ArmyInfo( Troop( monster, available ), ZERO );
 
             // Perform a full rendering to properly restore the parts of the screen outside of this dialog
             display.render();
         }
         else if ( le.MouseClickLeft( monsterArea ) ) {
-            ArmyInfo( Troop( monster, available ), READONLY | BUTTONS );
+            ArmyInfo( Troop( monster, available ), BUTTONS );
 
             skipHotKeyCheck = true;
 

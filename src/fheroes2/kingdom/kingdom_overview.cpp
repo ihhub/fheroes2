@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -709,7 +709,7 @@ void Kingdom::openOverviewDialog()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
+    fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
 
     const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt );
@@ -736,6 +736,9 @@ void Kingdom::openOverviewDialog()
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_EXIT, 0, 1 );
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
+
+    const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
+    const fheroes2::Rect rectLighthouse( cur_pt.x + 100 - lighthouse.width(), cur_pt.y + 459, lighthouse.width() + 10, lighthouse.height() );
 
     Interface::ListBasic * listStats = nullptr;
 
@@ -783,7 +786,10 @@ void Kingdom::openOverviewDialog()
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
         else if ( le.MousePressRight( rectIncome ) ) {
-            fheroes2::showKingdomIncome( *this, 0 );
+            fheroes2::showKingdomIncome( *this, Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( rectLighthouse ) ) {
+            fheroes2::showLighthouseInfo( *this, Dialog::ZERO );
         }
 
         // Exit this dialog.
@@ -811,6 +817,10 @@ void Kingdom::openOverviewDialog()
 
         if ( le.MouseClickLeft( rectIncome ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::OK );
+        }
+
+        if ( le.MouseClickLeft( rectLighthouse ) ) {
+            fheroes2::showLighthouseInfo( *this, Dialog::OK );
         }
 
         if ( !listStats->IsNeedRedraw() && !redraw ) {

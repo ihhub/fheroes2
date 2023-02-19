@@ -181,5 +181,5 @@ int main( int argc, char ** argv )
 
     std::cout << "Total extracted: " << spritesExtracted << ", failed: " << spritesFailed << std::endl;
 
-    return ( spritesExtracted > 0 && spritesFailed == 0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
+    return ( spritesFailed == 0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

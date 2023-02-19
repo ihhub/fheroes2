@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 16:41+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -1480,6 +1480,10 @@ msgstr ""
 msgid "campaignBonus|Foremost Scroll"
 msgstr ""
 
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Tržiště"
+
 msgid "campaignBonus|Hideous Mask"
 msgstr ""
 
@@ -2553,17 +2557,6 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr ""
-
 msgid "Attack Skill"
 msgstr ""
 
@@ -2583,6 +2576,17 @@ msgid "Hit Points"
 msgstr ""
 
 msgid "Hit Points Left"
+msgstr ""
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+
+msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
 #, fuzzy
@@ -4219,6 +4223,9 @@ msgstr "Příjem:"
 msgid "Kingdom Income per day."
 msgstr "Příjem:"
 
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+
 msgid "English"
 msgstr ""
 
@@ -4677,12 +4684,12 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr ""
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr ""
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
-msgstr ""
-
-msgid "You enter the faerie ring, but nothing happens."
 msgstr ""
 
 msgid ""
@@ -4970,11 +4977,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5018,6 +5020,11 @@ msgid ""
 msgstr ""
 
 msgid "You gain control of a %{name}."
+msgstr ""
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
 msgstr ""
 
 msgid ""
@@ -6428,7 +6435,10 @@ msgid "Dragon City"
 msgstr ""
 
 msgid "Lighthouse"
-msgstr ""
+msgid_plural "Lighthouses"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"

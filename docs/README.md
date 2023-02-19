@@ -46,6 +46,8 @@ To build the project from source, please follow [**this guide**](DEVELOPMENT.md)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=code_smells)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
 
+To assist with the graphical asset efforts of the project, please look at our [**graphical artist guide**](GRAPHICAL_ASSETS.md).
+
 If you would like to help translating the project, please read the [**translation guide**](TRANSLATION.md).
 
 ## Donation

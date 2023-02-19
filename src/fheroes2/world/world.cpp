@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "world.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -43,7 +45,6 @@
 #include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
-#include "maps_actions.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "mp2.h"
@@ -53,12 +54,12 @@
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
-#include "world.h"
 
 namespace
 {
@@ -144,18 +145,6 @@ namespace
 namespace GameStatic
 {
     extern uint32_t uniq;
-}
-
-ListActions::~ListActions()
-{
-    clear();
-}
-
-void ListActions::clear()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
-    std::list<ActionSimple *>::clear();
 }
 
 MapObjects::~MapObjects()
@@ -364,7 +353,6 @@ void World::Reset()
 
     // extra
     map_captureobj.clear();
-    map_actions.clear();
     map_objects.clear();
 
     ultimate_artifact.Reset();
@@ -892,12 +880,6 @@ int World::ColorCapturedObject( int32_t index ) const
     return map_captureobj.GetColor( index );
 }
 
-ListActions * World::GetListActions( int32_t index )
-{
-    MapActions::iterator it = map_actions.find( index );
-    return it != map_actions.end() ? &( *it ).second : nullptr;
-}
-
 CapturedObject & World::GetCapturedObject( int32_t index )
 {
     return map_captureobj.Get( index );
@@ -1394,7 +1376,7 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t height = static_cast<uint16_t>( w.height );
 
     return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
+               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1408,7 +1390,20 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the logic below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_1002_RELEASE ) {
+        uint32_t dummy = 0xDEADBEEF;
+
+        msg >> dummy;
+
+        if ( dummy != 0 ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid number of MapActions items: " << dummy )
+        }
+    }
+
+    msg >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 

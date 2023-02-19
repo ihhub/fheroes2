@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <cstring>
 #include <ostream>
+#include <string_view>
 #include <vector>
 
 #include <SDL_error.h>
@@ -48,10 +49,10 @@
 
 namespace
 {
-    bool isPNGFilePath( const std::string & path )
+    bool isPNGFilePath( const std::string_view path )
     {
         const std::string pngExtension( ".png" );
-        return path.size() > pngExtension.size() && ( path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 );
+        return path.size() >= pngExtension.size() && ( path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 );
     }
 
     std::vector<uint8_t> PALPalette()
@@ -165,12 +166,64 @@ namespace fheroes2
 
     bool Load( const std::string & path, Image & image )
     {
+#if defined( ENABLE_PNG )
+        SDL_Surface * surface = IMG_Load( path.c_str() );
+#else
         SDL_Surface * surface = SDL_LoadBMP( path.c_str() );
+#endif
         if ( surface == nullptr ) {
             return false;
         }
 
-        if ( surface->format->BytesPerPixel == 3 ) {
+        if ( surface->format->BytesPerPixel == 1 ) {
+            const SDL_Palette * palette = surface->format->palette;
+            assert( palette != nullptr );
+
+            image.resize( surface->w, surface->h );
+
+            const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
+            uint8_t * outY = image.image();
+            uint8_t * transformY = image.transform();
+
+            const uint8_t * inYEnd = inY + surface->h * surface->pitch;
+
+            for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w, transformY += surface->w ) {
+                const uint8_t * inX = inY;
+                uint8_t * outX = outY;
+                uint8_t * transformX = transformY;
+                const uint8_t * inXEnd = inX + surface->w;
+
+                for ( ; inX != inXEnd; ++inX, ++outX, ++transformX ) {
+                    assert( *inX < palette->ncolors );
+                    const SDL_Color * color = palette->colors + *inX;
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+                    if ( color->a < 255 ) {
+                        if ( color->a == 0 ) {
+                            *outX = 0;
+                            *transformX = 1;
+                        }
+                        else if ( color->r == 0 && color->g == 0 && color->b == 0 ) {
+                            *outX = 0;
+                            *transformX = 2;
+                        }
+                        else {
+                            *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
+                            *transformX = 0;
+                        }
+                    }
+                    else {
+                        *outX = GetColorId( color->r, color->g, color->b );
+                        *transformX = 0;
+                    }
+#else
+                    // SDL 1 doesn't support RGBA colors.
+                    *outX = GetColorId( color->r, color->g, color->b );
+                    *transformX = 0;
+#endif
+                }
+            }
+        }
+        else if ( surface->format->BytesPerPixel == 3 ) {
             image.resize( surface->w, surface->h );
             memset( image.transform(), 0, surface->w * surface->h );
 
@@ -209,9 +262,11 @@ namespace fheroes2
                     const uint8_t alpha = *( inX + 3 );
                     if ( alpha < 255 ) {
                         if ( alpha == 0 ) {
+                            *outX = 0;
                             *transformX = 1;
                         }
                         else if ( *inX == 0 && *( inX + 1 ) == 0 && *( inX + 2 ) == 0 ) {
+                            *outX = 0;
                             *transformX = 2;
                         }
                         else {

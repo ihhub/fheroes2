@@ -197,7 +197,7 @@ namespace Interface
         void EventContinueMovement() const;
         void EventKingdomInfo() const;
         void EventCastSpell();
-        void EventSwitchShowRadar();
+        void EventSwitchShowRadar() const;
         void EventSwitchShowStatus() const;
         void EventSwitchShowButtons() const;
         void EventSwitchShowIcons() const;

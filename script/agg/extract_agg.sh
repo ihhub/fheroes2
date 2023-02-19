@@ -2,7 +2,7 @@
 
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2023                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -20,7 +20,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-set -e
+set -e -o pipefail
 
 PATH="$(dirname "$0"):$PATH"
 
@@ -32,4 +32,10 @@ for DIR in agg/*; do
     fi
 
     icn2img "icn/$(basename "$DIR")" agg/*/kb.pal "$DIR"/*.icn
+    82m2wav "wav/$(basename "$DIR")" "$DIR"/*.82m
+    xmi2midi "midi/$(basename "$DIR")" "$DIR"/*.xmi
 done
+
+pal2img agg/*/kb.pal palette.png
+
+echo -e "\nAsset extraction completed successfully."

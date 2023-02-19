@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 15:51+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -30,120 +30,140 @@ msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"НОВАЯ\n"
+"ИГРА"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+" СОХРА-\n"
+"НИТЬ\n"
+"ИГРУ"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+" ЗАГРУ-\n"
+"ЗИТЬ\n"
+"ИГРУ"
 
 msgid "INFO"
 msgstr ""
+" СЦЕНА-\n"
+"РИЙ"
 
 msgid "QUIT"
-msgstr ""
+msgstr "ВЫЙТИ"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ОТМЕНА"
 
 msgid "OKAY"
-msgstr ""
+msgstr "ОК"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ПРИНЯТЬ"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "ОТКЛОНИТЬ"
 
 msgid "LEARN"
-msgstr ""
+msgstr "ИЗУЧИТЬ"
 
 msgid "TRADE"
-msgstr ""
+msgstr "МЕНЯТЬ"
 
 msgid "YES"
-msgstr ""
+msgstr "ДА"
 
 msgid "NO"
-msgstr ""
+msgstr "НЕТ"
 
 msgid "EXIT"
-msgstr ""
+msgstr "ВЫЙТИ"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "УВОЛИТЬ"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "УЛУЧШИТЬ"
 
 msgid "RESTART"
-msgstr ""
+msgstr "СНАЧАЛА"
 
 msgid "S"
-msgstr ""
+msgstr "М"
 
 msgid "M"
-msgstr ""
+msgstr "С"
 
 msgid "L"
-msgstr ""
+msgstr "Б"
 
 msgid "X-L"
-msgstr ""
+msgstr "О-Б"
 
 msgid "ALL"
-msgstr ""
+msgstr "ВСЕ"
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"ОБЫЧНАЯ\n"
+"ИГРА"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
-msgstr ""
+msgstr "КАМПАНИЯ"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"СОВМЕСТНАЯ\n"
+"ИГРА"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "НАСТРОЙКИ"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"ВОЙНЫ ЗА\n"
+"ПРЕСТОЛ"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"ЦЕНА\n"
+"ВЕРНОСТИ"
 
 msgid "HOT SEAT"
 msgstr ""
+"ЗА ОДНОЙ\n"
+"МАШИНОЙ"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 ИГРОКА"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 ИГРОКА"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 ИГРОКА"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 ИГРОКОВ"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 ИГРОКОВ"
 
 msgid "GIFT"
 msgstr "ОТДАТЬ"
@@ -1565,6 +1585,10 @@ msgstr "Символ Неудачи"
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Высший Свиток"
 
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Баллиста"
+
 msgid "campaignBonus|Hideous Mask"
 msgstr "Ужасная Маска"
 
@@ -2600,18 +2624,6 @@ msgstr ""
 "побеждаете их под дикие вопли толпы. Тренер гладиаторов, впечатлённый Вашим "
 "умением, соглашается обучить Вас выбранному навыку."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr "Вы не можете позволить себе улучшения для Вашей армии!"
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Ваши войска могут быть улучшены, но за это придётся заплатить. Вы согласны?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Вы уверены, что хотите распустить этот отряд?"
-
 msgid "Attack Skill"
 msgstr "Атака"
 
@@ -2632,6 +2644,18 @@ msgstr "Здоровье"
 
 msgid "Hit Points Left"
 msgstr "Тек. здоровье"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr "Вы не можете позволить себе улучшения для Вашей армии!"
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Ваши войска могут быть улучшены, но за это придётся заплатить. Вы согласны?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Вы уверены, что хотите распустить этот отряд?"
 
 msgid "Followers"
 msgstr "Последователи"
@@ -3062,13 +3086,13 @@ msgid "Number to buy:"
 msgstr "Нанять:"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Нанять выбранных существ."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Выбрать максимальное количество существ для найма."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Выбрать всего 1 существо для найма."
 
 msgid "Select Game Resolution:"
 msgstr "Выбор разрешения экрана:"
@@ -3698,13 +3722,12 @@ msgstr "Посмотреть очки рейтинга за кампании."
 msgid "This file contains a save with an invalid game type."
 msgstr "Этот файл содержит сохранение с некорректным типом игры."
 
-#, fuzzy
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
-"Этот файл сохранен в версии \"Цена верности\".\n"
-"Некоторые элементы игры будут недоступны."
+"Этот файл сохранён для карты дополнения \"Цена верности\", но "
+"соответствующие игровые ресурсы не обнаружены."
 
 msgid "Unsupported save format: "
 msgstr "Неподдерживаемый формат сохранения: "
@@ -4366,6 +4389,12 @@ msgstr "Доход королевства"
 msgid "Kingdom Income per day."
 msgstr "Ежедневный доход королевства."
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Вы стали хозяином маяка, теперь все Ваши корабли будут передвигаться по морю "
+"гораздо дальше."
+
 msgid "English"
 msgstr "Английский"
 
@@ -4876,15 +4905,15 @@ msgstr "Выпив свежей воды Вы получаете бонус уд
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Вы пьёте из фонтана, но ничего не происходит."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Вы посетили кольцо фей, но ничего не произошло."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "Ваше войско вступает в кольцо фей, чары которого принесут Вам удачу в "
 "грядущем сражении."
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Вы посетили кольцо фей, но ничего не произошло."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -5271,13 +5300,6 @@ msgstr ""
 "потереть?"
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-"Вы подошли к заброшенной шахте. Возможно в ней живут Привидения. Хотите "
-"войти и проверить это?"
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5338,6 +5360,13 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "%{name} переходит под Ваш контроль."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+"Вы подошли к заброшенной шахте. Возможно в ней живут Привидения. Хотите "
+"войти и проверить это?"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6974,8 +7003,12 @@ msgstr "Событие"
 msgid "Dragon City"
 msgstr "Драконий город"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Маяк"
+msgid_plural "Lighthouses"
+msgstr[0] "Маяк"
+msgstr[1] "Маяк"
+msgstr[2] "Маяк"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -7080,7 +7113,7 @@ msgid "Nothing Special"
 msgstr "Ничего особенного"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Мшистая скала"
 
 msgid "Watch Tower"
 msgstr "Обзорная башня"
