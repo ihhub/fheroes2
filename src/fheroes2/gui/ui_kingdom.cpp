@@ -73,9 +73,7 @@ namespace fheroes2
         Copy( lighthouseLight, 0, 0, combined, TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset, TILEWIDTH, TILEWIDTH );
 
         const CustomImageDialogElement lighthouseImageElement( combined );
-
-        const Text lighthouseControlledText( std::to_string( lighthouseCount ), FontType::normalWhite() );
-        const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( lighthouseControlledText ) );
+        const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( std::to_string( lighthouseCount ), FontType::normalWhite() ) );
 
         // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
         showMessage( Text( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
