@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 15:09+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2633,19 +2633,6 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Felfejlesztheted a csoportot, de ez többe kerül. Fel szeretnéd fejleszteni "
-"őket?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Biztos vagy benne hogy feloszlatod ezt a sereget?"
-
 msgid "Attack Skill"
 msgstr "Támadóerő"
 
@@ -2666,6 +2653,19 @@ msgstr "Életerő-pontok"
 
 msgid "Hit Points Left"
 msgstr "Maradék életerő-pontok"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Felfejlesztheted a csoportot, de ez többe kerül. Fel szeretnéd fejleszteni "
+"őket?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Biztos vagy benne hogy feloszlatod ezt a sereget?"
 
 #, fuzzy
 msgid "Followers"
