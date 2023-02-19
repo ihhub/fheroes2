@@ -54,6 +54,7 @@ std::string StringLower( std::string str );
 std::string StringUpper( std::string str );
 
 std::vector<std::string> StringSplit( const std::string &, const std::string & );
+std::vector<std::string> stringSplit( const std::string &, const size_t, const char delimiter = ' ' );
 
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );

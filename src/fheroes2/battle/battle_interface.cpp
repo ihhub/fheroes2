@@ -369,41 +369,10 @@ namespace Battle
             return border.GetRect();
         }
 
-        // Split message at spaces when it's too long to fit in the box
-        static std::vector<std::string> splitMessage( const std::string & message, size_t maxLength )
-        {
-            std::vector<std::string> result;
-            std::string::size_type start = 0;
-            std::string::size_type currentEnd = 0;
-            std::string::size_type nextEnd = 0;
-
-            if ( message.length() <= maxLength ) {
-                result.push_back( message );
-                return result;
-            }
-
-            do {
-                currentEnd = nextEnd;
-                nextEnd = message.find( ' ', currentEnd + 1 );
-                if ( nextEnd == std::string::npos )
-                    nextEnd = message.length();
-
-                if ( nextEnd - start > maxLength ) {
-                    result.push_back( message.substr( start, currentEnd - start ) );
-                    start = currentEnd + 1;
-                }
-            } while ( nextEnd != message.length() );
-
-            if ( start != message.length() )
-                result.push_back( message.substr( start ) );
-
-            return result;
-        }
-
         void AddMessage( const std::string & str )
         {
             const int maxBattleLogSize = 72;
-            std::vector<std::string> splitMessages = splitMessage( str, maxBattleLogSize );
+            std::vector<std::string> splitMessages = stringSplit( str, maxBattleLogSize );
             messages.insert( messages.end(), std::make_move_iterator( splitMessages.begin() ), std::make_move_iterator( splitMessages.end() ) );
             if ( !openlog ) {
                 _scrollbar.hide();

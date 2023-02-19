@@ -108,35 +108,35 @@ int GetInt( const std::string & str )
         // hex
         if ( str.size() > 3 && str.at( 0 ) == '0' && std::tolower( str.at( 1 ) ) == 'x'
              && std::all_of( str.begin() + 2, str.end(), []( const unsigned char c ) { return std::isxdigit( c ); } ) ) {
-        std::istringstream ss( str );
-        ss >> std::hex >> res;
-    }
-    else
-    // str
-    {
-        std::string lower = StringLower( str );
+            std::istringstream ss( str );
+            ss >> std::hex >> res;
+        }
+        else
+        // str
+        {
+            std::string lower = StringLower( str );
 
-        if ( lower == "on" )
-            return 1;
-        else if ( lower == "one" )
-            return 1;
-        else if ( lower == "two" )
-            return 2;
-        else if ( lower == "three" )
-            return 3;
-        else if ( lower == "four" )
-            return 4;
-        else if ( lower == "five" )
-            return 5;
-        else if ( lower == "six" )
-            return 6;
-        else if ( lower == "seven" )
-            return 7;
-        else if ( lower == "eight" )
-            return 8;
-        else if ( lower == "nine" )
-            return 9;
-    }
+            if ( lower == "on" )
+                return 1;
+            else if ( lower == "one" )
+                return 1;
+            else if ( lower == "two" )
+                return 2;
+            else if ( lower == "three" )
+                return 3;
+            else if ( lower == "four" )
+                return 4;
+            else if ( lower == "five" )
+                return 5;
+            else if ( lower == "six" )
+                return 6;
+            else if ( lower == "seven" )
+                return 7;
+            else if ( lower == "eight" )
+                return 8;
+            else if ( lower == "nine" )
+                return 9;
+        }
 
     return res;
 }
@@ -170,6 +170,36 @@ std::vector<std::string> StringSplit( const std::string & str, const std::string
         vec.push_back( str.substr( pos1, str.size() - pos1 ) );
 
     return vec;
+}
+
+std::vector<std::string> stringSplit( const std::string & message, const size_t maxLength, const char delimiter )
+{
+    std::vector<std::string> result;
+    std::string::size_type start = 0;
+    std::string::size_type currentEnd = 0;
+    std::string::size_type nextEnd = 0;
+
+    if ( message.length() <= maxLength ) {
+        result.push_back( message );
+        return result;
+    }
+
+    do {
+        currentEnd = nextEnd;
+        nextEnd = message.find( delimiter, currentEnd + 1 );
+        if ( nextEnd == std::string::npos )
+            nextEnd = message.length();
+
+        if ( nextEnd - start > maxLength ) {
+            result.push_back( message.substr( start, currentEnd - start ) );
+            start = currentEnd + 1;
+        }
+    } while ( nextEnd != message.length() );
+
+    if ( start != message.length() )
+        result.push_back( message.substr( start ) );
+
+    return result;
 }
 
 std::string InsertString( const std::string & src, size_t pos, const char * c )
