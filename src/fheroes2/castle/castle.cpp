@@ -223,7 +223,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     //    Is it allowed to build a castle?
     //
     // - unused 29 bytes
-    //    Always zeroes.
+    //    Always zeros.
 
     StreamBuf dataStream( data );
 
@@ -454,7 +454,7 @@ void Castle::PostLoad()
     if ( building & DWELLING_UPGRADE7 )
         dwelling[5] = Monster( race, DWELLING_UPGRADE7 ).GetGrown();
 
-    // fix upgrade dwelling dependend from race
+    // fix upgrade dwelling dependent from race
     switch ( race ) {
     case Race::BARB:
         building &= ~( DWELLING_UPGRADE3 | DWELLING_UPGRADE6 );
@@ -2529,7 +2529,7 @@ void Castle::setName( const std::set<std::string> & usedNames )
 
 int Castle::GetControl() const
 {
-    /* gray towns: ai control */
+    /* gray towns: AI control */
     return GetColor() & Color::ALL ? GetKingdom().GetControl() : CONTROL_AI;
 }
 

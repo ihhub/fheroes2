@@ -1,13 +1,12 @@
 # Bulgarian translation of fheroes2
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 12:11+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -709,7 +708,7 @@ msgstr "%{name} пропускат своя ред."
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
 msgstr[0] "%{attacker} нанася %{damage} щети."
-msgstr[1] "%{attacker} нанася %{damage} щети."
+msgstr[1] "%{attacker} нанасят %{damage} щети."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1578,6 +1577,9 @@ msgstr "Медал Физбин"
 
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Най-могъщият свитък"
+
+msgid "campaignBonus|Gauntlets"
+msgstr "Ръкавици"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Отвратителна маска"
@@ -2522,7 +2524,7 @@ msgstr ""
 "бойното поле, с поне едно празно пространство между всяка армия."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "\"Групираната\" бойна формация обединява армията ти в центъра от твоята "
@@ -2625,19 +2627,6 @@ msgstr ""
 "умения, възрастният треньор на гладиатори се съгласява да те обучи на умение "
 "по твой избор."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr "Не можеш да си позволиш да надграждиш войските си!"
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Твоите войски могат да бъдат подобрени, но това ще ти струва скъпо. Искаш ли "
-"да ги надстроиш?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Сигурен ли си, че искаш да разпуснеш тази армия?"
-
 msgid "Attack Skill"
 msgstr "Атака"
 
@@ -2658,6 +2647,19 @@ msgstr "Живот"
 
 msgid "Hit Points Left"
 msgstr "Ост. живот"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr "Не можеш да си позволиш да надграждиш войските си!"
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Твоите войски могат да бъдат подобрени, но това ще ти струва скъпо. Искаш ли "
+"да ги надстроиш?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Сигурен ли си, че искаш да разпуснеш тази армия?"
 
 msgid "Followers"
 msgstr "Последователи"
@@ -3357,7 +3359,7 @@ msgid "Battles"
 msgstr "Сражения"
 
 msgid "autoBattle|Manual"
-msgstr "Вручную"
+msgstr "Ръчно"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Промени скоростта, с която твоите герои се движат на главния екран."
@@ -3542,14 +3544,14 @@ msgstr "Броят дни, прекарани в тази кампания."
 msgid "Project Coordination and Core Development"
 msgstr "Координация на проекта и основно развитие"
 
-msgid "QA and Support"
-msgstr "Гарантиране на качеството и поддръжка"
+msgid "Development"
+msgstr "Разработка"
 
 msgid "Visit us at "
 msgstr "Посетете ни на "
 
-msgid "Development"
-msgstr "Разработка"
+msgid "QA and Support"
+msgstr "Гарантиране на качеството и поддръжка"
 
 msgid "Dev and Support"
 msgstr "Разработка и поддръжка"
@@ -3716,15 +3718,14 @@ msgstr "Вижте високите резултати за кампании."
 msgid "This file contains a save with an invalid game type."
 msgstr "Този файл съдържа запис с невалиден тип игра."
 
-#, fuzzy
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
-"Този файл е запазен от версията на играта \"The Price of Loyalty\".\n"
-"Някои артикули може да не са налични."
+"Този файл е запазен за \"Цената на лоялността\", но съответните активи на "
+"играта не са предоставени на двигателя."
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr "Неподдържан формат за запис: "
 
 msgid "Current game version: "
@@ -4397,6 +4398,11 @@ msgstr "Приходи на царството"
 msgid "Kingdom Income per day."
 msgstr "Приходи на царството за ден."
 
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"За всеки контролиран фар, твойте кораби ще се придвижват все повече всеки "
+"ден."
+
 msgid "English"
 msgstr "Английски"
 
@@ -4684,7 +4690,7 @@ msgid "%{count} / day"
 msgstr "%{count} / ден"
 
 msgid "one"
-msgstr "едно"
+msgstr "една"
 
 msgid "two"
 msgstr "две"
@@ -4874,7 +4880,7 @@ msgid ""
 "%{skill}.\n"
 " \n"
 msgstr ""
-"Приближаваш се до хижата и виждаш вътре вещица изучаваща древен том на "
+"Приближаваш се до хижата и виждаш вътре вещица изучаваща древен том по "
 "%{skill}.\n"
 "\n"
 
@@ -4909,15 +4915,15 @@ msgstr "Докато пиеш сладката вода, печелиш късм
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Пиеш от омагьосания фонтан, но нищо не се случва."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Влизаш във пръстена на фейте, но нищо не се случва."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "С влизането в мистичния приказен пръстен армията ти печели късмет за "
 "следващата си битка."
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Влизаш във пръстена на фейте, но нищо не се случва."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -5242,8 +5248,8 @@ msgid ""
 "guarded by a nearby %{monster}. Do you want to fight the %{monster} for the "
 "artifact?"
 msgstr ""
-"През поляна наблюдаваш древен артефакт. За съжаление, той се охранява от "
-"близко %{monster}. Искате ли да се биете с %{monster} за артефакта?"
+"На една поляна виждаш древен артефакт. За съжаление, той се охранява от "
+"%{monster}. Искаш ли да се биеш с %{monster} за артефакта?"
 
 msgid "Victorious, you take your prize, the %{art}."
 msgstr "Победител, ти вземаш своята награда, %{art}."
@@ -5307,13 +5313,6 @@ msgstr ""
 "да потъркаш лампата?"
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-"Попадаш на изоставена златна мина. Мината изглежда обитавана от духове. "
-"Желаеш ли да влезеш?"
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5375,6 +5374,13 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "Получаваш контрол над %{name}."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+"Попадаш на изоставена златна мина. Мината изглежда обитавана от духове. "
+"Желаеш ли да влезеш?"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6072,13 +6078,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} е %{race} (Ниво %{level})"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"'Групирана' бойна формация обединява армията ти в центъра на твоята страна "
-"на бойното поле."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Сигурен ли си, че искаш да отсвободиш този герой?"
@@ -7033,7 +7032,9 @@ msgid "Dragon City"
 msgstr "Драконов град"
 
 msgid "Lighthouse"
-msgstr "Фар"
+msgid_plural "Lighthouses"
+msgstr[0] "Фар"
+msgstr[1] "Фарове"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -7136,7 +7137,7 @@ msgid "Nothing Special"
 msgstr "Нищо специално"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Мъхеста скала"
 
 msgid "Watch Tower"
 msgstr "Стражева кула"
@@ -7459,7 +7460,7 @@ msgid "Sprite"
 msgstr "Фея"
 
 msgid "Sprites"
-msgstr "Фей"
+msgstr "Феи"
 
 msgid "Dwarf"
 msgstr "Джудже"
@@ -9947,25 +9948,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Некромант"
-
-#~ msgid "Cyberlore Studios"
-#~ msgstr "Студия Cyberlore"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Нека тази единица да изчака"
-
-#~ msgid "Wait"
-#~ msgstr "Изчакай"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Изчаква текущото създание. Текущото създание отлага реда си, докато не "
-#~ "дойде редът на всички други същества."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} чакат своя ред."

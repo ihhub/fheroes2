@@ -12,28 +12,34 @@ jobs:
           platform: x86
           build_config: Release-SDL1
           deploy_config: SDL1
-          package_name: fheroes2_windows_x86_SDL1
+          installer_package_name: fheroes2_windows_x86_SDL1_installer.exe
+          zip_package_name: fheroes2_windows_x86_SDL1.zip
           release_name: Windows x86 build with SDL1 (latest commit)
           release_tag: fheroes2-windows-x86-SDL1
         - name: SDL1 x64
           platform: x64
           build_config: Release-SDL1
           deploy_config: SDL1
-          package_name: fheroes2_windows_x64_SDL1
+          installer_package_name: fheroes2_windows_x64_SDL1_installer.exe
+          zip_package_name: fheroes2_windows_x64_SDL1.zip
           release_name: Windows x64 build with SDL1 (latest commit)
           release_tag: fheroes2-windows-x64-SDL1
         - name: SDL2 x86
           platform: x86
           build_config: Release-SDL2
           deploy_config: SDL2
-          package_name: fheroes2_windows_x86_SDL2
+          installer_package_name: fheroes2_windows_x86_SDL2_installer.exe
+          zip_package_name: fheroes2_windows_x86_SDL2.zip
+          tools_package_name: fheroes2_tools_windows_x86_SDL2.zip
           release_name: Windows x86 build with SDL2 (latest commit)
           release_tag: fheroes2-windows-x86-SDL2
         - name: SDL2 x64
           platform: x64
           build_config: Release-SDL2
           deploy_config: SDL2
-          package_name: fheroes2_windows_x64_SDL2
+          installer_package_name: fheroes2_windows_x64_SDL2_installer.exe
+          zip_package_name: fheroes2_windows_x64_SDL2.zip
+          tools_package_name: fheroes2_tools_windows_x64_SDL2.zip
           release_name: Windows x64 build with SDL2 (latest commit)
           release_tag: fheroes2-windows-x64-SDL2
     name: MSVC (${{ matrix.config.name }})
@@ -75,9 +81,13 @@ jobs:
     - name: Build tools
       run: |
         cd src/tools
+        MSBuild.exe 82m2wav-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+        MSBuild.exe bin2txt-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
         MSBuild.exe extractor-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
         MSBuild.exe icn2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
-        MSBuild.exe bin2txt-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+        MSBuild.exe pal2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+        MSBuild.exe til2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+        MSBuild.exe xmi2midi-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
     - name: Generate translations
       run: |
         set PATH=C:\msys64\usr\bin;%PATH%
@@ -92,31 +102,81 @@ jobs:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
     - name: Create ZIP package
       run: |
-        7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip .\\"$BUILD_DIR"\\fheroes2.exe .\\"$BUILD_DIR"\\*.dll \
-                               .\\script\\demo\\*.bat .\\script\\demo\\*.ps1 .\\script\\homm2\\*.bat .\\script\\homm2\\*.ps1 \
-                               .\\docs\\README.txt LICENSE changelog.txt files\\lang\\*.mo files\\data\\*.h2d
+        7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.zip_package_name }} \
+                               .\\"$BUILD_DIR"\\fheroes2.exe \
+                               .\\"$BUILD_DIR"\\*.dll \
+                               LICENSE \
+                               changelog.txt \
+                               .\\docs\\README.txt \
+                               files\\data\\*.h2d \
+                               files\\lang\\*.mo \
+                               .\\script\\demo\\*.bat \
+                               .\\script\\demo\\*.ps1 \
+                               .\\script\\homm2\\*.bat \
+                               .\\script\\homm2\\*.ps1 
         if [[ ${{ matrix.config.deploy_config }} == SDL2 ]]; then
-            7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\soundfonts\\*
+            7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.zip_package_name }} files\\soundfonts\\*
+        fi
+      env:
+        BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
+    - name: Create tools package
+      if: ${{ matrix.config.tools_package_name != '' }}
+      run: |
+        7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.tools_package_name }} \
+                               .\\"$BUILD_DIR"\\82m2wav.exe \
+                               .\\"$BUILD_DIR"\\extractor.exe \
+                               .\\"$BUILD_DIR"\\icn2img.exe \
+                               .\\"$BUILD_DIR"\\pal2img.exe \
+                               .\\"$BUILD_DIR"\\xmi2midi.exe \
+                               LICENSE \
+                               .\\docs\\GRAPHICAL_ASSETS.md \
+                               .\\script\\agg\\extract_agg.bat
+        if [[ ${{ matrix.config.deploy_config }} == SDL2 ]]; then
+            7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.tools_package_name }} \
+                                   .\\"$BUILD_DIR"\\SDL2.dll \
+                                   .\\"$BUILD_DIR"\\SDL2_image.dll
+        else
+            false
         fi
       env:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
-        name: ${{ matrix.config.package_name }}_installer.exe
-        path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}_installer.exe
+        name: ${{ matrix.config.installer_package_name }}
+        path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.installer_package_name }}
         if-no-files-found: error
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
-        name: ${{ matrix.config.package_name }}.zip
-        path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}.zip
+        name: ${{ matrix.config.zip_package_name }}
+        path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.zip_package_name }}
+        if-no-files-found: error
+    - uses: actions/upload-artifact@v3
+      if: ${{ github.event_name == 'pull_request' && matrix.config.tools_package_name != '' }}
+      with:
+        name: ${{ matrix.config.tools_package_name }}
+        path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.tools_package_name }}
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
-      if: ${{ github.event_name == 'push' }}
+      if: ${{ github.event_name == 'push' && matrix.config.tools_package_name == '' }}
       with:
-        artifacts: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}_installer.exe,
-                   build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.package_name }}.zip
+        artifacts: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.installer_package_name }},
+                   build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.zip_package_name }}
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ matrix.config.release_name }}
+        tag: ${{ matrix.config.release_tag }}
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' && matrix.config.tools_package_name != '' }}
+      with:
+        artifacts: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.installer_package_name }},
+                   build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.zip_package_name }},
+                   build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.tools_package_name }}
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: ${{ matrix.config.release_name }}

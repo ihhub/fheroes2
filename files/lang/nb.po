@@ -1,13 +1,12 @@
 # Norwegian translation for fheroes2
-# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# Copyright (C) 2021 - 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 12:11+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-12-18 08:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1609,6 +1608,10 @@ msgstr "Fizbinmedaljen"
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Yprst. kunskpsrull"
 
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Hurtigballisten"
+
 msgid "campaignBonus|Hideous Mask"
 msgstr "Avskyelig maske"
 
@@ -2578,7 +2581,7 @@ msgstr ""
 "slagmarken med minst ett ledig felt mellom hver enkelt tropp."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "\"Gruppert\" kampoppstilling setter styrkene dine tett sammen i midten av "
@@ -2681,20 +2684,6 @@ msgstr ""
 "gladiatormester ble så imponert av deg at han går med på å trene deg opp i "
 "én ferdighet etter ditt ønske."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr "Du har ikke råd til å oppgradere troppene dine!"
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Krigerne dine kan oppgraderes, men det vil koste deg dyrt. Ønsker du å "
-"oppgradere dem likevel?"
-
-# Avskjedige
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Er du sikker på at du vil bortvise denne troppen?"
-
 msgid "Attack Skill"
 msgstr "Angrep"
 
@@ -2715,6 +2704,20 @@ msgstr "Liv"
 
 msgid "Hit Points Left"
 msgstr "Liv igjen"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr "Du har ikke råd til å oppgradere troppene dine!"
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Krigerne dine kan oppgraderes, men det vil koste deg dyrt. Ønsker du å "
+"oppgradere dem likevel?"
+
+# Avskjedige
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Er du sikker på at du vil bortvise denne troppen?"
 
 msgid "Followers"
 msgstr "Følgere"
@@ -3613,14 +3616,14 @@ msgstr ""
 "og hovedprogramvare-\n"
 "utvikling"
 
-msgid "QA and Support"
-msgstr "Kvalitetssikring og støtte"
+msgid "Development"
+msgstr "Programvareutvikling"
 
 msgid "Visit us at "
 msgstr "Treff oss på "
 
-msgid "Development"
-msgstr "Programvareutvikling"
+msgid "QA and Support"
+msgstr "Kvalitetssikring og støtte"
 
 msgid "Dev and Support"
 msgstr "Utvikling og støtte"
@@ -3796,7 +3799,7 @@ msgstr ""
 "Denne filen ble lagret i spillutgaven \"Prisen for trofasthet\".\n"
 "Enkelte ting kan mangle."
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr "Ustøttet lagringsformat: "
 
 msgid "Current game version: "
@@ -4473,6 +4476,12 @@ msgstr "Kongedømmets inntekt"
 msgid "Kingdom Income per day."
 msgstr "Dette er den daglige inntekten til kongedømmet ditt."
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Fyrtårnet er herved under din kontroll og alle skipene dine vil fra nå av "
+"kunne flytte seg lengre hver dag."
+
 msgid "English"
 msgstr "Engelsk"
 
@@ -4991,13 +5000,13 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Du drikker fra den magiske fontenen, men det skjer ingenting."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Du går inn i feenes ring, men ingenting skjer."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr "På innsiden av feenes ring får hæren din flaks for sin neste kamp."
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Du går inn i feenes ring, men ingenting skjer."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -5412,13 +5421,6 @@ msgstr ""
 "Vil du gni på den?"
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-"Du kommer over ei forlatt gullgruve. Gruva ser ut til å være hjemsøkt.\n"
-"Vil du gå inn?"
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5479,6 +5481,13 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "Du tar kontroll over en %{name}."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+"Du kommer over ei forlatt gullgruve. Gruva ser ut til å være hjemsøkt.\n"
+"Vil du gå inn?"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6201,13 +6210,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}en %{name} (level %{level})"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"\"Gruppert\" kampoppstilling setter styrkene dine tett sammen i midten av "
-"din side av slagmarken."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Er du sikker på at du ønsker å bortvise denne helten?"
@@ -7171,8 +7173,11 @@ msgstr "Hendelse"
 msgid "Dragon City"
 msgstr "Dragenes landsby"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Fyrtårn"
+msgid_plural "Lighthouses"
+msgstr[0] "Fyrtårn"
+msgstr[1] "Fyrtårn"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -10151,22 +10156,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Sortekunstner"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Avvent denne stryken"
-
-#~ msgid "Wait"
-#~ msgstr "Avvent"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Lar den nåværende skapningen vente. Den nåværende skapningen utsetter "
-#~ "turen sin til etter alle andre skapninger har gjort turen sin."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "Troppen med %{name} avventet turen sin."

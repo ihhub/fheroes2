@@ -374,7 +374,7 @@ namespace AI
         case Spell::STEELSKIN:
             ratio = 0.2;
             break;
-        // Following spell usefullness is conditional; ratio will be determined later
+        // Following spell usefulness is conditional; ratio will be determined later
         case Spell::DRAGONSLAYER:
         case Spell::ANTIMAGIC:
         case Spell::MIRRORIMAGE:

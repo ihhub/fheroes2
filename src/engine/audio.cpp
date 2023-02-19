@@ -74,7 +74,7 @@ namespace
             samples = 2048;
 #endif
             size = 0;
-            // TODO: research if we need to utilize these 2 paremeters in the future.
+            // TODO: research if we need to utilize these 2 parameters in the future.
             callback = nullptr;
             userdata = nullptr;
         }
@@ -621,7 +621,7 @@ namespace
     // By the Weber-Fechner law, humans subjective sound sensation is proportional logarithm of sound intensity.
     // So for linear changing sound intensity we have to change the volume exponential.
     // There is a good explanation at https://www.dr-lex.be/info-stuff/volumecontrols.html.
-    // This function maps sound volumes in percents to SDL units with values [0..MIX_MAX_VOLUME] by exponetial law.
+    // This function maps sound volumes in percents to SDL units with values [0..MIX_MAX_VOLUME] by exponential law.
     int normalizeToSDLVolume( const int volumePercentage )
     {
         if ( volumePercentage < 0 ) {

@@ -1,13 +1,12 @@
 # Spanish translation for fheroes2
-# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 12:11+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1524,6 +1523,10 @@ msgstr ""
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Principal Pergamino de Conocimiento"
 
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Peto de Anduran"
+
 msgid "campaignBonus|Hideous Mask"
 msgstr "Máscara Horrenda"
 
@@ -2539,7 +2542,7 @@ msgstr ""
 "entre unidades."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
@@ -2648,18 +2651,6 @@ msgstr ""
 "veterano entrenador de gladiadores acepta adiestrarte en la habilidad que "
 "prefieras."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Tus tropas pueden ser mejoradas, pero te saldrá caro. ¿Quieres actualizarlas?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "¿Estás seguro de que desea descartar este ejército?"
-
 msgid "Attack Skill"
 msgstr "Ataque"
 
@@ -2680,6 +2671,18 @@ msgstr "Puntos de daño"
 
 msgid "Hit Points Left"
 msgstr "Vida Restante"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Tus tropas pueden ser mejoradas, pero te saldrá caro. ¿Quieres actualizarlas?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "¿Estás seguro de que desea descartar este ejército?"
 
 #, fuzzy
 msgid "Followers"
@@ -3588,13 +3591,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 #, fuzzy
@@ -3779,7 +3782,7 @@ msgid ""
 "corresponding game assets have not been provided to the engine."
 msgstr ""
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 #, fuzzy
@@ -4452,6 +4455,12 @@ msgstr "Ingresos:"
 msgid "Kingdom Income per day."
 msgstr "Ingresos:"
 
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"El faro está ahora bajo tu control, todos tus barcos podrán recorrer mayor "
+"distancia por turno."
+
 msgid "English"
 msgstr ""
 
@@ -4975,15 +4984,15 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Bebes de una fuente encantada pero nada sucede."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Entras en el anillo místico de hadas pero nada sucede."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "Justo al entrar el anillo místico de las hadas tu ejército adquiere suerte "
 "para su próxima batalla"
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Entras en el anillo místico de hadas pero nada sucede."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -5385,13 +5394,6 @@ msgstr ""
 "la tierra. ¿Deseas frotar la lámpara?"
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-"Llegas a una mina de oro abandonada. La mina parece estar embrujada. "
-"¿Quieres entrar en ella?"
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5454,6 +5456,13 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "Tomas control de %{name}."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+"Llegas a una mina de oro abandonada. La mina parece estar embrujada. "
+"¿Quieres entrar en ella?"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6137,13 +6146,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
-"lado del campo de batalla."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "¿Estas seguro que quieres despedir este Héroe?"
@@ -7099,8 +7101,11 @@ msgstr ""
 msgid "Dragon City"
 msgstr "Ciudad Dragón"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Faro"
+msgid_plural "Lighthouses"
+msgstr[0] "Faro"
+msgstr[1] "Faro"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -9836,13 +9841,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Nigromante"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Esta unidad espera"
-
-#, fuzzy
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} esperando turno."

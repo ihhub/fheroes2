@@ -616,7 +616,7 @@ uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
     if ( dmg && GetCount() ) {
         uint32_t killed = HowManyWillKilled( dmg );
 
-        // mirror image dies if recieves any damage
+        // mirror image dies if it receives any damage
         if ( Modes( CAP_MIRRORIMAGE ) ) {
             dmg = hp;
             killed = GetCount();
@@ -888,7 +888,7 @@ bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
 
 bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, TargetInfo & target )
 {
-    // HACK!!! Chain lightining is the only spell which can't be casted on allies but could be applied on them
+    // HACK!!! Chain lightning is the only spell which can't be cast on allies but could be applied on them
     const bool isForceApply = ( spell.GetID() == Spell::CHAINLIGHTNING );
 
     if ( !AllowApplySpell( spell, hero, nullptr, isForceApply ) )
@@ -1155,7 +1155,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
     if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) ) {
         attackerThreat *= -1;
     }
-    // Otherwise heavy penalty for hiting our own units
+    // Otherwise heavy penalty for hitting our own units
     else if ( attacker.GetArmyColor() == defender.GetArmyColor() ) {
         const bool isTower = ( dynamic_cast<const Battle::Tower *>( this ) != nullptr );
         if ( !isTower ) {
@@ -1326,10 +1326,21 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const HeroBase * hero, TargetInfo & target )
+void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, TargetInfo & target )
+{
+    const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, hero, target.damage, false /* ignore defending hero */ );
+
+    // apply damage
+    if ( dmg ) {
+        target.damage = dmg;
+        target.killed = ApplyDamage( dmg );
+    }
+}
+
+uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const
 {
     // TODO: use fheroes2::getSpellDamage function to remove code duplication.
-    uint32_t dmg = spell.Damage() * spoint;
+    uint32_t dmg = spell.Damage() * spellPoints;
 
     switch ( GetID() ) {
     case Monster::IRON_GOLEM:
@@ -1395,6 +1406,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
     // check artifact
     if ( hero ) {
         const HeroBase * defendingHero = GetCommander();
+        const bool useDefendingHeroArts = defendingHero && !ignoreDefendingHero;
 
         switch ( spell.GetID() ) {
         case Spell::COLDRAY:
@@ -1405,7 +1417,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
                 dmg = dmg * ( 100 + value ) / 100;
             }
 
-            if ( defendingHero ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::COLD_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1428,7 +1440,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
                 dmg = dmg * ( 100 + value ) / 100;
             }
 
-            if ( defendingHero ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::FIRE_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1451,7 +1463,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
                 dmg = dmg * ( 100 + value ) / 100;
             }
 
-            if ( defendingHero != nullptr ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::LIGHTNING_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1461,7 +1473,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
 
             // update orders damage
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
-                switch ( target.damage ) {
+                switch ( targetDamage ) {
                 case 0:
                     break;
                 case 1:
@@ -1482,7 +1494,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
         }
         case Spell::ELEMENTALSTORM:
         case Spell::ARMAGEDDON: {
-            if ( defendingHero != nullptr ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::ELEMENTAL_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1497,11 +1509,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
         }
     }
 
-    // apply damage
-    if ( dmg ) {
-        target.damage = dmg;
-        target.killed = ApplyDamage( dmg );
-    }
+    return dmg;
 }
 
 void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, const HeroBase * hero )
@@ -1629,13 +1637,13 @@ bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
         checkIdleDelay();
     }
 
-    // We retun true if the animation was correctly changed adn if it is valid.
+    // We return true if the animation was correctly changed and if it is valid.
     return ( animation.switchAnimation( rule, reverse ) && animation.isValid() );
 }
 
 bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
 {
-    // We retun true if the animation was correctly changed adn if it is valid.
+    // We return true if the animation was correctly changed and if it is valid.
     return ( animation.switchAnimation( animationList, reverse ) && animation.isValid() );
 }
 

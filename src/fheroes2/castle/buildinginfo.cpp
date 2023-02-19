@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -317,7 +317,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
         break;
     }
 
-    // fix area for capratin
+    // fix area for captain
     if ( b == BUILD_CAPTAIN ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( building & BUILD_CAPTAIN ? 1 : 0 ) );
         area.width = sprite.width();

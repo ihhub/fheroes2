@@ -1152,7 +1152,7 @@ namespace
         }
     }
 
-    // CP-1251 supports Russian, Ukranian, Belarussian, Bulgarian, Serbian Cyrillic, Macedonian and English.
+    // CP-1251 supports Russian, Ukrainian, Belarussian, Bulgarian, Serbian Cyrillic, Macedonian and English.
     void generateCP1251Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // TODO: add support for Serbian Cyrillic and Macedonian languages by generating missing letters.
@@ -1461,7 +1461,7 @@ namespace
             fheroes2::SetTransformPixel( font[227 - 32], 4, 2, 1 );
             updateNormalFontLetterShadow( font[227 - 32] );
 
-            // The same letter as above but with a verical line at the top.
+            // The same letter as above but with a vertical line at the top.
             font[180 - 32].resize( font[227 - 32].width(), font[227 - 32].height() + 1 );
             font[180 - 32].reset();
             fheroes2::Copy( font[227 - 32], 0, 0, font[180 - 32], 0, 1, font[227 - 32].width(), font[227 - 32].height() );
@@ -4086,6 +4086,7 @@ namespace
 
         // Offset symbols that either have diacritics or need less space to neighboring symbols.
         released[109].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[129].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[136].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[143].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         released[160].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
@@ -4102,6 +4103,27 @@ namespace
         fheroes2::DrawLine( released[109], { offset + 6, offset + 12 }, { offset + 8, offset + 12 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[109], offset + 7, offset + 11, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[109], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
+
+        // '
+        released[114].resize( 3 + offset * 2, 4 + offset * 2 );
+        released[114].reset();
+        fheroes2::DrawLine( released[114], { offset + 1, offset + 0 }, { offset + 1, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[114], { offset + 2, offset + 0 }, { offset + 2, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[114], offset + 0, offset + 3, buttonGoodReleasedColor );
+
+        // y with breve.
+        released[129].resize( 9 + offset * 2, 13 + offset * 2 );
+        released[129].reset();
+        fheroes2::DrawLine( released[129], { offset + 0, offset + 3 }, { offset + 2, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[129], { offset + 6, offset + 3 }, { offset + 8, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[129], { offset + 3, offset + 8 }, { offset + 1, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[129], { offset + 5, offset + 8 }, { offset + 7, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[129], { offset + 4, offset + 8 }, { offset + 3, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[129], { offset + 0, offset + 12 }, { offset + 2, offset + 12 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[129], offset + 0, offset + 11, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[129], { offset + 3, offset + 1 }, { offset + 5, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[129], offset + 2, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[129], offset + 6, offset + 0, buttonGoodReleasedColor );
 
         // J
         released[131] = released[42];

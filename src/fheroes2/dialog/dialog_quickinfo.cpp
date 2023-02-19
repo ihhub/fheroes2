@@ -98,7 +98,7 @@ namespace
             Interface::Basic & iface = Interface::Basic::Get();
 
             iface.GetGameArea().SetCenter( updatedPosition );
-            iface.Redraw( Interface::REDRAW_RADAR );
+            iface.Redraw( Interface::REDRAW_RADAR_CURSOR );
 
             _restorer.restore();
         }
@@ -112,7 +112,7 @@ namespace
             Interface::Basic & iface = Interface::Basic::Get();
 
             iface.GetGameArea().SetCenterInPixels( _prevPosition );
-            iface.Redraw( Interface::REDRAW_RADAR );
+            iface.Redraw( Interface::REDRAW_RADAR_CURSOR );
 
             _restorer.restore();
         }

@@ -1537,6 +1537,11 @@ namespace fheroes2
     void Display::resize( int32_t width_, int32_t height_ )
     {
         assert( width_ == width() && height_ == height() );
+
+#ifdef NDEBUG
+        (void)width_;
+        (void)height_;
+#endif
     }
 
     void Display::setResolution( ResolutionInfo info )

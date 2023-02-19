@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@ namespace fheroes2
     {
         NONE,
 
-        // These bonuses are cummulative means each copy of an artifact having it will add to the total value.
+        // These bonuses are cumulative meaning each copy of an artifact having it will add to the total value.
         KNOWLEDGE_SKILL,
         ATTACK_SKILL,
         DEFENCE_SKILL,
@@ -99,7 +99,7 @@ namespace fheroes2
 
     enum class ArtifactCurseType : int32_t
     {
-        // These curses are cummulative means each copy of an artifact having it will add to the total value.
+        // These curses are cumulative meaning each copy of an artifact having it will add to the total value.
         GOLD_PENALTY,
         SPELL_POWER_SKILL,
 
