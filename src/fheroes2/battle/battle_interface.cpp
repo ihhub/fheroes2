@@ -972,7 +972,7 @@ void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<
     }
 }
 
-void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset )
+void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
