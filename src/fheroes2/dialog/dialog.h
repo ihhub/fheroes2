@@ -77,8 +77,6 @@ namespace Dialog
         DIG = 0x1000,
 
         UPGRADE_DISABLE = MAX,
-
-        READONLY = 0x2000,
         BUTTONS = ( YES | OK | NO | CANCEL )
     };
 
