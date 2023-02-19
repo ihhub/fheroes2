@@ -54,6 +54,14 @@ enum MusicSource
     MUSIC_EXTERNAL
 };
 
+enum class ZoomLevel : uint8_t
+{
+    ZoomLevel0 = 0,
+    ZoomLevel1 = 1,
+    ZoomLevel2 = 2,
+    ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
+};
+
 class Settings
 {
 public:
@@ -408,6 +416,16 @@ public:
         current_maps_file.file = file;
     }
 
+    ZoomLevel ViewWorldZoomLevel() const
+    {
+        return _viewWorldZoomLevel;
+    }
+
+    void SetViewWorldZoomLevel( ZoomLevel zoomLevel )
+    {
+        _viewWorldZoomLevel = zoomLevel;
+    }
+
     void SetProgramPath( const char * );
 
     static std::string GetVersion();
@@ -451,6 +469,7 @@ private:
 
     int game_type;
     int preferably_count_players;
+    ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };
