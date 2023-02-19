@@ -3464,7 +3464,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
                 break;
 
             case Monster::VAMPIRE_LORD:
-                msg = _n( "1 unit rised.", "%{count} units revived.", resurrects );
+                msg = _n( "1 %{unit} rised.", "%{count} %{unit} revived.", resurrects );
                 log( status, msg, resurrects, attacker.GetName() );
                 break;
             default:
