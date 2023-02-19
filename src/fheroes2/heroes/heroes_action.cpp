@@ -3058,8 +3058,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
-    Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
+    const MP2::MapObjectType objectType = world.GetTiles( tileIndex ).GetObject( tileIndex != heroPosIndex );
 
     // Play a permanent musical effect (that is, independent of the state of the object or actions with it) associated with the visited object,
     // if any, and in any case restore the music volume on exit. Auxiliary functions can play other musical effects depending on the situation.
