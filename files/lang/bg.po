@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 15:09+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2627,19 +2627,6 @@ msgstr ""
 "умения, възрастният треньор на гладиатори се съгласява да те обучи на умение "
 "по твой избор."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr "Не можеш да си позволиш да надграждиш войските си!"
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Твоите войски могат да бъдат подобрени, но това ще ти струва скъпо. Искаш ли "
-"да ги надстроиш?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Сигурен ли си, че искаш да разпуснеш тази армия?"
-
 msgid "Attack Skill"
 msgstr "Атака"
 
@@ -2660,6 +2647,19 @@ msgstr "Живот"
 
 msgid "Hit Points Left"
 msgstr "Ост. живот"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr "Не можеш да си позволиш да надграждиш войските си!"
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Твоите войски могат да бъдат подобрени, но това ще ти струва скъпо. Искаш ли "
+"да ги надстроиш?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Сигурен ли си, че искаш да разпуснеш тази армия?"
 
 msgid "Followers"
 msgstr "Последователи"
