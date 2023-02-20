@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -69,7 +69,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     std::unique_ptr<fheroes2::StandardWindow> background;
     std::unique_ptr<fheroes2::ImageRestorer> restorer;
     if ( renderBackgroundDialog ) {
-        background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+        background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
         cur_pt = { background->activeArea().x, background->activeArea().y };
     }
     else {

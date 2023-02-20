@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -81,7 +81,16 @@ namespace
     Funds getHandicapDependentIncome( const Funds & original, const Player::HandicapStatus handicapStatus )
     {
         const int32_t handicapPercentage = getHandicapIncomePercentage( handicapStatus );
-        return ( original * handicapPercentage + Funds( 99, 99, 99, 99, 99, 99, 99 ) ) / 100;
+        Funds corrected( original );
+        corrected.wood = std::min( corrected.wood, ( corrected.wood * handicapPercentage + 99 ) / 100 );
+        corrected.mercury = std::min( corrected.mercury, ( corrected.mercury * handicapPercentage + 99 ) / 100 );
+        corrected.ore = std::min( corrected.ore, ( corrected.ore * handicapPercentage + 99 ) / 100 );
+        corrected.sulfur = std::min( corrected.sulfur, ( corrected.sulfur * handicapPercentage + 99 ) / 100 );
+        corrected.crystal = std::min( corrected.crystal, ( corrected.crystal * handicapPercentage + 99 ) / 100 );
+        corrected.gems = std::min( corrected.gems, ( corrected.gems * handicapPercentage + 99 ) / 100 );
+        corrected.gold = std::min( corrected.gold, ( corrected.gold * handicapPercentage + 99 ) / 100 );
+
+        return corrected;
     }
 }
 
@@ -437,9 +446,9 @@ uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) con
 }
 
 /* set visited cell */
-void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
+void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_NONE )
 {
-    if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_ZERO )
+    if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_NONE )
         visit_object.push_front( IndexObject( index, objectType ) );
 }
 

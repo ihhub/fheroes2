@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -61,7 +61,6 @@
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
-#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -86,6 +85,10 @@ namespace
         }
         else {
             conf.Save( configurationFileName );
+
+            // Fullscreen mode can be enabled by default for some devices, we need to forcibly
+            // synchronize reality with the default config if config file was not read
+            conf.setFullScreen( conf.FullScreen() );
         }
     }
 
@@ -127,7 +130,7 @@ namespace
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            display.resize( conf.VideoMode().width, conf.VideoMode().height );
+            display.setResolution( conf.currentResolutionInfo() );
             display.fill( 0 ); // start from a black screen
 
             fheroes2::engine().setTitle( GetCaption() );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -628,12 +628,15 @@ bool Heroes::MoveStep( bool fast )
     const int32_t indexDest = path.GetDestinationIndex( true );
 
     if ( fast ) {
-        // Unveil fog before moving the hero.
-        Scoute( indexTo );
-        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) )
+        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
             MoveStep( *this, indexTo, false );
-        else
+        }
+        else {
+            // Unveil fog before moving the hero.
+            Scoute( indexTo );
+
             MoveStep( *this, indexTo, true );
+        }
 
         return true;
     }

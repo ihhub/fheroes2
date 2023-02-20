@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -463,6 +463,9 @@ public:
     void ApplyPenaltyMovement( uint32_t penalty );
     void ActionSpellCast( const Spell & spell );
 
+    // Update map in the scout area around the Hero on radar (mini-map).
+    void ScoutRadar() const;
+
     bool MayCastAdventureSpells() const;
 
     // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
@@ -493,6 +496,11 @@ public:
     void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
     void Scoute( const int tileIndex ) const;
     int GetScoute() const;
+
+    // Returns the area in map tiles around hero's position in his scout range.
+    // For non-diagonal hero move the area is set only in move direction and one tile behind (to clear Hero's previous position).
+    fheroes2::Rect GetScoutRoi( const bool ignoreDirection = false ) const;
+
     uint32_t GetVisionsDistance() const;
 
     bool isShipMaster() const;

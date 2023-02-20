@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -63,9 +63,6 @@ void StringReplace( std::string &, const char *, int );
 int CountBits( uint32_t );
 
 std::string InsertString( const std::string &, size_t, const char * );
-
-bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path );
-std::vector<uint8_t> LoadFileToMem( const std::string & path );
 
 namespace fheroes2
 {

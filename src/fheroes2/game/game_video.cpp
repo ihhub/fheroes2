@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <ostream>
@@ -132,7 +133,9 @@ namespace Video
 
         bool isFrameReady = false;
 
-        Game::passAnimationDelay( Game::CUSTOM_DELAY );
+        Game::passCustomAnimationDelay( delay );
+        // Make sure that the first run is passed immediately.
+        assert( !Game::isCustomDelayNeeded( delay ) );
 
         bool userMadeAction = false;
 

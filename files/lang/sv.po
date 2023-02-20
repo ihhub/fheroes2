@@ -1,13 +1,12 @@
 # Swedish translation for fheroes2
-# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 02:36+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -591,6 +590,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Visa information om %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr "Flyg %{monster} hit"
+
+msgid "Move %{monster} here"
+msgstr "Flytta %{monster} hit"
+
 #, fuzzy
 msgid "Shoot %{monster}"
 msgstr ""
@@ -604,12 +609,6 @@ msgstr[1] ""
 
 msgid "Attack %{monster}"
 msgstr "Attackera %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "Flyg %{monster} hit"
-
-msgid "Move %{monster} here"
-msgstr "Flytta %{monster} hit"
 
 msgid "Turn %{turn}"
 msgstr "Sväng %{turn}"
@@ -1491,6 +1490,10 @@ msgstr ""
 #, fuzzy
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Särskild Kunskapsrulle"
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Bröstharnesk"
 
 #, fuzzy
 msgid "campaignBonus|Hideous Mask"
@@ -2500,7 +2503,7 @@ msgstr ""
 "minst en tomt mellanrum mellan varje armé."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "'Grupperad' stridsformation buntar ihop din armé till mitten av din sida av "
@@ -2608,19 +2611,6 @@ msgstr ""
 "ansträngning och publiken hurrar. Den åldrade gladiatortränaren går med på "
 "att träna dig i en valfri färdighet."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Din trupper kan uppgraderas, men det kommer att bli dyrt. Vill du uppgradera "
-"dem?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Är du säker på att du vill avskeda denna armé?"
-
 msgid "Attack Skill"
 msgstr "Attackfärdighet"
 
@@ -2641,6 +2631,19 @@ msgstr "Hälsopoäng"
 
 msgid "Hit Points Left"
 msgstr "Hälsopoäng kvar"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Din trupper kan uppgraderas, men det kommer att bli dyrt. Vill du uppgradera "
+"dem?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Är du säker på att du vill avskeda denna armé?"
 
 #, fuzzy
 msgid "Followers"
@@ -3545,13 +3548,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 #, fuzzy
@@ -3734,11 +3737,11 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 msgid "Current game version: "
@@ -4269,6 +4272,9 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr "Att gräva efter artefakter tar en hel dag. Försök igen imorgon."
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
@@ -4283,9 +4289,6 @@ msgstr "Ingenting här. Var kan det vara?"
 
 msgid "Try searching on clear ground."
 msgstr "Försök att söka på bar mark."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr "Att gräva efter artefakter tar en hel dag. Försök igen imorgon."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -4388,6 +4391,12 @@ msgstr "Inkomst"
 #, fuzzy
 msgid "Kingdom Income per day."
 msgstr "Inkomst"
+
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Fyret är nu under din kontroll och alla dina skepp kommer nu förflytta sig "
+"längre varje runda."
 
 msgid "English"
 msgstr ""
@@ -4902,15 +4911,15 @@ msgstr "När du dricker det söta vattnet, ökar din tur inför nästa strid."
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Du dricker från den förtrollande fontänen, men ingenting händer."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Du kliver in i häxringen, men ingenting händer."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "När du kliver in i den mystiska häxringen, ökar din armés tur inför nästa "
 "strid."
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Du kliver in i häxringen, men ingenting händer."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -5280,13 +5289,6 @@ msgstr ""
 "lampan?"
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-"Du stöter på en övergiven guldgruva. Gruvan verkar vara hemsökt. Vill du gå "
-"in?"
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5348,6 +5350,13 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "Du fick kontroll över en %{name}."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+"Du stöter på en övergiven guldgruva. Gruvan verkar vara hemsökt. Vill du gå "
+"in?"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -5974,13 +5983,6 @@ msgstr ""
 #, fuzzy
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} av %{race} ( Level %{level} )"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"'Grupperad' stridsformation samlar ihop din armé tillsammans i mitten på din "
-"sida av stridsfältet."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Är du säker på att du vill avsätta denna hjälte?"
@@ -6855,17 +6857,65 @@ msgstr ""
 msgid "Alchemist Lab"
 msgstr "Alkemistlabb"
 
+msgid "Sign"
+msgstr "Skylt"
+
+msgid "Buoy"
+msgstr "Boj"
+
+msgid "Skeleton"
+msgstr "Skelett"
+
 msgid "Daemon Cave"
 msgstr "Demongrotta"
+
+msgid "Treasure Chest"
+msgstr "Skattkista"
 
 msgid "Faerie Ring"
 msgstr "Häxring"
 
+msgid "Campfire"
+msgstr "Lägereld"
+
+msgid "Fountain"
+msgstr "Fontän"
+
+msgid "Gazebo"
+msgstr "Lusthus"
+
+msgid "Genie Lamp"
+msgstr "Andens lampa"
+
+msgid "Archer's House"
+msgstr "Bågskyttens hus"
+
+msgid "Goblin Hut"
+msgstr "Goblinhydda"
+
+msgid "Dwarf Cottage"
+msgstr "Dvärgstuga"
+
+msgid "Peasant Hut"
+msgstr "Bondehydda"
+
+msgid "Stables"
+msgstr "Stall"
+
+msgid "Alchemist's Tower"
+msgstr "Alkemistens torn"
+
+msgid "Event"
+msgstr ""
+
 msgid "Dragon City"
 msgstr "Drakstad"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Fyr"
+msgid_plural "Lighthouses"
+msgstr[0] "Fyr"
+msgstr[1] "Fyr"
 
 #, fuzzy
 msgid "Water Wheel"
@@ -6876,11 +6926,17 @@ msgstr[1] "Vattenhjul"
 msgid "Mines"
 msgstr "Gruvor"
 
+msgid "Monster"
+msgstr "Monster"
+
 msgid "Obelisk"
 msgstr "Obelisk"
 
 msgid "Oasis"
 msgstr "Oas"
+
+msgid "Resource"
+msgstr "Resurs"
 
 msgid "Sawmill"
 msgstr "Sågverk"
@@ -6888,11 +6944,30 @@ msgstr "Sågverk"
 msgid "Oracle"
 msgstr "Orakel"
 
+msgid "Shrine of the First Circle"
+msgstr "Första kretsens tempel"
+
+#, fuzzy
+msgid "Shipwreck"
+msgstr "Skeppsbruten!"
+
+msgid "Sea Chest"
+msgstr "Sjökista"
+
 msgid "Desert Tent"
 msgstr "Ökentält"
 
+msgid "Stone Liths"
+msgstr ""
+
 msgid "Wagon Camp"
 msgstr "Godsvagnläger"
+
+msgid "Hut of the Magi"
+msgstr "De vise männens stuga"
+
+msgid "Whirlpool"
+msgstr "Strömvirvel"
 
 #, fuzzy
 msgid "Windmill"
@@ -6900,20 +6975,70 @@ msgid_plural "Windmills"
 msgstr[0] "Väderkvarn"
 msgstr[1] "Väderkvarn"
 
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "Mermaid"
+msgstr "Sjöjungfru"
+
+msgid "Boat"
+msgstr "Båt"
+
+#, fuzzy
+msgid "Random Ultimate Artifact"
+msgstr "Hitta den Ultimata artefakten"
+
+#, fuzzy
+msgid "Random Artifact"
+msgstr "Artefakt"
+
+#, fuzzy
+msgid "Random Resource"
+msgstr "Resurs"
+
+#, fuzzy
+msgid "Random Monster"
+msgstr "Slumpartat slott"
+
 msgid "Random Town"
 msgstr "Slumpartad stad"
 
 msgid "Random Castle"
 msgstr "Slumpartat slott"
 
+msgid "Eye of the Magi"
+msgstr "De vise männens öga"
+
+#, fuzzy
+msgid "Random Monster - weak"
+msgstr "Slumpartat slott"
+
+#, fuzzy
+msgid "Random Monster - medium"
+msgstr "Slumpartat slott"
+
+#, fuzzy
+msgid "Random Monster - strong"
+msgstr "Slumpartat slott"
+
+#, fuzzy
+msgid "Random Monster - very strong"
+msgstr "Slumpartat slott"
+
+msgid "Nothing Special"
+msgstr "Ingenting speciellt"
+
+msgid "Mossy Rock"
+msgstr ""
+
 msgid "Watch Tower"
 msgstr "Vakttorn"
 
-msgid "Tree City"
-msgstr "Trädstad"
-
 msgid "Tree House"
 msgstr "Trädhus"
+
+msgid "Tree City"
+msgstr "Trädstad"
 
 msgid "Ruins"
 msgstr "Ruiner"
@@ -6923,6 +7048,15 @@ msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Övergiven gruva"
+
+msgid "Sirens"
+msgstr "Sirener"
+
+msgid "Standing Stones"
+msgstr "Stenblock"
+
+msgid "Idol"
+msgstr "Avgud"
 
 msgid "Tree of Knowledge"
 msgstr "Kunskapens träd"
@@ -6942,14 +7076,32 @@ msgstr "Hobhål"
 msgid "Mercenary Camp"
 msgstr "Legosoldatsläger"
 
+msgid "Shrine of the Second Circle"
+msgstr "Andra kretsens tempel"
+
+msgid "Shrine of the Third Circle"
+msgstr "Tredje kretsens tempel"
+
 msgid "City of the Dead"
 msgstr "Dödens stad"
 
 msgid "Sphinx"
 msgstr "Sfinx"
 
+msgid "Wagon"
+msgstr "Godsvagn"
+
+msgid "Tar Pit"
+msgstr ""
+
+msgid "Artesian Spring"
+msgstr "Artesisk källa"
+
 msgid "Troll Bridge"
 msgstr "Trollbro"
+
+msgid "Watering Hole"
+msgstr "Vattenhål"
 
 msgid "Witch's Hut"
 msgstr "Häxhydda"
@@ -6957,197 +7109,17 @@ msgstr "Häxhydda"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan's Maps"
-msgstr "Magellan-kartor"
-
-msgid "Derelict Ship"
-msgstr "Övergivet skepp"
-
-#, fuzzy
-msgid "Shipwreck"
-msgstr "Skeppsbruten!"
-
-msgid "Observation Tower"
-msgstr "Observationstorn"
-
-msgid "Freeman's Foundry"
-msgstr "Hedersmedborgarnas gjuteri"
-
-msgid "Watering Hole"
-msgstr "Vattenhål"
-
-msgid "Artesian Spring"
-msgstr "Artesisk källa"
-
-msgid "Gazebo"
-msgstr "Lusthus"
-
-msgid "Archer's House"
-msgstr "Bågskyttens hus"
-
-msgid "Peasant Hut"
-msgstr "Bondehydda"
-
-msgid "Dwarf Cottage"
-msgstr "Dvärgstuga"
-
-msgid "Stone Liths"
-msgstr ""
-
-msgid "Magic Well"
-msgstr "Magisk brunn"
-
-msgid "Sign"
-msgstr "Skylt"
-
-msgid "Nothing Special"
-msgstr "Ingenting speciellt"
-
-msgid "Tar Pit"
-msgstr ""
-
-msgid "Mound"
-msgstr "Kulle"
-
-msgid "Dune"
-msgstr "Dyn"
-
-msgid "Stump"
-msgstr "Stubbe"
-
-msgid "Cactus"
-msgstr "Kaktus"
-
-msgid "Trees"
-msgstr "Träd"
-
-msgid "Dead Tree"
-msgstr "Dött träd"
-
-msgid "Mountains"
-msgstr "Berg"
-
-msgid "Volcano"
-msgstr "Vulkan"
-
-msgid "Rock"
-msgstr "Sten"
-
-msgid "Flowers"
-msgstr "Blommor"
-
-msgid "Water Lake"
-msgstr "Sjö"
-
-msgid "Mandrake"
-msgstr "Alruna"
-
-msgid "Crater"
-msgstr "Krater"
-
-msgid "Lava Pool"
-msgstr "Lavapöl"
-
-msgid "Shrub"
-msgstr "Buske"
-
-msgid "Buoy"
-msgstr "Boj"
-
-msgid "Skeleton"
-msgstr "Skelett"
-
-msgid "Treasure Chest"
-msgstr "Skattkista"
-
-msgid "Sea Chest"
-msgstr "Sjökista"
-
-msgid "Campfire"
-msgstr "Lägereld"
-
-msgid "Fountain"
-msgstr "Fontän"
-
-msgid "Genie Lamp"
-msgstr "Andens lampa"
-
-msgid "Goblin Hut"
-msgstr "Goblinhydda"
-
-msgid "Monster"
-msgstr "Monster"
-
-msgid "Resource"
-msgstr "Resurs"
-
-msgid "Whirlpool"
-msgstr "Strömvirvel"
-
-msgid "Artifact"
-msgstr "Artefakt"
-
-msgid "Boat"
-msgstr "Båt"
-
-#, fuzzy
-msgid "Random Artifact"
-msgstr "Artefakt"
-
-#, fuzzy
-msgid "Random Resource"
-msgstr "Resurs"
-
-#, fuzzy
-msgid "Random Monster - weak"
-msgstr "Slumpartat slott"
-
-#, fuzzy
-msgid "Random Monster - medium"
-msgstr "Slumpartat slott"
-
-#, fuzzy
-msgid "Random Monster - strong"
-msgstr "Slumpartat slott"
-
-#, fuzzy
-msgid "Random Monster - very strong"
-msgstr "Slumpartat slott"
-
-msgid "Standing Stones"
-msgstr "Stenblock"
-
-msgid "Event"
-msgstr ""
-
-#, fuzzy
-msgid "Random Monster"
-msgstr "Slumpartat slott"
-
-#, fuzzy
-msgid "Random Ultimate Artifact"
-msgstr "Hitta den Ultimata artefakten"
-
-msgid "Idol"
-msgstr "Avgud"
-
-msgid "Shrine of the First Circle"
-msgstr "Första kretsens tempel"
-
-msgid "Shrine of the Second Circle"
-msgstr "Andra kretsens tempel"
-
-msgid "Shrine of the Third Circle"
-msgstr "Tredje kretsens tempel"
-
-msgid "Wagon"
-msgstr "Godsvagn"
-
 msgid "Lean-To"
 msgstr ""
 
+msgid "Magellan's Maps"
+msgstr "Magellan-kartor"
+
 msgid "Flotsam"
 msgstr "Vrakgods"
+
+msgid "Derelict Ship"
+msgstr "Övergivet skepp"
 
 msgid "Shipwreck Survivor"
 msgstr ""
@@ -7155,11 +7127,71 @@ msgstr ""
 msgid "Bottle"
 msgstr "Flaska"
 
+msgid "Magic Well"
+msgstr "Magisk brunn"
+
 #, fuzzy
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Magisk trädgård"
 msgstr[1] "Magisk trädgård"
+
+msgid "Observation Tower"
+msgstr "Observationstorn"
+
+msgid "Freeman's Foundry"
+msgstr "Hedersmedborgarnas gjuteri"
+
+msgid "Reefs"
+msgstr "Rev"
+
+msgid "Trees"
+msgstr "Träd"
+
+msgid "Mountains"
+msgstr "Berg"
+
+msgid "Volcano"
+msgstr "Vulkan"
+
+msgid "Flowers"
+msgstr "Blommor"
+
+msgid "Rock"
+msgstr "Sten"
+
+msgid "Water Lake"
+msgstr "Sjö"
+
+msgid "Mandrake"
+msgstr "Alruna"
+
+msgid "Dead Tree"
+msgstr "Dött träd"
+
+msgid "Stump"
+msgstr "Stubbe"
+
+msgid "Crater"
+msgstr "Krater"
+
+msgid "Cactus"
+msgstr "Kaktus"
+
+msgid "Mound"
+msgstr "Kulle"
+
+msgid "Dune"
+msgstr "Dyn"
+
+msgid "Lava Pool"
+msgstr "Lavapöl"
+
+msgid "Shrub"
+msgstr "Buske"
+
+msgid "Barrow Mounds"
+msgstr ""
 
 msgid "Random Artifact - Treasure"
 msgstr ""
@@ -7170,14 +7202,14 @@ msgstr ""
 msgid "Random Artifact - Major"
 msgstr ""
 
-msgid "Jail"
-msgstr "Fängelse"
+msgid "Barrier"
+msgstr "Barriär"
 
 msgid "Traveller's Tent"
 msgstr "Resenärstält"
 
-msgid "Barrier"
-msgstr "Barriär"
+msgid "Jail"
+msgstr "Fängelse"
 
 msgid "Fire Summoning Altar"
 msgstr "Eldinkallnings-altare"
@@ -7190,30 +7222,6 @@ msgstr "Jordinkallnings-altare"
 
 msgid "Water Summoning Altar"
 msgstr "Vatteninkallnings-altare"
-
-msgid "Barrow Mounds"
-msgstr ""
-
-msgid "Stables"
-msgstr "Stall"
-
-msgid "Alchemist's Tower"
-msgstr "Alkemistens torn"
-
-msgid "Hut of the Magi"
-msgstr "De vise männens stuga"
-
-msgid "Eye of the Magi"
-msgstr "De vise männens öga"
-
-msgid "Mermaid"
-msgstr "Sjöjungfru"
-
-msgid "Sirens"
-msgstr "Sirener"
-
-msgid "Reefs"
-msgstr "Rev"
 
 #, fuzzy
 msgid "Unknown Monster"
@@ -9566,9 +9574,3 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Vänta denna enhet"
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} inväntar runda."

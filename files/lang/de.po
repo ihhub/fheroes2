@@ -1,13 +1,12 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
+# German translation of fheroes2
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-30 15:06+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-12-22 21:39+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -617,6 +616,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "%{monster}-Infos anzeigen"
 
+msgid "Fly %{monster} here"
+msgstr "%{monster} hier fliegen"
+
+msgid "Move %{monster} here"
+msgstr "Bewegen %{monster} hier"
+
 msgid "Shoot %{monster}"
 msgstr "An %{monster} schießen"
 
@@ -627,12 +632,6 @@ msgstr[1] "(%{count} Schüsse übrig)"
 
 msgid "Attack %{monster}"
 msgstr "Angriff auf %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "%{monster} hier fliegen"
-
-msgid "Move %{monster} here"
-msgstr "Bewegen %{monster} hier"
 
 msgid "Turn %{turn}"
 msgstr "Runde %{turn}"
@@ -1615,6 +1614,10 @@ msgstr "Fizbin des Pechs"
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Herausragendste Schriftrolle"
 
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Ballista"
+
 msgid "campaignBonus|Hideous Mask"
 msgstr "Scheußliche Maske"
 
@@ -2564,11 +2567,11 @@ msgstr ""
 "bleibt."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
-"Die \"Gruppierte\" Kampfformation bündelt eure Armee in der Mitte eurer "
-"Seite des Schlachtfelds."
+"Die 'Gruppierte' Kampfformation bündelt Ihre Armee in der Mitte Ihrer Seite "
+"des Schlachtfelds."
 
 msgid "Spread Formation"
 msgstr "Ausbreitende Formation"
@@ -2667,19 +2670,6 @@ msgstr ""
 "Beeindruckt von Ihren Fähigkeiten, erklärt sich der alte Gladiatorentrainer "
 "bereit, Sie in einer Fähigkeit Ihrer Wahl zu unterrichten."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr "Sie können es sich nicht leisten, Ihre Truppen aufzurüsten!"
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Ihre Truppen können aufgerüstet werden, aber das wird Sie teuer zu stehen "
-"kommen. Willen Sie die aufwerten?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Sind Sie sicher, dass Sie diese Armee entlassen wollen?"
-
 msgid "Attack Skill"
 msgstr "Angriff"
 
@@ -2700,6 +2690,19 @@ msgstr "Trefferpunkte"
 
 msgid "Hit Points Left"
 msgstr "TP übrig"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr "Sie können es sich nicht leisten, Ihre Truppen aufzurüsten!"
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Ihre Truppen können aufgerüstet werden, aber das wird Sie teuer zu stehen "
+"kommen. Willen Sie die aufwerten?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Sind Sie sicher, dass Sie diese Armee entlassen wollen?"
 
 msgid "Followers"
 msgstr "Anhänger"
@@ -3591,14 +3594,14 @@ msgstr "Die Anzahl der Tage, die für diesen Feldzug aufgewendet wurden."
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination und Kernentwicklung"
 
-msgid "QA and Support"
-msgstr "QA und Unterstützung"
+msgid "Development"
+msgstr "Entwicklung"
 
 msgid "Visit us at "
 msgstr "Besuchen Sie uns bei "
 
-msgid "Development"
-msgstr "Entwicklung"
+msgid "QA and Support"
+msgstr "QA und Unterstützung"
 
 msgid "Dev and Support"
 msgstr "Entwicklung und Support"
@@ -3766,13 +3769,13 @@ msgid "This file contains a save with an invalid game type."
 msgstr "Diese Datei enthält einen Spielstand mit einem ungültigen Spieltyp."
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
-"Diese Datei ist in der \"The Price of Loyalty\"-Version gespeichert.\n"
-"Einige Objekte sind möglicherweise nicht mehr verfügbar."
+"Diese Datei wurde als \"The Price of Loyalty\"-Karte gespeichert, aber die "
+"entsprechenden Spiel-Assets wurden der Engine nicht zur Verfügung gestellt."
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr "Unterstütztes Speicherformat: "
 
 msgid "Current game version: "
@@ -4336,6 +4339,11 @@ msgstr ""
 "nicht tragen, selbst wenn er es gefunden hätte - alle seine Artefaktplätze "
 "sind voll."
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr ""
+"Das Graben nach Artefakten dauert einen ganzen Tag, versuchen Sie es morgen "
+"noch einmal."
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
@@ -4350,11 +4358,6 @@ msgstr "Hier ist nichts. Wo könnte es nur sein?"
 
 msgid "Try searching on clear ground."
 msgstr "Versuchen Sie, auf freiem Feld zu suchen."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr ""
-"Das Graben nach Artefakten dauert einen ganzen Tag, versuchen Sie es morgen "
-"noch einmal."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -4469,6 +4472,12 @@ msgstr "Einkommen"
 
 msgid "Kingdom Income per day."
 msgstr "Einkommen des Königreichs pro Tag."
+
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Der Leuchtturm ist nun unter Ihrer Kontrolle, und alle Ihre Schiffe bewegen "
+"sich nun jeden Tag weiter."
 
 msgid "English"
 msgstr "Englisch"
@@ -4995,15 +5004,15 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Sie trinken aus dem verwunschenen Brunnen, aber es passiert nichts."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Sie betreten den Feenring, aber es passiert nichts."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "Beim Betreten des mystischen Feenrings erhält Ihre Armee Glück für die "
 "nächste Schlacht."
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Sie betreten den Feenring, aber es passiert nichts."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -5420,13 +5429,6 @@ msgstr ""
 "Erde steckt. Möchten Sie die Lampe reiben?"
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-"Sie stoßen auf eine verlassene Goldmine. In der Mine scheint es zu spuken. "
-"Möchten Sie sie betreten?"
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5488,6 +5490,13 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "Sie erhalten die Kontrolle über einen %{name}."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+"Sie stoßen auf eine verlassene Goldmine. In der Mine scheint es zu spuken. "
+"Möchten Sie sie betreten?"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6223,13 +6232,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} (Stufe %{level} %{race})"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"Die 'Gruppierte' Kampfformation bündelt Ihre Armee in der Mitte Ihrer Seite "
-"des Schlachtfelds."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Sind Sie sicher, dass Sie diesen Helden entlassen wollen?"
@@ -7123,17 +7125,65 @@ msgstr "Kein Objekt"
 msgid "Alchemist Lab"
 msgstr "Alchemistenlabor"
 
+msgid "Sign"
+msgstr "Zeichen"
+
+msgid "Buoy"
+msgstr "Boje"
+
+msgid "Skeleton"
+msgstr "Skelett"
+
 msgid "Daemon Cave"
 msgstr "Dämonenhöhle"
+
+msgid "Treasure Chest"
+msgstr "Schatzkiste"
 
 msgid "Faerie Ring"
 msgstr "Feenring"
 
+msgid "Campfire"
+msgstr "Lagerfeuer"
+
+msgid "Fountain"
+msgstr "Brunnen"
+
+msgid "Gazebo"
+msgstr "Pavillon"
+
+msgid "Genie Lamp"
+msgstr "Antike Lampe"
+
+msgid "Archer's House"
+msgstr "Haus des Bogenschützen"
+
+msgid "Goblin Hut"
+msgstr "Goblinhütte"
+
+msgid "Dwarf Cottage"
+msgstr "Zwergenhaus"
+
+msgid "Peasant Hut"
+msgstr "Bauernhaus"
+
+msgid "Stables"
+msgstr "Ställe"
+
+msgid "Alchemist's Tower"
+msgstr "Turm des Alchemisten"
+
+msgid "Event"
+msgstr "Ereignis"
+
 msgid "Dragon City"
 msgstr "Drachenstadt"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Leuchtturm"
+msgid_plural "Lighthouses"
+msgstr[0] "Leuchtturm"
+msgstr[1] "Leuchtturm"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -7143,11 +7193,17 @@ msgstr[1] "Wasserräder"
 msgid "Mines"
 msgstr "Minen"
 
+msgid "Monster"
+msgstr "Monster"
+
 msgid "Obelisk"
 msgstr "Obelisk"
 
 msgid "Oasis"
 msgstr "Oase"
+
+msgid "Resource"
+msgstr "Ressource"
 
 msgid "Sawmill"
 msgstr "Sägemühle"
@@ -7155,16 +7211,55 @@ msgstr "Sägemühle"
 msgid "Oracle"
 msgstr "Orakel"
 
+msgid "Shrine of the First Circle"
+msgstr "Schrein des ersten Kreises"
+
+msgid "Shipwreck"
+msgstr "Schiffswrack"
+
+msgid "Sea Chest"
+msgstr "Seekiste"
+
 msgid "Desert Tent"
 msgstr "Wüstenzelt"
 
+msgid "Stone Liths"
+msgstr "Steinsäulen"
+
 msgid "Wagon Camp"
 msgstr "Wagenlager"
+
+msgid "Hut of the Magi"
+msgstr "Hütte des Magiers"
+
+msgid "Whirlpool"
+msgstr "Whirlpool"
 
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Windmühle"
 msgstr[1] "Windmühlen"
+
+msgid "Artifact"
+msgstr "Artefakt"
+
+msgid "Mermaid"
+msgstr "Meerjungfrau"
+
+msgid "Boat"
+msgstr "Boot"
+
+msgid "Random Ultimate Artifact"
+msgstr "Zufälliges ultimatives Artefakt"
+
+msgid "Random Artifact"
+msgstr "Zufälliges Artefakt"
+
+msgid "Random Resource"
+msgstr "Zufällige Ressource"
+
+msgid "Random Monster"
+msgstr "Zufälliges Monster"
 
 msgid "Random Town"
 msgstr "Zufällige Stadt"
@@ -7172,14 +7267,35 @@ msgstr "Zufällige Stadt"
 msgid "Random Castle"
 msgstr "Zufälliges Burg"
 
+msgid "Eye of the Magi"
+msgstr "Auge des Magiers"
+
+msgid "Random Monster - weak"
+msgstr "Zufälliges Monster - schwach"
+
+msgid "Random Monster - medium"
+msgstr "Zufälliges Monster - mittel"
+
+msgid "Random Monster - strong"
+msgstr "Zufälliges Monster - stark"
+
+msgid "Random Monster - very strong"
+msgstr "Zufälliges Monster - sehr stark"
+
+msgid "Nothing Special"
+msgstr "Nichts besonderes"
+
+msgid "Mossy Rock"
+msgstr "Moosiger Felsen"
+
 msgid "Watch Tower"
 msgstr "Wachturm"
 
-msgid "Tree City"
-msgstr "Baumhausstadt"
-
 msgid "Tree House"
 msgstr "Baumhaus"
+
+msgid "Tree City"
+msgstr "Baumhausstadt"
 
 msgid "Ruins"
 msgstr "Ruinen"
@@ -7189,6 +7305,15 @@ msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Verlassene Mine"
+
+msgid "Sirens"
+msgstr "Sirenen"
+
+msgid "Standing Stones"
+msgstr "Stehende Steine"
+
+msgid "Idol"
+msgstr "Götzenbild"
 
 msgid "Tree of Knowledge"
 msgstr "Baum des Wissens"
@@ -7208,14 +7333,32 @@ msgstr "Loch des Halblings"
 msgid "Mercenary Camp"
 msgstr "Söldnerlager"
 
+msgid "Shrine of the Second Circle"
+msgstr "Schrein des zweiten Kreises"
+
+msgid "Shrine of the Third Circle"
+msgstr "Schrein des dritten Kreises"
+
 msgid "City of the Dead"
 msgstr "Stadt der Toten"
 
 msgid "Sphinx"
 msgstr "Sphinx"
 
+msgid "Wagon"
+msgstr "Waggon"
+
+msgid "Tar Pit"
+msgstr "Teergrube"
+
+msgid "Artesian Spring"
+msgstr "Artesische Quelle"
+
 msgid "Troll Bridge"
 msgstr "Trollbrücke"
+
+msgid "Watering Hole"
+msgstr "Wasserloch"
 
 msgid "Witch's Hut"
 msgstr "Hexenhütte"
@@ -7223,188 +7366,17 @@ msgstr "Hexenhütte"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan's Maps"
-msgstr "Magellans Karten"
-
-msgid "Derelict Ship"
-msgstr "Heruntergekommenes Schiff"
-
-msgid "Shipwreck"
-msgstr "Schiffswrack"
-
-msgid "Observation Tower"
-msgstr "Beobachtungsturm"
-
-msgid "Freeman's Foundry"
-msgstr "Freemans Giesserei"
-
-msgid "Watering Hole"
-msgstr "Wasserloch"
-
-msgid "Artesian Spring"
-msgstr "Artesische Quelle"
-
-msgid "Gazebo"
-msgstr "Pavillon"
-
-msgid "Archer's House"
-msgstr "Haus des Bogenschützen"
-
-msgid "Peasant Hut"
-msgstr "Bauernhaus"
-
-msgid "Dwarf Cottage"
-msgstr "Zwergenhaus"
-
-msgid "Stone Liths"
-msgstr "Steinsäulen"
-
-msgid "Magic Well"
-msgstr "Magischer Brunnen"
-
-msgid "Sign"
-msgstr "Zeichen"
-
-msgid "Nothing Special"
-msgstr "Nichts besonderes"
-
-msgid "Tar Pit"
-msgstr "Teergrube"
-
-msgid "Mound"
-msgstr "Erdhügel"
-
-msgid "Dune"
-msgstr "Düne"
-
-msgid "Stump"
-msgstr "Stumpf"
-
-msgid "Cactus"
-msgstr "Kaktus"
-
-msgid "Trees"
-msgstr "Bäume"
-
-msgid "Dead Tree"
-msgstr "Toter Baum"
-
-msgid "Mountains"
-msgstr "Berge"
-
-msgid "Volcano"
-msgstr "Vulkan"
-
-msgid "Rock"
-msgstr "Fels"
-
-msgid "Flowers"
-msgstr "Blumen"
-
-msgid "Water Lake"
-msgstr "See"
-
-msgid "Mandrake"
-msgstr "Mandragola"
-
-msgid "Crater"
-msgstr "Krater"
-
-msgid "Lava Pool"
-msgstr "Lavabecken"
-
-msgid "Shrub"
-msgstr "Strauch"
-
-msgid "Buoy"
-msgstr "Boje"
-
-msgid "Skeleton"
-msgstr "Skelett"
-
-msgid "Treasure Chest"
-msgstr "Schatzkiste"
-
-msgid "Sea Chest"
-msgstr "Seekiste"
-
-msgid "Campfire"
-msgstr "Lagerfeuer"
-
-msgid "Fountain"
-msgstr "Brunnen"
-
-msgid "Genie Lamp"
-msgstr "Antike Lampe"
-
-msgid "Goblin Hut"
-msgstr "Goblinhütte"
-
-msgid "Monster"
-msgstr "Monster"
-
-msgid "Resource"
-msgstr "Ressource"
-
-msgid "Whirlpool"
-msgstr "Whirlpool"
-
-msgid "Artifact"
-msgstr "Artefakt"
-
-msgid "Boat"
-msgstr "Boot"
-
-msgid "Random Artifact"
-msgstr "Zufälliges Artefakt"
-
-msgid "Random Resource"
-msgstr "Zufällige Ressource"
-
-msgid "Random Monster - weak"
-msgstr "Zufälliges Monster - schwach"
-
-msgid "Random Monster - medium"
-msgstr "Zufälliges Monster - mittel"
-
-msgid "Random Monster - strong"
-msgstr "Zufälliges Monster - stark"
-
-msgid "Random Monster - very strong"
-msgstr "Zufälliges Monster - sehr stark"
-
-msgid "Standing Stones"
-msgstr "Stehende Steine"
-
-msgid "Event"
-msgstr "Ereignis"
-
-msgid "Random Monster"
-msgstr "Zufälliges Monster"
-
-msgid "Random Ultimate Artifact"
-msgstr "Zufälliges ultimatives Artefakt"
-
-msgid "Idol"
-msgstr "Götzenbild"
-
-msgid "Shrine of the First Circle"
-msgstr "Schrein des ersten Kreises"
-
-msgid "Shrine of the Second Circle"
-msgstr "Schrein des zweiten Kreises"
-
-msgid "Shrine of the Third Circle"
-msgstr "Schrein des dritten Kreises"
-
-msgid "Wagon"
-msgstr "Waggon"
-
 msgid "Lean-To"
 msgstr "Anbau"
 
+msgid "Magellan's Maps"
+msgstr "Magellans Karten"
+
 msgid "Flotsam"
 msgstr "Treibgut"
+
+msgid "Derelict Ship"
+msgstr "Heruntergekommenes Schiff"
 
 msgid "Shipwreck Survivor"
 msgstr "Schiffbrüchiger"
@@ -7412,10 +7384,70 @@ msgstr "Schiffbrüchiger"
 msgid "Bottle"
 msgstr "Flasche"
 
+msgid "Magic Well"
+msgstr "Magischer Brunnen"
+
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Zaubergarten"
 msgstr[1] "Zaubergärten"
+
+msgid "Observation Tower"
+msgstr "Beobachtungsturm"
+
+msgid "Freeman's Foundry"
+msgstr "Freemans Giesserei"
+
+msgid "Reefs"
+msgstr "Riffe"
+
+msgid "Trees"
+msgstr "Bäume"
+
+msgid "Mountains"
+msgstr "Berge"
+
+msgid "Volcano"
+msgstr "Vulkan"
+
+msgid "Flowers"
+msgstr "Blumen"
+
+msgid "Rock"
+msgstr "Fels"
+
+msgid "Water Lake"
+msgstr "See"
+
+msgid "Mandrake"
+msgstr "Mandragola"
+
+msgid "Dead Tree"
+msgstr "Toter Baum"
+
+msgid "Stump"
+msgstr "Stumpf"
+
+msgid "Crater"
+msgstr "Krater"
+
+msgid "Cactus"
+msgstr "Kaktus"
+
+msgid "Mound"
+msgstr "Erdhügel"
+
+msgid "Dune"
+msgstr "Düne"
+
+msgid "Lava Pool"
+msgstr "Lavabecken"
+
+msgid "Shrub"
+msgstr "Strauch"
+
+msgid "Barrow Mounds"
+msgstr "Vergrabener Karren"
 
 msgid "Random Artifact - Treasure"
 msgstr "Zufälliges Artefakt - Schatz"
@@ -7426,14 +7458,14 @@ msgstr "Zufälliges Artefakt - Klein"
 msgid "Random Artifact - Major"
 msgstr "Zufälliges Artefakt - Groß"
 
-msgid "Jail"
-msgstr "Gefängnis"
+msgid "Barrier"
+msgstr "Barriere"
 
 msgid "Traveller's Tent"
 msgstr "Zelt des Reisenden"
 
-msgid "Barrier"
-msgstr "Barriere"
+msgid "Jail"
+msgstr "Gefängnis"
 
 msgid "Fire Summoning Altar"
 msgstr "Feuerwesen-Altar"
@@ -7446,30 +7478,6 @@ msgstr "Erdwesen-Altar"
 
 msgid "Water Summoning Altar"
 msgstr "Wasserwesen-Altar"
-
-msgid "Barrow Mounds"
-msgstr "Vergrabener Karren"
-
-msgid "Stables"
-msgstr "Ställe"
-
-msgid "Alchemist's Tower"
-msgstr "Turm des Alchemisten"
-
-msgid "Hut of the Magi"
-msgstr "Hütte des Magiers"
-
-msgid "Eye of the Magi"
-msgstr "Auge des Magiers"
-
-msgid "Mermaid"
-msgstr "Meerjungfrau"
-
-msgid "Sirens"
-msgstr "Sirenen"
-
-msgid "Reefs"
-msgstr "Riffe"
 
 msgid "Unknown Monster"
 msgstr "Unbekanntes Monster"
@@ -10171,22 +10179,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Totenbesc"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Auf diesen Zug warten"
-
-#~ msgid "Wait"
-#~ msgstr "Warten"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Wartet die aktuelle Kreatur. Die aktuelle Kreatur verzögert ihren Zug, "
-#~ "bis alle anderen Kreaturen dran waren."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} wartet auf den Zug."

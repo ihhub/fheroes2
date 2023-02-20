@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@ namespace Bin_Info
             TEMPORARY, // This is an empty placeholder for combined animation built from previous parts
             STATIC, // Frame 1
             IDLE1,
-            IDLE2, // Idle animations: picked at random with different probablities, rarely all 5 present
+            IDLE2, // Idle animations: picked at random with different probabilities, rarely all 5 present
             IDLE3,
             IDLE4,
             IDLE5,

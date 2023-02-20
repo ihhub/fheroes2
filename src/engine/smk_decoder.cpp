@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -161,9 +161,9 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
             wavHeader.putLE16( 0x01 ); // format
             wavHeader.putLE16( channelsPerTrack[i] ); // channels
             wavHeader.putLE32( audioRate[i] ); // samples
-            wavHeader.putLE32( audioRate[i] * audioBitDepth[i] / 8 ); // byteper
-            wavHeader.putLE16( 0x01 ); // align
-            wavHeader.putLE16( audioBitDepth[i] ); // bitsper
+            wavHeader.putLE32( audioRate[i] * audioBitDepth[i] * channelsPerTrack[i] / 8 ); // bytes per second
+            wavHeader.putLE16( audioBitDepth[i] * channelsPerTrack[i] / 8 ); // align
+            wavHeader.putLE16( audioBitDepth[i] ); // bits per channel
             wavHeader.putLE32( 0x61746164 ); // DATA
             wavHeader.putLE32( originalSize ); // size
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -310,7 +310,7 @@ namespace
         const Maps::Addons & lowerTileAddons = tileBelow.getLevel2Addons();
 
         for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
-            if ( lowerAddon.uniq == uid ) {
+            if ( lowerAddon._uid == uid ) {
                 // This is a tall object.
                 return true;
             }
@@ -331,6 +331,7 @@ Interface::GameArea::GameArea( Basic & basic )
     , updateCursor( false )
     , _mouseDraggingInitiated( false )
     , _mouseDraggingMovement( false )
+    , _needRedrawByMouseDragging( false )
 {
     // Do nothing.
 }
@@ -468,7 +469,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
-    // TODO: Dragon City with tilset 164 (OBJNMUL2.ICN) and object index 46 is a bottom layer sprite.
+    // TODO: Dragon City with Object ICN Type OBJ_ICN_TYPE_OBJNMUL2 and object index 46 is a bottom layer sprite.
     // TODO: When a hero standing besides this turns a part of the hero is visible. This can be fixed only by some hack.
 
     // Run through all visible tiles and find all tile-unfit objects.
@@ -659,12 +660,12 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
             // Since some objects are taller than 2 tiles their top layer sprites must be drawn at the very end.
-            // For now what we need to do is to run throught all level 2 objects and verify that the tile below doesn't have
+            // For now what we need to do is to run through all level 2 objects and verify that the tile below doesn't have
             // any other level 2 objects with the same UID.
 
             topLayerTallObjects.clear();
             for ( const Maps::TilesAddon & addon : tile.getLevel2Addons() ) {
-                if ( isTallTopLayerObject( x, y, addon.uniq ) ) {
+                if ( isTallTopLayerObject( x, y, addon._uid ) ) {
                     topLayerTallObjects.emplace_back( &addon );
                 }
                 else {
@@ -702,7 +703,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             --greenColorSteps;
         }
 
-        // Not all arrows and their shadows fit in 1 tile. We need to consider by 1 tile bigger area to properly render eveything.
+        // Not all arrows and their shadows fit in 1 tile. We need to consider an area of 1 tile bigger to properly render everything.
         const fheroes2::Rect extendedVisibleRoi{ tileROI.x - 1, tileROI.y - 1, tileROI.width + 2, tileROI.height + 2 };
 
         for ( ; currentStep != path.end(); ++currentStep ) {
@@ -755,11 +756,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     tile.drawFog( dst, friendColors, *this );
 
                     if ( drawTowns ) {
-                        tile.drawByIcnId( dst, *this, ICN::OBJNTWBA );
+                        tile.drawByObjectIcnType( dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
 
                         const MP2::MapObjectType objectType = tile.GetObject( false );
-                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJN_CASTLE ) {
-                            tile.drawByIcnId( dst, *this, ICN::OBJNTOWN );
+                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
+                            tile.drawByObjectIcnType( dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
                         }
                     }
                 }
@@ -897,29 +898,37 @@ void Interface::GameArea::SetScroll( int direct )
 void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 {
     LocalEvent & le = LocalEvent::Get();
-    const fheroes2::Point & mp = le.GetMouseCursor();
+    const fheroes2::Point & mousePosition = le.GetMouseCursor();
 
     if ( !le.MousePressLeft() ) {
         _mouseDraggingInitiated = false;
         _mouseDraggingMovement = false;
+        _needRedrawByMouseDragging = false;
     }
     else if ( !_mouseDraggingInitiated ) {
         _mouseDraggingInitiated = true;
-        _startMouseDragPosition = mp;
+        _lastMouseDragPosition = mousePosition;
     }
-    else if ( ( std::abs( _startMouseDragPosition.x - mp.x ) > minimalRequiredDraggingMovement
-                || std::abs( _startMouseDragPosition.y - mp.y ) > minimalRequiredDraggingMovement )
+    else if ( ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
+                || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement )
               && isCursorOverGamearea ) {
         _mouseDraggingMovement = true;
     }
 
     if ( _mouseDraggingMovement ) {
-        SetCenterInPixels( getCurrentCenterInPixels() + _startMouseDragPosition - mp );
-        _startMouseDragPosition = mp;
+        if ( _lastMouseDragPosition == mousePosition ) {
+            _needRedrawByMouseDragging = false;
+        }
+        else {
+            // Update the center coordinates and redraw the adventure map only if the mouse was moved.
+            _needRedrawByMouseDragging = true;
+            SetCenterInPixels( getCurrentCenterInPixels() + _lastMouseDragPosition - mousePosition );
+            _lastMouseDragPosition = mousePosition;
+        }
         return;
     }
 
-    int32_t index = GetValidTileIdFromPoint( mp );
+    int32_t index = GetValidTileIdFromPoint( mousePosition );
 
     // change cursor if need
     if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
@@ -936,7 +945,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
 
-    const fheroes2::Point tileOffset = _topLeftTileOffset + mp - _windowROI.getPosition();
+    const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
     const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
                                    ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
 
@@ -1047,7 +1056,7 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
     fheroes2::Display & display = fheroes2::Display::instance();
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
-    while ( le.HandleEvents() && !info->isAnimationCompleted() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
         if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
             basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
             display.render();

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -58,18 +58,23 @@ namespace
         Spec()
             : SDL_AudioSpec()
         {
+#if defined( _WIN32 )
+            // Value 22050 causes audio distortion on Windows
+            freq = 44100;
+#else
             freq = 22050;
+#endif
             format = AUDIO_S16;
             channels = 2; // Support stereo audio.
             silence = 0;
 #if defined( ANDROID )
-            // TODO: a value greater than 1024 causes audio distortion on Android
+            // Value greater than 1024 causes audio distortion on Android
             samples = 1024;
 #else
             samples = 2048;
 #endif
             size = 0;
-            // TODO: research if we need to utilize these 2 paremeters in the future.
+            // TODO: research if we need to utilize these 2 parameters in the future.
             callback = nullptr;
             userdata = nullptr;
         }
@@ -616,7 +621,7 @@ namespace
     // By the Weber-Fechner law, humans subjective sound sensation is proportional logarithm of sound intensity.
     // So for linear changing sound intensity we have to change the volume exponential.
     // There is a good explanation at https://www.dr-lex.be/info-stuff/volumecontrols.html.
-    // This function maps sound volumes in percents to SDL units with values [0..MIX_MAX_VOLUME] by exponetial law.
+    // This function maps sound volumes in percents to SDL units with values [0..MIX_MAX_VOLUME] by exponential law.
     int normalizeToSDLVolume( const int volumePercentage )
     {
         if ( volumePercentage < 0 ) {
