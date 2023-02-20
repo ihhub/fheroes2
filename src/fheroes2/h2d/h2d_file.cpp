@@ -154,8 +154,8 @@ namespace fheroes2
             return false;
         }
 
-        const auto result = _fileData.try_emplace( name, data );
-        return result.second;
+        _fileData[name] = data;
+        return true;
     }
 
     bool H2Writer::add( H2RReader & reader )
