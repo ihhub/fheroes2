@@ -3460,12 +3460,12 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
             switch ( attacker.GetID() ) {
             case Monster::GHOST:
                 msg = _n( "1 soul drained.", "%{count} souls drained.", resurrects );
-                log( status, msg, resurrects, attacker.GetName() );
+                log( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
                 break;
 
             case Monster::VAMPIRE_LORD:
                 msg = _n( "1 %{unit} rised.", "%{count} %{unit} revived.", resurrects );
-                log( status, msg, resurrects, attacker.GetName() );
+                log( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
                 break;
             default:
                 break;
