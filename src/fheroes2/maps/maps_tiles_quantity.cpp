@@ -990,18 +990,27 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
 uint32_t Maps::Tiles::MonsterCount() const
 {
+    static_assert( std::is_same_v<decltype( quantity1 ), uint8_t> && std::is_same_v<decltype( quantity2 ), uint8_t>,
+                   "Types of tile's quantities have been changed, check the logic below" );
+
     // TODO: avoid this hacky way of storing data.
-    return ( static_cast<uint32_t>( quantity1 ) << 8 ) | quantity2;
+    return ( static_cast<uint32_t>( quantity1 ) << 8 ) + quantity2;
 }
 
 void Maps::Tiles::MonsterSetCount( uint32_t count )
 {
-    using Quantity1Type = decltype( quantity1 );
-    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( quantity1 ), uint8_t> && std::is_same_v<decltype( quantity2 ), uint8_t>,
+                   "Types of tile's quantities have been changed, check the logic below" );
+
+    if ( count > UINT16_MAX ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "The number of monsters for tile " << _index << " is " << count << ", which is more than " << UINT16_MAX )
+
+        count = UINT16_MAX;
+    }
 
     // TODO: avoid this hacky way of storing data.
-    quantity1 = static_cast<Quantity1Type>( count >> 8 );
-    quantity2 = 0x00FF & count;
+    quantity1 = ( count >> 8 ) & 0xFF;
+    quantity2 = count & 0xFF;
 }
 
 void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count )
