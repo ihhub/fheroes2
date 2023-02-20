@@ -575,7 +575,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 static_assert( std::is_same_v<decltype( quantity1 ), uint8_t> && std::is_same_v<decltype( quantity2 ), uint8_t>,
                                "Type of quantity1 or quantity2 has been changed, check the logic below" );
 
-                int spell = ( 1 + ( quantity2 << 5 ) + ( quantity1 >> 3 ) ) & 0xFF;
+                const int spell = ( 1 + ( quantity2 << 5 ) + ( quantity1 >> 3 ) ) & 0xFF;
 
                 QuantitySetVariant( 15 );
                 QuantitySetSpell( spell );
