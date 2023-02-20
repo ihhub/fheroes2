@@ -24,7 +24,10 @@
 #ifndef H2M82_H
 #define H2M82_H
 
-#include "mp2.h"
+namespace Maps
+{
+    class Tiles;
+}
 
 namespace M82
 {
@@ -353,7 +356,8 @@ namespace M82
     const char * GetString( int m82 );
     int FromSpell( const int spellID );
 
-    SoundType getAdventureMapObjectSound( const MP2::MapObjectType objectType );
+    // Returns the ambient soundtrack for a given tile or M82::UNKNOWN if there is no track
+    SoundType getAdventureMapTileSound( const Maps::Tiles & tile );
 }
 
 #endif

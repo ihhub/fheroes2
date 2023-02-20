@@ -184,10 +184,9 @@ void Interface::Radar::Build()
 void Interface::Radar::SetZoom()
 {
     const int32_t worldWidth = world.w();
-    const int32_t worldHeight = world.h();
 
     // Currently we have and support only square size maps.
-    assert( worldWidth == worldHeight );
+    assert( worldWidth == world.h() );
 
     _zoom = static_cast<double>( area.width ) / worldWidth;
 
@@ -409,22 +408,31 @@ void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nul
     }
 
     const fheroes2::Rect & viewableWorldArea = ( roiRectangle == nullptr ) ? _interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
-    const fheroes2::Rect radarWorldArea = worldSize ^ viewableWorldArea;
 
-    const fheroes2::Rect & totalRenderingArea = GetArea();
-    const fheroes2::Size actualRenderingArea{ totalRenderingArea.width, totalRenderingArea.height };
-
-    const fheroes2::Size cursorSize{ ( radarWorldArea.width * actualRenderingArea.width ) / worldSize.width,
-                                     ( radarWorldArea.height * actualRenderingArea.height ) / worldSize.height };
-
-    if ( _cursorArea.width() != cursorSize.width || _cursorArea.height() != cursorSize.height ) {
-        _cursorArea.resize( cursorSize.width, cursorSize.height );
+    if ( ( viewableWorldArea.width > worldSize.width ) && ( viewableWorldArea.height > worldSize.height ) ) {
+        // We hide the cursor if the whole map is displayed.
+        _cursorArea.resize( 0, 0 );
         _cursorArea.reset();
-        fheroes2::DrawBorder( _cursorArea, RADARCOLOR, 6 );
+        _cursorArea.setPosition( 0, 0 );
     }
+    else {
+        const fheroes2::Rect radarWorldArea = worldSize ^ viewableWorldArea;
 
-    _cursorArea.setPosition( totalRenderingArea.x + ( radarWorldArea.x * actualRenderingArea.width ) / worldSize.width,
-                             totalRenderingArea.y + ( radarWorldArea.y * actualRenderingArea.height ) / worldSize.height );
+        const fheroes2::Rect & totalRenderingArea = GetArea();
+        const fheroes2::Size actualRenderingArea{ totalRenderingArea.width, totalRenderingArea.height };
+
+        const fheroes2::Size cursorSize{ ( radarWorldArea.width * actualRenderingArea.width ) / worldSize.width,
+                                         ( radarWorldArea.height * actualRenderingArea.height ) / worldSize.height };
+
+        if ( _cursorArea.width() != cursorSize.width || _cursorArea.height() != cursorSize.height ) {
+            _cursorArea.resize( cursorSize.width, cursorSize.height );
+            _cursorArea.reset();
+            fheroes2::DrawBorder( _cursorArea, RADARCOLOR, 6 );
+        }
+
+        _cursorArea.setPosition( totalRenderingArea.x + ( radarWorldArea.x * actualRenderingArea.width ) / worldSize.width,
+                                 totalRenderingArea.y + ( radarWorldArea.y * actualRenderingArea.height ) / worldSize.height );
+    }
 }
 
 void Interface::Radar::QueueEventProcessing()
@@ -484,7 +492,7 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
                 const fheroes2::Point newCoordsTopLeft( newCoordsCenter.x - initROI.width / 2, newCoordsCenter.y - initROI.height / 2 );
 
                 if ( prevCoordsTopLeft != newCoordsTopLeft ) {
-                    return roi.ChangeCenter( { newCoordsCenter.x * TILEWIDTH, newCoordsCenter.y * TILEWIDTH } );
+                    return roi.ChangeCenter( { newCoordsCenter.x * TILEWIDTH - TILEWIDTH / 2, newCoordsCenter.y * TILEWIDTH - TILEWIDTH / 2 } );
                 }
             }
         }

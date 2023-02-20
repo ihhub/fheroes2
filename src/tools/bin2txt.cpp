@@ -24,9 +24,11 @@
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <string>
 #include <system_error>
+#include <type_traits>
 #include <vector>
 
 #include "serialize.h"
@@ -82,7 +84,14 @@ int main( int argc, char ** argv )
             continue;
         }
 
-        const size_t size = pos;
+        const std::make_unsigned_t<std::streamoff> posOffset = pos;
+        if ( posOffset > std::numeric_limits<size_t>::max() ) {
+            std::cerr << "File " << inputFileName << " is too large" << std::endl;
+            // Ignore files of invalid size
+            continue;
+        }
+
+        const size_t size = static_cast<size_t>( posOffset );
         if ( size != correctBINSize ) {
             // Ignore files of invalid size
             continue;

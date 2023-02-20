@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 15:09+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -708,7 +708,7 @@ msgstr "%{name} пропускат своя ред."
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
 msgstr[0] "%{attacker} нанася %{damage} щети."
-msgstr[1] "%{attacker} нанася %{damage} щети."
+msgstr[1] "%{attacker} нанасят %{damage} щети."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1578,9 +1578,8 @@ msgstr "Медал Физбин"
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Най-могъщият свитък"
 
-#, fuzzy
 msgid "campaignBonus|Gauntlets"
-msgstr "Катапулт"
+msgstr "Ръкавици"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Отвратителна маска"
@@ -2628,19 +2627,6 @@ msgstr ""
 "умения, възрастният треньор на гладиатори се съгласява да те обучи на умение "
 "по твой избор."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr "Не можеш да си позволиш да надграждиш войските си!"
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Твоите войски могат да бъдат подобрени, но това ще ти струва скъпо. Искаш ли "
-"да ги надстроиш?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Сигурен ли си, че искаш да разпуснеш тази армия?"
-
 msgid "Attack Skill"
 msgstr "Атака"
 
@@ -2661,6 +2647,19 @@ msgstr "Живот"
 
 msgid "Hit Points Left"
 msgstr "Ост. живот"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr "Не можеш да си позволиш да надграждиш войските си!"
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Твоите войски могат да бъдат подобрени, но това ще ти струва скъпо. Искаш ли "
+"да ги надстроиш?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Сигурен ли си, че искаш да разпуснеш тази армия?"
 
 msgid "Followers"
 msgstr "Последователи"
@@ -3360,7 +3359,7 @@ msgid "Battles"
 msgstr "Сражения"
 
 msgid "autoBattle|Manual"
-msgstr "Вручную"
+msgstr "Ръчно"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Промени скоростта, с която твоите герои се движат на главния екран."
@@ -3719,13 +3718,12 @@ msgstr "Вижте високите резултати за кампании."
 msgid "This file contains a save with an invalid game type."
 msgstr "Този файл съдържа запис с невалиден тип игра."
 
-#, fuzzy
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
-"Този файл е запазен от версията на играта \"The Price of Loyalty\".\n"
-"Някои артикули може да не са налични."
+"Този файл е запазен за \"Цената на лоялността\", но съответните активи на "
+"играта не са предоставени на двигателя."
 
 msgid "Unsupported save format: "
 msgstr "Неподдържан формат за запис: "
@@ -4400,11 +4398,10 @@ msgstr "Приходи на царството"
 msgid "Kingdom Income per day."
 msgstr "Приходи на царството за ден."
 
-#, fuzzy
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
-"Фарът сега е под твой контрол и всички твой кораби сега ще се движат все по-"
-"далеч всеки ден."
+"За всеки контролиран фар, твойте кораби ще се придвижват все повече всеки "
+"ден."
 
 msgid "English"
 msgstr "Английски"
@@ -4693,7 +4690,7 @@ msgid "%{count} / day"
 msgstr "%{count} / ден"
 
 msgid "one"
-msgstr "едно"
+msgstr "една"
 
 msgid "two"
 msgstr "две"
@@ -4883,7 +4880,7 @@ msgid ""
 "%{skill}.\n"
 " \n"
 msgstr ""
-"Приближаваш се до хижата и виждаш вътре вещица изучаваща древен том на "
+"Приближаваш се до хижата и виждаш вътре вещица изучаваща древен том по "
 "%{skill}.\n"
 "\n"
 
@@ -5251,8 +5248,8 @@ msgid ""
 "guarded by a nearby %{monster}. Do you want to fight the %{monster} for the "
 "artifact?"
 msgstr ""
-"През поляна наблюдаваш древен артефакт. За съжаление, той се охранява от "
-"близко %{monster}. Искате ли да се биете с %{monster} за артефакта?"
+"На една поляна виждаш древен артефакт. За съжаление, той се охранява от "
+"%{monster}. Искаш ли да се биеш с %{monster} за артефакта?"
 
 msgid "Victorious, you take your prize, the %{art}."
 msgstr "Победител, ти вземаш своята награда, %{art}."
@@ -7034,11 +7031,10 @@ msgstr "Събитие"
 msgid "Dragon City"
 msgstr "Драконов град"
 
-#, fuzzy
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
 msgstr[0] "Фар"
-msgstr[1] "Фар"
+msgstr[1] "Фарове"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -7141,7 +7137,7 @@ msgid "Nothing Special"
 msgstr "Нищо специално"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Мъхеста скала"
 
 msgid "Watch Tower"
 msgstr "Стражева кула"
@@ -7464,7 +7460,7 @@ msgid "Sprite"
 msgstr "Фея"
 
 msgid "Sprites"
-msgstr "Фей"
+msgstr "Феи"
 
 msgid "Dwarf"
 msgstr "Джудже"

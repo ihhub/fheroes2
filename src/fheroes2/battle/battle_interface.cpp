@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_interface.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -43,7 +45,6 @@
 #include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
-#include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "bin_info.h"
@@ -971,7 +972,7 @@ void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<
     }
 }
 
-void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset )
+void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -987,10 +988,10 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
         const Unit & unit = *( unitPos.first );
 
         if ( le.MouseClickLeft( unitRoi ) ) {
-            Dialog::ArmyInfo( unit, Dialog::READONLY | Dialog::BUTTONS, unit.isReflect() );
+            Dialog::ArmyInfo( unit, Dialog::BUTTONS, unit.isReflect() );
         }
         else if ( le.MousePressRight( unitRoi ) ) {
-            Dialog::ArmyInfo( unit, Dialog::READONLY, unit.isReflect() );
+            Dialog::ArmyInfo( unit, Dialog::ZERO, unit.isReflect() );
         }
     }
 }
@@ -1298,7 +1299,7 @@ void Battle::Interface::UpdateContourColor()
 void Battle::Interface::fullRedraw()
 {
     if ( !_background ) {
-        _background.reset( new fheroes2::StandardWindow( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+        _background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
     }
 
     Redraw();
@@ -3040,12 +3041,12 @@ void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
     const Unit * unitOnCell = cell.GetUnit();
 
     if ( unitOnCell != nullptr ) {
-        Dialog::ArmyInfo( *unitOnCell, Dialog::READONLY, unitOnCell->isReflect() );
+        Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect() );
     }
     else {
         unitOnCell = arena.GraveyardLastTroop( cell.GetIndex() );
         if ( unitOnCell != nullptr ) {
-            Dialog::ArmyInfo( *unitOnCell, Dialog::READONLY, unitOnCell->isReflect() );
+            Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect() );
         }
     }
 }
@@ -3113,7 +3114,7 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
 
         case Cursor::WAR_INFO: {
             if ( b ) {
-                Dialog::ArmyInfo( *b, Dialog::BUTTONS | Dialog::READONLY, b->isReflect() );
+                Dialog::ArmyInfo( *b, Dialog::BUTTONS, b->isReflect() );
                 humanturn_redraw = true;
             }
             break;

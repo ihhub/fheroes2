@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 15:09+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-12-22 21:39+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2670,19 +2670,6 @@ msgstr ""
 "Beeindruckt von Ihren Fähigkeiten, erklärt sich der alte Gladiatorentrainer "
 "bereit, Sie in einer Fähigkeit Ihrer Wahl zu unterrichten."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr "Sie können es sich nicht leisten, Ihre Truppen aufzurüsten!"
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Ihre Truppen können aufgerüstet werden, aber das wird Sie teuer zu stehen "
-"kommen. Willen Sie die aufwerten?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Sind Sie sicher, dass Sie diese Armee entlassen wollen?"
-
 msgid "Attack Skill"
 msgstr "Angriff"
 
@@ -2703,6 +2690,19 @@ msgstr "Trefferpunkte"
 
 msgid "Hit Points Left"
 msgstr "TP übrig"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr "Sie können es sich nicht leisten, Ihre Truppen aufzurüsten!"
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Ihre Truppen können aufgerüstet werden, aber das wird Sie teuer zu stehen "
+"kommen. Willen Sie die aufwerten?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Sind Sie sicher, dass Sie diese Armee entlassen wollen?"
 
 msgid "Followers"
 msgstr "Anhänger"

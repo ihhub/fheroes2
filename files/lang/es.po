@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 15:09+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2651,18 +2651,6 @@ msgstr ""
 "veterano entrenador de gladiadores acepta adiestrarte en la habilidad que "
 "prefieras."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Tus tropas pueden ser mejoradas, pero te saldrá caro. ¿Quieres actualizarlas?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "¿Estás seguro de que desea descartar este ejército?"
-
 msgid "Attack Skill"
 msgstr "Ataque"
 
@@ -2683,6 +2671,18 @@ msgstr "Puntos de daño"
 
 msgid "Hit Points Left"
 msgstr "Vida Restante"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Tus tropas pueden ser mejoradas, pero te saldrá caro. ¿Quieres actualizarlas?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "¿Estás seguro de que desea descartar este ejército?"
 
 #, fuzzy
 msgid "Followers"

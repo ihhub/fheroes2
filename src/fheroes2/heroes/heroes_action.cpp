@@ -25,7 +25,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <list>
 #include <memory>
 #include <ostream>
 #include <string>
@@ -58,7 +57,6 @@
 #include "logging.h"
 #include "m82.h"
 #include "maps.h"
-#include "maps_actions.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
 #include "math_base.h"
@@ -92,7 +90,7 @@ namespace
     {
         MusicalEffectPlayer() = default;
 
-        MusicalEffectPlayer( const int trackId )
+        explicit MusicalEffectPlayer( const int trackId )
         {
             play( trackId );
         }
@@ -188,6 +186,11 @@ namespace
 
         hero.FadeOut();
         hero.SetFreeman( reason );
+
+        // If the enemy is vanquished we fully redraw the radar map image as there might be color reset of enemy's objects.
+        if ( hero.GetKingdom().isLoss() ) {
+            Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
+        }
     }
 
     void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -399,16 +402,23 @@ namespace
             Army & army = castle->GetActualArmy();
 
             auto captureCastle = [&hero, dst_index, castle]() {
-                castle->GetKingdom().RemoveCastle( castle );
+                Kingdom & enemyKingdom = castle->GetKingdom();
+                enemyKingdom.RemoveCastle( castle );
                 hero.GetKingdom().AddCastle( castle );
                 world.CaptureObject( dst_index, hero.GetColor() );
 
                 castle->Scoute();
-                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
-                const fheroes2::Point castlePosition = Maps::GetPoint( dst_index );
 
                 Interface::Basic & I = Interface::Basic::Get();
-                I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
+
+                // If the enemy is not vanquished we update only the area around the castle on radar.
+                if ( !enemyKingdom.isLoss() ) {
+                    const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
+                    const fheroes2::Point castlePosition = Maps::GetPoint( dst_index );
+
+                    I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
+                }
+                // Otherwise we fully redraw the radar map image as there might be color reset of enemy's objects.
                 I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
             };
 
@@ -3048,8 +3058,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
-    Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
+    const MP2::MapObjectType objectType = world.GetTiles( tileIndex ).GetObject( tileIndex != heroPosIndex );
 
     // Play a permanent musical effect (that is, independent of the state of the object or actions with it) associated with the visited object,
     // if any, and in any case restore the music volume on exit. Auxiliary functions can play other musical effects depending on the situation.
@@ -3059,310 +3068,266 @@ void Heroes::Action( int tileIndex, bool isDestination )
         SetModes( ACTION );
     }
 
-    // new format map only
-    ListActions * list = world.GetListActions( tileIndex );
-    bool cancel_default = false;
-
-    if ( Modes( ACTION ) || list ) {
-        // most likely there will be some action, immediately center the map on the hero to avoid subsequent minor screen movements
+    // Most likely there will be some action, immediately center the map on the hero to avoid subsequent minor screen movements
+    if ( Modes( ACTION ) ) {
         Interface::Basic & I = Interface::Basic::Get();
 
         I.GetGameArea().SetCenter( GetCenter() );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
     }
 
-    if ( list ) {
-        for ( ListActions::const_iterator it = list->begin(); it != list->end(); ++it ) {
-            switch ( ( *it )->GetType() ) {
-            case ACTION_ACCESS:
-                if ( !ActionAccess::Action( static_cast<ActionAccess *>( *it ), tileIndex, *this ) )
-                    cancel_default = true;
-                break;
+    switch ( objectType ) {
+    case MP2::OBJ_MONSTER:
+        ActionToMonster( *this, tileIndex );
+        break;
 
-            case ACTION_DEFAULT:
-                if ( !ActionDefault::Action( static_cast<ActionDefault *>( *it ) ) )
-                    cancel_default = true;
-                break;
+    case MP2::OBJ_CASTLE:
+        ActionToCastle( *this, tileIndex );
+        break;
+    case MP2::OBJ_HEROES:
+        ActionToHeroes( *this, tileIndex );
+        break;
 
-            case ACTION_MESSAGE:
-                ActionMessage::Action( static_cast<ActionMessage *>( *it ) );
-                break;
+    case MP2::OBJ_BOAT:
+        ActionToBoat( *this, tileIndex );
+        break;
+    case MP2::OBJ_COAST:
+        ActionToCoast( *this, tileIndex );
+        break;
 
-            case ACTION_RESOURCES:
-                ActionResources::Action( static_cast<ActionResources *>( *it ), *this );
-                break;
+    // resource object
+    case MP2::OBJ_WINDMILL:
+    case MP2::OBJ_WATER_WHEEL:
+    case MP2::OBJ_MAGIC_GARDEN:
+    case MP2::OBJ_LEAN_TO:
+        ActionToObjectResource( *this, objectType, tileIndex );
+        break;
 
-            case ACTION_ARTIFACT:
-                ActionArtifact::Action( static_cast<ActionArtifact *>( *it ), *this );
-                break;
+    case MP2::OBJ_WAGON:
+        ActionToWagon( *this, tileIndex );
+        break;
+    case MP2::OBJ_SKELETON:
+        ActionToSkeleton( *this, objectType, tileIndex );
+        break;
 
-            default:
-                break;
-            }
-        }
+    // pickup object
+    case MP2::OBJ_RESOURCE:
+    case MP2::OBJ_BOTTLE:
+    case MP2::OBJ_CAMPFIRE:
+        ActionToPickupResource( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_TREASURE_CHEST:
+        ActionToTreasureChest( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_GENIE_LAMP:
+        ActionToGenieLamp( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_FLOTSAM:
+        ActionToFlotSam( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        ActionToShipwreckSurvivor( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_ARTIFACT:
+        ActionToArtifact( *this, tileIndex );
+        break;
+
+    // shrine circle
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+        ActionToShrine( *this, tileIndex );
+        break;
+
+    case MP2::OBJ_WITCHS_HUT:
+        ActionToWitchsHut( *this, objectType, tileIndex );
+        break;
+
+    // info message
+    case MP2::OBJ_SIGN:
+        ActionToSign( *this, tileIndex );
+        break;
+
+    // luck modification
+    case MP2::OBJ_FOUNTAIN:
+    case MP2::OBJ_FAERIE_RING:
+    case MP2::OBJ_IDOL:
+        ActionToGoodLuckObject( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_PYRAMID:
+        ActionToPyramid( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_MAGIC_WELL:
+        ActionToMagicWell( *this, tileIndex );
+        break;
+    case MP2::OBJ_TRADING_POST:
+        ActionToTradingPost( *this );
+        break;
+
+    // primary skill modification
+    case MP2::OBJ_FORT:
+    case MP2::OBJ_MERCENARY_CAMP:
+    case MP2::OBJ_WITCH_DOCTORS_HUT:
+    case MP2::OBJ_STANDING_STONES:
+        ActionToPrimarySkillObject( *this, objectType, tileIndex );
+        break;
+
+    // morale modification
+    case MP2::OBJ_OASIS:
+    case MP2::OBJ_TEMPLE:
+    case MP2::OBJ_WATERING_HOLE:
+    case MP2::OBJ_BUOY:
+        ActionToGoodMoraleObject( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_DERELICT_SHIP:
+        ActionToPoorMoraleObject( *this, objectType, tileIndex );
+        break;
+
+    // experience modification
+    case MP2::OBJ_GAZEBO:
+        ActionToExperienceObject( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_DAEMON_CAVE:
+        ActionToDaemonCave( *this, objectType, tileIndex );
+        break;
+
+    // teleports
+    case MP2::OBJ_STONE_LITHS:
+        ActionToTeleports( *this, tileIndex );
+        break;
+    case MP2::OBJ_WHIRLPOOL:
+        if ( isDestination )
+            ActionToWhirlpools( *this, tileIndex );
+        break;
+
+    case MP2::OBJ_OBSERVATION_TOWER:
+        ActionToObservationTower( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_MAGELLANS_MAPS:
+        ActionToMagellanMaps( *this, objectType, tileIndex );
+        break;
+
+    // capture color object
+    case MP2::OBJ_ALCHEMIST_LAB:
+    case MP2::OBJ_MINES:
+    case MP2::OBJ_SAWMILL:
+    case MP2::OBJ_LIGHTHOUSE:
+        ActionToCaptureObject( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_ABANDONED_MINE:
+        ActionToAbandonedMine( *this, objectType, tileIndex );
+        break;
+
+    // accept army
+    case MP2::OBJ_WATCH_TOWER:
+    case MP2::OBJ_EXCAVATION:
+    case MP2::OBJ_CAVE:
+    case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_PEASANT_HUT:
+        ActionToDwellingJoinMonster( *this, objectType, tileIndex );
+        break;
+
+    // recruit army
+    case MP2::OBJ_RUINS:
+    case MP2::OBJ_TREE_CITY:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_DESERT_TENT:
+        ActionToDwellingRecruitMonster( *this, objectType, tileIndex );
+        break;
+
+    // battle and recruit army
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_CITY_OF_DEAD:
+    case MP2::OBJ_TROLL_BRIDGE:
+        ActionToDwellingBattleMonster( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_ARTESIAN_SPRING:
+        ActionToArtesianSpring( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_XANADU:
+        ActionToXanadu( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_HILL_FORT:
+    case MP2::OBJ_FREEMANS_FOUNDRY:
+        ActionToUpgradeArmyObject( *this, objectType, "" );
+        break;
+
+    case MP2::OBJ_EVENT:
+        ActionToEvent( *this, tileIndex );
+        break;
+
+    case MP2::OBJ_OBELISK:
+        ActionToObelisk( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_TREE_OF_KNOWLEDGE:
+        ActionToTreeKnowledge( *this, objectType, tileIndex );
+        break;
+
+    case MP2::OBJ_ORACLE:
+        ActionToOracle( *this, objectType );
+        break;
+    case MP2::OBJ_SPHINX:
+        ActionToSphinx( *this, objectType, tileIndex );
+        break;
+
+    // loyalty version
+    case MP2::OBJ_WATER_ALTAR:
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_BARROW_MOUNDS:
+        ActionToDwellingRecruitMonster( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_ALCHEMIST_TOWER:
+        ActionToAlchemistsTower( *this );
+        break;
+    case MP2::OBJ_STABLES:
+        ActionToStables( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_ARENA:
+        ActionToArena( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_MERMAID:
+        ActionToGoodLuckObject( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_SIRENS:
+        ActionToSirens( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_JAIL:
+        ActionToJail( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_HUT_OF_MAGI:
+        ActionToHutMagi( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_EYE_OF_MAGI:
+        ActionToEyeMagi( *this, objectType );
+        break;
+
+    case MP2::OBJ_BARRIER:
+        ActionToBarrier( *this, objectType, tileIndex );
+        break;
+    case MP2::OBJ_TRAVELLER_TENT:
+        ActionToTravellersTent( *this, objectType, tileIndex );
+        break;
+
+    // other object
+    default:
+        break;
     }
-
-    if ( cancel_default ) {
-        if ( MP2::isPickupObject( objectType ) ) {
-            Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
-                std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-            tile.QuantityReset();
-        }
-    }
-    else
-        switch ( objectType ) {
-        case MP2::OBJ_MONSTER:
-            ActionToMonster( *this, tileIndex );
-            break;
-
-        case MP2::OBJ_CASTLE:
-            ActionToCastle( *this, tileIndex );
-            break;
-        case MP2::OBJ_HEROES:
-            ActionToHeroes( *this, tileIndex );
-            break;
-
-        case MP2::OBJ_BOAT:
-            ActionToBoat( *this, tileIndex );
-            break;
-        case MP2::OBJ_COAST:
-            ActionToCoast( *this, tileIndex );
-            break;
-
-        // resource object
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_LEAN_TO:
-            ActionToObjectResource( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_WAGON:
-            ActionToWagon( *this, tileIndex );
-            break;
-        case MP2::OBJ_SKELETON:
-            ActionToSkeleton( *this, objectType, tileIndex );
-            break;
-
-        // pickup object
-        case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_BOTTLE:
-        case MP2::OBJ_CAMPFIRE:
-            ActionToPickupResource( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_TREASURE_CHEST:
-            ActionToTreasureChest( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_GENIE_LAMP:
-            ActionToGenieLamp( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_FLOTSAM:
-            ActionToFlotSam( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
-            ActionToShipwreckSurvivor( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_ARTIFACT:
-            ActionToArtifact( *this, tileIndex );
-            break;
-
-        // shrine circle
-        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
-        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
-        case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-            ActionToShrine( *this, tileIndex );
-            break;
-
-        case MP2::OBJ_WITCHS_HUT:
-            ActionToWitchsHut( *this, objectType, tileIndex );
-            break;
-
-        // info message
-        case MP2::OBJ_SIGN:
-            ActionToSign( *this, tileIndex );
-            break;
-
-        // luck modification
-        case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_FAERIE_RING:
-        case MP2::OBJ_IDOL:
-            ActionToGoodLuckObject( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_PYRAMID:
-            ActionToPyramid( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_MAGIC_WELL:
-            ActionToMagicWell( *this, tileIndex );
-            break;
-        case MP2::OBJ_TRADING_POST:
-            ActionToTradingPost( *this );
-            break;
-
-        // primary skill modification
-        case MP2::OBJ_FORT:
-        case MP2::OBJ_MERCENARY_CAMP:
-        case MP2::OBJ_WITCH_DOCTORS_HUT:
-        case MP2::OBJ_STANDING_STONES:
-            ActionToPrimarySkillObject( *this, objectType, tileIndex );
-            break;
-
-        // morale modification
-        case MP2::OBJ_OASIS:
-        case MP2::OBJ_TEMPLE:
-        case MP2::OBJ_WATERING_HOLE:
-        case MP2::OBJ_BUOY:
-            ActionToGoodMoraleObject( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_DERELICT_SHIP:
-            ActionToPoorMoraleObject( *this, objectType, tileIndex );
-            break;
-
-        // experience modification
-        case MP2::OBJ_GAZEBO:
-            ActionToExperienceObject( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_DAEMON_CAVE:
-            ActionToDaemonCave( *this, objectType, tileIndex );
-            break;
-
-        // teleports
-        case MP2::OBJ_STONE_LITHS:
-            ActionToTeleports( *this, tileIndex );
-            break;
-        case MP2::OBJ_WHIRLPOOL:
-            if ( isDestination )
-                ActionToWhirlpools( *this, tileIndex );
-            break;
-
-        case MP2::OBJ_OBSERVATION_TOWER:
-            ActionToObservationTower( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_MAGELLANS_MAPS:
-            ActionToMagellanMaps( *this, objectType, tileIndex );
-            break;
-
-        // capture color object
-        case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_MINES:
-        case MP2::OBJ_SAWMILL:
-        case MP2::OBJ_LIGHTHOUSE:
-            ActionToCaptureObject( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_ABANDONED_MINE:
-            ActionToAbandonedMine( *this, objectType, tileIndex );
-            break;
-
-        // accept army
-        case MP2::OBJ_WATCH_TOWER:
-        case MP2::OBJ_EXCAVATION:
-        case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREE_HOUSE:
-        case MP2::OBJ_ARCHER_HOUSE:
-        case MP2::OBJ_GOBLIN_HUT:
-        case MP2::OBJ_DWARF_COTTAGE:
-        case MP2::OBJ_HALFLING_HOLE:
-        case MP2::OBJ_PEASANT_HUT:
-            ActionToDwellingJoinMonster( *this, objectType, tileIndex );
-            break;
-
-        // recruit army
-        case MP2::OBJ_RUINS:
-        case MP2::OBJ_TREE_CITY:
-        case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_DESERT_TENT:
-            ActionToDwellingRecruitMonster( *this, objectType, tileIndex );
-            break;
-
-        // battle and recruit army
-        case MP2::OBJ_DRAGON_CITY:
-        case MP2::OBJ_CITY_OF_DEAD:
-        case MP2::OBJ_TROLL_BRIDGE:
-            ActionToDwellingBattleMonster( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_ARTESIAN_SPRING:
-            ActionToArtesianSpring( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_XANADU:
-            ActionToXanadu( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_HILL_FORT:
-        case MP2::OBJ_FREEMANS_FOUNDRY:
-            ActionToUpgradeArmyObject( *this, objectType, "" );
-            break;
-
-        case MP2::OBJ_EVENT:
-            ActionToEvent( *this, tileIndex );
-            break;
-
-        case MP2::OBJ_OBELISK:
-            ActionToObelisk( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_TREE_OF_KNOWLEDGE:
-            ActionToTreeKnowledge( *this, objectType, tileIndex );
-            break;
-
-        case MP2::OBJ_ORACLE:
-            ActionToOracle( *this, objectType );
-            break;
-        case MP2::OBJ_SPHINX:
-            ActionToSphinx( *this, objectType, tileIndex );
-            break;
-
-        // loyalty version
-        case MP2::OBJ_WATER_ALTAR:
-        case MP2::OBJ_AIR_ALTAR:
-        case MP2::OBJ_FIRE_ALTAR:
-        case MP2::OBJ_EARTH_ALTAR:
-        case MP2::OBJ_BARROW_MOUNDS:
-            ActionToDwellingRecruitMonster( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_ALCHEMIST_TOWER:
-            ActionToAlchemistsTower( *this );
-            break;
-        case MP2::OBJ_STABLES:
-            ActionToStables( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_ARENA:
-            ActionToArena( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_MERMAID:
-            ActionToGoodLuckObject( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_SIRENS:
-            ActionToSirens( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_JAIL:
-            ActionToJail( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_HUT_OF_MAGI:
-            ActionToHutMagi( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_EYE_OF_MAGI:
-            ActionToEyeMagi( *this, objectType );
-            break;
-
-        case MP2::OBJ_BARRIER:
-            ActionToBarrier( *this, objectType, tileIndex );
-            break;
-        case MP2::OBJ_TRAVELLER_TENT:
-            ActionToTravellersTent( *this, objectType, tileIndex );
-            break;
-
-        // other object
-        default:
-            break;
-        }
 }

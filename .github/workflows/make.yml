@@ -58,6 +58,7 @@ jobs:
           tools_package_name: fheroes2_tools_ubuntu_x86-64_SDL2.zip
           tools_package_files: >-
             LICENSE
+            ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
             ./src/tools/82m2wav
             ./src/tools/extractor
@@ -134,6 +135,7 @@ jobs:
           tools_package_name: fheroes2_tools_ubuntu_arm64_SDL2.zip
           tools_package_files: >-
             LICENSE
+            ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
             ./src/tools/82m2wav
             ./src/tools/extractor
@@ -203,6 +205,7 @@ jobs:
           tools_package_name: fheroes2_tools_macos_x86-64_SDL2.zip
           tools_package_files: >-
             LICENSE
+            ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
             ./src/tools/82m2wav
             ./src/tools/extractor

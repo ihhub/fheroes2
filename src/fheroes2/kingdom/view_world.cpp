@@ -81,13 +81,13 @@ namespace
 
     // Compute a rectangle that defines which world pixels we can see in the "view world" window,
     // based on given zoom level and initial center
-    fheroes2::Rect computeROI( const fheroes2::Point & centerInPixel, const ViewWorld::ZoomLevel zoomLevel )
+    fheroes2::Rect computeROI( const fheroes2::Point & centerInPixel, const ZoomLevel zoomLevel )
     {
         const fheroes2::Rect sizeInPixels = Interface::Basic::Get().GetGameArea().GetROI();
 
         // how many pixels from "world map" we can see in "view world" window, given current zoom
-        const int32_t pixelsW = sizeInPixels.width * TILEWIDTH / tileSizePerZoomLevel[zoomLevel];
-        const int32_t pixelsH = sizeInPixels.height * TILEWIDTH / tileSizePerZoomLevel[zoomLevel];
+        const int32_t pixelsW = sizeInPixels.width * TILEWIDTH / tileSizePerZoomLevel[static_cast<uint8_t>( zoomLevel )];
+        const int32_t pixelsH = sizeInPixels.height * TILEWIDTH / tileSizePerZoomLevel[static_cast<uint8_t>( zoomLevel )];
 
         const int32_t x = centerInPixel.x - pixelsW / 2;
         const int32_t y = centerInPixel.y - pixelsH / 2;
@@ -95,41 +95,41 @@ namespace
         return { x, y, pixelsW, pixelsH };
     }
 
-    ViewWorld::ZoomLevel GetNextZoomLevel( const ViewWorld::ZoomLevel level, const bool cycle )
+    ZoomLevel GetNextZoomLevel( const ZoomLevel level, const bool cycle )
     {
         switch ( level ) {
-        case ViewWorld::ZoomLevel::ZoomLevel0:
-            return ViewWorld::ZoomLevel::ZoomLevel1;
-        case ViewWorld::ZoomLevel::ZoomLevel1:
-            return ViewWorld::ZoomLevel::ZoomLevel2;
+        case ZoomLevel::ZoomLevel0:
+            return ZoomLevel::ZoomLevel1;
+        case ZoomLevel::ZoomLevel1:
+            return ZoomLevel::ZoomLevel2;
 #ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
-        case ViewWorld::ZoomLevel::ZoomLevel2:
-            return ViewWorld::ZoomLevel::ZoomLevel3;
+        case ZoomLevel::ZoomLevel2:
+            return ZoomLevel::ZoomLevel3;
         default:
-            return cycle ? ViewWorld::ZoomLevel::ZoomLevel0 : ViewWorld::ZoomLevel::ZoomLevel3;
+            return cycle ? ZoomLevel::ZoomLevel0 : ZoomLevel::ZoomLevel3;
 #else
         default:
-            return cycle ? ViewWorld::ZoomLevel::ZoomLevel0 : ViewWorld::ZoomLevel::ZoomLevel2;
+            return cycle ? ZoomLevel::ZoomLevel0 : ZoomLevel::ZoomLevel2;
 #endif
         }
     }
 
-    ViewWorld::ZoomLevel GetPreviousZoomLevel( const ViewWorld::ZoomLevel level, const bool cycle )
+    ZoomLevel GetPreviousZoomLevel( const ZoomLevel level, const bool cycle )
     {
         switch ( level ) {
 #ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
-        case ViewWorld::ZoomLevel::ZoomLevel0:
-            return cycle ? ViewWorld::ZoomLevel::ZoomLevel3 : ViewWorld::ZoomLevel::ZoomLevel0;
+        case ZoomLevel::ZoomLevel0:
+            return cycle ? ZoomLevel::ZoomLevel3 : ZoomLevel::ZoomLevel0;
 #else
-        case ViewWorld::ZoomLevel::ZoomLevel0:
-            return cycle ? ViewWorld::ZoomLevel::ZoomLevel2 : ViewWorld::ZoomLevel::ZoomLevel0;
+        case ZoomLevel::ZoomLevel0:
+            return cycle ? ZoomLevel::ZoomLevel2 : ZoomLevel::ZoomLevel0;
 #endif
-        case ViewWorld::ZoomLevel::ZoomLevel1:
-            return ViewWorld::ZoomLevel::ZoomLevel0;
-        case ViewWorld::ZoomLevel::ZoomLevel2:
-            return ViewWorld::ZoomLevel::ZoomLevel1;
+        case ZoomLevel::ZoomLevel1:
+            return ZoomLevel::ZoomLevel0;
+        case ZoomLevel::ZoomLevel2:
+            return ZoomLevel::ZoomLevel1;
         default:
-            return ViewWorld::ZoomLevel::ZoomLevel2;
+            return ZoomLevel::ZoomLevel2;
         }
     }
 
@@ -250,12 +250,12 @@ namespace
     void DrawWorld( const ViewWorld::ZoomROIs & ROI, CacheForMapWithResources & cache )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Image & image = cache.cachedImages[ROI._zoomLevel];
+        const fheroes2::Image & image = cache.cachedImages[static_cast<uint8_t>( ROI._zoomLevel )];
 
         const fheroes2::Rect roiScreen = Interface::Basic::Get().GetGameArea().GetROI();
 
-        const int32_t offsetPixelsX = tileSizePerZoomLevel[ROI._zoomLevel] * ROI.GetROIinPixels().x / TILEWIDTH;
-        const int32_t offsetPixelsY = tileSizePerZoomLevel[ROI._zoomLevel] * ROI.GetROIinPixels().y / TILEWIDTH;
+        const int32_t offsetPixelsX = tileSizePerZoomLevel[static_cast<uint8_t>( ROI._zoomLevel )] * ROI.GetROIinPixels().x / TILEWIDTH;
+        const int32_t offsetPixelsY = tileSizePerZoomLevel[static_cast<uint8_t>( ROI._zoomLevel )] * ROI.GetROIinPixels().y / TILEWIDTH;
 
         const fheroes2::Point inPos( offsetPixelsX < 0 ? 0 : offsetPixelsX, offsetPixelsY < 0 ? 0 : offsetPixelsY );
         const fheroes2::Point outPos( BORDERWIDTH + ( offsetPixelsX < 0 ? -offsetPixelsX : 0 ), BORDERWIDTH + ( offsetPixelsY < 0 ? -offsetPixelsY : 0 ) );
@@ -478,7 +478,7 @@ namespace
     }
 }
 
-ViewWorld::ZoomROIs::ZoomROIs( const ViewWorld::ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels )
+ViewWorld::ZoomROIs::ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels )
     : _zoomLevel( zoomLevel )
     , _center( centerInPixels )
 {
@@ -489,7 +489,7 @@ ViewWorld::ZoomROIs::ZoomROIs( const ViewWorld::ZoomLevel zoomLevel, const fhero
 void ViewWorld::ZoomROIs::_updateZoomLevels()
 {
     for ( int32_t i = 0; i < zoomLevels; ++i ) {
-        _roiForZoomLevels[i] = computeROI( _center, static_cast<ViewWorld::ZoomLevel>( i ) );
+        _roiForZoomLevels[i] = computeROI( _center, static_cast<ZoomLevel>( i ) );
     }
 }
 
@@ -505,14 +505,14 @@ bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
     fheroes2::Point newCenter;
 
     if ( worldSize.width <= currentRect.width ) {
-        newCenter.x = worldSize.width / 2;
+        newCenter.x = ( worldSize.width - 1 ) / 2;
     }
     else {
         newCenter.x = std::clamp( centerInPixels.x, currentRect.width / 2, worldSize.width - currentRect.width / 2 );
     }
 
     if ( worldSize.height <= currentRect.height ) {
-        newCenter.y = worldSize.height / 2;
+        newCenter.y = ( worldSize.height - 1 ) / 2;
     }
     else {
         newCenter.y = std::clamp( centerInPixels.y, currentRect.height / 2, worldSize.height - currentRect.height / 2 );
@@ -548,16 +548,16 @@ bool ViewWorld::ZoomROIs::zoomOut( const bool cycle )
 
 const fheroes2::Rect & ViewWorld::ZoomROIs::GetROIinPixels() const
 {
-    return _roiForZoomLevels[_zoomLevel];
+    return _roiForZoomLevels[static_cast<uint8_t>( _zoomLevel )];
 }
 
 fheroes2::Rect ViewWorld::ZoomROIs::GetROIinTiles() const
 {
-    fheroes2::Rect result = _roiForZoomLevels[_zoomLevel];
-    result.x = result.x / TILEWIDTH;
-    result.y = result.y / TILEWIDTH;
-    result.width = ( result.width + TILEWIDTH - 1 ) / TILEWIDTH;
-    result.height = ( result.height + TILEWIDTH - 1 ) / TILEWIDTH;
+    fheroes2::Rect result = _roiForZoomLevels[static_cast<uint8_t>( _zoomLevel )];
+    result.x = ( result.x + TILEWIDTH / 2 ) / TILEWIDTH;
+    result.y = ( result.y + TILEWIDTH / 2 ) / TILEWIDTH;
+    result.width = ( result.width + TILEWIDTH / 2 ) / TILEWIDTH;
+    result.height = ( result.height + TILEWIDTH / 2 ) / TILEWIDTH;
     return result;
 }
 
@@ -575,6 +575,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     Settings & conf = Settings::Get();
     const bool isEvilInterface = conf.isEvilInterfaceEnabled();
     const bool isHideInterface = conf.isHideInterfaceEnabled();
+    const ZoomLevel zoomLevel = conf.ViewWorldZoomLevel();
 
     // If the interface is currently hidden, we have to temporarily bring it back, because
     // the map generation in the World View mode heavily depends on the existing game area
@@ -591,16 +592,17 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     const fheroes2::Rect visibleScreenInPixels = gameArea.GetROI();
 
     // Initial view is centered on where the player is centered
-    fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.width / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.height / 2 );
+    fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + ( visibleScreenInPixels.width + TILEWIDTH ) / 2,
+                                        worldMapROI.y * TILEWIDTH + ( visibleScreenInPixels.height + TILEWIDTH ) / 2 );
 
     // Special case: full map picture can be contained within the window -> center view on center of the map
-    if ( world.w() * tileSizePerZoomLevel[ZoomLevel::ZoomLevel2] <= visibleScreenInPixels.width
-         && world.h() * tileSizePerZoomLevel[ZoomLevel::ZoomLevel2] <= visibleScreenInPixels.height ) {
+    if ( world.w() * tileSizePerZoomLevel[static_cast<uint8_t>( zoomLevel )] <= visibleScreenInPixels.width
+         && world.h() * tileSizePerZoomLevel[static_cast<uint8_t>( zoomLevel )] <= visibleScreenInPixels.height ) {
         viewCenterInPixels.x = world.w() * TILEWIDTH / 2;
         viewCenterInPixels.y = world.h() * TILEWIDTH / 2;
     }
 
-    ZoomROIs currentROI( ZoomLevel::ZoomLevel2, viewCenterInPixels );
+    ZoomROIs currentROI( zoomLevel, viewCenterInPixels );
 
     CacheForMapWithResources cache( mode );
 
@@ -653,8 +655,12 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         else if ( le.MousePressLeft( visibleScreenInPixels ) ) {
             if ( isDrag ) {
                 const fheroes2::Point & newMousePos = le.GetMouseCursor();
-                const fheroes2::Point newRoiCenter( initRoiCenter.x - ( newMousePos.x - initMousePos.x ) * TILEWIDTH / tileSizePerZoomLevel[currentROI._zoomLevel],
-                                                    initRoiCenter.y - ( newMousePos.y - initMousePos.y ) * TILEWIDTH / tileSizePerZoomLevel[currentROI._zoomLevel] );
+                const fheroes2::Point newRoiCenter( initRoiCenter.x
+                                                        - ( newMousePos.x - initMousePos.x ) * TILEWIDTH
+                                                              / tileSizePerZoomLevel[static_cast<uint8_t>( currentROI._zoomLevel )],
+                                                    initRoiCenter.y
+                                                        - ( newMousePos.y - initMousePos.y ) * TILEWIDTH
+                                                              / tileSizePerZoomLevel[static_cast<uint8_t>( currentROI._zoomLevel )] );
                 changed = currentROI.ChangeCenter( newRoiCenter );
             }
             else {
@@ -686,6 +692,9 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         conf.setHideInterface( true );
         interface.Reset();
     }
+
+    // Memorize the last zoom level value.
+    conf.SetViewWorldZoomLevel( currentROI._zoomLevel );
 
     LocalEvent::ResumeCycling();
 }
