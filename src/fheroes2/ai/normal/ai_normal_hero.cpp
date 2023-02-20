@@ -355,7 +355,7 @@ namespace
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD;
 
         case MP2::OBJ_MAGIC_WELL:
-            return !hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
+            return !hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
 
         case MP2::OBJ_ARTESIAN_SPRING:
             return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
@@ -852,9 +852,8 @@ namespace AI
 
             return 1000.0 * art.getArtifactValue();
         }
-        case MP2::OBJ_WATERCHEST:
-        case MP2::OBJ_SHIPWRECKSURVIVOR:
-        case MP2::OBJ_TREASURECHEST: {
+        case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        case MP2::OBJ_TREASURE_CHEST: {
             // TODO: add logic if the object contains an artifact and resources.
 
             if ( tile.QuantityArtifact().isValid() ) {
@@ -874,7 +873,7 @@ namespace AI
 
         case MP2::OBJ_WAGON:
         case MP2::OBJ_SKELETON:
-        case MP2::OBJ_DAEMONCAVE:
+        case MP2::OBJ_DAEMON_CAVE:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD: {
             if ( !tile.QuantityArtifact().isValid() ) {
@@ -918,36 +917,35 @@ namespace AI
             const Spell & spell = tile.QuantitySpell();
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
-        case MP2::OBJ_TREEKNOWLEDGE:
-        case MP2::OBJ_MERCENARYCAMP:
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
+        case MP2::OBJ_MERCENARY_CAMP:
         case MP2::OBJ_FORT:
-        case MP2::OBJ_STANDINGSTONES:
-        case MP2::OBJ_DOCTORHUT:
-        case MP2::OBJ_WITCHSHUT: {
+        case MP2::OBJ_STANDING_STONES:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
+        case MP2::OBJ_WITCHS_HUT: {
             return 500.0;
         }
-        case MP2::OBJ_WATCHTOWER:
+        case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREEHOUSE:
-        case MP2::OBJ_ARCHERHOUSE:
-        case MP2::OBJ_GOBLINHUT:
-        case MP2::OBJ_DWARFCOTT:
-        case MP2::OBJ_HALFLINGHOLE:
-        case MP2::OBJ_PEASANTHUT:
-        case MP2::OBJ_THATCHEDHUT:
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_ARCHER_HOUSE:
+        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_HALFLING_HOLE:
+        case MP2::OBJ_PEASANT_HUT:
         case MP2::OBJ_RUINS:
-        case MP2::OBJ_TREECITY:
-        case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJ_DESERTTENT:
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS:
-        case MP2::OBJ_CITYDEAD:
-        case MP2::OBJ_TROLLBRIDGE:
-        case MP2::OBJ_DRAGONCITY: {
+        case MP2::OBJ_TREE_CITY:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_WATER_ALTAR:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
+        case MP2::OBJ_CITY_OF_DEAD:
+        case MP2::OBJ_TROLL_BRIDGE:
+        case MP2::OBJ_DRAGON_CITY: {
             return tile.QuantityTroop().GetStrength();
         }
         case MP2::OBJ_STONE_LITHS: {
@@ -1079,7 +1077,7 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_FAERIERING:
+        case MP2::OBJ_FAERIE_RING:
         case MP2::OBJ_IDOL: {
             const int luck = hero.GetLuck();
             if ( luck >= Luck::IRISH ) {
@@ -1097,11 +1095,11 @@ namespace AI
 
             return 100;
         }
-        case MP2::OBJ_MAGICGARDEN:
-        case MP2::OBJ_WATERWHEEL:
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_LEANTO:
-        case MP2::OBJ_DERELICTSHIP: {
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_DERELICT_SHIP: {
             if ( tile.QuantityIsValid() ) {
                 return 850;
             }
