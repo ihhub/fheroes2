@@ -184,10 +184,9 @@ void Interface::Radar::Build()
 void Interface::Radar::SetZoom()
 {
     const int32_t worldWidth = world.w();
-    const int32_t worldHeight = world.h();
 
     // Currently we have and support only square size maps.
-    assert( worldWidth == worldHeight );
+    assert( worldWidth == world.h() );
 
     _zoom = static_cast<double>( area.width ) / worldWidth;
 
