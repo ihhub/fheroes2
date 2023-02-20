@@ -237,7 +237,7 @@ void Maps::Tiles::QuantitySetResource( int res, uint32_t count )
     using Quantity1Type = decltype( quantity1 );
     using Quantity2Type = decltype( quantity2 );
     static_assert( std::is_same_v<Quantity1Type, uint8_t> && std::is_same_v<Quantity2Type, uint8_t>,
-                   "Type of quantity1 or quantity2 has been changed, check the logic below" );
+                   "Types of tile's quantities have been changed, check the logic below" );
 
     assert( res >= std::numeric_limits<Quantity1Type>::min() && res <= std::numeric_limits<Quantity1Type>::max() );
 
@@ -573,9 +573,12 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         if ( Artifact::UNKNOWN != art ) {
             if ( art == Artifact::SPELL_SCROLL ) {
                 static_assert( std::is_same_v<decltype( quantity1 ), uint8_t> && std::is_same_v<decltype( quantity2 ), uint8_t>,
-                               "Type of quantity1 or quantity2 has been changed, check the logic below" );
+                               "Types of tile's quantities have been changed, check the bitwise arithmetic below" );
+                static_assert( Spell::FIREBALL < Spell::SETWGUARDIAN, "The order of spell IDs has been changed, check the logic below" );
 
-                const int spell = ( 1 + ( quantity2 << 5 ) + ( quantity1 >> 3 ) ) & 0xFF;
+                // Spell id of a spell scroll is represented by 2 low-order bits of quantity2 and 5 high-order bits of quantity1 plus one, and cannot be random
+                const int spell
+                    = std::clamp( ( ( quantity2 & 0x03 ) << 5 ) + ( quantity1 >> 3 ) + 1, static_cast<int>( Spell::FIREBALL ), static_cast<int>( Spell::SETWGUARDIAN ) );
 
                 QuantitySetVariant( 15 );
                 QuantitySetSpell( spell );
