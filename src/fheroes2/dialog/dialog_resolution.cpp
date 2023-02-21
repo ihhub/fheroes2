@@ -145,6 +145,11 @@ namespace
             // Do nothing.
         }
 
+        void ActionListDoubleClick( fheroes2::ResolutionInfo & item, const fheroes2::Point &, int32_t, int32_t ) override
+        {
+            ActionListDoubleClick( item );
+        }
+
         void ActionListDoubleClick( fheroes2::ResolutionInfo & /*unused*/ ) override
         {
             _isDoubleClicked = true;
