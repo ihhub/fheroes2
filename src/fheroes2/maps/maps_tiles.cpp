@@ -1697,6 +1697,25 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
         return false;
     }
 
+    // Tiles on which allied heroes are located are inaccessible
+    if ( _mainObjectType == MP2::OBJ_HEROES ) {
+        const Heroes * hero = GetHeroes();
+        assert( hero != nullptr );
+
+        if ( hero->GetColor() != heroColor && hero->isFriends( heroColor ) ) {
+            return false;
+        }
+    }
+
+    // Tiles on which the entrances to the allied castles are located are inaccessible
+    if ( _mainObjectType == MP2::OBJ_CASTLE ) {
+        const Castle * castle = world.getCastleEntrance( GetCenter() );
+
+        if ( castle && castle->GetColor() != heroColor && castle->isFriends( heroColor ) ) {
+            return false;
+        }
+    }
+
     return ( direction & tilePassable ) != 0;
 }
 
