@@ -257,114 +257,149 @@ namespace
         taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts(), taker, giver );
     }
 
-    void AIToCastle( Heroes & hero, int32_t dst_index )
+    void AIToCastle( Heroes & hero, const int32_t dstIndex )
     {
-        Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
+        Castle * castle = world.getCastleEntrance( Maps::GetPoint( dstIndex ) );
         if ( castle == nullptr ) {
-            // Something is wrong while calling this function for incorrect tile.
             assert( 0 );
+
+            DEBUG_LOG( DBG_AI, DBG_WARN,
+                       hero.GetName() << " is trying to visit the castle on tile " << dstIndex << ", but there is no entrance to the castle on this tile" )
             return;
         }
 
         if ( hero.GetColor() == castle->GetColor() ) {
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() )
+            assert( hero.GetIndex() == dstIndex );
+
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visits " << castle->GetName() )
+
             castle->MageGuildEducateHero( hero );
-            hero.SetVisited( dst_index );
-        }
-        if ( hero.isFriends( castle->GetColor() ) ) {
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " disable visiting" )
-        }
-        else {
-            Army & army = castle->GetActualArmy();
+            hero.SetVisited( dstIndex );
 
-            if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() )
-
-                Heroes * defender = castle->GetHero();
-                castle->ActionPreBattle();
-
-                const bool playVanishingHeroSound = defender != nullptr && defender->isControlHuman();
-
-                // new battle
-                Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
-
-                castle->ActionAfterBattle( res.AttackerWins() );
-
-                // loss defender
-                if ( !res.DefenderWins() && defender )
-                    AIBattleLose( *defender, res, false, nullptr, playVanishingHeroSound );
-
-                // loss attacker
-                if ( !res.AttackerWins() )
-                    AIBattleLose( hero, res, true, &( castle->GetCenter() ), playVanishingHeroSound );
-
-                // wins attacker
-                if ( res.AttackerWins() ) {
-                    castle->GetKingdom().RemoveCastle( castle );
-                    hero.GetKingdom().AddCastle( castle );
-                    world.CaptureObject( dst_index, hero.GetColor() );
-                    castle->Scoute();
-
-                    hero.IncreaseExperience( res.GetExperienceAttacker() );
-                }
-                // wins defender
-                else if ( res.DefenderWins() && defender ) {
-                    defender->IncreaseExperience( res.GetExperienceDefender() );
-                }
-            }
-            else {
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " capture enemy castle " << castle->GetName() )
-
-                castle->GetKingdom().RemoveCastle( castle );
-                hero.GetKingdom().AddCastle( castle );
-                world.CaptureObject( dst_index, hero.GetColor() );
-                castle->Scoute();
-            }
-        }
-    }
-
-    void AIToHeroes( Heroes & hero, int32_t dst_index )
-    {
-        Heroes * other_hero = world.GetTiles( dst_index ).GetHeroes();
-        if ( !other_hero )
             return;
+        }
 
-        if ( hero.GetColor() == other_hero->GetColor() ) {
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " meeting " << other_hero->GetName() )
-            AIMeeting( hero, *other_hero );
+        if ( hero.isFriends( castle->GetColor() ) ) {
+            assert( 0 );
+
+            DEBUG_LOG( DBG_AI, DBG_WARN, hero.GetName() << " could not visit the allied castle " << castle->GetName() )
+            return;
         }
-        else if ( hero.isFriends( other_hero->GetColor() ) ) {
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " disable meeting" )
-        }
-        else {
-            if ( other_hero->inCastle() ) {
-                AIToCastle( hero, dst_index );
-                return;
+
+        auto captureCastle = [&hero, dstIndex, castle]() {
+            castle->GetKingdom().RemoveCastle( castle );
+            hero.GetKingdom().AddCastle( castle );
+            world.CaptureObject( dstIndex, hero.GetColor() );
+
+            castle->Scoute();
+        };
+
+        Army & army = castle->GetActualArmy();
+
+        // Hero is standing in front of the castle, which means that there must be an enemy army in the castle
+        if ( hero.GetIndex() != dstIndex ) {
+            assert( army.isValid() && army.GetColor() != hero.GetColor() );
+
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacks the enemy castle " << castle->GetName() )
+
+            Heroes * defender = castle->GetHero();
+            const bool playVanishingHeroSound = defender != nullptr && defender->isControlHuman();
+
+            castle->ActionPreBattle();
+
+            Battle::Result res = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+            castle->ActionAfterBattle( res.AttackerWins() );
+
+            // The defender was defeated
+            if ( !res.DefenderWins() && defender ) {
+                AIBattleLose( *defender, res, false, nullptr, playVanishingHeroSound );
             }
 
-            const bool playVanishingHeroSound = other_hero->isControlHuman();
+            // The attacker was defeated
+            if ( !res.AttackerWins() ) {
+                AIBattleLose( hero, res, true, &( castle->GetCenter() ), playVanishingHeroSound );
+            }
 
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() )
-
-            // new battle
-            Battle::Result res = Battle::Loader( hero.GetArmy(), other_hero->GetArmy(), dst_index );
-
-            // loss defender
-            if ( !res.DefenderWins() )
-                AIBattleLose( *other_hero, res, false, nullptr, playVanishingHeroSound );
-
-            // loss attacker
-            if ( !res.AttackerWins() )
-                AIBattleLose( hero, res, true, &( other_hero->GetCenter() ), playVanishingHeroSound );
-
-            // wins attacker
+            // The attacker won
             if ( res.AttackerWins() ) {
+                captureCastle();
+
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
             }
-            // wins defender
-            else if ( res.DefenderWins() ) {
-                other_hero->IncreaseExperience( res.GetExperienceDefender() );
+            // The defender won
+            else if ( res.DefenderWins() && defender ) {
+                defender->IncreaseExperience( res.GetExperienceDefender() );
             }
+
+            return;
+        }
+
+        // If hero is already in the castle, then there must be his own army in the castle
+        assert( army.isValid() && army.GetColor() == hero.GetColor() );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " captures the enemy castle " << castle->GetName() )
+
+        captureCastle();
+
+        castle->MageGuildEducateHero( hero );
+        hero.SetVisited( dstIndex );
+    }
+
+    void AIToHeroes( Heroes & hero, const int32_t dstIndex )
+    {
+        Heroes * otherHero = world.GetTiles( dstIndex ).GetHeroes();
+        if ( otherHero == nullptr ) {
+            assert( 0 );
+
+            DEBUG_LOG( DBG_AI, DBG_WARN, hero.GetName() << " is trying to meet the hero on tile " << dstIndex << ", but there is no hero on this tile" )
+            return;
+        }
+
+        if ( hero.GetColor() == otherHero->GetColor() ) {
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " meets " << otherHero->GetName() )
+
+            AIMeeting( hero, *otherHero );
+
+            return;
+        }
+
+        if ( hero.isFriends( otherHero->GetColor() ) ) {
+            assert( 0 );
+
+            DEBUG_LOG( DBG_AI, DBG_WARN, hero.GetName() << " could not meet the allied hero " << otherHero->GetName() )
+            return;
+        }
+
+        if ( otherHero->inCastle() ) {
+            AIToCastle( hero, dstIndex );
+
+            return;
+        }
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacks " << otherHero->GetName() )
+
+        const bool playVanishingHeroSound = otherHero->isControlHuman();
+
+        Battle::Result res = Battle::Loader( hero.GetArmy(), otherHero->GetArmy(), dstIndex );
+
+        // The defender was defeated
+        if ( !res.DefenderWins() ) {
+            AIBattleLose( *otherHero, res, false, nullptr, playVanishingHeroSound );
+        }
+
+        // The attacker was defeated
+        if ( !res.AttackerWins() ) {
+            AIBattleLose( hero, res, true, &( otherHero->GetCenter() ), playVanishingHeroSound );
+        }
+
+        // The attacker won
+        if ( res.AttackerWins() ) {
+            hero.IncreaseExperience( res.GetExperienceAttacker() );
+        }
+        // The defender won
+        else if ( res.DefenderWins() ) {
+            otherHero->IncreaseExperience( res.GetExperienceDefender() );
         }
     }
 
