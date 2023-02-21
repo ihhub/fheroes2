@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -276,7 +277,8 @@ namespace fheroes2
     class DynamicImageDialogElement : public DialogElement
     {
     public:
-        explicit DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndices, const uint64_t delay );
+        explicit DynamicImageDialogElement( const int icnId, std::map<uint32_t, Point> backgroundIndices, const uint64_t delay, const std::uint32_t start_index = 0,
+                                            const Point animationOffset = { 0, 0 }, const Size area = {} );
 
         ~DynamicImageDialogElement() override = default;
 
@@ -292,11 +294,15 @@ namespace fheroes2
     private:
         const int _icnId;
 
-        const std::vector<uint32_t> _backgroundIndices;
+        const std::map<uint32_t, Point> _backgroundIndices;
 
         const uint64_t _delay;
 
         mutable uint32_t _currentIndex;
+
+        const uint32_t _indexOffset;
+
+        const Point _animationOffset;
 
         Point _internalOffset;
     };

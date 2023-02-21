@@ -18,10 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "ui_dialog.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <map>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -42,7 +45,6 @@
 #include "screen.h"
 #include "spell_info.h"
 #include "ui_button.h"
-#include "ui_dialog.h"
 #include "ui_text.h"
 
 class HeroBase;
@@ -692,40 +694,43 @@ namespace fheroes2
         showMessage( header, description, buttons, { this } );
     }
 
-    DynamicImageDialogElement::DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndices, const uint64_t delay )
+    DynamicImageDialogElement::DynamicImageDialogElement( const int icnId, std::map<uint32_t, Point> backgroundIndices, const uint64_t delay,
+                                                          const std::uint32_t start_index, const Point animationOffset, const Size area )
         : _icnId( icnId )
-        , _backgroundIndices( backgroundIndices )
+        , _backgroundIndices( std::move( backgroundIndices ) )
         , _delay( delay )
         , _currentIndex( 0 )
+        , _indexOffset( start_index )
+        , _animationOffset( animationOffset )
     {
         assert( !_backgroundIndices.empty() && _delay > 0 );
 
-        for ( const uint32_t index : _backgroundIndices ) {
-            const Sprite & image = AGG::GetICN( _icnId, index );
+        _area = area;
+
+        for ( const std::pair<uint32_t, Point> pair : _backgroundIndices ) {
+            const Sprite & image = AGG::GetICN( _icnId, pair.first );
             _area.width = std::max( _area.width, image.width() );
             _area.height = std::max( _area.height, image.height() );
 
-            _internalOffset = { ( _area.width - image.width() ) / 2, ( _area.height - image.height() ) / 2 };
+            _internalOffset = { _area.width / 2, _area.height / 2 };
         }
     }
 
     void DynamicImageDialogElement::draw( Image & output, const Point & offset ) const
     {
         if ( _currentIndex == 0 ) {
-            // Since this is the first time to draw we have to draw the background.
-            for ( const uint32_t index : _backgroundIndices ) {
-                const Sprite & image = AGG::GetICN( _icnId, index );
-                Blit( image, 0, 0, output, offset.x + ( _area.width - image.width() ) / 2, offset.y + ( _area.height - image.height() ) / 2, image.width(),
-                      image.height() );
+            for ( const std::pair<uint32_t, Point> pair : _backgroundIndices ) {
+                const Sprite & image = AGG::GetICN( _icnId, pair.first );
+                Blit( image, 0, 0, output, offset.x + pair.second.x - _internalOffset.x, offset.y + pair.second.y - _internalOffset.y, image.width(), image.height() );
             }
         }
 
-        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, 0, _currentIndex );
+        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, _indexOffset, _currentIndex );
         ++_currentIndex;
 
         const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
 
-        Blit( animationImage, 0, 0, output, offset.x + _internalOffset.x + animationImage.x(), offset.y + _internalOffset.y + animationImage.y(), animationImage.width(),
+        Blit( animationImage, 0, 0, output, offset.x + _animationOffset.x - _internalOffset.x, offset.y + _animationOffset.y - _internalOffset.y, animationImage.width(),
               animationImage.height() );
     }
 
