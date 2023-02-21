@@ -53,6 +53,7 @@ namespace
     // TODO: this is a hack over partially incorrect text height calculation. Fix it later together with the Text classes.
     const int32_t textOffsetYCorrection = 6;
     const std::string middleText = " x ";
+    const int32_t textPadding = 6;
 
     std::pair<std::string, std::string> getResolutionStrings( const fheroes2::ResolutionInfo & resolution )
     {
@@ -94,7 +95,6 @@ namespace
     public:
         using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListSingleClick;
         using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListPressRight;
-        using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListDoubleClick;
 
         explicit ResolutionList( const fheroes2::Point & offset )
             : Interface::ListBox<fheroes2::ResolutionInfo>( offset )
@@ -108,18 +108,15 @@ namespace
             const fheroes2::FontType fontType = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
             const auto [leftText, rightText] = getResolutionStrings( resolution );
-            const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
-            const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
-
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
 
-            const int32_t textOffsetX = offsetX + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetX = offsetX + textPadding;
             const int32_t textOffsetY = offsetY + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2;
 
             resolutionText.draw( textOffsetX, textOffsetY, fheroes2::Display::instance() );
 
             const fheroes2::Text aspectRatioText( getAspectRatio( resolution ), fontType );
-            aspectRatioText.draw( offsetX + editBoxLength - editBoxLength / 3, textOffsetY, fheroes2::Display::instance() );
+            aspectRatioText.draw( offsetX + editBoxLength - aspectRatioText.width() - textPadding, textOffsetY, fheroes2::Display::instance() );
         }
 
         void RedrawBackground( const fheroes2::Point & dst ) override
@@ -171,17 +168,15 @@ namespace
             const fheroes2::FontType fontType = fheroes2::FontType::normalYellow();
 
             const auto [leftText, rightText] = getResolutionStrings( resolution );
-            const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
-            const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
-            const int32_t textOffsetX = dst.x + 41 + editBoxLength / 3 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetX = dst.x + 41 + textPadding;
             const int32_t textOffsetY = dst.y + 287 + ( resolutionItemHeight - text.height() + textOffsetYCorrection ) / 2;
 
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
             resolutionText.draw( textOffsetX, textOffsetY, output );
 
             const fheroes2::Text aspectRatioText( getAspectRatio( resolution ), fontType );
-            aspectRatioText.draw( dst.x + 41 + editBoxLength - editBoxLength / 3, textOffsetY, output );
+            aspectRatioText.draw( dst.x + 41 + editBoxLength - aspectRatioText.width() - textPadding, textOffsetY, output );
         }
     }
 }
