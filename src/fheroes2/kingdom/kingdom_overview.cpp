@@ -786,7 +786,7 @@ void Kingdom::openOverviewDialog()
         else if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
-        else if ( le.MousePressRight( rectIncome ) || le.MousePressRight( rectGoldPerDay )) {
+        else if ( le.MousePressRight( rectIncome ) || le.MousePressRight( rectGoldPerDay ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::ZERO );
         }
         else if ( le.MousePressRight( rectLighthouse ) ) {
