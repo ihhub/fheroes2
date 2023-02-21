@@ -387,6 +387,7 @@ namespace
     {
         Castle * castle = world.getCastleEntrance( Maps::GetPoint( dstIndex ) );
         if ( castle == nullptr ) {
+            // This should never happen
             assert( 0 );
 
             DEBUG_LOG( DBG_GAME, DBG_WARN,
@@ -406,6 +407,7 @@ namespace
         }
 
         if ( hero.isFriends( castle->GetColor() ) ) {
+            // This should never happen - hero should not be able to visit an allied castle
             assert( 0 );
 
             DEBUG_LOG( DBG_GAME, DBG_WARN, hero.GetName() << " could not visit the allied castle " << castle->GetName() )
@@ -488,6 +490,7 @@ namespace
     {
         Heroes * otherHero = world.GetTiles( dstIndex ).GetHeroes();
         if ( otherHero == nullptr ) {
+            // This should never happen
             assert( 0 );
 
             DEBUG_LOG( DBG_GAME, DBG_WARN, hero.GetName() << " is trying to meet the hero on tile " << dstIndex << ", but there is no hero on this tile" )
@@ -503,6 +506,7 @@ namespace
         }
 
         if ( hero.isFriends( otherHero->GetColor() ) ) {
+            // This should never happen - hero should not be able to meet an allied hero
             assert( 0 );
 
             DEBUG_LOG( DBG_GAME, DBG_WARN, hero.GetName() << " could not meet the allied hero " << otherHero->GetName() )
