@@ -71,16 +71,15 @@ namespace fheroes2
         Copy( lighthouseTop, 0, 0, combined, TILEWIDTH * 2 + lighthouseTop.x(), lighthouseTop.y() - topOffset, TILEWIDTH, TILEWIDTH );
         Copy( lighthouseMiddle, 0, 0, combined, TILEWIDTH * 2 + lighthouseMiddle.x(), TILEWIDTH + lighthouseMiddle.y() - topOffset, TILEWIDTH, TILEWIDTH );
         Copy( lighthouseBottom, 0, 0, combined, TILEWIDTH * 2 + lighthouseBottom.x(), TILEWIDTH * 2 + lighthouseBottom.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseLight, 0, 0, combined, TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset, TILEWIDTH, TILEWIDTH );
 
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( std::to_string( lighthouseCount ), FontType::normalWhite() ) );
 
         // Use MAPS_DELAY for animation delay since the lighthouse is a map object
-        const CustomDynamicImageDialogElement lighthouseLightElement( combined, ICN::OBJNMUL2, getAnimationDelayValue( Game::MAPS_DELAY ),
+        const CustomDynamicImageDialogElement lighthouseCustomDynamicImageElement( combined, ICN::OBJNMUL2, getAnimationDelayValue( Game::MAPS_DELAY ),
                                                                       { TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset }, 0x3D );
 
         // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
         showMessage( Text( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
-                     { &lighthouseLightElement, &lighthouseControlledElement } );
+                     { &lighthouseCustomDynamicImageElement, &lighthouseControlledElement } );
     }
 }
