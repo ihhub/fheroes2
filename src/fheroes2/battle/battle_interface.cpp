@@ -3451,7 +3451,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
         if ( resurrects != 0 ) {
             auto log = []( Battle::Status & uiEl, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
                 StringReplace( localMsg, "%{count}", static_cast<int32_t>( localRes ) );
-                StringReplace( localMsg, "%{unit}", localUnit );
+                StringReplaceWithLowercase( localMsg, "%{unit}", localUnit );
 
                 uiEl.SetMessage( localMsg, true );
                 uiEl.SetMessage( "", false );
@@ -3464,7 +3464,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
                 break;
 
             case Monster::VAMPIRE_LORD:
-                msg = _n( "1 %{unit} rised.", "%{count} %{unit} revived.", resurrects );
+                msg = _n( "1 %{unit} is revived.", "%{count} %{unit} are revived.", resurrects );
                 log( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
                 break;
             default:
