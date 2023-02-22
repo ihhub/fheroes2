@@ -770,9 +770,7 @@ namespace fheroes2
             Blit( _image, 0, 0, output, offset.x, offset.y, _image.width(), _image.height() );
         }
 
-        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex++ );
-        const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
-
+        const Sprite & animationImage = AGG::GetICN( _icnId, ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex++ ) );
         Blit( animationImage, 0, 0, output, offset.x + _animationPosition.x, offset.y + _animationPosition.y, animationImage.width(), animationImage.height() );
     }
 
