@@ -2230,9 +2230,11 @@ namespace fheroes2
 
                     _icnVsSprite[id].reserve( golemICNSize + copyFramesNum );
                     // 'MOVE_MAIN' frames starts from the 6th frame in Golem ICN sprites.
-                    const std::vector<fheroes2::Sprite>::const_iterator firstFrameToCopy = _icnVsSprite[id].begin() + 6;
-                    _icnVsSprite[id].insert( _icnVsSprite[id].end(), firstFrameToCopy, firstFrameToCopy + copyFramesNum );
-                    for ( int32_t i = 0; i < copyFramesNum; ++i ) {
+                    size_t copyFrame = 6;
+
+                    for ( int32_t i = 0; i < copyFramesNum; ++i, ++copyFrame ) {
+                        _icnVsSprite[id].push_back( _icnVsSprite[id][copyFrame] );
+
                         const size_t frameID = golemICNSize + i;
                         // We have 7 'MOVE_MAIN' frames and 1/4 of cell to expand the horizontal movement, so we shift the first copied frame by "6*CELLW/(4*7)" to the
                         // left and reduce this shift every next frame by "CELLW/(7*4)".
