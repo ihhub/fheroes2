@@ -21,7 +21,6 @@
 #pragma once
 
 #include <cstdint>
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -277,8 +276,7 @@ namespace fheroes2
     class DynamicImageDialogElement : public DialogElement
     {
     public:
-        explicit DynamicImageDialogElement( const int icnId, std::map<uint32_t, Point> backgroundIndices, const uint64_t delay, const std::uint32_t start_index = 0,
-                                            const Point animationOffset = { 0, 0 }, const Size area = {} );
+        explicit DynamicImageDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint64_t delay );
 
         ~DynamicImageDialogElement() override = default;
 
@@ -294,16 +292,43 @@ namespace fheroes2
     private:
         const int _icnId;
 
-        const std::map<uint32_t, Point> _backgroundIndices;
+        const std::vector<uint32_t> _backgroundIndices;
 
         const uint64_t _delay;
 
         mutable uint32_t _currentIndex;
 
-        const uint32_t _indexOffset;
-
-        const Point _animationOffset;
-
         Point _internalOffset;
+    };
+
+    class CustomDynamicImageDialogElement : public DialogElement
+    {
+    public:
+        explicit CustomDynamicImageDialogElement( Image staticImage, const int animationIcnId, const uint64_t delay, const Point animationPositionOffset = { 0, 0 },
+                                                  const uint32_t animationIndexOffset = 0 );
+
+        ~CustomDynamicImageDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        // Never call this method as a dynamic image has nothing to popup.
+        void showPopup( const int buttons ) const override;
+
+        bool update( Image & output, const Point & offset ) const override;
+
+    private:
+        const Image _image;
+
+        const int _icnId;
+
+        const uint64_t _delay;
+
+        mutable uint32_t _currentIndex;
+
+        const Point _animationPosition;
+
+        const uint32_t _animationIndexOffset;
     };
 }

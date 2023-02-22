@@ -40,7 +40,7 @@ void Castle::OpenTavern() const
     body += "\n\n";
     body += world.getCurrentRumor();
 
-    const fheroes2::DynamicImageDialogElement imageUI( ICN::TAVWIN, { { 0, { 0, 0 } }, { 1, { 0, 0 } } }, Game::getAnimationDelayValue( Game::CASTLE_TAVERN_DELAY ) );
+    const fheroes2::DynamicImageDialogElement imageUI( ICN::TAVWIN, { 0, 1 }, Game::getAnimationDelayValue( Game::CASTLE_TAVERN_DELAY ) );
     const fheroes2::TextDialogElement textBodyUI( std::make_shared<fheroes2::Text>( body, fheroes2::FontType::normalWhite() ) );
 
     fheroes2::showMessage( fheroes2::Text( GetStringBuilding( BUILD_TAVERN ), fheroes2::FontType::normalYellow() ), fheroes2::Text( "", {} ), Dialog::OK,

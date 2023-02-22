@@ -62,7 +62,7 @@ namespace fheroes2
 
         const int32_t topOffset = TILEWIDTH - lighthouseTop.height();
 
-        /*Image combined( 5 * TILEWIDTH, 2 * TILEWIDTH + lighthouseTop.height() );
+        Image combined( 5 * TILEWIDTH, 2 * TILEWIDTH + lighthouseTop.height() );
         combined.reset();
 
         Copy( shadowTop, 0, 0, combined, shadowTop.x(), TILEWIDTH + shadowTop.y() - topOffset, TILEWIDTH, TILEWIDTH );
@@ -73,20 +73,11 @@ namespace fheroes2
         Copy( lighthouseBottom, 0, 0, combined, TILEWIDTH * 2 + lighthouseBottom.x(), TILEWIDTH * 2 + lighthouseBottom.y() - topOffset, TILEWIDTH, TILEWIDTH );
         Copy( lighthouseLight, 0, 0, combined, TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset, TILEWIDTH, TILEWIDTH );
 
-        const CustomImageDialogElement lighthouseImageElement( combined );*/
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( std::to_string( lighthouseCount ), FontType::normalWhite() ) );
 
-        const DynamicImageDialogElement lighthouseLightElement( ICN::OBJNMUL2,
-                                                                {
-                                                                    { 60, { shadowTop.x(), TILEWIDTH + shadowTop.y() - topOffset } },
-                                                                    { 71, { shadowMiddle.x(), TILEWIDTH * 2 + shadowMiddle.y() - topOffset } },
-                                                                    { 72, { TILEWIDTH + shadowBottom.x(), TILEWIDTH * 2 + shadowBottom.y() - topOffset } },
-                                                                    { 59, { TILEWIDTH * 2 + lighthouseTop.x(), lighthouseTop.y() - topOffset } },
-                                                                    { 61, { TILEWIDTH * 2 + lighthouseMiddle.x(), TILEWIDTH + lighthouseMiddle.y() - topOffset } },
-                                                                    { 73, { TILEWIDTH * 2 + lighthouseBottom.x(), TILEWIDTH * 2 + lighthouseBottom.y() - topOffset } },
-                                                                },
-                                                                getAnimationDelayValue( Game::MAPS_DELAY ), 0x3D,
-                                                                { TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset } );
+        // Use MAPS_DELAY for animation delay since the lighthouse is a map object
+        const CustomDynamicImageDialogElement lighthouseLightElement( combined, ICN::OBJNMUL2, getAnimationDelayValue( Game::MAPS_DELAY ),
+                                                                      { TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset }, 0x3D );
 
         // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
         showMessage( Text( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
