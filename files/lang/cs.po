@@ -2244,7 +2244,6 @@ msgid ""
 msgstr ""
 "Křišťálová zahrada zvyšuje produkci Víl o %{count} za týden."
 
-
 msgid "The Dungeon increases the income of the town by %{count} / day."
 msgstr "Kobka zvyšuje městské příjmy o %{count} za den."
 
@@ -2314,7 +2313,7 @@ msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
-"Svatyně zvyšuje schopnost nekromatie o 10 procent u všech vašich nekromatnů."
+"Svatyně zvyšuje schopnost nekromantie o 10 procent u všech vašich nekromatnů."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
@@ -2365,14 +2364,14 @@ msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
 msgstr ""
-"Hrad zlepšuje obranyschopnost města a zvyšuje jeho příjmy o %{count}"
+"Hrad zlepšuje obranyschopnost města a zvyšuje jeho příjmy o %{count} "
 "za den."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
 "gold are available."
 msgstr ""
-"Stan posytuje dělníky ke stavbě hradu, pokud je k dispozici dostatek "
+"Stan poskytuje dělníky ke stavbě hradu, pokud je k dispozici dostatek "
 "materiálu a zlaťáků."
 
 msgid ""
@@ -2519,7 +2518,7 @@ msgid "Damg"
 msgstr "Škody"
 
 msgid "HP"
-msgstr "HP"
+msgstr "Živ"
 
 msgid "Growth"
 msgstr "Růst"
@@ -2537,10 +2536,10 @@ msgid "View the entire world."
 msgstr "Zobraz celou mapu světa."
 
 msgid "Puzzle"
-msgstr "Skládačka"
+msgstr "Skládanka"
 
 msgid "View the obelisk puzzle."
-msgstr "Zobraz skládačku oblisků."
+msgstr "Zobraz skládanku obelisků."
 
 msgid "Scenario Information"
 msgstr "Informace o Hře"
@@ -2585,10 +2584,10 @@ msgid "Damage"
 msgstr "Škody"
 
 msgid "Hit Points"
-msgstr ""
+msgstr "Životy"
 
 msgid "Hit Points Left"
-msgstr "Zůstává Hit Points "
+msgstr "Zbývá životů"
 
 msgid "You can't afford to upgrade your troops!"
 msgstr "Nemůžeš si dovolit vylepšit své jednotky!"
@@ -2663,7 +2662,6 @@ msgstr "Efekty"
 msgid "MIDI"
 msgstr ""
 
-
 msgid "MIDI Expansion"
 msgstr "MIDI Rozšířené"
 
@@ -2715,7 +2713,6 @@ msgstr "Spusti hru jednoho nebo více hráčů."
 msgid "Load a previously saved game."
 msgstr "Načti dříve uloženou hru."
 
-
 msgid "Save Game"
 msgstr "Uložit Hru"
 
@@ -2733,7 +2730,6 @@ msgstr "Jazyk"
 
 msgid "Graphics"
 msgstr "Grafika"
-
 
 msgid "Black & White"
 msgstr "Černobílý"
