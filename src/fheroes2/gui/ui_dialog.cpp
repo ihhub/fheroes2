@@ -752,25 +752,25 @@ namespace fheroes2
 
     CustomDynamicImageDialogElement::CustomDynamicImageDialogElement( Image staticImage, const int animationIcnId, const uint64_t delay,
                                                                       const Point animationPositionOffset, const uint32_t animationIndexOffset )
-        : _image( std::move( staticImage ) )
-        , _icnId( animationIcnId )
+        : _staticImage( std::move( staticImage ) )
+        , _animationIcnId( animationIcnId )
         , _delay( delay )
         , _currentIndex( 0 )
         , _animationPosition( animationPositionOffset )
         , _animationIndexOffset( animationIndexOffset )
     {
         assert( delay > 0 );
-        _area = { _image.width(), _image.height() };
+        _area = { _staticImage.width(), _staticImage.height() };
     }
 
     void CustomDynamicImageDialogElement::draw( Image & output, const Point & offset ) const
     {
         if ( _currentIndex == 0 ) {
             // Since this is the first time to draw we have to draw the background.
-            Blit( _image, 0, 0, output, offset.x, offset.y, _image.width(), _image.height() );
+            Blit( _staticImage, 0, 0, output, offset.x, offset.y, _staticImage.width(), _staticImage.height() );
         }
 
-        const Sprite & animationImage = AGG::GetICN( _icnId, ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex++ ) );
+        const Sprite & animationImage = AGG::GetICN( _animationIcnId, ICN::AnimationFrame( _animationIcnId, _animationIndexOffset, _currentIndex++ ) );
         Blit( animationImage, 0, 0, output, offset.x + _animationPosition.x, offset.y + _animationPosition.y, animationImage.width(), animationImage.height() );
     }
 

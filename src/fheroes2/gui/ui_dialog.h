@@ -319,9 +319,9 @@ namespace fheroes2
         bool update( Image & output, const Point & offset ) const override;
 
     private:
-        const Image _image;
+        const Image _staticImage;
 
-        const int _icnId;
+        const int _animationIcnId;
 
         const uint64_t _delay;
 
