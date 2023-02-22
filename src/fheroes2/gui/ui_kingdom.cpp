@@ -76,7 +76,8 @@ namespace fheroes2
 
         // Use MAPS_DELAY for animation delay since the lighthouse is a map object
         const CustomDynamicImageDialogElement lighthouseCustomDynamicImageElement( combined, ICN::OBJNMUL2, getAnimationDelayValue( Game::MAPS_DELAY ),
-                                                                      { TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset }, 0x3D );
+                                                                                   { TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset },
+                                                                                   0x3D );
 
         // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
         showMessage( Text( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
