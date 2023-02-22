@@ -284,7 +284,7 @@ namespace
             // This should never happen - hero should not be able to visit an allied castle
             assert( 0 );
 
-            DEBUG_LOG( DBG_AI, DBG_WARN, hero.GetName() << " could not visit the allied castle " << castle->GetName() )
+            DEBUG_LOG( DBG_AI, DBG_WARN, hero.GetName() << " is not allowed to visit the allied castle " << castle->GetName() )
             return;
         }
 
@@ -371,7 +371,7 @@ namespace
             // This should never happen - hero should not be able to meet an allied hero
             assert( 0 );
 
-            DEBUG_LOG( DBG_AI, DBG_WARN, hero.GetName() << " could not meet the allied hero " << otherHero->GetName() )
+            DEBUG_LOG( DBG_AI, DBG_WARN, hero.GetName() << " is not allowed to meet the allied hero " << otherHero->GetName() )
             return;
         }
 
