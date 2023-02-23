@@ -953,7 +953,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
     if ( le.MouseClickLeft( tileROI ) )
         interface.MouseCursorAreaClickLeft( index );
-    else if ( le.MousePressRight( tileROI ) )
+    else if ( le.MousePressRight( tileROI ) && isCursorOverGamearea )
         interface.MouseCursorAreaPressRight( index );
 }
 
