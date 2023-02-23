@@ -31,6 +31,7 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <memory>
 #include <set>
 #include <type_traits>
 
@@ -66,6 +67,7 @@
 #include "spell.h"
 #include "til.h"
 #include "trees.h"
+#include "ui_object_rendering.h"
 #include "world.h"
 
 namespace

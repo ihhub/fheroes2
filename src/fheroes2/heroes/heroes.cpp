@@ -30,6 +30,7 @@
 #include <map>
 #include <ostream>
 #include <set>
+#include <utility>
 
 #include "agg_image.h"
 #include "ai.h"

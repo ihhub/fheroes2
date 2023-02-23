@@ -31,7 +31,6 @@
 #include <exception>
 #include <list>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "army.h"
@@ -45,7 +44,6 @@
 #include "route.h"
 #include "skill.h"
 #include "spell.h"
-#include "ui_object_rendering.h"
 #include "visit.h"
 
 class Castle;
@@ -66,6 +64,7 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
+    struct ObjectRenderingInfo;
 }
 
 struct HeroSeedsForLevelUp

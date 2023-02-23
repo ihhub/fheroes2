@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <ostream>
@@ -55,6 +56,7 @@
 #include "route.h"
 #include "screen.h"
 #include "settings.h"
+#include "ui_object_rendering.h"
 #include "world.h"
 
 namespace

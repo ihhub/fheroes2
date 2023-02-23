@@ -38,7 +38,6 @@
 #include "pairs.h"
 #include "resource.h"
 #include "skill.h"
-#include "ui_object_rendering.h"
 #include "world_regions.h"
 
 class Heroes;
@@ -49,7 +48,7 @@ class StreamBase;
 namespace fheroes2
 {
     class Image;
-    class Sprite;
+    struct ObjectRenderingInfo;
 }
 
 namespace Interface
