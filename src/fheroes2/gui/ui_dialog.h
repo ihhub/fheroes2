@@ -304,8 +304,8 @@ namespace fheroes2
     class CustomDynamicImageDialogElement : public DialogElement
     {
     public:
-        explicit CustomDynamicImageDialogElement( Image staticImage, const int animationIcnId, const uint64_t delay, const Point animationPositionOffset = { 0, 0 },
-                                                  const uint32_t animationIndexOffset = 0 );
+        explicit CustomDynamicImageDialogElement( Image staticImage, const int animationIcnId, const uint64_t delay, const Point animationPositionOffset,
+                                                  const uint32_t animationIndexOffset );
 
         ~CustomDynamicImageDialogElement() override = default;
 
