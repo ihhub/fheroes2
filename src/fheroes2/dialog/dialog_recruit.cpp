@@ -28,6 +28,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -369,7 +370,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
     std::vector<Monster> upgrades = { monster0 };
     while ( upgrades.back().GetDowngrade() != upgrades.back() ) {
         // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
-        const Monster downgradedMonster = upgrades.back().GetDowngrade();
+        Monster downgradedMonster = upgrades.back().GetDowngrade();
 
         upgrades.emplace_back( std::move( downgradedMonster ) );
     }

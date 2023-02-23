@@ -844,7 +844,7 @@ namespace Campaign
 
             while ( monsters.back() != monsters.back().GetUpgrade() ) {
                 // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
-                const Monster upgradedMonster = monsters.back().GetUpgrade();
+                Monster upgradedMonster = monsters.back().GetUpgrade();
 
                 monsters.emplace_back( std::move( upgradedMonster ) );
                 description += ", ";
@@ -861,7 +861,7 @@ namespace Campaign
 
             while ( monsters.back() != monsters.back().GetUpgrade() ) {
                 // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
-                const Monster upgradedMonster = monsters.back().GetUpgrade();
+                Monster upgradedMonster = monsters.back().GetUpgrade();
 
                 monsters.emplace_back( std::move( upgradedMonster ) );
                 description += ", ";

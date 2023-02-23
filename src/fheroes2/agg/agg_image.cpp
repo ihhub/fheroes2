@@ -1869,13 +1869,10 @@ namespace fheroes2
                 // Some checks that we really have CP1251 font
                 const int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
                 if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
-                    // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
-                    const fheroes2::Sprite firstImage = imageArray[0];
-
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
                     // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
-                    imageArray.insert( imageArray.begin() + 96, 64, firstImage );
+                    imageArray.insert( imageArray.begin() + 96, 64, imageArray[0] );
                     std::swap( imageArray[136], imageArray[192] ); // Move sprites for chars 0xA8
                     std::swap( imageArray[152], imageArray[225] ); // and 0xB8 to it's places.
                     imageArray.pop_back();
@@ -1883,10 +1880,7 @@ namespace fheroes2
                 }
                 // German version uses CP1252
                 if ( crc32 == 0x04745D1D || crc32 == 0xD0F0D852 ) {
-                    // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
-                    const fheroes2::Sprite firstImage = imageArray[0];
-
-                    imageArray.insert( imageArray.begin() + 96, 124, firstImage );
+                    imageArray.insert( imageArray.begin() + 96, 124, imageArray[0] );
                     std::swap( imageArray[164], imageArray[224] );
                     std::swap( imageArray[182], imageArray[225] );
                     std::swap( imageArray[188], imageArray[226] );
@@ -1898,10 +1892,7 @@ namespace fheroes2
                 }
                 // French version has its own special encoding but should conform to CP1252 too
                 if ( crc32 == 0xD9556567 || crc32 == 0x406967B9 ) {
-                    // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
-                    const fheroes2::Sprite firstImage = imageArray[0];
-
-                    imageArray.insert( imageArray.begin() + 96, 160 - 32, firstImage );
+                    imageArray.insert( imageArray.begin() + 96, 160 - 32, imageArray[0] );
                     imageArray[192 - 32] = imageArray[33];
                     imageArray[199 - 32] = imageArray[35];
                     imageArray[201 - 32] = imageArray[37];
@@ -1924,10 +1915,7 @@ namespace fheroes2
                 }
                 // Italian version uses CP1252
                 if ( crc32 == 0x219B3124 || crc32 == 0x1F3C3C74 ) {
-                    // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
-                    const fheroes2::Sprite firstImage = imageArray[0];
-
-                    imageArray.insert( imageArray.begin() + 101, 155 - 32, firstImage );
+                    imageArray.insert( imageArray.begin() + 101, 155 - 32, imageArray[0] );
                     imageArray[192 - 32] = imageArray[33];
                     imageArray[200 - 32] = imageArray[37];
                     imageArray[201 - 32] = imageArray[37];
