@@ -736,6 +736,7 @@ void Kingdom::openOverviewDialog()
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_EXIT, 0, 1 );
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
+    const fheroes2::Rect rectGoldPerDay( cur_pt.x + 124, cur_pt.y + 459, 289, 16 );
 
     const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
     const fheroes2::Rect rectLighthouse( cur_pt.x + 100 - lighthouse.width(), cur_pt.y + 459, lighthouse.width() + 10, lighthouse.height() );
@@ -785,7 +786,7 @@ void Kingdom::openOverviewDialog()
         else if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
-        else if ( le.MousePressRight( rectIncome ) ) {
+        else if ( le.MousePressRight( rectIncome ) || le.MousePressRight( rectGoldPerDay ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::ZERO );
         }
         else if ( le.MousePressRight( rectLighthouse ) ) {
@@ -815,7 +816,7 @@ void Kingdom::openOverviewDialog()
 
         redraw |= listStats->QueueEventProcessing();
 
-        if ( le.MouseClickLeft( rectIncome ) ) {
+        if ( le.MouseClickLeft( rectIncome ) || le.MouseClickLeft( rectGoldPerDay ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::OK );
         }
 
