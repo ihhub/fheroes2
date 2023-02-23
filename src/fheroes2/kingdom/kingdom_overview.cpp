@@ -727,7 +727,7 @@ void Kingdom::openOverviewDialog()
     dst_pt.y = cur_pt.y + 360;
     fheroes2::Button buttonHeroes( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 0, 1 );
 
-    // We need to additionally render the background between HEROES and TOWSN/CASTLES buttons.
+    // We need to additionally render the background between HEROES and TOWNS/CASTLES buttons.
     dst_pt.y += 42;
     fheroes2::Copy( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 540, 444, display, dst_pt.x, dst_pt.y, 99, 5 );
 
