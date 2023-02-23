@@ -3459,7 +3459,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
 
             switch ( attacker.GetID() ) {
             case Monster::GHOST:
-                msg = _n( "1 soul drained.", "%{count} souls drained.", resurrects );
+                msg = _n( "1 soul is absorbed.", "%{count} souls are absorbed.", resurrects );
                 log( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
                 break;
 
