@@ -693,11 +693,12 @@ namespace fheroes2
         showMessage( header, description, buttons, { this } );
     }
 
-    DynamicImageDialogElement::DynamicImageDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint64_t delay )
+    AnimationDialogElement::AnimationDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint32_t animationIndexOffset, const uint64_t delay )
         : _icnId( icnId )
         , _backgroundIndices( std::move( backgroundIndices ) )
         , _delay( delay )
         , _currentIndex( 0 )
+        , _animationIndexOffset( animationIndexOffset )
     {
         assert( !_backgroundIndices.empty() && _delay > 0 );
 
@@ -710,7 +711,7 @@ namespace fheroes2
         }
     }
 
-    void DynamicImageDialogElement::draw( Image & output, const Point & offset ) const
+    void AnimationDialogElement::draw( Image & output, const Point & offset ) const
     {
         if ( _currentIndex == 0 ) {
             // Since this is the first time to draw we have to draw the background.
@@ -721,7 +722,7 @@ namespace fheroes2
             }
         }
 
-        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, 0, _currentIndex );
+        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex );
         ++_currentIndex;
 
         const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
@@ -730,17 +731,17 @@ namespace fheroes2
               animationImage.height() );
     }
 
-    void DynamicImageDialogElement::processEvents( const Point & /* offset */ ) const
+    void AnimationDialogElement::processEvents( const Point & /* offset */ ) const
     {
         // No events processed here.
     }
 
-    void DynamicImageDialogElement::showPopup( const int /* buttons */ ) const
+    void AnimationDialogElement::showPopup( const int /* buttons */ ) const
     {
         assert( 0 );
     }
 
-    bool DynamicImageDialogElement::update( Image & output, const Point & offset ) const
+    bool AnimationDialogElement::update( Image & output, const Point & offset ) const
     {
         if ( Game::validateCustomAnimationDelay( _delay ) ) {
             draw( output, offset );
@@ -750,8 +751,8 @@ namespace fheroes2
         return false;
     }
 
-    CustomDynamicImageDialogElement::CustomDynamicImageDialogElement( Image staticImage, const int animationIcnId, const uint64_t delay,
-                                                                      const Point animationPositionOffset, const uint32_t animationIndexOffset )
+    CustomAnimationDialogElement::CustomAnimationDialogElement( Image staticImage, const int animationIcnId, const uint64_t delay, const uint32_t animationIndexOffset,
+                                                                const Point animationPositionOffset )
         : _staticImage( std::move( staticImage ) )
         , _animationIcnId( animationIcnId )
         , _delay( delay )
@@ -763,7 +764,7 @@ namespace fheroes2
         _area = { _staticImage.width(), _staticImage.height() };
     }
 
-    void CustomDynamicImageDialogElement::draw( Image & output, const Point & offset ) const
+    void CustomAnimationDialogElement::draw( Image & output, const Point & offset ) const
     {
         if ( _currentIndex == 0 ) {
             // Since this is the first time to draw we have to draw the background.
@@ -773,22 +774,22 @@ namespace fheroes2
         const uint32_t animationFrameId = ICN::AnimationFrame( _animationIcnId, _animationIndexOffset, _currentIndex );
         ++_currentIndex;
 
-        const Sprite & animationImage = AGG::GetICN( _animationIcnId, animationFrameId);
+        const Sprite & animationImage = AGG::GetICN( _animationIcnId, animationFrameId );
 
         Blit( animationImage, 0, 0, output, offset.x + _animationPosition.x, offset.y + _animationPosition.y, animationImage.width(), animationImage.height() );
     }
 
-    void CustomDynamicImageDialogElement::processEvents( const Point & /* offset */ ) const
+    void CustomAnimationDialogElement::processEvents( const Point & /* offset */ ) const
     {
         // No events processed here.
     }
 
-    void CustomDynamicImageDialogElement::showPopup( const int /* buttons */ ) const
+    void CustomAnimationDialogElement::showPopup( const int /* buttons */ ) const
     {
         assert( 0 );
     }
 
-    bool CustomDynamicImageDialogElement::update( Image & output, const Point & offset ) const
+    bool CustomAnimationDialogElement::update( Image & output, const Point & offset ) const
     {
         if ( Game::validateCustomAnimationDelay( _delay ) ) {
             draw( output, offset );

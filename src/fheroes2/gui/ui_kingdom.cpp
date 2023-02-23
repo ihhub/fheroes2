@@ -75,9 +75,9 @@ namespace fheroes2
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( std::to_string( lighthouseCount ), FontType::normalWhite() ) );
 
         // Use MAPS_DELAY for animation delay since the lighthouse is a map object
-        const CustomDynamicImageDialogElement lighthouseCustomDynamicImageElement( combined, ICN::OBJNMUL2, getAnimationDelayValue( Game::MAPS_DELAY ),
-                                                                                   { TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset },
-                                                                                   0x3D );
+        // 61 (0x3D) references the icn offset for the lighthouse animation in icn.cpp
+        const CustomAnimationDialogElement lighthouseCustomDynamicImageElement( combined, ICN::OBJNMUL2, getAnimationDelayValue( Game::MAPS_DELAY ), 61,
+                                                                                { TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset } );
 
         // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
         showMessage( Text( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,

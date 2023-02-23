@@ -273,12 +273,12 @@ namespace fheroes2
         const Heroes & _hero;
     };
 
-    class DynamicImageDialogElement : public DialogElement
+    class AnimationDialogElement : public DialogElement
     {
     public:
-        explicit DynamicImageDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint64_t delay );
+        explicit AnimationDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint32_t animationIndexOffset, const uint64_t delay );
 
-        ~DynamicImageDialogElement() override = default;
+        ~AnimationDialogElement() override = default;
 
         void draw( Image & output, const Point & offset ) const override;
 
@@ -298,16 +298,18 @@ namespace fheroes2
 
         mutable uint32_t _currentIndex;
 
+        const uint32_t _animationIndexOffset;
+
         Point _internalOffset;
     };
 
-    class CustomDynamicImageDialogElement : public DialogElement
+    class CustomAnimationDialogElement : public DialogElement
     {
     public:
-        explicit CustomDynamicImageDialogElement( Image staticImage, const int animationIcnId, const uint64_t delay, const Point animationPositionOffset,
-                                                  const uint32_t animationIndexOffset );
+        explicit CustomAnimationDialogElement( Image staticImage, const int animationIcnId, const uint64_t delay, const uint32_t animationIndexOffset,
+                                               const Point animationPositionOffset );
 
-        ~CustomDynamicImageDialogElement() override = default;
+        ~CustomAnimationDialogElement() override = default;
 
         void draw( Image & output, const Point & offset ) const override;
 
