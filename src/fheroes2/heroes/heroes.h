@@ -395,7 +395,7 @@ public:
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
-    bool BuySpellBook( const Castle *, int shrine = 0 );
+    bool BuySpellBook( const Castle * castle );
 
     const Route::Path & GetPath() const
     {
