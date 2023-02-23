@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "campaign_data.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -26,7 +28,6 @@
 #include <utility>
 
 #include "artifact.h"
-#include "campaign_data.h"
 #include "color.h"
 #include "game_video_type.h"
 #include "heroes.h"
@@ -842,7 +843,10 @@ namespace Campaign
             std::string description( monsters.back().GetMultiName() );
 
             while ( monsters.back() != monsters.back().GetUpgrade() ) {
-                monsters.emplace_back( monsters.back().GetUpgrade() );
+                // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+                const Monster upgradedMonster = monsters.back().GetUpgrade();
+
+                monsters.emplace_back( std::move( upgradedMonster ) );
                 description += ", ";
                 description += monsters.back().GetMultiName();
             }
@@ -856,7 +860,10 @@ namespace Campaign
             std::string description( monsters.back().GetMultiName() );
 
             while ( monsters.back() != monsters.back().GetUpgrade() ) {
-                monsters.emplace_back( monsters.back().GetUpgrade() );
+                // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+                const Monster upgradedMonster = monsters.back().GetUpgrade();
+
+                monsters.emplace_back( std::move( upgradedMonster ) );
                 description += ", ";
                 description += monsters.back().GetMultiName();
             }
