@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "interface_gamearea.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
@@ -40,7 +42,6 @@
 #include "heroes.h"
 #include "icn.h"
 #include "interface_cpanel.h"
-#include "interface_gamearea.h"
 #include "localevent.h"
 #include "logging.h"
 #include "maps.h"
