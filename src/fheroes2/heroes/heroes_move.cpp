@@ -561,7 +561,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroSpritesPerTile() const
 
     std::vector<fheroes2::Point> outputSquareInfo;
     std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( heroSpriteOffset, spriteHero, TILEWIDTH, reflect, outputSquareInfo, outputImageInfo );
+    fheroes2::DivideImageBySquares( heroSpriteOffset, spriteHero, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
     assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -580,7 +580,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroSpritesPerTile() const
     const fheroes2::Point flagSpriteOffset( offset.x + ( reflect ? ( TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() ) : spriteFlag.x() + flagOffset.x ),
                                             offset.y + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
-    fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, reflect, outputSquareInfo, outputImageInfo );
+    fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
     assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -598,7 +598,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroSpritesPerTile() const
         const fheroes2::Point frothSpriteOffset( offset.x + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ),
                                                  offset.y + spriteFroth.y() + TILEWIDTH );
 
-        fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, reflect, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
             objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, static_cast<uint8_t>( 255 ) );
@@ -631,7 +631,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroShadowSpritesPerTile()
 
     std::vector<fheroes2::Point> outputSquareInfo;
     std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( shadowSpriteOffset, spriteShadow, TILEWIDTH, false, outputSquareInfo, outputImageInfo );
+    fheroes2::DivideImageBySquares( shadowSpriteOffset, spriteShadow, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
     assert( outputSquareInfo.size() == outputImageInfo.size() );
 

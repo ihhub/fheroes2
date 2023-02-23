@@ -1387,7 +1387,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
 
     std::vector<fheroes2::Point> outputSquareInfo;
     std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, TILEWIDTH, false, outputSquareInfo, outputImageInfo );
+    fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
     assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1404,7 +1404,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
         const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndicies.second );
         const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
 
-        fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, false, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1430,7 +1430,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
 
     std::vector<fheroes2::Point> outputSquareInfo;
     std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, TILEWIDTH, false, outputSquareInfo, outputImageInfo );
+    fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
     assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1447,7 +1447,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
         const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndicies.second );
         const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
 
-        fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, false, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1477,7 +1477,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getBoatSpritesPerTile() 
 
     std::vector<fheroes2::Point> outputSquareInfo;
     std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, TILEWIDTH, isReflected, outputSquareInfo, outputImageInfo );
+    fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
     assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1504,7 +1504,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getBoatShadowSpritesPerT
     // Shadows cannot be flipped so flip flag is always false.
     std::vector<fheroes2::Point> outputSquareInfo;
     std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( boatShadowSpriteOffset, boatShadowSprite, TILEWIDTH, false, outputSquareInfo, outputImageInfo );
+    fheroes2::DivideImageBySquares( boatShadowSpriteOffset, boatShadowSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
     assert( outputSquareInfo.size() == outputImageInfo.size() );
 
@@ -1537,7 +1537,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMineGuardianSpritesPe
 
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-        fheroes2::DivideImageBySquares( { image.x(), image.y() }, image, TILEWIDTH, false, outputSquareInfo, outputImageInfo );
+        fheroes2::DivideImageBySquares( { image.x(), image.y() }, image, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
