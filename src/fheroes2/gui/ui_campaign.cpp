@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "ui_campaign.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -41,7 +43,6 @@
 #include "monster.h"
 #include "skill.h"
 #include "spell.h"
-#include "ui_campaign.h"
 #include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
@@ -155,7 +156,10 @@ namespace fheroes2
             uiElements.emplace_back( monsterUI.back().get() );
 
             while ( monsters.back() != monsters.back().GetUpgrade() ) {
-                monsters.emplace_back( monsters.back().GetUpgrade() );
+                // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+                const Monster upgradedMonster = monsters.back().GetUpgrade();
+
+                monsters.emplace_back( upgradedMonster );
                 monsterUI.emplace_back( new CustomImageDialogElement( getMonsterFrame( monsters.back(), 0 ) ) );
                 uiElements.emplace_back( monsterUI.back().get() );
             }
