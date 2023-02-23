@@ -1,3 +1,136 @@
+version 1.0.1 (08 February 2023)
+- add the ambient sound for Abandoned Mine
+- add support for scaled resolutions
+- instantly update status bar in battle for hero's dialog options
+- fix invalid Kingdom income calculation
+- fix incorrect status bar update call
+- update Czech translation
+- add German and Russian translations of Android Toolset
+- Android Save File Manager: implement filtering of save files by type
+- fix scroll bar bottom position when dragging and fix high FPS rate when dragging scroll bar by mouse
+- make a narrower button font for cp-1251 (Cyrillic) characters
+- fix Druid projectile start position for shooting up
+- add PS Vita fixes and gamepad mapping improvements
+- add Danish translation
+- fix shooters projectile position during battle
+- fix high CPU load on Adventure map when Hero speed is set to Jump
+- Android toolset: add the ability to browse & delete save files
+- fix loss of the first frame in the after attack unit animation
+- update spell points for campaign heroes at the start of a scenario
+- uncover the fog during the hero's instantaneous movement only if the hero is actually moving
+- do not allow to dig for Ultimate Artifact second time
+- show spell effect animation so as not to cover the front troops
+- fix screen restoration after closing monster info dialog
+- fix the AI resurrect spell logic
+- fix the Dimension Door shadow on resolutions 640+x480 & 640x480+, temporarily hide auxiliary panels in "no interface" mode
+- rework pathfinding algorithm during battle to fix non-optimal paths for monsters
+- add Mossy Rock object which appears only on Swamp terrain while in the original game this object has no name
+- optimize Adventure Map rendering
+- do not do redundant redraws when dragging Adventure Map with the mouse
+- fix walking animations of certain monsters
+- fix the bridge operation when a wide friendly unit steps on it from the moat
+- fix creature wince animation for low morale and Lich cloud cases during battle
+- optimize Holy Shout spell effect rendering during battle
+- allow wide units to take a step back during battle
+- fix certain Peasant Huts being displayed as Thatched Huts with no ambient sounds on Adventure Map
+- update Polish translation
+- avoid excessing CPU usage for multiple windows in the game
+- set audio frequency to 44100 on Windows to avoid cracking sounds during playback
+- add fh2 toolset application on Android to help with setting up the main application
+- update French translation
+- reduce CPU usage in Select Language dialog
+- fix a case when external music was not being played on Ubuntu
+- fix incorrect logic for monster placement on Adventure Map
+- update German translation
+- do not lowercase creature name (or other string) when it is put first in phrase
+- fix forced Idle animation after switching to Static animation
+- fix screen flickering in SDL2
+- optimize Death Wave spell effect rendering during battle
+- automatically assemble artifacts sets if their parts were captured in the battle
+- fix controller support for PS Vita
+- add a full stop, A and E characters with accents for CP1252 button font
+
+version 1.0.0 (21 December 2022)
+- add Ubuntu ARM support
+- update Polish translation
+- update the French translation
+- fix incorrect resource placements on certain maps
+- adjust "Battlefield Casualties" vertical position
+- fix bridge logic after morale event
+- enable the instant battle by default
+- optimize rendering in multiple places
+- update the Norwegian translation
+- add global hotkey to toggle the text support mode
+- make the regular small buttons translatable
+- make Trade button in Marketplace window disabled by default
+- add popup windows for monster recruit dialog
+- fix animation of slowed flying creatures
+- fix multiple hero related awards for campaigns
+- fix Death Wave, Holy Shout and Holy Word spell animations
+- do not mirror corpses of defeated troops during battle
+- fix rendering an extra empty line for specific texts
+- fix monster idling animation during battle
+- use logarithmic scale of sound volume
+- enable touch support for all devices
+- make separate hotkeys to cast battle & adventure spells
+- add the "Quit game" hotkey
+- handle hotkeys in the Adventure Map's File dialog
+- optimize defensive strategy for AI castles
+- fix black area not being rendering during video playback
+- reduce priority for bottles in sea for AI
+- make File Dialog and Adventure Dialog buttons translatable
+- do not stop object animation during AI turn
+- update Russian translation
+- fix text rendering for game option's names of certain translations
+- fix incorrect battlefield image restoration in the place of the previous damage popup
+- adjust several button font characters
+- rework the hotkeys concerning the hero movement
+- make the Main Menu's dialog buttons translatable for specific languages
+- display the amount of gold in the diplomacy dialog
+- show object animation during Hut of Magi visit
+- fix Dwarves death animation
+- fix very slow hero movement animation when moving a cursor with software cursor rendering
+- fix translated Cancel button in monster recruit dialog being switched to English
+- fix animation of bridge destruction during battle
+- fix the smoke animation when demolishing a castle building during battle
+- improve Adventure Map rendering performance
+- fix multiline word splitting for short phrases with a long first word
+- fix position of left barbarian's captain quarters part
+- reset the cursor position at the start of 'human turn'
+- add an option to toggle screen scaling type
+- recreate the original rainbow animation during battle
+- fix Scenario Info window elements
+- improve hexagon shading during battle
+- add Danish language option and font
+- improve rendering speed with software cursor rendering
+- fix French and Italian characters not being shown with their assets
+- set the minimum supported version to Android 5.1
+- introduce AI Scout role
+- fix fullscreen mode with DPI higher than 100% on Windows
+- fix multi-monitor fullscreen support on Windows
+- update Bulgarian Translation
+- add Android installation and usage documentation
+- fix the scenario info dialog position
+- generate resizable buttons for both interfaces
+- fix inability to toggle V-Sync option dynamically
+- do not show resolution dialog on handheld devices on the first startup
+- add mouse right click simulation on touchscreen devices
+- fix cursor being too small for certain resolutions
+- disable Adventure Map scrolling for handheld devices by default
+- change battlefield hexagon generation to match the original
+- make fullscreen mode as a default state for Android devices
+- implement all troops transfer between armies within castle dialog
+- scroll Adventure Map with mouse left button pressed
+- use parabolic catapult projectile flight trajectory
+- update credits page
+- always show the Ultimate Artifact behind one of the last four central pieces of the puzzle
+- update captain's mana on map load and when building the Captain's Quarters
+- remove and integrate the rest of experimental options
+- always center text when a maximum width is provided
+- fix UI elements for the unhired hero popup window
+- update Ballista and Turrets damage information when they are destroyed
+- correctly reflect the change of fullscreen mode in the graphics settings dialog when it was toggled using a hotkey
+
 version 0.9.21 (12 November 2022)
 - fix audio playback issues on Windows OSes
 - do not show any hero status for AI heroes
@@ -1897,7 +2030,7 @@ version 0.8 (26 July 2020)
 - fix multiple memory leaks
 - add double quotes to surrender dialog
 
-version 0.7 (18th April 2020)
+version 0.7 (18 April 2020)
 - add an edge of the World Map
 - complete hero movement cell if a player stops it by any keyboard button
 - add hotkey 'N' to start a new game within the World Map like in the original game

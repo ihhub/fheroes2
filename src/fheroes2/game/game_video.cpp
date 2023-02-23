@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <ostream>
@@ -120,6 +121,7 @@ namespace Video
 
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );
+        display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
 
         unsigned int currentFrame = 0;
         fheroes2::Rect frameRoi( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2, 0, 0 );
@@ -131,7 +133,9 @@ namespace Video
 
         bool isFrameReady = false;
 
-        Game::passAnimationDelay( Game::CUSTOM_DELAY );
+        Game::passCustomAnimationDelay( delay );
+        // Make sure that the first run is passed immediately.
+        assert( !Game::isCustomDelayNeeded( delay ) );
 
         bool userMadeAction = false;
 
@@ -207,6 +211,7 @@ namespace Video
         }
 
         display.fill( 0 );
+        display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
 
         return true;
     }

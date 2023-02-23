@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -42,6 +42,8 @@ class HeroBase;
 class Heroes;
 class Monster;
 class Troop;
+
+struct ArtifactSetData;
 struct CapturedObject;
 
 namespace Skill
@@ -75,8 +77,6 @@ namespace Dialog
         DIG = 0x1000,
 
         UPGRADE_DISABLE = MAX,
-
-        READONLY = 0x2000,
         BUTTONS = ( YES | OK | NO | CANCEL )
     };
 
@@ -109,6 +109,9 @@ namespace Dialog
     int BuyBoat( bool enable );
     void ThievesGuild( bool oracle );
     void GameInfo();
+
+    // Displays a dialog box informing that an artifact set has been assembled
+    void ArtifactSetAssembled( const ArtifactSetData & artifactSetData );
 
     class NonFixedFrameBox
     {

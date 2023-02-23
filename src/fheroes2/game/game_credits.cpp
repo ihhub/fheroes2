@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -194,15 +194,15 @@ namespace
 
         const int32_t secondAuthorLayerY = offsetY;
 
-        title.Set( _( "QA and Support" ), Font::YELLOW_BIG, textWidth );
-        name.Set( "Igor Tsivilko", Font::BIG, textWidth );
+        title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
+        name.Set( "Sergei Ivanov", Font::BIG, textWidth );
         title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
         name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
         offsetY += title.h() + name.h() + 10;
 
-        const fheroes2::Sprite & cyclop = fheroes2::AGG::GetICN( ICN::CYCLOPS, 38 );
-        fheroes2::Blit( cyclop, output, ( columnStep - cyclop.width() ) / 2, offsetY );
-        offsetY += cyclop.height();
+        const fheroes2::Sprite & minotaur = fheroes2::AGG::GetICN( ICN::MINOTAUR, 14 );
+        fheroes2::Blit( minotaur, output, ( columnStep - minotaur.width() ) / 2, offsetY );
+        offsetY += minotaur.height();
 
         offsetY += 40;
 
@@ -216,9 +216,16 @@ namespace
         fheroes2::Blit( missile, output, websiteOffsetX - 10 - missile.width(), offsetY + website.h() / 2 - missile.height() / 2 );
         fheroes2::Blit( missile, output, websiteOffsetX + websiteInto.w() + website.w() + 10, offsetY + website.h() / 2 - missile.height() / 2, true );
 
-        const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
-        fheroes2::Blit( goblin, output, columnStep + columnStep / 2 - 15, ( textInitialOffsetY + ( secondAuthorLayerY - textInitialOffsetY ) - goblin.height() ) / 2,
-                        true );
+        offsetY = textInitialOffsetY;
+
+        title.Set( _( "QA and Support" ), Font::YELLOW_BIG, textWidth );
+        name.Set( "Igor Tsivilko", Font::BIG, textWidth );
+        title.Blit( columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
+        name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
+        offsetY += title.h() + name.h() + 10;
+
+        const fheroes2::Sprite & cyclop = fheroes2::AGG::GetICN( ICN::CYCLOPS, 38 );
+        fheroes2::Blit( cyclop, output, columnStep + ( columnStep - cyclop.width() ) / 2, offsetY );
 
         offsetY = secondAuthorLayerY;
 
@@ -254,6 +261,9 @@ namespace
         const fheroes2::Sprite & phoenix = fheroes2::AGG::GetICN( ICN::PHOENIX, 4 );
         fheroes2::Blit( phoenix, output, columnStep * 2 + ( columnStep - phoenix.width() ) / 2, offsetY - 10 );
 
+        const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
+        fheroes2::Blit( goblin, output, output.width() - goblin.width() * 2, output.height() - goblin.height() - 10, true );
+
         return output;
     }
 
@@ -280,9 +290,9 @@ namespace
                                         "vincent-grosbois\n"
                                         "eos428\n"
                                         "felix642\n"
+                                        "Arthusppp\n"
                                         "Vasilenko Alexey\n"
                                         "Andrii Kurdiumov\n"
-                                        "Arthusppp\n"
                                         "dimag0g\n"
                                         "tau3\n" );
 
@@ -713,6 +723,11 @@ void Game::ShowCredits()
     bool fadeInHeader = true;
 
     fheroes2::Display & display = fheroes2::Display::instance();
+
+    // Immediately indicate that the delay has passed to render first frame immediately.
+    Game::passCustomAnimationDelay( animationDelay );
+    // Make sure that the first run is passed immediately.
+    assert( !Game::isCustomDelayNeeded( animationDelay ) );
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) ) {

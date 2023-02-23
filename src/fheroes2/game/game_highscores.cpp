@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -225,7 +225,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point top{ ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 };
-    const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
+    const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
 
     int32_t selectedEntryIndex = -1;
     uint32_t monsterAnimationFrameId = 0;
@@ -281,7 +281,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     }
 
     LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
         le.MousePressLeft( buttonOtherHighScore.area() ) ? buttonOtherHighScore.drawOnPress() : buttonOtherHighScore.drawOnRelease();
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 

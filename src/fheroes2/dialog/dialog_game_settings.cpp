@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,41 +64,45 @@ namespace
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
         fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ) );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ),
+                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawGraphics( const fheroes2::Rect & optionRoi )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 15 ), _( "Graphics" ), _( "Settings" ) );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 15 ), _( "Graphics" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawAudioOptions( const fheroes2::Rect & optionRoi )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ) );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 1 ), _( "Audio" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 5 ), _( "Hot Keys" ), _( "Configure" ) );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ),
+                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawCursorTypeOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isMonochromeCursorEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 20 ), _( "Mouse Cursor" ), _( "Black & White" ) );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 20 ), _( "Mouse Cursor" ), _( "Black & White" ),
+                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ) );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 21 ), _( "Mouse Cursor" ), _( "Color" ),
+                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
 
     void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isTextSupportModeEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ) );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 4 ), _( "Text Support" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ) );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
 
@@ -135,9 +139,9 @@ namespace
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
-        const int buttonIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
-        const fheroes2::Sprite & buttonOkayReleased = fheroes2::AGG::GetICN( buttonIcnId, 0 );
-        const fheroes2::Sprite & buttonOkayPressed = fheroes2::AGG::GetICN( buttonIcnId, 1 );
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
+
+        const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowGraphicsRoi( graphicsRoi + windowRoi.getPosition() );
@@ -146,17 +150,23 @@ namespace
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowTextSupportModeRoi( textSupportModeRoi + windowRoi.getPosition() );
 
-        drawLanguage( windowLanguageRoi );
-        drawGraphics( windowGraphicsRoi );
-        drawAudioOptions( windowAudioRoi );
-        drawHotKeyOptions( windowHotKeyRoi );
-        drawCursorTypeOptions( windowCursorTypeRoi );
-        drawTextSupportModeOptions( windowTextSupportModeRoi );
+        auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowTextSupportModeRoi]() {
+            drawLanguage( windowLanguageRoi );
+            drawGraphics( windowGraphicsRoi );
+            drawAudioOptions( windowAudioRoi );
+            drawHotKeyOptions( windowHotKeyRoi );
+            drawCursorTypeOptions( windowCursorTypeRoi );
+            drawTextSupportModeOptions( windowTextSupportModeRoi );
+        };
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, buttonOkayReleased, buttonOkayPressed );
+        drawOptions();
+
+        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
         okayButton.draw();
 
         display.render();
+
+        bool isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
@@ -210,6 +220,16 @@ namespace
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
+            }
+
+            // Text support mode can be toggled using a global hotkey, we need to properly reflect this change in the UI
+            if ( isTextSupportModeEnabled != conf.isTextSupportModeEnabled() ) {
+                isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
+
+                emptyDialogRestorer.restore();
+                drawOptions();
+
+                display.render( emptyDialogRestorer.rect() );
             }
         }
 

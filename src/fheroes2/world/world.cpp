@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,6 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include "world.h"
 
 #include <algorithm>
 #include <array>
@@ -43,7 +45,6 @@
 #include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
-#include "maps_actions.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "mp2.h"
@@ -59,7 +60,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
-#include "world.h"
 
 namespace
 {
@@ -145,18 +145,6 @@ namespace
 namespace GameStatic
 {
     extern uint32_t uniq;
-}
-
-ListActions::~ListActions()
-{
-    clear();
-}
-
-void ListActions::clear()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
-    std::list<ActionSimple *>::clear();
 }
 
 MapObjects::~MapObjects()
@@ -287,7 +275,7 @@ void CapturedObjects::ClearFog( int colors )
 
             switch ( objcol.first ) {
             case MP2::OBJ_MINES:
-            case MP2::OBJ_ALCHEMYLAB:
+            case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_SAWMILL:
                 scoute = 2;
                 break;
@@ -365,7 +353,6 @@ void World::Reset()
 
     // extra
     map_captureobj.clear();
-    map_actions.clear();
     map_objects.clear();
 
     ultimate_artifact.Reset();
@@ -409,15 +396,15 @@ void World::NewMaps( int32_t sw, int32_t sh )
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         MP2::mp2tile_t mp2tile;
 
-        mp2tile.surfaceType = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
+        mp2tile.terrainImageIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
         mp2tile.objectName1 = 0; // object sprite level 1
         mp2tile.level1IcnImageIndex = 0xff; // index sprite level 1
         mp2tile.quantity1 = 0;
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
         mp2tile.level2IcnImageIndex = 0xff; // index sprite level 2
-        mp2tile.flags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        mp2tile.mapObjectType = MP2::OBJ_ZERO;
+        mp2tile.terrainFlags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
+        mp2tile.mapObjectType = MP2::OBJ_NONE;
         mp2tile.nextAddonIndex = 0;
         mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.
         mp2tile.level2ObjectUID = 0;
@@ -788,7 +775,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
 
     const Maps::Tiles & entranceTile = GetTiles( index );
 
-    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONELITHS ) {
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONE_LITHS ) {
         return result;
     }
 
@@ -865,7 +852,7 @@ uint32_t World::CountCapturedMines( int type, int color ) const
     case Resource::WOOD:
         return CountCapturedObject( MP2::OBJ_SAWMILL, color );
     case Resource::MERCURY:
-        return CountCapturedObject( MP2::OBJ_ALCHEMYLAB, color );
+        return CountCapturedObject( MP2::OBJ_ALCHEMIST_LAB, color );
     default:
         break;
     }
@@ -891,12 +878,6 @@ void World::CaptureObject( int32_t index, int color )
 int World::ColorCapturedObject( int32_t index ) const
 {
     return map_captureobj.GetColor( index );
-}
-
-ListActions * World::GetListActions( int32_t index )
-{
-    MapActions::iterator it = map_actions.find( index );
-    return it != map_actions.end() ? &( *it ).second : nullptr;
 }
 
 CapturedObject & World::GetCapturedObject( int32_t index )
@@ -932,19 +913,18 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
     Maps::Tiles & tile = GetTiles( center.x, center.y );
 
     // Get digging hole sprite.
-    uint8_t obj = 0;
-    uint32_t idx = 0;
+    MP2::ObjectIcnType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+    uint8_t imageIndex = 0;
 
-    if ( !MP2::getDiggingHoleSprite( tile.GetGround(), obj, idx ) ) {
+    if ( !MP2::getDiggingHoleSprite( tile.GetGround(), objectIcnType, imageIndex ) ) {
         // Are you sure that you can dig here?
         assert( 0 );
 
         return false;
     }
 
-    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), obj, idx ) );
+    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), objectIcnType, imageIndex, false, false ) );
 
-    // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
         return true;
@@ -1149,7 +1129,7 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
     if ( conf.isCampaignGameType() ) {
         const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
         if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
+            const bool visited = kingdom.isVisited( MP2::OBJ_DRAGON_CITY );
             if ( visited ) {
                 return GameOver::WINS_SIDE;
             }
@@ -1262,7 +1242,7 @@ void World::PostLoad( const bool setTilePassabilities )
     // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
     _allTeleports.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true ) ) {
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS, true ) ) {
         _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
     }
 
@@ -1310,16 +1290,7 @@ StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 
 StreamBase & operator>>( StreamBase & msg, CapturedObject & obj )
 {
-    msg >> obj.objcol >> obj.guardians;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE1_1000_RELEASE ) {
-        int dummy;
-
-        msg >> dummy;
-    }
-
-    return msg;
+    return msg >> obj.objcol >> obj.guardians;
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
@@ -1405,7 +1376,7 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t height = static_cast<uint16_t>( w.height );
 
     return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
+               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1419,7 +1390,20 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the logic below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_1002_RELEASE ) {
+        uint32_t dummy = 0xDEADBEEF;
+
+        msg >> dummy;
+
+        if ( dummy != 0 ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid number of MapActions items: " << dummy )
+        }
+    }
+
+    msg >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 
@@ -1444,7 +1428,7 @@ void EventDate::LoadFromMP2( StreamBuf st )
         // allow computer
         computer = ( st.getLE16() != 0 );
 
-        // day of first occurent
+        // day of first occurrence
         first = st.getLE16();
 
         // subsequent occurrences

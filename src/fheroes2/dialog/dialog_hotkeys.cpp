@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +53,7 @@ namespace
         const fheroes2::Sprite & originalWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
         fheroes2::Sprite window = originalWindow;
 
-        // Copy the bottom of a dialog with Okay buttom from another window.
+        // Copy the bottom of a dialog with Okay button from another window.
         const fheroes2::Sprite & mapSelectionWindow = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
         fheroes2::Copy( mapSelectionWindow, 0, 409, window, 0, 315, window.width(), window.height() - 314 );
 
@@ -184,21 +184,24 @@ namespace
             HotKeyElement hotKeyUI( Game::getHotKeyForEvent( hotKeyEvent ), fheroes2::Display::instance() );
 
             // Okay and Cancel events are special cases as they are used in dialogs. By default we need to disable these events to allow to be set any key for an event.
-            // Fullscreen event must be disabled as well.
+            // Global events (that work on all screens) must be disabled as well.
             const fheroes2::Key okayEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY );
             const fheroes2::Key cancelEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL );
-            const fheroes2::Key fullscreenEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::SYSTEM_FULLSCREEN );
+            const fheroes2::Key fullscreenEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN );
+            const fheroes2::Key textSupportModeEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE );
 
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, fheroes2::Key::NONE );
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL, fheroes2::Key::NONE );
-            Game::setHotKeyForEvent( Game::HotKeyEvent::SYSTEM_FULLSCREEN, fheroes2::Key::NONE );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN, fheroes2::Key::NONE );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE, fheroes2::Key::NONE );
 
             const int returnValue = fheroes2::showMessage( fheroes2::Text{ Game::getHotKeyEventNameByEventId( hotKeyEvent ), fheroes2::FontType::normalWhite() },
                                                            fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK | Dialog::CANCEL, { &hotKeyUI } );
 
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, okayEventKey );
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL, cancelEventKey );
-            Game::setHotKeyForEvent( Game::HotKeyEvent::SYSTEM_FULLSCREEN, fullscreenEventKey );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN, fullscreenEventKey );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE, textSupportModeEventKey );
 
             // To avoid UI issues we need to reset restorer manually.
             hotKeyUI.reset();
@@ -241,7 +244,7 @@ namespace fheroes2
 
         fheroes2::Blit( spriteShadow, display, roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
 
-        fheroes2::Button buttonOk( roi.x + 140, roi.y + 315, ICN::REQUEST, 1, 2 );
+        fheroes2::Button buttonOk( roi.x + 140, roi.y + 315, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
 
         HotKeyList resList( roi.getPosition() );
 

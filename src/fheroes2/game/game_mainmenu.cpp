@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -51,7 +51,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -87,7 +86,8 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES ) << " to show High Scores." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CREDITS ) << " to show Credits." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to Quit the game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_QUIT ) << " or " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL )
+                       << " to Quit the game." )
     }
 }
 
@@ -329,7 +329,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             return fheroes2::GameMode::CREDITS;
         }
 
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 return fheroes2::GameMode::QUIT_GAME;
             }
@@ -342,17 +342,17 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         // right info
         if ( le.MousePressRight( buttonQuit.area() ) )
-            Dialog::Message( _( "Quit" ), _( "Quit Heroes of Might and Magic II and return to the operating system." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit Heroes of Might and Magic II and return to the operating system." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonLoadGame.area() ) )
-            Dialog::Message( _( "Load Game" ), _( "Load a previously saved game." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Load Game" ), _( "Load a previously saved game." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonCredits.area() ) )
-            Dialog::Message( _( "Credits" ), _( "View the credits screen." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Credits" ), _( "View the credits screen." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonHighScores.area() ) )
-            Dialog::Message( _( "High Scores" ), _( "View the high scores screen." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "High Scores" ), _( "View the high scores screen." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonNewGame.area() ) )
-            Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
         else if ( le.MousePressRight( settingsArea ) )
-            Dialog::Message( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );

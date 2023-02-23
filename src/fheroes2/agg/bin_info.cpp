@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <cstdlib>
+#include <initializer_list>
 #include <map>
 #include <memory>
 #include <ostream>
@@ -121,10 +122,90 @@ namespace Bin_Info
             projectileOffset.emplace_back( getValue<int16_t>( data, 174 + ( i * 4 ) ), getValue<int16_t>( data, 176 + ( i * 4 ) ) );
         }
 
-        // Elves and Grand Elves have incorrect start Y position for lower shooting attack
+        // We change all projectile start positions to match the last projectile position in shooting animation,
+        // this position will be used to calculate the projectile path, but will not be used in rendering.
+        if ( monsterID == Monster::ARCHER || monsterID == Monster::RANGER ) {
+            projectileOffset[0].x -= 30;
+            projectileOffset[0].y += 5;
+            projectileOffset[1].x -= 46;
+            projectileOffset[1].y -= 5;
+            projectileOffset[2].x -= 30;
+            projectileOffset[2].y -= 40;
+        }
+
+        if ( monsterID == Monster::ORC || monsterID == Monster::ORC_CHIEF ) {
+            for ( fheroes2::Point & offset : projectileOffset ) {
+                offset.x -= 20;
+                offset.y = -36;
+            }
+        }
+
+        if ( monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL ) {
+            projectileOffset[0].x -= 30;
+            projectileOffset[0].y -= 5;
+            projectileOffset[1].x -= 14;
+            --projectileOffset[1].y;
+            projectileOffset[2].x -= 15;
+            projectileOffset[2].y -= 19;
+        }
+
         if ( monsterID == Monster::ELF || monsterID == Monster::GRAND_ELF ) {
-            if ( projectileOffset[2].y == -1 )
-                projectileOffset[2].y = -32;
+            projectileOffset[0].x -= 19;
+            projectileOffset[0].y += 22;
+            projectileOffset[1].x -= 40;
+            --projectileOffset[1].y;
+            projectileOffset[2].x -= 19;
+            // IMPORTANT: In BIN file Elves and Grand Elves have incorrect start Y position for lower shooting attack ( -1 ).
+            projectileOffset[2].y = -54;
+        }
+
+        if ( monsterID == Monster::DRUID || monsterID == Monster::GREATER_DRUID ) {
+            projectileOffset[0].x -= 12;
+            projectileOffset[0].y += 23;
+            projectileOffset[1].x -= 20;
+            projectileOffset[2].x -= 7;
+            projectileOffset[2].y -= 21;
+        }
+
+        if ( monsterID == Monster::CENTAUR ) {
+            projectileOffset[0].x -= 24;
+            projectileOffset[0].y += 31;
+            projectileOffset[1].x -= 32;
+            projectileOffset[1].y += 2;
+            projectileOffset[2].x -= 24;
+            projectileOffset[2].y -= 27;
+        }
+
+        if ( monsterID == Monster::HALFLING ) {
+            projectileOffset[0].x -= 7;
+            projectileOffset[0].y += 11;
+            projectileOffset[1].x -= 21;
+            projectileOffset[1].y += 10;
+            projectileOffset[2].x -= 9;
+            projectileOffset[2].y -= 14;
+        }
+
+        if ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE ) {
+            projectileOffset[0].y -= 2;
+            projectileOffset[2].y += 2;
+        }
+
+        if ( monsterID == Monster::TITAN ) {
+            projectileOffset[0].x -= 10;
+            projectileOffset[0].y += 22;
+            projectileOffset[1].x -= 20;
+            projectileOffset[1].y += 8;
+            projectileOffset[2].x -= 15;
+            projectileOffset[2].y -= 22;
+        }
+
+        if ( monsterID == Monster::LICH || monsterID == Monster::POWER_LICH ) {
+            projectileOffset[0].x -= 5;
+            projectileOffset[0].y += 6;
+            projectileOffset[1].x -= 16;
+            projectileOffset[1].y -= 9;
+            projectileOffset[2].x -= 9;
+            projectileOffset[2].y -= 7;
         }
 
         uint8_t projectileCount = data[186];
@@ -155,6 +236,17 @@ namespace Bin_Info
             }
             if ( animationFrames[ATTACK3_END].size() == 3 && animationFrames[ATTACK3_END][2] == 16 ) {
                 animationFrames[ATTACK3_END][2] = 2;
+            }
+        }
+
+        if ( monsterID == Monster::DWARF || monsterID == Monster::BATTLE_DWARF ) {
+            // Dwarves and Battle Dwarves have incorrect death animation.
+            if ( animationFrames[DEATH].size() == 8 ) {
+                animationFrames[DEATH].clear();
+
+                for ( int frameId = 49; frameId <= 55; ++frameId ) {
+                    animationFrames[DEATH].push_back( frameId );
+                }
             }
         }
 
@@ -216,26 +308,153 @@ namespace Bin_Info
                 frameXOffset[MOVE_STOP][0] = frameXOffset[MOVE_MAIN].back();
         }
 
-        if ( monsterID == Monster::IRON_GOLEM || monsterID == Monster::STEEL_GOLEM ) {
-            if ( frameXOffset[MOVE_START].size() == 4 ) { // the original golem info
-                frameXOffset[MOVE_START][0] = 0;
-                frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
-                frameXOffset[MOVE_START][2] = CELLW * 2 / 8;
-                frameXOffset[MOVE_START][3] = CELLW * 3 / 8;
-                for ( size_t id = 0; id < frameXOffset[MOVE_MAIN].size(); ++id )
-                    frameXOffset[MOVE_MAIN][id] += CELLW / 2;
+        // Movement animation fix for Iron and Steel Golem. Also check that the data sizes are correct.
+        if ( ( monsterID == Monster::IRON_GOLEM || monsterID == Monster::STEEL_GOLEM )
+             && ( frameXOffset[MOVE_START].size() == 4 && frameXOffset[MOVE_MAIN].size() == 7 && animationFrames[MOVE_MAIN].size() == 7 ) ) { // the original golem info
+            frameXOffset[MOVE_START][0] = 0;
+            frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
+            frameXOffset[MOVE_START][2] = CELLW * 2 / 8 + 3;
+            frameXOffset[MOVE_START][3] = CELLW * 3 / 8;
+
+            // 'MOVE_MAIN' animation is missing 1/4 of animation start. 'MOVE_START' (for first and one cell move) has this 1/4 of animation,
+            // but 'MOVE_TILE_START` (for movement after the first cell) is empty, so we move all frames except the last frame from 'MOVE_MAIN'
+            // to the end of 'MOVE_START' animationFrames. And prepare 'MOVE_TILE_START' for new animation frame IDs.
+            animationFrames[MOVE_TILE_START].resize( animationFrames[MOVE_TILE_START].size() + animationFrames[MOVE_MAIN].size() - 1 );
+            animationFrames[MOVE_START].insert( animationFrames[MOVE_START].end(), animationFrames[MOVE_MAIN].begin(), animationFrames[MOVE_MAIN].end() - 1 );
+            animationFrames[MOVE_MAIN].erase( animationFrames[MOVE_MAIN].begin(), animationFrames[MOVE_MAIN].end() - 1 );
+            // Do the same for 'x' offset vector and make a copy to 'MOVE_TILE_START'.
+            frameXOffset[MOVE_START].insert( frameXOffset[MOVE_START].end(), frameXOffset[MOVE_MAIN].begin(), frameXOffset[MOVE_MAIN].end() - 1 );
+            frameXOffset[MOVE_TILE_START] = frameXOffset[MOVE_MAIN];
+            frameXOffset[MOVE_TILE_START].pop_back();
+            frameXOffset[MOVE_MAIN].erase( frameXOffset[MOVE_MAIN].begin(), frameXOffset[MOVE_MAIN].end() - 1 );
+
+            // Correct the 'x' offset by half of cell.
+            frameXOffset[MOVE_MAIN][0] += CELLW / 2;
+            for ( size_t id = 0; id < frameXOffset[MOVE_TILE_START].size(); ++id ) {
+                frameXOffset[MOVE_START][id + 4] += CELLW / 2;
+                // For 'MOVE_TILE_START' also include the correction, made in "agg_image.cpp".
+                frameXOffset[MOVE_TILE_START][id] += CELLW / 2 - ( 6 - static_cast<int32_t>( id ) ) * CELLW / 28;
+                // For 'MOVE_TILE_START' animation frames IDs use new frames, made in "agg_image.cpp", which starts from ID = 40.
+                animationFrames[MOVE_TILE_START][id] = 40 + static_cast<int32_t>( id );
             }
         }
 
-        if ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) {
-            if ( frameXOffset[MOVE_START].size() == 2 && frameXOffset[MOVE_STOP].size() == 1 ) { // the original swordsman info
-                frameXOffset[MOVE_START][0] = 0;
-                frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
-                for ( size_t id = 0; id < frameXOffset[MOVE_MAIN].size(); ++id )
-                    frameXOffset[MOVE_MAIN][id] += CELLW / 4;
+        // The Ogre has a duplicate frame of the 'STATIC' animation at the start of the 'MOVE_MAIN' animation, making him to move non-smoothly.
+        if ( ( monsterID == Monster::OGRE || monsterID == Monster::OGRE_LORD ) && frameXOffset[MOVE_MAIN].size() == 9 && animationFrames[MOVE_MAIN].size() == 9 ) {
+            animationFrames[MOVE_MAIN].erase( animationFrames[MOVE_MAIN].begin() );
+            frameXOffset[MOVE_MAIN].erase( frameXOffset[MOVE_MAIN].begin() );
+        }
 
-                frameXOffset[MOVE_STOP][0] = CELLW;
+        // Some creatures needs their 'x' offset in moving animations to be bigger by 3px to avoid sprite shift in Well and during diagonal movement.
+        if ( monsterID == Monster::ORC || monsterID == Monster::ORC_CHIEF || monsterID == Monster::OGRE || monsterID == Monster::OGRE_LORD || monsterID == Monster::DWARF
+             || monsterID == Monster::BATTLE_DWARF || monsterID == Monster::UNICORN || monsterID == Monster::CENTAUR || monsterID == Monster::BOAR
+             || monsterID == Monster::LICH || monsterID == Monster::POWER_LICH || monsterID == Monster::ROGUE ) {
+            for ( const int animType : { MOVE_START, MOVE_TILE_START, MOVE_MAIN, MOVE_TILE_END, MOVE_STOP, MOVE_ONE } ) {
+                for ( int & xOffset : frameXOffset[animType] ) {
+                    xOffset += 3;
+                }
             }
+        }
+
+        // Archers/Rangers needs their 'x' offset in moving animations to be bigger by 1px to avoid sprite shift in Well and during diagonal movement.
+        if ( monsterID == Monster::ARCHER || monsterID == Monster::RANGER ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                for ( int & xOffset : frameXOffset[animType] ) {
+                    ++xOffset;
+                }
+            }
+        }
+
+        // Paladin/Crusader needs their 'x' offset in moving animations to be lower by 1px to avoid sprite shift in Well and during diagonal movement.
+        if ( ( monsterID == Monster::PALADIN || monsterID == Monster::CRUSADER ) && frameXOffset[MOVE_MAIN].size() == 8 && animationFrames[MOVE_MAIN].size() == 8 ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                for ( int & xOffset : frameXOffset[animType] ) {
+                    --xOffset;
+                }
+
+                // The 5th and 8th frames needs extra shift by 2 and 1 pixel.
+                frameXOffset[animType][4] -= 2;
+                --frameXOffset[animType][7];
+            }
+        }
+
+        // Goblins needs their 'x' offset in moving animations to be bigger by 6px to avoid sprite shift in Well and during diagonal movement.
+        if ( monsterID == Monster::GOBLIN ) {
+            for ( const int animType : { MOVE_TILE_START, MOVE_MAIN, MOVE_STOP, MOVE_ONE } ) {
+                for ( int & xOffset : frameXOffset[animType] ) {
+                    xOffset += 6;
+                }
+            }
+        }
+
+        // Trolls needs their 'x' offset in moving animations to be bigger by 2px to avoid sprite shift in Well and during diagonal movement.
+        if ( ( monsterID == Monster::TROLL || monsterID == Monster::WAR_TROLL ) && frameXOffset[MOVE_MAIN].size() == 14 && frameXOffset[MOVE_ONE].size() == 14 ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                for ( int & xOffset : frameXOffset[animType] ) {
+                    xOffset += 2;
+                }
+
+                // The 7th and 14th frames needs extra shift by 1 px.
+                ++frameXOffset[animType][6];
+                ++frameXOffset[animType][13];
+            }
+        }
+
+        // Giants/Titians needs their 'x' offset in moving animations to be corrected to avoid sprite shift in Well and during diagonal movement.
+        if ( ( monsterID == Monster::GIANT || monsterID == Monster::TITAN ) && frameXOffset[MOVE_MAIN].size() == 7 && frameXOffset[MOVE_ONE].size() == 7 ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                frameXOffset[animType][0] += 3;
+                frameXOffset[animType][1] += 2;
+                frameXOffset[animType][2] += 2;
+                ++frameXOffset[animType][5];
+                ++frameXOffset[animType][6];
+            }
+        }
+
+        // Nomad needs their 'x' offset in moving animations to be corrected to avoid one sprite shift in Well and during diagonal movement.
+        if ( monsterID == Monster::NOMAD && frameXOffset[MOVE_MAIN].size() == 8 && frameXOffset[MOVE_ONE].size() == 8 ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                frameXOffset[animType][2] -= 2;
+            }
+        }
+
+        // Nomad needs their 'x' offset in moving animations to be corrected to avoid one sprite shift in Well and during diagonal movement.
+        if ( monsterID == Monster::MEDUSA && frameXOffset[MOVE_MAIN].size() == 15 && frameXOffset[MOVE_ONE].size() == 15 ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                frameXOffset[animType][3] += 2;
+                frameXOffset[animType][4] += 2;
+                ++frameXOffset[animType][5];
+                ++frameXOffset[animType][9];
+                frameXOffset[animType][10] += 2;
+                ++frameXOffset[animType][11];
+                ++frameXOffset[animType][14];
+            }
+        }
+
+        // Elementals needs their 'x' offset in moving animations to be corrected to avoid sprite shift in Well and during diagonal movement.
+        if ( ( monsterID == Monster::EARTH_ELEMENT || monsterID == Monster::AIR_ELEMENT || monsterID == Monster::FIRE_ELEMENT || monsterID == Monster::WATER_ELEMENT )
+             && frameXOffset[MOVE_MAIN].size() == 8 && frameXOffset[MOVE_ONE].size() == 8 ) {
+            for ( const int animType : { MOVE_MAIN, MOVE_ONE } ) {
+                frameXOffset[animType][0] += 3;
+                frameXOffset[animType][1] += 3;
+                frameXOffset[animType][2] += 5;
+                frameXOffset[animType][3] += 3;
+                --frameXOffset[animType][5];
+                ++frameXOffset[animType][6];
+                --frameXOffset[animType][7];
+            }
+        }
+
+        // X offset fix for Swordsman.
+        if ( ( monsterID == Monster::SWORDSMAN || monsterID == Monster::MASTER_SWORDSMAN ) && frameXOffset[MOVE_START].size() == 2
+             && frameXOffset[MOVE_STOP].size() == 1 ) {
+            frameXOffset[MOVE_START][0] = 0;
+            frameXOffset[MOVE_START][1] = CELLW * 1 / 8;
+            for ( int & xOffset : frameXOffset[MOVE_MAIN] ) {
+                xOffset += CELLW / 4 + 3;
+            }
+
+            frameXOffset[MOVE_STOP][0] = CELLW;
         }
     }
 
@@ -252,7 +471,7 @@ namespace Bin_Info
                 return info;
             }
             else {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID )
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID )
             }
         }
         return MonsterAnimInfo();

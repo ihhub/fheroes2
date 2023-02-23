@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -46,7 +46,6 @@
 #include "world_pathfinding.h"
 #include "world_regions.h"
 
-class ActionSimple;
 class MapObjectSimple;
 class StreamBase;
 class StreamBuf;
@@ -58,20 +57,6 @@ namespace Route
 {
     class Step;
 }
-
-struct ListActions : public std::list<ActionSimple *>
-{
-    ListActions() = default;
-    ListActions( const ListActions & other ) = default;
-    ListActions( ListActions && other ) = delete;
-
-    ~ListActions();
-
-    ListActions & operator=( const ListActions & other ) = delete;
-    ListActions & operator=( ListActions && other ) = delete;
-
-    void clear();
-};
 
 struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
 {
@@ -90,8 +75,6 @@ struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
     MapObjectSimple * get( uint32_t uid );
     void remove( uint32_t uid );
 };
-
-using MapActions = std::map<int32_t, ListActions>;
 
 struct CapturedObject
 {
@@ -177,7 +160,7 @@ public:
     World & operator=( const World & other ) = delete;
     World & operator=( World && other ) = delete;
 
-    bool LoadMapMP2( const std::string & );
+    bool LoadMapMP2( const std::string & filename, const bool isOriginalMp2File );
 
     void NewMaps( int32_t, int32_t );
 
@@ -341,7 +324,6 @@ public:
     int ColorCapturedObject( int32_t ) const;
     void ResetCapturedObjects( int );
     CapturedObject & GetCapturedObject( int32_t );
-    ListActions * GetListActions( int32_t );
 
     void ActionForMagellanMaps( int color );
     void ClearFog( int color );
@@ -407,7 +389,6 @@ private:
     int heroes_cond_wins = Heroes::UNKNOWN;
     int heroes_cond_loss = Heroes::UNKNOWN;
 
-    MapActions map_actions;
     MapObjects map_objects;
 
     uint32_t _seed{ 0 }; // Map seed
@@ -426,9 +407,6 @@ StreamBase & operator>>( StreamBase &, CapturedObject & );
 
 StreamBase & operator<<( StreamBase &, const World & );
 StreamBase & operator>>( StreamBase &, World & );
-
-StreamBase & operator<<( StreamBase &, const ListActions & );
-StreamBase & operator>>( StreamBase &, ListActions & );
 
 StreamBase & operator<<( StreamBase &, const MapObjects & );
 StreamBase & operator>>( StreamBase &, MapObjects & );

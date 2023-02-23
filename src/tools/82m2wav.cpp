@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,42 +21,98 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cstdint>
 #include <cstdlib>
+#include <filesystem>
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
+#include <limits>
+#include <memory>
+#include <sstream>
 #include <string>
+#include <system_error>
+#include <type_traits>
+#include <vector>
 
 #include "serialize.h"
+#include "system.h"
 
 int main( int argc, char ** argv )
 {
-    if ( argc != 3 ) {
-        std::cout << argv[0] << " infile.82m outfile.wav" << std::endl;
+    if ( argc < 3 ) {
+        std::string baseName = System::GetBasename( argv[0] );
 
-        return EXIT_SUCCESS;
+        std::cerr << baseName << " converts the specified 82M file(s) to WAV format." << std::endl
+                  << "Syntax: " << baseName << " dst_dir input_file.82m ..." << std::endl;
+        return EXIT_FAILURE;
     }
 
-    std::fstream fd_data( argv[1], std::ios::in | std::ios::binary );
+    const char * dstDir = argv[1];
 
-    if ( fd_data.fail() ) {
-        std::cout << "error open file: " << argv[1] << std::endl;
-
-        return EXIT_SUCCESS;
+    std::vector<std::string> inputFileNames;
+    for ( int i = 2; i < argc; ++i ) {
+        if ( System::isShellLevelGlobbingSupported() ) {
+            inputFileNames.emplace_back( argv[i] );
+        }
+        else {
+            System::globFiles( argv[i], inputFileNames );
+        }
     }
 
-    fd_data.seekg( 0, std::ios_base::end );
-    uint32_t size = fd_data.tellg();
-    fd_data.seekg( 0, std::ios_base::beg );
-    char * body = new char[size];
-    fd_data.read( body, size );
-    fd_data.close();
+    std::error_code ec;
 
-    std::fstream fd_body( argv[2], std::ios::out | std::ios::binary );
-    if ( !fd_body.fail() ) {
+    // Using the non-throwing overloads
+    if ( !std::filesystem::exists( dstDir, ec ) && !std::filesystem::create_directories( dstDir, ec ) ) {
+        std::cerr << "Cannot create directory " << dstDir << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    for ( const std::string & inputFileName : inputFileNames ) {
+        std::cout << "Processing " << inputFileName << "..." << std::endl;
+
+        std::ifstream inputStream( inputFileName, std::ios_base::binary | std::ios_base::ate );
+        if ( !inputStream ) {
+            std::cerr << "Cannot open file " << inputFileName << std::endl;
+            // A non-existent or inaccessible file is not considered a fatal error
+            continue;
+        }
+
+        const std::streampos pos = inputStream.tellg();
+        if ( pos <= 0 ) {
+            std::cerr << "File " << inputFileName << " is empty" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const std::make_unsigned_t<std::streamoff> posOffset = pos;
+        if ( posOffset > std::numeric_limits<size_t>::max() ) {
+            std::cerr << "File " << inputFileName << " is too large" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const size_t size = static_cast<size_t>( posOffset );
+        const auto buf = std::make_unique<char[]>( size );
+
+        inputStream.seekg( 0, std::ios_base::beg );
+        inputStream.read( buf.get(), size );
+        if ( !inputStream ) {
+            std::cerr << "Error reading from file " << inputFileName << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const std::filesystem::path outputFilePath = std::filesystem::path( dstDir ) / std::filesystem::path( inputFileName ).filename().replace_extension( "wav" );
+
+        std::ofstream outputStream( outputFilePath, std::ios_base::binary | std::ios_base::trunc );
+        if ( !outputStream ) {
+            std::cerr << "Cannot open file " << outputFilePath << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+
         StreamBuf wavHeader( 44 );
         wavHeader.putLE32( 0x46464952 ); // RIFF
-        wavHeader.putLE32( size + 0x24 ); // size
+        wavHeader.putLE32( static_cast<uint32_t>( size ) + 0x24 ); // size
         wavHeader.putLE32( 0x45564157 ); // WAVE
         wavHeader.putLE32( 0x20746D66 ); // FMT
         wavHeader.putLE32( 0x10 ); // size_t
@@ -67,14 +123,15 @@ int main( int argc, char ** argv )
         wavHeader.putLE16( 0x01 ); // align
         wavHeader.putLE16( 0x08 ); // bitsper
         wavHeader.putLE32( 0x61746164 ); // DATA
-        wavHeader.putLE32( size ); // size
+        wavHeader.putLE32( static_cast<uint32_t>( size ) ); // size
 
-        fd_body.write( reinterpret_cast<const char *>( wavHeader.data() ), wavHeader.size() );
-        fd_body.write( body, size );
-        fd_body.close();
+        outputStream.write( reinterpret_cast<const char *>( wavHeader.data() ), wavHeader.size() );
+        outputStream.write( buf.get(), size );
+        if ( !outputStream ) {
+            std::cerr << "Error writing to file " << outputFilePath << std::endl;
+            return EXIT_FAILURE;
+        }
     }
-
-    delete[] body;
 
     return EXIT_SUCCESS;
 }

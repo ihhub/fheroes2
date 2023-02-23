@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -111,7 +111,7 @@ bool Battle::Only::ChangeSettings()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const fheroes2::StandardWindow frameborder( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    const fheroes2::StandardWindow frameborder( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
 
     const fheroes2::Point cur_pt( frameborder.activeArea().x, frameborder.activeArea().y );
 
@@ -181,7 +181,7 @@ bool Battle::Only::ChangeSettings()
     const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
     fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
 
-    const int icnId = ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int icnId = ICN::BUTTON_SMALL_OKAY_GOOD;
     const fheroes2::Sprite & buttonStartImage = fheroes2::AGG::GetICN( icnId, 0 );
     fheroes2::ButtonSprite buttonStart = fheroes2::makeButtonWithShadow( cur_pt.x + ( 640 - buttonStartImage.width() ) / 2, cur_pt.y + 428, buttonStartImage,
                                                                          fheroes2::AGG::GetICN( icnId, 1 ), display );

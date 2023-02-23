@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,45 +24,70 @@
 #ifndef H2BATTLE_BRIDGE_H
 #define H2BATTLE_BRIDGE_H
 
+#include <cassert>
 #include <cstdint>
 
 namespace Battle
 {
     class Unit;
 
-    class Bridge
+    class Bridge final
     {
     public:
-        Bridge();
+        Bridge() = default;
         Bridge( const Bridge & ) = delete;
+
+        ~Bridge() = default;
 
         Bridge & operator=( const Bridge & ) = delete;
 
-        void Action( const Unit &, int32_t );
+        void ActionUp();
+        void ActionDown();
 
-        void SetDestroy();
-        void SetDown( bool );
-        void SetPassable( const Unit & ) const;
+        void SetDestroyed();
+        void SetPassability( const Unit & unit ) const;
 
-        bool AllowUp() const;
-        bool NeedDown( const Unit &, int32_t ) const;
-        bool isPassable( const Unit & ) const;
-        bool isValid() const;
-        bool isDestroy() const;
-        bool isDown() const;
-        bool isBridgeOccupied() const;
+        bool AllowUp() const
+        {
+            // Yes if not destroyed and lowered and there are no any troops (alive or dead) on or under the bridge
+            return isValid() && isDown() && !isOccupied();
+        }
+
+        bool NeedDown( const Unit & unit, const int32_t dstIdx ) const;
+
+        bool isPassable( const Unit & unit ) const;
+
+        bool isValid() const
+        {
+            return !_isDestroyed;
+        }
+
+        bool isDestroyed() const
+        {
+            return _isDestroyed;
+        }
+
+        bool isDown() const
+        {
+            assert( !_isDestroyed || _isDown );
+
+            return _isDown;
+        }
 
     private:
-        bool destroy;
-        bool down;
+        static bool isOccupied();
+
+        bool _isDestroyed{ false };
+        bool _isDown{ false };
 
         enum
         {
-            ABOVE_BRIDGE_CELL = 39,
-            MOAT_CELL = 49,
-            GATES_CELL = 50,
+            CELL_ABOVE_BRIDGE = 39,
+            CELL_BEFORE_MOAT = 48,
+            CELL_MOAT = 49,
+            CELL_GATES = 50,
             CELL_AFTER_GATES = 51,
-            BELOW_BRIDGE_CELL = 61
+            CELL_BELOW_BRIDGE = 61
         };
     };
 }

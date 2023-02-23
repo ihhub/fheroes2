@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <optional>
 #include <string>
 #include <utility>
 
@@ -213,11 +214,6 @@ public:
         return mouse_pl;
     }
 
-    void ResetPressLeft()
-    {
-        mouse_pl = { -1, -1 };
-    }
-
     bool MouseClickLeft();
     bool MouseClickMiddle();
     bool MouseClickRight();
@@ -384,26 +380,29 @@ private:
 
     fheroes2::Rect _mouseCursorRenderArea;
 
-    // used to convert user-friendly pointer speed values into more useable ones
+    // used to convert user-friendly pointer speed values into more usable ones
     const double CONTROLLER_SPEED_MOD = 2000000.0;
     double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
     double _emulatedPointerPosX = 0;
     double _emulatedPointerPosY = 0;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
+    // bigger value corresponds to faster pointer movement speed with bigger stick axis values
     const double CONTROLLER_AXIS_SPEEDUP = 1.03;
+    const double CONTROLLER_TRIGGER_CURSOR_SPEEDUP = 2.0;
 
     SDL_GameController * _gameController = nullptr;
-    SDL_FingerID _firstFingerId = 0;
-    SDL_FingerID _secondFingerId = 0;
     fheroes2::Time _controllerTimer;
     int16_t _controllerLeftXAxis = 0;
     int16_t _controllerLeftYAxis = 0;
     int16_t _controllerRightXAxis = 0;
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
-    int16_t _numTouches = 0;
+
+    // Ids of currently active (touching the screen) fingers, if any
+    std::pair<std::optional<SDL_FingerID>, std::optional<SDL_FingerID>> _fingerIds;
+    // Is the two-finger gesture currently being processed
+    bool _isTwoFingerGestureInProgress = false;
 #endif
 };
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,6 +29,8 @@
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
+#include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "gamedefs.h"
 #include "heroes.h"
@@ -408,7 +410,7 @@ void Interface::StatusWindow::DrawBackground() const
             fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         }
 
-        // botom
+        // bottom
         srcrt = fheroes2::Rect( 0, startY, icnston.width(), icnston.height() - startY );
         dstpt = fheroes2::Point( pos.x, pos.y + pos.height - ( icnston.height() - startY ) );
         fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -470,10 +472,19 @@ void Interface::StatusWindow::TimerEventProcessing()
     SetRedraw();
 }
 
-void Interface::StatusWindow::RedrawTurnProgress( uint32_t v )
+void Interface::StatusWindow::DrawAITurnProgress( const uint32_t progressValue )
 {
-    turn_progress = v;
+    // Process events if any before rendering a frame. For instance, updating a mouse cursor position.
+    LocalEvent::Get().HandleEvents( false );
 
-    interface.Redraw( REDRAW_STATUS );
-    fheroes2::Display::instance().render( GetArea() );
+    turn_progress = progressValue;
+
+    interface.SetRedraw( REDRAW_STATUS );
+
+    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+        Game::updateAdventureMapAnimationIndex();
+
+        interface.Redraw( REDRAW_GAMEAREA );
+        fheroes2::Display::instance().render();
+    }
 }

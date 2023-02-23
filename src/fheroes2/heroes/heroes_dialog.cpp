@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -69,7 +69,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     std::unique_ptr<fheroes2::StandardWindow> background;
     std::unique_ptr<fheroes2::ImageRestorer> restorer;
     if ( renderBackgroundDialog ) {
-        background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+        background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
         cur_pt = { background->activeArea().x, background->activeArea().y };
     }
     else {
@@ -300,13 +300,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // prev hero
         if ( buttonPrevHero.isEnabled()
-             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
             return Dialog::PREV;
         }
 
         // next hero
         if ( buttonNextHero.isEnabled()
-             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
             return Dialog::NEXT;
         }
 

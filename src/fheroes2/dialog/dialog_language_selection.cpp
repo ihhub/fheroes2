@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -135,8 +135,8 @@ namespace
 
         fheroes2::Blit( windowShadow, display, roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
 
-        fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::REQUEST, 1, 2 );
-        fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::REQUEST, 3, 4 );
+        fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+        fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
         LanguageList items( roi.getPosition() );
 
@@ -199,8 +199,11 @@ namespace
             }
 
             if ( items.isSelected() ) {
-                chosenLanguage = items.GetCurrent();
-                Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+                const fheroes2::SupportedLanguage newChosenLanguage = items.GetCurrent();
+                if ( newChosenLanguage != chosenLanguage ) {
+                    chosenLanguage = newChosenLanguage;
+                    Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+                }
             }
 
             if ( !items.IsNeedRedraw() ) {

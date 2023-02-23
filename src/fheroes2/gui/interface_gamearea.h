@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -80,7 +80,7 @@ namespace Interface
 
         int32_t tileId{ -1 };
 
-        MP2::MapObjectType type{ MP2::OBJ_ZERO };
+        MP2::MapObjectType type{ MP2::OBJ_NONE };
 
         uint8_t alphaValue{ 255 };
 
@@ -253,6 +253,11 @@ namespace Interface
             return _mouseDraggingMovement;
         }
 
+        bool needDragScrollRedraw() const
+        {
+            return _needRedrawByMouseDragging;
+        }
+
     private:
         Basic & interface;
 
@@ -276,9 +281,10 @@ namespace Interface
         // This member needs to be mutable because it is modified during rendering.
         mutable std::vector<std::shared_ptr<BaseObjectAnimationInfo>> _animationInfo;
 
+        fheroes2::Point _lastMouseDragPosition;
         bool _mouseDraggingInitiated;
         bool _mouseDraggingMovement;
-        fheroes2::Point _startMouseDragPosition;
+        bool _needRedrawByMouseDragging;
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const

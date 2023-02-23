@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2022                                             #
+#   Copyright (C) 2021 - 2023                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,7 +18,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-TARGETS := extractor 82m2wav til2img icn2img xmi2mid_cli bin2txt
+TARGETS := 82m2wav bin2txt extractor icn2img pal2img til2img xmi2midi
 
 LIBENGINE := ../engine/libengine.a
 CCFLAGS := $(CCFLAGS) -I../engine

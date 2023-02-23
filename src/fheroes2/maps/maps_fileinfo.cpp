@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,10 +27,12 @@
 #include <algorithm>
 #include <cassert>
 #include <cstring>
+#include <limits>
 #include <list>
 #include <locale>
 #include <map>
 #include <ostream>
+#include <type_traits>
 #include <utility>
 
 #include "artifact.h"
@@ -104,7 +106,7 @@ namespace
         return Color::NONE;
     }
 
-    int ByteToRace( const int byte )
+    uint8_t ByteToRace( const int byte )
     {
         switch ( byte ) {
         case 0x00:
@@ -330,10 +332,13 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
     // race color
     for ( const int color : colors ) {
-        const int race = ByteToRace( fs.get() );
+        const uint8_t race = ByteToRace( fs.get() );
+
         races[Color::GetIndex( color )] = race;
-        if ( Race::RAND == race )
+
+        if ( Race::RAND == race ) {
             rnd_races |= color;
+        }
     }
 
     bool skipUnionSetup = false;
@@ -407,15 +412,25 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
 void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 {
-    for ( uint32_t i = 0; i < KINGDOMMAX; ++i ) {
-        const int color = ByteToColor( i );
+    using UnionsItemType = std::remove_extent_t<decltype( unions )>;
+    static_assert( std::is_same_v<UnionsItemType, uint8_t>, "Type of unions has been changed, check the logic below" );
 
-        if ( side1Colors & color )
-            unions[i] = side1Colors;
-        else if ( side2Colors & color )
-            unions[i] = side2Colors;
-        else
+    for ( int i = 0; i < KINGDOMMAX; ++i ) {
+        const uint8_t color = ByteToColor( i );
+
+        if ( side1Colors & color ) {
+            assert( side1Colors >= std::numeric_limits<UnionsItemType>::min() && side1Colors <= std::numeric_limits<UnionsItemType>::max() );
+
+            unions[i] = static_cast<UnionsItemType>( side1Colors );
+        }
+        else if ( side2Colors & color ) {
+            assert( side2Colors >= std::numeric_limits<UnionsItemType>::min() && side2Colors <= std::numeric_limits<UnionsItemType>::max() );
+
+            unions[i] = static_cast<UnionsItemType>( side2Colors );
+        }
+        else {
             unions[i] = color;
+        }
     }
 }
 
@@ -521,7 +536,7 @@ std::string Maps::FileInfo::String() const
        << "kingdom colors: " << static_cast<int>( kingdom_colors ) << ", "
        << "allow human colors: " << static_cast<int>( allow_human_colors ) << ", "
        << "allow comp colors: " << static_cast<int>( allow_comp_colors ) << ", "
-       << "rnd races: " << static_cast<int>( rnd_races ) << ", "
+       << "random races: " << static_cast<int>( rnd_races ) << ", "
        << "conditions wins: " << static_cast<int>( conditions_wins ) << ", "
        << "comp also wins: " << ( comp_also_wins ? "true" : "false" ) << ", "
        << "allow normal victory: " << ( allow_normal_victory ? "true" : "false" ) << ", "

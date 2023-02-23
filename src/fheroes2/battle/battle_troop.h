@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -71,7 +71,6 @@ namespace Battle
         uint32_t FindZeroDuration() const;
     };
 
-    // battle troop stats
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
@@ -193,7 +192,8 @@ namespace Battle
         void ResetBlind();
         void SetBlindAnswer( bool value );
         void SpellModesAction( const Spell &, uint32_t, const HeroBase * );
-        void SpellApplyDamage( const Spell &, uint32_t, const HeroBase *, TargetInfo & );
+        void SpellApplyDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, TargetInfo & target );
+        uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const;
         void SpellRestoreAction( const Spell &, uint32_t, const HeroBase * );
         uint32_t Resurrect( uint32_t, bool, bool );
 

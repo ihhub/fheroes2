@@ -78,6 +78,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_adventure.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_arena.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_armyinfo.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_artifact.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_audio.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_box.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_buyboat.cpp" />
@@ -180,7 +181,6 @@
     <ClCompile Include="src\fheroes2\kingdom\week.cpp" />
     <ClCompile Include="src\fheroes2\maps\ground.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps.cpp" />
-    <ClCompile Include="src\fheroes2\maps\maps_actions.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_fileinfo.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_objects.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_tiles.cpp" />
@@ -364,7 +364,6 @@
     <ClInclude Include="src\fheroes2\kingdom\week.h" />
     <ClInclude Include="src\fheroes2\maps\ground.h" />
     <ClInclude Include="src\fheroes2\maps\maps.h" />
-    <ClInclude Include="src\fheroes2\maps\maps_actions.h" />
     <ClInclude Include="src\fheroes2\maps\maps_fileinfo.h" />
     <ClInclude Include="src\fheroes2\maps\maps_objects.h" />
     <ClInclude Include="src\fheroes2\maps\maps_tiles.h" />

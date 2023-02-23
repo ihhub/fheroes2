@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,6 +34,7 @@
 #include "battle_board.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "icn.h"
 #include "image.h"
 #include "math_base.h"
 #include "spell.h"
@@ -94,6 +95,22 @@ namespace Battle
         CAPTAIN
     };
 
+    // Sprite data to render over the unit (spell effect animation)
+    struct UnitSpellEffectInfo
+    {
+        UnitSpellEffectInfo( const uint32_t setUnitId, const int32_t setIcnId, const bool setReflectedImage )
+            : unitId( setUnitId )
+            , icnId( setIcnId )
+            , isReflectedImage( setReflectedImage )
+        {}
+
+        uint32_t unitId{ 0 };
+        int32_t icnId{ ICN::UNKNOWN };
+        uint32_t icnIndex{ 0 };
+        fheroes2::Point position;
+        bool isReflectedImage{ false };
+    };
+
     class OpponentSprite
     {
     public:
@@ -109,7 +126,10 @@ namespace Battle
 
         fheroes2::Point GetCastPosition() const;
         void Redraw( fheroes2::Image & dst ) const;
-        void Update();
+
+        // Return true is animation state was changed.
+        bool updateAnimationState();
+
         void SetAnimation( int rule );
         void IncreaseAnimFrame( bool loop = false );
 
@@ -194,7 +214,7 @@ namespace Battle
 
         void Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color );
         void Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
-        void QueueEventProcessing( std::string & msg, const fheroes2::Point & offset );
+        void QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
 
     private:
         enum ArmyColor : uint8_t
@@ -229,15 +249,19 @@ namespace Battle
         PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
 
         void setBattleUIRect( const fheroes2::Rect & battleUIRect );
-        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
+        void SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
+        void SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell );
         void Reset();
-        void Redraw();
+        void Redraw() const;
 
     private:
+        bool SetDamageInfoBase( const Cell * cell, const Unit * defender );
+
         fheroes2::Rect _battleUIRect;
         const Cell * _cell;
-        const Unit * _attacker;
         const Unit * _defender;
+        uint32_t _minDamage;
+        uint32_t _maxDamage;
         bool _redraw;
     };
 
@@ -271,8 +295,8 @@ namespace Battle
         void FadeArena( bool clearMessageLog );
 
         void RedrawActionNewTurn() const;
-        void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
-        void RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets );
+        void RedrawActionAttackPart1( Unit & attacker, const Unit & defender, const TargetsInfo & targets );
+        void RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets );
         void RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
         void RedrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets );
         void RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets );
@@ -284,7 +308,8 @@ namespace Battle
         void RedrawActionLuck( const Unit & );
         void RedrawActionTowerPart1( const Tower &, const Unit & );
         void RedrawActionTowerPart2( const Tower &, const TargetInfo & );
-        void RedrawActionCatapult( int target, bool hit );
+        void RedrawActionCatapultPart1( const int catapultTargetId, const bool isHit );
+        void RedrawActionCatapultPart2( const int catapultTargetId );
         void RedrawActionTeleportSpell( Unit &, int32_t );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
         void RedrawActionSummonElementalSpell( Unit & target );
@@ -295,7 +320,7 @@ namespace Battle
         void RedrawMissileAnimation( const fheroes2::Point & startPos, const fheroes2::Point & endPos, double angle, uint32_t monsterID );
 
     private:
-        enum CreatueSpellAnimation
+        enum CreatureSpellAnimation
         {
             NONE,
             WINCE,
@@ -322,7 +347,7 @@ namespace Battle
 
         void RedrawTroopCount( const Unit & unit );
 
-        void RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr );
+        void RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr, const Unit * defender = nullptr );
         void RedrawActionArrowSpell( const Unit & );
         void RedrawActionColdRaySpell( Unit & );
         void RedrawActionDisruptingRaySpell( const Unit & );
@@ -331,25 +356,31 @@ namespace Battle
         void RedrawActionColdRingSpell( int32_t, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell();
-        void RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength );
+        void RedrawActionHolyShoutSpell( const uint8_t strength );
         void RedrawActionResurrectSpell( Unit &, const Spell & );
-        void RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength );
+        void RedrawActionDeathWaveSpell( const int strength );
         void RedrawActionLightningBoltSpell( const Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
         void RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi ); // helper function
         void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, int32_t size );
 
+        // Wait for all possible battlefield action delays that could be set in previous functions to pass.
+        // Use this if a function may be called from other functions with different render delay types.
+        void WaitForAllActionDelays();
+
         void AnimateOpponents( OpponentSprite * target );
-        void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
+        void AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender = false );
         void RedrawTroopDefaultDelay( Unit & unit );
-        void RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation );
+        void RedrawTroopWithFrameAnimation( Unit & unit, int icn, int m82, CreatureSpellAnimation animation );
         void RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount = 0 );
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
 
         bool IdleTroopsAnimation() const;
         void ResetIdleTroopAnimation() const;
+        void SwitchAllUnitsAnimation( const int32_t animationState ) const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
+        void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor );
 
         void ProcessingHeroDialogResult( int, Actions & );
 
@@ -433,6 +464,11 @@ namespace Battle
         };
 
         BridgeMovementAnimation _bridgeAnimation;
+
+        // TODO: While currently we don't need to persist 'UnitSpellEffectInfos' between render functions,
+        // this may be needed in the future (for example, in expansion) to display some sprites over
+        // troops for some time (e.g. long duration spell effects or other permanent effects).
+        std::vector<UnitSpellEffectInfo> _unitSpellEffectInfos;
     };
 }
 

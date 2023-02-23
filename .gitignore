@@ -73,7 +73,6 @@ build
 files/save
 # Never put 'fheroes2' in this list. It breaks SonarQube analysis
 fheroes2.cfg
-fheroes2.bin
 
 # demo directory
 script/demo/demo

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -41,7 +41,6 @@
 #include "color.h"
 #include "game_over.h"
 #include "heroes.h"
-#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps.h"
@@ -115,14 +114,14 @@ namespace GameStatic
     extern uint32_t uniq;
 }
 
-bool World::LoadMapMP2( const std::string & filename )
+bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2File )
 {
     Reset();
     Defaults();
 
     StreamFile fs;
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_WARN, "file not found " << filename.c_str() )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "file not found " << filename.c_str() )
         return false;
     }
 
@@ -192,6 +191,7 @@ bool World::LoadMapMP2( const std::string & filename )
     std::vector<MP2::mp2addon_t> vec_mp2addons( fs.getLE32() /* count mp2addon_t */ );
 
     for ( MP2::mp2addon_t & mp2addon : vec_mp2addons ) {
+        // TODO: add checks for a truncated file state.
         MP2::loadAddon( fs, mp2addon );
     }
 
@@ -211,12 +211,37 @@ bool World::LoadMapMP2( const std::string & filename )
     MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
     vec_object.reserve( 100 );
 
+    const bool checkPoLObjects = !Settings::Get().isPriceOfLoyaltySupported() && isOriginalMp2File;
+
     // read all tiles
     for ( int32_t i = 0; i < worldSize; ++i ) {
         Maps::Tiles & tile = vec_tiles[i];
 
         MP2::mp2tile_t mp2tile;
         MP2::loadTile( fs, mp2tile );
+        // There are some tiles which have object type as 65 and 193 which are Thatched Hut. This is exactly the same object as Peasant Hut.
+        // Since the original number of object types is limited and in order not to confuse players we will convert this type into Peasant Hut.
+        if ( mp2tile.mapObjectType == 65 ) {
+            mp2tile.mapObjectType = MP2::OBJ_NON_ACTION_PEASANT_HUT;
+        }
+        else if ( mp2tile.mapObjectType == 193 ) {
+            mp2tile.mapObjectType = MP2::OBJ_PEASANT_HUT;
+        }
+
+        if ( checkPoLObjects ) {
+            switch ( mp2tile.mapObjectType ) {
+            case MP2::OBJ_BARRIER:
+            case MP2::OBJ_TRAVELLER_TENT:
+            case MP2::OBJ_EXPANSION_DWELLING:
+            case MP2::OBJ_EXPANSION_OBJECT:
+            case MP2::OBJ_JAIL:
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Failed to load The Price of Loyalty map '" << filename << "' which is not supported by this version of the game." )
+                // You are trying to load a PoL map named as a MP2 file.
+                return false;
+            default:
+                break;
+            }
+        }
 
         tile.Init( i, mp2tile );
 
@@ -235,8 +260,8 @@ bool World::LoadMapMP2( const std::string & filename )
         tile.AddonsSort();
 
         switch ( mp2tile.mapObjectType ) {
-        case MP2::OBJ_RNDTOWN:
-        case MP2::OBJ_RNDCASTLE:
+        case MP2::OBJ_RANDOM_TOWN:
+        case MP2::OBJ_RANDOM_CASTLE:
         case MP2::OBJ_CASTLE:
         case MP2::OBJ_HEROES:
         case MP2::OBJ_SIGN:
@@ -334,7 +359,7 @@ bool World::LoadMapMP2( const std::string & filename )
             break;
         // mines: mercury
         case 0x01:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( cx, cy ), MP2::OBJ_ALCHEMYLAB, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( cx, cy ), MP2::OBJ_ALCHEMIST_LAB, Color::NONE );
             break;
         // mines: ore
         case 0x02:
@@ -354,11 +379,11 @@ bool World::LoadMapMP2( const std::string & filename )
             break;
         // dragon city
         case 0x65:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( cx, cy ), MP2::OBJ_DRAGONCITY, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( cx, cy ), MP2::OBJ_DRAGON_CITY, Color::NONE );
             break;
         // abandoned mines
         case 0x67:
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( cx, cy ), MP2::OBJ_ABANDONEDMINE, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( cx, cy ), MP2::OBJ_ABANDONED_MINE, Color::NONE );
             break;
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
@@ -399,10 +424,12 @@ bool World::LoadMapMP2( const std::string & filename )
             const Maps::Tiles & tile = vec_tiles[*it_index];
 
             // orders(quantity2, quantity1)
-            uint32_t orders = ( tile.GetQuantity2() ? tile.GetQuantity2() : 0 );
+            uint32_t orders = tile.GetQuantity2();
             orders <<= 8;
             orders |= tile.GetQuantity1();
 
+            // Witchcraft!!!
+            // TODO: change the code to be more readable.
             if ( orders && !( orders % 0x08 ) && ( ii + 1 == orders / 0x08 ) )
                 findobject = *it_index;
         }
@@ -431,8 +458,8 @@ bool World::LoadMapMP2( const std::string & filename )
                     }
                 }
                 break;
-            case MP2::OBJ_RNDTOWN:
-            case MP2::OBJ_RNDCASTLE:
+            case MP2::OBJ_RANDOM_TOWN:
+            case MP2::OBJ_RANDOM_CASTLE:
                 // add rnd castle
                 if ( MP2::SIZEOFMP2CASTLE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
@@ -526,7 +553,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 break;
             case MP2::OBJ_SIGN:
             case MP2::OBJ_BOTTLE:
-                // add sign or buttle
+                // add sign or bottle
                 if ( MP2::SIZEOFMP2SIGN - 1 < pblock.size() && 0x01 == pblock[0] ) {
                     MapSign * obj = new MapSign();
                     obj->LoadFromMP2( findobject, StreamBuf( pblock ) );
@@ -543,9 +570,9 @@ bool World::LoadMapMP2( const std::string & filename )
                 break;
             case MP2::OBJ_SPHINX:
                 // add riddle sphinx
-                if ( MP2::SIZEOFMP2RIDDLE - 1 < pblock.size() && 0x00 == pblock[0] ) {
+                if ( MP2::SIZEOFMP2RIDDLE < pblock.size() && 0x00 == pblock[0] ) {
                     MapSphinx * obj = new MapSphinx();
-                    obj->LoadFromMP2( findobject, StreamBuf( pblock ) );
+                    obj->LoadFromMP2( findobject, pblock );
                     map_objects.add( obj );
                 }
                 break;
@@ -602,83 +629,82 @@ void World::ProcessNewMap()
         Maps::Tiles::fixTileObjectType( tile );
 
         switch ( tile.GetObject() ) {
-        case MP2::OBJ_WITCHSHUT:
-        case MP2::OBJ_SHRINE1:
-        case MP2::OBJ_SHRINE2:
-        case MP2::OBJ_SHRINE3:
-        case MP2::OBJ_STONELITHS:
+        case MP2::OBJ_WITCHS_HUT:
+        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+        case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+        case MP2::OBJ_STONE_LITHS:
         case MP2::OBJ_FOUNTAIN:
         case MP2::OBJ_EVENT:
         case MP2::OBJ_BOAT:
-        case MP2::OBJ_RNDARTIFACT:
-        case MP2::OBJ_RNDARTIFACT1:
-        case MP2::OBJ_RNDARTIFACT2:
-        case MP2::OBJ_RNDARTIFACT3:
-        case MP2::OBJ_RNDRESOURCE:
-        case MP2::OBJ_WATERCHEST:
-        case MP2::OBJ_TREASURECHEST:
+        case MP2::OBJ_RANDOM_ARTIFACT:
+        case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+        case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+        case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+        case MP2::OBJ_RANDOM_RESOURCE:
+        case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_TREASURE_CHEST:
         case MP2::OBJ_ARTIFACT:
         case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_MAGICGARDEN:
-        case MP2::OBJ_WATERWHEEL:
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WAGON:
         case MP2::OBJ_SKELETON:
-        case MP2::OBJ_LEANTO:
+        case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_SHIPWRECKSURVIVOR:
-        case MP2::OBJ_DERELICTSHIP:
+        case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_PYRAMID:
-        case MP2::OBJ_DAEMONCAVE:
-        case MP2::OBJ_ABANDONEDMINE:
-        case MP2::OBJ_ALCHEMYLAB:
+        case MP2::OBJ_DAEMON_CAVE:
+        case MP2::OBJ_ABANDONED_MINE:
+        case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_MINES:
-        case MP2::OBJ_TREEKNOWLEDGE:
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
         case MP2::OBJ_BARRIER:
-        case MP2::OBJ_TRAVELLERTENT:
+        case MP2::OBJ_TRAVELLER_TENT:
         case MP2::OBJ_MONSTER:
-        case MP2::OBJ_RNDMONSTER:
-        case MP2::OBJ_RNDMONSTER1:
-        case MP2::OBJ_RNDMONSTER2:
-        case MP2::OBJ_RNDMONSTER3:
-        case MP2::OBJ_RNDMONSTER4:
-        case MP2::OBJ_ANCIENTLAMP:
-        case MP2::OBJ_WATCHTOWER:
+        case MP2::OBJ_RANDOM_MONSTER:
+        case MP2::OBJ_RANDOM_MONSTER_WEAK:
+        case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+        case MP2::OBJ_RANDOM_MONSTER_STRONG:
+        case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+        case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREEHOUSE:
-        case MP2::OBJ_ARCHERHOUSE:
-        case MP2::OBJ_GOBLINHUT:
-        case MP2::OBJ_DWARFCOTT:
-        case MP2::OBJ_HALFLINGHOLE:
-        case MP2::OBJ_PEASANTHUT:
-        case MP2::OBJ_THATCHEDHUT:
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_ARCHER_HOUSE:
+        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_HALFLING_HOLE:
+        case MP2::OBJ_PEASANT_HUT:
         case MP2::OBJ_RUINS:
-        case MP2::OBJ_TREECITY:
-        case MP2::OBJ_WAGONCAMP:
-        case MP2::OBJ_DESERTTENT:
-        case MP2::OBJ_TROLLBRIDGE:
-        case MP2::OBJ_DRAGONCITY:
-        case MP2::OBJ_CITYDEAD:
+        case MP2::OBJ_TREE_CITY:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_TROLL_BRIDGE:
+        case MP2::OBJ_DRAGON_CITY:
+        case MP2::OBJ_CITY_OF_DEAD:
             tile.QuantityUpdate();
             break;
 
-        case MP2::OBJ_WATERALTAR:
-        case MP2::OBJ_AIRALTAR:
-        case MP2::OBJ_FIREALTAR:
-        case MP2::OBJ_EARTHALTAR:
-        case MP2::OBJ_BARROWMOUNDS:
+        case MP2::OBJ_WATER_ALTAR:
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
             tile.QuantityReset();
             tile.QuantityUpdate();
             break;
 
         case MP2::OBJ_HEROES: {
             // remove map editor sprite
-            if ( MP2::GetICNObject( tile.GetObjectTileset() ) == ICN::MINIHERO )
+            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO )
                 tile.Remove( tile.GetObjectUID() );
 
             tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
@@ -714,7 +740,7 @@ void World::ProcessNewMap()
 
     // Search for a tile with a predefined Ultimate Artifact
     const MapsTiles::iterator ultArtTileIter
-        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isSameMainObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ); } );
 
     auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
         const int32_t x = idx % width;

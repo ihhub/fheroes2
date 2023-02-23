@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,7 +24,10 @@
 #ifndef H2M82_H
 #define H2M82_H
 
-#include "mp2.h"
+namespace Maps
+{
+    class Tiles;
+}
 
 namespace M82
 {
@@ -185,7 +188,7 @@ namespace M82
         LOOP0023, // UNUSED: a moving wooden structure with water. The most suitable for Water Wheel which uses LOOP0009.
         LOOP0024,
         LOOP0025,
-        LOOP0026, // moving mechanical parts, ideally for a factory. It is used for Freeman's Foundry.
+        LOOP0026, // Moving (rusty?) mechanical parts, originally used for Abandoned Mine. In fheroes2, it is used also for Freeman's Foundry.
         LOOP0027,
 
         MAGCAROW,
@@ -353,7 +356,8 @@ namespace M82
     const char * GetString( int m82 );
     int FromSpell( const int spellID );
 
-    SoundType getAdventureMapObjectSound( const MP2::MapObjectType objectType );
+    // Returns the ambient soundtrack for a given tile or M82::UNKNOWN if there is no track
+    SoundType getAdventureMapTileSound( const Maps::Tiles & tile );
 }
 
 #endif
