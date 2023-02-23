@@ -138,8 +138,11 @@ namespace
     {
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+            const fheroes2::Sprite firstVsSprite = icnVsSprite[icnId][0];
+
             icnVsSprite[icnId].resize( baseFontSize );
-            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, icnVsSprite[icnId][0] );
+            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstVsSprite );
         }
 
         // Normal font.
@@ -1159,10 +1162,11 @@ namespace
 
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            std::vector<fheroes2::Sprite> & original = icnVsSprite[icnId];
+            // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+            const fheroes2::Sprite firstVsSprite = icnVsSprite[icnId][0];
 
-            original.resize( baseFontSize );
-            original.insert( original.end(), 128, original[0] );
+            icnVsSprite[icnId].resize( baseFontSize );
+            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 128, firstVsSprite );
         }
 
         // Normal font.
@@ -2108,8 +2112,11 @@ namespace
     {
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+            const fheroes2::Sprite firstVsSprite = icnVsSprite[icnId][0];
+
             icnVsSprite[icnId].resize( baseFontSize );
-            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, icnVsSprite[icnId][0] );
+            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstVsSprite );
         }
 
         // Normal font.
@@ -3146,8 +3153,11 @@ namespace
     {
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+            const fheroes2::Sprite firstVsSprite = icnVsSprite[icnId][0];
+
             icnVsSprite[icnId].resize( baseFontSize );
-            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, icnVsSprite[icnId][0] );
+            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstVsSprite );
         }
 
         // Normal font.
@@ -3382,8 +3392,11 @@ namespace
     {
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+            const fheroes2::Sprite firstVsSprite = icnVsSprite[icnId][0];
+
             icnVsSprite[icnId].resize( baseFontSize );
-            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, icnVsSprite[icnId][0] );
+            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, firstVsSprite );
         }
 
         // Normal font.
@@ -3936,8 +3949,11 @@ namespace
 
     void generateCP1250GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
+        // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+        const fheroes2::Sprite firstSprite = released[0];
+
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
-        released.insert( released.end(), 160, released[0] );
+        released.insert( released.end(), 160, firstSprite );
 
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
@@ -4078,8 +4094,11 @@ namespace
 
     void generateCP1251GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
+        // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+        const fheroes2::Sprite firstSprite = released[0];
+
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
-        released.insert( released.end(), 160, released[0] );
+        released.insert( released.end(), 160, firstSprite );
 
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
@@ -4447,8 +4466,11 @@ namespace
 
     void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
+        // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+        const fheroes2::Sprite firstSprite = released[0];
+
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
-        released.insert( released.end(), 160, released[0] );
+        released.insert( released.end(), 160, firstSprite );
 
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
