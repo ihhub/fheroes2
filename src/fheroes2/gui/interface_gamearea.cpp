@@ -59,6 +59,8 @@ namespace
 {
     const int32_t minimalRequiredDraggingMovement = 10;
 
+    static_assert( std::is_trivially_copyable<fheroes2::ObjectRenderingInfo>::value, "This class is not trivially copyable anymore. Add std::move where required." );
+
     struct TileUnfitRenderObjectInfo
     {
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> bottomImages;
@@ -80,26 +82,26 @@ namespace
 
             if ( imagePos.y > 0 ) {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_front( std::move( objectInfo ) );
+                    tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_back( objectInfo );
                 }
             }
             else if ( imagePos.y == 0 ) {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.bottomImages[imagePos + offset].emplace_front( std::move( objectInfo ) );
+                    tileUnfit.bottomImages[imagePos + offset].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.bottomImages[imagePos + offset].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.bottomImages[imagePos + offset].emplace_back( objectInfo );
                 }
             }
             else {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.topImages[imagePos + offset].emplace_front( std::move( objectInfo ) );
+                    tileUnfit.topImages[imagePos + offset].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.topImages[imagePos + offset].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.topImages[imagePos + offset].emplace_back( objectInfo );
                 }
             }
         }
@@ -109,7 +111,7 @@ namespace
             const fheroes2::Point imagePos = objectInfo.tileOffset;
             objectInfo.alphaValue = alphaValue;
 
-            tileUnfit.shadowImages[imagePos + offset].emplace_back( std::move( objectInfo ) );
+            tileUnfit.shadowImages[imagePos + offset].emplace_back( objectInfo );
         }
     }
 
@@ -121,13 +123,13 @@ namespace
             objectInfo.alphaValue = alphaValue;
 
             if ( imagePos.y > 0 ) {
-                tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_front( std::move( objectInfo ) );
+                tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_front( objectInfo );
             }
             else if ( imagePos.y == 0 ) {
-                tileUnfit.bottomImages[imagePos + offset].emplace_front( std::move( objectInfo ) );
+                tileUnfit.bottomImages[imagePos + offset].emplace_front( objectInfo );
             }
             else {
-                tileUnfit.topImages[imagePos + offset].emplace_front( std::move( objectInfo ) );
+                tileUnfit.topImages[imagePos + offset].emplace_front( objectInfo );
             }
         }
     }
@@ -165,25 +167,25 @@ namespace
             if ( movingHero && imagePos.y == 0 ) {
                 if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
                     // The hero moves south-east. We need to render it over everything.
-                    tileUnfit.highPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.highPriorityBottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
 
                 if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
                     // The hero moves south-west. We need to render it over everything.
-                    tileUnfit.highPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.highPriorityBottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
 
                 if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
                     // The hero moves north-west. We need to render it under all other objects.
-                    tileUnfit.lowPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.lowPriorityBottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
 
                 if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
                     // The hero moves north-east. We need to render it under all other objects.
-                    tileUnfit.lowPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.lowPriorityBottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
             }
@@ -191,13 +193,13 @@ namespace
             if ( movingHero && imagePos.y == 1 ) {
                 if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
                     // The hero moves south-east. We need to render it over everything.
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
 
                 if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
                     // The hero moves south-west. We need to render it over everything.
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
             }
@@ -205,39 +207,39 @@ namespace
             if ( movingHero && imagePos.y == -1 ) {
                 if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
                     // The hero moves north-west. We need to render it under all other objects.
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
 
                 if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
                     // The hero moves north-east. We need to render it under all other objects.
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
             }
 
             if ( imagePos.y > 0 && !isHeroInCastle ) {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_front( std::move( objectInfo ) );
+                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_back( objectInfo );
                 }
             }
             else if ( imagePos.y == 0 || ( isHeroInCastle && imagePos.y > 0 ) ) {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_front( std::move( objectInfo ) );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                 }
             }
             else {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.topImages[imagePos + heroPos].emplace_front( std::move( objectInfo ) );
+                    tileUnfit.topImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.topImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+                    tileUnfit.topImages[imagePos + heroPos].emplace_back( objectInfo );
                 }
             }
         }
@@ -246,7 +248,7 @@ namespace
             const fheroes2::Point imagePos = objectInfo.tileOffset;
             objectInfo.alphaValue = heroAlphaValue;
 
-            tileUnfit.shadowImages[imagePos + heroPos].emplace_back( std::move( objectInfo ) );
+            tileUnfit.shadowImages[imagePos + heroPos].emplace_back( objectInfo );
         }
     }
 
