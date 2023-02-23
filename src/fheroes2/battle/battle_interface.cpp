@@ -5361,13 +5361,12 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     const uint32_t spellEffectLastFrame = halfMaxFrame - 1;
 
     // The similar frames number is smaller than size by 1 as the last frame will be different.
-    spellEffect.emplace_back( std::move( battleFieldCopy ) );
     while ( spellEffect.size() < spellEffectLastFrame ) {
-        spellEffect.push_back( spellEffect.front() );
+        spellEffect.push_back( battleFieldCopy );
     }
 
     // The last frame is the full power of spell effect. It will be used to produce other frames.
-    spellEffect.emplace_back( fheroes2::CreateHolyShoutEffect( spellEffect[0], 4, strength ) );
+    spellEffect.emplace_back( fheroes2::CreateHolyShoutEffect( battleFieldCopy, 4, strength ) );
 
     const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / maxFrame;
     uint32_t frame = 0;
