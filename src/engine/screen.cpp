@@ -149,9 +149,9 @@ namespace
                      && ( resolutions[biggerId].width / resolutions[currentId].width ) == ( resolutions[biggerId].height / resolutions[currentId].height ) ) {
                     // IMPORTANT: we MUST do a copy of a vector element if we want to emplace it to the same vector.
                     const fheroes2::ResolutionInfo currentResolution = resolutions[currentId];
-                    const int32_t biggerResolutionWidth = resolutions[biggerId].width;
+                    const int32_t scaleFactor = resolutions[biggerId].width / currentResolution.width;
 
-                    resolutions.emplace_back( currentResolution.width, currentResolution.height, biggerResolutionWidth / currentResolution.width );
+                    resolutions.emplace_back( currentResolution.width, currentResolution.height, scaleFactor );
                 }
             }
         }
