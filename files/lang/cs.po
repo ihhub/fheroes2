@@ -2112,9 +2112,8 @@ msgstr "Upg. Stonehenge"
 msgid "Fenced Meadow"
 msgstr "Oplocená Louka"
 
-#, fuzzy
 msgid "sorceress|Red Tower"
-msgstr "Červená věž"
+msgstr "Červená Věž"
 
 msgid "Dungeon"
 msgstr "Kobka"
@@ -2221,18 +2220,21 @@ msgstr "Svatyně"
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
-msgstr "Opevnění zvyšuje odolnost zdí - zvyšuje počet kol než budou zničeny."
+msgstr ""
+"Opevnění zvyšuje odolnost zdí, zvyšuje počet zásahů než budou zničeny."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr ""
+msgstr "Farma zvyšuje produkci Rolníků o %{count} za týden."
 
 msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
 msgstr ""
+"Koloseum poskytuje inspirující podívanou pro obranu hradu, tím "
+"vylepšuje jejich morálku během boje o 2 body."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr ""
+msgstr "Halda Hnoje zvyšuje produkci Goblinů o %{count} za týden."
 
 msgid "The Rainbow increases the luck of the defending units by two."
 msgstr "Duha zvyšuje štěstí bránících jednotek o dvě."
@@ -2240,26 +2242,27 @@ msgstr "Duha zvyšuje štěstí bránících jednotek o dvě."
 msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
 msgstr ""
+"Křišťálová zahrada zvyšuje produkci Víl o %{count} za týden."
 
 msgid "The Dungeon increases the income of the town by %{count} / day."
-msgstr ""
+msgstr "Kobka zvyšuje městské příjmy o %{count} za den."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr ""
+msgstr "Vodopád zvyšuje produkci Kentaurů o %{count} za týden."
 
 msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
-msgstr ""
+msgstr "Knihovna zvyšuje počet kouzel ve věži o jedno na každé úrovni."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr ""
+msgstr "Ovocný sad zvyšuje produkci Půlčíků o %{count} za týden."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
+msgstr "Bouře přidává +2 na síle kouzel obránci hradu."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
-msgstr ""
+msgstr "Hromada Lebek zvyšuje produkci Kostlivců o %{count} za týden."
 
 msgid "Thieves' Guild"
 msgstr "Cech zlodějů"
@@ -2310,16 +2313,16 @@ msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
-"Svatyně zvyšuje úroveň nekromacie o 10 procent u všech vašich nekromatnů."
+"Svatyně zvyšuje schopnost nekromantie o 10 procent u všech vašich nekromatnů."
 
-#, fuzzy
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
 "Cech zlodějů poskytuje informace o nepřátelích. Může také poskytovat "
-"špionážní informace o nepřátelských městech."
+"špionážní informace o nepřátelských městech. S každým dalším stavením "
+"je informace přesnější."
 
 msgid "The Tavern increases morale for troops defending the castle."
 msgstr "Taverna zvyšuje morálku jednotek bránících hrad."
@@ -2331,15 +2334,17 @@ msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
+"Studna zvyšuje tempo růstu ve všech obydlích o %{count} stvoření"
+"za týden."
 
 msgid "The Statue increases your town's income by %{count} per day."
-msgstr ""
+msgstr "Socha zvyšuje městské příjmy o %{count} za den."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr "Levá věž zvyšuje palebnou sílu při obraně hradu."
 
 msgid "The Right Turret provides extra firepower during castle combat."
-msgstr "Levá věž zvyšuje palebnou sílu při obraně hradu."
+msgstr "Pravá věž zvyšuje palebnou sílu při obraně hradu."
 
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
@@ -2359,106 +2364,113 @@ msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
 msgstr ""
+"Hrad zlepšuje obranyschopnost města a zvyšuje jeho příjmy o %{count} "
+"za den."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
 "gold are available."
 msgstr ""
+"Stan poskytuje dělníky ke stavbě hradu, pokud je k dispozici dostatek "
+"materiálu a zlaťáků."
 
 msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
+"Kapitánovo obydlí poskytuje velitele, který bude asistovat při obraně hradu "
+"když v něm není hrdina."
 
 msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
+"Kouzelná Věž umožňuje hrdinům naučit se kouzla a doplnit jejich kouzelnou "
+"energii."
 
 msgid "Recruit %{name}"
-msgstr ""
+msgstr "Najmout %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
-msgstr ""
+msgstr "Měsíc: %{month}, Týden: %{week}, Den: %{day}"
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
+"Pro vstup do věže si musíš zakoupit knihu kouzel, teď ale nemáš pro ni místo. "
+"Zkus podarovat jeden ze svých artefaktů jinému hrdinovi."
 
-#, fuzzy
 msgid "Exit"
-msgstr "Opustit město"
+msgstr "Pryč"
 
-#, fuzzy
 msgid "Click to show next town."
-msgstr "Zobrazit následující město"
+msgstr "Klikni pro zobrazení následujícího města."
 
 msgid "Show next town"
 msgstr "Zobrazit následující město"
 
-#, fuzzy
 msgid "Click to show previous town."
-msgstr "Zobrazit předchozí město"
+msgstr "Klikni pro zobrazení předchozího města."
 
 msgid "Show previous town"
 msgstr "Zobrazit předchozí město"
 
 msgid "This town may not be upgraded to a castle."
-msgstr ""
+msgstr "Toto město nemůže být povýšeno na hrad."
 
 msgid "Town"
 msgstr "Město"
 
-#, fuzzy
 msgid "Exit Castle"
 msgstr "Opustit hrad"
 
-#, fuzzy
 msgid "Exit Town"
 msgstr "Opustit město"
 
-#, fuzzy
 msgid "Show Income"
-msgstr "Příjem:"
+msgstr "Zobraz Příjmy"
 
 msgid "View Hero"
 msgstr "Zobrazit hrdinu"
 
 msgid "The above spells are available here."
-msgstr ""
+msgstr "Nacházejí se zde výše uvedená kouzla."
 
 msgid "The above spells have been added to your book."
-msgstr ""
+msgstr "Výše uvedená kouzla byly přidány to tvé knihy."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
-msgstr ""
+msgstr "Vrchní po štědrém spropitném postil tuto zvěst:"
 
 msgid "Recruit Hero"
 msgstr "Najmout hrdinu"
 
-#, fuzzy
 msgid "%{name} is a level %{value} %{race} "
-msgstr "%{name} %{does} %{value} škod."
+msgstr "%{name} je level %{value} %{race} "
 
 msgid "with %{count} artifacts."
-msgstr ""
+msgstr "s %{count} artefakty."
 
 msgid "with 1 artifact."
-msgstr ""
+msgstr "s 1 artefaktem."
 
 msgid "without artifacts."
-msgstr ""
+msgstr "bez artefaktů."
 
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
 msgstr ""
+"'Rozvinutá' bojová formace roztáhne tvoje jednotky shora až dolů po celém "
+"bojišti, s minimálně jedným volným polem mezi jednotkami."
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
+"'Seskupená' bojová formace srazí tvoje jednotky do středu bojiště na tvé "
+"straně bojiště."
 
 msgid "Spread Formation"
 msgstr "Rozvinutá formace"
@@ -2467,160 +2479,173 @@ msgid "Grouped Formation"
 msgstr "Seskupená formace"
 
 msgid "Recruit %{name} the %{race}"
-msgstr ""
+msgstr "Najmout %{name} %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
-msgstr ""
+msgstr "Nastavit bojovou formaci pevnosti na 'Rozvinutá'"
 
 msgid "Set garrison combat formation to 'Grouped'"
-msgstr ""
+msgstr "Nastavit bojovou formaci pevnosti na 'Seskupená'"
 
-#, fuzzy
 msgid "Exit Castle Options"
-msgstr "Nastavení systému"
+msgstr "Pryč z Možnosti Hradu"
 
 msgid "Castle Options"
-msgstr ""
+msgstr "Možnosti Hradu"
 
 msgid "Not enough resources to recruit creatures."
-msgstr ""
+msgstr "Nemáš dost prostředků pro najmutí stvoření."
 
 msgid "You are unable to recruit at this time, your ranks are full."
-msgstr ""
+msgstr "Tento krát nemůžeš nikoho najmout, Tvé řady jsou již plné."
 
 msgid "No creatures available for purchase."
-msgstr ""
+msgstr "Nejsou zde žádné stvoření k najmutí."
 
-#, fuzzy
 msgid "Recruit Creatures"
-msgstr "Najmout hrdinu"
+msgstr "Najmout Stvoření"
 
 msgid "Max"
 msgstr ""
 
 msgid "Hire all creatures in the town."
-msgstr ""
+msgstr "Najmout všechna stvoření ve městě."
 
 msgid "Town Population Information and Statistics"
-msgstr ""
+msgstr "Populace ve městě Informace a Statistiky"
 
 msgid "Damg"
-msgstr ""
+msgstr "Škody"
 
 msgid "HP"
-msgstr "HP"
+msgstr "Živ"
 
 msgid "Growth"
 msgstr "Růst"
 
 msgid "week"
-msgstr ""
+msgstr "týd"
 
 msgid "Available"
-msgstr ""
+msgstr "Dostupných"
 
-#, fuzzy
 msgid "View World"
-msgstr "Zobrazit hrdinu"
+msgstr "Zobrazit Svět"
 
 msgid "View the entire world."
-msgstr ""
+msgstr "Zobraz celou mapu světa."
 
 msgid "Puzzle"
-msgstr ""
+msgstr "Skládanka"
 
 msgid "View the obelisk puzzle."
-msgstr ""
+msgstr "Zobraz skládanku obelisků."
 
-#, fuzzy
 msgid "Scenario Information"
-msgstr "Rozvinutá formace"
+msgstr "Informace o Hře"
 
 msgid "View information on the scenario you are currently playing."
-msgstr ""
+msgstr "Zobraz informaci o hře, kterou právě hraješ."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr ""
+msgstr "Vykopej ultimátní Artefakt."
 
 msgid "Digging"
-msgstr ""
+msgstr "Kopání"
 
 msgid "Exit this menu without doing anything."
-msgstr ""
+msgstr "Odejít z menu bez provedení změm."
 
 msgid "Arena"
-msgstr ""
+msgstr "Aréna"
 
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
 "them, to the wild cheers of the crowd.  Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
+"Vstupuješ do arény kde se utkáš se smečkou rozzuřených lvů. Lehce je porazíš, "
+"za bouřlivého jásotu davu. Ohromen tvými schopnostmi se starý trenér "
+"gladiátorů uvolí, že Tě vycvičí v dovednosti, kterou si sám vybereš."
 
 msgid "Attack Skill"
-msgstr ""
+msgstr "Útočná Síla"
 
 msgid "Defense Skill"
-msgstr ""
+msgstr "Obranná Síla"
 
 msgid "Shots"
-msgstr ""
+msgstr "Výstřely"
 
 msgid "Shots Left"
-msgstr ""
+msgstr "Zbývá ran"
 
 msgid "Damage"
-msgstr ""
+msgstr "Škody"
 
 msgid "Hit Points"
-msgstr ""
+msgstr "Životy"
 
 msgid "Hit Points Left"
-msgstr ""
+msgstr "Zbývá životů"
 
 msgid "You can't afford to upgrade your troops!"
-msgstr ""
+msgstr "Nemůžeš si dovolit vylepšit své jednotky!"
 
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
 msgstr ""
+"Tvé jednotky mohou být vylepšeny ale bude Tě to stát balík. Přeješ si je "
+"pořád vylepšit?"
 
 msgid "Are you sure you want to dismiss this army?"
-msgstr ""
+msgstr "Jsi si jist, že chceš jednotku propustit?"
 
-#, fuzzy
 msgid "Followers"
-msgstr "Síla kouzel"
+msgstr "Následovníci"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
 msgstr ""
+"Skupina %{monster} s touhou po velké slávě se chce k Tobě přidat.\n"
+"Přijímáš?"
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
 "army for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
+"%{monster} jsou uchlácholeni Tvou diplomatickou řečí a nabízí Ti, že vstoupí "
+"do Tvé armády za %{gold} zlaťáků.\n"
+"Přijímáš?"
 
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
 " \n"
 msgstr ""
+"Stvoření jsou uchlácholeni Tvou diplomatickou\n"
+"řečí a davají Ti nabídku:\n"
+" \n"
 
 msgid ""
 "%{offer} of the %{total} %{monster} will join your army, and the rest will "
 "leave you alone, for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
+"%{offer} z %{total} %{monster} se přidá ke Tvé armádě, a zbytek Tě "
+"nechá na pokoji za sumu %{gold} zlaťáků.\n"
+"Přijímáš?"
 
 msgid ""
 "All %{offer} of the %{monster} will join your army for the sum of %{gold} "
 "gold.\n"
 "Do you accept?"
 msgstr ""
+"Všech %{offer} %{monster} se přidá ke Tvé armádě za sumu %{gold} zlaťáků. "
+"Přijímáš?"
 
 msgid "(Rate: %{percent})"
 msgstr ""
@@ -2628,25 +2653,23 @@ msgstr ""
 msgid "off"
 msgstr "off"
 
-#, fuzzy
 msgid "Music"
-msgstr "hudba"
+msgstr "Hudba"
 
 msgid "Effects"
-msgstr ""
+msgstr "Efekty"
 
 msgid "MIDI"
 msgstr ""
 
-#, fuzzy
 msgid "MIDI Expansion"
-msgstr "Zámek"
+msgstr "MIDI Rozšířené"
 
 msgid "External"
-msgstr ""
+msgstr "Externí"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Typ Hudby"
 
 msgid "3D Audio"
 msgstr ""
@@ -2664,7 +2687,7 @@ msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
 msgid "Build a new ship:"
-msgstr ""
+msgstr "Postavit novou loď:"
 
 msgid "Resource cost:"
 msgstr ""
@@ -2676,48 +2699,46 @@ msgid "Need: "
 msgstr ""
 
 msgid "Load Game"
-msgstr "Načíst hru"
+msgstr "Načíst Hru"
 
 msgid "No save files to load."
-msgstr ""
+msgstr "Žádné uložené hry k načtení."
 
 msgid "New Game"
-msgstr "Nová hra"
+msgstr "Nová Hra"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Spusti hru jednoho nebo více hráčů."
 
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Načti dříve uloženou hru."
 
-#, fuzzy
 msgid "Save Game"
-msgstr "Nová hra"
+msgstr "Uložit Hru"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Uložit aktuální hru."
 
 msgid "Quit"
 msgstr "Ukončit"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr ""
+msgstr "Ukončit Heroes of Might and Magic II."
 
 msgid "Language"
-msgstr ""
+msgstr "Jazyk"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafika"
 
-#, fuzzy
 msgid "Black & White"
-msgstr "Most"
+msgstr "Černobílý"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Kurzor Myši"
 
 msgid "Color"
-msgstr ""
+msgstr "Barevný"
 
 msgid "Text Support"
 msgstr ""
@@ -2774,7 +2795,7 @@ msgid "Opponents"
 msgstr "Protivníci"
 
 msgid "Class"
-msgstr ""
+msgstr "Třída"
 
 msgid ""
 "Victory\n"
