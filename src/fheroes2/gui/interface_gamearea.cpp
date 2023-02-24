@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "interface_gamearea.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
@@ -40,7 +42,6 @@
 #include "heroes.h"
 #include "icn.h"
 #include "interface_cpanel.h"
-#include "interface_gamearea.h"
 #include "localevent.h"
 #include "logging.h"
 #include "maps.h"
@@ -51,112 +52,84 @@
 #include "screen.h"
 #include "settings.h"
 #include "skill.h"
+#include "ui_object_rendering.h"
 #include "world.h"
 
 namespace
 {
     const int32_t minimalRequiredDraggingMovement = 10;
 
-    struct RenderObjectInfo
-    {
-        RenderObjectInfo( fheroes2::Sprite in, const uint8_t value )
-            : image( std::move( in ) )
-            , alphaValue( value )
-        {
-            // Do nothing.
-        }
-
-        fheroes2::Sprite image;
-
-        uint8_t alphaValue{ 255 };
-    };
+    static_assert( std::is_trivially_copyable<fheroes2::ObjectRenderingInfo>::value, "This class is not trivially copyable anymore. Add std::move where required." );
 
     struct TileUnfitRenderObjectInfo
     {
-        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> bottomImages;
-        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> bottomBackgroundImages;
-        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> topImages;
+        std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> bottomImages;
+        std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> bottomBackgroundImages;
+        std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> topImages;
 
-        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> lowPriorityBottomImages;
-        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> highPriorityBottomImages;
+        std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> lowPriorityBottomImages;
+        std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> highPriorityBottomImages;
 
-        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> shadowImages;
+        std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> shadowImages;
     };
 
-    void correctShadowSprites( std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & shadows,
-                               const std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & images )
+    void populateStaticTileUnfitObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, std::vector<fheroes2::ObjectRenderingInfo> & imageInfo,
+                                            std::vector<fheroes2::ObjectRenderingInfo> & shadowInfo, const fheroes2::Point & offset, const uint8_t alphaValue )
     {
-        for ( auto & [shadowPos, shadow] : shadows ) {
-            const fheroes2::Rect shadowRoi{ shadow.x(), shadow.y(), shadow.width(), shadow.height() };
-            assert( shadowRoi.x >= 0 && shadowRoi.y >= 0 && shadowRoi.x + shadowRoi.width <= TILEWIDTH && shadowRoi.y + shadowRoi.height <= TILEWIDTH );
+        for ( auto & objectInfo : imageInfo ) {
+            const fheroes2::Point imagePos = objectInfo.tileOffset;
+            objectInfo.alphaValue = alphaValue;
 
-            for ( const auto & [imagePos, image] : images ) {
-                if ( shadowPos == imagePos ) {
-                    const fheroes2::Rect imageRoi{ image.x(), image.y(), image.width(), image.height() };
-                    assert( imageRoi.x >= 0 && imageRoi.y >= 0 && imageRoi.x + imageRoi.width <= TILEWIDTH && imageRoi.y + imageRoi.height <= TILEWIDTH );
-
-                    const fheroes2::Rect overlappedArea = shadowRoi ^ imageRoi;
-                    if ( overlappedArea.width <= 0 || overlappedArea.height <= 0 ) {
-                        continue;
-                    }
-
-                    // These are overlapping images. Mask overlapping area.
-                    fheroes2::MaskTransformLayer( image, overlappedArea.x - imageRoi.x, overlappedArea.y - imageRoi.y, shadow, overlappedArea.x - shadowRoi.x,
-                                                  overlappedArea.y - shadowRoi.y, overlappedArea.width, overlappedArea.height );
-                }
-            }
-        }
-    }
-
-    void populateStaticTileUnfitObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & imageInfo,
-                                            std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & shadowInfo, const fheroes2::Point & offset,
-                                            const uint8_t alphaValue )
-    {
-        for ( auto & [imagePos, image] : imageInfo ) {
             if ( imagePos.y > 0 ) {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+                    tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_back( std::move( image ), alphaValue );
+                    tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_back( objectInfo );
                 }
             }
             else if ( imagePos.y == 0 ) {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.bottomImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+                    tileUnfit.bottomImages[imagePos + offset].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.bottomImages[imagePos + offset].emplace_back( std::move( image ), alphaValue );
+                    tileUnfit.bottomImages[imagePos + offset].emplace_back( objectInfo );
                 }
             }
             else {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.topImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+                    tileUnfit.topImages[imagePos + offset].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.topImages[imagePos + offset].emplace_back( std::move( image ), alphaValue );
+                    tileUnfit.topImages[imagePos + offset].emplace_back( objectInfo );
                 }
             }
         }
 
         // Static object's shadows are always on the same layer.
-        for ( auto & [shadowPos, shadow] : shadowInfo ) {
-            tileUnfit.shadowImages[shadowPos + offset].emplace_back( std::move( shadow ), alphaValue );
+        for ( auto & objectInfo : shadowInfo ) {
+            const fheroes2::Point imagePos = objectInfo.tileOffset;
+            objectInfo.alphaValue = alphaValue;
+
+            tileUnfit.shadowImages[imagePos + offset].emplace_back( objectInfo );
         }
     }
 
-    void populateStaticTileUnfitBackgroundObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & imageInfo,
+    void populateStaticTileUnfitBackgroundObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, std::vector<fheroes2::ObjectRenderingInfo> & imageInfo,
                                                       const fheroes2::Point & offset, const uint8_t alphaValue )
     {
-        for ( auto & [imagePos, image] : imageInfo ) {
+        for ( auto & objectInfo : imageInfo ) {
+            const fheroes2::Point imagePos = objectInfo.tileOffset;
+            objectInfo.alphaValue = alphaValue;
+
             if ( imagePos.y > 0 ) {
-                tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+                tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_front( objectInfo );
             }
             else if ( imagePos.y == 0 ) {
-                tileUnfit.bottomImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+                tileUnfit.bottomImages[imagePos + offset].emplace_front( objectInfo );
             }
             else {
-                tileUnfit.topImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+                tileUnfit.topImages[imagePos + offset].emplace_front( objectInfo );
             }
         }
     }
@@ -186,31 +159,33 @@ namespace
 
         auto spriteInfo = hero->getHeroSpritesPerTile();
         auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
-        correctShadowSprites( spriteShadowInfo, spriteInfo );
 
-        for ( auto & [imagePos, image] : spriteInfo ) {
+        for ( auto & objectInfo : spriteInfo ) {
+            const fheroes2::Point imagePos = objectInfo.tileOffset;
+            objectInfo.alphaValue = heroAlphaValue;
+
             if ( movingHero && imagePos.y == 0 ) {
                 if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
                     // The hero moves south-east. We need to render it over everything.
-                    tileUnfit.highPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.highPriorityBottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
 
                 if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
                     // The hero moves south-west. We need to render it over everything.
-                    tileUnfit.highPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.highPriorityBottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
 
                 if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
                     // The hero moves north-west. We need to render it under all other objects.
-                    tileUnfit.lowPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.lowPriorityBottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
 
                 if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
                     // The hero moves north-east. We need to render it under all other objects.
-                    tileUnfit.lowPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.lowPriorityBottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
             }
@@ -218,13 +193,13 @@ namespace
             if ( movingHero && imagePos.y == 1 ) {
                 if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
                     // The hero moves south-east. We need to render it over everything.
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
 
                 if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
                     // The hero moves south-west. We need to render it over everything.
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
             }
@@ -232,50 +207,53 @@ namespace
             if ( movingHero && imagePos.y == -1 ) {
                 if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
                     // The hero moves north-west. We need to render it under all other objects.
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
 
                 if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
                     // The hero moves north-east. We need to render it under all other objects.
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                     continue;
                 }
             }
 
             if ( imagePos.y > 0 && !isHeroInCastle ) {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_front( std::move( image ), heroAlphaValue );
+                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_back( objectInfo );
                 }
             }
             else if ( imagePos.y == 0 || ( isHeroInCastle && imagePos.y > 0 ) ) {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_front( std::move( image ), heroAlphaValue );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( objectInfo );
                 }
             }
             else {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.topImages[imagePos + heroPos].emplace_front( std::move( image ), heroAlphaValue );
+                    tileUnfit.topImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.topImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    tileUnfit.topImages[imagePos + heroPos].emplace_back( objectInfo );
                 }
             }
         }
 
-        for ( auto & [shadowPos, shadow] : spriteShadowInfo ) {
-            tileUnfit.shadowImages[shadowPos + heroPos].emplace_back( std::move( shadow ), heroAlphaValue );
+        for ( auto & objectInfo : spriteShadowInfo ) {
+            const fheroes2::Point imagePos = objectInfo.tileOffset;
+            objectInfo.alphaValue = heroAlphaValue;
+
+            tileUnfit.shadowImages[imagePos + heroPos].emplace_back( objectInfo );
         }
     }
 
-    void renderImagesOnTile( fheroes2::Image & output, const std::map<fheroes2::Point, std::deque<RenderObjectInfo>> & images, const fheroes2::Point & offset,
-                             const Interface::GameArea & area )
+    void renderImagesOnTile( fheroes2::Image & output, const std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> & images,
+                             const fheroes2::Point & offset, const Interface::GameArea & area )
     {
         auto iter = images.find( offset );
         if ( iter == images.end() ) {
@@ -284,8 +262,9 @@ namespace
 
         assert( !iter->second.empty() );
 
-        for ( const RenderObjectInfo & info : iter->second ) {
-            area.BlitOnTile( output, info.image, info.image.x(), info.image.y(), offset, false, info.alphaValue );
+        for ( const auto & info : iter->second ) {
+            area.BlitOnTile( output, fheroes2::AGG::GetICN( info.icnId, info.icnIndex ), info.area, info.imageOffset.x, info.imageOffset.y, offset, info.isFlipped,
+                             info.alphaValue );
         }
     }
 
@@ -383,6 +362,18 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
 
     fheroes2::AlphaBlit( src, overlappedRoi.x - imageRoi.x, overlappedRoi.y - imageRoi.y, dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width,
                          overlappedRoi.height, alpha, flip );
+}
+
+void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, const fheroes2::Rect & srcRoi, int32_t ox, int32_t oy,
+                                      const fheroes2::Point & mp, bool flip, uint8_t alpha ) const
+{
+    const fheroes2::Point tileOffset = GetRelativeTilePosition( mp );
+
+    const fheroes2::Rect imageRoi{ tileOffset.x + ox, tileOffset.y + oy, srcRoi.width, srcRoi.height };
+    const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
+
+    fheroes2::AlphaBlit( src, srcRoi.x + overlappedRoi.x - imageRoi.x, srcRoi.y + overlappedRoi.y - imageRoi.y, dst, overlappedRoi.x, overlappedRoi.y,
+                         overlappedRoi.width, overlappedRoi.height, alpha, flip );
 }
 
 void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image & src, const fheroes2::Point & mp ) const
@@ -526,7 +517,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 auto spriteInfo = tile.getBoatSpritesPerTile();
                 auto spriteShadowInfo = tile.getBoatShadowSpritesPerTile();
-                correctShadowSprites( spriteShadowInfo, spriteInfo );
 
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
