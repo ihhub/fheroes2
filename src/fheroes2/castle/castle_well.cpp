@@ -257,17 +257,17 @@ void Castle::OpenWell()
             recruitCastleMax( currentArmy, allDwellings );
         }
         else if ( ( building & DWELLING_MONSTER1 ) && ( le.MouseClickLeft( rectMonster1 ) || pressedHotkeyBuildingID == DWELLING_MONSTER1 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER1 ) }, dwelling[0], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER1 ) }, dwelling[0], true, 2) );
         else if ( ( building & DWELLING_MONSTER2 ) && ( le.MouseClickLeft( rectMonster2 ) || pressedHotkeyBuildingID == DWELLING_MONSTER2 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER2 ) }, dwelling[1], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER2 ) }, dwelling[1], true, 2 ) );
         else if ( ( building & DWELLING_MONSTER3 ) && ( le.MouseClickLeft( rectMonster3 ) || pressedHotkeyBuildingID == DWELLING_MONSTER3 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER3 ) }, dwelling[2], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER3 ) }, dwelling[2], true, 2 ) );
         else if ( ( building & DWELLING_MONSTER4 ) && ( le.MouseClickLeft( rectMonster4 ) || pressedHotkeyBuildingID == DWELLING_MONSTER4 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER4 ) }, dwelling[3], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER4 ) }, dwelling[3], true, 2 ) );
         else if ( ( building & DWELLING_MONSTER5 ) && ( le.MouseClickLeft( rectMonster5 ) || pressedHotkeyBuildingID == DWELLING_MONSTER5 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER5 ) }, dwelling[4], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER5 ) }, dwelling[4], true, 2 ) );
         else if ( ( building & DWELLING_MONSTER6 ) && ( le.MouseClickLeft( rectMonster6 ) || pressedHotkeyBuildingID == DWELLING_MONSTER6 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER6 ) }, dwelling[5], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER6 ) }, dwelling[5], true, 2 ) );
         else if ( ( building & DWELLING_MONSTER1 ) && le.MousePressRight( rectMonster1 ) )
             Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER1 ) }, dwelling[0] );
         else if ( ( building & DWELLING_MONSTER2 ) && le.MousePressRight( rectMonster2 ) )
