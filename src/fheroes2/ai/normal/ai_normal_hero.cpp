@@ -1464,7 +1464,7 @@ namespace AI
             return fogCountToUncover / 2;
         }
         case MP2::OBJ_GAZEBO: {
-            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valueable this object is.
+            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valuable this object is.
             const uint32_t heroExperience = hero.GetExperience();
             const uint32_t nextLevelExperience = Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( heroExperience ) );
             const uint32_t neededExperience = nextLevelExperience - heroExperience;
