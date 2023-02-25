@@ -246,8 +246,8 @@ namespace fheroes2
 
     void DrawRect( Image & image, const Rect & roi, uint8_t value );
 
-    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, const bool flip,
-                               std::vector<std::pair<Point, Sprite>> & output );
+    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, std::vector<Point> & outputSquareId,
+                               std::vector<std::pair<Point, Rect>> & outputImageInfo );
 
     // Every image in the array must be the same size. Make sure that pointers aren't nullptr!
     Image ExtractCommonPattern( const std::vector<const Image *> & input );

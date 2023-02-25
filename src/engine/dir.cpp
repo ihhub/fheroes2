@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -70,24 +70,24 @@ namespace
 
         const std::string pattern( nameAsFilter ? path + "\\*" + name : path + "\\" + name );
         WIN32_FIND_DATA data;
-        HANDLE hFind = FindFirstFile( pattern.c_str(), &data );
+
+        HANDLE hFind = FindFirstFileEx( pattern.c_str(), FindExInfoBasic, &data, FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH );
         if ( hFind == INVALID_HANDLE_VALUE ) {
             return;
         }
 
         do {
+            // Ignore any internal directories
             if ( data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
-                // Ignore any internal directories.
                 continue;
             }
 
-            std::string fullname = System::concatPath( path, data.cFileName );
-
-            // FindFirstFile() searches for both long and short variants of names, so we need additional filtering
-            if ( filterByName( data.cFileName, nameAsFilter, name, _stricmp ) )
+            // FindFirstFileEx() searches for both long and short variants of names, so we need additional filtering
+            if ( filterByName( data.cFileName, nameAsFilter, name, _stricmp ) ) {
                 continue;
+            }
 
-            files.emplace_back( std::move( fullname ) );
+            files.emplace_back( System::concatPath( path, data.cFileName ) );
         } while ( FindNextFile( hFind, &data ) != 0 );
 
         FindClose( hFind );

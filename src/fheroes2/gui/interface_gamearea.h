@@ -206,6 +206,9 @@ namespace Interface
 
         void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip, uint8_t alpha ) const;
 
+        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, const fheroes2::Rect & srcRoi, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip,
+                         uint8_t alpha ) const;
+
         // Use this method to draw TIL images
         void DrawTile( fheroes2::Image & src, const fheroes2::Image & dst, const fheroes2::Point & mp ) const;
 

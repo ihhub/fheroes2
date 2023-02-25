@@ -48,7 +48,7 @@ class StreamBase;
 namespace fheroes2
 {
     class Image;
-    class Sprite;
+    struct ObjectRenderingInfo;
 }
 
 namespace Interface
@@ -261,11 +261,11 @@ namespace Maps
 
         void drawByObjectIcnType( fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType ) const;
 
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterShadowSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatShadowSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMineGuardianSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile() const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & mt );
         void AddonsPushLevel1( const MP2::mp2addon_t & ma );

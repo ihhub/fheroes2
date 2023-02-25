@@ -30,6 +30,7 @@
 #include <map>
 #include <ostream>
 #include <set>
+#include <utility>
 
 #include "agg_image.h"
 #include "ai.h"
@@ -1136,13 +1137,13 @@ uint32_t Heroes::GetExperienceFromLevel( int lvl )
     return ( l1 + static_cast<uint32_t>( round( ( l1 - GetExperienceFromLevel( lvl - 2 ) ) * 1.2 / 100 ) * 100 ) );
 }
 
-/* buy book */
-bool Heroes::BuySpellBook( const Castle * castle, int shrine )
+bool Heroes::BuySpellBook( const Castle * castle )
 {
-    if ( HaveSpellBook() || Color::NONE == GetColor() )
+    if ( HaveSpellBook() || Color::NONE == GetColor() ) {
         return false;
+    }
 
-    const payment_t payment = PaymentConditions::BuySpellBook( shrine );
+    const payment_t payment = PaymentConditions::BuySpellBook();
     Kingdom & kingdom = GetKingdom();
 
     std::string header = _( "To cast spells, you must first buy a spell book for %{gold} gold." );
@@ -1175,9 +1176,9 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
     if ( SpellBookActivate() ) {
         kingdom.OddFundsResource( payment );
 
-        // add all spell to book
-        if ( castle )
+        if ( castle ) {
             castle->MageGuildEducateHero( *this );
+        }
 
         return true;
     }
@@ -1185,7 +1186,6 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
     return false;
 }
 
-/* return true is move enable */
 bool Heroes::isMoveEnabled() const
 {
     return Modes( ENABLEMOVE ) && path.isValid() && path.hasAllowedSteps();
@@ -1197,7 +1197,6 @@ bool Heroes::CanMove() const
     return move_point >= ( tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
 }
 
-/* set enable move */
 void Heroes::SetMove( bool f )
 {
     if ( f ) {

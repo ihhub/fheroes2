@@ -383,129 +383,165 @@ namespace
         hero.SetAttackedMonsterTileIndex( -1 );
     }
 
-    void ActionToCastle( Heroes & hero, int32_t dst_index )
+    void ActionToCastle( Heroes & hero, const int32_t dstIndex )
     {
-        Castle * castle = world.getCastleEntrance( Maps::GetPoint( dst_index ) );
+        Castle * castle = world.getCastleEntrance( Maps::GetPoint( dstIndex ) );
+        if ( castle == nullptr ) {
+            // This should never happen
+            assert( 0 );
 
-        if ( !castle ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "castle not found " << dst_index )
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       hero.GetName() << " is trying to visit the castle on tile " << dstIndex << ", but there is no entrance to the castle on this tile" )
+            return;
         }
-        else if ( hero.GetColor() == castle->GetColor() ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() )
+
+        if ( hero.GetColor() == castle->GetColor() ) {
+            assert( hero.GetIndex() == dstIndex );
+
+            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visits " << castle->GetName() )
+
             castle->MageGuildEducateHero( hero );
             Game::OpenCastleDialog( *castle );
+
+            return;
         }
-        else if ( hero.isFriends( castle->GetColor() ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable visiting" )
+
+        if ( hero.isFriends( castle->GetColor() ) ) {
+            // This should never happen - hero should not be able to visit an allied castle
+            assert( 0 );
+
+            DEBUG_LOG( DBG_GAME, DBG_WARN, hero.GetName() << " is not allowed to visit the allied castle " << castle->GetName() )
+            return;
         }
-        else {
-            Army & army = castle->GetActualArmy();
 
-            auto captureCastle = [&hero, dst_index, castle]() {
-                Kingdom & enemyKingdom = castle->GetKingdom();
-                enemyKingdom.RemoveCastle( castle );
-                hero.GetKingdom().AddCastle( castle );
-                world.CaptureObject( dst_index, hero.GetColor() );
+        auto captureCastle = [&hero, dstIndex, castle]() {
+            Kingdom & enemyKingdom = castle->GetKingdom();
+            enemyKingdom.RemoveCastle( castle );
+            hero.GetKingdom().AddCastle( castle );
+            world.CaptureObject( dstIndex, hero.GetColor() );
 
-                castle->Scoute();
+            castle->Scoute();
 
-                Interface::Basic & I = Interface::Basic::Get();
+            Interface::Basic & I = Interface::Basic::Get();
 
-                // If the enemy is not vanquished we update only the area around the castle on radar.
-                if ( !enemyKingdom.isLoss() ) {
-                    const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
-                    const fheroes2::Point castlePosition = Maps::GetPoint( dst_index );
+            // If the enemy is not vanquished we update only the area around the castle on radar.
+            if ( !enemyKingdom.isLoss() ) {
+                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
+                const fheroes2::Point castlePosition = Maps::GetPoint( dstIndex );
 
-                    I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
-                }
-                // Otherwise we fully redraw the radar map image as there might be color reset of enemy's objects.
-                I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
-            };
-
-            if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() )
-
-                Heroes * defender = castle->GetHero();
-                castle->ActionPreBattle();
-
-                // new battle
-                const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
-
-                castle->ActionAfterBattle( res.AttackerWins() );
-
-                // loss defender
-                if ( !res.DefenderWins() && defender )
-                    BattleLose( *defender, res, false );
-
-                // loss attacker
-                if ( !res.AttackerWins() )
-                    BattleLose( hero, res, true );
-
-                // wins attacker
-                if ( res.AttackerWins() ) {
-                    captureCastle();
-
-                    hero.IncreaseExperience( res.GetExperienceAttacker() );
-                }
-                // wins defender
-                else if ( res.DefenderWins() && defender ) {
-                    defender->IncreaseExperience( res.GetExperienceDefender() );
-                }
+                I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
             }
-            else {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " capture enemy castle " << castle->GetName() )
+            // Otherwise we fully redraw the radar map image as there might be color reset of enemy's objects.
+            I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
+        };
 
+        Army & army = castle->GetActualArmy();
+
+        // Hero is standing in front of the castle, which means that there must be an enemy army in the castle
+        if ( hero.GetIndex() != dstIndex ) {
+            assert( army.isValid() && army.GetColor() != hero.GetColor() );
+
+            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attacks the enemy castle " << castle->GetName() )
+
+            Heroes * defender = castle->GetHero();
+
+            castle->ActionPreBattle();
+
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+            castle->ActionAfterBattle( res.AttackerWins() );
+
+            // The defender was defeated
+            if ( !res.DefenderWins() && defender ) {
+                BattleLose( *defender, res, false );
+            }
+
+            // The attacker was defeated
+            if ( !res.AttackerWins() ) {
+                BattleLose( hero, res, true );
+            }
+
+            // The attacker won
+            if ( res.AttackerWins() ) {
                 captureCastle();
 
-                castle->MageGuildEducateHero( hero );
-                Game::OpenCastleDialog( *castle );
-            }
-        }
-    }
-
-    void ActionToHeroes( Heroes & hero, int32_t dst_index )
-    {
-        Heroes * other_hero = world.GetTiles( dst_index ).GetHeroes();
-
-        if ( !other_hero )
-            return;
-
-        if ( hero.GetColor() == other_hero->GetColor() ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " meeting " << other_hero->GetName() )
-            hero.MeetingDialog( *other_hero );
-        }
-        else if ( hero.isFriends( other_hero->GetColor() ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable meeting" )
-        }
-        else {
-            if ( other_hero->inCastle() ) {
-                ActionToCastle( hero, dst_index );
-                return;
-            }
-
-            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() )
-
-            // new battle
-            Battle::Result res = Battle::Loader( hero.GetArmy(), other_hero->GetArmy(), dst_index );
-
-            // TODO: make fading animation of both heroes together.
-
-            // loss defender
-            if ( !res.DefenderWins() )
-                BattleLose( *other_hero, res, false );
-
-            // loss attacker
-            if ( !res.AttackerWins() )
-                BattleLose( hero, res, true );
-
-            // wins attacker
-            if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
             }
-            // wins defender
-            else if ( res.DefenderWins() ) {
-                other_hero->IncreaseExperience( res.GetExperienceDefender() );
+            // The defender won
+            else if ( res.DefenderWins() && defender ) {
+                defender->IncreaseExperience( res.GetExperienceDefender() );
             }
+
+            return;
+        }
+
+        // If hero is already in the castle, then there must be his own army in the castle
+        assert( army.isValid() && army.GetColor() == hero.GetColor() );
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " captures the enemy castle " << castle->GetName() )
+
+        captureCastle();
+
+        castle->MageGuildEducateHero( hero );
+        Game::OpenCastleDialog( *castle );
+    }
+
+    void ActionToHeroes( Heroes & hero, const int32_t dstIndex )
+    {
+        Heroes * otherHero = world.GetTiles( dstIndex ).GetHeroes();
+        if ( otherHero == nullptr ) {
+            // This should never happen
+            assert( 0 );
+
+            DEBUG_LOG( DBG_GAME, DBG_WARN, hero.GetName() << " is trying to meet the hero on tile " << dstIndex << ", but there is no hero on this tile" )
+            return;
+        }
+
+        if ( hero.GetColor() == otherHero->GetColor() ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " meets " << otherHero->GetName() )
+
+            hero.MeetingDialog( *otherHero );
+
+            return;
+        }
+
+        if ( hero.isFriends( otherHero->GetColor() ) ) {
+            // This should never happen - hero should not be able to meet an allied hero
+            assert( 0 );
+
+            DEBUG_LOG( DBG_GAME, DBG_WARN, hero.GetName() << " is not allowed to meet the allied hero " << otherHero->GetName() )
+            return;
+        }
+
+        if ( otherHero->inCastle() ) {
+            ActionToCastle( hero, dstIndex );
+
+            return;
+        }
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attacks " << otherHero->GetName() )
+
+        Battle::Result res = Battle::Loader( hero.GetArmy(), otherHero->GetArmy(), dstIndex );
+
+        // TODO: make fading animation of both heroes together.
+
+        // The defender was defeated
+        if ( !res.DefenderWins() ) {
+            BattleLose( *otherHero, res, false );
+        }
+
+        // The attacker was defeated
+        if ( !res.AttackerWins() ) {
+            BattleLose( hero, res, true );
+        }
+
+        // The attacker won
+        if ( res.AttackerWins() ) {
+            hero.IncreaseExperience( res.GetExperienceAttacker() );
+        }
+        // The defender won
+        else if ( res.DefenderWins() ) {
+            otherHero->IncreaseExperience( res.GetExperienceDefender() );
         }
     }
 

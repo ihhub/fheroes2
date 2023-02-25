@@ -727,15 +727,18 @@ void Kingdom::openOverviewDialog()
     dst_pt.y = cur_pt.y + 360;
     fheroes2::Button buttonHeroes( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 0, 1 );
 
-    dst_pt.x = cur_pt.x + 540;
+    // We need to additionally render the background between HEROES and TOWNS/CASTLES buttons.
+    dst_pt.y += 42;
+    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 540, 444, display, dst_pt.x, dst_pt.y, 99, 5 );
+
     dst_pt.y = cur_pt.y + 405;
     fheroes2::Button buttonCastle( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 2, 3 );
 
-    dst_pt.x = cur_pt.x + 540;
     dst_pt.y = cur_pt.y + 453;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_EXIT, 0, 1 );
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
+    const fheroes2::Rect rectGoldPerDay( cur_pt.x + 124, cur_pt.y + 459, 289, 16 );
 
     const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
     const fheroes2::Rect rectLighthouse( cur_pt.x + 100 - lighthouse.width(), cur_pt.y + 459, lighthouse.width() + 10, lighthouse.height() );
@@ -785,7 +788,7 @@ void Kingdom::openOverviewDialog()
         else if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
-        else if ( le.MousePressRight( rectIncome ) ) {
+        else if ( le.MousePressRight( rectIncome ) || le.MousePressRight( rectGoldPerDay ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::ZERO );
         }
         else if ( le.MousePressRight( rectLighthouse ) ) {
@@ -815,7 +818,7 @@ void Kingdom::openOverviewDialog()
 
         redraw |= listStats->QueueEventProcessing();
 
-        if ( le.MouseClickLeft( rectIncome ) ) {
+        if ( le.MouseClickLeft( rectIncome ) || le.MouseClickLeft( rectGoldPerDay ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::OK );
         }
 
