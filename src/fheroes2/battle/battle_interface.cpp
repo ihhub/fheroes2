@@ -3694,12 +3694,9 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             return false;
         }
 
-        // If wide unit performs 3 movements and the first movement is a turn back, then it's
-        // path consists of only one "real" movement, because...
-        if ( path.size() == 3 && path[0] == unit.GetTailIndex() ) {
-            // ... its last movement should be a return to the normal position.
-            assert( Board::GetDirection( path[1], path[2] ) == ( unit.isReflect() ? LEFT : RIGHT ) );
-
+        // If wide unit performs 3 movements and the first and the last movement is a turn back, then it's
+        // path consists of only one "real" movement.
+        if ( path.size() == 3 && path[0] == unit.GetTailIndex() && ( Board::GetDirection( path[1], path[2] ) == ( unit.isReflect() ? LEFT : RIGHT ) ) ) {
             return true;
         }
 
