@@ -305,11 +305,15 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     fs.seek( 0x25 );
     startWithHeroInEachCastle = ( 0 == fs.get() );
 
+    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
+
     // Initial races
     for ( const int color : colors ) {
         const uint8_t race = ByteToRace( fs.get() );
+        const int idx = Color::GetIndex( color );
+        assert( idx < KINGDOMMAX );
 
-        races[Color::GetIndex( color )] = race;
+        races[idx] = race;
 
         if ( Race::RAND == race ) {
             colorsOfRandomRaces |= color;
