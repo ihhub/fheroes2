@@ -1284,14 +1284,14 @@ namespace
         case MP2::OBJ_OASIS:
             msg = visited ? _( "The drink at the oasis is refreshing, but offers no further benefit. The oasis might help again if you fought a battle first." )
                           : _( "A drink at the oasis fills your troops with strength and lifts their spirits.  You can travel a bit further today." );
-            move = 800; // + 8TP, from FAQ
+            move = GameStatic::getMovementPointBonus( MP2::OBJ_OASIS );
             break;
 
         case MP2::OBJ_WATERING_HOLE:
             msg = visited ? _(
                       "The drink at the watering hole is refreshing, but offers no further benefit. The watering hole might help again if you fought a battle first." )
                           : _( "A drink at the watering hole fills your troops with strength and lifts their spirits. You can travel a bit further today." );
-            move = 400; // + 4TP, from FAQ
+            move = GameStatic::getMovementPointBonus( MP2::OBJ_WATERING_HOLE );
             break;
 
         case MP2::OBJ_TEMPLE:
@@ -2753,7 +2753,7 @@ namespace
         if ( !visited ) {
             hero.SetVisited( dst_index );
             AudioManager::PlaySound( M82::EXPERNCE );
-            hero.IncreaseMovePoints( 400 );
+            hero.IncreaseMovePoints( GameStatic::getMovementPointBonus( MP2::OBJ_STABLES ) );
         }
 
         if ( isCavalryPresent ) {

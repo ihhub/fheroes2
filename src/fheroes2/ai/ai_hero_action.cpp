@@ -909,10 +909,10 @@ namespace
 
         switch ( objectType ) {
         case MP2::OBJ_OASIS:
-            move = 800;
+            move = GameStatic::getMovementPointBonus( MP2::OBJ_OASIS );
             break;
         case MP2::OBJ_WATERING_HOLE:
-            move = 400;
+            move = GameStatic::getMovementPointBonus( MP2::OBJ_WATERING_HOLE );
             break;
         default:
             break;
@@ -1257,7 +1257,7 @@ namespace
         // check already visited
         if ( !hero.isObjectTypeVisited( objectType ) ) {
             hero.SetVisited( dst_index );
-            hero.IncreaseMovePoints( 400 );
+            hero.IncreaseMovePoints( GameStatic::getMovementPointBonus( MP2::OBJ_STABLES ) );
         }
 
         if ( hero.GetArmy().HasMonster( Monster::CAVALRY ) )

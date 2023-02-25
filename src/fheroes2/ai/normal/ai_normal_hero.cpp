@@ -342,10 +342,16 @@ namespace
         case MP2::OBJ_IDOL:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetLuck() < Luck::IRISH;
 
-        // Objects increasing Movement points.
+        // Objects increasing Movement points and Morale.
         case MP2::OBJ_OASIS:
-        case MP2::OBJ_WATERING_HOLE:
-            return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD;
+        case MP2::OBJ_WATERING_HOLE: {
+            if ( !hero.isObjectTypeVisited( objectType ) ) {
+                return false;
+            }
+
+            const double movementPenalty = 2.0 * pathfinder.getDistance( index );
+            return movementPenalty < GameStatic::getMovementPointBonus( objectType ) || hero.GetMorale() < Morale::BLOOD;
+        }
 
         case MP2::OBJ_MAGIC_WELL:
             return !hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
@@ -466,7 +472,7 @@ namespace
             }
 
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
-            const double movementBonus = daysActive * 400.0 - 2.0 * pathfinder.getDistance( index );
+            const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * pathfinder.getDistance( index );
 
             return !hero.isObjectTypeVisited( MP2::OBJ_STABLES ) && movementBonus > 0;
         }
@@ -1004,7 +1010,7 @@ namespace AI
         }
         case MP2::OBJ_STABLES: {
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
-            double movementBonus = daysActive * 400.0 - 2.0 * distanceToObject;
+            double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject;
             if ( movementBonus < 0 ) {
                 // Looks like this is too far away.
                 movementBonus = 0;
@@ -1031,11 +1037,9 @@ namespace AI
             // Most likely it'll lead to opening more land.
             return 1000;
         }
-        case MP2::OBJ_OASIS: {
-            return std::max( 800.0 - 2.0 * distanceToObject, 0.0 );
-        }
+        case MP2::OBJ_OASIS:
         case MP2::OBJ_WATERING_HOLE: {
-            return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
+            return std::max( GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject, 0.0 );
         }
         case MP2::OBJ_JAIL: {
             // A free hero is always good and it could be very powerful.
@@ -1325,7 +1329,7 @@ namespace AI
         }
         else if ( objectType == MP2::OBJ_STABLES ) {
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
-            double movementBonus = daysActive * 400.0 - 2.0 * distanceToObject;
+            double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject;
             if ( movementBonus < 0 ) {
                 // Looks like this is too far away.
                 movementBonus = 0;
@@ -1353,10 +1357,10 @@ namespace AI
             return 1000;
         }
         else if ( objectType == MP2::OBJ_OASIS ) {
-            return std::max( 800.0 - 2.0 * distanceToObject, 0.0 );
+            return std::max( GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject, 0.0 );
         }
         else if ( objectType == MP2::OBJ_WATERING_HOLE ) {
-            return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
+            return std::max( GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject, 0.0 );
         }
         else if ( objectType == MP2::OBJ_JAIL ) {
             // A free hero is always good and it could be very powerful.
@@ -1545,7 +1549,7 @@ namespace AI
         }
         else if ( objectType == MP2::OBJ_STABLES ) {
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
-            double movementBonus = daysActive * 400.0 - 2.0 * distanceToObject;
+            double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject;
             if ( movementBonus < 0 ) {
                 // Looks like this is too far away.
                 movementBonus = 0;
@@ -1573,10 +1577,10 @@ namespace AI
             return 1000;
         }
         else if ( objectType == MP2::OBJ_OASIS ) {
-            return std::max( 800.0 - 2.0 * distanceToObject, 0.0 );
+            return std::max( GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject, 0.0 );
         }
         else if ( objectType == MP2::OBJ_WATERING_HOLE ) {
-            return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
+            return std::max( GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject, 0.0 );
         }
         else if ( objectType == MP2::OBJ_JAIL ) {
             // A free hero is always good and it could be very powerful.

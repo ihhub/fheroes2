@@ -273,3 +273,18 @@ int GameStatic::GetBattleMoatReduceDefense()
 {
     return 3;
 }
+
+uint32_t GameStatic::getMovementPointBonus( const MP2::MapObjectType objectType )
+{
+    switch ( objectType ) {
+    case MP2::OBJ_OASIS:
+        return 800;
+    case MP2::OBJ_STABLES:
+    case MP2::OBJ_WATERING_HOLE:
+        return 400;
+    default:
+        break;
+    }
+
+    return 0;
+}
