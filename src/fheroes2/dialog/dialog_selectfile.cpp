@@ -130,9 +130,9 @@ public:
         if ( info.worldDay > 0 || info.worldWeek > 0 || info.worldMonth > 0 ) {
             body.add( { _( "\n\nMonth: " ), fheroes2::FontType::normalYellow() } );
             body.add( { std::to_string( info.worldMonth ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( ", week: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { _( ", Week: " ), fheroes2::FontType::normalYellow() } );
             body.add( { std::to_string( info.worldWeek ), fheroes2::FontType::normalWhite() } );
-            body.add( { _( ", day: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { _( ", Day: " ), fheroes2::FontType::normalYellow() } );
             body.add( { std::to_string( info.worldDay ), fheroes2::FontType::normalWhite() } );
         }
 
