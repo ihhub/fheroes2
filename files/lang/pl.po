@@ -4389,9 +4389,7 @@ msgid "Kingdom Income per day."
 msgstr "Dzienny przychód królestwa."
 
 msgid "For every lighthouse controlled, your ships will move further each day."
-msgstr ""
-"Latarnia morska jest teraz pod twoją kontrolą i twoje okręty zwiększają "
-"zasięg swego ruchu w każdej turze."
+msgstr "Z każdą kolejną latarnią morską, która jest pod twoją kontrolą, zwiększa się zasięg twoich okrętów."
 
 msgid "English"
 msgstr "Angielski"
