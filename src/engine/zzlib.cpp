@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,14 +21,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "zzlib.h"
+
 #include <algorithm>
 #include <cstring>
 #include <vector>
+
 #include <zconf.h>
 #include <zlib.h>
 
 #include "logging.h"
-#include "zzlib.h"
 
 namespace
 {
@@ -44,7 +46,7 @@ namespace
             int ret = Z_BUF_ERROR;
 
             while ( Z_BUF_ERROR
-                    == ( ret = uncompress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) ) ) ) {
+                    == ( ret = uncompress( reinterpret_cast<Bytef *>( res.data() ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) ) ) ) {
                 dstsz = static_cast<uLong>( res.size() * 2 );
                 res.resize( dstsz );
             }
@@ -69,7 +71,7 @@ namespace
         if ( src && srcsz ) {
             res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
             uLong dstsz = static_cast<uLong>( res.size() );
-            int ret = compress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) );
+            int ret = compress( reinterpret_cast<Bytef *>( res.data() ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) );
 
             if ( ret == Z_OK )
                 res.resize( dstsz );
@@ -90,25 +92,36 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
     StreamFile sf;
     sf.setbigendian( true );
 
-    if ( sf.open( fn, "rb" ) ) {
-        if ( offset )
-            sf.seek( offset );
-        const uint32_t size0 = sf.get32(); // raw size
-        if ( size0 == 0 ) {
-            return false;
-        }
-        const uint32_t size1 = sf.get32(); // zip size
-        if ( size1 == 0 ) {
-            return false;
-        }
-        sf.skip( 4 ); // old stream format
-        const std::vector<uint8_t> zip = sf.getRaw( size1 );
-        const std::vector<uint8_t> raw = zlibDecompress( &zip[0], zip.size(), size0 );
-        putRaw( reinterpret_cast<const char *>( &raw[0] ), raw.size() );
-        seek( 0 );
-        return !fail();
+    if ( !sf.open( fn, "rb" ) ) {
+        return false;
     }
-    return false;
+
+    if ( offset ) {
+        sf.seek( offset );
+    }
+
+    const uint32_t size0 = sf.get32(); // raw size
+    if ( size0 == 0 ) {
+        return false;
+    }
+
+    const uint32_t size1 = sf.get32(); // zip size
+    if ( size1 == 0 ) {
+        return false;
+    }
+
+    sf.skip( 4 ); // old stream format
+
+    const std::vector<uint8_t> zip = sf.getRaw( size1 );
+    const std::vector<uint8_t> raw = zlibDecompress( zip.data(), zip.size(), size0 );
+    if ( raw.empty() ) {
+        return false;
+    }
+
+    putRaw( reinterpret_cast<const char *>( raw.data() ), raw.size() );
+    seek( 0 );
+
+    return !fail();
 }
 
 bool ZStreamFile::write( const std::string & fn, bool append ) const
@@ -116,18 +129,21 @@ bool ZStreamFile::write( const std::string & fn, bool append ) const
     StreamFile sf;
     sf.setbigendian( true );
 
-    if ( sf.open( fn, append ? "ab" : "wb" ) ) {
-        const std::vector<uint8_t> zip = zlibCompress( data(), size() );
-
-        if ( !zip.empty() ) {
-            sf.put32( static_cast<uint32_t>( size() ) );
-            sf.put32( static_cast<uint32_t>( zip.size() ) );
-            sf.put32( 0 ); // unused, old format support
-            sf.putRaw( reinterpret_cast<const char *>( &zip[0] ), zip.size() );
-            return !sf.fail();
-        }
+    if ( !sf.open( fn, append ? "ab" : "wb" ) ) {
+        return false;
     }
-    return false;
+
+    const std::vector<uint8_t> zip = zlibCompress( data(), size() );
+    if ( zip.empty() ) {
+        return false;
+    }
+
+    sf.put32( static_cast<uint32_t>( size() ) );
+    sf.put32( static_cast<uint32_t>( zip.size() ) );
+    sf.put32( 0 ); // unused, old format support
+    sf.putRaw( reinterpret_cast<const char *>( zip.data() ), zip.size() );
+
+    return !sf.fail();
 }
 
 fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer )
