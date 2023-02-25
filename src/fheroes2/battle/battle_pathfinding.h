@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <bitset>
 #include <cstddef>
 #include <cstdint>
 #include <unordered_map>
@@ -73,27 +74,34 @@ namespace Battle
 
         BattlePathfinder & operator=( const BattlePathfinder & ) = delete;
 
-        // Rebuilds the graph of available positions for the given unit
-        void evaluateForUnit( const Unit & unit );
+        // Checks whether a given position is reachable for a given unit, either on the current turn or in principle
+        bool isPositionReachable( const Unit & unit, const Position & position, const bool isOnCurrentTurn );
 
-        // Checks whether the given position is reachable, either on the current turn or in principle
-        bool isPositionReachable( const Position & position, const bool onCurrentTurn ) const;
+        // Returns the distance to a given position (i.e. the number of cells to be traversed) for a given unit.
+        // It's the caller's responsibility to make sure that this position is reachable before calling this method.
+        uint32_t getDistance( const Unit & unit, const Position & position );
 
-        // Returns the distance to the given position (i.e. the number of cells that needs to be passed).
-        // It's the caller's responsibility to make sure that this position is reachable before calling
-        // this method.
-        uint32_t getDistance( const Position & position ) const;
+        // Builds and returns a path (or its part) for a given unit to a given position that can be traversed during the
+        // current turn. If this position is unreachable by this unit, then an empty path is returned.
+        Indexes buildPath( const Unit & unit, const Position & position );
 
-        // Builds and returns a path (or its part) to the given position that can be traversed during the
-        // current turn. If this position is unreachable, then an empty path is returned.
-        Indexes buildPath( const Position & position ) const;
-
-        // Returns the indexes of all cells that can be occupied by the unit's head on the current turn
-        Indexes getAllAvailableMoves() const;
+        // Returns the indexes of all cells that can be occupied by a given unit's head on the current turn
+        Indexes getAllAvailableMoves( const Unit & unit );
 
     private:
+        // Rebuilds the graph of available positions for a given unit if necessary (if it is not already cached)
+        void reEvaluateIfNeeded( const Unit & unit );
+
         std::unordered_map<BattleNodeIndex, BattleNode, BattleNodeIndexHash> _cache;
+
+        // Parameters of the unit for which the current cache is created
         BattleNodeIndex _pathStart = { -1, -1 };
-        uint32_t _unitSpeed = 0;
+        uint32_t _speed = 0;
+        bool _isWide = false;
+        bool _isFlying = false;
+        // The unit's color (or rather, the unit's army color) affects the ability to pass the castle bridge
+        int _color = 0;
+        // Board cells passability status at the time of current cache creation
+        std::bitset<ARENASIZE> _boardStatus;
     };
 }

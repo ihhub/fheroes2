@@ -198,8 +198,7 @@ namespace
     void UpdateOrderOfUnits( const Battle::Force & army1, const Battle::Force & army2, const Battle::Unit * currentUnit, int preferredColor,
                              const Battle::Units & orderHistory, Battle::Units & orderOfUnits )
     {
-        orderOfUnits.clear();
-        orderOfUnits.insert( orderOfUnits.end(), orderHistory.begin(), orderHistory.end() );
+        orderOfUnits.assign( orderHistory.begin(), orderHistory.end() );
 
         Battle::Units units1( army1.getUnits(), true );
         Battle::Units units2( army2.getUnits(), true );
@@ -456,8 +455,6 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             if ( _bridge ) {
                 _bridge->SetPassability( *troop );
             }
-
-            _battlePathfinder.evaluateForUnit( *troop );
 
             if ( troop->isControlRemote() ) {
                 RemoteTurn( *troop, actions );
@@ -718,9 +715,9 @@ void Battle::Arena::CatapultAction()
     }
 }
 
-Battle::Indexes Battle::Arena::GetPath( const Position & position ) const
+Battle::Indexes Battle::Arena::GetPath( const Unit & unit, const Position & position )
 {
-    const Indexes result = _battlePathfinder.buildPath( position );
+    const Indexes result = _battlePathfinder.buildPath( unit, position );
 
     if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) && !result.empty() ) {
         std::string pathStr;

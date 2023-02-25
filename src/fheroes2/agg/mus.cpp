@@ -205,7 +205,6 @@ namespace MUS
         case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_TROLL_BRIDGE:
             return DUNGEON;
-        case MP2::OBJ_ARTESIAN_SPRING:
         case MP2::OBJ_MAGIC_WELL:
         case MP2::OBJ_ORACLE:
             return WATERSPRING;
@@ -226,7 +225,6 @@ namespace MUS
         case MP2::OBJ_MERCENARY_CAMP:
         case MP2::OBJ_WITCH_DOCTORS_HUT:
         case MP2::OBJ_STANDING_STONES:
-        case MP2::OBJ_WITCHS_HUT:
             return SKILL;
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
@@ -236,7 +234,6 @@ namespace MUS
         case MP2::OBJ_OBSERVATION_TOWER:
             return WATCHTOWER;
         case MP2::OBJ_XANADU:
-        case MP2::OBJ_LIGHTHOUSE:
             return XANADU;
         default:
             return UNKNOWN;

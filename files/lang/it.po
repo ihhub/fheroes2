@@ -1,13 +1,12 @@
 # Italian translation of fheroes2
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
+# Copyright (C) 2021 - 2022 fheroes2 team <fhomm2@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-10 05:45+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -1421,6 +1420,10 @@ msgstr ""
 msgid "campaignBonus|Foremost Scroll"
 msgstr ""
 
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "La Perla Bianca"
+
 msgid "campaignBonus|Hideous Mask"
 msgstr ""
 
@@ -2399,7 +2402,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 
@@ -2503,17 +2506,6 @@ msgstr ""
 "sforzo, e il pubblico ti applaude. Colpito dalle tue capacità, un allenatore "
 "di gladiatori attempato acconsente ad allenarti in una dote a scelta tua."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Sei sicuro di voler congedare queste forze?"
-
 msgid "Attack Skill"
 msgstr "Attacco"
 
@@ -2534,6 +2526,17 @@ msgstr "Pt. Ferita"
 
 msgid "Hit Points Left"
 msgstr "PF Rimasti"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Sei sicuro di voler congedare queste forze?"
 
 msgid "Followers"
 msgstr "Accoliti"
@@ -3430,13 +3433,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 #, fuzzy
@@ -3613,11 +3616,11 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 msgid "Current game version: "
@@ -4110,6 +4113,9 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr ""
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
@@ -4124,9 +4130,6 @@ msgstr ""
 
 msgid "Try searching on clear ground."
 msgstr "Riprova su terreno sgombro."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr ""
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -4218,6 +4221,12 @@ msgstr "Rendita"
 #, fuzzy
 msgid "Kingdom Income per day."
 msgstr "Rendita"
+
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Hai catturato un faro, e ora i punti di movimento in nave si aumentano per "
+"tutti i tuoi eroi."
 
 msgid "English"
 msgstr ""
@@ -4689,15 +4698,15 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Prendi un sorso dalla fontana incantata, ma non accade niente."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Visiti il cerchio fatato, ma non accade nulla."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "Visitando il mistico cerchio fatato, l'esercito riceve la fortuna buona per "
 "il combattimento prossimo."
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Visiti il cerchio fatato, ma non accade nulla."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -4984,11 +4993,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5043,6 +5047,11 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "Catturi un %{name}."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -5569,11 +5578,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}: %{race} (Livello %{level})"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Sei sicuro di voler congedare questo eroe?"
@@ -6475,8 +6479,11 @@ msgstr "Evento"
 msgid "Dragon City"
 msgstr "Dragon City"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Faro"
+msgid_plural "Lighthouses"
+msgstr[0] "Faro"
+msgstr[1] "Faro"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -9088,22 +9095,3 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Necroman"
-#~ msgstr "Negromante"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Aspetta questa unità"
-
-#~ msgid "Wait"
-#~ msgstr "Salta"
-
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Fa aspettare questa unità. L'unità rimanda il suo turno per dopo che "
-#~ "tutte le altre unità hanno finito i loro turni."
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} rimanda il suo turno."

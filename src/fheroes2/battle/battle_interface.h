@@ -214,7 +214,7 @@ namespace Battle
 
         void Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color );
         void Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
-        void QueueEventProcessing( std::string & msg, const fheroes2::Point & offset );
+        void QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
 
     private:
         enum ArmyColor : uint8_t
@@ -249,15 +249,19 @@ namespace Battle
         PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
 
         void setBattleUIRect( const fheroes2::Rect & battleUIRect );
-        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
+        void SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
+        void SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell );
         void Reset();
         void Redraw() const;
 
     private:
+        bool SetDamageInfoBase( const Cell * cell, const Unit * defender );
+
         fheroes2::Rect _battleUIRect;
         const Cell * _cell;
-        const Unit * _attacker;
         const Unit * _defender;
+        uint32_t _minDamage;
+        uint32_t _maxDamage;
         bool _redraw;
     };
 

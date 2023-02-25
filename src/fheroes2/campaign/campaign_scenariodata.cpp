@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +53,7 @@ namespace
         case 0:
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::ARMORED_GAUNTLETS, 1 );
             break;
         case 1:
         case 2:
@@ -386,6 +386,8 @@ namespace
             return _( "campaignBonus|Fizbin Medal" );
         case Artifact::FOREMOST_SCROLL:
             return _( "campaignBonus|Foremost Scroll" );
+        case Artifact::ARMORED_GAUNTLETS:
+            return _( "campaignBonus|Gauntlets" );
         case Artifact::HIDEOUS_MASK:
             return _( "campaignBonus|Hideous Mask" );
         case Artifact::MAGE_RING:

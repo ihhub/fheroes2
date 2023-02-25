@@ -43,6 +43,17 @@ ContinuationIndentWidth: 4
 Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 FixNamespaceComments: false
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^<SDL'
+    CaseSensitive: true
+    Priority: 3
+  - Regex: '^<[^.]+>$'
+    Priority: 1
+  - Regex: '^<'
+    Priority: 2
+  - Regex: '^"'
+    Priority: 4
 IndentCaseLabels: false
 IndentWidth: 4
 IndentWrappedFunctionNames: true

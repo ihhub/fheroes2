@@ -181,7 +181,6 @@
     <ClCompile Include="src\fheroes2\kingdom\week.cpp" />
     <ClCompile Include="src\fheroes2\maps\ground.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps.cpp" />
-    <ClCompile Include="src\fheroes2\maps\maps_actions.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_fileinfo.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_objects.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_tiles.cpp" />
@@ -334,6 +333,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_kingdom.h" />
     <ClInclude Include="src\fheroes2\gui\ui_language.h" />
     <ClInclude Include="src\fheroes2\gui\ui_monster.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_object_rendering.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
     <ClInclude Include="src\fheroes2\gui\ui_option_item.h" />
     <ClInclude Include="src\fheroes2\gui\ui_text.h" />
@@ -364,7 +364,6 @@
     <ClInclude Include="src\fheroes2\kingdom\week.h" />
     <ClInclude Include="src\fheroes2\maps\ground.h" />
     <ClInclude Include="src\fheroes2\maps\maps.h" />
-    <ClInclude Include="src\fheroes2\maps\maps_actions.h" />
     <ClInclude Include="src\fheroes2\maps\maps_fileinfo.h" />
     <ClInclude Include="src\fheroes2\maps\maps_objects.h" />
     <ClInclude Include="src\fheroes2\maps\maps_tiles.h" />

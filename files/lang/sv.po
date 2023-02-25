@@ -1,13 +1,12 @@
 # Swedish translation for fheroes2
-# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-10 05:45+0000\n"
+"POT-Creation-Date: 2023-02-19 09:46+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1493,6 +1492,10 @@ msgid "campaignBonus|Foremost Scroll"
 msgstr "Särskild Kunskapsrulle"
 
 #, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Bröstharnesk"
+
+#, fuzzy
 msgid "campaignBonus|Hideous Mask"
 msgstr "Otäck mask"
 
@@ -2500,7 +2503,7 @@ msgstr ""
 "minst en tomt mellanrum mellan varje armé."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "'Grupperad' stridsformation buntar ihop din armé till mitten av din sida av "
@@ -2608,19 +2611,6 @@ msgstr ""
 "ansträngning och publiken hurrar. Den åldrade gladiatortränaren går med på "
 "att träna dig i en valfri färdighet."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Din trupper kan uppgraderas, men det kommer att bli dyrt. Vill du uppgradera "
-"dem?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Är du säker på att du vill avskeda denna armé?"
-
 msgid "Attack Skill"
 msgstr "Attackfärdighet"
 
@@ -2641,6 +2631,19 @@ msgstr "Hälsopoäng"
 
 msgid "Hit Points Left"
 msgstr "Hälsopoäng kvar"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Din trupper kan uppgraderas, men det kommer att bli dyrt. Vill du uppgradera "
+"dem?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Är du säker på att du vill avskeda denna armé?"
 
 #, fuzzy
 msgid "Followers"
@@ -3545,13 +3548,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 #, fuzzy
@@ -3734,11 +3737,11 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 msgid "Current game version: "
@@ -4269,6 +4272,9 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr "Att gräva efter artefakter tar en hel dag. Försök igen imorgon."
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
@@ -4283,9 +4289,6 @@ msgstr "Ingenting här. Var kan det vara?"
 
 msgid "Try searching on clear ground."
 msgstr "Försök att söka på bar mark."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr "Att gräva efter artefakter tar en hel dag. Försök igen imorgon."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -4388,6 +4391,12 @@ msgstr "Inkomst"
 #, fuzzy
 msgid "Kingdom Income per day."
 msgstr "Inkomst"
+
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Fyret är nu under din kontroll och alla dina skepp kommer nu förflytta sig "
+"längre varje runda."
 
 msgid "English"
 msgstr ""
@@ -4902,15 +4911,15 @@ msgstr "När du dricker det söta vattnet, ökar din tur inför nästa strid."
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Du dricker från den förtrollande fontänen, men ingenting händer."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Du kliver in i häxringen, men ingenting händer."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "När du kliver in i den mystiska häxringen, ökar din armés tur inför nästa "
 "strid."
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Du kliver in i häxringen, men ingenting händer."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -5280,13 +5289,6 @@ msgstr ""
 "lampan?"
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-"Du stöter på en övergiven guldgruva. Gruvan verkar vara hemsökt. Vill du gå "
-"in?"
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5348,6 +5350,13 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "Du fick kontroll över en %{name}."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+"Du stöter på en övergiven guldgruva. Gruvan verkar vara hemsökt. Vill du gå "
+"in?"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -5974,13 +5983,6 @@ msgstr ""
 #, fuzzy
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} av %{race} ( Level %{level} )"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"'Grupperad' stridsformation samlar ihop din armé tillsammans i mitten på din "
-"sida av stridsfältet."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Är du säker på att du vill avsätta denna hjälte?"
@@ -6909,8 +6911,11 @@ msgstr ""
 msgid "Dragon City"
 msgstr "Drakstad"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Fyr"
+msgid_plural "Lighthouses"
+msgstr[0] "Fyr"
+msgstr[1] "Fyr"
 
 #, fuzzy
 msgid "Water Wheel"
@@ -9569,9 +9574,3 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Vänta denna enhet"
-
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} inväntar runda."

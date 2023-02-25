@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,7 +90,7 @@ protected:
     // the hero's remaining movement points. The default implementation can be overridden by a derived class.
     virtual uint32_t getMovementPenalty( int src, int dst, int direction ) const;
 
-    // Substracts movement points taking the transition between turns into account
+    // Subtracts movement points taking the transition between turns into account
     uint32_t substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const;
 
     uint8_t _pathfindingSkill = Skill::Level::EXPERT;

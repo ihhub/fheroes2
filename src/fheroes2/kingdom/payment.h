@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,7 +34,7 @@ namespace PaymentConditions
 {
     payment_t BuyBuilding( int race, uint32_t build );
     payment_t BuyBoat();
-    payment_t BuySpellBook( int shrine = 0 );
+    payment_t BuySpellBook();
     payment_t RecruitHero();
     payment_t ForAlchemist();
 }

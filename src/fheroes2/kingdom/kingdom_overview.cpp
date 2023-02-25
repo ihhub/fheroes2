@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -709,7 +709,7 @@ void Kingdom::openOverviewDialog()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
+    fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
 
     const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt );
@@ -727,15 +727,21 @@ void Kingdom::openOverviewDialog()
     dst_pt.y = cur_pt.y + 360;
     fheroes2::Button buttonHeroes( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 0, 1 );
 
-    dst_pt.x = cur_pt.x + 540;
+    // We need to additionally render the background between HEROES and TOWNS/CASTLES buttons.
+    dst_pt.y += 42;
+    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 540, 444, display, dst_pt.x, dst_pt.y, 99, 5 );
+
     dst_pt.y = cur_pt.y + 405;
     fheroes2::Button buttonCastle( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 2, 3 );
 
-    dst_pt.x = cur_pt.x + 540;
     dst_pt.y = cur_pt.y + 453;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_EXIT, 0, 1 );
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
+    const fheroes2::Rect rectGoldPerDay( cur_pt.x + 124, cur_pt.y + 459, 289, 16 );
+
+    const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
+    const fheroes2::Rect rectLighthouse( cur_pt.x + 100 - lighthouse.width(), cur_pt.y + 459, lighthouse.width() + 10, lighthouse.height() );
 
     Interface::ListBasic * listStats = nullptr;
 
@@ -782,8 +788,11 @@ void Kingdom::openOverviewDialog()
         else if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
-        else if ( le.MousePressRight( rectIncome ) ) {
-            fheroes2::showKingdomIncome( *this, 0 );
+        else if ( le.MousePressRight( rectIncome ) || le.MousePressRight( rectGoldPerDay ) ) {
+            fheroes2::showKingdomIncome( *this, Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( rectLighthouse ) ) {
+            fheroes2::showLighthouseInfo( *this, Dialog::ZERO );
         }
 
         // Exit this dialog.
@@ -809,8 +818,12 @@ void Kingdom::openOverviewDialog()
 
         redraw |= listStats->QueueEventProcessing();
 
-        if ( le.MouseClickLeft( rectIncome ) ) {
+        if ( le.MouseClickLeft( rectIncome ) || le.MouseClickLeft( rectGoldPerDay ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::OK );
+        }
+
+        if ( le.MouseClickLeft( rectLighthouse ) ) {
+            fheroes2::showLighthouseInfo( *this, Dialog::OK );
         }
 
         if ( !listStats->IsNeedRedraw() && !redraw ) {

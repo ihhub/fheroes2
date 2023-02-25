@@ -39,6 +39,7 @@ public final class ToolsetActivity extends Activity
     private Button startGameButton = null;
     private Button extractHoMM2AssetsButton = null;
     private Button downloadHoMM2DemoButton = null;
+    private Button saveFileManagerButton = null;
 
     private TextView gameStatusTextView = null;
     private TextView lastTaskStatusTextView = null;
@@ -57,6 +58,7 @@ public final class ToolsetActivity extends Activity
         startGameButton = findViewById( R.id.activity_toolset_start_game_btn );
         extractHoMM2AssetsButton = findViewById( R.id.activity_toolset_extract_homm2_assets_btn );
         downloadHoMM2DemoButton = findViewById( R.id.activity_toolset_download_homm2_demo_btn );
+        saveFileManagerButton = findViewById( R.id.activity_toolset_save_file_manager_btn );
 
         gameStatusTextView = findViewById( R.id.activity_toolset_game_status_lbl );
         lastTaskStatusTextView = findViewById( R.id.activity_toolset_last_task_status_lbl );
@@ -139,6 +141,11 @@ public final class ToolsetActivity extends Activity
         startActivity( new Intent( Intent.ACTION_VIEW, Uri.parse( getString( R.string.activity_toolset_homm2_demo_url ) ) ) );
     }
 
+    public void saveFileManagerButtonClicked( final View view )
+    {
+        startActivity( new Intent( this, SaveFileManagerActivity.class ) );
+    }
+
     private void updateLastTaskStatus( final String status )
     {
         lastTaskStatusTextView.setText( status );
@@ -154,6 +161,7 @@ public final class ToolsetActivity extends Activity
         startGameButton.setEnabled( backgroundTask == null && isHoMM2AssetsPresent );
         extractHoMM2AssetsButton.setEnabled( backgroundTask == null );
         downloadHoMM2DemoButton.setEnabled( backgroundTask == null );
+        saveFileManagerButton.setEnabled( backgroundTask == null );
 
         gameStatusTextView.setVisibility( isHoMM2AssetsPresent ? View.GONE : View.VISIBLE );
         backgroundTaskProgressBar.setVisibility( backgroundTask == null ? View.GONE : View.VISIBLE );
