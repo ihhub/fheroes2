@@ -330,8 +330,11 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
         if ( ( colorRace.first & colorsAvailableForHumans ) == 0 ) {
             const int side1 = colorRace.first | colorsAvailableForHumans;
             const int side2 = colorsAvailableForComp ^ colorRace.first;
+
             FillUnions( side1, side2 );
+
             victoryConditions = VICTORY_DEFEAT_OTHER_SIDE;
+
             skipUnionSetup = true;
         }
     }
