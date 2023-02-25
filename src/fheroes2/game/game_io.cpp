@@ -134,7 +134,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     fz.setbigendian( true );
 
     // Game data in ZIP format
-    fz << saveFileVersion << World::Get() << Settings::Get() << GameOver::Result::Get();
+    fz << World::Get() << Settings::Get() << GameOver::Result::Get();
 
     if ( conf.isCampaignGameType() ) {
         fz << Campaign::CampaignSaveData::Get();
@@ -239,16 +239,19 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    uint16_t zippedSaveFileVersion = 0;
-    fz >> zippedSaveFileVersion;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1002_RELEASE ) {
+        uint16_t zippedSaveFileVersion = 0;
+        fz >> zippedSaveFileVersion;
 
-    if ( zippedSaveFileVersion != saveFileVersion ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN,
-                   "In the file " << filePath << " the file version " << saveFileVersion << " does not match the zipped one " << zippedSaveFileVersion )
+        if ( zippedSaveFileVersion != saveFileVersion ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       "In the file " << filePath << " the file version " << saveFileVersion << " does not match the zipped one " << zippedSaveFileVersion )
 
-        showGenericErrorMessage();
+            showGenericErrorMessage();
 
-        return fheroes2::GameMode::CANCEL;
+            return fheroes2::GameMode::CANCEL;
+        }
     }
 
     fz >> World::Get() >> conf >> GameOver::Result::Get();
