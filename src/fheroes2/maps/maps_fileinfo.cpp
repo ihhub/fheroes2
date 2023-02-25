@@ -170,6 +170,9 @@ void Maps::FileInfo::Reset()
     height = 0;
     difficulty = 0;
 
+    static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
+    static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
+
     for ( int i = 0; i < KINGDOMMAX; ++i ) {
         races[i] = Race::NONE;
         unions[i] = ByteToColor( i );
@@ -530,7 +533,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 
 StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
 {
-    uint8_t kingdommax;
+    uint8_t kingdommax = 0;
 
     // Only the basename of map filename (fi.file) is loaded
     msg >> fi.file >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
