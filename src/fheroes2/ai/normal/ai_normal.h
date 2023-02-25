@@ -254,7 +254,7 @@ namespace AI
         void CastleTurn( Castle & castle, const bool defensiveStrategy );
         bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
 
-        double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getCourierObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getCourierMainTarget( const Heroes & hero, double lowestPossibleValue ) const;

@@ -733,7 +733,7 @@ namespace AI
     // TODO: we might need to remove duplication code present in the methods below. For now we can keep them as it is for a simpler modification of parameters.
     // In the future we need to come up with dynamic object value estimation based not only on a hero's role but on an outcome from movement at certain position.
 
-    double Normal::getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+    double Normal::getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
         // Hunter has almost equal priorities to all kind of objects. Scout possesses the same priorities but has much higher priority to discover fog.
         assert( ( hero.getAIRole() == Heroes::Role::HUNTER ) || ( hero.getAIRole() == Heroes::Role::SCOUT ) );
@@ -998,7 +998,7 @@ namespace AI
                 return -dangerousTaskPenalty; // no reason to visit with a maximum moral
             }
             if ( morale == Morale::GREAT ) {
-                return -4000; // moral is good enough to avoid visting this object
+                return -4000; // moral is good enough to avoid visiting this object
             }
             if ( morale == Morale::GOOD ) {
                 return -2000; // is it worth to visit this object with little better than neutral moral?
@@ -1059,7 +1059,7 @@ namespace AI
             return fogCountToUncover;
         }
         case MP2::OBJ_GAZEBO: {
-            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valueable this object is.
+            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valuable this object is.
             const uint32_t heroExperience = hero.GetExperience();
             const uint32_t nextLevelExperience = Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( heroExperience ) );
             const uint32_t neededExperience = nextLevelExperience - heroExperience;
@@ -1148,7 +1148,8 @@ namespace AI
         const MP2::MapObjectType objectType = tile.GetObject();
         const bool anotherFriendlyHeroPresent = _regions[tile.GetRegion()].friendlyHeroes > 1;
 
-        if ( objectType == MP2::OBJ_CASTLE ) {
+        switch ( objectType ) {
+        case MP2::OBJ_CASTLE: {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
             if ( !castle )
                 return valueToIgnore;
@@ -1191,7 +1192,7 @@ namespace AI
 
             return value;
         }
-        else if ( objectType == MP2::OBJ_HEROES ) {
+        case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
             assert( otherHero );
             if ( !otherHero ) {
@@ -1227,23 +1228,27 @@ namespace AI
 
             return isCriticalTask( index ) ? 20000.0 : 12000.0;
         }
-        else if ( objectType == MP2::OBJ_MONSTER ) {
+        case MP2::OBJ_MONSTER: {
+            // TODO: add value calculation based on monster strength, experience to obtain and possible losses.
             return anotherFriendlyHeroPresent ? 4000.0 : 1000.0;
         }
-        else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMIST_LAB ) {
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_MINES:
+        case MP2::OBJ_SAWMILL: {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 3000.0 : 1500.0;
         }
-        else if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
+        case MP2::OBJ_ABANDONED_MINE: {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return 5000.0;
         }
-        else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
+        case MP2::OBJ_ARTIFACT: {
             const Artifact art = tile.QuantityArtifact();
+            assert( art.isValid() );
 
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
             if ( isFindArtifactVictoryConditionForHuman( art ) ) {
@@ -1253,41 +1258,109 @@ namespace AI
 
             return 1500.0 * art.getArtifactValue();
         }
-        else if ( objectType == MP2::OBJ_TREASURE_CHEST ) {
-            // Treasure chest without the artifact
-            return std::max( tile.QuantityGold(), 1000U );
-        }
-        else if ( MP2::isPickupObject( objectType ) ) {
-            if ( objectType == MP2::OBJ_BOTTLE ) {
-                // A bottle is useless to AI as it contains only a message.
-                return 0;
+        case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        case MP2::OBJ_TREASURE_CHEST: {
+            // TODO: add logic if the object contains an artifact and resources.
+
+            if ( tile.QuantityArtifact().isValid() ) {
+                const Artifact art = tile.QuantityArtifact();
+
+                // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+                if ( isFindArtifactVictoryConditionForHuman( art ) ) {
+                    assert( 0 );
+                    return -dangerousTaskPenalty;
+                }
+
+                return 1000.0 * art.getArtifactValue();
             }
 
+            return 850.0;
+        }
+
+        case MP2::OBJ_DAEMON_CAVE:
+        case MP2::OBJ_GRAVEYARD:
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJ_SKELETON:
+        case MP2::OBJ_WAGON: {
+            if ( !tile.QuantityArtifact().isValid() ) {
+                // Don't waste time to go here.
+                return -dangerousTaskPenalty;
+            }
+
+            const Artifact art = tile.QuantityArtifact();
+
+            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+            if ( isFindArtifactVictoryConditionForHuman( art ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            return 1000.0 * art.getArtifactValue();
+        }
+        case MP2::OBJ_BOTTLE: {
+            // A bottle is useless to AI as it contains only a message but it might block path.
+            return 0;
+        }
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_FLOTSAM:
+        case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_SEA_CHEST: {
             return anotherFriendlyHeroPresent ? 100.0 : 500.0;
         }
-        else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
-            // Objects like WATERWHEEL, WINDMILL and MAGICGARDEN if capture setting is enabled
-            return 100.0;
+        case MP2::OBJ_LIGHTHOUSE: {
+            // TODO: add more complex logic for cases when AI has boats.
+            if ( tile.QuantityColor() == hero.GetColor() ) {
+                return -dangerousTaskPenalty; // don't even attempt to go here
+            }
+            return 250;
         }
-        else if ( objectType == MP2::OBJ_XANADU ) {
-            return 3000.0;
+        case MP2::OBJ_XANADU: {
+            return 3000;
         }
-        else if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE || objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE || objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
+        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+        case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
             const Spell & spell = tile.QuantitySpell();
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
-        else if ( MP2::isHeroUpgradeObject( objectType ) ) {
+        case MP2::OBJ_FORT:
+        case MP2::OBJ_MERCENARY_CAMP:
+        case MP2::OBJ_STANDING_STONES:
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
+        case MP2::OBJ_WITCHS_HUT: {
             return 1250.0;
         }
-        else if ( MP2::isMonsterDwelling( objectType ) ) {
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_ARCHER_HOUSE:
+        case MP2::OBJ_BARROW_MOUNDS:
+        case MP2::OBJ_CAVE:
+        case MP2::OBJ_CITY_OF_DEAD:
+        case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_DRAGON_CITY:
+        case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_EXCAVATION:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_HALFLING_HOLE:
+        case MP2::OBJ_PEASANT_HUT:
+        case MP2::OBJ_RUINS:
+        case MP2::OBJ_TREE_CITY:
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_TROLL_BRIDGE:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_WATCH_TOWER:
+        case MP2::OBJ_WATER_ALTAR: {
             return tile.QuantityTroop().GetStrength();
         }
-        else if ( objectType == MP2::OBJ_STONE_LITHS ) {
+        case MP2::OBJ_STONE_LITHS: {
             // Stone lith is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        else if ( objectType == MP2::OBJ_OBSERVATION_TOWER ) {
+        case MP2::OBJ_OBSERVATION_TOWER: {
             const int fogCountToUncover
                 = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
@@ -1296,57 +1369,52 @@ namespace AI
             }
             return fogCountToUncover / 2;
         }
-        else if ( objectType == MP2::OBJ_MAGELLANS_MAPS ) {
+        case MP2::OBJ_MAGELLANS_MAPS: {
             // Very valuable object.
             return 5000;
         }
-        else if ( objectType == MP2::OBJ_COAST ) {
-            // Coast is not an object. If this assertion blows up something is wrong with the logic.
+        case MP2::OBJ_BOAT:
+        case MP2::OBJ_COAST:
+        case MP2::OBJ_WHIRLPOOL: {
+            // Coast is not an object while Whirlpool and Boat are not considered by AI as an action object.
+            // If this assertion blows up something is wrong with the logic.
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        else if ( objectType == MP2::OBJ_WHIRLPOOL ) {
-            // Whirlpool is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
-            assert( 0 );
-            return -dangerousTaskPenalty;
-        }
-        else if ( objectType == MP2::OBJ_BOAT ) {
-            // Boat is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
-            assert( 0 );
-            return -dangerousTaskPenalty;
-        }
-        else if ( objectType == MP2::OBJ_MAGIC_WELL || objectType == MP2::OBJ_ARTESIAN_SPRING ) {
+        case MP2::OBJ_ARTESIAN_SPRING:
+        case MP2::OBJ_MAGIC_WELL: {
             if ( !hero.HaveSpellBook() ) {
                 return -dangerousTaskPenalty;
             }
             if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
                 return -2000; // no reason to visit the well with no magic book or with half of points
             }
-            return hero.isPotentSpellcaster() ? 2500 : 0;
+            return hero.isPotentSpellcaster() ? 2000 : 0;
         }
-        else if ( objectType == MP2::OBJ_TEMPLE ) {
+        case MP2::OBJ_BUOY:
+        case MP2::OBJ_TEMPLE: {
             if ( hero.GetArmy().AllTroopsAreUndead() ) {
                 // All troops are undead, no use of Morale.
                 return 0;
             }
 
-            const int moral = hero.GetMorale();
-            if ( moral >= 3 ) {
+            const int morale = hero.GetMorale();
+            if ( morale >= Morale::BLOOD ) {
                 return -dangerousTaskPenalty; // no reason to visit with a maximum moral
             }
-            if ( moral == 2 ) {
+            if ( morale == Morale::GREAT ) {
                 return -4000; // moral is good enough to avoid visiting this object
             }
-            if ( moral == 1 ) {
+            if ( morale == Morale::GOOD ) {
                 return -2000; // is it worth to visit this object with little better than neutral moral?
             }
-            if ( moral == 0 ) {
-                return 0;
+            if ( morale == Morale::NORMAL ) {
+                return 50;
             }
 
             return 200;
         }
-        else if ( objectType == MP2::OBJ_STABLES ) {
+        case MP2::OBJ_STABLES: {
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
             double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject;
             if ( movementBonus < 0 ) {
@@ -1357,35 +1425,33 @@ namespace AI
             const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
             return movementBonus + freeMonsterUpgradeModifier * upgradeValue;
         }
-        else if ( objectType == MP2::OBJ_FREEMANS_FOUNDRY ) {
+        case MP2::OBJ_FREEMANS_FOUNDRY: {
             const double upgradePikemanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::PIKEMAN );
             const double upgradeSwordsmanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::SWORDSMAN );
             const double upgradeGolemValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::IRON_GOLEM );
 
             return freeMonsterUpgradeModifier * ( upgradePikemanValue + upgradeSwordsmanValue + upgradeGolemValue );
         }
-        else if ( objectType == MP2::OBJ_HILL_FORT ) {
+        case MP2::OBJ_HILL_FORT: {
             const double upgradeDwarfValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::DWARF );
             const double upgradeOrcValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::ORC );
             const double upgradeOgreValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::OGRE );
 
             return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
         }
-        else if ( objectType == MP2::OBJ_TRAVELLER_TENT ) {
+        case MP2::OBJ_TRAVELLER_TENT: {
             // Most likely it'll lead to opening more land.
             return 1000;
         }
-        else if ( objectType == MP2::OBJ_OASIS ) {
+        case MP2::OBJ_OASIS:
+        case MP2::OBJ_WATERING_HOLE: {
             return std::max( GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject, 0.0 );
         }
-        else if ( objectType == MP2::OBJ_WATERING_HOLE ) {
-            return std::max( GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject, 0.0 );
-        }
-        else if ( objectType == MP2::OBJ_JAIL ) {
+        case MP2::OBJ_JAIL: {
             // A free hero is always good and it could be very powerful.
             return 3000;
         }
-        else if ( objectType == MP2::OBJ_HUT_OF_MAGI ) {
+        case MP2::OBJ_HUT_OF_MAGI: {
             const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
@@ -1397,8 +1463,8 @@ namespace AI
 
             return fogCountToUncover / 2;
         }
-        else if ( objectType == MP2::OBJ_GAZEBO ) {
-            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valuable this object is.
+        case MP2::OBJ_GAZEBO: {
+            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valueable this object is.
             const uint32_t heroExperience = hero.GetExperience();
             const uint32_t nextLevelExperience = Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( heroExperience ) );
             const uint32_t neededExperience = nextLevelExperience - heroExperience;
@@ -1409,17 +1475,69 @@ namespace AI
 
             return 1000.0 * 1000.0 / neededExperience;
         }
-        else if ( objectType == MP2::OBJ_LIGHTHOUSE ) {
-            if ( tile.QuantityColor() == hero.GetColor() ) {
-                return -dangerousTaskPenalty; // don't even attempt to go here
-            }
-            return 250;
-        }
-        else if ( objectType == MP2::OBJ_PYRAMID ) {
+        case MP2::OBJ_PYRAMID: {
             return 10000;
         }
+        case MP2::OBJ_FAERIE_RING:
+        case MP2::OBJ_FOUNTAIN:
+        case MP2::OBJ_IDOL:
+        case MP2::OBJ_MERMAID: {
+            const int luck = hero.GetLuck();
+            if ( luck >= Luck::IRISH ) {
+                return -dangerousTaskPenalty; // no reason to visit with a maximum moral
+            }
+            if ( luck == Luck::GREAT ) {
+                return -4000; // moral is good enough to avoid visiting this object
+            }
+            if ( luck == Luck::GOOD ) {
+                return -2000; // is it worth to visit this object with little better than neutral moral?
+            }
+            if ( luck == Luck::NORMAL ) {
+                return 50;
+            }
 
-        // TODO: add support for all possible objects.
+            return 100;
+        }
+        case MP2::OBJ_DERELICT_SHIP:
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL: {
+            if ( tile.QuantityIsValid() ) {
+                return 850;
+            }
+
+            return -dangerousTaskPenalty;
+        }
+        case MP2::OBJ_ALCHEMIST_TOWER: {
+            const BagArtifacts & bag = hero.GetBagArtifacts();
+            const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
+            if ( cursed == 0 ) {
+                return -dangerousTaskPenalty;
+            }
+
+            // TODO: evaluate this object properly.
+            return 0;
+        }
+        case MP2::OBJ_EYE_OF_MAGI:
+        case MP2::OBJ_ORACLE:
+        case MP2::OBJ_SIGN: {
+            // These objects are useless for AI.
+            return -dangerousTaskPenalty;
+        }
+        case MP2::OBJ_OBELISK:
+        case MP2::OBJ_SIRENS:
+        case MP2::OBJ_SPHINX:
+        case MP2::OBJ_TRADING_POST: {
+            // TODO: add logic to evaluate these objects.
+            // As of now these objects should be avoided by AI as they are useless.
+            return -dangerousTaskPenalty;
+        }
+        default:
+            // Did you forget to add logic for an action object?
+            assert( !MP2::isActionObject( objectType ) );
+            break;
+        }
 
         return 0;
     }
@@ -1626,7 +1744,7 @@ namespace AI
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
         case Heroes::Role::SCOUT:
-            return getHunterObjectValue( hero, index, valueToIgnore, distanceToObject );
+            return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
         case Heroes::Role::CHAMPION:
         case Heroes::Role::FIGHTER:
             return getFighterObjectValue( hero, index, valueToIgnore, distanceToObject );
