@@ -183,13 +183,14 @@ namespace
         const Army & army = hero.GetArmy();
         const Kingdom & kingdom = hero.GetKingdom();
 
+        // If you add new objects to a group of objects with the same logic sort them alphabetically.
         switch ( objectType ) {
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_BOTTLE:
-        case MP2::OBJ_RESOURCE:
         case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_FLOTSAM:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_SHIPWRECK_SURVIVOR:
         case MP2::OBJ_TREASURE_CHEST:
             return true;
 
@@ -200,26 +201,14 @@ namespace
         case MP2::OBJ_MERMAID:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetLuck() < Luck::IRISH;
 
-        case MP2::OBJ_SIRENS:
-            return false;
-
         case MP2::OBJ_MAGELLANS_MAPS:
             // TODO: avoid hardcoded resource values for objects.
             return !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANS_MAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
 
-        case MP2::OBJ_WHIRLPOOL:
-            // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
-            return false;
-
-        case MP2::OBJ_COAST:
-            // Coast is not an action object. If this assertion blows up then something is wrong with the logic above.
-            assert( 0 );
-            return false;
-
-        case MP2::OBJ_SAWMILL:
-        case MP2::OBJ_MINES:
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_LIGHTHOUSE:
+        case MP2::OBJ_MINES:
+        case MP2::OBJ_SAWMILL:
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
                     return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
@@ -239,10 +228,10 @@ namespace
             }
             break;
 
-        case MP2::OBJ_WAGON:
         case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_SKELETON:
         case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_SKELETON:
+        case MP2::OBJ_WAGON:
         case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL:
             return tile.QuantityIsValid();
@@ -266,7 +255,7 @@ namespace
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
             }
 
-            // other
+            // It is a normal artifact.
             return true;
         }
 
@@ -287,9 +276,13 @@ namespace
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
             const Spell & spell = tile.QuantitySpell();
-            assert( spell.isValid() );
-            if ( !spell.isValid() || !hero.HaveSpellBook() || hero.HaveSpell( spell )
-                 || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
+            if ( !spell.isValid() ) {
+                // The spell cannot be invalid!
+                assert( 0 );
+                return false;
+            }
+
+            if ( !hero.HaveSpellBook() || hero.HaveSpell( spell ) || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
                 return false;
             }
 
@@ -302,16 +295,16 @@ namespace
             return true;
         }
 
-        // primary skill
+        // On-time visit free Primary Skill or Experience object.
+        case MP2::OBJ_ARENA:
         case MP2::OBJ_FORT:
-        case MP2::OBJ_MERCENARY_CAMP:
-        case MP2::OBJ_WITCH_DOCTORS_HUT:
-        case MP2::OBJ_STANDING_STONES:
-        // exp
         case MP2::OBJ_GAZEBO:
+        case MP2::OBJ_MERCENARY_CAMP:
+        case MP2::OBJ_STANDING_STONES:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
             return !hero.isVisited( tile );
 
-        // sec skill
+        // One time visit Secondary Skill object.
         case MP2::OBJ_WITCHS_HUT: {
             const Skill::Secondary & skill = tile.QuantitySkill();
             const int skillType = skill.Skill();
@@ -343,13 +336,13 @@ namespace
             }
             break;
 
-        // good luck
-        case MP2::OBJ_FOUNTAIN:
+        // Objects increasing Luck.
         case MP2::OBJ_FAERIE_RING:
+        case MP2::OBJ_FOUNTAIN:
         case MP2::OBJ_IDOL:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetLuck() < Luck::IRISH;
 
-        // good morale
+        // Objects increasing Movement points.
         case MP2::OBJ_OASIS:
         case MP2::OBJ_WATERING_HOLE:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD;
@@ -371,16 +364,16 @@ namespace
             break;
         }
 
-        // Get a free army.
-        case MP2::OBJ_WATCH_TOWER:
-        case MP2::OBJ_EXCAVATION:
-        case MP2::OBJ_CAVE:
-        case MP2::OBJ_TREE_HOUSE:
+        // Dwellings with free army.
         case MP2::OBJ_ARCHER_HOUSE:
-        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_CAVE:
         case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_EXCAVATION:
+        case MP2::OBJ_GOBLIN_HUT:
         case MP2::OBJ_HALFLING_HOLE:
-        case MP2::OBJ_PEASANT_HUT: {
+        case MP2::OBJ_PEASANT_HUT:
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_WATCH_TOWER: {
             const Troop & troop = tile.QuantityTroop();
             if ( !troop.isValid() ) {
                 return false;
@@ -394,17 +387,17 @@ namespace
             return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
         }
 
-        // recruit army
+        // Dwellings where AI can recruit an army.
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
+        case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_GENIE_LAMP:
         case MP2::OBJ_RUINS:
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_DESERT_TENT:
-        case MP2::OBJ_WATER_ALTAR:
-        case MP2::OBJ_AIR_ALTAR:
-        case MP2::OBJ_FIRE_ALTAR:
-        case MP2::OBJ_EARTH_ALTAR:
-        case MP2::OBJ_BARROW_MOUNDS:
-        case MP2::OBJ_GENIE_LAMP: {
+        case MP2::OBJ_WATER_ALTAR: {
             const Troop & troop = tile.QuantityTroop();
             if ( !troop.isValid() ) {
                 return false;
@@ -433,9 +426,9 @@ namespace
             return isArmyValuableToObtain( troopToHire, armyStrengthThreshold, armyHasMonster );
         }
 
-        // recruit army (battle)
-        case MP2::OBJ_DRAGON_CITY:
+        // Dwellings where AI might fight monsters first before recruiting them.
         case MP2::OBJ_CITY_OF_DEAD:
+        case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_TROLL_BRIDGE: {
             if ( Color::NONE == tile.QuantityColor() ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
@@ -460,15 +453,13 @@ namespace
             return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
         }
 
-        // upgrade army
+        // Free army upgrade objects.
+        case MP2::OBJ_FREEMANS_FOUNDRY:
+            return army.HasMonster( Monster::PIKEMAN ) || army.HasMonster( Monster::SWORDSMAN ) || army.HasMonster( Monster::IRON_GOLEM );
         case MP2::OBJ_HILL_FORT:
             return army.HasMonster( Monster::DWARF ) || army.HasMonster( Monster::ORC ) || army.HasMonster( Monster::OGRE );
 
-        // upgrade army
-        case MP2::OBJ_FREEMANS_FOUNDRY:
-            return army.HasMonster( Monster::PIKEMAN ) || army.HasMonster( Monster::SWORDSMAN ) || army.HasMonster( Monster::IRON_GOLEM );
-
-        // loyalty obj
+        // Free army upgrade and extra movement points for the rest of the week.
         case MP2::OBJ_STABLES: {
             if ( army.HasMonster( Monster::CAVALRY ) ) {
                 return true;
@@ -480,13 +471,10 @@ namespace
             return !hero.isObjectTypeVisited( MP2::OBJ_STABLES ) && movementBonus > 0;
         }
 
-        case MP2::OBJ_ARENA:
-            return !hero.isVisited( tile );
-
-        // poor morale obj
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_GRAVEYARD:
+        // Objects that give goods but curse with bad morale when visiting them for subsequent times.
         case MP2::OBJ_DERELICT_SHIP:
+        case MP2::OBJ_GRAVEYARD:
+        case MP2::OBJ_SHIPWRECK:
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
                 return enemy.isValid() && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, 2 );
@@ -508,10 +496,6 @@ namespace
 
         case MP2::OBJ_MONSTER:
             return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
-
-        case MP2::OBJ_SIGN:
-            // AI has no brains to process anything from sign messages.
-            return false;
 
         case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
@@ -542,26 +526,11 @@ namespace
         case MP2::OBJ_CASTLE:
             return AIShouldVisitCastle( hero, index, heroArmyStrength );
 
-        case MP2::OBJ_BOAT:
-            // AI should never consider a boat as a destination point. It uses them only to make a path.
-            return false;
-
-        case MP2::OBJ_STONE_LITHS:
-            // AI should never consider a stone lith as a destination point. It uses them only to make a path.
-            return false;
-
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
         case MP2::OBJ_HUT_OF_MAGI:
             return !hero.isObjectTypeVisited( MP2::OBJ_HUT_OF_MAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true ).empty();
-        case MP2::OBJ_TRADING_POST:
-        case MP2::OBJ_SPHINX:
-            // TODO: AI doesn't know how it use it properly.
-            return false;
-        case MP2::OBJ_ORACLE:
-        case MP2::OBJ_EYE_OF_MAGI:
-            // No use of this object for AI.
-            return false;
+
         case MP2::OBJ_ALCHEMIST_TOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
             const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
@@ -572,6 +541,32 @@ namespace
             const payment_t payment = PaymentConditions::ForAlchemist();
             return kingdom.AllowPayment( payment );
         }
+
+        // AI should never consider a boat as a destination point. It uses them only to make a path.
+        case MP2::OBJ_BOAT:
+        // Eye of Magi is not an action object at all.
+        case MP2::OBJ_EYE_OF_MAGI:
+        // No use of these object for AI.
+        case MP2::OBJ_ORACLE:
+        // AI has no brains to do anything from sign messages.
+        case MP2::OBJ_SIGN:
+        // AI has no brains to handle Sirens object.
+        case MP2::OBJ_SIRENS:
+        // TODO: AI doesn't know how it use Sphinx object properly.
+        case MP2::OBJ_SPHINX:
+        // AI should never consider a stone lith as a destination point. It uses them only to make a path.
+        case MP2::OBJ_STONE_LITHS:
+        // TODO: AI doesn't know how it use Trading Post object properly.
+        case MP2::OBJ_TRADING_POST:
+        // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
+        case MP2::OBJ_WHIRLPOOL:
+            return false;
+
+        case MP2::OBJ_COAST:
+            // Coast is not an action object. If this assertion blows up then something is wrong with the logic above.
+            assert( 0 );
+            return false;
+
         default:
             // Did you add a new action object but forget to add AI interaction for it?
             assert( 0 );
