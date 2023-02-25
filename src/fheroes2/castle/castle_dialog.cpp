@@ -141,7 +141,7 @@ namespace
         }
 
         if ( hero ) {
-            fheroes2::Blit( hero->GetPortrait( PORT_BIG ), display, pt.x + 5, pt.y + 361 );
+            hero->PortraitRedraw( pt.x + 5, pt.y + 361, PORT_BIG, display );
         }
         else {
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), display, pt.x + 5, pt.y + 361 );
