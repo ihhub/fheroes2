@@ -333,7 +333,7 @@ namespace Battle
             const bool isReflect = lastReachableNodeIdx->first < lastReachableNodeIdx->second;
 
             if ( isReflect != position.isReflect() ) {
-                // The last reachable position should not be a straight or reversed version of the target position
+                // The last reachable position should not be a reversed version of the target position
                 assert( !position.contains( lastReachableNodeIdx->first ) || !position.contains( lastReachableNodeIdx->second ) );
 
                 result.push_back( lastReachableNodeIdx->second );
