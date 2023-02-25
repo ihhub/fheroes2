@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -36,8 +36,8 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
-#include "game.h"
 #include "game_hotkeys.h"
+#include "game_io.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
@@ -123,10 +123,21 @@ public:
         fheroes2::Text header( ResizeToShortName( info.file ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
+
         body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
         body.add( { info.name, fheroes2::FontType::normalWhite() } );
-        body.add( { _( "\n\nLocation: " ), fheroes2::FontType::normalYellow() } );
-        body.add( { fullPath, fheroes2::FontType::normalWhite() } );
+
+        if ( info.worldDay > 0 || info.worldWeek > 0 || info.worldMonth > 0 ) {
+            body.add( { _( "\n\nMonth: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { std::to_string( info.worldMonth ), fheroes2::FontType::normalWhite() } );
+            body.add( { _( ", week: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { std::to_string( info.worldWeek ), fheroes2::FontType::normalWhite() } );
+            body.add( { _( ", day: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { std::to_string( info.worldDay ), fheroes2::FontType::normalWhite() } );
+        }
+
+        body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
+        body.add( { fullPath, fheroes2::FontType::smallWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::ZERO );
     }
@@ -148,7 +159,7 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int
     char shortHours[20];
     char shortTime[20];
 
-    const tm tmi = System::GetTM( info.localtime );
+    const tm tmi = System::GetTM( info.timestamp );
 
     std::fill( shortDate, std::end( shortDate ), static_cast<char>( 0 ) );
     std::fill( shortHours, std::end( shortHours ), static_cast<char>( 0 ) );
@@ -235,7 +246,7 @@ std::string Dialog::SelectFileSave()
 
 std::string Dialog::SelectFileLoad()
 {
-    const std::string & lastfile = Game::GetLastSavename();
+    const std::string & lastfile = Game::GetLastSaveName();
     return SelectFileListSimple( _( "File to Load:" ), ( !lastfile.empty() ? lastfile : "" ), false );
 }
 

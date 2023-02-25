@@ -41,6 +41,7 @@
 #include "color.h"
 #include "direction.h"
 #include "game.h"
+#include "game_io.h"
 #include "game_over.h"
 #include "gamedefs.h"
 #include "heroes.h"
@@ -377,13 +378,13 @@ void World::NewMaps( int32_t sw, int32_t sh )
 
     Maps::FileInfo fi;
 
-    fi.size_w = static_cast<uint16_t>( width );
-    fi.size_h = static_cast<uint16_t>( height );
+    fi.width = static_cast<uint16_t>( width );
+    fi.height = static_cast<uint16_t>( height );
 
     Settings & conf = Settings::Get();
 
     if ( conf.isPriceOfLoyaltySupported() ) {
-        fi._version = GameVersion::PRICE_OF_LOYALTY;
+        fi.version = GameVersion::PRICE_OF_LOYALTY;
     }
 
     conf.SetCurrentFileInfo( fi );
@@ -1392,8 +1393,8 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
         >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the logic below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_1002_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_1002_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE_1002_RELEASE ) {
         uint32_t dummy = 0xDEADBEEF;
 
         msg >> dummy;

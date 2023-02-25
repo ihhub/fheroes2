@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,6 +24,7 @@
 #define H2MAPSFILEINFO_H
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -44,42 +45,45 @@ namespace Maps
     struct FileInfo
     {
         FileInfo();
-        FileInfo( const FileInfo & );
+        FileInfo( const FileInfo & ) = default;
+        FileInfo( FileInfo && ) = default;
 
         ~FileInfo() = default;
 
-        FileInfo & operator=( const FileInfo & );
+        FileInfo & operator=( const FileInfo & ) = default;
+        FileInfo & operator=( FileInfo && ) = default;
 
-        bool ReadMP2( const std::string & );
-        bool ReadSAV( const std::string & );
+        bool ReadMP2( const std::string & filePath );
+        bool ReadSAV( const std::string & filePath );
 
         bool operator==( const FileInfo & fi ) const
         {
             return file == fi.file;
         }
-        static bool NameSorting( const FileInfo &, const FileInfo & );
-        static bool FileSorting( const FileInfo &, const FileInfo & );
+
+        static bool NameSorting( const FileInfo & lhs, const FileInfo & rhs );
+        static bool FileSorting( const FileInfo & lhs, const FileInfo & rhs );
 
         bool isAllowCountPlayers( int playerCount ) const;
 
         int AllowCompHumanColors() const
         {
-            return allow_human_colors & allow_comp_colors;
+            return colorsAvailableForHumans & colorsAvailableForComp;
         }
 
         int AllowHumanColors() const
         {
-            return allow_human_colors;
+            return colorsAvailableForHumans;
         }
 
         int HumanOnlyColors() const
         {
-            return allow_human_colors & ~allow_comp_colors;
+            return colorsAvailableForHumans & ~colorsAvailableForComp;
         }
 
         int ComputerOnlyColors() const
         {
-            return allow_comp_colors & ~allow_human_colors;
+            return colorsAvailableForComp & ~colorsAvailableForHumans;
         }
 
         int KingdomRace( int color ) const;
@@ -91,32 +95,32 @@ namespace Maps
 
         bool WinsFindUltimateArtifact() const
         {
-            return 0 == wins1;
+            return 0 == victoryConditionsParam1;
         }
 
         uint32_t getWinningGoldAccumulationValue() const
         {
-            return wins1 * 1000;
+            return victoryConditionsParam1 * 1000;
         }
 
         fheroes2::Point WinsMapsPositionObject() const
         {
-            return { wins1, wins2 };
+            return { victoryConditionsParam1, victoryConditionsParam2 };
         }
 
         fheroes2::Point LossMapsPositionObject() const
         {
-            return { loss1, loss2 };
+            return { lossConditionsParam1, lossConditionsParam2 };
         }
 
         uint32_t LossCountDays() const
         {
-            return loss1;
+            return lossConditionsParam1;
         }
 
         void removeHumanColors( const int colors )
         {
-            allow_human_colors &= ~colors;
+            colorsAvailableForHumans &= ~colors;
         }
 
         std::string String() const;
@@ -126,16 +130,17 @@ namespace Maps
         std::string name;
         std::string description;
 
-        uint16_t size_w;
-        uint16_t size_h;
+        uint16_t width;
+        uint16_t height;
         uint8_t difficulty;
-        uint8_t races[KINGDOMMAX];
-        uint8_t unions[KINGDOMMAX];
 
-        uint8_t kingdom_colors;
-        uint8_t allow_human_colors;
-        uint8_t allow_comp_colors;
-        uint8_t rnd_races;
+        std::array<uint8_t, KINGDOMMAX> races;
+        std::array<uint8_t, KINGDOMMAX> unions;
+
+        uint8_t kingdomColors;
+        uint8_t colorsAvailableForHumans;
+        uint8_t colorsAvailableForComp;
+        uint8_t colorsOfRandomRaces;
 
         enum VictoryCondition : uint8_t
         {
@@ -155,20 +160,29 @@ namespace Maps
             LOSS_OUT_OF_TIME = 3
         };
 
-        uint8_t conditions_wins; // refer to VictoryCondition
-        bool comp_also_wins;
-        bool allow_normal_victory;
-        uint16_t wins1;
-        uint16_t wins2;
-        uint8_t conditions_loss; // refer to LossCondition
-        uint16_t loss1;
-        uint16_t loss2;
+        // Refer to the VictoryCondition
+        uint8_t victoryConditions;
+        bool compAlsoWins;
+        bool allowNormalVictory;
+        uint16_t victoryConditionsParam1;
+        uint16_t victoryConditionsParam2;
 
-        uint32_t localtime;
+        // Refer to the LossCondition
+        uint8_t lossConditions;
+        uint16_t lossConditionsParam1;
+        uint16_t lossConditionsParam2;
+
+        // Timestamp of the save file, only relevant for save files
+        uint32_t timestamp;
 
         bool startWithHeroInEachCastle;
 
-        GameVersion _version;
+        GameVersion version;
+
+        // World date at the moment the save file was created, only relevant for save files
+        uint32_t worldDay;
+        uint32_t worldWeek;
+        uint32_t worldMonth;
 
     private:
         void FillUnions( const int side1Colors, const int side2Colors );
