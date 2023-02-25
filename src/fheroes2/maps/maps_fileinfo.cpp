@@ -505,28 +505,6 @@ bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
     return humanOnly <= playerCount && playerCount <= humanOnly + compHuman;
 }
 
-std::string Maps::FileInfo::String() const
-{
-    std::ostringstream os;
-
-    os << "file: " << file << ", "
-       << "name: " << name << ", "
-       << "kingdom colors: " << static_cast<int>( kingdomColors ) << ", "
-       << "colors for humans: " << static_cast<int>( colorsAvailableForHumans ) << ", "
-       << "colors for comp: " << static_cast<int>( colorsAvailableForComp ) << ", "
-       << "random races: " << static_cast<int>( colorsOfRandomRaces ) << ", "
-       << "victory conditions: " << static_cast<int>( victoryConditions ) << ", "
-       << "comp also wins: " << ( compAlsoWins ? "true" : "false" ) << ", "
-       << "allow normal victory: " << ( allowNormalVictory ? "true" : "false" ) << ", "
-       << "victory cond param 1: " << victoryConditionsParam1 << ", "
-       << "victory cond param 2: " << victoryConditionsParam2 << ", "
-       << "loss conditions: " << static_cast<int>( lossConditions ) << ", "
-       << "loss cond param 1: " << lossConditionsParam1 << ", "
-       << "loss cond param 2: " << lossConditionsParam2;
-
-    return os.str();
-}
-
 StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 {
     using VersionUnderlyingType = std::underlying_type_t<decltype( fi.version )>;

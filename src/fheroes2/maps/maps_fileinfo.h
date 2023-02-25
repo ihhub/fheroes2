@@ -123,7 +123,6 @@ namespace Maps
             colorsAvailableForHumans &= ~colors;
         }
 
-        std::string String() const;
         void Reset();
 
         std::string file;
