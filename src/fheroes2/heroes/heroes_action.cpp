@@ -679,6 +679,8 @@ namespace
         }
 
         if ( rc.isValid() ) {
+            const MusicalEffectPlayer musicalEffectPlayer;
+
             // The Magic Garden has a special sound
             if ( objectType == MP2::OBJ_MAGIC_GARDEN && !Settings::Get().MusicMIDI() ) {
                 MusicalEffectPlayer::play( MUS::TREEHOUSE );
@@ -937,6 +939,8 @@ namespace
 
                 msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
                 StringReplace( msg, "%{skill}", skill_name );
+
+                const MusicalEffectPlayer musicalEffectPlayer;
 
                 if ( !Settings::Get().MusicMIDI() ) {
                     MusicalEffectPlayer::play( MUS::EXPERIENCE );
@@ -1359,6 +1363,8 @@ namespace
             Dialog::Message( title, msg, Font::BIG, Dialog::OK );
         }
         else {
+            const MusicalEffectPlayer musicalEffectPlayer;
+
             if ( Settings::Get().MusicMIDI() ) {
                 AudioManager::PlaySound( M82::EXPERNCE );
             }
@@ -1916,6 +1922,8 @@ namespace
 
                 Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
 
+                const MusicalEffectPlayer musicalEffectPlayer;
+
                 // The Lighthouse has a special sound
                 if ( objectType == MP2::OBJ_LIGHTHOUSE && !Settings::Get().MusicMIDI() ) {
                     MusicalEffectPlayer::play( MUS::XANADU );
@@ -2157,6 +2165,8 @@ namespace
             Dialog::Message( title, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
         }
         else {
+            const MusicalEffectPlayer musicalEffectPlayer;
+
             if ( !Settings::Get().MusicMIDI() ) {
                 MusicalEffectPlayer::play( MUS::WATERSPRING );
             }
@@ -2345,6 +2355,8 @@ namespace
 
                 offsetX += border.width() + 4;
             }
+
+            const MusicalEffectPlayer musicalEffectPlayer;
 
             // The Hill Fort has a special sound
             if ( objectType == MP2::OBJ_HILL_FORT && !Settings::Get().MusicMIDI() ) {
