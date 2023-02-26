@@ -37,7 +37,7 @@ namespace
 {
     constexpr uint16_t FORMAT_VERSION_0 = 0;
 
-    std::vector<uint8_t> zlibDecompress( const uint8_t * src, size_t srcsz, size_t realsz = 0 )
+    std::vector<uint8_t> zlibDecompress( const uint8_t * src, const size_t srcsz, const size_t realsz = 0 )
     {
         if ( src == nullptr || srcsz == 0 ) {
             return {};
@@ -66,7 +66,7 @@ namespace
         return res;
     }
 
-    std::vector<uint8_t> zlibCompress( const uint8_t * src, size_t srcsz )
+    std::vector<uint8_t> zlibCompress( const uint8_t * src, const size_t srcsz )
     {
         if ( src == nullptr || srcsz == 0 ) {
             return {};
@@ -90,7 +90,7 @@ namespace
     }
 }
 
-bool ZStreamFile::read( const std::string & fn, size_t offset )
+bool ZStreamFile::read( const std::string & fn, const size_t offset /* = 0 */ )
 {
     StreamFile sf;
     sf.setbigendian( true );
@@ -104,10 +104,6 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
     }
 
     const uint32_t rawSize = sf.get32();
-    if ( rawSize == 0 ) {
-        return false;
-    }
-
     const uint32_t zipSize = sf.get32();
     if ( zipSize == 0 ) {
         return false;
@@ -122,17 +118,18 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
 
     const std::vector<uint8_t> zip = sf.getRaw( zipSize );
     const std::vector<uint8_t> raw = zlibDecompress( zip.data(), zip.size(), rawSize );
-    if ( raw.empty() ) {
+    if ( raw.size() != rawSize ) {
         return false;
     }
 
+    reset();
+
     putRaw( reinterpret_cast<const char *>( raw.data() ), raw.size() );
-    seek( 0 );
 
     return !fail();
 }
 
-bool ZStreamFile::write( const std::string & fn, bool append ) const
+bool ZStreamFile::write( const std::string & fn, const bool append /* = false */ ) const
 {
     StreamFile sf;
     sf.setbigendian( true );

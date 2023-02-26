@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -36,8 +36,8 @@ class ZStreamFile : public StreamBuf
 public:
     ZStreamFile() = default;
 
-    bool read( const std::string &, size_t offset = 0 );
-    bool write( const std::string &, bool append = false ) const;
+    bool read( const std::string & fn, const size_t offset = 0 );
+    bool write( const std::string & fn, const bool append = false ) const;
 };
 
 fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
