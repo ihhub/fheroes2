@@ -86,8 +86,9 @@
 
 namespace
 {
-    struct MusicalEffectPlayer
+    class MusicalEffectPlayer
     {
+    public:
         MusicalEffectPlayer() = default;
 
         explicit MusicalEffectPlayer( const int trackId )
@@ -121,6 +122,9 @@ namespace
             Music::setVolume( 100 * soundVolume / 10 );
             AudioManager::PlayMusic( trackId, Music::PlaybackMode::PLAY_ONCE );
         }
+
+    private:
+        const AudioManager::MusicRestorer _musicRestorer;
     };
 
     void DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t resourceType )
@@ -1937,7 +1941,7 @@ namespace
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
             bool capture = true;
 
-            // check guardians
+            // Check guardians
             if ( tile.isCaptureObjectProtected() ) {
                 Army army( tile );
                 const Monster & mons = tile.QuantityMonster();
@@ -1960,7 +1964,7 @@ namespace
             }
 
             if ( capture ) {
-                // restore the abandoned mine
+                // Restore the abandoned mine
                 if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
                     Maps::Tiles::UpdateAbandonedMineSprite( tile );
                     hero.SetMapsObject( MP2::OBJ_MINES );
@@ -1991,10 +1995,22 @@ namespace
 
     void ActionToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
-        if ( Dialog::YES
-             == Dialog::Message( MP2::StringObject( MP2::OBJ_ABANDONED_MINE ),
-                                 _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ), Font::BIG,
-                                 Dialog::YES | Dialog::NO ) ) {
+        bool enter = false;
+
+        {
+            const MusicalEffectPlayer musicalEffectPlayer;
+
+            if ( !Settings::Get().MusicMIDI() ) {
+                MusicalEffectPlayer::play( MUS::WATCHTOWER );
+            }
+
+            enter = ( Dialog::Message( MP2::StringObject( MP2::OBJ_ABANDONED_MINE ),
+                                       _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ), Font::BIG,
+                                       Dialog::YES | Dialog::NO )
+                      == Dialog::YES );
+        }
+
+        if ( enter ) {
             ActionToCaptureObject( hero, objectType, dst_index );
         }
     }
@@ -2679,17 +2695,28 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         const std::string header = MP2::StringObject( objectType );
-        if ( Dialog::YES
-             == Dialog::Message( header, _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ), Font::BIG,
-                                 Dialog::YES | Dialog::NO ) ) {
+
+        bool enter = false;
+
+        {
+            const MusicalEffectPlayer musicalEffectPlayer;
+
+            if ( !Settings::Get().MusicMIDI() ) {
+                MusicalEffectPlayer::play( MUS::DEMONCAVE );
+            }
+
+            enter = ( Dialog::Message( header, _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ),
+                                       Font::BIG, Dialog::YES | Dialog::NO )
+                      == Dialog::YES );
+        }
+
+        if ( enter ) {
             uint32_t variant = tile.QuantityVariant();
 
             if ( variant ) {
-                uint32_t gold = tile.QuantityGold();
-                std::string msg;
-
-                if ( variant == 3 && hero.IsFullBagArtifacts() )
+                if ( variant == 3 && hero.IsFullBagArtifacts() ) {
                     variant = 2;
+                }
 
                 if (
                     Dialog::YES
@@ -2697,14 +2724,16 @@ namespace
                         header,
                         _( "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, \"you will fight and surely die. But I will give you a choice of deaths. You may fight me, or you may fight my servants. Do you prefer to fight my servants?\"" ),
                         Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                    // battle with earth elements
+                    // Battle with earth elementals
                     Army army( tile );
-                    gold = 2500;
 
                     Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
                     if ( res.AttackerWins() ) {
                         hero.IncreaseExperience( res.GetExperienceAttacker() );
-                        msg = _( "Upon defeating the daemon's servants, you find a hidden cache with %{count} gold." );
+
+                        const uint32_t gold = 2500;
+
+                        std::string msg = _( "Upon defeating the daemon's servants, you find a hidden cache with %{count} gold." );
                         StringReplace( msg, "%{count}", gold );
 
                         const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
@@ -2718,10 +2747,11 @@ namespace
                         BattleLose( hero, res, true );
                     }
                 }
-                // check variants
                 else if ( 1 == variant ) {
                     const uint32_t exp = 1000;
-                    msg = _( "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points." );
+
+                    std::string msg
+                        = _( "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points." );
                     StringReplace( msg, "%{exp}", exp );
 
                     const fheroes2::ExperienceDialogElement experienceUI( exp );
@@ -2732,7 +2762,9 @@ namespace
                 }
                 else if ( 2 == variant ) {
                     const uint32_t exp = 1000;
-                    msg = _(
+                    const uint32_t gold = tile.QuantityGold();
+
+                    std::string msg = _(
                         "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
                     StringReplace( msg, "%{exp}", exp );
                     StringReplace( msg, "%{count}", gold );
@@ -2746,27 +2778,35 @@ namespace
                     hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
                 }
                 else if ( 3 == variant ) {
-                    const uint32_t exp = 1000;
                     const Artifact & art = tile.QuantityArtifact();
-                    msg = _(
-                        "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and find the %{art} in the back of the cave." );
-                    StringReplace( msg, "%{art}", art.GetName() );
+
                     if ( art.isValid() ) {
+                        std::string msg = _(
+                            "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and find the %{art} in the back of the cave." );
+                        StringReplace( msg, "%{art}", art.GetName() );
+
+                        const uint32_t exp = 1000;
+
                         const fheroes2::ExperienceDialogElement experienceUI( exp );
                         const fheroes2::ArtifactDialogElement artifactUI( art );
                         fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
                                                Dialog::OK, { &experienceUI, &artifactUI } );
+
+                        hero.PickupArtifact( art );
+                        hero.IncreaseExperience( exp );
                     }
-                    hero.PickupArtifact( art );
-                    hero.IncreaseExperience( exp );
                 }
                 else {
-                    bool remove = true;
-                    Funds payment( Resource::GOLD, gold );
-                    Kingdom & kingdom = hero.GetKingdom();
-                    bool allow = kingdom.AllowPayment( payment );
+                    const uint32_t gold = tile.QuantityGold();
+                    const Funds payment( Resource::GOLD, gold );
 
-                    msg = allow ? _(
+                    Kingdom & kingdom = hero.GetKingdom();
+
+                    bool allow = kingdom.AllowPayment( payment );
+                    bool remove = true;
+
+                    std::string msg
+                        = allow ? _(
                               "The Demon leaps upon you and has its claws at your throat before you can even draw your sword. \"Your life is mine,\" it says. \"I will sell it back to you for %{count} gold.\"" )
                                 : _( "Seeing that you do not have %{count} gold, the demon slashes you with its claws, and the last thing you see is a red haze." );
                     StringReplace( msg, "%{count}", gold );
@@ -2774,23 +2814,27 @@ namespace
                     if ( allow ) {
                         if ( Dialog::YES == Dialog::Message( header, msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
                             remove = false;
+
                             kingdom.OddFundsResource( payment );
                         }
                     }
-                    else
+                    else {
                         Dialog::Message( header, msg, Font::BIG, Dialog::OK );
+                    }
 
                     if ( remove ) {
                         Battle::Result res;
                         res.army1 = Battle::RESULT_LOSS;
+
                         BattleLose( hero, res, true );
                     }
                 }
 
                 tile.QuantityReset();
             }
-            else
+            else {
                 Dialog::Message( header, _( "Except for evidence of a terrible battle, the cave is empty." ), Font::BIG, Dialog::OK );
+            }
 
             hero.SetVisited( dst_index, Visit::GLOBAL );
         }
