@@ -90,6 +90,12 @@ namespace
     {
     public:
         MusicalEffectPlayer() = default;
+
+        explicit MusicalEffectPlayer( const int trackId )
+        {
+            play( trackId );
+        }
+
         MusicalEffectPlayer( const MusicalEffectPlayer & ) = delete;
 
         ~MusicalEffectPlayer()
@@ -105,8 +111,15 @@ namespace
                 return;
             }
 
+            const Settings & conf = Settings::Get();
+
+            // There are no "musical" effects in MIDI format
+            if ( conf.MusicMIDI() ) {
+                return;
+            }
+
             // "Musical" sound effects should use the volume of the sound effects instead of the volume of the music
-            const int soundVolume = Settings::Get().SoundVolume();
+            const int soundVolume = conf.SoundVolume();
 
             // Play the sound effect only if the volume of the sound effect is not set to 0
             if ( soundVolume <= 0 ) {
@@ -938,11 +951,7 @@ namespace
                 msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
                 StringReplace( msg, "%{skill}", skill_name );
 
-                const MusicalEffectPlayer musicalEffectPlayer;
-
-                if ( !Settings::Get().MusicMIDI() ) {
-                    MusicalEffectPlayer::play( MUS::EXPERIENCE );
-                }
+                const MusicalEffectPlayer musicalEffectPlayer( MUS::EXPERIENCE );
 
                 const fheroes2::SecondarySkillDialogElement secondarySkillUI( skill, hero );
                 fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
@@ -1018,11 +1027,7 @@ namespace
         bool enter = false;
 
         {
-            const MusicalEffectPlayer musicalEffectPlayer;
-
-            if ( !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::DUNGEON );
-            }
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
 
             enter = ( Dialog::Message( title, ask, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
         }
@@ -1109,11 +1114,7 @@ namespace
             Dialog::Message( title, _( "A drink at the well is supposed to restore your spell points, but you are already at maximum." ), Font::BIG, Dialog::OK );
         }
         else {
-            const MusicalEffectPlayer musicalEffectPlayer;
-
-            if ( !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::WATERSPRING );
-            }
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
             if ( hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) ) {
                 Dialog::Message( title, _( "A second drink at the well in one day will not help you." ), Font::BIG, Dialog::OK );
@@ -1188,11 +1189,7 @@ namespace
             hero.IncreasePrimarySkill( skill );
             hero.SetVisited( dst_index );
 
-            const MusicalEffectPlayer musicalEffectPlayer;
-
-            if ( !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::SKILL );
-            }
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::SKILL );
 
             const fheroes2::PrimarySkillDialogElement primarySkillUI( skill, "+1" );
             fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
@@ -1238,11 +1235,7 @@ namespace
         bool enter = false;
 
         {
-            const MusicalEffectPlayer musicalEffectPlayer;
-
-            if ( !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::WATCHTOWER );
-            }
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
             enter = ( Dialog::Message( title, ask, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
         }
@@ -1752,11 +1745,7 @@ namespace
             return;
         }
 
-        const MusicalEffectPlayer musicalEffectPlayer;
-
-        if ( !Settings::Get().MusicMIDI() ) {
-            MusicalEffectPlayer::play( MUS::ARABIAN );
-        }
+        const MusicalEffectPlayer musicalEffectPlayer( MUS::ARABIAN );
 
         const std::string title( MP2::StringObject( objectType ) );
         if ( Dialog::YES
@@ -1991,11 +1980,7 @@ namespace
         bool enter = false;
 
         {
-            const MusicalEffectPlayer musicalEffectPlayer;
-
-            if ( !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::WATCHTOWER );
-            }
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
             enter = ( Dialog::Message( MP2::StringObject( MP2::OBJ_ABANDONED_MINE ),
                                        _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ), Font::BIG,
@@ -2187,11 +2172,7 @@ namespace
             bool attack = false;
 
             {
-                const MusicalEffectPlayer musicalEffectPlayer;
-
-                if ( !Settings::Get().MusicMIDI() ) {
-                    MusicalEffectPlayer::play( MUS::DUNGEON );
-                }
+                const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
 
                 attack = ( Dialog::Message( title, str_warn, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
             }
@@ -2222,11 +2203,7 @@ namespace
 
         // Recruit monsters
         if ( str_scss ) {
-            const MusicalEffectPlayer musicalEffectPlayer;
-
-            if ( !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::DUNGEON );
-            }
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
 
             if ( troop.isValid() && Dialog::Message( title, str_scss, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                 RecruitMonsterFromTile( hero, tile, title, troop, false );
@@ -2240,11 +2217,7 @@ namespace
 
     void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
-        const MusicalEffectPlayer musicalEffectPlayer;
-
-        if ( !Settings::Get().MusicMIDI() ) {
-            MusicalEffectPlayer::play( MUS::WATCHTOWER );
-        }
+        const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
         Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
 
@@ -2266,11 +2239,7 @@ namespace
             Dialog::Message( title, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
         }
         else {
-            const MusicalEffectPlayer musicalEffectPlayer;
-
-            if ( !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::WATERSPRING );
-            }
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
             const uint32_t max = hero.GetMaxSpellPoints();
 
@@ -2322,11 +2291,7 @@ namespace
             }
 
             if ( access ) {
-                const MusicalEffectPlayer musicalEffectPlayer;
-
-                if ( !Settings::Get().MusicMIDI() ) {
-                    MusicalEffectPlayer::play( MUS::XANADU );
-                }
+                const MusicalEffectPlayer musicalEffectPlayer( MUS::XANADU );
 
                 Dialog::Message( title, _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ), Font::BIG,
                                  Dialog::OK );
@@ -2493,11 +2458,7 @@ namespace
                              Font::BIG, Dialog::OK );
         }
         else {
-            const MusicalEffectPlayer musicalEffectPlayer;
-
-            if ( !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::WATCHTOWER );
-            }
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
             if ( kingdom.AllowPayment( payment ) ) {
                 if (
@@ -2606,27 +2567,25 @@ namespace
         }
         else {
             const Funds & funds = tile.QuantityFunds();
-            bool conditions = 0 == funds.GetValidItemsCount();
+            bool conditions = ( funds.GetValidItemsCount() == 0 );
             std::string msg;
 
             const int level = hero.GetLevel();
             assert( level > 0 );
             const uint32_t possibleExperience = Heroes::GetExperienceFromLevel( level ) - Heroes::GetExperienceFromLevel( level - 1 );
 
-            const MusicalEffectPlayer musicalEffectPlayer;
-
-            if ( !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::EXPERIENCE );
-            }
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::EXPERIENCE );
 
             // Free training
             if ( conditions ) {
                 msg = _(
                     "Upon your approach, the tree opens its eyes in delight. \"Ahh, an adventurer! Allow me to teach you a little of what I have learned over the ages.\"" );
 
-                const fheroes2::CustomImageDialogElement imageUI( fheroes2::AGG::GetICN( ICN::EXPMRL, 4 ) );
-                fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
-                                       { &imageUI } );
+                const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( possibleExperience ) );
+                const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
+                const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( titleUI, messageUI, Dialog::OK, { &experienceUI } );
             }
             else {
                 const ResourceCount & rc = tile.QuantityResourceCount();
@@ -2670,11 +2629,7 @@ namespace
 
     void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
     {
-        const MusicalEffectPlayer musicalEffectPlayer;
-
-        if ( !Settings::Get().MusicMIDI() ) {
-            MusicalEffectPlayer::play( MUS::WATERSPRING );
-        }
+        const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
         Dialog::Message(
             MP2::StringObject( objectType ),
@@ -2699,11 +2654,7 @@ namespace
         bool enter = false;
 
         {
-            const MusicalEffectPlayer musicalEffectPlayer;
-
-            if ( !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::DEMONCAVE );
-            }
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::DEMONCAVE );
 
             enter = ( Dialog::Message( header, _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ),
                                        Font::BIG, Dialog::YES | Dialog::NO )
@@ -3088,11 +3039,7 @@ namespace
         MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
         const std::string title = MP2::StringObject( objectType );
 
-        const MusicalEffectPlayer musicalEffectPlayer;
-
-        if ( !Settings::Get().MusicMIDI() ) {
-            MusicalEffectPlayer::play( MUS::ARABIAN );
-        }
+        const MusicalEffectPlayer musicalEffectPlayer( MUS::ARABIAN );
 
         if ( riddle && riddle->valid ) {
             if (
