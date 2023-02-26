@@ -692,16 +692,18 @@ namespace
         if ( rc.isValid() ) {
             const MusicalEffectPlayer musicalEffectPlayer;
 
+            if ( Settings::Get().MusicMIDI() ) {
+                // The Lean-To has a special sound
+                if ( objectType == MP2::OBJ_LEAN_TO ) {
+                    AudioManager::PlaySound( M82::EXPERNCE );
+                }
+                else {
+                    AudioManager::PlaySound( M82::TREASURE );
+                }
+            }
             // The Magic Garden has a special sound
-            if ( objectType == MP2::OBJ_MAGIC_GARDEN && !Settings::Get().MusicMIDI() ) {
+            else if ( objectType == MP2::OBJ_MAGIC_GARDEN ) {
                 MusicalEffectPlayer::play( MUS::TREEHOUSE );
-            }
-            // The Lean-To has a special sound
-            else if ( objectType == MP2::OBJ_LEAN_TO ) {
-                AudioManager::PlaySound( M82::EXPERNCE );
-            }
-            else {
-                AudioManager::PlaySound( M82::TREASURE );
             }
 
             const Funds funds( rc );
@@ -1959,7 +1961,7 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer;
 
                 // The Lighthouse has a special sound
-                if ( objectType == MP2::OBJ_LIGHTHOUSE && !Settings::Get().MusicMIDI() ) {
+                if ( objectType == MP2::OBJ_LIGHTHOUSE ) {
                     MusicalEffectPlayer::play( MUS::XANADU );
                 }
 
@@ -2006,12 +2008,12 @@ namespace
 
             const MusicalEffectPlayer musicalEffectPlayer;
 
-            // The Tree House has a special sound
-            if ( objectType == MP2::OBJ_TREE_HOUSE && !Settings::Get().MusicMIDI() ) {
-                MusicalEffectPlayer::play( MUS::TREEHOUSE );
-            }
-            else {
+            if ( Settings::Get().MusicMIDI() ) {
                 AudioManager::PlaySound( M82::EXPERNCE );
+            }
+            // The Tree House has a special sound
+            else if ( objectType == MP2::OBJ_TREE_HOUSE ) {
+                MusicalEffectPlayer::play( MUS::TREEHOUSE );
             }
 
             if ( Dialog::YES == Dialog::Message( title, message, Font::BIG, Dialog::YES | Dialog::NO ) ) {
@@ -2431,7 +2433,7 @@ namespace
             const MusicalEffectPlayer musicalEffectPlayer;
 
             // The Hill Fort has a special sound
-            if ( objectType == MP2::OBJ_HILL_FORT && !Settings::Get().MusicMIDI() ) {
+            if ( objectType == MP2::OBJ_HILL_FORT ) {
                 MusicalEffectPlayer::play( MUS::HILLFORT );
             }
 
