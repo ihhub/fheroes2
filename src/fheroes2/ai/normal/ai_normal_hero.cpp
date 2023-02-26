@@ -915,6 +915,7 @@ namespace AI
             const Spell & spell = tile.QuantitySpell();
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
+        case MP2::OBJ_ARENA:
         case MP2::OBJ_FORT:
         case MP2::OBJ_MERCENARY_CAMP:
         case MP2::OBJ_STANDING_STONES:
@@ -1281,6 +1282,7 @@ namespace AI
             const Spell & spell = tile.QuantitySpell();
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1;
         }
+        case MP2::OBJ_ARENA:
         case MP2::OBJ_FORT:
         case MP2::OBJ_MERCENARY_CAMP:
         case MP2::OBJ_STANDING_STONES:
@@ -1422,6 +1424,7 @@ namespace AI
         case MP2::OBJ_XANADU: {
             return fiveTiles;
         }
+        case MP2::OBJ_ARENA:
         case MP2::OBJ_FORT:
         case MP2::OBJ_MERCENARY_CAMP:
         case MP2::OBJ_STANDING_STONES:
