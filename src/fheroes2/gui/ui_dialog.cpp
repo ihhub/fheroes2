@@ -696,9 +696,9 @@ namespace fheroes2
     AnimationDialogElement::AnimationDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint32_t animationIndexOffset, const uint64_t delay )
         : _icnId( icnId )
         , _backgroundIndices( std::move( backgroundIndices ) )
+        , _animationIndexOffset( animationIndexOffset )
         , _delay( delay )
         , _currentIndex( 0 )
-        , _animationIndexOffset( animationIndexOffset )
     {
         assert( !_backgroundIndices.empty() && _delay > 0 );
 
@@ -751,14 +751,14 @@ namespace fheroes2
         return false;
     }
 
-    CustomAnimationDialogElement::CustomAnimationDialogElement( Image staticImage, const int animationIcnId, const uint64_t delay, const uint32_t animationIndexOffset,
-                                                                const Point animationPositionOffset )
-        : _staticImage( std::move( staticImage ) )
-        , _animationIcnId( animationIcnId )
-        , _delay( delay )
-        , _currentIndex( 0 )
+    CustomAnimationDialogElement::CustomAnimationDialogElement( const int icnId, Image staticImage, const Point animationPositionOffset,
+                                                                const uint32_t animationIndexOffset, const uint64_t delay )
+        : _icnId( icnId )
+        , _staticImage( std::move( staticImage ) )
         , _animationPosition( animationPositionOffset )
         , _animationIndexOffset( animationIndexOffset )
+        , _delay( delay )
+        , _currentIndex( 0 )
     {
         assert( delay > 0 );
         _area = { _staticImage.width(), _staticImage.height() };
@@ -771,10 +771,10 @@ namespace fheroes2
             Blit( _staticImage, 0, 0, output, offset.x, offset.y, _staticImage.width(), _staticImage.height() );
         }
 
-        const uint32_t animationFrameId = ICN::AnimationFrame( _animationIcnId, _animationIndexOffset, _currentIndex );
+        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex );
         ++_currentIndex;
 
-        const Sprite & animationImage = AGG::GetICN( _animationIcnId, animationFrameId );
+        const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
 
         Blit( animationImage, 0, 0, output, offset.x + _animationPosition.x, offset.y + _animationPosition.y, animationImage.width(), animationImage.height() );
     }

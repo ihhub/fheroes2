@@ -294,11 +294,11 @@ namespace fheroes2
 
         const std::vector<uint32_t> _backgroundIndices;
 
+        const uint32_t _animationIndexOffset;
+
         const uint64_t _delay;
 
         mutable uint32_t _currentIndex;
-
-        const uint32_t _animationIndexOffset;
 
         Point _internalOffset;
     };
@@ -306,8 +306,8 @@ namespace fheroes2
     class CustomAnimationDialogElement : public DialogElement
     {
     public:
-        explicit CustomAnimationDialogElement( Image staticImage, const int animationIcnId, const uint64_t delay, const uint32_t animationIndexOffset,
-                                               const Point animationPositionOffset );
+        explicit CustomAnimationDialogElement( const int icnId, Image staticImage, const Point animationPositionOffset, const uint32_t animationIndexOffset,
+                                               const uint64_t delay );
 
         ~CustomAnimationDialogElement() override = default;
 
@@ -321,16 +321,16 @@ namespace fheroes2
         bool update( Image & output, const Point & offset ) const override;
 
     private:
+        const int _icnId;
+
         const Image _staticImage;
-
-        const int _animationIcnId;
-
-        const uint64_t _delay;
-
-        mutable uint32_t _currentIndex;
 
         const Point _animationPosition;
 
         const uint32_t _animationIndexOffset;
+
+        const uint64_t _delay;
+
+        mutable uint32_t _currentIndex;
     };
 }
