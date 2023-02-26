@@ -38,27 +38,33 @@ namespace
 
     std::vector<uint8_t> zlibDecompress( const uint8_t * src, size_t srcsz, size_t realsz = 0 )
     {
+        if ( src == nullptr || srcsz == 0 ) {
+            return {};
+        }
+
         std::vector<uint8_t> res;
 
-        if ( src && srcsz ) {
-            if ( realsz )
-                res.reserve( realsz );
-            res.resize( ( realsz ? realsz : srcsz * 7 ), 0 );
-            uLong dstsz = static_cast<uLong>( res.size() );
-            int ret = Z_BUF_ERROR;
+        if ( realsz ) {
+            res.reserve( realsz );
+        }
 
-            while ( Z_BUF_ERROR
-                    == ( ret = uncompress( reinterpret_cast<Bytef *>( res.data() ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) ) ) ) {
-                dstsz = static_cast<uLong>( res.size() * 2 );
-                res.resize( dstsz );
-            }
+        res.resize( ( realsz ? realsz : srcsz * 7 ), 0 );
 
-            if ( ret == Z_OK )
-                res.resize( dstsz );
-            else {
-                res.clear();
-                ERROR_LOG( "zlib error: " << ret )
-            }
+        uLong dstsz = static_cast<uLong>( res.size() );
+        int ret = Z_BUF_ERROR;
+
+        while ( Z_BUF_ERROR
+                == ( ret = uncompress( reinterpret_cast<Bytef *>( res.data() ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) ) ) ) {
+            dstsz = static_cast<uLong>( res.size() * 2 );
+            res.resize( dstsz );
+        }
+
+        if ( ret == Z_OK ) {
+            res.resize( dstsz );
+        }
+        else {
+            res.clear();
+            ERROR_LOG( "zlib error: " << ret )
         }
 
         return res;
@@ -66,19 +72,23 @@ namespace
 
     std::vector<uint8_t> zlibCompress( const uint8_t * src, size_t srcsz )
     {
+        if ( src == nullptr || srcsz == 0 ) {
+            return {};
+        }
+
         std::vector<uint8_t> res;
 
-        if ( src && srcsz ) {
-            res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
-            uLong dstsz = static_cast<uLong>( res.size() );
-            int ret = compress( reinterpret_cast<Bytef *>( res.data() ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) );
+        res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
 
-            if ( ret == Z_OK )
-                res.resize( dstsz );
-            else {
-                res.clear();
-                ERROR_LOG( "zlib error: " << ret )
-            }
+        uLong dstsz = static_cast<uLong>( res.size() );
+        int ret = compress( reinterpret_cast<Bytef *>( res.data() ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) );
+
+        if ( ret == Z_OK ) {
+            res.resize( dstsz );
+        }
+        else {
+            res.clear();
+            ERROR_LOG( "zlib error: " << ret )
         }
 
         return res;
