@@ -1455,10 +1455,6 @@ namespace AI
 
             return hero.isPotentSpellcaster() ? fiveTiles : 0;
         }
-        case MP2::OBJ_JAIL: {
-            // A free hero is always good and it could be very powerful.
-            return fiveTiles;
-        }
         default:
             break;
         }
