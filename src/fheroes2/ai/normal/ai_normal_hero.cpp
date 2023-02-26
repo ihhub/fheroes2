@@ -1037,6 +1037,7 @@ namespace AI
 
             return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
         }
+        case MP2::OBJ_BARRIER:
         case MP2::OBJ_TRAVELLER_TENT: {
             // Most likely it'll lead to opening more land.
             return 1000;
