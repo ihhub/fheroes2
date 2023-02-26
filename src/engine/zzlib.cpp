@@ -75,7 +75,7 @@ namespace
         res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
 
         uLong dstsz = static_cast<uLong>( res.size() );
-        int ret = compress( reinterpret_cast<Bytef *>( res.data() ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) );
+        const int ret = compress( reinterpret_cast<Bytef *>( res.data() ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) );
 
         if ( ret == Z_OK ) {
             res.resize( dstsz );
