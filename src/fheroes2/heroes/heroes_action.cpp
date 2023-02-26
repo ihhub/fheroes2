@@ -1367,7 +1367,7 @@ namespace
         }
 
         const std::string title( MP2::StringObject( objectType ) );
-        // check already visited
+
         if ( visited ) {
             Dialog::Message( title, msg, Font::BIG, Dialog::OK );
         }
