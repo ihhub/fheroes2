@@ -1097,13 +1097,22 @@ namespace
         if ( hero.GetSpellPoints() >= max ) {
             Dialog::Message( title, _( "A drink at the well is supposed to restore your spell points, but you are already at maximum." ), Font::BIG, Dialog::OK );
         }
-        else if ( hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) ) {
-            Dialog::Message( title, _( "A second drink at the well in one day will not help you." ), Font::BIG, Dialog::OK );
-        }
         else {
-            hero.SetVisited( dst_index );
-            hero.SetSpellPoints( max );
-            Dialog::Message( title, _( "A drink from the well has restored your spell points to maximum." ), Font::BIG, Dialog::OK );
+            const MusicalEffectPlayer musicalEffectPlayer;
+
+            if ( !Settings::Get().MusicMIDI() ) {
+                MusicalEffectPlayer::play( MUS::WATERSPRING );
+            }
+
+            if ( hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) ) {
+                Dialog::Message( title, _( "A second drink at the well in one day will not help you." ), Font::BIG, Dialog::OK );
+            }
+            else {
+                hero.SetVisited( dst_index );
+                hero.SetSpellPoints( max );
+
+                Dialog::Message( title, _( "A drink from the well has restored your spell points to maximum." ), Font::BIG, Dialog::OK );
+            }
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )

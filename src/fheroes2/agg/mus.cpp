@@ -202,7 +202,6 @@ namespace MUS
         switch ( objectType ) {
         case MP2::OBJ_PYRAMID:
             return DUNGEON;
-        case MP2::OBJ_MAGIC_WELL:
         case MP2::OBJ_ORACLE:
             return WATERSPRING;
         case MP2::OBJ_DESERT_TENT: // Changed OG selection to something more appropriate
