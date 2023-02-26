@@ -108,13 +108,13 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
         sf.seek( offset );
     }
 
-    const uint32_t size0 = sf.get32(); // Raw size
-    if ( size0 == 0 ) {
+    const uint32_t rawSize = sf.get32();
+    if ( rawSize == 0 ) {
         return false;
     }
 
-    const uint32_t size1 = sf.get32(); // ZIP size
-    if ( size1 == 0 ) {
+    const uint32_t zipSize = sf.get32();
+    if ( zipSize == 0 ) {
         return false;
     }
 
@@ -125,8 +125,8 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
 
     sf.skip( 2 ); // Unused bytes
 
-    const std::vector<uint8_t> zip = sf.getRaw( size1 );
-    const std::vector<uint8_t> raw = zlibDecompress( zip.data(), zip.size(), size0 );
+    const std::vector<uint8_t> zip = sf.getRaw( zipSize );
+    const std::vector<uint8_t> raw = zlibDecompress( zip.data(), zip.size(), rawSize );
     if ( raw.empty() ) {
         return false;
     }
