@@ -2239,6 +2239,12 @@ namespace
             }
 
             if ( access ) {
+                const MusicalEffectPlayer musicalEffectPlayer;
+
+                if ( !Settings::Get().MusicMIDI() ) {
+                    MusicalEffectPlayer::play( MUS::XANADU );
+                }
+
                 Dialog::Message( title, _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ), Font::BIG,
                                  Dialog::OK );
                 hero.IncreasePrimarySkill( Skill::Primary::ATTACK );
