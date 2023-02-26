@@ -91,6 +91,8 @@ public:
 
     virtual double GetStrength() const;
 
+    uint32_t getTotalHP() const;
+
     void Clean();
     void UpgradeTroops( const Castle & );
 

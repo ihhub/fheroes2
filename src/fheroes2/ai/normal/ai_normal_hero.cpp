@@ -821,8 +821,15 @@ namespace AI
             return isCriticalTask( index ) ? 12000.0 : 5000.0;
         }
         case MP2::OBJ_MONSTER: {
-            // TODO: add value calculation based on monster strength, experience to obtain and possible losses.
-            return 1000.0;
+            const Army monsters( tile );
+            if ( !monsters.isValid() ) {
+                // How is it even possible?
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            // TODO: we should add logic to compare monsters and hero army strengths.
+            return 1000.0 + monsters.getTotalHP() / 100.0;
         }
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
@@ -1232,8 +1239,15 @@ namespace AI
             return isCriticalTask( index ) ? 20000.0 : 12000.0;
         }
         case MP2::OBJ_MONSTER: {
-            // TODO: add value calculation based on monster strength, experience to obtain and possible losses.
-            return anotherFriendlyHeroPresent ? 4000.0 : 1000.0;
+            const Army monsters( tile );
+            if ( !monsters.isValid() ) {
+                // How is it even possible?
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            // TODO: we should add logic to compare monsters and hero army strengths.
+            return ( anotherFriendlyHeroPresent ? 4000.0 : 1000.0 ) + monsters.getTotalHP() / 100.0;
         }
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
@@ -1390,8 +1404,15 @@ namespace AI
             return isCriticalTask( index ) ? 10000.0 : tenTiles;
         }
         case MP2::OBJ_MONSTER: {
-            // TODO: add value calculation based on monster strength, experience to obtain and possible losses.
-            return twoTiles;
+            const Army monsters( tile );
+            if ( !monsters.isValid() ) {
+                // How is it even possible?
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            // TODO: we should add logic to compare monsters and hero army strengths.
+            return twoTiles + monsters.getTotalHP() / 100.0;
         }
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
