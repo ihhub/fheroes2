@@ -2124,6 +2124,7 @@ namespace
             if ( Settings::Get().MusicMIDI() ) {
                 AudioManager::PlaySound( M82::EXPERNCE );
             }
+            // The Tree City and the Wagon Camp have a special sound
             else if ( objectType == MP2::OBJ_TREE_CITY || objectType == MP2::OBJ_WAGON_CAMP ) {
                 MusicalEffectPlayer::play( MUS::TREEHOUSE );
             }
