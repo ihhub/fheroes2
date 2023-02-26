@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
@@ -93,7 +93,6 @@ namespace MUS
 
     int FromGround( const int groundType );
     int FromRace( const int race );
-    int FromMapObject( const MP2::MapObjectType objectType );
 
     int GetBattleRandom();
 }

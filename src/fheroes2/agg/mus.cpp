@@ -193,20 +193,6 @@ namespace MUS
         return UNKNOWN;
     }
 
-    int FromMapObject( const MP2::MapObjectType objectType )
-    {
-        if ( Settings::Get().MusicMIDI() ) {
-            return UNKNOWN;
-        }
-
-        switch ( objectType ) {
-        case MP2::OBJ_OBSERVATION_TOWER:
-            return WATCHTOWER;
-        default:
-            return UNKNOWN;
-        }
-    }
-
     int GetBattleRandom()
     {
         switch ( Rand::Get( 1, 3 ) ) {

@@ -90,12 +90,6 @@ namespace
     {
     public:
         MusicalEffectPlayer() = default;
-
-        explicit MusicalEffectPlayer( const int trackId )
-        {
-            play( trackId );
-        }
-
         MusicalEffectPlayer( const MusicalEffectPlayer & ) = delete;
 
         ~MusicalEffectPlayer()
@@ -2246,6 +2240,12 @@ namespace
 
     void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
+        const MusicalEffectPlayer musicalEffectPlayer;
+
+        if ( !Settings::Get().MusicMIDI() ) {
+            MusicalEffectPlayer::play( MUS::WATCHTOWER );
+        }
+
         Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
 
         const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ) );
@@ -3271,11 +3271,6 @@ void Heroes::Action( int tileIndex, bool isDestination )
     }
 
     const MP2::MapObjectType objectType = world.GetTiles( tileIndex ).GetObject( tileIndex != heroPosIndex );
-
-    // Play a permanent musical effect (that is, independent of the state of the object or actions with it) associated with the visited object,
-    // if any, and in any case restore the music volume on exit. Auxiliary functions can play other musical effects depending on the situation.
-    const MusicalEffectPlayer musicalEffectPlayer( MUS::FromMapObject( objectType ) );
-
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
         SetModes( ACTION );
     }
