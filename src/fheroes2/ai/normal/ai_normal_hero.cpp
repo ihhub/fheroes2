@@ -972,14 +972,20 @@ namespace AI
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        case MP2::OBJ_ARTESIAN_SPRING:
-        case MP2::OBJ_MAGIC_WELL: {
-            if ( !hero.HaveSpellBook() ) {
+        case MP2::OBJ_ARTESIAN_SPRING: {
+            if ( !hero.HaveSpellBook() || hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
+                // No reason to visit Artesian Spring with no magic book or if no points will be gained.
                 return -dangerousTaskPenalty;
             }
-            if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
-                return -2000; // no reason to visit the well with no magic book or with half of points
+
+            return hero.isPotentSpellcaster() ? 1500 : 0;
+        }
+        case MP2::OBJ_MAGIC_WELL: {
+            if ( !hero.HaveSpellBook() || hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                // No reason to visit Magic Well with no magic book or if no points will be gained.
+                return -dangerousTaskPenalty;
             }
+
             return hero.isPotentSpellcaster() ? 1500 : 0;
         }
         case MP2::OBJ_BUOY:
@@ -1292,14 +1298,20 @@ namespace AI
             }
             return fogCountToUncover / 2;
         }
-        case MP2::OBJ_ARTESIAN_SPRING:
-        case MP2::OBJ_MAGIC_WELL: {
-            if ( !hero.HaveSpellBook() ) {
+        case MP2::OBJ_ARTESIAN_SPRING: {
+            if ( !hero.HaveSpellBook() || hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
+                // No reason to visit Artesian Spring with no magic book or if no points will be gained.
                 return -dangerousTaskPenalty;
             }
-            if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
-                return -2000; // no reason to visit the well with no magic book or with half of points
+
+            return hero.isPotentSpellcaster() ? 2000 : 0;
+        }
+        case MP2::OBJ_MAGIC_WELL: {
+            if ( !hero.HaveSpellBook() || hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                // No reason to visit Magic Well with no magic book or if no points will be gained.
+                return -dangerousTaskPenalty;
             }
+
             return hero.isPotentSpellcaster() ? 2000 : 0;
         }
         case MP2::OBJ_BUOY:
@@ -1418,11 +1430,20 @@ namespace AI
         case MP2::OBJ_WITCHS_HUT: {
             return fiveTiles;
         }
-        case MP2::OBJ_ARTESIAN_SPRING:
-        case MP2::OBJ_MAGIC_WELL: {
+        case MP2::OBJ_ARTESIAN_SPRING: {
             if ( !hero.HaveSpellBook() || hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
-                return -dangerousTaskPenalty; // no reason to visit the well with no magic book or with half of points
+                // No reason to visit Artesian Spring with no magic book or if no points will be gained.
+                return -dangerousTaskPenalty;
             }
+
+            return hero.isPotentSpellcaster() ? fiveTiles : 0;
+        }
+        case MP2::OBJ_MAGIC_WELL: {
+            if ( !hero.HaveSpellBook() || hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                // No reason to visit Magic Well with no magic book or if no points will be gained.
+                return -dangerousTaskPenalty;
+            }
+
             return hero.isPotentSpellcaster() ? fiveTiles : 0;
         }
         case MP2::OBJ_JAIL: {
