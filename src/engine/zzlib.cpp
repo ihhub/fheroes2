@@ -34,6 +34,8 @@
 
 namespace
 {
+    constexpr uint16_t FORMAT_VERSION_0 = 0;
+
     std::vector<uint8_t> zlibDecompress( const uint8_t * src, size_t srcsz, size_t realsz = 0 )
     {
         std::vector<uint8_t> res;
@@ -110,7 +112,12 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
         return false;
     }
 
-    sf.skip( 4 ); // old stream format
+    const uint16_t version = sf.get16();
+    if ( version != FORMAT_VERSION_0 ) {
+        return false;
+    }
+
+    sf.skip( 2 ); // Unused bytes
 
     const std::vector<uint8_t> zip = sf.getRaw( size1 );
     const std::vector<uint8_t> raw = zlibDecompress( zip.data(), zip.size(), size0 );
@@ -140,7 +147,8 @@ bool ZStreamFile::write( const std::string & fn, bool append ) const
 
     sf.put32( static_cast<uint32_t>( size() ) );
     sf.put32( static_cast<uint32_t>( zip.size() ) );
-    sf.put32( 0 ); // unused, old format support
+    sf.put16( FORMAT_VERSION_0 );
+    sf.put16( 0 ); // Unused bytes
     sf.putRaw( reinterpret_cast<const char *>( zip.data() ), zip.size() );
 
     return !sf.fail();
