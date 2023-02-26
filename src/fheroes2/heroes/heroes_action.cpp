@@ -2457,27 +2457,35 @@ namespace
             Dialog::Message( title, _( "The captain looks at you with surprise and says:\n\"You already have all the maps I know about. Let me fish in peace now.\"" ),
                              Font::BIG, Dialog::OK );
         }
-        else if ( kingdom.AllowPayment( payment ) ) {
-            if (
-                Dialog::YES
-                == Dialog::Message(
-                    title,
-                    _( "A retired captain living on this refurbished fishing platform offers to sell you maps of the sea he made in his younger days for 1,000 gold. Do you wish to buy the maps?" ),
-                    Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                world.ActionForMagellanMaps( hero.GetColor() );
-
-                kingdom.OddFundsResource( payment );
-
-                hero.SetVisited( dst_index, Visit::GLOBAL );
-                hero.setVisitedForAllies( dst_index );
-
-                Interface::Basic & I = Interface::Basic::Get();
-                I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
-            }
-        }
         else {
-            Dialog::Message( title, _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ), Font::BIG,
-                             Dialog::OK );
+            const MusicalEffectPlayer musicalEffectPlayer;
+
+            if ( !Settings::Get().MusicMIDI() ) {
+                MusicalEffectPlayer::play( MUS::WATCHTOWER );
+            }
+
+            if ( kingdom.AllowPayment( payment ) ) {
+                if (
+                    Dialog::YES
+                    == Dialog::Message(
+                        title,
+                        _( "A retired captain living on this refurbished fishing platform offers to sell you maps of the sea he made in his younger days for 1,000 gold. Do you wish to buy the maps?" ),
+                        Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                    world.ActionForMagellanMaps( hero.GetColor() );
+
+                    kingdom.OddFundsResource( payment );
+
+                    hero.SetVisited( dst_index, Visit::GLOBAL );
+                    hero.setVisitedForAllies( dst_index );
+
+                    Interface::Basic & I = Interface::Basic::Get();
+                    I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+                }
+            }
+            else {
+                Dialog::Message( title, _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ), Font::BIG,
+                                 Dialog::OK );
+            }
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
