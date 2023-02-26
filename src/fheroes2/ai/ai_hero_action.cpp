@@ -964,9 +964,7 @@ namespace
         const uint32_t level1 = hero.GetLevelSkill( Skill::Secondary::DIPLOMACY );
         const uint32_t level2 = hero.GetLevel();
 
-        if ( !hero.isVisited( tile )
-             && ( ( level1 == Skill::Level::BASIC && 7 < level2 ) || ( level1 == Skill::Level::ADVANCED && 5 < level2 )
-                  || ( level1 == Skill::Level::EXPERT && 3 < level2 ) || ( 9 < level2 ) ) ) {
+        if ( !hero.isVisited( tile ) && GameStatic::isHeroWorthyToVisitXanadu( hero ) ) {
             hero.IncreasePrimarySkill( Skill::Primary::ATTACK );
             hero.IncreasePrimarySkill( Skill::Primary::DEFENSE );
             hero.IncreasePrimarySkill( Skill::Primary::KNOWLEDGE );

@@ -35,6 +35,8 @@ namespace Skill
     struct secondary_t;
 }
 
+class Heroes;
+
 namespace GameStatic
 {
     enum class FogDiscoveryType : int32_t
@@ -67,6 +69,8 @@ namespace GameStatic
     const Skill::secondary_t * GetSkillForWitchsHut();
 
     uint32_t getMovementPointBonus( const MP2::MapObjectType objectType );
+
+    bool isHeroWorthyToVisitXanadu( const Heroes & hero );
 }
 
 #endif

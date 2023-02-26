@@ -183,7 +183,7 @@ namespace
         const Army & army = hero.GetArmy();
         const Kingdom & kingdom = hero.GetKingdom();
 
-        // If you add new objects to a group of objects with the same logic sort them alphabetically.
+        // If you add a new object to a group of objects sort them alphabetically.
         switch ( objectType ) {
         case MP2::OBJ_BOTTLE:
         case MP2::OBJ_CAMPFIRE:
@@ -361,14 +361,11 @@ namespace
             return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
 
         case MP2::OBJ_XANADU: {
-            const uint32_t level1 = hero.GetLevelSkill( Skill::Secondary::DIPLOMACY );
-            const uint32_t level2 = hero.GetLevel();
+            if ( hero.isVisited( tile ) ) {
+                return false;
+            }
 
-            if ( !hero.isVisited( tile )
-                 && ( ( level1 == Skill::Level::BASIC && 7 < level2 ) || ( level1 == Skill::Level::ADVANCED && 5 < level2 )
-                      || ( level1 == Skill::Level::EXPERT && 3 < level2 ) || ( 9 < level2 ) ) )
-                return true;
-            break;
+            return GameStatic::isHeroWorthyToVisitXanadu( hero );
         }
 
         // Dwellings with free army.
