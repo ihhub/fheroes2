@@ -212,7 +212,6 @@ namespace MUS
         case MP2::OBJ_DAEMON_CAVE:
             return DEMONCAVE;
         case MP2::OBJ_GAZEBO:
-        case MP2::OBJ_TREE_OF_KNOWLEDGE:
             return EXPERIENCE;
         case MP2::OBJ_FORT:
         case MP2::OBJ_MERCENARY_CAMP:
