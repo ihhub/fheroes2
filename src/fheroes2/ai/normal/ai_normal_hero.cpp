@@ -730,8 +730,7 @@ namespace
 
 namespace AI
 {
-    // TODO: we might need to remove duplication code present in the methods below. For now we can keep them as it is for a simpler modification of parameters.
-    // In the future we need to come up with dynamic object value estimation based not only on a hero's role but on an outcome from movement at certain position.
+    // TODO: In the future we need to come up with dynamic object value estimation based not only on a hero's role but on an outcome from movement at certain position.
 
     double Normal::getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
