@@ -70,7 +70,8 @@ namespace
 
     void drawGraphics( const fheroes2::Rect & optionRoi )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 15 ), _( "Graphics" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Graphics" ), _( "Settings" ),
+                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawAudioOptions( const fheroes2::Rect & optionRoi )
