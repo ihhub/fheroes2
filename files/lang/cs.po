@@ -6737,7 +6737,7 @@ msgid "Barrier"
 msgstr "Bariéra"
 
 msgid "Traveller's Tent"
-msgstr "Stan pocestnéhosummon"
+msgstr "Stan pocestného"
 
 msgid "Jail"
 msgstr "Vězení"
@@ -7091,7 +7091,7 @@ msgid "Power Lich"
 msgstr "Mocný Lich"
 
 msgid "Power Liches"
-msgstr "Mocní Lochové"
+msgstr "Mocní Lichové"
 
 msgid "Bone Dragon"
 msgstr "Kostěný Drak"
