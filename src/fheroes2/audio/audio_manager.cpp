@@ -255,6 +255,28 @@ namespace
             notifyWorker();
         }
 
+        void removeMusicTask()
+        {
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            _musicTask.reset();
+
+            if ( _taskToExecute == TaskType::PlayMusic ) {
+                _taskToExecute = TaskType::None;
+            }
+        }
+
+        void removeSoundTasks()
+        {
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            _soundTasks.clear();
+
+            if ( _taskToExecute == TaskType::PlaySound ) {
+                _taskToExecute = TaskType::None;
+            }
+        }
+
         void removeAllSoundTasks()
         {
             std::scoped_lock<std::mutex> lock( _mutex );
@@ -429,7 +451,7 @@ namespace
     // The music track last requested to be played
     int lastRequestedMusicTrackId{ MUS::UNKNOWN };
     // The music track that is currently being played
-    std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
+    int currentMusicTrackId{ MUS::UNKNOWN };
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -843,8 +865,7 @@ namespace AudioManager
             return;
         }
 
-        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
-        g_asyncSoundManager.removeAllTasks();
+        g_asyncSoundManager.removeSoundTasks();
 
         PlaySoundImp( m82, Settings::Get().SoundVolume() );
     }
@@ -874,8 +895,7 @@ namespace AudioManager
             return;
         }
 
-        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
-        g_asyncSoundManager.removeAllTasks();
+        g_asyncSoundManager.removeMusicTask();
 
         PlayMusicImp( trackId, Settings::Get().MusicType(), playbackMode );
     }
@@ -901,8 +921,7 @@ namespace AudioManager
             return;
         }
 
-        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
-        g_asyncSoundManager.removeAllTasks();
+        g_asyncSoundManager.removeMusicTask();
 
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
@@ -910,7 +929,7 @@ namespace AudioManager
             return;
         }
 
-        const int trackId = currentMusicTrackId.exchange( MUS::UNKNOWN );
+        const int trackId = std::exchange( currentMusicTrackId, MUS::UNKNOWN );
 
         PlayMusicImp( trackId, Settings::Get().MusicType(), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
