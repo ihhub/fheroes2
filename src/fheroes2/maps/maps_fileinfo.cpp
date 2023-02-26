@@ -286,18 +286,18 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     compAlsoWins = ( fs.get() != 0 );
     // Is "normal victory" (defeating all other players) applicable here
     allowNormalVictory = ( fs.get() != 0 );
-    // data wins
+    // Additional parameter of victory conditions
     victoryConditionsParam1 = fs.getLE16();
-    // data wins
+    // Additional parameter of victory conditions
     fs.seek( 0x2c );
     victoryConditionsParam2 = fs.getLE16();
 
     // Loss conditions
     fs.seek( 0x22 );
     lossConditions = fs.get();
-    // data loss
+    // Additional parameter of loss conditions
     lossConditionsParam1 = fs.getLE16();
-    // data loss
+    // Additional parameter of loss conditions
     fs.seek( 0x2e );
     lossConditionsParam2 = fs.getLE16();
 
