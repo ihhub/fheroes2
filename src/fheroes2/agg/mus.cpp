@@ -200,7 +200,6 @@ namespace MUS
         }
 
         switch ( objectType ) {
-        case MP2::OBJ_SPHINX:
         case MP2::OBJ_GENIE_LAMP:
             return ARABIAN;
         case MP2::OBJ_DAEMON_CAVE:

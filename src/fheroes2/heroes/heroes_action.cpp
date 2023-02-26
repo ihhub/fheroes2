@@ -3038,6 +3038,12 @@ namespace
         MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
         const std::string title = MP2::StringObject( objectType );
 
+        const MusicalEffectPlayer musicalEffectPlayer;
+
+        if ( !Settings::Get().MusicMIDI() ) {
+            MusicalEffectPlayer::play( MUS::ARABIAN );
+        }
+
         if ( riddle && riddle->valid ) {
             if (
                 Dialog::YES
