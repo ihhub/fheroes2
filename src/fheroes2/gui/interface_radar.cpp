@@ -207,10 +207,8 @@ void Interface::Radar::SetRenderArea( const fheroes2::Rect & roi )
     const Settings & conf = Settings::Get();
     // We set ROI only if radar is visible as there will be no render of radar map image if it is hidden.
     if ( !conf.isHideInterfaceEnabled() || conf.ShowRadar() ) {
-        _roi.x = roi.x < 0 ? 0 : roi.x;
-        _roi.y = roi.y < 0 ? 0 : roi.y;
-        _roi.width = ( roi.width + roi.x ) > world.w() ? ( world.w() - _roi.x ) : roi.width;
-        _roi.height = ( roi.height + roi.y ) > world.h() ? ( world.h() - _roi.y ) : roi.height;
+        // "_roi" should not be outside the "world".
+        _roi = roi ^ fheroes2::Rect( 0, 0, world.w(), world.h() );
     }
 }
 
