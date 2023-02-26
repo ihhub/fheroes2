@@ -2648,6 +2648,12 @@ namespace
 
     void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
     {
+        const MusicalEffectPlayer musicalEffectPlayer;
+
+        if ( !Settings::Get().MusicMIDI() ) {
+            MusicalEffectPlayer::play( MUS::WATERSPRING );
+        }
+
         Dialog::Message(
             MP2::StringObject( objectType ),
             _( "Nestled among the trees sits a blind seer. After you explain the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents." ),
@@ -2655,7 +2661,10 @@ namespace
 
         Dialog::ThievesGuild( true );
 
+#ifndef WITH_DEBUG
         (void)hero;
+#endif
+
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
 

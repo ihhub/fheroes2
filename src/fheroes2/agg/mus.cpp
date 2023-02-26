@@ -200,8 +200,6 @@ namespace MUS
         }
 
         switch ( objectType ) {
-        case MP2::OBJ_ORACLE:
-            return WATERSPRING;
         case MP2::OBJ_SPHINX:
         case MP2::OBJ_GENIE_LAMP:
             return ARABIAN;
