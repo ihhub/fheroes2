@@ -295,7 +295,9 @@ namespace Battle
         Indexes result;
         result.reserve( Speed::INSTANT );
 
+        BattleNodeIndex lastReachableNodeIdx{ -1, -1 };
         BattleNodeIndex nodeIdx = targetNodeIdx;
+
         for ( auto iter = _cache.find( nodeIdx ); iter != _cache.end(); iter = _cache.find( nodeIdx ) ) {
             const auto & [index, node] = *iter;
 
@@ -311,10 +313,31 @@ namespace Battle
                 continue;
             }
 
+            if ( _isWide && lastReachableNodeIdx == BattleNodeIndex{ -1, -1 } ) {
+                assert( index.first != -1 && index.second != -1 );
+
+                lastReachableNodeIdx = index;
+            }
+
             result.push_back( index.first );
         }
 
         std::reverse( result.begin(), result.end() );
+
+        // If a given position is not reachable on the current turn, then the last reachable position of
+        // a wide unit may be reversed in regard to the target one. Detect this and add an extra U-turn.
+        if ( _isWide && !result.empty() ) {
+            assert( lastReachableNodeIdx.first != -1 && lastReachableNodeIdx.second != -1 );
+
+            const bool isReflect = lastReachableNodeIdx.first < lastReachableNodeIdx.second;
+
+            if ( isReflect != position.isReflect() ) {
+                // The last reachable position should not be a reversed version of the target position
+                assert( !position.contains( lastReachableNodeIdx.first ) || !position.contains( lastReachableNodeIdx.second ) );
+
+                result.push_back( lastReachableNodeIdx.second );
+            }
+        }
 
         return result;
     }
