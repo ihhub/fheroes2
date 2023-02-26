@@ -2063,7 +2063,18 @@ namespace
             Dialog::Message( title, msg_void, Font::BIG, Dialog::OK );
         }
         else {
-            AudioManager::PlaySound( M82::EXPERNCE );
+            const MusicalEffectPlayer musicalEffectPlayer;
+
+            if ( Settings::Get().MusicMIDI() ) {
+                AudioManager::PlaySound( M82::EXPERNCE );
+            }
+            else if ( objectType == MP2::OBJ_TREE_CITY || objectType == MP2::OBJ_WAGON_CAMP ) {
+                MusicalEffectPlayer::play( MUS::TREEHOUSE );
+            }
+            // Changed OG selection to something more appropriate
+            else if ( objectType == MP2::OBJ_DESERT_TENT ) {
+                MusicalEffectPlayer::play( MUS::ARABIAN );
+            }
 
             if ( Dialog::YES == Dialog::Message( title, msg_full, Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 RecruitMonsterFromTile( hero, tile, title, troop, false );

@@ -204,13 +204,10 @@ namespace MUS
             return DUNGEON;
         case MP2::OBJ_ORACLE:
             return WATERSPRING;
-        case MP2::OBJ_DESERT_TENT: // Changed OG selection to something more appropriate
         case MP2::OBJ_SPHINX:
         case MP2::OBJ_GENIE_LAMP:
             return ARABIAN;
         case MP2::OBJ_TREE_HOUSE:
-        case MP2::OBJ_TREE_CITY:
-        case MP2::OBJ_WAGON_CAMP:
             return TREEHOUSE;
         case MP2::OBJ_DAEMON_CAVE:
             return DEMONCAVE;
