@@ -1588,7 +1588,6 @@ namespace
                 }
 
                 if ( battle ) {
-                    // new battle
                     Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
                     if ( res.AttackerWins() ) {
                         hero.IncreaseExperience( res.GetExperienceAttacker() );
@@ -3103,8 +3102,10 @@ namespace
                     Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 std::string header( _( "The Sphinx asks you the following riddle:\n \n'%{riddle}'\n \nYour answer?" ) );
                 StringReplace( header, "%{riddle}", riddle->message );
+
                 std::string answer;
                 Dialog::InputString( header, answer, title );
+
                 if ( riddle->AnswerCorrect( answer ) ) {
                     const Funds & res = riddle->resources;
                     const Artifact art = riddle->artifact;
@@ -3138,11 +3139,13 @@ namespace
                                                Dialog::OK, { &artifactUI } );
                     }
 
-                    if ( art.isValid() )
+                    if ( art.isValid() ) {
                         hero.PickupArtifact( art );
+                    }
 
-                    if ( count )
+                    if ( count ) {
                         hero.GetKingdom().AddFundsResource( res );
+                    }
 
                     riddle->SetQuiet();
                     hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -3152,8 +3155,10 @@ namespace
                         title,
                         _( "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at you with a paw, knocking you to the ground. Another blow makes the world go black, and you know no more." ),
                         Font::BIG, Dialog::OK );
+
                     Battle::Result res;
                     res.army1 = Battle::RESULT_LOSS;
+
                     BattleLose( hero, res, true );
                 }
             }
