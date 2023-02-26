@@ -1991,7 +1991,15 @@ namespace
             std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
             StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
-            AudioManager::PlaySound( M82::EXPERNCE );
+            const MusicalEffectPlayer musicalEffectPlayer;
+
+            // The Tree House has a special sound
+            if ( objectType == MP2::OBJ_TREE_HOUSE && !Settings::Get().MusicMIDI() ) {
+                MusicalEffectPlayer::play( MUS::TREEHOUSE );
+            }
+            else {
+                AudioManager::PlaySound( M82::EXPERNCE );
+            }
 
             if ( Dialog::YES == Dialog::Message( title, message, Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 if ( !hero.GetArmy().CanJoinTroop( troop ) )
