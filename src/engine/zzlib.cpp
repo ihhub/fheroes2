@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <ostream>
 #include <vector>
 
 #include <zconf.h>
