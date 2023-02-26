@@ -1224,7 +1224,19 @@ namespace
 
         const std::string title( MP2::StringObject( objectType ) );
 
-        if ( Dialog::YES == Dialog::Message( title, ask, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+        bool enter = false;
+
+        {
+            const MusicalEffectPlayer musicalEffectPlayer;
+
+            if ( !Settings::Get().MusicMIDI() ) {
+                MusicalEffectPlayer::play( MUS::WATCHTOWER );
+            }
+
+            enter = ( Dialog::Message( title, ask, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
+        }
+
+        if ( enter ) {
             bool complete = false;
 
             if ( gold ) {
@@ -1233,9 +1245,10 @@ namespace
                 Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
                 if ( res.AttackerWins() ) {
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
-                    complete = true;
-                    const Artifact & art = tile.QuantityArtifact();
 
+                    complete = true;
+
+                    const Artifact & art = tile.QuantityArtifact();
                     if ( art.isValid() ) {
                         if ( hero.IsFullBagArtifacts() ) {
                             gold = GoldInsteadArtifact( objectType );
@@ -1274,9 +1287,10 @@ namespace
                 hero.SetVisited( dst_index, Visit::GLOBAL );
             }
             else if ( 0 == gold ) {
-                // modify morale
+                // Modify morale
                 hero.SetVisited( dst_index, Visit::LOCAL );
                 hero.SetVisited( dst_index, Visit::GLOBAL );
+
                 AudioManager::PlaySound( M82::BADMRLE );
 
                 const fheroes2::MoraleDialogElement moraleUI( false );
