@@ -360,13 +360,8 @@ namespace
         case MP2::OBJ_ARTESIAN_SPRING:
             return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
 
-        case MP2::OBJ_XANADU: {
-            if ( hero.isVisited( tile ) ) {
-                return false;
-            }
-
-            return GameStatic::isHeroWorthyToVisitXanadu( hero );
-        }
+        case MP2::OBJ_XANADU:
+            return !hero.isVisited( tile ) && GameStatic::isHeroWorthyToVisitXanadu( hero );
 
         // Dwellings with free army.
         case MP2::OBJ_ARCHER_HOUSE:

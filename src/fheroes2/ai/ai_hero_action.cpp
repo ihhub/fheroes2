@@ -961,8 +961,6 @@ namespace
     void AIToXanadu( Heroes & hero, int32_t dst_index )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
-        const uint32_t level1 = hero.GetLevelSkill( Skill::Secondary::DIPLOMACY );
-        const uint32_t level2 = hero.GetLevel();
 
         if ( !hero.isVisited( tile ) && GameStatic::isHeroWorthyToVisitXanadu( hero ) ) {
             hero.IncreasePrimarySkill( Skill::Primary::ATTACK );
