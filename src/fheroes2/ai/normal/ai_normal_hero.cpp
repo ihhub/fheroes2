@@ -1138,8 +1138,6 @@ namespace AI
         // Fighters have higher priority for battles and smaller values for other objects.
         assert( hero.getAIRole() == Heroes::Role::FIGHTER || hero.getAIRole() == Heroes::Role::CHAMPION );
 
-        // In the future these hardcoded values could be configured by the mod
-        // 1 tile distance is 100.0 value approximately
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
         const bool anotherFriendlyHeroPresent = _regions[tile.GetRegion()].friendlyHeroes > 1;
@@ -1362,49 +1360,8 @@ namespace AI
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
 
-        if ( objectType == MP2::OBJ_CASTLE ) {
-            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
-            if ( !castle )
-                return valueToIgnore;
-
-            const bool critical = isCriticalTask( index );
-            if ( hero.GetColor() == castle->GetColor() ) {
-                double value = castle->getVisitValue( hero );
-                if ( critical )
-                    return 10000 + value;
-
-                if ( value < 500 )
-                    return valueToIgnore;
-
-                return value;
-            }
-
-            // Hero should never visit castles belonging to friendly kingdoms
-            if ( hero.isFriends( castle->GetColor() ) ) {
-                assert( 0 );
-                return -dangerousTaskPenalty;
-            }
-
-            // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castle with this hero
-            // to keep him alive for the human player
-            if ( isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( castle ) ) {
-                assert( 0 );
-                return -dangerousTaskPenalty;
-            }
-
-            double value = castle->getBuildingValue() * 150.0 + 3000;
-            if ( critical || hero.isLosingGame() )
-                value += 15000;
-            // If the castle is defenseless
-            if ( !castle->GetActualArmy().isValid() )
-                value *= 1.25;
-
-            if ( isCastleLossConditionForHuman( castle ) )
-                value += 20000;
-
-            return value;
-        }
-        else if ( objectType == MP2::OBJ_HEROES ) {
+        switch ( objectType ) {
+        case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
             assert( otherHero );
             if ( !otherHero ) {
@@ -1412,7 +1369,7 @@ namespace AI
             }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
-                // Will be handled by the main task
+                // Will be handled by the main task.
                 return valueToIgnore;
             }
 
@@ -1431,119 +1388,52 @@ namespace AI
             // focus on enemy hero if there's priority set (i.e. hero is threatening our castle)
             return isCriticalTask( index ) ? 10000.0 : tenTiles;
         }
-        else if ( objectType == MP2::OBJ_MONSTER ) {
+        case MP2::OBJ_MONSTER: {
+            // TODO: add value calculation based on monster strength, experience to obtain and possible losses.
             return twoTiles;
         }
-        else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMIST_LAB ) {
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_MINES:
+        case MP2::OBJ_SAWMILL: {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? tenTiles : fiveTiles;
         }
-        else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
-            const Artifact art = tile.QuantityArtifact();
-
-            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-            if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-                assert( 0 );
-                return -dangerousTaskPenalty;
-            }
-
-            return 1000.0 * art.getArtifactValue();
-        }
-        else if ( MP2::isPickupObject( objectType ) ) {
-            if ( objectType == MP2::OBJ_BOTTLE ) {
-                // A bottle is useless to AI as it contains only a message.
-                return 0;
-            }
-
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_FLOTSAM:
+        case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_SEA_CHEST: {
             return twoTiles;
         }
-        else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
-            // Objects like WATERWHEEL, WINDMILL and MAGICGARDEN if capture setting is enabled
-            return twoTiles;
-        }
-        else if ( objectType == MP2::OBJ_XANADU ) {
+        case MP2::OBJ_XANADU: {
             return fiveTiles;
         }
-        else if ( objectType == MP2::OBJ_SHRINE_FIRST_CIRCLE || objectType == MP2::OBJ_SHRINE_SECOND_CIRCLE || objectType == MP2::OBJ_SHRINE_THIRD_CIRCLE ) {
-            const Spell & spell = tile.QuantitySpell();
-            return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
-        }
-        else if ( MP2::isHeroUpgradeObject( objectType ) ) {
+        case MP2::OBJ_FORT:
+        case MP2::OBJ_MERCENARY_CAMP:
+        case MP2::OBJ_STANDING_STONES:
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
+        case MP2::OBJ_WITCHS_HUT: {
             return fiveTiles;
         }
-        else if ( MP2::isMonsterDwelling( objectType ) ) {
-            return tile.QuantityTroop().GetStrength();
-        }
-        else if ( objectType == MP2::OBJ_OBSERVATION_TOWER ) {
-            const int fogCountToUncover
-                = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
-            if ( fogCountToUncover <= 0 ) {
-                // Nothing to uncover.
-                return -dangerousTaskPenalty;
-            }
-            return fogCountToUncover;
-        }
-        else if ( objectType == MP2::OBJ_MAGIC_WELL || objectType == MP2::OBJ_ARTESIAN_SPRING ) {
+        case MP2::OBJ_ARTESIAN_SPRING:
+        case MP2::OBJ_MAGIC_WELL: {
             if ( !hero.HaveSpellBook() || hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
                 return -dangerousTaskPenalty; // no reason to visit the well with no magic book or with half of points
             }
             return hero.isPotentSpellcaster() ? fiveTiles : 0;
         }
-        else if ( objectType == MP2::OBJ_STABLES ) {
-            const int daysActive = DAYOFWEEK - world.GetDay() + 1;
-            double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject;
-            if ( movementBonus < 0 ) {
-                // Looks like this is too far away.
-                movementBonus = 0;
-            }
-
-            const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
-            return movementBonus + freeMonsterUpgradeModifier * upgradeValue;
-        }
-        else if ( objectType == MP2::OBJ_FREEMANS_FOUNDRY ) {
-            const double upgradePikemanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::PIKEMAN );
-            const double upgradeSwordsmanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::SWORDSMAN );
-            const double upgradeGolemValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::IRON_GOLEM );
-
-            return freeMonsterUpgradeModifier * ( upgradePikemanValue + upgradeSwordsmanValue + upgradeGolemValue );
-        }
-        else if ( objectType == MP2::OBJ_HILL_FORT ) {
-            const double upgradeDwarfValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::DWARF );
-            const double upgradeOrcValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::ORC );
-            const double upgradeOgreValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::OGRE );
-
-            return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
-        }
-        else if ( objectType == MP2::OBJ_TRAVELLER_TENT ) {
-            // Most likely it'll lead to opening more land.
-            return 1000;
-        }
-        else if ( objectType == MP2::OBJ_OASIS ) {
-            return std::max( GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject, 0.0 );
-        }
-        else if ( objectType == MP2::OBJ_WATERING_HOLE ) {
-            return std::max( GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject, 0.0 );
-        }
-        else if ( objectType == MP2::OBJ_JAIL ) {
+        case MP2::OBJ_JAIL: {
             // A free hero is always good and it could be very powerful.
             return fiveTiles;
         }
-        else if ( objectType == MP2::OBJ_GAZEBO ) {
-            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valuable this object is.
-            const uint32_t heroExperience = hero.GetExperience();
-            const uint32_t nextLevelExperience = Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( heroExperience ) );
-            const uint32_t neededExperience = nextLevelExperience - heroExperience;
-            if ( neededExperience < 1000 ) {
-                // A new level. Have to visit.
-                return 1000;
-            }
-
-            return 1000.0 * 1000.0 / neededExperience;
+        default:
+            break;
         }
 
-        return valueToIgnore;
+        return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
     }
 
     double Normal::getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
