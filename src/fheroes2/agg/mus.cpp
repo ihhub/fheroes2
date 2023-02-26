@@ -201,9 +201,6 @@ namespace MUS
 
         switch ( objectType ) {
         case MP2::OBJ_PYRAMID:
-        case MP2::OBJ_DRAGON_CITY:
-        case MP2::OBJ_CITY_OF_DEAD:
-        case MP2::OBJ_TROLL_BRIDGE:
             return DUNGEON;
         case MP2::OBJ_MAGIC_WELL:
         case MP2::OBJ_ORACLE:

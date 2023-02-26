@@ -2105,11 +2105,23 @@ namespace
 
         const std::string title( MP2::StringObject( objectType ) );
 
+        // Not captured / defeated yet
         if ( Color::NONE == tile.QuantityColor() ) {
-            // Not captured / defeated yet.
-            if ( Dialog::YES == Dialog::Message( title, str_warn, Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                // new battle
+            bool attack = false;
+
+            {
+                const MusicalEffectPlayer musicalEffectPlayer;
+
+                if ( !Settings::Get().MusicMIDI() ) {
+                    MusicalEffectPlayer::play( MUS::DUNGEON );
+                }
+
+                attack = ( Dialog::Message( title, str_warn, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
+            }
+
+            if ( attack ) {
                 Army army( tile );
+
                 Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
                 if ( res.AttackerWins() ) {
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
@@ -2131,9 +2143,15 @@ namespace
             }
         }
 
-        // recruit monster
+        // Recruit monsters
         if ( str_scss ) {
-            if ( troop.isValid() && Dialog::YES == Dialog::Message( title, str_scss, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+            const MusicalEffectPlayer musicalEffectPlayer;
+
+            if ( !Settings::Get().MusicMIDI() ) {
+                MusicalEffectPlayer::play( MUS::DUNGEON );
+            }
+
+            if ( troop.isValid() && Dialog::Message( title, str_scss, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                 RecruitMonsterFromTile( hero, tile, title, troop, false );
             }
 
