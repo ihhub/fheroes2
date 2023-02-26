@@ -1011,13 +1011,25 @@ namespace
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Spell & spell = tile.QuantitySpell();
+
         const std::string ask = _(
             "You come upon the pyramid of a great and ancient king.\nYou are tempted to search it for treasure, but all the old stories warn of fearful curses and undead "
             "guardians.\nWill you search?" );
-
         const std::string title( MP2::StringObject( objectType ) );
 
-        if ( Dialog::YES == Dialog::Message( title, ask, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+        bool enter = false;
+
+        {
+            const MusicalEffectPlayer musicalEffectPlayer;
+
+            if ( !Settings::Get().MusicMIDI() ) {
+                MusicalEffectPlayer::play( MUS::DUNGEON );
+            }
+
+            enter = ( Dialog::Message( title, ask, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
+        }
+
+        if ( enter ) {
             if ( spell.isValid() ) {
                 // battle
                 Army army( tile );
@@ -1064,8 +1076,9 @@ namespace
                 }
             }
             else {
-                // modify luck
+                // Modify luck
                 AudioManager::PlaySound( M82::BADLUCK );
+
                 const std::string msg = _( "You come upon the pyramid of a great and ancient king.\nRoutine exploration reveals that the pyramid is completely empty." );
 
                 const fheroes2::LuckDialogElement luckUI( false );
