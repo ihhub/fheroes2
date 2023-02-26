@@ -1429,16 +1429,14 @@ namespace AI
         case MP2::OBJ_SEA_CHEST: {
             return twoTiles;
         }
-        case MP2::OBJ_XANADU: {
-            return fiveTiles;
-        }
         case MP2::OBJ_ARENA:
         case MP2::OBJ_FORT:
         case MP2::OBJ_MERCENARY_CAMP:
         case MP2::OBJ_STANDING_STONES:
         case MP2::OBJ_TREE_OF_KNOWLEDGE:
         case MP2::OBJ_WITCH_DOCTORS_HUT:
-        case MP2::OBJ_WITCHS_HUT: {
+        case MP2::OBJ_WITCHS_HUT:
+        case MP2::OBJ_XANADU: {
             return fiveTiles;
         }
         case MP2::OBJ_ARTESIAN_SPRING: {
