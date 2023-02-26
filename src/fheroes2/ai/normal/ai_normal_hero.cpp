@@ -200,7 +200,7 @@ namespace
 
         case MP2::OBJ_MAGELLANS_MAPS:
             // TODO: avoid hardcoded resource values for objects.
-            return !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANS_MAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
+            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
 
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_LIGHTHOUSE:
@@ -355,7 +355,7 @@ namespace
         }
 
         case MP2::OBJ_MAGIC_WELL:
-            return !hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
+            return !hero.isObjectTypeVisited( objectType ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
 
         case MP2::OBJ_ARTESIAN_SPRING:
             return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
@@ -475,7 +475,7 @@ namespace
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
             const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * pathfinder.getDistance( index );
 
-            return !hero.isObjectTypeVisited( MP2::OBJ_STABLES ) && movementBonus > 0;
+            return !hero.isObjectTypeVisited( objectType ) && movementBonus > 0;
         }
 
         // Objects that give goods but curse with bad morale when visiting them for subsequent times.
@@ -536,7 +536,7 @@ namespace
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
         case MP2::OBJ_HUT_OF_MAGI:
-            return !hero.isObjectTypeVisited( MP2::OBJ_HUT_OF_MAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true ).empty();
+            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true ).empty();
 
         case MP2::OBJ_ALCHEMIST_TOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
@@ -1294,13 +1294,7 @@ namespace AI
             return 1250.0;
         }
         case MP2::OBJ_OBSERVATION_TOWER: {
-            const int fogCountToUncover
-                = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
-            if ( fogCountToUncover <= 0 ) {
-                // Nothing to uncover.
-                return -dangerousTaskPenalty;
-            }
-            return fogCountToUncover / 2;
+            return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject ) / 2;
         }
         case MP2::OBJ_ARTESIAN_SPRING: {
             if ( !hero.HaveSpellBook() || hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
@@ -1342,16 +1336,7 @@ namespace AI
             return 200;
         }
         case MP2::OBJ_HUT_OF_MAGI: {
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
-            int fogCountToUncover = 0;
-            const int heroColor = hero.GetColor();
-            const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
-
-            for ( const int32_t eyeIndex : eyeMagiIndexes ) {
-                fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );
-            }
-
-            return fogCountToUncover / 2;
+            return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject ) / 2;
         }
         case MP2::OBJ_PYRAMID: {
             return 10000;
