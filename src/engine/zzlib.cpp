@@ -57,9 +57,7 @@ namespace
                 res.resize( dstsz );
             else {
                 res.clear();
-                std::string errorDesc( "zlib error: " );
-                errorDesc += std::to_string( ret );
-                ERROR_LOG( errorDesc.c_str() )
+                ERROR_LOG( "zlib error: " << ret )
             }
         }
 
@@ -79,9 +77,7 @@ namespace
                 res.resize( dstsz );
             else {
                 res.clear();
-                std::string errorDesc( "zlib error: " );
-                errorDesc += std::to_string( ret );
-                ERROR_LOG( errorDesc.c_str() )
+                ERROR_LOG( "zlib error: " << ret )
             }
         }
 
@@ -102,12 +98,12 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
         sf.seek( offset );
     }
 
-    const uint32_t size0 = sf.get32(); // raw size
+    const uint32_t size0 = sf.get32(); // Raw size
     if ( size0 == 0 ) {
         return false;
     }
 
-    const uint32_t size1 = sf.get32(); // zip size
+    const uint32_t size1 = sf.get32(); // ZIP size
     if ( size1 == 0 ) {
         return false;
     }
