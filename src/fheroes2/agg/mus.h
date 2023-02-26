@@ -26,8 +26,6 @@
 
 #include <string>
 
-#include "mp2.h"
-
 namespace MUS
 {
     enum MusicTrack : int

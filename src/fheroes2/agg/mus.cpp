@@ -21,16 +21,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "mus.h"
+
 #include <array>
 #include <cassert>
 #include <string>
 
 #include "ground.h"
-#include "mp2.h"
-#include "mus.h"
 #include "race.h"
 #include "rand.h"
-#include "settings.h"
 
 namespace
 {
