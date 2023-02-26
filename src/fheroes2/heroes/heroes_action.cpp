@@ -1168,20 +1168,26 @@ namespace
         }
 
         const std::string title( MP2::StringObject( objectType ) );
-        // check already visited
+
         if ( visited ) {
             Dialog::Message( title, msg, Font::BIG, Dialog::OK );
         }
         else {
-            // increase skill
+            // Increase skill
             hero.IncreasePrimarySkill( skill );
             hero.SetVisited( dst_index );
+
+            const MusicalEffectPlayer musicalEffectPlayer;
+
+            if ( !Settings::Get().MusicMIDI() ) {
+                MusicalEffectPlayer::play( MUS::SKILL );
+            }
 
             const fheroes2::PrimarySkillDialogElement primarySkillUI( skill, "+1" );
             fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                    { &primarySkillUI } );
 
-            // fix double action tile
+            // Fix the double action tile
             hero.SetVisitedWideTile( dst_index, objectType );
         }
 

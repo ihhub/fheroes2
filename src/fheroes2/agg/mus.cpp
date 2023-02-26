@@ -211,11 +211,6 @@ namespace MUS
             return TREEHOUSE;
         case MP2::OBJ_DAEMON_CAVE:
             return DEMONCAVE;
-        case MP2::OBJ_FORT:
-        case MP2::OBJ_MERCENARY_CAMP:
-        case MP2::OBJ_WITCH_DOCTORS_HUT:
-        case MP2::OBJ_STANDING_STONES:
-            return SKILL;
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_DERELICT_SHIP:
