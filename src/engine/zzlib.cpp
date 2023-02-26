@@ -43,11 +43,6 @@ namespace
         }
 
         std::vector<uint8_t> res;
-
-        if ( realsz ) {
-            res.reserve( realsz );
-        }
-
         res.resize( ( realsz ? realsz : srcsz * 7 ), 0 );
 
         uLong dstsz = static_cast<uLong>( res.size() );
@@ -77,7 +72,6 @@ namespace
         }
 
         std::vector<uint8_t> res;
-
         res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
 
         uLong dstsz = static_cast<uLong>( res.size() );
