@@ -1755,6 +1755,12 @@ namespace
             return;
         }
 
+        const MusicalEffectPlayer musicalEffectPlayer;
+
+        if ( !Settings::Get().MusicMIDI() ) {
+            MusicalEffectPlayer::play( MUS::ARABIAN );
+        }
+
         const std::string title( MP2::StringObject( objectType ) );
         if ( Dialog::YES
              == Dialog::Message( title, _( "You stumble upon a dented and tarnished lamp lodged deep in the earth. Do you wish to rub the lamp?" ), Font::BIG,
