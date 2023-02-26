@@ -281,7 +281,8 @@ namespace
                 return false;
             }
 
-            if ( !hero.HaveSpellBook() || hero.HaveSpell( spell ) || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
+            if ( !hero.HaveSpellBook() || hero.HaveSpell( spell, true )
+                 || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
                 return false;
             }
 
