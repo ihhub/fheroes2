@@ -693,7 +693,6 @@ namespace
             const Funds funds( rc );
 
             {
-                // Should not outlive the corresponding dialog window(s)
                 const MusicalEffectPlayer musicalEffectPlayer;
 
                 // The Magic Garden has a special sound
@@ -931,13 +930,13 @@ namespace
 
             const std::string title( MP2::StringObject( objectType ) );
 
-            // check full
+            // No room for a new skill
             if ( hero.HasMaxSecondarySkill() ) {
                 msg.append( _(
                     "As you approach, she turns and focuses her one glass eye on you.\n\"You already know everything you deserve to learn!\" the witch screeches. \"NOW GET OUT OF MY HOUSE!\"" ) );
                 Dialog::Message( title, msg, Font::BIG, Dialog::OK );
             }
-            // check present skill
+            // Skill has already been learned
             else if ( hero.HasSecondarySkill( skill.Skill() ) ) {
                 msg.append( _( "As you approach, she turns and speaks.\n\"You already know that which I would teach you. I can help you no further.\"" ) );
                 Dialog::Message( title, msg, Font::BIG, Dialog::OK );
@@ -955,7 +954,6 @@ namespace
                 StringReplace( msg, "%{skill}", skill_name );
 
                 {
-                    // Should not outlive the corresponding dialog window(s)
                     const MusicalEffectPlayer musicalEffectPlayer( MUS::EXPERIENCE );
 
                     const fheroes2::SecondarySkillDialogElement secondarySkillUI( skill, hero );
@@ -1033,7 +1031,6 @@ namespace
         bool enter = false;
 
         {
-            // Should not outlive the corresponding dialog window(s)
             const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
 
             enter = ( Dialog::Message( title, ask, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
@@ -1122,7 +1119,6 @@ namespace
         }
         else {
             if ( hero.isObjectTypeVisited( MP2::OBJ_MAGIC_WELL ) ) {
-                // Should not outlive the corresponding dialog window(s)
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
                 Dialog::Message( title, _( "A second drink at the well in one day will not help you." ), Font::BIG, Dialog::OK );
@@ -1131,7 +1127,6 @@ namespace
                 hero.SetSpellPoints( max );
 
                 {
-                    // Should not outlive the corresponding dialog window(s)
                     const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
                     Dialog::Message( title, _( "A drink from the well has restored your spell points to maximum." ), Font::BIG, Dialog::OK );
@@ -1202,7 +1197,6 @@ namespace
             hero.IncreasePrimarySkill( skill );
 
             {
-                // Should not outlive the corresponding dialog window(s)
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::SKILL );
 
                 const fheroes2::PrimarySkillDialogElement primarySkillUI( skill, "+1" );
@@ -1250,7 +1244,6 @@ namespace
         bool enter = false;
 
         {
-            // Should not outlive the corresponding dialog window(s)
             const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
             enter = ( Dialog::Message( title, ask, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
@@ -1413,7 +1406,6 @@ namespace
         }
         else {
             {
-                // Should not outlive the corresponding dialog window(s)
                 const MusicalEffectPlayer musicalEffectPlayer;
 
                 if ( Settings::Get().MusicMIDI() ) {
@@ -1769,7 +1761,6 @@ namespace
         bool recruit = false;
 
         {
-            // Should not outlive the corresponding dialog window(s)
             const MusicalEffectPlayer musicalEffectPlayer( MUS::ARABIAN );
 
             recruit = ( Dialog::Message( title, _( "You stumble upon a dented and tarnished lamp lodged deep in the earth. Do you wish to rub the lamp?" ), Font::BIG,
@@ -1984,7 +1975,6 @@ namespace
                 Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
 
                 {
-                    // Should not outlive the corresponding dialog window(s)
                     const MusicalEffectPlayer musicalEffectPlayer;
 
                     // The Lighthouse has a special sound
@@ -2010,7 +2000,6 @@ namespace
         bool enter = false;
 
         {
-            // Should not outlive the corresponding dialog window(s)
             const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
             enter = ( Dialog::Message( MP2::StringObject( MP2::OBJ_ABANDONED_MINE ),
@@ -2038,7 +2027,6 @@ namespace
             bool recruit = false;
 
             {
-                // Should not outlive the corresponding dialog window(s)
                 const MusicalEffectPlayer musicalEffectPlayer;
 
                 // The Tree House has a special sound
@@ -2146,7 +2134,6 @@ namespace
             bool recruit = false;
 
             {
-                // Should not outlive the corresponding dialog window(s)
                 const MusicalEffectPlayer musicalEffectPlayer;
 
                 // The Tree City and the Wagon Camp have a special sound
@@ -2215,16 +2202,7 @@ namespace
 
         // Not captured / defeated yet
         if ( Color::NONE == tile.QuantityColor() ) {
-            bool attack = false;
-
-            {
-                // Should not outlive the corresponding dialog window(s)
-                const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
-
-                attack = ( Dialog::Message( title, str_warn, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
-            }
-
-            if ( attack ) {
+            if ( Dialog::Message( title, str_warn, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                 Army army( tile );
 
                 Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
@@ -2253,7 +2231,6 @@ namespace
             bool recruit = false;
 
             if ( troop.isValid() ) {
-                // Should not outlive the corresponding dialog window(s)
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
 
                 recruit = ( Dialog::Message( title, str_scss, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
@@ -2272,7 +2249,6 @@ namespace
     void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         {
-            // Should not outlive the corresponding dialog window(s)
             const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
             Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
@@ -2299,7 +2275,6 @@ namespace
             const uint32_t max = hero.GetMaxSpellPoints();
 
             if ( hero.GetSpellPoints() >= max * 2 ) {
-                // Should not outlive the corresponding dialog window(s)
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
                 Dialog::Message( title, _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ),
@@ -2309,7 +2284,6 @@ namespace
                 hero.SetSpellPoints( max * 2 );
 
                 {
-                    // Should not outlive the corresponding dialog window(s)
                     const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
                     Dialog::Message( title, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Font::BIG,
@@ -2355,7 +2329,6 @@ namespace
 
             if ( access ) {
                 {
-                    // Should not outlive the corresponding dialog window(s)
                     const MusicalEffectPlayer musicalEffectPlayer( MUS::XANADU );
 
                     Dialog::Message( title, _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ), Font::BIG,
@@ -2496,7 +2469,6 @@ namespace
             }
 
             {
-                // Should not outlive the corresponding dialog window(s)
                 const MusicalEffectPlayer musicalEffectPlayer;
 
                 // The Hill Fort has a special sound
@@ -2532,7 +2504,6 @@ namespace
                 bool buy = false;
 
                 {
-                    // Should not outlive the corresponding dialog window(s)
                     const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
                     buy = ( Dialog::Message(
@@ -2555,7 +2526,6 @@ namespace
                 }
             }
             else {
-                // Should not outlive the corresponding dialog window(s)
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
                 Dialog::Message( title, _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ), Font::BIG,
@@ -2653,54 +2623,50 @@ namespace
             assert( level > 0 );
             const uint32_t possibleExperience = Heroes::GetExperienceFromLevel( level ) - Heroes::GetExperienceFromLevel( level - 1 );
 
-            // Free training
-            if ( conditions ) {
-                // Should not outlive the corresponding dialog window(s)
+            {
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::EXPERIENCE );
 
-                msg = _(
-                    "Upon your approach, the tree opens its eyes in delight. \"Ahh, an adventurer! Allow me to teach you a little of what I have learned over the ages.\"" );
-
-                const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( possibleExperience ) );
-                const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
-                const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
-
-                fheroes2::showMessage( titleUI, messageUI, Dialog::OK, { &experienceUI } );
-            }
-            else {
-                const ResourceCount & rc = tile.QuantityResourceCount();
-
-                if ( hero.GetKingdom().AllowPayment( funds ) ) {
-                    // Should not outlive the corresponding dialog window(s)
-                    const MusicalEffectPlayer musicalEffectPlayer( MUS::EXPERIENCE );
-
-                    msg = _( "Upon your approach, the tree opens its eyes in delight." );
-                    msg += '\n';
-                    msg.append( _( "\"Ahh, an adventurer! I will be happy to teach you a little of what I have learned over the ages for a mere %{count} %{res}.\"" ) );
-                    msg += '\n';
-                    msg.append( _( "(Just bury it around my roots.)" ) );
-                    StringReplace( msg, "%{res}", Resource::String( rc.first ) );
-                    StringReplace( msg, "%{count}", rc.second );
+                // Free training
+                if ( conditions ) {
+                    msg = _(
+                        "Upon your approach, the tree opens its eyes in delight. \"Ahh, an adventurer! Allow me to teach you a little of what I have learned over the ages.\"" );
 
                     const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( possibleExperience ) );
                     const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
                     const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
-                    conditions = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
+                    fheroes2::showMessage( titleUI, messageUI, Dialog::OK, { &experienceUI } );
                 }
                 else {
-                    // Should not outlive the corresponding dialog window(s)
-                    const MusicalEffectPlayer musicalEffectPlayer( MUS::EXPERIENCE );
+                    const ResourceCount & rc = tile.QuantityResourceCount();
 
-                    msg = _( "Tears brim in the eyes of the tree." );
-                    msg += '\n';
-                    msg.append( _( "\"I need %{count} %{res}.\"" ) );
-                    msg += '\n';
-                    msg.append( _( "it whispers. (sniff) \"Well, come back when you can pay me.\"" ) );
-                    StringReplace( msg, "%{res}", Resource::String( rc.first ) );
-                    StringReplace( msg, "%{count}", rc.second );
+                    if ( hero.GetKingdom().AllowPayment( funds ) ) {
+                        msg = _( "Upon your approach, the tree opens its eyes in delight." );
+                        msg += '\n';
+                        msg.append(
+                            _( "\"Ahh, an adventurer! I will be happy to teach you a little of what I have learned over the ages for a mere %{count} %{res}.\"" ) );
+                        msg += '\n';
+                        msg.append( _( "(Just bury it around my roots.)" ) );
+                        StringReplace( msg, "%{res}", Resource::String( rc.first ) );
+                        StringReplace( msg, "%{count}", rc.second );
 
-                    Dialog::Message( title, msg, Font::BIG, Dialog::OK );
+                        const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( possibleExperience ) );
+                        const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
+                        const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
+
+                        conditions = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
+                    }
+                    else {
+                        msg = _( "Tears brim in the eyes of the tree." );
+                        msg += '\n';
+                        msg.append( _( "\"I need %{count} %{res}.\"" ) );
+                        msg += '\n';
+                        msg.append( _( "it whispers. (sniff) \"Well, come back when you can pay me.\"" ) );
+                        StringReplace( msg, "%{res}", Resource::String( rc.first ) );
+                        StringReplace( msg, "%{count}", rc.second );
+
+                        Dialog::Message( title, msg, Font::BIG, Dialog::OK );
+                    }
                 }
             }
 
@@ -2717,7 +2683,6 @@ namespace
     void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
     {
         {
-            // Should not outlive the corresponding dialog window(s)
             const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
             Dialog::Message(
@@ -2756,7 +2721,6 @@ namespace
 
         // Implicitly capture everything by reference because different compilers disagree on whether there is a need to capture the 'demonSlayingExperience' or not
         const Outcome outcome = [&]() {
-            // Should not outlive the corresponding dialog window(s)
             const MusicalEffectPlayer musicalEffectPlayer( MUS::DEMONCAVE );
 
             const Maps::Tiles & tile = world.GetTiles( dst_index );
@@ -3195,7 +3159,6 @@ namespace
         MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
 
         const Outcome outcome = [&title, riddle]() {
-            // Should not outlive the corresponding dialog window(s)
             const MusicalEffectPlayer musicalEffectPlayer( MUS::ARABIAN );
 
             if ( riddle == nullptr || !riddle->valid ) {
