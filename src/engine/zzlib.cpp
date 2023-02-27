@@ -122,8 +122,6 @@ bool ZStreamFile::read( const std::string & fn, const size_t offset /* = 0 */ )
         return false;
     }
 
-    reset();
-
     putRaw( reinterpret_cast<const char *>( raw.data() ), raw.size() );
 
     return !fail();
