@@ -2735,12 +2735,9 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
 
-    void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dst_index )
     {
         const std::string title = MP2::StringObject( objectType );
-
-        Maps::Tiles & tile = world.GetTiles( dst_index );
-        Kingdom & kingdom = hero.GetKingdom();
 
         enum class Outcome
         {
@@ -2757,9 +2754,12 @@ namespace
 
         const uint32_t demonSlayingExperience = 1000;
 
-        const Outcome outcome = [&hero, &title, &tile, &kingdom, demonSlayingExperience]() {
+        // Implicitly capture everything by reference because different compilers disagree on whether there is a need to capture the 'demonSlayingExperience' or not
+        const Outcome outcome = [&]() {
             // Should not outlive the corresponding dialog window(s)
             const MusicalEffectPlayer musicalEffectPlayer( MUS::DEMONCAVE );
+
+            const Maps::Tiles & tile = world.GetTiles( dst_index );
 
             if ( Dialog::Message( title, _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ), Font::BIG,
                                   Dialog::YES | Dialog::NO )
@@ -2829,6 +2829,7 @@ namespace
                 return Outcome::ExperienceAndArtifact;
             }
             default: {
+                const Kingdom & kingdom = hero.GetKingdom();
                 const uint32_t gold = tile.QuantityGold();
                 const Funds payment( Resource::GOLD, gold );
 
@@ -2858,6 +2859,9 @@ namespace
 
         if ( outcome != Outcome::Ignore ) {
             if ( outcome != Outcome::Empty ) {
+                Maps::Tiles & tile = world.GetTiles( dst_index );
+                Kingdom & kingdom = hero.GetKingdom();
+
                 switch ( outcome ) {
                 case Outcome::BattleWithServants: {
                     Army army( tile );
@@ -3179,8 +3183,6 @@ namespace
     {
         const std::string title = MP2::StringObject( objectType );
 
-        MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
-
         enum class Outcome
         {
             Invalid,
@@ -3189,6 +3191,8 @@ namespace
             CorrectAnswer,
             IncorrectAnswer
         };
+
+        MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
 
         const Outcome outcome = [&title, riddle]() {
             // Should not outlive the corresponding dialog window(s)
