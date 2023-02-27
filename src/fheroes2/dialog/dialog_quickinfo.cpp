@@ -796,12 +796,12 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
     dst_pt.y = cur_rt.y + 2;
     text.draw( dst_pt.x, dst_pt.y, display );
 
-    const fheroes2::Sprite & frame = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 22 );
+    const fheroes2::Sprite & heroPortraitFrame = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 22 );
 
     // mini port heroes
     const fheroes2::Sprite & port = isActiveHero ? activeHero->GetPortrait( PORT_SMALL ) : activeCaptain->GetPortrait( PORT_SMALL );
     if ( !port.empty() ) {
-        fheroes2::Blit( frame, display, cur_rt.x + ( cur_rt.width - frame.width() ) / 2, cur_rt.y + 12 );
+        fheroes2::Blit( heroPortraitFrame, display, cur_rt.x + ( cur_rt.width - heroPortraitFrame.width() ) / 2, cur_rt.y + 12 );
         fheroes2::Blit( port, display, cur_rt.x + ( cur_rt.width - port.width() ) / 2, cur_rt.y + 16 );
     }
 
@@ -878,7 +878,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
         // attack
         text.set( _( "Attack:" ), smallWhite );
         dst_pt.x = cur_rt.x + 10;
-        dst_pt.y += frame.height();
+        dst_pt.y += heroPortraitFrame.height();
         text.draw( dst_pt.x, dst_pt.y, display );
 
         text.set( std::to_string( hero.GetAttack() ), smallWhite );
