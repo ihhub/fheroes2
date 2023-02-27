@@ -2821,11 +2821,11 @@ namespace
         }();
 
         if ( outcome != Outcome::Ignore ) {
+            Kingdom & kingdom = hero.GetKingdom();
+
             if ( outcome != Outcome::Empty ) {
                 Maps::Tiles & tile = world.GetTiles( dst_index );
                 assert( tile.QuantityIsValid() );
-
-                Kingdom & kingdom = hero.GetKingdom();
 
                 switch ( outcome ) {
                 case Outcome::BattleWithServants: {
@@ -2897,7 +2897,9 @@ namespace
                 tile.QuantityReset();
             }
 
-            hero.SetVisited( dst_index, Visit::GLOBAL );
+            // Even if the hero has been defeated by a demon (and no longer belongs to any
+            // valid kingdom), this tile should be marked as visited for his former kingdom.
+            kingdom.SetVisited( dst_index, objectType );
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
