@@ -2616,8 +2616,7 @@ namespace
         }
         else {
             const Funds & funds = tile.QuantityFunds();
-            bool conditions = ( funds.GetValidItemsCount() == 0 );
-            std::string msg;
+            bool conditionsMet = ( funds.GetValidItemsCount() == 0 );
 
             const int level = hero.GetLevel();
             assert( level > 0 );
@@ -2627,8 +2626,8 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::EXPERIENCE );
 
                 // Free training
-                if ( conditions ) {
-                    msg = _(
+                if ( conditionsMet ) {
+                    const std::string msg = _(
                         "Upon your approach, the tree opens its eyes in delight. \"Ahh, an adventurer! Allow me to teach you a little of what I have learned over the ages.\"" );
 
                     const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( possibleExperience ) );
@@ -2641,7 +2640,7 @@ namespace
                     const ResourceCount & rc = tile.QuantityResourceCount();
 
                     if ( hero.GetKingdom().AllowPayment( funds ) ) {
-                        msg = _( "Upon your approach, the tree opens its eyes in delight." );
+                        std::string msg = _( "Upon your approach, the tree opens its eyes in delight." );
                         msg += '\n';
                         msg.append(
                             _( "\"Ahh, an adventurer! I will be happy to teach you a little of what I have learned over the ages for a mere %{count} %{res}.\"" ) );
@@ -2654,10 +2653,10 @@ namespace
                         const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
                         const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
-                        conditions = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
+                        conditionsMet = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
                     }
                     else {
-                        msg = _( "Tears brim in the eyes of the tree." );
+                        std::string msg = _( "Tears brim in the eyes of the tree." );
                         msg += '\n';
                         msg.append( _( "\"I need %{count} %{res}.\"" ) );
                         msg += '\n';
@@ -2670,7 +2669,7 @@ namespace
                 }
             }
 
-            if ( conditions ) {
+            if ( conditionsMet ) {
                 hero.GetKingdom().OddFundsResource( funds );
                 hero.SetVisited( dst_index );
                 hero.IncreaseExperience( possibleExperience );
