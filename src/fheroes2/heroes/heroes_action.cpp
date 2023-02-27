@@ -2777,7 +2777,7 @@ namespace
             case 3: {
                 const Artifact art = tile.QuantityArtifact();
                 if ( !art.isValid() ) {
-                    return Outcome::Empty;
+                    return Outcome::Invalid;
                 }
 
                 std::string msg = _(
