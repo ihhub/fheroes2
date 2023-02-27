@@ -3181,96 +3181,119 @@ namespace
 
         MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
 
-        if ( riddle && riddle->valid ) {
+        enum class Outcome
+        {
+            Invalid,
+            Empty,
+            Ignore,
+            CorrectAnswer,
+            IncorrectAnswer
+        };
+
+        const Outcome outcome = [&title, riddle]() {
+            // Should not outlive the corresponding dialog window(s)
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::ARABIAN );
+
+            if ( riddle == nullptr || !riddle->valid ) {
+                Dialog::Message( title, _( "You come across a giant Sphinx. The Sphinx remains strangely quiet." ), Font::BIG, Dialog::OK );
+
+                return Outcome::Empty;
+            }
+
+            if (
+                Dialog::Message(
+                    title,
+                    _( "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept the challenge?\"" ),
+                    Font::BIG, Dialog::YES | Dialog::NO )
+                != Dialog::YES ) {
+                return Outcome::Ignore;
+            }
+
+            std::string question( _( "The Sphinx asks you the following riddle:\n \n'%{riddle}'\n \nYour answer?" ) );
+            StringReplace( question, "%{riddle}", riddle->message );
+
+            std::string answer;
+            Dialog::InputString( question, answer, title );
+
+            if ( !riddle->AnswerCorrect( answer ) ) {
+                Dialog::Message(
+                    title,
+                    _( "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at you with a paw, knocking you to the ground. Another blow makes the world go black, and you know no more." ),
+                    Font::BIG, Dialog::OK );
+
+                return Outcome::IncorrectAnswer;
+            }
+
             const Funds & res = riddle->resources;
             const Artifact & art = riddle->artifact;
             const uint32_t count = res.GetValidItemsCount();
 
-            bool accept = false;
-            bool correct = false;
+            const std::string msg = _( "Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle so here's your reward. Now begone.\"" );
 
-            {
-                // Should not outlive the corresponding dialog window(s)
-                const MusicalEffectPlayer musicalEffectPlayer( MUS::ARABIAN );
+            if ( count || art.isValid() ) {
+                const std::vector<fheroes2::ResourceDialogElement> resourceUiElements = fheroes2::getResourceDialogElements( res );
 
-                accept
-                    = ( Dialog::Message(
-                            title,
-                            _( "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept the challenge?\"" ),
-                            Font::BIG, Dialog::YES | Dialog::NO )
-                        == Dialog::YES );
+                std::vector<const fheroes2::DialogElement *> uiElements;
+                uiElements.reserve( resourceUiElements.size() + 1 );
 
-                if ( accept ) {
-                    std::string header( _( "The Sphinx asks you the following riddle:\n \n'%{riddle}'\n \nYour answer?" ) );
-                    StringReplace( header, "%{riddle}", riddle->message );
-
-                    std::string answer;
-                    Dialog::InputString( header, answer, title );
-
-                    correct = riddle->AnswerCorrect( answer );
-                    if ( correct ) {
-                        const std::string say = _( "Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle so here's your reward. Now begone.\"" );
-
-                        if ( count ) {
-                            const std::vector<fheroes2::ResourceDialogElement> resourceUiElements = fheroes2::getResourceDialogElements( res );
-                            std::vector<const fheroes2::DialogElement *> uiElements;
-                            uiElements.reserve( resourceUiElements.size() );
-                            for ( const fheroes2::ResourceDialogElement & element : resourceUiElements ) {
-                                uiElements.emplace_back( &element );
-                            }
-
-                            std::unique_ptr<fheroes2::ArtifactDialogElement> artifactUI;
-
-                            if ( art.isValid() ) {
-                                artifactUI.reset( new fheroes2::ArtifactDialogElement( art ) );
-                                uiElements.emplace_back( artifactUI.get() );
-                            }
-
-                            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( say, fheroes2::FontType::normalWhite() ),
-                                                   Dialog::OK, uiElements );
-                        }
-                        else if ( art.isValid() ) {
-                            AudioManager::PlaySound( M82::TREASURE );
-
-                            const fheroes2::ArtifactDialogElement artifactUI( art );
-
-                            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( say, fheroes2::FontType::normalWhite() ),
-                                                   Dialog::OK, { &artifactUI } );
-                        }
-                    }
-                    else {
-                        Dialog::Message(
-                            title,
-                            _( "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at you with a paw, knocking you to the ground. Another blow makes the world go black, and you know no more." ),
-                            Font::BIG, Dialog::OK );
-                    }
+                for ( const fheroes2::ResourceDialogElement & element : resourceUiElements ) {
+                    uiElements.emplace_back( &element );
                 }
+
+                std::unique_ptr<fheroes2::ArtifactDialogElement> artifactUI;
+
+                if ( art.isValid() ) {
+                    artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( art );
+
+                    uiElements.emplace_back( artifactUI.get() );
+                }
+
+                fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       uiElements );
+
+                return Outcome::CorrectAnswer;
             }
 
-            if ( accept ) {
-                if ( correct ) {
-                    if ( art.isValid() ) {
-                        hero.PickupArtifact( art );
-                    }
+            return Outcome::Invalid;
+        }();
 
-                    if ( count ) {
-                        hero.GetKingdom().AddFundsResource( res );
-                    }
+        switch ( outcome ) {
+        case Outcome::Empty:
+            hero.SetVisited( dst_index, Visit::GLOBAL );
 
-                    riddle->SetQuiet();
+            break;
+        case Outcome::Ignore:
+            break;
+        case Outcome::CorrectAnswer: {
+            const Funds & res = riddle->resources;
+            const Artifact & art = riddle->artifact;
+            const uint32_t count = res.GetValidItemsCount();
 
-                    hero.SetVisited( dst_index, Visit::GLOBAL );
-                }
-                else {
-                    Battle::Result result;
-                    result.army1 = Battle::RESULT_LOSS;
-
-                    BattleLose( hero, result, true );
-                }
+            if ( count ) {
+                hero.GetKingdom().AddFundsResource( res );
             }
+
+            if ( art.isValid() ) {
+                hero.PickupArtifact( art );
+            }
+
+            riddle->SetQuiet();
+
+            hero.SetVisited( dst_index, Visit::GLOBAL );
+
+            break;
         }
-        else {
-            Dialog::Message( title, _( "You come across a giant Sphinx. The Sphinx remains strangely quiet." ), Font::BIG, Dialog::OK );
+        case Outcome::IncorrectAnswer: {
+            Battle::Result result;
+            result.army1 = Battle::RESULT_LOSS;
+
+            BattleLose( hero, result, true );
+
+            break;
+        }
+        default:
+            assert( 0 );
+            break;
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )

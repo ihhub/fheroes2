@@ -488,6 +488,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_DAEMON_CAVE:
+        case MP2::OBJ_SPHINX:
         case MP2::OBJ_PYRAMID:
         case MP2::OBJ_WAGON:
         case MP2::OBJ_SKELETON:
