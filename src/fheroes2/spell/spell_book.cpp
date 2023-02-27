@@ -495,15 +495,6 @@ SpellStorage SpellBook::SetFilter( const Filter filter, const HeroBase * hero ) 
                                    } ) ) );
     }
 
-    // check on water: disable portal spells
-    if ( hero != nullptr && hero->Modes( Heroes::SHIPMASTER ) ) {
-        SpellStorage::iterator itend = res.end();
-        itend = std::remove( res.begin(), itend, Spell( Spell::TOWNGATE ) );
-        itend = std::remove( res.begin(), itend, Spell( Spell::TOWNPORTAL ) );
-        if ( res.end() != itend )
-            res.resize( std::distance( res.begin(), itend ) );
-    }
-
     // sorting results
     std::sort( res.begin(), res.end() );
 

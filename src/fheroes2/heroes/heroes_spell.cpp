@@ -301,11 +301,6 @@ namespace
 
     bool ActionSpellSummonBoat( const Heroes & hero )
     {
-        if ( hero.isShipMaster() ) {
-            Dialog::Message( "", _( "This spell cannot be used on a boat." ), Font::BIG, Dialog::OK );
-            return false;
-        }
-
         const int32_t center = hero.GetIndex();
 
         const int tilePassability = world.GetTiles( center ).GetPassable();
@@ -672,10 +667,10 @@ void Heroes::ActionSpellCast( const Spell & spell )
         apply = ActionSpellDimensionDoor( *this );
         break;
     case Spell::TOWNGATE:
-        apply = isShipMaster() ? false : ActionSpellTownGate( *this );
+        apply = ActionSpellTownGate( *this );
         break;
     case Spell::TOWNPORTAL:
-        apply = isShipMaster() ? false : ActionSpellTownPortal( *this );
+        apply = ActionSpellTownPortal( *this );
         break;
     case Spell::VISIONS:
         apply = ActionSpellVisions( *this );

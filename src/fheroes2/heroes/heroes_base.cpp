@@ -392,6 +392,13 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             return false;
         }
 
+        if ( ( spell == Spell::SUMMONBOAT || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) && hero->isShipMaster() ) {
+            if ( res != nullptr ) {
+                *res = _( "This spell cannot be used on a boat." );
+            }
+            return false;
+        }
+
         if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
             const KingdomCastles & castles = hero->GetKingdom().GetCastles();
             bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
