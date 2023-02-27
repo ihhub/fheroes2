@@ -2647,7 +2647,7 @@ namespace
                         msg += '\n';
                         msg.append( _( "(Just bury it around my roots.)" ) );
                         StringReplace( msg, "%{res}", Resource::String( rc.first ) );
-                        StringReplace( msg, "%{count}", rc.second );
+                        StringReplace( msg, "%{count}", std::to_string( rc.second ) );
 
                         const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( possibleExperience ) );
                         const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
@@ -2662,7 +2662,7 @@ namespace
                         msg += '\n';
                         msg.append( _( "it whispers. (sniff) \"Well, come back when you can pay me.\"" ) );
                         StringReplace( msg, "%{res}", Resource::String( rc.first ) );
-                        StringReplace( msg, "%{count}", rc.second );
+                        StringReplace( msg, "%{count}", std::to_string( rc.second ) );
 
                         Dialog::Message( title, msg, Font::BIG, Dialog::OK );
                     }
