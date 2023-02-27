@@ -31,18 +31,19 @@
 #include "image.h"
 #include "serialize.h"
 
-class ZStreamFile : public StreamBuf
+class ZStreamBuf : public StreamBuf
 {
 public:
-    ZStreamFile() = default;
+    ZStreamBuf() = default;
 
-    // Reads & unzips the contents of the specified file and appends it to the end of the buffer.
-    // The current read position of the buffer does not change. Returns true on success or false
-    // on error.
+    // Reads & unzips the zipped chunk from the specified file at the specified offset and appends
+    // it to the end of the buffer. The current read position of the buffer does not change. Returns
+    // true on success or false on error.
     bool read( const std::string & fn, const size_t offset = 0 );
+
     // Zips the contents of the buffer from the current read position to the end of the buffer and
-    // writes it to the specified file. The current read position of the buffer does not change.
-    // Returns true on success and false on error.
+    // writes (or appends) it to the specified file. The current read position of the buffer does
+    // not change. Returns true on success and false on error.
     bool write( const std::string & fn, const bool append = false ) const;
 };
 

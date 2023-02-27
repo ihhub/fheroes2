@@ -115,7 +115,7 @@ namespace fheroes2
 
     bool HighScoreDataContainer::load( const std::string & fileName )
     {
-        ZStreamFile hdata;
+        ZStreamBuf hdata;
         if ( !hdata.read( fileName ) ) {
             return false;
         }
@@ -159,7 +159,7 @@ namespace fheroes2
 
     bool HighScoreDataContainer::save( const std::string & fileName ) const
     {
-        ZStreamFile hdata;
+        ZStreamBuf hdata;
         hdata.setbigendian( true );
         hdata << highscoreFileMagicValue << _highScoresStandard << _highScoresCampaign;
 

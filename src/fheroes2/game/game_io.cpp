@@ -130,20 +130,20 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
        << HeaderSAV( conf.CurrentFileInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
     fs.close();
 
-    ZStreamFile fz;
-    fz.setbigendian( true );
+    ZStreamBuf zb;
+    zb.setbigendian( true );
 
     // Game data in ZIP format
-    fz << World::Get() << Settings::Get() << GameOver::Result::Get();
+    zb << World::Get() << Settings::Get() << GameOver::Result::Get();
 
     if ( conf.isCampaignGameType() ) {
-        fz << Campaign::CampaignSaveData::Get();
+        zb << Campaign::CampaignSaveData::Get();
     }
 
     // End-of-data marker
-    fz << SAV2ID3;
+    zb << SAV2ID3;
 
-    if ( fz.fail() || !fz.write( filePath, true ) ) {
+    if ( zb.fail() || !zb.write( filePath, true ) ) {
         return false;
     }
 
@@ -220,10 +220,10 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    ZStreamFile fz;
-    fz.setbigendian( true );
+    ZStreamBuf zb;
+    zb.setbigendian( true );
 
-    if ( !fz.read( filePath, offset ) ) {
+    if ( !zb.read( filePath, offset ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error uncompressing the file " << filePath )
 
         showGenericErrorMessage();
@@ -242,7 +242,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1002_RELEASE ) {
         uint16_t zippedSaveFileVersion = 0;
-        fz >> zippedSaveFileVersion;
+        zb >> zippedSaveFileVersion;
 
         if ( zippedSaveFileVersion != saveFileVersion ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN,
@@ -254,13 +254,13 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         }
     }
 
-    fz >> World::Get() >> conf >> GameOver::Result::Get();
+    zb >> World::Get() >> conf >> GameOver::Result::Get();
 
     fheroes2::GameMode returnValue = fheroes2::GameMode::START_GAME;
 
     if ( conf.isCampaignGameType() ) {
         Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
-        fz >> saveData;
+        zb >> saveData;
 
         if ( !saveData.isStarting() && saveData.getCurrentScenarioInfoId() == saveData.getLastCompletedScenarioInfoID() ) {
             // This is the end of the current scenario. We should show next scenario selection.
@@ -269,9 +269,9 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     uint16_t endOfDataMarker = 0;
-    fz >> endOfDataMarker;
+    zb >> endOfDataMarker;
 
-    if ( fz.fail() || endOfDataMarker != SAV2ID3 ) {
+    if ( zb.fail() || endOfDataMarker != SAV2ID3 ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filePath << " is corrupted" )
 
         showGenericErrorMessage();
