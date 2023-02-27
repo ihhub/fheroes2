@@ -2788,7 +2788,7 @@ namespace
             case 1: {
                 std::string msg
                     = _( "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points." );
-                StringReplace( msg, "%{exp}", demonSlayingExperience );
+                StringReplace( msg, "%{exp}", std::to_string( demonSlayingExperience ) );
 
                 const fheroes2::ExperienceDialogElement experienceUI( demonSlayingExperience );
                 fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
@@ -2801,8 +2801,8 @@ namespace
 
                 std::string msg = _(
                     "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
-                StringReplace( msg, "%{exp}", demonSlayingExperience );
-                StringReplace( msg, "%{count}", gold );
+                StringReplace( msg, "%{exp}", std::to_string( demonSlayingExperience ) );
+                StringReplace( msg, "%{count}", std::to_string( gold ) );
 
                 const fheroes2::ExperienceDialogElement experienceUI( demonSlayingExperience );
                 const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
@@ -2834,7 +2834,7 @@ namespace
 
                 if ( !kingdom.AllowPayment( payment ) ) {
                     std::string msg = _( "Seeing that you do not have %{count} gold, the demon slashes you with its claws, and the last thing you see is a red haze." );
-                    StringReplace( msg, "%{count}", gold );
+                    StringReplace( msg, "%{count}", std::to_string( gold ) );
 
                     Dialog::Message( title, msg, Font::BIG, Dialog::OK );
 
@@ -2843,7 +2843,7 @@ namespace
 
                 std::string msg = _(
                     "The Demon leaps upon you and has its claws at your throat before you can even draw your sword. \"Your life is mine,\" it says. \"I will sell it back to you for %{count} gold.\"" );
-                StringReplace( msg, "%{count}", gold );
+                StringReplace( msg, "%{count}", std::to_string( gold ) );
 
                 if ( Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                     return Outcome::PayOff;
