@@ -2737,41 +2737,129 @@ namespace
 
     void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
+        const std::string title = MP2::StringObject( objectType );
+
         Maps::Tiles & tile = world.GetTiles( dst_index );
+        Kingdom & kingdom = hero.GetKingdom();
 
-        const std::string header = MP2::StringObject( objectType );
-
-        bool enter = false;
-        bool fightServants = false;
-
+        enum class Outcome
         {
+            Invalid,
+            Ignore,
+            Empty,
+            BattleWithServants,
+            Experience,
+            ExperienceAndGold,
+            ExperienceAndArtifact,
+            PayOff,
+            Death
+        };
+
+        const uint32_t demonSlayingExperience = 1000;
+
+        const Outcome outcome = [&hero, &title, &tile, &kingdom, demonSlayingExperience]() {
             // Should not outlive the corresponding dialog window(s)
             const MusicalEffectPlayer musicalEffectPlayer( MUS::DEMONCAVE );
 
-            enter = ( Dialog::Message( header, _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ),
-                                       Font::BIG, Dialog::YES | Dialog::NO )
-                      == Dialog::YES );
-
-            if ( enter ) {
-                fightServants
-                    = ( Dialog::Message(
-                            header,
-                            _( "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, \"you will fight and surely die. But I will give you a choice of deaths. You may fight me, or you may fight my servants. Do you prefer to fight my servants?\"" ),
-                            Font::BIG, Dialog::YES | Dialog::NO )
-                        == Dialog::YES );
+            if ( Dialog::Message( title, _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ), Font::BIG,
+                                  Dialog::YES | Dialog::NO )
+                 != Dialog::YES ) {
+                return Outcome::Ignore;
             }
-        }
 
-        if ( enter ) {
-            uint32_t variant = tile.QuantityVariant();
+            if ( !tile.QuantityIsValid() ) {
+                Dialog::Message( title, _( "Except for evidence of a terrible battle, the cave is empty." ), Font::BIG, Dialog::OK );
 
-            if ( variant ) {
-                if ( variant == 3 && hero.IsFullBagArtifacts() ) {
-                    variant = 2;
+                return Outcome::Empty;
+            }
+
+            if (
+                Dialog::Message(
+                    title,
+                    _( "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, \"you will fight and surely die. But I will give you a choice of deaths. You may fight me, or you may fight my servants. Do you prefer to fight my servants?\"" ),
+                    Font::BIG, Dialog::YES | Dialog::NO )
+                == Dialog::YES ) {
+                return Outcome::BattleWithServants;
+            }
+
+            const int variant = ( tile.QuantityVariant() == 3 && hero.IsFullBagArtifacts() ) ? 2 : tile.QuantityVariant();
+
+            switch ( variant ) {
+            case 1: {
+                std::string msg
+                    = _( "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points." );
+                StringReplace( msg, "%{exp}", demonSlayingExperience );
+
+                const fheroes2::ExperienceDialogElement experienceUI( demonSlayingExperience );
+                fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &experienceUI } );
+
+                return Outcome::Experience;
+            }
+            case 2: {
+                const uint32_t gold = tile.QuantityGold();
+
+                std::string msg = _(
+                    "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
+                StringReplace( msg, "%{exp}", demonSlayingExperience );
+                StringReplace( msg, "%{count}", gold );
+
+                const fheroes2::ExperienceDialogElement experienceUI( demonSlayingExperience );
+                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+                fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &experienceUI, &goldUI } );
+
+                return Outcome::ExperienceAndGold;
+            }
+            case 3: {
+                const Artifact art = tile.QuantityArtifact();
+                if ( !art.isValid() ) {
+                    return Outcome::Empty;
                 }
 
-                if ( fightServants ) {
-                    // Battle with earth elementals
+                std::string msg = _(
+                    "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and find the %{art} in the back of the cave." );
+                StringReplace( msg, "%{art}", art.GetName() );
+
+                const fheroes2::ExperienceDialogElement experienceUI( demonSlayingExperience );
+                const fheroes2::ArtifactDialogElement artifactUI( art );
+                fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &experienceUI, &artifactUI } );
+
+                return Outcome::ExperienceAndArtifact;
+            }
+            default: {
+                const uint32_t gold = tile.QuantityGold();
+                const Funds payment( Resource::GOLD, gold );
+
+                if ( !kingdom.AllowPayment( payment ) ) {
+                    std::string msg = _( "Seeing that you do not have %{count} gold, the demon slashes you with its claws, and the last thing you see is a red haze." );
+                    StringReplace( msg, "%{count}", gold );
+
+                    Dialog::Message( title, msg, Font::BIG, Dialog::OK );
+
+                    return Outcome::Death;
+                }
+
+                std::string msg = _(
+                    "The Demon leaps upon you and has its claws at your throat before you can even draw your sword. \"Your life is mine,\" it says. \"I will sell it back to you for %{count} gold.\"" );
+                StringReplace( msg, "%{count}", gold );
+
+                if ( Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                    return Outcome::PayOff;
+                }
+
+                return Outcome::Death;
+            }
+            }
+
+            return Outcome::Invalid;
+        }();
+
+        if ( outcome != Outcome::Ignore ) {
+            if ( outcome != Outcome::Empty ) {
+                switch ( outcome ) {
+                case Outcome::BattleWithServants: {
                     Army army( tile );
 
                     Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
@@ -2785,102 +2873,59 @@ namespace
 
                         const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
-                        fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
                                                Dialog::OK, { &goldUI } );
 
-                        hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
+                        kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
                     }
                     else {
                         BattleLose( hero, res, true );
                     }
+
+                    break;
                 }
-                else if ( 1 == variant ) {
-                    const uint32_t exp = 1000;
+                case Outcome::Experience:
+                    hero.IncreaseExperience( demonSlayingExperience );
 
-                    std::string msg
-                        = _( "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points." );
-                    StringReplace( msg, "%{exp}", exp );
-
-                    const fheroes2::ExperienceDialogElement experienceUI( exp );
-                    fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                                           Dialog::OK, { &experienceUI } );
-
-                    hero.IncreaseExperience( exp );
-                }
-                else if ( 2 == variant ) {
-                    const uint32_t exp = 1000;
+                    break;
+                case Outcome::ExperienceAndGold: {
                     const uint32_t gold = tile.QuantityGold();
 
-                    std::string msg = _(
-                        "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
-                    StringReplace( msg, "%{exp}", exp );
-                    StringReplace( msg, "%{count}", gold );
+                    hero.IncreaseExperience( demonSlayingExperience );
+                    kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
 
-                    const fheroes2::ExperienceDialogElement experienceUI( exp );
-                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
-                    fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                                           Dialog::OK, { &experienceUI, &goldUI } );
-
-                    hero.IncreaseExperience( exp );
-                    hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
+                    break;
                 }
-                else if ( 3 == variant ) {
-                    const Artifact & art = tile.QuantityArtifact();
+                case Outcome::ExperienceAndArtifact: {
+                    const Artifact art = tile.QuantityArtifact();
 
-                    if ( art.isValid() ) {
-                        std::string msg = _(
-                            "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and find the %{art} in the back of the cave." );
-                        StringReplace( msg, "%{art}", art.GetName() );
+                    hero.IncreaseExperience( demonSlayingExperience );
+                    hero.PickupArtifact( art );
 
-                        const uint32_t exp = 1000;
-
-                        const fheroes2::ExperienceDialogElement experienceUI( exp );
-                        const fheroes2::ArtifactDialogElement artifactUI( art );
-                        fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                                               Dialog::OK, { &experienceUI, &artifactUI } );
-
-                        hero.PickupArtifact( art );
-                        hero.IncreaseExperience( exp );
-                    }
+                    break;
                 }
-                else {
+                case Outcome::PayOff: {
                     const uint32_t gold = tile.QuantityGold();
                     const Funds payment( Resource::GOLD, gold );
 
-                    Kingdom & kingdom = hero.GetKingdom();
+                    kingdom.OddFundsResource( payment );
 
-                    bool allow = kingdom.AllowPayment( payment );
-                    bool remove = true;
+                    break;
+                }
+                case Outcome::Death: {
+                    Battle::Result res;
+                    res.army1 = Battle::RESULT_LOSS;
 
-                    std::string msg
-                        = allow ? _(
-                              "The Demon leaps upon you and has its claws at your throat before you can even draw your sword. \"Your life is mine,\" it says. \"I will sell it back to you for %{count} gold.\"" )
-                                : _( "Seeing that you do not have %{count} gold, the demon slashes you with its claws, and the last thing you see is a red haze." );
-                    StringReplace( msg, "%{count}", gold );
+                    BattleLose( hero, res, true );
 
-                    if ( allow ) {
-                        if ( Dialog::YES == Dialog::Message( header, msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                            remove = false;
-
-                            kingdom.OddFundsResource( payment );
-                        }
-                    }
-                    else {
-                        Dialog::Message( header, msg, Font::BIG, Dialog::OK );
-                    }
-
-                    if ( remove ) {
-                        Battle::Result res;
-                        res.army1 = Battle::RESULT_LOSS;
-
-                        BattleLose( hero, res, true );
-                    }
+                    break;
+                }
+                default:
+                    assert( 0 );
+                    break;
                 }
 
                 tile.QuantityReset();
-            }
-            else {
-                Dialog::Message( header, _( "Except for evidence of a terrible battle, the cave is empty." ), Font::BIG, Dialog::OK );
             }
 
             hero.SetVisited( dst_index, Visit::GLOBAL );
