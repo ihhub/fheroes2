@@ -66,13 +66,6 @@ else(MACOS_APP_BUNDLE)
 
 	add_executable(fheroes2 ${FHEROES2_SOURCES})
 
-	add_custom_command(
-		TARGET fheroes2 POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy
-		$<TARGET_FILE:fheroes2>
-		${PROJECT_SOURCE_DIR}/$<TARGET_FILE_NAME:fheroes2>
-		)
-
 	target_compile_definitions(
 		fheroes2
 		PRIVATE
@@ -80,6 +73,14 @@ else(MACOS_APP_BUNDLE)
 		$<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:_CRT_SECURE_NO_WARNINGS>
 		$<$<CONFIG:Debug>:WITH_DEBUG>
 		FHEROES2_DATA=${FHEROES2_DATA_ABSOLUTE}
+		)
+
+	# Copy executable to root of the project.
+	add_custom_command(
+		TARGET fheroes2 POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy
+		$<TARGET_FILE:fheroes2>
+		${PROJECT_SOURCE_DIR}/$<TARGET_FILE_NAME:fheroes2>
 		)
 
 	install(TARGETS fheroes2 DESTINATION ${CMAKE_INSTALL_BINDIR})
