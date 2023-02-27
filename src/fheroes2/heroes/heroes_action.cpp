@@ -2823,6 +2823,8 @@ namespace
         if ( outcome != Outcome::Ignore ) {
             if ( outcome != Outcome::Empty ) {
                 Maps::Tiles & tile = world.GetTiles( dst_index );
+                assert( tile.QuantityIsValid() );
+
                 Kingdom & kingdom = hero.GetKingdom();
 
                 switch ( outcome ) {
@@ -3231,6 +3233,8 @@ namespace
         case Outcome::Ignore:
             break;
         case Outcome::CorrectAnswer: {
+            assert( riddle && riddle->valid );
+
             const Funds & res = riddle->resources;
             const Artifact & art = riddle->artifact;
             const uint32_t count = res.GetValidItemsCount();
