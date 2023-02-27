@@ -998,13 +998,13 @@ namespace AI
 
             const int morale = hero.GetMorale();
             if ( morale >= Morale::BLOOD ) {
-                return -dangerousTaskPenalty; // no reason to visit with a maximum moral
+                return -dangerousTaskPenalty; // No reason to visit with maximum morale
             }
             if ( morale == Morale::GREAT ) {
-                return -4000; // moral is good enough to avoid visiting this object
+                return -4000; // Morale is good enough to avoid visiting this object
             }
             if ( morale == Morale::GOOD ) {
-                return -2000; // is it worth to visit this object with little better than neutral moral?
+                return -2000; // Is it worth visiting this facility with a morale slightly better than neutral?
             }
             if ( morale == Morale::NORMAL ) {
                 return 50;
@@ -1083,13 +1083,13 @@ namespace AI
         case MP2::OBJ_MERMAID: {
             const int luck = hero.GetLuck();
             if ( luck >= Luck::IRISH ) {
-                return -dangerousTaskPenalty; // no reason to visit with a maximum moral
+                return -dangerousTaskPenalty; // No reason to visit with maximum morale
             }
             if ( luck == Luck::GREAT ) {
-                return -4000; // moral is good enough to avoid visiting this object
+                return -4000; // Morale is good enough to avoid visiting this object
             }
             if ( luck == Luck::GOOD ) {
-                return -2000; // is it worth to visit this object with little better than neutral moral?
+                return -2000; // Is it worth visiting this facility with a morale slightly better than neutral?
             }
             if ( luck == Luck::NORMAL ) {
                 return 50;
@@ -1327,13 +1327,13 @@ namespace AI
 
             const int morale = hero.GetMorale();
             if ( morale >= Morale::BLOOD ) {
-                return -dangerousTaskPenalty; // no reason to visit with a maximum moral
+                return -dangerousTaskPenalty; // No reason to visit with maximum morale
             }
             if ( morale == Morale::GREAT ) {
-                return -4000; // moral is good enough to avoid visiting this object
+                return -4000; // Morale is good enough to avoid visiting this object
             }
             if ( morale == Morale::GOOD ) {
-                return -2000; // is it worth to visit this object with little better than neutral moral?
+                return -2000; // Is it worth visiting this facility with a morale slightly better than neutral?
             }
             if ( morale == Morale::NORMAL ) {
                 return 50;
