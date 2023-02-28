@@ -2453,6 +2453,9 @@ void Maps::Tiles::ClearFog( const int colors )
 {
     _fogColors &= ~colors;
 
+    // The fog might be cleared even without the hero's movement - for example, the hero can gain a new level of Scouting
+    // skill by picking up a Treasure Chest from a nearby tile or buying a map in a Magellan's Maps object using the space
+    // bar button. Reset the pathfinder(s) to make the newly discovered tiles immediately available for this hero.
     world.resetPathfinder();
 }
 
