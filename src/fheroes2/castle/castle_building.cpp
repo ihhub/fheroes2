@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -123,7 +123,7 @@ namespace
 
 CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const fheroes2::Point & top )
 {
-    const std::vector<building_t> ordersBuildings = fheroes2::getBuildingDrawingPriorities( castle.GetRace(), Settings::Get().CurrentFileInfo()._version );
+    const std::vector<building_t> ordersBuildings = fheroes2::getBuildingDrawingPriorities( castle.GetRace(), Settings::Get().CurrentFileInfo().version );
 
     for ( const building_t buildingId : ordersBuildings ) {
         emplace_back( buildingId, fheroes2::getCastleBuildingArea( castle.GetRace(), buildingId ) + top );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,13 +31,20 @@
 #include "image.h"
 #include "serialize.h"
 
-class ZStreamFile : public StreamBuf
+class ZStreamBuf : public StreamBuf
 {
 public:
-    ZStreamFile() = default;
+    ZStreamBuf() = default;
 
-    bool read( const std::string &, size_t offset = 0 );
-    bool write( const std::string &, bool append = false ) const;
+    // Reads & unzips the zipped chunk from the specified file at the specified offset and appends
+    // it to the end of the buffer. The current read position of the buffer does not change. Returns
+    // true on success or false on error.
+    bool read( const std::string & fn, const size_t offset = 0 );
+
+    // Zips the contents of the buffer from the current read position to the end of the buffer and
+    // writes (or appends) it to the specified file. The current read position of the buffer does
+    // not change. Returns true on success and false on error.
+    bool write( const std::string & fn, const bool append = false ) const;
 };
 
 fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );

@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2023                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -73,6 +73,14 @@ else(MACOS_APP_BUNDLE)
 		$<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:_CRT_SECURE_NO_WARNINGS>
 		$<$<CONFIG:Debug>:WITH_DEBUG>
 		FHEROES2_DATA=${FHEROES2_DATA_ABSOLUTE}
+		)
+
+	# Copy executable to root of the project.
+	add_custom_command(
+		TARGET fheroes2 POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy
+		$<TARGET_FILE:fheroes2>
+		${PROJECT_SOURCE_DIR}/$<TARGET_FILE_NAME:fheroes2>
 		)
 
 	install(TARGETS fheroes2 DESTINATION ${CMAKE_INSTALL_BINDIR})

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -115,7 +115,7 @@ namespace fheroes2
 
     bool HighScoreDataContainer::load( const std::string & fileName )
     {
-        ZStreamFile hdata;
+        ZStreamBuf hdata;
         if ( !hdata.read( fileName ) ) {
             return false;
         }
@@ -159,7 +159,7 @@ namespace fheroes2
 
     bool HighScoreDataContainer::save( const std::string & fileName ) const
     {
-        ZStreamFile hdata;
+        ZStreamBuf hdata;
         hdata.setbigendian( true );
         hdata << highscoreFileMagicValue << _highScoresStandard << _highScoresCampaign;
 

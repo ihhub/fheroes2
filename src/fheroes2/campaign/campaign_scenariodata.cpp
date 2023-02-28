@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "campaign_scenariodata.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -27,9 +29,8 @@
 #include <utility>
 
 #include "artifact.h"
-#include "campaign_scenariodata.h"
 #include "dir.h"
-#include "game.h"
+#include "game_io.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
@@ -799,7 +800,7 @@ namespace Campaign
         msg >> data._type >> data._subType >> data._amount;
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE5_1000_RELEASE, "Remove the check below." );
-        if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE5_1000_RELEASE ) {
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE5_1000_RELEASE ) {
             data._artifactSpellId = Spell::NONE;
         }
         else {

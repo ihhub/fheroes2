@@ -88,7 +88,7 @@ public:
 
     bool isCurrentMapPriceOfLoyalty() const
     {
-        return current_maps_file._version == GameVersion::PRICE_OF_LOYALTY;
+        return current_maps_file.version == GameVersion::PRICE_OF_LOYALTY;
     }
 
     int HeroesMoveSpeed() const
@@ -328,7 +328,7 @@ public:
     // from maps info
     bool AllowChangeRace( int f ) const
     {
-        return ( current_maps_file.rnd_races & f ) != 0;
+        return ( current_maps_file.colorsOfRandomRaces & f ) != 0;
     }
 
     const std::string & MapsFile() const
@@ -353,7 +353,7 @@ public:
 
     fheroes2::Size MapsSize() const
     {
-        return { current_maps_file.size_w, current_maps_file.size_h };
+        return { current_maps_file.width, current_maps_file.height };
     }
 
     bool GameStartWithHeroes() const
