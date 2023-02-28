@@ -1284,14 +1284,14 @@ namespace
         case MP2::OBJ_OASIS:
             msg = visited ? _( "The drink at the oasis is refreshing, but offers no further benefit. The oasis might help again if you fought a battle first." )
                           : _( "A drink at the oasis fills your troops with strength and lifts their spirits.  You can travel a bit further today." );
-            move = 800; // + 8TP, from FAQ
+            move = GameStatic::getMovementPointBonus( MP2::OBJ_OASIS );
             break;
 
         case MP2::OBJ_WATERING_HOLE:
             msg = visited ? _(
                       "The drink at the watering hole is refreshing, but offers no further benefit. The watering hole might help again if you fought a battle first." )
                           : _( "A drink at the watering hole fills your troops with strength and lifts their spirits. You can travel a bit further today." );
-            move = 400; // + 4TP, from FAQ
+            move = GameStatic::getMovementPointBonus( MP2::OBJ_WATERING_HOLE );
             break;
 
         case MP2::OBJ_TEMPLE:
@@ -2190,27 +2190,7 @@ namespace
                              Dialog::OK );
         }
         else {
-            bool access = false;
-            switch ( hero.GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) {
-            case Skill::Level::BASIC:
-                if ( 7 < hero.GetLevel() )
-                    access = true;
-                break;
-            case Skill::Level::ADVANCED:
-                if ( 5 < hero.GetLevel() )
-                    access = true;
-                break;
-            case Skill::Level::EXPERT:
-                if ( 3 < hero.GetLevel() )
-                    access = true;
-                break;
-            default:
-                if ( 9 < hero.GetLevel() )
-                    access = true;
-                break;
-            }
-
-            if ( access ) {
+            if ( GameStatic::isHeroWorthyToVisitXanadu( hero ) ) {
                 Dialog::Message( title, _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ), Font::BIG,
                                  Dialog::OK );
                 hero.IncreasePrimarySkill( Skill::Primary::ATTACK );
@@ -2753,7 +2733,7 @@ namespace
         if ( !visited ) {
             hero.SetVisited( dst_index );
             AudioManager::PlaySound( M82::EXPERNCE );
-            hero.IncreaseMovePoints( 400 );
+            hero.IncreaseMovePoints( GameStatic::getMovementPointBonus( MP2::OBJ_STABLES ) );
         }
 
         if ( isCavalryPresent ) {

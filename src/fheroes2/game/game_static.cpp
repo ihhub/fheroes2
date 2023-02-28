@@ -22,6 +22,8 @@
  ***************************************************************************/
 
 #include "game_static.h"
+
+#include "heroes.h"
 #include "mp2.h"
 #include "race.h"
 #include "skill.h"
@@ -272,4 +274,31 @@ const Skill::secondary_t * GameStatic::GetSkillForWitchsHut()
 int GameStatic::GetBattleMoatReduceDefense()
 {
     return 3;
+}
+
+uint32_t GameStatic::getMovementPointBonus( const MP2::MapObjectType objectType )
+{
+    switch ( objectType ) {
+    case MP2::OBJ_OASIS:
+        return 800;
+    case MP2::OBJ_STABLES:
+    case MP2::OBJ_WATERING_HOLE:
+        return 400;
+    default:
+        break;
+    }
+
+    return 0;
+}
+
+bool GameStatic::isHeroWorthyToVisitXanadu( const Heroes & hero )
+{
+    const uint32_t heroLevel = hero.GetLevel();
+    if ( heroLevel > 9 ) {
+        return true;
+    }
+
+    const uint32_t diplomacyLevel = hero.GetLevelSkill( Skill::Secondary::DIPLOMACY );
+    return ( diplomacyLevel == Skill::Level::BASIC && heroLevel > 7 ) || ( diplomacyLevel == Skill::Level::ADVANCED && heroLevel > 5 )
+           || ( diplomacyLevel == Skill::Level::EXPERT && heroLevel > 3 );
 }

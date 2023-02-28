@@ -584,22 +584,22 @@ bool MP2::isActionObject( const MapObjectType objectType, const bool locatesOnWa
 bool MP2::isWaterActionObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
-    case OBJ_SEA_CHEST:
-    case OBJ_DERELICT_SHIP:
-    case OBJ_SHIPWRECK:
-    case OBJ_WHIRLPOOL:
-    case OBJ_BUOY:
+    case OBJ_ARTIFACT:
+    case OBJ_BARRIER: // Can barriers be set on water?
     case OBJ_BOTTLE:
-    case OBJ_SHIPWRECK_SURVIVOR:
+    case OBJ_BUOY:
+    case OBJ_COAST: // This is actually a land object.
+    case OBJ_DERELICT_SHIP:
     case OBJ_FLOTSAM:
     case OBJ_MAGELLANS_MAPS:
-    case OBJ_COAST:
     case OBJ_MERMAID:
-    case OBJ_SIRENS:
-    case OBJ_BARRIER:
     case OBJ_MONSTER:
-    case OBJ_ARTIFACT:
     case OBJ_RESOURCE:
+    case OBJ_SEA_CHEST:
+    case OBJ_SHIPWRECK:
+    case OBJ_SHIPWRECK_SURVIVOR:
+    case OBJ_SIRENS:
+    case OBJ_WHIRLPOOL:
         return true;
     case OBJ_CASTLE:
     case OBJ_BOAT:

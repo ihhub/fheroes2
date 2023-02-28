@@ -609,7 +609,7 @@ uint32_t Heroes::GetMaxMovePoints() const
 
         // visited object
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
-            point += 400;
+            point += GameStatic::getMovementPointBonus( MP2::OBJ_STABLES );
     }
 
     if ( isControlAI() ) {
