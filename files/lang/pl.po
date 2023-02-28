@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-19 09:46+0000\n"
+"POT-Creation-Date: 2023-02-28 11:54+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -3112,6 +3112,18 @@ msgstr "Nazwa mapy: "
 msgid ""
 "\n"
 "\n"
+"Month: "
+msgstr ""
+
+msgid ", Week: "
+msgstr ""
+
+msgid ", Day: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
 "Location: "
 msgstr ""
 "\n"
@@ -3151,13 +3163,8 @@ msgstr "Wybierz zaklęcie:"
 msgid "Select Skill:"
 msgstr "Wybierz umiejętność:"
 
-msgid "Location: "
-msgstr "Położenie pliku: "
-
-msgid ""
-"\n"
-"\n"
-"Map Type:\n"
+#, fuzzy
+msgid "Map Type:\n"
 msgstr ""
 "\n"
 "\n"
@@ -3711,6 +3718,19 @@ msgstr "Kampania"
 msgid "View High Scores for Campaigns."
 msgstr "Obejrzyj najlepsze wyniki dla kampanii."
 
+#, fuzzy
+msgid "The save file is corrupted."
+msgstr "Stworzono lustrzane odbicie."
+
+msgid "Unsupported save format: "
+msgstr "Niewspierany format zapisanej gry: "
+
+msgid "Current game version: "
+msgstr "Aktualna wersja gry:"
+
+msgid "Last supported version: "
+msgstr "Ostatnia wspierana wersja: "
+
 msgid "This file contains a save with an invalid game type."
 msgstr "Ten plik zawiera zapis z nieprawidłowym typem gry."
 
@@ -3721,15 +3741,6 @@ msgid ""
 msgstr ""
 "Ten plik jest zapisany w wersji gry \"Cena Lojalności\".\n"
 "Niektóre elementy mogą być niedostępne."
-
-msgid "Unsupported save format: "
-msgstr "Niewspierany format zapisanej gry: "
-
-msgid "Current game version: "
-msgstr "Aktualna wersja gry:"
-
-msgid "Last supported version: "
-msgstr "Ostatnia wspierana wersja: "
 
 msgid "This saved game is localized to '"
 msgstr "Zapisana gra jest w języku '"
@@ -9987,3 +9998,6 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Location: "
+#~ msgstr "Położenie pliku: "
