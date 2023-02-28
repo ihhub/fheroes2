@@ -2596,7 +2596,7 @@ namespace
         }
         else {
             const Funds & funds = tile.QuantityFunds();
-            bool conditionsMet = ( funds.GetValidItemsCount() == 0 );
+            bool increaseExperience = ( funds.GetValidItemsCount() == 0 );
 
             const int level = hero.GetLevel();
             assert( level > 0 );
@@ -2606,7 +2606,7 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::EXPERIENCE );
 
                 // Free training
-                if ( conditionsMet ) {
+                if ( increaseExperience ) {
                     const std::string msg = _(
                         "Upon your approach, the tree opens its eyes in delight. \"Ahh, an adventurer! Allow me to teach you a little of what I have learned over the ages.\"" );
 
@@ -2615,7 +2615,7 @@ namespace
                     const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
                     // In the original game, there was no way to refuse to level up for free, this is an improvement specific to fheroes2
-                    conditionsMet = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
+                    increaseExperience = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
                 }
                 else {
                     const ResourceCount & rc = tile.QuantityResourceCount();
@@ -2634,7 +2634,7 @@ namespace
                         const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
                         const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
-                        conditionsMet = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
+                        increaseExperience = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
                     }
                     else {
                         std::string msg = _( "Tears brim in the eyes of the tree." );
@@ -2650,7 +2650,7 @@ namespace
                 }
             }
 
-            if ( conditionsMet ) {
+            if ( increaseExperience ) {
                 hero.GetKingdom().OddFundsResource( funds );
                 hero.SetVisited( dst_index );
                 hero.IncreaseExperience( possibleExperience );
