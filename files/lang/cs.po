@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 14:12+0000\n"
+"POT-Creation-Date: 2023-02-28 11:54+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3046,6 +3046,18 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
+"Month: "
+msgstr ""
+
+msgid ", Week: "
+msgstr ""
+
+msgid ", Day: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
 "Location: "
 msgstr ""
 
@@ -3086,14 +3098,8 @@ msgstr "Seslat kouzlo"
 msgid "Select Skill:"
 msgstr ""
 
-msgid "Location: "
-msgstr ""
-
 #, fuzzy
-msgid ""
-"\n"
-"\n"
-"Map Type:\n"
+msgid "Map Type:\n"
 msgstr "Velikost mapy"
 
 msgid "The Succession Wars"
@@ -3655,13 +3661,9 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-msgid "This file contains a save with an invalid game type."
-msgstr ""
-
-msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
-msgstr ""
+#, fuzzy
+msgid "The save file is corrupted."
+msgstr "Zrcadlová jednotka byla vytvořena."
 
 msgid "Unsupported save format: "
 msgstr ""
@@ -3670,6 +3672,14 @@ msgid "Current game version: "
 msgstr ""
 
 msgid "Last supported version: "
+msgstr ""
+
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+msgid ""
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-19 09:46+0000\n"
+"POT-Creation-Date: 2023-02-28 11:54+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3158,6 +3158,18 @@ msgstr "Carte : "
 msgid ""
 "\n"
 "\n"
+"Month: "
+msgstr ""
+
+msgid ", Week: "
+msgstr ""
+
+msgid ", Day: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
 "Location: "
 msgstr ""
 "\n"
@@ -3197,13 +3209,8 @@ msgstr "Choisir sort :"
 msgid "Select Skill:"
 msgstr "Choisir compétence :"
 
-msgid "Location: "
-msgstr "Emplacement : "
-
-msgid ""
-"\n"
-"\n"
-"Map Type:\n"
+#, fuzzy
+msgid "Map Type:\n"
 msgstr ""
 "\n"
 "\n"
@@ -3765,6 +3772,19 @@ msgstr "Campagne"
 msgid "View High Scores for Campaigns."
 msgstr "Voir l'écran des meilleurs scores."
 
+#, fuzzy
+msgid "The save file is corrupted."
+msgstr "L'image miroir est créée."
+
+msgid "Unsupported save format: "
+msgstr "Format de sauvegarde non supporté : "
+
+msgid "Current game version: "
+msgstr "Version actuelle du jeu : "
+
+msgid "Last supported version: "
+msgstr "Dernière version supportée : "
+
 msgid "This file contains a save with an invalid game type."
 msgstr "Ce fichier contient une sauvegarde avec un type de jeu invalide."
 
@@ -3775,15 +3795,6 @@ msgid ""
 msgstr ""
 "Ce fichier est enregistré au format \"The Price of Loyalty\".\n"
 "Certains éléments peuvent ne pas être disponibles."
-
-msgid "Unsupported save format: "
-msgstr "Format de sauvegarde non supporté : "
-
-msgid "Current game version: "
-msgstr "Version actuelle du jeu : "
-
-msgid "Last supported version: "
-msgstr "Dernière version supportée : "
 
 msgid "This saved game is localized to '"
 msgstr "Cette partie a été sauvegardée en langue '"
@@ -10142,3 +10153,6 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Location: "
+#~ msgstr "Emplacement : "
