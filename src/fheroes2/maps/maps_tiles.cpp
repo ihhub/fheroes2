@@ -39,6 +39,7 @@
 #include "army.h"
 #include "castle.h"
 #include "game.h"
+#include "game_io.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
@@ -2953,7 +2954,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
     static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1001_RELEASE ) {
         ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> objectIcnType;
 
@@ -2992,7 +2993,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> tile._index;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1001_RELEASE, "Remove the logic below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_1001_RELEASE ) {
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1001_RELEASE ) {
         // In old save format terrain information is stored in a very fuzzy way.
         uint16_t temp = 0;
         msg >> temp;
@@ -3010,7 +3011,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_1001_RELEASE ) {
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1001_RELEASE ) {
         ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
         msg >> objectIcnType;
 
@@ -3037,7 +3038,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> mainObjectType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1001_RELEASE, "Remove the logic below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE1_1001_RELEASE ) {
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1001_RELEASE ) {
         if ( mainObjectType == 128 ) {
             // This is an old Sea Chest object type.
             mainObjectType = MP2::OBJ_SEA_CHEST;
