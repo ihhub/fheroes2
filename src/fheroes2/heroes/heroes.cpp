@@ -1034,7 +1034,6 @@ void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect /*
     }
 }
 
-/* calc level from exp */
 int Heroes::GetLevelFromExperience( uint32_t exp )
 {
     for ( int lvl = 1; lvl < 255; ++lvl )
@@ -1044,7 +1043,6 @@ int Heroes::GetLevelFromExperience( uint32_t exp )
     return 0;
 }
 
-/* calc exp from level */
 uint32_t Heroes::GetExperienceFromLevel( int lvl )
 {
     switch ( lvl ) {

@@ -1116,10 +1116,13 @@ namespace
             const Funds & funds = tile.QuantityFunds();
 
             if ( 0 == funds.GetValidItemsCount() || hero.GetKingdom().AllowPayment( funds ) ) {
-                if ( funds.GetValidItemsCount() )
-                    hero.GetKingdom().OddFundsResource( funds );
+                const int level = hero.GetLevel();
+                assert( level > 0 );
+                const uint32_t experience = Heroes::GetExperienceFromLevel( level ) - Heroes::GetExperienceFromLevel( level - 1 );
+
+                hero.GetKingdom().OddFundsResource( funds );
                 hero.SetVisited( dst_index );
-                hero.IncreaseExperience( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
+                hero.IncreaseExperience( experience );
             }
         }
 
