@@ -421,7 +421,6 @@ bool Kingdom::AllowPayment( const Funds & funds ) const
            && ( resource.gold >= funds.gold || 0 == funds.gold );
 }
 
-/* is visited cell */
 bool Kingdom::isVisited( const Maps::Tiles & tile ) const
 {
     return isVisited( tile.GetIndex(), tile.GetObject( false ) );
@@ -433,7 +432,6 @@ bool Kingdom::isVisited( int32_t index, const MP2::MapObjectType objectType ) co
     return visit_object.end() != it && ( *it ).isObject( objectType );
 }
 
-/* return true if object visited */
 bool Kingdom::isVisited( const MP2::MapObjectType objectType ) const
 {
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
@@ -445,8 +443,7 @@ uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) con
     return static_cast<uint32_t>( std::count_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } ) );
 }
 
-/* set visited cell */
-void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_NONE )
+void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
 {
     if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_NONE )
         visit_object.push_front( IndexObject( index, objectType ) );

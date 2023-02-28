@@ -1136,7 +1136,7 @@ namespace
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
-                hero.GetKingdom().AddFundsResource( tile.QuantityFunds() );
+                hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, 2500 ) );
             }
             else {
                 AIBattleLose( hero, res, true );
