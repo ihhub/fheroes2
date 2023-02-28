@@ -2614,7 +2614,8 @@ namespace
                     const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
                     const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
-                    fheroes2::showMessage( titleUI, messageUI, Dialog::OK, { &experienceUI } );
+                    // In the original game, there was no way to refuse to level up for free, this is an improvement specific to fheroes2
+                    conditionsMet = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
                 }
                 else {
                     const ResourceCount & rc = tile.QuantityResourceCount();
