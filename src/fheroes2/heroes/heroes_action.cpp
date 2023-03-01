@@ -2208,7 +2208,7 @@ namespace
             Fight
         };
 
-        const Outcome outcome = [&hero, dst_index, &title, objectIsEmptyMsg, recruitmentAvailableMsg, warningMsg]() {
+        const Outcome outcome = [dst_index, &title, objectIsEmptyMsg, recruitmentAvailableMsg, warningMsg]() {
             const Maps::Tiles & tile = world.GetTiles( dst_index );
 
             if ( tile.QuantityColor() != Color::NONE ) {
