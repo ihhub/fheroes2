@@ -2203,7 +2203,8 @@ namespace
         {
             Invalid,
             Empty,
-            Ignore,
+            IgnoreRecruit,
+            IgnoreFight,
             Recruit,
             Fight
         };
@@ -2226,7 +2227,7 @@ namespace
                     return Outcome::Recruit;
                 }
 
-                return Outcome::Ignore;
+                return Outcome::IgnoreRecruit;
             }
 
             const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
@@ -2235,17 +2236,18 @@ namespace
                 return Outcome::Fight;
             }
 
-            return Outcome::Ignore;
+            return Outcome::IgnoreFight;
         }();
 
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         switch ( outcome ) {
         case Outcome::Empty:
+        case Outcome::IgnoreRecruit:
             hero.SetVisited( dst_index, Visit::GLOBAL );
 
             break;
-        case Outcome::Ignore:
+        case Outcome::IgnoreFight:
             break;
         case Outcome::Recruit: {
             const Troop troop = tile.QuantityTroop();
