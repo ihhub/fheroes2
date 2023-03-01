@@ -745,7 +745,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     quantity1 = mp2.quantity1;
     quantity2 = mp2.quantity2;
     additionalMetadata = 0;
-    fog_colors = Color::ALL;
+    _fogColors = Color::ALL;
     _terrainImageIndex = mp2.terrainImageIndex;
     _terrainFlags = mp2.terrainFlags;
 
@@ -824,6 +824,7 @@ MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */
 void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 {
     _mainObjectType = objectType;
+
     world.resetPathfinder();
 }
 
@@ -2448,6 +2449,16 @@ bool Maps::Tiles::isFogAllAround( const int color ) const
     return true;
 }
 
+void Maps::Tiles::ClearFog( const int colors )
+{
+    _fogColors &= ~colors;
+
+    // The fog might be cleared even without the hero's movement - for example, the hero can gain a new level of Scouting
+    // skill by picking up a Treasure Chest from a nearby tile or buying a map in a Magellan's Maps object using the space
+    // bar button. Reset the pathfinder(s) to make the newly discovered tiles immediately available for this hero.
+    world.resetPathfinder();
+}
+
 int Maps::Tiles::GetFogDirections( int color ) const
 {
     int around = 0;
@@ -2984,7 +2995,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
-               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
                << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType;
 }
 
@@ -3107,7 +3118,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
     tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
 
-    msg >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.additionalMetadata >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2
+    msg >> tile._fogColors >> tile.quantity1 >> tile.quantity2 >> tile.additionalMetadata >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2
         >> tile._layerType;
 
     return msg;
