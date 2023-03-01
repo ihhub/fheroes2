@@ -2161,86 +2161,130 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << title.c_str() )
     }
 
-    void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dst_index )
     {
-        const char * str_empty = nullptr;
-        const char * str_recr = nullptr;
-        const char * str_warn = nullptr;
-        const char * str_wins = nullptr;
-        const char * str_scss = nullptr;
+        const std::string title( MP2::StringObject( objectType ) );
+
+        const char * objectIsEmptyMsg = nullptr;
+        const char * recruitmentAvailableMsg = nullptr;
+        const char * warningMsg = nullptr;
+        const char * victoryMsg = nullptr;
 
         switch ( objectType ) {
         case MP2::OBJ_CITY_OF_DEAD:
-            str_empty = _( "The City of the Dead is empty of life, and empty of unlife as well. Perhaps some undead will move in next week." );
-            str_recr = _( "Some Liches living here are willing to join your army for a price. Do you want to recruit Liches?" );
-            str_warn = _( "You've found the ruins of an ancient city, now inhabited solely by the undead. Will you search?" );
-            str_wins
+            objectIsEmptyMsg = _( "The City of the Dead is empty of life, and empty of unlife as well. Perhaps some undead will move in next week." );
+            recruitmentAvailableMsg = _( "Some Liches living here are willing to join your army for a price. Do you want to recruit Liches?" );
+            warningMsg = _( "You've found the ruins of an ancient city, now inhabited solely by the undead. Will you search?" );
+            victoryMsg
                 = _( "Some of the surviving Liches are impressed by your victory over their fellows, and offer to join you for a price. Do you want to recruit Liches?" );
             break;
         case MP2::OBJ_TROLL_BRIDGE:
-            str_empty = _( "You've found one of those bridges that Trolls are so fond of living under, but there are none here. Perhaps there will be some next week." );
-            str_recr = _( "Some Trolls living under a bridge are willing to join your army, but for a price. Do you want to recruit Trolls?" );
-            str_warn = _( "Trolls living under the bridge challenge you. Will you fight them?" );
-            str_wins
+            objectIsEmptyMsg
+                = _( "You've found one of those bridges that Trolls are so fond of living under, but there are none here. Perhaps there will be some next week." );
+            recruitmentAvailableMsg = _( "Some Trolls living under a bridge are willing to join your army, but for a price. Do you want to recruit Trolls?" );
+            warningMsg = _( "Trolls living under the bridge challenge you. Will you fight them?" );
+            victoryMsg
                 = _( "A few Trolls remain, cowering under the bridge. They approach you and offer to join your forces as mercenaries. Do you want to buy any Trolls?" );
             break;
         case MP2::OBJ_DRAGON_CITY:
-            str_empty = _( "The Dragon city has no Dragons willing to join you this week. Perhaps a Dragon will become available next week." );
-            str_recr = _( "The Dragon city is willing to offer some Dragons for your army for a price. Do you wish to recruit Dragons?" );
-            str_warn = _( "You stand before the Dragon City, a place off-limits to mere humans. Do you wish to violate this rule and challenge the Dragons to a fight?" );
-            str_wins
+            objectIsEmptyMsg = _( "The Dragon city has no Dragons willing to join you this week. Perhaps a Dragon will become available next week." );
+            recruitmentAvailableMsg = _( "The Dragon city is willing to offer some Dragons for your army for a price. Do you wish to recruit Dragons?" );
+            warningMsg
+                = _( "You stand before the Dragon City, a place off-limits to mere humans. Do you wish to violate this rule and challenge the Dragons to a fight?" );
+            victoryMsg
                 = _( "Having defeated the Dragon champions, the city's leaders agree to supply some Dragons to your army for a price. Do you wish to recruit Dragons?" );
             break;
         default:
+            assert( 0 );
             return;
         }
 
-        Maps::Tiles & tile = world.GetTiles( dst_index );
-        const Troop & troop = tile.QuantityTroop();
+        enum class Outcome
+        {
+            Invalid,
+            Empty,
+            Ignore,
+            Recruit,
+            Fight
+        };
 
-        const std::string title( MP2::StringObject( objectType ) );
+        const Outcome outcome = [&hero, dst_index, &title, objectIsEmptyMsg, recruitmentAvailableMsg, warningMsg]() {
+            const Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        // Not captured / defeated yet
-        if ( Color::NONE == tile.QuantityColor() ) {
-            if ( Dialog::Message( title, str_warn, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
-                Army army( tile );
+            if ( tile.QuantityColor() != Color::NONE ) {
+                const Troop troop = tile.QuantityTroop();
 
-                Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
-                if ( res.AttackerWins() ) {
-                    hero.IncreaseExperience( res.GetExperienceAttacker() );
-                    tile.QuantitySetColor( hero.GetColor() );
-                    tile.SetObjectPassable( true );
-                    str_scss = str_wins;
+                if ( !troop.isValid() ) {
+                    Dialog::Message( title, objectIsEmptyMsg, Font::BIG, Dialog::OK );
+
+                    return Outcome::Empty;
                 }
-                else {
-                    BattleLose( hero, res, true );
-                }
-            }
-        }
-        else {
-            if ( troop.isValid() ) {
-                str_scss = str_recr;
-            }
-            else {
-                Dialog::Message( title, str_empty, Font::BIG, Dialog::OK );
-            }
-        }
 
-        // Recruit monsters
-        if ( str_scss ) {
-            bool recruit = false;
-
-            if ( troop.isValid() ) {
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
 
-                recruit = ( Dialog::Message( title, str_scss, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
+                if ( Dialog::Message( title, recruitmentAvailableMsg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                    return Outcome::Recruit;
+                }
+
+                return Outcome::Ignore;
             }
 
-            if ( recruit ) {
-                RecruitMonsterFromTile( hero, tile, title, troop, false );
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
+
+            if ( Dialog::Message( title, warningMsg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                return Outcome::Fight;
             }
+
+            return Outcome::Ignore;
+        }();
+
+        Maps::Tiles & tile = world.GetTiles( dst_index );
+
+        switch ( outcome ) {
+        case Outcome::Empty:
+            hero.SetVisited( dst_index, Visit::GLOBAL );
+
+            break;
+        case Outcome::Ignore:
+            break;
+        case Outcome::Recruit: {
+            const Troop troop = tile.QuantityTroop();
+            assert( troop.isValid() );
+
+            RecruitMonsterFromTile( hero, tile, title, troop, false );
 
             hero.SetVisited( dst_index, Visit::GLOBAL );
+
+            break;
+        }
+        case Outcome::Fight: {
+            Army army( tile );
+
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            if ( res.AttackerWins() ) {
+                hero.IncreaseExperience( res.GetExperienceAttacker() );
+
+                tile.QuantitySetColor( hero.GetColor() );
+                tile.SetObjectPassable( true );
+
+                if ( Dialog::Message( title, victoryMsg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                    const Troop troop = tile.QuantityTroop();
+                    assert( troop.isValid() );
+
+                    RecruitMonsterFromTile( hero, tile, title, troop, false );
+                }
+
+                hero.SetVisited( dst_index, Visit::GLOBAL );
+            }
+            else {
+                BattleLose( hero, res, true );
+            }
+
+            break;
+        }
+        default:
+            assert( 0 );
+            break;
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << title.c_str() )
@@ -3128,8 +3172,6 @@ namespace
 
     void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
-        const std::string title = MP2::StringObject( objectType );
-
         enum class Outcome
         {
             Invalid,
@@ -3141,7 +3183,8 @@ namespace
 
         MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
 
-        const Outcome outcome = [&title, riddle]() {
+        const Outcome outcome = [objectType, riddle]() {
+            const std::string title = MP2::StringObject( objectType );
             const MusicalEffectPlayer musicalEffectPlayer( MUS::ARABIAN );
 
             if ( riddle == nullptr || !riddle->valid ) {

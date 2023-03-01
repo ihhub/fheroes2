@@ -1223,30 +1223,34 @@ namespace
     void AIToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex )
     {
         Maps::Tiles & tile = world.GetTiles( tileIndex );
-        const Troop & troop = tile.QuantityTroop();
+        bool recruitmentAllowed = true;
 
-        bool allowToRecruit = true;
-        if ( Color::NONE == tile.QuantityColor() ) {
-            // Not captured / defeated yet.
+        if ( tile.QuantityColor() == Color::NONE ) {
             Army army( tile );
-            Battle::Result res = Battle::Loader( hero.GetArmy(), army, tileIndex );
+
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, tileIndex );
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
+
                 tile.QuantitySetColor( hero.GetColor() );
                 tile.SetObjectPassable( true );
             }
             else {
                 AIBattleLose( hero, res, true );
-                allowToRecruit = false;
+
+                recruitmentAllowed = false;
             }
         }
 
-        // recruit monster
-        if ( allowToRecruit && troop.isValid() ) {
-            AIToDwellingRecruitMonster( hero, objectType, tileIndex );
-        }
+        if ( recruitmentAllowed ) {
+            const Troop troop = tile.QuantityTroop();
 
-        hero.SetVisited( tileIndex, Visit::GLOBAL );
+            if ( troop.isValid() ) {
+                AIToDwellingRecruitMonster( hero, objectType, tileIndex );
+            }
+
+            hero.SetVisited( tileIndex, Visit::GLOBAL );
+        }
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
     }
