@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "army.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -32,7 +34,6 @@
 #include <set>
 #include <utility>
 
-#include "army.h"
 #include "army_troop.h"
 #include "army_ui_helper.h"
 #include "artifact.h"
@@ -1557,36 +1558,48 @@ void Army::resetInvalidMonsters() const
 void Army::ArrangeForCastleDefense( Army & garrison )
 {
     assert( this != &garrison );
+    assert( size() == maximumTroopCount && garrison.size() == maximumTroopCount );
     // This method is designed to take reinforcements only from the garrison, because
     // it can leave the garrison empty
     assert( garrison.commander == nullptr || garrison.commander->isCaptain() );
 
-    // There are no troops in the garrison
-    if ( !garrison.isValid() ) {
-        return;
-    }
+    // First, try to move or combine the garrison troops into exactly the same slots
+    // of the guest hero's army, if possible
+    for ( size_t i = 0; i < maximumTroopCount; ++i ) {
+        Troop * troop = GetTroop( i );
+        Troop * garrisonTroop = garrison.GetTroop( i );
+        assert( troop != nullptr && garrisonTroop != nullptr );
 
-    // Create and fill a temporary container for convenient sorting of garrison troops
-    std::vector<Troop *> garrisonTroops;
+        if ( !garrisonTroop->isValid() ) {
+            continue;
+        }
 
-    garrisonTroops.reserve( garrison.Size() );
+        const Monster garrisonMonster = garrisonTroop->GetMonster();
+        const uint32_t garrisonCount = garrisonTroop->GetCount();
 
-    for ( size_t i = 0; i < garrison.Size(); ++i ) {
-        Troop * troop = garrison.GetTroop( i );
-        assert( troop != nullptr );
+        if ( !troop->isValid() ) {
+            troop->Set( garrisonMonster, garrisonCount );
 
-        if ( troop->isValid() ) {
-            garrisonTroops.push_back( troop );
+            garrisonTroop->Reset();
+        }
+        else if ( troop->isMonster( garrisonMonster.GetID() ) ) {
+            troop->SetCount( troop->GetCount() + garrisonCount );
+
+            garrisonTroop->Reset();
         }
     }
 
-    // Sort the garrison troops by their strength (most powerful stacks first)
-    std::sort( garrisonTroops.begin(), garrisonTroops.end(), StrongestTroop );
+    // Then try to transfer the remaining garrison troops to the guest hero's army,
+    // if possible
+    for ( Troop * garrisonTroop : garrison ) {
+        assert( garrisonTroop != nullptr );
 
-    // Try to reinforce this army with garrison troops (most powerful stacks first)
-    for ( Troop * troop : garrisonTroops ) {
-        if ( JoinTroop( *troop ) ) {
-            troop->Reset();
+        if ( !garrisonTroop->isValid() ) {
+            continue;
+        }
+
+        if ( JoinTroop( *garrisonTroop ) ) {
+            garrisonTroop->Reset();
         }
     }
 }
