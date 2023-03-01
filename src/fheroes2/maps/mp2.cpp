@@ -732,62 +732,6 @@ bool MP2::isArtifactObject( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isHeroUpgradeObject( const MapObjectType objectType )
-{
-    // Sort things in alphabetical order for better readability.
-    switch ( objectType ) {
-    case OBJ_FORT:
-    case OBJ_GAZEBO:
-    case OBJ_MERCENARY_CAMP:
-    case OBJ_SHRINE_FIRST_CIRCLE:
-    case OBJ_SHRINE_SECOND_CIRCLE:
-    case OBJ_SHRINE_THIRD_CIRCLE:
-    case OBJ_STANDING_STONES:
-    case OBJ_TREE_OF_KNOWLEDGE:
-    case OBJ_WITCH_DOCTORS_HUT:
-    case OBJ_WITCHS_HUT:
-    case OBJ_XANADU:
-        return true;
-    default:
-        break;
-    }
-
-    return false;
-}
-
-bool MP2::isMonsterDwelling( const MapObjectType objectType )
-{
-    // Sort things in alphabetical order for better readability.
-    switch ( objectType ) {
-    case OBJ_AIR_ALTAR:
-    case OBJ_ARCHER_HOUSE:
-    case OBJ_BARROW_MOUNDS:
-    case OBJ_CAVE:
-    case OBJ_CITY_OF_DEAD:
-    case OBJ_DESERT_TENT:
-    case OBJ_DRAGON_CITY:
-    case OBJ_DWARF_COTTAGE:
-    case OBJ_EARTH_ALTAR:
-    case OBJ_EXCAVATION:
-    case OBJ_FIRE_ALTAR:
-    case OBJ_GOBLIN_HUT:
-    case OBJ_HALFLING_HOLE:
-    case OBJ_PEASANT_HUT:
-    case OBJ_RUINS:
-    case OBJ_TREE_CITY:
-    case OBJ_TREE_HOUSE:
-    case OBJ_TROLL_BRIDGE:
-    case OBJ_WAGON_CAMP:
-    case OBJ_WATER_ALTAR:
-    case OBJ_WATCH_TOWER:
-        return true;
-    default:
-        break;
-    }
-
-    return false;
-}
-
 bool MP2::isProtectedObject( const MapObjectType objectType )
 {
     // Sort things in alphabetical order for better readability.
