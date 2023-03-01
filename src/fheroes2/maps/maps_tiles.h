@@ -300,15 +300,11 @@ namespace Maps
         bool isFog( const int colors ) const
         {
             // colors may be the union friends
-            return ( fog_colors & colors ) == colors;
+            return ( _fogColors & colors ) == colors;
         }
 
         bool isFogAllAround( const int color ) const;
-
-        void ClearFog( int colors )
-        {
-            fog_colors &= ~colors;
-        }
+        void ClearFog( const int colors );
 
         void MonsterSetCount( uint32_t count );
         uint32_t MonsterCount() const;
@@ -317,7 +313,7 @@ namespace Maps
         // (castle has a hero or garrison, dwelling has creatures, etc)
         bool isCaptureObjectProtected() const;
 
-        /* object quantity operation */
+        // Operations with tile quantities
         void QuantityUpdate( bool isFirstLoad = true );
         void QuantityReset();
         bool QuantityIsValid() const;
@@ -453,7 +449,7 @@ namespace Maps
 
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
         uint16_t tilePassable = DIRECTION_ALL;
-        uint8_t fog_colors = Color::ALL;
+        uint8_t _fogColors = Color::ALL;
 
         uint8_t heroID = 0;
 

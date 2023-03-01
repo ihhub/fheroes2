@@ -26,6 +26,7 @@
 #include <string>
 
 #include "agg_image.h"
+#include "game_delays.h"
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
@@ -70,13 +71,17 @@ namespace fheroes2
         Copy( lighthouseTop, 0, 0, combined, TILEWIDTH * 2 + lighthouseTop.x(), lighthouseTop.y() - topOffset, TILEWIDTH, TILEWIDTH );
         Copy( lighthouseMiddle, 0, 0, combined, TILEWIDTH * 2 + lighthouseMiddle.x(), TILEWIDTH + lighthouseMiddle.y() - topOffset, TILEWIDTH, TILEWIDTH );
         Copy( lighthouseBottom, 0, 0, combined, TILEWIDTH * 2 + lighthouseBottom.x(), TILEWIDTH * 2 + lighthouseBottom.y() - topOffset, TILEWIDTH, TILEWIDTH );
-        Copy( lighthouseLight, 0, 0, combined, TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset, TILEWIDTH, TILEWIDTH );
 
-        const CustomImageDialogElement lighthouseImageElement( combined );
         const TextDialogElement lighthouseControlledElement( std::make_shared<Text>( std::to_string( lighthouseCount ), FontType::normalWhite() ) );
+
+        // Use MAPS_DELAY for animation delay since the lighthouse is a map object
+        // 61 (0x3D) references the icn offset for the lighthouse animation in icn.cpp
+        const CustomAnimationDialogElement lighthouseCustomDynamicImageElement( ICN::OBJNMUL2, combined,
+                                                                                { TILEWIDTH * 2 + lighthouseLight.x(), TILEWIDTH + lighthouseLight.y() - topOffset }, 61,
+                                                                                getAnimationDelayValue( Game::MAPS_DELAY ) );
 
         // StringObject on OBJ_LIGHTHOUSE with count 2 for the plural of lighthouse
         showMessage( Text( StringObject( MP2::OBJ_LIGHTHOUSE, 2 ), FontType::normalYellow() ), Text( body, FontType::normalWhite() ), buttons,
-                     { &lighthouseImageElement, &lighthouseControlledElement } );
+                     { &lighthouseCustomDynamicImageElement, &lighthouseControlledElement } );
     }
 }
