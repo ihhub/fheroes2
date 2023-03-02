@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>src\engine;src\fheroes2\gui;src\fheroes2\maps;src\fheroes2\kingdom;src\fheroes2\campaign;src\fheroes2\game;src\fheroes2\dialog;src\fheroes2\system;src\fheroes2\spell;src\fheroes2\monster;src\fheroes2\castle;src\fheroes2\agg;src\fheroes2\heroes;src\fheroes2\resource;src\fheroes2\ai;src\fheroes2\army;src\fheroes2\battle;src\fheroes2\h2d;src\fheroes2\objects;src\fheroes2\world;src\fheroes2\audio;src\fheroes2\image;src\thirdparty\libsmacker;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(FHEROES2_BUILD_NUMBER)'!=''">BUILD_VERSION=$(FHEROES2_BUILD_NUMBER);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>src\fheroes2\system;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(FHEROES2_BUILD_NUMBER)'!=''">BUILD_VERSION=$(FHEROES2_BUILD_NUMBER);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>if exist data (
+    if not exist "$(OutDir)data" (
+        xcopy /Y /S /Q data "$(OutDir)data\"
+    )
+)
+
+if exist maps (
+    if not exist "$(OutDir)maps" (
+        xcopy /Y /S /Q maps "$(OutDir)maps\"
+    )
+)
+
+xcopy /Y /S /Q files\data "$(OutDir)files\data\"
+xcopy /Y /Q files\lang\*.mo "$(OutDir)files\lang\"
+xcopy /Y /S /Q files\soundfonts "$(OutDir)files\soundfonts\"
+
+%(Command)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+</Project>

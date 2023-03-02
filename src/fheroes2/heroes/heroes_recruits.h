@@ -27,8 +27,6 @@
 #include <cstdint>
 #include <utility>
 
-#include "heroes.h"
-
 class Heroes;
 class StreamBase;
 
@@ -54,8 +52,6 @@ public:
     {
         return _surrenderDay;
     }
-
-    void setSurrenderDayTmp( const uint32_t surrenderDay );
 
 private:
     int _id;
@@ -83,8 +79,6 @@ public:
 
     void SetHero1( Heroes * hero );
     void SetHero2( Heroes * hero );
-
-    void SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay );
 
     void appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay );
 };

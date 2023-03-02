@@ -25,12 +25,25 @@
 #ifndef H2HEROESBASE_H
 #define H2HEROESBASE_H
 
+#include <cstdint>
+#include <functional>
+#include <string>
+
 #include "artifact.h"
 #include "bitmodes.h"
 #include "players.h"
 #include "position.h"
 #include "skill.h"
+#include "spell.h"
 #include "spell_book.h"
+#include "spell_storage.h"
+
+class StreamBase;
+
+namespace fheroes2
+{
+    class Image;
+}
 
 class Army;
 class Castle;
@@ -109,12 +122,24 @@ public:
     void SetSpellPoints( const uint32_t points );
     bool isPotentSpellcaster() const;
 
-    std::vector<Spell> GetSpells( const int lvl = -1 ) const;
+    // Returns all spells present in Magic Book and in Scrolls.
+    SpellStorage getAllSpells() const;
+
+    const SpellStorage & getMagicBookSpells() const
+    {
+        return spell_book;
+    }
+
     void EditSpellBook();
     Spell OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const bool restorePreviousState,
                          const std::function<void( const std::string & )> * statusCallback ) const;
-    bool HaveSpellBook() const;
-    bool HaveSpell( const Spell &, const bool skip_bag = false ) const;
+
+    bool HaveSpellBook() const
+    {
+        return hasArtifact( Artifact::MAGIC_BOOK );
+    }
+
+    bool HaveSpell( const Spell & spell, const bool skip_bag = false ) const;
     void AppendSpellToBook( const Spell &, const bool without_wisdom = false );
     void AppendSpellsToBook( const SpellStorage &, const bool without_wisdom = false );
     bool SpellBookActivate();

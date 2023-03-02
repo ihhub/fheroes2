@@ -22,6 +22,8 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdint>
+#include <iterator>
 #include <vector>
 
 #include "agg_image.h"
@@ -29,14 +31,23 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
 #include "mageguild.h"
+#include "math_base.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell.h"
+#include "spell_storage.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -47,7 +58,7 @@ namespace
     {
     public:
         RowSpells( const fheroes2::Point & pos, const Castle & castle, const int lvl );
-        void Redraw();
+        void Redraw( fheroes2::Image & output );
         bool QueueEventProcessing();
 
     private:
@@ -96,9 +107,8 @@ RowSpells::RowSpells( const fheroes2::Point & pos, const Castle & castle, const 
     spells.resize( coords.size(), Spell::NONE );
 }
 
-void RowSpells::Redraw()
+void RowSpells::Redraw( fheroes2::Image & output )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & roll_show = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
 
     for ( std::vector<fheroes2::Rect>::iterator it = coords.begin(); it != coords.end(); ++it ) {
@@ -108,14 +118,14 @@ void RowSpells::Redraw()
         // roll hide
         if ( dst.width < roll_show.width() || spell == Spell::NONE ) {
             const fheroes2::Sprite & roll_hide = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
-            fheroes2::Blit( roll_hide, display, dst.x, dst.y );
+            fheroes2::Blit( roll_hide, output, dst.x, dst.y );
         }
         // roll show
         else {
-            fheroes2::Blit( roll_show, display, dst.x, dst.y );
+            fheroes2::Blit( roll_show, output, dst.x, dst.y );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-            fheroes2::Blit( icon, display, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
+            fheroes2::Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
             TextBox text( spell.GetName(), Font::SMALL, 78 );
             text.Blit( dst.x + 18, dst.y + 55 );
@@ -134,14 +144,13 @@ bool RowSpells::QueueEventProcessing()
 
         if ( spell != Spell::NONE ) {
             fheroes2::SpellDialogElement( spell, nullptr ).showPopup( le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
-            fheroes2::Display::instance().render();
         }
     }
 
     return 0 <= index;
 }
 
-void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
+void Castle::OpenMageGuild( const Heroes * hero ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -155,7 +164,7 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
 
@@ -170,10 +179,12 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
 
     // text bar
     Text text;
-    if ( ( !heroes.Guard() || !heroes.Guard()->HaveSpellBook() ) && ( !heroes.Guest() || !heroes.Guest()->HaveSpellBook() ) )
+    if ( hero == nullptr || !hero->HaveSpellBook() ) {
         text.Set( _( "The above spells are available here." ), Font::BIG );
-    else
+    }
+    else {
         text.Set( _( "The above spells have been added to your book." ), Font::BIG );
+    }
     text.Blit( cur_pt.x + 280 - text.w() / 2, cur_pt.y + 463 );
 
     const int level = GetLevelMageGuild();
@@ -218,11 +229,11 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     RowSpells spells2( { cur_pt.x + 250, cur_pt.y + 275 }, *this, 2 );
     RowSpells spells1( { cur_pt.x + 250, cur_pt.y + 365 }, *this, 1 );
 
-    spells1.Redraw();
-    spells2.Redraw();
-    spells3.Redraw();
-    spells4.Redraw();
-    spells5.Redraw();
+    spells1.Redraw( display );
+    spells2.Redraw( display );
+    spells3.Redraw( display );
+    spells4.Redraw( display );
+    spells5.Redraw( display );
 
     fheroes2::Button buttonExit( cur_pt.x + exitButtonOffsetX, cur_pt.y + bottomBarOffsetY, ICN::WELLXTRA, 0, 1 );
     buttonExit.draw();
@@ -240,5 +251,12 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
 
         spells1.QueueEventProcessing() || spells2.QueueEventProcessing() || spells3.QueueEventProcessing() || spells4.QueueEventProcessing()
             || spells5.QueueEventProcessing();
+
+        if ( le.MousePressRight( buttonExit.area() ) ) {
+            fheroes2::Text header( _( "Exit" ), fheroes2::FontType::normalYellow() );
+            fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
+
+            fheroes2::showMessage( header, body, 0 );
+        }
     }
 }

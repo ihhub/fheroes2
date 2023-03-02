@@ -24,7 +24,6 @@
 #ifndef H2AI_H
 #define H2AI_H
 
-#include "gamedefs.h"
 #include "mp2.h"
 #include "rand.h"
 
@@ -37,10 +36,12 @@ class Kingdom;
 class Army;
 class Spell;
 struct VecHeroes;
+
 namespace Maps
 {
     class Tiles;
 }
+
 namespace Battle
 {
     class Arena;

@@ -21,8 +21,13 @@
 #ifndef H2CAMPAIGN_SAVEDATA_H
 #define H2CAMPAIGN_SAVEDATA_H
 
+#include <cstdint>
+#include <vector>
+
 #include "army_troop.h"
 #include "campaign_scenariodata.h"
+
+class StreamBase;
 
 class Troops;
 
@@ -30,11 +35,16 @@ namespace Campaign
 {
     struct CampaignAwardData;
 
+    enum CampaignDifficulty : int32_t
+    {
+        Easy = -1,
+        Normal = 0,
+        Hard = 1
+    };
+
     class CampaignSaveData
     {
     public:
-        CampaignSaveData();
-
         const std::vector<ScenarioInfoId> & getFinishedMaps() const
         {
             return _finishedMaps;
@@ -68,6 +78,16 @@ namespace Campaign
             return _daysPassed;
         }
 
+        int32_t getDifficulty() const
+        {
+            return _difficulty;
+        }
+
+        void setDifficulty( const int32_t difficulty )
+        {
+            _difficulty = difficulty;
+        }
+
         const std::vector<Troop> & getCarryOverTroops() const
         {
             return _carryOverTroops;
@@ -91,11 +111,11 @@ namespace Campaign
 
         static CampaignSaveData & Get();
 
-        static void loadOldSaveSata( StreamBase & msg, CampaignSaveData & data );
-
     private:
         friend StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data );
         friend StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data );
+
+        CampaignSaveData() = default;
 
         std::vector<ScenarioInfoId> _finishedMaps;
         std::vector<int> _obtainedCampaignAwards;
@@ -103,7 +123,9 @@ namespace Campaign
 
         ScenarioInfoId _currentScenarioInfoId;
 
-        uint32_t _daysPassed;
+        uint32_t _daysPassed{ 0 };
+        int32_t _difficulty{ CampaignDifficulty::Normal };
+
         ScenarioBonusData _currentScenarioBonus;
     };
 

@@ -35,19 +35,26 @@ public:
         : modes( 0 )
     {}
 
-    void SetModes( uint32_t f )
+    void SetModes( const uint32_t f )
     {
         modes |= f;
     }
 
-    void ResetModes( uint32_t f )
+    void ResetModes( const uint32_t f )
     {
         modes &= ~f;
     }
 
-    bool Modes( uint32_t f ) const
+    // Returns true if any of the requested modes is set, otherwise returns false
+    bool Modes( const uint32_t f ) const
     {
         return ( modes & f ) != 0;
+    }
+
+    // Returns true if all the requested modes are set, otherwise returns false
+    bool AllModes( const uint32_t f ) const
+    {
+        return ( modes & f ) == f && f != 0;
     }
 
 protected:

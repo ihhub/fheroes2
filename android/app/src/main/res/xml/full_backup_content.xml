@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<full-backup-content>
+    <!-- Backup game data files only when using local device-to-device transfer -->
+    <include
+        domain="external"
+        path="."
+        requireFlags="deviceToDeviceTransfer" />
+    <!-- Otherwise, backup only the save files and game settings -->
+    <include
+        domain="external"
+        path="files/save" />
+    <include
+        domain="external"
+        path="fheroes2.cfg" />
+    <include
+        domain="external"
+        path="fheroes2.key" />
+</full-backup-content>

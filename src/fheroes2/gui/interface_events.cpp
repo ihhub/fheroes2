@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,32 +23,57 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <ostream>
+#include <string>
 #include <vector>
 
+#include "artifact.h"
+#include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "dialog_system_options.h"
+#include "direction.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "image.h"
+#include "interface_buttons.h"
+#include "interface_gamearea.h"
+#include "interface_icons.h"
+#include "interface_radar.h"
+#include "interface_status.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "mp2.h"
+#include "mus.h"
+#include "puzzle.h"
+#include "route.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell.h"
+#include "spell_book.h"
 #include "system.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "view_world.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
 {
-    if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) ) {
+    if ( hero == nullptr ) {
         return;
     }
 
@@ -79,8 +104,9 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx 
 
 void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, int32_t destinationIdx )
 {
-    if ( !hero || hero->Modes( Heroes::GUARDIAN ) )
+    if ( hero == nullptr ) {
         return;
+    }
 
     const Route::Path & path = hero->GetPath();
 
@@ -183,7 +209,7 @@ void Interface::Basic::EventCastSpell()
 
     // Center on the hero before opening the spell book
     gameArea.SetCenter( hero->GetCenter() );
-    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR );
+    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
     if ( spell.isValid() ) {
@@ -204,7 +230,8 @@ fheroes2::GameMode Interface::Basic::EventEndTurn() const
         GetFocusHeroes()->SetMove( false );
 
     if ( !myKingdom.HeroesMayStillMove()
-         || Dialog::YES == Dialog::Message( "", _( "One or more heroes may still move, are you sure you want to end your turn?" ), Font::BIG, Dialog::YES | Dialog::NO ) )
+         || Dialog::YES
+                == fheroes2::showStandardTextMessage( "", _( "One or more heroes may still move, are you sure you want to end your turn?" ), Dialog::YES | Dialog::NO ) )
         return fheroes2::GameMode::END_TURN;
 
     return fheroes2::GameMode::CANCEL;
@@ -251,7 +278,7 @@ void Interface::Basic::EventSystemDialog() const
 
 fheroes2::GameMode Interface::Basic::EventExit()
 {
-    if ( Dialog::YES & Dialog::Message( "", _( "Are you sure you want to quit?" ), Font::BIG, Dialog::YES | Dialog::NO ) )
+    if ( Dialog::YES & fheroes2::showStandardTextMessage( "", _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) )
         return fheroes2::GameMode::QUIT_GAME;
 
     return fheroes2::GameMode::CANCEL;
@@ -279,7 +306,7 @@ void Interface::Basic::EventNextTown()
 
 fheroes2::GameMode Interface::Basic::EventNewGame() const
 {
-    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to restart? (Your current game will be lost.)" ), Font::BIG, Dialog::YES | Dialog::NO )
+    return Dialog::YES == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to restart? (Your current game will be lost.)" ), Dialog::YES | Dialog::NO )
                ? fheroes2::GameMode::NEW_GAME
                : fheroes2::GameMode::CANCEL;
 }
@@ -293,15 +320,15 @@ fheroes2::GameMode Interface::Basic::EventSaveGame() const
         }
 
         if ( System::IsFile( filename )
-             && Dialog::NO == Dialog::Message( "", _( "Are you sure you want to overwrite the save with this name?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+             && Dialog::NO == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to overwrite the save with this name?" ), Dialog::YES | Dialog::NO ) ) {
             continue;
         }
 
         if ( Game::Save( filename ) ) {
-            Dialog::Message( "", _( "Game saved successfully." ), Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", _( "Game saved successfully." ), Dialog::OK );
         }
         else {
-            Dialog::Message( "", _( "There was an issue during saving." ), Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", _( "There was an issue during saving." ), Dialog::OK );
         }
         return fheroes2::GameMode::CANCEL;
     }
@@ -309,7 +336,9 @@ fheroes2::GameMode Interface::Basic::EventSaveGame() const
 
 fheroes2::GameMode Interface::Basic::EventLoadGame() const
 {
-    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to load a new game? (Your current game will be lost.)" ), Font::BIG, Dialog::YES | Dialog::NO )
+    return Dialog::YES
+                   == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to load a new game? (Your current game will be lost.)" ),
+                                                         Dialog::YES | Dialog::NO )
                ? fheroes2::GameMode::LOAD_GAME
                : fheroes2::GameMode::CANCEL;
 }
@@ -359,51 +388,70 @@ void Interface::Basic::EventSwitchHeroSleeping()
 fheroes2::GameMode Interface::Basic::EventDigArtifact()
 {
     Heroes * hero = GetFocusHeroes();
+    if ( hero == nullptr ) {
+        // TODO: verify how this method can be called if a hero is not selected.
+        return fheroes2::GameMode::CANCEL;
+    }
 
-    if ( hero ) {
-        if ( hero->isShipMaster() )
-            Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
-        else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
-            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() ) {
-                AudioManager::PlaySound( M82::DIGSOUND );
+    if ( hero->isShipMaster() ) {
+        fheroes2::showStandardTextMessage( "", _( "Try looking on land!!!" ), Dialog::OK );
+        return fheroes2::GameMode::CANCEL;
+    }
 
-                hero->ResetMovePoints();
+    if ( hero->GetBagArtifacts().isFull() ) {
+        fheroes2::showStandardTextMessage(
+            "", _( "Searching for the Ultimate Artifact is fruitless. Your hero could not carry it even if he found it - all his artifact slots are full." ),
+            Dialog::OK );
+        return fheroes2::GameMode::CANCEL;
+    }
 
-                if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-                    const AudioManager::MusicRestorer musicRestorer;
+    if ( hero->GetMaxMovePoints() > hero->GetMovePoints() ) {
+        fheroes2::showStandardTextMessage( "", _( "Digging for artifacts requires a whole day, try again tomorrow." ), Dialog::OK );
+        return fheroes2::GameMode::CANCEL;
+    }
 
-                    if ( Settings::Get().MusicMIDI() ) {
-                        AudioManager::PlaySound( M82::TREASURE );
-                    }
-                    else {
-                        AudioManager::PlayMusic( MUS::ULTIMATE_ARTIFACT, Music::PlaybackMode::PLAY_ONCE );
-                    }
+    // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
+    const UltimateArtifact & ultimateArtifact = world.GetUltimateArtifact();
+    if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || ( ultimateArtifact.getPosition() == hero->GetIndex() && !ultimateArtifact.isFound() ) ) {
+        AudioManager::PlaySound( M82::DIGSOUND );
 
-                    const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
-                    hero->PickupArtifact( ultimate );
-                    std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
-                    StringReplace( msg, "%{artifact}", ultimate.GetName() );
+        hero->ResetMovePoints();
 
-                    const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
-                    fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
-                                           fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
-                }
-                else
-                    Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );
+        if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
+            const AudioManager::MusicRestorer musicRestorer;
 
-                Redraw( REDRAW_HEROES );
-                fheroes2::Display::instance().render();
-
-                // check if the game is over due to conditions related to the ultimate artifact
-                return GameOver::Result::Get().LocalCheckGameOver();
+            if ( Settings::Get().MusicMIDI() ) {
+                AudioManager::PlaySound( M82::TREASURE );
             }
-            else
-                Dialog::Message( "", _( "Try searching on clear ground." ), Font::BIG, Dialog::OK );
+            else {
+                AudioManager::PlayMusic( MUS::ULTIMATE_ARTIFACT, Music::PlaybackMode::PLAY_ONCE );
+            }
+
+            const Artifact & ultimate = ultimateArtifact.GetArtifact();
+
+            if ( !hero->PickupArtifact( ultimate ) ) {
+                assert( 0 );
+            }
+
+            std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
+            StringReplace( msg, "%{artifact}", ultimate.GetName() );
+
+            const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
+            fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
         }
         else {
-            Dialog::Message( "", _( "Digging for artifacts requires a whole day, try again tomorrow." ), Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", _( "Nothing here. Where could it be?" ), Dialog::OK );
         }
+
+        Redraw( REDRAW_HEROES );
+        fheroes2::Display::instance().render();
+
+        // check if the game is over due to conditions related to the ultimate artifact
+        return GameOver::Result::Get().LocalCheckGameOver();
     }
+
+    fheroes2::showStandardTextMessage( "", _( "Try searching on clear ground." ), Dialog::OK );
 
     return fheroes2::GameMode::CANCEL;
 }
@@ -450,14 +498,14 @@ void Interface::Basic::EventSwitchShowRadar() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowRadar() ) {
             conf.SetShowRadar( false );
             gameArea.SetRedraw();
         }
         else {
             conf.SetShowRadar( true );
-            radar.SetRedraw();
+            radar.SetRedraw( REDRAW_RADAR );
         }
     }
 }
@@ -466,7 +514,7 @@ void Interface::Basic::EventSwitchShowButtons() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowButtons() ) {
             conf.SetShowButtons( false );
             gameArea.SetRedraw();
@@ -482,7 +530,7 @@ void Interface::Basic::EventSwitchShowStatus() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowStatus() ) {
             conf.SetShowStatus( false );
             gameArea.SetRedraw();
@@ -498,7 +546,7 @@ void Interface::Basic::EventSwitchShowIcons() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
+    if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowIcons() ) {
             conf.SetShowIcons( false );
             gameArea.SetRedraw();
@@ -514,8 +562,8 @@ void Interface::Basic::EventSwitchShowControlPanel() const
 {
     Settings & conf = Settings::Get();
 
-    if ( conf.ExtGameHideInterface() ) {
-        conf.SetShowPanel( !conf.ShowControlPanel() );
+    if ( conf.isHideInterfaceEnabled() ) {
+        conf.SetShowControlPanel( !conf.ShowControlPanel() );
         gameArea.SetRedraw();
     }
 }

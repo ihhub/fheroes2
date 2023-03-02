@@ -8,8 +8,11 @@ jobs:
   assign:
     name: PR author auto assign
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: toshimaru/auto-author-assign@v1.4.0
+    - uses: toshimaru/auto-author-assign@v1.6.1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}

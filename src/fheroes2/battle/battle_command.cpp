@@ -54,12 +54,13 @@ Battle::Command::Command( const CommandType cmd, const int param1, const int par
     : _type( cmd )
 {
     switch ( _type ) {
-    case CommandType::MSG_BATTLE_AUTO:
+    case CommandType::MSG_BATTLE_AUTO_SWITCH:
         *this << param1; // color
         break;
 
     case CommandType::MSG_BATTLE_SURRENDER:
     case CommandType::MSG_BATTLE_RETREAT:
+    case CommandType::MSG_BATTLE_AUTO_FINISH:
         break;
 
     case CommandType::MSG_BATTLE_TOWER:
@@ -90,7 +91,7 @@ Battle::Command::Command( const CommandType cmd, const int param1, const int par
         break;
 
     case CommandType::MSG_BATTLE_SKIP:
-        *this << param2 << param1; // hard_skip, uid
+        *this << param1; // uid
         break;
 
     case CommandType::MSG_BATTLE_MOVE:

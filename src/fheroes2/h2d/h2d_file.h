@@ -20,12 +20,14 @@
 
 #pragma once
 
-#include "serialize.h"
-
+#include <cstdint>
 #include <map>
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
+
+#include "serialize.h"
 
 namespace fheroes2
 {

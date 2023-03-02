@@ -19,6 +19,11 @@
  ***************************************************************************/
 
 #include "ui_button.h"
+
+#include <algorithm>
+#include <cassert>
+#include <utility>
+
 #include "agg_image.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -29,7 +34,7 @@
 
 namespace fheroes2
 {
-    ButtonBase::ButtonBase( int32_t offsetX, int32_t offsetY )
+    ButtonBase::ButtonBase( const int32_t offsetX, const int32_t offsetY )
         : _offsetX( offsetX )
         , _offsetY( offsetY )
         , _isPressed( false )
@@ -39,112 +44,58 @@ namespace fheroes2
         , _disabledSprite()
     {}
 
-    ButtonBase::ButtonBase( ButtonBase && button ) noexcept
-        : ButtonBase()
+    bool ButtonBase::press()
     {
-        _swap( button );
-    }
-
-    ButtonBase & ButtonBase::operator=( ButtonBase && button ) noexcept
-    {
-        if ( this != &button ) {
-            _swap( button );
+        if ( !isEnabled() ) {
+            return false;
         }
-        return *this;
+
+        _isPressed = true;
+        notifySubscriber();
+        return true;
     }
 
-    void ButtonBase::_swap( ButtonBase & button )
+    bool ButtonBase::release()
     {
-        std::swap( _offsetX, button._offsetX );
-        std::swap( _offsetY, button._offsetY );
-        std::swap( _isPressed, button._isPressed );
-        std::swap( _isEnabled, button._isEnabled );
-        std::swap( _isVisible, button._isVisible );
-        std::swap( _releasedSprite, button._releasedSprite );
-        std::swap( _disabledSprite, button._disabledSprite );
-    }
-
-    bool ButtonBase::isEnabled() const
-    {
-        return _isEnabled;
-    }
-
-    bool ButtonBase::isDisabled() const
-    {
-        return !_isEnabled;
-    }
-
-    bool ButtonBase::isPressed() const
-    {
-        return _isPressed;
-    }
-
-    bool ButtonBase::isReleased() const
-    {
-        return !_isPressed;
-    }
-
-    bool ButtonBase::isVisible() const
-    {
-        return _isVisible;
-    }
-
-    bool ButtonBase::isHidden() const
-    {
-        return !_isVisible;
-    }
-
-    void ButtonBase::press()
-    {
-        if ( isEnabled() ) {
-            _isPressed = true;
-            updateSubscription();
+        if ( !isEnabled() ) {
+            return false;
         }
-    }
 
-    void ButtonBase::release()
-    {
-        if ( isEnabled() ) {
-            _isPressed = false;
-            updateSubscription();
-        }
+        _isPressed = false;
+        notifySubscriber();
+        return true;
     }
 
     void ButtonBase::enable()
     {
         _isEnabled = true;
-        updateSubscription();
+        notifySubscriber();
     }
 
     void ButtonBase::disable()
     {
         _isEnabled = false;
         _isPressed = false; // button can't be disabled and pressed
-        updateSubscription();
+        notifySubscriber();
     }
 
     void ButtonBase::show()
     {
         _isVisible = true;
-        updateSubscription();
+        notifySubscriber();
     }
 
     void ButtonBase::hide()
     {
         _isVisible = false;
-        updateSubscription();
+        notifySubscriber();
     }
 
-    void ButtonBase::setPosition( int32_t offsetX_, int32_t offsetY_ )
+    bool ButtonBase::draw( Image & output ) const
     {
-        _offsetX = offsetX_;
-        _offsetY = offsetY_;
-    }
-
-    void ButtonBase::draw( Image & output ) const
-    {
-        if ( !isVisible() )
-            return;
+        if ( !isVisible() ) {
+            return false;
+        }
 
         if ( isPressed() ) {
             // button can't be disabled and pressed
@@ -155,28 +106,42 @@ namespace fheroes2
             const Sprite & sprite = isEnabled() ? _getReleased() : _getDisabled();
             Blit( sprite, output, _offsetX + sprite.x(), _offsetY + sprite.y() );
         }
+
+        return true;
     }
 
-    bool ButtonBase::drawOnPress( Image & output )
-    {
-        if ( !isPressed() ) {
-            press();
-            draw( output );
-            Display::instance().render( area() );
-            return true;
-        }
-        return false;
-    }
-
-    bool ButtonBase::drawOnRelease( Image & output )
+    bool ButtonBase::drawOnPress( Display & output )
     {
         if ( isPressed() ) {
-            release();
-            draw( output );
-            Display::instance().render( area() );
-            return true;
+            return false;
         }
-        return false;
+
+        if ( !press() ) {
+            return false;
+        }
+
+        if ( isVisible() ) {
+            draw( output );
+            output.render( area() );
+        }
+        return true;
+    }
+
+    bool ButtonBase::drawOnRelease( Display & output )
+    {
+        if ( !isPressed() ) {
+            return false;
+        }
+
+        if ( !release() ) {
+            return false;
+        }
+
+        if ( isVisible() ) {
+            draw( output );
+            output.render( area() );
+        }
+        return true;
     }
 
     Rect ButtonBase::area() const
@@ -239,25 +204,6 @@ namespace fheroes2
         , _disabled( disabled )
     {}
 
-    ButtonSprite::ButtonSprite( ButtonSprite && button ) noexcept
-        : ButtonBase( std::move( button ) )
-    {
-        std::swap( _released, button._released );
-        std::swap( _pressed, button._pressed );
-        std::swap( _disabled, button._disabled );
-    }
-
-    ButtonSprite & ButtonSprite::operator=( ButtonSprite && button ) noexcept
-    {
-        if ( this != &button ) {
-            ButtonBase::_swap( button );
-            std::swap( _released, button._released );
-            std::swap( _pressed, button._pressed );
-            std::swap( _disabled, button._disabled );
-        }
-        return *this;
-    }
-
     void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled )
     {
         _released = released;
@@ -286,41 +232,46 @@ namespace fheroes2
 
     ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )
     {
-        const int icnId = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;
+        const int buttonNoIcnID = isEvilInterface ? ICN::BUTTON_SMALL_NO_EVIL : ICN::BUTTON_SMALL_NO_GOOD;
+        const int buttonOkayIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
+        const int buttonCancelIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
 
         Point offset;
 
         switch ( buttonTypes ) {
         case Dialog::YES | Dialog::NO:
             offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 5 ).height();
-            createButton( offset.x, offset.y, icnId, 5, 6, Dialog::YES );
+            offset.y = area.y + area.height - AGG::GetICN( buttonYesIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonYesIcnID, 0, 1, Dialog::YES );
 
-            offset.x = area.x + area.width - AGG::GetICN( icnId, 7 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 7 ).height();
-            createButton( offset.x, offset.y, icnId, 7, 8, Dialog::NO );
+            offset.x = area.x + area.width - AGG::GetICN( buttonNoIcnID, 0 ).width();
+            offset.y = area.y + area.height - AGG::GetICN( buttonNoIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonNoIcnID, 0, 1, Dialog::NO );
             break;
 
         case Dialog::OK | Dialog::CANCEL:
             offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
-            createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
 
-            offset.x = area.x + area.width - AGG::GetICN( icnId, 3 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
-            createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            offset.x = area.x + area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width();
+            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
 
         case Dialog::OK:
-            offset.x = area.x + ( area.width - AGG::GetICN( icnId, 1 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
-            createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            offset.x = area.x + ( area.width - AGG::GetICN( buttonOkayIcnID, 0 ).width() ) / 2;
+            offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
             break;
 
         case Dialog::CANCEL:
-            offset.x = area.x + ( area.width - AGG::GetICN( icnId, 3 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
-            createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            offset.x = area.x + ( area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width() ) / 2;
+            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
 
         default:
@@ -365,17 +316,14 @@ namespace fheroes2
 
     ButtonBase & ButtonGroup::button( size_t id )
     {
+        assert( id < _button.size() );
         return *_button[id];
     }
 
     const ButtonBase & ButtonGroup::button( size_t id ) const
     {
+        assert( id < _button.size() );
         return *_button[id];
-    }
-
-    size_t ButtonGroup::size() const
-    {
-        return _button.size();
     }
 
     int ButtonGroup::processEvents()

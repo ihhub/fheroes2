@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,36 +22,64 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <list>
+#include <ostream>
+#include <string>
+#include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
 #include "ai.h"
+#include "army.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "battle_only.h"
 #include "castle.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "direction.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "interface_buttons.h"
+#include "interface_cpanel.h"
+#include "interface_gamearea.h"
+#include "interface_icons.h"
+#include "interface_radar.h"
+#include "interface_status.h"
 #include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
+#include "maps.h"
 #include "maps_tiles.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mp2.h"
 #include "mus.h"
+#include "players.h"
+#include "resource.h"
 #include "route.h"
+#include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
+#include "week.h"
 #include "world.h"
 
 namespace
@@ -149,7 +177,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             const bool openConstructionWindow
                 = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
 
-            result = ( *it )->OpenDialog( false, openConstructionWindow );
+            result = ( *it )->OpenDialog( openConstructionWindow );
 
             if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
                 if ( it == myCastles.begin() )
@@ -163,8 +191,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             }
         }
     }
-    else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        castle.OpenDialog( true, false );
+    else {
+        assert( 0 );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
@@ -200,7 +228,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    bool needFade = Settings::ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+    bool needFade = Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize();
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
@@ -288,7 +316,7 @@ void ShowNewWeekDialog()
                                                                   "After regular growth, the population of %{monster} increases by %{count} percent!", count );
             else
                 message += _( "%{monster} growth +%{count}." );
-            StringReplace( message, "%{monster}", monster.GetMultiName() );
+            StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
             message += "\n \n";
         }
@@ -299,7 +327,7 @@ void ShowNewWeekDialog()
     else
         message += _( " All dwellings increase population." );
 
-    Dialog::Message( "", message, Font::BIG, Dialog::OK );
+    fheroes2::showStandardTextMessage( "", message, Dialog::OK );
 }
 
 void ShowEventDayDialog()
@@ -313,7 +341,7 @@ void ShowEventDayDialog()
                                            fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, event.resource );
         }
         else if ( !event.message.empty() ) {
-            Dialog::Message( event.title, event.message, Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
         }
     }
 }
@@ -336,7 +364,7 @@ void ShowWarningLostTownsDialog()
 int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Maps::Tiles & tile )
 {
     switch ( tile.GetObject() ) {
-    case MP2::OBJN_CASTLE:
+    case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * to_castle = world.getCastle( tile.GetCenter() );
 
@@ -371,12 +399,12 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
     case MP2::OBJ_BOAT:
         return Cursor::POINTER;
 
-    case MP2::OBJN_CASTLE:
+    case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( castle ) {
-            if ( tile.GetObject() == MP2::OBJN_CASTLE && water && tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
+            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE && water && tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
 
@@ -430,17 +458,14 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
     switch ( tile.GetObject() ) {
     case MP2::OBJ_MONSTER:
-        if ( from_hero.Modes( Heroes::GUARDIAN ) )
-            return Cursor::POINTER;
-        else
-            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
 
-    case MP2::OBJN_CASTLE:
+    case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( nullptr != castle ) {
-            if ( tile.GetObject() == MP2::OBJN_CASTLE ) {
+            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE ) {
                 if ( tile.GetPassable() == 0 ) {
                     return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
@@ -451,7 +476,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                                                    from_hero.getNumOfTravelDays( tile.GetIndex() ) );
                 }
             }
-            else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() ) {
+            else if ( from_hero.GetIndex() == castle->GetIndex() ) {
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
             }
             else if ( from_hero.GetColor() == castle->GetColor() ) {
@@ -474,10 +499,9 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         const Heroes * to_hero = tile.GetHeroes();
 
         if ( nullptr != to_hero ) {
-            if ( from_hero.Modes( Heroes::GUARDIAN ) )
-                return from_hero.GetColor() == to_hero->GetColor() ? Cursor::HEROES : Cursor::POINTER;
-            else if ( to_hero->GetCenter() == from_hero.GetCenter() )
+            if ( to_hero->GetCenter() == from_hero.GetCenter() ) {
                 return Cursor::HEROES;
+            }
             else if ( from_hero.GetColor() == to_hero->GetColor() ) {
                 int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
                 return newcur != Cursor::POINTER ? newcur : Cursor::HEROES;
@@ -492,14 +516,11 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     }
 
     case MP2::OBJ_BOAT:
-        return from_hero.Modes( Heroes::GUARDIAN ) ? Cursor::POINTER
-                                                   : Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
     case MP2::OBJ_BARRIER:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
     default:
-        if ( from_hero.Modes( Heroes::GUARDIAN ) )
-            return Cursor::POINTER;
-        else if ( MP2::isActionObject( tile.GetObject() ) ) {
+        if ( MP2::isActionObject( tile.GetObject() ) ) {
             bool protection = false;
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
                 protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
@@ -604,7 +625,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
 
                 radar.SetHide( true );
-                radar.SetRedraw();
+                radar.SetRedraw( REDRAW_RADAR_CURSOR );
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -662,6 +683,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     statusWindow.Reset();
                     statusWindow.SetState( StatusType::STATUS_AITURN );
 
+                    if ( player->isAIAutoControlMode() ) {
+                        radar.SetHide( false );
+                        radar.SetRedraw( REDRAW_RADAR );
+                    }
+
                     Redraw();
                     display.render();
 
@@ -710,7 +736,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    if ( Settings::ExtGameUseFade() )
+    if ( Settings::isFadeEffectEnabled() )
         fheroes2::FadeDisplay();
 
     return res;
@@ -725,14 +751,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
 
-    // set focus
-    if ( conf.ExtGameRememberLastFocus() ) {
-        if ( GetFocusHeroes() != nullptr )
-            ResetFocus( GameFocus::HEROES );
-        else if ( GetFocusCastle() != nullptr )
-            ResetFocus( GameFocus::CASTLE );
-        else
-            ResetFocus( GameFocus::FIRSTHERO );
+    if ( isload ) {
+        updateFocus();
     }
     else {
         ResetFocus( GameFocus::FIRSTHERO );
@@ -754,7 +774,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         ShowEventDayDialog();
 
-        if ( conf.ExtGameAutosaveBeginOfDay() ) {
+        if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
         }
     }
@@ -779,6 +799,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     int heroAnimationSpriteId = 0;
 
     bool isCursorOverButtons = false;
+    bool isCursorOverGamearea = false;
 
     const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
 
@@ -800,86 +821,101 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         // hotkeys
         if ( le.KeyPress() ) {
             // if the hero is currently moving, pressing any key should stop him
-            if ( isMovingHero )
+            if ( isMovingHero ) {
                 stopHero = true;
+            }
+
+#if defined( WITH_DEBUG )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) ) {
+                if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
+                                            fheroes2::Text( _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
+                                                            fheroes2::FontType::normalWhite() ),
+                                            Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    Players::Get( myKingdom.GetColor() )->setAIAutoControlMode( true );
+                    return fheroes2::GameMode::END_TURN;
+                }
+            }
+#endif
+
             // adventure map control
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
                 res = EventExit();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::END_TURN ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_END_TURN ) )
                 res = EventEndTurn();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::NEXT_HERO ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_NEXT_HERO ) )
                 EventNextHero();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::NEXT_TOWN ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_NEXT_TOWN ) )
                 EventNextTown();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) )
                 res = EventNewGame();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SAVE_GAME ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) )
                 EventSaveGame();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) )
                 res = EventLoadGame();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::FILE_OPTIONS ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_FILE_OPTIONS ) )
                 res = EventFileDialog();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::ADVENTURE_OPTIONS ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_ADVENTURE_OPTIONS ) )
                 res = EventAdventureDialog();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SYSTEM_OPTIONS ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SYSTEM_OPTIONS ) )
                 EventSystemDialog();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::PUZZLE_MAP ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_PUZZLE_MAP ) )
                 EventPuzzleMaps();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SCENARIO_INFORMATION ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) )
                 res = EventScenarioInformation();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::CAST_SPELL ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_CAST_SPELL ) )
                 EventCastSpell();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::KINGDOM_SUMMARY ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_KINGDOM_SUMMARY ) )
                 EventKingdomInfo();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::VIEW_WORLD ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) )
                 EventViewWorld();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::CONTROL_PANEL ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_CONTROL_PANEL ) )
                 EventSwitchShowControlPanel();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SHOW_RADAR ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_RADAR ) )
                 EventSwitchShowRadar();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SHOW_BUTTONS ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_BUTTONS ) )
                 EventSwitchShowButtons();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SHOW_STATUS ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_STATUS ) )
                 EventSwitchShowStatus();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SHOW_ICONS ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_ICONS ) )
                 EventSwitchShowIcons();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::CONTINUE_HERO_MOVEMENT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_CONTINUE_HERO_MOVEMENT ) )
                 EventContinueMovement();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::DIG_ARTIFACT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) )
                 res = EventDigArtifact();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SLEEP_HERO ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SLEEP_HERO ) )
                 EventSwitchHeroSleeping();
             // hero movement control
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_LEFT ) )
                 EventKeyArrowPress( Direction::LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_RIGHT ) )
                 EventKeyArrowPress( Direction::RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP ) )
                 EventKeyArrowPress( Direction::TOP );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN ) )
                 EventKeyArrowPress( Direction::BOTTOM );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP_LEFT ) )
                 EventKeyArrowPress( Direction::TOP_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP_RIGHT ) )
                 EventKeyArrowPress( Direction::TOP_RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN_LEFT ) )
                 EventKeyArrowPress( Direction::BOTTOM_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN_RIGHT ) )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
             // map scrolling control
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SCROLL_LEFT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) )
                 gameArea.SetScroll( SCROLL_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SCROLL_RIGHT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) )
                 gameArea.SetScroll( SCROLL_RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SCROLL_UP ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) )
                 gameArea.SetScroll( SCROLL_TOP );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::SCROLL_DOWN ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) )
                 gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_ACTION ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) )
                 res = EventDefaultAction( res );
             // open focus
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::OPEN_FOCUS ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) )
                 EventOpenFocus();
         }
 
@@ -887,7 +923,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             break;
         }
 
-        if ( fheroes2::cursor().isFocusActive() ) {
+        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
@@ -918,10 +954,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             fastScrollRepeatCount = 0;
         }
 
-        const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
-        const bool isHiddenInterface = conf.ExtGameHideInterface();
+        const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
+        isCursorOverGamearea = false;
 
         if ( isMovingHero ) {
             // hero is moving, set the appropriate cursor
@@ -930,6 +966,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             }
 
             // if the hero is currently moving, pressing any mouse button should stop him
+            const fheroes2::Rect displayArea{ 0, 0, display.width(), display.height() };
             if ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) {
                 stopHero = true;
             }
@@ -957,7 +994,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            radar.QueueEventProcessing();
+            if ( !gameArea.isDragScroll() )
+                radar.QueueEventProcessing();
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
@@ -967,13 +1005,21 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
         // cursor is over the game area
         else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
-            gameArea.QueueEventProcessing();
+            isCursorOverGamearea = true;
         }
         // cursor is somewhere else
         else if ( !gameArea.NeedScroll() ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             gameArea.ResetCursorPosition();
+        }
+
+        // gamearea
+        if ( !gameArea.NeedScroll() && !isMovingHero ) {
+            if ( !radar.isDragRadar() )
+                gameArea.QueueEventProcessing( isCursorOverGamearea );
+            else if ( !le.MousePressLeft() )
+                radar.QueueEventProcessing();
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
@@ -1017,10 +1063,19 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                     if ( resetHeroSprite ) {
                         hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
                     }
+
                     if ( hero->isMoveEnabled() ) {
                         if ( hero->Move( 10 == conf.HeroesMoveSpeed() ) ) {
+                            // Do not generate a frame as we are going to do it later.
+                            Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+
                             gameArea.SetCenter( hero->GetCenter() );
                             ResetFocus( GameFocus::HEROES );
+
+                            // Update the radar map image in the area that is visible to the hero after his movement.
+                            radar.SetRenderArea( hero->GetScoutRoi() );
+                            radar.SetRedraw( REDRAW_RADAR );
+
                             RedrawFocus();
 
                             if ( stopHero ) {
@@ -1032,6 +1087,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                         else {
                             const fheroes2::Point movement( hero->MovementDirection() );
                             if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
+                                // Do not generate a frame as we are going to do it later.
+                                Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+
                                 const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
 
                                 heroAnimationOffset = movement;
@@ -1080,24 +1138,24 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         // fast scroll
-        if ( gameArea.NeedScroll() && !isMovingHero ) {
+        if ( ( gameArea.NeedScroll() && !isMovingHero ) || gameArea.needDragScrollRedraw() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
-                if ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
-                     || isScrollBottom( le.GetMouseCursor() ) ) {
+                if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
+                       || isScrollBottom( le.GetMouseCursor() ) )
+                     && !gameArea.isDragScroll() ) {
                     cursor.SetThemes( gameArea.GetScrollCursor() );
                 }
 
                 gameArea.Scroll();
 
                 gameArea.SetRedraw();
-                radar.SetRedraw();
+                radar.SetRedraw( REDRAW_RADAR_CURSOR );
             }
         }
 
         // map objects animation
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            uint32_t & frame = Game::MapsAnimationFrame();
-            ++frame;
+            Game::updateAdventureMapAnimationIndex();
             gameArea.SetRedraw();
         }
 
@@ -1108,6 +1166,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         if ( NeedRedraw() ) {
             Redraw();
+
+            // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+            assert( GetRedrawMask() == 0 );
+
             display.render();
         }
     }
@@ -1133,7 +1195,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 }
             }
 
-            if ( !conf.ExtGameAutosaveBeginOfDay() ) {
+            if ( !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
                 Game::AutoSave();
             }
         }
@@ -1154,6 +1216,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
         if ( nullptr != to_hero ) {
             if ( !from_hero || from_hero != to_hero ) {
                 SetFocus( to_hero );
+                CalculateHeroPath( to_hero, -1 );
                 RedrawFocus();
             }
             else {
@@ -1167,7 +1230,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     case Cursor::CASTLE: {
         // correct index for castle
         const MP2::MapObjectType objectType = tile.GetObject();
-        if ( MP2::OBJN_CASTLE != objectType && MP2::OBJ_CASTLE != objectType )
+        if ( MP2::OBJ_NON_ACTION_CASTLE != objectType && MP2::OBJ_CASTLE != objectType )
             break;
 
         Castle * to_castle = world.getCastle( tile.GetCenter() );
@@ -1227,7 +1290,7 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
             Dialog::QuickInfo( tile );
         else
             switch ( tile.GetObject() ) {
-            case MP2::OBJN_CASTLE:
+            case MP2::OBJ_NON_ACTION_CASTLE:
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
                 if ( castle ) {

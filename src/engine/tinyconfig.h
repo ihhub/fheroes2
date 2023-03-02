@@ -27,7 +27,9 @@
 #include <map>
 #include <string>
 
-class TinyConfig : protected std::multimap<std::string, std::string>
+#include "math_base.h"
+
+class TinyConfig : private std::multimap<std::string, std::string>
 {
 public:
     TinyConfig( char sep = '=', char com = ';' );
@@ -38,8 +40,11 @@ public:
 
     int IntParams( const std::string & key ) const;
     std::string StrParams( const std::string & key ) const;
+    // Tries to find and return a Point-type struct stored as a string "[ x, y ]" for a given key.
+    // In case of any error, the fallback value is returned.
+    fheroes2::Point PointParams( const std::string & key, const fheroes2::Point & fallbackValue ) const;
 
-protected:
+private:
     char separator;
     char comment;
 };

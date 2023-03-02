@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,7 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
+#include <bitset>
+#include <vector>
 
 #include "direction.h"
 #include "mp2.h"
@@ -43,7 +44,7 @@ int ObjTree::GetPassable( const uint8_t index )
 
 bool ObjTree::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjTree::isShadow( const uint8_t index )
@@ -53,5 +54,5 @@ bool ObjTree::isShadow( const uint8_t index )
 
 int ObjTree::GetActionObject( uint32_t /* unused */ )
 {
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

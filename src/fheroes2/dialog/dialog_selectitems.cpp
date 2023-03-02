@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,15 +21,27 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "dialog_selectitems.h"
+#include <cstddef>
+#include <cstdint>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
+#include "gamedefs.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_list.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_text.h"
 
 class SelectEnum : public Interface::ListBox<int>
@@ -136,7 +148,7 @@ public:
     void ActionListPressRight( int & index ) override
     {
         Troop troop( Monster( index ), 1 );
-        Dialog::ArmyInfo( troop, 0 );
+        Dialog::ArmyInfo( troop, Dialog::ZERO );
     }
 };
 
@@ -424,7 +436,7 @@ Monster Dialog::SelectMonster( int id )
     std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
 
     for ( size_t i = 0; i < monsters.size(); ++i )
-        monsters[i] = static_cast<int>( i + 1 ); // skip Monser::UNKNOWN, safe to do this as the monsters of spells can't be more than 2 billion
+        monsters[i] = static_cast<int>( i + 1 ); // skip Monster::UNKNOWN, safe to do this as the monsters of spells can't be more than 2 billion
 
     Dialog::FrameBorder frameborder( { 260, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();

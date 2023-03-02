@@ -24,6 +24,8 @@
 #ifndef H2INTERFACE_STATUS_H
 #define H2INTERFACE_STATUS_H
 
+#include <cstdint>
+
 #include "interface_border.h"
 #include "timing.h"
 
@@ -61,7 +63,7 @@ namespace Interface
 
         void SetState( const StatusType status );
         void SetResource( int, uint32_t );
-        void RedrawTurnProgress( uint32_t );
+        void DrawAITurnProgress( const uint32_t progressValue );
         void QueueEventProcessing();
         void TimerEventProcessing();
 

@@ -26,14 +26,6 @@ CCFLAGS := $(CCFLAGS) -I../engine
 LIBENGINE := $(LIBENGINE) ../thirdparty/libsmacker/libsmacker.a
 CCFLAGS := $(CCFLAGS) -I../thirdparty/libsmacker
 
-ifeq ($(PREFIX),)
-PREFIX := /usr/local
-endif
-
-ifdef PREFIX
-CCFLAGS := $(CCFLAGS) -I$(PREFIX)/include
-endif
-
 ifeq ($(PLATFORM), mingw)
 RES := ../resources/$(TARGET).res
 RC  := ../resources/fheroes2.rc
@@ -54,7 +46,7 @@ all: $(TARGET)
 
 $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SEARCH))) $(LIBENGINE) $(RES)
 	@echo "lnk: $@"
-	$(CXX) $(LDFLAGS) $^ $(LIBS) -o $@
+	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
 
 pot: $(wildcard $(SEARCH))
 	@echo "gen: $(POT)"

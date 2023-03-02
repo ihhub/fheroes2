@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,9 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstdint>
+
 #include "ai_normal.h"
+#include "army.h"
 #include "maps_tiles.h"
 #include "pairs.h"
+#include "rand.h"
 
 namespace AI
 {
@@ -38,7 +43,7 @@ namespace AI
     void Normal::revealFog( const Maps::Tiles & tile )
     {
         const MP2::MapObjectType object = tile.GetObject();
-        if ( object != MP2::OBJ_ZERO )
+        if ( object != MP2::OBJ_NONE )
             _mapObjects.emplace_back( tile.GetIndex(), object );
     }
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,15 +23,18 @@
 #ifndef H2ARTIFACT_H
 #define H2ARTIFACT_H
 
+#include <cstdint>
 #include <set>
+#include <string>
 #include <vector>
 
 #include "artifact_info.h"
+#include "image.h"
 #include "interface_itemsbar.h"
+#include "math_base.h"
 #include "mp2.h"
 #include "ui_tool.h"
 
-class Spell;
 class Heroes;
 class StatusBar;
 class StreamBase;
@@ -42,10 +45,10 @@ public:
     enum level_t
     {
         ART_NONE = 0,
-        ART_LEVEL1 = 0x01,
-        ART_LEVEL2 = 0x02,
-        ART_LEVEL3 = 0x04,
-        ART_LEVEL123 = ART_LEVEL1 | ART_LEVEL2 | ART_LEVEL3,
+        ART_LEVEL_TREASURE = 0x01,
+        ART_LEVEL_MINOR = 0x02,
+        ART_LEVEL_MAJOR = 0x04,
+        ART_LEVEL_ALL_NORMAL = ART_LEVEL_TREASURE | ART_LEVEL_MINOR | ART_LEVEL_MAJOR,
         ART_ULTIMATE = 0x08,
         ART_LOYALTY = 0x10,
         ART_NORANDOM = 0x20
@@ -207,7 +210,7 @@ public:
     int Level() const;
     int LoyaltyLevel() const;
 
-    int getArtifactValue() const;
+    double getArtifactValue() const;
 
     // return index of the sprite from objnarti.icn
     uint32_t IndexSprite() const
@@ -303,9 +306,10 @@ public:
     bool isFull() const;
     bool ContainUltimateArtifact() const;
 
-    void exchangeArtifacts( BagArtifacts & giftBag );
+    // Automatically exchange artifacts between two heroes. The taker should get the best possible artifacts.
+    void exchangeArtifacts( BagArtifacts & giftBag, const Heroes & taker, const Heroes & giver );
 
-    int getArtifactValue() const;
+    double getArtifactValue() const;
     uint32_t CountArtifacts() const;
     uint32_t Count( const Artifact & ) const;
 
@@ -326,7 +330,7 @@ public:
     void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
 
     void ResetSelected();
-    void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
+    void Redraw( fheroes2::Image & dstsf );
 
     bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;
     bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;

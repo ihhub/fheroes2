@@ -21,13 +21,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string>
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -77,9 +85,6 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
-    const int system = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
-
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -102,14 +107,17 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
 
     Dialog::FrameBox box( box1.h() + spacer + box2.h() + 10 + sprite_frame.height(), true );
 
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const int buttonLearnIcnID = isEvilInterface ? ICN::BUTTON_SMALL_LEARN_EVIL : ICN::BUTTON_SMALL_LEARN_GOOD;
+
     fheroes2::Point pt;
-    pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( system, 9 ).width() - 20;
-    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 9 ).height();
-    fheroes2::Button button_learn1( pt.x, pt.y, system, 9, 10 );
+    pt.x = box.GetArea().x + box.GetArea().width / 2 - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).width() - 20;
+    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).height();
+    fheroes2::Button button_learn1( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
 
     pt.x = box.GetArea().x + box.GetArea().width / 2 + 20;
-    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 9 ).height();
-    fheroes2::Button button_learn2( pt.x, pt.y, system, 9, 10 );
+    pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( buttonLearnIcnID, 0 ).height();
+    fheroes2::Button button_learn2( pt.x, pt.y, buttonLearnIcnID, 0, 1 );
 
     const fheroes2::Rect & boxArea = box.GetArea();
     fheroes2::Point pos( boxArea.x, boxArea.y );
@@ -183,7 +191,7 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
 
         if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             LocalEvent::GetClean();
-            hero.OpenDialog( false, true, true, true );
+            hero.OpenDialog( false, true, true, true, true );
             display.render();
         }
 

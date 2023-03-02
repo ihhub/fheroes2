@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,29 +21,47 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "army_bar.h"
+#include "artifact.h"
 #include "buildinginfo.h"
+#include "captain.h"
 #include "castle.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "mp2.h"
+#include "resource.h"
+#include "screen.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_kingdom.h"
+#include "ui_scrollbar.h"
 #include "ui_window.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -73,8 +91,8 @@ struct HeroRow
     Heroes * hero;
     std::unique_ptr<ArmyBar> armyBar;
     std::unique_ptr<ArtifactsBar> artifactsBar;
-    std::unique_ptr<SecondarySkillsBar> secskillsBar;
-    std::unique_ptr<PrimarySkillsBar> primskillsBar;
+    std::unique_ptr<SecondarySkillsBar> secSkillsBar;
+    std::unique_ptr<PrimarySkillsBar> primSkillsBar;
 
     explicit HeroRow( Heroes * ptr = nullptr )
     {
@@ -91,27 +109,25 @@ struct HeroRow
     {
         hero = ptr;
 
-        armyBar.reset( new ArmyBar( &hero->GetArmy(), true, false ) );
+        armyBar = std::make_unique<ArmyBar>( &hero->GetArmy(), true, false );
         armyBar->SetBackground( { 41, 53 }, fheroes2::GetColorId( 72, 28, 0 ) );
-        armyBar->SetColRows( 5, 1 );
-        armyBar->SetHSpace( -1 );
+        armyBar->setTableSize( { 5, 1 } );
+        armyBar->setInBetweenItemsOffset( { -1, 0 } );
 
-        artifactsBar.reset( new ArtifactsBar( hero, true, false, false, true, nullptr ) );
-        artifactsBar->SetColRows( 7, 2 );
-        artifactsBar->SetHSpace( 1 );
-        artifactsBar->SetVSpace( 8 );
+        artifactsBar = std::make_unique<ArtifactsBar>( hero, true, false, false, true, nullptr );
+        artifactsBar->setTableSize( { 7, 2 } );
+        artifactsBar->setInBetweenItemsOffset( { 1, 8 } );
         artifactsBar->SetContent( hero->GetBagArtifacts() );
 
-        secskillsBar.reset( new SecondarySkillsBar( *hero ) );
-        secskillsBar->SetColRows( 4, 2 );
-        secskillsBar->SetHSpace( -1 );
-        secskillsBar->SetVSpace( 8 );
-        secskillsBar->SetContent( hero->GetSecondarySkills().ToVector() );
+        secSkillsBar = std::make_unique<SecondarySkillsBar>( *hero );
+        secSkillsBar->setTableSize( { 4, 2 } );
+        secSkillsBar->setInBetweenItemsOffset( { -1, 8 } );
+        secSkillsBar->SetContent( hero->GetSecondarySkills().ToVector() );
 
-        primskillsBar.reset( new PrimarySkillsBar( ptr, true ) );
-        primskillsBar->SetColRows( 4, 1 );
-        primskillsBar->SetHSpace( 2 );
-        primskillsBar->SetTextOff( 20, -13 );
+        primSkillsBar = std::make_unique<PrimarySkillsBar>( ptr, true );
+        primSkillsBar->setTableSize( { 4, 1 } );
+        primSkillsBar->setInBetweenItemsOffset( { 2, 0 } );
+        primSkillsBar->SetTextOff( 20, -13 );
     }
 };
 
@@ -239,19 +255,24 @@ bool StatsHeroesList::ActionListCursor( HeroRow & row, const fheroes2::Point & c
     const fheroes2::Point cursorPos( cursor.x, cursor.y );
 
     if ( ( row.armyBar->GetArea() & cursorPos ) && row.armyBar->QueueEventProcessing() ) {
-        if ( row.artifactsBar->isSelected() )
+        if ( row.artifactsBar->isSelected() ) {
             row.artifactsBar->ResetSelected();
+        }
         return true;
     }
-    else if ( ( row.artifactsBar->GetArea() & cursorPos ) && row.artifactsBar->QueueEventProcessing() ) {
-        if ( row.armyBar->isSelected() )
+
+    if ( ( row.artifactsBar->GetArea() & cursorPos ) && row.artifactsBar->QueueEventProcessing() ) {
+        if ( row.armyBar->isSelected() ) {
             row.armyBar->ResetSelected();
+        }
         return true;
     }
-    else if ( ( row.primskillsBar->GetArea() & cursorPos ) && row.primskillsBar->QueueEventProcessing() ) {
+
+    if ( ( row.primSkillsBar->GetArea() & cursorPos ) && row.primSkillsBar->QueueEventProcessing() ) {
         return true;
     }
-    else if ( ( row.secskillsBar->GetArea() & cursorPos ) && row.secskillsBar->QueueEventProcessing() ) {
+
+    if ( ( row.secSkillsBar->GetArea() & cursorPos ) && row.secSkillsBar->QueueEventProcessing() ) {
         return true;
     }
 
@@ -262,41 +283,46 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, int32_t dstx, int32_t dst
 {
     (void)current;
 
-    if ( row.hero ) {
-        Text text( "", Font::SMALL );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), fheroes2::Display::instance(), dstx, dsty );
-
-        // base info
-        Interface::RedrawHeroesIcon( *row.hero, dstx + 5, dsty + 4 );
-
-        text.Set( std::to_string( row.hero->GetAttack() ) );
-        text.Blit( dstx + 90 - text.w(), dsty + 20 );
-
-        text.Set( std::to_string( row.hero->GetDefense() ) );
-        text.Blit( dstx + 125 - text.w(), dsty + 20 );
-
-        text.Set( std::to_string( row.hero->GetPower() ) );
-        text.Blit( dstx + 160 - text.w(), dsty + 20 );
-
-        text.Set( std::to_string( row.hero->GetKnowledge() ) );
-        text.Blit( dstx + 195 - text.w(), dsty + 20 );
-
-        // primary skills info
-        row.primskillsBar->SetPos( dstx + 56, dsty - 3 );
-        row.primskillsBar->Redraw();
-
-        // secondary skills info
-        row.secskillsBar->SetPos( dstx + 206, dsty + 3 );
-        row.secskillsBar->Redraw();
-
-        // artifacts info
-        row.artifactsBar->SetPos( dstx + 348, dsty + 3 );
-        row.artifactsBar->Redraw();
-
-        // army info
-        row.armyBar->SetPos( dstx - 1, dsty + 30 );
-        row.armyBar->Redraw();
+    if ( row.hero == nullptr ) {
+        // No hero to draw.
+        return;
     }
+
+    Text text( "", Font::SMALL );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), fheroes2::Display::instance(), dstx, dsty );
+
+    // base info
+    Interface::RedrawHeroesIcon( *row.hero, dstx + 5, dsty + 4 );
+
+    text.Set( std::to_string( row.hero->GetAttack() ) );
+    text.Blit( dstx + 90 - text.w(), dsty + 20 );
+
+    text.Set( std::to_string( row.hero->GetDefense() ) );
+    text.Blit( dstx + 125 - text.w(), dsty + 20 );
+
+    text.Set( std::to_string( row.hero->GetPower() ) );
+    text.Blit( dstx + 160 - text.w(), dsty + 20 );
+
+    text.Set( std::to_string( row.hero->GetKnowledge() ) );
+    text.Blit( dstx + 195 - text.w(), dsty + 20 );
+
+    // primary skills info
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    row.primSkillsBar->setRenderingOffset( { dstx + 56, dsty - 3 } );
+    row.primSkillsBar->Redraw( display );
+
+    // secondary skills info
+    row.secSkillsBar->setRenderingOffset( { dstx + 206, dsty + 3 } );
+    row.secSkillsBar->Redraw( display );
+
+    // artifacts info
+    row.artifactsBar->setRenderingOffset( { dstx + 348, dsty + 3 } );
+    row.artifactsBar->Redraw( display );
+
+    // army info
+    row.armyBar->setRenderingOffset( { dstx - 1, dsty + 30 } );
+    row.armyBar->Redraw( display );
 }
 
 void StatsHeroesList::RedrawBackground( const fheroes2::Point & dst )
@@ -329,8 +355,8 @@ void StatsHeroesList::RedrawBackground( const fheroes2::Point & dst )
 struct CstlRow
 {
     Castle * castle;
-    std::unique_ptr<ArmyBar> armyBarGuard;
-    std::unique_ptr<ArmyBar> armyBarGuest;
+    std::unique_ptr<ArmyBar> garrisonArmyBar;
+    std::unique_ptr<ArmyBar> heroArmyBar;
     std::unique_ptr<DwellingsBar> dwellingsBar;
 
     explicit CstlRow( Castle * ptr = nullptr )
@@ -350,26 +376,26 @@ struct CstlRow
 
         const uint8_t fill = fheroes2::GetColorId( 40, 12, 0 );
 
-        armyBarGuard.reset( new ArmyBar( &castle->GetArmy(), true, false ) );
-        armyBarGuard->SetBackground( { 41, 41 }, fill );
-        armyBarGuard->SetColRows( 5, 1 );
-        armyBarGuard->SetHSpace( -1 );
+        garrisonArmyBar = std::make_unique<ArmyBar>( &castle->GetArmy(), true, false );
+        garrisonArmyBar->SetBackground( { 41, 41 }, fill );
+        garrisonArmyBar->setTableSize( { 5, 1 } );
+        garrisonArmyBar->setInBetweenItemsOffset( { -1, 0 } );
 
-        CastleHeroes heroes = world.GetHeroes( *castle );
+        Heroes * hero = world.GetHero( *castle );
 
-        if ( heroes.Guest() ) {
-            armyBarGuest.reset( new ArmyBar( &heroes.Guest()->GetArmy(), true, false ) );
-            armyBarGuest->SetBackground( { 41, 41 }, fill );
-            armyBarGuest->SetColRows( 5, 1 );
-            armyBarGuest->SetHSpace( -1 );
+        if ( hero ) {
+            heroArmyBar = std::make_unique<ArmyBar>( &hero->GetArmy(), true, false );
+            heroArmyBar->SetBackground( { 41, 41 }, fill );
+            heroArmyBar->setTableSize( { 5, 1 } );
+            heroArmyBar->setInBetweenItemsOffset( { -1, 0 } );
         }
         else {
-            armyBarGuest.reset();
+            heroArmyBar.reset();
         }
 
-        dwellingsBar.reset( new DwellingsBar( *castle, { 39, 52 } ) );
-        dwellingsBar->SetColRows( 6, 1 );
-        dwellingsBar->SetHSpace( 2 );
+        dwellingsBar = std::make_unique<DwellingsBar>( *castle, fheroes2::Size{ 39, 52 } );
+        dwellingsBar->setTableSize( { 6, 1 } );
+        dwellingsBar->setInBetweenItemsOffset( { 2, 0 } );
     }
 };
 
@@ -456,10 +482,9 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
             Game::OpenCastleDialog( *row.castle, false );
             row.Init( row.castle );
         }
-        else
-            // click hero icon
-            if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
-            Heroes * hero = row.castle->GetHeroes().GuardFirst();
+        // click hero icon
+        else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
+            Heroes * hero = row.castle->GetHero();
             if ( hero ) {
                 Game::OpenHeroesDialog( *hero, false, false );
                 row.Init( row.castle );
@@ -475,7 +500,7 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Poin
             Dialog::QuickInfo( *row.castle, {}, true, _windowArea );
         }
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
-            const Heroes * hero = row.castle->GetHeroes().GuardFirst();
+            const Heroes * hero = row.castle->GetHero();
             if ( hero ) {
                 Dialog::QuickInfo( *hero, {}, true, _windowArea );
             }
@@ -490,23 +515,29 @@ bool StatsCastlesList::ActionListCursor( CstlRow & row, const fheroes2::Point & 
 {
     const fheroes2::Point cursorPos( cursor.x, cursor.y );
 
-    if ( row.armyBarGuard && ( row.armyBarGuard->GetArea() & cursorPos )
-         && ( row.armyBarGuest ? row.armyBarGuard->QueueEventProcessing( *row.armyBarGuest ) : row.armyBarGuard->QueueEventProcessing() ) ) {
-        if ( row.armyBarGuest && row.armyBarGuest->isSelected() )
-            row.armyBarGuest->ResetSelected();
+    if ( row.garrisonArmyBar && ( row.garrisonArmyBar->GetArea() & cursorPos )
+         && ( row.heroArmyBar ? row.garrisonArmyBar->QueueEventProcessing( *row.heroArmyBar ) : row.garrisonArmyBar->QueueEventProcessing() ) ) {
+        if ( row.heroArmyBar && row.heroArmyBar->isSelected() ) {
+            row.heroArmyBar->ResetSelected();
+        }
         return true;
     }
-    else if ( row.armyBarGuest && ( row.armyBarGuest->GetArea() & cursorPos )
-              && ( row.armyBarGuard ? row.armyBarGuest->QueueEventProcessing( *row.armyBarGuard ) : row.armyBarGuest->QueueEventProcessing() ) ) {
-        if ( row.armyBarGuard && row.armyBarGuard->isSelected() )
-            row.armyBarGuard->ResetSelected();
+
+    if ( row.heroArmyBar && ( row.heroArmyBar->GetArea() & cursorPos )
+         && ( row.garrisonArmyBar ? row.heroArmyBar->QueueEventProcessing( *row.garrisonArmyBar ) : row.heroArmyBar->QueueEventProcessing() ) ) {
+        if ( row.garrisonArmyBar && row.garrisonArmyBar->isSelected() ) {
+            row.garrisonArmyBar->ResetSelected();
+        }
         return true;
     }
-    else if ( row.dwellingsBar && ( row.dwellingsBar->GetArea() & cursorPos ) && row.dwellingsBar->QueueEventProcessing() ) {
-        if ( row.armyBarGuest && row.armyBarGuest->isSelected() )
-            row.armyBarGuest->ResetSelected();
-        if ( row.armyBarGuard && row.armyBarGuard->isSelected() )
-            row.armyBarGuard->ResetSelected();
+
+    if ( row.dwellingsBar && ( row.dwellingsBar->GetArea() & cursorPos ) && row.dwellingsBar->QueueEventProcessing() ) {
+        if ( row.heroArmyBar && row.heroArmyBar->isSelected() ) {
+            row.heroArmyBar->ResetSelected();
+        }
+        if ( row.garrisonArmyBar && row.garrisonArmyBar->isSelected() ) {
+            row.garrisonArmyBar->ResetSelected();
+        }
         return true;
     }
 
@@ -517,48 +548,53 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
 {
     (void)current;
 
-    if ( row.castle ) {
-        Text text( "", Font::SMALL );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), fheroes2::Display::instance(), dstx, dsty );
-
-        // base info
-        Interface::RedrawCastleIcon( *row.castle, dstx + 17, dsty + 19 );
-
-        const Heroes * hero = row.castle->GetHeroes().GuardFirst();
-
-        if ( hero ) {
-            Interface::RedrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
-            const std::string sep = "-";
-            text.Set( std::to_string( hero->GetAttack() ) + sep + std::to_string( hero->GetDefense() ) + sep + std::to_string( hero->GetPower() ) + sep
-                      + std::to_string( hero->GetKnowledge() ) );
-            text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
-        }
-        else if ( row.castle->GetCaptain().isValid() ) {
-            const Captain & captain = row.castle->GetCaptain();
-            captain.PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, fheroes2::Display::instance() );
-            const std::string sep = "-";
-            text.Set( std::to_string( captain.GetAttack() ) + sep + std::to_string( captain.GetDefense() ) + sep + std::to_string( captain.GetPower() ) + sep
-                      + std::to_string( captain.GetKnowledge() ) );
-            text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
-        }
-
-        text.Set( row.castle->GetName() );
-        text.Blit( dstx + 72 - text.w() / 2, dsty + 62 );
-
-        // army info
-        if ( row.armyBarGuard ) {
-            row.armyBarGuard->SetPos( dstx + 146, row.armyBarGuest ? dsty : dsty + 20 );
-            row.armyBarGuard->Redraw();
-        }
-
-        if ( row.armyBarGuest ) {
-            row.armyBarGuest->SetPos( dstx + 146, row.armyBarGuard ? dsty + 41 : dsty + 20 );
-            row.armyBarGuest->Redraw();
-        }
-
-        row.dwellingsBar->SetPos( dstx + 349, dsty + 15 );
-        row.dwellingsBar->Redraw();
+    if ( row.castle == nullptr ) {
+        // No castle to draw.
+        return;
     }
+
+    Text text( "", Font::SMALL );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), fheroes2::Display::instance(), dstx, dsty );
+
+    // base info
+    Interface::RedrawCastleIcon( *row.castle, dstx + 17, dsty + 19 );
+
+    const Heroes * hero = row.castle->GetHero();
+
+    if ( hero ) {
+        Interface::RedrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
+        const std::string sep = "-";
+        text.Set( std::to_string( hero->GetAttack() ) + sep + std::to_string( hero->GetDefense() ) + sep + std::to_string( hero->GetPower() ) + sep
+                  + std::to_string( hero->GetKnowledge() ) );
+        text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
+    }
+    else if ( row.castle->GetCaptain().isValid() ) {
+        const Captain & captain = row.castle->GetCaptain();
+        captain.PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, fheroes2::Display::instance() );
+        const std::string sep = "-";
+        text.Set( std::to_string( captain.GetAttack() ) + sep + std::to_string( captain.GetDefense() ) + sep + std::to_string( captain.GetPower() ) + sep
+                  + std::to_string( captain.GetKnowledge() ) );
+        text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
+    }
+
+    text.Set( row.castle->GetName() );
+    text.Blit( dstx + 72 - text.w() / 2, dsty + 62 );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    // army info
+    if ( row.garrisonArmyBar ) {
+        row.garrisonArmyBar->setRenderingOffset( { dstx + 146, row.heroArmyBar ? dsty : dsty + 20 } );
+        row.garrisonArmyBar->Redraw( display );
+    }
+
+    if ( row.heroArmyBar ) {
+        row.heroArmyBar->setRenderingOffset( { dstx + 146, row.garrisonArmyBar ? dsty + 41 : dsty + 20 } );
+        row.heroArmyBar->Redraw( display );
+    }
+
+    row.dwellingsBar->setRenderingOffset( { dstx + 349, dsty + 15 } );
+    row.dwellingsBar->Redraw( display );
 }
 
 void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
@@ -673,7 +709,7 @@ void Kingdom::openOverviewDialog()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
+    fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
 
     const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt );
@@ -691,15 +727,21 @@ void Kingdom::openOverviewDialog()
     dst_pt.y = cur_pt.y + 360;
     fheroes2::Button buttonHeroes( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 0, 1 );
 
-    dst_pt.x = cur_pt.x + 540;
+    // We need to additionally render the background between HEROES and TOWNS/CASTLES buttons.
+    dst_pt.y += 42;
+    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 540, 444, display, dst_pt.x, dst_pt.y, 99, 5 );
+
     dst_pt.y = cur_pt.y + 405;
     fheroes2::Button buttonCastle( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 2, 3 );
 
-    dst_pt.x = cur_pt.x + 540;
     dst_pt.y = cur_pt.y + 453;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 4, 5 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_EXIT, 0, 1 );
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
+    const fheroes2::Rect rectGoldPerDay( cur_pt.x + 124, cur_pt.y + 459, 289, 16 );
+
+    const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
+    const fheroes2::Rect rectLighthouse( cur_pt.x + 100 - lighthouse.width(), cur_pt.y + 459, lighthouse.width() + 10, lighthouse.height() );
 
     Interface::ListBasic * listStats = nullptr;
 
@@ -708,8 +750,6 @@ void Kingdom::openOverviewDialog()
         buttonCastle.press();
         buttonHeroes.release();
 
-        listCastles.setTopVisibleItem( _topItemInKingdomView );
-
         listStats = &listCastles;
     }
     else {
@@ -717,10 +757,11 @@ void Kingdom::openOverviewDialog()
         buttonHeroes.press();
         buttonCastle.release();
 
-        listHeroes.setTopVisibleItem( _topItemInKingdomView );
-
         listStats = &listHeroes;
     }
+
+    listCastles.setTopVisibleItem( _topCastleInKingdomView );
+    listHeroes.setTopVisibleItem( _topHeroInKingdomView );
 
     listStats->Redraw();
 
@@ -747,13 +788,17 @@ void Kingdom::openOverviewDialog()
         else if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
-        else if ( le.MousePressRight( rectIncome ) ) {
-            fheroes2::showKingdomIncome( *this, 0 );
+        else if ( le.MousePressRight( rectIncome ) || le.MousePressRight( rectGoldPerDay ) ) {
+            fheroes2::showKingdomIncome( *this, Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( rectLighthouse ) ) {
+            fheroes2::showLighthouseInfo( *this, Dialog::ZERO );
         }
 
         // Exit this dialog.
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
+        }
 
         // switch view: heroes/castle
         if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes.area() ) ) {
@@ -773,8 +818,12 @@ void Kingdom::openOverviewDialog()
 
         redraw |= listStats->QueueEventProcessing();
 
-        if ( le.MouseClickLeft( rectIncome ) ) {
+        if ( le.MouseClickLeft( rectIncome ) || le.MouseClickLeft( rectGoldPerDay ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::OK );
+        }
+
+        if ( le.MouseClickLeft( rectLighthouse ) ) {
+            fheroes2::showLighthouseInfo( *this, Dialog::OK );
         }
 
         if ( !listStats->IsNeedRedraw() && !redraw ) {
@@ -805,7 +854,8 @@ void Kingdom::openOverviewDialog()
         redraw = false;
     }
 
-    _topItemInKingdomView = listStats->getTopId();
+    _topCastleInKingdomView = listCastles.getTopId();
+    _topHeroInKingdomView = listHeroes.getTopId();
 
     if ( worldMapRedrawMask != 0 ) {
         // Force redraw of all UI elements that changed, that were masked by Kingdom window

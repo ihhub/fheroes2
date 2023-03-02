@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,7 +22,9 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <set>
+#include <bitset>
+#include <iterator>
+#include <vector>
 
 #include "direction.h"
 #include "mp2.h"
@@ -58,7 +60,7 @@ int ObjGras::GetPassable( const uint8_t index )
 
 bool ObjGras::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjGras::isShadow( const uint8_t index )
@@ -79,7 +81,7 @@ int ObjGra2::GetPassable( const uint8_t index )
 
 bool ObjGra2::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjGra2::isShadow( const uint8_t index )
@@ -91,33 +93,33 @@ int ObjGras::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 6:
-        return MP2::OBJ_ABANDONEDMINE;
+        return MP2::OBJ_ABANDONED_MINE;
     case 30:
-        return MP2::OBJ_FAERIERING;
+        return MP2::OBJ_FAERIE_RING;
     default:
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 int ObjGra2::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 4:
-        return MP2::OBJ_HILLFORT;
+        return MP2::OBJ_HILL_FORT;
     case 7:
-        return MP2::OBJ_HALFLINGHOLE;
+        return MP2::OBJ_HALFLING_HOLE;
     case 21:
-        return MP2::OBJ_TREECITY;
+        return MP2::OBJ_TREE_CITY;
     case 55:
         return MP2::OBJ_WINDMILL;
     case 84:
-        return MP2::OBJ_ARCHERHOUSE;
+        return MP2::OBJ_ARCHER_HOUSE;
     case 92:
-        return MP2::OBJ_GOBLINHUT;
+        return MP2::OBJ_GOBLIN_HUT;
     case 114:
-        return MP2::OBJ_DWARFCOTT;
+        return MP2::OBJ_DWARF_COTTAGE;
     case 125:
     case 126:
         return MP2::OBJ_ORACLE;
@@ -127,5 +129,5 @@ int ObjGra2::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

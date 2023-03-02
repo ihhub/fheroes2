@@ -1,0 +1,106 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'org.fheroes2'
+
+    compileSdkVersion 33
+
+    defaultConfig {
+        applicationId 'org.fheroes2'
+
+        minSdkVersion 22
+        targetSdkVersion 33
+
+        // These paths are set relative to the android project directory
+        versionCode((new File('../version_code.txt')).getText('UTF-8').trim().toInteger())
+        versionName((new File('../version.txt')).getText('UTF-8').trim())
+
+        externalNativeBuild {
+            ndkBuild {
+                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+                arguments '-j4'
+            }
+        }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'jni/Android.mk'
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile({
+                def keystorePath = System.getenv('FHEROES2_KEYSTORE')
+
+                return keystorePath ? file(keystorePath) : null
+            }.call())
+
+            storePassword({
+                def keystorePass = System.getenv('FHEROES2_KEYSTORE_PASSWORD')
+
+                return keystorePass ? keystorePass : ''
+            }.call())
+
+            keyAlias({
+                def keyAlias = System.getenv('FHEROES2_KEY_ALIAS')
+
+                return keyAlias ? keyAlias : ''
+            }.call())
+
+            keyPassword({
+                def keyPass = System.getenv('FHEROES2_KEY_PASSWORD')
+
+                return keyPass ? keyPass : ''
+            }.call())
+        }
+    }
+
+    buildTypes {
+        debug {
+            externalNativeBuild {
+                ndkBuild {
+                    cFlags '-DWITH_DEBUG', '-Werror'
+                }
+            }
+        }
+
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+
+    implementation project(':sdl2')
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation 'com.google.android.material:material:1.8.0'
+}
+
+task copyH2D(type: Copy) {
+    from('../../files/data') {
+        include '*.h2d'
+    }
+    into 'src/main/assets/files/data'
+}
+
+task copyTranslations(type: Copy) {
+    from('../../files/lang') {
+        include '*.mo'
+    }
+    into 'src/main/assets/files/lang'
+}
+
+preBuild {
+    dependsOn copyH2D, copyTranslations
+}

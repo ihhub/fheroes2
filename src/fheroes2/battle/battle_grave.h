@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,6 +24,7 @@
 #ifndef H2BATTLE_GRAVEYARD_H
 #define H2BATTLE_GRAVEYARD_H
 
+#include <algorithm>
 #include <cstdint>
 #include <map>
 #include <vector>
@@ -46,11 +47,11 @@ namespace Battle
 
         Graveyard & operator=( const Graveyard & ) = delete;
 
-        Indexes GetClosedCells() const;
-        void AddTroop( const Unit & );
-        void RemoveTroop( const Unit & );
-        uint32_t GetLastTroopUID( int32_t ) const;
-        TroopUIDs GetTroopUIDs( const int32_t hexIndex ) const;
+        Indexes GetOccupiedCells() const;
+        void AddTroop( const Unit & unit );
+        void RemoveTroop( const Unit & unit );
+        uint32_t GetLastTroopUID( const int32_t index ) const;
+        TroopUIDs GetTroopUIDs( const int32_t index ) const;
     };
 }
 

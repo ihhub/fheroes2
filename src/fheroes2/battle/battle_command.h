@@ -24,10 +24,11 @@
 #ifndef H2BATTLE_COMMAND_H
 #define H2BATTLE_COMMAND_H
 
+#include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <type_traits>
-
-#include "battle_board.h"
+#include <vector>
 
 namespace Battle
 {
@@ -43,7 +44,8 @@ namespace Battle
         MSG_BATTLE_SURRENDER,
         MSG_BATTLE_SKIP,
         MSG_BATTLE_END_TURN,
-        MSG_BATTLE_AUTO
+        MSG_BATTLE_AUTO_SWITCH,
+        MSG_BATTLE_AUTO_FINISH
     };
 
     class Command : public std::vector<int>

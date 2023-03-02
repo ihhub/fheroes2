@@ -24,8 +24,21 @@
 #ifndef H2BUILDINGINFO_H
 #define H2BUILDINGINFO_H
 
+#include <cstdint>
+#include <string>
+#include <vector>
+
 #include "castle.h"
+#include "image.h"
+#include "interface_itemsbar.h"
+#include "math_base.h"
+#include "monster.h"
 #include "payment.h"
+
+namespace fheroes2
+{
+    class ButtonBase;
+}
 
 class StatusBar;
 

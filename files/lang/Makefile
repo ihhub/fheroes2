@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2023                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,7 +18,8 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-MSGFMT = sed -e '1,20 s/UTF-8/$(1)/' $< | iconv -f utf-8 -t $(1) | msgfmt - -o $@
+ICONV  = iconv
+MSGFMT = sed -e '1,20 s/UTF-8/$(1)/' $< | $(ICONV) -f utf-8 -t $(1) | msgfmt - -o $@
 
 .PHONY: all clean merge
 
@@ -27,13 +28,8 @@ all: $(patsubst %.po, %.mo, $(wildcard *.po))
 merge: ../../src/dist/fheroes2.pot
 	for i in $(wildcard *.po); do msgmerge -U --no-location $$i $<; done
 
-# In French, accented characters are mapped to unused ASCII characters
-# Non-mapped characters are replaced by their non-accented equivalents
-fr.mo: fr.po
-	sed -e 'y/àâçéèêîïôùûüÇÉÊÀ/@*^~`|><#&$$uCEEA/; s/œ/oe/g' $< | msgfmt - -o $@
-
-# Czech, Polish versions use CP1250
-cs.mo pl.mo: %.mo: %.po
+# Czech, Hungarian and Polish versions use CP1250
+cs.mo hu.mo pl.mo: %.mo: %.po
 	$(call MSGFMT,CP1250)
 
 # Belarusian, Bulgarian, Ukrainian versions use CP1251
@@ -42,9 +38,13 @@ cs.mo pl.mo: %.mo: %.po
 be.mo bg.mo ru.mo uk.mo: %.mo: %.po
 	$(call MSGFMT,CP1251)
 
-# German, Italian, Norwegian, Portuguese, Spanish, Swedish versions use CP1252
-de.mo es.mo it.mo nb.mo pt.mo sv.mo: %.mo: %.po
+# German, Danish, French, Italian, Dutch, Norwegian, Portuguese, Spanish and Swedish translations use CP1252
+de.mo dk.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
 	$(call MSGFMT,CP1252)
+
+# Turkish uses CP1254
+tr.mo: tr.po
+	$(call MSGFMT,CP1254)
 
 # Romanian uses ISO-8859-16
 ro.mo: ro.po
@@ -53,7 +53,7 @@ ro.mo: ro.po
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
 %.mo: %.po
-	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< | iconv -f utf-8 -t ascii//TRANSLIT | msgfmt - -o $@
+	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< | $(ICONV) -f utf-8 -t ascii//TRANSLIT | msgfmt - -o $@
 
 clean:
 	rm -f *.mo *.po~

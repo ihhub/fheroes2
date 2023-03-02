@@ -18,10 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdint>
+#include <string>
+
 #include "ai.h"
-#include "heroes.h"
+#include "heroes_base.h"
+#include "mp2.h"
 #include "serialize.h"
 #include "translations.h"
+
+class Castle;
+class Heroes;
 
 namespace AI
 {
@@ -86,9 +93,9 @@ namespace AI
         // Do nothing.
     }
 
-    void Base::HeroesAfterBattle( HeroBase &, bool )
+    void Base::HeroesAfterBattle( HeroBase & hero, bool /*unused*/ )
     {
-        // Do nothing.
+        hero.ActionAfterBattle();
     }
 
     void Base::HeroesActionNewPosition( Heroes & )

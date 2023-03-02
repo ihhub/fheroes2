@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,12 +24,16 @@
 #ifndef H2ARMY_H
 #define H2ARMY_H
 
+#include <cstddef>
+#include <cstdint>
+#include <functional>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "monster.h"
 #include "players.h"
+
+class StreamBase;
 
 class Castle;
 class HeroBase;
@@ -47,7 +51,7 @@ public:
     Troops() = default;
     Troops( const Troops & troops );
     virtual ~Troops();
-    Troops & operator=( const Troops & rhs );
+    Troops & operator=( const Troops & ) = delete;
 
     void Assign( const Troop *, const Troop * );
     void Assign( const Troops & );
@@ -68,27 +72,26 @@ public:
 
     double getReinforcementValue( const Troops & reinforcement ) const;
 
-    uint32_t GetCount() const;
+    uint32_t GetOccupiedSlotCount() const;
     bool isValid() const;
     bool HasMonster( const Monster & ) const;
 
+    bool areAllTroopsUnique() const;
+
     bool AllTroopsAreUndead() const;
+    // Returns true if all valid troops have the same ID or if there are no troops, otherwise returns false
     bool AllTroopsAreTheSame() const;
 
-    bool JoinTroop( const Troop & );
-    bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst = false );
+    bool JoinTroop( const Troop & troop );
+    bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
 
-    void JoinTroops( Troops & );
-    bool CanJoinTroops( const Troops & ) const;
-
-    // Used only for moving full army in hero's meeting dialog.
-    void MoveTroops( const Troops & from );
-
-    void MergeTroops();
+    void MergeSameMonsterTroops();
     Troops GetOptimized() const;
 
     virtual double GetStrength() const;
+
+    uint32_t getTotalHP() const;
 
     void Clean();
     void UpgradeTroops( const Castle & );
@@ -98,16 +101,27 @@ public:
     Troop * GetSlowestTroop() const;
 
     void SortStrongest();
-    void ArrangeForBattle( bool = false );
-    // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit
-    // to a separate slot, if possible)
-    void ArrangeForWhirlpool();
-
-    void JoinStrongest( Troops &, bool );
 
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
     void JoinAllTroopsOfType( const Troop & targetTroop );
+
+    void addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots );
+
+    bool isFullHouse() const
+    {
+        return GetOccupiedSlotCount() == size();
+    }
+
+    // If the army has no slot find 2 or more slots of the same monster which is the weakest and merge them releasing one slot in troops.
+    bool mergeWeakestTroopsIfNeeded();
+
+protected:
+    void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
+
+private:
+    // Returns the stack that best matches the specified condition or nullptr if there are no valid stacks
+    Troop * getBestMatchToCondition( const std::function<bool( const Troop *, const Troop * )> & condition ) const;
 };
 
 struct NeutralMonsterJoiningCondition
@@ -133,23 +147,24 @@ struct NeutralMonsterJoiningCondition
 class Army : public Troops, public Control
 {
 public:
+    static const size_t maximumTroopCount = 5;
+
     static std::string SizeString( uint32_t );
     static std::string TroopSizeString( const Troop & );
 
-    static std::pair<uint32_t, uint32_t> SizeRange( const uint32_t count );
-
-    // compare
+    // Comparison functions
     static bool WeakestTroop( const Troop *, const Troop * );
     static bool StrongestTroop( const Troop *, const Troop * );
     static bool SlowestTroop( const Troop *, const Troop * );
     static bool FastestTroop( const Troop *, const Troop * );
+
     static void SwapTroops( Troop &, Troop & );
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
-    static void drawMiniMonsLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first = 0, uint32_t count = 0 );
-    static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact = true,
-                                  bool isScouteView = true );
+    static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width );
+    static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
+                                          const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
 
     explicit Army( HeroBase * s = nullptr );
     explicit Army( const Maps::Tiles & );
@@ -196,7 +211,10 @@ public:
 
     std::string String() const;
 
-    void JoinStrongestFromArmy( Army & );
+    void JoinStrongestFromArmy( Army & giver );
+
+    // Implements the necessary logic to move unit stacks from army to army in the hero's meeting dialog and in the castle dialog
+    void MoveTroops( Army & from, const int monsterIdToKeep );
 
     void SetSpreadFormat( bool f )
     {
@@ -208,16 +226,17 @@ public:
         return combat_format;
     }
 
-    bool isFullHouse() const
-    {
-        return GetCount() == size();
-    }
-
     bool SaveLastTroop() const;
 
     Monster GetStrongestMonster() const;
 
     void resetInvalidMonsters() const;
+
+    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison (most
+    // powerful stacks first), by adding them either to free slots or to slots that already contain troops of the same type
+    void ArrangeForCastleDefense( Army & garrison );
+    // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
+    void ArrangeForWhirlpool();
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );
@@ -226,6 +245,13 @@ protected:
     HeroBase * commander;
     bool combat_format;
     int color;
+
+private:
+    // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a given number of stacks if possible
+    void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount );
+    // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a random number of stacks (seeded by
+    // the tile index) with a random chance to get an upgraded stack of monsters in the center (if allowed)
+    void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const int32_t tileIndex, const bool allowUpgrade );
 };
 
 StreamBase & operator<<( StreamBase &, const Army & );

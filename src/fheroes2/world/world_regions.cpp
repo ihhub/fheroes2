@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,14 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <set>
+#include <utility>
+#include <vector>
+
+#include "castle.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "math_base.h"
+#include "mp2.h"
 #include "world.h"
+#include "world_regions.h"
 
 namespace
 {
     // Aliases to make data structures easier to work with
     // TileData.first is index, TileData.second is payload
     using TileData = std::pair<int, int>;
-    using TileDataVector = std::vector<std::pair<int, int> >;
+    using TileDataVector = std::vector<std::pair<int, int>>;
 
     // Values in Direction namespace can't be used as index, use a custom value here
     // Converted into bitfield later
@@ -226,7 +240,7 @@ void World::ComputeStaticAnalysis()
         }
     }
 
-    // Step 3. Check all castles on the map and create region centres based on them
+    // Step 3. Check all castles on the map and create region centers based on them
     std::vector<int> regionCenters;
     TileDataVector castleCenters;
     for ( const Castle * castle : vec_castles ) {
@@ -248,7 +262,7 @@ void World::ComputeStaticAnalysis()
         AppendIfFarEnough( regionCenters, ( castleIndex >= 0 && static_cast<size_t>( castleIndex ) > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
-    // Step 4. Add missing region centres based on distance (for water or if there's big chunks of space without castles)
+    // Step 4. Add missing region centers based on distance (for water or if there's big chunks of space without castles)
     const std::vector<int> & directionOffsets = GetDirectionOffsets( width );
     for ( int waterOrGround = 0; waterOrGround < 4; waterOrGround += 2 ) {
         for ( const int rowID : emptyLines[waterOrGround] ) {
@@ -343,7 +357,7 @@ void World::ComputeStaticAnalysis()
             // connect regions through teleports
             MapsIndexes exits;
 
-            if ( node.mapObject == MP2::OBJ_STONELITHS ) {
+            if ( node.mapObject == MP2::OBJ_STONE_LITHS ) {
                 exits = GetTeleportEndPoints( node.index );
             }
             else if ( node.mapObject == MP2::OBJ_WHIRLPOOL ) {
@@ -351,7 +365,7 @@ void World::ComputeStaticAnalysis()
             }
 
             for ( const int exitIndex : exits ) {
-                // neighbours is a set that will force the uniqness
+                // neighbours is a set that will force the uniqueness
                 reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
             }
         }

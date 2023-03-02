@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,28 +22,40 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <set>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "army_troop.h"
+#include "artifact.h"
+#include "artifact_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
-#include "logging.h"
-#include "settings.h"
+#include "image.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "monster.h"
+#include "screen.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
-#include "ui_dialog.h"
-#include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -294,33 +306,33 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     fheroes2::ImageRestorer backPrimary( display, cur_pt.x + 255, cur_pt.y + 50, 130, 135 );
 
     MeetingPrimarySkillsBar primskill_bar1( this );
-    primskill_bar1.SetColRows( 1, 4 );
-    primskill_bar1.SetVSpace( -1 );
+    primskill_bar1.setTableSize( { 1, 4 } );
+    primskill_bar1.setInBetweenItemsOffset( { 0, -1 } );
     primskill_bar1.SetTextOff( 70, -25 );
-    primskill_bar1.SetPos( cur_pt.x + 216, cur_pt.y + 51 );
+    primskill_bar1.setRenderingOffset( { cur_pt.x + 216, cur_pt.y + 51 } );
 
     MeetingPrimarySkillsBar primskill_bar2( &otherHero );
-    primskill_bar2.SetColRows( 1, 4 );
-    primskill_bar2.SetVSpace( -1 );
+    primskill_bar2.setTableSize( { 1, 4 } );
+    primskill_bar2.setInBetweenItemsOffset( { 0, -1 } );
     primskill_bar2.SetTextOff( -70, -25 );
-    primskill_bar2.SetPos( cur_pt.x + 389, cur_pt.y + 51 );
+    primskill_bar2.setRenderingOffset( { cur_pt.x + 389, cur_pt.y + 51 } );
 
     fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
 
     // secondary skill
     MeetingSecondarySkillsBar secskill_bar1( *this );
-    secskill_bar1.SetColRows( 8, 1 );
-    secskill_bar1.SetHSpace( -1 );
+    secskill_bar1.setTableSize( { 8, 1 } );
+    secskill_bar1.setInBetweenItemsOffset( { -1, 0 } );
     secskill_bar1.SetContent( secondary_skills.ToVector() );
-    secskill_bar1.SetPos( cur_pt.x + 22, cur_pt.y + 199 );
-    secskill_bar1.Redraw();
+    secskill_bar1.setRenderingOffset( { cur_pt.x + 22, cur_pt.y + 199 } );
+    secskill_bar1.Redraw( display );
 
     MeetingSecondarySkillsBar secskill_bar2( otherHero );
-    secskill_bar2.SetColRows( 8, 1 );
-    secskill_bar2.SetHSpace( -1 );
+    secskill_bar2.setTableSize( { 8, 1 } );
+    secskill_bar2.setInBetweenItemsOffset( { -1, 0 } );
     secskill_bar2.SetContent( otherHero.GetSecondarySkills().ToVector() );
-    secskill_bar2.SetPos( cur_pt.x + 353, cur_pt.y + 199 );
-    secskill_bar2.Redraw();
+    secskill_bar2.setRenderingOffset( { cur_pt.x + 353, cur_pt.y + 199 } );
+    secskill_bar2.Redraw( display );
 
     const fheroes2::Sprite & moveButtonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
     fheroes2::Blit( moveButtonBackground, 292, 270, display, cur_pt.x + 292, cur_pt.y + 270, 48, 44 );
@@ -337,42 +349,40 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     dst_pt.y = cur_pt.y + 267;
 
     MeetingArmyBar selectArmy1( &GetArmy() );
-    selectArmy1.SetColRows( 5, 1 );
-    selectArmy1.SetPos( dst_pt.x, dst_pt.y );
-    selectArmy1.SetHSpace( 2 );
-    selectArmy1.Redraw();
+    selectArmy1.setTableSize( { 5, 1 } );
+    selectArmy1.setRenderingOffset( dst_pt );
+    selectArmy1.setInBetweenItemsOffset( { 2, 0 } );
+    selectArmy1.Redraw( display );
 
     dst_pt.x = cur_pt.x + 381;
     dst_pt.y = cur_pt.y + 267;
 
     MeetingArmyBar selectArmy2( &otherHero.GetArmy() );
-    selectArmy2.SetColRows( 5, 1 );
-    selectArmy2.SetPos( dst_pt.x, dst_pt.y );
-    selectArmy2.SetHSpace( 2 );
-    selectArmy2.Redraw();
+    selectArmy2.setTableSize( { 5, 1 } );
+    selectArmy2.setRenderingOffset( dst_pt );
+    selectArmy2.setInBetweenItemsOffset( { 2, 0 } );
+    selectArmy2.Redraw( display );
 
     // artifact
     dst_pt.x = cur_pt.x + 23;
     dst_pt.y = cur_pt.y + 347;
 
     MeetingArtifactBar selectArtifacts1( this );
-    selectArtifacts1.SetColRows( 7, 2 );
-    selectArtifacts1.SetHSpace( 2 );
-    selectArtifacts1.SetVSpace( 2 );
+    selectArtifacts1.setTableSize( { 7, 2 } );
+    selectArtifacts1.setInBetweenItemsOffset( { 2, 2 } );
     selectArtifacts1.SetContent( GetBagArtifacts() );
-    selectArtifacts1.SetPos( dst_pt.x, dst_pt.y );
-    selectArtifacts1.Redraw();
+    selectArtifacts1.setRenderingOffset( dst_pt );
+    selectArtifacts1.Redraw( display );
 
     dst_pt.x = cur_pt.x + 367;
     dst_pt.y = cur_pt.y + 347;
 
     MeetingArtifactBar selectArtifacts2( &otherHero );
-    selectArtifacts2.SetColRows( 7, 2 );
-    selectArtifacts2.SetHSpace( 2 );
-    selectArtifacts2.SetVSpace( 2 );
+    selectArtifacts2.setTableSize( { 7, 2 } );
+    selectArtifacts2.setInBetweenItemsOffset( { 2, 2 } );
     selectArtifacts2.SetContent( otherHero.GetBagArtifacts() );
-    selectArtifacts2.SetPos( dst_pt.x, dst_pt.y );
-    selectArtifacts2.Redraw();
+    selectArtifacts2.setRenderingOffset( dst_pt );
+    selectArtifacts2.Redraw( display );
 
     fheroes2::Blit( moveButtonBackground, 292, 363, display, cur_pt.x + 292, cur_pt.y + 363, 48, 44 );
     fheroes2::ButtonSprite moveArtifactsToHero2 = createMoveButton( ICN::SWAP_ARROW_LEFT_TO_RIGHT, cur_pt.x + 298, cur_pt.y + 361, display );
@@ -391,17 +401,20 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     display.render();
 
+    const int32_t hero1ScoutAreaBonus = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
+    const int32_t hero2ScoutAreaBonus = otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
+
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MousePressLeft( moveArmyToHero2.area() ) ) {
+        if ( le.MousePressLeft( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             moveArmyToHero2.drawOnPress();
             moveArmyToHero1.drawOnRelease();
         }
-        else if ( le.MousePressLeft( moveArmyToHero1.area() ) ) {
+        else if ( le.MousePressLeft( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnRelease();
         }
@@ -437,8 +450,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
 
-            selectArmy1.Redraw();
-            selectArmy2.Redraw();
+            selectArmy1.Redraw( display );
+            selectArmy2.Redraw( display );
 
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
@@ -457,20 +470,15 @@ void Heroes::MeetingDialog( Heroes & otherHero )
                 selectArmy2.ResetSelected();
 
             std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
-            const std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+            std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
 
-            // Use insert instead of std::merge to make appveyour happy
-            assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
+            // MSVC 2017 fails to use the std::set<...>::merge( std::set<...> && ) overload here, so we have to use a temporary variable
+            assembledArtifacts.merge( otherHeroAssembledArtifacts );
 
-            for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
-                const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
-                fheroes2::showMessage( fheroes2::Text( Artifact( static_cast<int>( artifactSetData._assembledArtifactID ) ).GetName(),
-                                                       fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
-            }
+            std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
 
-            selectArtifacts1.Redraw();
-            selectArtifacts2.Redraw();
+            selectArtifacts1.Redraw( display );
+            selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
@@ -510,13 +518,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
-            selectArtifacts1.Redraw();
-            selectArtifacts2.Redraw();
+            selectArtifacts1.Redraw( display );
+            selectArtifacts2.Redraw( display );
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
-            selectArmy1.Redraw();
-            selectArmy2.Redraw();
+            selectArmy1.Redraw( display );
+            selectArmy2.Redraw( display );
 
             moraleIndicator1.Redraw();
             luckIndicator1.Redraw();
@@ -531,45 +539,63 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
-            selectArtifacts1.Redraw();
-            selectArtifacts2.Redraw();
+            selectArtifacts1.Redraw( display );
+            selectArtifacts2.Redraw( display );
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
-            selectArmy1.Redraw();
-            selectArmy2.Redraw();
+            selectArmy1.Redraw( display );
+            selectArmy2.Redraw( display );
 
             moraleIndicator2.Redraw();
             luckIndicator2.Redraw();
 
             display.render();
         }
-        else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
-            otherHero.GetArmy().MoveTroops( GetArmy() );
+        else if ( le.MouseClickLeft( moveArmyToHero2.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
+            const ArmyTroop * keep = nullptr;
+
+            if ( selectArmy1.isSelected() ) {
+                keep = selectArmy1.GetSelectedItem();
+            }
+            else if ( selectArmy2.isSelected() ) {
+                keep = selectArmy2.GetSelectedItem();
+            }
+
+            otherHero.GetArmy().MoveTroops( GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
-            selectArmy1.Redraw();
-            selectArmy2.Redraw();
+            selectArmy1.Redraw( display );
+            selectArmy2.Redraw( display );
 
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
 
             display.render();
         }
-        else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
-            GetArmy().MoveTroops( otherHero.GetArmy() );
+        else if ( le.MouseClickLeft( moveArmyToHero1.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
+            const ArmyTroop * keep = nullptr;
+
+            if ( selectArmy1.isSelected() ) {
+                keep = selectArmy1.GetSelectedItem();
+            }
+            else if ( selectArmy2.isSelected() ) {
+                keep = selectArmy2.GetSelectedItem();
+            }
+
+            GetArmy().MoveTroops( otherHero.GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
-            selectArmy1.Redraw();
-            selectArmy2.Redraw();
+            selectArmy1.Redraw( display );
+            selectArmy2.Redraw( display );
 
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
@@ -581,8 +607,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
-            selectArtifacts1.Redraw();
-            selectArtifacts2.Redraw();
+            selectArtifacts1.Redraw( display );
+            selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
@@ -598,8 +624,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
-            selectArtifacts1.Redraw();
-            selectArtifacts2.Redraw();
+            selectArtifacts1.Redraw( display );
+            selectArtifacts2.Redraw( display );
 
             backPrimary.restore();
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
@@ -609,6 +635,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             luckIndicator2.Redraw();
 
             display.render();
+        }
+
+        if ( le.MousePressRight( hero1Area ) ) {
+            Dialog::QuickInfo( *this );
+        }
+        else if ( le.MousePressRight( hero2Area ) ) {
+            Dialog::QuickInfo( otherHero );
         }
     }
 
@@ -621,5 +654,16 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     armyCountBackgroundRestorerLeft.reset();
     armyCountBackgroundRestorerRight.reset();
     restorer.restore();
+
+    // If the scout area bonus is increased with the new artifact we reveal the fog and update the radar.
+    if ( hero1ScoutAreaBonus < bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
+        Scoute( GetIndex() );
+        ScoutRadar();
+    }
+    if ( hero2ScoutAreaBonus < otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
+        otherHero.Scoute( otherHero.GetIndex() );
+        otherHero.ScoutRadar();
+    }
+
     display.render();
 }

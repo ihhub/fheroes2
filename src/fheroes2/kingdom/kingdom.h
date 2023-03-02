@@ -23,15 +23,28 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
+#include <cstdint>
+#include <list>
 #include <set>
 
+#include "bitmodes.h"
 #include "castle.h"
+#include "gamedefs.h"
+#include "heroes.h"
 #include "heroes_recruits.h"
+#include "monster.h"
 #include "mp2.h"
 #include "pairs.h"
+#include "players.h"
 #include "puzzle.h"
+#include "resource.h"
 
-struct CapturedObjects;
+class StreamBase;
+
+namespace Maps
+{
+    class Tiles;
+}
 
 struct KingdomCastles : public VecCastles
 {};
@@ -78,7 +91,7 @@ public:
 
     void appendSurrenderedHero( Heroes & hero );
 
-    Heroes * GetBestHero();
+    Heroes * GetBestHero() const;
 
     Monster GetStrongestMonster() const;
 
@@ -195,7 +208,8 @@ private:
     uint32_t visited_tents_colors;
 
     // Used to remember which item was selected in Kingdom View dialog.
-    int _topItemInKingdomView;
+    int _topCastleInKingdomView;
+    int _topHeroInKingdomView;
 };
 
 class Kingdoms
@@ -220,8 +234,6 @@ public:
 
     void AddHeroes( const AllHeroes & );
     void AddCastles( const AllCastles & );
-
-    void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType );
 
     // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
     // in the kingdoms

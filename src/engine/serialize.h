@@ -27,10 +27,12 @@
 #include <algorithm>
 #include <cstdint>
 #include <cstdio>
+#include <iterator>
 #include <list>
 #include <map>
 #include <string>
 #include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "endian_h2.h"

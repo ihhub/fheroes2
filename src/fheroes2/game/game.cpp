@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,30 +21,39 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
+
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <map>
+#include <utility>
+#include <vector>
 
+#include "army.h"
 #include "audio.h"
 #include "audio_manager.h"
+#include "campaign_savedata.h"
+#include "castle.h"
+#include "color.h"
 #include "cursor.h"
 #include "difficulty.h"
-#include "game.h"
 #include "game_credits.h"
-#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
-#include "icn.h"
+#include "heroes.h"
+#include "localevent.h"
 #include "m82.h"
+#include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
-#include "monster.h"
-#include "mp2.h"
+#include "math_base.h"
+#include "mus.h"
+#include "players.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "settings.h"
-#include "skill.h"
 #include "tools.h"
-#include "translations.h"
 #include "world.h"
 
 namespace
@@ -52,77 +61,28 @@ namespace
     std::string lastMapFileName;
     std::vector<Player> savedPlayers;
 
-    uint16_t save_version = CURRENT_FORMAT_VERSION;
-
-    std::string last_name;
-
     bool updateSoundsOnFocusUpdate = true;
 
     uint32_t maps_animation_frame = 0;
-
-    // TODO: this function returns a sound track based on a provided tile. It works fine for most of objects as they have only one "main" tile.
-    // However, some objects like Oracle or Volcano can be bigger than 1 tile leading to multiple sounds coming from the same object and these
-    // sounds might not be synchronized. This is mostly noticeable with 3D Audio mode on.
-    M82::SoundType getSoundTypeFromTile( const Maps::Tiles & tile )
-    {
-        // check stream first
-        if ( tile.isStream() ) {
-            return M82::LOOP0014;
-        }
-
-        const MP2::MapObjectType objectType = tile.GetObject( false );
-
-        // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Stones.
-        if ( objectType == MP2::OBJ_STONES && tile.containsSprite( 200, 183 ) ) {
-            return M82::LOOP0019;
-        }
-
-        return M82::getAdventureMapObjectSound( objectType );
-    }
 }
 
 namespace Game
 {
     void AnimateDelaysInitialize();
-
-    namespace ObjectFadeAnimation
-    {
-        FadeTask::FadeTask( MP2::MapObjectType object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_,
-                            bool fadeOut_, bool fadeIn_, uint8_t objectTileset_ )
-            : object( object_ )
-            , objectIndex( objectIndex_ )
-            , animationIndex( animationIndex_ )
-            , fromIndex( fromIndex_ )
-            , toIndex( toIndex_ )
-            , alpha( alpha_ )
-            , fadeOut( fadeOut_ )
-            , fadeIn( fadeIn_ )
-            , objectTileset( objectTileset_ )
-        {}
-
-        FadeTask::FadeTask()
-            : object( MP2::OBJ_ZERO )
-            , objectIndex( 0 )
-            , animationIndex( 0 )
-            , fromIndex( 0 )
-            , toIndex( 0 )
-            , alpha( 0 )
-            , fadeOut( false )
-            , fadeIn( false )
-            , objectTileset( 0 )
-        {}
-
-        // Single instance of FadeTask.
-        FadeTask fadeTask;
-    }
 }
 
 // Returns the difficulty level based on the type of game.
 int Game::getDifficulty()
 {
     const Settings & configuration = Settings::Get();
+    if ( configuration.isCampaignGameType() ) {
+        int difficulty = configuration.CurrentFileInfo().difficulty;
+        const int difficultyAdjustment = Campaign::CampaignSaveData::Get().getDifficulty();
+        difficulty += difficultyAdjustment;
+        return std::clamp( difficulty, static_cast<int>( Difficulty::EASY ), static_cast<int>( Difficulty::IMPOSSIBLE ) );
+    }
 
-    return ( configuration.isCampaignGameType() ? configuration.CurrentFileInfo().difficulty : configuration.GameDifficulty() );
+    return configuration.GameDifficulty();
 }
 
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )
@@ -139,13 +99,18 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
     }
 
     players.clear();
+
     for ( const Player & p : savedPlayers ) {
         Player * player = new Player( p.GetColor() );
+
         player->SetRace( p.GetRace() );
         player->SetControl( p.GetControl() );
         player->SetFriends( p.GetFriends() );
         player->SetName( p.GetName() );
+        player->setHandicapStatus( p.getHandicapStatus() );
+
         players.push_back( player );
+
         Players::Set( Color::GetIndex( p.GetColor() ), player );
     }
 }
@@ -158,35 +123,22 @@ void Game::saveDifficulty( const int difficulty )
 void Game::SavePlayers( const std::string & mapFileName, const Players & players )
 {
     lastMapFileName = mapFileName;
+
     savedPlayers.clear();
+
     for ( const Player * p : players ) {
+        assert( p != nullptr );
+
         Player player( p->GetColor() );
+
         player.SetRace( p->GetRace() );
         player.SetControl( p->GetControl() );
         player.SetFriends( p->GetFriends() );
         player.SetName( p->GetName() );
+        player.setHandicapStatus( p->getHandicapStatus() );
+
         savedPlayers.push_back( player );
     }
-}
-
-void Game::SetLoadVersion( uint16_t ver )
-{
-    save_version = ver;
-}
-
-uint16_t Game::GetLoadVersion()
-{
-    return save_version;
-}
-
-const std::string & Game::GetLastSavename()
-{
-    return last_name;
-}
-
-void Game::SetLastSavename( const std::string & name )
-{
-    last_name = name;
 }
 
 fheroes2::GameMode Game::Credits()
@@ -208,123 +160,24 @@ void Game::SetUpdateSoundsOnFocusUpdate( const bool update )
 
 void Game::Init()
 {
-    // default events
-    LocalEvent::SetStateDefaults();
-
     // set global events
     LocalEvent & le = LocalEvent::Get();
-    le.SetGlobalFilterMouseEvents( Cursor::Redraw );
-    le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
+    le.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
+    le.setGlobalKeyDownEventHook( Game::globalKeyDownEvent );
 
     Game::AnimateDelaysInitialize();
 
     Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
-void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::MapObjectType objectType, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
-{
-    const uint8_t alpha = fadeOut ? 255u : 0;
-    const Maps::Tiles & fromTile = world.GetTiles( fromIndex );
-
-    if ( objectType == MP2::OBJ_ZERO ) {
-        fadeTask = FadeTask();
-    }
-    else if ( objectType == MP2::OBJ_MONSTER ) {
-        const auto & spriteIndicies = Maps::Tiles::GetMonsterSpriteIndices( fromTile, fromTile.QuantityMonster().GetSpriteIndex() );
-
-        fadeTask = FadeTask( objectType, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
-    }
-    else if ( objectType == MP2::OBJ_BOAT ) {
-        fadeTask = FadeTask( objectType, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
-    }
-    else {
-        const int icn = MP2::GetICNObject( fromTile.GetObjectTileset() );
-        const uint32_t animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() != 0 );
-
-        fadeTask = FadeTask( objectType, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
-    }
-}
-
-void Game::ObjectFadeAnimation::PerformFadeTask()
-{
-    auto removeObject = []() {
-        Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
-
-        if ( tile.GetObject() == fadeTask.object ) {
-            tile.RemoveObjectSprite();
-            tile.setAsEmpty();
-        }
-    };
-    auto addObject = []() {
-        Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
-
-        if ( tile.GetObject() != fadeTask.object && fadeTask.object == MP2::OBJ_BOAT ) {
-            tile.setBoat( Direction::RIGHT );
-        }
-    };
-    auto redrawGameArea = []() {
-        Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
-        fheroes2::Display::instance().render();
-    };
-
-    LocalEvent & le = LocalEvent::Get();
-
-    while ( le.HandleEvents() && ( fadeTask.fadeOut || fadeTask.fadeIn ) ) {
-        if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            if ( fadeTask.fadeOut ) {
-                if ( fadeTask.alpha > 20 ) {
-                    fadeTask.alpha -= 20;
-                }
-                else {
-                    removeObject();
-
-                    if ( fadeTask.fadeIn ) {
-                        fadeTask.fadeOut = false;
-                        fadeTask.alpha = 0;
-                    }
-                    else {
-                        fadeTask = FadeTask();
-                    }
-                }
-            }
-            else if ( fadeTask.fadeIn ) {
-                if ( fadeTask.alpha == 0 ) {
-                    addObject();
-                }
-
-                if ( fadeTask.alpha < 235 ) {
-                    fadeTask.alpha += 20;
-                }
-                else {
-                    fadeTask = FadeTask();
-                }
-            }
-
-            redrawGameArea();
-        }
-    }
-
-    if ( fadeTask.fadeOut ) {
-        removeObject();
-    }
-
-    if ( fadeTask.fadeIn ) {
-        addObject();
-    }
-
-    fadeTask = FadeTask();
-
-    redrawGameArea();
-}
-
-const Game::ObjectFadeAnimation::FadeTask & Game::ObjectFadeAnimation::GetFadeTask()
-{
-    return fadeTask;
-}
-
-uint32_t & Game::MapsAnimationFrame()
+uint32_t Game::getAdventureMapAnimationIndex()
 {
     return maps_animation_frame;
+}
+
+void Game::updateAdventureMapAnimationIndex()
+{
+    ++maps_animation_frame;
 }
 
 // play environment sounds from the game area in focus
@@ -392,7 +245,7 @@ void Game::EnvironmentSoundMixer()
     const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
 
     for ( const fheroes2::Point & pos : positions ) {
-        const M82::SoundType soundType = getSoundTypeFromTile( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
+        const M82::SoundType soundType = M82::getAdventureMapTileSound( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
         if ( soundType == M82::UNKNOWN ) {
             continue;
         }
@@ -426,7 +279,7 @@ void Game::EnvironmentSoundMixer()
 
             // We need to swap X and Y axes and invert Y axis as on screen Y axis goes from top to bottom.
             angle = static_cast<int16_t>( std::atan2( actualPosition.x, -actualPosition.y ) * 180 / M_PI );
-            // It is exteremely important to normalize the angle.
+            // It is extremely important to normalize the angle.
             if ( angle < 0 ) {
                 angle = 360 + angle;
             }
@@ -594,89 +447,13 @@ int Game::GetActualKingdomColors()
     return Settings::Get().GetPlayers().GetActualColors();
 }
 
-std::string Game::formatMonsterCount( const uint32_t count, const int scoutingLevel, const bool abbreviateNumber /* = false */ )
+std::string Game::formatMonsterCount( const uint32_t count, const bool isDetailedView, const bool abbreviateNumber /* = false */ )
 {
-    switch ( scoutingLevel ) {
-    case Skill::Level::BASIC:
-    case Skill::Level::ADVANCED: {
-        // Always use abbreviated numbers for ranges, otherwise the string might become too long
-        auto formatString = []( const uint32_t min, const uint32_t max ) {
-            const std::string minStr = fheroes2::abbreviateNumber( min );
-            const std::string maxStr = fheroes2::abbreviateNumber( max );
-
-            if ( minStr == maxStr ) {
-                return '~' + minStr;
-            }
-
-            return minStr + '-' + maxStr;
-        };
-
-        const auto [min, max] = Army::SizeRange( count );
-        assert( min <= max );
-
-        // Open range without upper bound
-        if ( max == UINT32_MAX ) {
-            return fheroes2::abbreviateNumber( min ) + '+';
-        }
-
-        // With basic scouting level, the range is divided in half and the part of the range into
-        // which the monster count falls is returned
-        if ( scoutingLevel == Skill::Level::BASIC ) {
-            const uint32_t half = min + ( max - min ) / 2;
-
-            if ( count < half ) {
-                return formatString( min, half );
-            }
-
-            return formatString( half, max );
-        }
-
-        // With advanced scouting level, the range is divided into four parts and the part of the
-        // range into which the monster count falls is returned
-        if ( scoutingLevel == Skill::Level::ADVANCED ) {
-            const uint32_t firstQuarter = min + ( max - min ) / 4;
-
-            if ( count < firstQuarter ) {
-                return formatString( min, firstQuarter );
-            }
-
-            const uint32_t secondQuarter = min + ( max - min ) / 2;
-
-            if ( count < secondQuarter ) {
-                return formatString( firstQuarter, secondQuarter );
-            }
-
-            const uint32_t thirdQuarter = min + ( max - min ) / 2 + ( max - min ) / 4;
-
-            if ( count < thirdQuarter ) {
-                return formatString( secondQuarter, thirdQuarter );
-            }
-
-            return formatString( thirdQuarter, max );
-        }
-
-        // We shouldn't be here
-        assert( 0 );
-
-        break;
-    }
-
-    // With expert scouting level, the exact monster count is returned (possibly in abbreviated form)
-    case Skill::Level::EXPERT:
+    if ( isDetailedView ) {
         return ( abbreviateNumber ? fheroes2::abbreviateNumber( count ) : std::to_string( count ) );
-
-    default:
-        break;
     }
 
-    // Otherwise we just return the approximate string representation (Few, Several, Pack, ...)
     return Army::SizeString( count );
-}
-
-std::string Game::CountThievesGuild( uint32_t monsterCount, int guildCount )
-{
-    assert( guildCount > 0 );
-    return guildCount == 1 ? "???" : Army::SizeString( monsterCount );
 }
 
 void Game::PlayPickupSound()

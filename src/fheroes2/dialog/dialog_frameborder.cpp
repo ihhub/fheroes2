@@ -21,9 +21,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdint>
+
 #include "agg_image.h"
 #include "dialog.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
+#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 
@@ -109,7 +114,7 @@ const fheroes2::Rect & Dialog::FrameBorder::GetArea() const
 
 void Dialog::FrameBorder::RenderRegular( const fheroes2::Rect & dstrt )
 {
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
     const fheroes2::Image renderedImage
         = fheroes2::Stretch( sprite, SHADOWWIDTH, 0, sprite.width() - SHADOWWIDTH, sprite.height() - SHADOWWIDTH, dstrt.width, dstrt.height );
     fheroes2::Blit( renderedImage, fheroes2::Display::instance(), dstrt.x, dstrt.y );

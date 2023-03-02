@@ -21,21 +21,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <functional>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_tool.h"
-
-#include <algorithm>
-#include <cassert>
 
 namespace
 {
@@ -216,8 +225,6 @@ bool Dialog::SelectCount( const std::string & header, uint32_t min, uint32_t max
 
 bool Dialog::InputString( const std::string & header, std::string & res, const std::string & title, const size_t charLimit )
 {
-    const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
@@ -229,7 +236,10 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     TextBox titlebox( title, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
     const uint32_t titleHeight = title.empty() ? 0 : titlebox.h() + 10;
     FrameBox box( 10 + titleHeight + textbox.h() + 10 + sprite.height(), true );
@@ -253,13 +263,17 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
     text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
 
-    dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
-    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
+    const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
-    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, system, 3, 4 );
+    dst_pt.x = box_rt.x;
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( okayButtonICNID, 0 ).height();
+    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, okayButtonICNID, 0, 1 );
+
+    const int cancelButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
+
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, cancelButtonIcnID, 0, 1 );
 
     if ( res.empty() )
         buttonOk.disable();
@@ -292,7 +306,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
         if ( le.KeyPress() ) {
             if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE )
-                charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), le.KeyMod() );
+                charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
             redraw = true;
         }
 
@@ -388,7 +402,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     btnGroups.draw();
 
     const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
     fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 

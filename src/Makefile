@@ -34,6 +34,8 @@ CXXFLAGS := $(CXXFLAGS)
 CPPFLAGS := $(CPPFLAGS)
 # Flags for the linker
 LDFLAGS := $(LDFLAGS) -pthread
+# Flags for additional libraries
+LDLIBS := $(LDLIBS)
 
 ifdef FHEROES2_WITH_DEBUG
 CCFLAGS := $(CCFLAGS) -O0 -g
@@ -102,7 +104,7 @@ CFLAGS := $(CFLAGS) $(CFLAGS_FH2)
 CXXFLAGS := $(CXXFLAGS) $(CXXFLAGS_FH2) -std=c++17
 CPPFLAGS := $(CPPFLAGS) $(CPPFLAGS_FH2)
 
-LIBS := $(LIBS) -lz
+LIBS := $(LIBS) -lz $(LDLIBS)
 
 ifdef FHEROES2_WITH_DEBUG
 CCFLAGS := $(CCFLAGS) -DWITH_DEBUG

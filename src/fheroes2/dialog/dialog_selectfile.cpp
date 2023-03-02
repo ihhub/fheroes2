@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,28 +22,37 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdint>
 #include <ctime>
 #include <iomanip>
 #include <iterator>
+#include <list>
+#include <memory>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
-#include "game.h"
 #include "game_hotkeys.h"
+#include "game_io.h"
+#include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_list.h"
+#include "localevent.h"
 #include "maps_fileinfo.h"
-#include "settings.h"
+#include "math_base.h"
+#include "screen.h"
 #include "system.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "world.h"
 
@@ -114,10 +123,21 @@ public:
         fheroes2::Text header( ResizeToShortName( info.file ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
+
         body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
         body.add( { info.name, fheroes2::FontType::normalWhite() } );
-        body.add( { _( "\n\nLocation: " ), fheroes2::FontType::normalYellow() } );
-        body.add( { fullPath, fheroes2::FontType::normalWhite() } );
+
+        if ( info.worldDay > 0 || info.worldWeek > 0 || info.worldMonth > 0 ) {
+            body.add( { _( "\n\nMonth: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { std::to_string( info.worldMonth ), fheroes2::FontType::normalWhite() } );
+            body.add( { _( ", Week: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { std::to_string( info.worldWeek ), fheroes2::FontType::normalWhite() } );
+            body.add( { _( ", Day: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { std::to_string( info.worldDay ), fheroes2::FontType::normalWhite() } );
+        }
+
+        body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
+        body.add( { fullPath, fheroes2::FontType::smallWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::ZERO );
     }
@@ -139,7 +159,7 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int
     char shortHours[20];
     char shortTime[20];
 
-    const tm tmi = System::GetTM( info.localtime );
+    const tm tmi = System::GetTM( info.timestamp );
 
     std::fill( shortDate, std::end( shortDate ), static_cast<char>( 0 ) );
     std::fill( shortHours, std::end( shortHours ), static_cast<char>( 0 ) );
@@ -218,7 +238,7 @@ std::string Dialog::SelectFileSave()
 {
     std::ostringstream os;
 
-    os << System::ConcatePath( Game::GetSaveDir(), Game::GetSaveFileBaseName() ) << '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay()
+    os << System::concatPath( Game::GetSaveDir(), Game::GetSaveFileBaseName() ) << '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay()
        << Game::GetSaveFileExtension();
 
     return SelectFileListSimple( _( "File to Save:" ), os.str(), true );
@@ -226,7 +246,7 @@ std::string Dialog::SelectFileSave()
 
 std::string Dialog::SelectFileLoad()
 {
-    const std::string & lastfile = Game::GetLastSavename();
+    const std::string & lastfile = Game::GetLastSaveName();
     return SelectFileListSimple( _( "File to Load:" ), ( !lastfile.empty() ? lastfile : "" ), false );
 }
 
@@ -251,8 +271,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     const fheroes2::Rect enter_field( rt.x + 42, rt.y + 286, 260, 16 );
 
-    fheroes2::Button buttonOk( rt.x + 34, rt.y + 315, ICN::REQUEST, 1, 2 );
-    fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::REQUEST, 3, 4 );
+    fheroes2::Button buttonOk( rt.x + 34, rt.y + 315, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+    fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
     MapsFileInfoList lists = GetSortedMapsFileInfoList();
     FileInfoListBox listbox( rt.getPosition() );
@@ -310,7 +330,11 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     buttonCancel.draw();
 
     display.render();
-    le.OpenVirtualKeyboard();
+
+    if ( isEditing ) {
+        // Show keyboard only when editing file name.
+        le.OpenVirtualKeyboard();
+    }
 
     std::string result;
     bool is_limit = false;
@@ -328,7 +352,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
              || listbox.isDoubleClicked() ) {
             if ( !filename.empty() )
-                result = System::ConcatePath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
+                result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
             else if ( isListboxSelected )
                 result = listbox.GetCurrent().file;
         }
@@ -343,7 +367,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             needRedraw = true;
         }
         else if ( isEditing && le.KeyPress() && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
-            charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
+            charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
             if ( filename.empty() )
                 buttonOk.disable();
             else
@@ -414,7 +438,9 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         display.render();
     }
 
-    le.CloseVirtualKeyboard();
+    if ( isEditing ) {
+        le.CloseVirtualKeyboard();
+    }
 
     return result;
 }

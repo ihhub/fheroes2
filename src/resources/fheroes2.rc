@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,7 +51,7 @@ BEGIN
             VALUE "FileDescription",  "Free implementation of the Heroes of Might and Magic II game engine\0"
             VALUE "FileVersion",      FH2_VERSION_STR
             VALUE "InternalName",     "fheroes2\0"
-            VALUE "LegalCopyright",   "\251 2022 fheroes2 Resurrection team <fhomm2@gmail.com>. All rights for the original HoMM II game belong to Ubisoft\0"
+            VALUE "LegalCopyright",   "\251 2023 fheroes2 Resurrection team <fhomm2@gmail.com>. All rights for the original HoMM II game belong to Ubisoft\0"
             VALUE "OriginalFilename", "fheroes2.exe\0"
             VALUE "ProductName",      "fheroes2 engine\0"
             VALUE "ProductVersion",   FH2_VERSION_STR

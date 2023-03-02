@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,18 +21,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "tools.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
-#include <fstream>
+#include <fstream> // IWYU pragma: keep
+#include <memory>
 
-#include "logging.h"
-#include "tools.h"
+#include "translations.h"
 
-/* trim left right space */
 std::string StringTrim( std::string str )
 {
     if ( str.empty() ) {
@@ -68,13 +69,13 @@ std::string StringTrim( std::string str )
 
 std::string StringLower( std::string str )
 {
-    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return std::tolower( c ); } );
+    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return static_cast<char>( std::tolower( c ) ); } );
     return str;
 }
 
 std::string StringUpper( std::string str )
 {
-    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return std::toupper( c ); } );
+    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return static_cast<char>( std::toupper( c ) ); } );
     return str;
 }
 
@@ -140,9 +141,53 @@ int GetInt( const std::string & str )
     return res;
 }
 
+void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement )
+{
+    if ( pattern == nullptr ) {
+        return;
+    }
+
+    for ( size_t position = workString.find( pattern ); position != std::string::npos; position = workString.find( pattern ) ) {
+        // To determine if the end of a sentence was before this word we parse the character before it
+        // for the presence of full stop, question mark, or exclamation mark, skipping whitespace characters.
+        const char prevWordEnd = [&workString, position]() {
+            assert( position < workString.size() );
+
+            const auto iter = std::find_if_not( workString.rbegin() + static_cast<int32_t>( workString.size() - position ), workString.rend(),
+                                                []( const unsigned char c ) { return std::isspace( c ); } );
+            if ( iter != workString.rend() ) {
+                return *iter;
+            }
+
+            // Before 'position' there is nothing, or there are only spaces.
+            return '\0';
+        }();
+
+        // Also if the insert 'position' equals zero, then it is the first word in a sentence.
+        if ( position == 0 || prevWordEnd == '.' || prevWordEnd == '?' || prevWordEnd == '!' ) {
+            // Also, 'patternReplacement' can consist of two words (for example, "Power Liches") and if
+            // it is placed as the first word in sentence, then we have to lowercase only the second word.
+            // To detect this, we look for a space mark in 'patternReplacement'.
+            const size_t spacePosition = patternReplacement.find( ' ' );
+
+            // The first (and possibly only) word of 'patternReplacement' replaces 'pattern' in 'workString'.
+            workString.replace( position, std::strlen( pattern ), patternReplacement.substr( 0, spacePosition ) );
+
+            // Check if a space mark was found to insert the rest part of 'patternReplacement' with lowercase applied.
+            if ( spacePosition != std::string::npos ) {
+                workString.insert( position + spacePosition, Translation::StringLower( patternReplacement.substr( spacePosition ) ) );
+            }
+        }
+        else {
+            // For all other cases lowercase the 'patternReplacement' and replace the 'pattern' with it in 'workString'.
+            workString.replace( position, std::strlen( pattern ), Translation::StringLower( patternReplacement ) );
+        }
+    }
+}
+
 void StringReplace( std::string & dst, const char * pred, const std::string & src )
 {
-    size_t pos = std::string::npos;
+    size_t pos;
 
     while ( std::string::npos != ( pos = dst.find( pred ) ) )
         dst.replace( pos, std::strlen( pred ), src );
@@ -157,7 +202,7 @@ std::vector<std::string> StringSplit( const std::string & str, const std::string
 {
     std::vector<std::string> vec;
     size_t pos1 = 0;
-    size_t pos2 = std::string::npos;
+    size_t pos2;
 
     while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
         vec.push_back( str.substr( pos1, pos2 - pos1 ) );
@@ -188,54 +233,6 @@ int Sign( int s )
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
 }
 
-bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path )
-{
-    std::fstream file;
-    file.open( path, std::fstream::out | std::fstream::trunc | std::fstream::binary );
-
-    if ( !file ) {
-        ERROR_LOG( "Unable to open file for writing: " << path )
-        return false;
-    }
-
-    file.write( reinterpret_cast<const char *>( data.data() ), static_cast<std::streamsize>( data.size() ) );
-
-    return true;
-}
-
-std::vector<uint8_t> LoadFileToMem( const std::string & path )
-{
-    std::fstream file;
-    file.open( path, std::fstream::in | std::fstream::binary );
-    if ( !file ) {
-        return {};
-    }
-
-    file.seekg( 0, std::fstream::end );
-    std::streamoff length = file.tellg();
-    if ( length < 1 ) {
-        return {};
-    }
-
-    std::vector<uint8_t> data( length );
-
-    size_t dataToRead = static_cast<size_t>( length );
-    size_t dataAlreadyRead = 0;
-
-    const size_t blockSize = 4 * 1024 * 1024; // read by 4 MB blocks
-
-    while ( dataToRead > 0 ) {
-        size_t readSize = dataToRead > blockSize ? blockSize : dataToRead;
-
-        file.read( reinterpret_cast<char *>( data.data() + dataAlreadyRead ), static_cast<std::streamsize>( readSize ) );
-
-        dataAlreadyRead += readSize;
-        dataToRead -= readSize;
-    }
-
-    return data;
-}
-
 namespace fheroes2
 {
     double GetAngle( const Point & start, const Point & target )
@@ -254,19 +251,32 @@ namespace fheroes2
     {
         const int dx = pt2.x - pt1.x;
         const int dy = pt2.y - pt1.y;
-        const uint32_t dist = static_cast<uint32_t>( std::hypot( std::abs( dx ), std::abs( dy ) ) );
-        // round up the integer division
-        const uint32_t length = ( step > 0 && dist >= step / 2 ) ? ( dist + step / 2 ) / step : 1;
-        const double moveX = dx / static_cast<double>( length );
-        const double moveY = dy / static_cast<double>( length );
+        const uint32_t dist = static_cast<uint32_t>( std::hypot( dx, dy ) );
+        // Round up the integer division and avoid the division by zero in calculation of total line points.
+        const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 0;
 
         std::vector<Point> line;
-        line.reserve( length );
 
-        for ( uint32_t i = 0; i <= length; ++i ) {
-            line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
+        if ( length < 2 ) {
+            // If the length is equal to 0 than 'pt2' could be closer to 'pt1' than 'step'.
+            // In this case we put 'pt1' as the start of the line.
+            line.emplace_back( pt1 );
+            // And put 'pt2' as the end of the line only if 'pt1' is not equal to 'pt2'.
+            if ( pt1 != pt2 ) {
+                line.emplace_back( pt2 );
+            }
         }
+        else {
+            // Otherwise we calculate the euclidean line, using the determined parameters.
+            const double moveX = dx / static_cast<double>( length );
+            const double moveY = dy / static_cast<double>( length );
 
+            line.reserve( length + 1 );
+
+            for ( uint32_t i = 0; i <= length; ++i ) {
+                line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
+            }
+        }
         return line;
     }
 
@@ -309,23 +319,48 @@ namespace fheroes2
         return res;
     }
 
-    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const Point & max, const int32_t step )
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step )
     {
         std::vector<Point> res;
+        Point pt( from );
+        // The first projectile point is "from"
+        res.push_back( pt );
 
-        Point tempPoint( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
-        std::vector<Point> points = GetLinePoints( from, tempPoint, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        // Calculate the number of projectile trajectory points
+        const int32_t steps = ( to.x - from.x ) / step;
 
-        points = GetLinePoints( tempPoint, max, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        // Trajectory start point coordinates
+        const double x1 = from.x;
+        const double y1 = from.y;
 
-        tempPoint = { max.x + std::abs( to.x - max.x ) / 2, to.y - std::abs( to.y - max.y ) * 3 / 4 };
-        points = GetLinePoints( max, tempPoint, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        // Distance to the destination point along the axes
+        const double dx = to.x - x1;
+        const double dy = to.y - y1;
 
-        points = GetLinePoints( tempPoint, to, step );
-        res.insert( res.end(), points.begin(), points.end() );
+        // The movement of the projectile is determined according to the parabolic
+        // throwing approximation. The first two parabola points are "from" and
+        // "to" with an exception that the second ("to") point is at the same
+        // height as the start point. The parabola third point "y" coordinate is
+        // set using the "arcHeight" parameter, which determines the height of the
+        // parabola arc. And its "x" coordinate is taken equal to half the path
+        // from the start point to the end point. Using this three point
+        // coordinates, a system of three linear equations (y=a*x*x+b*x+c) in
+        // three variables is solved by substituting these points "x" and "y".
+        // Considering that on an isometric battlefield, the target location above
+        // or below corresponds to a simple turn of the shooter to the left or
+        // right, a linear movement from point "from" to point "to" is added to the
+        // parabola ('dy/dx' in 'b' constant and '-x1*dy/dx' in 'c' constant).
+
+        // Calculation of the parabola equation coefficients
+        const double a = 4 * arcHeight / dx / dx;
+        const double b = dy / dx - a * ( dx + 2 * x1 );
+        const double c = y1 + a * x1 * ( dx + x1 ) - x1 * dy / dx;
+
+        for ( int32_t i = 1; i <= steps; ++i ) {
+            pt.x += step;
+            pt.y = static_cast<int32_t>( std::lround( a * pt.x * pt.x + b * pt.x + c ) );
+            res.push_back( pt );
+        }
 
         return res;
     }
@@ -340,43 +375,16 @@ namespace fheroes2
         return -1;
     }
 
-    std::pair<Rect, Point> Fixed4Blit( const Rect & srcrt, const Rect & dstrt )
-    {
-        if ( srcrt.width <= 0 || srcrt.height <= 0 || srcrt.x + srcrt.width <= dstrt.x || srcrt.y + srcrt.height <= dstrt.y || srcrt.x >= dstrt.x + dstrt.width
-             || srcrt.y >= dstrt.y + dstrt.height ) {
-            return {};
-        }
-
-        std::pair<Rect, Point> res;
-        Rect & srcrtfix = res.first;
-        Point & dstptfix = res.second;
-
-        srcrtfix.width = srcrt.width;
-        srcrtfix.height = srcrt.height;
-        dstptfix.x = srcrt.x;
-        dstptfix.y = srcrt.y;
-
-        if ( srcrt.x < dstrt.x ) {
-            srcrtfix.x = dstrt.x - srcrt.x;
-            dstptfix.x = dstrt.x;
-        }
-
-        if ( srcrt.y < dstrt.y ) {
-            srcrtfix.y = dstrt.y - srcrt.y;
-            dstptfix.y = dstrt.y;
-        }
-
-        if ( dstptfix.x + srcrtfix.width > dstrt.x + dstrt.width )
-            srcrtfix.width = dstrt.x + dstrt.width - dstptfix.x;
-
-        if ( dstptfix.y + srcrtfix.height > dstrt.y + dstrt.height )
-            srcrtfix.height = dstrt.y + dstrt.height - dstptfix.y;
-
-        return res;
-    }
-
     Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 )
     {
+        if ( rt2.width == 0 && rt2.height == 0 ) {
+            return rt1;
+        }
+
+        if ( rt1.width == 0 && rt1.height == 0 ) {
+            return rt2;
+        }
+
         const int32_t x = std::min( rt1.x, rt2.x );
         const int32_t y = std::min( rt1.y, rt2.y );
         const int32_t width = std::max( rt1.x + rt1.width, rt2.x + rt2.width ) - x;

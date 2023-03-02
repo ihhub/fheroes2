@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,12 @@
 #ifndef H2BATTLE_ANIMATION_H
 #define H2BATTLE_ANIMATION_H
 
+#include <cstddef>
+#include <cstdint>
+#include <vector>
+
 #include "bin_info.h"
+#include "math_base.h"
 #include "timing.h"
 
 // This timer is used for randomized idle animation delays, automatically setting it in range of 75%-125% of the intended value
@@ -65,6 +70,11 @@ public:
     bool isLastFrame() const;
     virtual bool isValid() const;
 
+    inline size_t getCurrentFrameId() const
+    {
+        return _currentFrame;
+    }
+
 protected:
     std::vector<int> _seq;
     size_t _currentFrame;
@@ -98,12 +108,14 @@ protected:
     std::vector<int> _moveLastTile;
     std::vector<int> _moveOneTile;
     monsterReturnAnim _flying;
+    std::vector<int> _winceUp;
+    std::vector<int> _winceDown;
     std::vector<int> _wince;
     std::vector<int> _death;
     monsterReturnAnim _melee[3];
     monsterReturnAnim _ranged[3];
-    std::vector<std::vector<int> > _idle;
-    std::vector<std::vector<int> > _offsetX;
+    std::vector<std::vector<int>> _idle;
+    std::vector<std::vector<int>> _offsetX;
 
     bool appendFrames( std::vector<int> & target, int animID );
 };
@@ -124,6 +136,7 @@ public:
 
     int getFrame() const;
     int firstFrame() const;
+    int32_t getCurrentFrameXOffset() const;
     size_t animationLength() const;
     double movementProgress() const;
     bool isLastFrame() const;

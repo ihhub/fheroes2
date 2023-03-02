@@ -6,17 +6,20 @@ on:
 jobs:
   clang:
     name: Clang Analyzer
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies and clang-tools
       run: |
         sudo apt-get -y update
-        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools-12
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools-14
     - name: Setup clang-tools
       run: |
-        sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-12 100
+        sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-14 100
     - name: Analyze
       run: |
         scan-build --status-bugs -v -o scan-build-result make -j 2
@@ -25,7 +28,7 @@ jobs:
         FHEROES2_WITH_DEBUG: ON
         FHEROES2_WITH_IMAGE: ON
         FHEROES2_WITH_TOOLS: ON
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: ${{ failure() }}
       with:
         name: scan-build-result

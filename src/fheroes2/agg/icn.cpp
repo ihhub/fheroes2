@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,8 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "heroes.h"
 #include "icn.h"
+#include "color.h"
+#include "heroes.h"
 #include "race.h"
 #include "settings.h"
 
@@ -346,7 +347,7 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         return ticket % 15;
     case OBJNWATR:
         switch ( start ) {
-        // buttle
+        // bottle
         case 0x00:
             return start + ( ticket % 11 ) + 1;
         // shadow
@@ -471,14 +472,14 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         case 0x3F:
         case 0x46:
         case 0x4D:
-        // archerhouse
+        // Archer House
         case 0x54:
         // smoke from chimney
         case 0x5D:
         case 0x64:
         // shadow smoke
         case 0x6B:
-        // peasanthunt
+        // Peasant Hut
         case 0x72:
             return start + ( ticket % 6 ) + 1;
         default:
@@ -545,14 +546,14 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         // lighthouse
         case 0x3D:
             return start + ( ticket % 9 ) + 1;
-        // alchemytower
+        // Alchemist Tower
         case 0x1B:
         // watermill
         case 0x53:
         case 0x5A:
         case 0x62:
         case 0x69:
-        // fire in wagoncamp
+        // fire in Wagon Camp
         case 0x81:
         // smoke smithy (2 chimney)
         case 0xA6:
@@ -594,9 +595,9 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
         }
     case OBJNSNOW:
         switch ( start ) {
-        // firecamp
+        // fire camp
         case 0x04:
-        // alchemytower
+        // Alchemist Tower
         case 0x97:
         // watermill
         case 0xA2:
@@ -872,83 +873,6 @@ int ICN::PORTxxxx( int heroId )
     }
 
     return ICN::UNKNOWN;
-}
-
-bool ICN::HighlyObjectSprite( int icn, uint32_t index )
-{
-    switch ( icn ) {
-    case OBJNDIRT:
-        // wind mill
-        if ( 154 <= index && index <= 160 )
-            return true;
-        break;
-
-    case OBJNGRA2:
-        // wind mill
-        if ( 24 <= index && index <= 30 )
-            return true;
-        break;
-
-    case OBJNLAV2:
-    case OBJNLAV3:
-        // fog lava
-        return true;
-
-    case OBJNMUL2:
-        // dragon city
-        if ( 35 == index || 37 == index || 38 == index || 40 == index || 41 == index )
-            return true;
-        // ligth
-        if ( 59 == index )
-            return true;
-        // water mill
-        if ( 82 == index )
-            return true;
-        break;
-
-    case OBJNMULT:
-        // fort
-        if ( 36 <= index && index <= 44 )
-            return true;
-        // tree
-        if ( 117 == index || 118 == index )
-            return true;
-        break;
-
-    case OBJNSNOW:
-        // wind mill
-        if ( 97 <= index && index <= 103 )
-            return true;
-        // water mill
-        if ( 161 == index )
-            return true;
-        break;
-
-    case OBJNSWMP:
-        //
-        if ( 35 <= index && index <= 42 )
-            return true;
-        break;
-
-    case OBJNTOWN:
-        if ( 1 <= index && index <= 5 )
-            return true;
-        if ( 32 <= index && index <= 37 )
-            return true;
-        if ( 64 <= index && index <= 69 )
-            return true;
-        if ( 96 <= index && index <= 101 )
-            return true;
-        if ( 128 <= index && index <= 133 )
-            return true;
-        if ( 160 <= index && index <= 165 )
-            return true;
-        break;
-
-    default:
-        break;
-    }
-    return false;
 }
 
 int ICN::Get4Captain( int race )

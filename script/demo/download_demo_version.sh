@@ -1,6 +1,26 @@
 #!/usr/bin/env bash
 
-set -e
+###########################################################################
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
+#   Copyright (C) 2021 - 2023                                             #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
+
+set -e -o pipefail
 
 H2DEMO_URL="https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip"
 H2DEMO_SHA256="12048c8b03875c81e69534a3813aaf6340975e77b762dc1b79a4ff5514240e3c"
@@ -51,10 +71,10 @@ echo_stage "[2/4] downloading the demo version"
 
 cd "$DEST_PATH/demo"
 
-if [[ "$(command -v wget)" != "" ]]; then
+if [[ -n "$(command -v wget)" ]]; then
     wget -O h2demo.zip "$H2DEMO_URL"
-elif [[ "$(command -v curl)" != "" ]]; then
-    curl -O -L "$H2DEMO_URL" > h2demo.zip
+elif [[ -n "$(command -v curl)" ]]; then
+    curl -o h2demo.zip -L "$H2DEMO_URL"
 else
     echo_red "Neither wget nor curl were found in your system. Unable to download the demo version. Installation aborted."
     exit 1
@@ -62,9 +82,9 @@ fi
 
 echo "$H2DEMO_SHA256 *h2demo.zip" > checksums
 
-if [[ "$(command -v shasum)" != "" ]]; then
+if [[ -n "$(command -v shasum)" ]]; then
     shasum --check --algorithm 256 checksums
-elif [[ "$(command -v sha256sum)" != "" ]]; then
+elif [[ -n "$(command -v sha256sum)" ]]; then
     sha256sum --check --strict checksums
 else
     echo_red "Neither shasum nor sha256sum were found in your system. Unable to verify the downloaded file. Installation aborted."

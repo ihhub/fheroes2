@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,10 +24,13 @@
 #ifndef H2TEXT_H
 #define H2TEXT_H
 
+#include <cstddef>
 #include <cstdint>
 #include <list>
 #include <string>
 
+#include "image.h"
+#include "math_base.h"
 #include "screen.h"
 
 namespace Font
@@ -85,7 +88,7 @@ public:
 
     static int32_t getCharacterWidth( const uint8_t character, const int fontType );
 
-    // Use this method when you need to find the maximum width of of a string to be fit within given width
+    // Use this method when you need to find the maximum width of a string to be fit within given width
     static int32_t getFitWidth( const std::string & text, const int fontId, const int32_t width_ );
 
 protected:

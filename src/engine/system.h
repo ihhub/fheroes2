@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,32 +25,40 @@
 #define H2SYSTEM_H
 
 #include <ctime>
+#include <string>
+#include <string_view>
 #include <vector>
-
-#include "dir.h"
 
 namespace System
 {
-    int MakeDirectory( const std::string & );
-    std::string ConcatePath( const std::string &, const std::string & );
+    bool isHandheldDevice();
+    // Returns true if target platform supports shell-level globbing (Unix-like platforms with POSIX-compatible shells).
+    // Otherwise returns false, which means that app need to resolve wildcard patterns itself (for example, on Windows).
+    bool isShellLevelGlobbingSupported();
+
+    bool MakeDirectory( const std::string & path );
+    std::string concatPath( const std::string_view left, const std::string_view right );
 
     void appendOSSpecificDirectories( std::vector<std::string> & directories );
     std::string GetConfigDirectory( const std::string & prog );
     std::string GetDataDirectory( const std::string & prog );
 
-    std::string GetDirname( const std::string & );
-    std::string GetBasename( const std::string & );
+    std::string GetDirname( std::string_view path );
+    std::string GetBasename( std::string_view path );
 
-    int GetCommandOptions( int argc, char * const argv[], const char * optstring );
-    char * GetOptionsArgument();
-
-    bool IsFile( const std::string & name, bool writable = false );
-    bool IsDirectory( const std::string & name, bool writable = false );
-    int Unlink( const std::string & );
+    bool IsFile( const std::string & path, bool writable = false );
+    bool IsDirectory( const std::string & path, bool writable = false );
+    bool Unlink( const std::string & path );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 
-    std::string FileNameToUTF8( const std::string & str );
+    // Resolves the wildcard pattern 'glob' and appends matching paths to 'fileNames'. Supported wildcards are '?' and '*'.
+    // These wildcards are resolved only if they are in the last element of the path. For example, they will be resolved
+    // in the case of the 'foo/b*r?' pattern, but they will be ignored (used as is) in the case of '*/bar' pattern. If there
+    // are no files matching the pattern, it will be appended to the 'fileNames' as is.
+    void globFiles( const std::string_view glob, std::vector<std::string> & fileNames );
+
+    std::string FileNameToUTF8( const std::string & name );
 
     tm GetTM( const time_t time );
 }

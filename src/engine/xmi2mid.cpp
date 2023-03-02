@@ -24,9 +24,13 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
 #include <fstream>
-#include <iomanip>
 #include <list>
+#include <map>
+#include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -42,144 +46,81 @@
 
 namespace
 {
-    const std::array<const char *, 128> instrumentDescription = { "Acoustic Grand Piano",
-                                                                  "Soprano Sax",
-                                                                  "Bright Acoustic Piano",
-                                                                  "Alto Sax",
-                                                                  "Electric Grand Piano",
-                                                                  "Tenor Sax",
-                                                                  "Honky-tonk Piano",
-                                                                  "Baritone Sax",
-                                                                  "Electric Piano 1 (Rhodes Piano)",
-                                                                  "Oboe",
-                                                                  "Electric Piano 2 (Chorused Piano)",
-                                                                  "English Horn",
-                                                                  "Harpsichord",
-                                                                  "Bassoon",
-                                                                  "Clavinet",
-                                                                  "Clarinet",
-                                                                  "Celesta",
-                                                                  "Piccolo",
-                                                                  "Glockenspiel",
-                                                                  "Flute",
-                                                                  "Music Box",
-                                                                  "Recorder",
-                                                                  "Vibraphone",
-                                                                  "Pan Flute",
-                                                                  "Marimba",
-                                                                  "Blown Bottle",
-                                                                  "Xylophone",
-                                                                  "Shakuhachi",
-                                                                  "Tubular Bells",
-                                                                  "Whistle",
-                                                                  "Dulcimer (Santur)",
-                                                                  "Ocarina",
-                                                                  "Drawbar Organ (Hammond)",
-                                                                  "Lead 1 (square wave)",
-                                                                  "Percussive Organ",
-                                                                  "Lead 2 (sawtooth wave)",
-                                                                  "Rock Organ",
-                                                                  "Lead 3 (calliope)",
-                                                                  "Church Organ",
-                                                                  "Lead 4 (chiffer)",
-                                                                  "Reed Organ",
-                                                                  "Lead 5 (charang)",
-                                                                  "Accordion (French)",
-                                                                  "Lead 6 (voice solo)",
-                                                                  "Harmonica",
-                                                                  "Lead 7 (fifths)",
-                                                                  "Tango Accordion (Band neon)",
-                                                                  "Lead 8 (bass + lead)",
-                                                                  "Acoustic Guitar (nylon)",
-                                                                  "Pad 1 (new age Fantasia)",
-                                                                  "Acoustic Guitar (steel)",
-                                                                  "Pad 2 (warm)",
-                                                                  "Electric Guitar (jazz)",
-                                                                  "Pad 3 (polysynth)",
-                                                                  "Electric Guitar (clean)",
-                                                                  "Pad 4 (choir space voice)",
-                                                                  "Electric Guitar (muted)",
-                                                                  "Pad 5 (bowed glass)",
-                                                                  "Overdriven Guitar",
-                                                                  "Pad 6 (metallic pro)",
-                                                                  "Distortion Guitar",
-                                                                  "Pad 7 (halo)",
-                                                                  "Guitar harmonics",
-                                                                  "Pad 8 (sweep)",
-                                                                  "Acoustic Bass",
-                                                                  "FX 1 (rain)",
-                                                                  "Electric Bass (fingered)",
-                                                                  "FX 2 (soundtrack)",
-                                                                  "Electric Bass (picked)",
-                                                                  "FX 3 (crystal)",
-                                                                  "Fretless Bass",
-                                                                  "FX 4 (atmosphere)",
-                                                                  "Slap Bass 1",
-                                                                  "FX 5 (brightness)",
-                                                                  "Slap Bass 2",
-                                                                  "FX 6 (goblins)",
-                                                                  "Synth Bass 1",
-                                                                  "FX 7 (echoes, drops)",
-                                                                  "Synth Bass 2",
-                                                                  "FX 8 (sci-fi, star theme)",
-                                                                  "Violin",
-                                                                  "Sitar",
-                                                                  "Viola",
-                                                                  "Banjo",
-                                                                  "Cello",
-                                                                  "Shamisen",
-                                                                  "Contrabass",
-                                                                  "Koto",
-                                                                  "Tremolo Strings",
-                                                                  "Kalimba",
-                                                                  "Pizzicato Strings",
-                                                                  "Bag pipe",
-                                                                  "Orchestral Harp",
-                                                                  "Fiddle",
-                                                                  "Timpani",
-                                                                  "Shanai",
-                                                                  "String Ensemble 1 (strings)",
-                                                                  "Tinkle Bell",
-                                                                  "String Ensemble 2 (slow strings)",
-                                                                  "Agogo",
-                                                                  "SynthStrings 1",
-                                                                  "Steel Drums",
-                                                                  "SynthStrings 2",
-                                                                  "Woodblock",
-                                                                  "Choir Aahs",
-                                                                  "Taiko Drum",
-                                                                  "Voice Oohs",
-                                                                  "Melodic Tom",
-                                                                  "Synth Voice",
-                                                                  "Synth Drum",
-                                                                  "Orchestra Hit",
-                                                                  "Reverse Cymbal",
-                                                                  "Trumpet",
-                                                                  "Guitar Fret Noise",
-                                                                  "Trombone",
-                                                                  "Breath Noise",
-                                                                  "Tuba",
-                                                                  "Seashore",
-                                                                  "Muted Trumpet",
-                                                                  "Bird Tweet",
-                                                                  "French Horn",
-                                                                  "Telephone Ring",
-                                                                  "Brass Section",
-                                                                  "Helicopter",
-                                                                  "SynthBrass 1",
-                                                                  "Applause",
-                                                                  "SynthBrass 2",
-                                                                  "Gunshot" };
+    const std::array<const char *, 128> instrumentDescription = {
+        //
+        // Piano ( 0 - 7 )
+        //
+        "Acoustic Grand Piano", "Bright Acoustic Piano", "Electric Grand Piano", "Honky-tonk Piano", "Electric Piano 1 (Rhodes Piano)",
+        "Electric Piano 2 (Chorused Piano)", "Harpsichord", "Clavinet",
+        //
+        // Chromatic Percussion ( 8 - 15 )
+        //
+        "Celesta", "Glockenspiel", "Music Box", "Vibraphone", "Marimba", "Xylophone", "Tubular Bells", "Dulcimer (Santur)",
+        //
+        // Organ ( 16 - 23 )
+        //
+        "Drawbar Organ (Hammond)", "Percussive Organ", "Rock Organ", "Church Organ", "Reed Organ", "Accordion (French)", "Harmonica", "Tango Accordion (Band neon)",
+        //
+        // Guitar ( 24 - 31 )
+        //
+        "Acoustic Guitar (nylon)", "Acoustic Guitar (steel)", "Electric Guitar (jazz)", "Electric Guitar (clean)", "Electric Guitar (muted)", "Overdriven Guitar",
+        "Distortion Guitar", "Guitar harmonics",
+        //
+        // Bass ( 32 - 39 )
+        //
+        "Acoustic Bass", "Electric Bass (fingered)", "Electric Bass (picked)", "Fretless Bass", "Slap Bass 1", "Slap Bass 2", "Synth Bass 1", "Synth Bass 2",
+        //
+        // Strings ( 40 - 47 )
+        //
+        "Violin", "Viola", "Cello", "Contrabass", "Tremolo Strings", "Pizzicato Strings", "Orchestral Harp", "Timpani",
+        //
+        // Strings ( 48 - 55 )
+        //
+        "String Ensemble 1 (strings)", "String Ensemble 2 (slow strings)", "SynthStrings 1", "SynthStrings 2", "Choir Aahs", "Voice Oohs", "Synth Voice", "Orchestra Hit",
+        //
+        // Brass ( 56 - 63 )
+        //
+        "Trumpet", "Trombone", "Tuba", "Muted Trumpet", "French Horn", "Brass Section", "SynthBrass 1", "SynthBrass 2",
+        //
+        // Reed ( 64 - 71 )
+        //
+        "Soprano Sax", "Alto Sax", "Tenor Sax", "Baritone Sax", "Oboe", "English Horn", "Bassoon", "Clarinet",
+        //
+        // Pipe ( 72 - 79 )
+        //
+        "Piccolo", "Flute", "Recorder", "Pan Flute", "Blown Bottle", "Shakuhachi", "Whistle", "Ocarina",
+        //
+        // Synth Lead ( 80 - 87 )
+        //
+        "Lead 1 (square wave)", "Lead 2 (sawtooth wave)", "Lead 3 (calliope)", "Lead 4 (chiffer)", "Lead 5 (charang)", "Lead 6 (voice solo)", "Lead 7 (fifths)",
+        "Lead 8 (bass + lead)",
+        //
+        // Synth Pad ( 88 - 95 )
+        //
+        "Pad 1 (new age Fantasia)", "Pad 2 (warm)", "Pad 3 (polysynth)", "Pad 4 (choir space voice)", "Pad 5 (bowed glass)", "Pad 6 (metallic pro)", "Pad 7 (halo)",
+        "Pad 8 (sweep)",
+        //
+        // Synth Effects ( 96 - 103 )
+        //
+        "FX 1 (rain)", "FX 2 (soundtrack)", "FX 3 (crystal)", "FX 4 (atmosphere)", "FX 5 (brightness)", "FX 6 (goblins)", "FX 7 (echoes, drops)",
+        "FX 8 (sci-fi, star theme)",
+        //
+        // Ethnic ( 104 - 111 )
+        //
+        "Sitar", "Banjo", "Shamisen", "Koto", "Kalimba", "Bag pipe", "Fiddle", "Shanai",
+        //
+        // Percussive ( 112 - 119 )
+        //
+        "Tinkle Bell", "Agogo", "Steel Drums", "Woodblock", "Taiko Drum", "Melodic Tom", "Synth Drum", "Reverse Cymbal",
+        //
+        // Sound effects ( 120 - 127 )
+        //
+        "Guitar Fret Noise", "Breath Noise", "Seashore", "Bird Tweet", "Telephone Ring", "Helicopter", "Applause", "Gunshot" };
 
-    const std::array<const char *, 47> drumSoundDescription
-        = { "B1 Acoustic Bass Drum", "B3 Ride Cymbal 2",  "C2 Bass Drum 1",    "C4 Hi Bongo",       "C#2 Side Stick",     "C#4 Low Bongo",
-            "D2 Acoustic Snare",     "D4 Mute Hi Conga",  "D#2 Hand Clap",     "D#4 Open Hi Conga", "E2 Electric Snare",  "E4 Low Conga",
-            "F2 Low Floor Tom",      "F4 High Timbale",   "F#2 Closed Hi Hat", "F#4 Low Timbale",   "G2 High Floor Tom",  "G4 High Agogo",
-            "G#2 Pedal Hi-Hat",      "G#4 Low Agogo",     "A2 Low Tom",        "A4 Cabasa",         "A#2 Open Hi-Hat",    "A#4 Maracas",
-            "B2 Low-Mid Tom",        "B4 Short Whistle",  "C3 Hi Mid Tom",     "C5 Long Whistle",   "C#3 Crash Cymbal 1", "C#5 Short Guiro",
-            "D3 High Tom",           "D5 Long Guiro",     "D#3 Ride Cymbal 1", "D#5 Claves",        "E3 Chinese Cymbal",  "E5 Hi Wood Block",
-            "F3 Ride Bell",          "F5 Low Wood Block", "F#3 Tambourine",    "F#5 Mute Cuica",    "G3 Splash Cymbal",   "G5 Open Cuica",
-            "G#3 Cowbell",           "G#5 Mute Triangle", "A3 Crash Cymbal 2", "A5 Open Triangle",  "A#3 Vibraslap" };
+    // Some (but not all) commonly used MIDI drum kits are listed here: https://en.wikipedia.org/wiki/General_MIDI_Level_2#Drum_sounds
+    const std::map<uint32_t, const char *> drumKitDescription
+        = { { 0, "Standard Kit" }, { 8, "Room Kit" },   { 16, "Power Kit" },      { 24, "Electronic Kit" }, { 25, "TR-808 Kit" },
+            { 32, "Jazz Kit" },    { 40, "Brush Kit" }, { 48, "Orchestral Kit" }, { 49, "Fix Room Kit" },   { 56, "Sound FX Kit" } };
 
     enum
     {
@@ -543,11 +484,11 @@ struct MidiEvents : public std::vector<MidiChunk>
             }
 
             switch ( *ptr >> 4 ) {
-            // key pressure
+            // Polyphonic Key Pressure (Aftertouch).
             case 0x0A:
-            // control change
+            // Control Change.
             case 0x0B:
-            // pitch bend
+            // Pitch Wheel Change.
             case 0x0E:
                 if ( !checkDataPresence( ptr, end, 3 ) ) {
                     break;
@@ -558,7 +499,7 @@ struct MidiEvents : public std::vector<MidiChunk>
                 break;
 
             // XMI events do not have note off events.
-            // note on
+            // Note On event.
             case 0x09: {
                 if ( !checkDataPresence( ptr, end, 4 ) ) {
                     break;
@@ -578,37 +519,45 @@ struct MidiEvents : public std::vector<MidiChunk>
             }
 
             // Program Change: in other words which instrument is going to be played.
-            case 0x0C:
+            case 0x0C: {
                 if ( !checkDataPresence( ptr, end, 2 ) ) {
                     break;
                 }
 
+                const int32_t channelId = *ptr - 0xC0;
+
                 emplace_back( delta, *ptr, *( ptr + 1 ) );
 
-                if ( *ptr == 0xCA ) {
-                    // It is a drum.
-                    const uint32_t drumSoundType = *( ptr + 1 );
-                    if ( drumSoundType >= 35 && drumSoundType - 35 < drumSoundDescription.size() ) {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: drum sound used in the track: " << drumSoundDescription[drumSoundType - 35] )
+                // Drum sounds are only played in channel 9 if channel ID starts from 0, or 10 if channel ID starts from 1. In our case it starts from 0.
+                if ( channelId == 9 ) {
+                    // It is a drum kit.
+                    const uint32_t drumKitId = *( ptr + 1 );
+                    const auto drumKitIter = drumKitDescription.find( drumKitId );
+
+                    if ( drumKitIter != drumKitDescription.end() ) {
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MIDI channel " << channelId << ", drum kit ID " << drumKitId << ": " << drumKitIter->second )
                     }
                     else {
-                        ERROR_LOG( "MIDI track: Unknown drum sound type " << drumSoundType )
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MIDI channel " << channelId << ": unknown drum kit ID " << drumKitId )
                     }
                 }
                 else {
-                    const uint32_t instrumentType = *( ptr + 1 );
-                    if ( instrumentType < instrumentDescription.size() ) {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: instrument used in the track: " << instrumentDescription[*( ptr + 1 )] )
+                    const uint32_t instrumentId = *( ptr + 1 );
+
+                    if ( instrumentId < instrumentDescription.size() ) {
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
+                                   "MIDI channel " << channelId << ", instrument ID " << instrumentId << ": " << instrumentDescription[instrumentId] )
                     }
                     else {
-                        ERROR_LOG( "MIDI track: Unknown instrument type " << instrumentType )
+                        ERROR_LOG( "MIDI channel " << channelId << ": unknown instrument ID " << instrumentId )
                     }
                 }
 
                 ptr += 2;
                 break;
+            }
 
-            // channel aftertouch
+            // Channel Pressure (After-touch).
             case 0x0D:
                 if ( !checkDataPresence( ptr, end, 2 ) ) {
                     break;
@@ -621,7 +570,8 @@ struct MidiEvents : public std::vector<MidiChunk>
             // Unknown command.
             default:
                 emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
-                ERROR_LOG( "unknown st: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
+                ERROR_LOG( "MIDI track: Unknown command: " << GetHexString( static_cast<int>( *ptr ), 2 )
+                                                           << ", byte: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
                 break;
             }
         }

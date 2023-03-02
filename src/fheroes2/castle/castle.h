@@ -24,24 +24,35 @@
 #define H2CASTLE_H
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
 #include <map>
+#include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "army.h"
 #include "bitmodes.h"
 #include "captain.h"
-#include "castle_heroes.h"
+#include "color.h"
+#include "gamedefs.h"
 #include "mageguild.h"
+#include "math_base.h"
+#include "monster.h"
+#include "players.h"
 #include "position.h"
-#include "ui_button.h"
 
 namespace fheroes2
 {
     class RandomMonsterAnimation;
 }
 
+class Funds;
+class HeroBase;
 class Heroes;
+class StreamBase;
+class Troop;
 
 enum building_t : uint32_t
 {
@@ -149,7 +160,7 @@ public:
     uint32_t CountBuildings() const;
 
     Heroes * RecruitHero( Heroes * );
-    CastleHeroes GetHeroes() const;
+    Heroes * GetHero() const;
 
     int GetRace() const
     {
@@ -183,8 +194,13 @@ public:
     Army & GetArmy();
     const Army & GetActualArmy() const;
     Army & GetActualArmy();
-    double GetGarrisonStrength( const Heroes * attackingHero ) const;
     uint32_t getMonstersInDwelling( uint32_t ) const;
+
+    // Returns the garrison strength estimation calculated as if the attacking hero really attacked this
+    // castle - including an estimate of the strength of the combined army consisting of the garrison and
+    // the hero's troops (if present), castle-specific bonuses from moat, towers and so on, relative to
+    // the attacking hero's abilities. See the implementation for details.
+    double GetGarrisonStrength( const Heroes * attackingHero ) const;
 
     // Returns the correct dwelling type available in the castle. BUILD_NOTHING is returned if this is not a dwelling.
     uint32_t GetActualDwelling( const uint32_t buildId ) const;
@@ -213,7 +229,7 @@ public:
 
     void DrawImageCastle( const fheroes2::Point & pt ) const;
 
-    CastleDialogReturnValue OpenDialog( const bool readOnly, const bool openConstructionWindow );
+    CastleDialogReturnValue OpenDialog( const bool openConstructionWindow );
 
     int GetAttackModificator( const std::string * ) const;
     int GetDefenseModificator( const std::string * ) const;
@@ -263,7 +279,7 @@ public:
     int DialogBuyHero( const Heroes * ) const;
     int DialogBuyCastle( bool fixed = true ) const;
 
-    void SwapCastleHeroes( CastleHeroes & );
+    Troops getAvailableArmy( Funds potentialBudget ) const;
 
 private:
     enum class ConstructionDialogResult : int
@@ -275,6 +291,10 @@ private:
         RecruitHero // Recruit a hero.
     };
 
+    // Checks whether this particular building is currently built in the castle (unlike
+    // the isBuild(), upgraded versions of the same building are not taken into account)
+    bool isExactBuildingBuilt( const uint32_t buildingToCheck ) const;
+
     uint32_t * GetDwelling( uint32_t dw );
     void EducateHeroes();
 
@@ -282,9 +302,8 @@ private:
 
     void OpenTavern() const;
     void OpenWell();
-    void OpenMageGuild( const CastleHeroes & heroes ) const;
+    void OpenMageGuild( const Heroes * hero ) const;
     void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
-    Troops getAvailableArmy( Funds potentialBudget ) const;
     void JoinRNDArmy();
     void PostLoad();
 
@@ -389,7 +408,14 @@ public:
 
     void AddCastle( Castle * castle );
 
-    Castle * Get( const fheroes2::Point & position ) const;
+    Castle * Get( const fheroes2::Point & position ) const
+    {
+        auto iter = _castleTiles.find( position );
+        if ( iter == _castleTiles.end() )
+            return nullptr;
+
+        return _castles[iter->second];
+    }
 
     void Scoute( int ) const;
 

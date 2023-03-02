@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -42,6 +42,8 @@ class HeroBase;
 class Heroes;
 class Monster;
 class Troop;
+
+struct ArtifactSetData;
 struct CapturedObject;
 
 namespace Skill
@@ -75,8 +77,6 @@ namespace Dialog
         DIG = 0x1000,
 
         UPGRADE_DISABLE = MAX,
-
-        READONLY = 0x2000,
         BUTTONS = ( YES | OK | NO | CANCEL )
     };
 
@@ -93,7 +93,6 @@ namespace Dialog
     void QuickInfo( const HeroBase & hero, const fheroes2::Point & position = {}, const bool showOnRadar = false, const fheroes2::Rect & areaToRestore = {} );
 
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
-    void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();
@@ -101,16 +100,18 @@ namespace Dialog
     bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
     Troop RecruitMonster( const Monster & monster0, uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
     void DwellingInfo( const Monster &, uint32_t available );
-    bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
-    int ArmyJoinFree( const Troop &, Heroes & );
-    int ArmyJoinWithCost( const Troop &, uint32_t join, uint32_t gold, Heroes & );
+    int ArmyJoinFree( const Troop & troop );
+    int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
     int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
     void ThievesGuild( bool oracle );
     void GameInfo();
+
+    // Displays a dialog box informing that an artifact set has been assembled
+    void ArtifactSetAssembled( const ArtifactSetData & artifactSetData );
 
     class NonFixedFrameBox
     {

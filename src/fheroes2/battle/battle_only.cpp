@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,23 +21,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "battle_only.h"
+#include <cstdint>
+#include <string>
+
 #include "agg_image.h"
 #include "army_bar.h"
+#include "army_troop.h"
 #include "battle.h"
+#include "battle_only.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
 #include "heroes.h"
+#include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
+#include "image.h"
+#include "localevent.h"
+#include "monster.h"
 #include "race.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
@@ -99,7 +111,7 @@ bool Battle::Only::ChangeSettings()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const fheroes2::StandardWindow frameborder( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    const fheroes2::StandardWindow frameborder( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
 
     const fheroes2::Point cur_pt( frameborder.activeArea().x, frameborder.activeArea().y );
 
@@ -129,15 +141,15 @@ bool Battle::Only::ChangeSettings()
 
     moraleIndicator1->Redraw();
     luckIndicator1->Redraw();
-    primskill_bar1->Redraw();
-    secskill_bar1->Redraw();
-    selectArtifacts1->Redraw();
+    primskill_bar1->Redraw( display );
+    secskill_bar1->Redraw( display );
+    selectArtifacts1->Redraw( display );
 
     selectArmy1.reset( new ArmyBar( army1, true, false, true ) );
-    selectArmy1->SetColRows( 5, 1 );
-    selectArmy1->SetPos( cur_pt.x + 36, cur_pt.y + 267 );
-    selectArmy1->SetHSpace( 2 );
-    selectArmy1->Redraw();
+    selectArmy1->setTableSize( { 5, 1 } );
+    selectArmy1->setRenderingOffset( { cur_pt.x + 36, cur_pt.y + 267 } );
+    selectArmy1->setInBetweenItemsOffset( { 2, 0 } );
+    selectArmy1->Redraw( display );
 
     if ( hero2 ) {
         hero2->GetSecondarySkills().FillMax( Skill::Secondary() );
@@ -145,19 +157,19 @@ bool Battle::Only::ChangeSettings()
 
         moraleIndicator2->Redraw();
         luckIndicator2->Redraw();
-        secskill_bar2->Redraw();
-        selectArtifacts2->Redraw();
-        selectArmy2->Redraw();
+        secskill_bar2->Redraw( display );
+        selectArtifacts2->Redraw( display );
+        selectArmy2->Redraw( display );
     }
 
     monsters.GetTroop( 0 )->Set( Monster::PEASANT, 100 );
     army2 = hero2 ? &hero2->GetArmy() : &monsters;
 
     selectArmy2.reset( new ArmyBar( army2, true, false, true ) );
-    selectArmy2->SetColRows( 5, 1 );
-    selectArmy2->SetPos( cur_pt.x + 381, cur_pt.y + 267 );
-    selectArmy2->SetHSpace( 2 );
-    selectArmy2->Redraw();
+    selectArmy2->setTableSize( { 5, 1 } );
+    selectArmy2->setRenderingOffset( { cur_pt.x + 381, cur_pt.y + 267 } );
+    selectArmy2->setInBetweenItemsOffset( { 2, 0 } );
+    selectArmy2->Redraw( display );
 
     bool exit = false;
     bool redraw = false;
@@ -169,7 +181,7 @@ bool Battle::Only::ChangeSettings()
     const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
     fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
 
-    const int icnId = ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
+    const int icnId = ICN::BUTTON_SMALL_OKAY_GOOD;
     const fheroes2::Sprite & buttonStartImage = fheroes2::AGG::GetICN( icnId, 0 );
     fheroes2::ButtonSprite buttonStart = fheroes2::makeButtonWithShadow( cur_pt.x + ( 640 - buttonStartImage.width() ) / 2, cur_pt.y + 428, buttonStartImage,
                                                                          fheroes2::AGG::GetICN( icnId, 1 ), display );
@@ -372,18 +384,18 @@ bool Battle::Only::ChangeSettings()
         RedrawBaseInfo( cur_pt );
         moraleIndicator1->Redraw();
         luckIndicator1->Redraw();
-        secskill_bar1->Redraw();
-        selectArtifacts1->Redraw();
-        selectArmy1->Redraw();
+        secskill_bar1->Redraw( display );
+        selectArtifacts1->Redraw( display );
+        selectArmy1->Redraw( display );
 
         if ( hero2 ) {
             moraleIndicator2->Redraw();
             luckIndicator2->Redraw();
-            secskill_bar2->Redraw();
-            selectArtifacts2->Redraw();
+            secskill_bar2->Redraw( display );
+            selectArtifacts2->Redraw( display );
         }
 
-        selectArmy2->Redraw();
+        selectArmy2->Redraw( display );
 
         if ( cinfo2 ) {
             cinfo2->Redraw();
@@ -442,30 +454,29 @@ void Battle::Only::UpdateHero1( const fheroes2::Point & cur_pt )
         }
 
         primskill_bar1.reset( new PrimarySkillsBar( hero1, true ) );
-        primskill_bar1->SetColRows( 1, 4 );
-        primskill_bar1->SetVSpace( -1 );
+        primskill_bar1->setTableSize( { 1, 4 } );
+        primskill_bar1->setInBetweenItemsOffset( { 0, -1 } );
         primskill_bar1->SetTextOff( 70, -25 );
-        primskill_bar1->SetPos( cur_pt.x + 216, cur_pt.y + 51 );
+        primskill_bar1->setRenderingOffset( { cur_pt.x + 216, cur_pt.y + 51 } );
 
         secskill_bar1.reset( new SecondarySkillsBar( *hero1, true, true ) );
-        secskill_bar1->SetColRows( 8, 1 );
-        secskill_bar1->SetHSpace( -1 );
+        secskill_bar1->setTableSize( { 8, 1 } );
+        secskill_bar1->setInBetweenItemsOffset( { -1, 0 } );
         secskill_bar1->SetContent( hero1->GetSecondarySkills().ToVector() );
-        secskill_bar1->SetPos( cur_pt.x + 22, cur_pt.y + 199 );
+        secskill_bar1->setRenderingOffset( { cur_pt.x + 22, cur_pt.y + 199 } );
 
         selectArtifacts1.reset( new ArtifactsBar( hero1, true, false, true, true, nullptr ) );
-        selectArtifacts1->SetColRows( 7, 2 );
-        selectArtifacts1->SetHSpace( 2 );
-        selectArtifacts1->SetVSpace( 2 );
+        selectArtifacts1->setTableSize( { 7, 2 } );
+        selectArtifacts1->setInBetweenItemsOffset( { 2, 2 } );
         selectArtifacts1->SetContent( hero1->GetBagArtifacts() );
-        selectArtifacts1->SetPos( cur_pt.x + 23, cur_pt.y + 347 );
+        selectArtifacts1->setRenderingOffset( { cur_pt.x + 23, cur_pt.y + 347 } );
 
         army1 = &hero1->GetArmy();
 
         selectArmy1.reset( new ArmyBar( army1, true, false, true ) );
-        selectArmy1->SetColRows( 5, 1 );
-        selectArmy1->SetPos( cur_pt.x + 36, cur_pt.y + 267 );
-        selectArmy1->SetHSpace( 2 );
+        selectArmy1->setTableSize( { 5, 1 } );
+        selectArmy1->setRenderingOffset( { cur_pt.x + 36, cur_pt.y + 267 } );
+        selectArmy1->setInBetweenItemsOffset( { 2, 0 } );
     }
 }
 
@@ -497,30 +508,29 @@ void Battle::Only::UpdateHero2( const fheroes2::Point & cur_pt )
         }
 
         primskill_bar2.reset( new PrimarySkillsBar( hero2, true ) );
-        primskill_bar2->SetColRows( 1, 4 );
-        primskill_bar2->SetVSpace( -1 );
+        primskill_bar2->setTableSize( { 1, 4 } );
+        primskill_bar2->setInBetweenItemsOffset( { 0, -1 } );
         primskill_bar2->SetTextOff( -70, -25 );
-        primskill_bar2->SetPos( cur_pt.x + 389, cur_pt.y + 51 );
+        primskill_bar2->setRenderingOffset( { cur_pt.x + 389, cur_pt.y + 51 } );
 
         secskill_bar2.reset( new SecondarySkillsBar( *hero2, true, true ) );
-        secskill_bar2->SetColRows( 8, 1 );
-        secskill_bar2->SetHSpace( -1 );
+        secskill_bar2->setTableSize( { 8, 1 } );
+        secskill_bar2->setInBetweenItemsOffset( { -1, 0 } );
         secskill_bar2->SetContent( hero2->GetSecondarySkills().ToVector() );
-        secskill_bar2->SetPos( cur_pt.x + 353, cur_pt.y + 199 );
+        secskill_bar2->setRenderingOffset( { cur_pt.x + 353, cur_pt.y + 199 } );
 
         selectArtifacts2.reset( new ArtifactsBar( hero2, true, false, true, true, nullptr ) );
-        selectArtifacts2->SetColRows( 7, 2 );
-        selectArtifacts2->SetHSpace( 2 );
-        selectArtifacts2->SetVSpace( 2 );
+        selectArtifacts2->setTableSize( { 7, 2 } );
+        selectArtifacts2->setInBetweenItemsOffset( { 2, 2 } );
         selectArtifacts2->SetContent( hero2->GetBagArtifacts() );
-        selectArtifacts2->SetPos( cur_pt.x + 367, cur_pt.y + 347 );
+        selectArtifacts2->setRenderingOffset( { cur_pt.x + 367, cur_pt.y + 347 } );
 
         army2 = &hero2->GetArmy();
 
         selectArmy2.reset( new ArmyBar( army2, true, false, true ) );
-        selectArmy2->SetColRows( 5, 1 );
-        selectArmy2->SetPos( cur_pt.x + 381, cur_pt.y + 267 );
-        selectArmy2->SetHSpace( 2 );
+        selectArmy2->setTableSize( { 5, 1 } );
+        selectArmy2->setRenderingOffset( { cur_pt.x + 381, cur_pt.y + 267 } );
+        selectArmy2->setInBetweenItemsOffset( { 2, 0 } );
     }
 }
 

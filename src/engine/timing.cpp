@@ -33,7 +33,7 @@ namespace fheroes2
         _startTime = std::chrono::steady_clock::now();
     }
 
-    double Time::get() const
+    double Time::getS() const
     {
         const std::chrono::duration<double> time = std::chrono::steady_clock::now() - _startTime;
         return time.count();
@@ -41,7 +41,8 @@ namespace fheroes2
 
     uint64_t Time::getMs() const
     {
-        return static_cast<uint64_t>( get() * 1000 + 0.5 );
+        const auto time = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - _startTime );
+        return time.count();
     }
 
     TimeDelay::TimeDelay( const uint64_t delayMs )
@@ -61,8 +62,8 @@ namespace fheroes2
 
     bool TimeDelay::isPassed( const uint64_t delayMs ) const
     {
-        const std::chrono::duration<double> time = std::chrono::steady_clock::now() - _prevTime;
-        const uint64_t passedMs = static_cast<uint64_t>( time.count() * 1000 + 0.5 );
+        const auto time = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - _prevTime );
+        const uint64_t passedMs = time.count();
         return passedMs >= delayMs;
     }
 

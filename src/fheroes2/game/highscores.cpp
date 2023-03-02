@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,8 +21,10 @@
 #include <algorithm>
 #include <array>
 #include <ctime>
+#include <memory>
 
 #include "highscores.h"
+#include "serialize.h"
 #include "zzlib.h"
 
 namespace
@@ -64,7 +66,7 @@ namespace
                                                                    Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
                                                                    Monster::TITAN,         Monster::BLACK_DRAGON };
 
-    int32_t saveHighscoreEntry( fheroes2::HighscoreData && data, std::vector<fheroes2::HighscoreData> & entries )
+    int32_t saveHighscoreEntry( fheroes2::HighscoreData && data, std::vector<fheroes2::HighscoreData> & entries, const bool isCampaign )
     {
         auto iter = std::find( entries.begin(), entries.end(), data );
         if ( iter != entries.end() ) {
@@ -74,12 +76,10 @@ namespace
         }
 
         entries.emplace_back( data );
-        std::sort( entries.begin(), entries.end(), []( const fheroes2::HighscoreData & first, const fheroes2::HighscoreData & second ) {
-            if ( first.rating == 0 && second.rating == 0 ) {
-                // Ratings are 0 only for campaigns.
-                return first.dayCount < second.dayCount;
+        std::sort( entries.begin(), entries.end(), [isCampaign]( const fheroes2::HighscoreData & first, const fheroes2::HighscoreData & second ) {
+            if ( isCampaign ) {
+                return first.rating < second.rating;
             }
-
             return first.rating > second.rating;
         } );
 
@@ -115,7 +115,7 @@ namespace fheroes2
 
     bool HighScoreDataContainer::load( const std::string & fileName )
     {
-        ZStreamFile hdata;
+        ZStreamBuf hdata;
         if ( !hdata.read( fileName ) ) {
             return false;
         }
@@ -132,12 +132,34 @@ namespace fheroes2
 
         hdata >> _highScoresStandard >> _highScoresCampaign;
 
+        // Since the introduction of campaign difficulty we need to calculate rating of a campaign completion.
+        // Before the change rating for campaigns was always 0. We need to set it to the number of days.
+        for ( fheroes2::HighscoreData & data : _highScoresCampaign ) {
+            if ( data.rating == 0 ) {
+                data.rating = data.dayCount;
+            }
+        }
+
+        if ( _highScoresStandard.size() < highscoreMaximumEntries ) {
+            populateStandardDefaultHighScores();
+        }
+        else if ( _highScoresStandard.size() > highscoreMaximumEntries ) {
+            _highScoresStandard.resize( highscoreMaximumEntries );
+        }
+
+        if ( _highScoresCampaign.size() < highscoreMaximumEntries ) {
+            populateCampaignDefaultHighScores();
+        }
+        else if ( _highScoresCampaign.size() > highscoreMaximumEntries ) {
+            _highScoresCampaign.resize( highscoreMaximumEntries );
+        }
+
         return !hdata.fail();
     }
 
     bool HighScoreDataContainer::save( const std::string & fileName ) const
     {
-        ZStreamFile hdata;
+        ZStreamBuf hdata;
         hdata.setbigendian( true );
         hdata << highscoreFileMagicValue << _highScoresStandard << _highScoresCampaign;
 
@@ -146,12 +168,12 @@ namespace fheroes2
 
     int32_t HighScoreDataContainer::registerScoreStandard( HighscoreData && data )
     {
-        return saveHighscoreEntry( std::move( data ), _highScoresStandard );
+        return saveHighscoreEntry( std::move( data ), _highScoresStandard, false );
     }
 
     int32_t HighScoreDataContainer::registerScoreCampaign( HighscoreData && data )
     {
-        return saveHighscoreEntry( std::move( data ), _highScoresCampaign );
+        return saveHighscoreEntry( std::move( data ), _highScoresCampaign, true );
     }
 
     Monster HighScoreDataContainer::getMonsterByRating( const size_t rating )
@@ -279,15 +301,15 @@ namespace fheroes2
     {
         const uint32_t currentTime = HighscoreData::generateCompletionTime();
 
-        registerScoreCampaign( { "Antoine", "Roland", currentTime, 600, 0, 0 } );
-        registerScoreCampaign( { "Astra", "Archibald", currentTime, 650, 0, 0 } );
-        registerScoreCampaign( { "Agar", "Roland", currentTime, 700, 0, 0 } );
-        registerScoreCampaign( { "Vatawna", "Archibald", currentTime, 750, 0, 0 } );
-        registerScoreCampaign( { "Vesper", "Roland", currentTime, 800, 0, 0 } );
-        registerScoreCampaign( { "Ambrose", "Archibald", currentTime, 850, 0, 0 } );
-        registerScoreCampaign( { "Troyan", "Roland", currentTime, 900, 0, 0 } );
-        registerScoreCampaign( { "Jojosh", "Archibald", currentTime, 1000, 0, 0 } );
-        registerScoreCampaign( { "Wrathmont", "Roland", currentTime, 2000, 0, 0 } );
-        registerScoreCampaign( { "Maximus", "Archibald", currentTime, 3000, 0, 0 } );
+        registerScoreCampaign( { "Antoine", "Roland", currentTime, 600, 600, 0 } );
+        registerScoreCampaign( { "Astra", "Archibald", currentTime, 650, 650, 0 } );
+        registerScoreCampaign( { "Agar", "Roland", currentTime, 700, 700, 0 } );
+        registerScoreCampaign( { "Vatawna", "Archibald", currentTime, 750, 750, 0 } );
+        registerScoreCampaign( { "Vesper", "Roland", currentTime, 800, 800, 0 } );
+        registerScoreCampaign( { "Ambrose", "Archibald", currentTime, 850, 850, 0 } );
+        registerScoreCampaign( { "Troyan", "Roland", currentTime, 900, 900, 0 } );
+        registerScoreCampaign( { "Jojosh", "Archibald", currentTime, 1000, 1000, 0 } );
+        registerScoreCampaign( { "Wrathmont", "Roland", currentTime, 2000, 2000, 0 } );
+        registerScoreCampaign( { "Maximus", "Archibald", currentTime, 3000, 3000, 0 } );
     }
 }

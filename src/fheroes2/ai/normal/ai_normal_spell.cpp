@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,13 +18,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <ostream>
+#include <vector>
+
+#include "ai.h"
 #include "ai_normal.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "artifact_info.h"
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "battle_board.h"
+#include "battle_cell.h"
 #include "battle_troop.h"
 #include "heroes_base.h"
 #include "logging.h"
+#include "monster.h"
 #include "speed.h"
+#include "spell.h"
+#include "spell_storage.h"
 
 using namespace Battle;
 
@@ -52,7 +69,7 @@ namespace AI
             return bestSpell;
         }
 
-        const std::vector<Spell> allSpells = _commander->GetSpells();
+        const SpellStorage allSpells = _commander->getAllSpells();
         const Units friendly( arena.getForce( _myColor ).getUnits(), true );
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
 
@@ -357,7 +374,7 @@ namespace AI
         case Spell::STEELSKIN:
             ratio = 0.2;
             break;
-        // Following spell usefullness is conditional; ratio will be determined later
+        // Following spell usefulness is conditional; ratio will be determined later
         case Spell::DRAGONSLAYER:
         case Spell::ANTIMAGIC:
         case Spell::MIRRORIMAGE:
@@ -376,7 +393,7 @@ namespace AI
         else if ( spellID == Spell::ANTIMAGIC && !target.Modes( IS_GOOD_MAGIC ) && _enemySpellStrength > antimagicLowLimit ) {
             double ratioLimit = 0.9;
 
-            const std::vector<Spell> & spellList = _commander->GetSpells();
+            const SpellStorage spellList = _commander->getAllSpells();
             for ( const Spell & otherSpell : spellList ) {
                 if ( otherSpell.isResurrect() && _commander->HaveSpellPoints( otherSpell ) && target.AllowApplySpell( otherSpell, _commander ) ) {
                     // Can resurrect unit in the future, limit the ratio
@@ -489,17 +506,7 @@ namespace AI
             hpRestored = hpRestored * ( 100 + value ) / 100;
         }
 
-        // Get friendly units list including the invalid and dead ones
-        const Force & friendlyForce = arena.getForce( _myColor );
-
-        for ( const Unit * unit : friendlyForce ) {
-            if ( !unit || !unit->AllowApplySpell( spell, _commander ) )
-                continue;
-
-            // For dead units: skip if there's another unit standing on top
-            if ( !unit->isValid() && Board::GetCell( unit->GetHeadIndex() )->GetUnit() )
-                continue;
-
+        auto updateBestOutcome = [this, &spell, &bestOutcome, hpRestored]( const Unit * unit ) {
             uint32_t missingHP = unit->GetMissingHitPoints();
             missingHP = ( missingHP < hpRestored ) ? missingHP : hpRestored;
 
@@ -511,6 +518,33 @@ namespace AI
             }
 
             bestOutcome.updateOutcome( spellValue, unit->GetHeadIndex() );
+        };
+
+        // First consider the still alive stacks
+        for ( const Unit * unit : arena.getForce( _myColor ) ) {
+            assert( unit != nullptr );
+
+            if ( !unit->isValid() ) {
+                continue;
+            }
+
+            if ( !unit->AllowApplySpell( spell, _commander ) ) {
+                continue;
+            }
+
+            updateBestOutcome( unit );
+        }
+
+        // Then consider the stacks from the graveyard
+        for ( const int32_t idx : arena.GraveyardOccupiedCells() ) {
+            if ( !arena.GraveyardAllowResurrect( idx, spell ) ) {
+                continue;
+            }
+
+            const Unit * unit = arena.GraveyardLastTroop( idx );
+            assert( unit != nullptr && !unit->isValid() );
+
+            updateBestOutcome( unit );
         }
 
         return bestOutcome;
@@ -545,7 +579,7 @@ namespace AI
 
     double BattlePlanner::commanderMaximumSpellDamageValue( const HeroBase & commander )
     {
-        const std::vector<Spell> & spells = commander.GetSpells();
+        const SpellStorage spells = commander.getAllSpells();
         const double spellPower = static_cast<double>( commander.GetPower() );
 
         double bestValue = 0;

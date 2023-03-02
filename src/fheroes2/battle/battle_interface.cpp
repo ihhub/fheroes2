@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,47 +21,86 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_interface.h"
+
 #include <algorithm>
+#include <array>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
 #include <cstdlib>
+#include <functional>
+#include <initializer_list>
+#include <ostream>
+#include <set>
 
 #include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_bridge.h"
 #include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
-#include "battle_interface.h"
 #include "battle_tower.h"
 #include "battle_troop.h"
+#include "bin_info.h"
 #include "castle.h"
+#include "color.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "ground.h"
+#include "heroes_base.h"
 #include "icn.h"
 #include "interface_list.h"
+#include "localevent.h"
 #include "logging.h"
+#include "m82.h"
+#include "maps.h"
+#include "maps_tiles.h"
+#include "monster.h"
 #include "monster_anim.h"
+#include "monster_info.h"
+#include "mp2.h"
 #include "mus.h"
 #include "pal.h"
+#include "players.h"
 #include "race.h"
 #include "rand.h"
+#include "screen.h"
 #include "settings.h"
+#include "spell_book.h"
+#include "timing.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
+
+class Kingdom;
 
 namespace
 {
     const int32_t cellYOffset = -9;
 
     const int32_t armyOrderMonsterIconSize = 43; // in both directions.
+
+    // The parameters of castle buildings destruction by a catapult:
+    // Smoke cloud frame number, after which the building should be drawn as destroyed.
+    const int32_t castleBuildingDestroyFrame = 5;
+    // Bridge demolition second smoke cloud offset from the first one after the catapult attack.
+    const fheroes2::Point bridgeDestroySmokeOffset( -45, 65 );
+    // Smoke cloud frame number, after which the bridge should be drawn as destroyed.
+    const int32_t bridgeDestroyFrame = 6;
+    // The number of frames the second smoke cloud is delayed by.
+    const int32_t bridgeDestroySmokeDelay = 2;
 
     struct LightningPoint
     {
@@ -95,7 +134,7 @@ namespace
         return std::atan2( end.y - start.y, end.x - start.x );
     }
 
-    std::vector<std::pair<LightningPoint, LightningPoint> > GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
+    std::vector<std::pair<LightningPoint, LightningPoint>> GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
     {
         const int distance = static_cast<int>( getDistance( src, dst ) );
         const double angle = getAngle( src, dst );
@@ -106,13 +145,13 @@ namespace
         if ( iterationCount > 5 )
             iterationCount = 5;
 
-        std::vector<std::pair<LightningPoint, LightningPoint> > lines;
+        std::vector<std::pair<LightningPoint, LightningPoint>> lines;
         lines.emplace_back( LightningPoint( { 0, 0 }, 5 ), LightningPoint( { distance, 0 }, 3 ) );
 
         int maxOffset = distance;
 
         for ( int step = 0; step < iterationCount; ++step ) {
-            std::vector<std::pair<LightningPoint, LightningPoint> > oldLines;
+            std::vector<std::pair<LightningPoint, LightningPoint>> oldLines;
             std::swap( lines, oldLines );
 
             for ( size_t i = 0; i < oldLines.size(); ++i ) {
@@ -153,7 +192,7 @@ namespace
         return lines;
     }
 
-    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, uint8_t color, fheroes2::Image & surface,
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint>> & lightning, uint8_t color, fheroes2::Image & surface,
                           const fheroes2::Rect & roi = fheroes2::Rect() )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
@@ -183,22 +222,126 @@ namespace
         }
     }
 
-    bool preferAttackFromHead( const Battle::Unit & attacker, const int /* theme */ )
+    void GetHalfArc( std::vector<int32_t> & arc, int32_t width, const int32_t height, const int32_t pow1, const int32_t pow2, const double pow2Ratio )
     {
-        if ( !attacker.isWide() ) {
-            return true;
+        // For positive width the arc will start from y = 0, for negative it will end at y = 0.
+        const int32_t x0 = ( width < 0 ) ? width : 0;
+
+        // For positive height the arc top will be y = 0, for negative - arc will be flipped for 'y' coordinate.
+        // TODO: consider height offset from previous arc part.
+        const int32_t y0 = ( height < 0 ) ? height : 0;
+
+        // Coefficients for multipliers of 'pow1' and 'pow2' degrees.
+        const double k1 = ( height * ( 1 - pow2Ratio ) ) / std::pow( width, pow1 );
+        const double k2 = ( height * pow2Ratio ) / std::pow( width, pow2 );
+
+        width = std::abs( width );
+        // Calculate 'y' coordinates for the arc: y = k1*(x-x0)^pow1+k2*(x-x0)^pow2 and push it to the 'arc' vector.
+        for ( int32_t x = 0; x < width; ++x ) {
+            arc.push_back( static_cast<int32_t>( k1 * std::pow( ( x + x0 ), pow1 ) + k2 * std::pow( ( x + x0 ), pow2 ) - y0 ) );
         }
+    }
 
-        return true;
+    fheroes2::Image DrawRainbow( const std::vector<int32_t> & rainbowArc, const int32_t rainbowThickness, const bool isVertical, const bool flipHorizontally )
+    {
+        // Rainbow image size should include the arc size plus the thickness of the rainbow.
+        const int32_t rainbowWidth = static_cast<int32_t>( rainbowArc.size() );
+        const int32_t rainbowHeight = *std::max_element( rainbowArc.begin(), rainbowArc.end() ) + rainbowThickness;
 
-        /* TODO: example code for implementing direct up/down attacks
-        if ( attacker.isReflect() ) {
-            return theme != Cursor::SWORD_TOPRIGHT && theme != Cursor::SWORD_BOTTOMRIGHT;
+        // If the rainbow is vertical - swap width and height.
+        const int32_t rainbowImgWidth = isVertical ? rainbowHeight : rainbowWidth;
+        const int32_t rainbowImgHeight = isVertical ? rainbowWidth : rainbowHeight;
+        fheroes2::Image rainbow( rainbowImgWidth, rainbowImgHeight );
+        rainbow.reset();
+        std::vector<int32_t>::const_iterator pnt = rainbowArc.begin();
+
+        // Get the original good luck sprite, since it has a rainbow image which will be used to get line.
+        const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
+
+        // Get a single rainbow line from the center of the luckSprite.
+        fheroes2::Image croppedRainbow( 1, rainbowThickness );
+        fheroes2::Copy( luckSprite, luckSprite.width() / 2, 0, croppedRainbow, 0, 0, 1, rainbowThickness );
+        fheroes2::Image rainbowLine;
+        if ( isVertical ) {
+            rainbowLine = fheroes2::Image( croppedRainbow.height(), croppedRainbow.width() );
+            // For a vertical rainbow orientation the line needs to be transposed.
+            fheroes2::Transpose( croppedRainbow, rainbowLine );
+            if ( !flipHorizontally ) {
+                rainbowLine = fheroes2::Flip( rainbowLine, true, false );
+            }
         }
         else {
-            return theme != Cursor::SWORD_TOPLEFT && theme != Cursor::SWORD_BOTTOMLEFT;
+            rainbowLine = std::move( croppedRainbow );
         }
-        */
+
+        // Draw a rainbow image for each 'x' coordinate and corresponding '*pnt' value.
+        for ( int32_t x = 0; pnt != rainbowArc.end(); ++x, ++pnt ) {
+            // Set the 'x' and 'y' coordinates of the current rainbow pixel in the resulting rainbow image according to the rainbow direction.
+            const int32_t imgX = isVertical ? ( flipHorizontally ? *pnt : rainbowImgWidth - *pnt - rainbowThickness ) : ( flipHorizontally ? rainbowImgWidth - x : x );
+            const int32_t imgY = isVertical ? x : *pnt;
+
+            // Insert a rainbow line at the current arc position.
+            fheroes2::Copy( rainbowLine, 0, 0, rainbow, imgX, imgY, rainbowLine.width(), rainbowLine.height() );
+        }
+        return rainbow;
+    }
+
+    fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
+    {
+        const fheroes2::Rect & pos = target.GetRectPosition();
+
+        // Get the sprite for the first frame, so its center won't shift if the creature is animating (instead of target.GetFrame()).
+        const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.animation.firstFrame() );
+
+        // Bottom-left corner (default) position with spell offset applied
+        fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.height + cellYOffset + spellSprite.y() );
+
+        switch ( spellICN ) {
+        case ICN::SHIELD:
+            // in front of the unit
+            result.x += target.isReflect() ? -pos.width / ( target.isWide() ? 2 : 1 ) : pos.width;
+            result.y += unitSprite.y() / 2;
+            break;
+        case ICN::BLIND: {
+            // unit's eyes
+            const fheroes2::Point & offset = target.animation.getBlindOffset();
+
+            // calculate OG Heroes2 unit position to apply offset to
+            const int rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.width * 3 / 4 : CELLW / 2;
+
+            // Overwrite result with custom blind value
+            result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
+            result.y += offset.y;
+            break;
+        }
+        case ICN::STONSKIN:
+        case ICN::STELSKIN:
+            // bottom center point
+            result.x += pos.width / 2;
+            break;
+        case ICN::REDDEATH:
+            // Shift spell sprite position for a wide creature to its head.
+            result.x += pos.width / 2 + ( target.isReflect() ? ( 1 - spellSprite.width() - 2 * spellSprite.x() - pos.width / 8 ) : ( pos.width / 8 ) );
+            result.y -= pos.height - 4;
+            break;
+        case ICN::MAGIC08:
+            // Position shifts for the Holy Shout spell to be closer to OG.
+            result.x += pos.width / 2 + ( target.isReflect() ? 12 : 0 );
+            result.y += unitSprite.y() / 2 - 1;
+            break;
+        default:
+            // center point of the unit
+            result.x += pos.width / 2;
+            result.y += unitSprite.y() / 2;
+            break;
+        }
+
+        if ( result.y < 0 ) {
+            const int maximumY = fheroes2::AGG::GetAbsoluteICNHeight( spellICN );
+            result.y = maximumY + spellSprite.y();
+        }
+
+        return result;
     }
 }
 
@@ -208,16 +351,6 @@ namespace Battle
     int GetSwordCursorDirection( int );
     int GetDirectionFromCursorSword( uint32_t sword );
     int GetCursorFromSpell( int );
-
-    struct CursorPosition
-    {
-        CursorPosition()
-            : index( -1 )
-        {}
-
-        fheroes2::Point coord;
-        int32_t index;
-    };
 
     class StatusListBox : public ::Interface::ListBox<std::string>
     {
@@ -247,7 +380,7 @@ namespace Battle
 
             const int32_t scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7;
 
-            setScrollBarArea( { ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12, scrollbarSliderAreaLength} );
+            setScrollBarArea( { ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12, scrollbarSliderAreaLength } );
 
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
             const fheroes2::Image scrollbarSlider
@@ -258,7 +391,6 @@ namespace Battle
             _scrollbar.hide();
             SetAreaItems( { area.x, area.y, area.width - 10, area.height } );
             SetListContent( messages );
-            _scrollbar.show();
         }
 
         const fheroes2::Rect & GetArea() const
@@ -266,14 +398,15 @@ namespace Battle
             return border.GetRect();
         }
 
-        void AddMessage( const std::string & str )
+        void AddMessage( std::string str )
         {
-            messages.push_back( str );
-            SetListContent( messages );
-            SetCurrent( messages.size() - 1 );
+            messages.push_back( std::move( str ) );
             if ( !openlog ) {
                 _scrollbar.hide();
             }
+
+            SetListContent( messages );
+            SetCurrent( messages.size() - 1 );
 
             const int32_t scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7;
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
@@ -397,13 +530,21 @@ namespace Battle
         if ( heroTypeAnim[heroType][animation].empty() ) {
             const int sourceArray[7][9][9] = {
                 //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
-                {{6, 7, 8, 9, 8, 9, 8, 7, 6}, {10, 11}, {10}, {6, 12, 13}, {12, 6}, {2, 14}, {2}, {15, 16, 17}, {18, 19}}, // KNIGHT
-                {{6, 7, 8, 9, 9, 8, 7, 6}, {6, 10, 11}, {10, 6}, {6, 12, 13}, {12, 6}, {6, 14}, {6}, {15, 16, 17}, {18}}, // BARBARIAN
-                {{6, 7, 8, 7, 6}, {6, 7, 9}, {7, 6}, {6, 10, 11}, {10, 6}, {6, 12}, {6}, {13, 14, 15}, {16}}, // SORCERESS
-                {{6, 7, 8, 9, 10, 9, 8, 7, 6}, {6, 7, 11, 12}, {11, 6}, {6, 7, 13}, {6}, {6, 14}, {6}, {15, 16}, {6}}, // WARLOCK
-                {{6, 7, 8, 9, 8, 7, 6}, {6, 10, 11, 12, 13}, {12, 11, 10, 6}, {6, 14}, {6}, {6, 15}, {6}, {16, 17}, {18}}, // WIZARD
-                {{6, 7, 6, 7, 6, 7}, {7, 8, 9, 10, 11}, {10, 9, 7}, {7, 12, 13, 14, 15}, {7}, {7, 12, 13, 14, 16}, {7}, {17}, {18, 19}}, // NECROMANCER
-                {{1}, {2, 3, 4}, {3, 2}, {5, 6}, {5}, {5, 7}, {5}, {8, 9}, {10}} // CAPTAIN
+                { { 6, 7, 8, 9, 8, 9, 8, 7, 6 }, { 10, 11 }, { 10 }, { 6, 12, 13 }, { 12, 6 }, { 2, 14 }, { 2 }, { 15, 16, 17 }, { 18, 19 } }, // KNIGHT
+                { { 6, 7, 8, 9, 9, 8, 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12, 13 }, { 12, 6 }, { 6, 14 }, { 6 }, { 15, 16, 17 }, { 18 } }, // BARBARIAN
+                { { 6, 7, 8, 7, 6 }, { 6, 7, 9 }, { 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12 }, { 6 }, { 13, 14, 15 }, { 16 } }, // SORCERESS
+                { { 6, 7, 8, 9, 10, 9, 8, 7, 6 }, { 6, 7, 11, 12 }, { 11, 6 }, { 6, 7, 13 }, { 6 }, { 6, 14 }, { 6 }, { 15, 16 }, { 6 } }, // WARLOCK
+                { { 6, 7, 8, 9, 8, 7, 6 }, { 6, 10, 11, 12, 13 }, { 12, 11, 10, 6 }, { 6, 14 }, { 6 }, { 6, 15 }, { 6 }, { 16, 17 }, { 18 } }, // WIZARD
+                { { 6, 7, 6, 7, 6, 7 },
+                  { 7, 8, 9, 10, 11 },
+                  { 10, 9, 7 },
+                  { 7, 12, 13, 14, 15 },
+                  { 7 },
+                  { 7, 12, 13, 14, 16 },
+                  { 7 },
+                  { 17 },
+                  { 18, 19 } }, // NECROMANCER
+                { { 1 }, { 2, 3, 4 }, { 3, 2 }, { 5, 6 }, { 5 }, { 5, 7 }, { 5 }, { 8, 9 }, { 10 } } // CAPTAIN
             };
 
             for ( int frame = 0; frame < 9; ++frame ) {
@@ -448,19 +589,21 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
 
-    fheroes2::DrawLine( sf, { r, 0 }, { 0, l }, colorId );
-    fheroes2::DrawLine( sf, { r, 0 }, { w, l }, colorId );
+    fheroes2::DrawLine( sf, { r - 1, 1 }, { 0, l + 1 }, colorId );
+    fheroes2::SetPixel( sf, r, 1, colorId );
+    fheroes2::DrawLine( sf, { r + 1, 1 }, { w, l + 1 }, colorId );
 
     fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
     fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
 
-    fheroes2::DrawLine( sf, { r, h }, { 0, h - l }, colorId );
-    fheroes2::DrawLine( sf, { r, h }, { w, h - l }, colorId );
+    fheroes2::DrawLine( sf, { r - 1, h }, { 0, h - l }, colorId );
+    fheroes2::SetPixel( sf, r, h, colorId );
+    fheroes2::DrawLine( sf, { r + 1, h }, { w, h - l }, colorId );
 
     return sf;
 }
 
-fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
+fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue, const int32_t horizSpace )
 {
     const int l = 13;
     const int w = CELLW;
@@ -468,17 +611,17 @@ fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
 
     fheroes2::Image sf( w, h );
     sf.reset();
-    fheroes2::Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
+    fheroes2::Rect rt( horizSpace, l - 1, w + 1 - horizSpace * 2, 2 * l + 4 );
     for ( int i = 0; i < w / 2; i += 2 ) {
-        --rt.y;
-        rt.height += 2;
-        rt.x += 2;
-        rt.width -= 4;
         for ( int x = 0; x < rt.width; ++x ) {
             for ( int y = 0; y < rt.height; ++y ) {
                 fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
             }
         }
+        --rt.y;
+        rt.height += 2;
+        rt.x += ( i == 0 ) ? 1 : 2;
+        rt.width -= ( i == 0 ) ? 2 : 4;
     }
 
     return sf;
@@ -656,11 +799,11 @@ Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroB
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( _heroIcnId, _currentAnim.getFrame() );
 
     if ( reflect ) {
-        pos.x = _offset.x + fheroes2::Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.width() );
+        pos.x = _offset.x + fheroes2::Display::DEFAULT_WIDTH - RIGHT_HERO_X_OFFSET - ( sprite.x() + sprite.width() );
         pos.y = _offset.y + RIGHT_HERO_Y_OFFSET + sprite.y();
     }
     else {
-        pos.x = _offset.x + HERO_X_OFFSET + sprite.x();
+        pos.x = _offset.x + LEFT_HERO_X_OFFSET + sprite.x();
         pos.y = _offset.y + LEFT_HERO_Y_OFFSET + sprite.y();
     }
 
@@ -737,26 +880,31 @@ void Battle::OpponentSprite::Redraw( fheroes2::Image & dst ) const
     }
 
     if ( reflect )
-        fheroes2::Blit( hero, dst, offset.x + fheroes2::Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.width() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y(),
-                        reflect );
+        fheroes2::Blit( hero, dst, offset.x + fheroes2::Display::DEFAULT_WIDTH - RIGHT_HERO_X_OFFSET - ( hero.x() + hero.width() ),
+                        offset.y + RIGHT_HERO_Y_OFFSET + hero.y(), reflect );
     else
-        fheroes2::Blit( hero, dst, offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
+        fheroes2::Blit( hero, dst, offset.x + LEFT_HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
 }
 
-void Battle::OpponentSprite::Update()
+bool Battle::OpponentSprite::updateAnimationState()
 {
     if ( _currentAnim.isLastFrame() ) {
         if ( _animationType != OP_STATIC ) {
-            if ( _animationType != OP_CAST_MASS && _animationType != OP_CAST_UP && _animationType != OP_CAST_DOWN )
+            if ( _animationType != OP_CAST_MASS && _animationType != OP_CAST_UP && _animationType != OP_CAST_DOWN ) {
                 SetAnimation( OP_STATIC );
+                return true;
+            }
         }
         else if ( _idleTimer.checkDelay() ) {
             SetAnimation( ( Rand::Get( 1, 3 ) < 2 ) ? OP_IDLE2 : OP_IDLE );
+            return true;
         }
+
+        return false;
     }
-    else {
-        _currentAnim.playAnimation();
-    }
+
+    IncreaseAnimFrame();
+    return true;
 }
 
 Battle::Status::Status()
@@ -790,11 +938,10 @@ void Battle::Status::SetMessage( const std::string & str, bool top )
     }
 }
 
-void Battle::Status::Redraw() const
+void Battle::Status::Redraw( fheroes2::Image & output ) const
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Blit( back1, display, x, y );
-    fheroes2::Blit( back2, display, x, y + back1.height() );
+    fheroes2::Blit( back1, output, x, y );
+    fheroes2::Blit( back2, output, x, y + back1.height() );
 
     if ( bar1.Size() )
         bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 2 );
@@ -809,40 +956,44 @@ void Battle::Status::clear()
 }
 
 Battle::ArmiesOrder::ArmiesOrder()
-    : orders( nullptr )
-    , army_color2( 0 )
+    : _army2Color( 0 )
 {
     // Do nothing.
 }
 
-void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const Units * units, int color )
+void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color )
 {
-    area = rt;
-    orders = units;
-    army_color2 = color;
-    if ( units )
-        rects.reserve( units->size() );
+    _area = rt;
+    _orders = units;
+    _army2Color = army2Color;
+
+    if ( units ) {
+        _rects.reserve( units->size() );
+    }
 }
 
-void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset )
+void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
-    for ( std::vector<UnitPos>::const_iterator it = rects.begin(); it != rects.end(); ++it )
-        if ( ( *it ).first ) {
-            const fheroes2::Rect unitRoi = ( *it ).second + offset;
-            if ( le.MouseCursor( unitRoi ) ) {
-                msg = _( "View %{monster} info" );
-                StringReplace( msg, "%{monster}", ( *it ).first->GetName() );
-            }
+    for ( const UnitPos & unitPos : _rects ) {
+        assert( unitPos.first != nullptr );
 
-            const Unit & unit = *( *it ).first;
-
-            if ( le.MouseClickLeft( unitRoi ) )
-                Dialog::ArmyInfo( unit, Dialog::READONLY | Dialog::BUTTONS, unit.isReflect() );
-            else if ( le.MousePressRight( unitRoi ) )
-                Dialog::ArmyInfo( unit, Dialog::READONLY, unit.isReflect() );
+        const fheroes2::Rect unitRoi = unitPos.second + offset;
+        if ( le.MouseCursor( unitRoi ) ) {
+            msg = _( "View %{monster} info" );
+            StringReplaceWithLowercase( msg, "%{monster}", unitPos.first->GetName() );
         }
+
+        const Unit & unit = *( unitPos.first );
+
+        if ( le.MouseClickLeft( unitRoi ) ) {
+            Dialog::ArmyInfo( unit, Dialog::BUTTONS, unit.isReflect() );
+        }
+        else if ( le.MousePressRight( unitRoi ) ) {
+            Dialog::ArmyInfo( unit, Dialog::ZERO, unit.isReflect() );
+        }
+    }
 }
 
 void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
@@ -908,32 +1059,34 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
 
 void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
 {
-    if ( orders == nullptr ) {
+    if ( _orders.expired() ) {
         // Nothing to show.
         return;
     }
+
+    const std::shared_ptr<const Units> orders = _orders.lock();
 
     const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) {
         assert( unit != nullptr );
         return unit->isValid();
     } ) );
 
-    const int32_t maximumUnitsToDraw = area.width / armyOrderMonsterIconSize;
+    const int32_t maximumUnitsToDraw = _area.width / armyOrderMonsterIconSize;
 
-    int32_t offsetX = area.x;
+    int32_t offsetX = _area.x;
 
     if ( validUnitCount > maximumUnitsToDraw ) {
-        offsetX += ( area.width - armyOrderMonsterIconSize * maximumUnitsToDraw ) / 2;
+        offsetX += ( _area.width - armyOrderMonsterIconSize * maximumUnitsToDraw ) / 2;
     }
     else {
-        offsetX += ( area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
+        offsetX += ( _area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
     }
 
     fheroes2::Rect::x = offsetX;
-    fheroes2::Rect::y = area.y;
+    fheroes2::Rect::y = _area.y;
     fheroes2::Rect::height = armyOrderMonsterIconSize;
 
-    rects.clear();
+    _rects.clear();
 
     int32_t unitsDrawn = 0;
     int32_t unitsProcessed = 0;
@@ -953,8 +1106,8 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
             continue;
         }
 
-        rects.emplace_back( unit, fheroes2::Rect( offsetX, area.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
-        RedrawUnit( rects.back().second, *unit, unit->GetColor() == army_color2, current == unit, currentUnitColor, output );
+        _rects.emplace_back( unit, fheroes2::Rect( offsetX, _area.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
+        RedrawUnit( _rects.back().second, *unit, unit->GetColor() == _army2Color, current == unit, currentUnitColor, output );
         offsetX += armyOrderMonsterIconSize;
         fheroes2::Rect::width += armyOrderMonsterIconSize;
 
@@ -963,8 +1116,8 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
     }
 }
 
-Battle::Interface::Interface( Arena & a, int32_t center )
-    : arena( a )
+Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
+    : arena( battleArena )
     , _surfaceInnerArea( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , _mainSurface( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , icn_cbkg( ICN::UNKNOWN )
@@ -974,9 +1127,10 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     , humanturn_redraw( true )
     , animation_flags_frame( 0 )
     , catapult_frame( 0 )
-    , _breakAutoBattleForColor( 0 )
+    , _interruptAutoBattleForColor( 0 )
     , _contourColor( 110 )
     , _brightLandType( false )
+    , _contourCycle( 0 )
     , _currentUnit( nullptr )
     , _movingUnit( nullptr )
     , _flyingUnit( nullptr )
@@ -1000,8 +1154,8 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     popup.setBattleUIRect( _interfacePosition );
 
     // cover
-    const bool trees = !Maps::ScanAroundObject( center, MP2::OBJ_TREES ).empty();
-    const Maps::Tiles & tile = world.GetTiles( center );
+    const bool trees = !Maps::ScanAroundObject( tileIndex, MP2::OBJ_TREES ).empty();
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
     const int groundType = tile.GetGround();
     _brightLandType
@@ -1052,9 +1206,13 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     }
 
     // hexagon
-    sf_hexagon = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
-    sf_cursor = DrawHexagonShadow( 2 );
-    sf_shadow = DrawHexagonShadow( 4 );
+    _hexagonGrid = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
+    // Shadow under the cursor: the first parameter is the shadow strength (smaller is stronger), the second is the distance between the hexagonal shadows.
+    _hexagonCursorShadow = DrawHexagonShadow( 2, 1 );
+    // Hexagon shadow for the case when grid is disabled.
+    _hexagonShadow = DrawHexagonShadow( 4, 2 );
+    // Shadow that fits the hexagon grid.
+    _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
@@ -1073,27 +1231,16 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     btn_auto.setPosition( area.x, area.y + area.height - settingsRect.height - autoRect.height );
     btn_settings.setPosition( area.x, area.y + area.height - settingsRect.height );
 
-    if ( conf.ExtBattleSoftWait() ) {
-        btn_wait.setICNInfo( ICN::BATTLEWAIT, 0, 1 );
-        btn_skip.setICNInfo( ICN::BATTLESKIP, 0, 1 );
-
-        const fheroes2::Rect waitRect = btn_wait.area();
-        const fheroes2::Rect skipRect = btn_skip.area();
-        btn_wait.setPosition( area.x + area.width - waitRect.width, area.y + area.height - skipRect.height - waitRect.height );
-        btn_skip.setPosition( area.x + area.width - skipRect.width, area.y + area.height - skipRect.height );
-    }
-    else {
-        btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
-        btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
-    }
+    btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
+    btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
 
     status.SetPosition( area.x + settingsRect.width, btn_auto.area().y );
 
-    listlog = new StatusListBox();
+    listlog = std::make_unique<StatusListBox>();
 
     if ( listlog )
         listlog->SetPosition( area.x, area.y + area.height - status.height );
-    status.SetLogs( listlog );
+    status.SetLogs( listlog.get() );
 
     AudioManager::ResetAudio();
 
@@ -1107,17 +1254,15 @@ Battle::Interface::~Interface()
 {
     AudioManager::ResetAudio();
 
-    if ( listlog )
-        delete listlog;
     if ( opponent1 )
         delete opponent1;
     if ( opponent2 )
         delete opponent2;
 }
 
-void Battle::Interface::SetArmiesOrder( const Units * units )
+void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
 {
-    armies_order.Set( GetArea(), units, arena.GetArmyColor2() );
+    armies_order.Set( GetArea(), units, arena.GetArmy2Color() );
 }
 
 fheroes2::Point Battle::Interface::GetMouseCursor() const
@@ -1142,11 +1287,11 @@ void Battle::Interface::UpdateContourColor()
     ++_contourCycle;
 
     if ( _brightLandType ) {
-        static const uint8_t contourColorTable[] = {108, 115, 122, 129, 122, 115};
+        static const std::array<const uint8_t, 6> contourColorTable = { 108, 115, 122, 129, 122, 115 };
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
     else {
-        static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
+        static const std::array<const uint8_t, 8> contourColorTable = { 110, 114, 118, 122, 126, 122, 118, 114 };
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
 }
@@ -1154,7 +1299,7 @@ void Battle::Interface::UpdateContourColor()
 void Battle::Interface::fullRedraw()
 {
     if ( !_background ) {
-        _background.reset( new fheroes2::StandardWindow( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+        _background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
     }
 
     Redraw();
@@ -1176,18 +1321,18 @@ void Battle::Interface::RedrawPartialFinish()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( Settings::Get().BattleShowArmyOrder() )
+    if ( Settings::Get().BattleShowArmyOrder() ) {
         armies_order.Redraw( _currentUnit, _contourColor, _mainSurface );
+    }
 
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() ) {
-        const Board & board = *Arena::GetBoard();
-        for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-            uint32_t distance = arena.CalculateMoveDistance( it->GetIndex() );
-            if ( distance != MAX_MOVE_COST ) {
-                Text text( std::to_string( distance ), Font::SMALL );
-                text.Blit( ( *it ).GetPos().x + 20, ( *it ).GetPos().y + 22, _mainSurface );
-            }
+        const Board * board = Arena::GetBoard();
+        assert( board != nullptr );
+
+        for ( const Cell & cell : *board ) {
+            Text text( std::to_string( cell.GetIndex() ), Font::SMALL );
+            text.Blit( cell.GetPos().x + 20, cell.GetPos().y + 22, _mainSurface );
         }
     }
 #endif
@@ -1200,15 +1345,10 @@ void Battle::Interface::RedrawPartialFinish()
 
 void Battle::Interface::RedrawInterface()
 {
-    const Settings & conf = Settings::Get();
-
-    status.Redraw();
+    status.Redraw( fheroes2::Display::instance() );
 
     btn_auto.draw();
     btn_settings.draw();
-
-    if ( conf.ExtBattleSoftWait() )
-        btn_wait.draw();
     btn_skip.draw();
 
     popup.Redraw();
@@ -1259,6 +1399,11 @@ void Battle::Interface::RedrawArmies()
             std::vector<const Unit *> movingTroopBeforeWall;
             std::vector<const Unit *> movingTroopAfterWall;
 
+            // Overlay sprites for troops (i.e. spell effect animation) should be rendered after rendering all troops
+            // for current row so the next troop will not be rendered over the overlay sprite.
+            std::vector<const UnitSpellEffectInfo *> troopOverlaySpriteBeforeWall;
+            std::vector<const UnitSpellEffectInfo *> troopOverlaySpriteAfterWall;
+
             const int32_t wallCellId = wallCellIds[cellRowId];
 
             for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
@@ -1281,9 +1426,23 @@ void Battle::Interface::RedrawArmies()
                     if ( deadUnits[i] && cellId != deadUnits[i]->GetTailIndex() ) {
                         if ( isCellBefore ) {
                             deadTroopBeforeWall.emplace_back( deadUnits[i] );
+
+                            // Check for overlay sprites of dead units (i.e. Resurrect spell).
+                            for ( const Battle::UnitSpellEffectInfo & overlaySprite : _unitSpellEffectInfos ) {
+                                if ( overlaySprite.unitId == deadUnits[i]->GetUID() ) {
+                                    troopOverlaySpriteBeforeWall.emplace_back( &overlaySprite );
+                                }
+                            }
                         }
                         else {
                             deadTroopAfterWall.emplace_back( deadUnits[i] );
+
+                            // Check for overlay sprites of dead units (i.e. Resurrect spell).
+                            for ( const Battle::UnitSpellEffectInfo & overlaySprite : _unitSpellEffectInfos ) {
+                                if ( overlaySprite.unitId == deadUnits[i]->GetUID() ) {
+                                    troopOverlaySpriteAfterWall.emplace_back( &overlaySprite );
+                                }
+                            }
                         }
                     }
                 }
@@ -1318,6 +1477,18 @@ void Battle::Interface::RedrawArmies()
                         movingTroopAfterWall.emplace_back( unitOnCell );
                     }
                 }
+
+                // Check for overlay sprites for 'unitOnCell'.
+                for ( const Battle::UnitSpellEffectInfo & overlaySprite : _unitSpellEffectInfos ) {
+                    if ( overlaySprite.unitId == unitOnCell->GetUID() ) {
+                        if ( isCellBefore ) {
+                            troopOverlaySpriteBeforeWall.emplace_back( &overlaySprite );
+                        }
+                        else {
+                            troopOverlaySpriteAfterWall.emplace_back( &overlaySprite );
+                        }
+                    }
+                }
             }
 
             for ( size_t i = 0; i < deadTroopBeforeWall.size(); ++i ) {
@@ -1334,6 +1505,13 @@ void Battle::Interface::RedrawArmies()
 
             for ( size_t i = 0; i < movingTroopBeforeWall.size(); ++i ) {
                 RedrawTroopSprite( *movingTroopBeforeWall[i] );
+            }
+
+            // Render the overlay sprite for units in current cell row above all units in this and upper rows.
+            for ( const Battle::UnitSpellEffectInfo * overlaySprite : troopOverlaySpriteBeforeWall ) {
+                assert( overlaySprite->icnId != ICN::UNKNOWN );
+                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite->icnId, overlaySprite->icnIndex );
+                fheroes2::Blit( spellSprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->isReflectedImage );
             }
 
             RedrawCastle( *castle, wallCellId );
@@ -1353,15 +1531,32 @@ void Battle::Interface::RedrawArmies()
             for ( size_t i = 0; i < movingTroopAfterWall.size(); ++i ) {
                 RedrawTroopSprite( *movingTroopAfterWall[i] );
             }
+
+            // Render the overlay sprite for units in current cell row above all units in this and upper rows.
+            for ( const Battle::UnitSpellEffectInfo * overlaySprite : troopOverlaySpriteAfterWall ) {
+                assert( overlaySprite->icnId != ICN::UNKNOWN );
+                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite->icnId, overlaySprite->icnIndex );
+                fheroes2::Blit( spellSprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->isReflectedImage );
+            }
         }
         else {
             std::vector<const Unit *> troopCounter;
             std::vector<const Unit *> troop;
             std::vector<const Unit *> movingTroop;
+            std::vector<const UnitSpellEffectInfo *> troopOverlaySprite;
 
             // Redraw monsters.
             for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
                 const int32_t cellId = cellRowId * ARENAW + cellColumnId;
+
+                // Check for overlay sprites of dead units (i.e. Resurrect spell).
+                for ( const Unit * deadUnit : arena.GetGraveyardTroops( cellId ) ) {
+                    for ( const Battle::UnitSpellEffectInfo & overlaySprite : _unitSpellEffectInfos ) {
+                        if ( overlaySprite.unitId == deadUnit->GetUID() ) {
+                            troopOverlaySprite.emplace_back( &overlaySprite );
+                        }
+                    }
+                }
 
                 const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
                 if ( unitOnCell == nullptr || _flyingUnit == unitOnCell || cellId == unitOnCell->GetTailIndex() ) {
@@ -1380,6 +1575,13 @@ void Battle::Interface::RedrawArmies()
                 else {
                     movingTroop.emplace_back( unitOnCell );
                 }
+
+                // Check for overlay sprites for 'unitOnCell'.
+                for ( const Battle::UnitSpellEffectInfo & overlaySprite : _unitSpellEffectInfos ) {
+                    if ( overlaySprite.unitId == unitOnCell->GetUID() ) {
+                        troopOverlaySprite.emplace_back( &overlaySprite );
+                    }
+                }
             }
 
             // Redraw monster counters.
@@ -1394,6 +1596,13 @@ void Battle::Interface::RedrawArmies()
             for ( size_t i = 0; i < movingTroop.size(); ++i ) {
                 RedrawTroopSprite( *movingTroop[i] );
             }
+
+            // Render the overlay sprite for units in current cell row above all units in this and upper rows.
+            for ( const Battle::UnitSpellEffectInfo * overlaySprite : troopOverlaySprite ) {
+                assert( overlaySprite->icnId != ICN::UNKNOWN );
+                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( overlaySprite->icnId, overlaySprite->icnIndex );
+                fheroes2::Blit( spellSprite, _mainSurface, overlaySprite->position.x, overlaySprite->position.y, overlaySprite->isReflectedImage );
+            }
         }
 
         // Redraw heroes.
@@ -1405,6 +1614,9 @@ void Battle::Interface::RedrawArmies()
     if ( _flyingUnit ) {
         RedrawTroopSprite( *_flyingUnit );
     }
+
+    // Continue the idle animation for all troops on the battlefield.
+    IdleTroopsAnimation();
 }
 
 void Battle::Interface::RedrawOpponents()
@@ -1422,7 +1634,7 @@ void Battle::Interface::RedrawOpponentsFlags()
     if ( opponent1 ) {
         int icn = ICN::UNKNOWN;
 
-        switch ( arena.GetArmyColor1() ) {
+        switch ( arena.GetArmy1Color() ) {
         case Color::BLUE:
             icn = ICN::HEROFL00;
             break;
@@ -1447,7 +1659,7 @@ void Battle::Interface::RedrawOpponentsFlags()
         }
 
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ) );
-        fheroes2::Blit( flag, _mainSurface, opponent1->Offset().x + OpponentSprite::HERO_X_OFFSET + flag.x(),
+        fheroes2::Blit( flag, _mainSurface, opponent1->Offset().x + OpponentSprite::LEFT_HERO_X_OFFSET + flag.x(),
                         opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
     }
 
@@ -1480,7 +1692,7 @@ void Battle::Interface::RedrawOpponentsFlags()
 
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ) );
         const fheroes2::Point offset = opponent2->Offset();
-        fheroes2::Blit( flag, _mainSurface, offset.x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.width() ),
+        fheroes2::Blit( flag, _mainSurface, offset.x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::RIGHT_HERO_X_OFFSET - ( flag.x() + flag.width() ),
                         offset.y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y(), true );
     }
 }
@@ -1563,44 +1775,50 @@ void Battle::Interface::RedrawTroopSprite( const Unit & unit )
 
 fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite )
 {
-    const fheroes2::Rect & rt = unit.GetRectPosition();
-    fheroes2::Point sp = GetTroopPosition( unit, troopSprite );
+    const fheroes2::Rect & unitPosition = unit.GetRectPosition();
+    // Get the sprite rendering offset.
+    fheroes2::Point offset = GetTroopPosition( unit, troopSprite );
 
     if ( _movingUnit == &unit ) {
         // Monster is moving.
-        // Here we're getting the first frame and then based on the offset from the first frame we calculate the position of the current frame.
-        // TODO: verify if it's the correct way as we have issues for monster movement animation.
-        const int monsterIcnId = unit.GetMonsterSprite();
-        const fheroes2::Sprite & firstMonsterFrame = fheroes2::AGG::GetICN( monsterIcnId, _movingUnit->animation.firstFrame() );
-        const int32_t ox = troopSprite.x() - firstMonsterFrame.x();
+        // Unit coordinates relevant to its position are set in Sprite coordinates 'x'  and 'y' (some values may be set incorrectly).
+        // The offset data from BIN file is used in Monster info dialog and to correct horizontal movement range when moving diagonally.
+        // IMPORTANT: The 'x' offset from BIN file cannot be used in horizontal movement animation as
+        // it does not take into account the uneven movement during the step. Use sprite 'x' coordinate for this purpose.
 
         if ( _movingUnit->animation.animationLength() ) {
-            const int32_t cx = _movingPos.x - rt.x;
-            const int32_t cy = _movingPos.y - rt.y;
+            // Get the horizontal and vertical movement projections.
+            const int32_t moveX = _movingPos.x - unitPosition.x;
+            const int32_t moveY = _movingPos.y - unitPosition.y;
 
-            // TODO: use offset X from bin file for ground movement
-            // cx/cy is sprite size
-            // Frame count: one tile of movement goes through all stages of animation
-            // sp is sprite drawing offset
-            sp.y += static_cast<int32_t>( _movingUnit->animation.movementProgress() * cy );
-            if ( 0 != Sign( cy ) )
-                sp.x -= Sign( cx ) * ox / 2;
+            // If it is a slowed flying creature, then it should smoothly move horizontally.
+            if ( _movingUnit->isAbilityPresent( fheroes2::MonsterAbilityType::FLYING ) ) {
+                const double movementProgress = _movingUnit->animation.movementProgress();
+                offset.x += static_cast<int32_t>( movementProgress * moveX );
+                offset.y += static_cast<int32_t>( movementProgress * moveY );
+            }
+            // If the creature has to move diagonally.
+            else if ( moveY != 0 ) {
+                offset.x -= Sign( moveX ) * ( _movingUnit->animation.getCurrentFrameXOffset() ) / 2;
+                offset.y += static_cast<int32_t>( _movingUnit->animation.movementProgress() * moveY );
+            }
         }
     }
     else if ( _flyingUnit == &unit ) {
         // Monster is flying.
-        const int32_t cx = _flyingPos.x - rt.x;
-        const int32_t cy = _flyingPos.y - rt.y;
+        // Get the horizontal and vertical movement projections.
+        const int32_t moveX = _flyingPos.x - unitPosition.x;
+        const int32_t moveY = _flyingPos.y - unitPosition.y;
 
         const double movementProgress = _flyingUnit->animation.movementProgress();
 
-        sp.x += cx + static_cast<int32_t>( ( _movingPos.x - _flyingPos.x ) * movementProgress );
-        sp.y += cy + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
+        offset.x += moveX + static_cast<int32_t>( ( _movingPos.x - _flyingPos.x ) * movementProgress );
+        offset.y += moveY + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
     }
 
-    fheroes2::AlphaBlit( troopSprite, _mainSurface, sp.x, sp.y, unit.GetCustomAlpha(), unit.isReflect() );
+    fheroes2::AlphaBlit( troopSprite, _mainSurface, offset.x, offset.y, unit.GetCustomAlpha(), unit.isReflect() );
 
-    return sp;
+    return offset;
 }
 
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
@@ -1638,7 +1856,7 @@ void Battle::Interface::RedrawCover()
 
     const Bridge * bridge = Arena::GetBridge();
     if ( bridge && ( bridge->isDown() || _bridgeAnimation.animationIsRequired ) ) {
-        uint32_t spriteIndex = bridge->isDestroy() ? BridgeMovementAnimation::DESTROYED : BridgeMovementAnimation::DOWN_POSITION;
+        uint32_t spriteIndex = bridge->isDestroyed() ? BridgeMovementAnimation::DESTROYED : BridgeMovementAnimation::DOWN_POSITION;
 
         if ( _bridgeAnimation.animationIsRequired ) {
             spriteIndex = _bridgeAnimation.currentFrameId;
@@ -1741,8 +1959,7 @@ void Battle::Interface::RedrawCover()
                 assert( 0 );
             }
 
-            const Position pos
-                = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ), preferAttackFromHead( *_currentUnit, cursorType ) );
+            const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) );
 
             assert( pos.GetHead() != nullptr );
 
@@ -1799,7 +2016,7 @@ void Battle::Interface::RedrawCover()
             }
 
             if ( isApplicable ) {
-                fheroes2::Blit( sf_cursor, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+                fheroes2::Blit( _hexagonCursorShadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
             }
         }
     }
@@ -1861,9 +2078,12 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
         }
     }
 
-    if ( conf.BattleShowGrid() ) { // grid
+    const bool isGridEnabled = conf.BattleShowGrid();
+
+    // grid
+    if ( isGridEnabled ) {
         for ( const Cell & cell : board ) {
-            fheroes2::Blit( sf_hexagon, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+            fheroes2::Blit( _hexagonGrid, _mainSurface, cell.GetPos().x, cell.GetPos().y );
         }
     }
 
@@ -1878,10 +2098,17 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
         fheroes2::Blit( sprite2, _mainSurface, sprite2.x(), sprite2.y() );
     }
 
-    if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
+    // shadow
+    if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) {
+        const fheroes2::Image & shadowImage = isGridEnabled ? _hexagonGridShadow : _hexagonShadow;
+
         for ( const Cell & cell : board ) {
-            if ( cell.isReachableForHead() || cell.isReachableForTail() ) {
-                fheroes2::Blit( sf_shadow, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+            const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
+
+            if ( pos.GetHead() != nullptr ) {
+                assert( !_currentUnit->isWide() || pos.GetTail() != nullptr );
+
+                fheroes2::Blit( shadowImage, _mainSurface, cell.GetPos().x, cell.GetPos().y );
             }
         }
     }
@@ -1898,7 +2125,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
     else if ( Arena::CASTLE_GATE_POS == cellId ) {
         const Bridge * bridge = Arena::GetBridge();
         assert( bridge != nullptr );
-        if ( bridge != nullptr && !bridge->isDestroy() ) {
+        if ( bridge != nullptr && !bridge->isDestroyed() ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
             fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
         }
@@ -2145,7 +2372,7 @@ void Battle::Interface::RedrawHighObjects( int32_t cell_index )
 void Battle::Interface::RedrawKilled()
 {
     // redraw killed troop
-    const Indexes cells = arena.GraveyardClosedCells();
+    const Indexes cells = arena.GraveyardOccupiedCells();
 
     for ( Indexes::const_iterator it = cells.begin(); it != cells.end(); ++it ) {
         const std::vector<const Unit *> & units = arena.GetGraveyardTroops( *it );
@@ -2164,82 +2391,103 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
     const Cell * cell = Board::GetCell( index_pos );
 
     if ( cell && _currentUnit ) {
-        const Unit * b_enemy = cell->GetUnit();
+        auto formatViewInfoMsg = []( const Unit * unit ) {
+            assert( unit != nullptr );
 
-        if ( b_enemy ) {
-            if ( _currentUnit->GetCurrentColor() == b_enemy->GetColor() || ( _currentUnit == b_enemy ) ) {
-                statusMsg = _( "View %{monster} info" );
-                StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
-                return Cursor::WAR_INFO;
-            }
-            else {
-                if ( _currentUnit->isArchers() && !_currentUnit->isHandFighting() ) {
-                    statusMsg = _( "Shoot %{monster}" );
-                    statusMsg.append( " " );
-                    statusMsg.append( _n( "(1 shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
-                    StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
-                    StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
+            std::string msg = _( "View %{monster} info" );
+            StringReplaceWithLowercase( msg, "%{monster}", unit->GetMultiName() );
 
-                    return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
+            return msg;
+        };
+
+        const Unit * unit = cell->GetUnit();
+
+        if ( unit == nullptr || _currentUnit == unit ) {
+            const Position pos = Position::GetReachable( *_currentUnit, index_pos );
+
+            if ( pos.GetHead() != nullptr ) {
+                assert( !_currentUnit->isWide() || pos.GetTail() != nullptr );
+
+                if ( pos.GetHead()->GetIndex() == _currentUnit->GetHeadIndex() ) {
+                    assert( !_currentUnit->isWide() || pos.GetTail()->GetIndex() == _currentUnit->GetTailIndex() );
+
+                    statusMsg = formatViewInfoMsg( _currentUnit );
+
+                    return Cursor::WAR_INFO;
                 }
-                else {
-                    // Find all possible directions where the current monster can attack.
-                    std::set<int> availableAttackDirection;
 
-                    for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
-                        if ( Board::isValidDirection( index_pos, direction )
-                             && Board::CanAttackUnitFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
-                            availableAttackDirection.emplace( direction );
-                        }
-                    }
+                statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here" ) : _( "Move %{monster} here" );
+                StringReplaceWithLowercase( statusMsg, "%{monster}", _currentUnit->GetName() );
 
-                    if ( !availableAttackDirection.empty() ) {
-                        int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
-                        if ( currentDirection == UNKNOWN ) {
-                            // This could happen when another window has popped up and the user moved the mouse.
-                            currentDirection = CENTER;
-                        }
-
-                        if ( availableAttackDirection.count( currentDirection ) == 0 ) {
-                            // This direction is not valid. Find the nearest one.
-                            if ( availableAttackDirection.size() == 1 ) {
-                                currentDirection = *availableAttackDirection.begin();
-                            }
-                            else {
-                                // First seach clockwise.
-                                direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
-                                direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
-
-                                while ( true ) {
-                                    ++clockWiseDirection;
-                                    if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
-                                        currentDirection = clockWiseDirection;
-                                        break;
-                                    }
-
-                                    --antiClockWiseDirection;
-                                    if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
-                                        currentDirection = antiClockWiseDirection;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        const int cursor = GetSwordCursorDirection( currentDirection );
-
-                        statusMsg = _( "Attack %{monster}" );
-                        StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
-
-                        return cursor;
-                    }
-                }
+                return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
             }
         }
-        else if ( cell->isReachableForHead() || cell->isReachableForTail() ) {
-            statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here" ) : _( "Move %{monster} here" );
-            StringReplace( statusMsg, "%{monster}", _currentUnit->GetName() );
-            return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
+        else {
+            if ( _currentUnit->GetCurrentColor() == unit->GetColor() ) {
+                statusMsg = formatViewInfoMsg( unit );
+
+                return Cursor::WAR_INFO;
+            }
+
+            if ( _currentUnit->isArchers() && !_currentUnit->isHandFighting() ) {
+                statusMsg = _( "Shoot %{monster}" );
+                statusMsg.append( " " );
+                statusMsg.append( _n( "(1 shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
+                StringReplaceWithLowercase( statusMsg, "%{monster}", unit->GetMultiName() );
+                StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
+
+                return arena.IsShootingPenalty( *_currentUnit, *unit ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
+            }
+
+            // Find all possible directions where the current monster can attack.
+            std::set<int> availableAttackDirection;
+
+            for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
+                if ( Board::isValidDirection( index_pos, direction ) && Board::CanAttackFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
+                    availableAttackDirection.emplace( direction );
+                }
+            }
+
+            if ( !availableAttackDirection.empty() ) {
+                int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
+                if ( currentDirection == UNKNOWN ) {
+                    // This could happen when another window has popped up and the user moved the mouse.
+                    currentDirection = CENTER;
+                }
+
+                if ( availableAttackDirection.count( currentDirection ) == 0 ) {
+                    // This direction is not valid. Find the nearest one.
+                    if ( availableAttackDirection.size() == 1 ) {
+                        currentDirection = *availableAttackDirection.begin();
+                    }
+                    else {
+                        // First search clockwise.
+                        direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
+                        direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
+
+                        while ( true ) {
+                            ++clockWiseDirection;
+                            if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
+                                currentDirection = clockWiseDirection;
+                                break;
+                            }
+
+                            --antiClockWiseDirection;
+                            if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
+                                currentDirection = antiClockWiseDirection;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                const int cursor = GetSwordCursorDirection( currentDirection );
+
+                statusMsg = _( "Attack %{monster}" );
+                StringReplaceWithLowercase( statusMsg, "%{monster}", unit->GetName() );
+
+                return cursor;
+            }
         }
     }
 
@@ -2287,7 +2535,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
         else if ( b_stats && b_stats->AllowApplySpell( spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
             statusMsg = _( "Cast %{spell} on %{monster}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
-            StringReplace( statusMsg, "%{monster}", b_stats->GetName() );
+            StringReplaceWithLowercase( statusMsg, "%{monster}", b_stats->GetName() );
             return GetCursorFromSpell( spell.GetID() );
         }
         else if ( !spell.isApplyToFriends() && !spell.isApplyToEnemies() && !spell.isApplyToAnyTroops() ) {
@@ -2304,19 +2552,20 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
 void Battle::Interface::getPendingActions( Actions & actions )
 {
-    if ( _breakAutoBattleForColor ) {
-        actions.emplace_back( CommandType::MSG_BATTLE_AUTO, _breakAutoBattleForColor );
+    if ( _interruptAutoBattleForColor ) {
+        actions.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, _interruptAutoBattleForColor );
 
-        _breakAutoBattleForColor = 0;
+        _interruptAutoBattleForColor = 0;
     }
 }
 
 void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 {
-    Cursor & cursor = Cursor::Get();
-    LocalEvent & le = LocalEvent::Get();
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-    cursor.SetThemes( Cursor::WAR_POINTER );
+    // Reset the cursor position to avoid forcing the cursor shadow to be drawn at the last position of the previous turn.
+    index_pos = -1;
+
     _currentUnit = &b;
     humanturn_redraw = false;
     humanturn_exit = false;
@@ -2325,27 +2574,28 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     // in case we moved the window
     _interfacePosition = border.GetArea();
 
-    Board & board = *Arena::GetBoard();
-    board.Reset();
-    board.SetScanPassability( b );
-
     popup.Reset();
 
-    // safe position coord
-    CursorPosition cursorPosition;
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
 
+    ResetIdleTroopAnimation();
     Redraw();
 
     std::string msg;
     animation_flags_frame = 0;
 
-    ResetIdleTroopAnimation();
+    // TODO: update delay types within the loop to avoid rendering slowdown.
+    const std::vector<Game::DelayType> delayTypes{ Game::BATTLE_FLAGS_DELAY };
 
-    while ( !humanturn_exit && le.HandleEvents() ) {
+    const Board * board = Arena::GetBoard();
+    LocalEvent & le = LocalEvent::Get();
+
+    while ( !humanturn_exit && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
         // move cursor
         int32_t indexNew = -1;
         if ( le.MouseCursor( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
-            indexNew = board.GetIndexAbsPosition( GetMouseCursor() );
+            indexNew = board->GetIndexAbsPosition( GetMouseCursor() );
         }
         if ( index_pos != indexNew ) {
             index_pos = indexNew;
@@ -2387,51 +2637,48 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     const Settings & conf = Settings::Get();
 
     if ( le.KeyPress() ) {
-        // skip
+        // Skip the turn
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
-            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), true );
+            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID() );
             humanturn_exit = true;
         }
-        else
-            // soft skip
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_WAIT ) ) {
-            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), !conf.ExtBattleSoftWait() );
-            humanturn_exit = true;
-        }
-        else
-            // options
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) )
+        // Battle options
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) ) {
             EventShowOptions();
-        else
-            // auto switch
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH ) )
+        }
+        // Switch the auto battle mode on/off
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) ) {
             EventAutoSwitch( b, a );
-        else
-            // cast
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::CAST_SPELL ) )
+        }
+        // Finish the battle in auto mode
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_FINISH ) ) {
+            EventAutoFinish( a );
+        }
+        // Cast the spell
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) ) {
             ProcessingHeroDialogResult( 1, a );
-        else
-            // retreat
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) )
+        }
+        // Retreat
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) ) {
             ProcessingHeroDialogResult( 2, a );
-        else
-            // surrender
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) )
+        }
+        // Surrender
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) ) {
             ProcessingHeroDialogResult( 3, a );
+        }
 
-            // debug only
 #ifdef WITH_DEBUG
         if ( IS_DEVEL() )
             switch ( le.KeyValue() ) {
             case fheroes2::Key::KEY_W:
-                // fast wins game
+                // The attacker wins the battle instantly
                 arena.GetResult().army1 = RESULT_WINS;
                 humanturn_exit = true;
                 a.emplace_back( CommandType::MSG_BATTLE_END_TURN, b.GetUID() );
                 break;
 
             case fheroes2::Key::KEY_L:
-                // fast loss game
+                // The attacker loses the battle instantly
                 arena.GetResult().army1 = RESULT_LOSS;
                 humanturn_exit = true;
                 a.emplace_back( CommandType::MSG_BATTLE_END_TURN, b.GetUID() );
@@ -2484,16 +2731,6 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             Dialog::Message( _( "System Options" ), _( "Allows you to customize the combat screen." ), Font::BIG );
         }
     }
-    else if ( conf.ExtBattleSoftWait() && le.MouseCursor( btn_wait.area() ) ) {
-        cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Wait this unit" );
-        ButtonWaitAction( a );
-
-        if ( le.MousePressRight() ) {
-            Dialog::Message( _( "Wait" ), _( "Waits the current creature. The current creature delays its turn until after all other creatures have had their turn." ),
-                             Font::BIG );
-        }
-    }
     else if ( le.MouseCursor( btn_skip.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
         msg = _( "Skip this unit" );
@@ -2506,8 +2743,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else if ( opponent1 && le.MouseCursor( opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent1Area = opponent1->GetArea() + _interfacePosition.getPosition();
-        if ( arena.GetCurrentColor() == arena.GetArmyColor1() ) {
-            msg = _( "View Hero's options" );
+        if ( arena.GetCurrentColor() == arena.GetArmy1Color() ) {
+            if ( opponent1->GetHero()->isCaptain() ) {
+                msg = _( "View Captain's options" );
+            }
+            else {
+                msg = _( "View Hero's options" );
+            }
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
@@ -2516,7 +2758,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             }
         }
         else {
-            msg = _( "View opposing Hero" );
+            if ( opponent1->GetHero()->isCaptain() ) {
+                msg = _( "View opposing Captain" );
+            }
+            else {
+                msg = _( "View opposing Hero" );
+            }
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
@@ -2533,7 +2780,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     else if ( opponent2 && le.MouseCursor( opponent2->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent2Area = opponent2->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetForce2().GetColor() ) {
-            msg = _( "View Hero's options" );
+            if ( opponent2->GetHero()->isCaptain() ) {
+                msg = _( "View Captain's options" );
+            }
+            else {
+                msg = _( "View Hero's options" );
+            }
+
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
@@ -2542,7 +2795,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             }
         }
         else {
-            msg = _( "View opposing Hero" );
+            if ( opponent2->GetHero()->isCaptain() ) {
+                msg = _( "View opposing Captain" );
+            }
+            else {
+                msg = _( "View opposing Hero" );
+            }
+
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
@@ -2572,7 +2831,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         if ( cell ) {
             if ( CursorAttack( themes ) ) {
                 const Unit * b_enemy = cell->GetUnit();
-                popup.SetInfo( cell, _currentUnit, b_enemy );
+                popup.SetAttackInfo( cell, _currentUnit, b_enemy );
             }
             else
                 popup.Reset();
@@ -2623,6 +2882,14 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
         if ( cursor.Themes() != themes )
             cursor.SetThemes( themes );
 
+        const Cell * cell = Board::GetCell( index_pos );
+        if ( cell && _currentUnit && cell->GetUnit() ) {
+            popup.SetSpellAttackInfo( cell, _currentUnit->GetCurrentOrArmyCommander(), cell->GetUnit(), humanturn_spell );
+        }
+        else {
+            popup.Reset();
+        }
+
         if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() ) {
             if ( !Board::isValidIndex( index_pos ) ) {
                 DEBUG_LOG( DBG_BATTLE, DBG_WARN,
@@ -2664,16 +2931,17 @@ void Battle::Interface::FadeArena( bool clearMessageLog )
 {
     AudioManager::ResetAudio();
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     if ( clearMessageLog ) {
         status.clear();
-        status.Redraw();
+        status.Redraw( display );
     }
 
     Redraw();
 
     const fheroes2::Rect srt = border.GetArea();
     fheroes2::Image top( srt.width, srt.height );
-    fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
@@ -2684,16 +2952,17 @@ void Battle::Interface::FadeArena( bool clearMessageLog )
 int Battle::GetIndexIndicator( const Unit & b )
 {
     // yellow
-    if ( b.Modes( IS_GREEN_STATUS ) && b.Modes( IS_RED_STATUS ) )
+    if ( b.Modes( IS_GREEN_STATUS ) && b.Modes( IS_RED_STATUS ) ) {
         return 13;
-    else
-        // green
-        if ( b.Modes( IS_GREEN_STATUS ) )
+    }
+    // green
+    if ( b.Modes( IS_GREEN_STATUS ) ) {
         return 12;
-    else
-        // red
-        if ( b.Modes( IS_RED_STATUS ) )
+    }
+    // red
+    if ( b.Modes( IS_RED_STATUS ) ) {
         return 14;
+    }
 
     return 10;
 }
@@ -2708,9 +2977,26 @@ void Battle::Interface::EventShowOptions()
 
 void Battle::Interface::EventAutoSwitch( const Unit & b, Actions & a )
 {
-    if ( arena.CanToggleAutoBattle() ) {
-        a.emplace_back( CommandType::MSG_BATTLE_AUTO, b.GetColor() );
+    if ( !arena.CanToggleAutoBattle() ) {
+        return;
     }
+
+    a.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, b.GetCurrentOrArmyColor() );
+
+    humanturn_redraw = true;
+    humanturn_exit = true;
+}
+
+void Battle::Interface::EventAutoFinish( Actions & a )
+{
+    if ( fheroes2::showMessage( fheroes2::Text( "", {} ),
+                                fheroes2::Text( _( "Are you sure you want to finish the battle in auto mode?" ), fheroes2::FontType::normalWhite() ),
+                                Dialog::YES | Dialog::NO )
+         != Dialog::YES ) {
+        return;
+    }
+
+    a.emplace_back( CommandType::MSG_BATTLE_AUTO_FINISH );
 
     humanturn_redraw = true;
     humanturn_exit = true;
@@ -2738,18 +3024,6 @@ void Battle::Interface::ButtonSettingsAction()
     }
 }
 
-void Battle::Interface::ButtonWaitAction( Actions & a )
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    le.MousePressLeft( btn_wait.area() ) ? btn_wait.drawOnPress() : btn_wait.drawOnRelease();
-
-    if ( le.MouseClickLeft( btn_wait.area() ) && _currentUnit ) {
-        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID(), false );
-        humanturn_exit = true;
-    }
-}
-
 void Battle::Interface::ButtonSkipAction( Actions & a )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -2757,7 +3031,7 @@ void Battle::Interface::ButtonSkipAction( Actions & a )
     le.MousePressLeft( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_skip.area() ) && _currentUnit ) {
-        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID(), true );
+        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID() );
         humanturn_exit = true;
     }
 }
@@ -2767,12 +3041,12 @@ void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
     const Unit * unitOnCell = cell.GetUnit();
 
     if ( unitOnCell != nullptr ) {
-        Dialog::ArmyInfo( *unitOnCell, Dialog::READONLY, unitOnCell->isReflect() );
+        Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect() );
     }
     else {
         unitOnCell = arena.GraveyardLastTroop( cell.GetIndex() );
         if ( unitOnCell != nullptr ) {
-            Dialog::ArmyInfo( *unitOnCell, Dialog::READONLY, unitOnCell->isReflect() );
+            Dialog::ArmyInfo( *unitOnCell, Dialog::ZERO, unitOnCell->isReflect() );
         }
     }
 }
@@ -2782,13 +3056,13 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
 
-    auto fixupDestinationCell = []( const Unit & unit, const int32_t dst, const bool tryHeadFirst ) {
+    auto fixupDestinationCell = []( const Unit & unit, const int32_t dst ) {
         // Only wide units may need this fixup
         if ( !unit.isWide() ) {
             return dst;
         }
 
-        const Position pos = Position::GetReachable( unit, dst, tryHeadFirst );
+        const Position pos = Position::GetReachable( unit, dst );
 
         assert( pos.GetHead() != nullptr && pos.GetTail() != nullptr );
 
@@ -2799,7 +3073,7 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
-            a.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index, true ) );
+            a.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index ) );
             a.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
             humanturn_exit = true;
             break;
@@ -2814,7 +3088,7 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
             const int dir = GetDirectionFromCursorSword( themes );
 
             if ( enemy && Board::isValidDirection( index, dir ) ) {
-                const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ), preferAttackFromHead( *_currentUnit, themes ) );
+                const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );
 
                 if ( _currentUnit->GetHeadIndex() != move ) {
                     a.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), move );
@@ -2840,7 +3114,7 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
 
         case Cursor::WAR_INFO: {
             if ( b ) {
-                Dialog::ArmyInfo( *b, Dialog::BUTTONS | Dialog::READONLY, b->isReflect() );
+                Dialog::ArmyInfo( *b, Dialog::BUTTONS, b->isReflect() );
                 humanturn_redraw = true;
             }
             break;
@@ -2852,36 +3126,77 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
     }
 }
 
-void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
+void Battle::Interface::WaitForAllActionDelays()
 {
-    if ( unit.isFinishAnimFrame() ) // nothing to animate
-        return;
-
     LocalEvent & le = LocalEvent::Get();
-    const uint64_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
 
-    while ( le.HandleEvents( false ) ) {
+    // The array of possible delays of previous battlefield actions.
+    const std::vector<Game::DelayType> unitDelays{ Game::DelayType::BATTLE_FRAME_DELAY,
+                                                   Game::DelayType::BATTLE_MISSILE_DELAY,
+                                                   Game::DelayType::BATTLE_SPELL_DELAY,
+                                                   Game::DelayType::BATTLE_DISRUPTING_DELAY,
+                                                   Game::DelayType::BATTLE_CATAPULT_CLOUD_DELAY,
+                                                   Game::DelayType::BATTLE_BRIDGE_DELAY,
+                                                   Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY };
+
+    // Wait for the delay after previous render and only after it render a new frame and proceed to the rest of this function.
+    while ( le.HandleEvents( Game::isDelayNeeded( unitDelays ) ) ) {
         CheckGlobalEvents( le );
 
-        if ( Game::validateCustomAnimationDelay( frameDelay ) ) {
+        if ( Game::hasEveryDelayPassed( unitDelays ) ) {
+            break;
+        }
+    }
+}
+
+void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender )
+{
+    if ( unit.isFinishAnimFrame() && unit.animation.animationLength() != 1 ) {
+        // If it is the last frame in the animation sequence with more than one frame or if we have no frames.
+        return;
+    }
+
+    LocalEvent & le = LocalEvent::Get();
+
+    // In the loop below we wait for the delay and then display the next frame.
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) ) {
+        CheckGlobalEvents( le );
+
+        if ( Game::validateAnimationDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY ) ) {
             Redraw();
-            if ( unit.isFinishAnimFrame() )
+
+            if ( unit.isFinishAnimFrame() ) {
+                // We have reached the end of animation and rendered the last frame.
                 break;
+            }
+
             unit.IncreaseAnimFrame();
+
+            if ( skipLastFrameRender && unit.isFinishAnimFrame() ) {
+                // We have reached the last animation frame and do not render it.
+                break;
+            }
         }
     }
 }
 
 void Battle::Interface::AnimateOpponents( OpponentSprite * target )
 {
-    if ( target == nullptr ) // nothing to animate
+    if ( target == nullptr || target->isFinishFrame() ) // nothing to animate
         return;
 
     LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() && !target->isFinishFrame() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY } ) ) ) {
         if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-            target->IncreaseAnimFrame();
+            // Render the first frame before waiting any delay.
             Redraw();
+
+            if ( target->isFinishFrame() ) {
+                // We have reached the end of animation.
+                break;
+            }
+
+            target->IncreaseAnimFrame();
         }
     }
 }
@@ -2892,14 +3207,17 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
         return;
 
     LocalEvent & le = LocalEvent::Get();
-
-    while ( le.HandleEvents( false ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_FRAME_DELAY } ) ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
             Redraw();
-            if ( unit.isFinishAnimFrame() )
+
+            if ( unit.isFinishAnimFrame() ) {
+                // We have reached the end of animation.
                 break;
+            }
+
             unit.IncreaseAnimFrame();
         }
     }
@@ -2907,15 +3225,9 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 
 void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 {
-    std::string msg;
-    if ( attacker.Modes( TR_HARDSKIP ) ) {
-        msg = _( "%{name} skip their turn." );
-    }
-    else {
-        msg = _( "%{name} wait their turn." );
-    }
+    std::string msg = _( "%{name} skip their turn." );
+    StringReplaceWithLowercase( msg, "%{name}", attacker.GetName() );
 
-    StringReplace( msg, "%{name}", attacker.GetName() );
     status.SetMessage( msg, true );
 }
 
@@ -2928,14 +3240,27 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     const bool isMage = ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE );
 
     // Mage is channeling the bolt; doesn't have missile sprite
-    if ( isMage )
+    if ( isMage ) {
         fheroes2::delayforMs( Game::ApplyBattleSpeed( 115 ) );
-    else
+    }
+    else {
         missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
+    }
 
     // Lich/Power lich has projectile speed of 25
     const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
+
+    // For most shooting creatures we do not render the first missile position to better imitate start position change depending on shooting angle.
+    if ( !isMage && ( monsterID != Monster::TROLL ) && ( monsterID != Monster::WAR_TROLL ) ) {
+        ++pnt;
+    }
+
+    // Shooter projectile rendering offset uses 'x' and 'y' from sprite data.
+    const fheroes2::Point missileOffset( reverse ? ( -missile.width() - missile.x() ) : missile.x(), ( angle > 0 ) ? ( -missile.height() - missile.y() ) : missile.y() );
+
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
 
     // convert the following code into a function/event service
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
@@ -2951,7 +3276,8 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
                 fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y + 2 }, { pnt->x, pnt->y + 2 }, 0x77 );
             }
             else {
-                fheroes2::Blit( missile, _mainSurface, reverse ? pnt->x - missile.width() : pnt->x, ( angle > 0 ) ? pnt->y - missile.height() : pnt->y, reverse );
+                // Coordinates in 'pnt' corresponds to the front side of the projectile (arrowhead).
+                fheroes2::Blit( missile, _mainSurface, pnt->x + missileOffset.x, pnt->y + missileOffset.y, reverse );
             }
             RedrawPartialFinish();
             ++pnt;
@@ -2972,10 +3298,10 @@ void Battle::Interface::RedrawActionNewTurn() const
     std::string msg = _( "Turn %{turn}" );
     StringReplace( msg, "%{turn}", arena.GetCurrentTurn() );
 
-    listlog->AddMessage( msg );
+    listlog->AddMessage( std::move( msg ) );
 }
 
-void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & defender, const TargetsInfo & targets )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
@@ -2998,11 +3324,16 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     // long distance attack animation
     if ( archer ) {
+        // Reset the delay to wait till the next frame if is not already waiting.
+        if ( !Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
+            Game::AnimateResetDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY );
+        }
+
         const fheroes2::Sprite & attackerSprite = fheroes2::AGG::GetICN( attacker.GetMonsterSprite(), attacker.GetFrame() );
         const fheroes2::Point attackerPos = GetTroopPosition( attacker, attackerSprite );
 
         // For shooter position we need bottom center position of rear tile
-        // Use cell coordinates for X because sprite width is very inconsistent (e.g. halfling)
+        // Use cell coordinates for X because sprite width is very inconsistent (e.g. Halfling)
         const int rearCenterX = ( attacker.isWide() && attacker.isReflect() ) ? pos1.width * 3 / 4 : CELLW / 2;
         const fheroes2::Point shooterPos( pos1.x + rearCenterX, attackerPos.y - attackerSprite.y() );
 
@@ -3025,7 +3356,12 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         // redraw archer attack animation
         if ( attacker.SwitchAnimation( Monster_Info::RANG_TOP + direction * 2 ) ) {
-            AnimateUnitWithDelay( attacker, Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) );
+            // Set the delay between shooting animation frames.
+            Game::setCustomUnitMovementDelay( Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) / attacker.animation.animationLength() );
+
+            // We do not render the last frame of shooting animation as all frames besides this contains the projectile.
+            // The last frame will be rendered in RedrawMissileAnimation() function with the render of projectile.
+            AnimateUnitWithDelay( attacker, true );
         }
 
         const fheroes2::Point missileStart( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
@@ -3044,18 +3380,21 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         // redraw melee attack animation
         if ( attacker.SwitchAnimation( attackAnim ) ) {
+            // Reset the delay to wait till the next frame.
+            Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+
             RedrawTroopDefaultDelay( attacker );
         }
     }
-
-    if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && archer ) {
-        // Lich cloud animation.
-        RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), NONE );
-    }
 }
 
-void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets )
 {
+    // Reset the delay to wait till the next frame.
+    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+    }
+
     // post attack animation
     int attackStart = attacker.animation.getCurrentState();
     if ( attackStart >= Monster_Info::MELEE_TOP && attackStart <= Monster_Info::RANG_BOT ) {
@@ -3064,7 +3403,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
     }
 
     // targets damage animation
-    RedrawActionWincesKills( targets, &attacker );
+    RedrawActionWincesKills( targets, &attacker, &defender );
     RedrawTroopDefaultDelay( attacker );
 
     attacker.SwitchAnimation( Monster_Info::STATIC );
@@ -3073,7 +3412,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
     // draw status for first defender
     if ( !isMirror && !targets.empty() ) {
         std::string msg( _n( "%{attacker} does %{damage} damage.", "%{attacker} do %{damage} damage.", attacker.GetCount() ) );
-        StringReplace( msg, "%{attacker}", attacker.GetName() );
+        StringReplaceWithLowercase( msg, "%{attacker}", attacker.GetName() );
 
         if ( 1 < targets.size() ) {
             uint32_t killed = 0;
@@ -3102,7 +3441,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
                 msg.append( " " );
                 msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
                 StringReplace( msg, "%{count}", target.killed );
-                StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
+                StringReplaceWithLowercase( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
             }
         }
 
@@ -3113,143 +3452,212 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
     _movingUnit = nullptr;
 }
 
-void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */ )
+void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */, const Unit * defender /* = nullptr */ )
 {
+    // Reset the delay to wait till the next frame.
+    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+    }
+
     LocalEvent & le = LocalEvent::Get();
 
-    // targets damage animation
-    int finish = 0;
-    int deathColor = Color::UNUSED;
+    // Number of targets to be animated with a wince or kill animation.
+    ptrdiff_t animatingTargets = 0;
+    int32_t deathColor = Color::UNUSED;
 
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
 
-    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-        Unit * defender = it->defender;
-        if ( defender == nullptr ) {
+    // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
+    // along with the unit kill/wince animation.
+    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
+                               && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
+
+    for ( const Battle::TargetInfo & target : targets ) {
+        Unit * unit = target.defender;
+        if ( unit == nullptr ) {
             continue;
         }
 
-        if ( defender->isModes( CAP_MIRRORIMAGE ) )
-            mirrorImages.push_back( defender );
+        if ( unit->isModes( CAP_MIRRORIMAGE ) ) {
+            mirrorImages.push_back( unit );
+        }
 
         // kill animation
-        if ( !defender->isValid() ) {
+        if ( !unit->isValid() ) {
             // destroy linked mirror
-            if ( defender->isModes( CAP_MIRROROWNER ) )
-                mirrorImages.push_back( defender->GetMirror() );
+            if ( unit->isModes( CAP_MIRROROWNER ) ) {
+                mirrorImages.push_back( unit->GetMirror() );
+            }
 
-            defender->SwitchAnimation( Monster_Info::KILL );
-            AudioManager::PlaySound( defender->M82Kill() );
-            ++finish;
+            unit->SwitchAnimation( Monster_Info::KILL );
+            AudioManager::PlaySound( unit->M82Kill() );
+            ++animatingTargets;
 
-            deathColor = defender->GetArmyColor();
+            deathColor = unit->GetArmyColor();
         }
-        else if ( it->damage ) {
+        else if ( target.damage ) {
             // wince animation
-            defender->SwitchAnimation( Monster_Info::WNCE );
-            AudioManager::PlaySound( defender->M82Wnce() );
-            ++finish;
+            if ( drawLichCloud ) {
+                // The Lich cloud causes units to freeze for some time in the maximum wince state.
+                // So we will divide the wince animation. First part: the creature stands for a couple of frames before wincing.
+                unit->SwitchAnimation( Monster_Info::STAND_STILL );
+            }
+            else {
+                unit->SwitchAnimation( Monster_Info::WNCE );
+                AudioManager::PlaySound( unit->M82Wnce() );
+            }
+            ++animatingTargets;
         }
         else {
             // have immunity
-            resistantTarget.insert( it->defender );
+            resistantTarget.insert( target.defender );
             AudioManager::PlaySound( M82::RSBRYFZL );
         }
     }
 
-    if ( deathColor != Color::UNUSED ) {
-        const bool attackersTurn = deathColor == arena.GetArmyColor2();
-        OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
-        OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
-        // 60% of joyful animation
-        if ( attackingHero && Rand::Get( 1, 5 ) < 4 ) {
-            attackingHero->SetAnimation( OP_JOY );
-        }
-        // 80% of sorrow animation otherwise
-        else if ( defendingHero && Rand::Get( 1, 5 ) < 5 ) {
-            defendingHero->SetAnimation( OP_SORROW );
-        }
+    SetHeroAnimationReactionToTroopDeath( deathColor );
+
+    uint32_t lichCloudFrame = 0;
+    const uint32_t lichCloudMaxFrame = fheroes2::AGG::GetICNCount( ICN::LICHCLOD );
+    // Wince animation under the Lich cloud, second part: the frame number after which the target animation will be switched to 'WNCE_UP'.
+    const uint32_t wnceUpStartFrame = 1;
+    // Wince animation under the Lich cloud, third part: the frame number after which the target animation will be switched to 'WNCE_DOWN'.
+    const uint32_t wnceDownStartFrame = lichCloudMaxFrame - 3;
+
+    if ( drawLichCloud ) {
+        // Lich cloud sound.
+        AudioManager::PlaySound( attacker->M82Expl() );
     }
 
-    // targets damage animation loop
-    bool finishedAnimation = false;
-    while ( le.HandleEvents() && !finishedAnimation ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_FRAME_DELAY } ) ) ) {
         CheckGlobalEvents( le );
 
-        if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
-            bool redrawBattleField = false;
+        if ( !Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
+            continue;
+        }
 
-            if ( attacker != nullptr ) {
-                if ( attacker->isFinishAnimFrame() ) {
-                    attacker->SwitchAnimation( Monster_Info::STATIC );
-                }
-                else {
-                    attacker->IncreaseAnimFrame();
-                }
+        RedrawPartialStart();
 
-                redrawBattleField = true;
+        // Render a Lich cloud above the target unit if it is a Lich attack and if the cloud animation is not already finished.
+        if ( drawLichCloud && lichCloudFrame < lichCloudMaxFrame ) {
+            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::LICHCLOD, lichCloudFrame );
+            const fheroes2::Point & pos = CalculateSpellPosition( *defender, ICN::LICHCLOD, spellSprite );
+            fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, false );
+            ++lichCloudFrame;
+        }
+
+        RedrawPartialFinish();
+
+        if ( attacker != nullptr ) {
+            if ( attacker->isFinishAnimFrame() ) {
+                attacker->SwitchAnimation( Monster_Info::STATIC );
             }
             else {
-                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                    if ( ( *it ).defender ) {
-                        redrawBattleField = true;
-                        break;
-                    }
+                attacker->IncreaseAnimFrame();
+            }
+        }
+
+        for ( const Battle::TargetInfo & target : targets ) {
+            if ( target.defender ) {
+                if ( target.defender->isFinishAnimFrame()
+                     && ( target.defender->GetAnimationState() == Monster_Info::WNCE || target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
+                    target.defender->SwitchAnimation( Monster_Info::STATIC );
+                }
+                else if ( drawLichCloud && lichCloudFrame == wnceUpStartFrame && ( target.defender->GetAnimationState() == Monster_Info::STAND_STILL ) ) {
+                    target.defender->SwitchAnimation( Monster_Info::WNCE_UP );
+                    AudioManager::PlaySound( target.defender->M82Wnce() );
+                }
+                else if ( drawLichCloud && lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
+                    target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
+                }
+                else {
+                    target.defender->IncreaseAnimFrame();
                 }
             }
+        }
 
-            if ( redrawBattleField ) {
-                RedrawPartialStart();
-                RedrawPartialFinish();
+        const ptrdiff_t finishedAnimationCount = std::count_if( targets.begin(), targets.end(), [&resistantTarget]( const TargetInfo & info ) {
+            if ( info.defender == nullptr ) {
+                return false;
             }
 
-            const ptrdiff_t finishedAnimationCount = std::count_if( targets.begin(), targets.end(), [&resistantTarget]( const TargetInfo & info ) {
-                if ( info.defender == nullptr ) {
-                    return false;
-                }
-
-                if ( resistantTarget.count( info.defender ) > 0 ) {
-                    return false;
-                }
-
-                const int animationState = info.defender->GetAnimationState();
-                if ( animationState == Monster_Info::WNCE ) {
-                    return false;
-                }
-
-                if ( animationState != Monster_Info::KILL ) {
-                    return true;
-                }
-
-                return TargetInfo::isFinishAnimFrame( info );
-            } );
-
-            finishedAnimation = ( finish == static_cast<int>( finishedAnimationCount ) );
-
-            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                if ( ( *it ).defender ) {
-                    if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
-                        it->defender->SwitchAnimation( Monster_Info::STATIC );
-                    }
-                    else {
-                        it->defender->IncreaseAnimFrame();
-                    }
-                }
+            if ( resistantTarget.count( info.defender ) > 0 ) {
+                return false;
             }
+
+            const int animationState = info.defender->GetAnimationState();
+            if ( animationState == Monster_Info::WNCE || animationState == Monster_Info::WNCE_UP || animationState == Monster_Info::WNCE_DOWN
+                 || animationState == Monster_Info::STAND_STILL ) {
+                return false;
+            }
+
+            if ( animationState != Monster_Info::KILL ) {
+                return true;
+            }
+
+            return TargetInfo::isFinishAnimFrame( info );
+        } );
+
+        // There should not be more finished animations than when we started.
+        assert( finishedAnimationCount <= animatingTargets );
+
+        // There should not be more Lich cloud animation frames than in the corresponding ICN.
+        assert( lichCloudFrame <= lichCloudMaxFrame );
+
+        // IMPORTANT: The game engine can change STATIC animation to IDLE, especially for Ghosts and Zombies,
+        // so we need also to check for IDLE where we check for STATIC.
+        if ( ( animatingTargets == finishedAnimationCount ) && ( !drawLichCloud || ( lichCloudFrame == lichCloudMaxFrame ) )
+             && ( ( attacker == nullptr ) || ( attacker->animation.getCurrentState() == Monster_Info::STATIC )
+                  || ( attacker->animation.getCurrentState() == Monster_Info::IDLE ) ) ) {
+            // All unit animation frames are rendered and if it was a Lich attack then also its cloud frames are rendered too.
+            break;
         }
     }
 
     // Fade away animation for destroyed mirror images
-    if ( !mirrorImages.empty() )
+    if ( !mirrorImages.empty() ) {
         RedrawActionRemoveMirrorImage( mirrorImages );
+    }
+}
+
+void Battle::Interface::SetHeroAnimationReactionToTroopDeath( const int32_t deathColor )
+{
+    if ( deathColor == Color::UNUSED ) {
+        return;
+    }
+
+    const bool attackersTurn = ( deathColor == arena.GetArmy2Color() );
+    OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
+    OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
+    // 60% of joyful animation
+    if ( attackingHero && Rand::Get( 1, 5 ) < 4 ) {
+        attackingHero->SetAnimation( OP_JOY );
+    }
+    // 80% of sorrow animation otherwise
+    else if ( defendingHero && Rand::Get( 1, 5 ) < 5 ) {
+        defendingHero->SetAnimation( OP_SORROW );
+    }
 }
 
 void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 {
+    // If the path is empty there is no movement and so nothing to render.
+    if ( path.empty() ) {
+        return;
+    }
+
+    // Reset the delay to wait till the next frame if is not already waiting.
+    if ( !Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY );
+    }
+
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
     Indexes::const_iterator dst = path.begin();
     Bridge * bridge = Arena::GetBridge();
 
+    // Get the time to animate movement for one cell.
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
     if ( unit.Modes( SP_HASTE ) ) {
         frameDelay = frameDelay * 65 / 100; // by 35% faster
@@ -3258,71 +3666,215 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         frameDelay = frameDelay * 150 / 100; // by 50% slower
     }
 
-    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+    // Set the delay between movement animation frames. This delay will be used for all types of movement animations.
+    unit.SwitchAnimation( Monster_Info::MOVING );
+    Game::setCustomUnitMovementDelay( frameDelay / unit.animation.animationLength() );
 
-#ifdef DEBUG_LOG
-    std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
-    StringReplace( msg, "%{monster}", unit.GetName() );
-    StringReplace( msg, "%{src}", unit.GetHeadIndex() );
-#else
-    std::string msg = _( "Moved %{monster}" );
-    StringReplace( msg, "%{monster}", unit.GetName() );
-#endif
+    std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
+    StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
+    StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+
+    assert( _movingUnit == nullptr && _flyingUnit == nullptr );
 
     _currentUnit = nullptr;
     _movingUnit = &unit;
 
-    while ( dst != path.end() ) {
+    // If it is a flying creature that acts like walking one when it is under the Slow spell.
+    const bool canFly = unit.isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
+    // If it is a wide creature (cache this boolean to use in the loop).
+    const bool isWide = unit.isWide();
+    const Indexes::const_iterator pathEnd = path.end();
+
+    const bool isOneStepPath = [&unit, &path]() {
+        if ( path.size() == 1 ) {
+            return true;
+        }
+
+        if ( !unit.isWide() ) {
+            return false;
+        }
+
+        // If wide unit performs 3 movements and the first movement is a turn back, then it's
+        // path consists of only one "real" movement, because...
+        if ( path.size() == 3 && path[0] == unit.GetTailIndex() ) {
+            // ... its last movement should be a return to the normal position.
+            assert( Board::GetDirection( path[1], path[2] ) == ( unit.isReflect() ? LEFT : RIGHT ) );
+
+            return true;
+        }
+
+        return false;
+    }();
+
+    // TODO: make an analytic check with checks for wide creatures back step: is one step left before/after the bridge action.
+
+    // Slowed flying creature has to fly off.
+    if ( canFly ) {
+        // If a flying creature has to cross the bridge during its path we have to open it before the creature flies up.
+        // Otherwise it will freeze during the movement, waiting for the bridge to open. So we have to go the whole path
+        // to analyze if the bridge needs to open for this creature.
+        if ( bridge ) {
+            const Position startPosition = unit.GetPosition();
+            while ( dst != pathEnd ) {
+                if ( bridge->NeedDown( unit, *dst ) ) {
+                    // Restore the initial creature position before rendering the whole battlefield with the bridge animation.
+                    unit.SetPosition( startPosition );
+                    bridge->ActionDown();
+                    break;
+                }
+
+                // Fix for wide flyers - go the whole path with reflections to check the bridge.
+                if ( isWide && ( unit.GetTailIndex() == *dst ) ) {
+                    unit.SetReflection( !unit.isReflect() );
+                }
+                unit.SetPosition( *dst );
+
+                ++dst;
+            }
+
+            // If there was no bridge on the path then restore the initial creature position.
+            if ( dst == pathEnd ) {
+                unit.SetPosition( startPosition );
+            }
+
+            // Restore the initial path pointer state.
+            dst = path.begin();
+        }
+
+        // The destination of fly off is same as the current creature position.
+        _movingPos = unit.GetRectPosition().getPosition();
+        const bool isFromRightArmy = unit.isReflect();
+        const bool isFlyToRight = ( _movingPos.x < Board::GetCell( *dst )->GetPos().x );
+
+        // Reflect the creature if it has to fly back.
+        unit.SetReflection( !isFlyToRight );
+        // For creatures, that has no 'FLY_UP' animation, like Ghosts, we check if the animation was correctly set.
+        if ( unit.SwitchAnimation( Monster_Info::FLY_UP ) ) {
+            AudioManager::PlaySound( unit.M82Tkof() );
+            AnimateUnitWithDelay( unit );
+        }
+        // If a wide flyer returns back it should skip one path position (its head becomes its tail - it is already one move).
+        if ( isWide && ( isFlyToRight == isFromRightArmy ) ) {
+            ++dst;
+        }
+
+        // Switch animation to MOVING before going through the path.
+        unit.SwitchAnimation( Monster_Info::MOVING );
+    }
+    else {
+        // Every ground unit should start its movement from the special 'MOVE_START' animation
+        // or if it moves only for one cell its animation must be 'MOVE_QUICK'. So a check for 1 cell path is made.
+        if ( isOneStepPath ) {
+            unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
+        }
+        else {
+            unit.SwitchAnimation( Monster_Info::MOVE_START );
+        }
+    }
+
+    while ( dst != pathEnd ) {
+        // Check if a wide unit changes its horizontal direction.
+        if ( isWide && unit.GetTailIndex() == *dst ) {
+            // We must not reflect the flyers at the and of the path (just before the landing).
+            if ( !canFly || ( dst != ( pathEnd - 1 ) ) ) {
+                unit.SetReflection( !unit.isReflect() );
+            }
+            // After changing the direction go to the next step in the path.
+            ++dst;
+            continue;
+        }
+
         const Cell * cell = Board::GetCell( *dst );
         _movingPos = cell->GetPos().getPosition();
-        bool show_anim = false;
+
+        if ( !isWide ) {
+            // Check for change the horizontal direction. Only for non-wide units, the wide units use their own algorithm.
+            unit.UpdateDirection( cell->GetPos() );
+        }
 
         if ( bridge && bridge->NeedDown( unit, *dst ) ) {
             _movingUnit = nullptr;
-            unit.SwitchAnimation( Monster_Info::STATIC );
-            bridge->Action( unit, *dst );
+            unit.SwitchAnimation( Monster_Info::STAND_STILL );
+            bridge->ActionDown();
             _movingUnit = &unit;
+            if ( dst == ( pathEnd - 1 ) ) {
+                // There is only one cell left to move after standing.
+                unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
+            }
+            else {
+                // If the path has more than one step after the bridge action then begin the movement.
+                unit.SwitchAnimation( Monster_Info::MOVE_START );
+            }
         }
 
-        if ( unit.isWide() ) {
-            if ( unit.GetTailIndex() == *dst )
-                unit.SetReflection( !unit.isReflect() );
-            else
-                show_anim = true;
-        }
-        else {
-            unit.UpdateDirection( cell->GetPos() );
-            show_anim = true;
+        // If a wide flyer is flying to the right its visual horizontal destination should be shifted to the left by one cell.
+        if ( canFly && isWide && !unit.isReflect() ) {
+            _movingPos.x -= CELLW;
         }
 
-        if ( show_anim ) {
-            AudioManager::PlaySound( unit.M82Move() );
-            unit.SwitchAnimation( Monster_Info::MOVING );
-            AnimateUnitWithDelay( unit, frameDelay );
-            unit.SetPosition( *dst );
-        }
-
-        // check for possible bridge close action, after unit's end of movement
-        if ( bridge && bridge->AllowUp() ) {
-            _movingUnit = nullptr;
-            unit.SwitchAnimation( Monster_Info::STATIC );
-            bridge->Action( unit, *dst );
-            _movingUnit = &unit;
-        }
+        // Render the unit movement with the movement sound.
+        // TODO: adjust sounds calls and synchronize them with frames. Take into account that some sounds (like for Cavalry) consists of a sequence of steps.
+        AudioManager::PlaySound( unit.M82Move() );
+        AnimateUnitWithDelay( unit );
+        unit.SetPosition( *dst );
 
         ++dst;
+
+        // Do a post-move check for the bridge action and set the animation the movement to the next cell in the path.
+        if ( canFly ) {
+            // The animation for the next step in the path of slowed flying creatures is always "MOVING".
+            unit.SwitchAnimation( Monster_Info::MOVING );
+        }
+        else {
+            // Check for possible bridge close action, after walking unit's end of movement to the next cell.
+            // This check should exclude the flying creature because it can't 'hang' here to wait
+            // for bridge to close. For this creature, the bridge should close after it lands.
+            if ( bridge && bridge->AllowUp() ) {
+                _movingUnit = nullptr;
+                unit.SwitchAnimation( Monster_Info::STAND_STILL );
+                bridge->ActionUp();
+                _movingUnit = &unit;
+                if ( dst == ( pathEnd - 1 ) ) {
+                    // There is only one cell left to move after standing.
+                    unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
+                }
+                else {
+                    // If the path has more than one step after the bridge action then begin the movement.
+                    unit.SwitchAnimation( Monster_Info::MOVE_START );
+                }
+            }
+            else if ( dst == ( pathEnd - 1 ) ) {
+                // There is only one cell left to move.
+                unit.SwitchAnimation( Monster_Info::MOVE_END );
+            }
+            else {
+                unit.SwitchAnimation( Monster_Info::MOVING );
+            }
+        }
     }
 
-    // restore
-    _flyingUnit = nullptr;
+    // Slowed flying creature has to land.
+    if ( canFly ) {
+        // IMPORTANT: do not combine into vector animations with the STATIC at the end: the game could randomly switch it to IDLE this way.
+        unit.SwitchAnimation( { Monster_Info::FLY_LAND, Monster_Info::STAND_STILL } );
+        AudioManager::PlaySound( unit.M82Land() );
+        AnimateUnitWithDelay( unit );
+
+        // Close the bridge only after the creature lands.
+        if ( bridge && bridge->AllowUp() ) {
+            bridge->ActionUp();
+        }
+    }
+
     _movingUnit = nullptr;
-    _currentUnit = nullptr;
+
     unit.SwitchAnimation( Monster_Info::STATIC );
 
-#ifdef DEBUG_LOG
-    StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
-#endif
+    StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+
     status.SetMessage( msg, true );
+
+    assert( _currentUnit == nullptr && _movingUnit == nullptr && _flyingUnit == nullptr );
 }
 
 void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
@@ -3331,24 +3883,27 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     const int32_t destTailIndex = unit.isWide() ? pos.GetTail()->GetIndex() : -1;
 
     // check if we're already there
-    if ( unit.GetPosition().contains( destIndex ) )
+    if ( unit.GetPosition().contains( destIndex ) ) {
         return;
+    }
 
-    const fheroes2::Rect & pos1 = unit.GetRectPosition();
-    const fheroes2::Rect & pos2 = Board::GetCell( destIndex )->GetPos();
+    // Reset the delay to wait till the next frame if is not already waiting.
+    if ( !Game::isDelayNeeded( { Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY );
+    }
 
-    fheroes2::Point destPos( pos1.x, pos1.y );
-    fheroes2::Point targetPos( pos2.x, pos2.y );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
+    const fheroes2::Point destPos = unit.GetRectPosition().getPosition();
+    fheroes2::Point targetPos = Board::GetCell( destIndex )->GetPos().getPosition();
 
     if ( unit.isWide() && targetPos.x > destPos.x ) {
         targetPos.x -= CELLW; // this is needed to avoid extra cell shifting upon landing when we move to right side
     }
 
-    std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
-    StringReplace( msg, "%{monster}", unit.GetName() );
-    StringReplace( msg, "%{src}", unit.GetHeadIndex() );
-
-    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+    std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
+    StringReplaceWithLowercase( msg, "%{monster}", unit.GetName() );
+    StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
 
     const uint32_t step = unit.animation.getFlightSpeed();
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
@@ -3359,43 +3914,42 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         frameDelay = frameDelay * 12 / 10; // 20% slower
     }
 
+    // Set the delay between movement animation frames. This delay will be used for all types of movement animations.
+    unit.SwitchAnimation( Monster_Info::MOVING );
+    Game::setCustomUnitMovementDelay( frameDelay / unit.animation.animationLength() );
+
     const std::vector<fheroes2::Point> points = GetEuclideanLine( destPos, targetPos, step );
     std::vector<fheroes2::Point>::const_iterator currentPoint = points.begin();
 
-    // cleanup
-    _currentUnit = nullptr;
-    _movingUnit = nullptr;
-    _flyingUnit = nullptr;
-
     Bridge * bridge = Arena::GetBridge();
 
-    // open the bridge if the unit should land on it
+    // Lower the bridge if the unit needs to land on it
     if ( bridge ) {
-        if ( bridge->NeedDown( unit, destIndex ) ) {
-            bridge->Action( unit, destIndex );
-        }
-        else if ( unit.isWide() && bridge->NeedDown( unit, destTailIndex ) ) {
-            bridge->Action( unit, destTailIndex );
+        if ( bridge->NeedDown( unit, destIndex ) || ( unit.isWide() && bridge->NeedDown( unit, destTailIndex ) ) ) {
+            bridge->ActionDown();
         }
     }
 
-    // jump up
-    _flyingUnit = nullptr;
+    assert( _movingUnit == nullptr && _flyingUnit == nullptr );
+
+    // Jump up
+    _currentUnit = nullptr;
     _movingUnit = &unit;
     _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
-    _flyingPos = destPos;
 
-    unit.SwitchAnimation( Monster_Info::FLY_UP );
-    // Take off animation is 30% length on average (original value)
-    AudioManager::PlaySound( unit.M82Tkof() );
-    AnimateUnitWithDelay( unit, frameDelay * 3 / 10 );
+    // For creatures, that has no 'FLY_UP' animation, like Ghosts, we check if the animation was correctly set.
+    if ( unit.SwitchAnimation( Monster_Info::FLY_UP ) ) {
+        AudioManager::PlaySound( unit.M82Tkof() );
+        AnimateUnitWithDelay( unit );
+    }
 
     _movingUnit = nullptr;
     _flyingUnit = &unit;
     _flyingPos = _movingPos;
 
-    if ( currentPoint != points.end() )
+    if ( currentPoint != points.end() ) {
         ++currentPoint;
+    }
 
     unit.SwitchAnimation( Monster_Info::MOVING );
     while ( currentPoint != points.end() ) {
@@ -3403,7 +3957,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
         AudioManager::PlaySound( unit.M82Move() );
         unit.animation.restartAnimation();
-        AnimateUnitWithDelay( unit, frameDelay );
+        AnimateUnitWithDelay( unit );
 
         _flyingPos = _movingPos;
         ++currentPoint;
@@ -3411,28 +3965,29 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     unit.SetPosition( destIndex );
 
-    // landing
+    // Landing
     _flyingUnit = nullptr;
     _movingUnit = &unit;
     _movingPos = targetPos;
 
-    std::vector<int> landAnim;
-    landAnim.push_back( Monster_Info::FLY_LAND );
-    landAnim.push_back( Monster_Info::STATIC );
-    unit.SwitchAnimation( landAnim );
+    // IMPORTANT: do not combine into vector animations with the STATIC at the end: the game could randomly switch it to IDLE this way.
+    unit.SwitchAnimation( { Monster_Info::FLY_LAND, Monster_Info::STAND_STILL } );
     AudioManager::PlaySound( unit.M82Land() );
-    AnimateUnitWithDelay( unit, frameDelay );
+    AnimateUnitWithDelay( unit );
+    unit.SwitchAnimation( Monster_Info::STATIC );
 
-    // restore
     _movingUnit = nullptr;
 
-    // check for possible bridge close action, after unit's end of movement
+    // Raise the bridge if possible after the unit has completed its movement
     if ( bridge && bridge->AllowUp() ) {
-        bridge->Action( unit, destIndex );
+        bridge->ActionUp();
     }
 
-    StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
+    StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+
     status.SetMessage( msg, true );
+
+    assert( _currentUnit == nullptr && _movingUnit == nullptr && _flyingUnit == nullptr );
 }
 
 void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playSound )
@@ -3441,7 +3996,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
         AudioManager::PlaySound( M82::RSBRYFZL );
     }
     std::string str( _( "The %{name} resist the spell!" ) );
-    StringReplace( str, "%{name}", target.GetName() );
+    StringReplaceWithLowercase( str, "%{name}", target.GetName() );
     status.SetMessage( str, true );
     status.SetMessage( "", false );
 }
@@ -3454,7 +4009,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
 
     if ( target && ( target->GetHeadIndex() == dst || ( target->isWide() && target->GetTailIndex() == dst ) ) ) {
         msg = _( "%{name} casts %{spell} on the %{troop}." );
-        StringReplace( msg, "%{troop}", target->GetName() );
+        StringReplaceWithLowercase( msg, "%{troop}", target->GetName() );
     }
     else {
         msg = _( "%{name} casts %{spell}." );
@@ -3475,8 +4030,11 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
 
     // set spell cast animation
     if ( caster ) {
-        OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
+        OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? opponent1 : opponent2;
         if ( opponent ) {
+            // Reset the delay to wait till the next frame.
+            Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
+
             opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
@@ -3520,17 +4078,17 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
         break;
 
     case Spell::DEATHRIPPLE:
-        RedrawActionDeathWaveSpell( targets, 10 );
+        RedrawActionDeathWaveSpell( 7 );
         break;
     case Spell::DEATHWAVE:
-        RedrawActionDeathWaveSpell( targets, 15 );
+        RedrawActionDeathWaveSpell( 14 );
         break;
 
     case Spell::HOLYWORD:
-        RedrawActionHolyShoutSpell( targets, 2 );
+        RedrawActionHolyShoutSpell( 16 );
         break;
     case Spell::HOLYSHOUT:
-        RedrawActionHolyShoutSpell( targets, 4 );
+        RedrawActionHolyShoutSpell( 24 );
         break;
 
     case Spell::ELEMENTALSTORM:
@@ -3625,8 +4183,11 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     }
 
     if ( caster ) {
-        OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
+        OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? opponent1 : opponent2;
         if ( opponent ) {
+            // Reset the delay to wait till the next frame.
+            Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
+
             opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
             AnimateOpponents( opponent );
         }
@@ -3647,13 +4208,27 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
 
                 ++damagedMonsters;
                 totalDamage += it->damage;
-                if ( maximumDamage < it->damage )
+                if ( maximumDamage < it->damage ) {
                     maximumDamage = it->damage;
+                }
             }
         }
 
         // targets damage animation
-        RedrawActionWincesKills( targets );
+        switch ( spell.GetID() ) {
+            // For some spells the damage animation is done during the flame animation after the spell animation.
+        case Spell::DEATHRIPPLE:
+        case Spell::DEATHWAVE:
+            RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::UNKNOWN, true );
+            break;
+        case Spell::HOLYWORD:
+        case Spell::HOLYSHOUT:
+            RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::UNKNOWN, true );
+            break;
+        default:
+            RedrawActionWincesKills( targets );
+            break;
+        }
 
         if ( totalDamage > 0 ) {
             assert( damagedMonsters > 0 );
@@ -3738,7 +4313,9 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
     }
 
     status.SetMessage( " ", false );
-    _movingUnit = nullptr;
+
+    // TODO: remove this temporary assertion
+    assert( _movingUnit == nullptr );
 }
 
 void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell, const Unit & attacker, const TargetInfo & target )
@@ -3769,8 +4346,8 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell,
         break;
     }
 
-    StringReplace( msg, "%{attacker}", attacker.GetMultiName() );
-    StringReplace( msg, "%{target}", target.defender->GetName() );
+    StringReplaceWithLowercase( msg, "%{attacker}", attacker.GetMultiName() );
+    StringReplaceWithLowercase( msg, "%{target}", target.defender->GetName() );
 
     status.SetMessage( msg, true );
     status.SetMessage( "", false );
@@ -3778,43 +4355,122 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell,
 
 void Battle::Interface::RedrawActionLuck( const Unit & unit )
 {
+    // Reset the delay to wait till the next frame if is not already waiting.
+    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_MISSILE_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_MISSILE_DELAY );
+    }
+
     LocalEvent & le = LocalEvent::Get();
 
     const bool isGoodLuck = unit.Modes( LUCK_GOOD );
     const fheroes2::Rect & pos = unit.GetRectPosition();
 
     std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}." ) : _( "Bad luck descends on the %{attacker}." );
-    StringReplace( msg, "%{attacker}", unit.GetName() );
+    StringReplaceWithLowercase( msg, "%{attacker}", unit.GetName() );
     status.SetMessage( msg, true );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
-        const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
-        const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( unit.GetMonsterSprite(), unit.GetFrame() );
+        const fheroes2::Rect & battleArea = border.GetArea();
+        const fheroes2::Point rainbowDescendPoint( pos.x + pos.width / 2, pos.y - pos.height / 2 );
 
-        int width = 2;
-        fheroes2::Rect src( 0, 0, width, luckSprite.height() );
-        src.x = ( luckSprite.width() - src.width ) / 2;
-        int y = pos.y + pos.height - unitSprite.height() - src.height;
-        if ( y < 0 )
-            y = 0;
+        // If the creature is low on the battleboard - the rainbow will be from the top (in the original game the threshold is about 140 pixels).
+        const bool isVerticalRainbow = ( rainbowDescendPoint.y > 140 );
+
+        // Set the rainbow animation direction to match the army side.
+        // Also, if the creature is under effect of the Berserker spell (or similar), then check its original color.
+        bool isRainbowFromRight = ( unit.GetCurrentColor() < 0 ) ? ( unit.GetColor() == arena.GetArmy2Color() ) : ( unit.GetCurrentColor() == arena.GetArmy2Color() );
+
+        // The distance from the right or left battlefield border to the 'lucky' creature in the direction from the beginning of the animation to its end.
+        const int32_t borderDistance = isRainbowFromRight ? battleArea.width - rainbowDescendPoint.x : rainbowDescendPoint.x;
+
+        // The rainbow thickness in pixels: it must be 15 pixels to match the rainbow thickness from original sprite 'ICN::EXPMRL'.
+        const int32_t rainbowThickness = 15;
+
+        // Declare rainbow generation parameters and set default values:
+        // Rainbow arc parameters for: y = (1-pow2ratio)*k1*(x-x0)^pow1+pow2ratio*k2*(x-x0)^pow2.
+        // Parameters pow3, pow4, pow4ratio are the same as pow1, pow2, pow2ratio, but for the second part of the arc.
+        const int32_t pow1{ 2 };
+        int32_t pow2{ 10 };
+        double pow2ratio{ 0.16 };
+        const int32_t pow3{ 2 };
+        int32_t pow4{ 2 };
+        double pow4ratio{ 0.77 };
+        // The distance from the start to the end of the rainbow in direction of animation (in pixels).
+        int32_t rainbowLength{ rainbowDescendPoint.y };
+        // The distance from the start to the end (the 'lucky' creature) of the rainbow orthogonal to the direction of animation (in pixels).
+        int32_t rainbowAscend{ 75 };
+        // The distance from the top to the end (the 'lucky' creature) of the rainbow orthogonal to the direction of animation (in pixels).
+        int32_t rainbowDescend{ 10 };
+        // The coordinate where the rainbow arc changes its direction.
+        int32_t rainbowTop{ 50 };
+        // Rainbow image offset from battlefield zero coordinates to "fall" onto the 'lucky' creature.
+        int32_t drawOffset{ 10 };
+
+        // Set rainbow generation parameters.
+        if ( isVerticalRainbow ) {
+            rainbowAscend = static_cast<int32_t>( 0.4845 * rainbowLength + 156.2 );
+            // If the rainbow doesn't fit on the screen, then change its horizontal direction.
+            if ( ( borderDistance + rainbowThickness / 2 ) < rainbowAscend ) {
+                isRainbowFromRight = !isRainbowFromRight;
+            }
+            rainbowDescend = std::max( 1, static_cast<int32_t>( 0.0342 * rainbowLength - 4.868 ) );
+            rainbowTop = static_cast<int32_t>( 0.8524 * rainbowLength + 17.7 );
+            drawOffset
+                = isRainbowFromRight ? ( rainbowDescendPoint.x - rainbowDescend - rainbowThickness / 2 ) : ( rainbowDescendPoint.x - rainbowDescend - rainbowAscend );
+        }
+        else {
+            pow2 = 0;
+            pow4 = 5;
+            pow2ratio = 0.0;
+            pow4ratio = 0.5;
+            rainbowLength = borderDistance;
+            rainbowDescend = std::max( 1, static_cast<int32_t>( 0.1233 * rainbowLength + 0.7555 ) );
+            rainbowTop = static_cast<int32_t>( 0.6498 * rainbowLength + 11.167 );
+            drawOffset = std::max( 10, rainbowDescendPoint.y - rainbowDescend );
+        }
+
+        const fheroes2::Size rainbowArcBegin( rainbowTop, rainbowDescend + rainbowAscend );
+        const fheroes2::Size rainbowArcEnd( rainbowLength - rainbowTop, rainbowDescend );
+
+        std::vector<int32_t> rainbowArc;
+
+        GetHalfArc( rainbowArc, -rainbowArcBegin.width, rainbowArcBegin.height, pow1, pow2, pow2ratio );
+        GetHalfArc( rainbowArc, rainbowArcEnd.width, rainbowArcEnd.height, pow3, pow4, pow4ratio );
+
+        const fheroes2::Image luckSprite = DrawRainbow( rainbowArc, rainbowThickness, isVerticalRainbow, isRainbowFromRight );
+
+        // Rainbow animation draw step (in original game it is random and about 7-11 pixels).
+        // We set the constant animation time for all rainbows: rainbowLength/30 fits the rainbow sound duration on '1' speed.
+        const double drawStep = rainbowLength / 30.0;
 
         AudioManager::PlaySound( M82::GOODLUCK );
 
-        while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
+        double x = 0;
+        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) ) && ( Mixer::isPlaying( -1 ) || x < rainbowLength ) ) {
             CheckGlobalEvents( le );
 
-            if ( width < luckSprite.width() && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( x < rainbowLength && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
-                fheroes2::Blit( luckSprite, src.x, src.y, _mainSurface, pos.x + ( pos.width - src.width ) / 2, y, src.width, src.height );
+                x += drawStep;
+                const int32_t drawWidth = x > rainbowLength ? rainbowLength : static_cast<int32_t>( x );
+
+                // For different rainbow types use appropriate animation direction.
+                if ( isVerticalRainbow ) {
+                    fheroes2::Blit( luckSprite, 0, 0, _mainSurface, drawOffset, 0, luckSprite.width(), drawWidth );
+                }
+                else {
+                    if ( isRainbowFromRight ) {
+                        fheroes2::Blit( luckSprite, rainbowLength - drawWidth, 0, _mainSurface, battleArea.width - drawWidth, drawOffset, drawWidth,
+                                        luckSprite.height() );
+                    }
+                    else {
+                        fheroes2::Blit( luckSprite, 0, 0, _mainSurface, 0, drawOffset, drawWidth, luckSprite.height() );
+                    }
+                }
 
                 RedrawPartialFinish();
-
-                src.width = width;
-                src.x = ( luckSprite.width() - src.width ) / 2;
-
-                width += 3;
             }
         }
     }
@@ -3829,7 +4485,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         AudioManager::PlaySound( M82::BADLUCK );
 
         int frameId = 0;
-        while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
+        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
             if ( frameId < 8 && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
@@ -3852,13 +4508,13 @@ void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
 
     if ( good ) {
         msg = _( "High morale enables the %{monster} to attack again." );
-        StringReplace( msg, "%{monster}", b.GetName() );
+        StringReplaceWithLowercase( msg, "%{monster}", b.GetName() );
         status.SetMessage( msg, true );
         RedrawTroopWithFrameAnimation( b, ICN::MORALEG, M82::GOODMRLE, NONE );
     }
     else {
         msg = _( "Low morale causes the %{monster} to freeze in panic." );
-        StringReplace( msg, "%{monster}", b.GetName() );
+        StringReplaceWithLowercase( msg, "%{monster}", b.GetName() );
         status.SetMessage( msg, true );
         RedrawTroopWithFrameAnimation( b, ICN::MORALEB, M82::BADMRLE, WINCE );
     }
@@ -3896,7 +4552,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
         msg += ' ';
         msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
         StringReplace( msg, "%{count}", target.killed );
-        StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
+        StringReplaceWithLowercase( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
     }
 
     if ( !isMirror ) {
@@ -3904,20 +4560,23 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
         status.SetMessage( "", false );
     }
 
-    _movingUnit = nullptr;
+    // TODO: remove this temporary assertion
+    assert( _movingUnit == nullptr );
 }
 
-void Battle::Interface::RedrawActionCatapult( int target, bool hit )
+void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, const bool isHit )
 {
+    // Reset the delay before rendering the first frame of catapult animation.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_DELAY );
+
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Sprite & missile = fheroes2::AGG::GetICN( ICN::BOULDER, 0 );
     const fheroes2::Rect & area = GetArea();
 
     AudioManager::PlaySound( M82::CATSND00 );
 
     // catapult animation
-    while ( le.HandleEvents( false ) && catapult_frame < 6 ) {
+    while ( le.HandleEvents( false ) && catapult_frame < 5 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_DELAY ) ) {
@@ -3926,20 +4585,51 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
         }
     }
 
+    // Reset the delay before rendering the first frame of catapult boulder animation.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_BOULDER_DELAY );
+
     // boulder animation
-    fheroes2::Point pt1( 90, 220 );
-    fheroes2::Point pt2 = Catapult::GetTargetPosition( target, hit );
-    fheroes2::Point max( 300, 20 );
+    fheroes2::Point pt1( 30, 290 );
+    fheroes2::Point pt2 = Catapult::GetTargetPosition( catapultTargetId, isHit );
+    const int32_t boulderArcStep = ( pt2.x - pt1.x ) / 30;
+
+    // set the projectile arc height for each castle target and a formula for an unknown target
+    int32_t boulderArcHeight;
+    switch ( catapultTargetId ) {
+    case Battle::CAT_WALL1:
+        boulderArcHeight = 220;
+        break;
+    case Battle::CAT_WALL2:
+    case Battle::CAT_BRIDGE:
+        boulderArcHeight = 216;
+        break;
+    case Battle::CAT_WALL3:
+        boulderArcHeight = 204;
+        break;
+    case Battle::CAT_WALL4:
+        boulderArcHeight = 208;
+        break;
+    case Battle::CAT_TOWER1:
+    case Battle::CAT_TOWER2:
+        boulderArcHeight = 206;
+        break;
+    case Battle::CAT_CENTRAL_TOWER:
+        boulderArcHeight = 290;
+        break;
+    default:
+        boulderArcHeight = static_cast<int32_t>( std::lround( 0.55 * getDistance( pt1, pt2 ) ) );
+    }
 
     pt1.x += area.x;
     pt2.x += area.x;
-    max.x += area.x;
     pt1.y += area.y;
     pt2.y += area.y;
-    max.y += area.y;
 
-    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, max, missile.width() );
+    const std::vector<fheroes2::Point> points = GetArcPoints( pt1, pt2, boulderArcHeight, boulderArcStep );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
+
+    uint32_t boulderFrameId = 0;
+    const uint32_t boulderFramesCount = fheroes2::AGG::GetICNCount( ICN::BOULDER );
 
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
@@ -3949,26 +4639,44 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
                 ++catapult_frame;
 
             RedrawPartialStart();
-            fheroes2::Blit( missile, _mainSurface, pnt->x, pnt->y );
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BOULDER, boulderFrameId ), _mainSurface, pnt->x, pnt->y );
             RedrawPartialFinish();
             ++pnt;
+            ++boulderFrameId;
+            if ( boulderFrameId >= boulderFramesCount ) {
+                boulderFrameId = 0;
+            }
         }
     }
 
+    // Reset the delay before rendering the catapult cloud.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_CLOUD_DELAY );
+
     // draw cloud
-    const int icn = hit ? ICN::LICHCLOD : ICN::SMALCLOD;
+    const int32_t icn = isHit ? ICN::LICHCLOD : ICN::SMALCLOD;
     uint32_t frame = 0;
+    // If the building is hit, end the animation on the 5th frame to change the building state (when the smoke cloud is largest).
+    uint32_t maxFrame = isHit ? castleBuildingDestroyFrame : fheroes2::AGG::GetICNCount( icn );
+    const bool isBridgeDestroyed = isHit && ( catapultTargetId == Battle::CAT_BRIDGE );
+    // If the bridge is destroyed - prepare parameters for the second smoke cloud.
+    if ( isBridgeDestroyed ) {
+        pt1 = pt2 + bridgeDestroySmokeOffset;
+        // Increase maxFrame to get bigger second smoke cloud.
+        maxFrame = bridgeDestroyFrame;
+    }
 
     AudioManager::PlaySound( M82::CATSND02 );
 
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_CATAPULT_CLOUD_DELAY } ) ) && frame < maxFrame ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_CLOUD_DELAY ) ) {
-            if ( catapult_frame < 9 )
-                ++catapult_frame;
-
             RedrawPartialStart();
+            // Start animation of the second smoke cloud only for the bridge and after 2 frames of the first smoke cloud.
+            if ( isBridgeDestroyed && frame >= bridgeDestroySmokeDelay ) {
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame - bridgeDestroySmokeDelay );
+                fheroes2::Blit( sprite, _mainSurface, pt1.x + sprite.x(), pt1.y + sprite.y() );
+            }
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame );
             fheroes2::Blit( sprite, _mainSurface, pt2.x + sprite.x(), pt2.y + sprite.y() );
             RedrawPartialFinish();
@@ -3977,6 +4685,55 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
         }
     }
 
+    if ( !isHit ) {
+        catapult_frame = 0;
+    }
+}
+
+void Battle::Interface::RedrawActionCatapultPart2( const int catapultTargetId )
+{
+    // Finish the smoke cloud animation after the building's state has changed after the hit and it is drawn as demolished.
+
+    const fheroes2::Point pt1 = Catapult::GetTargetPosition( catapultTargetId, true ) + GetArea().getPosition();
+    fheroes2::Point pt2;
+
+    // Continue the smoke cloud animation from the 6th frame.
+    const int32_t icnId = ICN::LICHCLOD;
+    uint32_t frame = castleBuildingDestroyFrame;
+    const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icnId );
+    uint32_t maxAnimationFrame = maxFrame;
+    const bool isBridgeDestroyed = ( catapultTargetId == Battle::CAT_BRIDGE );
+    // If the bridge is destroyed - prepare parameters for the second smoke cloud.
+    if ( isBridgeDestroyed ) {
+        pt2 = pt1 + bridgeDestroySmokeOffset;
+        // Increase maxAnimationFrame to finish the second smoke animation.
+        maxAnimationFrame += bridgeDestroySmokeDelay;
+        // Bridge smoke animation should continue from the 7th frame.
+        frame = bridgeDestroyFrame;
+    }
+
+    LocalEvent & le = LocalEvent::Get();
+
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_CATAPULT_CLOUD_DELAY } ) ) && frame < maxAnimationFrame ) {
+        CheckGlobalEvents( le );
+
+        if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_CLOUD_DELAY ) ) {
+            RedrawPartialStart();
+            // Draw animation of the second smoke cloud only for the bridge.
+            if ( isBridgeDestroyed ) {
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnId, frame - bridgeDestroySmokeDelay );
+                fheroes2::Blit( sprite, _mainSurface, pt2.x + sprite.x(), pt2.y + sprite.y() );
+            }
+            // Don't draw the smoke cloud after its animation has ended (in case the second smoke cloud is still animating).
+            if ( frame <= maxFrame ) {
+                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icnId, frame );
+                fheroes2::Blit( sprite, _mainSurface, pt1.x + sprite.x(), pt1.y + sprite.y() );
+            }
+            RedrawPartialFinish();
+
+            ++frame;
+        }
+    }
     catapult_frame = 0;
 }
 
@@ -4004,17 +4761,18 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, int32_t dst )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-    uint32_t currentAlpha = target.GetCustomAlpha();
+    uint8_t currentAlpha = target.GetCustomAlpha();
+    const uint8_t alphaStep = 15;
 
     AudioManager::PlaySound( M82::TELPTOUT );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( currentAlpha > 0 && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            currentAlpha -= 15;
+        if ( currentAlpha >= alphaStep && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            currentAlpha -= alphaStep;
             target.SetCustomAlpha( currentAlpha );
             Redraw();
         }
@@ -4026,11 +4784,11 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, int32_t dst )
     target.SetPosition( dst );
     AudioManager::PlaySound( M82::TELPTIN );
 
-    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( currentAlpha <= 240 && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            currentAlpha += 15;
+        if ( currentAlpha <= ( 255 - alphaStep ) && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            currentAlpha += alphaStep;
             target.SetCustomAlpha( currentAlpha );
             Redraw();
         }
@@ -4045,17 +4803,18 @@ void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-    uint32_t currentAlpha = 0;
+    uint8_t currentAlpha = 0;
+    const uint8_t alphaStep = 20;
 
     AudioManager::PlaySound( M82::SUMNELM );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents() && currentAlpha < 220 ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && currentAlpha <= ( 255 - alphaStep ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            currentAlpha += 20;
+            currentAlpha += alphaStep;
             target.SetCustomAlpha( currentAlpha );
             Redraw();
         }
@@ -4082,7 +4841,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents() && pnt != points.end() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4116,7 +4875,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
         const fheroes2::Point & startingPos = points[i - 1];
         const fheroes2::Point & endPos = points[i];
 
-        const std::vector<std::pair<LightningPoint, LightningPoint> > & lightningBolt = GenerateLightning( startingPos + roiOffset, endPos + roiOffset );
+        const std::vector<std::pair<LightningPoint, LightningPoint>> & lightningBolt = GenerateLightning( startingPos + roiOffset, endPos + roiOffset );
         fheroes2::Rect roi;
         const bool isHorizontalBolt = std::abs( startingPos.x - endPos.x ) > std::abs( startingPos.y - endPos.y );
         const bool isForwardDirection = isHorizontalBolt ? ( endPos.x > startingPos.x ) : ( endPos.y > startingPos.y );
@@ -4145,7 +4904,8 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
             }
         }
 
-        while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.width < drawRoi.width ) || ( !isHorizontalBolt && roi.height < drawRoi.height ) ) ) {
+        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) )
+                && ( ( isHorizontalBolt && roi.width < drawRoi.width ) || ( !isHorizontalBolt && roi.height < drawRoi.height ) ) ) {
             if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
                 if ( isHorizontalBolt ) {
                     if ( isForwardDirection ) {
@@ -4191,7 +4951,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
     fheroes2::delayforMs( 100 );
 
     uint32_t frame = 0;
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( ICN::SPARKS ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && frame < fheroes2::AGG::GetICNCount( ICN::SPARKS ) ) {
         CheckGlobalEvents( le );
 
         if ( ( frame == 0 ) || Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
@@ -4245,7 +5005,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
     fheroes2::Sprite unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
 
-    std::vector<std::vector<uint8_t> > originalPalette;
+    std::vector<std::vector<uint8_t>> originalPalette;
     if ( target.Modes( SP_STONE ) ) {
         originalPalette.push_back( PAL::GetPalette( PAL::PaletteType::GRAY ) );
     }
@@ -4281,7 +5041,13 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
     uint32_t alpha = 0;
     uint32_t frame = 0;
-    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
+
+    // Immediately indicate that the delay has passed to render first frame immediately.
+    Game::passCustomAnimationDelay( bloodlustDelay );
+    // Make sure that the first run is passed immediately.
+    assert( !Game::isCustomDelayNeeded( bloodlustDelay ) );
+
+    while ( le.HandleEvents( Game::isCustomDelayNeeded( bloodlustDelay ) ) && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
         if ( frame < 20 && Game::validateCustomAnimationDelay( bloodlustDelay ) ) {
@@ -4318,7 +5084,7 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
 
     uint32_t alpha = 0;
     uint32_t frame = 0;
-    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
         if ( frame < 25 && Game::validateCustomAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4337,15 +5103,25 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
 
 void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell & spell )
 {
-    LocalEvent & le = LocalEvent::Get();
-
     if ( !target.isValid() ) {
+        // Restore direction of the creature, since it could be killed when it was reflected.
+        target.UpdateDirection();
+
+        Redraw();
+        target.IncreaseAnimFrame();
+
         Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-        while ( le.HandleEvents() && !target.isFinishAnimFrame() ) {
+        LocalEvent & le = LocalEvent::Get();
+        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) ) {
             CheckGlobalEvents( le );
 
             if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
+                if ( target.isFinishAnimFrame() ) {
+                    // We have reached the end of animation.
+                    break;
+                }
+
                 Redraw();
                 target.IncreaseAnimFrame();
             }
@@ -4379,7 +5155,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     AudioManager::PlaySound( spellSound );
 
     size_t i = 0;
-    while ( le.HandleEvents() && i < path.size() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && i < path.size() ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
@@ -4407,7 +5183,7 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
     _movingPos = { 0, 0 };
 
     uint32_t frame = 0;
-    while ( le.HandleEvents() && frame < 60 ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && frame < 60 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
@@ -4425,34 +5201,81 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
     b_current_sprite = nullptr;
 }
 
-void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength )
+void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     _currentUnit = nullptr;
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    fheroes2::Rect area = GetArea();
-    area.height -= 36;
+    // Set all non-dead troops animation to static and redraw the '_mainSurface'.
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
+    Redraw();
 
-    const fheroes2::Sprite & copy = fheroes2::Crop( _mainSurface, area.x, area.y, area.width, area.height );
-    const int waveLength = strength * 2 + 10;
+    fheroes2::Rect area = GetArea();
+    // Cut out the battle log image so we don't use it in the death wave effect.
+    area.height -= status.height;
+    // And if listlog is open, then cut off it too.
+    if ( listlog && listlog->isOpenLog() ) {
+        area.height -= listlog->GetArea().height;
+    }
+
+    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
+
+    // The death wave horizontal length in pixels.
+    const int32_t waveLength = 38;
+    const int32_t waveStep = 5;
+    // A death wave parameter that limits the curve to one cosine period.
+    const double waveLimit = waveLength / M_PI / 2;
+    std::vector<int32_t> deathWaveCurve;
+    deathWaveCurve.reserve( waveLength );
+
+    // Calculate the "Death Wave" curve as one period of cosine, which starts from 0 with an amplitude of 1/2 and shifted down by 0.5.
+    // So we get a smooth hill, which is the multiplied with 'strength' and shifted after that by -1px.
+    // (The "Death Wave" curve has to shift the image and cosine starts from 0 so we add extra 1px).
+    for ( int32_t posX = 0; posX < waveLength; ++posX ) {
+        deathWaveCurve.push_back( static_cast<int32_t>( std::round( strength * ( cos( posX / waveLimit ) / 2 - 0.5 ) ) ) - 1 );
+    }
+
+    // Take into account that the Death Wave starts outside the battle screen.
+    area.x -= waveLength;
+    // The first frame of spell effect must have a part of the spell, so we start from its first position.
+    int32_t position = waveStep;
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    // Prepare the blank image for the Death Wave spell effect with the transform layer equal to "0"
+    fheroes2::Image spellEffect( waveLength, area.height );
+    std::fill( spellEffect.transform(), spellEffect.transform() + static_cast<size_t>( waveLength * area.height ), static_cast<uint8_t>( 0 ) );
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
-    int position = 10;
-    while ( le.HandleEvents() && position < area.width + waveLength ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_DISRUPTING_DELAY } ) ) && position < area.width + waveLength ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, waveLength, strength ), _mainSurface );
-            RedrawPartialFinish();
+            const int32_t wavePositionX = ( area.x + position < 0 ) ? 0 : ( area.x + position );
+            const int32_t waveWidth = position > waveLength ? ( position > area.width ? ( waveLength - position + area.width ) : waveLength ) : position;
+            const int32_t restorePositionX = ( wavePositionX < waveStep ) ? 0 : ( wavePositionX - waveStep );
+            const int32_t restoreWidth = wavePositionX < waveStep ? wavePositionX : waveStep;
 
-            position += 3;
+            const fheroes2::Rect renderArea( _interfacePosition.x + restorePositionX, _interfacePosition.y + area.y, waveWidth + restoreWidth, area.height );
+
+            // Place a copy of the original image where the Death Wave effect was on the previous frame.
+            fheroes2::Blit( battleFieldCopy, restorePositionX, area.y, display, renderArea.x, renderArea.y, restoreWidth, renderArea.height );
+
+            // Place the Death Wave effect to its new position.
+            fheroes2::CreateDeathWaveEffect( spellEffect, battleFieldCopy, position, deathWaveCurve );
+            fheroes2::Blit( spellEffect, 0, 0, display, renderArea.x + restoreWidth, renderArea.y, waveWidth, area.height );
+
+            // Render only the changed screen area.
+            display.render( renderArea );
+
+            position += waveStep;
         }
     }
 
-    RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::UNKNOWN, true );
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
 }
 
 void Battle::Interface::RedrawActionColdRingSpell( int32_t dst, const TargetsInfo & targets )
@@ -4476,7 +5299,7 @@ void Battle::Interface::RedrawActionColdRingSpell( int32_t dst, const TargetsInf
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4502,40 +5325,85 @@ void Battle::Interface::RedrawActionColdRingSpell( int32_t dst, const TargetsInf
         }
 }
 
-void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength )
+void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    const fheroes2::Image original( _mainSurface );
-    const fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, strength );
+    // Set all non-dead troops animation to static and redraw the '_mainSurface'.
+    SwitchAllUnitsAnimation( Monster_Info::STATIC );
+    Redraw();
+
+    fheroes2::Rect area = GetArea();
+    // Cut out the battle log image so we don't use it in the death wave effect.
+    area.height -= status.height;
+    // And if listlog is open, then cut off it too.
+    if ( listlog && listlog->isOpenLog() ) {
+        area.height -= listlog->GetArea().height;
+    }
+
+    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
-    AudioManager::PlaySound( M82::MASSCURS );
 
-    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / 20;
+    const uint32_t maxFrame = 20;
+    const uint32_t halfMaxFrame = maxFrame / 2;
+
+    // A vector of frames to animate the increase of the spell effect. The decrease will be shown in reverse frames order.
+    // Initialize a vector with copies of battle field to use them in making the spell effect increase animation.
+    std::vector<fheroes2::Image> spellEffect;
+    static_assert( halfMaxFrame > 1 );
+    spellEffect.reserve( halfMaxFrame );
+
+    const uint32_t spellEffectLastFrame = halfMaxFrame - 1;
+
+    // The similar frames number is smaller than size by 1 as the last frame will be different.
+    while ( spellEffect.size() < spellEffectLastFrame ) {
+        spellEffect.push_back( battleFieldCopy );
+    }
+
+    // The last frame is the full power of spell effect. It will be used to produce other frames.
+    spellEffect.emplace_back( fheroes2::CreateHolyShoutEffect( battleFieldCopy, 4, strength ) );
+
+    const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / maxFrame;
     uint32_t frame = 0;
     uint8_t alpha = 30;
+    const uint8_t alphaStep = 25;
 
-    while ( le.HandleEvents() && frame < 20 ) {
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Rect renderArea( _interfacePosition.x + area.x, _interfacePosition.y + area.y, area.width, area.height );
+
+    // Immediately indicate that the delay has passed to render first frame immediately.
+    Game::passCustomAnimationDelay( spellcastDelay );
+    // Make sure that the first run is passed immediately.
+    assert( !Game::isCustomDelayNeeded( spellcastDelay ) );
+
+    AudioManager::PlaySound( M82::MASSCURS );
+
+    while ( le.HandleEvents( Game::isCustomDelayNeeded( spellcastDelay ) ) && frame < maxFrame ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateCustomAnimationDelay( spellcastDelay ) ) {
-            // stay at maximum blur for 2 frames
-            if ( frame < 9 || frame > 10 ) {
-                fheroes2::Copy( original, _mainSurface );
-                fheroes2::AlphaBlit( blurred, _mainSurface, alpha );
-                RedrawPartialFinish();
+            // Display the maximum spell effect for 1 more 'spellcastDelay' without rendering a frame.
+            if ( frame != halfMaxFrame ) {
+                // If the spell effect is increasing we generate the frame for it in the vector to use it later in decreasing animation.
+                if ( frame < spellEffectLastFrame ) {
+                    fheroes2::AlphaBlit( spellEffect[spellEffectLastFrame], spellEffect[frame], alpha );
+                    alpha += alphaStep;
+                }
 
-                alpha += ( frame < 10 ) ? 25 : -25;
+                const uint32_t spellEffectFrame = ( frame < halfMaxFrame ) ? frame : ( maxFrame - frame - 1 );
+                fheroes2::Copy( spellEffect[spellEffectFrame], area.x, area.y, display, renderArea.x, renderArea.y, renderArea.width, renderArea.height );
+
+                display.render( renderArea );
             }
+
             ++frame;
         }
     }
-
-    RedrawTargetsWithFrameAnimation( targets, ICN::MAGIC08, M82::UNKNOWN, true );
 }
 
 void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & targets )
@@ -4565,7 +5433,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
     uint32_t frame = 0;
-    while ( le.HandleEvents() && frame < 60 ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < 60 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4619,7 +5487,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents() && alpha < 100 ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && alpha < 100 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4634,7 +5502,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     fheroes2::ApplyPalette( spriteReddish, PAL::GetPalette( PAL::PaletteType::RED ) );
     fheroes2::Copy( spriteReddish, 0, 0, _mainSurface, area.x, area.y, area.width, area.height );
 
-    while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4685,7 +5553,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
     // draw earth quake
-    while ( le.HandleEvents() && frame < 18 ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < 18 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4725,7 +5593,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4753,22 +5621,30 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
     if ( mirrorImages.empty() ) // nothing to animate
         return;
 
+    // Reset the delay to wait till the next frame if is not already waiting.
+    if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
+        Game::AnimateResetDelay( Game::DelayType::BATTLE_FRAME_DELAY );
+    }
+
     LocalEvent & le = LocalEvent::Get();
 
-    int frame = 10;
-    while ( le.HandleEvents() && frame > 0 ) {
+    uint8_t frameId = 10;
+    const uint8_t alphaStep = 25;
+
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_FRAME_DELAY } ) ) && frameId > 0 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
-            const uint32_t alpha = static_cast<uint32_t>( frame ) * 25;
-            for ( std::vector<Unit *>::const_iterator it = mirrorImages.begin(); it != mirrorImages.end(); ++it ) {
-                if ( *it )
-                    ( *it )->SetCustomAlpha( alpha );
+            const uint8_t alpha = frameId * alphaStep;
+            for ( Unit * unit : mirrorImages ) {
+                if ( unit != nullptr ) {
+                    unit->SetCustomAlpha( alpha );
+                }
             }
 
             Redraw();
 
-            --frame;
+            --frameId;
         }
     }
     status.SetMessage( _( "The mirror image is destroyed!" ), true );
@@ -4794,7 +5670,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents() && frame < frameCount ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && frame < frameCount ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4823,154 +5699,225 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
         }
 }
 
-fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
-{
-    const fheroes2::Rect & pos = target.GetRectPosition();
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
-
-    // Bottom-left corner (default) position with spell offset applied
-    fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.height + cellYOffset + spellSprite.y() );
-
-    switch ( spellICN ) {
-    case ICN::SHIELD:
-        // in front of the unit
-        result.x += target.isReflect() ? -pos.width / ( target.isWide() ? 2 : 1 ) : pos.width;
-        result.y += unitSprite.y() / 2;
-        break;
-    case ICN::BLIND: {
-        // unit's eyes
-        const fheroes2::Point & offset = target.animation.getBlindOffset();
-
-        // calculate OG Heroes2 unit position to apply offset to
-        const int rearCenterX = ( target.isWide() && target.isReflect() ) ? pos.width * 3 / 4 : CELLW / 2;
-
-        // Overwrite result with custom blind value
-        result.x += rearCenterX + ( target.isReflect() ? -offset.x : offset.x );
-        result.y += offset.y;
-        break;
-    }
-    case ICN::STONSKIN:
-    case ICN::STELSKIN:
-        // bottom center point
-        result.x += pos.width / 2;
-        break;
-    default:
-        // center point of the unit
-        result.x += pos.width / 2;
-        result.y += unitSprite.y() / 2;
-        break;
-    }
-
-    if ( result.y < 0 ) {
-        const int maximumY = fheroes2::AGG::GetAbsoluteICNHeight( spellICN );
-        result.y = maximumY + spellSprite.y();
-    }
-
-    return result;
-}
-
 void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & targets, int icn, int m82, bool wnce )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    uint32_t frame = 0;
+    // A vector for creatures made by Mirror Image spell which will be destroyed by current spell.
+    std::vector<Unit *> mirrorImages;
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = nullptr;
 
-    if ( wnce )
-        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-            if ( ( *it ).defender && ( *it ).damage )
-                ( *it ).defender->SwitchAnimation( Monster_Info::WNCE );
+    if ( wnce ) {
+        int32_t deathColor = Color::UNUSED;
 
-    AudioManager::PlaySound( m82 );
+        for ( const TargetInfo & target : targets ) {
+            Unit * defender = target.defender;
+            if ( defender == nullptr ) {
+                continue;
+            }
 
-    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+            if ( defender->isModes( CAP_MIRRORIMAGE ) ) {
+                mirrorImages.push_back( defender );
+            }
 
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
-        CheckGlobalEvents( le );
-
-        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            RedrawPartialStart();
-
-            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-                if ( ( *it ).defender ) {
-                    const bool reflect = ( icn == ICN::SHIELD && it->defender->isReflect() );
-                    const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-                    const fheroes2::Point & pos = CalculateSpellPosition( *it->defender, icn, spellSprite );
-                    fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
+            // If the creature was killed set its death animation.
+            if ( !defender->isValid() ) {
+                // Destroy linked mirror to a dead creature.
+                if ( defender->isModes( CAP_MIRROROWNER ) ) {
+                    mirrorImages.push_back( defender->GetMirror() );
                 }
-            RedrawPartialFinish();
 
-            if ( wnce )
-                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-                    if ( ( *it ).defender && ( *it ).damage )
-                        ( *it ).defender->IncreaseAnimFrame( false );
-            ++frame;
+                defender->SwitchAnimation( Monster_Info::KILL );
+                AudioManager::PlaySound( defender->M82Kill() );
+
+                // Set the color of the dead creature to tell heroes about it.
+                deathColor = defender->GetArmyColor();
+            }
+            // If the creature is damaged but is still alive set its wince animation.
+            else if ( target.damage ) {
+                defender->SwitchAnimation( Monster_Info::WNCE_UP );
+                AudioManager::PlaySound( defender->M82Wnce() );
+            }
+
+            SetHeroAnimationReactionToTroopDeath( deathColor );
         }
     }
 
-    if ( wnce )
-        for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
-            if ( ( *it ).defender ) {
-                ( *it ).defender->SwitchAnimation( Monster_Info::STATIC );
-                _currentUnit = nullptr;
+    // For certain spells reflect the spell sprite if the creature is reflected.
+    const bool isReflectICN = ( icn == ICN::SHIELD || icn == ICN::REDDEATH || icn == ICN::MAGIC08 );
+
+    size_t overlaySpriteCount = _unitSpellEffectInfos.size();
+    _unitSpellEffectInfos.reserve( overlaySpriteCount + targets.size() );
+
+    for ( const Battle::TargetInfo & target : targets ) {
+        if ( target.defender ) {
+            _unitSpellEffectInfos.emplace_back( target.defender->GetUID(), icn, ( isReflectICN && target.defender->isReflect() ) );
+        }
+    }
+
+    overlaySpriteCount = _unitSpellEffectInfos.size() - overlaySpriteCount;
+    const std::vector<Battle::UnitSpellEffectInfo>::iterator overlaySpriteEnd = _unitSpellEffectInfos.end();
+    const std::vector<Battle::UnitSpellEffectInfo>::iterator overlaySpriteBegin = overlaySpriteEnd - static_cast<ptrdiff_t>( overlaySpriteCount );
+
+    // Set the defender wince animation state.
+    bool isDefenderAnimating = wnce;
+    const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icn );
+    uint32_t frame = 0;
+
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
+
+    AudioManager::PlaySound( m82 );
+
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && ( frame < maxFrame || isDefenderAnimating ) ) {
+        CheckGlobalEvents( le );
+
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            if ( frame < maxFrame ) {
+                std::vector<Battle::UnitSpellEffectInfo>::iterator overlaySpriteIter = overlaySpriteBegin;
+                const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
+
+                for ( const Battle::TargetInfo & target : targets ) {
+                    if ( target.defender ) {
+                        overlaySpriteIter->position = CalculateSpellPosition( *target.defender, icn, spellSprite );
+                        overlaySpriteIter->icnIndex = frame;
+
+                        ++overlaySpriteIter;
+                    }
+                }
             }
+
+            Redraw();
+
+            // Reset the defender wince animation state.
+            isDefenderAnimating = false;
+
+            if ( wnce ) {
+                for ( const TargetInfo & target : targets ) {
+                    if ( target.defender == nullptr ) {
+                        continue;
+                    }
+
+                    // Fully animate creature death.
+                    if ( !target.defender->isValid() ) {
+                        target.defender->IncreaseAnimFrame( false );
+
+                        // If the death animation is still in process then set isDefenderAnimating to false.
+                        isDefenderAnimating |= !target.defender->isFinishAnimFrame();
+                    }
+                    else if ( target.damage ) {
+                        // If the target has taken damage and is not killed.
+                        // Check if the current animation is not finished.
+                        if ( !target.defender->isFinishAnimFrame() ) {
+                            target.defender->IncreaseAnimFrame( false );
+                        }
+                        else if ( frame >= ( maxFrame - 1 ) && target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) {
+                            // If the main spell sprite animation and WNCE_UP are finished then switch unit animation to WNCE_DOWN.
+                            target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
+                        }
+                        else if ( target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) {
+                            // If the WNCE_DOWN animation is finished, then set STATIC animation to the target.
+                            target.defender->SwitchAnimation( Monster_Info::STATIC );
+                        }
+
+                        // If not all damaged (and not killed) units are set to STATIC animation then set isDefenderAnimating to false.
+                        // IMPORTANT: The game engine can change STATIC animation to IDLE, especially for Ghosts and Zombies,
+                        // so we need to check IDLE where we check for STATIC.
+                        const int unitAnimState = target.defender->GetAnimationState();
+                        isDefenderAnimating |= ( unitAnimState != Monster_Info::STATIC ) && ( unitAnimState != Monster_Info::IDLE );
+                    }
+                }
+            }
+
+            ++frame;
+
+            // Remove all overlay sprites when the animation is finished.
+            if ( frame == maxFrame ) {
+                _unitSpellEffectInfos.erase( overlaySpriteBegin, overlaySpriteEnd );
+            }
+        }
+    }
+
+    // TODO: When there is a need to display some permanent effects with '_unitSpellEffectInfos' - remove this assertion.
+    assert( _unitSpellEffectInfos.empty() );
+
+    if ( !mirrorImages.empty() ) {
+        // Fade away animation for destroyed mirror images.
+        RedrawActionRemoveMirrorImage( mirrorImages );
+    }
 }
 
-void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation )
+void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int m82, CreatureSpellAnimation animation )
 {
     LocalEvent & le = LocalEvent::Get();
 
     uint32_t frame = 0;
-    const bool reflect = ( icn == ICN::SHIELD && b.isReflect() );
+    const bool reflect = ( icn == ICN::SHIELD && unit.isReflect() );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     if ( animation == WINCE ) {
         _currentUnit = nullptr;
-        b.SwitchAnimation( Monster_Info::WNCE );
+        unit.SwitchAnimation( Monster_Info::WNCE_UP );
     }
     else if ( animation == RESURRECT ) {
         _currentUnit = nullptr;
-        b.SwitchAnimation( Monster_Info::KILL, true );
+        unit.SwitchAnimation( Monster_Info::KILL, true );
     }
+
+    _unitSpellEffectInfos.emplace_back( unit.GetUID(), icn, reflect );
+
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
+
+    const uint32_t maxICNFrame = fheroes2::AGG::GetICNCount( icn );
 
     AudioManager::PlaySound( m82 );
 
-    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
-
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_SPELL_DELAY } ) ) && ( frame < maxICNFrame || unit.GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            RedrawPartialStart();
-
-            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
-            const fheroes2::Point & pos = CalculateSpellPosition( b, icn, spellSprite );
-            fheroes2::Blit( spellSprite, _mainSurface, pos.x, pos.y, reflect );
-            RedrawPartialFinish();
+            if ( frame < maxICNFrame ) {
+                _unitSpellEffectInfos.back().position = CalculateSpellPosition( unit, icn, fheroes2::AGG::GetICN( icn, frame ) );
+                _unitSpellEffectInfos.back().icnIndex = frame;
+            }
+            Redraw();
 
             if ( animation != NONE ) {
-                if ( animation == RESURRECT ) {
-                    if ( b.isFinishAnimFrame() )
-                        b.SwitchAnimation( Monster_Info::STATIC );
+                if ( ( animation == RESURRECT || unit.GetAnimationState() == Monster_Info::WNCE_DOWN ) && unit.isFinishAnimFrame() ) {
+                    unit.SwitchAnimation( Monster_Info::STAND_STILL );
                 }
-                b.IncreaseAnimFrame( false );
+                unit.IncreaseAnimFrame( false );
+                if ( frame == maxICNFrame - 1 && animation == WINCE ) {
+                    unit.SwitchAnimation( Monster_Info::WNCE_DOWN );
+                }
             }
             ++frame;
+            if ( frame == maxICNFrame ) {
+                // Spell animation is finished, so delete the overlay sprite from unit.
+                _unitSpellEffectInfos.pop_back();
+            }
         }
     }
 
+    // TODO: When there is a need to display some permanent effects with '_unitSpellEffectInfos' - remove this assertion.
+    assert( _unitSpellEffectInfos.empty() );
+
     if ( animation != NONE ) {
-        b.SwitchAnimation( Monster_Info::STATIC );
+        unit.SwitchAnimation( Monster_Info::STATIC );
         _currentUnit = nullptr;
     }
 }
 
 void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
 {
+    // Wait for previously set and not passed delays before rendering a new frame.
+    WaitForAllActionDelays();
+
     LocalEvent & le = LocalEvent::Get();
 
     _bridgeAnimation.animationIsRequired = true;
@@ -4980,7 +5927,7 @@ void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
     if ( bridgeDownAnimation )
         AudioManager::PlaySound( M82::DRAWBRG );
 
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_BRIDGE_DELAY } ) ) ) {
         if ( bridgeDownAnimation ) {
             if ( _bridgeAnimation.currentFrameId < BridgeMovementAnimation::DOWN_POSITION )
                 break;
@@ -5024,36 +5971,55 @@ void Battle::Interface::ResetIdleTroopAnimation() const
     arena.GetForce2().resetIdleAnimation();
 }
 
+void Battle::Interface::SwitchAllUnitsAnimation( const int32_t animationState ) const
+{
+    for ( Battle::Unit * unit : arena.GetForce1() ) {
+        if ( unit->isValid() ) {
+            unit->SwitchAnimation( animationState );
+        }
+    }
+    for ( Battle::Unit * unit : arena.GetForce2() ) {
+        if ( unit->isValid() ) {
+            unit->SwitchAnimation( animationState );
+        }
+    }
+}
+
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 {
-    if ( Game::validateAnimationDelay( Game::BATTLE_SELECTED_UNIT_DELAY ) )
+    // Animation of the currently active unit's contour
+    if ( Game::validateAnimationDelay( Game::BATTLE_SELECTED_UNIT_DELAY ) ) {
         UpdateContourColor();
-
-    // animate heroes
-    if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-        if ( opponent1 )
-            opponent1->Update();
-
-        if ( opponent2 )
-            opponent2->Update();
-
-        humanturn_redraw = true;
     }
 
-    // flags animation
+    // Animation of heroes
+    if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
+        if ( opponent1 && opponent1->updateAnimationState() ) {
+            humanturn_redraw = true;
+        }
+
+        if ( opponent2 && opponent2->updateAnimationState() ) {
+            humanturn_redraw = true;
+        }
+    }
+
+    // Animation of flags
     if ( Game::validateAnimationDelay( Game::BATTLE_FLAGS_DELAY ) ) {
         ++animation_flags_frame;
         humanturn_redraw = true;
     }
 
-    // break auto battle
+    // Interrupting auto battle
     if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
          && ( le.MouseClickLeft( btn_auto.area() )
               || ( le.KeyPress()
-                   && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH )
+                   && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
                         || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
-                             && Dialog::YES == Dialog::Message( "", _( "Break auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) ) ) ) ) {
-        _breakAutoBattleForColor = arena.GetCurrentColor();
+                             && fheroes2::showMessage( fheroes2::Text( "", {} ),
+                                                       fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
+                                                       Dialog::YES | Dialog::NO )
+                                    == Dialog::YES ) ) ) ) ) {
+        _interruptAutoBattleForColor = arena.GetCurrentColor();
     }
 }
 
@@ -5074,7 +6040,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                 else {
                     std::function<void( const std::string & )> statusCallback = [this]( const std::string & statusStr ) {
                         status.SetMessage( statusStr );
-                        status.Redraw();
+                        status.Redraw( fheroes2::Display::instance() );
                     };
 
                     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, &statusCallback );
@@ -5156,8 +6122,9 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
 Battle::PopupDamageInfo::PopupDamageInfo()
     : Dialog::FrameBorder( 5 )
     , _cell( nullptr )
-    , _attacker( nullptr )
     , _defender( nullptr )
+    , _minDamage( 0 )
+    , _maxDamage( 0 )
     , _redraw( false )
 {}
 
@@ -5166,92 +6133,123 @@ void Battle::PopupDamageInfo::setBattleUIRect( const fheroes2::Rect & battleUIRe
     _battleUIRect = battleUIRect;
 }
 
-void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender )
+bool Battle::PopupDamageInfo::SetDamageInfoBase( const Cell * cell, const Unit * defender )
 {
-    if ( cell == nullptr || attacker == nullptr || defender == nullptr ) {
-        return;
+    if ( cell == nullptr || defender == nullptr ) {
+        return false;
     }
 
-    if ( !Settings::Get().ExtBattleShowDamage() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
+    if ( !Settings::Get().isBattleShowDamageInfoEnabled() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
+        return false;
+    }
+
+    _cell = cell;
+    _defender = defender;
+
+    return true;
+}
+
+void Battle::PopupDamageInfo::SetAttackInfo( const Cell * cell, const Unit * attacker, const Unit * defender )
+{
+    if ( attacker == nullptr || !SetDamageInfoBase( cell, defender ) ) {
         return;
     }
 
     _redraw = true;
-    _cell = cell;
-    _attacker = attacker;
-    _defender = defender;
+    _minDamage = attacker->CalculateMinDamage( *defender );
+    _maxDamage = attacker->CalculateMaxDamage( *defender );
+
+    if ( attacker->Modes( SP_BLESS ) ) {
+        _minDamage = _maxDamage;
+    }
+    else if ( attacker->Modes( SP_CURSE ) ) {
+        _maxDamage = _minDamage;
+    }
+}
+
+void Battle::PopupDamageInfo::SetSpellAttackInfo( const Cell * cell, const HeroBase * hero, const Unit * defender, const Spell spell )
+{
+    assert( hero != nullptr );
+
+    // TODO: Currently, this functionality only supports a simple single-target spell case
+    // We should refactor this to apply to all cases
+    if ( !spell.isSingleTarget() || !spell.isDamage() ) {
+        return;
+    }
+
+    if ( !SetDamageInfoBase( cell, defender ) ) {
+        return;
+    }
+
+    // If defender unit immune to magic, do not show the tooltip
+    if ( !defender->AllowApplySpell( spell, hero ) ) {
+        return;
+    }
+
+    const int spellPoints = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
+    const uint32_t spellDamage = defender->CalculateSpellDamage( spell, spellPoints, hero, 0 /* targetInfo damage */, true /* ignore defending hero */ );
+
+    _redraw = true;
+    _minDamage = spellDamage;
+    _maxDamage = spellDamage;
 }
 
 void Battle::PopupDamageInfo::Reset()
 {
     if ( _redraw ) {
-        restorer.restore();
-
         _redraw = false;
         _cell = nullptr;
-        _attacker = nullptr;
         _defender = nullptr;
+        _minDamage = 0;
+        _maxDamage = 0;
     }
 
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
 }
 
-void Battle::PopupDamageInfo::Redraw()
+void Battle::PopupDamageInfo::Redraw() const
 {
     if ( !_redraw ) {
         return;
     }
 
-    assert( _cell != nullptr && _attacker != nullptr && _defender != nullptr );
+    assert( _cell != nullptr && _defender != nullptr );
 
-    uint32_t minDamage = _attacker->CalculateMinDamage( *_defender );
-    uint32_t maxDamage = _attacker->CalculateMaxDamage( *_defender );
+    std::string str = _minDamage == _maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
-    if ( _attacker->Modes( SP_BLESS ) ) {
-        minDamage = maxDamage;
-    }
-    else if ( _attacker->Modes( SP_CURSE ) ) {
-        maxDamage = minDamage;
-    }
-
-    std::string str = minDamage == maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
-
-    StringReplace( str, "%{min}", minDamage );
-    StringReplace( str, "%{max}", maxDamage );
+    StringReplace( str, "%{min}", std::to_string( _minDamage ) );
+    StringReplace( str, "%{max}", std::to_string( _maxDamage ) );
 
     Text damageText( str, Font::SMALL );
 
-    const uint32_t minNumKilled = _defender->HowManyWillKilled( minDamage );
-    const uint32_t maxNumKilled = _defender->HowManyWillKilled( maxDamage );
+    const uint32_t minNumKilled = _defender->HowManyWillKilled( _minDamage );
+    const uint32_t maxNumKilled = _defender->HowManyWillKilled( _maxDamage );
 
     assert( minNumKilled <= _defender->GetCount() && maxNumKilled <= _defender->GetCount() );
 
     str = minNumKilled == maxNumKilled ? _( "Perish: %{max}" ) : _( "Perish: %{min} - %{max}" );
 
-    StringReplace( str, "%{min}", minNumKilled );
-    StringReplace( str, "%{max}", maxNumKilled );
+    StringReplace( str, "%{min}", std::to_string( minNumKilled ) );
+    StringReplace( str, "%{max}", std::to_string( maxNumKilled ) );
 
     Text killedText( str, Font::SMALL );
 
     const fheroes2::Rect & cellRect = _cell->GetPos();
+
+    // Get the border width and set the popup parameters.
+    const int borderWidth = BorderWidth();
+    const int x = _battleUIRect.x + cellRect.x + cellRect.width;
     const int y = _battleUIRect.y + cellRect.y;
-    const int w = std::max( damageText.w(), killedText.w() );
-    const int h = damageText.h() + killedText.h();
+    const int w = std::max( damageText.w(), killedText.w() ) + 2 * borderWidth;
+    const int h = damageText.h() + killedText.h() + 2 * borderWidth;
 
-    SetPosition( _battleUIRect.x + cellRect.x + cellRect.width, y, w, h );
-
-    const fheroes2::Rect & borderRect = GetRect();
-    const fheroes2::Display & display = fheroes2::Display::instance();
-
-    // If the damage info popup doesn't fit on the screen, then try to place it on the other side of the cell
-    if ( ( fheroes2::Rect( 0, 0, display.width(), display.height() ) ^ borderRect ) != borderRect ) {
-        SetPosition( _battleUIRect.x + cellRect.x - borderRect.width, y, w, h );
-    }
+    // If the damage info popup doesn't fit the battlefield draw surface, then try to place it on the left side of the cell
+    const bool isLeftSidePopup = ( cellRect.x + cellRect.width + w ) > _battleUIRect.width;
+    const fheroes2::Rect borderRect( isLeftSidePopup ? ( x - w - cellRect.width - borderWidth ) : x, y, w, h );
 
     Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), borderRect );
 
-    const fheroes2::Rect & borderArea = GetArea();
-
-    damageText.Blit( borderArea.x, borderArea.y );
-    killedText.Blit( borderArea.x, borderArea.y + borderArea.height / 2 );
+    const int leftTextBorder = borderRect.x + borderWidth;
+    damageText.Blit( leftTextBorder, borderRect.y + borderWidth );
+    killedText.Blit( leftTextBorder, borderRect.y + borderRect.height / 2 );
 }

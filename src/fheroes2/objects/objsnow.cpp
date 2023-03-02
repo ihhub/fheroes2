@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,7 +22,9 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <set>
+#include <bitset>
+#include <iterator>
+#include <vector>
 
 #include "direction.h"
 #include "mp2.h"
@@ -52,7 +54,7 @@ int ObjSnow::GetPassable( const uint8_t index )
 
 bool ObjSnow::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjSnow::isShadow( const uint8_t index )
@@ -66,23 +68,23 @@ int ObjSnow::GetActionObject( uint32_t index )
     case 3:
         return MP2::OBJ_CAVE;
     case 13:
-        return MP2::OBJ_LEANTO;
+        return MP2::OBJ_LEAN_TO;
     case 128:
         return MP2::OBJ_WINDMILL;
     case 138:
-        return MP2::OBJ_WATCHTOWER;
+        return MP2::OBJ_WATCH_TOWER;
     case 141:
         return MP2::OBJ_OBELISK;
     case 143:
         return MP2::OBJ_SIGN;
     case 150:
-        return MP2::OBJ_ALCHEMYTOWER;
+        return MP2::OBJ_ALCHEMIST_TOWER;
     case 160:
         return MP2::OBJ_GRAVEYARD;
     case 191:
-        return MP2::OBJ_WATERWHEEL;
+        return MP2::OBJ_WATER_WHEEL;
     case 194:
-        return MP2::OBJ_MAGICWELL;
+        return MP2::OBJ_MAGIC_WELL;
     case 201:
         return MP2::OBJ_SAWMILL;
     case 209:
@@ -91,5 +93,5 @@ int ObjSnow::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

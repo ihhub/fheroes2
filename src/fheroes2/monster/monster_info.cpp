@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,6 +19,18 @@
  ***************************************************************************/
 
 #include "monster_info.h"
+
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <set>
+#include <sstream>
+#include <utility>
+
 #include "icn.h"
 #include "m82.h"
 #include "monster.h"
@@ -27,12 +39,6 @@
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
-
-#include <algorithm>
-#include <cassert>
-#include <map>
-#include <set>
-#include <sstream>
 
 namespace
 {
@@ -59,7 +65,7 @@ namespace
         }
 
         if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) ) {
-            damagePotential *= 1.15; // 15% of all Monsters are Undead, deals double dmg
+            damagePotential *= 1.15; // 15% of all Monsters are Undead, deals double damage.
         }
 
         if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
@@ -124,7 +130,7 @@ namespace
         const int speedDiff = battleStats.speed - Speed::AVERAGE;
         monsterSpecial += ( speedDiff < 0 ) ? speedDiff * 0.1 : speedDiff * 0.05;
 
-        // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
+        // Additional HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
         return sqrt( damagePotential * effectiveHP ) * monsterSpecial;
     }
 

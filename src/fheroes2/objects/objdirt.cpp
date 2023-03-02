@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,7 +22,9 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <set>
+#include <bitset>
+#include <iterator>
+#include <vector>
 
 #include "direction.h"
 #include "mp2.h"
@@ -53,7 +55,7 @@ int ObjDirt::GetPassable( const uint8_t index )
 
 bool ObjDirt::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjDirt::isShadow( const uint8_t index )
@@ -65,15 +67,15 @@ int ObjDirt::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 8:
-        return MP2::OBJ_ABANDONEDMINE;
+        return MP2::OBJ_ABANDONED_MINE;
     case 129:
-        return MP2::OBJ_FAERIERING;
+        return MP2::OBJ_FAERIE_RING;
     case 135:
-        return MP2::OBJ_HILLFORT;
+        return MP2::OBJ_HILL_FORT;
     case 138:
-        return MP2::OBJ_HALFLINGHOLE;
+        return MP2::OBJ_HALFLING_HOLE;
     case 151:
-        return MP2::OBJ_TREECITY;
+        return MP2::OBJ_TREE_CITY;
     case 185:
         return MP2::OBJ_WINDMILL;
     case 197:
@@ -85,5 +87,5 @@ int ObjDirt::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

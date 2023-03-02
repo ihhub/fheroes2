@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,11 +23,16 @@
 #ifndef H2MAPS_OBJECTS_H
 #define H2MAPS_OBJECTS_H
 
+#include <cstdint>
+#include <list>
 #include <string>
+#include <vector>
 
 #include "artifact.h"
 #include "position.h"
 #include "resource.h"
+
+class StreamBase;
 
 class StreamBuf;
 
@@ -92,7 +97,7 @@ struct MapSphinx : public MapObjectSimple
 {
     MapSphinx();
 
-    void LoadFromMP2( int32_t index, StreamBuf );
+    void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data );
 
     bool AnswerCorrect( const std::string & answer );
     void SetQuiet();

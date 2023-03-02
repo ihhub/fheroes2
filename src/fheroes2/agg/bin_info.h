@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 #define H2BIN_FRM_H
 
 #include <cstddef>
+#include <cstdint>
 #include <vector>
 
 #include "math_base.h"
@@ -41,7 +42,7 @@ namespace Bin_Info
             TEMPORARY, // This is an empty placeholder for combined animation built from previous parts
             STATIC, // Frame 1
             IDLE1,
-            IDLE2, // Idle animations: picked at random with different probablities, rarely all 5 present
+            IDLE2, // Idle animations: picked at random with different probabilities, rarely all 5 present
             IDLE3,
             IDLE4,
             IDLE5,
@@ -68,7 +69,7 @@ namespace Bin_Info
             SHOOT3_END
         };
 
-        std::vector<std::vector<int> > frameXOffset;
+        std::vector<std::vector<int>> frameXOffset;
         uint32_t moveSpeed;
         uint32_t shootSpeed;
         uint32_t flightSpeed;
@@ -81,7 +82,7 @@ namespace Bin_Info
         std::vector<uint32_t> unusedIdleDelays;
         uint32_t idleAnimationCount;
         uint32_t idleAnimationDelay;
-        std::vector<std::vector<int> > animationFrames;
+        std::vector<std::vector<int>> animationFrames;
 
         MonsterAnimInfo( int monsterID = 0, const std::vector<uint8_t> & bytes = std::vector<uint8_t>() );
         bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;

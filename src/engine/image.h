@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include "math_base.h"
@@ -166,6 +167,11 @@ namespace fheroes2
             return _height;
         }
 
+        Rect rect() const
+        {
+            return { _x, _y, _width, _height };
+        }
+
         void restore();
         void reset();
 
@@ -223,9 +229,12 @@ namespace fheroes2
     // Copies transform the layer from in to out. Both images must be of the same size.
     void CopyTransformLayer( const Image & in, Image & out );
 
-    Image CreateBlurredImage( const Image & in, int32_t blurRadius );
-
     Sprite CreateContour( const Image & image, uint8_t value );
+
+    // Make a transition to "in" image from left to right or vertically - from top to bottom using dithering (https://en.wikipedia.org/wiki/Dither).
+    // The direction of transition can be reversed.
+    void CreateDitheringTransition( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
+                                    const bool isVertical, const bool isReverse );
 
     Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height );
 
@@ -236,6 +245,9 @@ namespace fheroes2
     void DrawLine( Image & image, const Point & start, const Point & end, uint8_t value, const Rect & roi = Rect() );
 
     void DrawRect( Image & image, const Rect & roi, uint8_t value );
+
+    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, std::vector<Point> & outputSquareId,
+                               std::vector<std::pair<Point, Rect>> & outputImageInfo );
 
     // Every image in the array must be the same size. Make sure that pointers aren't nullptr!
     Image ExtractCommonPattern( const std::vector<const Image *> & input );
@@ -250,6 +262,7 @@ namespace fheroes2
     bool FitToRoi( const Image & in, Point & inPos, const Image & out, Point & outPos, Size & outputSize, const Rect & outputRoi );
 
     Image Flip( const Image & in, bool horizontally, bool vertically );
+    void Flip( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool horizontally, bool vertically );
 
     // Return ROI with pixels which are not skipped and not used for shadow creation. 1 is to skip, 2 - 5 types of shadows
     Rect GetActiveROI( const Image & image, const uint8_t minTransformValue = 6 );
@@ -257,9 +270,11 @@ namespace fheroes2
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
 
-    std::vector<uint8_t> getTransformTable( const fheroes2::Image & in, const fheroes2::Image & out, int32_t x, int32_t y, int32_t width, int32_t height );
+    std::vector<uint8_t> getTransformTable( const Image & in, const Image & out, int32_t x, int32_t y, int32_t width, int32_t height );
 
     Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );
+
+    void MaskTransformLayer( const Image & mask, int32_t maskX, int32_t maskY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
     // This function does NOT check transform layer. If you intent to replace few colors at the same image please use ApplyPalette to be more efficient.
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId );

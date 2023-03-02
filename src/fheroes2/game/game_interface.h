@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,13 +24,19 @@
 #ifndef H2GAMEINTERFACE_H
 #define H2GAMEINTERFACE_H
 
+#include <cstdint>
+
+#include "game_mode.h"
+#include "gamedefs.h"
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_radar.h"
 #include "interface_status.h"
+#include "math_base.h"
 #include "players.h"
+#include "screen.h"
 
 class Castle;
 class Heroes;
@@ -55,13 +61,16 @@ namespace Interface
 {
     enum redraw_t : uint32_t
     {
-        REDRAW_RADAR = 0x01,
-        REDRAW_HEROES = 0x02,
-        REDRAW_CASTLES = 0x04,
-        REDRAW_BUTTONS = 0x08,
-        REDRAW_STATUS = 0x10,
-        REDRAW_BORDER = 0x20,
-        REDRAW_GAMEAREA = 0x40,
+        // To render the cursor over the previously generated radar map image.
+        REDRAW_RADAR_CURSOR = 0x01,
+        // To render radar map fully or in ROI and then the cursor over it.
+        REDRAW_RADAR = 0x02,
+        REDRAW_HEROES = 0x04,
+        REDRAW_CASTLES = 0x08,
+        REDRAW_BUTTONS = 0x10,
+        REDRAW_STATUS = 0x20,
+        REDRAW_BORDER = 0x40,
+        REDRAW_GAMEAREA = 0x80,
 
         REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
         REDRAW_ALL = 0xFF
@@ -74,6 +83,32 @@ namespace Interface
     class Basic
     {
     public:
+        // This class is used to lock rendering of Basic class. This is useful when we have to generate only a single frame.
+        // Use this class ONLY when you are going to call rendering after all other operations.
+        class RedrawLocker
+        {
+        public:
+            explicit RedrawLocker( Basic & basic )
+                : _basic( basic )
+            {
+                _basic._lockRedraw = true;
+            }
+
+            RedrawLocker( const RedrawLocker & ) = delete;
+            RedrawLocker( RedrawLocker && ) = delete;
+
+            RedrawLocker & operator=( const RedrawLocker & ) = delete;
+            RedrawLocker & operator=( RedrawLocker && ) = delete;
+
+            ~RedrawLocker()
+            {
+                _basic._lockRedraw = false;
+            }
+
+        private:
+            Basic & _basic;
+        };
+
         static Basic & Get();
 
         bool NeedRedraw() const
@@ -148,6 +183,7 @@ namespace Interface
         void SetFocus( Castle * );
         void ResetFocus( int );
         void RedrawFocus();
+        void updateFocus();
 
         void EventSwitchHeroSleeping();
         fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );
@@ -205,6 +241,8 @@ namespace Interface
         ControlPanel controlPanel;
 
         uint32_t redraw;
+
+        bool _lockRedraw;
     };
 }
 

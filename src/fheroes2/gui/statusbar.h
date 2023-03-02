@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,6 +24,10 @@
 #ifndef H2STATUSBAR_H
 #define H2STATUSBAR_H
 
+#include <cstdint>
+#include <string>
+
+#include "math_base.h"
 #include "text.h"
 
 class StatusBar : public TextSprite
@@ -31,7 +35,10 @@ class StatusBar : public TextSprite
 public:
     StatusBar() = default;
 
-    void SetCenter( int32_t cx, int32_t cy );
+    void SetCenter( const int32_t cx, const int32_t cy )
+    {
+        center = { cx, cy };
+    }
 
     void ShowMessage( const std::string & msg );
 

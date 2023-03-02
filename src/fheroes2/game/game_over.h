@@ -24,6 +24,7 @@
 #ifndef H2GAMEOVER_H
 #define H2GAMEOVER_H
 
+#include <cstdint>
 #include <string>
 
 #include "game_mode.h"
@@ -79,7 +80,6 @@ namespace GameOver
 
         int colors;
         uint32_t result;
-        bool continueAfterVictory;
     };
 
     StreamBase & operator<<( StreamBase &, const Result & );

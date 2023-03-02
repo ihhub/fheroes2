@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,6 +24,9 @@
 #ifndef H2BATTLE_TROOP_H
 #define H2BATTLE_TROOP_H
 
+#include <cstddef>
+#include <cstdint>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -31,6 +34,8 @@
 #include "battle_animation.h"
 #include "battle_cell.h"
 #include "bitmodes.h"
+#include "math_base.h"
+#include "payment.h"
 #include "players.h"
 
 class Spell;
@@ -66,7 +71,6 @@ namespace Battle
         uint32_t FindZeroDuration() const;
     };
 
-    // battle troop stats
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
@@ -100,7 +104,6 @@ namespace Battle
         void NewTurn();
 
         bool isValid() const override;
-        bool isArchers() const;
         bool isFlying() const;
         bool isDoubleAttack() const;
 
@@ -189,7 +192,8 @@ namespace Battle
         void ResetBlind();
         void SetBlindAnswer( bool value );
         void SpellModesAction( const Spell &, uint32_t, const HeroBase * );
-        void SpellApplyDamage( const Spell &, uint32_t, const HeroBase *, TargetInfo & );
+        void SpellApplyDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, TargetInfo & target );
+        uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const;
         void SpellRestoreAction( const Spell &, uint32_t, const HeroBase * );
         uint32_t Resurrect( uint32_t, bool, bool );
 
@@ -211,12 +215,12 @@ namespace Battle
             return animation.getFrame();
         }
 
-        uint32_t GetCustomAlpha() const
+        uint8_t GetCustomAlpha() const
         {
             return customAlphaMask;
         }
 
-        void SetCustomAlpha( uint32_t alpha )
+        void SetCustomAlpha( uint8_t alpha )
         {
             customAlphaMask = alpha;
         }
@@ -285,7 +289,7 @@ namespace Battle
         RandomizedDelay idleTimer;
 
         bool blindanswer;
-        uint32_t customAlphaMask;
+        uint8_t customAlphaMask;
 
         const Rand::DeterministicRandomGenerator & _randomGenerator;
     };

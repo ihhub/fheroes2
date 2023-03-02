@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,8 +21,11 @@
 #ifndef AGG_FILE_H
 #define AGG_FILE_H
 
+#include <cstddef>
+#include <cstdint>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "serialize.h"
@@ -49,7 +52,7 @@ namespace fheroes2
         static const size_t _maxFilenameSize = 15; // 8.3 ASCIIZ file name + 2-bytes padding
 
         StreamFile _stream;
-        std::map<std::string, std::pair<uint32_t, uint32_t> > _files;
+        std::map<std::string, std::pair<uint32_t, uint32_t>> _files;
     };
 
     struct ICNHeader
@@ -63,8 +66,8 @@ namespace fheroes2
             , offsetData( 0 )
         {}
 
-        uint16_t offsetX;
-        uint16_t offsetY;
+        int16_t offsetX;
+        int16_t offsetY;
         uint16_t width;
         uint16_t height;
         uint8_t animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame

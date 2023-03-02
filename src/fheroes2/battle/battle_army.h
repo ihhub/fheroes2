@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,8 +24,14 @@
 #ifndef H2BATTLE_ARMY_H
 #define H2BATTLE_ARMY_H
 
+#include <cstdint>
+#include <vector>
+
 #include "army.h"
 #include "bitmodes.h"
+#include "monster.h"
+
+class HeroBase;
 
 namespace Rand
 {
@@ -41,8 +47,17 @@ namespace Battle
     {
     public:
         Units();
+
+        // Creates a shallow copy of 'units' (only pointers are copied), removing
+        // invalid units (i.e. empty slots) if requested
+        Units( const Units & units, const bool isRemoveInvalidUnits );
+
+        // Creates a shallow copy of 'units' (only pointers are copied), removing
+        // invalid units (i.e. empty slots) as well as the specified unit
+        Units( const Units & units, const Unit * unitToRemove );
+
         Units( const Units & ) = delete;
-        Units( const Units & units, const bool filter );
+
         virtual ~Units() = default;
 
         Units & operator=( const Units & ) = delete;
@@ -50,7 +65,6 @@ namespace Battle
         Unit * FindMode( uint32_t mod ) const;
         Unit * FindUID( uint32_t pid ) const;
 
-        void SortSlowest();
         void SortFastest();
         void SortArchers();
     };

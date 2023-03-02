@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,6 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cassert>
 
 #include "agg_image.h"
@@ -31,15 +32,20 @@
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "localevent.h"
 #include "m82.h"
 #include "monster.h"
 #include "pal.h"
 #include "profit.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
 #include "statusbar.h"
+#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 
 namespace
 {
@@ -285,7 +291,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     else if ( IsDwelling() ) {
         description = _( "The %{building} produces %{monster}." );
         StringReplace( description, "%{building}", Castle::GetStringBuilding( building, castle.GetRace() ) );
-        StringReplace( description, "%{monster}", Translation::StringLower( Monster( castle.GetRace(), building ).GetMultiName() ) );
+        StringReplaceWithLowercase( description, "%{monster}", Monster( castle.GetRace(), building ).GetMultiName() );
     }
     else
         description = Castle::GetDescriptionBuilding( building, castle.GetRace() );
@@ -311,7 +317,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
         break;
     }
 
-    // fix area for capratin
+    // fix area for captain
     if ( b == BUILD_CAPTAIN ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Captain( castle.GetRace() ), ( building & BUILD_CAPTAIN ? 1 : 0 ) );
         area.width = sprite.width();
@@ -400,7 +406,7 @@ void BuildingInfo::Redraw() const
 
         // build image
         if ( BUILD_NOTHING == building ) {
-            const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+            const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
             fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 ), display, area.x, area.y );
             return;
         }
@@ -470,8 +476,6 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
-
     // setup cursor
     const CursorRestorer cursorRestorer( buttons, Cursor::POINTER );
 
@@ -517,13 +521,18 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     fheroes2::Point dst_pt;
 
-    dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
-    fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const int buttonOkayIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
-    fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
+    dst_pt.x = box_rt.x;
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonOkayIcnID, 0 ).height();
+    fheroes2::Button button1( dst_pt.x, dst_pt.y, buttonOkayIcnID, 0, 1 );
+
+    const int buttonCancelIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
+
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonCancelIcnID, 0 ).height();
+    fheroes2::Button button2( dst_pt.x, dst_pt.y, buttonCancelIcnID, 0, 1 );
 
     dst_pt.x = box_rt.x + ( box_rt.width - window_icons.width() ) / 2;
     dst_pt.y = box_rt.y + space;
@@ -688,7 +697,7 @@ DwellingsBar::DwellingsBar( Castle & cstl, const fheroes2::Size & sz )
     SetContent( content );
 
     fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
-    SetItemSize( sz.width, sz.height );
+    setSingleItemSize( sz );
 }
 
 void DwellingsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )

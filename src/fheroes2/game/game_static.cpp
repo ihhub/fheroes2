@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,15 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <array>
-
-#include "game.h"
 #include "game_static.h"
+
+#include "heroes.h"
 #include "mp2.h"
 #include "race.h"
-#include "resource.h"
-#include "save_format_version.h"
-#include "serialize.h"
 #include "skill.h"
 #include "skill_static.h"
 
@@ -117,7 +113,7 @@ namespace Skill
         /* archery */ 1,   /* ballistics */ 1, /* diplomacy */ 1, /* eagleeye */ 1,
         /* estates */ 1,   /* leadership */ 0, /* logistics */ 1, /* luck */ 1,
         /* mysticism */ 1, /* navigation */ 1, /* necromancy*/ 0, /* pathfinding */ 1,
-        /* scouting */ 1,  /* wisdom */ 1};
+        /* scouting */ 1,  /* wisdom */ 1 };
 }
 
 namespace GameStatic
@@ -189,16 +185,16 @@ int32_t GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType 
     switch ( objectType ) {
     case MP2::OBJ_BUOY:
     case MP2::OBJ_OASIS:
-    case MP2::OBJ_WATERINGHOLE:
+    case MP2::OBJ_WATERING_HOLE:
     case MP2::OBJ_MERMAID:
-    case MP2::OBJ_FAERIERING:
+    case MP2::OBJ_FAERIE_RING:
     case MP2::OBJ_FOUNTAIN:
     case MP2::OBJ_IDOL:
         return 1;
     case MP2::OBJ_TEMPLE:
         return 2;
     case MP2::OBJ_GRAVEYARD:
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_DERELICT_SHIP:
     case MP2::OBJ_SHIPWRECK:
         return -1;
     case MP2::OBJ_PYRAMID:
@@ -278,4 +274,31 @@ const Skill::secondary_t * GameStatic::GetSkillForWitchsHut()
 int GameStatic::GetBattleMoatReduceDefense()
 {
     return 3;
+}
+
+uint32_t GameStatic::getMovementPointBonus( const MP2::MapObjectType objectType )
+{
+    switch ( objectType ) {
+    case MP2::OBJ_OASIS:
+        return 800;
+    case MP2::OBJ_STABLES:
+    case MP2::OBJ_WATERING_HOLE:
+        return 400;
+    default:
+        break;
+    }
+
+    return 0;
+}
+
+bool GameStatic::isHeroWorthyToVisitXanadu( const Heroes & hero )
+{
+    const uint32_t heroLevel = hero.GetLevel();
+    if ( heroLevel > 9 ) {
+        return true;
+    }
+
+    const uint32_t diplomacyLevel = hero.GetLevelSkill( Skill::Secondary::DIPLOMACY );
+    return ( diplomacyLevel == Skill::Level::BASIC && heroLevel > 7 ) || ( diplomacyLevel == Skill::Level::ADVANCED && heroLevel > 5 )
+           || ( diplomacyLevel == Skill::Level::EXPERT && heroLevel > 3 );
 }

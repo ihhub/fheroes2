@@ -33,7 +33,10 @@ namespace fheroes2
     {
         SMALL,
         NORMAL,
-        LARGE
+        LARGE,
+        // These are special fonts designed only for buttons. Use WHITE font color for Good Interface and GRAY for Evil Interface.
+        BUTTON_RELEASED,
+        BUTTON_PRESSED,
     };
 
     enum class FontColor : uint8_t
@@ -105,10 +108,10 @@ namespace fheroes2
         // Draw text as a single line text.
         virtual void draw( const int32_t x, const int32_t y, Image & output ) const = 0;
 
-        // Draw text as a multi-line limited by width of a line.
+        // Draw text as a multi-line limited by width of a line. The text will be centered according to the provided maximum width.
         virtual void draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const = 0;
 
-        // Returns true if here is something to draw.
+        // Returns true if nothing to draw.
         virtual bool empty() const = 0;
 
         // Returns full text. Multi-text class cannot return by reference hence returning by value.
@@ -184,4 +187,7 @@ namespace fheroes2
     private:
         std::vector<Text> _texts;
     };
+
+    // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
+    bool isFontAvailable( const std::string & text, const FontType fontType );
 }

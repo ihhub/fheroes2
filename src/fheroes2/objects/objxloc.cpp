@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,7 +22,9 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <set>
+#include <bitset>
+#include <iterator>
+#include <vector>
 
 #include "direction.h"
 #include "mp2.h"
@@ -57,7 +59,7 @@ int ObjXlc1::GetPassable( const uint8_t index )
 
 bool ObjXlc1::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjXlc1::isShadow( const uint8_t index )
@@ -79,7 +81,7 @@ int ObjXlc2::GetPassable( const uint8_t index )
 
 bool ObjXlc2::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjXlc2::isShadow( const uint8_t index )
@@ -99,7 +101,7 @@ int ObjXlc3::GetPassable( const uint8_t index )
 
 bool ObjXlc3::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjXlc3::isShadow( const uint8_t index )
@@ -111,24 +113,24 @@ int ObjXlc1::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 3:
-        return MP2::OBJ_ALCHEMYTOWER;
+        return MP2::OBJ_ALCHEMIST_TOWER;
     case 70:
         return MP2::OBJ_ARENA;
     case 77:
-        return MP2::OBJ_BARROWMOUNDS;
+        return MP2::OBJ_BARROW_MOUNDS;
     case 94:
-        return MP2::OBJ_EARTHALTAR;
+        return MP2::OBJ_EARTH_ALTAR;
     case 118:
-        return MP2::OBJ_AIRALTAR;
+        return MP2::OBJ_AIR_ALTAR;
     case 127:
-        return MP2::OBJ_FIREALTAR;
+        return MP2::OBJ_FIRE_ALTAR;
     case 135:
-        return MP2::OBJ_WATERALTAR;
+        return MP2::OBJ_WATER_ALTAR;
     default:
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 int ObjXlc2::GetActionObject( uint32_t index )
@@ -146,7 +148,7 @@ int ObjXlc2::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }
 
 bool ObjXlc2::isReefs( const uint8_t index )
@@ -158,9 +160,9 @@ int ObjXlc3::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 30:
-        return MP2::OBJ_HUTMAGI;
+        return MP2::OBJ_HUT_OF_MAGI;
     case 50:
-        return MP2::OBJ_EYEMAGI;
+        return MP2::OBJ_EYE_OF_MAGI;
     case 60:
     case 66:
     case 72:
@@ -178,10 +180,10 @@ int ObjXlc3::GetActionObject( uint32_t index )
     case 130:
     case 134:
     case 138:
-        return MP2::OBJ_TRAVELLERTENT;
+        return MP2::OBJ_TRAVELLER_TENT;
     default:
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

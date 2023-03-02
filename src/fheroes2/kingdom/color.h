@@ -23,6 +23,7 @@
 #ifndef H2COLOR_H
 #define H2COLOR_H
 
+#include <cstdint>
 #include <string>
 #include <vector>
 

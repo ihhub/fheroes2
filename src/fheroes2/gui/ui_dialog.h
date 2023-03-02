@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,25 +20,31 @@
 
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "artifact.h"
+#include "image.h"
 #include "math_base.h"
 #include "skill.h"
 #include "spell.h"
 
 class Funds;
+class HeroBase;
 class Heroes;
 
 namespace fheroes2
 {
     class DialogElement;
-    class Image;
     class TextBase;
 
     int showMessage( const TextBase & header, const TextBase & body, const int buttons, const std::vector<const DialogElement *> & elements = {} );
+
+    // This is a simplified version of UI window which is used to display a window with a text.
+    // Header text has yellow normal font style and body text - white normal font style.
+    int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons );
 
     // An interactive UI element within a dialog.
     class DialogElement
@@ -267,12 +273,12 @@ namespace fheroes2
         const Heroes & _hero;
     };
 
-    class DynamicImageDialogElement : public DialogElement
+    class AnimationDialogElement : public DialogElement
     {
     public:
-        explicit DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndices, const uint64_t delay );
+        explicit AnimationDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint32_t animationIndexOffset, const uint64_t delay );
 
-        ~DynamicImageDialogElement() override = default;
+        ~AnimationDialogElement() override = default;
 
         void draw( Image & output, const Point & offset ) const override;
 
@@ -288,10 +294,43 @@ namespace fheroes2
 
         const std::vector<uint32_t> _backgroundIndices;
 
+        const uint32_t _animationIndexOffset;
+
         const uint64_t _delay;
 
         mutable uint32_t _currentIndex;
 
         Point _internalOffset;
+    };
+
+    class CustomAnimationDialogElement : public DialogElement
+    {
+    public:
+        explicit CustomAnimationDialogElement( const int icnId, Image staticImage, const Point animationPositionOffset, const uint32_t animationIndexOffset,
+                                               const uint64_t delay );
+
+        ~CustomAnimationDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        // Never call this method as a dynamic image has nothing to popup.
+        void showPopup( const int buttons ) const override;
+
+        bool update( Image & output, const Point & offset ) const override;
+
+    private:
+        const int _icnId;
+
+        const Image _staticImage;
+
+        const Point _animationPosition;
+
+        const uint32_t _animationIndexOffset;
+
+        const uint64_t _delay;
+
+        mutable uint32_t _currentIndex;
     };
 }

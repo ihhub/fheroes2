@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,15 +21,24 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
-#include <cassert>
+#include "players.h"
 
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <ostream>
+
+#include "ai.h"
+#include "castle.h"
 #include "game.h"
+#include "gamedefs.h"
+#include "heroes.h"
 #include "logging.h"
+#include "maps.h"
 #include "maps_fileinfo.h"
 #include "normal/ai_normal.h"
-#include "players.h"
 #include "race.h"
+#include "rand.h"
 #include "serialize.h"
 #include "settings.h"
 #include "world.h"
@@ -106,7 +115,11 @@ Player::Player( int col )
     , friends( col )
     , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
-{}
+    , _handicapStatus( HandicapStatus::NONE )
+    , _isAIAutoControlMode( false )
+{
+    // Do nothing.
+}
 
 std::string Player::GetDefaultName() const
 {
@@ -122,18 +135,13 @@ std::string Player::GetName() const
     return name;
 }
 
-Focus & Player::GetFocus()
-{
-    return focus;
-}
-
-const Focus & Player::GetFocus() const
-{
-    return focus;
-}
-
 int Player::GetControl() const
 {
+    if ( _isAIAutoControlMode ) {
+        assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
+        return CONTROL_AI;
+    }
+
     return control;
 }
 
@@ -147,11 +155,6 @@ bool Player::isPlay() const
     return Modes( ST_INGAME );
 }
 
-void Player::SetFriends( int f )
-{
-    friends = f;
-}
-
 void Player::SetName( const std::string & newName )
 {
     if ( newName == GetDefaultName() ) {
@@ -162,27 +165,30 @@ void Player::SetName( const std::string & newName )
     }
 }
 
-void Player::SetControl( int ctl )
-{
-    control = ctl;
-}
-
-void Player::SetColor( int cl )
-{
-    color = cl;
-}
-
-void Player::SetRace( int r )
-{
-    race = r;
-}
-
 void Player::SetPlay( bool f )
 {
     if ( f )
         SetModes( ST_INGAME );
     else
         ResetModes( ST_INGAME );
+}
+
+void Player::setHandicapStatus( const HandicapStatus status )
+{
+    if ( status == HandicapStatus::NONE ) {
+        _handicapStatus = status;
+        return;
+    }
+
+    assert( !( control & CONTROL_AI ) );
+
+    _handicapStatus = status;
+}
+
+void Player::setAIAutoControlMode( const bool enable )
+{
+    assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
+    _isAIAutoControlMode = enable;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Focus & focus )
@@ -229,7 +235,8 @@ StreamBase & operator<<( StreamBase & msg, const Player & player )
     const BitModes & modes = player;
 
     assert( player._ai != nullptr );
-    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai;
+    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
+        << static_cast<uint8_t>( player._handicapStatus );
     return msg;
 }
 
@@ -241,6 +248,12 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
 
     assert( player._ai );
     msg >> *player._ai;
+
+    uint8_t handicapStatusInt;
+
+    msg >> handicapStatusInt;
+
+    player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
 
     return msg;
 }
@@ -286,9 +299,9 @@ void Players::Init( int colors )
 
 void Players::Init( const Maps::FileInfo & fi )
 {
-    if ( fi.kingdom_colors ) {
+    if ( fi.kingdomColors ) {
         clear();
-        const Colors vcolors( fi.kingdom_colors );
+        const Colors vcolors( fi.kingdomColors );
 
         Player * first = nullptr;
 

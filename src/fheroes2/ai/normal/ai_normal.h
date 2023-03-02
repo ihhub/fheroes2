@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,19 +21,47 @@
 #ifndef H2AI_NORMAL_H
 #define H2AI_NORMAL_H
 
-#include "ai.h"
-#include "kingdom.h"
-#include "world_pathfinding.h"
-
+#include <cassert>
+#include <cstdint>
 #include <map>
 #include <set>
+#include <utility>
+#include <vector>
 
-struct KingdomCastles;
+#include "ai.h"
+#include "color.h"
+#include "mp2.h"
+#include "pairs.h"
+#include "world_pathfinding.h"
+
+class Army;
+class Castle;
+class Funds;
+class HeroBase;
+class Heroes;
+class Kingdom;
+class Spell;
 
 namespace Battle
 {
+    class Actions;
+    class Arena;
+    class Unit;
     class Units;
 }
+
+namespace Maps
+{
+    class Tiles;
+}
+
+namespace Rand
+{
+    class DeterministicRandomGenerator;
+}
+
+struct VecHeroes;
+struct KingdomCastles;
 
 namespace AI
 {
@@ -126,11 +154,11 @@ namespace AI
     private:
         void analyzeBattleState( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
-        Battle::Actions berserkTurn( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        Battle::Actions archerDecision( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        static Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
 
-        BattleTargetPair meleeUnitOffense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        BattleTargetPair meleeUnitDefense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
 
         SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
 
@@ -153,7 +181,7 @@ namespace AI
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
         // the auto battle should be interrupted (one way or another)
-        const uint32_t MAX_TURNS_WITHOUT_DEATHS = 50;
+        static const uint32_t MAX_TURNS_WITHOUT_DEATHS = 50;
 
         // Member variables related to the logic of checking the limit of the number of turns
         uint32_t _currentTurnNumber = 0;
@@ -223,10 +251,10 @@ namespace AI
         // In order to avoid extra computations during AI turn it is important to keep cache of monster strength but update it when an action on a monster is taken.
         std::map<int32_t, double> _neutralMonsterStrengthCache;
 
-        void CastleTurn( Castle & castle, bool defensive );
-        bool HeroesTurn( VecHeroes & heroes );
+        void CastleTurn( Castle & castle, const bool defensiveStrategy );
+        bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
 
-        double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getCourierObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getCourierMainTarget( const Heroes & hero, double lowestPossibleValue ) const;

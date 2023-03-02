@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,16 +24,27 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <list>
 #include <map>
+#include <memory>
 #include <mutex>
-#include <numeric>
+#include <ostream>
+#include <type_traits>
 #include <utility>
+#include <variant>
 
-#include <SDL.h>
+#include <SDL_audio.h>
+#include <SDL_error.h>
 #include <SDL_mixer.h>
+#include <SDL_rwops.h>
+#include <SDL_stdinc.h>
+#include <SDL_version.h>
 
 #include "audio.h"
 #include "core.h"
+#include "dir.h"
 #include "logging.h"
 #include "system.h"
 #include "thread.h"
@@ -47,13 +58,23 @@ namespace
         Spec()
             : SDL_AudioSpec()
         {
+#if defined( _WIN32 )
+            // Value 22050 causes audio distortion on Windows
+            freq = 44100;
+#else
             freq = 22050;
+#endif
             format = AUDIO_S16;
             channels = 2; // Support stereo audio.
             silence = 0;
+#if defined( ANDROID )
+            // Value greater than 1024 causes audio distortion on Android
+            samples = 1024;
+#else
             samples = 2048;
+#endif
             size = 0;
-            // TODO: research if we need to utilize these 2 paremeters in the future.
+            // TODO: research if we need to utilize these 2 parameters in the future.
             callback = nullptr;
             userdata = nullptr;
         }
@@ -64,10 +85,12 @@ namespace
     std::atomic<bool> isInitialized{ false };
     bool isMuted = false;
 
+    int musicFadeInMs{ 0 };
+
     std::vector<int> savedMixerVolumes;
     int savedMusicVolume = 0;
 
-    std::atomic<int> audioChannelCount{ 0 };
+    std::atomic<int> mixerChannelCount{ 0 };
 
     // This mutex protects all operations with audio. In order to avoid deadlocks, it shouldn't
     // be acquired in any callback functions that can be called by SDL_Mixer.
@@ -115,13 +138,12 @@ namespace
             }
 
             const auto res = _channelSamples.try_emplace( channelId, std::make_pair( sample, nullptr ) );
-
             if ( !res.second ) {
                 assert( 0 );
             }
         }
 
-        // This is the only method that can be called from the SDL_Mixer callback (without acquiring the audioMutex)
+        // This method can be called from the SDL_Mixer callback (without acquiring the audioMutex)
         void channelFinished( const int channelId )
         {
             assert( channelId >= 0 );
@@ -168,7 +190,11 @@ namespace
 
     // This is the callback function set by Mix_ChannelFinished(). As a rule, it is called from
     // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    void SDLCALL channelFinished( const int channelId )
+#else
     void channelFinished( const int channelId )
+#endif
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
@@ -180,7 +206,15 @@ namespace
     {
         assert( ptr != nullptr && size != 0 );
 
-        Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
+        soundSampleManager.clearFinishedSamples();
+
+        SDL_RWops * rwops = SDL_RWFromConstMem( ptr, size );
+        if ( rwops == nullptr ) {
+            ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << SDL_GetError() )
+            return -1;
+        }
+
+        Mix_Chunk * sample = Mix_LoadWAV_RW( rwops, 1 );
         if ( sample == nullptr ) {
             ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << Mix_GetError() )
             return -1;
@@ -188,17 +222,16 @@ namespace
 
         const int channel = Mix_PlayChannel( channelId, sample, loop ? -1 : 0 );
         if ( channel < 0 ) {
-            ERROR_LOG( "Failed to play an audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
+            ERROR_LOG( "Failed to play an audio chunk for channel " << channelId << ". The error: " << Mix_GetError() )
 
             Mix_FreeChunk( sample );
-        }
-        else {
-            // There can be a maximum of two items in the sample queue for a channel:
-            // the previous sample (if it hasn't been released yet) and the current one
-            soundSampleManager.channelStarted( channel, sample );
+
+            return channel;
         }
 
-        soundSampleManager.clearFinishedSamples();
+        // There can be a maximum of two items in the sample queue for a channel:
+        // the previous sample (if it hasn't been freed yet) and the current one
+        soundSampleManager.channelStarted( channel, sample );
 
         return channel;
     }
@@ -214,51 +247,167 @@ namespace
         }
     }
 
-    struct MusicInfo
+    class MusicInfo
     {
-        Mix_Music * mix{ nullptr };
+    public:
+        explicit MusicInfo( std::vector<uint8_t> v )
+            : _source( std::move( v ) )
+        {
+            // Do nothing
+        }
 
-        double position{ 0 };
+        explicit MusicInfo( std::string file )
+            : _source( std::move( file ) )
+        {
+            // Do nothing
+        }
+
+        MusicInfo( const MusicInfo & ) = delete;
+
+        ~MusicInfo() = default;
+
+        MusicInfo & operator=( const MusicInfo & ) = delete;
+
+        // Mix_Music objects should never be cached because they store the state of the music decoder's backend,
+        // and should be passed to functions like Mix_PlayMusic() only once, otherwise weird things can happen.
+        Mix_Music * createMusic() const
+        {
+            Mix_Music * result = nullptr;
+
+            if ( std::holds_alternative<std::vector<uint8_t>>( _source ) ) {
+                const std::vector<uint8_t> & v = std::get<std::vector<uint8_t>>( _source );
+
+                SDL_RWops * rwops = SDL_RWFromConstMem( &v[0], static_cast<int>( v.size() ) );
+                if ( rwops == nullptr ) {
+                    ERROR_LOG( "Failed to create a music track from memory. The error: " << SDL_GetError() )
+                }
+                else {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+                    result = Mix_LoadMUS_RW( rwops, 0 );
+#else
+                    result = Mix_LoadMUS_RW( rwops );
+#endif
+                    if ( result == nullptr ) {
+                        ERROR_LOG( "Failed to create a music track from memory. The error: " << Mix_GetError() )
+                    }
+
+                    SDL_FreeRW( rwops );
+                }
+            }
+            else if ( std::holds_alternative<std::string>( _source ) ) {
+                const std::string & file = std::get<std::string>( _source );
+
+                result = Mix_LoadMUS( System::FileNameToUTF8( file ).c_str() );
+                if ( result == nullptr ) {
+                    ERROR_LOG( "Failed to create a music track from file " << file << ". The error: " << Mix_GetError() )
+                }
+            }
+            else {
+                assert( 0 );
+            }
+
+            return result;
+        }
+
+        double getPosition() const
+        {
+            return _position;
+        }
+
+        void setPosition( const double pos )
+        {
+            _position = pos;
+        }
+
+    private:
+        const std::variant<std::vector<uint8_t>, std::string> _source;
+        double _position{ 0 };
     };
 
     class MusicTrackManager
     {
     public:
-        MusicInfo getMusicInfoByUID( const uint64_t musicUID ) const
+        MusicTrackManager() = default;
+        MusicTrackManager( const MusicTrackManager & ) = delete;
+
+        ~MusicTrackManager()
         {
-            auto iter = _musicCache.find( musicUID );
-            if ( iter == _musicCache.end() ) {
-                return {};
-            }
+            // Make sure that all music tracks have been eventually freed
+            assert( _musicQueue == nullptr );
+        }
+
+        MusicTrackManager & operator=( const MusicTrackManager & ) = delete;
+
+        bool isTrackInMusicDB( const uint64_t musicUID ) const
+        {
+            return ( _musicDB.find( musicUID ) != _musicDB.end() );
+        }
+
+        std::shared_ptr<MusicInfo> getTrackFromMusicDB( const uint64_t musicUID ) const
+        {
+            const auto iter = _musicDB.find( musicUID );
+            assert( iter != _musicDB.end() );
 
             return iter->second;
         }
 
-        void update( const uint64_t musicUID, const MusicInfo & info )
+        void addTrackToMusicDB( const uint64_t musicUID, const std::shared_ptr<MusicInfo> & track )
         {
-            assert( info.mix != nullptr );
-
-            auto iter = _musicCache.find( musicUID );
-            if ( iter == _musicCache.end() ) {
-                _musicCache.try_emplace( musicUID, info );
-                return;
+            const auto res = _musicDB.try_emplace( musicUID, track );
+            if ( !res.second ) {
+                assert( 0 );
             }
-
-            iter->second = info;
         }
 
-        void clear()
+        void clearMusicDB()
         {
-            for ( auto & musicInfoPair : _musicCache ) {
-                Mix_FreeMusic( musicInfoPair.second.mix );
-            }
+            _musicDB.clear();
+        }
 
-            _musicCache.clear();
+        std::weak_ptr<MusicInfo> getCurrentTrack() const
+        {
+            return _currentTrack;
+        }
+
+        uint64_t getCurrentTrackUID() const
+        {
+            return _currentTrackUID;
+        }
+
+        Music::PlaybackMode getCurrentTrackPlaybackMode() const
+        {
+            return _currentTrackPlaybackMode;
+        }
+
+        // This method can be called from the SDL_Mixer callback (without acquiring the audioMutex)
+        uint64_t getCurrentTrackChangeCounter() const
+        {
+            return _currentTrackChangeCounter;
         }
 
         double getCurrentTrackPosition() const
         {
-            return _currentTrackTimer.get();
+            return _currentTrackTimer.getS();
+        }
+
+        void updateCurrentTrack( const uint64_t musicUID, const Music::PlaybackMode trackPlaybackMode )
+        {
+            _currentTrack = getTrackFromMusicDB( musicUID );
+
+            _currentTrackUID = musicUID;
+            _currentTrackPlaybackMode = trackPlaybackMode;
+
+            ++_currentTrackChangeCounter;
+        }
+
+        void resetCurrentTrack()
+        {
+            _currentTrack = {};
+
+            _currentTrackUID = 0;
+            _currentTrackPlaybackMode = Music::PlaybackMode::PLAY_ONCE;
+
+            ++_currentTrackChangeCounter;
         }
 
         void resetTimer()
@@ -266,48 +415,44 @@ namespace
             _currentTrackTimer.reset();
         }
 
+        void musicStarted( Mix_Music * mus )
+        {
+            // If the _musicQueue is not nullptr, then the music queue (consisting of only one music
+            // track) is already full, this shouldn't happen
+            assert( _musicQueue == nullptr );
+
+            _musicQueue = mus;
+        }
+
+        void clearFinishedMusic()
+        {
+            // This queue consists of only one music track
+            if ( _musicQueue == nullptr ) {
+                return;
+            }
+
+            Mix_FreeMusic( _musicQueue );
+
+            _musicQueue = nullptr;
+        }
+
     private:
-        std::map<uint64_t, MusicInfo> _musicCache;
+        std::map<uint64_t, std::shared_ptr<MusicInfo>> _musicDB;
+
+        std::weak_ptr<MusicInfo> _currentTrack;
+
+        uint64_t _currentTrackUID{ 0 };
+        Music::PlaybackMode _currentTrackPlaybackMode{ Music::PlaybackMode::PLAY_ONCE };
+
+        // This counter should be incremented every time the current track or its playback mode changes
+        std::atomic<uint64_t> _currentTrackChangeCounter{ 0 };
 
         fheroes2::Time _currentTrackTimer;
+
+        Mix_Music * _musicQueue{ nullptr };
     };
 
-    struct MusicSettings
-    {
-        void resetCurrentTrack()
-        {
-            currentTrack = {};
-
-            currentTrackUID = 0;
-            currentTrackPlaybackMode = Music::PlaybackMode::PLAY_ONCE;
-
-            ++currentTrackChangeCounter;
-        }
-
-        void updateCurrentTrack( const MusicInfo & track, const uint64_t trackUID, const Music::PlaybackMode trackPlaybackMode )
-        {
-            currentTrack = track;
-
-            currentTrackUID = trackUID;
-            currentTrackPlaybackMode = trackPlaybackMode;
-
-            ++currentTrackChangeCounter;
-        }
-
-        MusicInfo currentTrack;
-
-        uint64_t currentTrackUID{ 0 };
-        Music::PlaybackMode currentTrackPlaybackMode{ Music::PlaybackMode::PLAY_ONCE };
-        // This counter should be incremented every time the currentTrackUID or
-        // currentTrackPlaybackMode are changed
-        std::atomic<uint64_t> currentTrackChangeCounter{ 0 };
-
-        int fadeInMs{ 0 };
-
-        MusicTrackManager trackManager;
-    };
-
-    MusicSettings musicSettings;
+    MusicTrackManager musicTrackManager;
 
     void playMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode );
 
@@ -318,7 +463,7 @@ namespace
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            _trackChangeCounter = musicSettings.currentTrackChangeCounter;
+            _trackChangeCounter = musicTrackManager.getCurrentTrackChangeCounter();
 
             notifyWorker();
         }
@@ -344,17 +489,21 @@ namespace
             }
 
             // The current track managed to change during the start of this task
-            if ( _taskTrackChangeCounter != musicSettings.currentTrackChangeCounter ) {
+            if ( _taskTrackChangeCounter != musicTrackManager.getCurrentTrackChangeCounter() ) {
                 return;
             }
 
-            // REWIND_AND_PLAY_INFINITE should be handled by the Mix_PlayMusic() itself
-            assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+            // REWIND_AND_PLAY_INFINITE should be handled by the SDL_Mixer itself
+            if ( musicTrackManager.getCurrentTrackPlaybackMode() != Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
+                return;
+            }
 
-            musicSettings.currentTrack.position = 0;
-            musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
+            const std::shared_ptr<MusicInfo> currentTrack = musicTrackManager.getCurrentTrack().lock();
+            assert( currentTrack );
 
-            playMusic( musicSettings.currentTrackUID, musicSettings.currentTrackPlaybackMode );
+            currentTrack->setPosition( 0 );
+
+            playMusic( musicTrackManager.getCurrentTrackUID(), musicTrackManager.getCurrentTrackPlaybackMode() );
         }
 
         // This variable can be accessed by multiple threads and it is protected by _mutex
@@ -367,7 +516,11 @@ namespace
 
     // This is the callback function set by Mix_HookMusicFinished(). As a rule, it is called from
     // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    void SDLCALL musicFinished()
+#else
     void musicFinished()
+#endif
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
@@ -375,25 +528,31 @@ namespace
         musicRestartManager.restartCurrentMusicTrack();
     }
 
-    bool isMusicResumeSupported( const Mix_Music * mix )
+    bool isMusicResumeSupported( const Mix_Music * mus )
     {
-        assert( mix != nullptr );
+        assert( mus != nullptr );
 
-        const Mix_MusicType musicType = Mix_GetMusicType( mix );
+        const Mix_MusicType musicType = Mix_GetMusicType( mus );
 
         return ( musicType == Mix_MusicType::MUS_OGG ) || ( musicType == Mix_MusicType::MUS_MP3 ) || ( musicType == Mix_MusicType::MUS_FLAC );
     }
 
     void playMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode )
     {
-        // Unregister this callback to ensure that it will not be called while we are modifying the
-        // current track information
-        Mix_HookMusicFinished( nullptr );
+        // This function should never be called if a music track is currently playing.
+        // Thus we have a guarantee that the Mix_HookMusicFinished()'s callback will
+        // not be called while we are modifying the current track information.
+        assert( !Music::isPlaying() );
 
-        const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
-        if ( musicInfo.mix == nullptr ) {
-            // How is it even possible! Check your logic!
-            assert( 0 );
+        musicTrackManager.clearFinishedMusic();
+
+        const std::shared_ptr<MusicInfo> track = musicTrackManager.getTrackFromMusicDB( musicUID );
+        assert( track );
+
+        Mix_Music * mus = track->createMusic();
+        if ( mus == nullptr ) {
+            musicTrackManager.resetCurrentTrack();
+
             return;
         }
 
@@ -401,7 +560,7 @@ namespace
         bool autoLoop = false;
 
         if ( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
-            if ( isMusicResumeSupported( musicInfo.mix ) ) {
+            if ( isMusicResumeSupported( mus ) ) {
                 resumePlayback = true;
             }
             else {
@@ -414,52 +573,55 @@ namespace
             autoLoop = true;
         }
 
-        // Should be updated before the callback set by Mix_HookMusicFinished() will get a chance to be called
-        musicSettings.updateCurrentTrack( musicInfo, musicUID, playbackMode );
-
-        // Once we are done with the current track information, let's register this callback back. We need this
-        // callback only when resuming the music track, because there is no other way to loop such a track.
-        if ( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
-            Mix_HookMusicFinished( musicFinished );
-        }
+        // Update the current track information while the music playback is not yet started, so the
+        // Mix_HookMusicFinished()'s callback cannot be called
+        musicTrackManager.updateCurrentTrack( musicUID, playbackMode );
 
         const int loopCount = autoLoop ? -1 : 0;
 
-        if ( musicSettings.fadeInMs > 0 ) {
-            int returnCode = -1;
+        int returnCode = -1;
 
-            // Resume the music only if at least 1 second of the track has been played.
-            if ( resumePlayback && musicInfo.position > 1 ) {
-                returnCode = Mix_FadeInMusicPos( musicInfo.mix, loopCount, musicSettings.fadeInMs, musicInfo.position );
+        // Resume the music only if at least 1 second of the track has been played.
+        if ( resumePlayback && track->getPosition() > 1 ) {
+            returnCode = Mix_FadeInMusicPos( mus, loopCount, musicFadeInMs, track->getPosition() );
 
-                if ( returnCode != 0 ) {
-                    ERROR_LOG( "Failed to resume a music mix. The error: " << Mix_GetError() )
-                }
-            }
-
-            // Either there is no need to resume music playback, or the resumption failed. Let's start the playback from the beginning.
             if ( returnCode != 0 ) {
-                returnCode = Mix_FadeInMusic( musicInfo.mix, loopCount, musicSettings.fadeInMs );
-
-                if ( returnCode != 0 ) {
-                    ERROR_LOG( "Failed to play a music mix. The error: " << Mix_GetError() )
-                }
-            }
-        }
-        else {
-            if ( Mix_PlayMusic( musicInfo.mix, loopCount ) != 0 ) {
-                ERROR_LOG( "Failed to play a music mix. The error: " << Mix_GetError() )
-            }
-            // Resume the music only if at least 1 second of the track has been played.
-            else if ( resumePlayback && musicInfo.position > 1 && Mix_SetMusicPosition( musicInfo.position ) != 0 ) {
-                ERROR_LOG( "Failed to set the position for a music mix. The error: " << Mix_GetError() )
+                ERROR_LOG( "Failed to resume a music track. The error: " << Mix_GetError() )
             }
         }
 
-        // For better accuracy reset the timer only when actual playback is already started
-        musicSettings.trackManager.resetTimer();
+        // Either there is no need to resume music playback, or the resumption failed. Let's try to
+        // start the playback from the beginning.
+        if ( returnCode != 0 ) {
+            returnCode = Mix_FadeInMusic( mus, loopCount, musicFadeInMs );
+
+            if ( returnCode != 0 ) {
+                ERROR_LOG( "Failed to play a music track. The error: " << Mix_GetError() )
+            }
+        }
+
+        if ( returnCode != 0 ) {
+            Mix_FreeMusic( mus );
+
+            // Since the music playback failed, the Mix_HookMusicFinished()'s callback cannot be called
+            // here, so we can safely reset the current track information
+            musicTrackManager.resetCurrentTrack();
+
+            return;
+        }
+
+        // For better accuracy reset the timer right after the actual playback starts
+        musicTrackManager.resetTimer();
+
+        // There can be no more than one element in the music queue - the current track, the previous
+        // one should already be freed
+        musicTrackManager.musicStarted( mus );
     }
 
+    // By the Weber-Fechner law, humans subjective sound sensation is proportional logarithm of sound intensity.
+    // So for linear changing sound intensity we have to change the volume exponential.
+    // There is a good explanation at https://www.dr-lex.be/info-stuff/volumecontrols.html.
+    // This function maps sound volumes in percents to SDL units with values [0..MIX_MAX_VOLUME] by exponential law.
     int normalizeToSDLVolume( const int volumePercentage )
     {
         if ( volumePercentage < 0 ) {
@@ -472,12 +634,7 @@ namespace
             return MIX_MAX_VOLUME;
         }
 
-        return volumePercentage * MIX_MAX_VOLUME / 100;
-    }
-
-    int normalizeFromSDLVolume( const int volume )
-    {
-        return volume * 100 / MIX_MAX_VOLUME;
+        return static_cast<int>( ( std::exp( std::log( 10 + 1 ) * volumePercentage / 100 ) - 1 ) / 10 * MIX_MAX_VOLUME );
     }
 }
 
@@ -497,26 +654,26 @@ void Audio::Init()
     }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG;
+    const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MP3 | MIX_INIT_OGG | MIX_INIT_MID;
     const int initializedFlags = Mix_Init( initializationFlags );
     if ( ( initializedFlags & initializationFlags ) != initializationFlags ) {
         DEBUG_LOG( DBG_ENGINE, DBG_WARN,
                    "Expected music initialization flags as " << initializationFlags << " but received " << ( initializedFlags & initializationFlags ) )
 
         if ( ( initializedFlags & MIX_INIT_FLAC ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Flac module failed to be initialized" )
-        }
-
-        if ( ( initializedFlags & MIX_INIT_MOD ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Mod module failed to be initialized" )
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "FLAC module failed to be initialized" )
         }
 
         if ( ( initializedFlags & MIX_INIT_MP3 ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Mp3 module failed to be initialized" )
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "MP3 module failed to be initialized" )
         }
 
         if ( ( initializedFlags & MIX_INIT_OGG ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Ogg module failed to be initialized" )
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "OGG module failed to be initialized" )
+        }
+
+        if ( ( initializedFlags & MIX_INIT_MID ) == 0 ) {
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "MID module failed to be initialized" )
         }
     }
 #endif
@@ -527,7 +684,7 @@ void Audio::Init()
     }
 
     // By default this value should be MIX_CHANNELS.
-    audioChannelCount = Mix_AllocateChannels( -1 );
+    mixerChannelCount = Mix_AllocateChannels( -1 );
 
     int channels = 0;
     int frequency = 0;
@@ -544,7 +701,9 @@ void Audio::Init()
     }
 
     if ( audioSpecs.freq != frequency ) {
-        ERROR_LOG( "Audio frequency is initialized as " << frequency << " instead of " << audioSpecs.freq )
+        // At least on Windows the standard frequency is 48000 Hz. Sounds in the game are 22500 Hz frequency.
+        // However, resampling is done inside SDL so this is not exactly an error.
+        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Audio frequency is initialized as " << frequency << " instead of " << audioSpecs.freq )
     }
 
     if ( audioSpecs.format != format ) {
@@ -561,6 +720,7 @@ void Audio::Init()
     musicRestartManager.createWorker();
 
     Mix_ChannelFinished( channelFinished );
+    Mix_HookMusicFinished( musicFinished );
 
     isInitialized = true;
 }
@@ -585,16 +745,19 @@ void Audio::Quit()
         Mixer::Stop();
 
         Mix_ChannelFinished( nullptr );
+        Mix_HookMusicFinished( nullptr );
 
         soundSampleManager.clearFinishedSamples();
-        musicSettings.trackManager.clear();
+
+        musicTrackManager.clearFinishedMusic();
+        musicTrackManager.clearMusicDB();
 
         Mix_CloseAudio();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         Mix_Quit();
 #endif
 
-        audioChannelCount = 0;
+        mixerChannelCount = 0;
 
         isInitialized = false;
     }
@@ -602,7 +765,7 @@ void Audio::Quit()
     // We can't hold the audioMutex here because if MusicRestartManager's working
     // thread is already waiting on it, then there will be a deadlock while waiting
     // for it to join. The Mix_HookMusicFinished()'s callback can no longer be called
-    // at the moment because it has been already unregistered by the Music::Stop().
+    // at the moment because it has been already unregistered.
     musicRestartManager.stopWorker();
 }
 
@@ -659,25 +822,25 @@ void Mixer::SetChannels( const int num )
         return;
     }
 
-    audioChannelCount = Mix_AllocateChannels( num );
-    if ( num != audioChannelCount ) {
+    mixerChannelCount = Mix_AllocateChannels( num );
+    if ( num != mixerChannelCount ) {
         ERROR_LOG( "Failed to allocate the required amount of channels for sound. The required number of channels " << num << " but allocated only "
-                                                                                                                    << audioChannelCount )
+                                                                                                                    << mixerChannelCount )
     }
 
     if ( isMuted ) {
-        savedMixerVolumes.resize( static_cast<size_t>( audioChannelCount ), 0 );
+        savedMixerVolumes.resize( static_cast<size_t>( mixerChannelCount ), MIX_MAX_VOLUME );
 
         Mix_Volume( -1, 0 );
     }
 
     // Just to verify that we are synced with SDL.
-    assert( Mix_AllocateChannels( -1 ) == audioChannelCount );
+    assert( Mix_AllocateChannels( -1 ) == mixerChannelCount );
 }
 
 int Mixer::getChannelCount()
 {
-    return audioChannelCount;
+    return mixerChannelCount;
 }
 
 int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop )
@@ -734,42 +897,31 @@ int Mixer::applySoundEffect( const int channelId, const int16_t angle, const uin
     return channelId;
 }
 
-int Mixer::setVolume( const int channelId, const int volumePercentage )
+void Mixer::setVolume( const int channelId, const int volumePercentage )
 {
     const int volume = normalizeToSDLVolume( volumePercentage );
 
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
-        return 0;
+        return;
     }
 
     if ( !isMuted ) {
-        return normalizeFromSDLVolume( Mix_Volume( channelId, volume ) );
+        Mix_Volume( channelId, volume );
+        return;
     }
 
     if ( channelId < 0 ) {
-        if ( savedMixerVolumes.empty() ) {
-            return 0;
-        }
-
-        // return the average volume
-        const int prevVolume = std::accumulate( savedMixerVolumes.begin(), savedMixerVolumes.end(), 0 ) / static_cast<int>( savedMixerVolumes.size() );
         std::fill( savedMixerVolumes.begin(), savedMixerVolumes.end(), volume );
-
-        return normalizeFromSDLVolume( prevVolume );
+        return;
     }
 
     const size_t channel = static_cast<size_t>( channelId );
 
-    if ( channel >= savedMixerVolumes.size() ) {
-        return 0;
+    if ( channel < savedMixerVolumes.size() ) {
+        savedMixerVolumes[channel] = volume;
     }
-
-    const int prevVolume = savedMixerVolumes[channel];
-    savedMixerVolumes[channel] = volume;
-
-    return normalizeFromSDLVolume( prevVolume );
 }
 
 void Mixer::Pause( const int channelId /* = -1 */ )
@@ -814,8 +966,7 @@ bool Music::Play( const uint64_t musicUID, const PlaybackMode playbackMode )
         return false;
     }
 
-    const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
-    if ( musicInfo.mix != nullptr ) {
+    if ( musicTrackManager.isTrackInMusicDB( musicUID ) ) {
         Stop();
 
         playMusic( musicUID, playbackMode );
@@ -838,31 +989,9 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
-    const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
-    if ( musicInfo.mix != nullptr ) {
-        Stop();
-
-        playMusic( musicUID, playbackMode );
-
-        return;
-    }
-
-    SDL_RWops * rwops = SDL_RWFromConstMem( &v[0], static_cast<int>( v.size() ) );
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    Mix_Music * mix = Mix_LoadMUS_RW( rwops, 0 );
-#else
-    Mix_Music * mix = Mix_LoadMUS_RW( rwops );
-#endif
-    SDL_FreeRW( rwops );
-
-    if ( mix == nullptr ) {
-        ERROR_LOG( "Failed to create a music mix from memory. The error: " << Mix_GetError() )
-        return;
-    }
+    musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( v ) );
 
     Stop();
-
-    musicSettings.trackManager.update( musicUID, { mix, 0 } );
 
     playMusic( musicUID, playbackMode );
 }
@@ -870,7 +999,7 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
 void Music::Play( const uint64_t musicUID, const std::string & file, const PlaybackMode playbackMode )
 {
     if ( file.empty() ) {
-        // Nothing to play. It is an empty file.
+        // Nothing to play, the file name is empty.
         return;
     }
 
@@ -880,26 +1009,9 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
         return;
     }
 
-    const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
-    if ( musicInfo.mix != nullptr ) {
-        Stop();
-
-        playMusic( musicUID, playbackMode );
-
-        return;
-    }
-
-    const std::string filePath = System::FileNameToUTF8( file );
-
-    Mix_Music * mix = Mix_LoadMUS( filePath.c_str() );
-    if ( mix == nullptr ) {
-        ERROR_LOG( "Failed to create a music mix from path " << filePath << ". The error: " << Mix_GetError() )
-        return;
-    }
+    musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( file ) );
 
     Stop();
-
-    musicSettings.trackManager.update( musicUID, { mix, 0 } );
 
     playMusic( musicUID, playbackMode );
 }
@@ -914,28 +1026,25 @@ void Music::SetFadeInMs( const int timeMs )
 
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
-    musicSettings.fadeInMs = timeMs;
+    musicFadeInMs = timeMs;
 }
 
-int Music::setVolume( const int volumePercentage )
+void Music::setVolume( const int volumePercentage )
 {
     const int volume = normalizeToSDLVolume( volumePercentage );
 
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
-        return 0;
+        return;
     }
 
     if ( isMuted ) {
-        const int prevVolume = savedMusicVolume;
-
         savedMusicVolume = volume;
-
-        return normalizeFromSDLVolume( prevVolume );
+        return;
     }
 
-    return normalizeFromSDLVolume( Mix_VolumeMusic( volume ) );
+    Mix_VolumeMusic( volume );
 }
 
 void Music::Stop()
@@ -946,45 +1055,40 @@ void Music::Stop()
         return;
     }
 
-    if ( musicSettings.currentTrack.mix == nullptr ) {
+    if ( musicTrackManager.getCurrentTrack().expired() ) {
         // Nothing to do.
         return;
     }
 
-    // Unregister this callback - there is no need to repeat this track anymore
-    Mix_HookMusicFinished( nullptr );
-
-    // Always returns 0
+    // Always returns 0. After this call we have a guarantee that the Mix_HookMusicFinished()'s
+    // callback will not be called while we are modifying the current track information.
     Mix_HaltMusic();
 
-    // We can resume this track, so let's remember the current position
-    if ( musicSettings.currentTrackPlaybackMode == PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
-        musicSettings.currentTrack.position += musicSettings.trackManager.getCurrentTrackPosition();
+    const std::shared_ptr<MusicInfo> currentTrack = musicTrackManager.getCurrentTrack().lock();
+    assert( currentTrack );
+
+    // We can and should reliably calculate the current playback position, let's remember it
+    if ( musicTrackManager.getCurrentTrackPlaybackMode() == PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
+        currentTrack->setPosition( currentTrack->getPosition() + musicTrackManager.getCurrentTrackPosition() );
     }
-    // We cannot resume this track, but in future we should be able to play it in the
-    // RESUME_AND_PLAY_INFINITE mode if necessary, so reset its position to zero
+    // We either shouldn't (PLAY_ONCE) or can't (REWIND_AND_PLAY_INFINITE) reliably calculate the
+    // current playback position, let's reset it to zero
     else {
-        musicSettings.currentTrack.position = 0;
+        currentTrack->setPosition( 0 );
     }
 
-    musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
-    musicSettings.resetCurrentTrack();
+    musicTrackManager.resetCurrentTrack();
 }
 
 bool Music::isPlaying()
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
-    return ( musicSettings.currentTrack.mix != nullptr ) && Mix_PlayingMusic();
+    return !musicTrackManager.getCurrentTrack().expired() && Mix_PlayingMusic();
 }
 
 void Music::SetMidiSoundFonts( const ListFiles & files )
 {
-    if ( files.empty() ) {
-        // No fonts to set
-        return;
-    }
-
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
@@ -994,16 +1098,18 @@ void Music::SetMidiSoundFonts( const ListFiles & files )
     std::string filePaths;
 
     for ( const std::string & file : files ) {
-        filePaths.append( System::FileNameToUTF8( file ) );
+        filePaths.append( file );
         filePaths.push_back( ';' );
     }
 
-    assert( !filePaths.empty() && filePaths.back() == ';' );
-
     // Remove the last semicolon
-    filePaths.pop_back();
+    if ( !filePaths.empty() ) {
+        assert( filePaths.back() == ';' );
 
-    if ( Mix_SetSoundFonts( filePaths.c_str() ) == 0 ) {
-        ERROR_LOG( "Failed to set MIDI sound fonts using paths " << filePaths << ". The error: " << Mix_GetError() )
+        filePaths.pop_back();
+    }
+
+    if ( Mix_SetSoundFonts( System::FileNameToUTF8( filePaths ).c_str() ) == 0 ) {
+        ERROR_LOG( "Failed to set MIDI SoundFonts using paths " << filePaths << ". The error: " << Mix_GetError() )
     }
 }

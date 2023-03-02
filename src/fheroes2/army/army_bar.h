@@ -24,7 +24,12 @@
 #ifndef H2ARMYBAR_H
 #define H2ARMYBAR_H
 
+#include <cstdint>
+#include <string>
+
+#include "image.h"
 #include "interface_itemsbar.h"
+#include "math_base.h"
 #include "ui_tool.h"
 
 class Army;
@@ -47,7 +52,7 @@ public:
     bool isValid() const;
 
     void ResetSelected();
-    void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
+    void Redraw( fheroes2::Image & dstsf );
 
     bool ActionBarLeftMouseSingleClick( ArmyTroop & troop ) override;
     bool ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;

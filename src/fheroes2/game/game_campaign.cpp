@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,10 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
+#include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
+#include "audio.h"
 #include "audio_manager.h"
 #include "battle.h"
 #include "campaign_data.h"
@@ -33,17 +46,35 @@
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
+#include "game_mode.h"
 #include "game_over.h"
 #include "game_video.h"
+#include "game_video_type.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
+#include "kingdom.h"
+#include "localevent.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
+#include "math_base.h"
+#include "monster.h"
+#include "mus.h"
+#include "pal.h"
+#include "players.h"
 #include "race.h"
+#include "resource.h"
+#include "screen.h"
 #include "settings.h"
+#include "skill.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_campaign.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
+#include "ui_window.h"
 #include "world.h"
 
 namespace
@@ -163,6 +194,23 @@ namespace
         fheroes2::Point offset = iconOffsets[scenarioInfo.scenarioId];
         offset.x *= deltaX;
         offset.y *= deltaY;
+
+        // Price of loyalty's track doesn't respect the standard offset between icons.
+        if ( scenarioInfo.campaignId == Campaign::CampaignID::PRICE_OF_LOYALTY_CAMPAIGN && scenarioInfo.scenarioId >= 5 ) {
+            switch ( scenarioInfo.scenarioId ) {
+            case 5:
+                offset.x -= 2;
+                break;
+            case 6:
+                offset.x -= 1;
+                break;
+            case 7:
+                offset.x -= 4;
+                break;
+            default:
+                break;
+            }
+        }
 
         offset.x -= 2;
         offset.y -= 2;
@@ -482,6 +530,62 @@ namespace
         }
     }
 
+    Heroes * getHeroToApplyBonusOrAwards( const Campaign::ScenarioInfoId & scenarioInfoId, const Kingdom & kingdom )
+    {
+        {
+            static const std::map<std::pair<int, int>, int> targetHeroes = { // Final Justice
+                                                                             { { Campaign::ROLAND_CAMPAIGN, 9 }, Heroes::ROLAND },
+                                                                             // Apocalypse
+                                                                             { { Campaign::ARCHIBALD_CAMPAIGN, 10 }, Heroes::ARCHIBALD },
+                                                                             // Blood is Thicker
+                                                                             { { Campaign::VOYAGE_HOME_CAMPAIGN, 3 }, Heroes::GALLAVANT } };
+
+            const auto iter = targetHeroes.find( { scenarioInfoId.campaignId, scenarioInfoId.scenarioId } );
+            if ( iter != targetHeroes.end() ) {
+                // The "special" kingdom heroes may have the ID of another hero, but a custom name and portrait,
+                // so the search should be performed by the portrait ID
+                for ( Heroes * hero : kingdom.GetHeroes() ) {
+                    assert( hero != nullptr );
+
+                    if ( hero->getPortraitId() == iter->second ) {
+                        return hero;
+                    }
+                }
+
+                DEBUG_LOG( DBG_GAME, DBG_WARN,
+                           "the hero to whom bonuses or awards should be applied has not been found"
+                               << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
+            }
+        }
+
+        {
+            static const std::map<std::pair<int, int>, int> targetRaces = { // Defender
+                                                                            { { Campaign::ROLAND_CAMPAIGN, 5 }, Race::SORC },
+                                                                            // The Wayward Son
+                                                                            { { Campaign::DESCENDANTS_CAMPAIGN, 2 }, Race::SORC },
+                                                                            // The Epic Battle
+                                                                            { { Campaign::DESCENDANTS_CAMPAIGN, 7 }, Race::SORC } };
+
+            const auto iter = targetRaces.find( { scenarioInfoId.campaignId, scenarioInfoId.scenarioId } );
+            if ( iter != targetRaces.end() ) {
+                for ( Heroes * hero : kingdom.GetHeroes() ) {
+                    assert( hero != nullptr );
+
+                    if ( hero->GetRace() == iter->second ) {
+                        return hero;
+                    }
+                }
+
+                DEBUG_LOG( DBG_GAME, DBG_WARN,
+                           "the hero to whom bonuses or awards should be applied has not been found"
+                               << ", campaign id: " << scenarioInfoId.campaignId << ", scenario id: " << scenarioInfoId.scenarioId )
+            }
+        }
+
+        // By default, bonuses and awards are applied to the best hero of the kingdom
+        return kingdom.GetBestHero();
+    }
+
     void SetScenarioBonus( const Campaign::ScenarioInfoId & scenarioInfoId, const Campaign::ScenarioBonusData & scenarioBonus )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
@@ -490,60 +594,89 @@ namespace
                 continue;
             }
 
-            if ( !player->isControlHuman() )
+            if ( !player->isControlHuman() ) {
                 continue;
+            }
 
             Kingdom & kingdom = world.GetKingdom( player->GetColor() );
-            Heroes * bestHero = kingdom.GetBestHero();
 
             switch ( scenarioBonus._type ) {
             case Campaign::ScenarioBonusData::RESOURCES:
                 kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
+
                 break;
             case Campaign::ScenarioBonusData::ARTIFACT: {
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->PickupArtifact( Artifact( scenarioBonus._subType ) );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    Artifact artifact( scenarioBonus._subType );
+
+                    if ( artifact == Artifact::SPELL_SCROLL ) {
+                        artifact.SetSpell( scenarioBonus._artifactSpellId );
+                    }
+
+                    hero->PickupArtifact( artifact );
                 }
+
                 break;
             }
-            case Campaign::ScenarioBonusData::TROOP:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
+            case Campaign::ScenarioBonusData::TROOP: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
                 }
+
                 break;
+            }
             case Campaign::ScenarioBonusData::SPELL: {
-                KingdomHeroes & heroes = kingdom.GetHeroes();
-                assert( !heroes.empty() );
-                if ( !heroes.empty() ) {
-                    // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
-                    heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->AppendSpellToBook( scenarioBonus._subType, true );
                 }
+
                 break;
             }
             case Campaign::ScenarioBonusData::STARTING_RACE:
                 Players::SetPlayerRace( player->GetColor(), scenarioBonus._subType );
+
                 break;
-            case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    setHeroAndArmyBonus( bestHero, scenarioInfoId );
+            case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    setHeroAndArmyBonus( hero, scenarioInfoId );
                 }
+
                 break;
-            case Campaign::ScenarioBonusData::SKILL_PRIMARY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    for ( int32_t i = 0; i < scenarioBonus._amount; ++i )
-                        bestHero->IncreasePrimarySkill( scenarioBonus._subType );
+            }
+            case Campaign::ScenarioBonusData::SKILL_PRIMARY: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    for ( int32_t i = 0; i < scenarioBonus._amount; ++i ) {
+                        hero->IncreasePrimarySkill( scenarioBonus._subType );
+                    }
                 }
+
                 break;
-            case Campaign::ScenarioBonusData::SKILL_SECONDARY:
-                assert( bestHero != nullptr );
-                if ( bestHero != nullptr ) {
-                    bestHero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+            }
+            case Campaign::ScenarioBonusData::SKILL_SECONDARY: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( scenarioInfoId, kingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
                 }
+
                 break;
+            }
             default:
                 assert( 0 );
             }
@@ -555,35 +688,63 @@ namespace
     void applyObtainedCampaignAwards( const Campaign::ScenarioInfoId & currentScenarioInfoId, const std::vector<Campaign::CampaignAwardData> & awards )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
+        const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
-            if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID )
+            if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID ) {
                 continue;
+            }
 
             switch ( awards[i]._type ) {
-            case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT:
-                humanKingdom.GetBestHero()->PickupArtifact( Artifact( awards[i]._subType ) );
+            case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->PickupArtifact( Artifact( awards[i]._subType ) );
+
+                    // Some artifacts increase the Spell Power of the hero we have to set spell points to maximum.
+                    hero->SetSpellPoints( std::max( hero->GetSpellPoints(), hero->GetMaxSpellPoints() ) );
+                }
+
                 break;
-            case Campaign::CampaignAwardData::TYPE_GET_SPELL:
-                humanKingdom.GetBestHero()->AppendSpellToBook( awards[i]._subType, true );
+            }
+            case Campaign::CampaignAwardData::TYPE_GET_SPELL: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    hero->AppendSpellToBook( awards[i]._subType, true );
+                }
+
                 break;
+            }
             case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
                 for ( const Player * player : sortedPlayers ) {
-                    Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+                    const Kingdom & kingdom = world.GetKingdom( player->GetColor() );
                     const KingdomHeroes & heroes = kingdom.GetHeroes();
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
+                        assert( heroes[j] != nullptr );
+
                         if ( heroes[j]->GetID() == awards[i]._subType ) {
                             heroes[j]->SetFreeman( Battle::RESULT_LOSS );
                             break;
                         }
                     }
                 }
+
                 break;
-            case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES:
-                replaceArmy( humanKingdom.GetBestHero()->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+            case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES: {
+                Heroes * hero = getHeroToApplyBonusOrAwards( currentScenarioInfoId, humanKingdom );
+                assert( hero != nullptr );
+
+                if ( hero != nullptr ) {
+                    replaceArmy( hero->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+                }
+
                 break;
+            }
             default:
                 break;
             }
@@ -704,6 +865,204 @@ namespace
         }
     }
 
+    fheroes2::ButtonSprite getDifficultyButton( const int campaignId, const fheroes2::Point & offset )
+    {
+        int icnId = ICN::UNKNOWN;
+
+        switch ( campaignId ) {
+        case Campaign::ROLAND_CAMPAIGN:
+            icnId = ICN::BUTTON_DIFFICULTY_ROLAND;
+            break;
+        case Campaign::ARCHIBALD_CAMPAIGN:
+            icnId = ICN::BUTTON_DIFFICULTY_ARCHIBALD;
+            break;
+        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+        case Campaign::DESCENDANTS_CAMPAIGN:
+        case Campaign::WIZARDS_ISLE_CAMPAIGN:
+        case Campaign::VOYAGE_HOME_CAMPAIGN:
+            icnId = ICN::BUTTON_DIFFICULTY_POL;
+            break;
+        default:
+            // Implementing a new campaign? Add a new case!
+            assert( 0 );
+            break;
+        }
+        return fheroes2::ButtonSprite( offset.x, offset.y, fheroes2::AGG::GetICN( icnId, 0 ), fheroes2::AGG::GetICN( icnId, 1 ) );
+    }
+
+    int32_t setCampaignDifficulty( int32_t currentDifficulty, const bool isSelectionAllowed )
+    {
+        const fheroes2::StandardWindow frameborder( 234, 270, true );
+        const fheroes2::Rect & windowRoi = frameborder.activeArea();
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const int buttonIcnId = isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN;
+        const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Rect buttonMaxRoi( windowRoi.x + 5, windowRoi.y, windowRoi.width - 10, windowRoi.height - 5 );
+        fheroes2::ButtonSprite buttonOk = fheroes2::makeButtonWithShadow( buttonMaxRoi.x + ( buttonMaxRoi.width - buttonSprite.width() ) / 2,
+                                                                          buttonMaxRoi.y + buttonMaxRoi.height - buttonSprite.height(),
+                                                                          fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ), display );
+
+        buttonOk.draw();
+
+        const fheroes2::Text caption( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() );
+        caption.draw( windowRoi.x + ( windowRoi.width - caption.width() ) / 2, windowRoi.y + 10, display );
+
+        const fheroes2::Rect copyFromArea{ 20, 94, 223, 69 };
+        const fheroes2::Point copyToOffset{ windowRoi.x + 4, windowRoi.y + 40 };
+        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 ), copyFromArea.x, copyFromArea.y, display, copyToOffset.x, copyToOffset.y, copyFromArea.width,
+                        copyFromArea.height );
+
+        if ( isEvilInterface ) {
+            fheroes2::ApplyPalette( display, copyToOffset.x, copyToOffset.y, display, copyToOffset.x, copyToOffset.y, copyFromArea.width, copyFromArea.height,
+                                    PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+        }
+
+        const fheroes2::Sprite & selectionImage = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
+
+        fheroes2::MovableSprite selection( selectionImage );
+
+        const char * easyDescription = _( "Choose this difficulty if you want to prefer game story over challenge. AI is weaker in comparison with normal difficulty." );
+        const char * normalDescription = _( "Choose this difficulty to enjoy the campaign as per the original design." );
+        const char * hardDescription = _( "Choose this difficulty if you want challenge. AI is stronger in comparison with normal difficulty." );
+
+        const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( windowRoi.x + 5, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
+                                                            fheroes2::Rect( windowRoi.x + 82, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
+                                                            fheroes2::Rect( windowRoi.x + 158, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ) };
+
+        const std::array<fheroes2::Rect, 3> iconArea{ fheroes2::Rect( difficultyArea[0].x + 4, difficultyArea[0].y + 4, 63, 63 ),
+                                                      fheroes2::Rect( difficultyArea[1].x + 4, difficultyArea[1].y + 4, 63, 63 ),
+                                                      fheroes2::Rect( difficultyArea[2].x + 4, difficultyArea[2].y + 4, 63, 63 ) };
+
+        const char * currentDescription = nullptr;
+        switch ( currentDifficulty ) {
+        case Campaign::CampaignDifficulty::Easy:
+            currentDescription = easyDescription;
+            selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
+            if ( !isSelectionAllowed ) {
+                fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
+            break;
+        case Campaign::CampaignDifficulty::Normal:
+            currentDescription = normalDescription;
+            selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
+            if ( !isSelectionAllowed ) {
+                fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
+            break;
+        case Campaign::CampaignDifficulty::Hard:
+            currentDescription = hardDescription;
+            selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
+            if ( !isSelectionAllowed ) {
+                fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
+            break;
+        default:
+            // Did you add a new difficulty level for campaigns? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        const int32_t textWidth = windowRoi.width - 16;
+        const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 135 };
+
+        fheroes2::Text description( currentDescription, fheroes2::FontType::normalWhite() );
+        fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
+        description.draw( textOffset.x, textOffset.y, textWidth, display );
+
+        fheroes2::Text easyName( _( "Easy" ), fheroes2::FontType::normalWhite() );
+        fheroes2::Text normalName( _( "Normal" ), fheroes2::FontType::normalWhite() );
+        fheroes2::Text hardName( _( "Hard" ), fheroes2::FontType::normalWhite() );
+
+        easyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - easyName.width() ) / 2, difficultyArea[0].y + difficultyArea[0].height + 5, display );
+        normalName.draw( difficultyArea[1].x + ( difficultyArea[1].width - normalName.width() ) / 2, difficultyArea[1].y + difficultyArea[1].height + 5, display );
+        hardName.draw( difficultyArea[2].x + ( difficultyArea[2].width - hardName.width() ) / 2, difficultyArea[2].y + difficultyArea[2].height + 5, display );
+
+        display.render();
+
+        LocalEvent & le = LocalEvent::Get();
+        while ( le.HandleEvents() ) {
+            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
+                break;
+            }
+
+            if ( le.MousePressRight( buttonOk.area() ) ) {
+                fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( difficultyArea[0] ) ) {
+                fheroes2::Text header( _( "Easy" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( easyDescription, fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( difficultyArea[1] ) ) {
+                fheroes2::Text header( _( "Normal" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( normalDescription, fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( difficultyArea[2] ) ) {
+                fheroes2::Text header( _( "Hard" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( hardDescription, fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+
+            bool updateInfo = false;
+
+            if ( isSelectionAllowed ) {
+                if ( le.MouseClickLeft( difficultyArea[0] ) ) {
+                    currentDescription = easyDescription;
+                    selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
+                    currentDifficulty = Campaign::CampaignDifficulty::Easy;
+                    updateInfo = true;
+                }
+                else if ( le.MouseClickLeft( difficultyArea[1] ) ) {
+                    currentDescription = normalDescription;
+                    selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
+                    currentDifficulty = Campaign::CampaignDifficulty::Normal;
+                    updateInfo = true;
+                }
+                else if ( le.MouseClickLeft( difficultyArea[2] ) ) {
+                    currentDescription = hardDescription;
+                    selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
+                    currentDifficulty = Campaign::CampaignDifficulty::Hard;
+                    updateInfo = true;
+                }
+            }
+
+            if ( updateInfo ) {
+                restorer.restore();
+
+                description.set( currentDescription, fheroes2::FontType::normalWhite() );
+                restorer.reset();
+                restorer.update( textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
+                description.draw( textOffset.x, textOffset.y, textWidth, display );
+
+                display.render();
+            }
+        }
+
+        return currentDifficulty;
+    }
+
     void outputCampaignScenarioInfoInTextSupportMode( const bool allowToRestart )
     {
         START_TEXT_SUPPORT_MODE
@@ -747,13 +1106,15 @@ namespace
         }
 
         if ( allowToRestart ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to Restart scenario." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_RESTART_SCENARIO ) << " to Restart scenario." )
         }
         else {
             COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to Start scenario." )
         }
 
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_VIEW_INTRO ) << " to View Intro Video." )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) << " to Select / View Campaign Difficulty." )
 
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to Exit this dialog." )
     }
@@ -854,7 +1215,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         AudioManager::ResetAudio();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
         // TODO : Implement function that displays the last frame of win.smk with score
-        // and a dialog for name entry. fheroes::PlayMusic is run here in order to start
+        // and a dialog for name entry. fheroes2::PlayMusic is run here in order to start
         // playing before displaying the high score.
         AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
         return fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
@@ -924,9 +1285,12 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     const int buttonIconID = getCampaignButtonId( chosenCampaignID );
     fheroes2::Button buttonViewIntro( top.x + 22, top.y + 431, buttonIconID, 0, 1 );
-    fheroes2::Button buttonRestart( top.x + 195, top.y + 431, buttonIconID, 2, 3 );
+    fheroes2::Button buttonRestart( top.x + 367 - 6, top.y + 431, buttonIconID, 2, 3 );
     fheroes2::Button buttonOk( top.x + 367, top.y + 431, buttonIconID, 4, 5 );
     fheroes2::Button buttonCancel( top.x + 511, top.y + 431, buttonIconID, 6, 7 );
+
+    // Difficulty button is not present in the original assets so we need to generate it.
+    fheroes2::ButtonSprite buttonDifficulty = getDifficultyButton( chosenCampaignID, top + fheroes2::Point( 195, 431 ) );
 
     // create scenario bonus choice buttons
     fheroes2::ButtonGroup buttonChoices;
@@ -956,21 +1320,34 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     }
 
     buttonViewIntro.draw();
+    buttonDifficulty.draw();
 
-    if ( !scenario.isMapFilePresent() ) {
-        buttonOk.disable();
-    }
+    const bool isDifficultySelectionAllowed = campaignSaveData.isStarting() && !allowToRestart;
+    const bool isMapPresent = scenario.isMapFilePresent();
 
     if ( allowToRestart ) {
         buttonOk.disable();
         buttonOk.hide();
+
+        if ( !isMapPresent ) {
+            buttonRestart.disable();
+        }
+
         buttonRestart.draw();
     }
     else {
         buttonRestart.disable();
         buttonRestart.hide();
+
+        if ( !isMapPresent ) {
+            buttonOk.disable();
+        }
+
         buttonOk.draw();
     }
+
+    // Only one button can be enabled at the time.
+    assert( buttonRestart.isHidden() != buttonOk.isHidden() );
 
     buttonCancel.draw();
 
@@ -1017,6 +1394,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         choiceArea[i].width += 170;
     }
 
+    const fheroes2::Rect areaDaysSpent{ top.x + 413, top.y + 27, 201, 25 };
+
     const std::array<Game::HotKeyEvent, 3> hotKeyBonusChoice{ Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS, Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS,
                                                               Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS };
 
@@ -1024,10 +1403,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonViewIntro.area() ) ? buttonViewIntro.drawOnPress() : buttonViewIntro.drawOnRelease();
-
-        if ( allowToRestart ) {
-            le.MousePressLeft( buttonRestart.area() ) ? buttonRestart.drawOnPress() : buttonRestart.drawOnRelease();
-        }
+        le.MousePressLeft( buttonDifficulty.area() ) ? buttonDifficulty.drawOnPress() : buttonDifficulty.drawOnRelease();
+        le.MousePressLeft( buttonRestart.area() ) ? buttonRestart.drawOnPress() : buttonRestart.drawOnRelease();
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
             if ( le.MousePressLeft( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
@@ -1057,13 +1434,14 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         displayScenarioAwardsPopupWindow( campaignSaveData, top ) || displayScenarioBonusPopupWindow( scenario, top );
 
-        const bool restartButtonClicked = ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) );
+        const bool restartButtonClicked
+            = ( buttonRestart.isEnabled() && ( le.MouseClickLeft( buttonRestart.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_RESTART_SCENARIO ) ) );
 
         if ( le.MousePressRight( buttonCancel.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Cancel" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
-        else if ( !allowToRestart && le.MousePressRight( buttonOk.area() ) ) {
+        else if ( buttonOk.isVisible() && le.MousePressRight( buttonOk.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Okay" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "Start the selected scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
@@ -1071,7 +1449,11 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             fheroes2::showMessage( fheroes2::Text( _( "View Intro" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "View Intro videos for the current state of the campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
-        else if ( allowToRestart && le.MousePressRight( buttonRestart.area() ) ) {
+        else if ( le.MousePressRight( buttonDifficulty.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Select campaign difficulty. It cannot be changed after." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+        else if ( buttonRestart.isVisible() && le.MousePressRight( buttonRestart.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Restart" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "Restart the current scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
@@ -1081,7 +1463,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 continue;
             }
 
-            const Maps::FileInfo mapInfo = scenario.loadMap();
+            Maps::FileInfo mapInfo = scenario.loadMap();
+            Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
+
             conf.SetCurrentFileInfo( mapInfo );
 
             // starting faction scenario bonus has to be called before players.SetStartGame()
@@ -1097,13 +1481,17 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
-            if ( Settings::ExtGameUseFade() )
+            if ( Settings::isFadeEffectEnabled() )
                 fheroes2::FadeDisplay();
 
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
-            if ( !world.LoadMapMP2( mapInfo.file ) ) {
+            const bool isSWCampaign = ( chosenCampaignID == Campaign::ROLAND_CAMPAIGN ) || ( chosenCampaignID == Campaign::ARCHIBALD_CAMPAIGN );
+
+            if ( !world.LoadMapMP2( mapInfo.file, isSWCampaign ) ) {
                 Dialog::Message( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ), Font::BIG, Dialog::OK );
+
+                // TODO: find a way to restore world for the current game after a failure.
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
             }
@@ -1126,7 +1514,18 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             playPreviosScenarioVideo();
             playCurrentScenarioVideo();
 
+            restorer.restore();
+            display.render();
+
             playCampaignMusic( chosenCampaignID );
+        }
+        else if ( le.MousePressRight( areaDaysSpent ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "The number of days spent on this campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+        else if ( le.MouseClickLeft( buttonDifficulty.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) ) {
+            campaignSaveData.setDifficulty( setCampaignDifficulty( campaignSaveData.getDifficulty(), isDifficultySelectionAllowed ) );
+            display.render();
         }
     }
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,7 +34,7 @@ class IndexObject : public std::pair<int32_t, int>
 {
 public:
     IndexObject()
-        : std::pair<int32_t, int>( -1, MP2::OBJ_ZERO )
+        : std::pair<int32_t, int>( -1, MP2::OBJ_NONE )
     {}
 
     IndexObject( int32_t index, int object )
@@ -52,31 +52,22 @@ public:
     }
 };
 
-StreamBase & operator>>( StreamBase &, IndexObject & );
-
 class ObjectColor : public std::pair<int, int>
 {
 public:
     ObjectColor()
-        : std::pair<int, int>( MP2::OBJ_ZERO, Color::NONE )
+        : std::pair<int, int>( MP2::OBJ_NONE, Color::NONE )
     {}
 
     ObjectColor( int object, int color )
         : std::pair<int, int>( object, color )
     {}
 
-    bool isObject( int object ) const
-    {
-        return object == first;
-    }
-
     bool isColor( int colors ) const
     {
         return ( colors & second ) != 0;
     }
 };
-
-StreamBase & operator>>( StreamBase &, ObjectColor & );
 
 class ResourceCount : public std::pair<int, uint32_t>
 {

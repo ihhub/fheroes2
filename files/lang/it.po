@@ -1,14 +1,13 @@
 # Italian translation of fheroes2
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
+# Copyright (C) 2021 - 2022 fheroes2 team <fhomm2@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
-"PO-Revision-Date: 2022-05-12 17:11+0200\n"
+"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
 "Language: it\n"
@@ -17,7 +16,143 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2021-10-08 00:00+0800\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid "QUIT"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+
+msgid "CONFIG"
+msgstr ""
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+
+msgid "HOT SEAT"
+msgstr ""
+
+msgid "2 PLAYERS"
+msgstr ""
+
+msgid "3 PLAYERS"
+msgstr ""
+
+msgid "4 PLAYERS"
+msgstr ""
+
+msgid "5 PLAYERS"
+msgstr ""
+
+msgid "6 PLAYERS"
+msgstr ""
+
+msgid "GIFT"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr ""
+
+msgid "MIN"
+msgstr ""
+
+msgid "MAX"
+msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Lottare"
@@ -30,6 +165,14 @@ msgstr "Esplorare"
 
 msgid "None"
 msgstr "Nessun/a"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
 
 msgid ""
 "A few\n"
@@ -200,14 +343,20 @@ msgid ""
 "half movement rate."
 msgstr ""
 
-msgid "Speed"
-msgstr "Velocità"
-
 msgid "Speed: %{speed}"
 msgstr "Velocità: %{speed}"
 
+msgid "Speed"
+msgstr "Velocità"
+
 msgid "Army Order"
 msgstr ""
+
+msgid "Off"
+msgstr "No"
+
+msgid "On"
+msgstr "Sì"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -223,11 +372,21 @@ msgstr "Movimento Ombra"
 msgid "Shadow Cursor"
 msgstr "Cursore Ombra"
 
-msgid "Off"
-msgstr "No"
+msgid "Audio"
+msgstr ""
 
-msgid "On"
-msgstr "Sì"
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgid "Configure"
+msgstr ""
+
+msgid "Hot Keys"
+msgstr ""
+
+#, fuzzy
+msgid "Damage Info"
+msgstr "Danni"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -254,6 +413,21 @@ msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+
+msgid "Change the audio settings of the game."
+msgstr "Cambia le impostazioni dell'audio del gioco."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr ""
+
+msgid "Toggle to display damage information during the battle."
+msgstr ""
+
+msgid "Exit this menu."
+msgstr "Lascia questo menù."
+
+msgid "Okay"
+msgstr "Okay"
 
 msgid "The enemy has surrendered!"
 msgstr "Il nemico si è ceduto!"
@@ -353,6 +527,10 @@ msgstr "Annulla"
 msgid "Hero Screen"
 msgstr "Schermata Eroe"
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Opzioni Castello"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -395,6 +573,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Mostra dettagli su %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr "Fai volare %{monster} qua"
+
+msgid "Move %{monster} here"
+msgstr "Sposta %{monster} qua"
+
 msgid "Shoot %{monster}"
 msgstr "Tira a %{monster}"
 
@@ -405,12 +589,6 @@ msgstr[1] "(rimasti %{count} colpi)"
 
 msgid "Attack %{monster}"
 msgstr "Attacca %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "Fai volare %{monster} qua"
-
-msgid "Move %{monster} here"
-msgstr "Sposta %{monster} qua"
 
 msgid "Turn %{turn}"
 msgstr "Round %{turn}"
@@ -454,19 +632,6 @@ msgstr "Permette di modificare la schermata del combattimento."
 msgid "System Options"
 msgstr "Opzioni Sistema"
 
-msgid "Wait this unit"
-msgstr "Aspetta questa unità"
-
-msgid "Wait"
-msgstr "Salta"
-
-msgid ""
-"Waits the current creature. The current creature delays its turn until after "
-"all other creatures have had their turn."
-msgstr ""
-"Fa aspettare questa unità. L'unità rimanda il suo turno per dopo che tutte "
-"le altre unità hanno finito i loro turni."
-
 msgid "Skip this unit"
 msgstr "Salta questa unità"
 
@@ -480,8 +645,16 @@ msgstr ""
 "Salta l'unità attuale. L'unità salta il suo turno senza fare nulla e deve "
 "aspettare per il prossimo round."
 
+#, fuzzy
+msgid "View Captain's options"
+msgstr "Mostra opzioni eroe"
+
 msgid "View Hero's options"
 msgstr "Mostra opzioni eroe"
+
+#, fuzzy
+msgid "View opposing Captain"
+msgstr "Mostra eroe avversario"
 
 msgid "View opposing Hero"
 msgstr "Mostra eroe avversario"
@@ -498,11 +671,12 @@ msgstr ""
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Sei sicuro di voler congedare queste forze?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} salta il suo turno."
-
-msgid "%{name} wait their turn."
-msgstr "%{name} rimanda il suo turno."
 
 #, fuzzy
 msgid "%{attacker} does %{damage} damage."
@@ -520,11 +694,9 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} perisce."
 msgstr[1] "%{count} %{defender} periscono."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
+#, fuzzy
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Spostamento %{monster}: %{src}, %{dst}"
-
-msgid "Moved %{monster}"
-msgstr "Spostato %{monster}"
 
 msgid "The %{name} resist the spell!"
 msgstr "La magia non ha funzianto a %{name}!"
@@ -593,8 +765,9 @@ msgstr ""
 msgid "The mirror image is destroyed!"
 msgstr ""
 
-msgid "Break auto battle?"
-msgstr ""
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Sei sicuro di voler fuggire?"
 
 msgid "Error"
 msgstr ""
@@ -676,13 +849,19 @@ msgstr ""
 msgid "each with a +%{attack} bonus to their attack skill."
 msgstr ""
 
+#, fuzzy
+msgid "The %{name} is destroyed."
+msgstr "%{name} incrementa il morale delle tue truppe."
+
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr ""
 
-msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Dwarven Alliance"
 msgstr ""
@@ -718,13 +897,22 @@ msgstr ""
 msgid "Annexation"
 msgstr ""
 
-msgid "Carator Mines"
-msgstr ""
-
 msgid "Force of Arms"
 msgstr ""
 
 msgid "Save the Dwarves"
+msgstr ""
+
+msgid "Carator Mines"
+msgstr ""
+
+msgid "Turning Point"
+msgstr ""
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
 msgstr ""
 
 msgid "The Crown"
@@ -733,13 +921,7 @@ msgstr ""
 msgid "The Gauntlet"
 msgstr ""
 
-msgid "Turning Point"
-msgstr ""
-
 msgid "Betrayal"
-msgstr ""
-
-msgid "Corlagon's Defense"
 msgstr ""
 
 msgid "Final Justice"
@@ -1178,6 +1360,41 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
+#, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Anima i Morti"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Fulmini in Serie"
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Rispecchia"
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "La Perla Bianca"
+
+msgid "campaignBonus|Summon Earth"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|View Heroes"
+msgstr "Mostra Eroi"
+
 msgid "campaignBonus|Ballista"
 msgstr ""
 
@@ -1202,6 +1419,10 @@ msgstr ""
 
 msgid "campaignBonus|Foremost Scroll"
 msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "La Perla Bianca"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr ""
@@ -1416,41 +1637,6 @@ msgstr "Anima i Morti"
 #, fuzzy
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Scudo Segreto"
-
-#, fuzzy
-msgid "campaignBonus|Animate Dead"
-msgstr "Anima i Morti"
-
-#, fuzzy
-msgid "campaignBonus|Chain Lightning"
-msgstr "Fulmini in Serie"
-
-msgid "campaignBonus|Fireblast"
-msgstr ""
-
-msgid "campaignBonus|Mass Curse"
-msgstr ""
-
-msgid "campaignBonus|Mass Haste"
-msgstr ""
-
-#, fuzzy
-msgid "campaignBonus|Mirror Image"
-msgstr "Rispecchia"
-
-msgid "campaignBonus|Resurrect"
-msgstr ""
-
-#, fuzzy
-msgid "campaignBonus|Steelskin"
-msgstr "La Perla Bianca"
-
-msgid "campaignBonus|Summon Earth"
-msgstr ""
-
-#, fuzzy
-msgid "campaignBonus|View Heroes"
-msgstr "Mostra Eroi"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -1774,11 +1960,6 @@ msgstr ""
 
 msgid "Sheltemburg"
 msgstr ""
-
-msgid "Cannot recruit - guest to guard automove error."
-msgstr ""
-"Non puoi reclutare - errore in cambiamento automatico dall'ospite al "
-"guardiano."
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Reclutamento impossibile. Eroe già presente in questa città."
@@ -2160,9 +2341,6 @@ msgstr ""
 msgid "Exit"
 msgstr "Esci"
 
-msgid "Exit this menu."
-msgstr "Lascia questo menù."
-
 msgid "Click to show next town."
 msgstr "Clicca per andare alla città succ."
 
@@ -2174,14 +2352,6 @@ msgstr "Clicca per andare alla città prec."
 
 msgid "Show previous town"
 msgstr "Vai alla città prec."
-
-msgid "Army joining"
-msgstr ""
-
-msgid ""
-"Unable to merge two armies together. Rearrange monsters manually before "
-"moving the hero to the garrison."
-msgstr ""
 
 msgid "This town may not be upgraded to a castle."
 msgstr ""
@@ -2197,12 +2367,6 @@ msgstr "Esci dalla Città"
 
 msgid "Show Income"
 msgstr "Mostra Rendita"
-
-msgid "Swap Heroes"
-msgstr "Scambia Eroi"
-
-msgid "Meeting Heroes"
-msgstr "Eroi incontranti"
 
 msgid "View Hero"
 msgstr "Mostra Eroe"
@@ -2238,7 +2402,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 
@@ -2277,6 +2441,13 @@ msgstr "Niente truppe disponibili da comprare."
 #, fuzzy
 msgid "Recruit Creatures"
 msgstr "Recluta Eroe"
+
+msgid "Max"
+msgstr "Max"
+
+#, fuzzy
+msgid "Hire all creatures in the town."
+msgstr "Perdi tutti i tuoi eroi e le città."
 
 msgid "Town Population Information and Statistics"
 msgstr "Populazione e Dati della Città"
@@ -2335,17 +2506,6 @@ msgstr ""
 "sforzo, e il pubblico ti applaude. Colpito dalle tue capacità, un allenatore "
 "di gladiatori attempato acconsente ad allenarti in una dote a scelta tua."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Sei sicuro di voler congedare queste forze?"
-
 msgid "Attack Skill"
 msgstr "Attacco"
 
@@ -2366,6 +2526,17 @@ msgstr "Pt. Ferita"
 
 msgid "Hit Points Left"
 msgstr "PF Rimasti"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Sei sicuro di voler congedare queste forze?"
 
 msgid "Followers"
 msgstr "Accoliti"
@@ -2417,15 +2588,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Grado: %{percent})"
 
-msgid "Total: "
-msgstr "Totale: "
-
-msgid "No room in"
-msgstr "Non c'è posto"
-
-msgid "the garrison"
-msgstr "nella guarnigione"
-
 msgid "off"
 msgstr "Muto"
 
@@ -2462,14 +2624,14 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-msgid "Okay"
-msgstr "Okay"
-
 msgid "Build a new ship:"
 msgstr "Costruisci una nave:"
 
 msgid "Resource cost:"
 msgstr "Costo Risorse:"
+
+msgid "Total: "
+msgstr "Totale: "
 
 msgid "Need: "
 msgstr "Servono: "
@@ -2505,26 +2667,7 @@ msgstr "Esci da fheroes2."
 msgid "Language"
 msgstr "Lingua"
 
-msgid "Resolution"
-msgstr "Risoluzione"
-
-msgid "Experimental"
-msgstr "Sperimentale"
-
-msgid "Settings"
-msgstr "Impostazioni"
-
-msgid "Audio"
-msgstr ""
-
-#, fuzzy
-msgid "settings"
-msgstr "Impostazioni"
-
-msgid "Hot Keys"
-msgstr ""
-
-msgid "In-game"
+msgid "Graphics"
 msgstr ""
 
 #, fuzzy
@@ -2544,58 +2687,17 @@ msgstr ""
 "Tele-\n"
 "trasporto"
 
-msgid "Evil"
-msgstr "Cattivo"
-
-msgid "Good"
-msgstr "Buono"
-
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
-
-msgid "Auto Resolve"
-msgstr "Auto-Risolva"
-
-msgid "Auto, No Spells"
-msgstr "Auto, Senza Magie"
-
-msgid "Manual"
-msgstr "Manuali"
-
-msgid "Battles"
-msgstr "Battaglie"
+msgid "Change the language of the game."
+msgstr "Cambia la lingua del gioco."
 
 msgid "Select Game Language"
 msgstr "Scegli lingua del gioco"
 
-msgid "Change language of the game."
-msgstr "Cambia la lingua del gioco."
-
-msgid "Select Game Resolution"
-msgstr "Scegli la risoluzione del gioco"
-
-msgid "Change resolution of the game."
-msgstr "Cambia la risoluzione del gioco."
-
 #, fuzzy
-msgid "Change audio settings of the game."
-msgstr "Cambia la risoluzione del gioco."
+msgid "Change the graphics settings of the game."
+msgstr "Cambia le impostazioni dell'audio del gioco."
 
-msgid "Experimental game settings."
-msgstr "Impostazioni sperimentali del gioco."
-
-msgid "Toggle instant battle mode."
-msgstr ""
-
-msgid "Check all Hot Keys used in the game."
-msgstr ""
-
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -2656,9 +2758,6 @@ msgstr ""
 "Condizioni\n"
 "Sconfitta"
 
-msgid "Score: "
-msgstr "Punteggio: "
-
 msgid "First select recipients!"
 msgstr "Prima scegli destinatari!"
 
@@ -2680,17 +2779,58 @@ msgstr "Dono Scelto"
 msgid "Gift from %{name}"
 msgstr "Dono da %{name}"
 
-msgid "Set Guardian"
+msgid "Resolution"
+msgstr "Risoluzione"
+
+msgid "Fullscreen"
 msgstr ""
 
-msgid "Your army too big!"
-msgstr "Il tuo esercito è troppo grande"
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr ""
+
+msgid "V-Sync"
+msgstr ""
+
+#, fuzzy
+msgid "on"
+msgstr "1"
+
+msgid "FPS"
+msgstr ""
+
+#, fuzzy
+msgid "System Info"
+msgstr "Opzioni Sistema"
+
+msgid "Change the resolution of the game."
+msgstr "Cambia la risoluzione del gioco."
+
+msgid "Select Game Resolution"
+msgstr "Scegli la risoluzione del gioco"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr ""
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
 
 msgid "Hot Keys:"
 msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Scegli la lingua del gioco:"
+
+#, fuzzy
+msgid "Click to choose the selected language."
+msgstr "Clicca per salvare la partita in corso."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} sale di livello."
@@ -2725,9 +2865,6 @@ msgstr "Ti offro %{count} unità d'oro per 1 unità di %{resfrom}."
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr "Ti offro 1 unità di %{resto} per %{count} unità di %{resfrom}."
 
-msgid "Max"
-msgstr "Max"
-
 msgid "Min"
 msgstr "Min"
 
@@ -2746,11 +2883,11 @@ msgstr "Scambi disponibili"
 msgid "n/a"
 msgstr "n/d"
 
-msgid "guarded by "
-msgstr "Protetto/a da "
-
 msgid "guarded by %{count} %{monster}"
 msgstr "Protetto/a da %{count} %{monster}"
+
+msgid "guarded by "
+msgstr "Protetto/a da "
 
 msgid "(available: %{count})"
 msgstr "(disponibiltà: %{count})"
@@ -2836,11 +2973,20 @@ msgstr "Disponibile/i: %{count}"
 msgid "Number to buy:"
 msgstr "Quantità:"
 
-msgid "Click to apply the selected resolution."
+msgid "Recruit selected monsters."
 msgstr ""
 
-msgid "MAX"
-msgstr "MAX"
+msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "Select only 1 monster to be recruited."
+msgstr ""
+
+msgid "Select Game Resolution:"
+msgstr "Scegli la risoluzione del gioco:"
+
+msgid "Click to apply the selected resolution."
+msgstr ""
 
 msgid "How many troops to move?"
 msgstr "Quante forze spostare?"
@@ -2850,6 +2996,18 @@ msgstr "Distribuzione rapida ai riquadri liberi:"
 
 msgid "Map: "
 msgstr "Mappa: "
+
+msgid ""
+"\n"
+"\n"
+"Month: "
+msgstr ""
+
+msgid ", Week: "
+msgstr ""
+
+msgid ", Day: "
+msgstr ""
 
 msgid ""
 "\n"
@@ -2894,17 +3052,7 @@ msgid "Select Skill:"
 msgstr "Scegli dote:"
 
 #, fuzzy
-msgid "Location: "
-msgstr ""
-"\n"
-"\n"
-"Percorso: "
-
-#, fuzzy
-msgid ""
-"\n"
-"\n"
-"Map Type:\n"
+msgid "Map Type:\n"
 msgstr "Tipo di mappa"
 
 msgid "The Succession Wars"
@@ -2948,6 +3096,9 @@ msgstr "Condizione Vittoria"
 
 msgid "Map difficulty:"
 msgstr "Difficoltà mappa:"
+
+msgid "N"
+msgstr ""
 
 msgid "No maps exist at that size"
 msgstr "Non esistono mappe di quella dimensione"
@@ -3046,9 +3197,6 @@ msgstr "La descrizione della mappa scelta attualmente."
 msgid "Accept the choice made."
 msgstr "Accetta la scelta."
 
-msgid "Experimental Game Settings"
-msgstr "Impostazioni Sperimentali"
-
 msgid "Jump"
 msgstr "Salta"
 
@@ -3061,8 +3209,32 @@ msgstr "Nascondi"
 msgid "Enemy Speed"
 msgstr "Velocità Nemica"
 
+#, fuzzy
+msgid "Slow"
+msgstr "Pianissimo"
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Velocissima"
+
 msgid "Scroll Speed"
 msgstr "Velocità dello Scorrimento"
+
+msgid "Evil"
+msgstr "Cattivo"
+
+msgid "Good"
+msgstr "Buono"
+
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
 
 msgid "Hide"
 msgstr "Nascondi"
@@ -3072,6 +3244,18 @@ msgstr "Mostra"
 
 msgid "Interface"
 msgstr "Interfaccia"
+
+msgid "Auto Resolve"
+msgstr "Auto-Risolva"
+
+msgid "Auto, No Spells"
+msgstr "Auto, Senza Magie"
+
+msgid "Battles"
+msgstr "Battaglie"
+
+msgid "autoBattle|Manual"
+msgstr "Manuali"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3084,7 +3268,13 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
 msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3183,6 +3373,30 @@ msgstr "Impossibile"
 msgid "and more..."
 msgstr ""
 
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Difficoltà Gioco"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr ""
 
@@ -3191,6 +3405,9 @@ msgid "View Intro"
 msgstr "Mostra Eroe"
 
 msgid "View Intro videos for the current state of the campaign."
+msgstr ""
+
+msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
 
 msgid "Restart"
@@ -3209,13 +3426,22 @@ msgstr ""
 msgid "Please make sure that campaign files are correct and present."
 msgstr ""
 
+msgid "Days spent"
+msgstr ""
+
+msgid "The number of days spent on this campaign."
+msgstr ""
+
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
-msgid "Development"
+msgid "Visit us at "
+msgstr ""
+
+msgid "QA and Support"
 msgstr ""
 
 #, fuzzy
@@ -3224,25 +3450,28 @@ msgstr ""
 "Tele-\n"
 "trasporto"
 
-msgid "Visit us at "
-msgstr ""
-
 msgid "Special Thanks to"
 msgstr ""
 
 msgid "and many other contributors!"
 msgstr ""
 
+msgid "and many-many other supporters!"
+msgstr ""
+
 msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
 msgstr ""
 
-msgid "Need help with the game?"
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
 
-msgid "and many-many other supporters!"
+msgid "Need help with the game?"
 msgstr ""
 
 msgid "Original project before 0.7"
@@ -3307,9 +3536,6 @@ msgstr ""
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Esci da fheroes2."
 
-msgid "Cyberlore Studios"
-msgstr ""
-
 msgid "Design Lead"
 msgstr ""
 
@@ -3325,9 +3551,6 @@ msgstr ""
 #, fuzzy
 msgid "Playtesters"
 msgstr "Icona dei Giocatori"
-
-msgid "New World Computing"
-msgstr ""
 
 msgid "Designer"
 msgstr ""
@@ -3358,8 +3581,11 @@ msgstr ""
 msgid "Soprano Vocal"
 msgstr ""
 
-msgid "Recorded at Green Street Studios"
+msgid "Recorded at %{recordingStudio}"
 msgstr ""
+
+msgid "credits|Manual"
+msgstr "Manuale"
 
 msgid "German Consultant"
 msgstr ""
@@ -3388,24 +3614,25 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-msgid "Warning"
-msgstr ""
+#, fuzzy
+msgid "The save file is corrupted."
+msgstr "Non esistono punti di salvataggio da caricare."
 
-msgid "This file contains a save with an invalid game type."
-msgstr ""
-
-msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
-msgstr ""
-
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 msgid "Current game version: "
 msgstr ""
 
 msgid "Last supported version: "
+msgstr ""
+
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+msgid ""
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -3451,6 +3678,12 @@ msgstr "Il Team di fheroes2 Resurrection presenta"
 msgid "Greetings!"
 msgstr "Saluti!"
 
+#, fuzzy
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
+"risoluzione per il gioco."
+
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
@@ -3469,27 +3702,10 @@ msgid "door"
 msgstr "porta"
 
 msgid ""
-" on the left side of main menu.\n"
-"\n"
-"To switch between windowed and full screen modes\n"
-"press "
-msgstr ""
-" sul lato sinistro della schermata principale. \n"
-"\n"
-"Per andare da modalità finestra a schermo intero\n"
-"premi il tasto "
-
-msgid "F4"
-msgstr "F4"
-
-msgid ""
-" key on the keyboard.\n"
+" on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" sulla tastiera.\n"
-"\n"
-"Divertiti!"
 
 #, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -3659,6 +3875,21 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
 
+#, fuzzy
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] "La tua alleanza sconfigge quella avversaria."
+msgstr[1] "La tua alleanza sconfigge quella avversaria."
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Capture the castle '%{name}'."
 msgstr ""
 
@@ -3696,9 +3927,6 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "Giocatore %{color} è stato sconfitto!"
-
-msgid "Do you wish to continue the game?"
-msgstr ""
 
 msgid "Scenario:"
 msgstr "Scenario:"
@@ -3794,6 +4022,11 @@ msgid "%{color} player's turn."
 msgstr "Turno di giocatore %{color}"
 
 msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -3882,6 +4115,14 @@ msgid "Try looking on land!!!"
 msgstr "Cerca sulla terraferma!"
 
 msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
+
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr ""
+
+msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
 
@@ -3895,9 +4136,6 @@ msgstr ""
 
 msgid "Try searching on clear ground."
 msgstr "Riprova su terreno sgombro."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr ""
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -3931,9 +4169,6 @@ msgid ""
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
 
-msgid "Necroman"
-msgstr "Negromante"
-
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
@@ -3946,8 +4181,42 @@ msgid ""
 "and/or heroes not of their primary alignment."
 msgstr ""
 
+msgid "Handicap"
+msgstr ""
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 msgid "%{color} player"
 msgstr "Giocatore %{color}"
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
+msgstr ""
 
 msgid "View %{skill} Info"
 msgstr "Mostra dettagli su %{skill}"
@@ -3958,6 +4227,12 @@ msgstr "Rendita"
 #, fuzzy
 msgid "Kingdom Income per day."
 msgstr "Rendita"
+
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Hai catturato un faro, e ora i punti di movimento in nave si aumentano per "
+"tutti i tuoi eroi."
 
 msgid "English"
 msgstr ""
@@ -4005,6 +4280,19 @@ msgstr ""
 #, fuzzy
 msgid "Portuguese"
 msgstr "Furfanti"
+
+msgid "Turkish"
+msgstr ""
+
+msgid "Dutch"
+msgstr ""
+
+#, fuzzy
+msgid "Hungarian"
+msgstr "Barbaro"
+
+msgid "Danish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -4242,11 +4530,8 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr "Un gorgo travolge la tua nave."
-
-msgid "Some of your army has fallen overboard."
-msgstr ""
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Rifiutandoli si sono offesi i mostri e ti attaccano!"
@@ -4376,11 +4661,6 @@ msgstr ""
 
 msgid ""
 "\n"
-"Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
-
-msgid ""
-"\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
@@ -4389,6 +4669,11 @@ msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 
 msgid ""
@@ -4419,15 +4704,15 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Prendi un sorso dalla fontana incantata, ma non accade niente."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Visiti il cerchio fatato, ma non accade nulla."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "Visitando il mistico cerchio fatato, l'esercito riceve la fortuna buona per "
 "il combattimento prossimo."
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Visiti il cerchio fatato, ma non accade nulla."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -4714,11 +4999,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -4773,6 +5053,11 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "Catturi un %{name}."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -5059,16 +5344,16 @@ msgid ""
 "the cave mouth. Will you enter?"
 msgstr ""
 
+msgid "Except for evidence of a terrible battle, the cave is empty."
+msgstr ""
+"Tranne che per le tracce di una terribile battaglia, la caverna è "
+"abbandonata."
+
 msgid ""
 "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, "
 "\"you will fight and surely die. But I will give you a choice of deaths. You "
 "may fight me, or you may fight my servants. Do you prefer to fight my "
 "servants?\""
-msgstr ""
-
-msgid ""
-"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
-"gold."
 msgstr ""
 
 msgid ""
@@ -5088,20 +5373,20 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Seeing that you do not have %{count} gold, the demon slashes you with its "
+"claws, and the last thing you see is a red haze."
+msgstr ""
+
+msgid ""
 "The Demon leaps upon you and has its claws at your throat before you can "
 "even draw your sword. \"Your life is mine,\" it says. \"I will sell it back "
 "to you for %{count} gold.\""
 msgstr ""
 
 msgid ""
-"Seeing that you do not have %{count} gold, the demon slashes you with its "
-"claws, and the last thing you see is a red haze."
+"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
+"gold."
 msgstr ""
-
-msgid "Except for evidence of a terrible battle, the cave is empty."
-msgstr ""
-"Tranne che per le tracce di una terribile battaglia, la caverna è "
-"abbandonata."
 
 msgid ""
 "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
@@ -5203,6 +5488,9 @@ msgstr ""
 msgid "This eye seems to be intently studying its surroundings."
 msgstr ""
 
+msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgstr "Trovi una Sfinge enorme, però stranamente resta in silenzio."
+
 msgid ""
 "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you "
 "shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept "
@@ -5225,14 +5513,6 @@ msgstr ""
 "\n"
 "La tua risposta?"
 
-#, fuzzy
-msgid ""
-"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
-"so here's your reward. Now begone.\""
-msgstr ""
-"La Sfinge fa un soffio di delusione. Hai dato la risposta giusta e come ti "
-"ho premesso qua è il tuo premio. Ora sparisci da qui."
-
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
 "you with a paw, knocking you to the ground. Another blow makes the world go "
@@ -5242,8 +5522,13 @@ msgstr ""
 "Sfinge ti colpisce con la sua zampa, lanciando ti per terra. Un'altra "
 "zampata ancora ti fa svenire, e dopodiché non sai più cosa succede."
 
-msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
-msgstr "Trovi una Sfinge enorme, però stranamente resta in silenzio."
+#, fuzzy
+msgid ""
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
+msgstr ""
+"La Sfinge fa un soffio di delusione. Hai dato la risposta giusta e come ti "
+"ho premesso qua è il tuo premio. Ora sparisci da qui."
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -5299,11 +5584,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}: %{race} (Livello %{level})"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Sei sicuro di voler congedare questo eroe?"
@@ -5926,9 +6206,40 @@ msgid "Multi"
 msgstr "Multiplo"
 
 msgid "race|Random"
-msgstr "Random"
+msgstr "Casuale"
 
 msgid "race|Neutral"
+msgstr "Neutro"
+
+msgid "doubleLined|Knight"
+msgstr "Cavaliere"
+
+msgid "doubleLined|Barbarian"
+msgstr "Barbaro"
+
+msgid "doubleLined|Sorceress"
+msgstr "Strega"
+
+msgid "doubleLined|Warlock"
+msgstr "Guerriero"
+
+msgid "doubleLined|Wizard"
+msgstr "Mago"
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+"Negro-\n"
+"mante"
+
+msgid "doubleLinedRace|Multi"
+msgstr "Multiplo"
+
+msgid "doubleLinedRace|Random"
+msgstr "Casuale"
+
+msgid "doubleLinedRace|Neutral"
 msgstr "Neutro"
 
 msgid "speed|Standing"
@@ -5961,8 +6272,52 @@ msgstr "Folgore"
 msgid "speed|Instant"
 msgstr "Istantanea"
 
-msgid "week|PLAGUE"
-msgstr "PESTE"
+msgid "week|Squirrel"
+msgstr "Scoiattolo"
+
+msgid "week|Rabbit"
+msgstr "Coniglio"
+
+msgid "week|Gopher"
+msgstr "Topo"
+
+msgid "week|Badger"
+msgstr "Tasso"
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "Coniglio"
+
+msgid "week|Eagle"
+msgstr "Aquila"
+
+msgid "week|Weasel"
+msgstr "Donnola"
+
+msgid "week|Raven"
+msgstr "Corvo"
+
+msgid "week|Mongoose"
+msgstr "Mangusta"
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "Aquila"
+
+msgid "week|Aardvark"
+msgstr "Formichiere"
+
+msgid "week|Lizard"
+msgstr "Lucertola"
+
+msgid "week|Tortoise"
+msgstr "Testuggine"
+
+msgid "week|Hedgehog"
+msgstr "Riccio"
+
+msgid "week|Condor"
+msgstr "Condor"
 
 msgid "week|Ant"
 msgstr "Formica"
@@ -5994,44 +6349,12 @@ msgstr "Calabrone"
 msgid "week|Beetle"
 msgstr "Scarabeo"
 
-msgid "week|Squirrel"
-msgstr "Scoiattolo"
+msgid "week|PLAGUE"
+msgstr "PESTE"
 
-msgid "week|Rabbit"
-msgstr "Coniglio"
-
-msgid "week|Gopher"
-msgstr "Topo"
-
-msgid "week|Badger"
-msgstr "Tasso"
-
-msgid "week|Eagle"
+#, fuzzy
+msgid "week|Unnamed"
 msgstr "Aquila"
-
-msgid "week|Weasel"
-msgstr "Donnola"
-
-msgid "week|Raven"
-msgstr "Corvo"
-
-msgid "week|Mongoose"
-msgstr "Mangusta"
-
-msgid "week|Aardvark"
-msgstr "Formichiere"
-
-msgid "week|Lizard"
-msgstr "Lucertola"
-
-msgid "week|Tortoise"
-msgstr "Testuggine"
-
-msgid "week|Hedgehog"
-msgstr "Riccio"
-
-msgid "week|Condor"
-msgstr "Condor"
 
 msgid "Desert"
 msgstr "Deserto"
@@ -6108,17 +6431,65 @@ msgstr "Nessun oggetto"
 msgid "Alchemist Lab"
 msgstr "Laboratorio dell'Alchimista"
 
+msgid "Sign"
+msgstr "Cartello"
+
+msgid "Buoy"
+msgstr "Boa"
+
+msgid "Skeleton"
+msgstr "Scheletro"
+
 msgid "Daemon Cave"
 msgstr "Caverna del Demone"
+
+msgid "Treasure Chest"
+msgstr "Forziere del Tesoro"
 
 msgid "Faerie Ring"
 msgstr "Cerchio Fatato"
 
+msgid "Campfire"
+msgstr "Fuoco da Campo"
+
+msgid "Fountain"
+msgstr "Fontana"
+
+msgid "Gazebo"
+msgstr "Gazebo"
+
+msgid "Genie Lamp"
+msgstr "Lampa Antica"
+
+msgid "Archer's House"
+msgstr "Casa degli Arcieri"
+
+msgid "Goblin Hut"
+msgstr "Capanna dei Goblin"
+
+msgid "Dwarf Cottage"
+msgstr "Casetta dei Nani"
+
+msgid "Peasant Hut"
+msgstr "Capanna dei Burini"
+
+msgid "Stables"
+msgstr "Stalla"
+
+msgid "Alchemist's Tower"
+msgstr "Torre dell'Alchimista"
+
+msgid "Event"
+msgstr "Evento"
+
 msgid "Dragon City"
 msgstr "Dragon City"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Faro"
+msgid_plural "Lighthouses"
+msgstr[0] "Faro"
+msgstr[1] "Faro"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -6128,11 +6499,17 @@ msgstr[1] "Mulini ad Acqua"
 msgid "Mines"
 msgstr "Miniere"
 
+msgid "Monster"
+msgstr "Mostro"
+
 msgid "Obelisk"
 msgstr "Obelisco"
 
 msgid "Oasis"
 msgstr "Oasi"
+
+msgid "Resource"
+msgstr "Risorso"
 
 msgid "Sawmill"
 msgstr "Segheria"
@@ -6140,16 +6517,55 @@ msgstr "Segheria"
 msgid "Oracle"
 msgstr "Oracolo"
 
+msgid "Shrine of the First Circle"
+msgstr "Tempio del Primo Cerchio"
+
+msgid "Shipwreck"
+msgstr "Naufragio"
+
+msgid "Sea Chest"
+msgstr "Forziere Marino"
+
 msgid "Desert Tent"
 msgstr "Tenda da Deserto"
 
+msgid "Stone Liths"
+msgstr "Monoliti"
+
 msgid "Wagon Camp"
 msgstr "Campo Carri"
+
+msgid "Hut of the Magi"
+msgstr "Capanna del Mago"
+
+msgid "Whirlpool"
+msgstr "Gorgo"
 
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Mulino a Vento"
 msgstr[1] "Mulini a Vento"
+
+msgid "Artifact"
+msgstr "Artefatto"
+
+msgid "Mermaid"
+msgstr "Sirenetta"
+
+msgid "Boat"
+msgstr "Nave"
+
+msgid "Random Ultimate Artifact"
+msgstr "Artefatto estremo casuale"
+
+msgid "Random Artifact"
+msgstr "Artefatto casuale"
+
+msgid "Random Resource"
+msgstr "Risorso casuale"
+
+msgid "Random Monster"
+msgstr "Mostro casuale"
 
 msgid "Random Town"
 msgstr "Città casuale"
@@ -6157,14 +6573,35 @@ msgstr "Città casuale"
 msgid "Random Castle"
 msgstr "Castello casuale"
 
+msgid "Eye of the Magi"
+msgstr "Occhio del Mago"
+
+msgid "Random Monster - weak"
+msgstr "Mostro casuale - debole"
+
+msgid "Random Monster - medium"
+msgstr "Mostro casuale - medio"
+
+msgid "Random Monster - strong"
+msgstr "Mostro casuale - forte"
+
+msgid "Random Monster - very strong"
+msgstr "Mostra casuale - molto forte"
+
+msgid "Nothing Special"
+msgstr "Niente particolare"
+
+msgid "Mossy Rock"
+msgstr ""
+
 msgid "Watch Tower"
 msgstr "Torre di Guardia"
 
-msgid "Tree City"
-msgstr "Città degli Alberi"
-
 msgid "Tree House"
 msgstr "Casa sugli Alberi"
+
+msgid "Tree City"
+msgstr "Città degli Alberi"
 
 msgid "Ruins"
 msgstr "Rovine"
@@ -6174,6 +6611,15 @@ msgstr "Forte"
 
 msgid "Abandoned Mine"
 msgstr "Miniera Abbandonata"
+
+msgid "Sirens"
+msgstr "Sirene"
+
+msgid "Standing Stones"
+msgstr "Massi Eretti"
+
+msgid "Idol"
+msgstr "Idolo"
 
 msgid "Tree of Knowledge"
 msgstr "Albero del Sapere"
@@ -6193,14 +6639,32 @@ msgstr "Tana dei Frombolieri"
 msgid "Mercenary Camp"
 msgstr "Campo Mercenari"
 
+msgid "Shrine of the Second Circle"
+msgstr "Tempio del Secondo Cerchio"
+
+msgid "Shrine of the Third Circle"
+msgstr "Tempio del Terzo Cerchio"
+
 msgid "City of the Dead"
 msgstr "Città dei Morti"
 
 msgid "Sphinx"
 msgstr "Sfinge"
 
+msgid "Wagon"
+msgstr "Carro"
+
+msgid "Tar Pit"
+msgstr "Pozzo di Catrame"
+
+msgid "Artesian Spring"
+msgstr "PozzoAartesiano"
+
 msgid "Troll Bridge"
 msgstr "Ponte dei Troll"
+
+msgid "Watering Hole"
+msgstr "Abbeveratoio"
 
 msgid "Witch's Hut"
 msgstr "Capanna della Strega"
@@ -6208,188 +6672,17 @@ msgstr "Capanna della Strega"
 msgid "Xanadu"
 msgstr "Xanadu"
 
-msgid "Magellan's Maps"
-msgstr "Mappe di Magellano"
-
-msgid "Derelict Ship"
-msgstr "Relitto Navale"
-
-msgid "Shipwreck"
-msgstr "Naufragio"
-
-msgid "Observation Tower"
-msgstr "Osservatorio"
-
-msgid "Freeman's Foundry"
-msgstr "Fucina dei Liberti"
-
-msgid "Watering Hole"
-msgstr "Abbeveratoio"
-
-msgid "Artesian Spring"
-msgstr "PozzoAartesiano"
-
-msgid "Gazebo"
-msgstr "Gazebo"
-
-msgid "Archer's House"
-msgstr "Casa degli Arcieri"
-
-msgid "Peasant Hut"
-msgstr "Capanna dei Burini"
-
-msgid "Dwarf Cottage"
-msgstr "Casetta dei Nani"
-
-msgid "Stone Liths"
-msgstr "Monoliti"
-
-msgid "Magic Well"
-msgstr "Pozzo Magico"
-
-msgid "Sign"
-msgstr "Cartello"
-
-msgid "Nothing Special"
-msgstr "Niente particolare"
-
-msgid "Tar Pit"
-msgstr "Pozzo di Catrame"
-
-msgid "Mound"
-msgstr "Terrapieno"
-
-msgid "Dune"
-msgstr "Duna"
-
-msgid "Stump"
-msgstr "Troncone"
-
-msgid "Cactus"
-msgstr "Cactus"
-
-msgid "Trees"
-msgstr "Alberi"
-
-msgid "Dead Tree"
-msgstr "Albero Morto"
-
-msgid "Mountains"
-msgstr "Montagne"
-
-msgid "Volcano"
-msgstr "Vulcano"
-
-msgid "Rock"
-msgstr "Roccia"
-
-msgid "Flowers"
-msgstr "Fiori"
-
-msgid "Water Lake"
-msgstr "Lago"
-
-msgid "Mandrake"
-msgstr "Mandragola"
-
-msgid "Crater"
-msgstr "Cratere"
-
-msgid "Lava Pool"
-msgstr "Pozza di Lava"
-
-msgid "Shrub"
-msgstr "Arbusto"
-
-msgid "Buoy"
-msgstr "Boa"
-
-msgid "Skeleton"
-msgstr "Scheletro"
-
-msgid "Treasure Chest"
-msgstr "Forziere del Tesoro"
-
-msgid "Sea Chest"
-msgstr "Forziere Marino"
-
-msgid "Campfire"
-msgstr "Fuoco da Campo"
-
-msgid "Fountain"
-msgstr "Fontana"
-
-msgid "Genie Lamp"
-msgstr "Lampa Antica"
-
-msgid "Goblin Hut"
-msgstr "Capanna dei Goblin"
-
-msgid "Monster"
-msgstr "Mostro"
-
-msgid "Resource"
-msgstr "Risorso"
-
-msgid "Whirlpool"
-msgstr "Gorgo"
-
-msgid "Artifact"
-msgstr "Artefatto"
-
-msgid "Boat"
-msgstr "Nave"
-
-msgid "Random Artifact"
-msgstr "Artefatto casuale"
-
-msgid "Random Resource"
-msgstr "Risorso casuale"
-
-msgid "Random Monster - weak"
-msgstr "Mostro casuale - debole"
-
-msgid "Random Monster - medium"
-msgstr "Mostro casuale - medio"
-
-msgid "Random Monster - strong"
-msgstr "Mostro casuale - forte"
-
-msgid "Random Monster - very strong"
-msgstr "Mostra casuale - molto forte"
-
-msgid "Standing Stones"
-msgstr "Massi Eretti"
-
-msgid "Event"
-msgstr "Evento"
-
-msgid "Random Monster"
-msgstr "Mostro casuale"
-
-msgid "Random Ultimate Artifact"
-msgstr "Artefatto estremo casuale"
-
-msgid "Idol"
-msgstr "Idolo"
-
-msgid "Shrine of the First Circle"
-msgstr "Tempio del Primo Cerchio"
-
-msgid "Shrine of the Second Circle"
-msgstr "Tempio del Secondo Cerchio"
-
-msgid "Shrine of the Third Circle"
-msgstr "Tempio del Terzo Cerchio"
-
-msgid "Wagon"
-msgstr "Carro"
-
 msgid "Lean-To"
 msgstr "Casotto"
 
+msgid "Magellan's Maps"
+msgstr "Mappe di Magellano"
+
 msgid "Flotsam"
 msgstr "Rottami"
+
+msgid "Derelict Ship"
+msgstr "Relitto Navale"
 
 msgid "Shipwreck Survivor"
 msgstr "Superstite Naufragio"
@@ -6397,10 +6690,70 @@ msgstr "Superstite Naufragio"
 msgid "Bottle"
 msgstr "Bottiglia"
 
+msgid "Magic Well"
+msgstr "Pozzo Magico"
+
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Giardino Magico"
 msgstr[1] "Giardini Magici"
+
+msgid "Observation Tower"
+msgstr "Osservatorio"
+
+msgid "Freeman's Foundry"
+msgstr "Fucina dei Liberti"
+
+msgid "Reefs"
+msgstr "Barriera Corallina"
+
+msgid "Trees"
+msgstr "Alberi"
+
+msgid "Mountains"
+msgstr "Montagne"
+
+msgid "Volcano"
+msgstr "Vulcano"
+
+msgid "Flowers"
+msgstr "Fiori"
+
+msgid "Rock"
+msgstr "Roccia"
+
+msgid "Water Lake"
+msgstr "Lago"
+
+msgid "Mandrake"
+msgstr "Mandragola"
+
+msgid "Dead Tree"
+msgstr "Albero Morto"
+
+msgid "Stump"
+msgstr "Troncone"
+
+msgid "Crater"
+msgstr "Cratere"
+
+msgid "Cactus"
+msgstr "Cactus"
+
+msgid "Mound"
+msgstr "Terrapieno"
+
+msgid "Dune"
+msgstr "Duna"
+
+msgid "Lava Pool"
+msgstr "Pozza di Lava"
+
+msgid "Shrub"
+msgstr "Arbusto"
+
+msgid "Barrow Mounds"
+msgstr "Tumulo"
 
 msgid "Random Artifact - Treasure"
 msgstr "Artefatto casuale - tesoro"
@@ -6411,14 +6764,14 @@ msgstr "Artefatto casuale - minore"
 msgid "Random Artifact - Major"
 msgstr "Artefatto casuale - maggiore"
 
-msgid "Jail"
-msgstr "Galera"
+msgid "Barrier"
+msgstr "Barriera"
 
 msgid "Traveller's Tent"
 msgstr "Tenda del Viaggiatore"
 
-msgid "Barrier"
-msgstr "Barriera"
+msgid "Jail"
+msgstr "Galera"
 
 msgid "Fire Summoning Altar"
 msgstr "Altare Convocante del Fuoco"
@@ -6431,30 +6784,6 @@ msgstr "Altare Convocante di Terra"
 
 msgid "Water Summoning Altar"
 msgstr "Altare Convocante dell'Acqua"
-
-msgid "Barrow Mounds"
-msgstr "Tumulo"
-
-msgid "Stables"
-msgstr "Stalla"
-
-msgid "Alchemist's Tower"
-msgstr "Torre dell'Alchimista"
-
-msgid "Hut of the Magi"
-msgstr "Capanna del Mago"
-
-msgid "Eye of the Magi"
-msgstr "Occhio del Mago"
-
-msgid "Mermaid"
-msgstr "Sirenetta"
-
-msgid "Sirens"
-msgstr "Sirene"
-
-msgid "Reefs"
-msgstr "Barriera Corallina"
 
 msgid "Unknown Monster"
 msgstr "Mostro sconosciuto"
@@ -8705,60 +9034,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: remember last focus"
-msgstr ""
-
-msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: show terrain penalty"
-msgstr ""
-
-msgid "world: Scouting skill shows extended content info"
-msgstr ""
-
-msgid "world: allow to set guardian to objects"
-msgstr ""
-
-msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
-
-msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
-
-msgid "castle: allow guardians"
-msgstr ""
-
-msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
-
-msgid "heroes: remember movement points when retreating or surrendering"
-msgstr ""
-
-msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
-
-msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "battle: deterministic events"
-msgstr ""
-
-msgid "game: show system info"
-msgstr ""
-
-msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
-
-msgid "game: use evil interface"
-msgstr ""
-
-msgid "game: hide interface"
-msgstr ""
-
-msgid "game: offer to continue the game after victory condition"
-msgstr ""
-
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Ho sentito che l'Estremo Artefatto è in verità il/la %{name}."
 
@@ -8826,3 +9101,10 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Location: "
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Percorso: "

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,9 +24,10 @@
 #define H2TOOLS_H
 
 #include <bitset>
+#include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <iomanip>
-#include <list>
 #include <sstream>
 #include <string>
 #include <type_traits>
@@ -54,6 +55,8 @@ std::string StringUpper( std::string str );
 
 std::vector<std::string> StringSplit( const std::string &, const std::string & );
 
+// Function to replace the pattern in workString with patternReplacement. Here the patternReplacement is converted to lowercase except for the first word in a sentence.
+void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement );
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );
 
@@ -61,19 +64,14 @@ int CountBits( uint32_t );
 
 std::string InsertString( const std::string &, size_t, const char * );
 
-bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path );
-std::vector<uint8_t> LoadFileToMem( const std::string & path );
-
 namespace fheroes2
 {
     double GetAngle( const Point & start, const Point & target );
     std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step );
     std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step );
-    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const Point & max, const int32_t step );
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const int32_t arcHeight, const int32_t step );
 
     int32_t GetRectIndex( const std::vector<Rect> & rects, const Point & pt );
-
-    std::pair<Rect, Point> Fixed4Blit( const Rect & srcrt, const Rect & dstrt );
 
     Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
 

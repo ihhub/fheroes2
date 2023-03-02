@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,6 +24,7 @@
 #ifndef H2GAMEIO_H
 #define H2GAMEIO_H
 
+#include <cstdint>
 #include <string>
 
 #include "game_mode.h"
@@ -35,14 +36,24 @@ namespace Maps
 
 namespace Game
 {
-    bool AutoSave();
+    const std::string & GetLastSaveName();
+    void SetLastSaveName( const std::string & name );
 
-    bool Save( const std::string & );
+    uint16_t GetVersionOfCurrentSaveFile();
+    void SetVersionOfCurrentSaveFile( const uint16_t version );
+
+    std::string GetSaveDir();
+    std::string GetSaveFileBaseName();
+    std::string GetSaveFileExtension();
+    std::string GetSaveFileExtension( const int gameType );
+
+    bool AutoSave();
+    bool Save( const std::string & filePath, const bool autoSave = false );
 
     // Returns GameMode::CANCEL in case of failure.
-    fheroes2::GameMode Load( const std::string & fileName );
+    fheroes2::GameMode Load( const std::string & filePath );
 
-    bool LoadSAV2FileInfo( const std::string &, Maps::FileInfo & );
+    bool LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & fileInfo );
 
     bool SaveCompletedCampaignScenario();
 }

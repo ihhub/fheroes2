@@ -22,20 +22,34 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
 #include <memory>
+#include <ostream>
+#include <set>
+#include <string>
+#include <vector>
 
 #include "ai.h"
 #include "army.h"
+#include "army_troop.h"
 #include "artifact.h"
+#include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "dialog.h"
 #include "game.h"
+#include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "monster.h"
+#include "players.h"
+#include "rand.h"
 #include "settings.h"
 #include "skill.h"
+#include "spell.h"
+#include "spell_storage.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -210,8 +224,16 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         showBattle = true;
 #endif
 
-    const uint32_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 )
-                                                                               : Rand::Get( std::numeric_limits<uint32_t>::max() );
+    if ( !showBattle ) {
+        const Player * player1 = Players::Get( army1.GetColor() );
+        const Player * player2 = Players::Get( army2.GetColor() );
+
+        if ( ( player1 != nullptr && player1->isAIAutoControlMode() ) || ( player2 != nullptr && player2->isAIAutoControlMode() ) ) {
+            showBattle = true;
+        }
+    }
+
+    const uint32_t battleSeed = computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 );
 
     bool isBattleOver = false;
     while ( !isBattleOver ) {
@@ -264,7 +286,15 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
             // if the other army also had a hero, some artifacts may be captured by them
             if ( winnerHero != nullptr ) {
-                transferArtifacts( winnerHero->GetBagArtifacts(), artifactsToTransfer );
+                BagArtifacts & bag = winnerHero->GetBagArtifacts();
+
+                transferArtifacts( bag, artifactsToTransfer );
+
+                const auto assembledArtifacts = bag.assembleArtifactSetIfPossible();
+
+                if ( winnerHero->isControlHuman() ) {
+                    std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
+                }
             }
         }
 
@@ -392,7 +422,7 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
     uint32_t raiseCount = Monster::GetCountFromHitPoints( raisedMonsterType, mons.GetHitPoints() * enemyTroopsKilled * necromancyPercent / 100 );
     if ( raiseCount == 0u )
         raiseCount = 1;
-    army.JoinTroop( mons, raiseCount );
+    army.JoinTroop( mons, raiseCount, false );
 
     if ( isControlHuman )
         arena.DialogBattleNecromancy( raiseCount, raisedMonsterType );

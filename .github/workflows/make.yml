@@ -4,70 +4,248 @@ on:
   workflow_call:
 
 jobs:
-  build:
+  make:
     strategy:
       matrix:
         config:
-        - name: Linux SDL1 Release
-          os: ubuntu-latest
+        - name: Linux x86-64 SDL1 Release
+          os: ubuntu-20.04
           dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
-          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
-          package_name: fheroes2_ubuntu_sdl1.zip
-          package_files: fheroes2 LICENSE script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: Ubuntu (Linux) build with SDL 1.2 support (latest commit)
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_SDL1: ON
+          package_name: fheroes2_ubuntu_x86-64_SDL1.zip
+          package_files: >-
+            LICENSE
+            changelog.txt
+            fheroes2
+            ./docs/README.txt
+            files/data/*.h2d
+            files/lang/*.mo
+            ./script/demo/download_demo_version.sh
+            ./script/homm2/extract_homm2_resources.sh
+            script/linux/install_sdl_1.sh
+          release_name: Ubuntu x86-64 (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-sdl1_dev
-        - name: Linux SDL1 Debug
-          os: ubuntu-latest
+        - name: Linux x86-64 SDL1 Debug
+          os: ubuntu-20.04
           dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
-          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_ASAN: ON }
-        - name: Linux SDL2 Release
-          os: ubuntu-latest
-          dependencies: libsdl2-dev libsdl2-mixer-dev gettext
-          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
-          package_name: fheroes2_ubuntu_sdl2.zip
-          package_files: fheroes2 LICENSE script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: Ubuntu (Linux) build with SDL 2.0 support (latest commit)
-          release_tag: fheroes2-linux-sdl2_dev
-        - name: Linux SDL2 Debug
-          os: ubuntu-latest
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_SDL1: ON
+            FHEROES2_WITH_DEBUG: ON
+            FHEROES2_WITH_ASAN: ON
+        - name: Linux x86-64 SDL2 Release
+          os: ubuntu-20.04
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
-          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON }
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_IMAGE: ON
+          package_name: fheroes2_ubuntu_x86-64_SDL2.zip
+          package_files: >-
+            LICENSE
+            changelog.txt
+            fheroes2
+            ./docs/README.txt
+            files/data/*.h2d
+            files/lang/*.mo
+            ./script/demo/download_demo_version.sh
+            ./script/homm2/extract_homm2_resources.sh
+            script/linux/install_sdl_2.sh
+          tools_package_name: fheroes2_tools_ubuntu_x86-64_SDL2.zip
+          tools_package_files: >-
+            LICENSE
+            ./docs/GRAPHICAL_ASSETS.md
+            ./script/agg/extract_agg.sh
+            ./src/tools/82m2wav
+            ./src/tools/extractor
+            ./src/tools/icn2img
+            ./src/tools/pal2img
+            ./src/tools/xmi2midi
+          release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
+          release_tag: fheroes2-linux-sdl2_dev
+        - name: Linux x86-64 SDL2 Debug
+          os: ubuntu-20.04
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_IMAGE: ON
+            FHEROES2_WITH_DEBUG: ON
+            FHEROES2_WITH_TSAN: ON
+        - name: Linux ARM64 SDL1 Release
+          os: ubuntu-22.04
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl1.2-dev:arm64 libsdl-mixer1.2-dev:arm64 gettext
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_SDL1: ON
+            CC: aarch64-linux-gnu-gcc
+            CXX: aarch64-linux-gnu-g++
+            AR: aarch64-linux-gnu-ar
+          package_name: fheroes2_ubuntu_arm64_SDL1.zip
+          package_files: >-
+            LICENSE
+            changelog.txt
+            fheroes2
+            ./docs/README.txt
+            files/data/*.h2d
+            files/lang/*.mo
+            ./script/demo/download_demo_version.sh
+            ./script/homm2/extract_homm2_resources.sh
+            script/linux/install_sdl_1.sh
+          release_name: Ubuntu ARM64 (Linux) build with SDL1 (latest commit)
+          release_tag: fheroes2-linux-arm-sdl1_dev
+        - name: Linux ARM64 SDL1 Debug
+          os: ubuntu-22.04
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl1.2-dev:arm64 libsdl-mixer1.2-dev:arm64 gettext
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_SDL1: ON
+            FHEROES2_WITH_DEBUG: ON
+            FHEROES2_WITH_ASAN: ON
+            CC: aarch64-linux-gnu-gcc
+            CXX: aarch64-linux-gnu-g++
+            AR: aarch64-linux-gnu-ar
+        - name: Linux ARM64 SDL2 Release
+          os: ubuntu-22.04
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 libpng-dev:arm64 gettext
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_IMAGE: ON
+            CC: aarch64-linux-gnu-gcc
+            CXX: aarch64-linux-gnu-g++
+            AR: aarch64-linux-gnu-ar
+          package_name: fheroes2_ubuntu_arm64_SDL2.zip
+          package_files: >-
+            LICENSE
+            changelog.txt
+            fheroes2
+            ./docs/README.txt
+            files/data/*.h2d
+            files/lang/*.mo
+            ./script/demo/download_demo_version.sh
+            ./script/homm2/extract_homm2_resources.sh
+            script/linux/install_sdl_2.sh
+          tools_package_name: fheroes2_tools_ubuntu_arm64_SDL2.zip
+          tools_package_files: >-
+            LICENSE
+            ./docs/GRAPHICAL_ASSETS.md
+            ./script/agg/extract_agg.sh
+            ./src/tools/82m2wav
+            ./src/tools/extractor
+            ./src/tools/icn2img
+            ./src/tools/pal2img
+            ./src/tools/xmi2midi
+          release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
+          release_tag: fheroes2-linux-arm-sdl2_dev
+        - name: Linux ARM64 SDL2 Debug
+          os: ubuntu-22.04
+          dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 libpng-dev:arm64 gettext
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_IMAGE: ON
+            FHEROES2_WITH_DEBUG: ON
+            FHEROES2_WITH_TSAN: ON
+            CC: aarch64-linux-gnu-gcc
+            CXX: aarch64-linux-gnu-g++
+            AR: aarch64-linux-gnu-ar
         - name: macOS SDL1
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl sdl_mixer
-          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
-          package_name: fheroes2_macos10_15_sdl1_x86-64.zip
-          package_files: fheroes2 LICENSE script/macos/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: MacOS build with SDL 1 support (latest commit)
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_SDL1: ON
+          package_name: fheroes2_macos_x86-64_SDL1.zip
+          package_files: >-
+            LICENSE
+            changelog.txt
+            fheroes2
+            ./docs/README.txt
+            files/data/*.h2d
+            files/lang/*.mo
+            ./script/demo/download_demo_version.sh
+            ./script/homm2/extract_homm2_resources.sh
+            script/macos/install_sdl_1.sh
+          release_name: macOS x86-64 build with SDL1 (latest commit)
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl sdl_mixer dylibbundler
-          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON, FHEROES2_MACOS_APP_BUNDLE: ON }
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_SDL1: ON
+            FHEROES2_MACOS_APP_BUNDLE: ON
         - name: macOS SDL2
-          os: macos-10.15
-          dependencies: sdl2 sdl2_mixer
-          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
-          package_name: fheroes2_macos10_15_sdl2_x86-64.zip
-          package_files: fheroes2 LICENSE script/macos/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
-          release_name: MacOS build with SDL 2 support (latest commit)
+          os: macos-11
+          dependencies: sdl2 sdl2_mixer sdl2_image
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_WITH_IMAGE: ON
+          package_name: fheroes2_macos_x86-64_SDL2.zip
+          package_files: >-
+            LICENSE
+            changelog.txt
+            fheroes2
+            ./docs/README.txt
+            files/data/*.h2d
+            files/lang/*.mo
+            ./script/demo/download_demo_version.sh
+            ./script/homm2/extract_homm2_resources.sh
+            script/macos/install_sdl_2.sh
+          tools_package_name: fheroes2_tools_macos_x86-64_SDL2.zip
+          tools_package_files: >-
+            LICENSE
+            ./docs/GRAPHICAL_ASSETS.md
+            ./script/agg/extract_agg.sh
+            ./src/tools/82m2wav
+            ./src/tools/extractor
+            ./src/tools/icn2img
+            ./src/tools/pal2img
+            ./src/tools/xmi2midi
+          release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl2 sdl2_mixer dylibbundler
-          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_MACOS_APP_BUNDLE: ON }
+          env:
+            FHEROES2_STRICT_COMPILATION: ON
+            FHEROES2_WITH_TOOLS: ON
+            FHEROES2_MACOS_APP_BUNDLE: ON
     name: Make (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies (Linux)
-      if: ${{ matrix.config.os == 'ubuntu-latest' }}
+      if: ${{ startsWith( matrix.config.os, 'ubuntu-' ) }}
       run: |
+        if [[ "${{ matrix.config.name }}" == *ARM64* ]]
+        then
+          sudo sed -i -e 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
+          sudo dpkg --add-architecture arm64
+          sudo sh -c '. /etc/os-release;
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME} main restricted universe multiverse" > /etc/apt/sources.list.d/arm64.list;
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-updates main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-security main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${VERSION_CODENAME}-backports main restricted universe multiverse" >> /etc/apt/sources.list.d/arm64.list;'
+        fi
         sudo apt-get -y update
         sudo apt-get -y install ${{ matrix.config.dependencies }}
     - name: Install dependencies (macOS)
-      if: ${{ matrix.config.os == 'macos-10.15' }}
+      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
       run: |
         brew update
         brew install ${{ matrix.config.dependencies }}
@@ -75,27 +253,33 @@ jobs:
       run: |
         make -j 2
       env: ${{ matrix.config.env }}
-    - name: Generate translations
-      run: |
-        make -C files/lang -j 2
     - name: Create app bundle
-      if: ${{ matrix.config.os == 'macos-10.15' }}
+      if: ${{ startsWith( matrix.config.os, 'macos-' ) }}
       run: |
         make -j 2 bundle
       env: ${{ matrix.config.env }}
     - name: Create package
       if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
       run: |
-        cp docs/README.txt script/demo/download_demo_version.sh script/homm2/extract_homm2_resources.sh .
-        zip ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
-    - uses: actions/upload-artifact@v2
+        7z a -bb1 -tzip -- ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
+    - name: Create tools package
+      if: ${{ matrix.config.tools_package_name != '' && matrix.config.tools_package_files != '' }}
+      run: |
+        7z a -bb1 -tzip -- ${{ matrix.config.tools_package_name }} ${{ matrix.config.tools_package_files }}
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' && matrix.config.package_name != '' }}
       with:
         name: ${{ matrix.config.package_name }}
         path: ${{ matrix.config.package_name }}
         if-no-files-found: error
+    - uses: actions/upload-artifact@v3
+      if: ${{ github.event_name == 'pull_request' && matrix.config.tools_package_name != '' }}
+      with:
+        name: ${{ matrix.config.tools_package_name }}
+        path: ${{ matrix.config.tools_package_name }}
+        if-no-files-found: error
     - uses: ncipollo/release-action@v1
-      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
+      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.tools_package_name == '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
       with:
         artifacts: ${{ matrix.config.package_name }}
         body: ${{ github.event.head_commit.message }}
@@ -106,12 +290,27 @@ jobs:
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-  build-psv:
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.tools_package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
+      with:
+        artifacts: ${{ matrix.config.package_name }}, ${{ matrix.config.tools_package_name }}
+        body: ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ matrix.config.release_name }}
+        tag: ${{ matrix.config.release_tag }}
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        prerelease: true
+        replacesArtifacts: true
+  make-psv:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies
       run: |
         sudo apt-get -y update
@@ -155,38 +354,40 @@ jobs:
         fi
     - name: Create package
       run: |
-        cp docs/README.txt docs/README_PSV.md .
         # Translations and H2D files are already included in fheroes2.vpk
-        zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE changelog.txt README.txt README_PSV.md
-    - uses: actions/upload-artifact@v2
+        7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
-        name: fheroes2_psv_sdl2.zip
-        path: fheroes2_psv_sdl2.zip
+        name: fheroes2_psv.zip
+        path: fheroes2_psv.zip
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
-        artifacts: fheroes2_psv_sdl2.zip
+        artifacts: fheroes2_psv.zip
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: PS Vita build with SDL 2.0 support (latest commit)
+        name: PS Vita build (latest commit)
         tag: fheroes2-psv-sdl2_dev
         allowUpdates: true
         artifactErrorsFailBuild: true
         prerelease: true
         replacesArtifacts: true
-  build-switch:
+  make-switch:
     name: Make (Nintendo Switch)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     container: devkitpro/devkita64:latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies
       run: |
         sudo apt-get -y update
-        sudo apt-get -y install gettext
+        sudo apt-get -y install gettext p7zip-full
     - name: Build
       run: |
         export PATH="$DEVKITPRO/tools/bin:$DEVKITPRO/portlibs/switch/bin:$DEVKITPRO/devkitA64/bin:$PATH"
@@ -199,21 +400,20 @@ jobs:
         make -C files/lang -j 2
     - name: Create package
       run: |
-        cp docs/README.txt docs/README_switch.md .
-        zip fheroes2_switch_sdl2.zip fheroes2.nro LICENSE changelog.txt README.txt README_switch.md files/lang/*.mo files/data/*.h2d
-    - uses: actions/upload-artifact@v2
+        7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo
+    - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
-        name: fheroes2_switch_sdl2.zip
-        path: fheroes2_switch_sdl2.zip
+        name: fheroes2_switch.zip
+        path: fheroes2_switch.zip
         if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
-        artifacts: fheroes2_switch_sdl2.zip
+        artifacts: fheroes2_switch.zip
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Nintendo Switch build with SDL 2.0 support (latest commit)
+        name: Nintendo Switch build (latest commit)
         tag: fheroes2-switch-sdl2_dev
         allowUpdates: true
         artifactErrorsFailBuild: true

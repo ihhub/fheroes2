@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,8 +19,8 @@
  ***************************************************************************/
 
 #include "ui_scrollbar.h"
-#include "pal.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 
@@ -125,7 +125,7 @@ namespace fheroes2
         if ( _isVertical() ) {
             const int32_t scrollbarImageMiddle = height() / 2;
             const int32_t minYPos = _area.y + scrollbarImageMiddle;
-            const int32_t maxYPos = _area.y + roiHeight + height() - scrollbarImageMiddle - 1;
+            const int32_t maxYPos = _area.y + roiHeight + scrollbarImageMiddle;
 
             int32_t posY = position.y;
             if ( posY < minYPos )
@@ -141,7 +141,7 @@ namespace fheroes2
         else {
             const int32_t scrollbarImageMiddle = width() / 2;
             const int32_t minXPos = _area.x + scrollbarImageMiddle;
-            const int32_t maxXPos = _area.x + roiWidth + width() - scrollbarImageMiddle - 1;
+            const int32_t maxXPos = _area.x + roiWidth + scrollbarImageMiddle;
 
             int32_t posX = position.x;
             if ( posX < minXPos )
@@ -202,7 +202,7 @@ namespace fheroes2
         }
 
         const int32_t step = horizonalSlider ? middleSliderArea.width : middleSliderArea.height;
-        const int32_t middleLength = ( sliderAreaLength * elementCountPerView / std::max( elementCountPerView,  totalElementCount ) ) - currentSliderLength;
+        const int32_t middleLength = ( sliderAreaLength * elementCountPerView / std::max( elementCountPerView, totalElementCount ) ) - currentSliderLength;
 
         int32_t width = originalSlider.width();
         int32_t height = originalSlider.height();
@@ -260,8 +260,8 @@ namespace fheroes2
                   originalSlider.width() - startSliderArea.width, startSliderArea.height );
         }
         else {
-            Copy( originalSlider, startSliderArea.x, startSliderArea.y + startSliderArea.height, output, startSliderArea.x, offset,
-                  startSliderArea.width, originalSlider.height() - startSliderArea.height );
+            Copy( originalSlider, startSliderArea.x, startSliderArea.y + startSliderArea.height, output, startSliderArea.x, offset, startSliderArea.width,
+                  originalSlider.height() - startSliderArea.height );
         }
 
         return output;

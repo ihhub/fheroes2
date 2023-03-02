@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,9 +22,12 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <memory>
 
 #include "heroes.h"
 #include "maps.h"
+#include "maps_tiles.h"
+#include "mp2.h"
 #include "route.h"
 #include "serialize.h"
 #include "world.h"
@@ -398,7 +401,7 @@ std::string Route::Path::String() const
     output += ", to: ";
     output += std::to_string( dst );
     output += ", obj: ";
-    output += MP2::StringObject( Maps::isValidAbsIndex( dst ) ? world.GetTiles( dst ).GetObject() : MP2::OBJ_ZERO );
+    output += MP2::StringObject( Maps::isValidAbsIndex( dst ) ? world.GetTiles( dst ).GetObject() : MP2::OBJ_NONE );
     output += ", dump: ";
 
     for ( const Step & step : *this ) {

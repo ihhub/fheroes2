@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -76,15 +76,21 @@ public:
     Funds operator+( const Funds & ) const;
     Funds operator*( uint32_t mul ) const;
     Funds operator-( const Funds & ) const;
+    Funds operator/( const int32_t div ) const;
     Funds & operator+=( const Funds & );
     Funds & operator*=( uint32_t mul );
+    Funds & operator/=( const int32_t div );
     Funds & operator-=( const Funds & );
     Funds & operator=( const cost_t & );
 
+    bool operator>=( const Funds & ) const;
+    bool operator<( const Funds & funds ) const
+    {
+        return !operator>=( funds );
+    }
+
     int32_t Get( int rs ) const;
     int32_t * GetPtr( int rs );
-
-    bool operator>=( const Funds & ) const;
 
     int getLowestQuotient( const Funds & ) const;
     int GetValidItems() const;
@@ -115,8 +121,8 @@ namespace Resource
 
     int Rand( const bool includeGold );
 
-    /* return index sprite objnrsrc.icn */
-    uint32_t GetIndexSprite( int resource );
+    // Returns index sprite objnrsrc.icn
+    uint8_t GetIndexSprite( int resource );
     int FromIndexSprite( uint32_t index );
 
     // Return index sprite from resource.icn.

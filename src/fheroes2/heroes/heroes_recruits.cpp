@@ -23,9 +23,8 @@
 
 #include <cassert>
 
-#include "game.h"
+#include "heroes.h"
 #include "heroes_recruits.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "world.h"
 
@@ -42,13 +41,6 @@ Recruit::Recruit( const Heroes & hero, const uint32_t surrenderDay )
 Recruit::Recruit( const Heroes & hero )
     : Recruit( hero, 0 )
 {}
-
-void Recruit::setSurrenderDayTmp( const uint32_t surrenderDay )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove this method." );
-
-    _surrenderDay = surrenderDay;
-}
 
 Recruits::Recruits()
     : std::pair<Recruit, Recruit>()
@@ -114,16 +106,6 @@ void Recruits::SetHero2( Heroes * hero )
     }
 }
 
-void Recruits::SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove this method." );
-    assert( hero != nullptr );
-
-    SetHero2( hero );
-
-    second.setSurrenderDayTmp( heroSurrenderDay );
-}
-
 void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay )
 {
     assert( heroSurrenderDay > 0 );
@@ -142,15 +124,5 @@ StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )
 
 StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
 {
-    msg >> recruit._id;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_PRE2_0912_RELEASE ) {
-        msg >> recruit._surrenderDay;
-    }
-    else {
-        recruit._surrenderDay = 0;
-    }
-
-    return msg;
+    return msg >> recruit._id >> recruit._surrenderDay;
 }
