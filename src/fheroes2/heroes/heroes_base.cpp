@@ -37,6 +37,7 @@
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
+#include "maps.h"
 
 HeroBase::HeroBase( const int type, const int race )
     : magic_point( 0 )
@@ -397,6 +398,16 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 *res = _( "This spell cannot be used on a boat." );
             }
             return false;
+        }
+
+        if ( spell == Spell::SUMMONBOAT ) {
+            int32_t boatDestination = fheroes2::getPossibleBoatPosition(hero);
+            if ( !Maps::isValidAbsIndex( boatDestination ) ) {
+                if ( res != nullptr ) {
+                    *res = _( "This spell can be casted only nearby water." );
+                }
+                return false;
+            }
         }
 
         if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {

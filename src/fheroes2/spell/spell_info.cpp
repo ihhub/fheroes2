@@ -34,6 +34,8 @@
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
+#include "maps.h"
+#include "world.h"
 
 namespace
 {
@@ -310,5 +312,42 @@ namespace fheroes2
         }
 
         return description;
+    }
+
+    int32_t getPossibleBoatPosition( const HeroBase * hero ) {
+        const int32_t center = hero->GetIndex();
+        const int tilePassability = world.GetTiles( center ).GetPassable();
+        const MapsIndexes tilesAround = Maps::GetFreeIndexesAroundTile( center );
+        std::vector<int32_t> possibleBoatPositions;
+        for ( const int32_t tileId : tilesAround ) {
+            const int direction = Maps::GetDirection( center, tileId );
+            assert( direction != Direction::UNKNOWN );
+
+            if ( ( tilePassability & direction ) != 0 ) {
+                possibleBoatPositions.emplace_back( tileId );
+            }
+        }
+
+        const fheroes2::Point & centerPoint = Maps::GetPoint( center );
+        std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
+                const fheroes2::Point & leftPoint = Maps::GetPoint( left );
+                const fheroes2::Point & rightPoint = Maps::GetPoint( right );
+                const int32_t leftDiffX = leftPoint.x - centerPoint.x;
+                const int32_t leftDiffY = leftPoint.y - centerPoint.y;
+                const int32_t rightDiffX = rightPoint.x - centerPoint.x;
+                const int32_t rightDiffY = rightPoint.y - centerPoint.y;
+
+                return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
+                } );
+
+        int32_t boatDestination = -1;
+        for ( const int32_t tileId : possibleBoatPositions ) {
+            const Maps::Tiles & tile = world.GetTiles( tileId );
+            if ( tile.isWater() ) {
+                boatDestination = tileId;
+                break;
+            }
+        }
+        return boatDestination;
     }
 }

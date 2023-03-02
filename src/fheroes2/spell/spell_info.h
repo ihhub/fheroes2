@@ -46,6 +46,8 @@ namespace fheroes2
     const Castle * getNearestCastleTownGate( const Heroes & hero );
 
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero );
+
+    int32_t getPossibleBoatPosition( const HeroBase * hero );
 }
 
 #endif
