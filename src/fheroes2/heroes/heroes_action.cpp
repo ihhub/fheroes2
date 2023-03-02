@@ -2230,6 +2230,7 @@ namespace
                 return Outcome::IgnoreRecruit;
             }
 
+            // In the original game, this dialog window has no sound, this is an improvement specific to fheroes2
             const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
 
             if ( Dialog::Message( title, warningMsg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
