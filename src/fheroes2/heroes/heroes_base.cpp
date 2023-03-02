@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "heroes_base.h"
+
 #include <algorithm>
 #include <cassert>
 #include <vector>
@@ -30,14 +32,13 @@
 #include "castle.h"
 #include "gamedefs.h"
 #include "heroes.h"
-#include "heroes_base.h"
 #include "kingdom.h"
+#include "maps.h"
 #include "race.h"
 #include "serialize.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
-#include "maps.h"
 
 HeroBase::HeroBase( const int type, const int race )
     : magic_point( 0 )
@@ -401,7 +402,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::SUMMONBOAT ) {
-            int32_t boatDestination = fheroes2::getPossibleBoatPosition(hero);
+            int32_t boatDestination = fheroes2::getPossibleBoatPosition( hero );
             if ( !Maps::isValidAbsIndex( boatDestination ) ) {
                 if ( res != nullptr ) {
                     *res = _( "This spell can be casted only nearby water." );
