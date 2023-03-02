@@ -20,16 +20,19 @@
 
 #include "spell_info.h"
 
+#include <algorithm>
 #include <cassert>
 #include <vector>
 
 #include "artifact.h"
 #include "artifact_info.h"
 #include "castle.h"
+#include "direction.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "maps.h"
+#include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
 #include "spell.h"

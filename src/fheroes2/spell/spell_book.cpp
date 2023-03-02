@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "spell_book.h"
+
 #include <algorithm>
 #include <cstdint>
 #include <functional>
@@ -32,14 +34,12 @@
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game_hotkeys.h"
-#include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
 #include "math_base.h"
 #include "screen.h"
-#include "spell_book.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
