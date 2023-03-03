@@ -354,7 +354,7 @@ namespace
             roi.width = ( roi.x - newX ) + roi.width;
             roi.x = newX;
 
-            for ( auto & button : buttonLayout[i] ) {
+            for ( const auto & button : buttonLayout[i] ) {
                 xOffset += button.button.area().width + buttonOffset;
             }
 
