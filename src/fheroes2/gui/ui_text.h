@@ -84,6 +84,8 @@ namespace fheroes2
         }
     };
 
+    int32_t getFontHeight( const FontSize fontSize );
+
     class TextBase
     {
     public:

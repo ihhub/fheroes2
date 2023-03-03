@@ -32,6 +32,51 @@
 #include "pal.h"
 #include "settings.h"
 
+namespace
+{
+    fheroes2::Image resizeButton( const fheroes2::Image & original, const int32_t width )
+    {
+        const int32_t height = original.height();
+        assert( height > 0 );
+
+        fheroes2::Image output;
+        output.resize( width, height );
+        output.reset();
+
+        const int32_t originalWidth = original.width();
+        if ( originalWidth >= width ) {
+            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height );
+            const int32_t secondHalf = width - width / 2;
+            fheroes2::Copy( original, originalWidth - secondHalf, 0, output, width - secondHalf, 0, secondHalf, height );
+        }
+        else {
+            const int32_t middleWidth = originalWidth / 3;
+            const int32_t overallMiddleWidth = width - middleWidth * 2;
+            const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
+            const int32_t middleLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
+
+            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, height );
+            int32_t offsetX = middleWidth;
+            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, height );
+                offsetX += middleWidth;
+            }
+
+            if ( middleLeftOver > 0 ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleLeftOver, height );
+                offsetX += middleLeftOver;
+            }
+
+            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
+            assert( offsetX + rightPartWidth == width );
+
+            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, height );
+        }
+
+        return output;
+    }
+}
+
 namespace fheroes2
 {
     ButtonBase::ButtonBase( const int32_t offsetX, const int32_t offsetY )
@@ -476,5 +521,41 @@ namespace fheroes2
         Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );
 
         return { offsetX + shadow.x(), offsetY + shadow.y(), releasedWithBackground, pressedWithBackground, disabledWithBackground };
+    }
+
+    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset )
+    {
+        assert( width > 0 );
+
+        releasedOffset = { 7, 5 };
+        pressedOffset = { 6, 6 };
+
+        // The actual button sprite is 10 pixels longer.
+        width += 10;
+
+        const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
+        const int32_t minimumButtonSize = 16;
+        const int32_t maximumButtonSize = 200; // Why is such a wide button needed?
+        width = std::clamp( width, minimumButtonSize, maximumButtonSize );
+
+        const Sprite & originalReleased = AGG::GetICN( icnId, 0 );
+        const Sprite & originalPressed = AGG::GetICN( icnId, 1 );
+
+        const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+        const Sprite & background = AGG::GetICN( backgroundIcnId, 0 );
+
+        Image temp = resizeButton( originalReleased, width );
+        released.resize( temp.width(), temp.height() );
+        assert( background.width() >= temp.width() && background.height() >= temp.height() );
+        Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
+        Blit( temp, released );
+        released.setPosition( originalReleased.x(), originalReleased.y() );
+
+        temp = resizeButton( originalPressed, width );
+        pressed.resize( temp.width(), temp.height() );
+        assert( background.width() >= temp.width() && background.height() >= temp.height() );
+        Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
+        Blit( temp, pressed );
+        pressed.setPosition( originalPressed.x(), originalPressed.y() );
     }
 }

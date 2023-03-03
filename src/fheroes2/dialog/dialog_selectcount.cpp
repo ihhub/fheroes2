@@ -40,10 +40,12 @@
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_keyboard.h"
 #include "ui_tool.h"
 
 namespace
@@ -239,10 +241,10 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
+    const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
     const uint32_t titleHeight = title.empty() ? 0 : titlebox.h() + 10;
-    FrameBox box( 10 + titleHeight + textbox.h() + 10 + sprite.height(), true );
+    FrameBox box( 10 + titleHeight + textbox.h() + 10 + inputArea.height(), true );
     const fheroes2::Rect & box_rt = box.GetArea();
 
     if ( !title.empty() )
@@ -255,13 +257,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     textbox.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.y = box_rt.y + 10 + titleHeight + textbox.h() + 10;
-    dst_pt.x = box_rt.x + ( box_rt.width - sprite.width() ) / 2;
-    fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
-    const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, sprite.width(), sprite.height() );
+    dst_pt.x = box_rt.x + ( box_rt.width - inputArea.width() ) / 2;
+    fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
+    const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, inputArea.width(), inputArea.height() );
 
     Text text( "_", Font::BIG );
-    fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
-    text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
+    fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
+    text.Blit( dst_pt.x + ( inputArea.width() - text.w() ) / 2, dst_pt.y - 1 );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -288,6 +290,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     LocalEvent & le = LocalEvent::Get();
     le.OpenVirtualKeyboard();
 
+    const bool isInGameKeyboardRequired = System::isHandheldDevice();
+
     // message loop
     while ( le.HandleEvents() ) {
         bool redraw = true;
@@ -304,7 +308,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             break;
         }
 
-        if ( le.KeyPress() ) {
+        if ( isInGameKeyboardRequired ) {
+            if ( le.MouseClickLeft( text_rt ) ) {
+                fheroes2::openVirtualKeyboard( res );
+                charInsertPos = res.size();
+            }
+        }
+        else if ( le.KeyPress() ) {
             if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE )
                 charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
             redraw = true;
@@ -319,8 +329,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
             text.Set( InsertString( res, charInsertPos, "_" ) );
 
-            if ( text.w() < sprite.width() - 24 ) {
-                fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
+            if ( text.w() < inputArea.width() - 24 ) {
+                fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
                 text.Blit( text_rt.x + ( text_rt.width - text.w() ) / 2, text_rt.y + 1 );
                 display.render();
             }
