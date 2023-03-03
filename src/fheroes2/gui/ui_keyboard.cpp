@@ -265,31 +265,31 @@ namespace
                 renderer.removeLastCharacter();
                 return DialogAction::Backspace;
             } );
-            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 60, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::UpperCase; } );
+            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::UpperCase; } );
 
             buttons.emplace_back();
-            buttons.back().emplace_back( _( "Keyboard|123" ), 60, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::Numeric; } );
+            buttons.back().emplace_back( _( "Keyboard|123" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
             buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
                 return DialogAction::AddLetter;
             } );
-            buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             break;
         case LayoutType::UpperCase:
             buttons.back().emplace_back( _( "Keyboard|BACK" ), 60, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeLastCharacter();
                 return DialogAction::Backspace;
             } );
-            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 60, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::LowerCase; } );
+            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
             buttons.back().front().isInvertedRenderingLogic = true;
 
             buttons.emplace_back();
-            buttons.back().emplace_back( _( "Keyboard|123" ), 60, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::Numeric; } );
+            buttons.back().emplace_back( _( "Keyboard|123" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
             buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
                 return DialogAction::AddLetter;
             } );
-            buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             break;
         case LayoutType::Numeric:
             buttons.back().emplace_back( _( "Keyboard|BACK" ), 60, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -298,12 +298,12 @@ namespace
             } );
 
             buttons.emplace_back();
-            buttons.back().emplace_back( _( "Keyboard|ABC" ), 60, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::LowerCase; } );
+            buttons.back().emplace_back( _( "Keyboard|ABC" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
             buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
                 return DialogAction::AddLetter;
             } );
-            buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             break;
         default:
             // Did you add a new layout type? Add the logic above!
