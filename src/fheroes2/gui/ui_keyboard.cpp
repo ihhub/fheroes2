@@ -287,6 +287,7 @@ namespace
                 return DialogAction::AddLetter;
             } );
             buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            buttons.back().back().button.disable();
             break;
         case LayoutType::UpperCase:
             buttons.back().emplace_back( _( "Keyboard|BACK" ), 60, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -304,6 +305,7 @@ namespace
                 return DialogAction::AddLetter;
             } );
             buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            buttons.back().back().button.disable();
             break;
         case LayoutType::Numeric:
             buttons.back().emplace_back( _( "Keyboard|BACK" ), 60, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -318,6 +320,7 @@ namespace
                 return DialogAction::AddLetter;
             } );
             buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            buttons.back().back().button.disable();
             break;
         default:
             // Did you add a new layout type? Add the logic above!
