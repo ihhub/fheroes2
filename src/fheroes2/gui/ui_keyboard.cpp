@@ -265,7 +265,8 @@ namespace
                 renderer.removeLastCharacter();
                 return DialogAction::Backspace;
             } );
-            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::UpperCase; } );
+            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 60, isEvilInterface,
+                                    []( const KeyboardRenderer & ) { return DialogAction::UpperCase; } );
 
             buttons.emplace_back();
             buttons.back().emplace_back( _( "Keyboard|123" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
@@ -280,7 +281,8 @@ namespace
                 renderer.removeLastCharacter();
                 return DialogAction::Backspace;
             } );
-            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
+            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 60, isEvilInterface,
+                                    []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
             buttons.back().front().isInvertedRenderingLogic = true;
 
             buttons.emplace_back();
