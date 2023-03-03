@@ -355,12 +355,17 @@ namespace
             const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
             if ( distance > 1 ) {
                 const Maps::Tiles & tileSource = world.GetTiles( boatSource );
+                int boatColor = world.GetCapturedObject( boatSource ).GetColor();
+
+                if ( boatColor != 0 && boatColor != hero.GetColor() )
+                    continue;
 
                 Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
                 Maps::Tiles & tileDest = world.GetTiles( boatDestination );
                 tileDest.setBoat( Direction::RIGHT );
+                world.CaptureObject( boatDestination, hero.GetColor() );
 
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 

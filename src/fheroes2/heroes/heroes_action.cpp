@@ -601,6 +601,7 @@ namespace
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
         world.GetTiles( fromIndex ).setBoat( Maps::GetDirection( fromIndex, dst_index ) );
+        world.CaptureObject( fromIndex, hero.GetColor() );
         hero.SetShipMaster( false );
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();

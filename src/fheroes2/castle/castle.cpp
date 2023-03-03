@@ -2492,16 +2492,19 @@ bool Castle::BuyBoat() const
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
         left.setBoat( Direction::RIGHT );
+        world.CaptureObject( left.GetIndex(), kingdom.GetColor() );
     }
     else if ( MP2::OBJ_NONE == right.GetObject() && right.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
         right.setBoat( Direction::RIGHT );
+        world.CaptureObject( right.GetIndex(), kingdom.GetColor() );
     }
     else if ( MP2::OBJ_NONE == middle.GetObject() && middle.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
 
         middle.setBoat( Direction::RIGHT );
+        world.CaptureObject( middle.GetIndex(), kingdom.GetColor() );
     }
 
     return true;
