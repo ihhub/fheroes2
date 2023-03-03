@@ -248,8 +248,12 @@ namespace
         return {};
     }
 
-    std::vector<std::vector<KeyboardButton>> generateButtons( const std::vector<std::vector<uint8_t>> & letterRows, const bool isEvilInterface )
+    std::vector<std::vector<KeyboardButton>> generateButtons( const std::vector<std::vector<uint8_t>> & letterRows, const fheroes2::SupportedLanguage language,
+                                                              const bool isEvilInterface )
     {
+        // This is required in order to render proper text on buttons but do not change Okay button in the window.
+        fheroes2::LanguageSwitcher switcher( language );
+
         std::vector<std::vector<KeyboardButton>> buttons;
         buttons.resize( letterRows.size() );
 
@@ -440,12 +444,10 @@ namespace
 
     DialogAction processVirtualKeyboardEvent( const LayoutType layoutType, const fheroes2::SupportedLanguage language, KeyboardRenderer & renderer )
     {
-        fheroes2::LanguageSwitcher switcher( language );
-
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         auto currentLayout = getCharacterLayout( layoutType, language );
-        auto buttons = generateButtons( currentLayout, isEvilInterface );
+        auto buttons = generateButtons( currentLayout, language, isEvilInterface );
         addExtraButtons( buttons, layoutType, language, isEvilInterface );
 
         fheroes2::Display & display = fheroes2::Display::instance();
