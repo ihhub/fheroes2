@@ -303,6 +303,7 @@ namespace
     {
         const int32_t center = hero.GetIndex();
         int32_t boatDestination = fheroes2::getPossibleBoatPosition( &hero );
+        assert( Maps::isValidAbsIndex( boatDestination ) );
 
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
