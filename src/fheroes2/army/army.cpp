@@ -1586,7 +1586,7 @@ void Army::ArrangeForCastleDefense( Army & garrison )
     }
 
     // If the guest hero's army is controlled by AI...
-    if ( !( GetControl() & CONTROL_AI ) ) {
+    if ( !isControlAI() ) {
         return;
     }
 
