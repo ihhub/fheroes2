@@ -417,8 +417,8 @@ namespace
             }
         }
 
-        for ( auto & buttons : buttonLayout ) {
-            for ( auto & button : buttons ) {
+        for ( const auto & buttons : buttonLayout ) {
+            for ( const auto & button : buttons ) {
                 if ( le.MouseClickLeft( button.button.area() ) ) {
                     return button.action( renderer );
                 }
