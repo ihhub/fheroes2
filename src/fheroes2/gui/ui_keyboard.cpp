@@ -188,7 +188,7 @@ namespace
         // Numeric character can be used for special letters as well
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
-            return { { { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' }, {}, {} } };
+            return { { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' }, {}, {} };
         default:
             assert( 0 );
         }
@@ -200,7 +200,7 @@ namespace
     {
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
-            return { { { 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P' }, { 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L' }, { 'Z', 'X', 'C', 'V', 'B', 'N', 'M' } } };
+            return { { 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P' }, { 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L' }, { 'Z', 'X', 'C', 'V', 'B', 'N', 'M' } };
         default:
             assert( 0 );
         }
