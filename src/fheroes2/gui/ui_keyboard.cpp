@@ -165,7 +165,7 @@ namespace
     {
         KeyboardButton() = default;
 
-        KeyboardButton( std::string input, const int32_t buttonWidth, const bool isEvilInterface,  std::function<DialogAction( KeyboardRenderer & )> actionEvent )
+        KeyboardButton( std::string input, const int32_t buttonWidth, const bool isEvilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
             : text( std::move( input ) )
             , action( std::move( actionEvent ) )
             , button( generateButton( text, buttonWidth, isEvilInterface ) )
@@ -248,9 +248,9 @@ namespace
         for ( size_t i = 0; i < letterRows.size(); ++i ) {
             for ( const uint8_t letter : letterRows[i] ) {
                 buttons[i].emplace_back( std::string( 1, static_cast<char>( letter ) ), defaultButtonWidth, isEvilInterface, [letter]( KeyboardRenderer & renderer ) {
-                        renderer.appendCharacter( letter );
-                        return DialogAction::AddLetter;
-                    } );
+                    renderer.appendCharacter( letter );
+                    return DialogAction::AddLetter;
+                } );
             }
         }
 
@@ -262,64 +262,48 @@ namespace
         switch ( layoutType ) {
         case LayoutType::LowerCase:
             buttons.back().emplace_back( _( "Keyboard|BACK" ), 50, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                        renderer.removeLastCharacter();
-                        return DialogAction::Backspace;
-                    } );
-            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 50, isEvilInterface, []( KeyboardRenderer & ) {
-                            return DialogAction::UpperCase;
-                        } );
+                renderer.removeLastCharacter();
+                return DialogAction::Backspace;
+            } );
+            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::UpperCase; } );
 
-            buttons.push_back({});
-            buttons.back().emplace_back( _( "Keyboard|123" ), 50, isEvilInterface, []( KeyboardRenderer & ) {
-                            return DialogAction::Numeric;
-                        } );
+            buttons.push_back( {} );
+            buttons.back().emplace_back( _( "Keyboard|123" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::Numeric; } );
             buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                            renderer.appendCharacter( ' ' );
-                            return DialogAction::AddLetter;
-                        } );
-            buttons.back().emplace_back( _( "Keyboard|LANG" ), 50, isEvilInterface, []( KeyboardRenderer & ) {
-                            return DialogAction::DoNothing;
-                        } );
+                renderer.appendCharacter( ' ' );
+                return DialogAction::AddLetter;
+            } );
+            buttons.back().emplace_back( _( "Keyboard|LANG" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             break;
         case LayoutType::UpperCase:
             buttons.back().emplace_back( _( "Keyboard|BACK" ), 50, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                        renderer.removeLastCharacter();
-                        return DialogAction::Backspace;
-                    } );
-            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 50, isEvilInterface, []( KeyboardRenderer & ) {
-                            return DialogAction::LowerCase;
-                        } );
+                renderer.removeLastCharacter();
+                return DialogAction::Backspace;
+            } );
+            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::LowerCase; } );
             buttons.back().front().isInvertedRenderingLogic = true;
 
-            buttons.push_back({});
-            buttons.back().emplace_back( _( "Keyboard|123" ), 50, isEvilInterface, []( KeyboardRenderer & ) {
-                            return DialogAction::Numeric;
-                        } );
+            buttons.push_back( {} );
+            buttons.back().emplace_back( _( "Keyboard|123" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::Numeric; } );
             buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                            renderer.appendCharacter( ' ' );
-                            return DialogAction::AddLetter;
-                        } );
-            buttons.back().emplace_back( _( "Keyboard|LANG" ), 50, isEvilInterface, []( KeyboardRenderer & ) {
-                            return DialogAction::DoNothing;
-                        } );
+                renderer.appendCharacter( ' ' );
+                return DialogAction::AddLetter;
+            } );
+            buttons.back().emplace_back( _( "Keyboard|LANG" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             break;
         case LayoutType::Numeric:
             buttons.back().emplace_back( _( "Keyboard|BACK" ), 50, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                        renderer.removeLastCharacter();
-                        return DialogAction::Backspace;
-                    } );
+                renderer.removeLastCharacter();
+                return DialogAction::Backspace;
+            } );
 
-            buttons.push_back({});
-            buttons.back().emplace_back( _( "Keyboard|ABC" ), 50, isEvilInterface, []( KeyboardRenderer & ) {
-                            return DialogAction::LowerCase;
-                        } );
+            buttons.push_back( {} );
+            buttons.back().emplace_back( _( "Keyboard|ABC" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::LowerCase; } );
             buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                            renderer.appendCharacter( ' ' );
-                            return DialogAction::AddLetter;
-                        } );
-            buttons.back().emplace_back( _( "Keyboard|LANG" ), 50, isEvilInterface, []( KeyboardRenderer & ) {
-                            return DialogAction::DoNothing;
-                        } );
+                renderer.appendCharacter( ' ' );
+                return DialogAction::AddLetter;
+            } );
+            buttons.back().emplace_back( _( "Keyboard|LANG" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             break;
         default:
             // Did you add a new layout type? Add the logic above!
@@ -366,7 +350,7 @@ namespace
             int32_t xOffset = offset.x + offsets[i];
             for ( auto & button : buttonLayout[i] ) {
                 button.button.setPosition( xOffset, yOffset );
-                if ( button.isInvertedRenderingLogic )  {
+                if ( button.isInvertedRenderingLogic ) {
                     button.button.press();
                 }
                 button.button.draw( output );
