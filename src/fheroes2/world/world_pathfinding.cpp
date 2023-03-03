@@ -478,10 +478,10 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     }
 }
 
-void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill, const bool isArtifactBagFull )
+void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
 {
     auto currentSettings = std::tie( _hero, _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength, _isArtifactBagFull );
-    const auto newSettings = std::make_tuple( nullptr, start, skill, color, 0U, 0U, armyStrength, isArtifactBagFull );
+    const auto newSettings = std::make_tuple( nullptr, start, skill, color, 0U, 0U, armyStrength, false );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -496,7 +496,7 @@ void AIWorldPathfinder::processWorldMap()
     for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
         _cache[idx].resetNode();
     }
-    _cache[_pathStart] = WorldNode( -1, 0, MP2::MapObjectType::OBJ_NONE, _remainingMovePoints );
+    _cache[_pathStart] = WorldNode( -1, 0, MP2::OBJ_NONE, _remainingMovePoints );
 
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( _pathStart );
@@ -1121,7 +1121,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, cons
 
 uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill )
 {
-    reEvaluateIfNeeded( start, color, armyStrength, skill, false );
+    reEvaluateIfNeeded( start, color, armyStrength, skill );
 
     return _cache[targetIndex]._cost;
 }
