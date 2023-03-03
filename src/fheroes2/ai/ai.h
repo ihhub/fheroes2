@@ -64,7 +64,7 @@ namespace AI
     };
 
     // Although AI heroes are capable to find their own tasks strategic AI should be able to focus them on most critical tasks
-    enum class PriorityTask : int
+    enum class PriorityTaskType : int
     {
         // AI will focus on siegeing or chasing the selected enemy castle or hero.
         ATTACK,

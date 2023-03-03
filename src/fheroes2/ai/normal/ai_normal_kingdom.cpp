@@ -400,13 +400,20 @@ namespace AI
 
                 const double attackerThreat = attackerStrength - defenders;
                 if ( attackerThreat > 0 ) {
-                    _priorityTargets[enemy.first] = PriorityTask::ATTACK;
                     const uint32_t dist = _pathfinder.getDistance( enemy.first, castleIndex, myColor, attackerStrength );
                     if ( dist && dist < threatDistanceLimit ) {
                         // castle is under threat
                         castlesInDanger.insert( castleIndex );
 
-                        _priorityTargets[castleIndex] = PriorityTask::DEFEND;
+                        auto it = _priorityTargets.find( enemy.first );
+                        if ( it == _priorityTargets.end() ) {
+                            _priorityTargets[enemy.first] = { PriorityTaskType::ATTACK, attackerStrength, castleIndex };
+                        }
+                        else {
+                            it->second.secondary.push_back( castleIndex );
+                        }
+
+                        _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat };
                     }
                 }
             }
