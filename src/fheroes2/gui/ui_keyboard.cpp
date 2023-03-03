@@ -267,7 +267,7 @@ namespace
             } );
             buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::UpperCase; } );
 
-            buttons.push_back( {} );
+            buttons.emplace_back();
             buttons.back().emplace_back( _( "Keyboard|123" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::Numeric; } );
             buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
@@ -283,7 +283,7 @@ namespace
             buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::LowerCase; } );
             buttons.back().front().isInvertedRenderingLogic = true;
 
-            buttons.push_back( {} );
+            buttons.emplace_back();
             buttons.back().emplace_back( _( "Keyboard|123" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::Numeric; } );
             buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
@@ -297,7 +297,7 @@ namespace
                 return DialogAction::Backspace;
             } );
 
-            buttons.push_back( {} );
+            buttons.emplace_back();
             buttons.back().emplace_back( _( "Keyboard|ABC" ), 50, isEvilInterface, []( KeyboardRenderer & ) { return DialogAction::LowerCase; } );
             buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
@@ -329,13 +329,13 @@ namespace
         std::vector<int32_t> offsets;
 
         int32_t maximumLength = 0;
-        for ( size_t i = 0; i < buttonLayout.size(); ++i ) {
+        for ( const auto & buttons : buttonLayout ) {
             int32_t length = 0;
-            for ( const auto & button : buttonLayout[i] ) {
+            for ( const auto & button : buttons ) {
                 length += button.button.area().width;
             }
 
-            length += ( static_cast<int32_t>( buttonLayout[i].size() ) - 1 ) * buttonOffset;
+            length += ( static_cast<int32_t>( buttons.size() ) - 1 ) * buttonOffset;
 
             offsets.push_back( length );
             maximumLength = std::max( maximumLength, length );
