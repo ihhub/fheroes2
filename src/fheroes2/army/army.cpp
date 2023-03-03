@@ -1559,12 +1559,14 @@ void Army::ArrangeForCastleDefense( Army & garrison )
 {
     assert( this != &garrison );
     assert( size() == maximumTroopCount && garrison.size() == maximumTroopCount );
+    // This method is designed to reinforce only the armies of heroes
+    assert( commander != nullptr && commander->isHeroes() );
     // This method is designed to take reinforcements only from the garrison, because
     // it can leave the garrison empty
     assert( garrison.commander == nullptr || garrison.commander->isCaptain() );
 
-    // First, try to move or combine the garrison troops into exactly the same slots
-    // of the guest hero's army, if possible
+    // First, try to move the garrison troops to exactly the same slots of the guest hero's army,
+    // provided that these slots are empty
     for ( size_t i = 0; i < maximumTroopCount; ++i ) {
         Troop * troop = GetTroop( i );
         Troop * garrisonTroop = garrison.GetTroop( i );
@@ -1574,23 +1576,21 @@ void Army::ArrangeForCastleDefense( Army & garrison )
             continue;
         }
 
-        const Monster garrisonMonster = garrisonTroop->GetMonster();
-        const uint32_t garrisonCount = garrisonTroop->GetCount();
-
-        if ( !troop->isValid() ) {
-            troop->Set( garrisonMonster, garrisonCount );
-
-            garrisonTroop->Reset();
+        if ( troop->isValid() ) {
+            continue;
         }
-        else if ( troop->isMonster( garrisonMonster.GetID() ) ) {
-            troop->SetCount( troop->GetCount() + garrisonCount );
 
-            garrisonTroop->Reset();
-        }
+        troop->Set( garrisonTroop->GetMonster(), garrisonTroop->GetCount() );
+
+        garrisonTroop->Reset();
     }
 
-    // Then try to transfer the remaining garrison troops to the guest hero's army,
-    // if possible
+    // If the guest hero's army is controlled by AI...
+    if ( !( GetControl() & CONTROL_AI ) ) {
+        return;
+    }
+
+    // ... then try to transfer the remaining garrison troops
     for ( Troop * garrisonTroop : garrison ) {
         assert( garrisonTroop != nullptr );
 
