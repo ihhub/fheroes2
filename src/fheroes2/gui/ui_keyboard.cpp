@@ -20,13 +20,21 @@
 
 #include "ui_keyboard.h"
 
+#include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <functional>
+#include <memory>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
 #include "game_hotkeys.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "pal.h"
 #include "screen.h"
 #include "settings.h"
