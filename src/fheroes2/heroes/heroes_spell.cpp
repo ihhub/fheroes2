@@ -347,25 +347,27 @@ namespace
         if ( !Maps::isValidAbsIndex( boatDestination ) ) {
             Dialog::Message( "", _( "This spell can be casted only nearby water." ), Font::BIG, Dialog::OK );
             return false;
+            return false;
         }
 
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
+            Maps::Tiles & tileSource = world.GetTiles( boatSource );
+            int boatColor = tileSource.getEmptyBoatColor();
+            bool isFriendlyBoat = boatColor == hero.GetColor() || boatColor == Color::NONE;
+
             const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
-            if ( distance > 1 ) {
-                const Maps::Tiles & tileSource = world.GetTiles( boatSource );
-                int boatColor = world.GetCapturedObject( boatSource ).GetColor();
 
-                if ( boatColor != 0 && boatColor != hero.GetColor() )
-                    continue;
-
+            if ( distance > 1 && isFriendlyBoat ) {
                 Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
                 Maps::Tiles & tileDest = world.GetTiles( boatDestination );
                 tileDest.setBoat( Direction::RIGHT );
-                world.CaptureObject( boatDestination, hero.GetColor() );
+
+                tileSource.resetEmptyBoatColor();
+                tileDest.setEmptyBoatColor( hero.GetColor() );
 
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 

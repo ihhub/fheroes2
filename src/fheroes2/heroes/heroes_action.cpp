@@ -587,6 +587,9 @@ namespace
         hero.SetShipMaster( true );
         hero.GetPath().Reset();
 
+        // Boat is no longer empty so we reset color to default
+        world.GetTiles( dst_index ).resetEmptyBoatColor();
+
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
 
@@ -601,7 +604,8 @@ namespace
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
         world.GetTiles( fromIndex ).setBoat( Maps::GetDirection( fromIndex, dst_index ) );
-        world.CaptureObject( fromIndex, hero.GetColor() );
+        world.GetTiles( fromIndex ).setEmptyBoatColor( hero.GetColor() );
+
         hero.SetShipMaster( false );
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
