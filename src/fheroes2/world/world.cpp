@@ -1393,8 +1393,8 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
         >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_1002_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE_1002_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1002_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1002_RELEASE ) {
         uint32_t dummy = 0xDEADBEEF;
 
         msg >> dummy;
