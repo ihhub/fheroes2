@@ -68,6 +68,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "spell_info.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
@@ -1952,8 +1953,20 @@ namespace AI
 
     void HeroesCastTownPortal( Heroes & hero, const int32_t targetIndex )
     {
-        const Spell townPortal( Spell::TOWNPORTAL );
-        if ( !Maps::isValidAbsIndex( targetIndex ) || hero.isShipMaster() || !hero.CanCastSpell( townPortal ) ) {
+        if ( !Maps::isValidAbsIndex( targetIndex ) || hero.isShipMaster() ) {
+            return;
+        }
+
+        Spell spellToUse( Spell::TOWNPORTAL );
+
+        // check if we can cast Town Gate instead
+        const Spell townGate( Spell::TOWNGATE );
+        const Castle * nearestCastle = fheroes2::getNearestCastleTownGate( hero );
+        if ( nearestCastle && nearestCastle->GetIndex() == targetIndex && hero.HaveSpell( townGate ) ) {
+            spellToUse = townGate;
+        }
+
+        if ( !hero.CanCastSpell( spellToUse ) ) {
             return;
         }
 
@@ -1962,7 +1975,7 @@ namespace AI
         }
 
         hero.Move2Dest( targetIndex );
-        hero.SpellCasted( townPortal );
+        hero.SpellCasted( spellToUse );
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {

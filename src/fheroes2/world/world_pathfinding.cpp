@@ -467,9 +467,9 @@ void AIWorldPathfinder::reset()
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    auto currentSettings = std::tie( _hero, _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength, _isArtifactBagFull );
-    const auto newSettings = std::make_tuple( &hero, hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
-                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), hero.GetArmy().GetStrength(), hero.GetBagArtifacts().isFull() );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _hero, _armyStrength, _isArtifactBagFull );
+    const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
+                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), &hero, hero.GetArmy().GetStrength(), hero.GetBagArtifacts().isFull() );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -480,8 +480,8 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
 {
-    auto currentSettings = std::tie( _hero, _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength, _isArtifactBagFull );
-    const auto newSettings = std::make_tuple( nullptr, start, skill, color, 0U, 0U, armyStrength, false );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _hero, _armyStrength, _isArtifactBagFull );
+    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, nullptr, armyStrength, false );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
