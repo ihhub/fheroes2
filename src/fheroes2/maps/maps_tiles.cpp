@@ -1652,7 +1652,7 @@ std::string Maps::Tiles::String() const
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
        << "add. metadata   : " << additionalMetadata << std::endl
-       << "empty boat color: " << _emptyBoatColor << std::endl;
+       << "empty boat color: " << Color::String( _emptyBoatColor ) << std::endl;
 
     for ( const TilesAddon & addon : addons_level1 ) {
         os << addon.String( 1 );
