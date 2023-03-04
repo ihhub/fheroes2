@@ -472,7 +472,7 @@ namespace Maps
 
         bool tileIsRoad = false;
 
-        // Empty boats can be summoned, we need to remember which player they belong to
+        // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
         int _emptyBoatColor = Color::NONE;
 
         // This field does not persist in savegame.
