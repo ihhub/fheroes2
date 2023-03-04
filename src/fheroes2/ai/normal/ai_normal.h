@@ -21,6 +21,7 @@
 #ifndef H2AI_NORMAL_H
 #define H2AI_NORMAL_H
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <map>
