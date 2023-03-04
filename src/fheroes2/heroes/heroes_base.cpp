@@ -402,7 +402,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::SUMMONBOAT ) {
-            int32_t boatDestination = fheroes2::getPossibleBoatPosition( hero );
+            const int32_t boatDestination = fheroes2::getPossibleBoatPosition( *hero );
             if ( !Maps::isValidAbsIndex( boatDestination ) ) {
                 if ( res != nullptr ) {
                     *res = _( "This spell can be casted only nearby water." );
