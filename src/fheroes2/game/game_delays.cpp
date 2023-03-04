@@ -183,7 +183,7 @@ void Game::UpdateGameSpeed()
     SetupHeroMovement( conf.AIMoveSpeed(), delays[CURRENT_AI_DELAY], aiHeroMultiplier );
 
     const int32_t battleSpeed = conf.BattleSpeed();
-    const double adjustedBattleSpeed = ( battleSpeed < 10 ) ? ( ( 10 - conf.BattleSpeed() ) * battleSpeedAdjustment ) : ( battleSpeedAdjustment / 2 );
+    const double adjustedBattleSpeed = ( battleSpeed < 10 ) ? ( ( 10 - battleSpeed ) * battleSpeedAdjustment ) : ( battleSpeedAdjustment / 2 );
 
     delays[BATTLE_FRAME_DELAY].setDelay( static_cast<uint64_t>( 120 * adjustedBattleSpeed ) );
     delays[BATTLE_MISSILE_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
