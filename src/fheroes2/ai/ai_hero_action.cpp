@@ -731,6 +731,14 @@ namespace
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+
+#if defined( WITH_DEBUG )
+            // If player gave control to AI we need to fully update the radar image after every 'Move2Dest()' and 'SetCenter()' calls and before 'FadeIn()'.
+            if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+                Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
+            }
+#endif
+
             hero.FadeIn();
         }
 
@@ -795,6 +803,14 @@ namespace
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+
+#if defined( WITH_DEBUG )
+            // If player gave control to AI we need to fully update the radar image after every 'Move2Dest()' and 'SetCenter()' calls and before 'FadeIn()'.
+            if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+                Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
+            }
+#endif
+
             hero.FadeIn();
         }
 
@@ -1389,6 +1405,13 @@ namespace
         hero.SetShipMaster( true );
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+
+#if defined( WITH_DEBUG )
+            // If player gave control to AI we need to fully update the radar image after every 'Move2Dest()' and 'SetCenter()' calls.
+            if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+                Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
+            }
+#endif
         }
         hero.GetPath().Reset();
 
@@ -1417,6 +1440,14 @@ namespace
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( prevPosition );
+
+#if defined( WITH_DEBUG )
+            // If player gave control to AI we need to fully update the radar image after every 'Move2Dest()' and 'SetCenter()' calls and before 'FadeIn()'.
+            if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+                Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
+            }
+#endif
+
             hero.FadeIn( { offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() } );
         }
         hero.ActionNewPosition( true );
@@ -1860,9 +1891,14 @@ namespace AI
                         if ( hero.Move( noMovementAnimation ) ) {
                             if ( AIHeroesShowAnimation( hero, colors ) ) {
                                 gameArea.SetCenter( hero.GetCenter() );
+
 #if defined( WITH_DEBUG )
-                                // If player gave control to AI we need to update radar after every AI move.
+                                // If player gave control to AI we need to fully update the radar image on every AI move after every 'Move()' and 'SetCenter()' calls.
                                 if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+                                    // We redraw the radar map fully as there is no need to make a code for rendering optimizations for debug AI tracking.
+                                    // 'SetRedraw( Interface::REDRAW_RADAR )' should be called after every possible hero move. As AI don't waste time for thinking between
+                                    // hero moves we do not need to update radar in any other places (Scouting skill upgrade, Magelan maps, e.t.c.).
+
                                     basicInterface.SetRedraw( Interface::REDRAW_RADAR );
                                 }
 #endif
@@ -1927,13 +1963,15 @@ namespace AI
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeIn();
+
 #if defined( WITH_DEBUG )
-            // If player gave control to AI we need to update radar after every AI move.
+            // If player gave control to AI we need to fully update the radar image after every 'Move2Dest()' and 'SetCenter()' calls and before 'FadeIn()'.
             if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
                 Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
             }
 #endif
+
+            hero.FadeIn();
         }
 
         hero.ActionNewPosition( false );

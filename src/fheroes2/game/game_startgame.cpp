@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -43,7 +45,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "direction.h"
-#include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -683,10 +684,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     statusWindow.Reset();
                     statusWindow.SetState( StatusType::STATUS_AITURN );
 
+#if defined( WITH_DEBUG )
                     if ( player->isAIAutoControlMode() ) {
+                        // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
                         radar.SetHide( false );
                         radar.SetRedraw( REDRAW_RADAR );
                     }
+#endif
 
                     Redraw();
                     display.render();
