@@ -748,6 +748,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     _fogColors = Color::ALL;
     _terrainImageIndex = mp2.terrainImageIndex;
     _terrainFlags = mp2.terrainFlags;
+    _emptyBoatColor = Color::NONE;
 
     SetIndex( index );
     SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
