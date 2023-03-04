@@ -32,11 +32,11 @@
 #include "color.h"
 #include "mp2.h"
 #include "pairs.h"
+#include "resource.h"
 #include "world_pathfinding.h"
 
 class Army;
 class Castle;
-class Funds;
 class HeroBase;
 class Heroes;
 class Kingdom;
