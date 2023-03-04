@@ -599,11 +599,12 @@ namespace
             return;
 
         const int fromIndex = hero.GetIndex();
+        Maps::Tiles & from = world.GetTiles( fromIndex );
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
-        world.GetTiles( fromIndex ).setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor() );
+        from.setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor() );
 
         hero.SetShipMaster( false );
         AudioManager::PlaySound( M82::KILLFADE );
