@@ -320,7 +320,7 @@ namespace fheroes2
     int32_t getPossibleBoatPosition( const HeroBase & heroBase )
     {
         const Heroes * hero = dynamic_cast<const Heroes *>( &heroBase );
-        if ( hero == nullptr) {
+        if ( hero == nullptr ) {
             return -1;
         }
 
