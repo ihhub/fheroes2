@@ -216,11 +216,6 @@ namespace Maps
             _index = index;
         }
 
-        void setEmptyBoatColor( int color )
-        {
-            _emptyBoatColor = color;
-        }
-
         void resetEmptyBoatColor()
         {
             _emptyBoatColor = Color::NONE;
@@ -231,7 +226,7 @@ namespace Maps
             return _emptyBoatColor;
         }
 
-        void setBoat( int direction );
+        void setBoat( int direction, int color );
         int getBoatDirection() const;
 
         void resetObjectSprite()
@@ -477,11 +472,11 @@ namespace Maps
 
         bool tileIsRoad = false;
 
-        // This field does not persist in savegame.
-        uint32_t _region = REGION_NODE_BLOCKED;
-
         // Empty boats can be summoned, we need to remember which player they belong to
         int _emptyBoatColor = Color::NONE;
+
+        // This field does not persist in savegame.
+        uint32_t _region = REGION_NODE_BLOCKED;        
     };
 
     StreamBase & operator<<( StreamBase &, const TilesAddon & );

@@ -603,8 +603,7 @@ namespace
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
-        world.GetTiles( fromIndex ).setBoat( Maps::GetDirection( fromIndex, dst_index ) );
-        world.GetTiles( fromIndex ).setEmptyBoatColor( hero.GetColor() );
+        world.GetTiles( fromIndex ).setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor() );
 
         hero.SetShipMaster( false );
         AudioManager::PlaySound( M82::KILLFADE );

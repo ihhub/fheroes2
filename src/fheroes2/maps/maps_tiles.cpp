@@ -828,7 +828,7 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
     world.resetPathfinder();
 }
 
-void Maps::Tiles::setBoat( int direction )
+void Maps::Tiles::setBoat( int direction, int color )
 {
     if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _imageIndex != 255 ) {
         AddonsPushLevel1( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex, false, false ) );
@@ -836,6 +836,7 @@ void Maps::Tiles::setBoat( int direction )
 
     SetObject( MP2::OBJ_BOAT );
     _objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
+    _emptyBoatColor = color;
 
     // Left-side sprites have to flipped, add 128 to index
     switch ( direction ) {
@@ -1649,7 +1650,8 @@ std::string Maps::Tiles::String() const
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
-       << "add. metadata   : " << additionalMetadata << std::endl;
+       << "add. metadata   : " << additionalMetadata << std::endl
+       << "empty boat color: " << _emptyBoatColor << std::endl;
 
     for ( const TilesAddon & addon : addons_level1 ) {
         os << addon.String( 1 );
@@ -2995,8 +2997,8 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
-               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
-               << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType;
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
+               << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._emptyBoatColor;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -3120,6 +3122,10 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
     msg >> tile._fogColors >> tile.quantity1 >> tile.quantity2 >> tile.additionalMetadata >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2
         >> tile._layerType;
+
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_1002_RELEASE ) {
+        msg >> tile._emptyBoatColor;
+    }
 
     return msg;
 }
