@@ -1713,6 +1713,7 @@ namespace AI
 
                 if ( !attackHero && ( !attackCastle || attackCastle->GetColor() == hero.GetColor() ) ) {
                     for ( const int secondaryTask : task.secondary ) {
+                        assert( secondaryTask != tileIndex );
                         _priorityTargets.erase( secondaryTask );
                     }
                     _priorityTargets.erase( tileIndex );
