@@ -32,6 +32,7 @@
 
 #include "army.h"
 #include "artifact.h"
+#include "castle.h"
 #include "direction.h"
 #include "game_over.h"
 #include "ground.h"
