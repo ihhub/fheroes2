@@ -2997,7 +2997,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
-               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
                << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._emptyBoatColor;
 }
 
@@ -3123,7 +3123,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> tile._fogColors >> tile.quantity1 >> tile.quantity2 >> tile.additionalMetadata >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2
         >> tile._layerType;
 
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_1002_RELEASE ) {
+    if ( Game::GetVersionOfCurrentSaveFile() >= FORMAT_VERSION_1002_RELEASE ) {
         msg >> tile._emptyBoatColor;
     }
 

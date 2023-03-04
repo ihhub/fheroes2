@@ -476,7 +476,7 @@ namespace Maps
         int _emptyBoatColor = Color::NONE;
 
         // This field does not persist in savegame.
-        uint32_t _region = REGION_NODE_BLOCKED;        
+        uint32_t _region = REGION_NODE_BLOCKED;
     };
 
     StreamBase & operator<<( StreamBase &, const TilesAddon & );
