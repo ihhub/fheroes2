@@ -493,8 +493,8 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, co
 void AIWorldPathfinder::processWorldMap()
 {
     // reset cache back to default value
-    for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
-        _cache[idx].resetNode();
+    for ( auto & node : _cache ) {
+        node.resetNode();
     }
     _cache[_pathStart] = WorldNode( -1, 0, MP2::OBJ_NONE, _remainingMovePoints );
 

@@ -1913,6 +1913,7 @@ namespace AI
                 HeroesCastTownPortal( hero, targetIndex );
             }
             else if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) ) {
+                // use the action object hero is standing on (Stone Liths)
                 hero.Action( hero.GetIndex(), true );
             }
         }
