@@ -319,12 +319,16 @@ namespace fheroes2
 
     int32_t getPossibleBoatPosition( const HeroBase & heroBase )
     {
-        const Heroes & hero = dynamic_cast<const Heroes &>( heroBase );
-        if ( !hero.MayCastAdventureSpells() ) {
+        const Heroes * hero = dynamic_cast<const Heroes *>( &heroBase );
+        if ( hero == nullptr) {
             return -1;
         }
 
-        const int32_t center = hero.GetIndex();
+        if ( !hero->MayCastAdventureSpells() ) {
+            return -1;
+        }
+
+        const int32_t center = hero->GetIndex();
         const int tilePassability = world.GetTiles( center ).GetPassable();
         const MapsIndexes tilesAround = Maps::GetFreeIndexesAroundTile( center );
         std::vector<int32_t> possibleBoatPositions;
