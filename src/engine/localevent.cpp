@@ -647,99 +647,6 @@ namespace fheroes2
 
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod )
     {
-#if defined( TARGET_PS_VITA )
-        (void)mod;
-
-        // input with D-Pad
-        if ( res.size() ) {
-            SetCurrentDPadCharIndex( res.back() );
-        }
-        else {
-            currentUpper = true;
-            currentCharIndex = 0;
-        }
-
-        switch ( key ) {
-        // delete char
-        case fheroes2::Key::KEY_LEFT: {
-            if ( !res.empty() && pos ) {
-                res.resize( res.size() - 1 );
-                --pos;
-            }
-            break;
-        }
-        // add new char
-        case fheroes2::Key::KEY_RIGHT: {
-            currentUpper = res.empty();
-            currentCharIndex = 0;
-
-            const char c = GetCurrentDPadChar();
-            if ( c )
-                res.push_back( c );
-
-            ++pos;
-            break;
-        }
-        // next char
-        case fheroes2::Key::KEY_DOWN: {
-            ++currentCharIndex;
-            if ( currentCharIndex >= totalCharactersDPad )
-                currentCharIndex = 0;
-
-            if ( !res.empty() ) {
-                res.resize( res.size() - 1 );
-            }
-            else {
-                ++pos;
-            }
-
-            const char c = GetCurrentDPadChar();
-            if ( c )
-                res.push_back( c );
-
-            break;
-        }
-        // previous char
-        case fheroes2::Key::KEY_UP: {
-            --currentCharIndex;
-            if ( currentCharIndex < 0 )
-                currentCharIndex = totalCharactersDPad - 1;
-
-            if ( !res.empty() ) {
-                res.resize( res.size() - 1 );
-            }
-            else {
-                ++pos;
-            }
-
-            const char c = GetCurrentDPadChar();
-            if ( c )
-                res.push_back( c );
-
-            break;
-        }
-        // switch upper/lowercase
-        case fheroes2::Key::KEY_SHIFT: {
-            currentUpper = !currentUpper;
-
-            if ( !res.empty() ) {
-                res.resize( res.size() - 1 );
-            }
-            else {
-                ++pos;
-            }
-
-            const char c = GetCurrentDPadChar();
-            if ( c )
-                res.push_back( c );
-
-            break;
-        }
-
-        default:
-            break;
-        }
-#else
         switch ( key ) {
         case fheroes2::Key::KEY_BACKSPACE:
             if ( !res.empty() && pos ) {
@@ -781,7 +688,6 @@ namespace fheroes2
             }
         }
         }
-#endif
 
         return pos;
     }
