@@ -354,11 +354,11 @@ namespace
 
             Maps::Tiles & tileSource = world.GetTiles( boatSource );
             const int boatColor = tileSource.getBoatOwnerColor();
-            const uint8_t heroColor = static_cast<uint8_t>( hero.GetColor() );
-            const bool isFriendlyBoat = ( boatColor == Color::NONE ) || ( boatColor == heroColor );
+            const int heroColor = hero.GetColor();
 
-            if ( !isFriendlyBoat )
+            if ( boatColor != Color::NONE && boatColor != heroColor ) {
                 continue;
+            }
 
             const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
 

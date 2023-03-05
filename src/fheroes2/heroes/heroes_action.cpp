@@ -604,7 +604,7 @@ namespace
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
-        from.setBoat( Maps::GetDirection( fromIndex, dst_index ), static_cast<uint8_t>( hero.GetColor() ) );
+        from.setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor() );
         hero.SetShipMaster( false );
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();

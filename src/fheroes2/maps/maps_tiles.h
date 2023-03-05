@@ -226,7 +226,7 @@ namespace Maps
             return _boatOwnerColor;
         }
 
-        void setBoat( int direction, uint8_t color );
+        void setBoat( const int direction, const int color );
         int getBoatDirection() const;
 
         void resetObjectSprite()

@@ -829,7 +829,7 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
     world.resetPathfinder();
 }
 
-void Maps::Tiles::setBoat( int direction, uint8_t color )
+void Maps::Tiles::setBoat( const int direction, const int color )
 {
     if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _imageIndex != 255 ) {
         AddonsPushLevel1( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex, false, false ) );
@@ -837,7 +837,6 @@ void Maps::Tiles::setBoat( int direction, uint8_t color )
 
     SetObject( MP2::OBJ_BOAT );
     _objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
-    _boatOwnerColor = color;
 
     // Left-side sprites have to flipped, add 128 to index
     switch ( direction ) {
@@ -871,6 +870,13 @@ void Maps::Tiles::setBoat( int direction, uint8_t color )
     }
 
     _uid = World::GetUniq();
+
+    using BoatOwnerColorType = decltype( _boatOwnerColor );
+    static_assert( std::is_same_v<BoatOwnerColorType, uint8_t>, "Type of _boatOwnerColor has been changed, check the logic below" );
+
+    assert( color >= std::numeric_limits<BoatOwnerColorType>::min() && color <= std::numeric_limits<BoatOwnerColorType>::max() );
+
+    _boatOwnerColor = static_cast<BoatOwnerColorType>( color );
 }
 
 int Maps::Tiles::getBoatDirection() const
