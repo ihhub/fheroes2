@@ -567,7 +567,12 @@ namespace
                   "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." ),
               {},
               {} },
-            { gettext_noop( "Shackles" ), gettext_noop( "The %{name} decrease your movement on land." ), gettext_noop( "A fat troll jumped out of the bushes and started screaming to challenge him in a competition to run in shackles for a prize of crispy 1000 gold. You agreed to do this, looking at the troll. After running for a minute you didn't realize how surprizingly fast the troll left you behind in the woods with the locked to your leg shackles. You have no idea how to remove it now." ), {}, {} },
+            { gettext_noop( "Shackles" ),
+              gettext_noop( "The %{name} decrease your movement on land." ),
+              gettext_noop(
+                  "A fat troll jumped out of the bushes and started screaming to challenge him in a competition to run in shackles for a prize of crispy 1000 gold. You agreed to do this, looking at the troll. After running for a minute you didn't realize how surprizingly fast the troll left you behind in the woods with the locked to your leg shackles. You have no idea how to remove it now." ),
+              {},
+              {} },
 
             { gettext_noop( "Invalid Artifact" ), gettext_noop( "Invalid Artifact" ), nullptr, {}, {} },
         };
