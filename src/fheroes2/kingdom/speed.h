@@ -23,7 +23,6 @@
 #ifndef H2SPEED_H
 #define H2SPEED_H
 
-#include <cstdint>
 #include <string>
 
 namespace Speed
@@ -42,7 +41,7 @@ namespace Speed
         INSTANT = 9
     };
 
-    std::string String( const uint32_t speed );
+    std::string String( const int speed );
     int GetOriginalSlow( const int speed );
     int GetOriginalFast( const int speed );
 

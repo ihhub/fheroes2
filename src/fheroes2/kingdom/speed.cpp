@@ -25,7 +25,7 @@
 #include "spell.h"
 #include "translations.h"
 
-std::string Speed::String( uint32_t speed )
+std::string Speed::String( int speed )
 {
     switch ( speed ) {
     case STANDING:

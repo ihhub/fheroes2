@@ -169,7 +169,7 @@ std::string Troop::GetSpeedString() const
 
 std::string Troop::GetSpeedString( uint32_t speed )
 {
-    std::string output( Speed::String( speed ) );
+    std::string output( Speed::String( static_cast<int>( speed ) ) );
     output += " (";
     output += std::to_string( speed );
     output += ')';
