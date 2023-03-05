@@ -461,7 +461,7 @@ namespace
             for ( const auto & buttonInfo : buttonRow ) {
                 if ( le.MouseClickLeft( buttonInfo.button.area() ) ) {
                     assert( buttonInfo.action );
-                    return  buttonInfo.action( renderer );
+                    return buttonInfo.action( renderer );
                 }
             }
         }
