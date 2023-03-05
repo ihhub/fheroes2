@@ -3449,12 +3449,12 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
         status.SetMessage( "", false );
 
         if ( resurrects != 0 ) {
-            auto log = []( Battle::Status & uiEl, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
+            auto log = []( Battle::Status & statusBar, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
                 StringReplace( localMsg, "%{count}", static_cast<int32_t>( localRes ) );
                 StringReplaceWithLowercase( localMsg, "%{unit}", localUnit );
 
-                uiEl.SetMessage( localMsg, true );
-                uiEl.SetMessage( "", false );
+                statusBar.SetMessage( localMsg, true );
+                statusBar.SetMessage( "", false );
             };
 
             switch ( attacker.GetID() ) {

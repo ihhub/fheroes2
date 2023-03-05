@@ -740,15 +740,13 @@ void Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg, uint32_t & killed, u
 
     switch ( enemy.GetID() ) {
     case Monster::GHOST:
-        resurrected = killed * static_cast<Monster &>( enemy ).GetHitPoints();
         // grow troop
-        resurrected = enemy.Resurrect( resurrected, true, false );
+        resurrected = enemy.Resurrect( killed * GetHitPoints(), true, false );
         break;
 
     case Monster::VAMPIRE_LORD:
-        resurrected = killed * Monster::GetHitPoints();
         // restore hit points
-        resurrected = enemy.Resurrect( resurrected, false, false );
+        resurrected = enemy.Resurrect( killed * GetHitPoints(), false, false );
         break;
 
     default:

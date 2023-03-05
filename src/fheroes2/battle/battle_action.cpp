@@ -651,9 +651,9 @@ void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, 
     for ( TargetInfo & target : targets ) {
         assert( target.defender != nullptr && target.defender->isValid() );
 
-        uint32_t resInc;
-        target.defender->ApplyDamage( attacker, target.damage, target.killed, resInc );
-        resurrected += resInc;
+        uint32_t resurrectIncrease = 0;
+        target.defender->ApplyDamage( attacker, target.damage, target.killed, resurrectIncrease );
+        resurrected += resurrectIncrease;
     }
 }
 
