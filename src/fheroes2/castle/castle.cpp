@@ -2487,21 +2487,19 @@ bool Castle::BuyBoat() const
     Maps::Tiles & right = world.GetTiles( index + 1 );
     Maps::Tiles & middle = world.GetTiles( index );
     Kingdom & kingdom = GetKingdom();
+    uint8_t kingdomColor = static_cast<uint8_t>( kingdom.GetColor() );
 
     if ( MP2::OBJ_NONE == left.GetObject() && left.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-
-        left.setBoat( Direction::RIGHT, kingdom.GetColor() );
+        left.setBoat( Direction::RIGHT, kingdomColor );
     }
     else if ( MP2::OBJ_NONE == right.GetObject() && right.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-
-        right.setBoat( Direction::RIGHT, kingdom.GetColor() );
+        right.setBoat( Direction::RIGHT, kingdomColor );
     }
     else if ( MP2::OBJ_NONE == middle.GetObject() && middle.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-
-        middle.setBoat( Direction::RIGHT, kingdom.GetColor() );
+        middle.setBoat( Direction::RIGHT, kingdomColor );
     }
 
     return true;

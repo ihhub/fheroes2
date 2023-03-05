@@ -748,7 +748,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     _fogColors = Color::ALL;
     _terrainImageIndex = mp2.terrainImageIndex;
     _terrainFlags = mp2.terrainFlags;
-    _emptyBoatColor = Color::NONE;
+    _boatOwnerColor = Color::NONE;
 
     SetIndex( index );
     SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
@@ -829,7 +829,7 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
     world.resetPathfinder();
 }
 
-void Maps::Tiles::setBoat( int direction, int color )
+void Maps::Tiles::setBoat( int direction, uint8_t color )
 {
     if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _imageIndex != 255 ) {
         AddonsPushLevel1( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex, false, false ) );
@@ -837,7 +837,7 @@ void Maps::Tiles::setBoat( int direction, int color )
 
     SetObject( MP2::OBJ_BOAT );
     _objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
-    _emptyBoatColor = color;
+    _boatOwnerColor = color;
 
     // Left-side sprites have to flipped, add 128 to index
     switch ( direction ) {
@@ -1651,8 +1651,10 @@ std::string Maps::Tiles::String() const
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
-       << "add. metadata   : " << additionalMetadata << std::endl
-       << "empty boat color: " << Color::String( _emptyBoatColor ) << std::endl;
+       << "add. metadata   : " << additionalMetadata << std::endl;
+
+    if ( objectType == MP2::OBJ_BOAT )
+        os << "boat owner color: " << Color::String( _boatOwnerColor ) << std::endl;
 
     for ( const TilesAddon & addon : addons_level1 ) {
         os << addon.String( 1 );
@@ -2999,7 +3001,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
                << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
-               << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._emptyBoatColor;
+               << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._boatOwnerColor;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -3126,7 +3128,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the check below." );
     if ( Game::GetVersionOfCurrentSaveFile() >= FORMAT_VERSION_1002_RELEASE ) {
-        msg >> tile._emptyBoatColor;
+        msg >> tile._boatOwnerColor;
     }
 
     return msg;

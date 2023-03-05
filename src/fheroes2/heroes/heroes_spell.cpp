@@ -353,18 +353,22 @@ namespace
             assert( Maps::isValidAbsIndex( boatSource ) );
 
             Maps::Tiles & tileSource = world.GetTiles( boatSource );
-            const int boatColor = tileSource.getEmptyBoatColor();
-            const bool isFriendlyBoat = boatColor == hero.GetColor() || boatColor == Color::NONE;
+            const int boatColor = tileSource.getBoatOwnerColor();
+            const uint8_t heroColor = static_cast<uint8_t>( hero.GetColor() );
+            const bool isFriendlyBoat = ( boatColor == Color::NONE ) || ( boatColor == heroColor );
+
+            if ( !isFriendlyBoat )
+                continue;
 
             const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
 
-            if ( distance > 1 && isFriendlyBoat ) {
+            if ( distance > 1 ) {
                 Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
                 Maps::Tiles & tileDest = world.GetTiles( boatDestination );
-                tileDest.setBoat( Direction::RIGHT, hero.GetColor() );
-                tileSource.resetEmptyBoatColor();
+                tileDest.setBoat( Direction::RIGHT, heroColor );
+                tileSource.resetBoatOwnerColor();
 
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 
