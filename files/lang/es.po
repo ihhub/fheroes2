@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-19 09:46+0000\n"
+"POT-Creation-Date: 2023-02-28 13:50+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3153,6 +3153,18 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
+"Month: "
+msgstr ""
+
+msgid ", Week: "
+msgstr ""
+
+msgid ", Day: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
 "Location: "
 msgstr ""
 
@@ -3197,14 +3209,7 @@ msgid "Select Skill:"
 msgstr "Defensa"
 
 #, fuzzy
-msgid "Location: "
-msgstr "Excavación"
-
-#, fuzzy
-msgid ""
-"\n"
-"\n"
-"Map Type:\n"
+msgid "Map Type:\n"
 msgstr "Tamaño del Mapa"
 
 #, fuzzy
@@ -3774,13 +3779,9 @@ msgstr "Partida de Campaña"
 msgid "View High Scores for Campaigns."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
-msgid "This file contains a save with an invalid game type."
-msgstr ""
-
-msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
-msgstr ""
+#, fuzzy
+msgid "The save file is corrupted."
+msgstr "Reflejo creado."
 
 msgid "Unsupported save format: "
 msgstr ""
@@ -3790,6 +3791,14 @@ msgid "Current game version: "
 msgstr "Modificadores actuales:"
 
 msgid "Last supported version: "
+msgstr ""
+
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+msgid ""
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -5844,6 +5853,9 @@ msgstr ""
 "La entrada a la Cueva es oscura, un hediondo y sufuroso olor sale de la boca "
 "de la cueva. ¿Entrarás?"
 
+msgid "Except for evidence of a terrible battle, the cave is empty."
+msgstr "Excepto por la evidencia de una terrible batalla, la Cueva está vacía."
+
 msgid ""
 "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, "
 "\"you will fight and surely die. But I will give you a choice of deaths. You "
@@ -5854,11 +5866,6 @@ msgstr ""
 "\"lucharás y seguramente morirás\". Pero podrás elegir la muerte que gustes: "
 "puedes luchar contra mi o contra mis sirvientes. ¿Prefieres luchar contra "
 "mis sirvientes?"
-
-msgid ""
-"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
-"gold."
-msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
@@ -5884,18 +5891,20 @@ msgstr ""
 "la cueva."
 
 msgid ""
+"Seeing that you do not have %{count} gold, the demon slashes you with its "
+"claws, and the last thing you see is a red haze."
+msgstr ""
+
+msgid ""
 "The Demon leaps upon you and has its claws at your throat before you can "
 "even draw your sword. \"Your life is mine,\" it says. \"I will sell it back "
 "to you for %{count} gold.\""
 msgstr ""
 
 msgid ""
-"Seeing that you do not have %{count} gold, the demon slashes you with its "
-"claws, and the last thing you see is a red haze."
+"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
+"gold."
 msgstr ""
-
-msgid "Except for evidence of a terrible battle, the cave is empty."
-msgstr "Excepto por la evidencia de una terrible batalla, la Cueva está vacía."
 
 msgid ""
 "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
@@ -6032,6 +6041,11 @@ msgstr ""
 msgid "This eye seems to be intently studying its surroundings."
 msgstr "Este ojo parece estar atentamente estudiando los alrededores."
 
+msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgstr ""
+"Te topas con una Esfinge Gigante. La Esfinge permanece extrañamente "
+"tranquila."
+
 msgid ""
 "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you "
 "shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept "
@@ -6054,13 +6068,6 @@ msgstr ""
 "¿Tú respuesta?"
 
 msgid ""
-"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
-"so here's your reward. Now begone.\""
-msgstr ""
-"Pareciendo en cierto modo decepcionada, la Esfinge suspira. Has acertado mi "
-"acertijo, por lo tanto aquí está tu recompensa. Ahora vete."
-
-msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
 "you with a paw, knocking you to the ground. Another blow makes the world go "
 "black, and you know no more."
@@ -6069,10 +6076,12 @@ msgstr ""
 "tirándote al suelo. Otro soplido hace retrodecer al mundo y no sabes nada "
 "más."
 
-msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgid ""
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
 msgstr ""
-"Te topas con una Esfinge Gigante. La Esfinge permanece extrañamente "
-"tranquila."
+"Pareciendo en cierto modo decepcionada, la Esfinge suspira. Has acertado mi "
+"acertijo, por lo tanto aquí está tu recompensa. Ahora vete."
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -9841,3 +9850,7 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Location: "
+#~ msgstr "Excavación"

@@ -488,6 +488,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_DAEMON_CAVE:
+        case MP2::OBJ_SPHINX:
         case MP2::OBJ_PYRAMID:
         case MP2::OBJ_WAGON:
         case MP2::OBJ_SKELETON:
@@ -796,12 +797,13 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
     dst_pt.y = cur_rt.y + 2;
     text.draw( dst_pt.x, dst_pt.y, display );
 
+    const fheroes2::Sprite & heroPortraitFrame = fheroes2::AGG::GetICN( conf.isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, 22 );
+
     // mini port heroes
     const fheroes2::Sprite & port = isActiveHero ? activeHero->GetPortrait( PORT_SMALL ) : activeCaptain->GetPortrait( PORT_SMALL );
     if ( !port.empty() ) {
-        dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
-        dst_pt.y = cur_rt.y + 13;
-        fheroes2::Blit( port, display, dst_pt.x, dst_pt.y );
+        fheroes2::Blit( heroPortraitFrame, display, cur_rt.x + ( cur_rt.width - heroPortraitFrame.width() ) / 2, cur_rt.y + 12 );
+        fheroes2::Blit( port, display, cur_rt.x + ( cur_rt.width - port.width() ) / 2, cur_rt.y + 16 );
     }
 
     // luck
@@ -871,13 +873,13 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
     }
 
     const uint16_t statNumberColumn = 89;
-    const uint16_t statRow = 12;
+    const uint16_t statRow = 11;
 
     if ( showFullInfo ) {
         // attack
         text.set( _( "Attack:" ), smallWhite );
         dst_pt.x = cur_rt.x + 10;
-        dst_pt.y += port.height() + 2;
+        dst_pt.y += heroPortraitFrame.height();
         text.draw( dst_pt.x, dst_pt.y, display );
 
         text.set( std::to_string( hero.GetAttack() ), smallWhite );
@@ -936,7 +938,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
             text.draw( dst_pt.x, dst_pt.y, display );
         }
 
-        Army::drawSingleDetailedMonsterLine( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 117, 160 );
+        Army::drawSingleDetailedMonsterLine( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 118, 160 );
     }
     else {
         // show limited

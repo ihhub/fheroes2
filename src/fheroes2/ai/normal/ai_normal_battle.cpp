@@ -524,13 +524,13 @@ namespace AI
                 _defendingCastle = true;
                 _myShooterStr += towerStr;
                 if ( !attackerIgnoresCover )
-                    _enemyShooterStr /= 2;
+                    _enemyShooterStr /= 1.5;
             }
             else {
                 _attackingCastle = true;
                 _enemyShooterStr += towerStr;
                 if ( !attackerIgnoresCover )
-                    _myShooterStr /= 2;
+                    _myShooterStr /= 1.5;
             }
         }
 
@@ -548,21 +548,13 @@ namespace AI
         if ( currentUnit.isFlying() ) {
             overPowerRatio = 6;
         }
-        if ( _defendingCastle ) {
-            overPowerRatio /= 2; // don't make shooters to kill us.
-        }
 
         // When we have in X times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
         const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * overPowerRatio;
         const double enemyArcherRatio = _enemyShooterStr / _enemyArmyStrength;
 
-        double enemyArcherThreshold = 0.75;
-        if ( _defendingCastle ) {
-            // Don't make shooters to kill us while we are standing in the castle.
-            enemyArcherThreshold /= 2;
-        }
-
-        _defensiveTactics = enemyArcherRatio < enemyArcherThreshold && ( _defendingCastle || _myShooterStr > _enemyShooterStr ) && !myOverpoweredArmy;
+        const double enemyArcherThreshold = 0.66;
+        _defensiveTactics = _myShooterStr > _enemyShooterStr && ( _defendingCastle || enemyArcherRatio < enemyArcherThreshold ) && !myOverpoweredArmy;
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    "Tactic " << _defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio )

@@ -48,7 +48,7 @@ class StreamBase;
 namespace fheroes2
 {
     class Image;
-    class Sprite;
+    struct ObjectRenderingInfo;
 }
 
 namespace Interface
@@ -261,11 +261,11 @@ namespace Maps
 
         void drawByObjectIcnType( fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType ) const;
 
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterShadowSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatShadowSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMineGuardianSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile() const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & mt );
         void AddonsPushLevel1( const MP2::mp2addon_t & ma );
@@ -300,15 +300,11 @@ namespace Maps
         bool isFog( const int colors ) const
         {
             // colors may be the union friends
-            return ( fog_colors & colors ) == colors;
+            return ( _fogColors & colors ) == colors;
         }
 
         bool isFogAllAround( const int color ) const;
-
-        void ClearFog( int colors )
-        {
-            fog_colors &= ~colors;
-        }
+        void ClearFog( const int colors );
 
         void MonsterSetCount( uint32_t count );
         uint32_t MonsterCount() const;
@@ -317,7 +313,7 @@ namespace Maps
         // (castle has a hero or garrison, dwelling has creatures, etc)
         bool isCaptureObjectProtected() const;
 
-        /* object quantity operation */
+        // Operations with tile quantities
         void QuantityUpdate( bool isFirstLoad = true );
         void QuantityReset();
         bool QuantityIsValid() const;
@@ -453,7 +449,7 @@ namespace Maps
 
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
         uint16_t tilePassable = DIRECTION_ALL;
-        uint8_t fog_colors = Color::ALL;
+        uint8_t _fogColors = Color::ALL;
 
         uint8_t heroID = 0;
 

@@ -214,7 +214,7 @@ namespace Battle
 
         void Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color );
         void Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
-        void QueueEventProcessing( std::string & msg, const fheroes2::Point & offset );
+        void QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const;
 
     private:
         enum ArmyColor : uint8_t

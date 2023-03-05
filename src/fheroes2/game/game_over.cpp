@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game_over.h"
+
 #include <cassert>
 #include <cstddef>
 #include <utility>
@@ -35,7 +37,7 @@
 #include "color.h"
 #include "dialog.h"
 #include "game.h"
-#include "game_over.h"
+#include "game_io.h"
 #include "game_video.h"
 #include "game_video_type.h"
 #include "gamedefs.h"
@@ -480,7 +482,7 @@ StreamBase & GameOver::operator>>( StreamBase & msg, Result & res )
     msg >> res.colors >> res.result;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE4_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE4_1000_RELEASE ) {
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE4_1000_RELEASE ) {
         bool dummy;
 
         msg >> dummy;

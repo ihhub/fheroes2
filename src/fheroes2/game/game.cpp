@@ -52,7 +52,6 @@
 #include "mus.h"
 #include "players.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "settings.h"
 #include "tools.h"
 #include "world.h"
@@ -61,10 +60,6 @@ namespace
 {
     std::string lastMapFileName;
     std::vector<Player> savedPlayers;
-
-    uint16_t save_version = CURRENT_FORMAT_VERSION;
-
-    std::string last_name;
 
     bool updateSoundsOnFocusUpdate = true;
 
@@ -144,26 +139,6 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
 
         savedPlayers.push_back( player );
     }
-}
-
-void Game::SetLoadVersion( uint16_t ver )
-{
-    save_version = ver;
-}
-
-uint16_t Game::GetLoadVersion()
-{
-    return save_version;
-}
-
-const std::string & Game::GetLastSavename()
-{
-    return last_name;
-}
-
-void Game::SetLastSavename( const std::string & name )
-{
-    last_name = name;
 }
 
 fheroes2::GameMode Game::Credits()

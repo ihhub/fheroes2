@@ -34,6 +34,7 @@
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_io.h"
 #include "gamedefs.h"
 #include "logging.h"
 #include "save_format_version.h"
@@ -1072,14 +1073,14 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_1000_RELEASE ) {
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1000_RELEASE ) {
         int dummy;
 
         msg >> dummy;
     }
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE3_1000_RELEASE ) {
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1000_RELEASE ) {
         BitModes dummy;
 
         msg >> dummy >> dummy >> dummy;

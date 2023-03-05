@@ -31,7 +31,6 @@
 #include <exception>
 #include <list>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "army.h"
@@ -65,6 +64,7 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
+    struct ObjectRenderingInfo;
 }
 
 struct HeroSeedsForLevelUp
@@ -395,7 +395,7 @@ public:
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
-    bool BuySpellBook( const Castle *, int shrine = 0 );
+    bool BuySpellBook( const Castle * castle );
 
     const Route::Path & GetPath() const
     {
@@ -469,8 +469,8 @@ public:
     bool MayCastAdventureSpells() const;
 
     // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
-    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getHeroSpritesPerTile() const;
-    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getHeroShadowSpritesPerTile() const;
+    std::vector<fheroes2::ObjectRenderingInfo> getHeroSpritesPerTile() const;
+    std::vector<fheroes2::ObjectRenderingInfo> getHeroShadowSpritesPerTile() const;
 
     void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
 

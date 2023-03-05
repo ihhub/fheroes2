@@ -416,6 +416,16 @@ double Troops::GetStrength() const
     return strength;
 }
 
+uint32_t Troops::getTotalHP() const
+{
+    uint32_t hp = 0;
+    for ( const Troop * troop : *this ) {
+        if ( troop && troop->isValid() )
+            hp += troop->GetCount() * troop->GetHitPoints();
+    }
+    return hp;
+}
+
 void Troops::Clean()
 {
     std::for_each( begin(), end(), []( Troop * troop ) { troop->Reset(); } );

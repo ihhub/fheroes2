@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,22 +18,51 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2PAYMENT_H
-#define H2PAYMENT_H
+#pragma once
 
-#include <cstdint>
+#include "math_base.h"
 
-#include "resource.h"
-
-using payment_t = Funds;
-
-namespace PaymentConditions
+namespace fheroes2
 {
-    payment_t BuyBuilding( int race, uint32_t build );
-    payment_t BuyBoat();
-    payment_t BuySpellBook();
-    payment_t RecruitHero();
-    payment_t ForAlchemist();
-}
+    struct ObjectRenderingInfo
+    {
+        Point tileOffset;
 
-#endif
+        Point imageOffset;
+
+        Rect area;
+
+        int icnId{ -1 };
+
+        uint32_t icnIndex{ 0 };
+
+        bool isFlipped{ false };
+
+        uint8_t alphaValue{ 255 };
+
+        ObjectRenderingInfo() = default;
+
+        ObjectRenderingInfo( const Point & tileOffset_, const Point & imageOffset_, const Rect & area_, const int icnId_, const uint32_t icnIndex_, const bool isFlipped_,
+                             const uint8_t alphaValue_ )
+            : tileOffset( tileOffset_ )
+            , imageOffset( imageOffset_ )
+            , area( area_ )
+            , icnId( icnId_ )
+            , icnIndex( icnIndex_ )
+            , isFlipped( isFlipped_ )
+            , alphaValue( alphaValue_ )
+        {
+            // Do nothing.
+        }
+
+        ObjectRenderingInfo( const ObjectRenderingInfo & ) = default;
+
+        ObjectRenderingInfo( ObjectRenderingInfo && ) = default;
+
+        ~ObjectRenderingInfo() = default;
+
+        ObjectRenderingInfo & operator=( const ObjectRenderingInfo & ) = default;
+
+        ObjectRenderingInfo & operator=( ObjectRenderingInfo && ) = default;
+    };
+}

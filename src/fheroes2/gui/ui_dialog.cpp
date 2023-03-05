@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,6 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include "ui_dialog.h"
 
 #include <algorithm>
 #include <cassert>
@@ -42,7 +44,6 @@
 #include "screen.h"
 #include "spell_info.h"
 #include "ui_button.h"
-#include "ui_dialog.h"
 #include "ui_text.h"
 
 class HeroBase;
@@ -692,9 +693,10 @@ namespace fheroes2
         showMessage( header, description, buttons, { this } );
     }
 
-    DynamicImageDialogElement::DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndices, const uint64_t delay )
+    AnimationDialogElement::AnimationDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint32_t animationIndexOffset, const uint64_t delay )
         : _icnId( icnId )
-        , _backgroundIndices( backgroundIndices )
+        , _backgroundIndices( std::move( backgroundIndices ) )
+        , _animationIndexOffset( animationIndexOffset )
         , _delay( delay )
         , _currentIndex( 0 )
     {
@@ -709,7 +711,7 @@ namespace fheroes2
         }
     }
 
-    void DynamicImageDialogElement::draw( Image & output, const Point & offset ) const
+    void AnimationDialogElement::draw( Image & output, const Point & offset ) const
     {
         if ( _currentIndex == 0 ) {
             // Since this is the first time to draw we have to draw the background.
@@ -720,7 +722,7 @@ namespace fheroes2
             }
         }
 
-        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, 0, _currentIndex );
+        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex );
         ++_currentIndex;
 
         const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
@@ -729,17 +731,65 @@ namespace fheroes2
               animationImage.height() );
     }
 
-    void DynamicImageDialogElement::processEvents( const Point & /* offset */ ) const
+    void AnimationDialogElement::processEvents( const Point & /* offset */ ) const
     {
         // No events processed here.
     }
 
-    void DynamicImageDialogElement::showPopup( const int /* buttons */ ) const
+    void AnimationDialogElement::showPopup( const int /* buttons */ ) const
     {
         assert( 0 );
     }
 
-    bool DynamicImageDialogElement::update( Image & output, const Point & offset ) const
+    bool AnimationDialogElement::update( Image & output, const Point & offset ) const
+    {
+        if ( Game::validateCustomAnimationDelay( _delay ) ) {
+            draw( output, offset );
+            return true;
+        }
+
+        return false;
+    }
+
+    CustomAnimationDialogElement::CustomAnimationDialogElement( const int icnId, Image staticImage, const Point animationPositionOffset,
+                                                                const uint32_t animationIndexOffset, const uint64_t delay )
+        : _icnId( icnId )
+        , _staticImage( std::move( staticImage ) )
+        , _animationPosition( animationPositionOffset )
+        , _animationIndexOffset( animationIndexOffset )
+        , _delay( delay )
+        , _currentIndex( 0 )
+    {
+        assert( delay > 0 );
+        _area = { _staticImage.width(), _staticImage.height() };
+    }
+
+    void CustomAnimationDialogElement::draw( Image & output, const Point & offset ) const
+    {
+        if ( _currentIndex == 0 ) {
+            // Since this is the first time to draw we have to draw the background.
+            Blit( _staticImage, 0, 0, output, offset.x, offset.y, _staticImage.width(), _staticImage.height() );
+        }
+
+        const uint32_t animationFrameId = ICN::AnimationFrame( _icnId, _animationIndexOffset, _currentIndex );
+        ++_currentIndex;
+
+        const Sprite & animationImage = AGG::GetICN( _icnId, animationFrameId );
+
+        Blit( animationImage, 0, 0, output, offset.x + _animationPosition.x, offset.y + _animationPosition.y, animationImage.width(), animationImage.height() );
+    }
+
+    void CustomAnimationDialogElement::processEvents( const Point & /* offset */ ) const
+    {
+        // No events processed here.
+    }
+
+    void CustomAnimationDialogElement::showPopup( const int /* buttons */ ) const
+    {
+        assert( 0 );
+    }
+
+    bool CustomAnimationDialogElement::update( Image & output, const Point & offset ) const
     {
         if ( Game::validateCustomAnimationDelay( _delay ) ) {
             draw( output, offset );
