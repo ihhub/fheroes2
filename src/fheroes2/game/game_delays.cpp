@@ -34,6 +34,8 @@ namespace
 {
     std::vector<fheroes2::TimeDelay> delays( Game::LAST_DELAY + 1, fheroes2::TimeDelay( 0 ) );
 
+    static_assert( ( DEFAULT_BATTLE_SPEED >= 0 ) && ( DEFAULT_BATTLE_SPEED < 10 ) );
+    
     const double battleSpeedAdjustment = 1.0 / static_cast<double>( 10 - DEFAULT_BATTLE_SPEED );
 
     int humanHeroMultiplier = 1;
