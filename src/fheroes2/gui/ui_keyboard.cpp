@@ -100,9 +100,9 @@ namespace
             _output.render( getWindowRoi() );
         }
 
-        void appendCharacter( const uint8_t character )
+        void appendCharacter( const char character )
         {
-            _info += static_cast<char>( character );
+            _info += character;
             if ( fheroes2::Text( _info, fheroes2::FontType::normalWhite() ).width() > inputAreaSize.width - inputAreaOffset * 2 ) {
                 _info.pop_back();
             }
@@ -173,15 +173,48 @@ namespace
     {
         KeyboardButton() = default;
 
-        KeyboardButton( std::string input, const int32_t buttonWidth, const bool isEvilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
+        KeyboardButton( std::string input, const int32_t buttonWidth, const bool evilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
             : text( std::move( input ) )
+            , buttonInitialWidth( buttonWidth )
+            , isEvilInterface( evilInterface )
             , action( std::move( actionEvent ) )
-            , button( generateButton( text, buttonWidth, isEvilInterface ) )
+            , button( generateButton( text, buttonInitialWidth, isEvilInterface ) )
         {
             // Do nothing.
         }
 
+        KeyboardButton( const KeyboardButton & buttonInfo )
+            : text( buttonInfo.text )
+            , buttonInitialWidth( buttonInfo.buttonInitialWidth )
+            , isEvilInterface( buttonInfo.isEvilInterface )
+            , action( buttonInfo.action )
+            , button( generateButton( buttonInfo.text, buttonInitialWidth, isEvilInterface ) )
+        {
+            // Do nothing.
+        }
+
+        KeyboardButton( KeyboardButton && ) noexcept = default;
+
+        ~KeyboardButton() = default;
+
+        KeyboardButton & operator=( const KeyboardButton & buttonInfo )
+        {
+            text = buttonInfo.text;
+            buttonInitialWidth = buttonInfo.buttonInitialWidth;
+            isEvilInterface = buttonInfo.isEvilInterface;
+            action = buttonInfo.action;
+            button = generateButton( buttonInfo.text, buttonInitialWidth, isEvilInterface );
+
+            return *this;
+        }
+
+        KeyboardButton & operator=( KeyboardButton && ) = default;
+
         std::string text;
+
+        int32_t buttonInitialWidth{ 0 };
+
+        bool isEvilInterface{ false };
 
         std::function<DialogAction( KeyboardRenderer & )> action;
 
@@ -191,12 +224,12 @@ namespace
         bool isInvertedRenderingLogic{ false };
     };
 
-    std::vector<std::vector<uint8_t>> getNumericCharacterLayout( const fheroes2::SupportedLanguage language )
+    std::vector<std::string> getNumericCharacterLayout( const fheroes2::SupportedLanguage language )
     {
-        // Numeric character can be used for special letters as well
+        // Numeric layout can be used for special letters as well.
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
-            return { { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' }, {}, {} };
+            return { "1234567890", "", "" };
         default:
             assert( 0 );
         }
@@ -204,11 +237,11 @@ namespace
         return {};
     }
 
-    std::vector<std::vector<uint8_t>> getCapitalCharacterLayout( const fheroes2::SupportedLanguage language )
+    std::vector<std::string> getCapitalCharacterLayout( const fheroes2::SupportedLanguage language )
     {
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
-            return { { 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P' }, { 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L' }, { 'Z', 'X', 'C', 'V', 'B', 'N', 'M' } };
+            return { "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
         default:
             assert( 0 );
         }
@@ -216,21 +249,17 @@ namespace
         return {};
     }
 
-    std::vector<std::vector<uint8_t>> getNonCapitalCharacterLayout( const fheroes2::SupportedLanguage language )
+    std::vector<std::string> getNonCapitalCharacterLayout( const fheroes2::SupportedLanguage language )
     {
         auto layout = getCapitalCharacterLayout( language );
         for ( auto & letters : layout ) {
-            for ( uint8_t & letter : letters ) {
-                std::string singleCharString( 1, static_cast<char>( letter ) );
-                singleCharString = StringLower( singleCharString );
-                letter = static_cast<uint8_t>( singleCharString.front() );
-            }
+            letters = StringLower( letters );
         }
 
         return layout;
     }
 
-    std::vector<std::vector<uint8_t>> getCharacterLayout( const LayoutType layoutType, const fheroes2::SupportedLanguage language )
+    std::vector<std::string> getCharacterLayout( const LayoutType layoutType, const fheroes2::SupportedLanguage language )
     {
         switch ( layoutType ) {
         case LayoutType::LowerCase:
@@ -248,7 +277,7 @@ namespace
         return {};
     }
 
-    std::vector<std::vector<KeyboardButton>> generateButtons( const std::vector<std::vector<uint8_t>> & letterRows, const fheroes2::SupportedLanguage language,
+    std::vector<std::vector<KeyboardButton>> generateButtons( const std::vector<std::string> & letterRows, const fheroes2::SupportedLanguage language,
                                                               const bool isEvilInterface )
     {
         // This is required in order to render proper text on buttons but do not change Okay button in the window.
@@ -258,8 +287,8 @@ namespace
         buttons.resize( letterRows.size() );
 
         for ( size_t i = 0; i < letterRows.size(); ++i ) {
-            for ( const uint8_t letter : letterRows[i] ) {
-                buttons[i].emplace_back( std::string( 1, static_cast<char>( letter ) ), defaultButtonWidth, isEvilInterface, [letter]( KeyboardRenderer & renderer ) {
+            for ( const char letter : letterRows[i] ) {
+                buttons[i].emplace_back( std::string( 1, letter ), defaultButtonWidth, isEvilInterface, [letter]( KeyboardRenderer & renderer ) {
                     renderer.appendCharacter( letter );
                     return DialogAction::AddLetter;
                 } );
@@ -271,56 +300,61 @@ namespace
 
     void addExtraEnglishButtons( std::vector<std::vector<KeyboardButton>> & buttons, const LayoutType layoutType, const bool isEvilInterface )
     {
+        // Button layout cannot be empty here.
+        assert( !buttons.empty() );
+
+        auto * lastButtonRow = &buttons.back();
+
         switch ( layoutType ) {
         case LayoutType::LowerCase:
-            buttons.back().emplace_back( _( "Keyboard|BACK" ), 60, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow->emplace_back( _( "Keyboard|BACK" ), 60, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeLastCharacter();
                 return DialogAction::Backspace;
             } );
-            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 60, isEvilInterface,
+            lastButtonRow->emplace( lastButtonRow->begin(), _( "Keyboard|UPP" ), 60, isEvilInterface,
                                     []( const KeyboardRenderer & ) { return DialogAction::UpperCase; } );
 
-            buttons.emplace_back();
-            buttons.back().emplace_back( _( "Keyboard|123" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
-            buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow = &buttons.emplace_back();
+            lastButtonRow->emplace_back( _( "Keyboard|123" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
+            lastButtonRow->emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
                 return DialogAction::AddLetter;
             } );
-            buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
-            buttons.back().back().button.disable();
+            lastButtonRow->emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            lastButtonRow->back().button.disable();
             break;
         case LayoutType::UpperCase:
-            buttons.back().emplace_back( _( "Keyboard|BACK" ), 60, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow->emplace_back( _( "Keyboard|BACK" ), 60, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeLastCharacter();
                 return DialogAction::Backspace;
             } );
-            buttons.back().emplace( buttons.back().begin(), _( "Keyboard|UPP" ), 60, isEvilInterface,
+            lastButtonRow->emplace( lastButtonRow->begin(), _( "Keyboard|UPP" ), 60, isEvilInterface,
                                     []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
-            buttons.back().front().isInvertedRenderingLogic = true;
+            lastButtonRow->front().isInvertedRenderingLogic = true;
 
-            buttons.emplace_back();
-            buttons.back().emplace_back( _( "Keyboard|123" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
-            buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow = &buttons.emplace_back();
+            lastButtonRow->emplace_back( _( "Keyboard|123" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
+            lastButtonRow->emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
                 return DialogAction::AddLetter;
             } );
-            buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
-            buttons.back().back().button.disable();
+            lastButtonRow->emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            lastButtonRow->back().button.disable();
             break;
         case LayoutType::Numeric:
-            buttons.back().emplace_back( _( "Keyboard|BACK" ), 60, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow->emplace_back( _( "Keyboard|BACK" ), 60, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeLastCharacter();
                 return DialogAction::Backspace;
             } );
 
-            buttons.emplace_back();
-            buttons.back().emplace_back( _( "Keyboard|ABC" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
-            buttons.back().emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
+            lastButtonRow = &buttons.emplace_back();
+            lastButtonRow->emplace_back( _( "Keyboard|ABC" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
+            lastButtonRow->emplace_back( _( "Keyboard|SPACE" ), 160, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
                 return DialogAction::AddLetter;
             } );
-            buttons.back().emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
-            buttons.back().back().button.disable();
+            lastButtonRow->emplace_back( _( "Keyboard|LANG" ), 60, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            lastButtonRow->back().button.disable();
             break;
         default:
             // Did you add a new layout type? Add the logic above!
@@ -346,13 +380,13 @@ namespace
         std::vector<int32_t> offsets;
 
         int32_t maximumLength = 0;
-        for ( const auto & buttons : buttonLayout ) {
+        for ( const auto & buttonRow : buttonLayout ) {
             int32_t length = 0;
-            for ( const auto & button : buttons ) {
-                length += button.button.area().width;
+            for ( const auto & buttonInfo : buttonRow ) {
+                length += buttonInfo.button.area().width;
             }
 
-            length += ( static_cast<int32_t>( buttons.size() ) - 1 ) * buttonOffset;
+            length += ( static_cast<int32_t>( buttonRow.size() ) - 1 ) * buttonOffset;
 
             offsets.push_back( length );
             maximumLength = std::max( maximumLength, length );
@@ -371,8 +405,8 @@ namespace
             roi.width = ( roi.x - newX ) + roi.width;
             roi.x = newX;
 
-            for ( const auto & button : buttonLayout[i] ) {
-                xOffset += button.button.area().width + buttonOffset;
+            for ( const auto & buttonInfo : buttonLayout[i] ) {
+                xOffset += buttonInfo.button.area().width + buttonOffset;
             }
 
             yOffset += defaultButtonHeight + buttonOffset * 2;
@@ -389,13 +423,13 @@ namespace
         std::vector<int32_t> offsets;
 
         int32_t maximumLength = 0;
-        for ( const auto & buttons : buttonLayout ) {
+        for ( const auto & buttonRow : buttonLayout ) {
             int32_t length = 0;
-            for ( const auto & button : buttons ) {
-                length += button.button.area().width;
+            for ( const auto & buttonInfo : buttonRow ) {
+                length += buttonInfo.button.area().width;
             }
 
-            length += ( static_cast<int32_t>( buttons.size() ) - 1 ) * buttonOffset;
+            length += ( static_cast<int32_t>( buttonRow.size() ) - 1 ) * buttonOffset;
 
             offsets.push_back( length );
             maximumLength = std::max( maximumLength, length );
@@ -408,13 +442,13 @@ namespace
         int32_t yOffset = offset.y;
         for ( size_t i = 0; i < buttonLayout.size(); ++i ) {
             int32_t xOffset = offset.x + offsets[i];
-            for ( auto & button : buttonLayout[i] ) {
-                button.button.setPosition( xOffset, yOffset );
-                if ( button.isInvertedRenderingLogic ) {
-                    button.button.press();
+            for ( auto & buttonInfo : buttonLayout[i] ) {
+                buttonInfo.button.setPosition( xOffset, yOffset );
+                if ( buttonInfo.isInvertedRenderingLogic ) {
+                    buttonInfo.button.press();
                 }
-                button.button.draw( output );
-                xOffset += button.button.area().width + buttonOffset;
+                buttonInfo.button.draw( output );
+                xOffset += buttonInfo.button.area().width + buttonOffset;
             }
 
             yOffset += defaultButtonHeight + buttonOffset * 2;
@@ -423,26 +457,30 @@ namespace
 
     DialogAction handleButtonEvents( std::vector<std::vector<KeyboardButton>> & buttonLayout, LocalEvent & le, KeyboardRenderer & renderer )
     {
-        for ( auto & buttons : buttonLayout ) {
-            for ( auto & button : buttons ) {
-                if ( button.isInvertedRenderingLogic ) {
-                    le.MousePressLeft( button.button.area() ) ? button.button.drawOnRelease() : button.button.drawOnPress();
-                }
-                else {
-                    le.MousePressLeft( button.button.area() ) ? button.button.drawOnPress() : button.button.drawOnRelease();
-                }
-            }
-        }
-
-        for ( const auto & buttons : buttonLayout ) {
-            for ( const auto & button : buttons ) {
-                if ( le.MouseClickLeft( button.button.area() ) ) {
-                    return button.action( renderer );
+        for ( const auto & buttonRow : buttonLayout ) {
+            for ( const auto & buttonInfo : buttonRow ) {
+                if ( le.MouseClickLeft( buttonInfo.button.area() ) ) {
+                    assert( buttonInfo.action );
+                    return  buttonInfo.action( renderer );
                 }
             }
         }
 
         return DialogAction::DoNothing;
+    }
+
+    void updateButtonStates( std::vector<std::vector<KeyboardButton>> & buttonLayout, LocalEvent & le )
+    {
+        for ( auto & buttonRow : buttonLayout ) {
+            for ( auto & buttonInfo : buttonRow ) {
+                if ( buttonInfo.isInvertedRenderingLogic ) {
+                    le.MousePressLeft( buttonInfo.button.area() ) ? buttonInfo.button.drawOnRelease() : buttonInfo.button.drawOnPress();
+                }
+                else {
+                    le.MousePressLeft( buttonInfo.button.area() ) ? buttonInfo.button.drawOnPress() : buttonInfo.button.drawOnRelease();
+                }
+            }
+        }
     }
 
     DialogAction processVirtualKeyboardEvent( const LayoutType layoutType, const fheroes2::SupportedLanguage language, KeyboardRenderer & renderer )
@@ -453,21 +491,20 @@ namespace
         auto buttons = generateButtons( currentLayout, language, isEvilInterface );
         addExtraButtons( buttons, layoutType, language, isEvilInterface );
 
-        fheroes2::Display & display = fheroes2::Display::instance();
-
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
-
         const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, windowRoi.getPosition() + offsetFromWindowBorders );
 
+        fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer restorer( display, buttonsRoi.x, buttonsRoi.y, buttonsRoi.width, buttonsRoi.height );
 
         renderButtons( buttons, windowRoi.getPosition() + offsetFromWindowBorders, display );
 
         const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+        const fheroes2::Sprite & okayButtonReleasedImage = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+        const fheroes2::Sprite & okayButtonPressedImage = fheroes2::AGG::GetICN( buttonIcnId, 1 );
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + ( windowRoi.width - buttonSprite.width() ) / 2, windowRoi.y + windowRoi.height - 35, buttonSprite,
-                                           fheroes2::AGG::GetICN( buttonIcnId, 1 ) );
+        fheroes2::ButtonSprite okayButton( windowRoi.x + ( windowRoi.width - okayButtonReleasedImage.width() ) / 2, windowRoi.y + windowRoi.height - 35,
+                                           okayButtonReleasedImage, okayButtonPressedImage );
         okayButton.draw();
 
         display.render();
@@ -475,12 +512,10 @@ namespace
         DialogAction action = DialogAction::DoNothing;
 
         LocalEvent & le = LocalEvent::Get();
+
         while ( le.HandleEvents() ) {
-            if ( le.MousePressLeft( okayButton.area() ) ) {
-                okayButton.drawOnPress();
-            }
-            else {
-                okayButton.drawOnRelease();
+            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
+                break;
             }
 
             action = handleButtonEvents( buttons, le, renderer );
@@ -494,8 +529,13 @@ namespace
                 return action;
             }
 
-            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
-                break;
+            updateButtonStates( buttons, le );
+
+            if ( le.MousePressLeft( okayButton.area() ) ) {
+                okayButton.drawOnPress();
+            }
+            else {
+                okayButton.drawOnRelease();
             }
         }
 
@@ -536,7 +576,11 @@ namespace fheroes2
             case DialogAction::ChangeLanguage:
                 // TODO: do something here.
                 break;
+            case DialogAction::Close:
+                return;
             default:
+                // Did you add a new state? Add the logic above!
+                assert( 0 );
                 break;
             }
         }

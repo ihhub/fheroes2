@@ -288,9 +288,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
-    le.OpenVirtualKeyboard();
 
-    const bool isInGameKeyboardRequired = System::isHandheldDevice();
+    const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
     // message loop
     while ( le.HandleEvents() ) {
@@ -336,8 +335,6 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             }
         }
     }
-
-    le.CloseVirtualKeyboard();
 
     return !res.empty();
 }

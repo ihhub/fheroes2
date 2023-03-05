@@ -32,6 +32,9 @@
 namespace System
 {
     bool isHandheldDevice();
+
+    bool isVirtualKeyboardSupported();
+
     // Returns true if target platform supports shell-level globbing (Unix-like platforms with POSIX-compatible shells).
     // Otherwise returns false, which means that app need to resolve wildcard patterns itself (for example, on Windows).
     bool isShellLevelGlobbingSupported();

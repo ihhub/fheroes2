@@ -332,16 +332,11 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     display.render();
 
-    if ( isEditing ) {
-        // Show keyboard only when editing file name.
-        le.OpenVirtualKeyboard();
-    }
-
     std::string result;
     bool is_limit = false;
     std::string lastSelectedSaveFileName;
 
-    const bool isInGameKeyboardRequired = System::isHandheldDevice();
+    const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
     while ( le.HandleEvents() && result.empty() ) {
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -447,10 +442,6 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         buttonOk.draw();
         buttonCancel.draw();
         display.render();
-    }
-
-    if ( isEditing ) {
-        le.CloseVirtualKeyboard();
     }
 
     return result;
