@@ -173,48 +173,25 @@ namespace
     {
         KeyboardButton() = default;
 
-        KeyboardButton( std::string input, const int32_t buttonWidth, const bool evilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
+        KeyboardButton( std::string input, const int32_t buttonWidth, const bool isEvilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
             : text( std::move( input ) )
-            , buttonInitialWidth( buttonWidth )
-            , isEvilInterface( evilInterface )
             , action( std::move( actionEvent ) )
-            , button( generateButton( text, buttonInitialWidth, isEvilInterface ) )
+            , button( generateButton( text, buttonWidth, isEvilInterface ) )
         {
             // Do nothing.
         }
 
-        KeyboardButton( const KeyboardButton & buttonInfo )
-            : text( buttonInfo.text )
-            , buttonInitialWidth( buttonInfo.buttonInitialWidth )
-            , isEvilInterface( buttonInfo.isEvilInterface )
-            , action( buttonInfo.action )
-            , button( generateButton( buttonInfo.text, buttonInitialWidth, isEvilInterface ) )
-        {
-            // Do nothing.
-        }
+        KeyboardButton( const KeyboardButton & buttonInfo ) = delete;
 
         KeyboardButton( KeyboardButton && ) noexcept = default;
 
         ~KeyboardButton() = default;
 
-        KeyboardButton & operator=( const KeyboardButton & buttonInfo )
-        {
-            text = buttonInfo.text;
-            buttonInitialWidth = buttonInfo.buttonInitialWidth;
-            isEvilInterface = buttonInfo.isEvilInterface;
-            action = buttonInfo.action;
-            button = generateButton( buttonInfo.text, buttonInitialWidth, isEvilInterface );
-
-            return *this;
-        }
+        KeyboardButton & operator=( const KeyboardButton & buttonInfo ) = delete;
 
         KeyboardButton & operator=( KeyboardButton && ) = default;
 
         std::string text;
-
-        int32_t buttonInitialWidth{ 0 };
-
-        bool isEvilInterface{ false };
 
         std::function<DialogAction( KeyboardRenderer & )> action;
 
