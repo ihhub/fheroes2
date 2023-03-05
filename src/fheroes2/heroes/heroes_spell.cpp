@@ -301,6 +301,8 @@ namespace
 
     bool ActionSpellSummonBoat( const Heroes & hero )
     {
+        assert( !hero.isShipMaster() );
+
         const int32_t center = hero.GetIndex();
         const int32_t boatDestination = fheroes2::getPossibleBoatPosition( hero );
         assert( Maps::isValidAbsIndex( boatDestination ) );
@@ -380,6 +382,8 @@ namespace
 
     bool ActionSpellTownGate( Heroes & hero )
     {
+        assert( !hero.isShipMaster() );
+
         const Castle * castle = fheroes2::getNearestCastleTownGate( hero );
         if ( !castle ) {
             // A hero must be able to have a destination castle. Something is wrong with the logic!
@@ -400,6 +404,8 @@ namespace
 
     bool ActionSpellTownPortal( Heroes & hero )
     {
+        assert( !hero.isShipMaster() );
+
         const Kingdom & kingdom = hero.GetKingdom();
         std::vector<int32_t> castles;
 
