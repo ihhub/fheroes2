@@ -283,11 +283,10 @@ namespace
 
         switch ( layoutType ) {
         case LayoutType::LowerCase:
-            lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface,
-                                    []( const KeyboardRenderer & ) { return DialogAction::UpperCase; } );
+            lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::UpperCase; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|123" ), defaultSpecialButtonWidth, isEvilInterface,
-                                         []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
+                                        []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
@@ -295,7 +294,7 @@ namespace
             } );
 
             lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
-                                         []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+                                        []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.disable();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -308,7 +307,7 @@ namespace
             lastButtonRow.back().isInvertedRenderingLogic = true;
 
             lastButtonRow.emplace_back( _( "Keyboard|123" ), defaultSpecialButtonWidth, isEvilInterface,
-                                         []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
+                                        []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
@@ -329,7 +328,7 @@ namespace
             lastButtonRow.back().button.disable();
 
             lastButtonRow.emplace_back( _( "Keyboard|ABC" ), defaultSpecialButtonWidth, isEvilInterface,
-                                         []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
+                                        []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.appendCharacter( ' ' );
@@ -337,7 +336,7 @@ namespace
             } );
 
             lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
-                                         []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+                                        []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
             lastButtonRow.back().button.disable();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
