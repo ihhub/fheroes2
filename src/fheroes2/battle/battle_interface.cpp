@@ -3457,18 +3457,12 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
                 statusBar.SetMessage( "", false );
             };
 
-            switch ( attacker.GetID() ) {
-            case Monster::GHOST:
+            if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
                 msg = _n( "1 soul is absorbed.", "%{count} souls are absorbed.", resurrects );
                 log( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
-                break;
-
-            case Monster::VAMPIRE_LORD:
+            } else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
                 msg = _n( "1 %{unit} is revived.", "%{count} %{unit} are revived.", resurrects );
                 log( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
-                break;
-            default:
-                break;
             }
         }
     }

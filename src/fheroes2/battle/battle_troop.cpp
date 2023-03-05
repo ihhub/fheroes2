@@ -738,19 +738,10 @@ void Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg, uint32_t & killed, u
         return;
     }
 
-    switch ( enemy.GetID() ) {
-    case Monster::GHOST:
-        // grow troop
+    if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
         resurrected = enemy.Resurrect( killed * GetHitPoints(), true, false );
-        break;
-
-    case Monster::VAMPIRE_LORD:
-        // restore hit points
+    } else if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
         resurrected = enemy.Resurrect( killed * GetHitPoints(), false, false );
-        break;
-
-    default:
-        break;
     }
 
     if ( resurrected > 0 ) {
