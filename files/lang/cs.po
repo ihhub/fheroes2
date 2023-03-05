@@ -6755,10 +6755,10 @@ msgid "Water Summoning Altar"
 msgstr "Oltář přivolání Vody"
 
 msgid "Unknown Monster"
-msgstr "Neznámá strvůra"
+msgstr "Neznámá stvůra"
 
 msgid "Unknown Monsters"
-msgstr "Neznámé strvůry"
+msgstr "Neznámé stvůry"
 
 msgid "Peasant"
 msgstr "Rolník"
