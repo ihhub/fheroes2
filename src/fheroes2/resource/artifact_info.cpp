@@ -567,6 +567,7 @@ namespace
                   "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." ),
               {},
               {} },
+            { gettext_noop( "Shackles" ), gettext_noop( "The %{name} decrease your movement on land." ), gettext_noop( "A fat troll jumped out of the bushes and started screaming to challenge him in a competition to run in shackles for a prize of crispy 1000 gold. You agreed to do this, looking at the troll. After running for a minute you didn't realize how surprizingly fast the troll left you behind in the woods with the locked to your leg shackles. You have no idea how to remove it now." ), {}, {} },
 
             { gettext_noop( "Invalid Artifact" ), gettext_noop( "Invalid Artifact" ), nullptr, {}, {} },
         };
@@ -800,6 +801,8 @@ namespace
         artifactData[Artifact::SWORD_ANDURAN].bonuses.emplace_back( fheroes2::ArtifactBonusType::ATTACK_SKILL, 5 );
 
         artifactData[Artifact::SPADE_NECROMANCY].bonuses.emplace_back( fheroes2::ArtifactBonusType::NECROMANCY_SKILL, 10 );
+
+        artifactData[Artifact::SHACKLES].curses.emplace_back( fheroes2::ArtifactCurseType::LAND_MOBILITY, 200 );
 
         artifactData[Artifact::UNKNOWN].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
 
@@ -1205,6 +1208,9 @@ namespace fheroes2
                     break;
                 case ArtifactCurseType::MORALE:
                     os << "Decreases army's Morale by " << curse.value << std::endl;
+                    break;
+                case ArtifactCurseType::LAND_MOBILITY:
+                    os << "Deduct " << curse.value << " move points from a hero on Land" << std::endl;
                     break;
                 case ArtifactCurseType::UNDEAD_MORALE_PENALTY:
                     os << "Add Undead Penalty to army's Morale" << std::endl;

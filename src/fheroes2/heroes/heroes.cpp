@@ -608,8 +608,12 @@ uint32_t Heroes::GetMaxMovePoints() const
         point += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LAND_MOBILITY );
 
         // visited object
-        if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
+        if ( isObjectTypeVisited( MP2::OBJ_STABLES ) ) {
             point += GameStatic::getMovementPointBonus( MP2::OBJ_STABLES );
+        }
+
+        const uint32_t cursedMobilityDeduction = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::LAND_MOBILITY );
+        point = ( point > cursedMobilityDeduction ) ? ( point - cursedMobilityDeduction ) : 0;
     }
 
     if ( isControlAI() ) {

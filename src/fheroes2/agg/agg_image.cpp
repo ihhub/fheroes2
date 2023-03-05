@@ -2988,7 +2988,27 @@ namespace fheroes2
                     Blit( originalImage, temp );
                     originalImage = std::move( temp );
                 }
+
+                _icnVsSprite[id].resize( 105 );
+                h2d::readImage( "artifact_64pix_shackles.image", _icnVsSprite[id][104] );
+
                 return true;
+            case ICN::ARTFX:
+                LoadOriginalICN( id );
+
+                _icnVsSprite[id].resize( 104 );
+                h2d::readImage( "artifact_32pix_shackles.image", _icnVsSprite[id][103] );
+
+                return true;
+            case ICN::OBJNARTI: {
+                LoadOriginalICN( id );
+
+                _icnVsSprite[id].resize( 208 );
+                h2d::readImage( "artifact_32pix_shackles_map_part1.image", _icnVsSprite[id][206] );
+                h2d::readImage( "artifact_32pix_shackles_map_part2.image", _icnVsSprite[id][207] );
+
+                return true;
+            }
             case ICN::TWNSDW_5:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 140 && _icnVsSprite[id][0].height() == 165 ) {

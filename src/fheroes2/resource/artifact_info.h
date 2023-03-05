@@ -105,6 +105,7 @@ namespace fheroes2
 
         // These curses are unique per artifact type but cumulative across multiple artifact types.
         MORALE,
+        LAND_MOBILITY,
 
         // These curses are unique per artifact type but the effect is multiplied with different artifact types.
         FIRE_SPELL_EXTRA_DAMAGE_PERCENT,

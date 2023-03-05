@@ -2319,7 +2319,8 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
         art = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
         break;
     case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
-        art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
+        art = Artifact::SHACKLES;
+        // art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
         break;
     case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
         art = Artifact::Rand( Artifact::ART_LEVEL_MINOR );

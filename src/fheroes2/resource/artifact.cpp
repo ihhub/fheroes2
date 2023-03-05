@@ -224,11 +224,12 @@ int Artifact::Level() const
     case BLACK_PEARL:
         return ART_LEVEL_MAJOR;
 
-    // no random
+    // Cursed artifacts cannot be generated from Random artifacts.
     case MAGIC_BOOK:
     case FIZBIN_MISFORTUNE:
     case TAX_LIEN:
     case HIDEOUS_MASK:
+    case SHACKLES:
         return ART_NORANDOM;
 
     // price loyalty
@@ -361,6 +362,7 @@ double Artifact::getArtifactValue() const
             break;
         case fheroes2::ArtifactCurseType::MORALE:
         case fheroes2::ArtifactCurseType::SPELL_POWER_SKILL:
+        case fheroes2::ArtifactCurseType::LAND_MOBILITY:
             artifactValue -= curse.value;
             break;
         default:
@@ -453,6 +455,8 @@ Artifact Artifact::FromMP2IndexSprite( uint32_t index )
     if ( 0xA2 > index )
         return Artifact( ( index - 1 ) / 2 );
     else if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
+        return Artifact( ( index - 1 ) / 2 );
+    else if ( index >= 206 )
         return Artifact( ( index - 1 ) / 2 );
     else if ( 0xA3 == index )
         return { Rand( ART_LEVEL_ALL_NORMAL ) };

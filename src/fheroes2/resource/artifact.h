@@ -145,6 +145,7 @@ public:
         DUMMY3,
         DUMMY4,
 
+        // These are artifacts from The Price of Loyalty expansion.
         SPELL_SCROLL,
         ARM_MARTYR,
         BREASTPLATE_ANDURAN,
@@ -162,6 +163,9 @@ public:
         SWORD_BREAKER,
         SWORD_ANDURAN,
         SPADE_NECROMANCY,
+
+        // These are artifacts from Resurrection expansion.
+        SHACKLES,
 
         // IMPORTANT! Put all new artifacts just above this line.
         UNKNOWN
