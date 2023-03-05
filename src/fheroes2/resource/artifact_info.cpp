@@ -570,7 +570,7 @@ namespace
             { gettext_noop( "Shackles" ),
               gettext_noop( "The %{name} decrease your movement on land." ),
               gettext_noop(
-                  "A fat troll jumped out of the bushes and started screaming to challenge him in a competition to run in shackles for a prize of crispy 1000 gold. You agreed to do this, looking at the troll. After running for a minute you didn't realize how surprizingly fast the troll left you behind in the woods with the locked to your leg shackles. You have no idea how to remove it now." ),
+                  "A fat and ugly troll jumps out of the bushes and screams at you challenging you to a race with shackles attached to your legs. The winner gets 1000 shiny gold pieces. Looking at the troll, you have no trouble accepting. One minute into the race you start realizing that the troll is quite a lot faster than you first thought. You fall behind in the woods, with the shackle still stuck to your leg.  Having no idea how to remove the device, you limp your way back." ),
               {},
               {} },
 
