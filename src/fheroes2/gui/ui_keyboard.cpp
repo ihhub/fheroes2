@@ -446,7 +446,7 @@ namespace
         return DialogAction::DoNothing;
     }
 
-    void updateButtonStates( std::vector<std::vector<KeyboardButton>> & buttonLayout, LocalEvent & le )
+    void updateButtonStates( std::vector<std::vector<KeyboardButton>> & buttonLayout, const LocalEvent & le )
     {
         for ( auto & buttonRow : buttonLayout ) {
             for ( auto & buttonInfo : buttonRow ) {
