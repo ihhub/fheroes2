@@ -33,6 +33,7 @@ namespace AI
         : _pathfinder( ARMY_ADVANTAGE_LARGE )
     {
         _personality = Rand::Get( AI::WARRIOR, AI::EXPLORER );
+        _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
     }
 
     void Normal::resetPathfinder()

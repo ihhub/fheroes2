@@ -96,6 +96,24 @@ namespace AI
         }
     };
 
+    struct BudgetEntry
+    {
+        int resource = Resource::UNKNOWN;
+        int requirement = 0;
+        bool priority = false;
+        bool recurringCost = false;
+
+        BudgetEntry( int type )
+            : resource( type )
+        {}
+
+        void reset() {
+            requirement = 0;
+            priority = false;
+            recurringCost = false;
+        }
+    };
+
     struct HeroToMove
     {
         Heroes * hero = nullptr;
@@ -264,6 +282,7 @@ namespace AI
         std::vector<IndexObject> _mapObjects;
         std::map<int, PriorityTask> _priorityTargets;
         std::vector<RegionStats> _regions;
+        std::vector<BudgetEntry> _budget;
         AIWorldPathfinder _pathfinder;
         BattlePlanner _battlePlanner;
 
@@ -280,6 +299,7 @@ namespace AI
         int getCourierMainTarget( const Heroes & hero, double lowestPossibleValue ) const;
 
         void updatePriorityTargets( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType );
+        void updateKingdomBudget( const Kingdom & kingdom );
 
         bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
                                 bool moreTasksForHeroes );
