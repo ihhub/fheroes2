@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include "army_troop.h"
+
 #include "army.h"
 #include "color.h"
 #include "heroes_base.h"
@@ -163,7 +164,17 @@ std::string Troop::GetShotString() const
 
 std::string Troop::GetSpeedString() const
 {
-    return Speed::String( GetSpeed() );
+    return GetSpeedString( GetSpeed() );
+}
+
+std::string Troop::GetSpeedString( uint32_t speed )
+{
+    std::string output( Speed::String( speed ) );
+    output += " (";
+    output += std::to_string( speed );
+    output += ')';
+
+    return output;
 }
 
 uint32_t Troop::GetHitPointsLeft() const

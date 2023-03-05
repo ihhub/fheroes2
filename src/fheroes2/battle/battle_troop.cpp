@@ -232,14 +232,8 @@ std::string Battle::Unit::GetShotString() const
 
 std::string Battle::Unit::GetSpeedString() const
 {
-    const uint32_t speedValue = GetSpeed( true, false );
-
-    std::string output( Speed::String( speedValue ) );
-    output += " (";
-    output += std::to_string( speedValue );
-    output += ')';
-
-    return output;
+    const uint32_t speed = GetSpeed( true, false );
+    return Troop::GetSpeedString( speed );
 }
 
 uint32_t Battle::Unit::GetInitialCount() const
