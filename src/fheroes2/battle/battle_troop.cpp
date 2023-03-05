@@ -740,7 +740,8 @@ void Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg, uint32_t & killed, u
 
     if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
         resurrected = enemy.Resurrect( killed * GetHitPoints(), true, false );
-    } else if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+    }
+    else if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
         resurrected = enemy.Resurrect( killed * GetHitPoints(), false, false );
     }
 

@@ -3460,7 +3460,8 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
             if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
                 msg = _n( "1 soul is absorbed.", "%{count} souls are absorbed.", resurrects );
                 updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
-            } else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+            }
+            else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
                 msg = _n( "1 %{unit} is revived.", "%{count} %{unit} are revived.", resurrects );
                 updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
             }
