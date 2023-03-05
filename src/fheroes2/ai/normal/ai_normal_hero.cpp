@@ -27,6 +27,7 @@
 #include <map>
 #include <memory>
 #include <ostream>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -1697,27 +1698,39 @@ namespace AI
     void Normal::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
     {
         const auto it = _priorityTargets.find( tileIndex );
-        if ( it != _priorityTargets.end() ) {
-            const PriorityTask & task = it->second;
-            if ( task.type == PriorityTaskType::DEFEND ) {
-                if ( objectType == MP2::OBJ_CASTLE ) {
-                    hero.SetModes( Heroes::SLEEPER );
-                }
+        if ( it == _priorityTargets.end() ) {
+            return;
+        }
 
-                _priorityTargets.erase( tileIndex );
+        const PriorityTask & task = it->second;
+        if ( task.type == PriorityTaskType::DEFEND ) {
+            if ( objectType == MP2::OBJ_CASTLE ) {
+                hero.SetModes( Heroes::SLEEPER );
             }
-            else if ( task.type == PriorityTaskType::ATTACK ) {
-                // check if battle was actually won or attacker still there
-                const Heroes * attackHero = world.GetTiles( tileIndex ).GetHeroes();
-                const Castle * attackCastle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
 
-                if ( !attackHero && ( !attackCastle || attackCastle->GetColor() == hero.GetColor() ) ) {
-                    for ( const int secondaryTask : task.secondary ) {
-                        assert( secondaryTask != tileIndex );
-                        _priorityTargets.erase( secondaryTask );
+            _priorityTargets.erase( tileIndex );
+        }
+        else if ( task.type == PriorityTaskType::ATTACK ) {
+            // check if battle was actually won or attacker still there
+            const Heroes * attackHero = world.GetTiles( tileIndex ).GetHeroes();
+            const Castle * attackCastle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+
+            if ( !attackHero && ( !attackCastle || attackCastle->GetColor() == hero.GetColor() ) ) {
+                for ( const int secondaryTaskId : task.secondaryTaskTileId ) {
+                    assert( secondaryTaskId != tileIndex );
+                    auto defense = _priorityTargets.find( secondaryTaskId );
+
+                    // if a task has any secondaries they must be present in the map
+                    assert( defense != _priorityTargets.end() );
+
+                    std::set<int> & defenseSecondaries = defense->second.secondaryTaskTileId;
+                    defenseSecondaries.erase( tileIndex );
+                    if ( defenseSecondaries.empty() ) {
+                        // if no one else was threatning this then we no longer have to defend
+                        _priorityTargets.erase( secondaryTaskId );
                     }
-                    _priorityTargets.erase( tileIndex );
                 }
+                _priorityTargets.erase( tileIndex );
             }
         }
     }

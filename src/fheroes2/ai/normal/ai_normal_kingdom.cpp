@@ -405,15 +405,21 @@ namespace AI
                         // castle is under threat
                         castlesInDanger.insert( castleIndex );
 
-                        auto it = _priorityTargets.find( enemy.first );
-                        if ( it == _priorityTargets.end() ) {
+                        auto attackTask = _priorityTargets.find( enemy.first );
+                        if ( attackTask == _priorityTargets.end() ) {
                             _priorityTargets[enemy.first] = { PriorityTaskType::ATTACK, attackerStrength, castleIndex };
                         }
                         else {
-                            it->second.secondary.push_back( castleIndex );
+                            attackTask->second.secondaryTaskTileId.insert( castleIndex );
                         }
 
-                        _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat };
+                        auto defenseTask = _priorityTargets.find( castleIndex );
+                        if ( defenseTask == _priorityTargets.end() ) {
+                            _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat, enemy.first };
+                        }
+                        else {
+                            defenseTask->second.secondaryTaskTileId.insert( enemy.first );
+                        }
                     }
                 }
             }
