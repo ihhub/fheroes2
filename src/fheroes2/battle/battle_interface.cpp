@@ -3449,7 +3449,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
         status.SetMessage( "", false );
 
         if ( resurrects != 0 ) {
-            auto log = []( Battle::Status & statusBar, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
+            auto updateStatusBar = []( Battle::Status & statusBar, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
                 StringReplace( localMsg, "%{count}", static_cast<int32_t>( localRes ) );
                 StringReplaceWithLowercase( localMsg, "%{unit}", localUnit );
 
@@ -3459,10 +3459,10 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
 
             if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
                 msg = _n( "1 soul is absorbed.", "%{count} souls are absorbed.", resurrects );
-                log( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
+                updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
             } else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
                 msg = _n( "1 %{unit} is revived.", "%{count} %{unit} are revived.", resurrects );
-                log( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
+                updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
             }
         }
     }
