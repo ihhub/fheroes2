@@ -3305,7 +3305,19 @@ namespace
 void Heroes::ScoutRadar() const
 {
     Interface::Basic & I = Interface::Basic::Get();
-    I.GetRadar().SetRenderArea( GetScoutRoi( true ) );
+
+#if defined( WITH_DEBUG )
+    // If player gave control to AI we need to fully update the radar image as there is no need to make a code for rendering optimizations so we don't call
+    // 'SetRenderArea()'.
+    if ( !Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+#endif
+
+        I.GetRadar().SetRenderArea( GetScoutRoi( true ) );
+
+#if defined( WITH_DEBUG )
+    }
+#endif
+
     I.SetRedraw( Interface::REDRAW_RADAR );
 }
 
