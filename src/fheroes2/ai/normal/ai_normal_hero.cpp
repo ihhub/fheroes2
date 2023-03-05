@@ -346,7 +346,7 @@ namespace
         // Objects increasing Movement points and Morale.
         case MP2::OBJ_OASIS:
         case MP2::OBJ_WATERING_HOLE: {
-            if ( !hero.isObjectTypeVisited( objectType ) ) {
+            if ( hero.isObjectTypeVisited( objectType ) ) {
                 return false;
             }
 
