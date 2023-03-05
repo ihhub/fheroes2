@@ -4174,33 +4174,11 @@ namespace
         fheroes2::DrawLine( released[94], { offset + 1, offset + 3 }, { offset + 1, offset + 5 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[94], { offset + 2, offset + 2 }, { offset + 2, offset + 6 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[94], { offset + 3, offset + 1 }, { offset + 3, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 4, offset + 0 }, { offset + 4, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 5, offset + 0 }, { offset + 5, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[94], offset + 6, offset + 0, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 6, offset + 2 }, { offset + 6, offset + 6 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[94], offset + 6, offset + 8, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[94], offset + 7, offset + 0, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 7, offset + 3 }, { offset + 7, offset + 5 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[94], offset + 7, offset + 8, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 8, offset + 0 }, { offset + 8, offset + 1 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[94], offset + 8, offset + 4, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 8, offset + 7 }, { offset + 8, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 9, offset + 0 }, { offset + 9, offset + 2 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 9, offset + 6 }, { offset + 9, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 10, offset + 0 }, { offset + 10, offset + 2 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 10, offset + 6 }, { offset + 10, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 11, offset + 0 }, { offset + 11, offset + 1 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[94], offset + 11, offset + 4, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 11, offset + 7 }, { offset + 11, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[94], offset + 12, offset + 0, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 12, offset + 3 }, { offset + 12, offset + 5 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[94], offset + 12, offset + 8, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[94], offset + 13, offset + 0, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 13, offset + 2 }, { offset + 13, offset + 6 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[94], offset + 13, offset + 8, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 14, offset + 0 }, { offset + 14, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 15, offset + 0 }, { offset + 15, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[94], { offset + 16, offset + 0 }, { offset + 16, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::Fill( released[94], offset + 4, offset + 0, 13, 9, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[94], { offset + 6, offset + 1 }, { offset + 12, offset + 7 }, 12 );
+        fheroes2::DrawLine( released[94], { offset + 7, offset + 1 }, { offset + 13, offset + 7 }, 12 );
+        fheroes2::DrawLine( released[94], { offset + 12, offset + 1 }, { offset + 6, offset + 7 }, 12 );
+        fheroes2::DrawLine( released[94], { offset + 13, offset + 1 }, { offset + 7, offset + 7 }, 12 );
     }
 
     void generateCP1250GoodButtonFont( std::vector<fheroes2::Sprite> & released )
