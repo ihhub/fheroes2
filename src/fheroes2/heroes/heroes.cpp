@@ -1275,6 +1275,15 @@ void Heroes::LearnSkill( const Skill::Secondary & skill )
 void Heroes::Scoute( const int tileIndex ) const
 {
     Maps::ClearFog( tileIndex, GetScoute(), GetColor() );
+
+#if defined( WITH_DEBUG )
+    // If player gave control to AI we need to update the radar image after every 'ClearFog()' call as in this mode we don't any optimizations.
+    if ( Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+        // We redraw the radar map fully as there is no need to make a code for rendering optimizations for AI debug tracking.
+        // As AI don't waste time for thinking between hero moves we don't need to force radar update in other places.
+        ScoutRadar();
+    }
+#endif
 }
 
 int Heroes::GetScoute() const
