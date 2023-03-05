@@ -1921,11 +1921,11 @@ namespace AI
 
     void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
     {
-        const Spell dimensionDoor( Spell::DIMENSIONDOOR );
         if ( !Maps::isValidAbsIndex( targetIndex ) || hero.isShipMaster() != world.GetTiles( targetIndex ).isWater() ) {
             return;
         }
 
+        const Spell dimensionDoor( Spell::DIMENSIONDOOR );
         if ( !hero.CanCastSpell( dimensionDoor ) ) {
             return;
         }

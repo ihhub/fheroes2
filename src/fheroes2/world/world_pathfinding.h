@@ -163,6 +163,7 @@ public:
 
 private:
     void processWorldMap() override;
+
     // Follows custom passability rules (for the AI)
     void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) override;
 
