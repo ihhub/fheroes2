@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-05 05:46+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -1589,9 +1589,8 @@ msgstr "Fizbin"
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Doskonały Zwój"
 
-#, fuzzy
 msgid "campaignBonus|Gauntlets"
-msgstr "Balista"
+msgstr "Rękawice"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Potworna Maska"
@@ -3734,13 +3733,12 @@ msgstr "Ostatnia wspierana wersja: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Ten plik zawiera zapis z nieprawidłowym typem gry."
 
-#, fuzzy
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
 "Ten plik jest zapisany w wersji gry \"Cena Lojalności\".\n"
-"Niektóre elementy mogą być niedostępne."
+"Nie można wczytać pliku - do wczytania potrzebujesz \"Ceny Lojalności\"."
 
 msgid "This saved game is localized to '"
 msgstr "Zapisana gra jest w języku '"
@@ -4401,11 +4399,10 @@ msgstr "Przychód"
 msgid "Kingdom Income per day."
 msgstr "Dzienny przychód królestwa."
 
-#, fuzzy
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
-"Latarnia morska jest teraz pod twoją kontrolą i twoje okręty zwiększają "
-"zasięg swego ruchu w każdej turze."
+"Z każdą kolejną latarnią morską, która jest pod twoją kontrolą, zwiększa się "
+"zasięg twoich okrętów."
 
 msgid "English"
 msgstr "Angielski"
@@ -7044,12 +7041,11 @@ msgstr "Zdarzenie"
 msgid "Dragon City"
 msgstr "Smocze Miasto"
 
-#, fuzzy
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
 msgstr[0] "Latarnia morska"
-msgstr[1] "Latarnia morska"
-msgstr[2] "Latarnia morska"
+msgstr[1] "Latarnie morskie"
+msgstr[2] "Latarni morskich"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
