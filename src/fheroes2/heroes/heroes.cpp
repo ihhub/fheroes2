@@ -1278,7 +1278,7 @@ void Heroes::Scoute( const int tileIndex ) const
 
 #if defined( WITH_DEBUG )
     // If player gave control to AI we need to update the radar image after every 'ClearFog()' call as in this mode we don't any optimizations.
-    if ( GetColor() != Color::NONE && Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+    if ( GetColor() != Color::NONE && Players::Get( GetColor() )->isAIAutoControlMode() ) {
         // We redraw the radar map fully as there is no need to make a code for rendering optimizations for AI debug tracking.
         // As AI don't waste time for thinking between hero moves we don't need to force radar update in other places.
         ScoutRadar();

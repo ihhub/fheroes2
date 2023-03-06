@@ -3355,7 +3355,7 @@ void Heroes::ScoutRadar() const
 #if defined( WITH_DEBUG )
     // If player gave control to AI we need to fully update the radar image as there is no need to make a code for rendering optimizations so we don't call
     // 'SetRenderArea()'.
-    if ( GetColor() != Color::NONE && !Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+    if ( GetColor() != Color::NONE && !Players::Get( GetColor() )->isAIAutoControlMode() ) {
 #endif
 
         I.GetRadar().SetRenderArea( GetScoutRoi( true ) );
