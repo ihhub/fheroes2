@@ -1442,7 +1442,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
             secondary_skills.AddSkill( Skill::Secondary( selected.Skill(), Skill::Level::BASIC ) );
 
         // Scout the area around the hero if his Scouting skill was leveled and he belongs to any kingdom.
-        if ( ( selected.Skill() == Skill::Secondary::SCOUTING ) && ( GetColor() != Color::NONE ) ) {
+        if ( ( selected.Skill() == Skill::Secondary::SCOUTING ) && !isFreeman() ) {
             Scoute( GetIndex() );
             ScoutRadar();
         }
