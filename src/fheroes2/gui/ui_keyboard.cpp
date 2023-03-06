@@ -295,7 +295,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
-            lastButtonRow.back().button.disable();
+            lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeLastCharacter();
@@ -316,7 +316,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
-            lastButtonRow.back().button.disable();
+            lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeLastCharacter();
@@ -325,7 +325,7 @@ namespace
             break;
         case LayoutType::Numeric:
             lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
-            lastButtonRow.back().button.disable();
+            lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( _( "Keyboard|ABC" ), defaultSpecialButtonWidth, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
@@ -337,7 +337,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
-            lastButtonRow.back().button.disable();
+            lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeLastCharacter();
