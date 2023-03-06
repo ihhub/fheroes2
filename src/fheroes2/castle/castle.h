@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -253,7 +253,7 @@ public:
     int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );
 
-    void Scoute() const;
+    void Scout() const;
 
     std::string GetStringBuilding( uint32_t ) const;
     std::string GetDescriptionBuilding( uint32_t ) const;
@@ -417,7 +417,7 @@ public:
         return _castles[iter->second];
     }
 
-    void Scoute( int ) const;
+    void Scout( int ) const;
 
     void NewDay()
     {

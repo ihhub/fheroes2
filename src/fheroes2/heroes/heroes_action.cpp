@@ -431,7 +431,7 @@ namespace
             hero.GetKingdom().AddCastle( castle );
             world.CaptureObject( dstIndex, hero.GetColor() );
 
-            castle->Scoute();
+            castle->Scout();
 
             Interface::Basic & I = Interface::Basic::Get();
 
@@ -946,7 +946,7 @@ namespace
 
                 // When Scouting skill is learned we reveal the fog and redraw the radar map image in a new scout area of the hero.
                 if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
-                    hero.Scoute( hero.GetIndex() );
+                    hero.Scout( hero.GetIndex() );
                     hero.ScoutRadar();
                 }
 

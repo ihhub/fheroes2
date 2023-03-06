@@ -294,7 +294,7 @@ namespace
             hero.GetKingdom().AddCastle( castle );
             world.CaptureObject( dstIndex, hero.GetColor() );
 
-            castle->Scoute();
+            castle->Scout();
         };
 
         Army & army = castle->GetActualArmy();
