@@ -1612,7 +1612,7 @@ void Army::ArrangeForCastleDefense( Army & garrison )
     // it can leave the garrison empty
     assert( garrison.commander == nullptr || garrison.commander->isCaptain() );
 
-    // If the guest hero's army is controlled by AI, then try to squeeze as much garrison troops as possible
+    // If the guest hero's army is controlled by AI, then try to squeeze as many garrison troops in as possible
     if ( isControlAI() ) {
         // Create and fill a temporary container for convenient sorting of garrison troops
         std::vector<Troop *> garrisonTroops;
