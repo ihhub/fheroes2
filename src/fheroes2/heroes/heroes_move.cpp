@@ -683,7 +683,7 @@ bool Heroes::MoveStep( bool fast )
         }
         else {
             // Unveil fog before moving the hero.
-            Scoute( indexTo );
+            Scout( indexTo );
 
             MoveStep( *this, indexTo, true );
         }
@@ -707,7 +707,7 @@ bool Heroes::MoveStep( bool fast )
     }
     else if ( ( sprite_index % heroFrameCountPerTile ) == 1 ) {
         // This is a start of hero's movement. We should clear fog around him.
-        Scoute( indexTo );
+        Scout( indexTo );
     }
     else if ( ( sprite_index % heroFrameCountPerTile ) == 8 ) {
         sprite_index -= 8;

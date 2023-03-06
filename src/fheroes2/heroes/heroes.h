@@ -494,8 +494,8 @@ public:
 
     void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
     void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
-    void Scoute( const int tileIndex ) const;
-    int GetScoute() const;
+    void Scout( const int tileIndex ) const;
+    int GetScoutingDistance() const;
 
     // Returns the area in map tiles around hero's position in his scout range.
     // For non-diagonal hero move the area is set only in move direction and one tile behind (to clear Hero's previous position).
@@ -653,7 +653,7 @@ struct AllHeroes : public VecHeroes
     void Init();
     void clear();
 
-    void Scoute( int ) const;
+    void Scout( int ) const;
 
     void ResetModes( const uint32_t modes ) const
     {

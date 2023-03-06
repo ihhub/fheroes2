@@ -272,21 +272,21 @@ void CapturedObjects::ClearFog( int colors )
         const ObjectColor & objcol = ( *it ).second.objcol;
 
         if ( objcol.isColor( colors ) ) {
-            int scoute = 0;
+            int scoutingDistance = 0;
 
             switch ( objcol.first ) {
             case MP2::OBJ_MINES:
             case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_SAWMILL:
-                scoute = 2;
+                scoutingDistance = 2;
                 break;
 
             default:
                 break;
             }
 
-            if ( scoute )
-                Maps::ClearFog( ( *it ).first, scoute, colors );
+            if ( scoutingDistance )
+                Maps::ClearFog( ( *it ).first, scoutingDistance, colors );
         }
     }
 }
@@ -896,10 +896,10 @@ void World::ClearFog( int colors )
     colors = Players::GetPlayerFriends( colors );
 
     // clear abroad castles
-    vec_castles.Scoute( colors );
+    vec_castles.Scout( colors );
 
     // clear abroad heroes
-    vec_heroes.Scoute( colors );
+    vec_heroes.Scout( colors );
 
     map_captureobj.ClearFog( colors );
 }

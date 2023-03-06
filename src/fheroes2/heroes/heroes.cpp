@@ -720,7 +720,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     kingdom.GetRecruits();
 
     // After recruiting a hero we reveal map in hero scout area.
-    Scoute( GetIndex() );
+    Scout( GetIndex() );
     if ( isControlHuman() ) {
         // And the radar image map for human player.
         ScoutRadar();
@@ -992,7 +992,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
         auto scout = [this]( const int32_t artifactID ) {
             const std::vector<fheroes2::ArtifactBonus> bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
             if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) != bonuses.end() ) {
-                Scoute( this->GetIndex() );
+                Scout( this->GetIndex() );
                 ScoutRadar();
                 return true;
             }
@@ -1272,9 +1272,9 @@ void Heroes::LearnSkill( const Skill::Secondary & skill )
         secondary_skills.AddSkill( skill );
 }
 
-void Heroes::Scoute( const int tileIndex ) const
+void Heroes::Scout( const int tileIndex ) const
 {
-    Maps::ClearFog( tileIndex, GetScoute(), GetColor() );
+    Maps::ClearFog( tileIndex, GetScoutingDistance(), GetColor() );
 
 #if defined( WITH_DEBUG )
     // If player gave control to AI we need to update the radar image after every 'ClearFog()' call as in this mode we don't any optimizations.
@@ -1286,7 +1286,7 @@ void Heroes::Scoute( const int tileIndex ) const
 #endif
 }
 
-int Heroes::GetScoute() const
+int Heroes::GetScoutingDistance() const
 {
     return static_cast<int>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE )
                              + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
@@ -1294,7 +1294,7 @@ int Heroes::GetScoute() const
 
 fheroes2::Rect Heroes::GetScoutRoi( const bool ignoreDirection /* = false */ ) const
 {
-    const int32_t scoutRange = GetScoute();
+    const int32_t scoutRange = GetScoutingDistance();
     const fheroes2::Point heroPosition = GetCenter();
 
     if ( ignoreDirection ) {
@@ -1436,7 +1436,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
 
         // post action
         if ( selected.Skill() == Skill::Secondary::SCOUTING ) {
-            Scoute( GetIndex() );
+            Scout( GetIndex() );
             ScoutRadar();
         }
     }
@@ -1589,7 +1589,7 @@ void Heroes::Move2Dest( const int32_t dstIndex )
     if ( dstIndex != GetIndex() ) {
         world.GetTiles( GetIndex() ).SetHeroes( nullptr );
         SetIndex( dstIndex );
-        Scoute( dstIndex );
+        Scout( dstIndex );
         world.GetTiles( dstIndex ).SetHeroes( this );
     }
 }
@@ -1909,11 +1909,11 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
     return at( Rand::Get( freeman_heroes ) );
 }
 
-void AllHeroes::Scoute( int colors ) const
+void AllHeroes::Scout( int colors ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
-            ( *it )->Scoute( ( *it )->GetIndex() );
+            ( *it )->Scout( ( *it )->GetIndex() );
 }
 
 Heroes * AllHeroes::FromJail( int32_t index ) const
