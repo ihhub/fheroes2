@@ -2459,26 +2459,27 @@ void Maps::Tiles::ClearFog( const int colors )
     world.resetPathfinder();
 }
 
-int Maps::Tiles::GetFogDirections( int color ) const
+int Maps::Tiles::GetFogDirections( const int32_t color ) const
 {
-    int around = 0;
-    const Directions & directions = Direction::All();
+    int32_t around = Direction::CENTER;
 
-    for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
-        if ( !Maps::isValidDirection( _index, *it ) || world.GetTiles( Maps::GetDirectionIndex( _index, *it ) ).isFog( color ) )
-            around |= *it;
-
-    if ( isFog( color ) )
-        around |= Direction::CENTER;
+    for ( const int32_t direction : Direction::All() ) {
+        if ( !isValidDirection( _index, direction ) || world.GetTiles( GetDirectionIndex( _index, direction ) ).isFog( color ) ) {
+            around |= direction;
+        }
+    }
 
     return around;
 }
 
-void Maps::Tiles::drawFog( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const
+void Maps::Tiles::drawFog( fheroes2::Image & dst, const int32_t color, const Interface::GameArea & area ) const
 {
+    // This method should be called only for tiles with fog.
+    assert( isFog( color ) );
+  
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
-    const int around = GetFogDirections( color );
+    const int32_t around = GetFogDirections( color );
 
     if ( DIRECTION_ALL == around ) {
         const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );

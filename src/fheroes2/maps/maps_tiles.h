@@ -253,9 +253,9 @@ namespace Maps
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
         void redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
-        int GetFogDirections( int color ) const;
+        int32_t GetFogDirections( const int32_t color ) const;
 
-        void drawFog( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
+        void drawFog( fheroes2::Image & dst, const int32_t color, const Interface::GameArea & area ) const;
         void RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const;
         void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
 
