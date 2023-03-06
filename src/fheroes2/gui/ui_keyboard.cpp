@@ -163,7 +163,7 @@ namespace
         const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
         const fheroes2::Text text( StringUpper( info ), releasedFont );
 
-        const fheroes2::Point textOffset{ ( buttonWidth - text.width() ) / 2 - 1, ( 16 - fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) ) / 2 };
+        const fheroes2::Point textOffset{ ( buttonWidth - text.width() ) / 2, ( 16 - fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) ) / 2 };
 
         text.draw( releasedOffset.x + textOffset.x, releasedOffset.y + textOffset.y, released );
         text.draw( pressedOffset.x + textOffset.x, pressedOffset.y + textOffset.y, pressed );
