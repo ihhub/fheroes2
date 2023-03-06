@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-06 16:17+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -5973,6 +5973,13 @@ msgstr ""
 "Din hjälte är för trött för att kasta en besvärjelse idag. Försök igen "
 "imorgon."
 
+#, fuzzy
+msgid "This spell cannot be used on a boat."
+msgstr "Denna stad kan inte uppgraderas till ett slott."
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6080,13 +6087,6 @@ msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fiendehjältar är nu fullt identifierade."
-
-#, fuzzy
-msgid "This spell cannot be used on a boat."
-msgstr "Denna stad kan inte uppgraderas till ett slott."
-
-msgid "This spell can be casted only nearby water."
-msgstr ""
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "

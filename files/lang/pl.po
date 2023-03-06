@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-05 05:46+0000\n"
+"POT-Creation-Date: 2023-03-06 16:17+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -6070,6 +6070,12 @@ msgstr ""
 "Twój bohater jest zbyt zmęczony, by rzucić dziś to zaklęcie. Spróbuj "
 "ponownie jutro."
 
+msgid "This spell cannot be used on a boat."
+msgstr "Ten czar nie może być rzucony z łodzi."
+
+msgid "This spell can be casted only nearby water."
+msgstr "Ten czar może być rzucony tylko przy wodzie."
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6182,12 +6188,6 @@ msgstr "Ten czar już został rzucony."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Można już w pełni zidentyfikować wrogich bohaterów."
-
-msgid "This spell cannot be used on a boat."
-msgstr "Ten czar nie może być rzucony z łodzi."
-
-msgid "This spell can be casted only nearby water."
-msgstr "Ten czar może być rzucony tylko przy wodzie."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "

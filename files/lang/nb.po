@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-06 16:17+0000\n"
 "PO-Revision-Date: 2022-12-18 08:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6200,6 +6200,12 @@ msgstr ""
 "Din helt er for sliten til å bruke denne trolldommen i dag. Prøv igjen i "
 "morgen."
 
+msgid "This spell cannot be used on a boat."
+msgstr "Denne trolldommen kan ikke bli brukt på et skip."
+
+msgid "This spell can be casted only nearby water."
+msgstr "Denne trolldommen kan kun bli brukt i nærheten av vann."
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6310,12 +6316,6 @@ msgstr "Denne trolldommen er allerede i virkning."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "De fiendtlige heltene er nå helt kartlagte."
-
-msgid "This spell cannot be used on a boat."
-msgstr "Denne trolldommen kan ikke bli brukt på et skip."
-
-msgid "This spell can be casted only nearby water."
-msgstr "Denne trolldommen kan kun bli brukt i nærheten av vann."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
