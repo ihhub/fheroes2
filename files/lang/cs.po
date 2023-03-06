@@ -2332,7 +2332,7 @@ msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
-"Studna zvyšuje tempo růstu ve všech obydlích o %{count} stvořeníza týden."
+"Studna zvyšuje tempo růstu ve všech obydlích o %{count} stvoření za týden."
 
 msgid "The Statue increases your town's income by %{count} per day."
 msgstr "Socha zvyšuje městské příjmy o %{count} za den."
@@ -6348,46 +6348,46 @@ msgid "Lava"
 msgstr "Láva"
 
 msgid "Dirt"
-msgstr ""
+msgstr "Hlína"
 
 msgid "Grass"
 msgstr "Tráva"
 
 msgid "Ocean"
-msgstr ""
+msgstr "Moře"
 
 msgid "maps|Small"
-msgstr ""
+msgstr "Malá"
 
 msgid "maps|Medium"
-msgstr ""
+msgstr "Střední"
 
 msgid "maps|Large"
-msgstr ""
+msgstr "Velká"
 
 msgid "maps|Extra Large"
-msgstr ""
+msgstr "Extra velká"
 
 msgid "maps|Custom Size"
-msgstr ""
+msgstr "Vlastní velikost"
 
 msgid "Ore Mine"
-msgstr ""
+msgstr "Důl Ruda"
 
 msgid "Sulfur Mine"
-msgstr ""
+msgstr "Důl Síra"
 
 msgid "Crystal Mine"
-msgstr ""
+msgstr "Důl Křišťál"
 
 msgid "Gems Mine"
-msgstr ""
+msgstr "Důl Drahokam"
 
 msgid "Gold Mine"
-msgstr ""
+msgstr "Důl Zlato"
 
 msgid "Mine"
-msgstr ""
+msgstr "Důl"
 
 msgid "Burma shave."
 msgstr ""
@@ -6408,152 +6408,151 @@ msgid "Alchemist Lab"
 msgstr ""
 
 msgid "Sign"
-msgstr ""
+msgstr "Značka"
 
 msgid "Buoy"
-msgstr ""
+msgstr "Bóje"
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Kostlivec"
 
 msgid "Daemon Cave"
-msgstr ""
+msgstr "Jeskyně démonů"
 
 msgid "Treasure Chest"
-msgstr ""
+msgstr "Truhla s pokladem"
 
 msgid "Faerie Ring"
-msgstr ""
+msgstr "Čarovný kruh"
 
 msgid "Campfire"
-msgstr ""
+msgstr "Ohniště"
 
 msgid "Fountain"
-msgstr ""
+msgstr "Fontána"
 
 msgid "Gazebo"
-msgstr ""
+msgstr "Altán"
 
 msgid "Genie Lamp"
-msgstr ""
+msgstr "Džinova lampa"
 
 msgid "Archer's House"
-msgstr ""
+msgstr "Dům Lučištníka"
 
 msgid "Goblin Hut"
-msgstr ""
+msgstr "Gobliní chatrč"
 
 msgid "Dwarf Cottage"
-msgstr ""
+msgstr "Skřítčí chata"
 
 msgid "Peasant Hut"
-msgstr ""
+msgstr "Chatrč Rolníka"
 
 msgid "Stables"
-msgstr ""
+msgstr "Stáje"
 
 msgid "Alchemist's Tower"
-msgstr ""
+msgstr "Alchymistova věž"
 
 msgid "Event"
-msgstr ""
+msgstr "Událost"
 
 msgid "Dragon City"
-msgstr ""
+msgstr "Dračí město"
 
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Maják"
+msgstr[1] "Majáky"
 msgstr[2] ""
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vodní Mlýn"
+msgstr[1] "Vodní Mlýny"
 msgstr[2] ""
 
 msgid "Mines"
-msgstr ""
+msgstr "Doly"
 
 msgid "Monster"
-msgstr ""
+msgstr "Stvůra"
 
 msgid "Obelisk"
 msgstr ""
 
 msgid "Oasis"
-msgstr ""
+msgstr "Oáza"
 
 msgid "Resource"
-msgstr ""
+msgstr "Zdroje"
 
 msgid "Sawmill"
-msgstr ""
+msgstr "Pila"
 
 msgid "Oracle"
-msgstr ""
+msgstr "Věštírna"
 
 msgid "Shrine of the First Circle"
-msgstr ""
+msgstr "Svatyně První úrovně"
 
 msgid "Shipwreck"
-msgstr ""
+msgstr "Vrak"
 
 msgid "Sea Chest"
-msgstr ""
+msgstr "Lodní kufr"
 
 msgid "Desert Tent"
-msgstr ""
+msgstr "Pouštní stan"
 
 msgid "Stone Liths"
-msgstr ""
+msgstr "Monolit"
 
 msgid "Wagon Camp"
-msgstr ""
+msgstr "Tábořiště"
 
 msgid "Hut of the Magi"
-msgstr ""
+msgstr "Chatrč Mága"
 
 msgid "Whirlpool"
-msgstr ""
+msgstr "Vodní vír"
 
 msgid "Windmill"
 msgid_plural "Windmills"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Větrný mlýn"
+msgstr[1] "Větrné mlýny"
 msgstr[2] ""
 
 msgid "Artifact"
 msgstr "Artefakt"
 
 msgid "Mermaid"
-msgstr ""
+msgstr "Mořská panna"
 
 msgid "Boat"
-msgstr ""
+msgstr "Loď"
 
 msgid "Random Ultimate Artifact"
-msgstr ""
+msgstr "Náhodný Ultimátní Artefakt"
 
-#, fuzzy
 msgid "Random Artifact"
-msgstr "Artefakt"
+msgstr "Náhodný Artefakt"
 
 msgid "Random Resource"
-msgstr ""
+msgstr "Náhodný zdroj"
 
 msgid "Random Monster"
-msgstr ""
+msgstr "Náhodná stvůra"
 
 msgid "Random Town"
-msgstr ""
+msgstr "Náhodné město"
 
 msgid "Random Castle"
-msgstr ""
+msgstr "Náhodný hrad"
 
 msgid "Eye of the Magi"
-msgstr ""
+msgstr "Oko Mága"
 
 msgid "Random Monster - weak"
 msgstr ""
@@ -6568,85 +6567,85 @@ msgid "Random Monster - very strong"
 msgstr ""
 
 msgid "Nothing Special"
-msgstr ""
+msgstr "Nic zvláštního"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Omšelá skála"
 
 msgid "Watch Tower"
-msgstr ""
+msgstr "Strážná Věž"
 
 msgid "Tree House"
-msgstr ""
+msgstr "Dům na stromě"
 
 msgid "Tree City"
-msgstr ""
+msgstr "Stromové město"
 
 msgid "Ruins"
-msgstr ""
+msgstr "Ruiny"
 
 msgid "Fort"
-msgstr ""
+msgstr "Bašta"
 
 msgid "Abandoned Mine"
-msgstr ""
+msgstr "Opuštěný důl"
 
 msgid "Sirens"
-msgstr ""
+msgstr "Sirény"
 
 msgid "Standing Stones"
-msgstr ""
+msgstr "Stojící kameny"
 
 msgid "Idol"
-msgstr ""
+msgstr "Socha"
 
 msgid "Tree of Knowledge"
-msgstr ""
+msgstr "Strom poznání"
 
 msgid "Witch Doctor's Hut"
-msgstr ""
+msgstr "Čarodějova chýše"
 
 msgid "Temple"
-msgstr ""
+msgstr "Chrám"
 
 msgid "Hill Fort"
-msgstr ""
+msgstr "Opevnění"
 
 msgid "Halfling Hole"
-msgstr ""
+msgstr "Díra Půlčíků"
 
 msgid "Mercenary Camp"
-msgstr ""
+msgstr "Kemp žoldáků"
 
 msgid "Shrine of the Second Circle"
-msgstr ""
+msgstr "Svatyně Druhé úrovně"
 
 msgid "Shrine of the Third Circle"
-msgstr ""
+msgstr "Svatyně Třetí úrovně"
 
 msgid "City of the Dead"
-msgstr ""
+msgstr "Město Mrtvých"
 
 msgid "Sphinx"
-msgstr ""
+msgstr "Sfinga"
 
 msgid "Wagon"
-msgstr ""
+msgstr "Vůz"
 
 msgid "Tar Pit"
-msgstr ""
+msgstr "Dehet"
 
 msgid "Artesian Spring"
-msgstr ""
+msgstr "Artéský zdroj"
 
 msgid "Troll Bridge"
-msgstr ""
+msgstr "Trolí Most"
 
 msgid "Watering Hole"
-msgstr ""
+msgstr "Napajedlo"
 
 msgid "Witch's Hut"
-msgstr ""
+msgstr "Chýše Vědmy"
 
 msgid "Xanadu"
 msgstr ""
@@ -6658,79 +6657,79 @@ msgid "Magellan's Maps"
 msgstr ""
 
 msgid "Flotsam"
-msgstr ""
+msgstr "Trosky"
 
 msgid "Derelict Ship"
-msgstr ""
+msgstr "Vrak Lodi"
 
 msgid "Shipwreck Survivor"
-msgstr ""
+msgstr "Trosečník"
 
 msgid "Bottle"
-msgstr ""
+msgstr "Láhev"
 
 msgid "Magic Well"
-msgstr ""
+msgstr "Magická studna"
 
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kouzelná zahrada"
+msgstr[1] "Kouzelné zahrady"
 msgstr[2] ""
 
 msgid "Observation Tower"
-msgstr ""
+msgstr "Rozhledna"
 
 msgid "Freeman's Foundry"
-msgstr ""
+msgstr "Svobodná Slévárna"
 
 msgid "Reefs"
-msgstr ""
+msgstr "Útesy"
 
 msgid "Trees"
-msgstr ""
+msgstr "Stromy"
 
 msgid "Mountains"
-msgstr ""
+msgstr "Hory"
 
 msgid "Volcano"
-msgstr ""
+msgstr "Sopka"
 
 msgid "Flowers"
-msgstr ""
+msgstr "Květiny"
 
 msgid "Rock"
-msgstr ""
+msgstr "Skála"
 
 msgid "Water Lake"
-msgstr ""
+msgstr "Jezero"
 
 msgid "Mandrake"
-msgstr ""
+msgstr "Mandragora"
 
 msgid "Dead Tree"
-msgstr ""
+msgstr "Suchý strom"
 
 msgid "Stump"
-msgstr ""
+msgstr "Pahýl"
 
 msgid "Crater"
-msgstr ""
+msgstr "Kráter"
 
 msgid "Cactus"
-msgstr ""
+msgstr "Kaktus"
 
 msgid "Mound"
-msgstr ""
+msgstr "Kopec"
 
 msgid "Dune"
-msgstr ""
+msgstr "Duna"
 
 msgid "Lava Pool"
-msgstr ""
+msgstr "Jezero Lávy"
 
 msgid "Shrub"
-msgstr ""
+msgstr "Křoví"
 
 msgid "Barrow Mounds"
 msgstr ""
@@ -6745,320 +6744,316 @@ msgid "Random Artifact - Major"
 msgstr ""
 
 msgid "Barrier"
-msgstr ""
+msgstr "Bariéra"
 
 msgid "Traveller's Tent"
-msgstr ""
+msgstr "Stan pocestného"
 
 msgid "Jail"
-msgstr ""
+msgstr "Vězení"
 
 msgid "Fire Summoning Altar"
-msgstr ""
+msgstr "Oltář přivolání Ohně"
 
 msgid "Air Summoning Altar"
-msgstr ""
+msgstr "Oltář přivolání Vzduchu"
 
 msgid "Earth Summoning Altar"
-msgstr ""
+msgstr "Oltář přivolání Země"
 
 msgid "Water Summoning Altar"
-msgstr ""
+msgstr "Oltář přivolání Vody"
 
 msgid "Unknown Monster"
-msgstr ""
+msgstr "Neznámá stvůra"
 
 msgid "Unknown Monsters"
-msgstr ""
+msgstr "Neznámé stvůry"
 
 msgid "Peasant"
-msgstr ""
+msgstr "Rolník"
 
 msgid "Peasants"
-msgstr ""
+msgstr "Rolníci"
 
-#, fuzzy
 msgid "Archer"
-msgstr "Expert"
+msgstr "Lučištník"
 
 msgid "Archers"
-msgstr ""
+msgstr "Lučištníci"
 
 msgid "Ranger"
-msgstr ""
+msgstr "Hraničář"
 
 msgid "Rangers"
-msgstr ""
+msgstr "Hraničáři"
 
 msgid "Pikeman"
-msgstr ""
+msgstr "Kopiník"
 
 msgid "Pikemen"
-msgstr ""
+msgstr "Kopiníci"
 
 msgid "Veteran Pikeman"
-msgstr ""
+msgstr "Kopiník veterán"
 
 msgid "Veteran Pikemen"
-msgstr ""
+msgstr "Kopiníci veteráni"
 
 msgid "Swordsman"
-msgstr ""
+msgstr "Šermíř"
 
 msgid "Swordsmen"
-msgstr ""
+msgstr "Šermíři"
 
 msgid "Master Swordsman"
-msgstr ""
+msgstr "Mistr Šermíř"
 
 msgid "Master Swordsmen"
-msgstr ""
+msgstr "Mistři Šermíři"
 
 msgid "Cavalries"
-msgstr ""
+msgstr "Kavalír"
 
 msgid "Cavalry"
-msgstr ""
+msgstr "Kavalerie"
 
 msgid "Champion"
-msgstr ""
+msgstr "Obránce"
 
 msgid "Champions"
-msgstr ""
+msgstr "Obránci"
 
 msgid "Paladin"
 msgstr ""
 
 msgid "Paladins"
-msgstr ""
+msgstr "Paladini"
 
 msgid "Crusader"
-msgstr ""
+msgstr "Křižák"
 
 msgid "Crusaders"
-msgstr ""
+msgstr "Křižáci"
 
 msgid "Goblin"
 msgstr ""
 
 msgid "Goblins"
-msgstr ""
+msgstr "Goblini"
 
-#, fuzzy
 msgid "Orc"
-msgstr "Ovocný sad"
+msgstr "Skřet"
 
 msgid "Orcs"
-msgstr ""
+msgstr "Skřeti"
 
 msgid "Orc Chief"
-msgstr ""
+msgstr "Skřet Velitel"
 
 msgid "Orc Chiefs"
-msgstr ""
+msgstr "Skřeti Velitelé"
 
 msgid "Wolf"
-msgstr ""
+msgstr "Vlk"
 
 msgid "Wolves"
-msgstr ""
+msgstr "Vlci"
 
 msgid "Ogre"
-msgstr ""
+msgstr "Zlobr"
 
 msgid "Ogres"
-msgstr ""
+msgstr "Zlobři"
 
 msgid "Ogre Lord"
-msgstr ""
+msgstr "Pán Zlobr"
 
 msgid "Ogre Lords"
-msgstr ""
+msgstr "Páni Zlobři"
 
 msgid "Troll"
-msgstr ""
+msgstr "Trol"
 
 msgid "Trolls"
-msgstr ""
+msgstr "Trolové"
 
 msgid "War Troll"
-msgstr ""
+msgstr "Válečný Trol"
 
 msgid "War Trolls"
-msgstr ""
+msgstr "Váleční Trolové"
 
 msgid "Cyclopes"
-msgstr ""
+msgstr "Kyklop"
 
 msgid "Cyclops"
-msgstr ""
+msgstr "Kyklopové"
 
 msgid "Sprite"
-msgstr ""
+msgstr "Víla"
 
 msgid "Sprites"
-msgstr ""
+msgstr "Víly"
 
 msgid "Dwarf"
-msgstr ""
+msgstr "Skřítek"
 
 msgid "Dwarves"
-msgstr ""
+msgstr "Skřítci"
 
 msgid "Battle Dwarf"
-msgstr ""
+msgstr "Bojový Skřítek"
 
 msgid "Battle Dwarves"
-msgstr ""
+msgstr "Bojoví Skřítci"
 
 msgid "Elf"
 msgstr ""
 
 msgid "Elves"
-msgstr ""
+msgstr "Elfové"
 
 msgid "Grand Elf"
-msgstr ""
+msgstr "Vznešený Elf"
 
 msgid "Grand Elves"
-msgstr ""
+msgstr "Vznešení Elfové"
 
 msgid "Druid"
 msgstr ""
 
 msgid "Druids"
-msgstr ""
+msgstr "Druidi"
 
 msgid "Greater Druid"
-msgstr ""
+msgstr "Věštec"
 
 msgid "Greater Druids"
-msgstr ""
+msgstr "Věštci"
 
 msgid "Unicorn"
-msgstr ""
+msgstr "Jednorožec"
 
 msgid "Unicorns"
-msgstr ""
+msgstr "Jednorožci"
 
 msgid "Phoenix"
-msgstr ""
+msgstr "Fénix"
 
 msgid "Phoenixes"
-msgstr ""
+msgstr "Fénixové"
 
 msgid "Centaur"
-msgstr ""
+msgstr "Kentaur"
 
 msgid "Centaurs"
-msgstr ""
+msgstr "Kentauři"
 
 msgid "Gargoyle"
-msgstr ""
+msgstr "Chrlič"
 
 msgid "Gargoyles"
-msgstr ""
+msgstr "Chrliči"
 
 msgid "Griffin"
-msgstr ""
+msgstr "Gryf"
 
 msgid "Griffins"
-msgstr ""
+msgstr "Gryfové"
 
 msgid "Minotaur"
 msgstr ""
 
 msgid "Minotaurs"
-msgstr ""
+msgstr "Minotauři"
 
 msgid "Minotaur King"
-msgstr ""
+msgstr "Minotauří Král"
 
 msgid "Minotaur Kings"
-msgstr ""
+msgstr "Minotauří Králové"
 
 msgid "Hydra"
 msgstr ""
 
 msgid "Hydras"
-msgstr ""
+msgstr "Hydry"
 
-#, fuzzy
 msgid "Green Dragon"
-msgstr "Zelená věž"
+msgstr "Zelený Drak"
 
 msgid "Green Dragons"
-msgstr ""
+msgstr "Zelení Draci"
 
 msgid "Red Dragon"
-msgstr ""
+msgstr "Červený Drak"
 
 msgid "Red Dragons"
-msgstr ""
+msgstr "Červení Draci"
 
-#, fuzzy
 msgid "Black Dragon"
-msgstr "Černá věž"
+msgstr "Černý Drak"
 
 msgid "Black Dragons"
-msgstr ""
+msgstr "Černí Draci"
 
 msgid "Halfling"
-msgstr ""
+msgstr "Půlčík"
 
 msgid "Halflings"
-msgstr ""
+msgstr "Půlčíci"
 
 msgid "Boar"
-msgstr ""
+msgstr "Kanec"
 
 msgid "Boars"
-msgstr ""
+msgstr "Kanci"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Kovový Golem"
 
 msgid "Iron Golems"
-msgstr ""
+msgstr "Kovoví Golemové"
 
 msgid "Steel Golem"
-msgstr ""
+msgstr "Železný Golem"
 
 msgid "Steel Golems"
-msgstr ""
+msgstr "Železní Golemové"
 
 msgid "Roc"
-msgstr ""
+msgstr "Ruch"
 
 msgid "Rocs"
-msgstr ""
+msgstr "Ruchové"
 
 msgid "Mage"
-msgstr ""
+msgstr "Mág"
 
 msgid "Magi"
-msgstr ""
+msgstr "Mágové"
 
 msgid "Archmage"
-msgstr ""
+msgstr "Šedý Mág"
 
 msgid "Archmagi"
-msgstr ""
+msgstr "Šedí Mágové"
 
 msgid "Giant"
-msgstr ""
+msgstr "Obr"
 
 msgid "Giants"
-msgstr ""
+msgstr "Obři"
 
 msgid "Titan"
-msgstr ""
+msgstr "Titán"
 
 msgid "Titans"
-msgstr ""
+msgstr "Titáni"
 
 msgid "Skeletons"
-msgstr ""
+msgstr "Kostlivci"
 
 msgid "Zombie"
 msgstr ""
@@ -7073,100 +7068,100 @@ msgid "Mutant Zombies"
 msgstr ""
 
 msgid "Mummies"
-msgstr ""
+msgstr "Mumie"
 
 msgid "Mummy"
-msgstr ""
+msgstr "Mumie"
 
 msgid "Royal Mummies"
-msgstr ""
+msgstr "Královské Mumie"
 
 msgid "Royal Mummy"
-msgstr ""
+msgstr "Královská Mumie"
 
 msgid "Vampire"
-msgstr ""
+msgstr "Upír"
 
 msgid "Vampires"
-msgstr ""
+msgstr "Upíři"
 
 msgid "Vampire Lord"
-msgstr ""
+msgstr "Lord Upír"
 
 msgid "Vampire Lords"
-msgstr ""
+msgstr "Lordi Upíři"
 
 msgid "Lich"
 msgstr ""
 
 msgid "Liches"
-msgstr ""
+msgstr "Lichové"
 
 msgid "Power Lich"
-msgstr ""
+msgstr "Mocný Lich"
 
 msgid "Power Liches"
-msgstr ""
+msgstr "Mocní Lichové"
 
 msgid "Bone Dragon"
-msgstr ""
+msgstr "Kostěný Drak"
 
 msgid "Bone Dragons"
-msgstr ""
+msgstr "Kostění Draci"
 
 msgid "Rogue"
-msgstr ""
+msgstr "Lupič"
 
 msgid "Rogues"
-msgstr ""
+msgstr "Lupiči"
 
 msgid "Nomad"
-msgstr ""
+msgstr "Nomád"
 
 msgid "Nomads"
-msgstr ""
+msgstr "Nomádi"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Duch"
 
 msgid "Ghosts"
-msgstr ""
+msgstr "Duchové"
 
 msgid "Genie"
-msgstr ""
+msgstr "Džin"
 
 msgid "Genies"
-msgstr ""
+msgstr "Džinové"
 
 msgid "Medusa"
-msgstr ""
+msgstr "Medůza"
 
 msgid "Medusas"
-msgstr ""
+msgstr "Medůzy"
 
 msgid "Earth Elemental"
-msgstr ""
+msgstr "Půdný Elementál"
 
 msgid "Earth Elementals"
-msgstr ""
+msgstr "Půdní Elementálové"
 
 msgid "Air Elemental"
-msgstr ""
+msgstr "Vzdušný Elementál"
 
 msgid "Air Elementals"
-msgstr ""
+msgstr "Vzdušní Elementálové"
 
 msgid "Fire Elemental"
-msgstr ""
+msgstr "Ohňový Elementál"
 
 msgid "Fire Elementals"
-msgstr ""
+msgstr "Ohňoví Elementálové"
 
 msgid "Water Elemental"
-msgstr ""
+msgstr "Vodný Elementál"
 
 msgid "Water Elementals"
-msgstr ""
+msgstr "Vodní Elementálové"
 
 msgid "Random Monsters"
 msgstr ""
