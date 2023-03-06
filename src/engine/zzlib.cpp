@@ -37,54 +37,85 @@ namespace
 {
     constexpr uint16_t FORMAT_VERSION_0 = 0;
 
-    std::vector<uint8_t> zlibDecompress( const uint8_t * src, const size_t srcsz, const size_t realsz = 0 )
+    std::vector<uint8_t> zlibDecompress( const uint8_t * src, const size_t srcSize, size_t realSize = 0 )
     {
-        if ( src == nullptr || srcsz == 0 ) {
+        if ( src == nullptr || srcSize == 0 ) {
             return {};
         }
 
-        std::vector<uint8_t> res;
-        res.resize( ( realsz ? realsz : srcsz * 7 ), 0 );
+        if ( realSize == 0 ) {
+            realSize = srcSize * 7;
+        }
 
-        uLong dstsz = static_cast<uLong>( res.size() );
+        const uLong srcSizeULong = static_cast<uLong>( srcSize );
+        if ( srcSizeULong != srcSize ) {
+            ERROR_LOG( "The size of the compressed data is too large" )
+            return {};
+        }
+
+        std::vector<uint8_t> res( realSize );
+
+        uLong dstSizeULong = static_cast<uLong>( res.size() );
+        if ( dstSizeULong != res.size() ) {
+            ERROR_LOG( "The size of the decompressed data is too large" )
+            return {};
+        }
+
         int ret = Z_BUF_ERROR;
+        while ( Z_BUF_ERROR == ( ret = uncompress( res.data(), &dstSizeULong, src, srcSizeULong ) ) ) {
+            // Avoid infinite loop due to unsigned overflow on multiplication
+            if ( res.size() > res.max_size() / 2 ) {
+                ERROR_LOG( "The size of the decompressed data is too large" )
+                return {};
+            }
 
-        while ( Z_BUF_ERROR
-                == ( ret = uncompress( reinterpret_cast<Bytef *>( res.data() ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) ) ) ) {
-            dstsz = static_cast<uLong>( res.size() * 2 );
-            res.resize( dstsz );
+            res.resize( res.size() * 2 );
+
+            dstSizeULong = static_cast<uLong>( res.size() );
+            if ( dstSizeULong != res.size() ) {
+                ERROR_LOG( "The size of the decompressed data is too large" )
+                return {};
+            }
         }
 
-        if ( ret == Z_OK ) {
-            res.resize( dstsz );
-        }
-        else {
-            res.clear();
+        if ( ret != Z_OK ) {
             ERROR_LOG( "zlib error: " << ret )
+            return {};
         }
+
+        res.resize( dstSizeULong );
 
         return res;
     }
 
-    std::vector<uint8_t> zlibCompress( const uint8_t * src, const size_t srcsz )
+    std::vector<uint8_t> zlibCompress( const uint8_t * src, const size_t srcSize )
     {
-        if ( src == nullptr || srcsz == 0 ) {
+        if ( src == nullptr || srcSize == 0 ) {
             return {};
         }
 
-        std::vector<uint8_t> res;
-        res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
-
-        uLong dstsz = static_cast<uLong>( res.size() );
-        const int ret = compress( reinterpret_cast<Bytef *>( res.data() ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) );
-
-        if ( ret == Z_OK ) {
-            res.resize( dstsz );
+        const uLong srcSizeULong = static_cast<uLong>( srcSize );
+        if ( srcSizeULong != srcSize ) {
+            ERROR_LOG( "The size of the source data is too large" )
+            return {};
         }
-        else {
-            res.clear();
+
+        std::vector<uint8_t> res( compressBound( srcSizeULong ) );
+
+        uLong dstSizeULong = static_cast<uLong>( res.size() );
+        if ( dstSizeULong != res.size() ) {
+            ERROR_LOG( "The size of the compressed data is too large" )
+            return {};
+        }
+
+        const int ret = compress( res.data(), &dstSizeULong, src, srcSizeULong );
+
+        if ( ret != Z_OK ) {
             ERROR_LOG( "zlib error: " << ret )
+            return {};
         }
+
+        res.resize( dstSizeULong );
 
         return res;
     }
