@@ -1274,20 +1274,21 @@ void Heroes::LearnSkill( const Skill::Secondary & skill )
 
 void Heroes::Scoute( const int tileIndex ) const
 {
+    // We should not scout for the NONE color player.
+    assert( GetColor() != Color::NONE );
+
     Maps::ClearFog( tileIndex, GetScoute(), GetColor() );
 
 #if defined( WITH_DEBUG )
-    if ( GetColor() != Color::NONE ) {
-        const Player * player = Players::Get( GetColor() );
-        assert( player != nullptr );
+    const Player * player = Players::Get( GetColor() );
+    assert( player != nullptr );
 
-        // If player gave control to AI we need to update the radar image after every 'ClearFog()' call as in this mode we don't
-        // do any optimizations.
-        if ( player->isAIAutoControlMode() ) {
-            // We redraw the radar map fully as there is no need to make a code for rendering optimizations for AI debug tracking.
-            // As AI don't waste time for thinking between hero moves we don't need to force radar update in other places.
-            ScoutRadar();
-        }
+    // If player gave control to AI we need to update the radar image after every 'ClearFog()' call as in this mode we don't
+    // do any optimizations.
+    if ( player->isAIAutoControlMode() ) {
+        // We redraw the radar map fully as there is no need to make a code for rendering optimizations for AI debug tracking.
+        // As AI don't waste time for thinking between hero moves we don't need to force radar update in other places.
+        ScoutRadar();
     }
 #endif
 }
@@ -1440,8 +1441,8 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         else
             secondary_skills.AddSkill( Skill::Secondary( selected.Skill(), Skill::Level::BASIC ) );
 
-        // post action
-        if ( selected.Skill() == Skill::Secondary::SCOUTING ) {
+        // Scout the area around the hero if his Scouting skill was leveled and he belongs to any kingdom.
+        if ( ( selected.Skill() == Skill::Secondary::SCOUTING ) && ( GetColor() != Color::NONE ) ) {
             Scoute( GetIndex() );
             ScoutRadar();
         }
