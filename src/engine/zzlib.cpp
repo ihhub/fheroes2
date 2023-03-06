@@ -43,10 +43,6 @@ namespace
             return {};
         }
 
-        if ( realSize == 0 ) {
-            realSize = srcSize * 7;
-        }
-
         const uLong srcSizeULong = static_cast<uLong>( srcSize );
         if ( srcSizeULong != srcSize ) {
             ERROR_LOG( "The size of the compressed data is too large" )
@@ -54,6 +50,20 @@ namespace
         }
 
         std::vector<uint8_t> res( realSize );
+
+        if ( realSize == 0 ) {
+            constexpr size_t sizeMultiplier = 7;
+
+            if ( srcSize > res.max_size() / sizeMultiplier ) {
+                // If the multiplicated size is too large, let's start with the original size and see how it goes
+                realSize = srcSize;
+            }
+            else {
+                realSize = srcSize * sizeMultiplier;
+            }
+
+            res.resize( realSize );
+        }
 
         uLong dstSizeULong = static_cast<uLong>( res.size() );
         if ( dstSizeULong != res.size() ) {
@@ -63,13 +73,15 @@ namespace
 
         int ret = Z_BUF_ERROR;
         while ( Z_BUF_ERROR == ( ret = uncompress( res.data(), &dstSizeULong, src, srcSizeULong ) ) ) {
+            constexpr size_t sizeMultiplier = 2;
+
             // Avoid infinite loop due to unsigned overflow on multiplication
-            if ( res.size() > res.max_size() / 2 ) {
+            if ( res.size() > res.max_size() / sizeMultiplier ) {
                 ERROR_LOG( "The size of the decompressed data is too large" )
                 return {};
             }
 
-            res.resize( res.size() * 2 );
+            res.resize( res.size() * sizeMultiplier );
 
             dstSizeULong = static_cast<uLong>( res.size() );
             if ( dstSizeULong != res.size() ) {
