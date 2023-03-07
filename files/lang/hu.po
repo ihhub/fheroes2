@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-06 16:17+0000\n"
+"POT-Creation-Date: 2023-03-07 14:32+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4402,6 +4402,18 @@ msgstr ""
 #, fuzzy
 msgid "View %{skill} Info"
 msgstr "%{level} %{skill} információ"
+
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
 
 #, fuzzy
 msgid "Kingdom Income"
