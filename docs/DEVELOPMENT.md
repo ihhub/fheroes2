@@ -13,8 +13,7 @@ Please follow the instructions below to be able to build the project from source
   be missing depending on the version of the original game) to the project root directory.
 * Alternatively, go to the directory `script/demo` and run the file `download_demo_version.bat`.
   This script will download a demo version of the original game, which is the minimum required for development.
-* Open the file `fheroes2-vs2017.vcxproj` or `fheroes2-vs2019.vcxproj` depending on the version of Microsoft Visual
-  Studio installed and build the project.
+* Open the file `fheroes2-vs2019.vcxproj` (targeted for Visual Studio 2019) and build the project.
 * Visual Studio will automatically copy game files in the root directory to the build directory.
 
 <a name="macos-and-linux"></a>
