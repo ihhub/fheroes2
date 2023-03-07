@@ -292,9 +292,6 @@ public:
         RegisterCycling();
     }
 
-    void OpenVirtualKeyboard();
-    void CloseVirtualKeyboard();
-
     void OpenController();
     void CloseController();
     void OpenTouchpad();
