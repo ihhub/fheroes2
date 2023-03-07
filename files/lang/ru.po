@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-06 16:17+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -6061,6 +6061,12 @@ msgstr ""
 "Ваш герой очень устал, и не сможет применять магию сегодня. Попробуйте ещё "
 "раз завтра."
 
+msgid "This spell cannot be used on a boat."
+msgstr "Это заклинание не действует в море."
+
+msgid "This spell can be casted only nearby water."
+msgstr "Это заклинание действует только у воды."
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6171,12 +6177,6 @@ msgstr "Это заклинание уже используется."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."
-
-msgid "This spell cannot be used on a boat."
-msgstr "Это заклинание не действует в море."
-
-msgid "This spell can be casted only nearby water."
-msgstr "Это заклинание действует только у воды."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "

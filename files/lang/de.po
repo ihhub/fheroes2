@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-06 16:17+0000\n"
 "PO-Revision-Date: 2022-12-22 21:39+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6221,6 +6221,12 @@ msgstr ""
 "Ihr Held ist zu müde, um diesen Zauber heute zu wirken. Versuchen Sie es "
 "morgen erneut."
 
+msgid "This spell cannot be used on a boat."
+msgstr "Dieser Zauber kann nicht auf einem Boot verwendet werden."
+
+msgid "This spell can be casted only nearby water."
+msgstr "Dieser Zauber kann nur in der Nähe von Wasser gewirkt werden."
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6333,12 +6339,6 @@ msgstr "Dieser Zauber ist bereits in Gebrauch."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Feindliche Helden sind jetzt vollständig identifizierbar."
-
-msgid "This spell cannot be used on a boat."
-msgstr "Dieser Zauber kann nicht auf einem Boot verwendet werden."
-
-msgid "This spell can be casted only nearby water."
-msgstr "Dieser Zauber kann nur in der Nähe von Wasser gewirkt werden."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
