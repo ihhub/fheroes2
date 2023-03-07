@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "heroes_base.h"
+
 #include <algorithm>
 #include <cassert>
 #include <vector>
@@ -30,8 +32,8 @@
 #include "castle.h"
 #include "gamedefs.h"
 #include "heroes.h"
-#include "heroes_base.h"
 #include "kingdom.h"
+#include "maps.h"
 #include "race.h"
 #include "serialize.h"
 #include "spell_info.h"
@@ -390,6 +392,23 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
             }
             return false;
+        }
+
+        if ( ( spell == Spell::SUMMONBOAT || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) && hero->isShipMaster() ) {
+            if ( res != nullptr ) {
+                *res = _( "This spell cannot be used on a boat." );
+            }
+            return false;
+        }
+
+        if ( spell == Spell::SUMMONBOAT ) {
+            const int32_t boatDestination = fheroes2::getPossibleBoatPosition( *hero );
+            if ( !Maps::isValidAbsIndex( boatDestination ) ) {
+                if ( res != nullptr ) {
+                    *res = _( "This spell can be casted only nearby water." );
+                }
+                return false;
+            }
         }
 
         if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {

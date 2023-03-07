@@ -431,7 +431,7 @@ namespace
             hero.GetKingdom().AddCastle( castle );
             world.CaptureObject( dstIndex, hero.GetColor() );
 
-            castle->Scoute();
+            castle->Scout();
 
             Interface::Basic & I = Interface::Basic::Get();
 
@@ -946,7 +946,7 @@ namespace
 
                 // When Scouting skill is learned we reveal the fog and redraw the radar map image in a new scout area of the hero.
                 if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
-                    hero.Scoute( hero.GetIndex() );
+                    hero.Scout( hero.GetIndex() );
                     hero.ScoutRadar();
                 }
 
@@ -3353,14 +3353,19 @@ void Heroes::ScoutRadar() const
     Interface::Basic & I = Interface::Basic::Get();
 
 #if defined( WITH_DEBUG )
-    // If player gave control to AI we need to fully update the radar image as there is no need to make a code for rendering optimizations so we don't call
-    // 'SetRenderArea()'.
-    if ( !Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode() ) {
+    if ( GetColor() != Color::NONE ) {
+        const Player * player = Players::Get( GetColor() );
+        assert( player != nullptr );
+
+        // If player gave control to AI we need to fully update the radar image as there is no need to make a code for rendering optimizations so we
+        // don't call 'SetRenderArea()'.
+        if ( !player->isAIAutoControlMode() ) {
 #endif
 
-        I.GetRadar().SetRenderArea( GetScoutRoi( true ) );
+            I.GetRadar().SetRenderArea( GetScoutRoi( true ) );
 
 #if defined( WITH_DEBUG )
+        }
     }
 #endif
 

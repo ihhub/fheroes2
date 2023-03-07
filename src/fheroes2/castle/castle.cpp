@@ -2558,7 +2558,7 @@ uint32_t Castle::GetGrownMonthOf()
     return GameStatic::GetCastleGrownMonthOf();
 }
 
-void Castle::Scoute() const
+void Castle::Scout() const
 {
     Maps::ClearFog( GetIndex(), GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ), GetColor() );
 }
@@ -2691,11 +2691,11 @@ void AllCastles::AddCastle( Castle * castle )
     _castleTiles[center + fheroes2::Point( 0, -3 )] = id;
 }
 
-void AllCastles::Scoute( int colors ) const
+void AllCastles::Scout( int colors ) const
 {
     for ( auto it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
-            ( *it )->Scoute();
+            ( *it )->Scout();
 }
 
 /* pack castle */

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-06 16:17+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -5900,6 +5900,13 @@ msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "A hősöd túl fáradt ehhez a varázslathoz a mai nap. Próbáld újra holnap."
 
+#, fuzzy
+msgid "This spell cannot be used on a boat."
+msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6009,13 +6016,6 @@ msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Az ellenséges hősök teljes mértékben azonosíthatóak."
-
-#, fuzzy
-msgid "This spell cannot be used on a boat."
-msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
-
-msgid "This spell can be casted only nearby water."
-msgstr ""
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "

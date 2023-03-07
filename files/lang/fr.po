@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-06 16:17+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -6209,6 +6209,12 @@ msgstr ""
 "Votre héros est trop fatigué pour lancer ce sort aujourd'hui. Essayez à "
 "nouveau demain."
 
+msgid "This spell cannot be used on a boat."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+msgid "This spell can be casted only nearby water."
+msgstr "Ce sort ne peut être lancé qu'à proximité de l'eau."
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6321,12 +6327,6 @@ msgstr "Ce sort est déjà utilisé."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Les héros ennemis sont désormais parfaitement identifiables."
-
-msgid "This spell cannot be used on a boat."
-msgstr "Ce sort ne peut pas être jeté en mer."
-
-msgid "This spell can be casted only nearby water."
-msgstr "Ce sort ne peut être lancé qu'à proximité de l'eau."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "

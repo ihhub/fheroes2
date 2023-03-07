@@ -636,7 +636,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
     reEvaluateIfNeeded( hero );
 
     const int start = hero.GetIndex();
-    const int scouteValue = hero.GetScoute();
+    const int scoutingDistance = hero.GetScoutingDistance();
 
     const Directions & directions = Direction::All();
     std::vector<bool> tilesVisited( world.getSize(), false );
@@ -650,13 +650,13 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
 
         if ( start != currentNodeIdx ) {
-            int32_t maxTilesToReveal = Maps::getFogTileCountToBeRevealed( currentNodeIdx, scouteValue, _currentColor );
+            int32_t maxTilesToReveal = Maps::getFogTileCountToBeRevealed( currentNodeIdx, scoutingDistance, _currentColor );
             if ( maxTilesToReveal > 0 ) {
                 // Found a tile where we can reveal fog. Check for other tiles in the queue to find the one with the highest value.
                 int bestIndex = currentNodeIdx;
                 for ( ; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                     const int nodeIdx = nodesToExplore[lastProcessedNode];
-                    const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scouteValue, _currentColor );
+                    const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scoutingDistance, _currentColor );
 
                     if ( std::make_tuple( maxTilesToReveal, _cache[nodeIdx]._cost ) < std::make_tuple( tilesToReveal, _cache[bestIndex]._cost ) ) {
                         maxTilesToReveal = tilesToReveal;
