@@ -582,6 +582,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
+    gameArea.updateMapFogDirections();
 
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
@@ -639,6 +640,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                         iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
+                        gameArea.updateMapFogDirections();
 
                         Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
                         display.render();
@@ -765,6 +767,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     radar.SetHide( false );
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
+    gameArea.updateMapFogDirections();
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     fheroes2::Display & display = fheroes2::Display::instance();

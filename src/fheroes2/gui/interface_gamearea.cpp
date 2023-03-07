@@ -388,6 +388,9 @@ void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image
 
 void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw ) const
 {
+    fheroes2::Time counter;
+    counter.reset();
+
     const fheroes2::Rect & tileROI = GetVisibleTileROI();
 
     int32_t minX = tileROI.x;
@@ -742,7 +745,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             for ( int32_t x = minX; x < maxX; ++x ) {
                 const Maps::Tiles & tile = world.GetTiles( x, y );
 
-                if ( tile.isFog( friendColors ) ) {
+                if ( tile.getFogDirection() != Direction::UNKNOWN ) {
                     tile.drawFog( dst, friendColors, *this );
 
                     if ( drawTowns ) {
@@ -759,6 +762,18 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     updateObjectAnimationInfo();
+
+    const double tmp = counter.getS() * 1000;
+    VERBOSE_LOG(tmp)
+}
+
+void Interface::GameArea::updateMapFogDirections() const
+{
+    const int32_t friendColors = Players::FriendColors();
+
+    for ( int32_t i = 0; i < world.getSize(); ++i ) {
+        world.GetTiles( i ).setFogDirection( friendColors );
+    }
 }
 
 void Interface::GameArea::Scroll()

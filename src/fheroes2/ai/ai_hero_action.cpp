@@ -118,7 +118,7 @@ namespace
             return true;
 
         const Route::Path & path = hero.GetPath();
-        if ( path.isValid() && world.GetTiles( path.front().GetIndex() ).GetFogDirections( colors ) != DIRECTION_ALL )
+        if ( path.isValid() && world.GetTiles( path.front().GetIndex() ).getFogDirection( colors ) != DIRECTION_ALL )
             return true;
 
         return false;

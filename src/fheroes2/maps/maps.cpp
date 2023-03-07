@@ -330,6 +330,9 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t max
 
 void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int playerColor )
 {
+    // We should not clear fog for the NONE player color.
+    assert( playerColor != Color::NONE );
+    
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         // Nothing to uncover.
         return;
@@ -366,7 +369,13 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
                     AI::Get().revealFog( tile );
                 }
 
+                const bool isFogOnMap = tile.isFog( alliedColors );
+
                 tile.ClearFog( alliedColors );
+
+                if ( !isAIPlayer && isFogOnMap) {
+                    tile.updateFogDirectionsAround( alliedColors );
+                }
             }
         }
     }

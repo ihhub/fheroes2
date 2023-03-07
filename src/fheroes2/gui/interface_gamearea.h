@@ -217,6 +217,8 @@ namespace Interface
             updateCursor = true;
         }
 
+        void updateMapFogDirections() const;
+
         void QueueEventProcessing( bool isCursorOverGamearea );
 
         static fheroes2::Image GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset );
