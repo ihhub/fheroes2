@@ -897,13 +897,6 @@ namespace fheroes2
             }
         }
 
-        if ( spell == Spell::RESURRECT || spell == Spell::RESURRECTTRUE || spell == Spell::ANIMATEDEAD ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
-            if ( foundAbility != abilities.end() ) {
-                return 100;
-            }
-        }
-
         if ( spell.isCold() ) {
             foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::COLD_SPELL_IMMUNITY ) );
             if ( foundAbility != abilities.end() ) {
