@@ -1076,10 +1076,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                             gameArea.SetCenter( hero->GetCenter() );
                             ResetFocus( GameFocus::HEROES );
 
-                            // Update the radar map image in the area that is visible to the hero after his movement.
-                            radar.SetRenderArea( hero->GetScoutRoi() );
-                            radar.SetRedraw( REDRAW_RADAR );
-
                             RedrawFocus();
 
                             if ( stopHero ) {
