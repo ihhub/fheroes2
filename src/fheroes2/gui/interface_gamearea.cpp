@@ -398,6 +398,12 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     int32_t maxX = tileROI.x + tileROI.width;
     int32_t maxY = tileROI.y + tileROI.height;
 
+#ifdef WITH_DEBUG
+    const bool drawFog = ( ( flag & LEVEL_FOG ) == LEVEL_FOG ) && !IS_DEVEL();
+#else
+    const bool drawFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
+#endif
+
     // Render terrain.
     for ( int32_t y = 0; y < tileROI.height; ++y ) {
         fheroes2::Point offset( tileROI.x, tileROI.y + y );
@@ -413,7 +419,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     Maps::Tiles::RedrawEmptyTile( dst, offset, *this );
                 }
                 else {
-                    DrawTile( dst, world.GetTiles( offset.x, offset.y ).GetTileSurface(), offset );
+                    const Maps::Tiles & tile = world.GetTiles( offset.x, offset.y );
+                    // Do not render terrain on the tiles fully covered with the fog.
+                    if ( tile.getFogDirection() != DIRECTION_ALL || !drawFog ) {
+                        DrawTile( dst, tile.GetTileSurface(), offset );
+                    }
                 }
             }
         }
@@ -450,12 +460,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // In case of tile-unfit objects we need to pass tile ID and set alpha value while creating RenderObjectInfo instances.
 
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
-
-#ifdef WITH_DEBUG
-    const bool drawFog = ( ( flag & LEVEL_FOG ) == LEVEL_FOG ) && !IS_DEVEL();
-#else
-    const bool drawFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
-#endif
 
     const int friendColors = Players::FriendColors();
 
