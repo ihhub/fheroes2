@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_troop.h"
+
 #include <algorithm>
 #include <cassert>
 #include <ostream>
@@ -37,7 +39,6 @@
 #include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
-#include "battle_troop.h"
 #include "castle.h"
 #include "color.h"
 #include "game_static.h"
@@ -1519,16 +1520,17 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
     case Spell::RESURRECT:
     case Spell::ANIMATEDEAD:
     case Spell::RESURRECTTRUE: {
-        // remove from graveyard
         if ( !isValid() ) {
-            // TODO: buggy behaviour
-            Arena::GetGraveyard()->RemoveTroop( *this );
+            Graveyard * graveyard = Arena::GetGraveyard();
+            assert( graveyard != nullptr );
+
+            graveyard->RemoveTroop( *this );
         }
 
         const uint32_t restore = fheroes2::getResurrectPoints( spell, spoint, hero );
         const uint32_t resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
-        // Puts back the unit in the board
+        // Put the unit back on the board
         SetPosition( GetPosition() );
 
         if ( Arena::GetInterface() ) {
