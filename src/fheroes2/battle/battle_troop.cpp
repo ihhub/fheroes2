@@ -681,7 +681,7 @@ void Battle::Unit::PostKilledAction()
     SetModes( TR_MOVED );
 
     // Save to the graveyard if possible
-    if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) ) {
+    if ( !Modes( CAP_MIRRORIMAGE ) && !isElemental() ) {
         Graveyard * graveyard = Arena::GetGraveyard();
         assert( graveyard != nullptr );
 
