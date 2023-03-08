@@ -1787,25 +1787,22 @@ namespace
 
         assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
 
+        Interface::Basic & I = Interface::Basic::Get();
+        // Update the radar map image after possible hero move before entering a Teleport.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.SetRedraw( Interface::REDRAW_RADAR );
+
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
         hero.FadeOut();
 
-        Interface::Basic & I = Interface::Basic::Get();
         const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
-        if ( hero.GetCenter() == fromPoint ) {
-            // If hero was already in Teleport and player hit the space bar.
-            I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
-        }
-        else {
-            // Before entering a Teleport the hero may make a move into it, so we update the radar map image of this move.
-            I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        }
 
         // No action and no penalty
         hero.Move2Dest( index_to );
 
         // Clear the previous hero position
+        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -1834,25 +1831,22 @@ namespace
             return;
         }
 
+        Interface::Basic & I = Interface::Basic::Get();
+        // Update the radar map image after possible hero move before entering a Whirlpool.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.SetRedraw( Interface::REDRAW_RADAR );
+
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
         hero.FadeOut();
 
-        Interface::Basic & I = Interface::Basic::Get();
         const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
-        if ( hero.GetCenter() == fromPoint ) {
-            // If hero was already in Whirlpool and player hit the space bar.
-            I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
-        }
-        else {
-            // Before entering a Whirlpool the hero may make a move into it, so we update the radar map image of this move.
-            I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        }
 
         // No action and no penalty
         hero.Move2Dest( index_to );
 
         // Clear the previous hero position
+        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
