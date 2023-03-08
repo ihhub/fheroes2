@@ -2752,14 +2752,15 @@ msgid ""
 "events in the game."
 msgstr ""
 
-#, fuzzy
 msgid "Attention"
-msgstr "animace"
+msgstr "Pozor"
 
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any other "
 "languages than English."
 msgstr ""
+"Tahle verze hry Heroes of Might and Magic II nepodporuje jiné "
+"ljazyky než English."
 
 msgid ""
 "Map\n"
@@ -2793,11 +2794,15 @@ msgid ""
 "Victory\n"
 "Conditions"
 msgstr ""
+"Podmínky\n"
+"pro výhru"
 
 msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+"Podmínky\n"
+"pro prohru"
 
 msgid "First select recipients!"
 msgstr ""
@@ -2811,9 +2816,8 @@ msgstr ""
 msgid "Select Recipients"
 msgstr ""
 
-#, fuzzy
 msgid "Your Funds"
-msgstr "Maračna"
+msgstr "Tvé zdroje"
 
 msgid "Planned Gift"
 msgstr ""
@@ -5617,18 +5621,20 @@ msgid "%{luck} Luck"
 msgstr ""
 
 msgid "Current Luck Modifiers:"
-msgstr ""
+msgstr "Štěstí ovlivňují:"
 
 msgid "Current Morale Modifiers:"
-msgstr ""
+msgstr "Morálku ovlivňují:"
 
 msgid "Entire army is undead, so morale does not apply."
-msgstr ""
+msgstr "Celá armáda je nemrtvá, morálka se nevztahuje."
 
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
 msgstr ""
+"Aktuálně zkušenost %{exp1}.\n"
+" Další level %{exp2}."
 
 msgid "Level %{level}"
 msgstr ""
@@ -5641,7 +5647,7 @@ msgid ""
 msgstr ""
 
 msgid "%{name1} meets %{name2}"
-msgstr ""
+msgstr "%{name1} se střetá s %{name2}"
 
 msgid "Town Portal"
 msgstr ""
