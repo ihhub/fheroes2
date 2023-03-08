@@ -483,6 +483,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
             const Maps::Tiles & tile = world.GetTiles( posX, posY );
+
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog  ) {
+                continue;
+            }
+
             MP2::MapObjectType objectType = tile.GetObject();
 
             switch ( objectType ) {
@@ -603,6 +608,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
+            
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog  ) {
+                continue;
+            }
 
             // Draw roads, rivers and cracks.
             tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::TERRAIN_LAYER );
@@ -613,6 +622,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog  ) {
+                continue;
+            }
 
             tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
 
@@ -625,6 +638,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog  ) {
+                continue;
+            }
+
             tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
 
             // Draw all shadows from tile-unfit objects.
@@ -635,6 +652,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog  ) {
+                continue;
+            }
 
             // Low priority images are drawn before any other object on this tile.
             renderImagesOnTile( dst, tileUnfit.lowPriorityBottomImages, { x, y }, *this );

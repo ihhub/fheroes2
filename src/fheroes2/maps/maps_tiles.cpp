@@ -2498,8 +2498,8 @@ void Maps::Tiles::drawFog( fheroes2::Image & dst, const int32_t color, const Int
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
     if ( DIRECTION_ALL == _fogDirection ) {
-        const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
-        area.DrawTile( dst, sf, mp );
+        //const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
+        //area.DrawTile( dst, sf, mp );
     }
     else {
         uint32_t index = 0;
