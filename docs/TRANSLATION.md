@@ -53,7 +53,7 @@ Currently all implemented languages, except French, adhere to a standardized fon
 NOTE: The fheroes2 team has set a maximum of 400 total modified lines for any Pull Request (PR) for translations. For contributors wanting to
 add translated lines to a new language this has a maximum of 30 total modified lines for that first PR.
 
-This limitations have been set because every PR needs to be reviewed by our team, and so changing too many lines at once will only slow this
+These limitations have been set because every PR needs to be reviewed by our team, and so changing too many lines at once will only slow this
 process down. In addition, GitHub becomes increasingly difficult to navigate once too many changes, comments and so on are present within the
 same PR page, further slowing down the process of reviewing it.
 
