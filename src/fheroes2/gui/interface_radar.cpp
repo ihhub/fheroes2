@@ -312,6 +312,11 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                 break;
             }
             case MP2::OBJ_DRAGON_CITY:
+            case MP2::OBJ_NON_ACTION_DRAGON_CITY:
+                if ( visibleTile ) {
+                    fillColor = COLOR_GRAY;
+                }
+                break;
             case MP2::OBJ_LIGHTHOUSE:
             case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_MINES:
@@ -321,7 +326,6 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                 }
                 break;
-            case MP2::OBJ_NON_ACTION_DRAGON_CITY:
             case MP2::OBJ_NON_ACTION_LIGHTHOUSE:
             case MP2::OBJ_NON_ACTION_ALCHEMIST_LAB:
             case MP2::OBJ_NON_ACTION_MINES:
