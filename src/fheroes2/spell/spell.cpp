@@ -494,7 +494,7 @@ bool Spell::isUndeadOnly() const
     return false;
 }
 
-bool Spell::isALiveOnly() const
+bool Spell::isAliveOnly() const
 {
     switch ( id ) {
     case BLESS:

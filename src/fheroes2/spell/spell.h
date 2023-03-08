@@ -201,7 +201,7 @@ public:
 
     bool isMindInfluence() const;
     bool isUndeadOnly() const;
-    bool isALiveOnly() const;
+    bool isAliveOnly() const;
     bool isSummon() const;
     bool isEffectDispel() const;
     bool isApplyWithoutFocusObject() const;

@@ -883,7 +883,7 @@ namespace fheroes2
             }
         }
 
-        if ( spell.isALiveOnly() ) {
+        if ( spell.isAliveOnly() ) {
             foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
