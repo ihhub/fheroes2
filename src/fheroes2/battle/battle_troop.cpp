@@ -664,21 +664,15 @@ void Battle::Unit::PostKilledAction()
         mirror = nullptr;
         ResetModes( CAP_MIRROROWNER );
     }
+
     // Remove mirror image (slave)
     if ( Modes( CAP_MIRRORIMAGE ) && mirror != nullptr ) {
         mirror->ResetModes( CAP_MIRROROWNER );
         mirror = nullptr;
     }
 
-    ResetModes( TR_RESPONDED );
-    ResetModes( TR_SKIP );
-    ResetModes( LUCK_GOOD );
-    ResetModes( LUCK_BAD );
-    ResetModes( MORALE_GOOD );
-    ResetModes( MORALE_BAD );
+    // Remove all spells
     ResetModes( IS_MAGIC );
-
-    SetModes( TR_MOVED );
 
     // Save to the graveyard if possible
     if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) ) {
@@ -706,9 +700,6 @@ void Battle::Unit::PostKilledAction()
 uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool skip_dead )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
-
-    if ( hp == 0 ) // Skip turn if already dead
-        SetModes( TR_MOVED );
 
     SetCount( GetCount() + resurrect );
     hp += points;
