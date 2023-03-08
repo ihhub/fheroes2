@@ -577,7 +577,7 @@ namespace
 
         // Update the radar map image before changing the direction of the hero.
         Interface::Basic & I = Interface::Basic::Get();
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi( false ) );
         I.Redraw( Interface::REDRAW_RADAR );
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
@@ -947,7 +947,7 @@ namespace
                 // When Scouting skill is learned we reveal the fog and redraw the radar map image in a new scout area of the hero.
                 if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
                     hero.Scout( hero.GetIndex() );
-                    hero.ScoutRadar();
+                    hero.ScoutRadar( true );
                 }
 
                 msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
@@ -3334,7 +3334,7 @@ namespace
     }
 }
 
-void Heroes::ScoutRadar() const
+void Heroes::ScoutRadar( const bool ignoreDirection ) const
 {
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -3348,7 +3348,7 @@ void Heroes::ScoutRadar() const
         if ( !player->isAIAutoControlMode() ) {
 #endif
 
-            I.GetRadar().SetRenderArea( GetScoutRoi( true ) );
+            I.GetRadar().SetRenderArea( GetScoutRoi( ignoreDirection ) );
 
 #if defined( WITH_DEBUG )
         }

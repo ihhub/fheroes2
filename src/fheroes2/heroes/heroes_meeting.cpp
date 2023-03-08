@@ -658,11 +658,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // If the scout area bonus is increased with the new artifact we reveal the fog and update the radar.
     if ( hero1ScoutAreaBonus < bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
         Scout( GetIndex() );
-        ScoutRadar();
+        ScoutRadar( true );
     }
     if ( hero2ScoutAreaBonus < otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
         otherHero.Scout( otherHero.GetIndex() );
-        otherHero.ScoutRadar();
+        otherHero.ScoutRadar( true );
     }
 
     display.render();
