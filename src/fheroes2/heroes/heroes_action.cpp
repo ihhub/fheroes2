@@ -2271,7 +2271,8 @@ namespace
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
-                tile.QuantitySetColor( hero.GetColor() );
+                // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
+                tile.QuantitySetColor( Color::UNUSED );
                 tile.SetObjectPassable( true );
 
                 if ( Dialog::Message( title, victoryMsg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
