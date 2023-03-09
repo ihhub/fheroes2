@@ -438,7 +438,7 @@ void Battle::Unit::NewTurn()
     affected.DecreaseDuration();
 
     for ( uint32_t mode = affected.FindZeroDuration(); mode != 0; mode = affected.FindZeroDuration() ) {
-        affected.RemoveMode( mode );
+        assert( Modes( mode ) );
 
         if ( mode == CAP_MIRROROWNER ) {
             assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) );
@@ -449,10 +449,11 @@ void Battle::Unit::NewTurn()
 
             mirror->hp = 0;
             mirror->SetCount( 0 );
+            // Affection will be removed here
             mirror->PostKilledAction();
         }
         else {
-            ResetModes( mode );
+            removeAffection( mode );
         }
     }
 }
@@ -627,8 +628,8 @@ uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
         if ( Modes( IS_PARALYZE_MAGIC ) ) {
             SetModes( TR_RESPONDED );
             SetModes( TR_MOVED );
-            ResetModes( IS_PARALYZE_MAGIC );
-            affected.RemoveMode( IS_PARALYZE_MAGIC );
+
+            removeAffection( IS_PARALYZE_MAGIC );
         }
 
         // blind
@@ -664,15 +665,13 @@ void Battle::Unit::PostKilledAction()
         mirror->mirror = nullptr;
         mirror = nullptr;
 
-        ResetModes( CAP_MIRROROWNER );
-        affected.RemoveMode( CAP_MIRROROWNER );
+        removeAffection( CAP_MIRROROWNER );
     }
 
     if ( Modes( CAP_MIRRORIMAGE ) && mirror != nullptr ) {
         assert( mirror->Modes( CAP_MIRROROWNER ) );
 
-        mirror->ResetModes( CAP_MIRROROWNER );
-        mirror->affected.RemoveMode( CAP_MIRROROWNER );
+        mirror->removeAffection( CAP_MIRROROWNER );
         mirror = nullptr;
     }
 
@@ -682,11 +681,10 @@ void Battle::Unit::PostKilledAction()
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
     ResetModes( MORALE_BAD );
-    ResetModes( IS_MAGIC );
 
     SetModes( TR_MOVED );
 
-    affected.RemoveMode( IS_MAGIC );
+    removeAffection( IS_MAGIC );
     assert( affected.empty() );
 
     // Save to the graveyard if possible
@@ -1011,16 +1009,10 @@ void Battle::Unit::PostAttackAction()
     }
 
     // clean berserker spell
-    if ( Modes( SP_BERSERKER ) ) {
-        ResetModes( SP_BERSERKER );
-        affected.RemoveMode( SP_BERSERKER );
-    }
+    removeAffection( SP_BERSERKER );
 
     // clean hypnotize spell
-    if ( Modes( SP_HYPNOTIZE ) ) {
-        ResetModes( SP_HYPNOTIZE );
-        affected.RemoveMode( SP_HYPNOTIZE );
-    }
+    removeAffection( SP_HYPNOTIZE );
 
     // clean luck capability
     ResetModes( LUCK_GOOD );
@@ -1032,8 +1024,8 @@ void Battle::Unit::ResetBlind()
     // remove blind action
     if ( Modes( SP_BLIND ) ) {
         SetModes( TR_MOVED );
-        ResetModes( SP_BLIND );
-        affected.RemoveMode( SP_BLIND );
+
+        removeAffection( SP_BLIND );
     }
 }
 
@@ -1206,120 +1198,78 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     switch ( spell.GetID() ) {
     case Spell::BLESS:
     case Spell::MASSBLESS:
-        if ( Modes( SP_CURSE ) ) {
-            ResetModes( SP_CURSE );
-            affected.RemoveMode( SP_CURSE );
-        }
-        SetModes( SP_BLESS );
-        affected.AddMode( SP_BLESS, duration );
+        replaceAffection( SP_CURSE, SP_BLESS, duration );
         break;
 
     case Spell::BLOODLUST:
-        SetModes( SP_BLOODLUST );
-        affected.AddMode( SP_BLOODLUST, 3 );
+        addAffection( SP_BLOODLUST, 3 );
         break;
 
     case Spell::CURSE:
     case Spell::MASSCURSE:
-        if ( Modes( SP_BLESS ) ) {
-            ResetModes( SP_BLESS );
-            affected.RemoveMode( SP_BLESS );
-        }
-        SetModes( SP_CURSE );
-        affected.AddMode( SP_CURSE, duration );
+        replaceAffection( SP_BLESS, SP_CURSE, duration );
         break;
 
     case Spell::HASTE:
     case Spell::MASSHASTE:
-        if ( Modes( SP_SLOW ) ) {
-            ResetModes( SP_SLOW );
-            affected.RemoveMode( SP_SLOW );
-        }
-        SetModes( SP_HASTE );
-        affected.AddMode( SP_HASTE, duration );
+        replaceAffection( SP_SLOW, SP_HASTE, duration );
         break;
 
     case Spell::DISPEL:
     case Spell::MASSDISPEL:
-        if ( Modes( IS_MAGIC ) ) {
-            ResetModes( IS_MAGIC );
-            affected.RemoveMode( IS_MAGIC );
-        }
+        removeAffection( IS_MAGIC );
         break;
 
     case Spell::SHIELD:
     case Spell::MASSSHIELD:
-        SetModes( SP_SHIELD );
-        affected.AddMode( SP_SHIELD, duration );
+        addAffection( SP_SHIELD, duration );
         break;
 
     case Spell::SLOW:
     case Spell::MASSSLOW:
-        if ( Modes( SP_HASTE ) ) {
-            ResetModes( SP_HASTE );
-            affected.RemoveMode( SP_HASTE );
-        }
-        SetModes( SP_SLOW );
-        affected.AddMode( SP_SLOW, duration );
+        replaceAffection( SP_HASTE, SP_SLOW, duration );
         break;
 
     case Spell::STONESKIN:
-        if ( Modes( SP_STEELSKIN ) ) {
-            ResetModes( SP_STEELSKIN );
-            affected.RemoveMode( SP_STEELSKIN );
-        }
-        SetModes( SP_STONESKIN );
-        affected.AddMode( SP_STONESKIN, duration );
+        replaceAffection( SP_STEELSKIN, SP_STONESKIN, duration );
         break;
 
     case Spell::BLIND:
-        SetModes( SP_BLIND );
+        addAffection( SP_BLIND, duration );
         blindanswer = false;
-        affected.AddMode( SP_BLIND, duration );
         break;
 
     case Spell::DRAGONSLAYER:
-        SetModes( SP_DRAGONSLAYER );
-        affected.AddMode( SP_DRAGONSLAYER, duration );
+        addAffection( SP_DRAGONSLAYER, duration );
         break;
 
     case Spell::STEELSKIN:
-        if ( Modes( SP_STONESKIN ) ) {
-            ResetModes( SP_STONESKIN );
-            affected.RemoveMode( SP_STONESKIN );
-        }
-        SetModes( SP_STEELSKIN );
-        affected.AddMode( SP_STEELSKIN, duration );
+        replaceAffection( SP_STONESKIN, SP_STEELSKIN, duration );
         break;
 
     case Spell::ANTIMAGIC:
-        ResetModes( IS_MAGIC );
-        SetModes( SP_ANTIMAGIC );
-        affected.AddMode( SP_ANTIMAGIC, duration );
+        replaceAffection( IS_MAGIC, SP_ANTIMAGIC, duration );
         break;
 
     case Spell::PARALYZE:
-        SetModes( SP_PARALYZE );
-        affected.AddMode( SP_PARALYZE, duration );
+        addAffection( SP_PARALYZE, duration );
         break;
 
     case Spell::BERSERKER:
-        SetModes( SP_BERSERKER );
-        affected.AddMode( SP_BERSERKER, duration );
+        addAffection( SP_BERSERKER, duration );
         break;
 
     case Spell::HYPNOTIZE: {
-        SetModes( SP_HYPNOTIZE );
-        affected.AddMode( SP_HYPNOTIZE, duration );
+        addAffection( SP_HYPNOTIZE, duration );
         break;
     }
 
     case Spell::PETRIFY:
-        SetModes( SP_STONE );
-        affected.AddMode( SP_STONE, duration );
+        addAffection( SP_STONE, duration );
         break;
 
     case Spell::MIRRORIMAGE:
+        // Special case, CAP_MIRROROWNER mode will be set when mirror image unit will be created
         affected.AddMode( CAP_MIRROROWNER, duration );
         break;
 
@@ -1524,14 +1474,13 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
     case Spell::CURE:
     case Spell::MASSCURE:
         // clear bad magic
-        if ( Modes( IS_BAD_MAGIC ) ) {
-            ResetModes( IS_BAD_MAGIC );
-            affected.RemoveMode( IS_BAD_MAGIC );
-        }
+        removeAffection( IS_BAD_MAGIC );
+
         // restore
         hp += ( spell.Restore() * spoint );
-        if ( hp > ArmyTroop::GetHitPoints() )
+        if ( hp > ArmyTroop::GetHitPoints() ) {
             hp = ArmyTroop::GetHitPoints();
+        }
         break;
 
     case Spell::RESURRECT:
@@ -1777,4 +1726,26 @@ const HeroBase * Battle::Unit::GetCurrentOrArmyCommander() const
     assert( arena != nullptr );
 
     return arena->getCommander( GetCurrentOrArmyColor() );
+}
+
+void Battle::Unit::addAffection( const uint32_t mode, const uint32_t duration )
+{
+    assert( CountBits( mode ) == 1 );
+
+    SetModes( mode );
+
+    affected.AddMode( mode, duration );
+}
+
+void Battle::Unit::removeAffection( const uint32_t mode )
+{
+    ResetModes( mode );
+
+    affected.RemoveMode( mode );
+}
+
+void Battle::Unit::replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration )
+{
+    removeAffection( modeToReplace );
+    addAffection( replacementMode, duration );
 }

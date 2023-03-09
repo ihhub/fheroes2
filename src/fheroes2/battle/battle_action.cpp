@@ -235,7 +235,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
                 }
 
                 if ( spell.GetID() == Spell::DISPEL ) {
-                    spellTargetUnit->ResetModes( IS_GOOD_MAGIC );
+                    spellTargetUnit->removeAffection( IS_GOOD_MAGIC );
                 }
                 else {
                     // The unit's built-in spell efficiency does not depend on its commanding hero's skills

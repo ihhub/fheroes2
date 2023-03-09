@@ -271,10 +271,20 @@ namespace Battle
             return idleTimer.checkDelay();
         }
 
+        // Remove temporary affection(s) (usually spell effect(s)). Multiple affections can be removed using a single call.
+        void removeAffection( const uint32_t mode );
+
         // TODO: find a better way to expose it without a million getters/setters
         AnimationState animation;
 
     private:
+        // Add a temporary affection (usually a spell effect) with the specified duration. Only one affection can be added.
+        void addAffection( const uint32_t mode, const uint32_t duration );
+
+        // Replace some temporary affection(s) with another affection. Multiple affections can be replaced by a new one (but
+        // only one) with a single call.
+        void replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration );
+
         const uint32_t _uid;
         uint32_t hp;
         uint32_t count0;
