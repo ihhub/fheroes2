@@ -6003,7 +6003,7 @@ msgid ""
 "brought back from the dead as Skeletons."
 msgstr ""
 "%{skill} umožnuje aby %{count} procent nestvůr padlých v boji mohlo být"
-"vzkříšeno jako Kostlivci.
+"vzkříšeno jako Kostlivci."
 
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
