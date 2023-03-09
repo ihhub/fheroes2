@@ -1220,6 +1220,17 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 
         Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), [unit]( const int32_t v ) { return Board::isValidMirrorImageIndex( v, unit ); } );
         if ( it != distances.end() ) {
+            const HeroBase * commander = GetCurrentCommander();
+            assert( commander != nullptr );
+
+            TargetInfo targetInfo;
+            targetInfo.defender = unit;
+
+            TargetsInfo targetsInfo;
+            targetsInfo.push_back( targetInfo );
+
+            TargetsApplySpell( commander, Spell::MIRRORIMAGE, targetsInfo );
+
             Unit * mirrorUnit = CreateMirrorImage( *unit );
             assert( mirrorUnit != nullptr );
 
@@ -1229,15 +1240,6 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
 
             if ( _interface ) {
-                const HeroBase * commander = GetCurrentCommander();
-                assert( commander != nullptr );
-
-                TargetInfo targetInfo;
-                targetInfo.defender = unit;
-
-                TargetsInfo targetsInfo;
-                targetsInfo.push_back( targetInfo );
-
                 _interface->RedrawActionSpellCastStatus( Spell( Spell::MIRRORIMAGE ), who, commander->GetName(), targetsInfo );
                 _interface->RedrawActionMirrorImageSpell( *unit, pos );
             }

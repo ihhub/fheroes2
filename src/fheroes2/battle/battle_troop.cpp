@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_troop.h"
+
 #include <algorithm>
 #include <cassert>
 #include <ostream>
@@ -37,7 +39,6 @@
 #include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
-#include "battle_troop.h"
 #include "castle.h"
 #include "color.h"
 #include "game_static.h"
@@ -74,8 +75,9 @@ bool Battle::ModeDuration::isZeroDuration() const
 
 void Battle::ModeDuration::DecreaseDuration()
 {
-    if ( second )
+    if ( second ) {
         --second;
+    }
 }
 
 Battle::ModesAffected::ModesAffected()
@@ -86,26 +88,23 @@ Battle::ModesAffected::ModesAffected()
 uint32_t Battle::ModesAffected::GetMode( uint32_t mode ) const
 {
     const_iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
-    return it == end() ? 0 : ( *it ).second;
+    return it == end() ? 0 : it->second;
 }
 
 void Battle::ModesAffected::AddMode( uint32_t mode, uint32_t duration )
 {
     iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
-    if ( it == end() )
+    if ( it == end() ) {
         emplace_back( mode, duration );
-    else
-        ( *it ).second = duration;
+    }
+    else {
+        it->second = duration;
+    }
 }
 
 void Battle::ModesAffected::RemoveMode( uint32_t mode )
 {
-    iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
-    if ( it != end() ) {
-        if ( it + 1 != end() )
-            std::swap( *it, back() );
-        pop_back();
-    }
+    erase( std::remove_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } ), end() );
 }
 
 void Battle::ModesAffected::DecreaseDuration()
@@ -424,8 +423,9 @@ bool Battle::Unit::isIdling() const
 
 void Battle::Unit::NewTurn()
 {
-    if ( isRegenerating() )
+    if ( isRegenerating() ) {
         hp = ArmyTroop::GetHitPoints();
+    }
 
     ResetModes( TR_RESPONDED );
     ResetModes( TR_MOVED );
@@ -435,25 +435,24 @@ void Battle::Unit::NewTurn()
     ResetModes( MORALE_GOOD );
     ResetModes( MORALE_BAD );
 
-    // decrease spell duration
     affected.DecreaseDuration();
 
-    // remove spell duration
-    uint32_t mode = 0;
-    while ( 0 != ( mode = affected.FindZeroDuration() ) ) {
+    for ( uint32_t mode = affected.FindZeroDuration(); mode != 0; mode = affected.FindZeroDuration() ) {
         affected.RemoveMode( mode );
-        ResetModes( mode );
 
-        // cancel mirror image
-        if ( mode == CAP_MIRROROWNER && mirror ) {
+        if ( mode == CAP_MIRROROWNER ) {
+            assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) );
+
             if ( Arena::GetInterface() ) {
-                std::vector<Unit *> images;
-                images.push_back( mirror );
-                Arena::GetInterface()->RedrawActionRemoveMirrorImage( images );
+                Arena::GetInterface()->RedrawActionRemoveMirrorImage( { mirror } );
             }
 
+            mirror->hp = 0;
             mirror->SetCount( 0 );
-            mirror = nullptr;
+            mirror->PostKilledAction();
+        }
+        else {
+            ResetModes( mode );
         }
     }
 }
@@ -655,18 +654,25 @@ uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
 
 void Battle::Unit::PostKilledAction()
 {
-    // Remove mirror image (master)
+    assert( !AllModes( CAP_MIRROROWNER | CAP_MIRRORIMAGE ) );
+
     if ( Modes( CAP_MIRROROWNER ) ) {
-        modes = 0;
+        assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+
         mirror->hp = 0;
         mirror->SetCount( 0 );
         mirror->mirror = nullptr;
         mirror = nullptr;
+
         ResetModes( CAP_MIRROROWNER );
+        affected.RemoveMode( CAP_MIRROROWNER );
     }
-    // Remove mirror image (slave)
+
     if ( Modes( CAP_MIRRORIMAGE ) && mirror != nullptr ) {
+        assert( mirror->Modes( CAP_MIRROROWNER ) );
+
         mirror->ResetModes( CAP_MIRROROWNER );
+        mirror->affected.RemoveMode( CAP_MIRROROWNER );
         mirror = nullptr;
     }
 
@@ -679,6 +685,9 @@ void Battle::Unit::PostKilledAction()
     ResetModes( IS_MAGIC );
 
     SetModes( TR_MOVED );
+
+    affected.RemoveMode( IS_MAGIC );
+    assert( affected.empty() );
 
     // Save to the graveyard if possible
     if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) ) {
@@ -1311,7 +1320,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
         break;
 
     case Spell::MIRRORIMAGE:
-        affected.AddMode( CAP_MIRRORIMAGE, duration );
+        affected.AddMode( CAP_MIRROROWNER, duration );
         break;
 
     case Spell::DISRUPTINGRAY:
