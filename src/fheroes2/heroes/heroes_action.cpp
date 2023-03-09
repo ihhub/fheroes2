@@ -1654,7 +1654,7 @@ namespace
 
                 const fheroes2::Point artifactPosition = Maps::GetPoint( dst_index );
 
-                // Update the position of picked up artefact on radar to remove its mark.
+                // Update the position of picked up artifact on radar to remove its mark.
                 I.GetRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
                 I.SetRedraw( Interface::REDRAW_RADAR );
             }
