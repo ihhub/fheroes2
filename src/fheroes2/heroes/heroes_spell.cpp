@@ -588,7 +588,15 @@ namespace
             if ( spell == Spell::HAUNT ) {
                 world.CaptureObject( tile.GetIndex(), Color::NONE );
                 tile.removeOwnershipFlag( MP2::OBJ_MINES );
+                // TODO: Update all mine tiles around "mine entrance" to OBJ_NON_ACTION_ABANDONED_MINE (like Maps::Tiles::UpdateAbandonedMineSprite())
                 hero.SetMapsObject( MP2::OBJ_ABANDONED_MINE );
+
+                // Update the color of haunted mine on radar.
+                Interface::Basic & I = Interface::Basic::Get();
+                const fheroes2::Point heroPosition = hero.GetCenter();
+                I.GetRadar().SetRenderArea( { heroPosition.x - 1, heroPosition.y - 1, 3, 2 } );
+
+                I.SetRedraw( Interface::REDRAW_RADAR );
             }
 
             world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );
