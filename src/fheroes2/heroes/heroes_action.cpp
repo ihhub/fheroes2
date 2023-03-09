@@ -1977,7 +1977,7 @@ namespace
 
                 tile.QuantitySetColor( hero.GetColor() );
 
-                // Set the radar update ROI according to image size and position.
+                // Set the radar update ROI according to captured object size and position.
                 fheroes2::Rect radarRoi( Maps::GetPoint( dst_index ), { 1, 1 } );
                 switch ( objectType ) {
                 case MP2::OBJ_SAWMILL:
