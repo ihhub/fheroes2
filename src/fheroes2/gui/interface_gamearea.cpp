@@ -478,17 +478,18 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const int32_t roiToRenderMaxY = std::min( maxY + 2, world.h() );
 
     // These are parts of original action objects which must be rendered under heroes / boats.
-    std::vector<int32_t> staticActionObjectTiles;
+    //std::vector<int32_t> staticActionObjectTiles;
 
     for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
             const Maps::Tiles & tile = world.GetTiles( posX, posY );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog  ) {
+            MP2::MapObjectType objectType = tile.GetObject();
+
+            // We skip objects under the fog except the boats as they are more than 2 tiles tall objects.
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog && objectType != MP2::OBJ_BOAT ) {
                 continue;
             }
-
-            MP2::MapObjectType objectType = tile.GetObject();
 
             switch ( objectType ) {
             case MP2::OBJ_HEROES: {
@@ -539,7 +540,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 break;
             }
 
-            switch ( objectType ) {
+            /*switch ( objectType ) {
             case MP2::OBJ_MINES: {
                 staticActionObjectTiles.push_back( tile.GetIndex() );
                 break;
@@ -547,11 +548,20 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             default:
                 break;
+            }*/
+
+            // These are parts of original action objects which must be rendered under heroes.
+            if ( objectType == MP2::OBJ_MINES ) {
+                auto spriteInfo = tile.getMineGuardianSpritesPerTile();
+                if ( !spriteInfo.empty() ) {
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );
+                    populateStaticTileUnfitBackgroundObjectInfo( tileUnfit, spriteInfo, tile.GetCenter(), alphaValue );
+                }
             }
         }
     }
 
-    for ( const int32_t tileId : staticActionObjectTiles ) {
+    /*for ( const int32_t tileId : staticActionObjectTiles ) {
         const Maps::Tiles & tile = world.GetTiles( tileId );
         MP2::MapObjectType objectType = tile.GetObject( false );
         switch ( objectType ) {
@@ -568,7 +578,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         default:
             break;
         }
-    }
+    }*/
 
     // Tile unfit objects should be rendered over the edge of the map, except the bottom. We also shouldn't render their shadows over the edge.
     // If a tile contains fog we shouldn't draw anything over the edge.
@@ -608,8 +618,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
-            
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog  ) {
+
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
                 continue;
             }
 
@@ -623,7 +633,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog  ) {
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
                 continue;
             }
 
@@ -638,7 +648,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog  ) {
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
                 continue;
             }
 
@@ -653,7 +663,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog  ) {
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
                 continue;
             }
 
@@ -676,6 +686,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
+                continue;
+            }
 
             // Since some objects are taller than 2 tiles their top layer sprites must be drawn at the very end.
             // For now what we need to do is to run through all level 2 objects and verify that the tile below doesn't have
@@ -789,7 +803,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     updateObjectAnimationInfo();
 
     const double tmp = counter.getS() * 1000;
-    VERBOSE_LOG(tmp)
+    VERBOSE_LOG( tmp )
 }
 
 void Interface::GameArea::updateMapFogDirections() const
