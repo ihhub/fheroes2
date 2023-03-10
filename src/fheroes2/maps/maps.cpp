@@ -345,6 +345,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     }
 
     const int alliedColors = Players::GetPlayerFriends( playerColor );
+    const bool isHumanFriend = Players::isFriends( playerColor, Players::HumanColors() );
 
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
 
@@ -371,7 +372,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
 
                 tile.ClearFog( alliedColors );
 
-                if ( !isAIPlayer && isFogOnMap ) {
+                if ( ( !isAIPlayer || isHumanFriend ) && isFogOnMap ) {
                     tile.setFogDirection( alliedColors );
                     tile.updateFogDirectionsAround( alliedColors );
                 }

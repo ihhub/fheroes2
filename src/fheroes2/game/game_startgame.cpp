@@ -582,7 +582,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
-    Interface::GameArea::updateMapFogDirections();
 
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
@@ -640,6 +639,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                         iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
+                        // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
                         Interface::GameArea::updateMapFogDirections();
 
                         Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
@@ -698,6 +698,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     display.render();
 
                     world.ClearFog( player->GetColor() );
+
+                    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) && Players::isFriends( player->GetColor(), Players::HumanColors() ) ) {
+                        // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
+                        Interface::GameArea::updateMapFogDirections();
+                    }
 
                     kingdom.ActionBeforeTurn();
 
@@ -767,6 +772,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     radar.SetHide( false );
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
+    // Fully update fog directions at the start of player's move.
     Interface::GameArea::updateMapFogDirections();
 
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );

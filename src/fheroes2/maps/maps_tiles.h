@@ -265,6 +265,7 @@ namespace Maps
         void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
         void updateFogDirectionsAround( const int32_t color ) const;
         void setFogDirection( const int32_t color );
+        void resetFogDirection();
         uint16_t getFogDirection( const int32_t color ) const;
         uint16_t getFogDirection() const
         {
@@ -466,7 +467,7 @@ namespace Maps
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
         uint16_t tilePassable = DIRECTION_ALL;
         uint8_t _fogColors = Color::ALL;
-        uint16_t _fogDirection{ Direction::CENTER }; // DIRECTION_ALL
+        uint16_t _fogDirection{ DIRECTION_ALL };
 
         uint8_t heroID = 0;
 
