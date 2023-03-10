@@ -588,7 +588,7 @@ namespace
             if ( spell == Spell::HAUNT ) {
                 world.CaptureObject( tile.GetIndex(), Color::NONE );
                 tile.removeOwnershipFlag( MP2::OBJ_MINES );
-                // TODO: Update all mine tiles around "mine entrance" to OBJ_NON_ACTION_ABANDONED_MINE (like Maps::Tiles::UpdateAbandonedMineSprite())
+                tile.setAbandonedMineObjectType();
                 hero.SetMapsObject( MP2::OBJ_ABANDONED_MINE );
 
                 // Update the color of haunted mine on radar.
