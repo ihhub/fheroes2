@@ -35,6 +35,7 @@
 #include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
+#include "direction.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "gamedefs.h"
