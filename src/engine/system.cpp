@@ -224,6 +224,15 @@ bool System::isHandheldDevice()
 #endif
 }
 
+bool System::isVirtualKeyboardSupported()
+{
+#if defined( ANDROID ) || defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+    return true;
+#else
+    return false;
+#endif
+}
+
 bool System::isShellLevelGlobbingSupported()
 {
 #if defined( _WIN32 )

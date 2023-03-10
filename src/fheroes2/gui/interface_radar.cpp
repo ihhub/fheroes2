@@ -311,22 +311,20 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                 }
                 break;
             }
-            case MP2::OBJ_DRAGON_CITY:
             case MP2::OBJ_LIGHTHOUSE:
             case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_MINES:
             case MP2::OBJ_SAWMILL:
-                // TODO: why Dragon City and Lighthouse are in this category? Verify the logic!
+                // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                 }
                 break;
-            case MP2::OBJ_NON_ACTION_DRAGON_CITY:
             case MP2::OBJ_NON_ACTION_LIGHTHOUSE:
             case MP2::OBJ_NON_ACTION_ALCHEMIST_LAB:
             case MP2::OBJ_NON_ACTION_MINES:
             case MP2::OBJ_NON_ACTION_SAWMILL:
-                // TODO: why Dragon City and Lighthouse are in this category? Verify the logic!
+                // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
                     const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
                     if ( mainTileIndex >= 0 ) {

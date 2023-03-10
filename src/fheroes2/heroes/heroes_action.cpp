@@ -587,6 +587,9 @@ namespace
         hero.SetShipMaster( true );
         hero.GetPath().Reset();
 
+        // Boat is no longer empty so we reset color to default
+        world.GetTiles( dst_index ).resetBoatOwnerColor();
+
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
 
@@ -596,11 +599,12 @@ namespace
             return;
 
         const int fromIndex = hero.GetIndex();
+        Maps::Tiles & from = world.GetTiles( fromIndex );
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
-        world.GetTiles( fromIndex ).setBoat( Maps::GetDirection( fromIndex, dst_index ) );
+        from.setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor() );
         hero.SetShipMaster( false );
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
@@ -2267,7 +2271,8 @@ namespace
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
-                tile.QuantitySetColor( hero.GetColor() );
+                // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
+                tile.QuantitySetColor( Color::UNUSED );
                 tile.SetObjectPassable( true );
 
                 if ( Dialog::Message( title, victoryMsg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
@@ -2643,7 +2648,7 @@ namespace
         }
         else {
             const Funds & funds = tile.QuantityFunds();
-            bool conditionsMet = ( funds.GetValidItemsCount() == 0 );
+            bool increaseExperience = ( funds.GetValidItemsCount() == 0 );
 
             const int level = hero.GetLevel();
             assert( level > 0 );
@@ -2653,7 +2658,7 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::EXPERIENCE );
 
                 // Free training
-                if ( conditionsMet ) {
+                if ( increaseExperience ) {
                     const std::string msg = _(
                         "Upon your approach, the tree opens its eyes in delight. \"Ahh, an adventurer! Allow me to teach you a little of what I have learned over the ages.\"" );
 
@@ -2661,7 +2666,8 @@ namespace
                     const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
                     const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
-                    fheroes2::showMessage( titleUI, messageUI, Dialog::OK, { &experienceUI } );
+                    // In the original game, there was no way to refuse to level up for free, this is an improvement specific to fheroes2
+                    increaseExperience = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
                 }
                 else {
                     const ResourceCount & rc = tile.QuantityResourceCount();
@@ -2680,7 +2686,7 @@ namespace
                         const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
                         const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
-                        conditionsMet = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
+                        increaseExperience = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
                     }
                     else {
                         std::string msg = _( "Tears brim in the eyes of the tree." );
@@ -2696,7 +2702,7 @@ namespace
                 }
             }
 
-            if ( conditionsMet ) {
+            if ( increaseExperience ) {
                 hero.GetKingdom().OddFundsResource( funds );
                 hero.SetVisited( dst_index );
                 hero.IncreaseExperience( possibleExperience );
@@ -3429,7 +3435,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         Interface::Basic & I = Interface::Basic::Get();
 
         I.GetGameArea().SetCenter( GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_HEROES );
     }
 
     switch ( objectType ) {

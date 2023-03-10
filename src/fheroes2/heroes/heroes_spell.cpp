@@ -310,15 +310,23 @@ namespace
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
-            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
-            if ( distance > 1 ) {
-                const Maps::Tiles & tileSource = world.GetTiles( boatSource );
+            Maps::Tiles & tileSource = world.GetTiles( boatSource );
+            const int boatColor = tileSource.getBoatOwnerColor();
+            const int heroColor = hero.GetColor();
 
+            if ( boatColor != Color::NONE && boatColor != heroColor ) {
+                continue;
+            }
+
+            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
+
+            if ( distance > 1 ) {
                 Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
                 Maps::Tiles & tileDest = world.GetTiles( boatDestination );
-                tileDest.setBoat( Direction::RIGHT );
+                tileDest.setBoat( Direction::RIGHT, heroColor );
+                tileSource.resetBoatOwnerColor();
 
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 
