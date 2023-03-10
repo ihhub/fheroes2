@@ -461,7 +461,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
 
-    const int friendColors = Players::FriendColors();
+    const int32_t friendColors = Players::FriendColors();
 
     TileUnfitRenderObjectInfo tileUnfit;
 
@@ -755,7 +755,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 const Maps::Tiles & tile = world.GetTiles( x, y );
 
                 if ( tile.getFogDirection() != Direction::UNKNOWN ) {
-                    tile.drawFog( dst, friendColors, *this );
+                    tile.drawFog( dst, *this );
 
                     if ( drawTowns ) {
                         tile.drawByObjectIcnType( dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
@@ -776,11 +776,12 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     VERBOSE_LOG( tmp )
 }
 
-void Interface::GameArea::updateMapFogDirections() const
+void Interface::GameArea::updateMapFogDirections()
 {
     const int32_t friendColors = Players::FriendColors();
+    const int32_t worldSize = static_cast<int32_t>( world.getSize() );
 
-    for ( int32_t i = 0; i < world.getSize(); ++i ) {
+    for ( int32_t i = 0; i < worldSize; ++i ) {
         world.GetTiles( i ).setFogDirection( friendColors );
     }
 }

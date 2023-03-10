@@ -2504,16 +2504,16 @@ uint16_t Maps::Tiles::getFogDirection( const int32_t color ) const
     return fogDirection;
 }
 
-void Maps::Tiles::drawFog( fheroes2::Image & dst, const int32_t /*color*/, const Interface::GameArea & area ) const
+void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const
 {
     // This method should be called only for tiles with fog.
     assert( _fogDirection != Direction::UNKNOWN );
-  
+
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
     if ( DIRECTION_ALL == _fogDirection ) {
-        //const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
-        //area.DrawTile( dst, sf, mp );
+        const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
+        area.DrawTile( dst, sf, mp );
     }
     else {
         uint32_t index = 0;
@@ -2629,31 +2629,39 @@ void Maps::Tiles::drawFog( fheroes2::Image & dst, const int32_t /*color*/, const
                   && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
             index = 22;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT )
+                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
             index = 24;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_RIGHT )
+                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_LEFT ) ) ) {
             index = 24;
             revert = true;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::LEFT | Direction::TOP_LEFT ) && !( _fogDirection & ( Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::LEFT | Direction::TOP_LEFT )
+                  && !( _fogDirection & ( Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 25;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::RIGHT | Direction::TOP_RIGHT ) && !( _fogDirection & ( Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::RIGHT | Direction::TOP_RIGHT )
+                  && !( _fogDirection & ( Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 25;
             revert = true;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::BOTTOM_LEFT | Direction::LEFT ) && !( _fogDirection & ( Direction::RIGHT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::BOTTOM_LEFT | Direction::LEFT )
+                  && !( _fogDirection & ( Direction::RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 26;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::BOTTOM_RIGHT | Direction::RIGHT ) && !( _fogDirection & ( Direction::LEFT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::BOTTOM_RIGHT | Direction::RIGHT )
+                  && !( _fogDirection & ( Direction::LEFT | Direction::TOP_RIGHT ) ) ) {
             index = 26;
             revert = true;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP_LEFT | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP_LEFT | Direction::TOP )
+                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_RIGHT ) ) ) {
             index = 30;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP_RIGHT | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP_RIGHT | Direction::TOP )
+                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_LEFT ) ) ) {
             index = 30;
             revert = true;
         }
@@ -2675,17 +2683,21 @@ void Maps::Tiles::drawFog( fheroes2::Image & dst, const int32_t /*color*/, const
             index = 28;
             revert = true;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP )
+                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
             index = 31;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::RIGHT ) && !( _fogDirection & ( Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::RIGHT )
+                  && !( _fogDirection & ( Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 32;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::LEFT ) && !( _fogDirection & ( Direction::RIGHT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::LEFT )
+                  && !( _fogDirection & ( Direction::RIGHT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
             index = 32;
             revert = true;
         }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM )
+                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 33;
         }
         else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW ) && !( _fogDirection & Direction::TOP ) ) {

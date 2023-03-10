@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "maps.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -33,7 +35,6 @@
 #include "game.h"
 #include "kingdom.h"
 #include "logging.h"
-#include "maps.h"
 #include "maps_tiles.h"
 #include "players.h"
 #include "race.h"
@@ -332,7 +333,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
 {
     // We should not clear fog for the NONE player color.
     assert( playerColor != Color::NONE );
-    
+
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         // Nothing to uncover.
         return;
@@ -373,7 +374,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
 
                 tile.ClearFog( alliedColors );
 
-                if ( !isAIPlayer && isFogOnMap) {
+                if ( !isAIPlayer && isFogOnMap ) {
                     tile.setFogDirection( alliedColors );
                     tile.updateFogDirectionsAround( alliedColors );
                 }

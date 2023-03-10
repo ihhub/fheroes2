@@ -217,7 +217,7 @@ namespace Interface
             updateCursor = true;
         }
 
-        void updateMapFogDirections() const;
+        static void updateMapFogDirections();
 
         void QueueEventProcessing( bool isCursorOverGamearea );
 
