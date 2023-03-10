@@ -6002,7 +6002,7 @@ msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
-"%{skill} umožnuje aby %{count} procent nestvůr padlých v boji mohlo být"
+"%{skill} umožnuje aby %{count} procent nestvůr padlých v boji mohlo být "
 "vzkříšeno jako Kostlivci."
 
 msgid ""
@@ -6107,10 +6107,8 @@ msgstr "Zlata za den:"
 msgid "Heroes"
 msgstr "Hrdinové"
 
-
 msgid "View Heroes."
 msgstr "Zobraz Hrdiny."
-
 
 msgid "Towns/Castles"
 msgstr "Města/Hrady"
@@ -6188,7 +6186,7 @@ msgid ""
 "Neutral morale means your armies will never be blessed with extra attacks or "
 "freeze in combat."
 msgstr ""
-"Neutrální morálka znamená, že Tvé jednotky neboudou obdařené útokem navíc ale"
+"Neutrální morálka znamená, že Tvé jednotky neboudou obdařené útokem navíc ale "
 "ani v boji neztuhnou."
 
 msgid "Good morale may give your armies extra attacks in combat."
