@@ -28,6 +28,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
+#include <initializer_list>
 #include <iostream>
 #include <limits>
 #include <map>
