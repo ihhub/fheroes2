@@ -478,7 +478,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const int32_t roiToRenderMaxY = std::min( maxY + 2, world.h() );
 
     // These are parts of original action objects which must be rendered under heroes / boats.
-    //std::vector<int32_t> staticActionObjectTiles;
 
     for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
@@ -540,16 +539,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 break;
             }
 
-            /*switch ( objectType ) {
-            case MP2::OBJ_MINES: {
-                staticActionObjectTiles.push_back( tile.GetIndex() );
-                break;
-            }
-
-            default:
-                break;
-            }*/
-
             // These are parts of original action objects which must be rendered under heroes.
             if ( objectType == MP2::OBJ_MINES ) {
                 auto spriteInfo = tile.getMineGuardianSpritesPerTile();
@@ -560,25 +549,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
         }
     }
-
-    /*for ( const int32_t tileId : staticActionObjectTiles ) {
-        const Maps::Tiles & tile = world.GetTiles( tileId );
-        MP2::MapObjectType objectType = tile.GetObject( false );
-        switch ( objectType ) {
-        case MP2::OBJ_MINES: {
-            auto spriteInfo = tile.getMineGuardianSpritesPerTile();
-            if ( !spriteInfo.empty() ) {
-                const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );
-                populateStaticTileUnfitBackgroundObjectInfo( tileUnfit, spriteInfo, tile.GetCenter(), alphaValue );
-            }
-
-            break;
-        }
-
-        default:
-            break;
-        }
-    }*/
 
     // Tile unfit objects should be rendered over the edge of the map, except the bottom. We also shouldn't render their shadows over the edge.
     // If a tile contains fog we shouldn't draw anything over the edge.
