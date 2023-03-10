@@ -2463,7 +2463,10 @@ void Maps::Tiles::updateFogDirectionsAround( const int32_t color ) const
 {
     for ( const int32_t direction : Direction::All() ) {
         if ( isValidDirection( _index, direction ) ) {
-            world.GetTiles( GetDirectionIndex( _index, direction ) ).setFogDirection( color );
+            Maps::Tiles & tile = world.GetTiles( GetDirectionIndex( _index, direction ) );
+            if ( tile.getFogDirection() != Direction::UNKNOWN ) {
+                tile.setFogDirection( color );
+            }
         }
     }
 }
@@ -2490,10 +2493,10 @@ uint16_t Maps::Tiles::getFogDirection( const int32_t color ) const
     return fogDirection;
 }
 
-void Maps::Tiles::drawFog( fheroes2::Image & dst, const int32_t color, const Interface::GameArea & area ) const
+void Maps::Tiles::drawFog( fheroes2::Image & dst, const int32_t /*color*/, const Interface::GameArea & area ) const
 {
     // This method should be called only for tiles with fog.
-    assert( isFog( color ) );
+    assert( _fogDirection != Direction::UNKNOWN );
   
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
