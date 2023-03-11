@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_troop.h"
+
 #include <algorithm>
 #include <cassert>
 #include <ostream>
@@ -37,7 +39,6 @@
 #include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
-#include "battle_troop.h"
 #include "castle.h"
 #include "color.h"
 #include "game_static.h"
@@ -664,21 +665,15 @@ void Battle::Unit::PostKilledAction()
         mirror = nullptr;
         ResetModes( CAP_MIRROROWNER );
     }
+
     // Remove mirror image (slave)
     if ( Modes( CAP_MIRRORIMAGE ) && mirror != nullptr ) {
         mirror->ResetModes( CAP_MIRROROWNER );
         mirror = nullptr;
     }
 
-    ResetModes( TR_RESPONDED );
-    ResetModes( TR_SKIP );
-    ResetModes( LUCK_GOOD );
-    ResetModes( LUCK_BAD );
-    ResetModes( MORALE_GOOD );
-    ResetModes( MORALE_BAD );
+    // Remove all spells
     ResetModes( IS_MAGIC );
-
-    SetModes( TR_MOVED );
 
     // Save to the graveyard if possible
     if ( !Modes( CAP_MIRRORIMAGE ) && !isElemental() ) {
@@ -706,9 +701,6 @@ void Battle::Unit::PostKilledAction()
 uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool skip_dead )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
-
-    if ( hp == 0 ) // Skip turn if already dead
-        SetModes( TR_MOVED );
 
     SetCount( GetCount() + resurrect );
     hp += points;
@@ -1528,16 +1520,17 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
     case Spell::RESURRECT:
     case Spell::ANIMATEDEAD:
     case Spell::RESURRECTTRUE: {
-        // remove from graveyard
         if ( !isValid() ) {
-            // TODO: buggy behaviour
-            Arena::GetGraveyard()->RemoveTroop( *this );
+            Graveyard * graveyard = Arena::GetGraveyard();
+            assert( graveyard != nullptr );
+
+            graveyard->RemoveTroop( *this );
         }
 
         const uint32_t restore = fheroes2::getResurrectPoints( spell, spoint, hero );
         const uint32_t resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
-        // Puts back the unit in the board
+        // Put the unit back on the board
         SetPosition( GetPosition() );
 
         if ( Arena::GetInterface() ) {
