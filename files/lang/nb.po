@@ -3791,7 +3791,7 @@ msgid "View High Scores for Campaigns."
 msgstr "Vis rekordtavle for felttog."
 
 msgid "The save file is corrupted."
-msgstr "Lagringsfilen er korrupt"
+msgstr "Lagringsfilen er korrupt."
 
 msgid "Unsupported save format: "
 msgstr "Ustøttet lagringsformat: "
