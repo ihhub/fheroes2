@@ -188,7 +188,7 @@ namespace
         case BUILD_CASTLE:
             return { 0, 0, 201, 179 };
         case BUILD_CAPTAIN:
-            return { 204, 122, 37, 52 };
+            return { 223, 122, 37, 52 };
         case BUILD_MAGEGUILD1:
             return { 280, 21, 60, 143 };
         case BUILD_MAGEGUILD2:
