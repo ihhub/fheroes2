@@ -2614,6 +2614,10 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 1 );
                 h2d::readImage( "barbarian_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
                 return true;
+            case ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE:
+                _icnVsSprite[id].resize( 1 );
+                h2d::readImage( "sorceress_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
+                return true;
             case ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS: {
                 _icnVsSprite[id].resize( 1 );
                 Sprite & output = _icnVsSprite[id][0];
