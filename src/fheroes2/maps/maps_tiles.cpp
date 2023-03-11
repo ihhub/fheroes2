@@ -2311,11 +2311,11 @@ void Maps::Tiles::UpdateAbandonedMineSprite( Tiles & tile )
     }
 }
 
-void Maps::Tiles::setAbandonedMineObjectType() const
+void Maps::Tiles::setAbandonedMineObjectType( const Tiles & tile )
 {
     for ( const int32_t direction : { Direction::LEFT, Direction::TOP_LEFT, Direction::TOP, Direction::TOP_RIGHT, Direction::RIGHT } ) {
-        if ( Maps::isValidDirection( _index, direction ) ) {
-            Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( _index, direction ) );
+        if ( Maps::isValidDirection( tile._index, direction ) ) {
+            Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, direction ) );
 
             if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_MINES ) {
                 tile2.SetObject( MP2::OBJ_NON_ACTION_ABANDONED_MINE );

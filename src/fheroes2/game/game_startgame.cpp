@@ -763,8 +763,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     }
 
     radar.SetHide( false );
-    // Force set radar ROI for the whole world as there could unused ROI from the last allied AI hero move in Hot Seat mode.
-    radar.SetRenderArea( { 0, 0, world.w(), world.h() } );
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
 

@@ -582,7 +582,7 @@ namespace
 
         // Update the radar map image before changing the direction of the hero.
         Interface::Basic & I = Interface::Basic::Get();
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( false ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.Redraw( Interface::REDRAW_RADAR );
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
@@ -613,7 +613,7 @@ namespace
 
         // Clear hero position marker from the boat and scout the area on radar after disembarking.
         Interface::Basic & I = Interface::Basic::Get();
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( false ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.SetRedraw( Interface::REDRAW_RADAR );
 
         hero.GetPath().Reset();
@@ -965,7 +965,7 @@ namespace
                 // When Scouting skill is learned we reveal the fog and redraw the radar map image in a new scout area of the hero.
                 if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
                     hero.Scout( hero.GetIndex() );
-                    hero.ScoutRadar( true );
+                    hero.ScoutRadar();
                 }
 
                 msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
@@ -1827,7 +1827,7 @@ namespace
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -1867,7 +1867,7 @@ namespace
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -1983,6 +1983,7 @@ namespace
 
                 tile.QuantitySetColor( hero.GetColor() );
 
+                // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
                 // Set the radar update ROI according to captured object size and position.
                 fheroes2::Rect radarRoi( Maps::GetPoint( dst_index ), { 1, 1 } );
                 switch ( objectType ) {
@@ -3389,7 +3390,7 @@ namespace
     }
 }
 
-void Heroes::ScoutRadar( const bool ignoreDirection ) const
+void Heroes::ScoutRadar() const
 {
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -3403,7 +3404,7 @@ void Heroes::ScoutRadar( const bool ignoreDirection ) const
         if ( !player->isAIAutoControlMode() ) {
 #endif
 
-            I.GetRadar().SetRenderArea( GetScoutRoi( ignoreDirection ) );
+            I.GetRadar().SetRenderArea( GetScoutRoi() );
 
 #if defined( WITH_DEBUG )
         }

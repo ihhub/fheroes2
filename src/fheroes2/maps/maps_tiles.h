@@ -377,7 +377,7 @@ namespace Maps
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
         static void UpdateAbandonedMineSprite( Tiles & tile );
-        void setAbandonedMineObjectType() const;
+        static void setAbandonedMineObjectType( const Tiles & tile );
 
         // Some tiles have incorrect object type. This is due to original Editor issues.
         static void fixTileObjectType( Tiles & tile );

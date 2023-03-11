@@ -723,7 +723,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     Scout( GetIndex() );
     if ( isControlHuman() ) {
         // And the radar image map for human player.
-        ScoutRadar( true );
+        ScoutRadar();
     }
 
     return true;
@@ -993,7 +993,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
             const std::vector<fheroes2::ArtifactBonus> bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
             if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) != bonuses.end() ) {
                 Scout( this->GetIndex() );
-                ScoutRadar( true );
+                ScoutRadar();
                 return true;
             }
             return false;
@@ -1288,7 +1288,7 @@ void Heroes::Scout( const int tileIndex ) const
     if ( player->isAIAutoControlMode() ) {
         // We redraw the radar map fully as there is no need to make a code for rendering optimizations for AI debug tracking.
         // As AI don't waste time for thinking between hero moves we don't need to force radar update in other places.
-        ScoutRadar( true );
+        ScoutRadar();
     }
 #endif
 }
@@ -1299,18 +1299,12 @@ int Heroes::GetScoutingDistance() const
                              + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
 }
 
-fheroes2::Rect Heroes::GetScoutRoi( const bool ignoreDirection ) const
+fheroes2::Rect Heroes::GetScoutRoi() const
 {
     const int32_t scoutRange = GetScoutingDistance();
     const fheroes2::Point heroPosition = GetCenter();
 
-    if ( ignoreDirection ) {
-        return { heroPosition.x - scoutRange, heroPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 };
-    }
-
-    return { heroPosition.x - ( ( direction == Direction::RIGHT ) ? 1 : scoutRange ), heroPosition.y - ( ( direction == Direction::BOTTOM ) ? 1 : scoutRange ),
-             ( ( direction == Direction::LEFT || direction == Direction::RIGHT ) ? 1 : scoutRange ) + scoutRange + 1,
-             ( ( direction == Direction::TOP || direction == Direction::BOTTOM ) ? 1 : scoutRange ) + scoutRange + 1 };
+    return { heroPosition.x - scoutRange, heroPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 };
 }
 
 uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
@@ -1444,7 +1438,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         // Scout the area around the hero if his Scouting skill was leveled and he belongs to any kingdom.
         if ( ( selected.Skill() == Skill::Secondary::SCOUTING ) && ( GetColor() != Color::NONE ) ) {
             Scout( GetIndex() );
-            ScoutRadar( true );
+            ScoutRadar();
         }
     }
 }

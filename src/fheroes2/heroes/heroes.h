@@ -464,7 +464,7 @@ public:
     void ActionSpellCast( const Spell & spell );
 
     // Update map in the scout area around the Hero on radar (mini-map).
-    void ScoutRadar( const bool ignoreDirection ) const;
+    void ScoutRadar() const;
 
     bool MayCastAdventureSpells() const;
 
@@ -498,8 +498,7 @@ public:
     int GetScoutingDistance() const;
 
     // Returns the area in map tiles around hero's position in his scout range.
-    // For non-diagonal hero move the area is set only in move direction and one tile behind (to clear Hero's previous position).
-    fheroes2::Rect GetScoutRoi( const bool ignoreDirection ) const;
+    fheroes2::Rect GetScoutRoi() const;
 
     uint32_t GetVisionsDistance() const;
 

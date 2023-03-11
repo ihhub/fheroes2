@@ -654,7 +654,7 @@ void Heroes::MoveStep( Heroes & hero, int32_t indexTo, bool newpos )
 
         if ( hero.isControlHuman() ) {
             // Update the radar map image in the area that is visible to the hero after his movement.
-            hero.ScoutRadar( false );
+            hero.ScoutRadar();
         }
 
         hero.ActionNewPosition( true );
