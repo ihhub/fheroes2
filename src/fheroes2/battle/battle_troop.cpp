@@ -336,11 +336,6 @@ bool Battle::Unit::isFlying() const
     return ArmyTroop::isFlying() && !Modes( SP_SLOW );
 }
 
-bool Battle::Unit::isValid() const
-{
-    return GetCount() != 0;
-}
-
 bool Battle::Unit::OutOfWalls() const
 {
     return Board::isOutOfWallsIndex( GetHeadIndex() ) || ( isWide() && Board::isOutOfWallsIndex( GetTailIndex() ) );
@@ -441,7 +436,7 @@ void Battle::Unit::NewTurn()
         assert( Modes( mode ) );
 
         if ( mode == CAP_MIRROROWNER ) {
-            assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) );
+            assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
 
             if ( Arena::GetInterface() ) {
                 Arena::GetInterface()->RedrawActionRemoveMirrorImage( { mirror } );
@@ -608,49 +603,59 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy ) const
 
 uint32_t Battle::Unit::HowManyWillKilled( uint32_t dmg ) const
 {
+    if ( Modes( CAP_MIRRORIMAGE ) ) {
+        return GetCount();
+    }
+
     return dmg >= hp ? GetCount() : GetCount() - Monster::GetCountFromHitPoints( *this, hp - dmg );
 }
 
-uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
+uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
 {
-    if ( dmg && GetCount() ) {
-        uint32_t killed = HowManyWillKilled( dmg );
-
-        // mirror image dies if it receives any damage
-        if ( Modes( CAP_MIRRORIMAGE ) ) {
-            dmg = hp;
-            killed = GetCount();
-        }
-
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed )
-
-        // clean paralyze or stone magic
-        if ( Modes( IS_PARALYZE_MAGIC ) ) {
-            SetModes( TR_RESPONDED );
-            SetModes( TR_MOVED );
-
-            removeAffection( IS_PARALYZE_MAGIC );
-        }
-
-        // blind
-        if ( Modes( SP_BLIND ) ) {
-            ResetBlind();
-        }
-
-        if ( killed >= GetCount() ) {
-            dead += GetCount();
-            SetCount( 0 );
-        }
-        else {
-            dead += killed;
-            SetCount( GetCount() - killed );
-        }
-        hp -= ( dmg >= hp ? hp : dmg );
-
-        return killed;
+    if ( dmg == 0 || GetCount() == 0 ) {
+        return 0;
     }
 
-    return 0;
+    const uint32_t killed = HowManyWillKilled( dmg );
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed )
+
+    if ( Modes( IS_PARALYZE_MAGIC ) ) {
+        SetModes( TR_RESPONDED );
+        SetModes( TR_MOVED );
+
+        removeAffection( IS_PARALYZE_MAGIC );
+    }
+
+    if ( Modes( SP_BLIND ) ) {
+        ResetBlind();
+    }
+
+    if ( killed >= GetCount() ) {
+        dead += GetCount();
+
+        SetCount( 0 );
+    }
+    else {
+        dead += killed;
+
+        SetCount( GetCount() - killed );
+    }
+
+    if ( Modes( CAP_MIRRORIMAGE ) ) {
+        hp = 0;
+    }
+    else {
+        hp -= std::min( hp, dmg );
+    }
+
+    if ( Modes( CAP_MIRROROWNER ) && !isValid() ) {
+        assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+
+        mirror->ApplyDamage( mirror->hp );
+    }
+
+    return killed;
 }
 
 void Battle::Unit::PostKilledAction()
@@ -660,18 +665,24 @@ void Battle::Unit::PostKilledAction()
     if ( Modes( CAP_MIRROROWNER ) ) {
         assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
 
-        mirror->hp = 0;
-        mirror->SetCount( 0 );
-        mirror->mirror = nullptr;
         mirror = nullptr;
 
         removeAffection( CAP_MIRROROWNER );
     }
 
-    if ( Modes( CAP_MIRRORIMAGE ) && mirror != nullptr ) {
-        assert( mirror->Modes( CAP_MIRROROWNER ) );
+    if ( Modes( CAP_MIRRORIMAGE ) ) {
+        // CAP_MIRROROWNER may have already been removed from the mirror owner,
+        // since this method may already have been called for it
+        assert( mirror != nullptr );
 
-        mirror->removeAffection( CAP_MIRROROWNER );
+        // But we still need to remove it if it is present
+        if ( mirror->Modes( CAP_MIRROROWNER ) ) {
+            assert( mirror->mirror == this );
+
+            mirror->mirror = nullptr;
+            mirror->removeAffection( CAP_MIRROROWNER );
+        }
+
         mirror = nullptr;
     }
 
@@ -725,7 +736,7 @@ uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool ski
     return resurrect;
 }
 
-uint32_t Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg )
+uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg )
 {
     uint32_t killed = ApplyDamage( dmg );
     uint32_t resurrect;

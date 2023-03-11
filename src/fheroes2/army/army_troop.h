@@ -60,8 +60,9 @@ public:
     payment_t GetTotalCost() const;
     payment_t GetTotalUpgradeCost() const;
 
+    bool isEmpty() const;
+
     virtual bool isValid() const;
-    virtual bool isEmpty() const;
     virtual bool isBattle() const;
     virtual bool isModes( uint32_t ) const;
     virtual std::string GetAttackString() const;

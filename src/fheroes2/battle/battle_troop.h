@@ -103,7 +103,6 @@ namespace Battle
         void SetRandomLuck();
         void NewTurn();
 
-        bool isValid() const override;
         bool isFlying() const;
         bool isDoubleAttack() const;
 
@@ -178,8 +177,8 @@ namespace Battle
             return shots;
         }
 
-        uint32_t ApplyDamage( Unit &, uint32_t );
-        uint32_t ApplyDamage( uint32_t );
+        uint32_t ApplyDamage( Unit & enemy, const uint32_t dmg );
+        uint32_t ApplyDamage( const uint32_t dmg );
         uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
         uint32_t CalculateMinDamage( const Unit & ) const;
         uint32_t CalculateMaxDamage( const Unit & ) const;
