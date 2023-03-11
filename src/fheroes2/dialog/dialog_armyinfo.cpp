@@ -450,7 +450,7 @@ namespace
     }
 }
 
-int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
+int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const int32_t windowOffsetY )
 {
     // Unit cannot be dismissed or upgraded during combat
     assert( !troop.isBattle() || !( flags & BUTTONS ) || !( flags & ( UPGRADE | DISMISS ) ) );
@@ -472,6 +472,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     if ( isEvilInterface ) {
         dialogOffset.y += 3;
     }
+    dialogOffset.y += windowOffsetY;
 
     const fheroes2::Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
     const fheroes2::Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
