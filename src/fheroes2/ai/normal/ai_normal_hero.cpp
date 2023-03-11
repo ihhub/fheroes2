@@ -1718,11 +1718,13 @@ namespace AI
             if ( !attackHero && ( !attackCastle || attackCastle->GetColor() == hero.GetColor() ) ) {
                 for ( const int secondaryTaskId : task.secondaryTaskTileId ) {
                     assert( secondaryTaskId != tileIndex );
+
                     auto defense = _priorityTargets.find( secondaryTaskId );
+                    if ( defense == _priorityTargets.end() ) {
+                        continue;
+                    }
 
-                    // if a task has any secondaries they must be present in the map
-                    assert( defense != _priorityTargets.end() );
-
+                    // check if a secondary task still present
                     std::set<int> & defenseSecondaries = defense->second.secondaryTaskTileId;
                     defenseSecondaries.erase( tileIndex );
                     if ( defenseSecondaries.empty() ) {

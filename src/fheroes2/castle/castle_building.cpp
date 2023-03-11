@@ -412,6 +412,9 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
         fheroes2::drawCastleDialogBuilding( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle,
                                             { dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width(), dst_pt.y + rightCaptainQuarters.y() }, max, alpha );
     }
+    else if ( castle.GetRace() == Race::SORC && BUILD_CAPTAIN == build && !castle.isBuild( BUILD_CASTLE ) ) {
+        fheroes2::drawCastleDialogBuilding( ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle, dst_pt, max, alpha );
+    }
 }
 
 fheroes2::Rect CastleGetMaxArea( const Castle & castle, const fheroes2::Point & top )

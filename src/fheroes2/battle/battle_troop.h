@@ -287,7 +287,7 @@ namespace Battle
 
         const uint32_t _uid;
         uint32_t hp;
-        uint32_t count0;
+        uint32_t _initialCount;
         uint32_t dead;
         uint32_t shots;
         uint32_t disruptingray;

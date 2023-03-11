@@ -883,7 +883,7 @@ namespace fheroes2
             }
         }
 
-        if ( spell.isALiveOnly() ) {
+        if ( spell.isAliveOnly() ) {
             foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
@@ -893,13 +893,6 @@ namespace fheroes2
         if ( spell.isUndeadOnly() ) {
             foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::UNDEAD ) );
             if ( foundAbility == abilities.end() ) {
-                return 100;
-            }
-        }
-
-        if ( spell == Spell::RESURRECT || spell == Spell::RESURRECTTRUE || spell == Spell::ANIMATEDEAD ) {
-            foundAbility = std::find( abilities.begin(), abilities.end(), MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
-            if ( foundAbility != abilities.end() ) {
                 return 100;
             }
         }
