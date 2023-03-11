@@ -612,6 +612,8 @@ uint32_t Battle::Unit::HowManyWillKilled( uint32_t dmg ) const
 
 uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
 {
+    assert( !AllModes( CAP_MIRROROWNER | CAP_MIRRORIMAGE ) );
+
     if ( dmg == 0 || GetCount() == 0 ) {
         return 0;
     }
@@ -628,7 +630,9 @@ uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
     }
 
     if ( Modes( SP_BLIND ) ) {
-        ResetBlind();
+        SetModes( TR_MOVED );
+
+        removeAffection( SP_BLIND );
     }
 
     if ( killed >= GetCount() ) {
@@ -1017,16 +1021,6 @@ void Battle::Unit::PostAttackAction()
     // clean luck capability
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
-}
-
-void Battle::Unit::ResetBlind()
-{
-    // remove blind action
-    if ( Modes( SP_BLIND ) ) {
-        SetModes( TR_MOVED );
-
-        removeAffection( SP_BLIND );
-    }
 }
 
 void Battle::Unit::SetBlindAnswer( bool value )
