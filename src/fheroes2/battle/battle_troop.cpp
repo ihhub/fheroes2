@@ -729,15 +729,18 @@ uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool ski
     return resurrect;
 }
 
-void Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg, uint32_t & killed, uint32_t & resurrected )
+void Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected )
 {
-    resurrected = 0;
     killed = ApplyDamage( dmg );
 
     if ( killed == 0 ) {
+        if ( ptrResurrected != nullptr ) {
+            *ptrResurrected = 0;
+        }
         return;
     }
 
+    uint32_t resurrected = 0;
     if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
         resurrected = enemy.Resurrect( killed * GetHitPoints(), true, false );
     }
@@ -747,6 +750,10 @@ void Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg, uint32_t & killed, u
 
     if ( resurrected > 0 ) {
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrected );
+    }
+
+    if ( ptrResurrected != nullptr ) {
+        *ptrResurrected = resurrected;
     }
 }
 

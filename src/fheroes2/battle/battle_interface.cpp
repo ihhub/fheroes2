@@ -3388,7 +3388,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
     }
 }
 
-void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets, uint32_t resurrects )
+void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets, const uint32_t resurrects )
 {
     // Reset the delay to wait till the next frame.
     if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {

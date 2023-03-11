@@ -178,7 +178,7 @@ namespace Battle
             return shots;
         }
 
-        void ApplyDamage( Unit & enemy, uint32_t dmg, uint32_t & killed, uint32_t & resurrected );
+        void ApplyDamage( Unit & enemy, uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected );
         uint32_t ApplyDamage( uint32_t );
         uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
         uint32_t CalculateMinDamage( const Unit & ) const;
