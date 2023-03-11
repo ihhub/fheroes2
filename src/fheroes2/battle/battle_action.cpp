@@ -804,6 +804,17 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
     }
 
     TargetsInfo targets;
+
+    const int32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, 0, hero );
+
+    if ( firstUnitResist >= static_cast<int32_t>( _randomGenerator.Get( 1, 100 ) ) ) {
+        targets.emplace_back();
+        TargetInfo & res = targets.back();
+        res.defender = unit;
+        res.resist = true;
+        return targets;
+    }
+
     const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit );
     for ( size_t i = 0; i < targetUnits.size(); ++i ) {
         targets.emplace_back();
@@ -881,7 +892,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             ignoreMagicResistance = true;
 
             if ( playResistSound ) {
-                *playResistSound = false;
+                *playResistSound = true;
             }
             break;
         }
