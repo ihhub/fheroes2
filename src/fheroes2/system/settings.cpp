@@ -1070,21 +1070,5 @@ StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1000_RELEASE ) {
-        int dummy;
-
-        msg >> dummy;
-    }
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE3_1000_RELEASE ) {
-        BitModes dummy;
-
-        msg >> dummy >> dummy >> dummy;
-    }
-
-    return msg >> conf.players;
+    return msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> conf.players;
 }
