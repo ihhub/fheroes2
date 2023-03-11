@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-07 14:32+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2704,17 +2704,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Attention"
-msgstr "Attenzione"
-
-#, fuzzy
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-"La tua versione di Heroes of Might and Magic II non supporta altre lingue "
-"che l'inglese."
 
 msgid ""
 "Map\n"
@@ -9113,6 +9102,17 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Attention"
+#~ msgstr "Attenzione"
+
+#, fuzzy
+#~ msgid ""
+#~ "Your version of Heroes of Might and Magic II does not support any other "
+#~ "languages than English."
+#~ msgstr ""
+#~ "La tua versione di Heroes of Might and Magic II non supporta altre lingue "
+#~ "che l'inglese."
 
 #, fuzzy
 #~ msgid "Location: "
