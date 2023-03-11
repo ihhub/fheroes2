@@ -66,6 +66,7 @@ namespace
     {
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> bottomImages;
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> bottomBackgroundImages;
+        std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> heroBackgroundImages;
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> topImages;
 
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> lowPriorityBottomImages;
@@ -221,10 +222,10 @@ namespace
 
             if ( imagePos.y > 0 && !isHeroInCastle ) {
                 if ( imagePos.x < 0 ) {
-                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_front( objectInfo );
+                    tileUnfit.heroBackgroundImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
                 else {
-                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_back( objectInfo );
+                    tileUnfit.heroBackgroundImages[imagePos + heroPos].emplace_back( objectInfo );
                 }
             }
             else if ( imagePos.y == 0 || ( isHeroInCastle && imagePos.y > 0 ) ) {
@@ -627,6 +628,19 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             // Draw all shadows from tile-unfit objects.
             renderImagesOnTile( dst, tileUnfit.shadowImages, { x, y }, *this );
+        }
+    }
+
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
+                continue;
+            }
+
+            // Draw the lower part of hero's sprite including boat sprite when it is controlled by hero.
+            renderImagesOnTile( dst, tileUnfit.heroBackgroundImages, { x, y }, *this );
         }
     }
 
