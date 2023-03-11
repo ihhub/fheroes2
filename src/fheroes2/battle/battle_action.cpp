@@ -1223,13 +1223,15 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
             const HeroBase * commander = GetCurrentCommander();
             assert( commander != nullptr );
 
+            const Spell mirrorImageSpell( Spell::MIRRORIMAGE );
+
             TargetInfo targetInfo;
             targetInfo.defender = unit;
 
             TargetsInfo targetsInfo;
             targetsInfo.push_back( targetInfo );
 
-            TargetsApplySpell( commander, Spell::MIRRORIMAGE, targetsInfo );
+            TargetsApplySpell( commander, mirrorImageSpell, targetsInfo );
 
             Unit * mirrorUnit = CreateMirrorImage( *unit );
             assert( mirrorUnit != nullptr );
@@ -1240,7 +1242,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
 
             if ( _interface ) {
-                _interface->RedrawActionSpellCastStatus( Spell( Spell::MIRRORIMAGE ), who, commander->GetName(), targetsInfo );
+                _interface->RedrawActionSpellCastStatus( mirrorImageSpell, who, commander->GetName(), targetsInfo );
                 _interface->RedrawActionMirrorImageSpell( *unit, pos );
             }
 

@@ -714,7 +714,7 @@ void Battle::Unit::PostKilledAction()
         tail->SetUnit( nullptr );
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << " is dead" )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
 uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool skip_dead )
