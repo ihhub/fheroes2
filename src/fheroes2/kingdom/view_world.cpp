@@ -47,6 +47,7 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
+#include "spell.h"
 #include "ui_button.h"
 #include "world.h"
 
