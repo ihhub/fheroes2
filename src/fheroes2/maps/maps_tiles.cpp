@@ -28,6 +28,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
+#include <initializer_list>
 #include <iostream>
 #include <limits>
 #include <map>
@@ -2317,6 +2318,19 @@ void Maps::Tiles::UpdateAbandonedMineSprite( Tiles & tile )
             Tiles & tile3 = world.GetTiles( Maps::GetDirectionIndex( tile2._index, Direction::RIGHT ) );
             if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
                 tile3.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        }
+    }
+}
+
+void Maps::Tiles::setAbandonedMineObjectType( const Tiles & tile )
+{
+    for ( const int32_t direction : { Direction::LEFT, Direction::TOP_LEFT, Direction::TOP, Direction::TOP_RIGHT, Direction::RIGHT } ) {
+        if ( Maps::isValidDirection( tile._index, direction ) ) {
+            Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, direction ) );
+
+            if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_MINES ) {
+                tile2.SetObject( MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+            }
         }
     }
 }

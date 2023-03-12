@@ -1299,18 +1299,12 @@ int Heroes::GetScoutingDistance() const
                              + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
 }
 
-fheroes2::Rect Heroes::GetScoutRoi( const bool ignoreDirection /* = false */ ) const
+fheroes2::Rect Heroes::GetScoutRoi() const
 {
     const int32_t scoutRange = GetScoutingDistance();
     const fheroes2::Point heroPosition = GetCenter();
 
-    if ( ignoreDirection ) {
-        return { heroPosition.x - scoutRange, heroPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 };
-    }
-
-    return { heroPosition.x - ( ( direction == Direction::RIGHT ) ? 1 : scoutRange ), heroPosition.y - ( ( direction == Direction::BOTTOM ) ? 1 : scoutRange ),
-             ( ( direction == Direction::LEFT || direction == Direction::RIGHT ) ? 1 : scoutRange ) + scoutRange + 1,
-             ( ( direction == Direction::TOP || direction == Direction::BOTTOM ) ? 1 : scoutRange ) + scoutRange + 1 };
+    return { heroPosition.x - scoutRange, heroPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 };
 }
 
 uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
