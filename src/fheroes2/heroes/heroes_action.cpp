@@ -198,10 +198,15 @@ namespace
         hero.FadeOut();
         hero.SetFreeman( reason );
 
-        // If the enemy is vanquished we fully redraw the radar map image as there might be color reset of enemy's objects.
-        if ( hero.GetKingdom().isLoss() ) {
-            Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
+        Interface::Basic & I = Interface::Basic::Get();
+        if ( !hero.GetKingdom().isLoss() ) {
+            // If the enemy is not vanquished we update only position of defeated hero on radar to remove hero mark.
+            const fheroes2::Point heroPosition = hero.GetCenter();
+            I.GetRadar().SetRenderArea( { heroPosition.x, heroPosition.y, 1, 1 } );
         }
+        // If the enemy is vanquished we do not set radar ROI and fully redraw the radar map image as there might be color reset of enemy's objects.
+
+        I.SetRedraw( Interface::REDRAW_RADAR );
     }
 
     void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -609,6 +614,12 @@ namespace
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
         hero.FadeIn( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
+
+        // Clear hero position marker from the boat and scout the area on radar after disembarking.
+        Interface::Basic & I = Interface::Basic::Get();
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.SetRedraw( Interface::REDRAW_RADAR );
+
         hero.GetPath().Reset();
         hero.ActionNewPosition( true );
 
@@ -618,6 +629,8 @@ namespace
     void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
+
+        Interface::Basic & I = Interface::Basic::Get();
 
         if ( objectType == MP2::OBJ_BOTTLE ) {
             const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
@@ -635,7 +648,6 @@ namespace
             else {
                 ResourceCount rc = tile.QuantityResourceCount();
 
-                Interface::Basic & I = Interface::Basic::Get();
                 I.GetStatusWindow().SetResource( rc.first, rc.second );
                 I.SetRedraw( Interface::REDRAW_STATUS );
             }
@@ -645,10 +657,16 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
-            std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+        I.GetGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         tile.QuantityReset();
+
+        if ( objectType == MP2::OBJ_RESOURCE ) {
+            // Update the position of picked up resource on radar to remove its mark.
+            const fheroes2::Point resourcePosition = Maps::GetPoint( dst_index );
+            I.GetRadar().SetRenderArea( { resourcePosition.x, resourcePosition.y, 1, 1 } );
+            I.SetRedraw( Interface::REDRAW_RADAR );
+        }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
@@ -1638,10 +1656,17 @@ namespace
             if ( result && hero.PickupArtifact( art ) ) {
                 Game::PlayPickupSound();
 
-                Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
-                    std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+                Interface::Basic & I = Interface::Basic::Get();
+
+                I.GetGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
                 tile.QuantityReset();
+
+                const fheroes2::Point artifactPosition = Maps::GetPoint( dst_index );
+
+                // Update the position of picked up artifact on radar to remove its mark.
+                I.GetRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
+                I.SetRedraw( Interface::REDRAW_RADAR );
             }
         }
 
@@ -1795,25 +1820,18 @@ namespace
         hero.GetPath().Hide();
         hero.FadeOut();
 
-        Interface::Basic & I = Interface::Basic::Get();
         const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
-        if ( hero.GetCenter() == fromPoint ) {
-            // If hero was already in Teleport and player hit the space bar.
-            I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
-        }
-        else {
-            // Before entering a Teleport the hero may make a move into it, so we update the radar map image of this move.
-            I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        }
 
         // No action and no penalty
         hero.Move2Dest( index_to );
 
         // Clear the previous hero position
+        Interface::Basic & I = Interface::Basic::Get();
+        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -1842,25 +1860,18 @@ namespace
         hero.GetPath().Hide();
         hero.FadeOut();
 
-        Interface::Basic & I = Interface::Basic::Get();
         const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
-        if ( hero.GetCenter() == fromPoint ) {
-            // If hero was already in Whirlpool and player hit the space bar.
-            I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
-        }
-        else {
-            // Before entering a Whirlpool the hero may make a move into it, so we update the radar map image of this move.
-            I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        }
 
         // No action and no penalty
         hero.Move2Dest( index_to );
 
         // Clear the previous hero position
+        Interface::Basic & I = Interface::Basic::Get();
+        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -1976,7 +1987,38 @@ namespace
 
                 tile.QuantitySetColor( hero.GetColor() );
 
-                Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
+                // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
+                // Set the radar update ROI according to captured object size and position.
+                fheroes2::Rect radarRoi( Maps::GetPoint( dst_index ), { 1, 1 } );
+                switch ( objectType ) {
+                case MP2::OBJ_SAWMILL:
+                    radarRoi.x -= 2;
+                    --radarRoi.y;
+                    radarRoi.width = 4;
+                    radarRoi.height = 2;
+                    break;
+                case MP2::OBJ_ALCHEMIST_LAB:
+                case MP2::OBJ_ABANDONED_MINE:
+                case MP2::OBJ_MINES:
+                    --radarRoi.x;
+                    --radarRoi.y;
+                    radarRoi.width = 3;
+                    radarRoi.height = 2;
+                    break;
+                case MP2::OBJ_LIGHTHOUSE:
+                    radarRoi.y -= 2;
+                    radarRoi.height = 3;
+                    break;
+                default:
+                    break;
+                }
+
+                Interface::Basic & I = Interface::Basic::Get();
+
+                // Update the color of captured object on radar.
+                I.GetRadar().SetRenderArea( radarRoi );
+
+                I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                 {
                     const MusicalEffectPlayer musicalEffectPlayer;
@@ -3370,7 +3412,7 @@ void Heroes::ScoutRadar() const
         if ( !player->isAIAutoControlMode() ) {
 #endif
 
-            I.GetRadar().SetRenderArea( GetScoutRoi( true ) );
+            I.GetRadar().SetRenderArea( GetScoutRoi() );
 
 #if defined( WITH_DEBUG )
         }

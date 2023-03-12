@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_troop.h"
+
 #include <algorithm>
 #include <cassert>
 #include <ostream>
@@ -37,7 +39,6 @@
 #include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
-#include "battle_troop.h"
 #include "castle.h"
 #include "color.h"
 #include "game_static.h"
@@ -124,7 +125,7 @@ Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const
     , animation( id )
     , _uid( uid )
     , hp( t.GetHitPoints() )
-    , count0( t.GetCount() )
+    , _initialCount( t.GetCount() )
     , dead( 0 )
     , shots( t.GetShots() )
     , disruptingray( 0 )
@@ -244,7 +245,7 @@ std::string Battle::Unit::GetSpeedString() const
 
 uint32_t Battle::Unit::GetInitialCount() const
 {
-    return count0;
+    return _initialCount;
 }
 
 uint32_t Battle::Unit::GetDead() const
@@ -259,7 +260,7 @@ uint32_t Battle::Unit::GetHitPointsLeft() const
 
 uint32_t Battle::Unit::GetMissingHitPoints() const
 {
-    const uint32_t totalHitPoints = count0 * Monster::GetHitPoints();
+    const uint32_t totalHitPoints = _initialCount * Monster::GetHitPoints();
     assert( totalHitPoints > hp );
     return totalHitPoints - hp;
 }
@@ -664,24 +665,18 @@ void Battle::Unit::PostKilledAction()
         mirror = nullptr;
         ResetModes( CAP_MIRROROWNER );
     }
+
     // Remove mirror image (slave)
     if ( Modes( CAP_MIRRORIMAGE ) && mirror != nullptr ) {
         mirror->ResetModes( CAP_MIRROROWNER );
         mirror = nullptr;
     }
 
-    ResetModes( TR_RESPONDED );
-    ResetModes( TR_SKIP );
-    ResetModes( LUCK_GOOD );
-    ResetModes( LUCK_BAD );
-    ResetModes( MORALE_GOOD );
-    ResetModes( MORALE_BAD );
+    // Remove all spells
     ResetModes( IS_MAGIC );
 
-    SetModes( TR_MOVED );
-
     // Save to the graveyard if possible
-    if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) ) {
+    if ( !Modes( CAP_MIRRORIMAGE ) && !isElemental() ) {
         Graveyard * graveyard = Arena::GetGraveyard();
         assert( graveyard != nullptr );
 
@@ -707,19 +702,16 @@ uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool ski
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
 
-    if ( hp == 0 ) // Skip turn if already dead
-        SetModes( TR_MOVED );
-
     SetCount( GetCount() + resurrect );
     hp += points;
 
     if ( allow_overflow ) {
-        if ( count0 < GetCount() )
-            count0 = GetCount();
+        if ( _initialCount < GetCount() )
+            _initialCount = GetCount();
     }
-    else if ( GetCount() > count0 ) {
-        resurrect -= GetCount() - count0;
-        SetCount( count0 );
+    else if ( GetCount() > _initialCount ) {
+        resurrect -= GetCount() - _initialCount;
+        SetCount( _initialCount );
         hp = ArmyTroop::GetHitPoints();
     }
 
@@ -1528,16 +1520,17 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
     case Spell::RESURRECT:
     case Spell::ANIMATEDEAD:
     case Spell::RESURRECTTRUE: {
-        // remove from graveyard
         if ( !isValid() ) {
-            // TODO: buggy behaviour
-            Arena::GetGraveyard()->RemoveTroop( *this );
+            Graveyard * graveyard = Arena::GetGraveyard();
+            assert( graveyard != nullptr );
+
+            graveyard->RemoveTroop( *this );
         }
 
         const uint32_t restore = fheroes2::getResurrectPoints( spell, spoint, hero );
         const uint32_t resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
-        // Puts back the unit in the board
+        // Put the unit back on the board
         SetPosition( GetPosition() );
 
         if ( Arena::GetInterface() ) {
@@ -1583,7 +1576,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attac
     case Spell::RESURRECT:
     case Spell::RESURRECTTRUE:
     case Spell::ANIMATEDEAD:
-        if ( GetCount() == count0 )
+        if ( GetCount() == _initialCount )
             return 100;
         break;
 
@@ -1624,7 +1617,7 @@ int Battle::Unit::GetSpellMagic() const
 
 bool Battle::Unit::isHaveDamage() const
 {
-    return hp < count0 * Monster::GetHitPoints();
+    return hp < _initialCount * Monster::GetHitPoints();
 }
 
 bool Battle::Unit::SwitchAnimation( int rule, bool reverse )

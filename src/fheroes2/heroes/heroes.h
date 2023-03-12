@@ -498,8 +498,7 @@ public:
     int GetScoutingDistance() const;
 
     // Returns the area in map tiles around hero's position in his scout range.
-    // For non-diagonal hero move the area is set only in move direction and one tile behind (to clear Hero's previous position).
-    fheroes2::Rect GetScoutRoi( const bool ignoreDirection = false ) const;
+    fheroes2::Rect GetScoutRoi() const;
 
     uint32_t GetVisionsDistance() const;
 
