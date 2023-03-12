@@ -30,12 +30,10 @@
 
 #include "artifact.h"
 #include "dir.h"
-#include "game_io.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
