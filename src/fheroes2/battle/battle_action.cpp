@@ -647,8 +647,10 @@ void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
 
 void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets )
 {
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
+
     for ( TargetInfo & target : targets ) {
-        assert( target.defender != nullptr && target.defender->isValid() );
+        assert( target.defender != nullptr );
 
         target.killed = target.defender->ApplyDamage( attacker, target.damage );
     }
@@ -737,7 +739,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
 void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "targets: " << targets.size() )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
 
     for ( TargetInfo & target : targets ) {
         assert( target.defender != nullptr );
