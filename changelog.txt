@@ -1,3 +1,70 @@
+version 1.0.2 (12 March 2023)
+- fix display of Haunted Mines on mini-map and in View World
+- update the Norwegian translation
+- allow resurrected units to act on the current turn if they have not yet had their turn
+- add missing part of Captain's Quarter in Sorceress Town
+- allow to resurrect Elementals
+- fix the battle casualty report when non-true Resurrect spell was used during battle
+- redraw hero icons to display movement bar change before action dialog box is shown
+- fight the guardians on dwellings on Adventure Map only once per game
+- change the logic of reinforcement of the guest hero's army during the castle defence
+- do not show Dragon City on mini-map
+- summon boat spell will only summon friendly boats
+- allow the player to refuse to level up in the Tree of Knowledge even if this level up is for free
+- add virtual keyboard support for touch devices
+- grey out Summon Boat, Town Gate and Town Portal spells if they cannot be used
+- clean up AI priority tasks if attacker was killed
+- update sounds used while visiting dwellings on Adventure Map
+- add logic of AI heroes using town portal 
+- add missing symbols to button font
+- update Polish translation
+- fix high CPU usage during battle while using highest animation speeds
+- fix battle AI tactics estimation
+- fix pathfinding not being updated after revealing the fog on visiting Magellan's Map
+- animate lighthouse in lighthouse dialog
+- fix the experience calculation for AI-controlled heroes while visiting Tree of Knowledge
+- add a frame for a hero portrait on the quick info dialog
+- add missing experience being displayed in the Tree of Knowledge window
+- fix music effects while visiting an empty object on Adventure Map
+- display the world date for save files
+- rework AI hero task priority logic
+- fix invalid popup window being displayed while clicking on an empty hero list area within Adventure Map
+- add Graphics option icon
+- fix corner cases of fog rendering
+- fix invalid calculation of AI path leading to a crash
+- show sleeping hero icon for hero's portrait within castle dialog
+- speed up rendering on Adventure Map
+- properly restore the screen after closing the hero dialog during combat
+- render background between HEROES and TOWSN/CASTLES buttons in Kingdom Overview window
+- fix possible random crashes during the gameplay
+- fix Iron and Steel Golems animation issues
+- show kingdom income when gold per day income is clicked within Kingdom Overview window
+- fix a crash while visiting a castle after an ally captured it
+- speed up file searching on Windows
+- fix the spell id calculation for a spell scroll while loading a map
+- fix puzzle map window position
+- fix View World default adventure map position
+- memorize zoom level of the View World screen
+- fix inability to move monsters after Good Morale event
+- fix unintended ability to upgrade troops during battle
+- fix huge CPU usage in in hero window during battle
+- redevelop standard window generation logic
+- update Bulgarian translation
+- fix volcano sounds
+- update Russian translation (main menu and dialog buttons)
+- fix issue with the puzzle rendering
+- fix musical effects for various objects
+- fix stereo audio playing in SMK files
+- add letter "Ў" and "’" sign to Cyrillic (cp1251) button font
+- add lighthouse information popup in kingdom overview
+- fix an invalid option for scenario 1 of Roland Campaign
+- optimize mini-map rendering
+- update Czech translation
+- add proper hotkeys option icon
+- fix title in German translation
+- optimize View World rendering
+- add tooltip damage info for single target attack spells during battle
+
 version 1.0.1 (08 February 2023)
 - add the ambient sound for Abandoned Mine
 - add support for scaled resolutions
