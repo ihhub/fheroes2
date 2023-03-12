@@ -487,18 +487,20 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             MP2::MapObjectType objectType = tile.GetObject();
 
-            // We skip objects under the fog except the boats as they are more than 2 tiles tall objects.
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog && objectType != MP2::OBJ_BOAT ) {
-                continue;
-            }
+            // We will skip objects which are fully under the fog.
+            const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && drawFog;
 
             switch ( objectType ) {
             case MP2::OBJ_HEROES: {
-                if ( !drawHeroes ) {
+                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : false;
+                const Heroes * hero = tile.GetHeroes();
+
+                // Boats are 2 tiles high so for hero on the boat we have to populate info for boat one tile lower than the fog.
+                if ( !drawHeroes || ( isTileUnderFog && ( isUpperTileUnderFog || !hero->isShipMaster() ) ) ) {
                     continue;
                 }
 
-                populateHeroObjectInfo( tileUnfit, tile.GetHeroes() );
+                populateHeroObjectInfo( tileUnfit, hero );
 
                 // Update object type as it could be an object under the hero.
                 objectType = tile.GetObject( false );
@@ -507,7 +509,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             case MP2::OBJ_MONSTER: {
-                if ( isPuzzleDraw ) {
+                if ( isPuzzleDraw || isTileUnderFog) {
                     continue;
                 }
 
@@ -519,10 +521,13 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
                 continue;
-            }
+            } 
 
             case MP2::OBJ_BOAT: {
-                if ( !drawHeroes ) {
+                // Boats are 2 tiles high so we have to populate info for boat one tile lower than the fog.
+                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : false;
+                
+                if ( !drawHeroes || ( isTileUnderFog && isUpperTileUnderFog ) ) {
                     // Boats can be occupied by heroes so they are considered as the same objects.
                     continue;
                 }
@@ -586,7 +591,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    // Render all terrain layer objects.
+    // Render all terrain and background layer object.
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
@@ -597,17 +602,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             // Draw roads, rivers and cracks.
             tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::TERRAIN_LAYER );
-        }
-    }
-
-    // Render all background layer object.
-    for ( int32_t y = minY; y < maxY; ++y ) {
-        for ( int32_t x = minX; x < maxX; ++x ) {
-            const Maps::Tiles & tile = world.GetTiles( x, y );
-
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
-                continue;
-            }
 
             tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
 
@@ -696,9 +690,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     if ( drawRoutes && ( currentHero != nullptr ) && currentHero->GetPath().isShow() ) {
         const Route::Path & path = currentHero->GetPath();
-        int greenColorSteps = path.GetAllowedSteps();
+        int32_t greenColorSteps = path.GetAllowedSteps();
 
-        const int pathfinding = currentHero->GetLevelSkill( Skill::Secondary::PATHFINDING );
+        const int32_t pathfinding = currentHero->GetLevelSkill( Skill::Secondary::PATHFINDING );
 
         Route::Path::const_iterator currentStep = path.begin();
         Route::Path::const_iterator nextStep = currentStep;
@@ -778,7 +772,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     updateObjectAnimationInfo();
 
     const double tmp = counter.getS() * 1000;
-    VERBOSE_LOG( tmp )
+    VERBOSE_LOG( "Render time " << tmp << " ms." )
 }
 
 void Interface::GameArea::updateMapFogDirections()
@@ -787,7 +781,7 @@ void Interface::GameArea::updateMapFogDirections()
     const int32_t worldSize = static_cast<int32_t>( world.getSize() );
 
     for ( int32_t i = 0; i < worldSize; ++i ) {
-        world.GetTiles( i ).setFogDirection( friendColors );
+        world.GetTiles( i ).updateFogDirection( friendColors );
     }
 }
 

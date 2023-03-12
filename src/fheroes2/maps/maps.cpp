@@ -373,7 +373,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
                 tile.ClearFog( alliedColors );
 
                 if ( ( !isAIPlayer || isHumanFriend ) && isFogOnMap ) {
-                    tile.setFogDirection( alliedColors );
+                    tile.updateFogDirection( alliedColors );
                     tile.updateFogDirectionsAround( alliedColors );
                 }
             }

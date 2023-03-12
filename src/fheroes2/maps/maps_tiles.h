@@ -264,8 +264,7 @@ namespace Maps
         void redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
         void updateFogDirectionsAround( const int32_t color ) const;
-        void setFogDirection( const int32_t color );
-        void resetFogDirection();
+        void updateFogDirection( const int32_t color );
         uint16_t getFogDirection( const int32_t color ) const;
         uint16_t getFogDirection() const
         {
