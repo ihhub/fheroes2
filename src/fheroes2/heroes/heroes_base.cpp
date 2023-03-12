@@ -467,7 +467,6 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
         if ( spell == Spell::HAUNT || spell == Spell::SETAGUARDIAN || spell == Spell::SETEGUARDIAN || spell == Spell::SETFGUARDIAN || spell == Spell::SETWGUARDIAN ) {
             Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-
             if ( MP2::OBJ_MINES != tile.GetObject( false ) ) {
                 if ( res != nullptr ) {
                     *res = _( "You must be standing on the entrance to a mine (sawmills and alchemists don't count) to cast this spell." );
