@@ -471,7 +471,7 @@ namespace Maps
         uint16_t tilePassable = DIRECTION_ALL;
         uint8_t _fogColors = Color::ALL;
 
-        // Fog direction to render fog in Game Area. 
+        // Fog direction to render fog in Game Area.
         uint16_t _fogDirection{ DIRECTION_ALL };
 
         uint8_t heroID = 0;
