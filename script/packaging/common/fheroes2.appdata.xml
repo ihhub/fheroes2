@@ -76,7 +76,7 @@
           <li>show sleeping hero icon for hero's portrait within castle dialog</li>
           <li>speed up rendering on Adventure Map</li>
           <li>properly restore the screen after closing the hero dialog during combat</li>
-          <li>render background between HEROES and TOWSN/CASTLES buttons in Kingdom Overview window</li>
+          <li>render background between HEROES and TOWNS/CASTLES buttons in Kingdom Overview window</li>
           <li>fix possible random crashes during the gameplay</li>
           <li>fix Iron and Steel Golems animation issues</li>
           <li>show kingdom income when gold per day income is clicked within Kingdom Overview window</li>
