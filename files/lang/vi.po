@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-07 14:32+0000\n"
-"PO-Revision-Date: 2023-03-10 00:04+0700\n"
+"PO-Revision-Date: 2023-03-13 00:11+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -2723,9 +2723,8 @@ msgstr ""
 msgid "No creatures available for purchase."
 msgstr ""
 
-#, fuzzy
 msgid "Recruit Creatures"
-msgstr "Купувати Створінь"
+msgstr "Triệu hồi Quái"
 
 #, fuzzy
 msgid "Max"
@@ -2747,9 +2746,8 @@ msgstr ""
 msgid "Growth"
 msgstr ""
 
-#, fuzzy
 msgid "week"
-msgstr "неділя"
+msgstr "tuần"
 
 msgid "Available"
 msgstr ""
@@ -2766,9 +2764,8 @@ msgstr ""
 msgid "View the obelisk puzzle."
 msgstr ""
 
-#, fuzzy
 msgid "Scenario Information"
-msgstr "Інформація по сценарію"
+msgstr "Thông tin Kịch bản"
 
 msgid "View information on the scenario you are currently playing."
 msgstr ""
@@ -2941,16 +2938,14 @@ msgstr "Зберегти Гру"
 msgid "Save the current game."
 msgstr "Збережіть поточну гру."
 
-#, fuzzy
 msgid "Quit"
-msgstr "Вихід"
+msgstr "Thoát"
 
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Залишити Heroes of Might and Magic II."
 
-#, fuzzy
 msgid "Language"
-msgstr "Мова"
+msgstr "Ngôn ngữ"
 
 msgid "Graphics"
 msgstr ""
@@ -3012,9 +3007,8 @@ msgstr ""
 msgid "Rating"
 msgstr ""
 
-#, fuzzy
 msgid "Map Size"
-msgstr "Розмір Мапи"
+msgstr "Cỡ Bản đồ"
 
 msgid "Opponents"
 msgstr ""
@@ -3255,9 +3249,8 @@ msgstr ""
 msgid "Select only 1 monster to be recruited."
 msgstr ""
 
-#, fuzzy
 msgid "Select Game Resolution:"
-msgstr "Обрати мову гри:"
+msgstr "Chọn Độ phân giải:"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
@@ -3268,9 +3261,8 @@ msgstr ""
 msgid "Fast separation into slots:"
 msgstr ""
 
-#, fuzzy
 msgid "Map: "
-msgstr "Мапа: "
+msgstr "Bản đồ"
 
 msgid ""
 "\n"
@@ -3323,9 +3315,8 @@ msgstr ""
 msgid "Select Skill:"
 msgstr ""
 
-#, fuzzy
 msgid "Map Type:\n"
-msgstr "Тип мапи"
+msgstr "Kiểu Bản đồ:\n"
 
 msgid "The Succession Wars"
 msgstr ""
@@ -3373,13 +3364,11 @@ msgstr "Складність мапи:"
 msgid "N"
 msgstr ""
 
-#, fuzzy
 msgid "No maps exist at that size"
-msgstr "Немає мап такого розміру"
+msgstr "Không có bản đồ nào ở cỡ này"
 
-#, fuzzy
 msgid "Small Maps"
-msgstr "Маленькі Мапи"
+msgstr "Bản đồ Nhỏ"
 
 msgid "View only maps of size small (36 x 36)."
 msgstr "Дивитися лише мапи малого розміру (36 x 36)."
@@ -3404,9 +3393,8 @@ msgstr "Надвелики Мапи"
 msgid "View only maps of size extra large (144 x 144)."
 msgstr "Дивитися лише мапи надвеликого розміру (144 x 144)."
 
-#, fuzzy
 msgid "All Maps"
-msgstr "Усі мапи"
+msgstr "Tất cả Bản đồ"
 
 msgid "View all maps, regardless of size."
 msgstr ""
@@ -3434,9 +3422,8 @@ msgid ""
 "of Loyalty\" version of the game."
 msgstr ""
 
-#, fuzzy
 msgid "Map Type"
-msgstr "Тип мапи"
+msgstr "Kiểu Bản đồ"
 
 msgid "Selected Name"
 msgstr ""
@@ -3497,9 +3484,8 @@ msgstr ""
 msgid "Good"
 msgstr ""
 
-#, fuzzy
 msgid "Interface Type"
-msgstr "Тип Інтерфейсу"
+msgstr "Kiểu Giao diện"
 
 msgid "Hide"
 msgstr ""
@@ -3638,11 +3624,8 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr ""
-"Складність\n"
-"Мапи"
+msgstr "Độ khó Chiến Dịch"
 
 msgid ""
 "Choose this difficulty if you want to prefer game story over challenge. AI "
@@ -3700,9 +3683,8 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-#, fuzzy
 msgid "Development"
-msgstr "Розробка"
+msgstr "Phát triển"
 
 msgid "Visit us at "
 msgstr ""
@@ -3740,10 +3722,8 @@ msgstr ""
 msgid "Original project before 0.7"
 msgstr ""
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr ""
-"Залишити Heroes of Might and Magic II і повернутися до операційної системи."
+msgstr "Heroes of Might and Magic II: The Succession Wars team"
 
 msgid "Designed and Directed"
 msgstr ""
@@ -3796,10 +3776,8 @@ msgstr ""
 msgid "Scenarios"
 msgstr ""
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr ""
-"Залишити Heroes of Might and Magic II і повернутися до операційної системи."
+msgstr "Heroes of Might and Magic II: The Price of Loyalty team"
 
 msgid "Design Lead"
 msgstr ""
@@ -9038,33 +9016,26 @@ msgstr ""
 msgid "Invalid Artifact"
 msgstr ""
 
-#, fuzzy
 msgid "Wood"
-msgstr "Дерево"
+msgstr "Gỗ"
 
-#, fuzzy
 msgid "Mercury"
-msgstr "Ртуть"
+msgstr "Thủy ngân"
 
-#, fuzzy
 msgid "Ore"
-msgstr "Руда"
+msgstr "Đá"
 
-#, fuzzy
 msgid "Sulfur"
-msgstr "Сірка"
+msgstr "Sun-phua"
 
-#, fuzzy
 msgid "Crystal"
-msgstr "Кристали"
+msgstr "Thạch anh"
 
-#, fuzzy
 msgid "Gems"
-msgstr "Самоцвіти"
+msgstr "Ngọc"
 
-#, fuzzy
 msgid "Gold"
-msgstr "Золото"
+msgstr "Vàng"
 
 msgid ""
 "There are seven resources in Heroes 2, used to build and improves castles, "
@@ -9106,9 +9077,8 @@ msgid ""
 "harmful.  Warning:  This spell can hit your own creatures!"
 msgstr ""
 
-#, fuzzy
 msgid "Teleport"
-msgstr "Телепортуватися сюди"
+msgstr "Dịch chuyển"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
@@ -9388,9 +9358,8 @@ msgstr ""
 msgid "Damages castle walls."
 msgstr ""
 
-#, fuzzy
 msgid "Earthquake"
-msgstr "Землетрус"
+msgstr "Động đất"
 
 msgid "Causes all mines across the land to become visible."
 msgstr ""
@@ -9566,58 +9535,58 @@ msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr ""
 
 msgid "north-west"
-msgstr ""
+msgstr "tây-bắc"
 
 msgid "north"
-msgstr ""
+msgstr "bắc"
 
 msgid "north-east"
-msgstr ""
+msgstr "đông-bắc"
 
 msgid "west"
-msgstr ""
+msgstr "tây"
 
 msgid "center"
-msgstr ""
+msgstr "trung tâm"
 
 msgid "east"
-msgstr ""
+msgstr "đông"
 
 msgid "south-west"
-msgstr ""
+msgstr "tây-nam"
 
 msgid "south"
-msgstr ""
+msgstr "nam"
 
 msgid "south-east"
-msgstr ""
+msgstr "đông-nam"
 
 msgid "The truth is out there."
-msgstr ""
+msgstr "Sự thật ngay ngoài kia"
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "Lực lượng bóng tối đang lớn mạnh"
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "Kết thúc của thế giới đang đến gần"
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Xương của Giết Chúa chôn vùi dưới móng của đấu trường"
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "Rồng Đen sẽ mang Khổng Lồ bất cứ ngày nào trong ngày"
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 
 msgid "An unknown force is being resurrected..."
-msgstr ""
+msgstr "Một lực lượng bóng tối đang hồi sinh"
 
 msgid ""
 "Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-"Перевірити нову версію гри на\n"
+"Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
