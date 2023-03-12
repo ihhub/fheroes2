@@ -2489,6 +2489,8 @@ void Maps::Tiles::updateFogDirectionsAround( const int32_t color ) const
     for ( const int32_t direction : Direction::All() ) {
         if ( isValidDirection( _index, direction ) ) {
             Maps::Tiles & tile = world.GetTiles( GetDirectionIndex( _index, direction ) );
+
+            // Do not update tile with already cleared fog.
             if ( tile.getFogDirection() != Direction::UNKNOWN ) {
                 tile.updateFogDirection( color );
             }

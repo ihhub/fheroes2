@@ -388,9 +388,6 @@ void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image
 
 void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw ) const
 {
-    fheroes2::Time counter;
-    counter.reset();
-
     const fheroes2::Rect & tileROI = GetVisibleTileROI();
 
     int32_t minX = tileROI.x;
@@ -460,8 +457,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // In case of tile-unfit objects we need to pass tile ID and set alpha value while creating RenderObjectInfo instances.
 
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
-
-    const int32_t friendColors = Players::FriendColors();
 
     TileUnfitRenderObjectInfo tileUnfit;
 
@@ -713,6 +708,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     if ( IS_DEVEL() ) {
         // redraw grid
         if ( flag & LEVEL_ALL ) {
+            const int32_t friendColors = Players::FriendColors();
+
             for ( int32_t y = minY; y < maxY; ++y ) {
                 for ( int32_t x = minX; x < maxX; ++x ) {
                     world.GetTiles( x, y ).RedrawPassable( dst, friendColors, *this );
@@ -745,9 +742,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     updateObjectAnimationInfo();
-
-    const double tmp = counter.getS() * 1000;
-    VERBOSE_LOG( "Render time " << tmp << " ms." )
 }
 
 void Interface::GameArea::updateMapFogDirections()
