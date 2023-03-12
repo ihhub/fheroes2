@@ -110,10 +110,16 @@ namespace
 
         // Static object's shadows are always on the same layer.
         for ( auto & objectInfo : shadowInfo ) {
-            const fheroes2::Point imagePos = objectInfo.tileOffset;
+            const fheroes2::Point imagePos = objectInfo.tileOffset + offset;
+
+            // Shadows outside the game area should not be rendered.
+            if ( imagePos.x < 0 || imagePos.y < 0 ) {
+                continue;
+            }
+
             objectInfo.alphaValue = alphaValue;
 
-            tileUnfit.shadowImages[imagePos + offset].emplace_back( objectInfo );
+            tileUnfit.shadowImages[imagePos].emplace_back( objectInfo );
         }
     }
 
@@ -247,36 +253,28 @@ namespace
         }
 
         for ( auto & objectInfo : spriteShadowInfo ) {
-            const fheroes2::Point imagePos = objectInfo.tileOffset;
+            const fheroes2::Point imagePos = objectInfo.tileOffset + heroPos;
+
+            // Shadows outside the game area should not be rendered.
+            if ( imagePos.x < 0 || imagePos.y < 0 ) {
+                continue;
+            }
+
             objectInfo.alphaValue = heroAlphaValue;
 
-            tileUnfit.shadowImages[imagePos + heroPos].emplace_back( objectInfo );
+            tileUnfit.shadowImages[imagePos].emplace_back( objectInfo );
         }
     }
 
-    void renderImagesOnTile( fheroes2::Image & output, const std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> & images,
-                             const fheroes2::Point & offset, const Interface::GameArea & area )
+    void renderImagesOnTiles( fheroes2::Image & output, const std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> & images,
+                              const Interface::GameArea & area )
     {
-        auto iter = images.find( offset );
-        if ( iter == images.end() ) {
-            return;
+        for ( const auto & [offset, imgInfo] : images ) {
+            for ( const auto & info : imgInfo ) {
+                area.BlitOnTile( output, fheroes2::AGG::GetICN( info.icnId, info.icnIndex ), info.area, info.imageOffset.x, info.imageOffset.y, offset, info.isFlipped,
+                                 info.alphaValue );
+            }
         }
-
-        assert( !iter->second.empty() );
-
-        for ( const auto & info : iter->second ) {
-            area.BlitOnTile( output, fheroes2::AGG::GetICN( info.icnId, info.icnIndex ), info.area, info.imageOffset.x, info.imageOffset.y, offset, info.isFlipped,
-                             info.alphaValue );
-        }
-    }
-
-    void renderOutOfMapTile( const TileUnfitRenderObjectInfo & tileUnfit, fheroes2::Image & output, const fheroes2::Point & offset, const Interface::GameArea & area )
-    {
-        renderImagesOnTile( output, tileUnfit.bottomBackgroundImages, offset, area );
-        renderImagesOnTile( output, tileUnfit.lowPriorityBottomImages, offset, area );
-        renderImagesOnTile( output, tileUnfit.bottomImages, offset, area );
-        renderImagesOnTile( output, tileUnfit.highPriorityBottomImages, offset, area );
-        renderImagesOnTile( output, tileUnfit.topImages, offset, area );
     }
 
     bool isTallTopLayerObject( const int32_t x, const int32_t y, const uint32_t uid )
@@ -492,7 +490,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             switch ( objectType ) {
             case MP2::OBJ_HEROES: {
-                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : false;
+                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
                 const Heroes * hero = tile.GetHeroes();
 
                 // Boats are 2 tiles high so for hero on the boat we have to populate info for boat one tile lower than the fog.
@@ -509,7 +507,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             case MP2::OBJ_MONSTER: {
-                if ( isPuzzleDraw || isTileUnderFog) {
+                if ( isPuzzleDraw || isTileUnderFog ) {
                     continue;
                 }
 
@@ -521,12 +519,12 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
                 continue;
-            } 
+            }
 
             case MP2::OBJ_BOAT: {
                 // Boats are 2 tiles high so we have to populate info for boat one tile lower than the fog.
-                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : false;
-                
+                const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
+
                 if ( !drawHeroes || ( isTileUnderFog && isUpperTileUnderFog ) ) {
                     // Boats can be occupied by heroes so they are considered as the same objects.
                     continue;
@@ -557,40 +555,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    // Tile unfit objects should be rendered over the edge of the map, except the bottom. We also shouldn't render their shadows over the edge.
-    // If a tile contains fog we shouldn't draw anything over the edge.
-    if ( minY == 0 ) {
-        for ( int32_t x = minX - 1; x < maxX + 1; ++x ) {
-            if ( drawFog && world.GetTiles( std::clamp( x, 0, maxX - 1 ), minY ).isFog( friendColors ) ) {
-                continue;
-            }
-
-            // Boat is taller than 2 tiles.
-            renderOutOfMapTile( tileUnfit, dst, { x, minY - 2 }, *this );
-            renderOutOfMapTile( tileUnfit, dst, { x, minY - 1 }, *this );
-        }
-    }
-
-    if ( minX == 0 ) {
-        for ( int32_t y = minY; y < maxY; ++y ) {
-            if ( drawFog && world.GetTiles( minX, y ).isFog( friendColors ) ) {
-                continue;
-            }
-
-            renderOutOfMapTile( tileUnfit, dst, { minX - 1, y }, *this );
-        }
-    }
-
-    if ( maxX == world.w() ) {
-        for ( int32_t y = minY; y < maxY; ++y ) {
-            if ( drawFog && world.GetTiles( maxX - 1, y ).isFog( friendColors ) ) {
-                continue;
-            }
-
-            renderOutOfMapTile( tileUnfit, dst, { maxX + 1, y }, *this );
-        }
-    }
-
     // Render all terrain and background layer object.
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
@@ -604,11 +568,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::TERRAIN_LAYER );
 
             tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
-
-            // Draw the lower part of tile-unfit object's sprite.
-            renderImagesOnTile( dst, tileUnfit.bottomBackgroundImages, { x, y }, *this );
         }
     }
+
+    // Draw the lower part of tile-unfit object's sprite.
+    renderImagesOnTiles( dst, tileUnfit.bottomBackgroundImages, *this );
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
@@ -619,14 +583,17 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
-
-            // Draw all shadows from tile-unfit objects.
-            renderImagesOnTile( dst, tileUnfit.shadowImages, { x, y }, *this );
-
-            // Draw the lower part of hero's sprite including boat sprite when it is controlled by hero.
-            renderImagesOnTile( dst, tileUnfit.heroBackgroundImages, { x, y }, *this );
         }
     }
+
+    // Draw all shadows from tile-unfit objects.
+    renderImagesOnTiles( dst, tileUnfit.shadowImages, *this );
+
+    // Draw the lower part of hero's sprite including boat sprite when it is controlled by hero.
+    renderImagesOnTiles( dst, tileUnfit.heroBackgroundImages, *this );
+
+    // Low priority images are drawn before any other object on this tile.
+    renderImagesOnTiles( dst, tileUnfit.lowPriorityBottomImages, *this );
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
@@ -635,55 +602,63 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
                 continue;
             }
-
-            // Low priority images are drawn before any other object on this tile.
-            renderImagesOnTile( dst, tileUnfit.lowPriorityBottomImages, { x, y }, *this );
 
             // TODO: some action objects have tiles above which are still on bottom layer. These images must be drawn last.
             tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::OBJECT_LAYER );
-
-            // Draw middle part of tile-unfit sprites.
-            renderImagesOnTile( dst, tileUnfit.bottomImages, { x, y }, *this );
-
-            // High priority images are drawn after any other object on this tile.
-            renderImagesOnTile( dst, tileUnfit.highPriorityBottomImages, { x, y }, *this );
         }
     }
 
+    // Draw middle part of tile-unfit sprites.
+    renderImagesOnTiles( dst, tileUnfit.bottomImages, *this );
+
+    // High priority images are drawn after any other object on this tile.
+    renderImagesOnTiles( dst, tileUnfit.highPriorityBottomImages, *this );
+
     std::vector<const Maps::TilesAddon *> topLayerTallObjects;
 
-    for ( int32_t y = minY; y < maxY; ++y ) {
+    // We add one extra 2 tiles to the bottom to properly render very tall objects: abandoned mine ghosts, flag on the Alchemist lab, and others.
+    for ( int32_t y = minY; y < roiToRenderMaxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
-                continue;
-            }
-
-            // Since some objects are taller than 2 tiles their top layer sprites must be drawn at the very end.
-            // For now what we need to do is to run through all level 2 objects and verify that the tile below doesn't have
-            // any other level 2 objects with the same UID.
-
-            topLayerTallObjects.clear();
-            for ( const Maps::TilesAddon & addon : tile.getLevel2Addons() ) {
-                if ( isTallTopLayerObject( x, y, addon._uid ) ) {
-                    topLayerTallObjects.emplace_back( &addon );
+            const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && drawFog;
+            if ( isTileUnderFog ) {
+                // To correctly render tall extra objects (ghosts over abandoned mine) we analyze under one fog tile to the bottom direction.
+                const bool isUpperTileUnderFog = ( y > 0 ) ? ( world.GetTiles( x, y - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
+                if ( isUpperTileUnderFog ) {
+                    continue;
                 }
-                else {
-                    tile.redrawTopLayerObject( dst, isPuzzleDraw, *this, addon );
+            }
+            else {
+                // Since some objects are taller than 2 tiles their top layer sprites must be drawn at the very end.
+                // For now what we need to do is to run through all level 2 objects and verify that the tile below doesn't have
+                // any other level 2 objects with the same UID.
+
+                topLayerTallObjects.clear();
+                for ( const Maps::TilesAddon & addon : tile.getLevel2Addons() ) {
+                    if ( isTallTopLayerObject( x, y, addon._uid ) ) {
+                        topLayerTallObjects.emplace_back( &addon );
+                    }
+                    else {
+                        tile.redrawTopLayerObject( dst, isPuzzleDraw, *this, addon );
+                    }
                 }
             }
 
             tile.redrawTopLayerExtraObjects( dst, isPuzzleDraw, *this );
 
-            // Draw upper part of tile-unfit sprites.
-            renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, *this );
+            if ( isTileUnderFog ) {
+                continue;
+            }
 
             for ( const Maps::TilesAddon * addon : topLayerTallObjects ) {
                 tile.redrawTopLayerObject( dst, isPuzzleDraw, *this, *addon );
             }
         }
     }
+
+    // Draw upper part of tile-unfit sprites.
+    renderImagesOnTiles( dst, tileUnfit.topImages, *this );
 
     // Draw hero's route. It should be drawn on top of everything.
     const bool drawRoutes = ( flag & LEVEL_ROUTES ) != 0;

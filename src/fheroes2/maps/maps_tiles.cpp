@@ -2508,8 +2508,6 @@ void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & ar
 {
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
-    if (true) return;
-
     if ( DIRECTION_ALL == _fogDirection ) {
         const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
         area.DrawTile( dst, sf, mp );
