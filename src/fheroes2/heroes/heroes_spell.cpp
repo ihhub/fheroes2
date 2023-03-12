@@ -288,10 +288,7 @@ namespace
 
     bool ActionSpellIdentifyHero( const Heroes & hero )
     {
-        if ( hero.GetKingdom().Modes( Kingdom::IDENTIFYHERO ) ) {
-            Message( "", _( "This spell is already in use." ), Font::BIG, Dialog::OK );
-            return false;
-        }
+        assert( !hero.GetKingdom().Modes( Kingdom::IDENTIFYHERO ) );
 
         hero.GetKingdom().SetModes( Kingdom::IDENTIFYHERO );
         Message( "", _( "Enemy heroes are now fully identifiable." ), Font::BIG, Dialog::OK );
@@ -517,19 +514,9 @@ namespace
 
     bool ActionSpellVisions( Heroes & hero )
     {
-        const uint32_t dist = hero.GetVisionsDistance();
-        MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
+        MapsIndexes monsters = fheroes2::getVisibleleMonstersAroundHero( hero );
 
-        const int32_t heroColor = hero.GetColor();
-        monsters.erase( std::remove_if( monsters.begin(), monsters.end(), [heroColor]( const int32_t index ) { return world.GetTiles( index ).isFog( heroColor ); } ),
-                        monsters.end() );
-
-        if ( monsters.empty() ) {
-            std::string msg = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
-            StringReplace( msg, "%{count}", dist );
-            Dialog::Message( "", msg, Font::BIG, Dialog::OK );
-            return false;
-        }
+        assert( !monsters.empty() );
 
         for ( const int32_t monsterIndex : monsters ) {
             const Maps::Tiles & tile = world.GetTiles( monsterIndex );
@@ -582,11 +569,7 @@ namespace
     bool ActionSpellSetGuardian( const Heroes & hero, const Spell & spell )
     {
         Maps::Tiles & tile = world.GetTiles( hero.GetIndex() );
-
-        if ( MP2::OBJ_MINES != tile.GetObject( false ) ) {
-            Dialog::Message( "", _( "You must be standing on the entrance to a mine (sawmills and alchemists don't count) to cast this spell." ), Font::BIG, Dialog::OK );
-            return false;
-        }
+        assert( MP2::OBJ_MINES == tile.GetObject( false ) );
 
         const uint32_t count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 

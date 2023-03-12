@@ -39,6 +39,7 @@
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
+#include "world.h"
 
 HeroBase::HeroBase( const int type, const int race )
     : magic_point( 0 )
@@ -439,6 +440,37 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                     *res = _( "The nearest town is %{town}.\n \nThis town is occupied by your hero %{hero}." );
                     StringReplace( *res, "%{town}", castle->GetName() );
                     StringReplace( *res, "%{hero}", townHero->GetName() );
+                }
+                return false;
+            }
+        }
+
+        if ( spell == Spell::IDENTIFYHERO && hero->GetKingdom().Modes( Kingdom::IDENTIFYHERO ) ) {
+            if ( res != nullptr ) {
+                *res = _( "This spell is already in use." );
+            }
+            return false;
+        }
+
+        if ( spell == Spell::VISIONS ) {
+            MapsIndexes monsters = fheroes2::getVisibleleMonstersAroundHero( *hero );
+            const uint32_t dist = hero->GetVisionsDistance();
+            if ( monsters.empty() ) {
+                if ( res != nullptr ) {
+                    std::string msg = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
+                    StringReplace( msg, "%{count}", dist );
+                    *res = msg;
+                }
+                return false;
+            }
+        }
+
+        if ( spell == Spell::HAUNT || spell == Spell::SETAGUARDIAN || spell == Spell::SETEGUARDIAN || spell == Spell::SETFGUARDIAN || spell == Spell::SETWGUARDIAN ) {
+            Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
+
+            if ( MP2::OBJ_MINES != tile.GetObject( false ) ) {
+                if ( res != nullptr ) {
+                    *res = _( "You must be standing on the entrance to a mine (sawmills and alchemists don't count) to cast this spell." );
                 }
                 return false;
             }
