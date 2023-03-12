@@ -264,8 +264,11 @@ namespace Maps
         void redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
         void updateFogDirectionsAround( const int32_t color ) const;
+        // Determine the fog direction by fog data for given color code of player(s) and store it in Tiles class.
         void updateFogDirection( const int32_t color );
+        // Return the fog direction by fog data for given color code of player(s).
         uint16_t getFogDirection( const int32_t color ) const;
+        // Return fog direction of tile.
         uint16_t getFogDirection() const
         {
             return _fogDirection;
@@ -467,6 +470,8 @@ namespace Maps
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
         uint16_t tilePassable = DIRECTION_ALL;
         uint8_t _fogColors = Color::ALL;
+
+        // Fog direction to render fog in Game Area. 
         uint16_t _fogDirection{ DIRECTION_ALL };
 
         uint8_t heroID = 0;

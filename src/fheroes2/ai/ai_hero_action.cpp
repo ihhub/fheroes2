@@ -707,7 +707,7 @@ namespace
             world.ActionForMagellanMaps( hero.GetColor() );
 
             if ( Players::isFriends( hero.GetColor(), Players::HumanColors() ) ) {
-                // Fully update fog directions if AI player is allied.
+                // Fully update fog directions if AI player is an ally.
                 Interface::GameArea::updateMapFogDirections();
             }
 

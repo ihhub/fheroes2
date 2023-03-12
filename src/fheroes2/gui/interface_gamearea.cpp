@@ -66,11 +66,12 @@ namespace
     {
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> bottomImages;
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> bottomBackgroundImages;
-        std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> heroBackgroundImages;
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> topImages;
 
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> lowPriorityBottomImages;
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> highPriorityBottomImages;
+
+        std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> heroBackgroundImages;
 
         std::map<fheroes2::Point, std::deque<fheroes2::ObjectRenderingInfo>> shadowImages;
     };
@@ -112,7 +113,7 @@ namespace
         for ( auto & objectInfo : shadowInfo ) {
             const fheroes2::Point imagePos = objectInfo.tileOffset + offset;
 
-            // Shadows outside the game area should not be rendered.
+            // Shadows outside the game area should not be rendered (objects cast shadows in top-right direction).
             if ( imagePos.x < 0 || imagePos.y < 0 ) {
                 continue;
             }
@@ -227,6 +228,7 @@ namespace
             }
 
             if ( imagePos.y > 0 && !isHeroInCastle ) {
+                // The bottom part of hero image should be rendered before it's fog so we place it in an extra deque.
                 if ( imagePos.x < 0 ) {
                     tileUnfit.heroBackgroundImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
@@ -472,8 +474,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const int32_t roiToRenderMaxX = std::min( maxX + 2, world.w() );
     const int32_t roiToRenderMaxY = std::min( maxY + 2, world.h() );
 
-    // These are parts of original action objects which must be rendered under heroes / boats.
-
     for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
             const Maps::Tiles & tile = world.GetTiles( posX, posY );
@@ -611,40 +611,40 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     std::vector<const Maps::TilesAddon *> topLayerTallObjects;
 
-    // We add one extra 2 tiles to the bottom to properly render very tall objects: abandoned mine ghosts, flag on the Alchemist lab, and others.
+    // Expand  ROI to properly render very tall objects (1 tile - left and right; 2 tiles - bottom): Abandoned mine Ghosts, Flag on the Alchemist lab, and others.
+    const int32_t roiExtraObjectsMaxX = std::min( maxX + 1, world.w() );
     for ( int32_t y = minY; y < roiToRenderMaxY; ++y ) {
-        for ( int32_t x = minX; x < maxX; ++x ) {
+        for ( int32_t x = roiToRenderMinX; x < roiExtraObjectsMaxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
             const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && drawFog;
             if ( isTileUnderFog ) {
-                // To correctly render tall extra objects (ghosts over abandoned mine) we analyze under one fog tile to the bottom direction.
+                // To correctly render tall extra objects (ghosts over abandoned mine) it is needed to analyze one tile to the bottom direction under fog.
                 const bool isUpperTileUnderFog = ( y > 0 ) ? ( world.GetTiles( x, y - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
                 if ( isUpperTileUnderFog ) {
+                    // If current tile and the bottom one are both under the fog
                     continue;
                 }
-            }
-            else {
-                // Since some objects are taller than 2 tiles their top layer sprites must be drawn at the very end.
-                // For now what we need to do is to run through all level 2 objects and verify that the tile below doesn't have
-                // any other level 2 objects with the same UID.
 
-                topLayerTallObjects.clear();
-                for ( const Maps::TilesAddon & addon : tile.getLevel2Addons() ) {
-                    if ( isTallTopLayerObject( x, y, addon._uid ) ) {
-                        topLayerTallObjects.emplace_back( &addon );
-                    }
-                    else {
-                        tile.redrawTopLayerObject( dst, isPuzzleDraw, *this, addon );
-                    }
+                tile.redrawTopLayerExtraObjects( dst, isPuzzleDraw, *this );
+                continue;
+            }
+
+            // Since some objects are taller than 2 tiles their top layer sprites must be drawn at the very end.
+            // For now what we need to do is to run through all level 2 objects and verify that the tile below doesn't have
+            // any other level 2 objects with the same UID.
+
+            topLayerTallObjects.clear();
+            for ( const Maps::TilesAddon & addon : tile.getLevel2Addons() ) {
+                if ( isTallTopLayerObject( x, y, addon._uid ) ) {
+                    topLayerTallObjects.emplace_back( &addon );
+                }
+                else {
+                    tile.redrawTopLayerObject( dst, isPuzzleDraw, *this, addon );
                 }
             }
 
             tile.redrawTopLayerExtraObjects( dst, isPuzzleDraw, *this );
-
-            if ( isTileUnderFog ) {
-                continue;
-            }
 
             for ( const Maps::TilesAddon * addon : topLayerTallObjects ) {
                 tile.redrawTopLayerObject( dst, isPuzzleDraw, *this, *addon );
@@ -668,7 +668,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         Route::Path::const_iterator nextStep = currentStep;
 
         if ( currentHero->isMoveEnabled() ) {
-            // Do not draw the first path mark when hero / boat is moving.
+            // Do not draw the first path mark when hero / boat is moving in the direction of the path.
             ++currentStep;
             ++nextStep;
             --greenColorSteps;

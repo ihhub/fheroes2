@@ -372,7 +372,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
 
                 tile.ClearFog( alliedColors );
 
-                // Update fog directions only for human player and only if fog was cleared.
+                // Update fog directions only for human player and his allies and only if fog was cleared.
                 if ( ( !isAIPlayer || isHumanFriend ) && isFogOnMap ) {
                     tile.updateFogDirection( alliedColors );
                     tile.updateFogDirectionsAround( alliedColors );
