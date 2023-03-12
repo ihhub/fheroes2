@@ -37,7 +37,6 @@
 #include "color.h"
 #include "dialog.h"
 #include "game.h"
-#include "game_io.h"
 #include "game_video.h"
 #include "game_video_type.h"
 #include "gamedefs.h"
@@ -45,7 +44,6 @@
 #include "kingdom.h"
 #include "mus.h"
 #include "players.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
@@ -479,14 +477,5 @@ StreamBase & GameOver::operator<<( StreamBase & msg, const Result & res )
 
 StreamBase & GameOver::operator>>( StreamBase & msg, Result & res )
 {
-    msg >> res.colors >> res.result;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE4_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE4_1000_RELEASE ) {
-        bool dummy;
-
-        msg >> dummy;
-    }
-
-    return msg;
+    return msg >> res.colors >> res.result;
 }

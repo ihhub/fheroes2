@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-07 14:32+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -1746,38 +1746,34 @@ msgid "Descendants"
 msgstr ""
 
 msgid "The %{building} produces %{monster}."
-msgstr ""
+msgstr "%{building} produkuje %{monster}."
 
 msgid "Requires:"
-msgstr ""
+msgstr "Požadováno:"
 
 msgid "Cannot build. You have already built here today."
-msgstr ""
+msgstr "Nelze postavit. Dnes si zde již stavěl."
 
 msgid "For this action it is necessary to build a castle first."
-msgstr ""
+msgstr "Pro tuto akci bude nutné nejdříve postavit hrad."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr ""
+msgstr "%{name} nelze postavit, protože hrad je moc daleko od moře."
 
 msgid "disable build."
 msgstr ""
 
-#, fuzzy
 msgid "Cannot afford %{name}."
-msgstr "Není možné postavit %{name}"
+msgstr "Na %{name} zatím nemáš."
 
-#, fuzzy
 msgid "%{name} is already built."
-msgstr "%{name} je již postaven."
+msgstr "%{name}, již dostavěno."
 
-#, fuzzy
 msgid "Cannot build %{name}."
 msgstr "Není možné postavit %{name}"
 
-#, fuzzy
 msgid "Build %{name}."
-msgstr "Postavit %{name}"
+msgstr "Postavit %{name}."
 
 #, fuzzy
 msgid "Blackridge"
@@ -2756,15 +2752,6 @@ msgid ""
 "events in the game."
 msgstr ""
 
-#, fuzzy
-msgid "Attention"
-msgstr "animace"
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-
 msgid ""
 "Map\n"
 "Difficulty"
@@ -2797,11 +2784,15 @@ msgid ""
 "Victory\n"
 "Conditions"
 msgstr ""
+"Podmínky\n"
+"pro výhru"
 
 msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+"Podmínky\n"
+"pro prohru"
 
 msgid "First select recipients!"
 msgstr ""
@@ -2815,9 +2806,8 @@ msgstr ""
 msgid "Select Recipients"
 msgstr ""
 
-#, fuzzy
 msgid "Your Funds"
-msgstr "Maračna"
+msgstr "Tvé zdroje"
 
 msgid "Planned Gift"
 msgstr ""
@@ -2878,25 +2868,26 @@ msgid "Click to choose the selected language."
 msgstr ""
 
 msgid "%{name} has gained a level."
-msgstr ""
+msgstr "%{name} jde o level výš."
 
-#, fuzzy
 msgid "%{skill} +1"
-msgstr "Zobrazit informace o %{name}."
+msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
-msgstr ""
+msgstr "Naučil ses %{skill}."
 
 msgid "You may learn either:"
-msgstr ""
+msgstr "Můžeś se naučit:"
 
 msgid "or"
-msgstr ""
+msgstr "nebo"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
+"Prohlédni si prosím naše kvalitní zboží. Pokud máš chuť nabídnout něco na "
+"výměnu, klikni na položky, které chceš vyměnit za jiné."
 
 msgid ""
 "You have received quite a bargain. I expect to make no profit on the deal. "
@@ -2904,129 +2895,121 @@ msgid ""
 msgstr ""
 
 msgid "I can offer you %{count} for 1 unit of %{resfrom}."
-msgstr ""
+msgstr "Mohu Ti nabídnout %{count} za 1 díl %{resfrom}."
 
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
-msgstr ""
+msgstr "Mohu Ti nabídnout 1 díl %{resto} za %{count} dílů %{resfrom}."
 
-#, fuzzy
 msgid "Min"
-msgstr "Zámek"
+msgstr "Min"
 
 msgid "Qty to trade"
-msgstr ""
+msgstr "Mn. k výměně"
 
 msgid "Trading Post"
-msgstr ""
+msgstr "Směnárna"
 
 msgid "Your Resources"
-msgstr ""
+msgstr "Tvoje zdroje"
 
 msgid "Available Trades"
-msgstr ""
+msgstr "Možno zaměnit"
 
 msgid "n/a"
 msgstr "n/a"
 
 msgid "guarded by %{count} %{monster}"
-msgstr ""
+msgstr "hlídáno %{count} %{monster}"
 
 msgid "guarded by "
-msgstr ""
+msgstr "hlídáno "
 
 msgid "(available: %{count})"
-msgstr ""
+msgstr "(K dispozici: %{count})"
 
-#, fuzzy
 msgid "(empty)"
-msgstr "Prázdný"
+msgstr "(prázdno)"
 
 msgid "already learned"
-msgstr ""
+msgstr "již to umíš"
 
 msgid "already knows this skill"
-msgstr ""
+msgstr "tuhle dovednost již máš"
 
 msgid "already has max skills"
-msgstr ""
+msgstr "již má maximální dovednosti"
 
 msgid "(already visited)"
-msgstr ""
+msgstr "(již navštíveno)"
 
 msgid "(not visited)"
-msgstr ""
+msgstr "(nenavštíveno)"
 
 msgid "%{color} Barrier"
-msgstr ""
+msgstr "%{color} Bariéra"
 
 msgid "%{color} Tent"
-msgstr ""
+msgstr "%{color} Stan"
 
 msgid "Road"
-msgstr ""
+msgstr "Cesta"
 
 msgid "(digging ok)"
-msgstr ""
+msgstr "(lze kopat)"
 
 msgid "(no digging)"
-msgstr ""
+msgstr "(nelze kopat)"
 
 msgid "penalty: %{cost}"
-msgstr ""
+msgstr "zpomalení: %{cost}"
 
 msgid "Uncharted Territory"
-msgstr ""
+msgstr "Neprozkoumané území"
 
 msgid "Defenders:"
 msgstr "Obránci:"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Není známo"
 
 msgid "%{name} (Level %{level})"
 msgstr ""
 
-#, fuzzy
 msgid "Attack:"
-msgstr "Útok"
+msgstr "Útok:"
 
-#, fuzzy
 msgid "Defense:"
-msgstr "Obrana"
+msgstr "Obrana:"
 
-#, fuzzy
 msgid "Spell Power:"
-msgstr "Síla kouzel"
+msgstr "Síla Kouzel:"
 
-#, fuzzy
 msgid "Knowledge:"
-msgstr "Znalosti"
+msgstr "Znalosti:"
 
-#, fuzzy
 msgid "Spell Points:"
-msgstr "Síla kouzel"
+msgstr "Body Kouzla:"
 
-#, fuzzy
 msgid "Move Points:"
-msgstr "Zobrazit %{name}"
+msgstr "Body Pohybu:"
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Cena za jedince:"
 
 msgid "Available: %{count}"
-msgstr ""
+msgstr "K dispozici: %{count}"
 
 msgid "Number to buy:"
-msgstr ""
+msgstr "Koupit:"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Najmout vybrané stvůry."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Vybrat maximální počet k najmutí. "
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Vybrat pouze 1 stvůru k najmutí."
 
 msgid "Select Game Resolution:"
 msgstr ""
@@ -3041,43 +3024,49 @@ msgid "Fast separation into slots:"
 msgstr ""
 
 msgid "Map: "
-msgstr ""
+msgstr "Mapa: "
 
 msgid ""
 "\n"
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Měsíc: "
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Týden: "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", Den: "
 
 msgid ""
 "\n"
 "\n"
 "Location: "
 msgstr ""
+"\n"
+"\n"
+"Cesta: "
 
 msgid "File to Save:"
-msgstr ""
+msgstr "Uložit do souboru:"
 
 msgid "File to Load:"
-msgstr ""
+msgstr "Soubor k načtení:"
 
 msgid "Click to save the current game."
-msgstr ""
+msgstr "Klikni pro uložení aktuální hry."
 
 msgid "Click to load a previously saved game."
-msgstr ""
+msgstr "Klikni pro načtení dříve uložené hry."
 
 msgid "Are you sure you want to delete file:"
-msgstr ""
+msgstr "Jsi si jist, že chceš smazat soubor:"
 
 msgid "Warning!"
-msgstr ""
+msgstr "Výstraha!"
 
 #, fuzzy
 msgid "Select Monster:"
@@ -3185,7 +3174,7 @@ msgid "All Maps"
 msgstr "Všechny mapy"
 
 msgid "View all maps, regardless of size."
-msgstr "Zobrazí všechny mapě nezávisle na velikosti."
+msgstr "Zobrazí všechny mapy, nezávisle na velikosti."
 
 msgid "Players Icon"
 msgstr ""
@@ -3322,17 +3311,16 @@ msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
-msgstr ""
+msgstr "Útk."
 
 msgid "Def."
-msgstr ""
+msgstr "Obr."
 
 msgid "Power"
-msgstr ""
+msgstr "Síla"
 
-#, fuzzy
 msgid "Knowl"
-msgstr "Znalosti"
+msgstr "Znal."
 
 msgid "1st"
 msgstr ""
@@ -3353,11 +3341,10 @@ msgid "6th"
 msgstr ""
 
 msgid "Oracle: Player Rankings"
-msgstr ""
+msgstr "Pořadí hráčů"
 
-#, fuzzy
 msgid "Thieves' Guild: Player Rankings"
-msgstr "Cech zlodějů"
+msgstr "Pořadí hráčů"
 
 msgid "Number of Towns:"
 msgstr "Počet měst:"
@@ -3378,14 +3365,13 @@ msgid "Gems, Cr, Slf & Mer:"
 msgstr ""
 
 msgid "Obelisks Found:"
-msgstr ""
+msgstr "Nalezeno Obelisků:"
 
-#, fuzzy
 msgid "Artifacts:"
-msgstr "Artefakt"
+msgstr "Artefakty:"
 
 msgid "Total Army Strength:"
-msgstr ""
+msgstr "Celková síla armády:"
 
 msgid "Income:"
 msgstr "Příjem:"
@@ -3394,31 +3380,31 @@ msgid "Best Hero:"
 msgstr "Nejlepší hrdina:"
 
 msgid "Best Hero Stats:"
-msgstr ""
+msgstr "Statistiky nej. hrdiny:"
 
 msgid "Personality:"
-msgstr ""
+msgstr "Osobnost:"
 
 msgid "Best Monster:"
-msgstr ""
+msgstr "Nejlepší Stvůra:"
 
 msgid "difficulty|Easy"
-msgstr ""
+msgstr "Lehká"
 
 msgid "difficulty|Normal"
-msgstr ""
+msgstr "Normální"
 
 msgid "difficulty|Hard"
-msgstr ""
+msgstr "Těžká"
 
 msgid "difficulty|Expert"
-msgstr ""
+msgstr "Expert"
 
 msgid "difficulty|Impossible"
-msgstr ""
+msgstr "Nemožné"
 
 msgid "and more..."
-msgstr ""
+msgstr "a víc..."
 
 #, fuzzy
 msgid "Campaign Difficulty"
@@ -5625,18 +5611,20 @@ msgid "%{luck} Luck"
 msgstr ""
 
 msgid "Current Luck Modifiers:"
-msgstr ""
+msgstr "Štěstí ovlivňují:"
 
 msgid "Current Morale Modifiers:"
-msgstr ""
+msgstr "Morálku ovlivňují:"
 
 msgid "Entire army is undead, so morale does not apply."
-msgstr ""
+msgstr "Celá armáda je nemrtvá, morálka se nevztahuje."
 
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
 msgstr ""
+"Aktuálně zkušenost %{exp1}.\n"
+" Další level %{exp2}."
 
 msgid "Level %{level}"
 msgstr ""
@@ -5649,7 +5637,7 @@ msgid ""
 msgstr ""
 
 msgid "%{name1} meets %{name2}"
-msgstr ""
+msgstr "%{name1} se střetá s %{name2}"
 
 msgid "Town Portal"
 msgstr ""
@@ -5718,464 +5706,479 @@ msgid "Current Modifiers:"
 msgstr ""
 
 msgid "skill|Basic"
-msgstr ""
+msgstr "Základ"
 
 msgid "skill|Advanced"
-msgstr ""
+msgstr "Pokročilý"
 
-#, fuzzy
 msgid "skill|Expert"
 msgstr "Expert"
 
 msgid "Pathfinding"
-msgstr ""
+msgstr "Hled. cest"
 
 msgid "Archery"
-msgstr ""
+msgstr "Lukostřelba"
 
 msgid "Logistics"
-msgstr ""
+msgstr "Logistika"
 
 msgid "Scouting"
-msgstr ""
+msgstr "Průzkumník"
 
 msgid "Diplomacy"
-msgstr ""
+msgstr "Diplomacie"
 
 msgid "Navigation"
-msgstr ""
+msgstr "Navigace"
 
 msgid "Leadership"
-msgstr ""
+msgstr "Vedení"
 
 msgid "Wisdom"
-msgstr ""
+msgstr "Moudrost"
 
 msgid "Mysticism"
-msgstr ""
+msgstr "Mystika"
 
 msgid "Ballistics"
-msgstr ""
+msgstr "Balistika"
 
 msgid "Eagle Eye"
-msgstr ""
+msgstr "Orlí Oko"
 
 msgid "Necromancy"
-msgstr ""
+msgstr "Nekromantie"
 
 msgid "Estates"
-msgstr ""
+msgstr "Majetek"
 
 msgid "Advanced Archery"
-msgstr ""
+msgstr "Pokr. Lukostřelba"
 
 msgid "Advanced Pathfinding"
-msgstr ""
+msgstr "Pokr. Hledání cest"
 
 msgid "Basic Archery"
-msgstr ""
+msgstr "Zákl. Lukostřelba"
 
 msgid "Basic Pathfinding"
-msgstr ""
+msgstr "Zákl. Hledání cest"
 
 msgid "Expert Pathfinding"
-msgstr ""
+msgstr "Exp. Hledání cest"
 
 msgid "Advanced Logistics"
-msgstr ""
+msgstr "Pokr. Logistika"
 
 msgid "Basic Logistics"
-msgstr ""
+msgstr "Zákl. Logistika"
 
 msgid "Basic Scouting"
-msgstr ""
+msgstr "Zákl. Průzkumník"
 
-#, fuzzy
 msgid "Expert Archery"
-msgstr "Expert"
+msgstr "Exp. Lukostřelba"
 
 msgid "Expert Logistics"
-msgstr ""
+msgstr "Exp. Logistika"
 
 msgid "Advanced Diplomacy"
-msgstr ""
+msgstr "Pokr. Diplomacie"
 
 msgid "Advanced Scouting"
-msgstr ""
+msgstr "Pokr. Průzkumník"
 
 msgid "Basic Diplomacy"
-msgstr ""
+msgstr "Zákl. Diplomacie"
 
 msgid "Expert Diplomacy"
-msgstr ""
+msgstr "Exp. Diplomacie"
 
 msgid "Expert Scouting"
-msgstr ""
+msgstr "Exp. Průzkumník"
 
 msgid "Advanced Leadership"
-msgstr ""
+msgstr "Pokr. Vedení"
 
 msgid "Advanced Navigation"
-msgstr ""
+msgstr "Pokr. Navigace"
 
 msgid "Basic Leadership"
-msgstr ""
+msgstr "Zákl. Vedení"
 
 msgid "Basic Navigation"
-msgstr ""
+msgstr "Zákl. Navigace"
 
 msgid "Expert Navigation"
-msgstr ""
+msgstr "Exp. Navigace"
 
 msgid "Advanced Wisdom"
-msgstr ""
+msgstr "Pokr. Moudrost"
 
 msgid "Basic Mysticism"
-msgstr ""
+msgstr "Zákl. Mystika"
 
 msgid "Basic Wisdom"
-msgstr ""
+msgstr "Zákl. Moudrost"
 
 msgid "Expert Leadership"
-msgstr ""
+msgstr "Exp. Vedení"
 
-#, fuzzy
 msgid "Expert Wisdom"
-msgstr "Expert"
+msgstr "Exp. Moudrost"
 
 msgid "Advanced Luck"
-msgstr ""
+msgstr "Pokr. Štěstí"
 
 msgid "Advanced Mysticism"
-msgstr ""
+msgstr "Pokr. Mystika"
 
 msgid "Basic Luck"
-msgstr ""
+msgstr "Zákl. Štěstí"
 
-#, fuzzy
 msgid "Expert Luck"
-msgstr "Expert"
+msgstr "Exp. Štěstí"
 
 msgid "Expert Mysticism"
-msgstr ""
+msgstr "Exp. Mystika"
 
 msgid "Advanced Ballistics"
-msgstr ""
+msgstr "Pokr. Balistika"
 
 msgid "Advanced Eagle Eye"
-msgstr ""
+msgstr "Pokr. Orlí Oko"
 
 msgid "Basic Ballistics"
-msgstr ""
+msgstr "Zákl. Balistika"
 
 msgid "Basic Eagle Eye"
-msgstr ""
+msgstr "Zákl. Orlí Oko"
 
 msgid "Expert Ballistics"
-msgstr ""
+msgstr "Exp. Balistika"
 
 msgid "Advanced Necromancy"
-msgstr ""
+msgstr "Pokr. Nekromantie"
 
 msgid "Basic Estates"
-msgstr ""
+msgstr "Zákl. Majetek"
 
 msgid "Basic Necromancy"
-msgstr ""
+msgstr "Zákl. Nekromantie"
 
 msgid "Expert Eagle Eye"
-msgstr ""
+msgstr "Exp. Orlí Oko"
 
 msgid "Expert Necromancy"
-msgstr ""
+msgstr "Exp. Nekromantie"
 
 msgid "Advanced Estates"
-msgstr ""
+msgstr "Pokr. Majetek"
 
-#, fuzzy
 msgid "Expert Estates"
-msgstr "Expert"
+msgstr "Exp. Majetek"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
-msgstr ""
+msgstr "%{skill} snižuje zpomalení na nerovném terénu o %{count} procent."
 
 msgid "%{skill} eliminates the movement penalty for rough terrain."
-msgstr ""
+msgstr "%{skill} kompletně ruší zpomalení na nerovném terénu."
 
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
 msgstr ""
+"%{skill} zvyšuje škody způsobené jednotek útočících na dálku o %{count} "
+"procent."
 
-#, fuzzy
 msgid "%{skill} increases your hero's movement points by %{count} percent."
-msgstr "Pomník zvyšuje příjem města o 250 za den."
+msgstr "%{skill} zvyšuje body pohybu hrdiny o %{count} procent."
 
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] ""
+msgstr[0] "%{skill} rozšiřuje viditelnou oblast kolem hrdiny o jeden čtverec."
 msgstr[1] ""
+"%{skill} rozšiřuje viditelnou oblast kolem hrdiny o %{count} čtverců."
 msgstr[2] ""
 
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
 msgstr ""
+"%{skill} Ti umožňuje vyjednávat se stvořeními, které jsou slabší jako je "
+"Tvoje družina. "
 
 msgid "Approximately %{count} percent of the creatures may offer to join you."
 msgstr ""
+"Přibližně %{count} procent ze stvoření Ti může nabídnout, že se přidají."
 
 msgid "All of the creatures may offer to join you."
-msgstr ""
+msgstr "Všechna stvoření Ti můžou nabídnout, že se přidají."
 
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
-msgstr ""
+msgstr "%{skill} zvyšuje body pohybu hrdiny na vodě o %{count} procent."
 
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr ""
+msgstr "%{skill} zvyšuje morálku u boj. jednotek hrdiny o %{count}."
 
 msgid "%{skill} allows your hero to learn third level spells."
-msgstr ""
+msgstr "%{skill} umožnuje hrdinovi naučit se kouzla třetího stupně."
 
 msgid "%{skill} allows your hero to learn fourth level spells."
-msgstr ""
+msgstr "%{skill} umožnuje hrdinovi naučit se kouzla čtvrtého stupně."
 
 msgid "%{skill} allows your hero to learn fifth level spells."
-msgstr ""
+msgstr "%{skill} umožnuje hrdinovi naučit se kouzla pátého stupně."
 
 msgid "%{skill} regenerates one of your hero's spell points per day."
 msgid_plural ""
 "%{skill} regenerates %{count} of your hero's spell points per day."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "regeneruje jeden bod magické energie za den."
+msgstr[1] "regeneruje %{count} bodů magické energie za den."
 msgstr[2] ""
 
-#, fuzzy
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr "Pomník zvyšuje příjem města o 250 za den."
+msgstr "%{skill} zvyšuje štěstí hrdiny o %{count}."
 
 msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
+"%{skill} dává katapultu větší šanci trefit se a více tím poškodit zdi hradu."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
+"%{skill} dává katapultu střelu navíc, kdy každý z výstřelů má větší šanci "
+"trefit se a více tím poškodit zdi hradu."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
+"%{skill} dává katapultu střelu navíc, kdy každý z výstřelů okamžitě zboří "
+"zasažené místo zdi hradu, výjma zesílených hradeb v Rytířském hradu."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level enemy spell used against him in a combat."
 msgstr ""
+"%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
+"prvé nebo druhé úrovně, které protivník použil v boji."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) used against him in combat."
 msgstr ""
+"%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
+"třetí (nebo nižší) úrovně, které protivník použil v boji."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) used against him in combat."
 msgstr ""
+"%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
+"čtvrté (nebo nižší) úrovně, které protivník použil v boji."
 
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
+"%{skill} umožnuje aby %{count} procent nestvůr padlých v boji mohlo být "
+"vzkříšeno jako Kostlivci."
 
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
+"Tvůj hrdina produkuje %{count} zlaťáků za den jako daňové příjmy z majetku."
 
 msgid "Blue"
-msgstr ""
+msgstr "Modrý"
 
 msgid "Green"
-msgstr ""
+msgstr "Zelený"
 
 msgid "Red"
-msgstr ""
+msgstr "Červený"
 
 msgid "Yellow"
-msgstr ""
+msgstr "Žlutý"
 
 msgid "Orange"
-msgstr ""
+msgstr "Oranžový"
 
 msgid "Purple"
-msgstr ""
+msgstr "Fialový"
 
 msgid "barrier|Aqua"
-msgstr ""
+msgstr "Aqua"
 
 msgid "barrier|Blue"
-msgstr ""
+msgstr "Modrá"
 
 msgid "barrier|Brown"
-msgstr ""
+msgstr "Hnědá"
 
 msgid "barrier|Gold"
-msgstr ""
+msgstr "Zlatá"
 
 msgid "barrier|Green"
-msgstr ""
+msgstr "Zelená"
 
 msgid "barrier|Orange"
-msgstr ""
+msgstr "Oranžová"
 
 msgid "barrier|Purple"
-msgstr ""
+msgstr "Fialová"
 
 msgid "barrier|Red"
-msgstr ""
+msgstr "Červená"
 
 msgid "tent|Aqua"
-msgstr ""
+msgstr "Aqua"
 
 msgid "tent|Blue"
-msgstr ""
+msgstr "Modrý"
 
-#, fuzzy
 msgid "tent|Brown"
-msgstr "animace"
+msgstr "Hnědý"
 
 msgid "tent|Gold"
-msgstr ""
+msgstr "Zlatý"
 
 msgid "tent|Green"
-msgstr ""
+msgstr "Zelený"
 
 msgid "tent|Orange"
-msgstr ""
+msgstr "Oranžový"
 
 msgid "tent|Purple"
-msgstr ""
+msgstr "Fialový"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Červený"
 
 msgid "Experience"
-msgstr ""
+msgstr "Zkušenosti"
 
 msgid ""
 "Experience allows your heroes to go up levels, increasing their primary and "
 "secondary skills."
 msgstr ""
+"Zkušenosti umožňují tvým hrdinům postupovat na vyšší úrovné a zvyšovat "
+"jejich primární a sekundární znalosti."
 
-#, fuzzy
 msgid "Hero/Stats"
-msgstr "Hrdinové"
+msgstr "Hrdina/Stat"
 
-#, fuzzy
 msgid "Skills"
-msgstr "Přeskočit"
+msgstr "Znalosti"
 
-#, fuzzy
 msgid "Artifacts"
-msgstr "Artefakt"
+msgstr "Artefakty"
 
-#, fuzzy
 msgid "Town/Castle"
-msgstr "Hrad"
+msgstr "Město/Hrad"
 
 msgid "Garrison"
-msgstr ""
+msgstr "Posádka"
 
-#, fuzzy
 msgid "Gold Per Day:"
-msgstr "Zlato v pokladici:"
+msgstr "Zlata za den:"
 
 msgid "Heroes"
 msgstr "Hrdinové"
 
-#, fuzzy
 msgid "View Heroes."
-msgstr "Zobrazit hrdinu"
+msgstr "Zobraz Hrdiny."
 
-#, fuzzy
 msgid "Towns/Castles"
-msgstr "Hrad"
+msgstr "Města/Hrady"
 
 msgid "View Towns and Castles."
-msgstr ""
+msgstr "Zobraz Města a Hrady."
 
 msgid "luck|Cursed"
-msgstr ""
+msgstr "Prokletí"
 
 msgid "luck|Awful"
-msgstr ""
+msgstr "Hrozné"
 
 msgid "luck|Bad"
-msgstr ""
+msgstr "Zlé"
 
 msgid "luck|Normal"
-msgstr ""
+msgstr "Normální"
 
 msgid "luck|Good"
-msgstr ""
+msgstr "Dobré"
 
 msgid "luck|Great"
-msgstr ""
+msgstr "Skvěé"
 
 msgid "luck|Irish"
-msgstr ""
+msgstr "Irské"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
 "only do half damage."
 msgstr ""
+"Nízké štěstí občas dolehne na Tvoje jednotky v bitvě a zapříčíní, že jejich "
+"útok způsobí pouze poloviční škody."
 
 msgid ""
 "Neutral luck means your armies will never get lucky or unlucky attacks on "
 "the enemy."
 msgstr ""
+"Neutrální štěstí znamená, že tvoje jednotky nikdy nezasadí nepříteli štastný "
+"ale ani méně povedený úder."
 
 msgid ""
 "Good luck sometimes lets your armies get lucky attacks (double strength) in "
 "combat."
 msgstr ""
+"Vysoké štěstí občas způsobí šťastný úder Tvých jednotek (dvojitou silou) v "
+"bitvě."
 
 msgid "morale|Treason"
-msgstr ""
+msgstr "Zrada"
 
 msgid "morale|Awful"
-msgstr ""
+msgstr "Hrozná"
 
 msgid "morale|Poor"
-msgstr ""
+msgstr "Nízká"
 
 msgid "morale|Normal"
-msgstr ""
+msgstr "Normální"
 
 msgid "morale|Good"
-msgstr ""
+msgstr "Dobrá"
 
 msgid "morale|Great"
-msgstr ""
+msgstr "Skvělá"
 
 msgid "morale|Blood!"
-msgstr ""
+msgstr "Krev!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
-msgstr ""
+msgstr "Zlá morálka může způsobit, že Tvé jednotky v bitvě ztuhnou."
 
 msgid ""
 "Neutral morale means your armies will never be blessed with extra attacks or "
 "freeze in combat."
 msgstr ""
+"Neutrální morálka znamená, že Tvé jednotky neboudou obdařené útokem navíc "
+"ale ani v boji neztuhnou."
 
 msgid "Good morale may give your armies extra attacks in combat."
-msgstr ""
+msgstr "Dobrá morálka může dát Tvým jednotkám jeden útok navíc."
 
 msgid "Knight"
 msgstr ""
@@ -6234,28 +6237,28 @@ msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
-msgstr ""
+msgstr "Stojící"
 
 msgid "speed|Crawling"
-msgstr ""
+msgstr "Plazící"
 
 msgid "speed|Very Slow"
-msgstr ""
+msgstr "velmi pomalý"
 
 msgid "speed|Slow"
-msgstr ""
+msgstr "Pomalý"
 
 msgid "speed|Average"
-msgstr ""
+msgstr "Průměr"
 
 msgid "speed|Fast"
-msgstr ""
+msgstr "Rychlý"
 
 msgid "speed|Very Fast"
-msgstr ""
+msgstr "Velmi rychlý"
 
 msgid "speed|Ultra Fast"
-msgstr ""
+msgstr "Ultra rychlý"
 
 msgid "speed|Blazing"
 msgstr ""
@@ -6663,7 +6666,7 @@ msgid "Xanadu"
 msgstr ""
 
 msgid "Lean-To"
-msgstr ""
+msgstr "Přístřešek"
 
 msgid "Magellan's Maps"
 msgstr ""
@@ -9033,3 +9036,13 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Attention"
+#~ msgstr "Pozor"
+
+#~ msgid ""
+#~ "Your version of Heroes of Might and Magic II does not support any other "
+#~ "languages than English."
+#~ msgstr ""
+#~ "Tahle verze hry Heroes of Might and Magic II nepodporuje jiné ljazyky než "
+#~ "English."

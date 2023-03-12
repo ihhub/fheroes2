@@ -222,6 +222,9 @@ void Interface::Radar::Redraw( const bool redrawMapObjects )
         }
         else {
             // We are in "Hide Interface" mode and radar is turned off so we have nothing to render.
+
+            // Force set radar ROI for the whole world to be prepared to fully update radar when it will be shown.
+            _roi = { 0, 0, world.w(), world.h() };
             return;
         }
     }
@@ -230,6 +233,9 @@ void Interface::Radar::Redraw( const bool redrawMapObjects )
     const fheroes2::Rect & rect = GetArea();
     if ( _hide ) {
         fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.isEvilInterfaceEnabled() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
+
+        // Force set radar ROI for the whole world to be prepared to fully update radar when it will be shown.
+        _roi = { 0, 0, world.w(), world.h() };
     }
     else {
         _cursorArea.hide();

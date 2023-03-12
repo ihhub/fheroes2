@@ -30,12 +30,10 @@
 
 #include "artifact.h"
 #include "dir.h"
-#include "game_io.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -797,17 +795,7 @@ namespace Campaign
 
     StreamBase & operator>>( StreamBase & msg, Campaign::ScenarioBonusData & data )
     {
-        msg >> data._type >> data._subType >> data._amount;
-
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE5_1000_RELEASE, "Remove the check below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE5_1000_RELEASE ) {
-            data._artifactSpellId = Spell::NONE;
-        }
-        else {
-            msg >> data._artifactSpellId;
-        }
-
-        return msg;
+        return msg >> data._type >> data._subType >> data._amount >> data._artifactSpellId;
     }
 
     ScenarioData::ScenarioData( const ScenarioInfoId & scenarioInfo, std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName,
