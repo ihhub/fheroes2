@@ -596,6 +596,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
     std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
+    if ( !loadedFromSave ) {
+        // Clear fog around heroes, castles and mines for all players when starting a new map.
+        for ( const Player * player : sortedPlayers ) {
+            world.ClearFog( player->GetColor() );
+        }
+    }
+
     while ( res == fheroes2::GameMode::END_TURN ) {
         if ( !loadedFromSave ) {
             world.NewDay();
@@ -655,8 +662,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     conf.SetCurrentColor( player->GetColor() );
 
-                    world.ClearFog( player->GetColor() );
-
                     kingdom.ActionBeforeTurn();
 
                     iconsPanel.ShowIcons( ICON_ANY );
@@ -697,10 +702,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     Redraw();
                     display.render();
 
-                    world.ClearFog( player->GetColor() );
-
 #if defined( WITH_DEBUG )
-                    if ( player->isAIAutoControlMode() || (conf.IsGameType( Game::TYPE_HOTSEAT ) && Players::isFriends( player->GetColor(), Players::HumanColors() ) ) ) {
+                    if ( player->isAIAutoControlMode()
+                         || ( conf.IsGameType( Game::TYPE_HOTSEAT ) && Players::isFriends( player->GetColor(), Players::HumanColors() ) ) ) {
 #else
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) && Players::isFriends( player->GetColor(), Players::HumanColors() ) ) {
 #endif
