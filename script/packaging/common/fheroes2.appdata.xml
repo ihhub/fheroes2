@@ -456,7 +456,7 @@
           <li>fix crashes on Windows 8 using MIDI music</li>
           <li>fix external audio not always returning to on after turning volume to zero (Windows OS)</li>
           <li>fix horse's steps being faded while crossing terrain border using MIDI sound (Windows OS)</li>
-          <li>fix sound volume being lower during combat (Windows OS) </li>
+          <li>fix sound volume being lower during combat (Windows OS)</li>
           <li>fix no sounds situation when music is off even when sounds are not (Windows OS)</li>
           <li>show correct hero's level and experience on level up</li>
           <li>fix incorrect castle's area leading to wrong castle's info</li>
@@ -698,7 +698,7 @@
           <li>speed up data reading from AGG files</li>
           <li>update Norwegian translation</li>
           <li>add a popup window for battle log</li>
-          <li>add a mandatory requirement of h2d file being present </li>
+          <li>add a mandatory requirement of h2d file being present</li>
           <li>fix incorrect logic for palette application function</li>
           <li>fix position of armies for quick info window for both castle and enemy hero</li>
           <li>set the direction for attacking and defending units in battle in a more OG-like way</li>
@@ -817,7 +817,7 @@
           <li>improve the AI fog discovery logic</li>
           <li>AI properly uses Whirlpools for path calculation</li>
           <li>fix cases when a hero was able to create a path over another hero</li>
-          <li>display dead monster information during battle </li>
+          <li>display dead monster information during battle</li>
           <li>fix Mass Dispel usage during battle</li>
           <li>update Polish translation</li>
           <li>fix Russian small k per in both fonts</li>
@@ -937,7 +937,7 @@
           <li>fix cases when opposing heroes still exist on the map after defeat</li>
           <li>improve AI usage of Disrupting Ray spell during battle</li>
           <li>add runtime language generation</li>
-          <li>fix terrain music being played during battle </li>
+          <li>fix terrain music being played during battle</li>
           <li>fix water object passabilities</li>
           <li>allow to use mouse wheel to change system options</li>
           <li>set correct building requirements for Upgraded Jousting Arena and Upgraded Cathedral</li>
@@ -1963,7 +1963,7 @@
           <li>use single OKAY button for Config window</li>
           <li>don't shift High Score background for high resolutions</li>
           <li>shift second hero's portrait in town</li>
-          <li>change unit movement speed in battle under spells </li>
+          <li>change unit movement speed in battle under spells</li>
           <li>add dynamic color for item selection</li>
           <li>add a popup window for clicking on Income in castle construction screen</li>
           <li>remember move points of surrendered/retreated hero</li>
@@ -2372,13 +2372,13 @@
           <li>hide dismiss button for monsters if a hero has only one stack of them</li>
           <li>fix incorrect message for Shipyard by right click</li>
           <li>fix missing battle hexagonal net was not appearing if enabled until next battle</li>
-          <li>display a warning message about missing files from the original game </li>
+          <li>display a warning message about missing files from the original game</li>
           <li>disable Continue Movement button for a hero which does not have chosen path</li>
           <li>required building names are displayed on a separate line each</li>
           <li>fix no building image for already built building for right mouse click</li>
           <li>fix incorrect image for Captains Quarters</li>
           <li>renamed 'Free Heroes II' to 'fheroes2'</li>
-          <li>show disabled "Continue Movement" button for castle </li>
+          <li>show disabled "Continue Movement" button for castle</li>
           <li>fix number of monsters being displayed in a black box</li>
           <li>add a script to download a demo version of the original game</li>
           <li>set default display size to 640x480 pixels</li>

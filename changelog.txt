@@ -379,7 +379,7 @@ version 0.9.18 (10 August 2022)
 - fix crashes on Windows 8 using MIDI music
 - fix external audio not always returning to on after turning volume to zero (Windows OS)
 - fix horse's steps being faded while crossing terrain border using MIDI sound (Windows OS)
-- fix sound volume being lower during combat (Windows OS) 
+- fix sound volume being lower during combat (Windows OS)
 - fix no sounds situation when music is off even when sounds are not (Windows OS)
 - show correct hero's level and experience on level up
 - fix incorrect castle's area leading to wrong castle's info
@@ -597,7 +597,7 @@ version 0.9.14 (09 April 2022)
 - speed up data reading from AGG files
 - update Norwegian translation
 - add a popup window for battle log
-- add a mandatory requirement of h2d file being present 
+- add a mandatory requirement of h2d file being present
 - fix incorrect logic for palette application function
 - fix position of armies for quick info window for both castle and enemy hero
 - set the direction for attacking and defending units in battle in a more OG-like way
@@ -704,7 +704,7 @@ version 0.9.12 (07 February 2022)
 - improve the AI fog discovery logic
 - AI properly uses Whirlpools for path calculation
 - fix cases when a hero was able to create a path over another hero
-- display dead monster information during battle 
+- display dead monster information during battle
 - fix Mass Dispel usage during battle
 - update Polish translation
 - fix Russian small k per in both fonts
@@ -812,7 +812,7 @@ version 0.9.10 (05 December 2021)
 - fix cases when opposing heroes still exist on the map after defeat
 - improve AI usage of Disrupting Ray spell during battle
 - add runtime language generation
-- fix terrain music being played during battle 
+- fix terrain music being played during battle
 - fix water object passabilities
 - allow to use mouse wheel to change system options
 - set correct building requirements for Upgraded Jousting Arena and Upgraded Cathedral
@@ -1760,7 +1760,7 @@ version 0.8.2 (04 October 2020)
 - use single OKAY button for Config window
 - don't shift High Score background for high resolutions
 - shift second hero's portrait in town
-- change unit movement speed in battle under spells 
+- change unit movement speed in battle under spells
 - add dynamic color for item selection
 - add a popup window for clicking on Income in castle construction screen
 - remember move points of surrendered/retreated hero
@@ -2151,13 +2151,13 @@ version 0.7 (18 April 2020)
 - hide dismiss button for monsters if a hero has only one stack of them
 - fix incorrect message for Shipyard by right click
 - fix missing battle hexagonal net was not appearing if enabled until next battle
-- display a warning message about missing files from the original game 
+- display a warning message about missing files from the original game
 - disable Continue Movement button for a hero which does not have chosen path
 - required building names are displayed on a separate line each
 - fix no building image for already built building for right mouse click
 - fix incorrect image for Captains Quarters
 - renamed 'Free Heroes II' to 'fheroes2'
-- show disabled "Continue Movement" button for castle 
+- show disabled "Continue Movement" button for castle
 - fix number of monsters being displayed in a black box
 - add a script to download a demo version of the original game
 - set default display size to 640x480 pixels
