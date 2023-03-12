@@ -88,7 +88,7 @@
           <li>memorize zoom level of the View World screen</li>
           <li>fix inability to move monsters after Good Morale event</li>
           <li>fix unintended ability to upgrade troops during battle</li>
-          <li>fix huge CPU usage in in hero window during battle</li>
+          <li>fix huge CPU usage in hero window during battle</li>
           <li>redevelop standard window generation logic</li>
           <li>update Bulgarian translation</li>
           <li>fix volcano sounds</li>

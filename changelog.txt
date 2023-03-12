@@ -47,7 +47,7 @@ version 1.0.2 (12 March 2023)
 - memorize zoom level of the View World screen
 - fix inability to move monsters after Good Morale event
 - fix unintended ability to upgrade troops during battle
-- fix huge CPU usage in in hero window during battle
+- fix huge CPU usage in hero window during battle
 - redevelop standard window generation logic
 - update Bulgarian translation
 - fix volcano sounds
