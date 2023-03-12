@@ -56,7 +56,7 @@
           <li>grey out Summon Boat, Town Gate and Town Portal spells if they cannot be used</li>
           <li>clean up AI priority tasks if attacker was killed</li>
           <li>update sounds used while visiting dwellings on Adventure Map</li>
-          <li>add logic of AI heroes using town portal </li>
+          <li>add logic of AI heroes using town portal</li>
           <li>add missing symbols to button font</li>
           <li>update Polish translation</li>
           <li>fix high CPU usage during battle while using highest animation speeds</li>

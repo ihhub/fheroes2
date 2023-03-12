@@ -15,7 +15,7 @@ version 1.0.2 (12 March 2023)
 - grey out Summon Boat, Town Gate and Town Portal spells if they cannot be used
 - clean up AI priority tasks if attacker was killed
 - update sounds used while visiting dwellings on Adventure Map
-- add logic of AI heroes using town portal 
+- add logic of AI heroes using town portal
 - add missing symbols to button font
 - update Polish translation
 - fix high CPU usage during battle while using highest animation speeds
