@@ -699,7 +699,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     world.ClearFog( player->GetColor() );
 
+#if defined( WITH_DEBUG )
+                    if ( player->isAIAutoControlMode() || (conf.IsGameType( Game::TYPE_HOTSEAT ) && Players::isFriends( player->GetColor(), Players::HumanColors() ) ) ) {
+#else
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) && Players::isFriends( player->GetColor(), Players::HumanColors() ) ) {
+#endif
                         // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
                         Interface::GameArea::updateMapFogDirections();
                     }
