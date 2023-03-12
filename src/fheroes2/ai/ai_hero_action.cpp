@@ -705,6 +705,12 @@ namespace
             hero.SetVisited( dst_index, Visit::GLOBAL );
             hero.setVisitedForAllies( dst_index );
             world.ActionForMagellanMaps( hero.GetColor() );
+
+            if ( Players::isFriends( hero.GetColor(), Players::HumanColors() ) ) {
+                // Fully update fog directions if AI player is allied.
+                Interface::GameArea::updateMapFogDirections();
+            }
+
             kingdom.OddFundsResource( payment );
         }
 

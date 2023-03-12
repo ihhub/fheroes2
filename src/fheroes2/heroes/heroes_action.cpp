@@ -2553,6 +2553,8 @@ namespace
                     hero.SetVisited( dst_index, Visit::GLOBAL );
                     hero.setVisitedForAllies( dst_index );
 
+                    // Fully update fog directions and redraw radar and game area.
+                    Interface::GameArea::updateMapFogDirections();
                     Interface::Basic & I = Interface::Basic::Get();
                     I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
                 }
