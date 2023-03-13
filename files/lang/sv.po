@@ -75,10 +75,10 @@ msgid "DISMISS"
 msgstr ""
 
 msgid "UPGRADE"
-msgstr "UPGRADERA"
+msgstr "UPPGRADERA"
 
 msgid "RESTART"
-msgstr "ÅTERSTART"
+msgstr "ÅTERSTARTA"
 
 msgid "S"
 msgstr ""
@@ -93,7 +93,7 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
-msgstr ""
+msgstr "ALLA"
 
 msgid ""
 "STANDARD\n"
