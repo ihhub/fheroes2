@@ -2532,7 +2532,6 @@ msgstr "Rekrytera Varelser"
 msgid "Max"
 msgstr "Maximalt"
 
-#, fuzzy
 msgid "Hire all creatures in the town."
 msgstr "Rekrytera alla varelser i staden."
 
