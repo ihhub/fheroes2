@@ -321,7 +321,6 @@ msgstr "Skadar alla odöda i striden."
 msgid "%{name} has turned on the auto battle"
 msgstr "Skadar alla odöda i striden."
 
-#, fuzzy
 msgid "Spell failed!"
 msgstr "Besvärjelse misslyckades!"
 
@@ -430,7 +429,7 @@ msgid "Toggle to display damage information during the battle."
 msgstr ""
 
 msgid "Exit this menu."
-msgstr "Stäng denna many"
+msgstr "Stäng menyn."
 
 msgid "Okay"
 msgstr "OK"
