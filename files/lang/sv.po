@@ -388,7 +388,7 @@ msgid "Configure"
 msgstr "Anpassa"
 
 msgid "Hot Keys"
-msgstr "Tangentbords-/ngenvägar"
+msgstr "Tangentbords-\ngenvägar"
 
 msgid "Damage Info"
 msgstr "Skadeinformation"
