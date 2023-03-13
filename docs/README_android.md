@@ -33,3 +33,5 @@ Note that text input is not yet implemented.
 ## Android specific notes
 Fullscreen is enabled by default. To have the info bar with the clock visible you can disable fullscreen mode within the
 main menu settings under "Graphics".
+
+The minimum supported Android version is 5.1.
