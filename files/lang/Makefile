@@ -49,6 +49,10 @@ tr.mo: tr.po
 # Romanian uses ISO-8859-16
 ro.mo: ro.po
 	$(call MSGFMT,ISO-8859-16)
+	
+# Vietnamese uses CP1258
+vi.mo: vi.po
+	$(call MSGFMT,CP1258)
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
