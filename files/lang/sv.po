@@ -1338,7 +1338,6 @@ msgstr ""
 msgid " bane"
 msgstr ""
 
-
 msgid " alliance"
 msgstr " allians"
 
