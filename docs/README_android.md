@@ -28,8 +28,6 @@ on the item.
 By default normal adventure map scrolling on the borders of the screen is disabled. To pane the viewing area around you
 need to press anywhere on the adventure map and slide around to change where you are viewing.
 
-Note that text input is not yet implemented.
-
 ## Android specific notes
 Fullscreen is enabled by default. To have the info bar with the clock visible you can disable fullscreen mode within the
 main menu settings under "Graphics".
