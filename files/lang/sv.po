@@ -931,7 +931,7 @@ msgid "Uncle Ivan"
 msgstr "Farbror Ivan"
 
 msgid "Annexation"
-msgstr "Annektering""
+msgstr "Annektering"
 
 msgid "Force of Arms"
 msgstr ""
