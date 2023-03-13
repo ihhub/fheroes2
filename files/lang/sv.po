@@ -3116,7 +3116,7 @@ msgid "Select Spell:"
 msgstr "Välj Besvärjelse"
 
 msgid "Select Skill:"
-msgstr ""
+msgstr "Välj Förmåga:"
 
 #, fuzzy
 msgid "Map Type:\n"
