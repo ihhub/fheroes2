@@ -2484,13 +2484,20 @@ void Maps::Tiles::ClearFog( const int colors )
     world.resetPathfinder();
 }
 
-void Maps::Tiles::updateFogDirectionsAround( const int32_t color ) const
+void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color )
 {
-    for ( const int32_t direction : Direction::All() ) {
-        if ( isValidDirection( _index, direction ) ) {
-            Maps::Tiles & tile = world.GetTiles( GetDirectionIndex( _index, direction ) );
+    // Do not get over the world borders.
+    const int32_t minX = std::max( minPos.x, 0 );
+    const int32_t minY = std::max( minPos.y, 0 );
+    // Add extra 1 to reach the given maxPos point.
+    const int32_t maxX = std::min( maxPos.x + 1, world.w() );
+    const int32_t maxY = std::min( maxPos.y + 1, world.h() );
 
-            // Do not update tile with already cleared fog.
+    for ( int32_t x = minX; x < maxX; ++x ) {
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            Maps::Tiles & tile = world.GetTiles( x, y );
+
+            // Do not update tile with already cleared fog direction.
             if ( tile.getFogDirection() != Direction::UNKNOWN ) {
                 tile.updateFogDirection( color );
             }
@@ -2522,6 +2529,9 @@ uint16_t Maps::Tiles::getFogDirection( const int32_t color ) const
 
 void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const
 {
+    // This method should not be called for a tile without fog.
+    assert( _fogDirection != Direction::UNKNOWN );
+    
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
     if ( DIRECTION_ALL == _fogDirection ) {

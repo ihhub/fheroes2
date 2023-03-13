@@ -263,12 +263,14 @@ namespace Maps
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
         void redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
-        void updateFogDirectionsAround( const int32_t color ) const;
-        // Determine the fog direction by fog data for given color code of player(s) and store it in Tiles class.
+
+        // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
+        static void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
+        // Determine the fog direction by fog data for given color code of player(s) and store it in tile data.
         void updateFogDirection( const int32_t color );
         // Return the fog direction by fog data for given color code of player(s).
         uint16_t getFogDirection( const int32_t color ) const;
-        // Return fog direction of tile.
+        // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
         uint16_t getFogDirection() const
         {
             return _fogDirection;

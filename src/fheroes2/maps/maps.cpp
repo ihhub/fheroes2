@@ -345,7 +345,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     }
 
     const int alliedColors = Players::GetPlayerFriends( playerColor );
-    const bool isHumanFriend = Players::isFriends( playerColor, Players::HumanColors() );
+    const bool isHumanOrHumanFriend = Players::isFriends( playerColor, Players::HumanColors() ) || !isAIPlayer;
 
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
 
@@ -356,6 +356,9 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     const int32_t minX = std::max( center.x - scoutingDistance, 0 );
     const int32_t maxX = std::min( center.x + scoutingDistance, world.w() - 1 );
     assert( minX < maxX );
+
+    fheroes2::Point fogRevealMinPos( world.h(), world.w() );
+    fheroes2::Point fogRevealMaxPos( 0, 0 );
 
     for ( int32_t y = minY; y <= maxY; ++y ) {
         const int32_t dy = y - center.y;
@@ -368,17 +371,28 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
                     AI::Get().revealFog( tile );
                 }
 
-                const bool isFogOnMap = tile.isFog( alliedColors );
+                if ( tile.isFog( alliedColors ) ) {
+                    // Clear fog only if it is not already cleared.
+                    tile.ClearFog( alliedColors );
 
-                tile.ClearFog( alliedColors );
-
-                // Update fog directions only for human player and his allies and only if fog was cleared.
-                if ( ( !isAIPlayer || isHumanFriend ) && isFogOnMap ) {
-                    tile.updateFogDirection( alliedColors );
-                    tile.updateFogDirectionsAround( alliedColors );
+                    if ( isHumanOrHumanFriend ) {
+                        // Update fog reveal area points only for human player and his allies.
+                        fogRevealMinPos.x = std::min( fogRevealMinPos.x, x );
+                        fogRevealMinPos.y = std::min( fogRevealMinPos.y, y );
+                        fogRevealMaxPos.x = std::max( fogRevealMaxPos.x, x );
+                        fogRevealMaxPos.y = std::max( fogRevealMaxPos.y, y );
+                    }
                 }
             }
         }
+    }
+
+    // Update fog directions only for human player and his allies and only if fog has to be cleared.
+    if ( isHumanOrHumanFriend && ( fogRevealMaxPos.x >= fogRevealMinPos.x ) && ( fogRevealMaxPos.y >= fogRevealMinPos.y ) ) {
+        // Fog directions should be updated 1 tile outside of the cleared fog.
+        fogRevealMinPos -= { 1, 1 };
+        fogRevealMaxPos += { 1, 1 };
+        Maps::Tiles::updateFogDirectionsInArea( fogRevealMinPos, fogRevealMaxPos, alliedColors );
     }
 }
 
