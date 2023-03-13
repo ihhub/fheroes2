@@ -45,14 +45,14 @@ de.mo dk.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
 # Turkish uses CP1254
 tr.mo: tr.po
 	$(call MSGFMT,CP1254)
-
-# Romanian uses ISO-8859-16
-ro.mo: ro.po
-	$(call MSGFMT,ISO-8859-16)
 	
 # Vietnamese uses CP1258
 vi.mo: vi.po
 	$(call MSGFMT,CP1258)
+
+# Romanian uses ISO-8859-16
+ro.mo: ro.po
+	$(call MSGFMT,ISO-8859-16)
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
