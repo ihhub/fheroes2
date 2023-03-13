@@ -3108,7 +3108,7 @@ msgid "Select Hero:"
 msgstr "Välj Hjälte:"
 
 msgid "Select Artifact:"
-msgstr "Artifakter"
+msgstr "Välj Artefakt:"
 
 msgid "Select Spell:"
 msgstr "Välj Besvärjelse"
