@@ -2055,7 +2055,7 @@ msgid "Thatched Hut"
 msgstr "Halmtäckt hydda"
 
 msgid "Archery Range"
-msgstr "Bågskyttebana
+msgstr "Bågskyttebana"
 
 msgid "Upg. Archery Range"
 msgstr "Uppg. Bågskyttesräckvidd"
