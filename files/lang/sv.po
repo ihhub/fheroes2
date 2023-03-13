@@ -2512,7 +2512,7 @@ msgid "Set garrison combat formation to 'Grouped'"
 msgstr "Ändra besättningens stridsformation till 'Grupperad'"
 
 msgid "Exit Castle Options"
-msgstr "Lämna Slotstalternativ"
+msgstr "Lämna Slottsalternativ"
 
 msgid "Castle Options"
 msgstr "Slottalternativ"
