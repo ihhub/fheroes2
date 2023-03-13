@@ -3386,6 +3386,8 @@ namespace
         }
     }
 
+    void generateCP1258Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite ) {}
+
     void generateISO8859_16Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // Resize fonts.
@@ -4807,6 +4809,9 @@ namespace fheroes2
         case SupportedLanguage::Turkish:
             generateCP1254Alphabet( icnVsSprite );
             break;
+        case SupportedLanguage::Vietnamese:
+            generateCP1258Alphabet( icnVsSprite );
+            break;
         case SupportedLanguage::Romanian:
             generateISO8859_16Alphabet( icnVsSprite );
             break;
@@ -4844,6 +4849,7 @@ namespace fheroes2
         case SupportedLanguage::Hungarian:
         case SupportedLanguage::Czech:
         case SupportedLanguage::Danish:
+        case SupportedLanguage::Vietnamese:
             return true;
         default:
             break;
@@ -4893,6 +4899,9 @@ namespace fheroes2
             break;
         case SupportedLanguage::Turkish:
             // generateGoodCP1254ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            break;
+        case SupportedLanguage::Vietnamese:
+            // generateGoodCP1258ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::Romanian:
             // generateGoodISO8859_16ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
