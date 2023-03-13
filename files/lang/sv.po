@@ -286,7 +286,7 @@ msgid "Move the %{name} "
 msgstr "Förlora hjälten: %{name}."
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Flytta eller högerklicka för fördela %{name}"
+msgstr "Flytta eller högerklicka för att fördela %{name}"
 
 msgid "Combine %{name} armies"
 msgstr "Kombinera %{name} arméer"
