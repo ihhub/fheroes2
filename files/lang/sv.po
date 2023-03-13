@@ -530,7 +530,7 @@ msgid "Cancel"
 msgstr "Avbryt"
 
 msgid "Hero Screen"
-msgstr "Hjältemenu"
+msgstr "Hjältemeny"
 
 #, fuzzy
 msgid "Captain's Options"
