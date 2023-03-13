@@ -2529,7 +2529,6 @@ msgstr "Inga varelser tillgängliga för köp."
 msgid "Recruit Creatures"
 msgstr "Rekrytera Varelser"
 
-#, fuzzy
 msgid "Max"
 msgstr "Maximalt"
 
