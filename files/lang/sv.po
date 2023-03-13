@@ -2763,7 +2763,7 @@ msgid "Color"
 msgstr "Färg"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Texthjälp"
 
 msgid "Change the language of the game."
 msgstr "Ändra spelets språk"
