@@ -388,11 +388,9 @@ msgstr "Inställningar"
 msgid "Configure"
 msgstr "Anpassa"
 
-#, fuzzy
 msgid "Hot Keys"
 msgstr "Tangentbordsgenvägar"
 
-#, fuzzy
 msgid "Damage Info"
 msgstr "Skadeinformation"
 
@@ -431,9 +429,8 @@ msgstr ""
 msgid "Toggle to display damage information during the battle."
 msgstr ""
 
-#, fuzzy
 msgid "Exit this menu."
-msgstr "Ständ denna many"
+msgstr "Stäng denna many"
 
 msgid "Okay"
 msgstr "OK"
@@ -898,7 +895,6 @@ msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} uppstår från de döda!"
 msgstr[1] "%{count} %{name} uppstår från de döda!"
 
-#, fuzzy
 msgid "Dwarven Alliance"
 msgstr "Dvärgallians"
 
@@ -935,7 +931,6 @@ msgstr ""
 msgid "Uncle Ivan"
 msgstr "Farbror Ivan"
 
-#, fuzzy
 msgid "Annexation"
 msgstr "Annektering""
 
@@ -1047,7 +1042,6 @@ msgstr "Barbarkrigen"
 msgid "First Blood"
 msgstr ""
 
-#, fuzzy
 msgid "Necromancers"
 msgstr "Svartkonstnärer"
 
@@ -1200,7 +1194,6 @@ msgid ""
 "hero for all time."
 msgstr ""
 
-#, fuzzy
 msgid "Border Towns"
 msgstr "Gränsstäder"
 
@@ -1346,9 +1339,9 @@ msgstr ""
 msgid " bane"
 msgstr ""
 
-#, fuzzy
+
 msgid " alliance"
-msgstr "allians"
+msgstr " allians"
 
 msgid "Carry-over forces"
 msgstr ""
@@ -2431,7 +2424,6 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-#, fuzzy
 msgid "Exit"
 msgstr "Lämna staden"
 
@@ -2535,7 +2527,6 @@ msgstr "Du kan inte rekrytera just nu. Din ranker är fulla."
 msgid "No creatures available for purchase."
 msgstr "Inga varelser tillgängliga för köp."
 
-#, fuzzy
 msgid "Recruit Creatures"
 msgstr "Rekrytera Varelser"
 
@@ -2638,7 +2629,6 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Är du säker på att du vill avskeda denna armé?"
 
-#, fuzzy
 msgid "Followers"
 msgstr "Anhängare"
 
@@ -2737,7 +2727,6 @@ msgstr ""
 msgid "Load Game"
 msgstr "Ladda spel"
 
-#, fuzzy
 msgid "No save files to load."
 msgstr "Inga sparfiler att ladda."
 
@@ -2768,7 +2757,6 @@ msgstr "Språk"
 msgid "Graphics"
 msgstr "Grafik"
 
-#, fuzzy
 msgid "Black & White"
 msgstr "Svart & Vitt"
 
@@ -2777,7 +2765,6 @@ msgstr "Muspekare"
 
 msgid "Color"
 msgstr "Färg"
-
 
 msgid "Text Support"
 msgstr ""
@@ -2846,7 +2833,6 @@ msgstr "Du kan inte välja %{resource}!"
 msgid "Select count %{resource}:"
 msgstr "Välj antalet %{resource}:"
 
-#, fuzzy
 msgid "Select Recipients"
 msgstr ""
 
@@ -2860,7 +2846,6 @@ msgstr ""
 msgid "Gift from %{name}"
 msgstr "Rekrytera %{name}"
 
-#, fuzzy
 msgid "Resolution"
 msgstr "Upplösning"
 
@@ -2876,7 +2861,6 @@ msgstr "Fönsterläge"
 msgid "V-Sync"
 msgstr "V-Sync"
 
-#, fuzzy
 msgid "on"
 msgstr "på"
 
@@ -2889,9 +2873,8 @@ msgstr "Systeminformation"
 msgid "Change the resolution of the game."
 msgstr "Ändra spelets upplösning."
 
-#, fuzzy
 msgid "Select Game Resolution"
-msgstr "Väls spelupplösning
+msgstr "Välj spelupplösning
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Växla mellan fullskärmsläge och fönsterläge."
@@ -3001,7 +2984,6 @@ msgstr "(inte besökt)"
 msgid "%{color} Barrier"
 msgstr "%{color} spelares tur."
 
-#, fuzzy
 msgid "%{color} Tent"
 msgstr "%{color} Tält"
 
@@ -3110,10 +3092,8 @@ msgstr "Fil att Spara:"
 msgid "File to Load:"
 msgstr "Fil att Ladda:"
 
-
 msgid "Click to save the current game."
 msgstr "Klicka för att spara nuvarande spel."
-
 
 msgid "Click to load a previously saved game."
 msgstr "Klicka för att ladda ett tidigare sparat spel."
@@ -3123,7 +3103,6 @@ msgstr "Är du säker på att du vill radera filen:"
 
 msgid "Warning!"
 msgstr "Varning!"
-
 
 msgid "Select Monster:"
 msgstr "Välj monster:"
