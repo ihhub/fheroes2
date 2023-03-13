@@ -2531,7 +2531,7 @@ void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & ar
 {
     // This method should not be called for a tile without fog.
     assert( _fogDirection != Direction::UNKNOWN );
-    
+
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
     if ( DIRECTION_ALL == _fogDirection ) {
