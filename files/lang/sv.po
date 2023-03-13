@@ -2833,7 +2833,7 @@ msgid "Select count %{resource}:"
 msgstr "Välj antalet %{resource}:"
 
 msgid "Select Recipients"
-msgstr ""
+msgstr "Välj mottagare"
 
 msgid "Your Funds"
 msgstr ""
