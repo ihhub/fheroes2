@@ -3493,14 +3493,13 @@ namespace
             font[194 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[194 - 32] );
 
-            // A with tilde accent ~. Generate accent for further use.
-            font[195 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 4 );
+            // A with breve and generate the accent for further use.
+            font[195 - 32].resize( font[33].width(), font[33].height() + 3 );
             font[195 - 32].reset();
-            fheroes2::Copy( font[65 - 32], 0, 0, font[195 - 32], 0, 4, font[65 - 32].width(), font[65 - 32].height() );
-            fheroes2::Copy( font[37 - 32], 7, 5, font[195 - 32], 4, 0, 5, 2 );
-            fheroes2::Copy( font[37 - 32], 8, 8, font[195 - 32], 8, 2, 3, 1 );
-            fheroes2::Copy( font[37 - 32], 10, 7, font[195 - 32], 10, 1, 2, 1 );
-            font[195 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 4 );
+            fheroes2::Copy( font[33], 0, 0, font[195 - 32], 0, 3, font[33].width(), font[33].height() );
+            fheroes2::Copy( font[39], 5, 9, font[195 - 32], 5, 0, 7, 2 );
+            fheroes2::FillTransform( font[195 - 32], 7, 0, 3, 1, 1 );
+            font[195 - 32].setPosition( font[33].x(), font[33].y() - 3 );
             updateNormalFontLetterShadow( font[195 - 32] );
 
             // A with 2 dots on top.
