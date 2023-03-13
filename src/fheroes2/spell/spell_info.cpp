@@ -39,6 +39,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
+#include "mp2.h"
 
 namespace
 {

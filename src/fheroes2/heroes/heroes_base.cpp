@@ -34,6 +34,8 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
+#include "maps_tiles.h"
+#include "mp2.h"
 #include "race.h"
 #include "serialize.h"
 #include "spell_info.h"
