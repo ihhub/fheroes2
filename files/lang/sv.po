@@ -2358,7 +2358,7 @@ msgid "The Tavern increases morale for troops defending the castle."
 msgstr "Värdshuset höjer moralen för trupperna som försvarar slottet."
 
 msgid "The Shipyard allows ships to be built."
-msgstr "Skeppsvarvet tilllåter skepp att byggas."
+msgstr "Skeppsvarvet tillåter skepp att byggas."
 
 msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
