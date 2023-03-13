@@ -2769,7 +2769,7 @@ msgid "Change the language of the game."
 msgstr "Ändra spelets språk"
 
 msgid "Select Game Language"
-msgstr "Välj spelspråk
+msgstr "Välj spelspråk"
 
 msgid "Change the graphics settings of the game."
 msgstr "Ändra grafikinställningar för spelet"
