@@ -394,10 +394,10 @@ msgid "Damage Info"
 msgstr "Skadeinformation"
 
 msgid "Set the speed of combat actions and animations."
-msgstr "Ange hastigheten för animationer på slagfältet"
+msgstr "Ange hastigheten för animationer på slagfältet."
 
 msgid "Toggle to display army order during the battle."
-msgstr "Visa truppturordningen på slagfältet"
+msgstr "Visa truppturordningen på slagfältet."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -420,7 +420,7 @@ msgid ""
 msgstr ""
 
 msgid "Change the audio settings of the game."
-msgstr "Ändra ljudinställingar för spelet"
+msgstr "Ändra ljudinställingar för spelet."
 
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
@@ -458,7 +458,7 @@ msgstr ""
 "trupper."
 
 msgid "Your force suffer a bitter defeat."
-msgstr "Dina trupper lider en bitter förslust."
+msgstr "Dina trupper lider en bitter förlust."
 
 msgid "Battlefield Casualties"
 msgstr "Slagfältsoffer"
@@ -470,7 +470,7 @@ msgid "Defender"
 msgstr "Försvarare"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr "När du försöker ta %{name}, så försvinner det plötsligt"
+msgstr "När du försöker ta %{name}, så försvinner det plötsligt."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
