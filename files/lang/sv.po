@@ -2872,7 +2872,7 @@ msgid "Change the resolution of the game."
 msgstr "Ändra spelets upplösning."
 
 msgid "Select Game Resolution"
-msgstr "Välj spelupplösning
+msgstr "Välj spelupplösning"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Växla mellan fullskärmsläge och fönsterläge."
