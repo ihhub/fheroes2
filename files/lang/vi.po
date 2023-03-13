@@ -1,5 +1,5 @@
-# Ukrainian translation of fheroes2
-# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# Vietnamese translation of fheroes2
+# Copyright (C) 2023 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-07 14:32+0000\n"
-"PO-Revision-Date: 2023-03-13 00:11+0700\n"
+"PO-Revision-Date: 2023-03-13 13:03+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
-"Language: uk\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1242,13 +1242,13 @@ msgid "Arrow's Flight"
 msgstr ""
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "Đảo Hỗn loạn"
 
 msgid "The Abyss"
 msgstr ""
 
 msgid "Uprising"
-msgstr ""
+msgstr "Khởi nghĩa"
 
 msgid "Aurora Borealis"
 msgstr ""
@@ -1260,7 +1260,7 @@ msgid "Corruption's Heart"
 msgstr ""
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "Đèo Cả"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
@@ -1306,7 +1306,7 @@ msgid ""
 msgstr ""
 
 msgid "Border Towns"
-msgstr ""
+msgstr "Trấn Biên thùy"
 
 msgid "Conquer and Unify"
 msgstr ""
@@ -1327,7 +1327,7 @@ msgid "The Epic Battle"
 msgstr ""
 
 msgid "The Southern War"
-msgstr ""
+msgstr "Cuộc chiến phương Nam"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
@@ -1409,10 +1409,10 @@ msgid "Blood is Thicker"
 msgstr ""
 
 msgid "King and Country"
-msgstr ""
+msgstr "Vua và Đất nước"
 
 msgid "Pirate Isles"
-msgstr ""
+msgstr "Đảo Hải tặc"
 
 msgid "Stranded"
 msgstr ""
@@ -1441,7 +1441,7 @@ msgid " bane"
 msgstr ""
 
 msgid " alliance"
-msgstr ""
+msgstr "đồng minh"
 
 msgid "Carry-over forces"
 msgstr ""
@@ -2461,21 +2461,18 @@ msgstr "Таверна"
 msgid "Shipyard"
 msgstr "Верф"
 
-#, fuzzy
 msgid "Well"
-msgstr "Колодязь"
+msgstr "Giếng"
 
 #, fuzzy
 msgid "Statue"
 msgstr "Статуя"
 
-#, fuzzy
 msgid "Marketplace"
-msgstr "Ринок"
+msgstr "Chợ"
 
-#, fuzzy
 msgid "Moat"
-msgstr "Рів"
+msgstr "Hào"
 
 #, fuzzy
 msgid "Castle"
