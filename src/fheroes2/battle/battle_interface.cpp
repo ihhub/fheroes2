@@ -6011,7 +6011,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 
     // Interrupting auto battle
     if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
-         && ( le.MouseClickLeft( btn_auto.area() )
+         && ( ( le.MouseClickLeft() || le.MouseClickRight() )
               || ( le.KeyPress()
                    && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
                         || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
