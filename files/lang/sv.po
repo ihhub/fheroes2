@@ -1333,7 +1333,7 @@ msgid " defeated"
 msgstr " besegrad"
 
 msgid " will always run away from your army."
-msgstr " kommer alltid att fly från din arm"
+msgstr " kommer alltid att fly från din armé."
 
 msgid " will be willing to join your army."
 msgstr " är villiga att ansluta till din armé."
