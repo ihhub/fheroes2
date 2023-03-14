@@ -2410,7 +2410,7 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 "Du måste köpa en Magibok för att tillgång till Magikersamfundet. Tyvärr har du "
-"ingen plats för en Magibok. Försök ge en artefakt till en annan hjälte.
+"ingen plats för en Magibok. Försök ge en artefakt till en annan hjälte."
 
 msgid "Exit"
 msgstr "Lämna staden"
@@ -6536,7 +6536,7 @@ msgid "Sorceress"
 msgstr "Häxa"
 
 msgid "Warlock"
-msgstr "Häxmästare
+msgstr "Häxmästare"
 
 msgid "Wizard"
 msgstr "Trollkarl"
