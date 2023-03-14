@@ -2025,7 +2025,7 @@ msgid "Cannot afford a Hero"
 msgstr "Har inte råd med en hjälte"
 
 msgid "There is no room in the garrison for this army."
-msgstr "Det finns ingen plats i garnisonen för denna arm"
+msgstr "Det finns ingen plats i garnisonen för denna armé."
 
 msgid "Fortifications"
 msgstr "Fortifikationer"
