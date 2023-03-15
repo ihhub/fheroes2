@@ -46,7 +46,7 @@ namespace
 
         std::cerr << baseName << " manages the contents of the specified H2D file(s)." << std::endl
                   << "Syntax: " << baseName << " extract dst_dir input_file.h2d ..." << std::endl
-                  << "        " << baseName << " append target_file.h2d input_file ..." << std::endl;
+                  << "        " << baseName << " combine target_file.h2d input_file ..." << std::endl;
     }
 
     int extractH2D( const int argc, char ** argv )
@@ -121,7 +121,7 @@ namespace
         return EXIT_SUCCESS;
     }
 
-    int appendH2D( const int argc, char ** argv )
+    int combineH2D( const int argc, char ** argv )
     {
         assert( argc >= 4 );
 
@@ -163,7 +163,7 @@ namespace
             }
         }
 
-        uint32_t itemsAppended = 0;
+        uint32_t itemsAdded = 0;
 
         for ( const std::string & inputFileName : inputFileNames ) {
             std::cout << "Processing " << inputFileName << "..." << std::endl;
@@ -205,11 +205,11 @@ namespace
             }
 
             if ( !writer.add( std::filesystem::path( inputFileName ).filename().string(), buf ) ) {
-                std::cerr << "Error appending file " << inputFileName << std::endl;
+                std::cerr << "Error adding file " << inputFileName << std::endl;
                 return EXIT_FAILURE;
             }
 
-            ++itemsAppended;
+            ++itemsAdded;
         }
 
         if ( !writer.write( h2dFileName ) ) {
@@ -217,7 +217,7 @@ namespace
             return EXIT_FAILURE;
         }
 
-        std::cout << "Total appended: " << itemsAppended << std::endl;
+        std::cout << "Total added: " << itemsAdded << std::endl;
 
         return EXIT_SUCCESS;
     }
@@ -229,8 +229,8 @@ int main( int argc, char ** argv )
         return extractH2D( argc, argv );
     }
 
-    if ( argc >= 4 && strcmp( argv[1], "append" ) == 0 ) {
-        return appendH2D( argc, argv );
+    if ( argc >= 4 && strcmp( argv[1], "combine" ) == 0 ) {
+        return combineH2D( argc, argv );
     }
 
     printUsage( argv );
