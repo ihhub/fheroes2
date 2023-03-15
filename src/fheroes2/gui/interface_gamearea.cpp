@@ -228,7 +228,7 @@ namespace
             }
 
             if ( imagePos.y > 0 && !isHeroInCastle ) {
-                // The bottom part of hero image should be rendered before it's fog so we place it in an extra deque.
+                // The very bottom part of hero (or hero on boat) image should not be rendered before it's fog so we place it in the extra deque.
                 if ( imagePos.x < 0 ) {
                     tileUnfit.heroBackgroundImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
