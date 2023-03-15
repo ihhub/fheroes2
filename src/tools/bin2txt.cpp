@@ -25,6 +25,7 @@
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
 #include <limits>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <system_error>
@@ -37,6 +38,33 @@
 namespace
 {
     constexpr size_t correctBINSize = 821;
+
+    std::optional<size_t> streamPosToSize( const std::streampos & pos )
+    {
+        if ( pos < 0 ) {
+            return {};
+        }
+
+        const std::make_unsigned_t<std::streamoff> streamOffUnsigned = pos;
+        if ( streamOffUnsigned > std::numeric_limits<size_t>::max() ) {
+            return {};
+        }
+
+        return static_cast<size_t>( streamOffUnsigned );
+    }
+
+    std::optional<std::streamsize> sizeToStreamSize( const size_t size )
+    {
+        constexpr std::streamsize streamSizeMax = std::numeric_limits<std::streamsize>::max();
+        static_assert( streamSizeMax >= 0 );
+
+        const std::make_unsigned_t<std::streamsize> streamSizeMaxUnsigned = streamSizeMax;
+        if ( size > streamSizeMaxUnsigned ) {
+            return {};
+        }
+
+        return static_cast<std::streamsize>( size );
+    }
 }
 
 int main( int argc, char ** argv )
@@ -77,21 +105,19 @@ int main( int argc, char ** argv )
             continue;
         }
 
-        const std::streampos pos = inputStream.tellg();
-        if ( pos <= 0 ) {
-            std::cerr << "File " << inputFileName << " is empty" << std::endl;
-            // Ignore files of invalid size
-            continue;
-        }
-
-        const std::make_unsigned_t<std::streamoff> posOffset = pos;
-        if ( posOffset > std::numeric_limits<size_t>::max() ) {
+        const auto size = streamPosToSize( inputStream.tellg() );
+        if ( !size ) {
             std::cerr << "File " << inputFileName << " is too large" << std::endl;
             // Ignore files of invalid size
             continue;
         }
 
-        const size_t size = static_cast<size_t>( posOffset );
+        if ( size == 0U ) {
+            std::cerr << "File " << inputFileName << " is empty" << std::endl;
+            // Ignore files of invalid size
+            continue;
+        }
+
         if ( size != correctBINSize ) {
             // Ignore files of invalid size
             continue;
@@ -99,10 +125,20 @@ int main( int argc, char ** argv )
 
         std::cout << "Processing " << inputFileName << "..." << std::endl;
 
-        std::vector<char> buf( size );
+        std::vector<char> buf( size.value() );
 
         inputStream.seekg( 0, std::ios_base::beg );
-        inputStream.read( buf.data(), buf.size() );
+
+        {
+            const auto streamSize = sizeToStreamSize( buf.size() );
+            if ( !streamSize ) {
+                std::cerr << "File " << inputFileName << " is too large" << std::endl;
+                return EXIT_FAILURE;
+            }
+
+            inputStream.read( buf.data(), streamSize.value() );
+        }
+
         if ( !inputStream ) {
             std::cerr << "Error reading from file " << inputFileName << std::endl;
             return EXIT_FAILURE;

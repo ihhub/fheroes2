@@ -28,6 +28,7 @@
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
 #include <limits>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <system_error>
@@ -36,6 +37,36 @@
 
 #include "audio.h"
 #include "system.h"
+
+namespace
+{
+    std::optional<size_t> streamPosToSize( const std::streampos & pos )
+    {
+        if ( pos < 0 ) {
+            return {};
+        }
+
+        const std::make_unsigned_t<std::streamoff> streamOffUnsigned = pos;
+        if ( streamOffUnsigned > std::numeric_limits<size_t>::max() ) {
+            return {};
+        }
+
+        return static_cast<size_t>( streamOffUnsigned );
+    }
+
+    std::optional<std::streamsize> sizeToStreamSize( const size_t size )
+    {
+        constexpr std::streamsize streamSizeMax = std::numeric_limits<std::streamsize>::max();
+        static_assert( streamSizeMax >= 0 );
+
+        const std::make_unsigned_t<std::streamsize> streamSizeMaxUnsigned = streamSizeMax;
+        if ( size > streamSizeMaxUnsigned ) {
+            return {};
+        }
+
+        return static_cast<std::streamsize>( size );
+    }
+}
 
 int main( int argc, char ** argv )
 {
@@ -77,26 +108,33 @@ int main( int argc, char ** argv )
             continue;
         }
 
-        const std::streampos pos = inputStream.tellg();
-        if ( pos <= 0 ) {
-            std::cerr << "File " << inputFileName << " is empty" << std::endl;
-            return EXIT_FAILURE;
-        }
-
-        const std::make_unsigned_t<std::streamoff> posOffset = pos;
-        if ( posOffset > std::numeric_limits<size_t>::max() ) {
+        const auto size = streamPosToSize( inputStream.tellg() );
+        if ( !size ) {
             std::cerr << "File " << inputFileName << " is too large" << std::endl;
             return EXIT_FAILURE;
         }
 
-        const size_t size = static_cast<size_t>( posOffset );
+        if ( size == 0U ) {
+            std::cerr << "File " << inputFileName << " is empty" << std::endl;
+            return EXIT_FAILURE;
+        }
 
         static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
 
-        std::vector<uint8_t> buf( size );
+        std::vector<uint8_t> buf( size.value() );
 
         inputStream.seekg( 0, std::ios_base::beg );
-        inputStream.read( reinterpret_cast<char *>( buf.data() ), buf.size() );
+
+        {
+            const auto streamSize = sizeToStreamSize( buf.size() );
+            if ( !streamSize ) {
+                std::cerr << "File " << inputFileName << " is too large" << std::endl;
+                return EXIT_FAILURE;
+            }
+
+            inputStream.read( reinterpret_cast<char *>( buf.data() ), streamSize.value() );
+        }
+
         if ( !inputStream ) {
             std::cerr << "Error reading from file " << inputFileName << std::endl;
             return EXIT_FAILURE;
@@ -116,7 +154,16 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        outputStream.write( reinterpret_cast<char *>( buf.data() ), buf.size() );
+        {
+            const auto streamSize = sizeToStreamSize( buf.size() );
+            if ( !streamSize ) {
+                std::cerr << inputFileName << ": resulting MIDI is too large" << std::endl;
+                return EXIT_FAILURE;
+            }
+
+            outputStream.write( reinterpret_cast<char *>( buf.data() ), streamSize.value() );
+        }
+
         if ( !outputStream ) {
             std::cerr << "Error writing to file " << outputFilePath << std::endl;
             return EXIT_FAILURE;

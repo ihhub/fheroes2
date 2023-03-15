@@ -31,6 +31,7 @@
 #include <iostream>
 #include <iterator>
 #include <map>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -70,6 +71,19 @@ namespace
         }
 
         return hash;
+    }
+
+    std::optional<std::streamsize> sizeToStreamSize( const size_t size )
+    {
+        constexpr std::streamsize streamSizeMax = std::numeric_limits<std::streamsize>::max();
+        static_assert( streamSizeMax >= 0 );
+
+        const std::make_unsigned_t<std::streamsize> streamSizeMaxUnsigned = streamSizeMax;
+        if ( size > streamSizeMaxUnsigned ) {
+            return {};
+        }
+
+        return static_cast<std::streamsize>( size );
     }
 }
 
@@ -174,7 +188,16 @@ int main( int argc, char ** argv )
                 return EXIT_FAILURE;
             }
 
-            outputStream.write( reinterpret_cast<const char *>( buf.data() ), buf.size() );
+            {
+                const auto streamSize = sizeToStreamSize( buf.size() );
+                if ( !streamSize ) {
+                    std::cerr << inputFileName << ": item " << name << " is too large" << std::endl;
+                    return EXIT_FAILURE;
+                }
+
+                outputStream.write( reinterpret_cast<const char *>( buf.data() ), streamSize.value() );
+            }
+
             if ( !outputStream ) {
                 std::cerr << "Error writing to file " << outputFilePath << std::endl;
                 return EXIT_FAILURE;

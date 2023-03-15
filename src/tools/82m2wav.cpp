@@ -29,6 +29,7 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <system_error>
@@ -37,6 +38,38 @@
 
 #include "serialize.h"
 #include "system.h"
+
+namespace
+{
+    constexpr size_t wavHeaderLen = 44;
+
+    std::optional<size_t> streamPosToSize( const std::streampos & pos )
+    {
+        if ( pos < 0 ) {
+            return {};
+        }
+
+        const std::make_unsigned_t<std::streamoff> streamOffUnsigned = pos;
+        if ( streamOffUnsigned > std::numeric_limits<size_t>::max() ) {
+            return {};
+        }
+
+        return static_cast<size_t>( streamOffUnsigned );
+    }
+
+    std::optional<std::streamsize> sizeToStreamSize( const size_t size )
+    {
+        constexpr std::streamsize streamSizeMax = std::numeric_limits<std::streamsize>::max();
+        static_assert( streamSizeMax >= 0 );
+
+        const std::make_unsigned_t<std::streamsize> streamSizeMaxUnsigned = streamSizeMax;
+        if ( size > streamSizeMaxUnsigned ) {
+            return {};
+        }
+
+        return static_cast<std::streamsize>( size );
+    }
+}
 
 int main( int argc, char ** argv )
 {
@@ -78,23 +111,36 @@ int main( int argc, char ** argv )
             continue;
         }
 
-        const std::streampos pos = inputStream.tellg();
-        if ( pos <= 0 ) {
-            std::cerr << "File " << inputFileName << " is empty" << std::endl;
-            return EXIT_FAILURE;
-        }
-
-        const std::make_unsigned_t<std::streamoff> posOffset = pos;
-        if ( posOffset > std::numeric_limits<size_t>::max() ) {
+        const auto size = streamPosToSize( inputStream.tellg() );
+        if ( !size ) {
             std::cerr << "File " << inputFileName << " is too large" << std::endl;
             return EXIT_FAILURE;
         }
 
-        const size_t size = static_cast<size_t>( posOffset );
-        const auto buf = std::make_unique<char[]>( size );
+        if ( size == 0U ) {
+            std::cerr << "File " << inputFileName << " is empty" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        if ( size.value() > std::numeric_limits<uint32_t>::max() - wavHeaderLen ) {
+            std::cerr << inputFileName << ": resulting WAV is too large" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        const auto buf = std::make_unique<char[]>( size.value() );
 
         inputStream.seekg( 0, std::ios_base::beg );
-        inputStream.read( buf.get(), size );
+
+        {
+            const auto streamSize = sizeToStreamSize( size.value() );
+            if ( !streamSize ) {
+                std::cerr << "File " << inputFileName << " is too large" << std::endl;
+                return EXIT_FAILURE;
+            }
+
+            inputStream.read( buf.get(), streamSize.value() );
+        }
+
         if ( !inputStream ) {
             std::cerr << "Error reading from file " << inputFileName << std::endl;
             return EXIT_FAILURE;
@@ -110,9 +156,9 @@ int main( int argc, char ** argv )
 
         static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
 
-        StreamBuf wavHeader( 44 );
+        StreamBuf wavHeader( wavHeaderLen );
         wavHeader.putLE32( 0x46464952 ); // RIFF
-        wavHeader.putLE32( static_cast<uint32_t>( size ) + 0x24 ); // size
+        wavHeader.putLE32( static_cast<uint32_t>( size.value() ) + ( wavHeaderLen - 8 ) ); // size
         wavHeader.putLE32( 0x45564157 ); // WAVE
         wavHeader.putLE32( 0x20746D66 ); // FMT
         wavHeader.putLE32( 0x10 ); // size_t
@@ -123,10 +169,28 @@ int main( int argc, char ** argv )
         wavHeader.putLE16( 0x01 ); // align
         wavHeader.putLE16( 0x08 ); // bitsper
         wavHeader.putLE32( 0x61746164 ); // DATA
-        wavHeader.putLE32( static_cast<uint32_t>( size ) ); // size
+        wavHeader.putLE32( static_cast<uint32_t>( size.value() ) ); // size
 
-        outputStream.write( reinterpret_cast<const char *>( wavHeader.data() ), wavHeader.size() );
-        outputStream.write( buf.get(), size );
+        {
+            const auto streamSize = sizeToStreamSize( wavHeader.size() );
+            if ( !streamSize ) {
+                std::cerr << inputFileName << ": resulting WAV is too large" << std::endl;
+                return EXIT_FAILURE;
+            }
+
+            outputStream.write( reinterpret_cast<const char *>( wavHeader.data() ), streamSize.value() );
+        }
+
+        {
+            const auto streamSize = sizeToStreamSize( size.value() );
+            if ( !streamSize ) {
+                std::cerr << inputFileName << ": resulting WAV is too large" << std::endl;
+                return EXIT_FAILURE;
+            }
+
+            outputStream.write( buf.get(), streamSize.value() );
+        }
+
         if ( !outputStream ) {
             std::cerr << "Error writing to file " << outputFilePath << std::endl;
             return EXIT_FAILURE;
