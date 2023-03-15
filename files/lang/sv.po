@@ -729,8 +729,9 @@ msgstr "Besvärjelsen %{spell} ger %{damage} skada till en levande varelse."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Besvärjelsen %{spell} ger %{damage} skada till alla levande varelser."
 
+#, fuzzy
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "%{attacker}' anfall förblindar %{target}!"
+msgstr "%{attacker}nas anfall förblindar %{target}na!"
 
 #, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
