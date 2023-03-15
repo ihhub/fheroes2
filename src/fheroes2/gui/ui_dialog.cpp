@@ -433,14 +433,14 @@ namespace fheroes2
         assert( spell.isValid() );
 
         const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.spellPoints( nullptr ) ) + ']', FontType::smallWhite() );
-
+   
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
         _area = { std::max( icn.width(), spellNameText.width() ), icn.height() + textOffsetFromElement + spellNameText.height() };
     }
 
     void SpellDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.spellPoints( nullptr ) ) + ']', FontType::smallWhite() );
+        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.spellPoints( _hero ) ) + ']', FontType::smallWhite() );
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
 
         const int32_t maxWidth = std::max( icn.width(), spellNameText.width() );
