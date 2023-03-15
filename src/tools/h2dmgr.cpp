@@ -20,22 +20,18 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cctype>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
-#include <functional>
 #include <iostream>
-#include <iterator>
-#include <map>
+#include <limits>
+#include <set>
 #include <sstream>
 #include <string>
-#include <string_view>
 #include <system_error>
 #include <type_traits>
-#include <utility>
 #include <vector>
 
 #include "h2d_file.h"
