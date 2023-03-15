@@ -729,9 +729,8 @@ msgstr "Besvärjelsen %{spell} ger %{damage} skada till en levande varelse."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Besvärjelsen %{spell} ger %{damage} skada till alla levande varelser."
 
-#, fuzzy
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Anfa"
+msgstr "%{attacker}' anfall förblindar %{target}!"
 
 #, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
@@ -3198,7 +3197,7 @@ msgid ""
 msgstr ""
 "Anger om kartan är liten (36 x 36),\n"
 "medel (72 x 72), stor (108 x 108)\n"
-"eller extrastor (144 x1 44)."
+"eller extrastor (144 x 144)."
 
 msgid "Size Icon"
 msgstr "Ikonstorlek"
@@ -3644,7 +3643,7 @@ msgid "Standard"
 msgstr "Standardspel"
 
 msgid "View High Scores for Standard Maps."
-msgstr "Visa Poänglistan för standarskartor."
+msgstr "Visa Poänglistan för standardkartor."
 
 #, fuzzy
 msgid "Campaign"
@@ -7613,7 +7612,7 @@ msgid "Immune to Cold spells"
 msgstr ""
 
 msgid "Immune to "
-msgstr "Immun  mot "
+msgstr "Immun mot "
 
 msgid "% immunity to %{spell} spell"
 msgstr ""
@@ -9472,10 +9471,3 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Attention"
-#~ msgstr "\"Tillägg\""
-
-#~ msgid "Location: "
-#~ msgstr "Plats: "
