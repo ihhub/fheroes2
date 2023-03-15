@@ -84,6 +84,7 @@ jobs:
         MSBuild.exe 82m2wav-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
         MSBuild.exe bin2txt-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
         MSBuild.exe extractor-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+        MSBuild.exe h2dmgr-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
         MSBuild.exe icn2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
         MSBuild.exe pal2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
         MSBuild.exe til2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
@@ -125,6 +126,7 @@ jobs:
         7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.tools_package_name }} \
                                .\\"$BUILD_DIR"\\82m2wav.exe \
                                .\\"$BUILD_DIR"\\extractor.exe \
+                               .\\"$BUILD_DIR"\\h2dmgr.exe \
                                .\\"$BUILD_DIR"\\icn2img.exe \
                                .\\"$BUILD_DIR"\\pal2img.exe \
                                .\\"$BUILD_DIR"\\xmi2midi.exe \

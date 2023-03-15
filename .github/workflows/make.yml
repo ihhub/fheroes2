@@ -62,6 +62,7 @@ jobs:
             ./script/agg/extract_agg.sh
             ./src/tools/82m2wav
             ./src/tools/extractor
+            ./src/tools/h2dmgr
             ./src/tools/icn2img
             ./src/tools/pal2img
             ./src/tools/xmi2midi
@@ -139,6 +140,7 @@ jobs:
             ./script/agg/extract_agg.sh
             ./src/tools/82m2wav
             ./src/tools/extractor
+            ./src/tools/h2dmgr
             ./src/tools/icn2img
             ./src/tools/pal2img
             ./src/tools/xmi2midi
@@ -209,6 +211,7 @@ jobs:
             ./script/agg/extract_agg.sh
             ./src/tools/82m2wav
             ./src/tools/extractor
+            ./src/tools/h2dmgr
             ./src/tools/icn2img
             ./src/tools/pal2img
             ./src/tools/xmi2midi
