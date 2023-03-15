@@ -38,37 +38,11 @@
 
 #include "serialize.h"
 #include "system.h"
+#include "tools.h"
 
 namespace
 {
     constexpr size_t wavHeaderLen = 44;
-
-    std::optional<size_t> streamPosToSize( const std::streampos & pos )
-    {
-        if ( pos < 0 ) {
-            return {};
-        }
-
-        const std::make_unsigned_t<std::streamoff> streamOffUnsigned = pos;
-        if ( streamOffUnsigned > std::numeric_limits<size_t>::max() ) {
-            return {};
-        }
-
-        return static_cast<size_t>( streamOffUnsigned );
-    }
-
-    std::optional<std::streamsize> sizeToStreamSize( const size_t size )
-    {
-        constexpr std::streamsize streamSizeMax = std::numeric_limits<std::streamsize>::max();
-        static_assert( streamSizeMax >= 0 );
-
-        const std::make_unsigned_t<std::streamsize> streamSizeMaxUnsigned = streamSizeMax;
-        if ( size > streamSizeMaxUnsigned ) {
-            return {};
-        }
-
-        return static_cast<std::streamsize>( size );
-    }
 }
 
 int main( int argc, char ** argv )
@@ -111,7 +85,7 @@ int main( int argc, char ** argv )
             continue;
         }
 
-        const auto size = streamPosToSize( inputStream.tellg() );
+        const auto size = fheroes2::checkedCast<size_t>( static_cast<std::streamoff>( inputStream.tellg() ) );
         if ( !size ) {
             std::cerr << "File " << inputFileName << " is too large" << std::endl;
             return EXIT_FAILURE;
@@ -132,7 +106,7 @@ int main( int argc, char ** argv )
         inputStream.seekg( 0, std::ios_base::beg );
 
         {
-            const auto streamSize = sizeToStreamSize( size.value() );
+            const auto streamSize = fheroes2::checkedCast<std::streamsize>( size.value() );
             if ( !streamSize ) {
                 std::cerr << "File " << inputFileName << " is too large" << std::endl;
                 return EXIT_FAILURE;
@@ -172,7 +146,7 @@ int main( int argc, char ** argv )
         wavHeader.putLE32( static_cast<uint32_t>( size.value() ) ); // Size of the data sub-chunk
 
         {
-            const auto streamSize = sizeToStreamSize( wavHeader.size() );
+            const auto streamSize = fheroes2::checkedCast<std::streamsize>( wavHeader.size() );
             if ( !streamSize ) {
                 std::cerr << inputFileName << ": resulting WAV is too large" << std::endl;
                 return EXIT_FAILURE;
@@ -182,7 +156,7 @@ int main( int argc, char ** argv )
         }
 
         {
-            const auto streamSize = sizeToStreamSize( size.value() );
+            const auto streamSize = fheroes2::checkedCast<std::streamsize>( size.value() );
             if ( !streamSize ) {
                 std::cerr << inputFileName << ": resulting WAV is too large" << std::endl;
                 return EXIT_FAILURE;

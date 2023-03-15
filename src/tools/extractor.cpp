@@ -73,19 +73,6 @@ namespace
 
         return hash;
     }
-
-    std::optional<std::streamsize> sizeToStreamSize( const size_t size )
-    {
-        constexpr std::streamsize streamSizeMax = std::numeric_limits<std::streamsize>::max();
-        static_assert( streamSizeMax >= 0 );
-
-        const std::make_unsigned_t<std::streamsize> streamSizeMaxUnsigned = streamSizeMax;
-        if ( size > streamSizeMaxUnsigned ) {
-            return {};
-        }
-
-        return static_cast<std::streamsize>( size );
-    }
 }
 
 int main( int argc, char ** argv )
@@ -190,7 +177,7 @@ int main( int argc, char ** argv )
             }
 
             {
-                const auto streamSize = sizeToStreamSize( buf.size() );
+                const auto streamSize = fheroes2::checkedCast<std::streamsize>( buf.size() );
                 if ( !streamSize ) {
                     std::cerr << inputFileName << ": item " << name << " is too large" << std::endl;
                     return EXIT_FAILURE;

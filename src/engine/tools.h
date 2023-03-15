@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <functional>
 #include <iomanip>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <type_traits>
@@ -97,6 +98,46 @@ namespace fheroes2
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding );
 
     std::string abbreviateNumber( const int num );
+
+    // Performs a checked conversion of an integer value of type From to an integer type To. Returns an empty std::optional<To> if
+    // the source value does not fit into the target type.
+    template <typename To, typename From, typename = typename std::enable_if_t<std::is_integral_v<To> && std::is_integral_v<From>>>
+    constexpr std::optional<To> checkedCast( const From from )
+    {
+        // Both types have the same signedness
+        if constexpr ( std::is_signed_v<From> == std::is_signed_v<To> ) {
+            if ( from < std::numeric_limits<To>::min() || from > std::numeric_limits<To>::max() ) {
+                return {};
+            }
+
+            return static_cast<To>( from );
+        }
+        // From is signed, To is unsigned
+        else if constexpr ( std::is_signed_v<From> ) {
+            if ( from < 0 ) {
+                return {};
+            }
+
+            const std::make_unsigned_t<From> unsignedFrom = from;
+            if ( unsignedFrom > std::numeric_limits<To>::max() ) {
+                return {};
+            }
+
+            return static_cast<To>( from );
+        }
+        // From is unsigned, To is signed
+        else {
+            constexpr To maxTo = std::numeric_limits<To>::max();
+            static_assert( maxTo >= 0 );
+
+            constexpr std::make_unsigned_t<To> maxUnsignedTo = maxTo;
+            if ( from > maxUnsignedTo ) {
+                return {};
+            }
+
+            return static_cast<To>( from );
+        }
+    }
 }
 
 #endif

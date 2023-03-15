@@ -18,5 +18,6 @@
     <ClInclude Include="..\engine\math_base.h" />
     <ClInclude Include="..\engine\serialize.h" />
     <ClInclude Include="..\engine\system.h" />
+    <ClInclude Include="..\engine\tools.h" />
   </ItemGroup>
 </Project>
