@@ -24,12 +24,10 @@
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
-#include <limits>
 #include <optional>
 #include <sstream>
 #include <string>
 #include <system_error>
-#include <type_traits>
 #include <vector>
 
 #include "serialize.h"

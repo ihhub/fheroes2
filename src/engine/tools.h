@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <functional>
 #include <iomanip>
+#include <limits>
 #include <optional>
 #include <sstream>
 #include <string>
