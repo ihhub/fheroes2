@@ -3135,7 +3135,7 @@ msgid "Find a specific artifact."
 msgstr "Hitta en viss artefakt."
 
 msgid "Your side defeats the opposing side."
-msgstr "Din sida besegrar den motståndarsidan."
+msgstr "Din sida besegrar motståndarsidan."
 
 msgid "Accumulate a large amount of gold."
 msgstr "Samla ihop en stor summa guld."
