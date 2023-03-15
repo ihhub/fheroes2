@@ -2409,7 +2409,7 @@ msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
-"Du måste köpa en Magibok för att tillgång till Magikersamfundet. Tyvärr har du "
+"Du måste köpa en Magibok för att få tillgång till Magikersamfundet. Tyvärr har du "
 "ingen plats för en Magibok. Försök ge en artefakt till en annan hjälte."
 
 msgid "Exit"
