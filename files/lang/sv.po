@@ -6912,7 +6912,7 @@ msgid "Random Monster"
 msgstr "Slumpat Monster"
 
 msgid "Random Town"
-msgstr "Slumpad stad"
+msgstr "Slumpad Stad"
 
 msgid "Random Castle"
 msgstr "Slumpat Slott"
