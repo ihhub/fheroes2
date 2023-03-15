@@ -625,7 +625,7 @@ msgid "Ballista"
 msgstr ""
 
 msgid "Enable auto combat"
-msgstr "Aktivera Autom. strid"
+msgstr "Aktivera autom. strid"
 
 msgid "Allows the computer to fight out the battle for you."
 msgstr "Tillåter datorn att fortsätta slaget åt dig."
