@@ -131,8 +131,8 @@ namespace fheroes2
             constexpr To maxTo = std::numeric_limits<To>::max();
             static_assert( maxTo >= 0 );
 
-            constexpr std::make_unsigned_t<To> maxUnsignedTo = maxTo;
-            if ( from > maxUnsignedTo ) {
+            constexpr std::make_unsigned_t<To> unsignedMaxTo = maxTo;
+            if ( from > unsignedMaxTo ) {
                 return {};
             }
 
