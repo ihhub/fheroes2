@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -60,8 +60,9 @@ public:
     payment_t GetTotalCost() const;
     payment_t GetTotalUpgradeCost() const;
 
+    bool isEmpty() const;
+
     virtual bool isValid() const;
-    virtual bool isEmpty() const;
     virtual bool isBattle() const;
     virtual bool isModes( uint32_t ) const;
     virtual std::string GetAttackString() const;

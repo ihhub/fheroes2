@@ -238,7 +238,7 @@ namespace
         I.GetGameArea().SetCenter( hero.GetCenter() );
 
         // Update radar image in scout area around Hero after teleport.
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -310,15 +310,23 @@ namespace
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
-            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
-            if ( distance > 1 ) {
-                const Maps::Tiles & tileSource = world.GetTiles( boatSource );
+            Maps::Tiles & tileSource = world.GetTiles( boatSource );
+            const int boatColor = tileSource.getBoatOwnerColor();
+            const int heroColor = hero.GetColor();
 
+            if ( boatColor != Color::NONE && boatColor != heroColor ) {
+                continue;
+            }
+
+            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
+
+            if ( distance > 1 ) {
                 Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
                 Maps::Tiles & tileDest = world.GetTiles( boatDestination );
-                tileDest.setBoat( Direction::RIGHT );
+                tileDest.setBoat( Direction::RIGHT, heroColor );
+                tileSource.resetBoatOwnerColor();
 
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 
@@ -366,7 +374,7 @@ namespace
         I.GetGameArea().SetCenter( hero.GetCenter() );
 
         // Update radar image in scout area around Hero after teleport.
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -588,7 +596,15 @@ namespace
             if ( spell == Spell::HAUNT ) {
                 world.CaptureObject( tile.GetIndex(), Color::NONE );
                 tile.removeOwnershipFlag( MP2::OBJ_MINES );
+                Maps::Tiles::setAbandonedMineObjectType( tile );
                 hero.SetMapsObject( MP2::OBJ_ABANDONED_MINE );
+
+                // Update the color of haunted mine on radar.
+                Interface::Basic & I = Interface::Basic::Get();
+                const fheroes2::Point heroPosition = hero.GetCenter();
+                I.GetRadar().SetRenderArea( { heroPosition.x - 1, heroPosition.y - 1, 3, 2 } );
+
+                I.SetRedraw( Interface::REDRAW_RADAR );
             }
 
             world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );

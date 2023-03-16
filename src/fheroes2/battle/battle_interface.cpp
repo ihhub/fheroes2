@@ -4265,7 +4265,7 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
                     status.SetMessage( msg, true );
                 }
             }
-            else if ( spell.isALiveOnly() ) {
+            else if ( spell.isAliveOnly() ) {
                 if ( damagedMonsters == 1 ) {
                     msg = _( "The %{spell} does %{damage} damage to one living creature." );
                     StringReplace( msg, "%{spell}", spell.GetName() );

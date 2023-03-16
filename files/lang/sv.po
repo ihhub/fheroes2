@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-07 14:32+0000\n"
+"POT-Creation-Date: 2023-03-14 17:05+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -39,34 +39,34 @@ msgid ""
 msgstr ""
 
 msgid "INFO"
-msgstr ""
+msgstr "INFO"
 
 msgid "QUIT"
-msgstr ""
+msgstr "AVSLUTA"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "AVBRYT"
 
 msgid "OKAY"
-msgstr ""
+msgstr "OKEJ"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ACCEPTERA"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "AVBÖJ"
 
 msgid "LEARN"
 msgstr ""
 
 msgid "TRADE"
-msgstr ""
+msgstr "HANDLA"
 
 msgid "YES"
-msgstr ""
+msgstr "JA"
 
 msgid "NO"
-msgstr ""
+msgstr "NEJ"
 
 msgid "EXIT"
 msgstr ""
@@ -75,10 +75,10 @@ msgid "DISMISS"
 msgstr ""
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "UPPGRADERA"
 
 msgid "RESTART"
-msgstr ""
+msgstr "ÅTERSTARTA"
 
 msgid "S"
 msgstr ""
@@ -93,7 +93,7 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
-msgstr ""
+msgstr "ALLA"
 
 msgid ""
 "STANDARD\n"
@@ -128,31 +128,31 @@ msgid "HOT SEAT"
 msgstr ""
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 SPELARE"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 SPELARE"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 SPELARE"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 SPELARE"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 SPELARE"
 
 msgid "GIFT"
-msgstr ""
+msgstr "GÅVA"
 
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "SVÅRIGHETSGRAD"
 
 msgid "MIN"
-msgstr ""
+msgstr "MIN"
 
 msgid "MAX"
-msgstr ""
+msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Krigare"
@@ -161,7 +161,7 @@ msgid "Builder"
 msgstr ""
 
 msgid "Explorer"
-msgstr ""
+msgstr "Utforskare"
 
 msgid "None"
 msgstr "Inga"
@@ -173,6 +173,8 @@ msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
 msgstr ""
+"Vill du återta kontrollen från AI:n? Denna effekt gäller bara under nästa "
+"tur."
 
 msgid ""
 "A few\n"
@@ -286,7 +288,7 @@ msgid "Move the %{name} "
 msgstr "Förlora hjälten: %{name}."
 
 msgid "Move or right click to redistribute %{name}"
-msgstr ""
+msgstr "Flytta eller högerklicka för att fördela %{name}"
 
 msgid "Combine %{name} armies"
 msgstr "Kombinera %{name} arméer"
@@ -298,14 +300,14 @@ msgid "Select %{name}"
 msgstr "Välj %{name}"
 
 msgid "Cannot move last troop"
-msgstr ""
+msgstr "Kan ej flytta sista truppen"
 
 #, fuzzy
 msgid "Move the %{name}"
 msgstr "Förlora hjälten: %{name}."
 
 msgid "Set Count"
-msgstr ""
+msgstr "Ange Antal"
 
 #, fuzzy
 msgid "%{name} destroys half the enemy troops!"
@@ -321,9 +323,8 @@ msgstr "Skadar alla odöda i striden."
 msgid "%{name} has turned on the auto battle"
 msgstr "Skadar alla odöda i striden."
 
-#, fuzzy
 msgid "Spell failed!"
-msgstr "besvärjelse misslyckades!"
+msgstr "Besvärjelse misslyckades!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -357,20 +358,20 @@ msgid "Speed"
 msgstr "Hastighet"
 
 msgid "Army Order"
-msgstr ""
+msgstr "Truppformation"
 
 msgid "Off"
 msgstr "Av"
 
 msgid "On"
-msgstr ""
+msgstr "På"
 
 #, fuzzy
 msgid "Auto Spell Casting"
 msgstr "Besvärjelsekastning"
 
 msgid "Grid"
-msgstr ""
+msgstr "Rutnät"
 
 #, fuzzy
 msgid "Shadow Movement"
@@ -380,27 +381,27 @@ msgid "Shadow Cursor"
 msgstr ""
 
 msgid "Audio"
-msgstr ""
+msgstr "Ljud"
 
 msgid "Settings"
 msgstr "Inställningar"
 
 msgid "Configure"
-msgstr ""
+msgstr "Anpassa"
 
-#, fuzzy
 msgid "Hot Keys"
-msgstr "Heta stolen"
+msgstr ""
+"Tangentbords-\n"
+"genvägar"
 
-#, fuzzy
 msgid "Damage Info"
-msgstr "Skada"
+msgstr "Skadeinformation"
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Ange hastigheten för animationer på slagfältet."
 
 msgid "Toggle to display army order during the battle."
-msgstr ""
+msgstr "Visa truppturordningen på slagfältet."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -423,7 +424,7 @@ msgid ""
 msgstr ""
 
 msgid "Change the audio settings of the game."
-msgstr ""
+msgstr "Ändra ljudinställingar för spelet."
 
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
@@ -431,9 +432,8 @@ msgstr ""
 msgid "Toggle to display damage information during the battle."
 msgstr ""
 
-#, fuzzy
 msgid "Exit this menu."
-msgstr "Vänta denna enhet"
+msgstr "Stäng menyn."
 
 msgid "Okay"
 msgstr "OK"
@@ -445,7 +445,7 @@ msgid "The enemy has fled!"
 msgstr "Fienden har flytt!"
 
 msgid "A glorious victory!"
-msgstr "En ljuvlig seger!"
+msgstr "En ärorik seger!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
 msgstr "För sin tapperhet i strid erhåller %{name} %{exp} erfarenhetspoäng."
@@ -462,7 +462,7 @@ msgstr ""
 "trupper."
 
 msgid "Your force suffer a bitter defeat."
-msgstr "Dina trupper lider en bitter förslust."
+msgstr "Dina trupper lider en bitter förlust."
 
 msgid "Battlefield Casualties"
 msgstr "Slagfältsoffer"
@@ -474,7 +474,7 @@ msgid "Defender"
 msgstr "Försvarare"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "När du försöker ta %{name}, så försvinner det plötsligt."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
@@ -510,7 +510,7 @@ msgid "Knowledge"
 msgstr "Kunskap"
 
 msgid "Morale"
-msgstr "Moral"
+msgstr "Stridsmoral"
 
 msgid "Luck"
 msgstr "Tur"
@@ -534,7 +534,7 @@ msgid "Cancel"
 msgstr "Avbryt"
 
 msgid "Hero Screen"
-msgstr "Hjältesskärm"
+msgstr "Hjältemeny"
 
 #, fuzzy
 msgid "Captain's Options"
@@ -626,7 +626,7 @@ msgid "Cast %{spell}"
 msgstr "Kasta %{spell}"
 
 msgid "Select spell target"
-msgstr "Välj besvärjelsemåltavla"
+msgstr "Välj besvärjelsemål"
 
 msgid "View Ballista info"
 msgstr ""
@@ -657,7 +657,7 @@ msgid "Skip this unit"
 msgstr "Hoppa över denna enhet"
 
 msgid "Skip"
-msgstr ""
+msgstr "Hoppa över"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
@@ -684,7 +684,7 @@ msgid "Show logs"
 msgstr "Visa logg"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Textfält"
 
 msgid "Shows the results of individual monster's actions."
 msgstr ""
@@ -832,10 +832,10 @@ msgid "Human"
 msgstr ""
 
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Välj en annan hjälte"
 
 #, fuzzy
 msgid "Set Attack Skill"
@@ -898,9 +898,8 @@ msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} uppstår från de döda!"
 msgstr[1] "%{count} %{name} uppstår från de döda!"
 
-#, fuzzy
 msgid "Dwarven Alliance"
-msgstr "Ohelig allians"
+msgstr "Dvärgallians"
 
 #, fuzzy
 msgid "Sorceress Guild"
@@ -935,9 +934,8 @@ msgstr ""
 msgid "Uncle Ivan"
 msgstr "Farbror Ivan"
 
-#, fuzzy
 msgid "Annexation"
-msgstr "\"Tillägg\""
+msgstr "Annektering"
 
 msgid "Force of Arms"
 msgstr ""
@@ -1042,27 +1040,26 @@ msgid ""
 msgstr ""
 
 msgid "Barbarian Wars"
-msgstr "Barbarkrig"
+msgstr "Barbarkrigen"
 
 msgid "First Blood"
 msgstr ""
 
-#, fuzzy
 msgid "Necromancers"
-msgstr "Svartkonstnär"
+msgstr "Svartkonstnärer"
 
 #, fuzzy
 msgid "Slay the Dwarves"
 msgstr "\"Rädda dvärgarna\""
 
 msgid "Country Lords"
-msgstr "Landslordar"
+msgstr "Landshövdingar"
 
 msgid "Dragon Master"
 msgstr "Drakmästare"
 
 msgid "Rebellion"
-msgstr ""
+msgstr "Uppror"
 
 #, fuzzy
 msgid "Apocalypse"
@@ -1137,7 +1134,7 @@ msgid "Island of Chaos"
 msgstr ""
 
 msgid "The Abyss"
-msgstr ""
+msgstr "Avgrunden"
 
 msgid "Uprising"
 msgstr ""
@@ -1200,9 +1197,8 @@ msgid ""
 "hero for all time."
 msgstr ""
 
-#, fuzzy
 msgid "Border Towns"
-msgstr "Visa Städer"
+msgstr "Gränsstäder"
 
 msgid "Conquer and Unify"
 msgstr ""
@@ -1346,31 +1342,29 @@ msgstr ""
 msgid " bane"
 msgstr ""
 
-#, fuzzy
 msgid " alliance"
-msgstr "Ohelig allians"
+msgstr " allians"
 
 msgid "Carry-over forces"
 msgstr ""
 
-#, fuzzy
 msgid " bonus"
-msgstr "Röd bonus"
+msgstr "bonus"
 
 msgid " defeated"
-msgstr ""
+msgstr " besegrad"
 
 msgid " will always run away from your army."
 msgstr ""
 
 msgid " will be willing to join your army."
-msgstr ""
+msgstr " är villiga att ansluta till din armé."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
 msgstr ""
 
 msgid "The army will be carried over the scenario."
-msgstr ""
+msgstr "Armén kommer följa med till nästa scenerio."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr ""
@@ -1450,9 +1444,8 @@ msgstr "Spegelbild"
 msgid "campaignBonus|Resurrect"
 msgstr ""
 
-#, fuzzy
 msgid "campaignBonus|Steelskin"
-msgstr "Vit pärla"
+msgstr "Stålskinn"
 
 #, fuzzy
 msgid "campaignBonus|Summon Earth"
@@ -1759,7 +1752,7 @@ msgid "The Price of Loyalty"
 msgstr ""
 
 msgid "Voyage Home"
-msgstr ""
+msgstr "Hemresan"
 
 #, fuzzy
 msgid "Wizard's Isle"
@@ -2066,28 +2059,28 @@ msgid "Thatched Hut"
 msgstr "Halmtäckt hydda"
 
 msgid "Archery Range"
-msgstr "Bågskyttesräckvidd"
+msgstr "Bågskyttebana"
 
 msgid "Upg. Archery Range"
 msgstr "Uppg. Bågskyttesräckvidd"
 
 msgid "Blacksmith"
-msgstr "Smed"
+msgstr "Smedja"
 
 msgid "Upg. Blacksmith"
-msgstr "Uppg. Smed"
+msgstr "Uppg. Smedja"
 
 msgid "Armory"
-msgstr "Vapensmedja"
+msgstr "Rustkammare"
 
 msgid "Upg. Armory"
-msgstr "Uppg. Vapensmedja"
+msgstr "Uppg. Rustkammare"
 
 msgid "Jousting Arena"
 msgstr "Turneringsarena"
 
 msgid "Upg. Jousting Arena"
-msgstr "Uppg. turneringsarena"
+msgstr "Uppg. Turneringsarena"
 
 msgid "Cathedral"
 msgstr "Katedral"
@@ -2111,7 +2104,7 @@ msgid "Upg. Stick Hut"
 msgstr "Uppg. Kvisthydda"
 
 msgid "Den"
-msgstr ""
+msgstr "Lya"
 
 msgid "Adobe"
 msgstr "Adobe"
@@ -2194,7 +2187,7 @@ msgid "Library"
 msgstr "Bibliotek"
 
 msgid "Orchard"
-msgstr "Fruktträdgård"
+msgstr "Fruktodling"
 
 msgid "Habitat"
 msgstr "Livsmiljö"
@@ -2257,7 +2250,7 @@ msgid "Laboratory"
 msgstr "Laboratorium"
 
 msgid "Shrine"
-msgstr "Tempel"
+msgstr "Helgedom"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -2306,7 +2299,7 @@ msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Benhögen höjer produktionen av skelett med %{count} per vecka."
 
 msgid "Thieves' Guild"
-msgstr "Tjuvarnas förening"
+msgstr "Tjuvgille"
 
 msgid "Tavern"
 msgstr "Värdshus"
@@ -2324,31 +2317,31 @@ msgid "Marketplace"
 msgstr "Marknad"
 
 msgid "Moat"
-msgstr "Vall grav"
+msgstr "Vallgrav"
 
 msgid "Castle"
 msgstr "Slott"
 
 msgid "Tent"
-msgstr "Telt"
+msgstr "Tält"
 
 msgid "Captain's Quarters"
 msgstr "Kaptenens bostad"
 
 msgid "Mage Guild, Level 1"
-msgstr "Magikerförening, level 1"
+msgstr "Magikerförening, nivå 1"
 
 msgid "Mage Guild, Level 2"
-msgstr "Magikerförening, level 2"
+msgstr "Magikerförening, nivå 2"
 
 msgid "Mage Guild, Level 3"
-msgstr "Magikerförening, level 3"
+msgstr "Magikerförening, nivå 3"
 
 msgid "Mage Guild, Level 4"
-msgstr "Magikerförening, level 4"
+msgstr "Magikerförening, nivå 4"
 
 msgid "Mage Guild, Level 5"
-msgstr "Magikerförening, level 5"
+msgstr "Magikerförening, nivå 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
@@ -2368,7 +2361,7 @@ msgid "The Tavern increases morale for troops defending the castle."
 msgstr "Värdshuset höjer moralen för trupperna som försvarar slottet."
 
 msgid "The Shipyard allows ships to be built."
-msgstr "Skeppsvarvet låter skepp byggas."
+msgstr "Skeppsvarvet tillåter skepp att byggas."
 
 msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
@@ -2433,20 +2426,17 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-#, fuzzy
 msgid "Exit"
-msgstr "Gå ut från staden"
+msgstr "Lämna staden"
 
-#, fuzzy
 msgid "Click to show next town."
-msgstr "Visa nästa stad"
+msgstr "Klicka för att visa nästa stad."
 
 msgid "Show next town"
 msgstr "Visa nästa stad"
 
-#, fuzzy
 msgid "Click to show previous town."
-msgstr "Visa föregående stad"
+msgstr "Klicka för att visa föregående stad."
 
 msgid "Show previous town"
 msgstr "Visa föregående stad"
@@ -2458,16 +2448,16 @@ msgid "Town"
 msgstr "Stad"
 
 msgid "Exit Castle"
-msgstr "Gå ut från slottet"
+msgstr "Lämna Slottet"
 
 msgid "Exit Town"
-msgstr "Gå ut från staden"
+msgstr "Lämna Staden"
 
 msgid "Show Income"
-msgstr "Visa inkomst"
+msgstr "Visa Inkomst"
 
 msgid "View Hero"
-msgstr "Visa hjälte"
+msgstr "Visa Hjälte"
 
 #, fuzzy
 msgid "The above spells are available here."
@@ -2524,33 +2514,29 @@ msgstr "Ändra besättningens stridsformation till 'Utspridd'"
 msgid "Set garrison combat formation to 'Grouped'"
 msgstr "Ändra besättningens stridsformation till 'Grupperad'"
 
-#, fuzzy
 msgid "Exit Castle Options"
-msgstr "Slottalternativ"
+msgstr "Lämna Slottsalternativ"
 
 msgid "Castle Options"
 msgstr "Slottalternativ"
 
 msgid "Not enough resources to recruit creatures."
-msgstr ""
+msgstr "Inte tillräckligt med resurser för att rekrytera varelser."
 
 msgid "You are unable to recruit at this time, your ranks are full."
 msgstr "Du kan inte rekrytera just nu. Din ranker är fulla."
 
 msgid "No creatures available for purchase."
-msgstr ""
+msgstr "Inga varelser tillgängliga för köp."
 
-#, fuzzy
 msgid "Recruit Creatures"
-msgstr "Rekrytera hjälte"
+msgstr "Rekrytera Varelser"
 
-#, fuzzy
 msgid "Max"
-msgstr "Maximus"
+msgstr "Maximalt"
 
-#, fuzzy
 msgid "Hire all creatures in the town."
-msgstr "Förlora alla dina hjältar och städer."
+msgstr "Rekrytera alla varelser i staden."
 
 msgid "Town Population Information and Statistics"
 msgstr "Stadsbefolknings- och statistikinfo"
@@ -2570,22 +2556,20 @@ msgstr "vecka"
 msgid "Available"
 msgstr "Tillgänglig"
 
-#, fuzzy
 msgid "View World"
-msgstr "Visa alla"
+msgstr "Visa Värld"
 
 msgid "View the entire world."
 msgstr "Visa hela världen."
 
 msgid "Puzzle"
-msgstr ""
+msgstr "Pussel"
 
 msgid "View the obelisk puzzle."
-msgstr "Visa obelisk-pusslet."
+msgstr "Visa obeliskpusslet."
 
-#, fuzzy
 msgid "Scenario Information"
-msgstr "Utspridd formation"
+msgstr "Scenarioinformation"
 
 msgid "View information on the scenario you are currently playing."
 msgstr "Visa information om scenariot som du spelar."
@@ -2594,10 +2578,10 @@ msgid "Dig for the Ultimate Artifact."
 msgstr "Gräv efter den Ultimata artefakten."
 
 msgid "Digging"
-msgstr ""
+msgstr "Gräver"
 
 msgid "Exit this menu without doing anything."
-msgstr "Stäng denna meny utan att spara någonting."
+msgstr "Stäng denna meny utan att göra någonting."
 
 msgid "Arena"
 msgstr "Arena"
@@ -2633,7 +2617,7 @@ msgid "Hit Points Left"
 msgstr "Hälsopoäng kvar"
 
 msgid "You can't afford to upgrade your troops!"
-msgstr ""
+msgstr "Du har inte råd att upgradera dina trupper!"
 
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
@@ -2645,9 +2629,8 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Är du säker på att du vill avskeda denna armé?"
 
-#, fuzzy
 msgid "Followers"
-msgstr "Blommor"
+msgstr "Anhängare"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
@@ -2699,10 +2682,10 @@ msgid "Music"
 msgstr "Musik"
 
 msgid "Effects"
-msgstr ""
+msgstr "Effekter"
 
 msgid "MIDI"
-msgstr ""
+msgstr "MIDI"
 
 #, fuzzy
 msgid "MIDI Expansion"
@@ -2712,10 +2695,10 @@ msgid "External"
 msgstr ""
 
 msgid "Music Type"
-msgstr ""
+msgstr "Musiktyp"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D-ljud"
 
 msgid "Toggle ambient music level."
 msgstr ""
@@ -2744,9 +2727,8 @@ msgstr ""
 msgid "Load Game"
 msgstr "Ladda spel"
 
-#, fuzzy
 msgid "No save files to load."
-msgstr "Inga besvärjelser att kasta."
+msgstr "Inga sparfiler att ladda."
 
 msgid "New Game"
 msgstr "Nytt spel"
@@ -2757,12 +2739,11 @@ msgstr "Starta ett spel med en eller flera spelare."
 msgid "Load a previously saved game."
 msgstr "Ladda ett tidigare sparat spel."
 
-#, fuzzy
 msgid "Save Game"
-msgstr "Nytt spel"
+msgstr "Spara spel"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Spara nuvarande spel."
 
 msgid "Quit"
 msgstr "Avsluta"
@@ -2771,34 +2752,31 @@ msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
 msgid "Language"
-msgstr ""
+msgstr "Språk"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafik"
 
-#, fuzzy
 msgid "Black & White"
-msgstr "Bro"
+msgstr "Svart & Vitt"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Muspekare"
 
 msgid "Color"
-msgstr ""
+msgstr "Färg"
 
-#, fuzzy
 msgid "Text Support"
-msgstr "Teleportera"
+msgstr "Texthjälp"
 
 msgid "Change the language of the game."
-msgstr ""
+msgstr "Ändra spelets språk"
 
-#, fuzzy
 msgid "Select Game Language"
-msgstr "Vald beskrivning"
+msgstr "Välj spelspråk"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
+msgstr "Ändra grafikinställningar för spelet"
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -2808,28 +2786,19 @@ msgid ""
 "events in the game."
 msgstr ""
 
-#, fuzzy
-msgid "Attention"
-msgstr "\"Tillägg\""
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-
 msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
-"Karta Svår-\n"
-"ighetsgrad"
+"Kartans\n"
+"Svårighetsgrad"
 
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
-"Spel Svår-\n"
-"ighetsgrad"
+"Spelets\n"
+"Svårighetsgrad"
 
 msgid "Rating"
 msgstr "Betyg"
@@ -2866,9 +2835,8 @@ msgstr "Du kan inte välja %{resource}!"
 msgid "Select count %{resource}:"
 msgstr "Välj antalet %{resource}:"
 
-#, fuzzy
 msgid "Select Recipients"
-msgstr "Vald beskrivning"
+msgstr "Välj mottagare"
 
 msgid "Your Funds"
 msgstr ""
@@ -2880,42 +2848,38 @@ msgstr ""
 msgid "Gift from %{name}"
 msgstr "Rekrytera %{name}"
 
-#, fuzzy
 msgid "Resolution"
-msgstr "Revolution"
+msgstr "Upplösning"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Fullskärm"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Fönsterläge"
 
 msgid "Windowed"
-msgstr ""
+msgstr "Fönsterläge"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
-#, fuzzy
 msgid "on"
-msgstr "ett"
+msgstr "på"
 
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
-#, fuzzy
 msgid "System Info"
-msgstr "Systemalternativ"
+msgstr "Systeminformation"
 
 msgid "Change the resolution of the game."
-msgstr ""
+msgstr "Ändra spelets upplösning."
 
-#, fuzzy
 msgid "Select Game Resolution"
-msgstr "Vald beskrivning"
+msgstr "Välj spelupplösning"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Växla mellan fullskärmsläge och fönsterläge."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -2926,10 +2890,10 @@ msgid "Show extra information such as FPS and current time."
 msgstr ""
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Tangentbordsgenvägar"
 
 msgid "Select Game Language:"
-msgstr ""
+msgstr "Välj spelspråk:"
 
 #, fuzzy
 msgid "Click to choose the selected language."
@@ -2995,19 +2959,19 @@ msgid "guarded by %{count} %{monster}"
 msgstr "vaktas av %{count} %{monster}"
 
 msgid "guarded by "
-msgstr ""
+msgstr "vaktas av "
 
 msgid "(available: %{count})"
 msgstr "(tillgängligt: %{count})"
 
 msgid "(empty)"
-msgstr ""
+msgstr "(tom)"
 
 msgid "already learned"
 msgstr "redan inlärt"
 
 msgid "already knows this skill"
-msgstr "vet redan denna färdighet"
+msgstr "kan redan denna färdighet"
 
 msgid "already has max skills"
 msgstr "har redan maximala färdigheter"
@@ -3022,19 +2986,17 @@ msgstr "(inte besökt)"
 msgid "%{color} Barrier"
 msgstr "%{color} spelares tur."
 
-#, fuzzy
 msgid "%{color} Tent"
-msgstr "%{color} spelares tur."
+msgstr "%{color} Tält"
 
-#, fuzzy
 msgid "Road"
-msgstr "Vägläge"
+msgstr "Väg"
 
 msgid "(digging ok)"
-msgstr ""
+msgstr "(grävning okej)"
 
 msgid "(no digging)"
-msgstr ""
+msgstr "(ingen grävning)"
 
 msgid "penalty: %{cost}"
 msgstr "straff: %{cost}"
@@ -3046,7 +3008,7 @@ msgid "Defenders:"
 msgstr "Försvarare:"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Okänd"
 
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (Level %{level})"
@@ -3093,12 +3055,11 @@ msgstr ""
 msgid "Select only 1 monster to be recruited."
 msgstr ""
 
-#, fuzzy
 msgid "Select Game Resolution:"
-msgstr "Vald beskrivning"
+msgstr "Ange spelupplösning:"
 
 msgid "Click to apply the selected resolution."
-msgstr ""
+msgstr "Klicka här för att ange den valda upplösningen."
 
 msgid "How many troops to move?"
 msgstr "Hur många trupper ska flyttas?"
@@ -3107,7 +3068,7 @@ msgid "Fast separation into slots:"
 msgstr ""
 
 msgid "Map: "
-msgstr ""
+msgstr "Karta: "
 
 msgid ""
 "\n"
@@ -3116,10 +3077,10 @@ msgid ""
 msgstr ""
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Vecka: "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", Dag: "
 
 msgid ""
 "\n"
@@ -3128,18 +3089,16 @@ msgid ""
 msgstr ""
 
 msgid "File to Save:"
-msgstr "Fil att spara:"
+msgstr "Fil att Spara:"
 
 msgid "File to Load:"
-msgstr "Fil att ladda:"
+msgstr "Fil att Ladda:"
 
-#, fuzzy
 msgid "Click to save the current game."
-msgstr "Klicka för att gå tillbaka till huvudmenyn."
+msgstr "Klicka för att spara nuvarande spel."
 
-#, fuzzy
 msgid "Click to load a previously saved game."
-msgstr "Ladda ett tidigare sparat spel."
+msgstr "Klicka för att ladda ett tidigare sparat spel."
 
 msgid "Are you sure you want to delete file:"
 msgstr "Är du säker på att du vill radera filen:"
@@ -3147,33 +3106,27 @@ msgstr "Är du säker på att du vill radera filen:"
 msgid "Warning!"
 msgstr "Varning!"
 
-#, fuzzy
 msgid "Select Monster:"
-msgstr "Bästa monster:"
+msgstr "Välj monster:"
 
-#, fuzzy
 msgid "Select Hero:"
-msgstr "Bästa hjälte:"
+msgstr "Välj Hjälte:"
 
-#, fuzzy
 msgid "Select Artifact:"
-msgstr "Artifakter"
+msgstr "Välj Artefakt:"
 
-#, fuzzy
 msgid "Select Spell:"
-msgstr "Välj besvärjelsemåltavla"
+msgstr "Välj Besvärjelse"
 
-#, fuzzy
 msgid "Select Skill:"
-msgstr "Försvarsfärdighet"
+msgstr "Välj Förmåga:"
 
 #, fuzzy
 msgid "Map Type:\n"
 msgstr "Kartstorlek"
 
-#, fuzzy
 msgid "The Succession Wars"
-msgstr "Den andra sidan"
+msgstr "Successionskrigen"
 
 msgid "Lose all your heroes and towns."
 msgstr "Förlora alla dina hjältar och städer."
@@ -9595,6 +9548,10 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "\"Tillägg\""
 
 #, fuzzy
 #~ msgid "Location: "

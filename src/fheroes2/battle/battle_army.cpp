@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_army.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -30,7 +32,6 @@
 #include "artifact_info.h"
 #include "battle.h"
 #include "battle_arena.h"
-#include "battle_army.h"
 #include "battle_cell.h"
 #include "battle_troop.h"
 #include "heroes.h"
@@ -253,14 +254,15 @@ void Battle::Force::NewTurn()
 
 Troops Battle::Force::GetKilledTroops() const
 {
-    Troops killed;
+    Troops result;
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const Unit & b = ( **it );
-        killed.PushBack( b, b.GetDead() );
+    for ( const Unit * unit : *this ) {
+        assert( unit != nullptr );
+
+        result.PushBack( *unit, std::min( unit->GetInitialCount(), unit->GetDead() ) );
     }
 
-    return killed;
+    return result;
 }
 
 bool Battle::Force::animateIdleUnits()
