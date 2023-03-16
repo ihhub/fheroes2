@@ -564,7 +564,7 @@ msgid "Return to the battle."
 msgstr "Återgå till strid."
 
 msgid "Not enough gold (%{gold})"
-msgstr "Inte tillräckligt med guld (%{gold}"
+msgstr "För lite guld (%{gold})"
 
 msgid "%{name} states:"
 msgstr "%{name}s status:"
@@ -700,7 +700,7 @@ msgstr[0] "en %{defender} dör."
 msgstr[1] "%{count} %{defender} dör."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr "Flyttade %{monster}: från %{src} till %{dst}."
+msgstr "Flyttade %{monster}: från [%{src}] till [%{dst}]."
 
 msgid "The %{name} resist the spell!"
 msgstr "%{name} motstår besvärjelsen!"
