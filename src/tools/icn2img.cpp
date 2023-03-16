@@ -144,7 +144,7 @@ int main( int argc, char ** argv )
             if ( buf.size() != dataSize ) {
                 ++spritesFailed;
 
-                std::cerr << inputFileName << ": sprite " << spriteIdx << " has an invalid size of " << dataSize << std::endl;
+                std::cerr << inputFileName << ": invalid size of sprite " << spriteIdx << ": expected " << dataSize << ", got " << buf.size() << std::endl;
                 continue;
             }
 
