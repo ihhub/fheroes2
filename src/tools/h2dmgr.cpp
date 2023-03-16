@@ -30,16 +30,26 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <system_error>
 #include <type_traits>
 #include <vector>
 
 #include "h2d_file.h"
+#include "image.h"
+#include "image_tool.h"
 #include "system.h"
 #include "tools.h"
 
 namespace
 {
+    bool isImageFile( const std::string_view fileName )
+    {
+        const std::string extension = StringLower( std::filesystem::path( fileName ).extension().string() );
+
+        return ( extension == ".bmp" || extension == ".png" );
+    }
+
     void printUsage( char ** argv )
     {
         std::string baseName = System::GetBasename( argv[0] );
@@ -168,45 +178,62 @@ namespace
         for ( const std::string & inputFileName : inputFileNames ) {
             std::cout << "Processing " << inputFileName << "..." << std::endl;
 
-            std::ifstream inputStream( inputFileName, std::ios_base::binary | std::ios_base::ate );
-            if ( !inputStream ) {
-                std::cerr << "Cannot open file " << inputFileName << std::endl;
-                // A non-existent or inaccessible file is not considered a fatal error
-                continue;
+            // Image files need special processing
+            if ( isImageFile( inputFileName ) ) {
+                fheroes2::Image image;
+
+                if ( !fheroes2::Load( inputFileName, image ) ) {
+                    std::cerr << "Cannot open file " << inputFileName << std::endl;
+                    // A non-existent or inaccessible file is not considered a fatal error
+                    continue;
+                }
+
+                if ( !fheroes2::writeImageToH2D( writer, std::filesystem::path( inputFileName ).filename().replace_extension( "image" ).string(), image ) ) {
+                    std::cerr << "Error adding file " << inputFileName << std::endl;
+                    return EXIT_FAILURE;
+                }
             }
+            else {
+                std::ifstream inputStream( inputFileName, std::ios_base::binary | std::ios_base::ate );
+                if ( !inputStream ) {
+                    std::cerr << "Cannot open file " << inputFileName << std::endl;
+                    // A non-existent or inaccessible file is not considered a fatal error
+                    continue;
+                }
 
-            const auto size = fheroes2::checkedCast<size_t>( static_cast<std::streamoff>( inputStream.tellg() ) );
-            if ( !size ) {
-                std::cerr << "File " << inputFileName << " is too large" << std::endl;
-                return EXIT_FAILURE;
-            }
+                const auto size = fheroes2::checkedCast<size_t>( static_cast<std::streamoff>( inputStream.tellg() ) );
+                if ( !size ) {
+                    std::cerr << "File " << inputFileName << " is too large" << std::endl;
+                    return EXIT_FAILURE;
+                }
 
-            if ( size == 0U ) {
-                std::cerr << "File " << inputFileName << " is empty" << std::endl;
-                return EXIT_FAILURE;
-            }
+                if ( size == 0U ) {
+                    std::cerr << "File " << inputFileName << " is empty" << std::endl;
+                    return EXIT_FAILURE;
+                }
 
-            static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+                static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
 
-            std::vector<uint8_t> buf( size.value() );
+                std::vector<uint8_t> buf( size.value() );
 
-            inputStream.seekg( 0, std::ios_base::beg );
+                inputStream.seekg( 0, std::ios_base::beg );
 
-            const auto streamSize = fheroes2::checkedCast<std::streamsize>( buf.size() );
-            if ( !streamSize ) {
-                std::cerr << "File " << inputFileName << " is too large" << std::endl;
-                return EXIT_FAILURE;
-            }
+                const auto streamSize = fheroes2::checkedCast<std::streamsize>( buf.size() );
+                if ( !streamSize ) {
+                    std::cerr << "File " << inputFileName << " is too large" << std::endl;
+                    return EXIT_FAILURE;
+                }
 
-            inputStream.read( reinterpret_cast<char *>( buf.data() ), streamSize.value() );
-            if ( !inputStream ) {
-                std::cerr << "Error reading from file " << inputFileName << std::endl;
-                return EXIT_FAILURE;
-            }
+                inputStream.read( reinterpret_cast<char *>( buf.data() ), streamSize.value() );
+                if ( !inputStream ) {
+                    std::cerr << "Error reading from file " << inputFileName << std::endl;
+                    return EXIT_FAILURE;
+                }
 
-            if ( !writer.add( std::filesystem::path( inputFileName ).filename().string(), buf ) ) {
-                std::cerr << "Error adding file " << inputFileName << std::endl;
-                return EXIT_FAILURE;
+                if ( !writer.add( std::filesystem::path( inputFileName ).filename().string(), buf ) ) {
+                    std::cerr << "Error adding file " << inputFileName << std::endl;
+                    return EXIT_FAILURE;
+                }
             }
 
             ++itemsAdded;

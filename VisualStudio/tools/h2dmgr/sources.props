@@ -4,9 +4,12 @@
     <ClCompile Include="..\engine\h2d_file.cpp" />
     <ClCompile Include="..\engine\image.cpp" />
     <ClCompile Include="..\engine\image_palette.cpp" />
+    <ClCompile Include="..\engine\image_tool.cpp" />
     <ClCompile Include="..\engine\logging.cpp" />
     <ClCompile Include="..\engine\serialize.cpp" />
     <ClCompile Include="..\engine\system.cpp" />
+    <ClCompile Include="..\engine\tools.cpp" />
+    <ClCompile Include="..\engine\translations.cpp" />
     <ClCompile Include="h2dmgr.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -14,10 +17,12 @@
     <ClInclude Include="..\engine\h2d_file.h" />
     <ClInclude Include="..\engine\image.h" />
     <ClInclude Include="..\engine\image_palette.h" />
+    <ClInclude Include="..\engine\image_tool.h" />
     <ClInclude Include="..\engine\logging.h" />
     <ClInclude Include="..\engine\math_base.h" />
     <ClInclude Include="..\engine\serialize.h" />
     <ClInclude Include="..\engine\system.h" />
     <ClInclude Include="..\engine\tools.h" />
+    <ClInclude Include="..\engine\translations.h" />
   </ItemGroup>
 </Project>
