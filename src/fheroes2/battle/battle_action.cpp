@@ -235,7 +235,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
                 }
 
                 if ( spell.GetID() == Spell::DISPEL ) {
-                    spellTargetUnit->ResetModes( IS_GOOD_MAGIC );
+                    spellTargetUnit->removeAffection( IS_GOOD_MAGIC );
                 }
                 else {
                     // The unit's built-in spell efficiency does not depend on its commanding hero's skills
@@ -647,8 +647,10 @@ void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
 
 void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets )
 {
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
+
     for ( TargetInfo & target : targets ) {
-        assert( target.defender != nullptr && target.defender->isValid() );
+        assert( target.defender != nullptr );
 
         target.killed = target.defender->ApplyDamage( attacker, target.damage );
     }
@@ -737,7 +739,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
 void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "targets: " << targets.size() )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
 
     for ( TargetInfo & target : targets ) {
         assert( target.defender != nullptr );
@@ -1220,6 +1222,19 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 
         Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), [unit]( const int32_t v ) { return Board::isValidMirrorImageIndex( v, unit ); } );
         if ( it != distances.end() ) {
+            const HeroBase * commander = GetCurrentCommander();
+            assert( commander != nullptr );
+
+            const Spell mirrorImageSpell( Spell::MIRRORIMAGE );
+
+            TargetInfo targetInfo;
+            targetInfo.defender = unit;
+
+            TargetsInfo targetsInfo;
+            targetsInfo.push_back( targetInfo );
+
+            TargetsApplySpell( commander, mirrorImageSpell, targetsInfo );
+
             Unit * mirrorUnit = CreateMirrorImage( *unit );
             assert( mirrorUnit != nullptr );
 
@@ -1229,16 +1244,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
 
             if ( _interface ) {
-                const HeroBase * commander = GetCurrentCommander();
-                assert( commander != nullptr );
-
-                TargetInfo targetInfo;
-                targetInfo.defender = unit;
-
-                TargetsInfo targetsInfo;
-                targetsInfo.push_back( targetInfo );
-
-                _interface->RedrawActionSpellCastStatus( Spell( Spell::MIRRORIMAGE ), who, commander->GetName(), targetsInfo );
+                _interface->RedrawActionSpellCastStatus( mirrorImageSpell, who, commander->GetName(), targetsInfo );
                 _interface->RedrawActionMirrorImageSpell( *unit, pos );
             }
 
