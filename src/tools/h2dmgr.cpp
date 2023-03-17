@@ -188,6 +188,11 @@ namespace
                     continue;
                 }
 
+                if ( image.empty() ) {
+                    std::cerr << "File " << inputFileName << " contains an empty image" << std::endl;
+                    return EXIT_FAILURE;
+                }
+
                 if ( !fheroes2::writeImageToH2D( writer, std::filesystem::path( inputFileName ).filename().replace_extension( "image" ).string(), image ) ) {
                     std::cerr << "Error adding file " << inputFileName << std::endl;
                     return EXIT_FAILURE;
