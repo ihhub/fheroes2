@@ -784,13 +784,11 @@ msgstr "Inga besvärjelser att kasta."
 msgid "Are you sure you want to retreat?"
 msgstr "Är du säker på att du vill retirera?"
 
-#, fuzzy
 msgid "Retreat disabled"
-msgstr "Retirera"
+msgstr "Retirering inaktiverat"
 
-#, fuzzy
 msgid "Surrender disabled"
-msgstr "Ge upp"
+msgstr "Kapitulation inaktiverat"
 
 msgid "Damage: %{max}"
 msgstr "Skada: %{max}"
@@ -863,7 +861,7 @@ msgid "each with a +%{attack} bonus to their attack skill."
 msgstr ""
 
 msgid "The %{name} is destroyed."
-msgstr "%{name} är förstört."
+msgstr "%{name} förstörs."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
@@ -1337,7 +1335,7 @@ msgid " will be willing to join your army."
 msgstr " är villiga att ansluta till din armé."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr ""
+msgstr "\"%{artifact}\" kommer följa med till nästa scenario."
 
 msgid "The army will be carried over the scenario."
 msgstr "Armén kommer följa med till nästa scenerio."
@@ -1474,13 +1472,11 @@ msgstr ""
 msgid "campaignBonus|Major Scroll"
 msgstr "Större Kunskapsrulle"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Honor"
 msgstr "Hedersmedalj"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Valor"
-msgstr "Tapperhetens medalj"
+msgstr "Tapperhetsmedalj"
 
 #, fuzzy
 msgid "campaignBonus|Minor Scroll"
@@ -1738,21 +1734,19 @@ msgid "Descendants"
 msgstr "Bönder"
 
 msgid "The %{building} produces %{monster}."
-msgstr "%{building} skapar %{monster}."
+msgstr "%{building} producerar %{monster}."
 
 msgid "Requires:"
 msgstr "Kräver:"
 
-#, fuzzy
 msgid "Cannot build. You have already built here today."
-msgstr "Kan inte byggas. Har redan byggt här denna runda."
+msgstr "Kan inte byggas. Du har redan byggt här idag."
 
 msgid "For this action it is necessary to build a castle first."
 msgstr "För denna åtgärd är det nödvändigt att först bygga ett slott."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr ""
-"Kan inte bygga %{name} eftersom slottet är för långt borta från vatten."
+msgstr ""Kan inte bygga %{name} eftersom slottet är för långt borta från vatten."
 
 msgid "disable build."
 msgstr ""
@@ -2025,7 +2019,7 @@ msgid "There is no room in the garrison for this army."
 msgstr "Det finns ingen plats i garnisonen för denna armé."
 
 msgid "Fortifications"
-msgstr "Fortifikationer"
+msgstr "Befästningar"
 
 msgid "Farm"
 msgstr "Farm"
@@ -2228,7 +2222,8 @@ msgstr "Helgedom"
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
-msgstr ""
+msgstr "Befästningar ökar dina slottsmurars styrka, ökar antal rundor det krävs 
+"för att riva dem."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
 msgstr "Farmen ökar produktionen av Bönder med %{count} per vecka."
@@ -2321,7 +2316,6 @@ msgid ""
 "percent."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
 "can also provide scouting information on enemy towns. Additional Guilds "
@@ -2391,7 +2385,7 @@ msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
-"Magikersamfundet tillåter hjältar att lära sig besvärjelser och återhämta "
+"Magikersamfundet låter hjältar att lära sig besvärjelser och återhämta "
 "besvärjelsepoäng."
 
 msgid "Recruit %{name}"
@@ -2468,14 +2462,14 @@ msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
 msgstr ""
-"'Utspridd' stridsformation sprider ut dina arméer över hela slagfältet med "
+"'Utspridd' stridsformation sprider ut dina trupper över hela slagfältet med "
 "minst en tomt mellanrum mellan varje trupp."
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
-"'Grupperad' stridsformation buntar ihop din armé till mitten av din sida av "
+"'Grupperad' stridsformation buntar ihop dina trupper till mitten av din sida av "
 "slagfältet."
 
 msgid "Spread Formation"
@@ -2503,7 +2497,7 @@ msgid "Not enough resources to recruit creatures."
 msgstr "För lite resurser för att rekrytera varelser."
 
 msgid "You are unable to recruit at this time, your ranks are full."
-msgstr "Du kan inte rekrytera just nu. Din ranker är fulla."
+msgstr "Du kan inte rekrytera just nu. Dina led är fulla."
 
 msgid "No creatures available for purchase."
 msgstr "Inga varelser tillgängliga för köp."
@@ -2518,7 +2512,7 @@ msgid "Hire all creatures in the town."
 msgstr "Rekrytera alla varelser i staden."
 
 msgid "Town Population Information and Statistics"
-msgstr "Stadsbefolkning- och statistikinfo."
+msgstr "Stadsbefolkning- och Statistikinfo."
 
 msgid "Damg"
 msgstr "Skada"
@@ -2615,7 +2609,7 @@ msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
 msgstr ""
-"En grupp %{monster} med en längtan efter större ära önskar att göra dig "
+"En grupp %{monster} med en längtan efter ära önskar att göra dig "
 "sällskap.\n"
 "Accepterar du?"
 
@@ -2679,7 +2673,7 @@ msgid "3D Audio"
 msgstr "3D-ljud"
 
 msgid "Toggle ambient music level."
-msgstr ""
+msgstr "Välj ljudnivå för bakgrundsmusik."
 
 msgid "Toggle foreground sounds level."
 msgstr ""
@@ -2727,7 +2721,7 @@ msgid "Quit"
 msgstr "Avsluta"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr ""
+msgstr "Avsluta Heroes of Might and Magic II."
 
 msgid "Language"
 msgstr "Språk"
@@ -2822,9 +2816,8 @@ msgstr ""
 msgid "Planned Gift"
 msgstr ""
 
-#, fuzzy
 msgid "Gift from %{name}"
-msgstr "Rekrytera %{name}"
+msgstr "Gåva från %{name}"
 
 msgid "Resolution"
 msgstr "Upplösning"
@@ -2873,9 +2866,8 @@ msgstr "Tangentbordsgenvägar"
 msgid "Select Game Language:"
 msgstr "Välj spelspråk:"
 
-#, fuzzy
 msgid "Click to choose the selected language."
-msgstr "Klicka för att gå tillbaka till huvudmenyn."
+msgstr "Klicka för att ange valt stråk."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} har gått upp en level."
@@ -2908,17 +2900,16 @@ msgstr ""
 "affären. Kan jag intressera dig med några andra varor?"
 
 msgid "I can offer you %{count} for 1 unit of %{resfrom}."
-msgstr "Jag kan erbjuda dig %{count} för 1 enhet %{resfrom}."
+msgstr "Jag kan erbjuda dig %{count} för 1  %{resfrom}."
 
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
-msgstr "Jag kan erbjuda dig 1 enhet %{resto} för %{count} %{resfrom}."
+msgstr "Jag kan erbjuda dig 1 %{resto} för %{count} %{resfrom}."
 
-#, fuzzy
 msgid "Min"
-msgstr "Gruva"
+msgstr "Min"
 
 msgid "Qty to trade"
-msgstr "Köp antal:"
+msgstr "Byt antal"
 
 msgid "Trading Post"
 msgstr "Handelsstation"
@@ -2959,9 +2950,8 @@ msgstr "(redan besökt)"
 msgid "(not visited)"
 msgstr "(inte besökt)"
 
-#, fuzzy
 msgid "%{color} Barrier"
-msgstr "%{color} spelares tur."
+msgstr "%{color} Barriär."
 
 msgid "%{color} Tent"
 msgstr "%{color} Tält"
@@ -2979,7 +2969,7 @@ msgid "penalty: %{cost}"
 msgstr "straff: %{cost}"
 
 msgid "Uncharted Territory"
-msgstr "Outforskat område"
+msgstr "Outforskat Område"
 
 msgid "Defenders:"
 msgstr "Försvarare:"
@@ -3009,7 +2999,7 @@ msgid "Move Points:"
 msgstr "Förflyttningspoäng:"
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Kostnad per trupp:"
 
 msgid "Available: %{count}"
 msgstr "Tillgängligt: %{count}"
@@ -3021,10 +3011,10 @@ msgid "Recruit selected monsters."
 msgstr "Rekrytera valda monster."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Välj maximalt antal monster att rekrytera."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Välj endast ett monster att rekrytera."
 
 msgid "Select Game Resolution:"
 msgstr "Ange Spelupplösning:"
@@ -3046,6 +3036,9 @@ msgid ""
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Månad: "
 
 msgid ", Week: "
 msgstr ", Vecka: "
@@ -6688,9 +6681,8 @@ msgstr "Skalbagge"
 msgid "week|PLAGUE"
 msgstr "FARSOT"
 
-#, fuzzy
 msgid "week|Unnamed"
-msgstr "Örn"
+msgstr "Namnlös"
 
 msgid "Desert"
 msgstr "Öken"
@@ -6854,7 +6846,7 @@ msgid "Oracle"
 msgstr "Orakel"
 
 msgid "Shrine of the First Circle"
-msgstr "Första kretsens helgedom"
+msgstr "Första kretsens Helgedom"
 
 msgid "Shipwreck"
 msgstr "Skeppsvrak"
@@ -6915,20 +6907,17 @@ msgstr "De vise männens öga"
 msgid "Random Monster - weak"
 msgstr "Slumpat Monster - svag"
 
-#, fuzzy
 msgid "Random Monster - medium"
-msgstr "Slumpartat slott"
+msgstr "Slumpat Monster - medel"
 
-#, fuzzy
 msgid "Random Monster - strong"
-msgstr "Slumpartat slott"
+msgstr "Slumpat Monster - starkt"
 
-#, fuzzy
 msgid "Random Monster - very strong"
-msgstr "Slumpartat slott"
+msgstr "Slumpat Monster - väldigt starkt"
 
 msgid "Nothing Special"
-msgstr "Ingenting speciellt"
+msgstr "Ingenting Speciellt"
 
 msgid "Mossy Rock"
 msgstr "Mossigt Stenblock"
@@ -6994,7 +6983,7 @@ msgid "Wagon"
 msgstr "Godsvagn"
 
 msgid "Tar Pit"
-msgstr ""
+msgstr "Tjärhåla"
 
 msgid "Artesian Spring"
 msgstr "Artesisk källa"
@@ -7034,8 +7023,8 @@ msgstr "Magisk Brunn"
 
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
-msgstr[0] "Magisk trädgård"
-msgstr[1] "Magiska trädgårdar"
+msgstr[0] "Förtrollad Trädgård"
+msgstr[1] "Förtrollade Trädgårdar"
 
 msgid "Observation Tower"
 msgstr "Observationstorn"
@@ -7178,12 +7167,11 @@ msgstr "Kavallerister"
 msgid "Cavalry"
 msgstr "Kavalleri"
 
-#, fuzzy
 msgid "Champion"
-msgstr "Krigare"
+msgstr "Lansiär"
 
 msgid "Champions"
-msgstr "Krigare"
+msgstr "Lansiärer"
 
 msgid "Paladin"
 msgstr "Paladin"
@@ -7192,10 +7180,10 @@ msgid "Paladins"
 msgstr "Paladiner"
 
 msgid "Crusader"
-msgstr "Korsriddare"
+msgstr "Korsfarare"
 
 msgid "Crusaders"
-msgstr "Korsriddare"
+msgstr "Korsfarare"
 
 msgid "Goblin"
 msgstr "Vätte"
@@ -7447,10 +7435,10 @@ msgid "Vampires"
 msgstr "Vampyrer"
 
 msgid "Vampire Lord"
-msgstr "Vampyrherre"
+msgstr "Vampyrbaron"
 
 msgid "Vampire Lords"
-msgstr "Vampyrherrar"
+msgstr "Vampyrbaroner"
 
 msgid "Lich"
 msgstr "Lich"
@@ -7637,19 +7625,17 @@ msgstr ""
 msgid "Dragon"
 msgstr "Drake"
 
-#, fuzzy
 msgid "Undead"
-msgstr "Odöda arméer"
+msgstr "Odöda"
 
 msgid "No enemy retaliation"
 msgstr ""
 
 msgid "HP drain"
-msgstr ""
+msgstr "Suger HP"
 
-#, fuzzy
 msgid "Cloud attack"
-msgstr "Molnslott"
+msgstr "Molnattack"
 
 msgid "Decreases enemy's morale by "
 msgstr ""
@@ -7793,7 +7779,7 @@ msgid "Medal of Valor"
 msgstr "Tapperhetens medalj"
 
 msgid "The %{name} increases your morale."
-msgstr "%{name} höjer din moral."
+msgstr "%{name} höjer din stridsmoral."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -7828,7 +7814,7 @@ msgid "Fizbin of Misfortune"
 msgstr "Olycksfizbin"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
-msgstr "%{name} minskar kraftigt din moral med %{count}."
+msgstr "%{name} minskar kraftigt din stridsmoral med %{count}."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
@@ -8669,7 +8655,7 @@ msgid ""
 msgstr ""
 
 msgid "Crystal Ball"
-msgstr "Kristallboll"
+msgstr "Kristallkula"
 
 msgid ""
 "The %{name} lets you get more specific information about monsters, enemy "
