@@ -6470,14 +6470,14 @@ msgid ""
 "Neutral luck means your armies will never get lucky or unlucky attacks on "
 "the enemy."
 msgstr ""
-"Normal tur inebär att dina arméer kommer varken att få lyckosamma eller "
+"Normal tur innebär att dina trupper kommer varken att få lyckosamma eller "
 "oturliga attacker."
 
 msgid ""
 "Good luck sometimes lets your armies get lucky attacks (double strength) in "
 "combat."
 msgstr ""
-"God tur låter dina ibland dina arméer få tursamma attacker (dubbel styrka) i "
+"Tursamhet låter ibland dina trupper få tursamma attacker (dubbel styrka) i "
 "strid."
 
 msgid "morale|Treason"
@@ -6502,7 +6502,7 @@ msgid "morale|Blood!"
 msgstr "Blod!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
-msgstr "Dålig stridsmoral kan få dina arméer att låsa sig i strid."
+msgstr "Låg stridsmoral kan få dina trupper att låsa sig i strid."
 
 msgid ""
 "Neutral morale means your armies will never be blessed with extra attacks or "
@@ -6512,7 +6512,7 @@ msgstr ""
 "låsta i strid."
 
 msgid "Good morale may give your armies extra attacks in combat."
-msgstr "God stridsmoral kan ge din arméer extra attacker i strid."
+msgstr "Hög stridsmoral kan ge din trupper extra attacker i strid."
 
 msgid "Knight"
 msgstr "Riddare"
@@ -7519,7 +7519,6 @@ msgstr "Vattenelement"
 
 msgid "Random Monsters"
 msgstr "Slumpade Monster"
-
 
 msgid "Random Monster 1"
 msgstr "Slumpat Monster 1"
