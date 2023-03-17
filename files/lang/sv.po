@@ -1746,7 +1746,7 @@ msgid "For this action it is necessary to build a castle first."
 msgstr "För denna åtgärd är det nödvändigt att först bygga ett slott."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr ""Kan inte bygga %{name} eftersom slottet är för långt borta från vatten."
+msgstr "Kan inte bygga %{name} eftersom slottet är för långt borta från vatten."
 
 msgid "disable build."
 msgstr ""
@@ -2222,7 +2222,8 @@ msgstr "Helgedom"
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
-msgstr "Befästningar ökar dina slottsmurars styrka, ökar antal rundor det krävs 
+msgstr ""
+"Befästningar ökar dina slottsmurars styrka, ökar antal rundor det krävs "
 "för att riva dem."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
