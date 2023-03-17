@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-07 14:32+0000\n"
-"PO-Revision-Date: 2023-03-13 13:03+0700\n"
+"PO-Revision-Date: 2023-03-13 14:39+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -142,7 +142,7 @@ msgstr ""
 "MỞ RỘNG"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "GHẾ NÓNG"
 
 msgid "2 PLAYERS"
 msgstr ""
@@ -189,7 +189,7 @@ msgstr "Cảnh báo"
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
-msgstr "Bạn có muốn kiểm soát AI không? Lượt tiếp theo sẽ bắt đầu hiệu quả"
+msgstr "Bạn có muốn AI kiểm soát không? Hiệu quả sẽ bắt đầu ở lượt tiếp theo."
 
 msgid ""
 "A few\n"
@@ -419,7 +419,7 @@ msgid "Configure"
 msgstr ""
 
 msgid "Hot Keys"
-msgstr ""
+msgstr "Phím tắt"
 
 msgid "Damage Info"
 msgstr ""
@@ -1051,7 +1051,7 @@ msgid "Wayward Son"
 msgstr ""
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Bác Ivan"
 
 msgid "Annexation"
 msgstr ""
@@ -1066,7 +1066,7 @@ msgid "Carator Mines"
 msgstr ""
 
 msgid "Turning Point"
-msgstr ""
+msgstr "Bước Ngoặt"
 
 msgid "scenarioName|Defender"
 msgstr ""
@@ -1075,16 +1075,16 @@ msgid "Corlagon's Defense"
 msgstr ""
 
 msgid "The Crown"
-msgstr ""
+msgstr "Vương Miện"
 
 msgid "The Gauntlet"
-msgstr ""
+msgstr "Găng tay"
 
 msgid "Betrayal"
-msgstr ""
+msgstr "Sự phản bội"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Công lý Cuối cùng"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -1092,29 +1092,46 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Roland cần bạn đánh bại các lãnh chúa gần lâu đài của anh ta để bắt đầu cuộc "
+"chiến nổi dậy chống lại anh trai mình. Họ không liên minh với nhau, vì vậy "
+"họ sẽ dành phần lớn thời gian để chiến đấu với nhau. Chiến thắng là của bạn "
+"khi bạn đã đánh bại tất cả các lâu đài và anh hùng của họ."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Các lãnh chúa địa phương từ chối thề trung thành với Roland, và phải khuất "
+"phục. Họ giàu có và quyền lực, vì vậy hãy chuẩn bị cho một cuộc chiến khó "
+"khăn. Đánh chiếm tất cả các lâu đài của kẻ thù để giành chiến thắng."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"Nhiệm vụ của bạn là bảo vệ Người lùn chống lại lực lượng của Archibald. Đánh "
+"chiếm tất cả các thị trấn và lâu đài của kẻ thù để giành chiến thắng, đồng "
+"thời đảm bảo không để mất tất cả các thị trấn của người lùn cùng một lúc, "
+"nếu không kẻ thù sẽ chiến thắng."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"Bạn sẽ đối mặt với bốn kẻ thù đồng minh trong một cuộc chiến đơn giản để "
+"giành lấy tài nguyên và kho báu. Nắm bắt tất cả các lâu đài của kẻ thù để "
+"giành chiến thắng."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+"Kẻ thù của bạn đang liên minh chống lại bạn và bắt đầu áp sát, vì vậy hãy "
+"sẵn sàng chiến đấu. Bạn sẽ cần phải sở hữu cả bốn lâu đài trong thung lũng "
+"nhỏ này để giành chiến thắng."
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -1122,6 +1139,10 @@ msgid ""
 "don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
 "castle on an island in the ocean.)"
 msgstr ""
+"Hội phù thủy Noraston đã yêu cầu sự trợ giúp của Roland chống lại cuộc tấn "
+"công từ các đồng minh của Archibald. Đánh chiếm tất cả các lâu đài của kẻ "
+"thù để giành chiến thắng và đừng để mất Noraston, nếu không bạn sẽ thua kịch "
+"bản. (Gợi ý: Có một lâu đài của kẻ thù trên một hòn đảo giữa đại dương.)"
 
 msgid ""
 "Gather as large an army as possible and capture the enemy castle within 8 "
@@ -1129,11 +1150,18 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
+"Tập hợp một đội quân lớn nhất có thể và chiếm được lâu đài của kẻ thù trong "
+"vòng 8 tuần. Bạn chỉ bị một kẻ thù chống lại, nhưng phải đi một quãng đường "
+"dài để đến được lâu đài của kẻ thù. Bất kỳ đội quân nào bạn có trong quân "
+"đội của mình khi kết thúc kịch bản này sẽ ở bên bạn trong trận chiến cuối "
+"cùng."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
 "for the final battle against Archibald."
 msgstr ""
+"Tìm Vương miện trước khi các anh hùng của Archibald tìm thấy nó. Roland sẽ "
+"cần Vương miện cho trận chiến cuối cùng với Archibald."
 
 msgid ""
 "Three allied enemies stand before you and victory, including Lord Corlagon. "
@@ -1141,17 +1169,27 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
+"Ba kẻ thù đồng minh đứng trước bạn và chiến thắng, bao gồm cả Lord Corlagon. "
+"Roland đang ở trong một lâu đài ở phía tây bắc, và bạn sẽ thua nếu anh ta "
+"rơi vào tay kẻ thù. Hãy nhớ rằng việc bắt giữ Lord Corlagon sẽ đảm bảo rằng "
+"anh ta sẽ không chiến đấu chống lại bạn trong kịch bản cuối cùng."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
+"Đây là trận chiến cuối cùng. Cả bạn và kẻ thù của bạn đều được trang bị tận "
+"răng, và tất cả đều liên minh chống lại bạn. Bắt giữ Archibald để kết thúc "
+"chiến tranh!"
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one.  This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"Đổi bên để lại cho bạn ba lâu đài chống lại một lâu đài của kẻ thù. Trận "
+"chiến này sẽ là trận chiến dễ dàng nhất mà bạn phải đối mặt trong phần còn "
+"lại của cuộc chiến...kẻ phản bội."
 
 msgid "Barbarian Wars"
 msgstr ""
@@ -1186,6 +1224,10 @@ msgid ""
 "energy fighting amongst themselves.  You will win when you own all of the "
 "enemy castles and there are no more heroes left to fight."
 msgstr ""
+"Vua Archibald yêu cầu bạn đánh bại ba kẻ thù trong khu vực này. Họ không "
+"liên minh với nhau, vì vậy họ sẽ dành phần lớn năng lượng để chiến đấu với "
+"nhau. Bạn sẽ giành chiến thắng khi sở hữu tất cả các lâu đài của kẻ thù và "
+"không còn anh hùng nào để chiến đấu."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -1193,6 +1235,10 @@ msgid ""
 "more resources at their disposal. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
+"Bạn phải thống nhất các bộ lạc man rợ ở phía bắc bằng cách chinh phục họ. "
+"Như trong nhiệm vụ trước, kẻ thù không liên minh chống lại bạn, nhưng chúng "
+"có nhiều tài nguyên hơn để sử dụng. Bạn sẽ giành chiến thắng khi sở hữu tất "
+"cả các lâu đài của kẻ thù và không còn anh hùng nào để chiến đấu."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -1200,6 +1246,11 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
+"Các pháp sư làm điều tốt hơn đã chiếm lâu đài của các Necromancer. Bạn phải "
+"chiếm lại nó để đạt được chiến thắng. Hãy nhớ rằng trong khi bạn bắt đầu với "
+"một đội quân hùng mạnh, bạn không có lâu đài nào và phải chiếm lấy một lâu "
+"đài trong vòng 7 ngày, nếu không sẽ thua trận này. (Gợi ý: Lâu đài gần nhất "
+"nằm ở phía đông nam.)"
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -1207,18 +1258,29 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
+"Những người lùn cần chinh phục trước khi họ có thể can thiệp vào kế hoạch "
+"của Vua Archibald. Lực lượng của Roland có nhiều hơn một anh hùng và nhiều "
+"thị trấn để bắt đầu, vì vậy hãy sẵn sàng tấn công từ nhiều hướng. Bạn phải "
+"chiếm được tất cả các thị trấn và lâu đài của kẻ thù để giành chiến thắng."
 
 msgid ""
 "You must put down a peasant revolt led by Roland's forces. All are allied "
 "against you, but you have Lord Corlagon, an experienced hero, to help you. "
 "Capture all enemy castles to win."
 msgstr ""
+"Bạn phải dập tắt cuộc nổi dậy của nông dân do lực lượng của Roland lãnh đạo. "
+"Tất cả đều liên minh chống lại bạn, nhưng bạn có Chúa Corlagon, một anh hùng "
+"giàu kinh nghiệm, để giúp bạn. Đánh chiếm tất cả các lâu đài của kẻ thù để "
+"giành chiến thắng."
 
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
 "City to win."
 msgstr ""
+"Có hai kẻ thù liên minh chống lại bạn trong nhiệm vụ này. Cả hai đều được "
+"trang bị vũ khí tốt và tìm cách đuổi bạn khỏi hòn đảo của họ. Tránh chúng và "
+"chiếm Dragon City để giành chiến thắng."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -1226,17 +1288,26 @@ msgid ""
 "without a castle, you must hurry to capture one before the end of the week. "
 "Capture all enemy castles for victory."
 msgstr ""
+"Mệnh lệnh của bạn là chinh phục các lãnh chúa đất nước đã thề phục vụ "
+"Roland. Tất cả các lâu đài của kẻ thù được thống nhất chống lại bạn. Vì bạn "
+"bắt đầu mà không có lâu đài, nên bạn phải nhanh chóng chiếm được một lâu đài "
+"trước cuối tuần. Nắm bắt tất cả các lâu đài của kẻ thù để giành chiến thắng."
 
 msgid ""
 "Find the Crown before Roland's heroes find it. Archibald will need the Crown "
 "for the final battle against Roland."
 msgstr ""
+"Tìm Vương miện trước khi các anh hùng của Roland tìm thấy nó. Archibald sẽ "
+"cần Vương miện cho trận chiến cuối cùng với Roland."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Roland to win the war, and be sure "
 "not to lose Archibald in the fight!"
 msgstr ""
+"Đây là trận chiến cuối cùng. Cả bạn và kẻ thù của bạn đều được trang bị tận "
+"răng, và tất cả đều liên minh chống lại bạn. Bắt giữ Roland để giành chiến "
+"thắng trong cuộc chiến và đảm bảo không để thua Archibald trong cuộc chiến!"
 
 msgid "Arrow's Flight"
 msgstr ""
@@ -1266,16 +1337,22 @@ msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
 msgstr ""
+"khuất phục các lãnh chúa địa phương ngang ngược để cung cấp cho Đế chế các "
+"cơ sở hoạt động trong khu vực này."
 
 msgid ""
 "Eliminate all oposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
+"Loại bỏ tất cả các đối lập trong lĩnh vực này. Phần đầu tiên của hiện vật sẽ "
+"là của bạn."
 
 msgid ""
 "The sorceresses to the northeast are rebelling! For the good of the empire "
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
+"Các phù thủy ở phía đông bắc đang nổi dậy! Vì lợi ích của đế chế, bạn phải "
+"dập tắt cuộc nổi dậy yếu ớt của chúng trên đường đến vùng núi."
 
 msgid ""
 "Having prepared for your arrival, Kraeger has arranged for a force of "
@@ -1283,27 +1360,42 @@ msgid ""
 "before the first day of the third week, or the Necromancers will be too "
 "strong for you."
 msgstr ""
+"Sau khi chuẩn bị sẵn sàng cho sự xuất hiện của bạn, Kraeger đã sắp xếp một "
+"lực lượng các pháp sư gọi hồn để cản trở nhiệm vụ của bạn. Bạn phải chiếm "
+"được lâu đài Scabsdale trước ngày đầu tiên của tuần thứ ba, nếu không các "
+"Necromancer sẽ quá mạnh đối với bạn."
 
 msgid ""
 "The barbarian despot in this area is, as yet, ignorant of your presence. "
 "Quickly, build up your forces before you are discovered and attacked! Secure "
 "the region by subduing all enemy forces."
 msgstr ""
+"Kẻ chuyên quyền man rợ trong khu vực này vẫn không biết gì về sự hiện diện "
+"của bạn. Nhanh chóng, xây dựng lực lượng của bạn trước khi bạn bị phát hiện "
+"và tấn công! Bảo vệ khu vực bằng cách khuất phục tất cả các lực lượng của kẻ "
+"thù."
 
 msgid ""
 "The Empire is weak in this region. You will be unable to completely subdue "
 "all forces in this area, so take what you can before reprisal strikes. "
 "Remember, your true goal is to claim the Helmet of Anduran."
 msgstr ""
+"Đế chế yếu trong khu vực này. Bạn sẽ không thể khuất phục hoàn toàn tất cả "
+"các lực lượng trong khu vực này, vì vậy hãy lấy những gì bạn có thể trước "
+"khi tấn công trả đũa. Hãy nhớ rằng, mục tiêu thực sự của bạn là giành được "
+"Mũ bảo hiểm của Anduran."
 
 msgid "For the good of the Empire, eliminate Kraeger."
-msgstr ""
+msgstr "Vì lợi ích của Đế chế, hãy loại bỏ Kraeger."
 
 msgid ""
 "At last, you have the opportunity and the facilities to rid the Empire of "
 "the necromancer's evil. Eradicate them completely, and you will be sung as a "
 "hero for all time."
 msgstr ""
+"Cuối cùng, bạn có cơ hội và phương tiện để loại bỏ Đế chế khỏi cái ác của kẻ "
+"phá hoại. Tiêu diệt chúng hoàn toàn, và bạn sẽ được tôn vinh như một anh "
+"hùng mọi thời đại."
 
 msgid "Border Towns"
 msgstr "Trấn Biên thùy"
@@ -1333,42 +1425,61 @@ msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
 "forefather of all descendants."
 msgstr ""
+"Chinh phục và thống nhất tất cả các bộ lạc kẻ thù. Đừng đánh mất anh hùng "
+"Jarkonas, tổ tiên của tất cả con cháu."
 
 msgid ""
 "Your rival, the Kingdom of Harondale, is attacking weak towns on your "
 "border! Recover from their first strike and crush them completely!"
 msgstr ""
+"Đối thủ của bạn, Vương quốc Harondale, đang tấn công các thị trấn yếu ở biên "
+"giới của bạn! Phục hồi từ cuộc tấn công đầu tiên của họ và nghiền nát họ "
+"hoàn toàn!"
 
 msgid ""
 "Find your wayward son Joseph who is rumored to be living in the desolate "
 "lands. Do it before the first day of the third month or it will be of no "
 "help to your family."
 msgstr ""
+"Tìm đứa con trai bướng bỉnh Joseph của bạn, người được đồn đại là đang sống "
+"ở những vùng đất hoang vắng. Hãy làm điều đó trước ngày đầu tiên của tháng "
+"thứ ba nếu không nó sẽ chẳng giúp ích được gì cho gia đình bạn."
 
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be no help to your kingdom."
 msgstr ""
+"Giải cứu chú Ivan điên rồ của bạn. Tìm anh ta trước ngày đầu tiên của tháng "
+"thứ tư, nếu không sẽ chẳng ích gì cho vương quốc của bạn."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
 "kingdom! Recover your fallen towns, and then invade the jungle kingdom. "
 "Leave no enemy standing."
 msgstr ""
+"Tiêu diệt những kẻ man rợ đang tấn công biên giới phía nam vương quốc của "
+"bạn! Khôi phục các thị trấn đã sụp đổ của bạn, sau đó xâm chiếm vương quốc "
+"rừng rậm. Không để kẻ thù đứng yên."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
-msgstr ""
+msgstr "Chiếm lại lâu đài Ivory Gates đã sụp đổ do bị phản bội."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so they will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
+"Giành được sự ưu ái của yêu tinh. Họ sẽ không cho phép chặt cây, vì vậy họ "
+"sẽ gửi cho bạn gỗ 2 tuần một lần. Bạn phải hoàn thành nhiệm vụ của mình "
+"trước ngày đầu tiên của tháng thứ bảy, nếu không vương quốc chắc chắn sẽ sụp "
+"đổ."
 
 msgid ""
 "This is the final battle against your rival kingdom of Harondale. Eliminate "
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
+"Đây là trận chiến cuối cùng chống lại vương quốc Harondale đối thủ của bạn. "
+"Loại bỏ tất cả mọi người và đừng để mất anh hùng Jarkonas VI."
 
 msgid "Fount of Wizardry"
 msgstr ""
@@ -1387,11 +1498,16 @@ msgid ""
 "The completion of this task will give you a fighting chance against your "
 "rivals."
 msgstr ""
+"Nhiệm vụ của bạn là đánh bại các pháp sư đang gây chiến trong Quần đảo "
+"Shrouded huyền diệu. Việc hoàn thành nhiệm vụ này sẽ cho bạn cơ hội chiến "
+"đấu chống lại các đối thủ của mình."
 
 msgid ""
 "The location of the great library has been discovered! You must make your "
 "way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
+"Vị trí của thư viện tuyệt vời đã được phát hiện! Bạn phải tìm đường đến đó "
+"và giành lại thành phố Chronos nơi nó tọa lạc."
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
@@ -1399,11 +1515,17 @@ msgid ""
 "Find the orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
+"Tìm Orb of negation, được cho là bị chôn vùi ở vùng đất này. Có những manh "
+"mối được ghi trên các đài tưởng niệm bằng đá sẽ giúp dẫn bạn đến mức giá của "
+"mình. Tìm quả cầu trước ngày đầu tiên của tháng thứ sáu, nếu không các đối "
+"thủ của bạn chắc chắn sẽ đến được nguồn trước bạn."
 
 msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
+"Bạn phải kiểm soát lâu đài Phép thuật, nơi khởi nguồn của phép thuật. Làm "
+"điều này và chiến thắng của bạn sẽ là tối cao."
 
 msgid "Blood is Thicker"
 msgstr ""
@@ -1421,21 +1543,29 @@ msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
 "a boat and travel back towards the mainland. Do not lose the hero Gallavant."
 msgstr ""
+"Đánh chiếm thị trấn trên hòn đảo ngoài khơi bờ biển phía đông nam để đóng "
+"một chiếc thuyền và quay trở lại đất liền. Đừng để mất anh hùng Gallavant."
 
 msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
+"Tìm và đánh bại Martine, thủ lĩnh cướp biển, cư trú tại Pirates Cove. Đừng "
+"để mất Gallavant nếu không nhiệm vụ của bạn sẽ kết thúc."
 
 msgid ""
 "Eliminate all the other forces who oppose the rule of Lord Alberon. "
 "Gallavant must not die."
 msgstr ""
+"Loại bỏ tất cả các lực lượng khác chống lại sự cai trị của Chúa Alberon. "
+"Gallavant không được chết."
 
 msgid ""
 "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in "
 "your name. Gallavant must not die."
 msgstr ""
+"Lật đổ chế độ quân chủ cố thủ của Chúa Alberon và giành lấy toàn bộ đất đai "
+"dưới tên của bạn. Gallavant không được chết."
 
 msgid " bane"
 msgstr ""
@@ -1871,9 +2001,8 @@ msgstr "Роланд"
 msgid "Archibald"
 msgstr "Арчібальд"
 
-#, fuzzy
 msgid "The Price of Loyalty"
-msgstr "Ціна Вірності"
+msgstr "Giá của Lòng Trung Thành"
 
 #, fuzzy
 msgid "Voyage Home"
@@ -1883,9 +2012,8 @@ msgstr "Подорож Додому"
 msgid "Wizard's Isle"
 msgstr "Острів Чаклуна"
 
-#, fuzzy
 msgid "Descendants"
-msgstr "Селяни"
+msgstr "Huậ duệ"
 
 #, fuzzy
 msgid "The %{building} produces %{monster}."
@@ -2176,9 +2304,8 @@ msgstr "Стрільбище"
 msgid "Upg. Archery Range"
 msgstr "Полігон"
 
-#, fuzzy
 msgid "Blacksmith"
-msgstr "Ковальня"
+msgstr "Lò rèn"
 
 #, fuzzy
 msgid "Upg. Blacksmith"
@@ -2267,17 +2394,14 @@ msgstr ""
 msgid "sorceress|Red Tower"
 msgstr "Червона вежа"
 
-#, fuzzy
 msgid "Dungeon"
-msgstr "Підземелля"
+msgstr "Ngục tối"
 
-#, fuzzy
 msgid "Waterfall"
-msgstr "Водоспад"
+msgstr "Thác nước"
 
-#, fuzzy
 msgid "Cave"
-msgstr "Печера"
+msgstr "Hang"
 
 #, fuzzy
 msgid "Crypt"
@@ -2299,21 +2423,18 @@ msgstr "Великий лабіринт"
 msgid "Swamp"
 msgstr "Болото"
 
-#, fuzzy
 msgid "Green Tower"
-msgstr "Зелена вежа"
+msgstr "Tháp Xanh"
 
 #, fuzzy
 msgid "warlock|Red Tower"
 msgstr "Червона вежа"
 
-#, fuzzy
 msgid "Black Tower"
-msgstr "Чорна вежа"
+msgstr "Tháp Đen"
 
-#, fuzzy
 msgid "Library"
-msgstr "Бібліотека"
+msgstr "Thư viện"
 
 #, fuzzy
 msgid "Orchard"
@@ -2393,9 +2514,8 @@ msgstr "Мавзолей"
 msgid "Upg. Mausoleum"
 msgstr "Некрополь"
 
-#, fuzzy
 msgid "Laboratory"
-msgstr "Лабораторія"
+msgstr "Phòng thí nghiệm"
 
 #, fuzzy
 msgid "Shrine"
@@ -2464,9 +2584,8 @@ msgstr "Верф"
 msgid "Well"
 msgstr "Giếng"
 
-#, fuzzy
 msgid "Statue"
-msgstr "Статуя"
+msgstr "Tượng"
 
 msgid "Marketplace"
 msgstr "Chợ"
@@ -2478,9 +2597,8 @@ msgstr "Hào"
 msgid "Castle"
 msgstr "Замок"
 
-#, fuzzy
 msgid "Tent"
-msgstr "Намет"
+msgstr "Lều"
 
 #, fuzzy
 msgid "Captain's Quarters"
@@ -2633,9 +2751,8 @@ msgstr "Показати попереднє місто"
 msgid "This town may not be upgraded to a castle."
 msgstr "Розбудова замку в цьому мiстi неможлива."
 
-#, fuzzy
 msgid "Town"
-msgstr "Місто"
+msgstr "Thị trấn"
 
 #, fuzzy
 msgid "Exit Castle"
@@ -2901,9 +3018,8 @@ msgstr "Побудувати новий корабель:"
 msgid "Resource cost:"
 msgstr ""
 
-#, fuzzy
 msgid "Total: "
-msgstr "Загалом: "
+msgstr "Tổng:"
 
 msgid "Need: "
 msgstr ""
@@ -2945,29 +3061,28 @@ msgid "Language"
 msgstr "Ngôn ngữ"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Đồ họa"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Đen & Trắng"
 
 msgid "Mouse Cursor"
 msgstr ""
 
 msgid "Color"
-msgstr ""
+msgstr "Màu"
 
 msgid "Text Support"
 msgstr ""
 
 msgid "Change the language of the game."
-msgstr "Змінити мову гри."
+msgstr "Thay đổi ngôn ngữ của game."
 
 msgid "Select Game Language"
-msgstr "Обрати мову гри"
+msgstr "Chọn Ngôn ngữ Game"
 
-#, fuzzy
 msgid "Change the graphics settings of the game."
-msgstr "Змінити мову гри."
+msgstr "Thay đổi đồ họa của game."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -2978,12 +3093,14 @@ msgid ""
 msgstr ""
 
 msgid "Attention"
-msgstr ""
+msgstr "Chú ý"
 
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any other "
 "languages than English."
 msgstr ""
+"Phiên bản Heroes of Might and Magic II của bạn không hỗ trợ ngôn ngữ nào "
+"khác ngoài Tiếng Anh."
 
 #, fuzzy
 msgid ""
@@ -3017,6 +3134,8 @@ msgid ""
 "Victory\n"
 "Conditions"
 msgstr ""
+"Điều kiện\n"
+"Chiến thắng"
 
 msgid ""
 "Loss\n"
@@ -3059,9 +3178,8 @@ msgstr ""
 msgid "V-Sync"
 msgstr ""
 
-#, fuzzy
 msgid "on"
-msgstr "Відсутні"
+msgstr "bật"
 
 msgid "FPS"
 msgstr ""
@@ -3070,15 +3188,14 @@ msgstr ""
 msgid "System Info"
 msgstr "Системні Параметри"
 
-#, fuzzy
 msgid "Change the resolution of the game."
-msgstr "Змінити мову гри."
+msgstr "Thay đổi độ phân giải của game"
 
 msgid "Select Game Resolution"
-msgstr ""
+msgstr "Chọn Độ phân giải Game"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Chuyển đổi giữa chế độ toàn màn hình và cửa sổ."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
@@ -3089,13 +3206,13 @@ msgid "Show extra information such as FPS and current time."
 msgstr ""
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Phím tắt:"
 
 msgid "Select Game Language:"
-msgstr "Обрати мову гри:"
+msgstr "Chọn Ngôn ngữ Game:"
 
 msgid "Click to choose the selected language."
-msgstr ""
+msgstr "Bấm để chọn ngôn ngữ đã chọn."
 
 msgid "%{name} has gained a level."
 msgstr ""
@@ -3136,7 +3253,7 @@ msgid "Qty to trade"
 msgstr ""
 
 msgid "Trading Post"
-msgstr ""
+msgstr "Trạm Giao dịch"
 
 msgid "Your Resources"
 msgstr ""
@@ -3193,7 +3310,7 @@ msgid "penalty: %{cost}"
 msgstr ""
 
 msgid "Uncharted Territory"
-msgstr ""
+msgstr "Lãnh thổ Chưa khám phá"
 
 #, fuzzy
 msgid "Defenders:"
@@ -3266,18 +3383,24 @@ msgid ""
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Tháng:"
 
 msgid ", Week: "
-msgstr ""
+msgstr ",Tuần:"
 
 msgid ", Day: "
-msgstr ""
+msgstr ",Ngày:"
 
 msgid ""
 "\n"
 "\n"
 "Location: "
 msgstr ""
+"\n"
+"\n"
+"Vị trí:"
 
 msgid "File to Save:"
 msgstr ""
@@ -3295,7 +3418,7 @@ msgid "Are you sure you want to delete file:"
 msgstr ""
 
 msgid "Warning!"
-msgstr ""
+msgstr "Cảnh báo!"
 
 msgid "Select Monster:"
 msgstr ""
@@ -3316,7 +3439,7 @@ msgid "Map Type:\n"
 msgstr "Kiểu Bản đồ:\n"
 
 msgid "The Succession Wars"
-msgstr ""
+msgstr "Cuộc chiến Kế vị"
 
 msgid "Lose all your heroes and towns."
 msgstr ""
@@ -3639,10 +3762,10 @@ msgid ""
 msgstr ""
 
 msgid "Easy"
-msgstr ""
+msgstr "Dễ"
 
 msgid "Hard"
-msgstr ""
+msgstr "Khó"
 
 msgid "Start the selected scenario."
 msgstr ""
@@ -3919,10 +4042,9 @@ msgstr ""
 msgid "Greetings!"
 msgstr ""
 
-#, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
-"Залишити Heroes of Might and Magic II і повернутися до операційної системи."
+"Chào mừng tới Heroes of Might and Magic II cung cấp bởi mã nguồn fheroes2!"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -3977,10 +4099,10 @@ msgid ""
 msgstr ""
 
 msgid "Original Campaign"
-msgstr ""
+msgstr "Chiến dịch Gốc"
 
 msgid "Expansion Campaign"
-msgstr ""
+msgstr "Chiến dịch Mở rộng"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
@@ -3994,7 +4116,7 @@ msgid ""
 msgstr ""
 
 msgid "Guest"
-msgstr ""
+msgstr "Khách"
 
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
@@ -4178,7 +4300,7 @@ msgid "Click here to select which scenario to play."
 msgstr ""
 
 msgid "Scenario"
-msgstr ""
+msgstr "Kịch bản"
 
 msgid "Game Difficulty"
 msgstr ""
@@ -4396,7 +4518,7 @@ msgid ""
 msgstr ""
 
 msgid "Handicap"
-msgstr ""
+msgstr "Chấp"
 
 #
 msgid ""
@@ -4409,7 +4531,7 @@ msgid "%{color} player"
 msgstr ""
 
 msgid "No Handicap"
-msgstr ""
+msgstr "Không Chấp"
 
 msgid "No special restrictions on start resources and earning them per turn."
 msgstr ""
@@ -4487,7 +4609,7 @@ msgid "Bulgarian"
 msgstr ""
 
 msgid "Ukrainian"
-msgstr "Українська"
+msgstr ""
 
 msgid "Romanian"
 msgstr ""
@@ -4511,7 +4633,7 @@ msgid "Hungarian"
 msgstr ""
 
 msgid "Danish"
-msgstr ""
+msgstr "Việt nam"
 
 msgid ", FPS: "
 msgstr ""
@@ -4742,10 +4864,10 @@ msgid "%{count} / day"
 msgstr ""
 
 msgid "one"
-msgstr ""
+msgstr "một"
 
 msgid "two"
-msgstr ""
+msgstr "hai"
 
 msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr ""
@@ -4809,9 +4931,8 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr ""
 
-#, fuzzy
 msgid "Treasure"
-msgstr "Скарб"
+msgstr "Kho báu"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
@@ -6280,22 +6401,22 @@ msgid ""
 msgstr "Ваш герой збирає %{count} золота податків з маєтків."
 
 msgid "Blue"
-msgstr "Синій"
+msgstr "Lục"
 
 msgid "Green"
-msgstr "Зелений"
+msgstr "Xanh"
 
 msgid "Red"
-msgstr "Червоний"
+msgstr "Đỏ"
 
 msgid "Yellow"
-msgstr "Жовтий"
+msgstr "Vàng"
 
 msgid "Orange"
-msgstr "Помаранчевий"
+msgstr "Cam"
 
 msgid "Purple"
-msgstr "Фіолетовий"
+msgstr "Tím"
 
 #, fuzzy
 msgid "barrier|Aqua"
@@ -6654,28 +6775,28 @@ msgid "week|Unnamed"
 msgstr ""
 
 msgid "Desert"
-msgstr "Пустеля"
+msgstr "Sa mạc"
 
 msgid "Snow"
-msgstr "Сніг"
+msgstr "Tuyết"
 
 msgid "Wasteland"
-msgstr "Пустощі"
+msgstr "Đất hoang"
 
 msgid "Beach"
-msgstr "Пляж"
+msgstr "Biển"
 
 msgid "Lava"
-msgstr "Лава"
+msgstr "Nham thạch"
 
 msgid "Dirt"
-msgstr "Багнюка"
+msgstr "Bùn"
 
 msgid "Grass"
-msgstr "Трава"
+msgstr "Cỏ"
 
 msgid "Ocean"
-msgstr "Океан"
+msgstr "Đại dương"
 
 msgid "maps|Small"
 msgstr "Nhỏ"
@@ -6689,33 +6810,26 @@ msgstr "Lớn"
 msgid "maps|Extra Large"
 msgstr "Rất Lớn"
 
-#, fuzzy
 msgid "maps|Custom Size"
-msgstr "Вказати розмір"
+msgstr ""
 
-#, fuzzy
 msgid "Ore Mine"
-msgstr "Рудник"
+msgstr "Mỏ Đá"
 
-#, fuzzy
 msgid "Sulfur Mine"
-msgstr "Сірчана шахта"
+msgstr "Mỏ Sun-phua"
 
-#, fuzzy
 msgid "Crystal Mine"
-msgstr "Кристальна шахта"
+msgstr "Mỏ Thạch anh"
 
-#, fuzzy
 msgid "Gems Mine"
-msgstr "Шахта Самоцвітів"
+msgstr "Mỏ Kim cương"
 
-#, fuzzy
 msgid "Gold Mine"
-msgstr "Золота копальня"
+msgstr "Mỏ Vàng"
 
-#, fuzzy
 msgid "Mine"
-msgstr "Шахта"
+msgstr "Mỏ"
 
 msgid "Burma shave."
 msgstr ""
@@ -6729,21 +6843,17 @@ msgstr ""
 msgid "This space for rent."
 msgstr ""
 
-#, fuzzy
 msgid "No object"
-msgstr "Пусте місце"
+msgstr "Không có gì"
 
-#, fuzzy
 msgid "Alchemist Lab"
-msgstr "Алхімічна лабораторія"
+msgstr "Phòng thí nghiệm Hóa"
 
-#, fuzzy
 msgid "Sign"
-msgstr "Показчик"
+msgstr "Biển hiệu"
 
-#, fuzzy
 msgid "Buoy"
-msgstr "Буй"
+msgstr "Phao"
 
 #, fuzzy
 msgid "Skeleton"
@@ -6753,21 +6863,18 @@ msgstr "Скелет"
 msgid "Daemon Cave"
 msgstr "Печера Демона"
 
-#, fuzzy
 msgid "Treasure Chest"
-msgstr "Сундук зі скарбом"
+msgstr "Rương Báu vật"
 
 #, fuzzy
 msgid "Faerie Ring"
 msgstr "Коло Фей"
 
-#, fuzzy
 msgid "Campfire"
-msgstr "Вогнище"
+msgstr "Lửa trại"
 
-#, fuzzy
 msgid "Fountain"
-msgstr "Фонтан"
+msgstr "Đài nước"
 
 #, fuzzy
 msgid "Gazebo"
@@ -6809,10 +6916,9 @@ msgstr "Подія"
 msgid "Dragon City"
 msgstr "Місто Драконів"
 
-#, fuzzy
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
-msgstr[0] "Маяк"
+msgstr[0] "Hải đăng"
 msgstr[1] "Маяк"
 msgstr[2] "Маяк"
 
@@ -6823,13 +6929,11 @@ msgstr[0] "Водяне колесо"
 msgstr[1] "Водяні колеса"
 msgstr[2] "Водяні колеса"
 
-#, fuzzy
 msgid "Mines"
-msgstr "Шахти"
+msgstr "Mỏ"
 
-#, fuzzy
 msgid "Monster"
-msgstr "Потвора"
+msgstr "Quái"
 
 #, fuzzy
 msgid "Obelisk"
@@ -6843,9 +6947,8 @@ msgstr "Оазіс"
 msgid "Resource"
 msgstr "Ресурс"
 
-#, fuzzy
 msgid "Sawmill"
-msgstr "Лісопильня"
+msgstr "Xưởng cưa"
 
 #, fuzzy
 msgid "Oracle"
@@ -6883,10 +6986,9 @@ msgstr "Хатина волхвів"
 msgid "Whirlpool"
 msgstr "Водоверть"
 
-#, fuzzy
 msgid "Windmill"
 msgid_plural "Windmills"
-msgstr[0] "Вітряк"
+msgstr[0] "Cối xay gió"
 msgstr[1] "Вітряки"
 msgstr[2] "Вітряки"
 
@@ -6898,9 +7000,8 @@ msgstr "Артефакт"
 msgid "Mermaid"
 msgstr "Русалка"
 
-#, fuzzy
 msgid "Boat"
-msgstr "Човен"
+msgstr "Thuyền"
 
 #, fuzzy
 msgid "Random Ultimate Artifact"
@@ -6953,9 +7054,8 @@ msgstr "Нічого особливого"
 msgid "Mossy Rock"
 msgstr ""
 
-#, fuzzy
 msgid "Watch Tower"
-msgstr "Вартова вежа"
+msgstr "Tháp Canh"
 
 #, fuzzy
 msgid "Tree House"
@@ -7077,9 +7177,8 @@ msgstr "Покинутий корабель"
 msgid "Shipwreck Survivor"
 msgstr "Уцілілий з корабля"
 
-#, fuzzy
 msgid "Bottle"
-msgstr "Пляшка"
+msgstr "Chai"
 
 #, fuzzy
 msgid "Magic Well"
@@ -7104,37 +7203,30 @@ msgstr "Ливарня"
 msgid "Reefs"
 msgstr "Рифи"
 
-#, fuzzy
 msgid "Trees"
-msgstr "Дерева"
+msgstr "Cây"
 
-#, fuzzy
 msgid "Mountains"
-msgstr "Гори"
+msgstr "Núi"
 
-#, fuzzy
 msgid "Volcano"
-msgstr "Вулкан"
+msgstr "Núi lửa"
 
-#, fuzzy
 msgid "Flowers"
-msgstr "Квіти"
+msgstr "Hoa"
 
-#, fuzzy
 msgid "Rock"
-msgstr "Скеля"
+msgstr "Đá"
 
-#, fuzzy
 msgid "Water Lake"
-msgstr "Озеро"
+msgstr "Hồ Nước"
 
 #, fuzzy
 msgid "Mandrake"
 msgstr "Мандрагора"
 
-#, fuzzy
 msgid "Dead Tree"
-msgstr "Мертве дерево"
+msgstr "Cây khô"
 
 #, fuzzy
 msgid "Stump"
@@ -7144,17 +7236,15 @@ msgstr "Пень"
 msgid "Crater"
 msgstr "Кратер"
 
-#, fuzzy
 msgid "Cactus"
-msgstr "Кактус"
+msgstr "Xương rồng"
 
 #, fuzzy
 msgid "Mound"
 msgstr "Курган"
 
-#, fuzzy
 msgid "Dune"
-msgstr "Дюна"
+msgstr "Đụn cát"
 
 #, fuzzy
 msgid "Lava Pool"
@@ -7188,9 +7278,8 @@ msgstr "Бар'єр"
 msgid "Traveller's Tent"
 msgstr "Намет мандрівника"
 
-#, fuzzy
 msgid "Jail"
-msgstr "В'язниця"
+msgstr "Ngục"
 
 #, fuzzy
 msgid "Fire Summoning Altar"
@@ -7216,13 +7305,11 @@ msgstr "Невідома потвора"
 msgid "Unknown Monsters"
 msgstr "Невідомі потвори"
 
-#, fuzzy
 msgid "Peasant"
-msgstr "Cелянин"
+msgstr "Nông dân"
 
-#, fuzzy
 msgid "Peasants"
-msgstr "Cеляни"
+msgstr "Nông dân"
 
 #, fuzzy
 msgid "Archer"
@@ -7616,9 +7703,8 @@ msgstr "Зомбі-мутанти"
 msgid "Mummies"
 msgstr "Мумії"
 
-#, fuzzy
 msgid "Mummy"
-msgstr "Мумія"
+msgstr "Xác ướp"
 
 #, fuzzy
 msgid "Royal Mummies"
@@ -7660,9 +7746,8 @@ msgstr "Могутній лич"
 msgid "Power Liches"
 msgstr "Могутні личі"
 
-#, fuzzy
 msgid "Bone Dragon"
-msgstr "Костяний дракон"
+msgstr "Rồng Xương"
 
 #, fuzzy
 msgid "Bone Dragons"
@@ -7849,7 +7934,7 @@ msgid "No melee penalty"
 msgstr ""
 
 msgid "Dragon"
-msgstr ""
+msgstr "Rồng"
 
 msgid "Undead"
 msgstr ""
@@ -7942,22 +8027,22 @@ msgid "The %{name} increases your attack and defense skills by %{count} each."
 msgstr ""
 
 msgid "Ultimate Shield"
-msgstr ""
+msgstr "Khiên Tối thượng"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
 msgstr ""
 
 msgid "Ultimate Staff"
-msgstr ""
+msgstr "Quyền trượng Tối thượng"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
 msgstr ""
 
 msgid "Ultimate Crown"
-msgstr ""
+msgstr "Vương miện Tối thượng"
 
 msgid "Golden Goose"
-msgstr ""
+msgstr "Ngỗng Vàng"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr ""
@@ -7997,7 +8082,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Valor"
-msgstr ""
+msgstr "Huân chương Anh dũng"
 
 msgid "The %{name} increases your morale."
 msgstr ""
@@ -8008,7 +8093,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Courage"
-msgstr ""
+msgstr "Huân chương Dũng cảm"
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
@@ -8016,7 +8101,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Honor"
-msgstr ""
+msgstr "Huân chương Danh dự"
 
 msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
@@ -8024,7 +8109,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Distinction"
-msgstr ""
+msgstr "Huân chương Xuất chúng"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
@@ -8295,7 +8380,7 @@ msgid ""
 msgstr ""
 
 msgid "Gold Watch"
-msgstr ""
+msgstr "Đồng hồ vàng"
 
 msgid "The %{name} doubles the effectiveness of your hypnotize spells."
 msgstr ""
@@ -8307,7 +8392,7 @@ msgid ""
 msgstr ""
 
 msgid "Skullcap"
-msgstr ""
+msgstr "Mũ đầu lâu"
 
 msgid "The %{name} halves the casting cost of all mind influencing spells."
 msgstr ""
@@ -8318,7 +8403,7 @@ msgid ""
 msgstr ""
 
 msgid "Ice Cloak"
-msgstr ""
+msgstr "Áo Băng"
 
 msgid "The %{name} halves all damage your troops take from cold spells."
 msgstr ""
@@ -8330,7 +8415,7 @@ msgid ""
 msgstr ""
 
 msgid "Fire Cloak"
-msgstr ""
+msgstr "Áo Lửa"
 
 msgid "The %{name} halves all damage your troops take from fire spells."
 msgstr ""
@@ -8547,7 +8632,7 @@ msgid ""
 msgstr ""
 
 msgid "Golden Bow"
-msgstr ""
+msgstr "Cung Vàng"
 
 msgid ""
 "The %{name} eliminates the %{count} percent penalty for your troops shooting "
@@ -8590,7 +8675,7 @@ msgid ""
 msgstr ""
 
 msgid "Wizard's Hat"
-msgstr ""
+msgstr "Mũ Phù thủy"
 
 msgid "The %{name} increases the duration of your spells by %{count} turns."
 msgstr ""
@@ -8748,7 +8833,7 @@ msgid ""
 msgstr ""
 
 msgid "White Pearl"
-msgstr ""
+msgstr "Ngọc trai Trắng"
 
 msgid ""
 "A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
@@ -8756,7 +8841,7 @@ msgid ""
 msgstr ""
 
 msgid "Black Pearl"
-msgstr ""
+msgstr "Ngọc trai Đen"
 
 msgid ""
 "Rumors of a Griffin of unusual size preying upon the countryside lead you to "
@@ -8765,7 +8850,7 @@ msgid ""
 msgstr ""
 
 msgid "Magic Book"
-msgstr ""
+msgstr "Sách Phép"
 
 msgid "The %{name} enables you to cast spells."
 msgstr ""
@@ -9048,7 +9133,7 @@ msgid ""
 msgstr ""
 
 msgid "Fireball"
-msgstr ""
+msgstr "Cầu lửa"
 
 msgid "Fireblast"
 msgstr ""
@@ -9155,7 +9240,7 @@ msgid "Magically increases the defense skill of the selected creatures."
 msgstr ""
 
 msgid "Stoneskin"
-msgstr ""
+msgstr "Thạch bì"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
@@ -9559,25 +9644,25 @@ msgid "south-east"
 msgstr "đông-nam"
 
 msgid "The truth is out there."
-msgstr "Sự thật ngay ngoài kia"
+msgstr "Sự thật ngay ngoài kia."
 
 msgid "The dark side is stronger."
-msgstr "Lực lượng bóng tối đang lớn mạnh"
+msgstr "Lực lượng bóng tối đang lớn mạnh."
 
 msgid "The end of the world is near."
-msgstr "Kết thúc của thế giới đang đến gần"
+msgstr "Kết thúc của thế giới đang đến gần."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr "Xương của Giết Chúa chôn vùi dưới móng của đấu trường"
+msgstr "Xương của Giết Chúa chôn vùi dưới móng của đấu trường."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr "Rồng Đen sẽ mang Khổng Lồ bất cứ ngày nào trong ngày"
+msgstr "Rồng Đen sẽ mang Khổng Lồ bất cứ ngày nào trong ngày."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 
 msgid "An unknown force is being resurrected..."
-msgstr "Một lực lượng bóng tối đang hồi sinh"
+msgstr "Một lực lượng bóng tối đang hồi sinh..."
 
 msgid ""
 "Check the newest version of the game at\n"
