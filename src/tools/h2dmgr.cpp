@@ -126,7 +126,7 @@ namespace
             }
         }
 
-        std::cout << "Total extracted: " << itemsExtracted << std::endl;
+        std::cout << "Total extracted items: " << itemsExtracted << std::endl;
 
         return EXIT_SUCCESS;
     }
@@ -244,7 +244,7 @@ namespace
             return EXIT_FAILURE;
         }
 
-        std::cout << "Total added: " << itemsAdded << std::endl;
+        std::cout << "Total added items: " << itemsAdded << std::endl;
 
         return EXIT_SUCCESS;
     }

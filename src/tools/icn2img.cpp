@@ -180,7 +180,7 @@ int main( int argc, char ** argv )
         }
     }
 
-    std::cout << "Total extracted: " << spritesExtracted << ", failed: " << spritesFailed << std::endl;
+    std::cout << "Total extracted sprites: " << spritesExtracted << ", failed sprites: " << spritesFailed << std::endl;
 
     return ( spritesFailed == 0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

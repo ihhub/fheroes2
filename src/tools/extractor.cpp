@@ -194,7 +194,7 @@ int main( int argc, char ** argv )
         }
     }
 
-    std::cout << "Total extracted: " << itemsExtracted << ", failed: " << itemsFailed << std::endl;
+    std::cout << "Total extracted items: " << itemsExtracted << ", failed items: " << itemsFailed << std::endl;
 
     return ( itemsFailed == 0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
