@@ -560,6 +560,13 @@ void Funds::Trim()
         gold = 0;
 }
 
+Funds Funds::CalculateEventResourceUpdate( const Funds & eventFunds ) const
+{
+    Funds funds = *this + eventFunds;
+    funds.Trim();
+    return funds - *this;
+}
+
 void Funds::Reset()
 {
     wood = 0;

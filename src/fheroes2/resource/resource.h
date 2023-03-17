@@ -96,6 +96,7 @@ public:
     int GetValidItems() const;
     uint32_t GetValidItemsCount() const;
 
+    Funds CalculateEventResourceUpdate( const Funds & eventFunds ) const;
     void Trim(); // set all values to be >= 0
 
     void Reset();
