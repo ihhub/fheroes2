@@ -83,6 +83,8 @@ int main( int argc, char ** argv )
         }
     }
 
+    uint32_t spritesExtracted = 0;
+
     for ( const std::string & inputFileName : inputFileNames ) {
         std::cout << "Processing " << inputFileName << "..." << std::endl;
 
@@ -151,8 +153,12 @@ int main( int argc, char ** argv )
                 std::cerr << inputFileName << ": error saving sprite " << spriteIdx << std::endl;
                 return EXIT_FAILURE;
             }
+
+            ++spritesExtracted;
         }
     }
+
+    std::cout << "Total extracted sprites: " << spritesExtracted << std::endl;
 
     return EXIT_SUCCESS;
 }

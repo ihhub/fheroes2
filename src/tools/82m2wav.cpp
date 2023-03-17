@@ -75,6 +75,8 @@ int main( int argc, char ** argv )
         return EXIT_FAILURE;
     }
 
+    uint32_t tracksConverted = 0;
+
     for ( const std::string & inputFileName : inputFileNames ) {
         std::cout << "Processing " << inputFileName << "..." << std::endl;
 
@@ -169,7 +171,11 @@ int main( int argc, char ** argv )
             std::cerr << "Error writing to file " << outputFilePath << std::endl;
             return EXIT_FAILURE;
         }
+
+        ++tracksConverted;
     }
+
+    std::cout << "Total converted tracks: " << tracksConverted << std::endl;
 
     return EXIT_SUCCESS;
 }

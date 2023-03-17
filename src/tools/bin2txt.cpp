@@ -69,6 +69,8 @@ int main( int argc, char ** argv )
         return EXIT_FAILURE;
     }
 
+    uint32_t filesProcessed = 0;
+
     for ( const std::string & inputFileName : inputFileNames ) {
         std::ifstream inputStream( inputFileName, std::ios_base::binary | std::ios_base::ate );
         if ( !inputStream ) {
@@ -224,7 +226,11 @@ int main( int argc, char ** argv )
             std::cerr << "Error writing to file " << outputFilePath << std::endl;
             return EXIT_FAILURE;
         }
+
+        ++filesProcessed;
     }
+
+    std::cout << "Total processed files: " << filesProcessed << std::endl;
 
     return EXIT_SUCCESS;
 }
