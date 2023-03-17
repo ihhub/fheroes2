@@ -125,10 +125,12 @@ jobs:
       run: |
         7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.tools_package_name }} \
                                .\\"$BUILD_DIR"\\82m2wav.exe \
+                               .\\"$BUILD_DIR"\\bin2txt.exe \
                                .\\"$BUILD_DIR"\\extractor.exe \
                                .\\"$BUILD_DIR"\\h2dmgr.exe \
                                .\\"$BUILD_DIR"\\icn2img.exe \
                                .\\"$BUILD_DIR"\\pal2img.exe \
+                               .\\"$BUILD_DIR"\\til2img.exe \
                                .\\"$BUILD_DIR"\\xmi2midi.exe \
                                LICENSE \
                                .\\docs\\GRAPHICAL_ASSETS.md \

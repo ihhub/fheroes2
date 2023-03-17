@@ -61,10 +61,12 @@ jobs:
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
             ./src/tools/82m2wav
+            ./src/tools/bin2txt
             ./src/tools/extractor
             ./src/tools/h2dmgr
             ./src/tools/icn2img
             ./src/tools/pal2img
+            ./src/tools/til2img
             ./src/tools/xmi2midi
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
@@ -139,10 +141,12 @@ jobs:
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
             ./src/tools/82m2wav
+            ./src/tools/bin2txt
             ./src/tools/extractor
             ./src/tools/h2dmgr
             ./src/tools/icn2img
             ./src/tools/pal2img
+            ./src/tools/til2img
             ./src/tools/xmi2midi
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-arm-sdl2_dev
@@ -210,10 +214,12 @@ jobs:
             ./docs/GRAPHICAL_ASSETS.md
             ./script/agg/extract_agg.sh
             ./src/tools/82m2wav
+            ./src/tools/bin2txt
             ./src/tools/extractor
             ./src/tools/h2dmgr
             ./src/tools/icn2img
             ./src/tools/pal2img
+            ./src/tools/til2img
             ./src/tools/xmi2midi
           release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
