@@ -2327,7 +2327,7 @@ msgid ""
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
-"Tjuvgillet ger infomation om fiendespelare. Tjuvarnas förening kan "
+"Tjuvgillet ger infomation om fiendespelare. Tjuvgillet kan "
 "även erbjuda spaningsinformation om fiendetorn."
 
 msgid "The Tavern increases morale for troops defending the castle."
