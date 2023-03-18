@@ -349,11 +349,11 @@ namespace
             }
         }
 
-        // fight
+        // Fight
         if ( !destroy ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack monster " << troop.GetName() )
 
-            // set the hero's attacked monster tile index and immediately redraw game area to show an attacking sprite for this monster
+            // Set the hero's attacked monster tile index and immediately redraw game area to show an attacking sprite for this monster
             hero.SetAttackedMonsterTileIndex( dst_index );
 
             I.Redraw( Interface::REDRAW_GAMEAREA );
@@ -374,7 +374,6 @@ namespace
                 if ( monstersLeft > 0 ) {
                     tile.MonsterSetCount( monstersLeft );
 
-                    // reset join condition
                     if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
                         Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
                     }
@@ -395,7 +394,7 @@ namespace
             tile.MonsterSetCount( 0 );
         }
 
-        // clear the hero's attacked monster tile index
+        // Clear the hero's attacked monster tile index
         hero.SetAttackedMonsterTileIndex( -1 );
     }
 

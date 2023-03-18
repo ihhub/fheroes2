@@ -456,21 +456,32 @@ namespace
             destroy = true;
         }
 
-        // fight
+        // Fight
         if ( !destroy ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacked monster " << troop.GetName() )
+
             Army army( tile );
+
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
+
                 destroy = true;
             }
             else {
                 AIBattleLose( hero, res, true );
-                tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
-                if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
-                    Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+
+                const uint32_t monstersLeft = army.GetCountMonsters( troop.GetMonster() );
+                if ( monstersLeft > 0 ) {
+                    tile.MonsterSetCount( monstersLeft );
+
+                    if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
+                        Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+                    }
+                }
+                else {
+                    destroy = true;
                 }
             }
         }
