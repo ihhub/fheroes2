@@ -28,7 +28,7 @@
     </plurals>
     <plurals name="activity_save_file_manager_delete_confirmation_message">
         <item quantity="one">Czy na pewno chcesz usunąć wybrany plik?</item>
-        <item quantity="other">Czy na pewno chcesz usunąć %d wybranych plików?</item>
+        <item quantity="other">Czy na pewno chcesz usunąć %d pliki/plików?</item>
     </plurals>
     <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Tak</string>
     <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">Nie</string>
