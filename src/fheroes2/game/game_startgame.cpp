@@ -603,6 +603,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
         }
     }
 
+    const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
+
+    if ( !isHotSeatGame ) {
+        // Fully update fog directions if there will be only one human player.
+        Interface::GameArea::updateMapFogDirections();
+    }
+
     while ( res == fheroes2::GameMode::END_TURN ) {
         if ( !loadedFromSave ) {
             world.NewDay();
@@ -640,12 +647,15 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     // Reset environment sounds and music theme at the beginning of the human turn
                     AudioManager::ResetAudio();
 
-                    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
+                    if ( isHotSeatGame ) {
                         // we need to hide the world map in hot seat mode
                         conf.SetCurrentColor( -1 );
 
                         iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
+
+                        // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
+
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
                         Interface::GameArea::updateMapFogDirections();
 
@@ -702,11 +712,12 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     Redraw();
                     display.render();
 
+                    const bool isFriendlyAI = isHotSeatGame && Players::isFriends( player->GetColor(), Players::HumanColors() );
+
 #if defined( WITH_DEBUG )
-                    if ( player->isAIAutoControlMode()
-                         || ( conf.IsGameType( Game::TYPE_HOTSEAT ) && Players::isFriends( player->GetColor(), Players::HumanColors() ) ) ) {
+                    if ( isFriendlyAI || player->isAIAutoControlMode() ) {
 #else
-                    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) && Players::isFriends( player->GetColor(), Players::HumanColors() ) ) {
+                    if ( isFriendlyAI ) {
 #endif
                         // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
                         Interface::GameArea::updateMapFogDirections();
@@ -780,8 +791,13 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     radar.SetHide( false );
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
-    // Fully update fog directions at the start of player's move.
-    Interface::GameArea::updateMapFogDirections();
+
+    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
+        // TODO: Cache fog directions for all Human players in array to not perform full update at every turn start.
+
+        // Fully update fog directions at the start of player's move in Hot Seat mode as the previous move could be done by opposing player.
+        Interface::GameArea::updateMapFogDirections();
+    }
 
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 

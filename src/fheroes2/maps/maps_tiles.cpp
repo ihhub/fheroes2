@@ -2442,38 +2442,6 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     return spriteIndices;
 }
 
-bool Maps::Tiles::isFogAllAround( const int color ) const
-{
-    const int32_t center = GetIndex();
-    const fheroes2::Point mp = Maps::GetPoint( center );
-    const int32_t width = world.w();
-    const int32_t height = world.h();
-
-    // Verify all tiles around the current one with radius of 2 to cover moving hero case as well.
-    for ( int32_t y = -2; y < 3; ++y ) {
-        const int32_t offsetY = mp.y + y;
-        if ( offsetY < 0 || offsetY >= height )
-            continue;
-
-        const int32_t centerY = center + y * width;
-
-        for ( int32_t x = -2; x < 3; ++x ) {
-            if ( x == 0 && y == 0 )
-                continue;
-
-            const int32_t offsetX = mp.x + x;
-            if ( offsetX < 0 || offsetX >= width )
-                continue;
-
-            if ( !world.GetTiles( centerY + x ).isFog( color ) ) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
 void Maps::Tiles::ClearFog( const int colors )
 {
     _fogColors &= ~colors;
@@ -2499,15 +2467,11 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
 
             // Do not update tile with already cleared fog direction.
             if ( tile.getFogDirection() != Direction::UNKNOWN ) {
+                // TODO: Use world size to calculate fog directions without use of "isValidDirection" and "GetDirectionIndex".
                 tile.updateFogDirection( color );
             }
         }
     }
-}
-
-void Maps::Tiles::updateFogDirection( const int32_t color )
-{
-    _fogDirection = getFogDirection( color );
 }
 
 uint16_t Maps::Tiles::getFogDirection( const int32_t color ) const
