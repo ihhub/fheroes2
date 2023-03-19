@@ -2465,9 +2465,8 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
         for ( int32_t y = minY; y < maxY; ++y ) {
             Maps::Tiles & tile = world.GetTiles( x, y );
 
-            // Do not update tile with already cleared fog direction.
+            // Do not update tile with already cleared fog direction on update.
             if ( tile.getFogDirection() != Direction::UNKNOWN ) {
-                // TODO: Use world size to calculate fog directions without use of "isValidDirection" and "GetDirectionIndex".
                 tile.updateFogDirection( color );
             }
         }
@@ -2482,9 +2481,13 @@ uint16_t Maps::Tiles::getFogDirection( const int32_t color ) const
     }
 
     uint16_t fogDirection = Direction::CENTER;
+    const int32_t worldMaxIndex = static_cast<int32_t>( world.getSize() ) - 1;
 
     for ( const int32_t direction : Direction::All() ) {
-        if ( !isValidDirection( _index, direction ) || world.GetTiles( GetDirectionIndex( _index, direction ) ).isFog( color ) ) {
+        const int32_t fogTileIndex = GetDirectionIndex( _index, direction );
+
+        // If fog tile index is outside the world borders we consider it as a fog.
+        if ( ( fogTileIndex < 0 ) || ( fogTileIndex > worldMaxIndex ) || world.GetTiles( fogTileIndex ).isFog( color ) ) {
             fogDirection |= direction;
         }
     }
