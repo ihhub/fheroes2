@@ -21,6 +21,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -69,9 +70,16 @@ int main( int argc, char ** argv )
     // We do not need to care about the transform layer.
     output._disableTransformLayer();
 
+    // These color indexes are from PAL::GetCyclingPalette() method.
+    const std::set<uint8_t> cyclingColors{ 214, 215, 216, 217, 218, 219, 220, 221, 231, 232, 233, 234, 235, 238, 239, 240, 241 };
+
     for ( uint8_t y = 0; y < 16; ++y ) {
         for ( uint8_t x = 0; x < 16; ++x ) {
             fheroes2::Fill( output, x * 16, y * 16, 16, 16, x + y * 16 );
+
+            if ( cyclingColors.count( x + y * 16 ) > 0 ) {
+                fheroes2::Fill( output, x * 16, y * 16, 4, 4, 0 );
+            }
         }
     }
 
