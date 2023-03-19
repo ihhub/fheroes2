@@ -113,6 +113,7 @@ struct HeroRow
         armyBar->SetBackground( { 41, 53 }, fheroes2::GetColorId( 72, 28, 0 ) );
         armyBar->setTableSize( { 5, 1 } );
         armyBar->setInBetweenItemsOffset( { -1, 0 } );
+        armyBar->setTroopWindowOffsetY( -60 );
 
         artifactsBar = std::make_unique<ArtifactsBar>( hero, true, false, false, true, nullptr );
         artifactsBar->setTableSize( { 7, 2 } );
