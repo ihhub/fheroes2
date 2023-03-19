@@ -351,7 +351,7 @@ namespace
 
         // Fight
         if ( !destroy ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack monster " << troop.GetName() )
+            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attacks monster " << troop.GetName() )
 
             // Set the hero's attacked monster tile index and immediately redraw game area to show an attacking sprite for this monster
             hero.SetAttackedMonsterTileIndex( dst_index );
@@ -370,7 +370,20 @@ namespace
             else {
                 BattleLose( hero, res, true );
 
+                // The army can include both the original monsters and their upgraded version
                 const uint32_t monstersLeft = army.getTotalCount();
+#ifndef NDEBUG
+                const Monster originalMonster = troop.GetMonster();
+                const Monster upgradedMonster = originalMonster.GetUpgrade();
+
+                if ( upgradedMonster == originalMonster ) {
+                    assert( monstersLeft == army.GetCountMonsters( originalMonster ) );
+                }
+                else {
+                    assert( monstersLeft == army.GetCountMonsters( originalMonster ) + army.GetCountMonsters( upgradedMonster ) );
+                }
+#endif
+
                 if ( monstersLeft > 0 ) {
                     tile.MonsterSetCount( monstersLeft );
 
@@ -1966,7 +1979,10 @@ namespace
                 else {
                     BattleLose( hero, result, true );
 
+                    // The army should include only the original monsters
                     const uint32_t monstersLeft = army.getTotalCount();
+                    assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
+
                     if ( monstersLeft > 0 ) {
                         capture = false;
 

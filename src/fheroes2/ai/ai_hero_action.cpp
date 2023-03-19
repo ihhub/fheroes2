@@ -458,7 +458,7 @@ namespace
 
         // Fight
         if ( !destroy ) {
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacked monster " << troop.GetName() )
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacks monster " << troop.GetName() )
 
             Army army( tile );
 
@@ -472,7 +472,20 @@ namespace
             else {
                 AIBattleLose( hero, res, true );
 
+                // The army can include both the original monsters and their upgraded version
                 const uint32_t monstersLeft = army.getTotalCount();
+#ifndef NDEBUG
+                const Monster originalMonster = troop.GetMonster();
+                const Monster upgradedMonster = originalMonster.GetUpgrade();
+
+                if ( upgradedMonster == originalMonster ) {
+                    assert( monstersLeft == army.GetCountMonsters( originalMonster ) );
+                }
+                else {
+                    assert( monstersLeft == army.GetCountMonsters( originalMonster ) + army.GetCountMonsters( upgradedMonster ) );
+                }
+#endif
+
                 if ( monstersLeft > 0 ) {
                     tile.MonsterSetCount( monstersLeft );
 
@@ -600,7 +613,10 @@ namespace
                 else {
                     AIBattleLose( hero, result, true );
 
+                    // The army should include only the original monsters
                     const uint32_t monstersLeft = army.getTotalCount();
+                    assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
+
                     if ( monstersLeft > 0 ) {
                         capture = false;
 
