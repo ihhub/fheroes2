@@ -49,7 +49,7 @@ public:
     void SetBackground( const fheroes2::Size & sz, const uint8_t fillColor );
     void SetArmy( Army * );
 
-    void setTroopWindowOffsetY(int32_t offsetY);
+    void setTroopWindowOffsetY( int32_t offsetY );
 
     bool isValid() const;
 

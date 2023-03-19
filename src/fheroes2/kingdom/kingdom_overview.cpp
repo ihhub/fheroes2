@@ -381,7 +381,7 @@ struct CstlRow
         garrisonArmyBar->SetBackground( { 41, 41 }, fill );
         garrisonArmyBar->setTableSize( { 5, 1 } );
         garrisonArmyBar->setInBetweenItemsOffset( { -1, 0 } );
-        garrisonArmyBar->setTroopWindowOffsetY(-60);
+        garrisonArmyBar->setTroopWindowOffsetY( -60 );
 
         Heroes * hero = world.GetHero( *castle );
 

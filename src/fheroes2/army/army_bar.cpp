@@ -178,7 +178,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
-    , troopInfoWindowOffsetY(0)
+    , troopInfoWindowOffsetY( 0 )
 {
     if ( use_mini_sprite )
         SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
@@ -210,7 +210,8 @@ void ArmyBar::SetArmy( Army * ptr )
     SetContentItems();
 }
 
-void ArmyBar::setTroopWindowOffsetY(int32_t offsetY) {
+void ArmyBar::setTroopWindowOffsetY( int32_t offsetY )
+{
     troopInfoWindowOffsetY = offsetY;
 }
 

@@ -21,13 +21,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "buildinginfo.h"
+
 #include <algorithm>
 #include <cassert>
 
 #include "agg_image.h"
 #include "army_troop.h"
 #include "audio_manager.h"
-#include "buildinginfo.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
