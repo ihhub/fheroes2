@@ -2463,7 +2463,7 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
     const int32_t maxX = std::min( maxPos.x + 1, worldWidth );
     const int32_t maxY = std::min( maxPos.y + 1, world.h() );
 
-    // Fog data range is 1 tile bigger from each side as for the fog directions we have to check all tiles around.
+    // Fog data range is 1 tile bigger from each side as for the fog directions we have to check all tiles around each tile in the area.
     const int32_t fogMinX = minX - 1;
     const int32_t fogMinY = minY - 1;
     const int32_t fogMaxX = maxX + 1;
@@ -2481,6 +2481,7 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
             const int32_t fogTileIndex = x + y * worldWidth;
 
             if ( ( fogTileIndex < 0 ) || ( fogTileIndex > worldMaxIndex ) ) {
+                // The 'isFog' tiles outside the world borders are already set to true so we skip them.
                 ++isFogIter;
                 continue;
             }
@@ -2491,7 +2492,7 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
         }
     }
 
-    // Set the pointer to 'isFog' data to correspond the first tile in given area: skip the upper row of 'isFog' and the left column.
+    // Set the iterator to 'isFog' data to correspond the first tile in given area: skip the upper row of 'isFog' and the left column.
     isFogIter = isFog.begin() + fogWidth + 1;
 
     for ( int32_t y = minY; y < maxY; ++y ) {
@@ -2509,7 +2510,7 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
             // The tile is under the fog so its CENTER direction for fog is true.
             uint16_t fogDirection = Direction::CENTER;
 
-            // Check all tiles around for fog and if it is true - logically add the direction to this tile.
+            // Check all tiles around for fog and if it is true then logically add the direction to this tile.
             if ( *( isFogIter - fogWidth - 1 ) ) {
                 fogDirection |= Direction::TOP_LEFT;
             }
@@ -2547,7 +2548,7 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
             ++isFogIter;
         }
 
-        // The 'isFog' data has extra columns from the right and the left sides so we need to skip them when going to the next row.
+        // The 'isFog' data has extra columns from the right and the left sides comparing to the given tiles area so we need to skip them when going to the next row.
         isFogIter += 2;
     }
 }
