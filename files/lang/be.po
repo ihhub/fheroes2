@@ -88,7 +88,6 @@ msgstr "ПАЛЕПШЫЦЬ"
 msgid "RESTART"
 msgstr "НАНОВА"
 
-
 msgid "S"
 msgstr ""
 
