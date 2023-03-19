@@ -79,6 +79,8 @@ protected:
     friend StreamBase & operator<<( StreamBase &, const Troop & );
     friend StreamBase & operator>>( StreamBase &, Troop & );
 
+    static std::string GetSpeedString( uint32_t speed );
+
     uint32_t count;
 };
 
