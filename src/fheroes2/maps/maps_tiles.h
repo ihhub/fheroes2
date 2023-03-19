@@ -328,7 +328,6 @@ namespace Maps
             return ( _fogColors & colors ) == colors;
         }
 
-        bool isFogAllAround( const int color ) const;
         void ClearFog( const int colors );
 
         void MonsterSetCount( uint32_t count );
