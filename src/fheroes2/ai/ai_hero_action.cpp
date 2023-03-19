@@ -600,33 +600,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
-            bool capture = true;
-
-            if ( tile.isCaptureObjectProtected() ) {
-                Army army( tile );
-
-                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
-
-                if ( result.AttackerWins() ) {
-                    hero.IncreaseExperience( result.GetExperienceAttacker() );
-                }
-                else {
-                    AIBattleLose( hero, result, true );
-
-                    // The army should include only the original monsters
-                    const uint32_t monstersLeft = army.getTotalCount();
-                    assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
-
-                    if ( monstersLeft > 0 ) {
-                        capture = false;
-
-                        Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
-                        troop.SetCount( monstersLeft );
-                    }
-                }
-            }
-
-            if ( capture ) {
+            auto captureObject = [&hero, objectType, &tile]() {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
 
@@ -637,6 +611,36 @@ namespace
                 }
 
                 tile.QuantitySetColor( hero.GetColor() );
+            };
+
+            if ( tile.isCaptureObjectProtected() ) {
+                Army army( tile );
+
+                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
+
+                if ( result.AttackerWins() ) {
+                    hero.IncreaseExperience( result.GetExperienceAttacker() );
+
+                    captureObject();
+                }
+                else {
+                    // The army should include only the original monsters
+                    const uint32_t monstersLeft = army.getTotalCount();
+                    assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
+
+                    Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
+                    troop.SetCount( monstersLeft );
+
+                    // We can still capture an object if we have defeated all the guards, even if the hero has lost the battle
+                    if ( monstersLeft == 0 ) {
+                        captureObject();
+                    }
+
+                    AIBattleLose( hero, result, true );
+                }
+            }
+            else {
+                captureObject();
             }
         }
 

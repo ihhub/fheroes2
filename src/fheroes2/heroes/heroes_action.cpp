@@ -1904,95 +1904,8 @@ namespace
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        std::string header;
-        std::string body;
-        int32_t resource = Resource::UNKNOWN;
-
-        switch ( objectType ) {
-        case MP2::OBJ_ALCHEMIST_LAB:
-            resource = Resource::MERCURY;
-            header = MP2::StringObject( objectType );
-            body = _( "You have taken control of the local Alchemist shop. It will provide you with %{count} unit of Mercury per day." );
-            break;
-
-        case MP2::OBJ_SAWMILL:
-            resource = Resource::WOOD;
-            header = MP2::StringObject( objectType );
-            body = _( "You gain control of a sawmill. It will provide you with %{count} units of wood per day." );
-            break;
-
-        case MP2::OBJ_ABANDONED_MINE:
-        case MP2::OBJ_MINES: {
-            resource = tile.QuantityResourceCount().first;
-            header = Maps::GetMinesName( resource );
-
-            if ( objectType == MP2::OBJ_ABANDONED_MINE && Maps::getSpellIdFromTile( tile ) != Spell::HAUNT ) {
-                body = _( "You beat the Ghosts and are able to restore the mine to production." );
-                break;
-            }
-
-            switch ( resource ) {
-            case Resource::ORE:
-                body = _( "You gain control of an ore mine. It will provide you with %{count} units of ore per day." );
-                break;
-            case Resource::SULFUR:
-                body = _( "You gain control of a sulfur mine. It will provide you with %{count} unit of sulfur per day." );
-                break;
-            case Resource::CRYSTAL:
-                body = _( "You gain control of a crystal mine. It will provide you with %{count} unit of crystal per day." );
-                break;
-            case Resource::GEMS:
-                body = _( "You gain control of a gem mine. It will provide you with %{count} unit of gems per day." );
-                break;
-            case Resource::GOLD:
-                body = _( "You gain control of a gold mine. It will provide you with %{count} gold per day." );
-                break;
-            default:
-                break;
-            }
-            break;
-        }
-
-        case MP2::OBJ_LIGHTHOUSE:
-            header = MP2::StringObject( objectType );
-            body = _( "The lighthouse is now under your control, and all of your ships will now move further each day." );
-            break;
-
-        default:
-            body = _( "You gain control of a %{name}." );
-            header = MP2::StringObject( objectType );
-            StringReplace( body, "%{name}", MP2::StringObject( objectType ) );
-            break;
-        }
-
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
-            bool capture = true;
-
-            if ( tile.isCaptureObjectProtected() ) {
-                Army army( tile );
-
-                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
-
-                if ( result.AttackerWins() ) {
-                    hero.IncreaseExperience( result.GetExperienceAttacker() );
-                }
-                else {
-                    BattleLose( hero, result, true );
-
-                    // The army should include only the original monsters
-                    const uint32_t monstersLeft = army.getTotalCount();
-                    assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
-
-                    if ( monstersLeft > 0 ) {
-                        capture = false;
-
-                        Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
-                        troop.SetCount( monstersLeft );
-                    }
-                }
-            }
-
-            if ( capture ) {
+            auto captureObject = [&hero, objectType, dst_index, &tile]() {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
 
@@ -2037,6 +1950,67 @@ namespace
 
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
+                std::string header;
+                std::string body;
+                int32_t resource = Resource::UNKNOWN;
+
+                switch ( objectType ) {
+                case MP2::OBJ_ALCHEMIST_LAB:
+                    resource = Resource::MERCURY;
+                    header = MP2::StringObject( objectType );
+                    body = _( "You have taken control of the local Alchemist shop. It will provide you with %{count} unit of Mercury per day." );
+                    break;
+
+                case MP2::OBJ_SAWMILL:
+                    resource = Resource::WOOD;
+                    header = MP2::StringObject( objectType );
+                    body = _( "You gain control of a sawmill. It will provide you with %{count} units of wood per day." );
+                    break;
+
+                case MP2::OBJ_ABANDONED_MINE:
+                case MP2::OBJ_MINES: {
+                    resource = tile.QuantityResourceCount().first;
+                    header = Maps::GetMinesName( resource );
+
+                    if ( objectType == MP2::OBJ_ABANDONED_MINE && Maps::getSpellIdFromTile( tile ) != Spell::HAUNT ) {
+                        body = _( "You beat the Ghosts and are able to restore the mine to production." );
+                        break;
+                    }
+
+                    switch ( resource ) {
+                    case Resource::ORE:
+                        body = _( "You gain control of an ore mine. It will provide you with %{count} units of ore per day." );
+                        break;
+                    case Resource::SULFUR:
+                        body = _( "You gain control of a sulfur mine. It will provide you with %{count} unit of sulfur per day." );
+                        break;
+                    case Resource::CRYSTAL:
+                        body = _( "You gain control of a crystal mine. It will provide you with %{count} unit of crystal per day." );
+                        break;
+                    case Resource::GEMS:
+                        body = _( "You gain control of a gem mine. It will provide you with %{count} unit of gems per day." );
+                        break;
+                    case Resource::GOLD:
+                        body = _( "You gain control of a gold mine. It will provide you with %{count} gold per day." );
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                }
+
+                case MP2::OBJ_LIGHTHOUSE:
+                    header = MP2::StringObject( objectType );
+                    body = _( "The lighthouse is now under your control, and all of your ships will now move further each day." );
+                    break;
+
+                default:
+                    body = _( "You gain control of a %{name}." );
+                    header = MP2::StringObject( objectType );
+                    StringReplace( body, "%{name}", MP2::StringObject( objectType ) );
+                    break;
+                }
+
                 {
                     const MusicalEffectPlayer musicalEffectPlayer;
 
@@ -2052,6 +2026,36 @@ namespace
                         DialogCaptureResourceObject( header, body, resource );
                     }
                 }
+            };
+
+            if ( tile.isCaptureObjectProtected() ) {
+                Army army( tile );
+
+                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
+
+                if ( result.AttackerWins() ) {
+                    hero.IncreaseExperience( result.GetExperienceAttacker() );
+
+                    captureObject();
+                }
+                else {
+                    // The army should include only the original monsters
+                    const uint32_t monstersLeft = army.getTotalCount();
+                    assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
+
+                    Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
+                    troop.SetCount( monstersLeft );
+
+                    // We can still capture an object if we have defeated all the guards, even if the hero has lost the battle
+                    if ( monstersLeft == 0 ) {
+                        captureObject();
+                    }
+
+                    BattleLose( hero, result, true );
+                }
+            }
+            else {
+                captureObject();
             }
         }
 
