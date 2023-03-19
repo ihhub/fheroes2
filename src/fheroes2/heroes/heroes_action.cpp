@@ -1900,26 +1900,16 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
 
-    void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dstIndex )
     {
-        Maps::Tiles & tile = world.GetTiles( dst_index );
+        Maps::Tiles & tile = world.GetTiles( dstIndex );
 
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
-            auto captureObject = [&hero, objectType, dst_index, &tile]() {
-                // Clear any metadata related to spells
-                tile.clearAdditionalMetadata();
-
-                // Restore the abandoned mine
-                if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
-                    Maps::Tiles::UpdateAbandonedMineSprite( tile );
-                    hero.SetMapsObject( MP2::OBJ_MINES );
-                }
-
-                tile.QuantitySetColor( hero.GetColor() );
-
+            auto updateRadar = [objectType, dstIndex]() {
                 // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
                 // Set the radar update ROI according to captured object size and position.
-                fheroes2::Rect radarRoi( Maps::GetPoint( dst_index ), { 1, 1 } );
+                fheroes2::Rect radarRoi( Maps::GetPoint( dstIndex ), { 1, 1 } );
+
                 switch ( objectType ) {
                 case MP2::OBJ_SAWMILL:
                     radarRoi.x -= 2;
@@ -1945,10 +1935,32 @@ namespace
 
                 Interface::Basic & I = Interface::Basic::Get();
 
-                // Update the color of captured object on radar.
+                // Update the object on radar.
                 I.GetRadar().SetRenderArea( radarRoi );
-
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+            };
+
+            auto removeProtection = [&hero, objectType, &tile, &updateRadar]( const bool isUpdateRadar ) {
+                // Clear any metadata related to spells
+                tile.clearAdditionalMetadata();
+
+                // Restore the abandoned mine
+                if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
+                    Maps::Tiles::UpdateAbandonedMineSprite( tile );
+                    hero.SetMapsObject( MP2::OBJ_MINES );
+                }
+
+                if ( isUpdateRadar ) {
+                    updateRadar();
+                }
+            };
+
+            auto captureObject = [&hero, objectType, &tile, &updateRadar, &removeProtection]() {
+                removeProtection( false );
+
+                tile.QuantitySetColor( hero.GetColor() );
+
+                updateRadar();
 
                 std::string header;
                 std::string body;
@@ -2031,7 +2043,7 @@ namespace
             if ( tile.isCaptureObjectProtected() ) {
                 Army army( tile );
 
-                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
+                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
 
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
@@ -2043,12 +2055,13 @@ namespace
                     const uint32_t monstersLeft = army.getTotalCount();
                     assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
 
-                    Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
+                    Troop & troop = world.GetCapturedObject( dstIndex ).GetTroop();
                     troop.SetCount( monstersLeft );
 
-                    // We can still capture an object if we have defeated all the guards, even if the hero has lost the battle
+                    // If all the guards are defeated, but the hero has lost the battle,
+                    // just remove the protection from the object
                     if ( monstersLeft == 0 ) {
-                        captureObject();
+                        removeProtection( true );
                     }
 
                     BattleLose( hero, result, true );

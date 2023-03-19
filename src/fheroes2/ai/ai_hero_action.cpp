@@ -595,12 +595,12 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
-    void AIToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void AIToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dstIndex )
     {
-        Maps::Tiles & tile = world.GetTiles( dst_index );
+        Maps::Tiles & tile = world.GetTiles( dstIndex );
 
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
-            auto captureObject = [&hero, objectType, &tile]() {
+            auto removeProtection = [&hero, objectType, &tile]() {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
 
@@ -609,6 +609,10 @@ namespace
                     Maps::Tiles::UpdateAbandonedMineSprite( tile );
                     hero.SetMapsObject( MP2::OBJ_MINES );
                 }
+            };
+
+            auto captureObject = [&hero, &tile, &removeProtection]() {
+                removeProtection();
 
                 tile.QuantitySetColor( hero.GetColor() );
             };
@@ -616,7 +620,7 @@ namespace
             if ( tile.isCaptureObjectProtected() ) {
                 Army army( tile );
 
-                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
+                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
 
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
@@ -628,12 +632,13 @@ namespace
                     const uint32_t monstersLeft = army.getTotalCount();
                     assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
 
-                    Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
+                    Troop & troop = world.GetCapturedObject( dstIndex ).GetTroop();
                     troop.SetCount( monstersLeft );
 
-                    // We can still capture an object if we have defeated all the guards, even if the hero has lost the battle
+                    // If all the guards are defeated, but the hero has lost the battle,
+                    // just remove the protection from the object
                     if ( monstersLeft == 0 ) {
-                        captureObject();
+                        removeProtection();
                     }
 
                     AIBattleLose( hero, result, true );
