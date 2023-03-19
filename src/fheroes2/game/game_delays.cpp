@@ -21,10 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game_delays.h"
+
 #include <cassert>
 #include <memory>
 
-#include "game_delays.h"
 #include "gamedefs.h"
 #include "settings.h"
 #include "timing.h"
@@ -32,6 +33,8 @@
 namespace
 {
     std::vector<fheroes2::TimeDelay> delays( Game::LAST_DELAY + 1, fheroes2::TimeDelay( 0 ) );
+
+    static_assert( ( DEFAULT_BATTLE_SPEED >= 0 ) && ( DEFAULT_BATTLE_SPEED < 10 ) );
 
     const double battleSpeedAdjustment = 1.0 / static_cast<double>( 10 - DEFAULT_BATTLE_SPEED );
 
@@ -171,7 +174,7 @@ void Game::passCustomAnimationDelay( const uint64_t delayMs )
 
 void Game::setCustomUnitMovementDelay( const uint64_t delayMs )
 {
-    delays[Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY].setDelay( delayMs );
+    delays[Game::DelayType::CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY].setDelay( delayMs > 0 ? delayMs : 1 );
 }
 
 void Game::UpdateGameSpeed()
@@ -181,19 +184,20 @@ void Game::UpdateGameSpeed()
     SetupHeroMovement( conf.HeroesMoveSpeed(), delays[CURRENT_HERO_DELAY], humanHeroMultiplier );
     SetupHeroMovement( conf.AIMoveSpeed(), delays[CURRENT_AI_DELAY], aiHeroMultiplier );
 
-    const double adjustedBattleSpeed = ( 10 - conf.BattleSpeed() ) * battleSpeedAdjustment;
+    const int32_t battleSpeed = conf.BattleSpeed();
+    const double adjustedBattleSpeed = ( battleSpeed < 10 ) ? ( ( 10 - battleSpeed ) * battleSpeedAdjustment ) : ( battleSpeedAdjustment / 2 );
+
     delays[BATTLE_FRAME_DELAY].setDelay( static_cast<uint64_t>( 120 * adjustedBattleSpeed ) );
     delays[BATTLE_MISSILE_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
     delays[BATTLE_SPELL_DELAY].setDelay( static_cast<uint64_t>( 75 * adjustedBattleSpeed ) );
-    delays[BATTLE_IDLE_DELAY].setDelay( static_cast<uint64_t>( 150 * adjustedBattleSpeed ) );
     delays[BATTLE_DISRUPTING_DELAY].setDelay( static_cast<uint64_t>( 25 * adjustedBattleSpeed ) );
     delays[BATTLE_CATAPULT_DELAY].setDelay( static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
     delays[BATTLE_CATAPULT_BOULDER_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
     delays[BATTLE_CATAPULT_CLOUD_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
     delays[BATTLE_BRIDGE_DELAY].setDelay( static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
+    delays[BATTLE_IDLE_DELAY].setDelay( static_cast<uint64_t>( 150 * adjustedBattleSpeed ) );
     delays[BATTLE_OPPONENTS_DELAY].setDelay( static_cast<uint64_t>( 350 * adjustedBattleSpeed ) );
-
-    delays[BATTLE_FLAGS_DELAY].setDelay( static_cast<uint64_t>( ( adjustedBattleSpeed < 0.1 ) ? 25 : 250 * adjustedBattleSpeed ) );
+    delays[BATTLE_FLAGS_DELAY].setDelay( static_cast<uint64_t>( 250 * adjustedBattleSpeed ) );
 }
 
 int Game::HumanHeroAnimSkip()

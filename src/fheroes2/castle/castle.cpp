@@ -2490,18 +2490,15 @@ bool Castle::BuyBoat() const
 
     if ( MP2::OBJ_NONE == left.GetObject() && left.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-
-        left.setBoat( Direction::RIGHT );
+        left.setBoat( Direction::RIGHT, kingdom.GetColor() );
     }
     else if ( MP2::OBJ_NONE == right.GetObject() && right.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-
-        right.setBoat( Direction::RIGHT );
+        right.setBoat( Direction::RIGHT, kingdom.GetColor() );
     }
     else if ( MP2::OBJ_NONE == middle.GetObject() && middle.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-
-        middle.setBoat( Direction::RIGHT );
+        middle.setBoat( Direction::RIGHT, kingdom.GetColor() );
     }
 
     return true;
@@ -2558,7 +2555,7 @@ uint32_t Castle::GetGrownMonthOf()
     return GameStatic::GetCastleGrownMonthOf();
 }
 
-void Castle::Scoute() const
+void Castle::Scout() const
 {
     Maps::ClearFog( GetIndex(), GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ), GetColor() );
 }
@@ -2691,11 +2688,11 @@ void AllCastles::AddCastle( Castle * castle )
     _castleTiles[center + fheroes2::Point( 0, -3 )] = id;
 }
 
-void AllCastles::Scoute( int colors ) const
+void AllCastles::Scout( int colors ) const
 {
     for ( auto it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
-            ( *it )->Scoute();
+            ( *it )->Scout();
 }
 
 /* pack castle */

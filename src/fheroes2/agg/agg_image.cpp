@@ -49,6 +49,7 @@
 #include "til.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_font.h"
 #include "ui_language.h"
 #include "ui_text.h"
@@ -353,86 +354,6 @@ namespace
         }
     }
 
-    fheroes2::Image resizeButton( const fheroes2::Image & original, const int32_t width )
-    {
-        const int32_t height = original.height();
-        assert( height > 0 );
-
-        fheroes2::Image output;
-        output.resize( width, height );
-        output.reset();
-
-        const int32_t originalWidth = original.width();
-        if ( originalWidth >= width ) {
-            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height );
-            const int32_t secondHalf = width - width / 2;
-            fheroes2::Copy( original, originalWidth - secondHalf, 0, output, width - secondHalf, 0, secondHalf, height );
-        }
-        else {
-            const int32_t middleWidth = originalWidth / 3;
-            const int32_t overallMiddleWidth = width - middleWidth * 2;
-            const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
-            const int32_t middleLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
-
-            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, height );
-            int32_t offsetX = middleWidth;
-            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
-                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, height );
-                offsetX += middleWidth;
-            }
-
-            if ( middleLeftOver > 0 ) {
-                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleLeftOver, height );
-                offsetX += middleLeftOver;
-            }
-
-            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
-            assert( offsetX + rightPartWidth == width );
-
-            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, height );
-        }
-
-        return output;
-    }
-
-    // The height of text area is only 16 pixels.
-    void getCustomNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const bool isEvilInterface, int32_t width, fheroes2::Point & releasedOffset,
-                                fheroes2::Point & pressedOffset )
-    {
-        assert( width > 0 );
-
-        releasedOffset = { 7, 5 };
-        pressedOffset = { 6, 6 };
-
-        // The actual button sprite is 10 pixels longer.
-        width += 10;
-
-        const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
-        const int32_t minimumButtonSize = 16;
-        const int32_t maximumButtonSize = 200; // Why is such a wide button needed?
-        width = std::clamp( width, minimumButtonSize, maximumButtonSize );
-
-        const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( icnId, 0 );
-        const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( icnId, 1 );
-
-        const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
-
-        fheroes2::Image temp = resizeButton( originalReleased, width );
-        released.resize( temp.width(), temp.height() );
-        assert( background.width() >= temp.width() && background.height() >= temp.height() );
-        fheroes2::Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
-        fheroes2::Blit( temp, released );
-        released.setPosition( originalReleased.x(), originalReleased.y() );
-
-        temp = resizeButton( originalPressed, width );
-        pressed.resize( temp.width(), temp.height() );
-        assert( background.width() >= temp.width() && background.height() >= temp.height() );
-        fheroes2::Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
-        fheroes2::Blit( temp, pressed );
-        pressed.setPosition( originalPressed.x(), originalPressed.y() );
-    }
-
     uint8_t getButtonFillingColor( const bool isReleasedState, const bool isGoodInterface = true )
     {
         if ( isGoodInterface ) {
@@ -469,11 +390,12 @@ namespace
     {
         fheroes2::Point releasedOffset;
         fheroes2::Point pressedOffset;
-        getCustomNormalButton( released, pressed, isEvilInterface, textWidth, releasedOffset, pressedOffset );
+        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, textWidth, releasedOffset, pressedOffset );
 
         const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
+                            buttonFontColor );
     }
 
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
@@ -2692,6 +2614,10 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 1 );
                 h2d::readImage( "barbarian_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
                 return true;
+            case ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE:
+                _icnVsSprite[id].resize( 1 );
+                h2d::readImage( "sorceress_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
+                return true;
             case ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS: {
                 _icnVsSprite[id].resize( 1 );
                 Sprite & output = _icnVsSprite[id][0];
@@ -3278,6 +3204,41 @@ namespace fheroes2
 
                     _icnVsSprite[id][i + 128 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
                     _icnVsSprite[id][i + 128 + 7].setPosition( 0, original.y() );
+                }
+                return true;
+            case ICN::SHADOW32:
+                LoadOriginalICN( id );
+                // The shadow sprite of hero needs to be shifted to match the hero sprite.
+                if ( _icnVsSprite[id].size() == 86 ) {
+                    // Direction: TOP (0-8), TOP_RIGHT (9-17), RIGHT (18-26), BOTTOM_RIGHT (27-35), BOTTOM (36-44)
+                    for ( int32_t i = 0; i < 45; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        original.setPosition( original.x(), original.y() - 3 );
+                    }
+
+                    // Direction:TOP_LEFT
+                    for ( int32_t i = 59; i < 68; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        original.setPosition( original.x() + 1, original.y() - 3 );
+                    }
+
+                    // Direction:LEFT
+                    for ( int32_t i = 68; i < 77; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        original.setPosition( original.x() - 5, original.y() - 3 );
+                    }
+
+                    // Direction:BOTTOM_LEFT
+                    for ( int32_t i = 77; i < 86; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        if ( i == 80 ) {
+                            // This sprite needs extra fix.
+                            original.setPosition( original.x() - 5, original.y() - 3 );
+                        }
+                        else {
+                            original.setPosition( original.x() - 10, original.y() - 3 );
+                        }
+                    }
                 }
                 return true;
             case ICN::MINI_MONSTER_IMAGE:

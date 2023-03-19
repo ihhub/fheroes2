@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2705,17 +2705,6 @@ msgid ""
 "events in the game."
 msgstr ""
 
-msgid "Attention"
-msgstr "Attenzione"
-
-#, fuzzy
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-"La tua versione di Heroes of Might and Magic II non supporta altre lingue "
-"che l'inglese."
-
 msgid ""
 "Map\n"
 "Difficulty"
@@ -4221,6 +4210,18 @@ msgstr ""
 msgid "View %{skill} Info"
 msgstr "Mostra dettagli su %{skill}"
 
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
+
 msgid "Kingdom Income"
 msgstr "Rendita"
 
@@ -5569,6 +5570,12 @@ msgstr ""
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
+msgid "This spell cannot be used on a boat."
+msgstr ""
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -5673,12 +5680,6 @@ msgid "This spell is already in use."
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
-msgstr ""
-
-msgid "This spell cannot be used on a boat."
-msgstr ""
-
-msgid "This spell can be casted only nearby water."
 msgstr ""
 
 msgid ""
@@ -9101,6 +9102,17 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Attention"
+#~ msgstr "Attenzione"
+
+#, fuzzy
+#~ msgid ""
+#~ "Your version of Heroes of Might and Magic II does not support any other "
+#~ "languages than English."
+#~ msgstr ""
+#~ "La tua versione di Heroes of Might and Magic II non supporta altre lingue "
+#~ "che l'inglese."
 
 #, fuzzy
 #~ msgid "Location: "

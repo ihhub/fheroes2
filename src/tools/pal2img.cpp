@@ -30,6 +30,11 @@
 #include "serialize.h"
 #include "system.h"
 
+namespace
+{
+    constexpr size_t validPaletteSize = 768;
+}
+
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {
@@ -51,8 +56,8 @@ int main( int argc, char ** argv )
         }
 
         const std::vector<uint8_t> palette = paletteStream.getRaw();
-        if ( palette.size() != 768 ) {
-            std::cerr << "Invalid palette size of " << palette.size() << " instead of 768" << std::endl;
+        if ( palette.size() != validPaletteSize ) {
+            std::cerr << "Invalid palette size of " << palette.size() << " instead of " << validPaletteSize << std::endl;
             return EXIT_FAILURE;
         }
 

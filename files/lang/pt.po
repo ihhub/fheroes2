@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -2758,15 +2758,6 @@ msgid ""
 "events in the game."
 msgstr ""
 
-#, fuzzy
-msgid "Attention"
-msgstr "animação"
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-
 msgid ""
 "Map\n"
 "Difficulty"
@@ -4352,6 +4343,18 @@ msgstr ""
 msgid "View %{skill} Info"
 msgstr ""
 
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
+
 #, fuzzy
 msgid "Kingdom Income"
 msgstr "Renda:"
@@ -5769,6 +5772,13 @@ msgstr ""
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
+#, fuzzy
+msgid "This spell cannot be used on a boat."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -5872,13 +5882,6 @@ msgid "This spell is already in use."
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
-msgstr ""
-
-#, fuzzy
-msgid "This spell cannot be used on a boat."
-msgstr "Esta cidade não pode ser transformada em castelo."
-
-msgid "This spell can be casted only nearby water."
 msgstr ""
 
 msgid ""
@@ -9269,6 +9272,10 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "animação"
 
 #, fuzzy
 #~ msgid "Location: "

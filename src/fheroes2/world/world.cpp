@@ -272,21 +272,21 @@ void CapturedObjects::ClearFog( int colors )
         const ObjectColor & objcol = ( *it ).second.objcol;
 
         if ( objcol.isColor( colors ) ) {
-            int scoute = 0;
+            int scoutingDistance = 0;
 
             switch ( objcol.first ) {
             case MP2::OBJ_MINES:
             case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_SAWMILL:
-                scoute = 2;
+                scoutingDistance = 2;
                 break;
 
             default:
                 break;
             }
 
-            if ( scoute )
-                Maps::ClearFog( ( *it ).first, scoute, colors );
+            if ( scoutingDistance )
+                Maps::ClearFog( ( *it ).first, scoutingDistance, colors );
         }
     }
 }
@@ -896,10 +896,10 @@ void World::ClearFog( int colors )
     colors = Players::GetPlayerFriends( colors );
 
     // clear abroad castles
-    vec_castles.Scoute( colors );
+    vec_castles.Scout( colors );
 
     // clear abroad heroes
-    vec_heroes.Scoute( colors );
+    vec_heroes.Scout( colors );
 
     map_captureobj.ClearFog( colors );
 }
@@ -1393,8 +1393,8 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
         >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_1002_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE_1002_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1002_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1002_RELEASE ) {
         uint32_t dummy = 0xDEADBEEF;
 
         msg >> dummy;

@@ -68,6 +68,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "spell_info.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
@@ -293,7 +294,7 @@ namespace
             hero.GetKingdom().AddCastle( castle );
             world.CaptureObject( dstIndex, hero.GetColor() );
 
-            castle->Scoute();
+            castle->Scout();
         };
 
         Army & army = castle->GetActualArmy();
@@ -1223,30 +1224,34 @@ namespace
     void AIToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex )
     {
         Maps::Tiles & tile = world.GetTiles( tileIndex );
-        const Troop & troop = tile.QuantityTroop();
+        bool recruitmentAllowed = true;
 
-        bool allowToRecruit = true;
-        if ( Color::NONE == tile.QuantityColor() ) {
-            // Not captured / defeated yet.
+        if ( tile.QuantityColor() == Color::NONE ) {
             Army army( tile );
-            Battle::Result res = Battle::Loader( hero.GetArmy(), army, tileIndex );
+
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, tileIndex );
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
+
                 tile.QuantitySetColor( hero.GetColor() );
                 tile.SetObjectPassable( true );
             }
             else {
                 AIBattleLose( hero, res, true );
-                allowToRecruit = false;
+
+                recruitmentAllowed = false;
             }
         }
 
-        // recruit monster
-        if ( allowToRecruit && troop.isValid() ) {
-            AIToDwellingRecruitMonster( hero, objectType, tileIndex );
-        }
+        if ( recruitmentAllowed ) {
+            const Troop troop = tile.QuantityTroop();
 
-        hero.SetVisited( tileIndex, Visit::GLOBAL );
+            if ( troop.isValid() ) {
+                AIToDwellingRecruitMonster( hero, objectType, tileIndex );
+            }
+
+            hero.SetVisited( tileIndex, Visit::GLOBAL );
+        }
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
     }
@@ -1394,6 +1399,8 @@ namespace
 
         AI::Get().HeroesClearTask( hero );
 
+        world.GetTiles( dst_index ).resetBoatOwnerColor();
+
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
@@ -1411,7 +1418,7 @@ namespace
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
-        from.setBoat( Maps::GetDirection( fromIndex, dst_index ) );
+        from.setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor() );
         hero.SetShipMaster( false );
         hero.GetPath().Reset();
 
@@ -1860,12 +1867,6 @@ namespace AI
                         if ( hero.Move( noMovementAnimation ) ) {
                             if ( AIHeroesShowAnimation( hero, colors ) ) {
                                 gameArea.SetCenter( hero.GetCenter() );
-#if defined( WITH_DEBUG )
-                                // If player gave control to AI we need to update radar after every AI move.
-                                if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
-                                    basicInterface.SetRedraw( Interface::REDRAW_RADAR );
-                                }
-#endif
                             }
                         }
                         else {
@@ -1905,15 +1906,27 @@ namespace AI
             hero.SetMove( false );
         }
         else if ( !path.empty() && path.GetFrontDirection() == Direction::UNKNOWN ) {
-            if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) )
+            const Route::Step & step = path.front();
+            const int32_t targetIndex = step.GetIndex();
+
+            if ( step.GetFrom() != targetIndex && world.GetTiles( targetIndex ).GetObject() == MP2::OBJ_CASTLE ) {
+                HeroesCastTownPortal( hero, targetIndex );
+            }
+            else if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) ) {
+                // use the action object hero is standing on (Stone Liths)
                 hero.Action( hero.GetIndex(), true );
+            }
         }
     }
 
     void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
     {
+        if ( !Maps::isValidAbsIndex( targetIndex ) || hero.isShipMaster() != world.GetTiles( targetIndex ).isWater() ) {
+            return;
+        }
+
         const Spell dimensionDoor( Spell::DIMENSIONDOOR );
-        if ( !Maps::isValidAbsIndex( targetIndex ) || !hero.CanCastSpell( dimensionDoor ) ) {
+        if ( !hero.CanCastSpell( dimensionDoor ) ) {
             return;
         }
 
@@ -1928,15 +1941,44 @@ namespace AI
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
-#if defined( WITH_DEBUG )
-            // If player gave control to AI we need to update radar after every AI move.
-            if ( Players::Get( hero.GetKingdom().GetColor() )->isAIAutoControlMode() ) {
-                Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
-            }
-#endif
         }
 
         hero.ActionNewPosition( false );
+    }
+
+    void HeroesCastTownPortal( Heroes & hero, const int32_t targetIndex )
+    {
+        if ( !Maps::isValidAbsIndex( targetIndex ) || hero.isShipMaster() ) {
+            return;
+        }
+
+        Spell spellToUse( Spell::TOWNPORTAL );
+
+        // check if we can cast Town Gate instead
+        const Spell townGate( Spell::TOWNGATE );
+        const Castle * nearestCastle = fheroes2::getNearestCastleTownGate( hero );
+        if ( nearestCastle && nearestCastle->GetIndex() == targetIndex && hero.HaveSpell( townGate ) ) {
+            spellToUse = townGate;
+        }
+
+        if ( !hero.CanCastSpell( spellToUse ) ) {
+            return;
+        }
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            hero.FadeOut();
+        }
+
+        hero.Move2Dest( targetIndex );
+        hero.SpellCasted( spellToUse );
+        hero.GetPath().Reset();
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            hero.FadeIn();
+        }
+
+        AI::Get().HeroesActionComplete( hero, targetIndex, hero.GetMapsObject() );
     }
 
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell )

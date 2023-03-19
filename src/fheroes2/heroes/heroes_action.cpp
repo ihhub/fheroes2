@@ -198,10 +198,15 @@ namespace
         hero.FadeOut();
         hero.SetFreeman( reason );
 
-        // If the enemy is vanquished we fully redraw the radar map image as there might be color reset of enemy's objects.
-        if ( hero.GetKingdom().isLoss() ) {
-            Interface::Basic::Get().SetRedraw( Interface::REDRAW_RADAR );
+        Interface::Basic & I = Interface::Basic::Get();
+        if ( !hero.GetKingdom().isLoss() ) {
+            // If the enemy is not vanquished we update only position of defeated hero on radar to remove hero mark.
+            const fheroes2::Point heroPosition = hero.GetCenter();
+            I.GetRadar().SetRenderArea( { heroPosition.x, heroPosition.y, 1, 1 } );
         }
+        // If the enemy is vanquished we do not set radar ROI and fully redraw the radar map image as there might be color reset of enemy's objects.
+
+        I.SetRedraw( Interface::REDRAW_RADAR );
     }
 
     void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -431,7 +436,7 @@ namespace
             hero.GetKingdom().AddCastle( castle );
             world.CaptureObject( dstIndex, hero.GetColor() );
 
-            castle->Scoute();
+            castle->Scout();
 
             Interface::Basic & I = Interface::Basic::Get();
 
@@ -587,6 +592,9 @@ namespace
         hero.SetShipMaster( true );
         hero.GetPath().Reset();
 
+        // Boat is no longer empty so we reset color to default
+        world.GetTiles( dst_index ).resetBoatOwnerColor();
+
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
 
@@ -596,15 +604,22 @@ namespace
             return;
 
         const int fromIndex = hero.GetIndex();
+        Maps::Tiles & from = world.GetTiles( fromIndex );
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
-        world.GetTiles( fromIndex ).setBoat( Maps::GetDirection( fromIndex, dst_index ) );
+        from.setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor() );
         hero.SetShipMaster( false );
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
         hero.FadeIn( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
+
+        // Clear hero position marker from the boat and scout the area on radar after disembarking.
+        Interface::Basic & I = Interface::Basic::Get();
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.SetRedraw( Interface::REDRAW_RADAR );
+
         hero.GetPath().Reset();
         hero.ActionNewPosition( true );
 
@@ -614,6 +629,8 @@ namespace
     void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
+
+        Interface::Basic & I = Interface::Basic::Get();
 
         if ( objectType == MP2::OBJ_BOTTLE ) {
             const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
@@ -631,7 +648,6 @@ namespace
             else {
                 ResourceCount rc = tile.QuantityResourceCount();
 
-                Interface::Basic & I = Interface::Basic::Get();
                 I.GetStatusWindow().SetResource( rc.first, rc.second );
                 I.SetRedraw( Interface::REDRAW_STATUS );
             }
@@ -641,10 +657,16 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
-            std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+        I.GetGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         tile.QuantityReset();
+
+        if ( objectType == MP2::OBJ_RESOURCE ) {
+            // Update the position of picked up resource on radar to remove its mark.
+            const fheroes2::Point resourcePosition = Maps::GetPoint( dst_index );
+            I.GetRadar().SetRenderArea( { resourcePosition.x, resourcePosition.y, 1, 1 } );
+            I.SetRedraw( Interface::REDRAW_RADAR );
+        }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
@@ -946,7 +968,7 @@ namespace
 
                 // When Scouting skill is learned we reveal the fog and redraw the radar map image in a new scout area of the hero.
                 if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
-                    hero.Scoute( hero.GetIndex() );
+                    hero.Scout( hero.GetIndex() );
                     hero.ScoutRadar();
                 }
 
@@ -1634,10 +1656,17 @@ namespace
             if ( result && hero.PickupArtifact( art ) ) {
                 Game::PlayPickupSound();
 
-                Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
-                    std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+                Interface::Basic & I = Interface::Basic::Get();
+
+                I.GetGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
                 tile.QuantityReset();
+
+                const fheroes2::Point artifactPosition = Maps::GetPoint( dst_index );
+
+                // Update the position of picked up artifact on radar to remove its mark.
+                I.GetRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
+                I.SetRedraw( Interface::REDRAW_RADAR );
             }
         }
 
@@ -1791,25 +1820,18 @@ namespace
         hero.GetPath().Hide();
         hero.FadeOut();
 
-        Interface::Basic & I = Interface::Basic::Get();
         const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
-        if ( hero.GetCenter() == fromPoint ) {
-            // If hero was already in Teleport and player hit the space bar.
-            I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
-        }
-        else {
-            // Before entering a Teleport the hero may make a move into it, so we update the radar map image of this move.
-            I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        }
 
         // No action and no penalty
         hero.Move2Dest( index_to );
 
         // Clear the previous hero position
+        Interface::Basic & I = Interface::Basic::Get();
+        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -1838,25 +1860,18 @@ namespace
         hero.GetPath().Hide();
         hero.FadeOut();
 
-        Interface::Basic & I = Interface::Basic::Get();
         const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
-        if ( hero.GetCenter() == fromPoint ) {
-            // If hero was already in Whirlpool and player hit the space bar.
-            I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
-        }
-        else {
-            // Before entering a Whirlpool the hero may make a move into it, so we update the radar map image of this move.
-            I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        }
 
         // No action and no penalty
         hero.Move2Dest( index_to );
 
         // Clear the previous hero position
+        Interface::Basic & I = Interface::Basic::Get();
+        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi( true ) );
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -1972,7 +1987,38 @@ namespace
 
                 tile.QuantitySetColor( hero.GetColor() );
 
-                Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
+                // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
+                // Set the radar update ROI according to captured object size and position.
+                fheroes2::Rect radarRoi( Maps::GetPoint( dst_index ), { 1, 1 } );
+                switch ( objectType ) {
+                case MP2::OBJ_SAWMILL:
+                    radarRoi.x -= 2;
+                    --radarRoi.y;
+                    radarRoi.width = 4;
+                    radarRoi.height = 2;
+                    break;
+                case MP2::OBJ_ALCHEMIST_LAB:
+                case MP2::OBJ_ABANDONED_MINE:
+                case MP2::OBJ_MINES:
+                    --radarRoi.x;
+                    --radarRoi.y;
+                    radarRoi.width = 3;
+                    radarRoi.height = 2;
+                    break;
+                case MP2::OBJ_LIGHTHOUSE:
+                    radarRoi.y -= 2;
+                    radarRoi.height = 3;
+                    break;
+                default:
+                    break;
+                }
+
+                Interface::Basic & I = Interface::Basic::Get();
+
+                // Update the color of captured object on radar.
+                I.GetRadar().SetRenderArea( radarRoi );
+
+                I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                 {
                     const MusicalEffectPlayer musicalEffectPlayer;
@@ -2161,86 +2207,134 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << title.c_str() )
     }
 
-    void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dst_index )
     {
-        const char * str_empty = nullptr;
-        const char * str_recr = nullptr;
-        const char * str_warn = nullptr;
-        const char * str_wins = nullptr;
-        const char * str_scss = nullptr;
+        const std::string title( MP2::StringObject( objectType ) );
+
+        const char * objectIsEmptyMsg = nullptr;
+        const char * recruitmentAvailableMsg = nullptr;
+        const char * warningMsg = nullptr;
+        const char * victoryMsg = nullptr;
 
         switch ( objectType ) {
         case MP2::OBJ_CITY_OF_DEAD:
-            str_empty = _( "The City of the Dead is empty of life, and empty of unlife as well. Perhaps some undead will move in next week." );
-            str_recr = _( "Some Liches living here are willing to join your army for a price. Do you want to recruit Liches?" );
-            str_warn = _( "You've found the ruins of an ancient city, now inhabited solely by the undead. Will you search?" );
-            str_wins
+            objectIsEmptyMsg = _( "The City of the Dead is empty of life, and empty of unlife as well. Perhaps some undead will move in next week." );
+            recruitmentAvailableMsg = _( "Some Liches living here are willing to join your army for a price. Do you want to recruit Liches?" );
+            warningMsg = _( "You've found the ruins of an ancient city, now inhabited solely by the undead. Will you search?" );
+            victoryMsg
                 = _( "Some of the surviving Liches are impressed by your victory over their fellows, and offer to join you for a price. Do you want to recruit Liches?" );
             break;
         case MP2::OBJ_TROLL_BRIDGE:
-            str_empty = _( "You've found one of those bridges that Trolls are so fond of living under, but there are none here. Perhaps there will be some next week." );
-            str_recr = _( "Some Trolls living under a bridge are willing to join your army, but for a price. Do you want to recruit Trolls?" );
-            str_warn = _( "Trolls living under the bridge challenge you. Will you fight them?" );
-            str_wins
+            objectIsEmptyMsg
+                = _( "You've found one of those bridges that Trolls are so fond of living under, but there are none here. Perhaps there will be some next week." );
+            recruitmentAvailableMsg = _( "Some Trolls living under a bridge are willing to join your army, but for a price. Do you want to recruit Trolls?" );
+            warningMsg = _( "Trolls living under the bridge challenge you. Will you fight them?" );
+            victoryMsg
                 = _( "A few Trolls remain, cowering under the bridge. They approach you and offer to join your forces as mercenaries. Do you want to buy any Trolls?" );
             break;
         case MP2::OBJ_DRAGON_CITY:
-            str_empty = _( "The Dragon city has no Dragons willing to join you this week. Perhaps a Dragon will become available next week." );
-            str_recr = _( "The Dragon city is willing to offer some Dragons for your army for a price. Do you wish to recruit Dragons?" );
-            str_warn = _( "You stand before the Dragon City, a place off-limits to mere humans. Do you wish to violate this rule and challenge the Dragons to a fight?" );
-            str_wins
+            objectIsEmptyMsg = _( "The Dragon city has no Dragons willing to join you this week. Perhaps a Dragon will become available next week." );
+            recruitmentAvailableMsg = _( "The Dragon city is willing to offer some Dragons for your army for a price. Do you wish to recruit Dragons?" );
+            warningMsg
+                = _( "You stand before the Dragon City, a place off-limits to mere humans. Do you wish to violate this rule and challenge the Dragons to a fight?" );
+            victoryMsg
                 = _( "Having defeated the Dragon champions, the city's leaders agree to supply some Dragons to your army for a price. Do you wish to recruit Dragons?" );
             break;
         default:
+            assert( 0 );
             return;
         }
 
-        Maps::Tiles & tile = world.GetTiles( dst_index );
-        const Troop & troop = tile.QuantityTroop();
+        enum class Outcome
+        {
+            Invalid,
+            Empty,
+            IgnoreRecruit,
+            IgnoreFight,
+            Recruit,
+            Fight
+        };
 
-        const std::string title( MP2::StringObject( objectType ) );
+        const Outcome outcome = [dst_index, &title, objectIsEmptyMsg, recruitmentAvailableMsg, warningMsg]() {
+            const Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        // Not captured / defeated yet
-        if ( Color::NONE == tile.QuantityColor() ) {
-            if ( Dialog::Message( title, str_warn, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
-                Army army( tile );
+            if ( tile.QuantityColor() != Color::NONE ) {
+                const Troop troop = tile.QuantityTroop();
 
-                Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
-                if ( res.AttackerWins() ) {
-                    hero.IncreaseExperience( res.GetExperienceAttacker() );
-                    tile.QuantitySetColor( hero.GetColor() );
-                    tile.SetObjectPassable( true );
-                    str_scss = str_wins;
+                if ( !troop.isValid() ) {
+                    Dialog::Message( title, objectIsEmptyMsg, Font::BIG, Dialog::OK );
+
+                    return Outcome::Empty;
                 }
-                else {
-                    BattleLose( hero, res, true );
-                }
-            }
-        }
-        else {
-            if ( troop.isValid() ) {
-                str_scss = str_recr;
-            }
-            else {
-                Dialog::Message( title, str_empty, Font::BIG, Dialog::OK );
-            }
-        }
 
-        // Recruit monsters
-        if ( str_scss ) {
-            bool recruit = false;
-
-            if ( troop.isValid() ) {
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
 
-                recruit = ( Dialog::Message( title, str_scss, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES );
+                if ( Dialog::Message( title, recruitmentAvailableMsg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                    return Outcome::Recruit;
+                }
+
+                return Outcome::IgnoreRecruit;
             }
 
-            if ( recruit ) {
-                RecruitMonsterFromTile( hero, tile, title, troop, false );
+            // In the original game, this dialog window has no sound, this is an improvement specific to fheroes2
+            const MusicalEffectPlayer musicalEffectPlayer( MUS::DUNGEON );
+
+            if ( Dialog::Message( title, warningMsg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                return Outcome::Fight;
             }
+
+            return Outcome::IgnoreFight;
+        }();
+
+        Maps::Tiles & tile = world.GetTiles( dst_index );
+
+        switch ( outcome ) {
+        case Outcome::Empty:
+        case Outcome::IgnoreRecruit:
+            hero.SetVisited( dst_index, Visit::GLOBAL );
+
+            break;
+        case Outcome::IgnoreFight:
+            break;
+        case Outcome::Recruit: {
+            const Troop troop = tile.QuantityTroop();
+            assert( troop.isValid() );
+
+            RecruitMonsterFromTile( hero, tile, title, troop, false );
 
             hero.SetVisited( dst_index, Visit::GLOBAL );
+
+            break;
+        }
+        case Outcome::Fight: {
+            Army army( tile );
+
+            const Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
+            if ( res.AttackerWins() ) {
+                hero.IncreaseExperience( res.GetExperienceAttacker() );
+
+                // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
+                tile.QuantitySetColor( Color::UNUSED );
+                tile.SetObjectPassable( true );
+
+                if ( Dialog::Message( title, victoryMsg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                    const Troop troop = tile.QuantityTroop();
+                    assert( troop.isValid() );
+
+                    RecruitMonsterFromTile( hero, tile, title, troop, false );
+                }
+
+                hero.SetVisited( dst_index, Visit::GLOBAL );
+            }
+            else {
+                BattleLose( hero, res, true );
+            }
+
+            break;
+        }
+        default:
+            assert( 0 );
+            break;
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << title.c_str() )
@@ -2596,7 +2690,7 @@ namespace
         }
         else {
             const Funds & funds = tile.QuantityFunds();
-            bool conditionsMet = ( funds.GetValidItemsCount() == 0 );
+            bool increaseExperience = ( funds.GetValidItemsCount() == 0 );
 
             const int level = hero.GetLevel();
             assert( level > 0 );
@@ -2606,7 +2700,7 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::EXPERIENCE );
 
                 // Free training
-                if ( conditionsMet ) {
+                if ( increaseExperience ) {
                     const std::string msg = _(
                         "Upon your approach, the tree opens its eyes in delight. \"Ahh, an adventurer! Allow me to teach you a little of what I have learned over the ages.\"" );
 
@@ -2614,7 +2708,8 @@ namespace
                     const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
                     const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
-                    fheroes2::showMessage( titleUI, messageUI, Dialog::OK, { &experienceUI } );
+                    // In the original game, there was no way to refuse to level up for free, this is an improvement specific to fheroes2
+                    increaseExperience = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
                 }
                 else {
                     const ResourceCount & rc = tile.QuantityResourceCount();
@@ -2633,7 +2728,7 @@ namespace
                         const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
                         const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
 
-                        conditionsMet = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
+                        increaseExperience = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
                     }
                     else {
                         std::string msg = _( "Tears brim in the eyes of the tree." );
@@ -2649,7 +2744,7 @@ namespace
                 }
             }
 
-            if ( conditionsMet ) {
+            if ( increaseExperience ) {
                 hero.GetKingdom().OddFundsResource( funds );
                 hero.SetVisited( dst_index );
                 hero.IncreaseExperience( possibleExperience );
@@ -3128,8 +3223,6 @@ namespace
 
     void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
-        const std::string title = MP2::StringObject( objectType );
-
         enum class Outcome
         {
             Invalid,
@@ -3141,7 +3234,8 @@ namespace
 
         MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
 
-        const Outcome outcome = [&title, riddle]() {
+        const Outcome outcome = [objectType, riddle]() {
+            const std::string title = MP2::StringObject( objectType );
             const MusicalEffectPlayer musicalEffectPlayer( MUS::ARABIAN );
 
             if ( riddle == nullptr || !riddle->valid ) {
@@ -3305,7 +3399,24 @@ namespace
 void Heroes::ScoutRadar() const
 {
     Interface::Basic & I = Interface::Basic::Get();
-    I.GetRadar().SetRenderArea( GetScoutRoi( true ) );
+
+#if defined( WITH_DEBUG )
+    if ( GetColor() != Color::NONE ) {
+        const Player * player = Players::Get( GetColor() );
+        assert( player != nullptr );
+
+        // If player gave control to AI we need to fully update the radar image as there is no need to make a code for rendering optimizations so we
+        // don't call 'SetRenderArea()'.
+        if ( !player->isAIAutoControlMode() ) {
+#endif
+
+            I.GetRadar().SetRenderArea( GetScoutRoi() );
+
+#if defined( WITH_DEBUG )
+        }
+    }
+#endif
+
     I.SetRedraw( Interface::REDRAW_RADAR );
 }
 
@@ -3366,7 +3477,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         Interface::Basic & I = Interface::Basic::Get();
 
         I.GetGameArea().SetCenter( GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_HEROES );
     }
 
     switch ( objectType ) {

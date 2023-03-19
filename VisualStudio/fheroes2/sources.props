@@ -5,6 +5,7 @@
     <ClCompile Include="src\engine\audio.cpp" />
     <ClCompile Include="src\engine\core.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
+    <ClCompile Include="src\engine\h2d_file.cpp" />
     <ClCompile Include="src\engine\image.cpp" />
     <ClCompile Include="src\engine\image_palette.cpp" />
     <ClCompile Include="src\engine\image_tool.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="src\fheroes2\gui\ui_castle.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_dialog.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_font.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_keyboard.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_kingdom.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_language.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_monster.cpp" />
@@ -153,7 +155,6 @@
     <ClCompile Include="src\fheroes2\gui\ui_tool.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_window.cpp" />
     <ClCompile Include="src\fheroes2\h2d\h2d.cpp" />
-    <ClCompile Include="src\fheroes2\h2d\h2d_file.cpp" />
     <ClCompile Include="src\fheroes2\heroes\direction.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes_action.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\endian_h2.h" />
+    <ClInclude Include="src\engine\h2d_file.h" />
     <ClInclude Include="src\engine\image.h" />
     <ClInclude Include="src\engine\image_palette.h" />
     <ClInclude Include="src\engine\image_tool.h" />
@@ -330,6 +332,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_castle.h" />
     <ClInclude Include="src\fheroes2\gui\ui_dialog.h" />
     <ClInclude Include="src\fheroes2\gui\ui_font.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_keyboard.h" />
     <ClInclude Include="src\fheroes2\gui\ui_kingdom.h" />
     <ClInclude Include="src\fheroes2\gui\ui_language.h" />
     <ClInclude Include="src\fheroes2\gui\ui_monster.h" />
@@ -340,7 +343,6 @@
     <ClInclude Include="src\fheroes2\gui\ui_tool.h" />
     <ClInclude Include="src\fheroes2\gui\ui_window.h" />
     <ClInclude Include="src\fheroes2\h2d\h2d.h" />
-    <ClInclude Include="src\fheroes2\h2d\h2d_file.h" />
     <ClInclude Include="src\fheroes2\heroes\direction.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes_base.h" />

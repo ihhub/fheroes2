@@ -236,7 +236,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
                 }
 
                 if ( spell.GetID() == Spell::DISPEL ) {
-                    spellTargetUnit->ResetModes( IS_GOOD_MAGIC );
+                    spellTargetUnit->removeAffection( IS_GOOD_MAGIC );
                 }
                 else {
                     // The unit's built-in spell efficiency does not depend on its commanding hero's skills
@@ -648,8 +648,10 @@ void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
 
 void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected )
 {
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
+
     for ( TargetInfo & target : targets ) {
-        assert( target.defender != nullptr && target.defender->isValid() );
+        assert( target.defender != nullptr );
 
         uint32_t resurrectIncrease = 0;
         target.defender->ApplyDamage( attacker, target.damage, target.killed, &resurrectIncrease );
@@ -740,7 +742,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
 void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "targets: " << targets.size() )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
 
     for ( TargetInfo & target : targets ) {
         assert( target.defender != nullptr );
@@ -807,6 +809,17 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
     }
 
     TargetsInfo targets;
+
+    const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, 0, hero );
+
+    if ( firstUnitResist >= _randomGenerator.Get( 1, 100 ) ) {
+        targets.emplace_back();
+        TargetInfo & res = targets.back();
+        res.defender = unit;
+        res.resist = true;
+        return targets;
+    }
+
     const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit );
     for ( size_t i = 0; i < targetUnits.size(); ++i ) {
         targets.emplace_back();
@@ -884,7 +897,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             ignoreMagicResistance = true;
 
             if ( playResistSound ) {
-                *playResistSound = false;
+                *playResistSound = true;
             }
             break;
         }
@@ -1223,6 +1236,19 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 
         Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), [unit]( const int32_t v ) { return Board::isValidMirrorImageIndex( v, unit ); } );
         if ( it != distances.end() ) {
+            const HeroBase * commander = GetCurrentCommander();
+            assert( commander != nullptr );
+
+            const Spell mirrorImageSpell( Spell::MIRRORIMAGE );
+
+            TargetInfo targetInfo;
+            targetInfo.defender = unit;
+
+            TargetsInfo targetsInfo;
+            targetsInfo.push_back( targetInfo );
+
+            TargetsApplySpell( commander, mirrorImageSpell, targetsInfo );
+
             Unit * mirrorUnit = CreateMirrorImage( *unit );
             assert( mirrorUnit != nullptr );
 
@@ -1232,16 +1258,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
 
             if ( _interface ) {
-                const HeroBase * commander = GetCurrentCommander();
-                assert( commander != nullptr );
-
-                TargetInfo targetInfo;
-                targetInfo.defender = unit;
-
-                TargetsInfo targetsInfo;
-                targetsInfo.push_back( targetInfo );
-
-                _interface->RedrawActionSpellCastStatus( Spell( Spell::MIRRORIMAGE ), who, commander->GetName(), targetsInfo );
+                _interface->RedrawActionSpellCastStatus( mirrorImageSpell, who, commander->GetName(), targetsInfo );
                 _interface->RedrawActionMirrorImageSpell( *unit, pos );
             }
 

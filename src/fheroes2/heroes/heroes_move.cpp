@@ -386,63 +386,42 @@ namespace
 
     void getShadowSpriteInfo( const Heroes & hero, const int heroMovementIndex, int & icnId, uint32_t & icnIndex )
     {
-        if ( hero.isShipMaster() ) {
-            int indexSprite = 0;
+        const int32_t heroDirection = hero.GetDirection();
+        const bool isOnBoat = hero.isShipMaster();
 
-            const int heroDirection = hero.GetDirection();
-            switch ( heroDirection ) {
-            case Direction::TOP:
-                indexSprite = 0;
-                break;
-            case Direction::TOP_RIGHT:
-                indexSprite = 9;
-                break;
-            case Direction::RIGHT:
-                indexSprite = 18;
-                break;
-            case Direction::BOTTOM_RIGHT:
-                indexSprite = 27;
-                break;
-            case Direction::BOTTOM:
-                indexSprite = 36;
-                break;
-            case Direction::BOTTOM_LEFT:
-                indexSprite = 45;
-                break;
-            case Direction::LEFT:
-                indexSprite = 54;
-                break;
-            case Direction::TOP_LEFT:
-                indexSprite = 63;
-                break;
-            default:
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
-                break;
-            }
-
-            icnId = ICN::BOATSHAD;
-            icnIndex = indexSprite + ( heroMovementIndex % heroFrameCountPerTile );
-            return;
+        switch ( heroDirection ) {
+        case Direction::TOP:
+            icnIndex = 0;
+            break;
+        case Direction::TOP_RIGHT:
+            icnIndex = 9;
+            break;
+        case Direction::RIGHT:
+            icnIndex = 18;
+            break;
+        case Direction::BOTTOM_RIGHT:
+            icnIndex = 27;
+            break;
+        case Direction::BOTTOM:
+            icnIndex = 36;
+            break;
+        case Direction::BOTTOM_LEFT:
+            icnIndex = isOnBoat ? 45 : 77;
+            break;
+        case Direction::LEFT:
+            icnIndex = isOnBoat ? 54 : 68;
+            break;
+        case Direction::TOP_LEFT:
+            icnIndex = isOnBoat ? 63 : 59;
+            break;
+        default:
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
+            break;
         }
 
-        // TODO: this is incorrect logic of choosing shadow sprite. Fix it!
-        int indexSprite = heroMovementIndex;
+        icnId = isOnBoat ? ICN::BOATSHAD : ICN::SHADOW32;
 
-        if ( indexSprite == 51 )
-            indexSprite = 56;
-        else if ( indexSprite == 50 )
-            indexSprite = 57;
-        else if ( indexSprite == 49 )
-            indexSprite = 58;
-        else if ( indexSprite == 47 )
-            indexSprite = 55;
-        else if ( indexSprite == 46 )
-            indexSprite = 55;
-
-        const int indexOffset = ( indexSprite < 9 || indexSprite >= 36 ) ? 0 : 50;
-
-        icnId = ICN::SHADOW32;
-        icnIndex = indexSprite + indexOffset;
+        icnIndex += ( heroMovementIndex % heroFrameCountPerTile );
     }
 
     void getFrothSpriteInfo( const Heroes & hero, const int heroMovementIndex, int & icnId, uint32_t & icnIndex )
@@ -617,9 +596,6 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroShadowSpritesPerTile()
     if ( isShipMaster() ) {
         offset.y -= 11;
     }
-    else {
-        offset.y -= 1;
-    }
 
     // Apply hero offset when he moves from one tile to another.
     offset += getCurrentPixelOffset();
@@ -651,6 +627,12 @@ void Heroes::MoveStep( Heroes & hero, int32_t indexTo, bool newpos )
     hero.ApplyPenaltyMovement( path.GetFrontPenalty() );
     if ( newpos ) {
         hero.Move2Dest( indexTo );
+
+        if ( hero.isControlHuman() ) {
+            // Update the radar map image in the area that is visible to the hero after his movement.
+            hero.ScoutRadar();
+        }
+
         hero.ActionNewPosition( true );
         path.PopFront();
 
@@ -683,7 +665,7 @@ bool Heroes::MoveStep( bool fast )
         }
         else {
             // Unveil fog before moving the hero.
-            Scoute( indexTo );
+            Scout( indexTo );
 
             MoveStep( *this, indexTo, true );
         }
@@ -707,7 +689,7 @@ bool Heroes::MoveStep( bool fast )
     }
     else if ( ( sprite_index % heroFrameCountPerTile ) == 1 ) {
         // This is a start of hero's movement. We should clear fog around him.
-        Scoute( indexTo );
+        Scout( indexTo );
     }
     else if ( ( sprite_index % heroFrameCountPerTile ) == 8 ) {
         sprite_index -= 8;

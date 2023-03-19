@@ -52,6 +52,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_keyboard.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "world.h"
@@ -331,14 +332,11 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     display.render();
 
-    if ( isEditing ) {
-        // Show keyboard only when editing file name.
-        le.OpenVirtualKeyboard();
-    }
-
     std::string result;
     bool is_limit = false;
     std::string lastSelectedSaveFileName;
+
+    const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
     while ( le.HandleEvents() && result.empty() ) {
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -360,9 +358,17 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             break;
         }
         else if ( le.MouseClickLeft( enter_field ) && isEditing ) {
-            charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
-            if ( filename.empty() )
-                buttonOk.disable();
+            if ( isInGameKeyboardRequired ) {
+                fheroes2::openVirtualKeyboard( filename );
+                charInsertPos = filename.size();
+                listbox.Unselect();
+                isListboxSelected = false;
+            }
+            else {
+                charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
+                if ( filename.empty() )
+                    buttonOk.disable();
+            }
 
             needRedraw = true;
         }
@@ -436,10 +442,6 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         buttonOk.draw();
         buttonCancel.draw();
         display.render();
-    }
-
-    if ( isEditing ) {
-        le.CloseVirtualKeyboard();
     }
 
     return result;

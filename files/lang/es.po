@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2851,15 +2851,6 @@ msgid ""
 "events in the game."
 msgstr ""
 
-#, fuzzy
-msgid "Attention"
-msgstr "\"Anexión\""
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-
 msgid ""
 "Map\n"
 "Difficulty"
@@ -4455,6 +4446,18 @@ msgstr ""
 
 msgid "View %{skill} Info"
 msgstr "Ver información de %{skill}"
+
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
 
 #, fuzzy
 msgid "Kingdom Income"
@@ -6137,6 +6140,13 @@ msgstr ""
 "Tu héroe está demasiado cansado como para conjurar este hechizo hoy. Prueba "
 "de nuevo mañana."
 
+#, fuzzy
+msgid "This spell cannot be used on a boat."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6252,13 +6262,6 @@ msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Ahora se identifica totalmente a los héroes enemigos."
-
-#, fuzzy
-msgid "This spell cannot be used on a boat."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-msgid "This spell can be casted only nearby water."
-msgstr ""
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -9850,6 +9853,10 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "\"Anexión\""
 
 #, fuzzy
 #~ msgid "Location: "

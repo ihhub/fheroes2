@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,33 +17,15 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2SPEED_H
-#define H2SPEED_H
+
+#pragma once
 
 #include <string>
 
-namespace Speed
+namespace fheroes2
 {
-    enum
-    {
-        STANDING = 0,
-        CRAWLING = 1,
-        VERYSLOW = 2,
-        SLOW = 3,
-        AVERAGE = 4,
-        FAST = 5,
-        VERYFAST = 6,
-        ULTRAFAST = 7,
-        BLAZING = 8,
-        INSTANT = 9
-    };
-
-    std::string String( const int speed );
-    int GetOriginalSlow( const int speed );
-    int GetOriginalFast( const int speed );
-
-    int GetSlowSpeedFromSpell( const int currentSpeed );
-    int GetHasteSpeedFromSpell( const int currentSpeed );
+    // fheroes2 does not support UTF-8 so on mobile devices with virtual keyboard it might be a big problem.
+    // As a solution we should utilize an in-game virtual keyboard which supports all code pages available by the engine.
+    // The default language in the keyboard is English.
+    void openVirtualKeyboard( std::string & output );
 }
-
-#endif

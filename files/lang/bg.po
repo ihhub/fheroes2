@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2824,16 +2824,6 @@ msgstr ""
 "Превключи режима на текстова поддръжка, за да изведеш допълнителна "
 "информация за прозорци и събития в играта."
 
-msgid "Attention"
-msgstr "Внимание"
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-"Твоята версия на Heroes of Might and Magic II не поддържа други езици освен "
-"английски."
-
 msgid ""
 "Map\n"
 "Difficulty"
@@ -4402,6 +4392,18 @@ msgstr ""
 
 msgid "View %{skill} Info"
 msgstr "Виж информация за %{skill}"
+
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr "Приходи на царството"
@@ -6069,6 +6071,12 @@ msgstr ""
 "Твоят герой е твърде уморен, за да направи това заклинание днес. Опитай "
 "отново утре."
 
+msgid "This spell cannot be used on a boat."
+msgstr "Това заклинание не може да се използва на лодка."
+
+msgid "This spell can be casted only nearby water."
+msgstr "Това заклинание може да се направи само в близост до вода."
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6179,12 +6187,6 @@ msgstr "Това заклинание вече се използва."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Вражеските герои вече могат да бъдат идентифицирани напълно."
-
-msgid "This spell cannot be used on a boat."
-msgstr "Това заклинание не може да се използва на лодка."
-
-msgid "This spell can be casted only nearby water."
-msgstr "Това заклинание може да се направи само в близост до вода."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -9959,6 +9961,16 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Attention"
+#~ msgstr "Внимание"
+
+#~ msgid ""
+#~ "Your version of Heroes of Might and Magic II does not support any other "
+#~ "languages than English."
+#~ msgstr ""
+#~ "Твоята версия на Heroes of Might and Magic II не поддържа други езици "
+#~ "освен английски."
 
 #~ msgid "Location: "
 #~ msgstr "Местоположение: "

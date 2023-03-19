@@ -25,17 +25,18 @@ set -e -o pipefail
 PATH="$(dirname "$0"):$PATH"
 
 extractor agg *.AGG *.agg
+pal2img agg/*/kb.pal palette.png
 
 for DIR in agg/*; do
     if [[ ! -d "$DIR" ]]; then
         continue
     fi
 
-    icn2img "icn/$(basename "$DIR")" agg/*/kb.pal "$DIR"/*.icn
     82m2wav "wav/$(basename "$DIR")" "$DIR"/*.82m
+    bin2txt "txt/$(basename "$DIR")" "$DIR"/*.bin
+    icn2img "icn/$(basename "$DIR")" agg/*/kb.pal "$DIR"/*.icn
+    til2img "til/$(basename "$DIR")" agg/*/kb.pal "$DIR"/*.til
     xmi2midi "midi/$(basename "$DIR")" "$DIR"/*.xmi
 done
-
-pal2img agg/*/kb.pal palette.png
 
 echo -e "\nAsset extraction completed successfully."

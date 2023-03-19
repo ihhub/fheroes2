@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
-"PO-Revision-Date: 2022-10-10 15:27+0200\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
+"PO-Revision-Date: 2023-03-18 14:09+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -2829,16 +2829,6 @@ msgstr ""
 "Режим текстовой поддержки, который выводит дополнительную информацию об "
 "окнах и событиях в игре."
 
-msgid "Attention"
-msgstr "Внимание"
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-"Ваша версия Heroes of Might and Magic II не поддерживает никакие языки, "
-"кроме английского."
-
 msgid ""
 "Map\n"
 "Difficulty"
@@ -3126,12 +3116,15 @@ msgid ""
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Месяц: "
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Неделя: "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", День: "
 
 msgid ""
 "\n"
@@ -4405,6 +4398,18 @@ msgstr ""
 
 msgid "View %{skill} Info"
 msgstr "Информация о навыке %{skill}"
+
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr "ПРОБЕЛ"
+
+msgid "Keyboard|LANG"
+msgstr "ЯЗЫК"
+
+msgid "Keyboard|ABC"
+msgstr "АБВ"
 
 msgid "Kingdom Income"
 msgstr "Доход королевства"
@@ -6073,6 +6078,12 @@ msgstr ""
 "Ваш герой очень устал, и не сможет применять магию сегодня. Попробуйте ещё "
 "раз завтра."
 
+msgid "This spell cannot be used on a boat."
+msgstr "Это заклинание не действует в море."
+
+msgid "This spell can be casted only nearby water."
+msgstr "Это заклинание действует только у воды."
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6183,12 +6194,6 @@ msgstr "Это заклинание уже используется."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."
-
-msgid "This spell cannot be used on a boat."
-msgstr "Это заклинание не действует в море."
-
-msgid "This spell can be casted only nearby water."
-msgstr "Это заклинание действует только у воды."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -9932,6 +9937,16 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Attention"
+#~ msgstr "Внимание"
+
+#~ msgid ""
+#~ "Your version of Heroes of Might and Magic II does not support any other "
+#~ "languages than English."
+#~ msgstr ""
+#~ "Ваша версия Heroes of Might and Magic II не поддерживает никакие языки, "
+#~ "кроме английского."
 
 #~ msgid "Location: "
 #~ msgstr "Путь к файлу: "

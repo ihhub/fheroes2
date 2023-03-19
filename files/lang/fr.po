@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2862,16 +2862,6 @@ msgstr ""
 "Activer le mode texte pour afficher des informations supplémentaires sur les "
 "différentes fenêtres et les événements du jeu."
 
-msgid "Attention"
-msgstr "Attention"
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-"Votre version de Heroes of Might and Magic II ne prend en charge aucune "
-"langue autre que l'anglais."
-
 msgid ""
 "Map\n"
 "Difficulty"
@@ -4470,6 +4460,18 @@ msgstr ""
 
 msgid "View %{skill} Info"
 msgstr "Voir les infos de %{skill}"
+
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
 
 msgid "Kingdom Income"
 msgstr "Revenu du royaume"
@@ -6209,6 +6211,12 @@ msgstr ""
 "Votre héros est trop fatigué pour lancer ce sort aujourd'hui. Essayez à "
 "nouveau demain."
 
+msgid "This spell cannot be used on a boat."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+msgid "This spell can be casted only nearby water."
+msgstr "Ce sort ne peut être lancé qu'à proximité de l'eau."
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6321,12 +6329,6 @@ msgstr "Ce sort est déjà utilisé."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Les héros ennemis sont désormais parfaitement identifiables."
-
-msgid "This spell cannot be used on a boat."
-msgstr "Ce sort ne peut pas être jeté en mer."
-
-msgid "This spell can be casted only nearby water."
-msgstr "Ce sort ne peut être lancé qu'à proximité de l'eau."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -10153,6 +10155,16 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Attention"
+#~ msgstr "Attention"
+
+#~ msgid ""
+#~ "Your version of Heroes of Might and Magic II does not support any other "
+#~ "languages than English."
+#~ msgstr ""
+#~ "Votre version de Heroes of Might and Magic II ne prend en charge aucune "
+#~ "langue autre que l'anglais."
 
 #~ msgid "Location: "
 #~ msgstr "Emplacement : "

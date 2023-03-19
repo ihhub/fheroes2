@@ -47,6 +47,7 @@
 #include "logging.h"
 #endif
 #include "settings.h"
+#include "spell.h"
 #include "text.h"
 #include "translations.h"
 #include "world.h"
@@ -221,6 +222,9 @@ void Interface::Radar::Redraw( const bool redrawMapObjects )
         }
         else {
             // We are in "Hide Interface" mode and radar is turned off so we have nothing to render.
+
+            // Force set radar ROI for the whole world to be prepared to fully update radar when it will be shown.
+            _roi = { 0, 0, world.w(), world.h() };
             return;
         }
     }
@@ -229,6 +233,9 @@ void Interface::Radar::Redraw( const bool redrawMapObjects )
     const fheroes2::Rect & rect = GetArea();
     if ( _hide ) {
         fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.isEvilInterfaceEnabled() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
+
+        // Force set radar ROI for the whole world to be prepared to fully update radar when it will be shown.
+        _roi = { 0, 0, world.w(), world.h() };
     }
     else {
         _cursorArea.hide();
@@ -307,46 +314,61 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                     const Heroes * hero = world.GetHeroes( tile.GetCenter() );
                     if ( hero ) {
                         fillColor = GetPaletteIndexFromColor( hero->GetColor() );
+                        break;
                     }
                 }
-                break;
+                continue;
             }
-            case MP2::OBJ_DRAGON_CITY:
             case MP2::OBJ_LIGHTHOUSE:
             case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_MINES:
             case MP2::OBJ_SAWMILL:
-                // TODO: why Dragon City and Lighthouse are in this category? Verify the logic!
+                // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
+                    break;
                 }
-                break;
-            case MP2::OBJ_NON_ACTION_DRAGON_CITY:
+                continue;
             case MP2::OBJ_NON_ACTION_LIGHTHOUSE:
             case MP2::OBJ_NON_ACTION_ALCHEMIST_LAB:
             case MP2::OBJ_NON_ACTION_MINES:
             case MP2::OBJ_NON_ACTION_SAWMILL:
-                // TODO: why Dragon City and Lighthouse are in this category? Verify the logic!
+                // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
                     const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
                     if ( mainTileIndex >= 0 ) {
                         fillColor = GetPaletteIndexFromColor( world.GetTiles( mainTileIndex ).QuantityColor() );
+                        break;
                     }
                 }
-                break;
+                continue;
             case MP2::OBJ_ARTIFACT:
                 if ( visibleTile || revealArtifacts ) {
                     fillColor = COLOR_GRAY;
+                    break;
                 }
-                break;
+                continue;
             case MP2::OBJ_RESOURCE:
                 if ( visibleTile || revealResources ) {
                     fillColor = COLOR_GRAY;
+                    break;
                 }
-                break;
+                continue;
+            case MP2::OBJ_ABANDONED_MINE:
+            case MP2::OBJ_NON_ACTION_ABANDONED_MINE:
+                if ( ( visibleTile || revealMines )
+                     && ( ( Maps::getSpellIdFromTile( tile ) == Spell::HAUNT )
+                          || ( Maps::getSpellIdFromTile( world.GetTiles( Maps::Tiles::getIndexOfMainTile( tile ) ) ) == Spell::HAUNT ) ) ) {
+                    // We show Haunted mines on radar with white (neutral) color.
+                    fillColor = COLOR_WHITE;
+                    break;
+                }
+
+                // If it is the initially Abandoned mine we do not show it on map and fall-through to the 'default' case.
+                [[fallthrough]];
             default:
-                // Castles and Towns can be partially covered by other non-action objects so we need to rely on special storage of castle's tiles.
                 if ( visibleTile ) {
+                    // Castles and Towns can be partially covered by other non-action objects so we need to rely on special storage of castle's tiles.
                     if ( !getCastleColor( fillColor, tile.GetCenter() ) ) {
                         // This is a visible tile and not covered by other objects, so fill it with the ground tile data.
                         if ( tile.isRoad() ) {

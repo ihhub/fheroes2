@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 13:50+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2838,15 +2838,6 @@ msgid ""
 "events in the game."
 msgstr ""
 
-#, fuzzy
-msgid "Attention"
-msgstr "animáció"
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-
 msgid ""
 "Map\n"
 "Difficulty"
@@ -4403,6 +4394,18 @@ msgstr ""
 msgid "View %{skill} Info"
 msgstr "%{level} %{skill} információ"
 
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
+
 #, fuzzy
 msgid "Kingdom Income"
 msgstr "Jövedelem:"
@@ -5900,6 +5903,13 @@ msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "A hősöd túl fáradt ehhez a varázslathoz a mai nap. Próbáld újra holnap."
 
+#, fuzzy
+msgid "This spell cannot be used on a boat."
+msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6009,13 +6019,6 @@ msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Az ellenséges hősök teljes mértékben azonosíthatóak."
-
-#, fuzzy
-msgid "This spell cannot be used on a boat."
-msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
-
-msgid "This spell can be casted only nearby water."
-msgstr ""
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -9640,6 +9643,10 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "animáció"
 
 #, fuzzy
 #~ msgid "Location: "
