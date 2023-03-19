@@ -590,8 +590,6 @@ namespace MP2
     bool isCaptureObject( const MapObjectType objectType );
     bool isPickupObject( const MapObjectType objectType );
     bool isArtifactObject( const MapObjectType objectType );
-    bool isHeroUpgradeObject( const MapObjectType objectType );
-    bool isMonsterDwelling( const MapObjectType objectType );
     bool isAbandonedMine( const MapObjectType objectType );
     bool isProtectedObject( const MapObjectType objectType );
     // Returns true if this object can be safely visited by AI for fog discovery purposes.

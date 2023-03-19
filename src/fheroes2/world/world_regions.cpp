@@ -240,7 +240,7 @@ void World::ComputeStaticAnalysis()
         }
     }
 
-    // Step 3. Check all castles on the map and create region centres based on them
+    // Step 3. Check all castles on the map and create region centers based on them
     std::vector<int> regionCenters;
     TileDataVector castleCenters;
     for ( const Castle * castle : vec_castles ) {
@@ -262,7 +262,7 @@ void World::ComputeStaticAnalysis()
         AppendIfFarEnough( regionCenters, ( castleIndex >= 0 && static_cast<size_t>( castleIndex ) > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
-    // Step 4. Add missing region centres based on distance (for water or if there's big chunks of space without castles)
+    // Step 4. Add missing region centers based on distance (for water or if there's big chunks of space without castles)
     const std::vector<int> & directionOffsets = GetDirectionOffsets( width );
     for ( int waterOrGround = 0; waterOrGround < 4; waterOrGround += 2 ) {
         for ( const int rowID : emptyLines[waterOrGround] ) {
@@ -365,7 +365,7 @@ void World::ComputeStaticAnalysis()
             }
 
             for ( const int exitIndex : exits ) {
-                // neighbours is a set that will force the uniqness
+                // neighbours is a set that will force the uniqueness
                 reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
             }
         }

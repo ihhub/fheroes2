@@ -21,9 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
 #include <cstdint>
+#include <limits>
 #include <list>
 #include <ostream>
+#include <type_traits>
 #include <utility>
 
 #include "army_troop.h"
@@ -130,9 +134,14 @@ Skill::Secondary Maps::Tiles::QuantitySkill() const
 
 void Maps::Tiles::QuantitySetSkill( int skill )
 {
+    using Quantity1Type = decltype( quantity1 );
+    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
     switch ( GetObject( false ) ) {
     case MP2::OBJ_WITCHS_HUT:
-        quantity1 = skill;
+        assert( skill >= std::numeric_limits<Quantity1Type>::min() && skill <= std::numeric_limits<Quantity1Type>::max() );
+
+        quantity1 = static_cast<Quantity1Type>( skill );
         break;
 
     default:
@@ -164,13 +173,18 @@ Spell Maps::Tiles::QuantitySpell() const
 
 void Maps::Tiles::QuantitySetSpell( int spell )
 {
+    using Quantity1Type = decltype( quantity1 );
+    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
     switch ( GetObject( false ) ) {
     case MP2::OBJ_ARTIFACT:
     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
     case MP2::OBJ_PYRAMID:
-        quantity1 = spell;
+        assert( spell >= std::numeric_limits<Quantity1Type>::min() && spell <= std::numeric_limits<Quantity1Type>::max() );
+
+        quantity1 = static_cast<Quantity1Type>( spell );
         break;
 
     default:
@@ -211,13 +225,32 @@ Artifact Maps::Tiles::QuantityArtifact() const
 
 void Maps::Tiles::QuantitySetArtifact( int art )
 {
-    quantity1 = art;
+    using Quantity1Type = decltype( quantity1 );
+    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
+    assert( art >= std::numeric_limits<Quantity1Type>::min() && art <= std::numeric_limits<Quantity1Type>::max() );
+
+    quantity1 = static_cast<Quantity1Type>( art );
 }
 
 void Maps::Tiles::QuantitySetResource( int res, uint32_t count )
 {
-    quantity1 = res;
-    quantity2 = res == Resource::GOLD ? count / 100 : count;
+    using Quantity1Type = decltype( quantity1 );
+    using Quantity2Type = decltype( quantity2 );
+    static_assert( std::is_same_v<Quantity1Type, uint8_t> && std::is_same_v<Quantity2Type, uint8_t>,
+                   "Types of tile's quantities have been changed, check the logic below" );
+
+    assert( res >= std::numeric_limits<Quantity1Type>::min() && res <= std::numeric_limits<Quantity1Type>::max() );
+
+    quantity1 = static_cast<Quantity1Type>( res );
+
+    if ( res == Resource::GOLD ) {
+        count = count / 100;
+    }
+
+    assert( count >= std::numeric_limits<Quantity2Type>::min() && count <= std::numeric_limits<Quantity2Type>::max() );
+
+    quantity2 = static_cast<Quantity2Type>( count );
 }
 
 uint32_t Maps::Tiles::QuantityGold() const
@@ -352,10 +385,15 @@ Funds Maps::Tiles::QuantityFunds() const
 
 void Maps::Tiles::QuantitySetColor( int col )
 {
+    using Quantity1Type = decltype( quantity1 );
+    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
     switch ( GetObject( false ) ) {
     case MP2::OBJ_BARRIER:
     case MP2::OBJ_TRAVELLER_TENT:
-        quantity1 = col;
+        assert( col >= std::numeric_limits<Quantity1Type>::min() && col <= std::numeric_limits<Quantity1Type>::max() );
+
+        quantity1 = static_cast<Quantity1Type>( col );
         break;
 
     default:
@@ -535,14 +573,21 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
         if ( Artifact::UNKNOWN != art ) {
             if ( art == Artifact::SPELL_SCROLL ) {
+                static_assert( std::is_same_v<decltype( quantity1 ), uint8_t> && std::is_same_v<decltype( quantity2 ), uint8_t>,
+                               "Types of tile's quantities have been changed, check the bitwise arithmetic below" );
+                static_assert( Spell::FIREBALL < Spell::SETWGUARDIAN, "The order of spell IDs has been changed, check the logic below" );
+
+                // Spell id of a spell scroll is represented by 2 low-order bits of quantity2 and 5 high-order bits of quantity1 plus one, and cannot be random
+                const int spell
+                    = std::clamp( ( ( quantity2 & 0x03 ) << 5 ) + ( quantity1 >> 3 ) + 1, static_cast<int>( Spell::FIREBALL ), static_cast<int>( Spell::SETWGUARDIAN ) );
+
                 QuantitySetVariant( 15 );
-                // spell from origin mp2
-                QuantitySetSpell( 1 + ( quantity2 * 256 + quantity1 ) / 8 );
+                QuantitySetSpell( spell );
             }
             else {
                 // 0: 70% none
                 // 1,2,3 - 2000g, 2500g+3res, 3000g+5res,
-                // 4,5 - need have skill wisard or leadership,
+                // 4,5 - need to have skill wisdom or leadership,
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
                 // 15 - spell
                 int cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
@@ -945,15 +990,27 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
 uint32_t Maps::Tiles::MonsterCount() const
 {
+    static_assert( std::is_same_v<decltype( quantity1 ), uint8_t> && std::is_same_v<decltype( quantity2 ), uint8_t>,
+                   "Types of tile's quantities have been changed, check the logic below" );
+
     // TODO: avoid this hacky way of storing data.
-    return ( static_cast<uint32_t>( quantity1 ) << 8 ) | quantity2;
+    return ( static_cast<uint32_t>( quantity1 ) << 8 ) + quantity2;
 }
 
 void Maps::Tiles::MonsterSetCount( uint32_t count )
 {
+    static_assert( std::is_same_v<decltype( quantity1 ), uint8_t> && std::is_same_v<decltype( quantity2 ), uint8_t>,
+                   "Types of tile's quantities have been changed, check the logic below" );
+
+    if ( count > UINT16_MAX ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "The number of monsters for tile " << _index << " is " << count << ", which is more than " << UINT16_MAX )
+
+        count = UINT16_MAX;
+    }
+
     // TODO: avoid this hacky way of storing data.
-    quantity1 = count >> 8;
-    quantity2 = 0x00FF & count;
+    quantity1 = ( count >> 8 ) & 0xFF;
+    quantity2 = count & 0xFF;
 }
 
 void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count )
@@ -963,14 +1020,21 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
     // If there was another object sprite here (shadow for example) push it down to Addons,
     // except when there is already MONS32.ICN here.
     if ( tile._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 && tile._imageIndex != 255 ) {
-        tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile._uid, tile._objectIcnType, tile._imageIndex, false, false ) );
+        // Push object sprite to Level 1 Addons preserving the Layer Type.
+        tile.AddonsPushLevel1( TilesAddon( tile._layerType, tile._uid, tile._objectIcnType, tile._imageIndex, false, false ) );
 
-        // TODO: why are we setting UID to 0? It should be unique!
-        tile._uid = 0;
+        // Set unique UID for placed monster.
+        tile._uid = World::GetUniq();
         tile._objectIcnType = MP2::OBJ_ICN_TYPE_MONS32;
     }
 
-    tile._imageIndex = mons.GetSpriteIndex();
+    using TileImageIndexType = decltype( tile._imageIndex );
+    static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
+
+    const uint32_t monsSpriteIndex = mons.GetSpriteIndex();
+    assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
+
+    tile._imageIndex = static_cast<TileImageIndexType>( monsSpriteIndex );
 
     const bool setDefinedCount = ( count > 0 );
 
@@ -1032,7 +1096,13 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 
         // fixed random sprite
         tile.SetObject( MP2::OBJ_MONSTER );
-        tile._imageIndex = mons.GetID() - 1; // ICN::MONS32 start from PEASANT
+
+        using TileImageIndexType = decltype( tile._imageIndex );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
+
+        assert( mons.GetID() > std::numeric_limits<TileImageIndexType>::min() && mons.GetID() <= std::numeric_limits<TileImageIndexType>::max() );
+
+        tile._imageIndex = static_cast<TileImageIndexType>( mons.GetID() - 1 ); // ICN::MONS32 starts from PEASANT
     }
 
     uint32_t count = 0;

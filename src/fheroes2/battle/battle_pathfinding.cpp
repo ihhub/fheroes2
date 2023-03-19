@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_pathfinding.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -29,7 +31,6 @@
 
 #include "battle_arena.h"
 #include "battle_cell.h"
-#include "battle_pathfinding.h"
 #include "battle_troop.h"
 #include "castle.h"
 #include "speed.h"
@@ -45,11 +46,24 @@ namespace Battle
     {
         assert( unit.GetHeadIndex() != -1 && ( !unit.isWide() || unit.GetTailIndex() != -1 ) );
 
-        auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color );
-        const auto newSettings
-            = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetSpeed(), unit.isWide(), unit.isFlying(), unit.GetColor() );
+        const Board * board = Arena::GetBoard();
+        assert( board != nullptr );
 
-        // If all the parameters of the specified unit match the parameters of the unit for which the current cache was built, then there is no need to rebuild it
+        // Passability of the board cells can change during the unit's turn even without its intervention (for example, because of a hero's spell cast),
+        // we need to keep track of this
+        std::bitset<ARENASIZE> boardStatus;
+        for ( const Cell & cell : *board ) {
+            const int32_t cellIdx = cell.GetIndex();
+            assert( Board::isValidIndex( cellIdx ) );
+
+            boardStatus[cellIdx] = cell.isPassable( true );
+        }
+
+        auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color, _boardStatus );
+        const auto newSettings = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetSpeed(), unit.isWide(), unit.isFlying(),
+                                                  unit.GetColor(), boardStatus );
+
+        // If all the current parameters match the parameters for which the current cache was built, then there is no need to rebuild it
         if ( currentSettings == newSettings ) {
             return;
         }
@@ -64,9 +78,6 @@ namespace Battle
 
         // Flying units can land wherever they can fit
         if ( _isFlying ) {
-            const Board * board = Arena::GetBoard();
-            assert( board != nullptr );
-
             for ( const Cell & cell : *board ) {
                 const Position pos = Position::GetPosition( unit, cell.GetIndex() );
 
@@ -284,7 +295,9 @@ namespace Battle
         Indexes result;
         result.reserve( Speed::INSTANT );
 
+        BattleNodeIndex lastReachableNodeIdx{ -1, -1 };
         BattleNodeIndex nodeIdx = targetNodeIdx;
+
         for ( auto iter = _cache.find( nodeIdx ); iter != _cache.end(); iter = _cache.find( nodeIdx ) ) {
             const auto & [index, node] = *iter;
 
@@ -300,10 +313,31 @@ namespace Battle
                 continue;
             }
 
+            if ( _isWide && lastReachableNodeIdx == BattleNodeIndex{ -1, -1 } ) {
+                assert( index.first != -1 && index.second != -1 );
+
+                lastReachableNodeIdx = index;
+            }
+
             result.push_back( index.first );
         }
 
         std::reverse( result.begin(), result.end() );
+
+        // If a given position is not reachable on the current turn, then the last reachable position of
+        // a wide unit may be reversed in regard to the target one. Detect this and add an extra U-turn.
+        if ( _isWide && !result.empty() ) {
+            assert( lastReachableNodeIdx.first != -1 && lastReachableNodeIdx.second != -1 );
+
+            const bool isReflect = lastReachableNodeIdx.first < lastReachableNodeIdx.second;
+
+            if ( isReflect != position.isReflect() ) {
+                // The last reachable position should not be a reversed version of the target position
+                assert( !position.contains( lastReachableNodeIdx.first ) || !position.contains( lastReachableNodeIdx.second ) );
+
+                result.push_back( lastReachableNodeIdx.second );
+            }
+        }
 
         return result;
     }

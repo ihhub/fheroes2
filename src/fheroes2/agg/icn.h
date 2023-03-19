@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -956,6 +956,7 @@ namespace ICN
 
         MAP_TYPE_ICON,
         BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE,
+        SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE,
 
         GOOD_ARMY_BUTTON,
         GOOD_MARKET_BUTTON,
@@ -1057,6 +1058,8 @@ namespace ICN
         BUTTON_MAPSIZE_LARGE,
         BUTTON_MAPSIZE_XLARGE,
         BUTTON_MAPSIZE_ALL,
+
+        GAME_OPTION_ICON,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

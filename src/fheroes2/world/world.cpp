@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "world.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -39,11 +41,11 @@
 #include "color.h"
 #include "direction.h"
 #include "game.h"
+#include "game_io.h"
 #include "game_over.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
-#include "maps_actions.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "mp2.h"
@@ -53,12 +55,12 @@
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
-#include "world.h"
 
 namespace
 {
@@ -144,18 +146,6 @@ namespace
 namespace GameStatic
 {
     extern uint32_t uniq;
-}
-
-ListActions::~ListActions()
-{
-    clear();
-}
-
-void ListActions::clear()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
-    std::list<ActionSimple *>::clear();
 }
 
 MapObjects::~MapObjects()
@@ -282,21 +272,21 @@ void CapturedObjects::ClearFog( int colors )
         const ObjectColor & objcol = ( *it ).second.objcol;
 
         if ( objcol.isColor( colors ) ) {
-            int scoute = 0;
+            int scoutingDistance = 0;
 
             switch ( objcol.first ) {
             case MP2::OBJ_MINES:
             case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_SAWMILL:
-                scoute = 2;
+                scoutingDistance = 2;
                 break;
 
             default:
                 break;
             }
 
-            if ( scoute )
-                Maps::ClearFog( ( *it ).first, scoute, colors );
+            if ( scoutingDistance )
+                Maps::ClearFog( ( *it ).first, scoutingDistance, colors );
         }
     }
 }
@@ -364,7 +354,6 @@ void World::Reset()
 
     // extra
     map_captureobj.clear();
-    map_actions.clear();
     map_objects.clear();
 
     ultimate_artifact.Reset();
@@ -389,13 +378,13 @@ void World::NewMaps( int32_t sw, int32_t sh )
 
     Maps::FileInfo fi;
 
-    fi.size_w = static_cast<uint16_t>( width );
-    fi.size_h = static_cast<uint16_t>( height );
+    fi.width = static_cast<uint16_t>( width );
+    fi.height = static_cast<uint16_t>( height );
 
     Settings & conf = Settings::Get();
 
     if ( conf.isPriceOfLoyaltySupported() ) {
-        fi._version = GameVersion::PRICE_OF_LOYALTY;
+        fi.version = GameVersion::PRICE_OF_LOYALTY;
     }
 
     conf.SetCurrentFileInfo( fi );
@@ -892,12 +881,6 @@ int World::ColorCapturedObject( int32_t index ) const
     return map_captureobj.GetColor( index );
 }
 
-ListActions * World::GetListActions( int32_t index )
-{
-    MapActions::iterator it = map_actions.find( index );
-    return it != map_actions.end() ? &( *it ).second : nullptr;
-}
-
 CapturedObject & World::GetCapturedObject( int32_t index )
 {
     return map_captureobj.Get( index );
@@ -913,10 +896,10 @@ void World::ClearFog( int colors )
     colors = Players::GetPlayerFriends( colors );
 
     // clear abroad castles
-    vec_castles.Scoute( colors );
+    vec_castles.Scout( colors );
 
     // clear abroad heroes
-    vec_heroes.Scoute( colors );
+    vec_heroes.Scout( colors );
 
     map_captureobj.ClearFog( colors );
 }
@@ -1394,7 +1377,7 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t height = static_cast<uint16_t>( w.height );
 
     return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
+               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1408,7 +1391,20 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1002_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1002_RELEASE ) {
+        uint32_t dummy = 0xDEADBEEF;
+
+        msg >> dummy;
+
+        if ( dummy != 0 ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid number of MapActions items: " << dummy )
+        }
+    }
+
+    msg >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 
@@ -1433,7 +1429,7 @@ void EventDate::LoadFromMP2( StreamBuf st )
         // allow computer
         computer = ( st.getLE16() != 0 );
 
-        // day of first occurent
+        // day of first occurrence
         first = st.getLE16();
 
         // subsequent occurrences

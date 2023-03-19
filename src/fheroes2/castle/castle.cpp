@@ -223,7 +223,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     //    Is it allowed to build a castle?
     //
     // - unused 29 bytes
-    //    Always zeroes.
+    //    Always zeros.
 
     StreamBuf dataStream( data );
 
@@ -454,7 +454,7 @@ void Castle::PostLoad()
     if ( building & DWELLING_UPGRADE7 )
         dwelling[5] = Monster( race, DWELLING_UPGRADE7 ).GetGrown();
 
-    // fix upgrade dwelling dependend from race
+    // fix upgrade dwelling dependent from race
     switch ( race ) {
     case Race::BARB:
         building &= ~( DWELLING_UPGRADE3 | DWELLING_UPGRADE6 );
@@ -2490,18 +2490,15 @@ bool Castle::BuyBoat() const
 
     if ( MP2::OBJ_NONE == left.GetObject() && left.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-
-        left.setBoat( Direction::RIGHT );
+        left.setBoat( Direction::RIGHT, kingdom.GetColor() );
     }
     else if ( MP2::OBJ_NONE == right.GetObject() && right.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-
-        right.setBoat( Direction::RIGHT );
+        right.setBoat( Direction::RIGHT, kingdom.GetColor() );
     }
     else if ( MP2::OBJ_NONE == middle.GetObject() && middle.isWater() ) {
         kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-
-        middle.setBoat( Direction::RIGHT );
+        middle.setBoat( Direction::RIGHT, kingdom.GetColor() );
     }
 
     return true;
@@ -2529,7 +2526,7 @@ void Castle::setName( const std::set<std::string> & usedNames )
 
 int Castle::GetControl() const
 {
-    /* gray towns: ai control */
+    /* gray towns: AI control */
     return GetColor() & Color::ALL ? GetKingdom().GetControl() : CONTROL_AI;
 }
 
@@ -2558,7 +2555,7 @@ uint32_t Castle::GetGrownMonthOf()
     return GameStatic::GetCastleGrownMonthOf();
 }
 
-void Castle::Scoute() const
+void Castle::Scout() const
 {
     Maps::ClearFog( GetIndex(), GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ), GetColor() );
 }
@@ -2691,11 +2688,11 @@ void AllCastles::AddCastle( Castle * castle )
     _castleTiles[center + fheroes2::Point( 0, -3 )] = id;
 }
 
-void AllCastles::Scoute( int colors ) const
+void AllCastles::Scout( int colors ) const
 {
     for ( auto it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
-            ( *it )->Scoute();
+            ( *it )->Scout();
 }
 
 /* pack castle */

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -410,7 +410,7 @@ void Interface::StatusWindow::DrawBackground() const
             fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         }
 
-        // botom
+        // bottom
         srcrt = fheroes2::Rect( 0, startY, icnston.width(), icnston.height() - startY );
         dstpt = fheroes2::Point( pos.x, pos.y + pos.height - ( icnston.height() - startY ) );
         fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );

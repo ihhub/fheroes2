@@ -22,6 +22,8 @@
  ***************************************************************************/
 
 #include "m82.h"
+
+#include "maps_tiles.h"
 #include "mp2.h"
 #include "spell.h"
 
@@ -200,9 +202,17 @@ int M82::FromSpell( const int spellID )
     return UNKNOWN;
 }
 
-M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectType )
+// TODO: This function works fine for most of objects as they have only one "main" tile. However,
+// TODO: some objects like Oracle or Volcano can be bigger than 1 tile leading to multiple sounds
+// TODO: coming from the same object and these sounds might not be synchronized. This is mostly
+// TODO: noticeable with 3D Audio mode on.
+M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
 {
-    switch ( objectType ) {
+    if ( tile.isStream() ) {
+        return LOOP0014;
+    }
+
+    switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_BUOY:
         return LOOP0000;
     case MP2::OBJ_SHIPWRECK:
@@ -214,6 +224,19 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
         return LOOP0003;
     case MP2::OBJ_STONE_LITHS:
         return LOOP0004;
+    case MP2::OBJ_VOLCANO:
+        switch ( tile.getObjectIcnType() ) {
+        // Tile with volcanic steam only
+        case MP2::OBJ_ICN_TYPE_UNKNOWN:
+            return UNKNOWN;
+        // Small volcanoes
+        case MP2::OBJ_ICN_TYPE_OBJNLAVA:
+            return LOOP0005;
+        default:
+            break;
+        }
+        // Other volcanoes
+        return LOOP0027;
     case MP2::OBJ_LAVAPOOL:
         return LOOP0006;
     case MP2::OBJ_ALCHEMIST_LAB:
@@ -240,6 +263,12 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
         return LOOP0018;
+    case MP2::OBJ_ROCK:
+        // This sound should only be played for a specific sprite belonging to Rock
+        if ( tile.containsSprite( MP2::OBJ_ICN_TYPE_OBJNWATR, 183 ) ) {
+            return LOOP0019;
+        }
+        break;
     case MP2::OBJ_TAR_PIT:
         return LOOP0021;
     case MP2::OBJ_TRADING_POST:
@@ -253,9 +282,6 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
     case MP2::OBJ_ABANDONED_MINE:
     case MP2::OBJ_FREEMANS_FOUNDRY:
         return LOOP0026;
-    case MP2::OBJ_VOLCANO:
-        // TODO: LOOP0005 is for all volcanos in the original game while LOOP0027 is used only for tall volcanos. Figure our how to use 2 sounds together.
-        return LOOP0027;
     default:
         break;
     }

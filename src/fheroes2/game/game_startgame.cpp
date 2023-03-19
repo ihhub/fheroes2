@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -43,7 +45,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "direction.h"
-#include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -625,7 +626,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
 
                 radar.SetHide( true );
-                radar.SetRedraw();
+                radar.SetRedraw( REDRAW_RADAR_CURSOR );
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -683,10 +684,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     statusWindow.Reset();
                     statusWindow.SetState( StatusType::STATUS_AITURN );
 
+#if defined( WITH_DEBUG )
                     if ( player->isAIAutoControlMode() ) {
+                        // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
                         radar.SetHide( false );
-                        radar.SetRedraw();
+                        radar.SetRedraw( REDRAW_RADAR );
                     }
+#endif
 
                     Redraw();
                     display.render();
@@ -761,6 +765,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     radar.SetHide( false );
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
+
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -1145,7 +1150,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 gameArea.Scroll();
 
                 gameArea.SetRedraw();
-                radar.SetRedraw();
+                radar.SetRedraw( REDRAW_RADAR_CURSOR );
             }
         }
 

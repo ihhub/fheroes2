@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game_over.h"
+
 #include <cassert>
 #include <cstddef>
 #include <utility>
@@ -35,7 +37,6 @@
 #include "color.h"
 #include "dialog.h"
 #include "game.h"
-#include "game_over.h"
 #include "game_video.h"
 #include "game_video_type.h"
 #include "gamedefs.h"
@@ -43,7 +44,6 @@
 #include "kingdom.h"
 #include "mus.h"
 #include "players.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
@@ -345,7 +345,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
     const int humanColors = Players::HumanColors();
 
     int activeHumanColors = 0;
-    int activeColors = 0;
 
     for ( const int color : Colors( colors ) ) {
         if ( !world.GetKingdom( color ).isPlay() ) {
@@ -354,11 +353,8 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             }
             colors &= ( ~color );
         }
-        else {
-            ++activeColors;
-            if ( color & humanColors ) {
-                ++activeHumanColors;
-            }
+        else if ( color & humanColors ) {
+            ++activeHumanColors;
         }
     }
 
@@ -481,14 +477,5 @@ StreamBase & GameOver::operator<<( StreamBase & msg, const Result & res )
 
 StreamBase & GameOver::operator>>( StreamBase & msg, Result & res )
 {
-    msg >> res.colors >> res.result;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE4_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE4_1000_RELEASE ) {
-        bool dummy;
-
-        msg >> dummy;
-    }
-
-    return msg;
+    return msg >> res.colors >> res.result;
 }

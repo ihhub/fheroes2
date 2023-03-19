@@ -232,7 +232,7 @@ namespace
         const fheroes2::Sprite & audioSettingsIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 1 );
         fheroes2::drawOption( areas[6], audioSettingsIcon, _( "Audio" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
-        const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, 5 );
+        const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 );
         fheroes2::drawOption( areas[7], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         const bool isShowBattleDamageInfoEnabled = conf.isBattleShowDamageInfoEnabled();
@@ -948,23 +948,36 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
                 statusMessage = _( "Hero's Options" );
             }
         }
+        else {
+            if ( !le.MousePressRight() ) {
+                break;
+            }
 
-        if ( !buttons && !le.MousePressRight() )
+            continue;
+        }
+
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnClose.area() ) ) {
             break;
+        }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) || ( btnCast.isEnabled() && le.MouseClickLeft( btnCast.area() ) ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_CAST_SPELL ) || ( btnCast.isEnabled() && le.MouseClickLeft( btnCast.area() ) ) ) {
             result = 1;
+        }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) || ( btnRetreat.isEnabled() && le.MouseClickLeft( btnRetreat.area() ) ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) || ( btnRetreat.isEnabled() && le.MouseClickLeft( btnRetreat.area() ) ) ) {
             result = 2;
+        }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) || ( btnSurrender.isEnabled() && le.MouseClickLeft( btnSurrender.area() ) ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) || ( btnSurrender.isEnabled() && le.MouseClickLeft( btnSurrender.area() ) ) ) {
             result = 3;
+        }
 
         if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
-            // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
             LocalEvent::GetClean();
+            // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
             const_cast<Heroes *>( actionHero )->OpenDialog( true, false, true, true );
+            // Render to restore the screen after closing the hero dialog
+            display.render();
         }
 
         if ( le.MousePressRight( btnCast.area() ) && current_color == hero.GetColor() ) {
@@ -990,10 +1003,6 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         else if ( le.MousePressRight( btnClose.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Return to the battle." ), Font::BIG );
         }
-
-        // exit
-        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnClose.area() ) )
-            break;
 
         if ( statusMessage != status.GetMessage() ) {
             status.SetMessage( statusMessage );

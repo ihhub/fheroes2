@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -123,7 +123,7 @@ namespace
 
 CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const fheroes2::Point & top )
 {
-    const std::vector<building_t> ordersBuildings = fheroes2::getBuildingDrawingPriorities( castle.GetRace(), Settings::Get().CurrentFileInfo()._version );
+    const std::vector<building_t> ordersBuildings = fheroes2::getBuildingDrawingPriorities( castle.GetRace(), Settings::Get().CurrentFileInfo().version );
 
     for ( const building_t buildingId : ordersBuildings ) {
         emplace_back( buildingId, fheroes2::getCastleBuildingArea( castle.GetRace(), buildingId ) + top );
@@ -411,6 +411,9 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
         const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
         fheroes2::drawCastleDialogBuilding( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle,
                                             { dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width(), dst_pt.y + rightCaptainQuarters.y() }, max, alpha );
+    }
+    else if ( castle.GetRace() == Race::SORC && BUILD_CAPTAIN == build && !castle.isBuild( BUILD_CASTLE ) ) {
+        fheroes2::drawCastleDialogBuilding( ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle, dst_pt, max, alpha );
     }
 }
 

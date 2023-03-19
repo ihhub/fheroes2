@@ -103,7 +103,6 @@ namespace Battle
         void SetRandomLuck();
         void NewTurn();
 
-        bool isValid() const override;
         bool isFlying() const;
         bool isDoubleAttack() const;
 
@@ -178,8 +177,8 @@ namespace Battle
             return shots;
         }
 
-        uint32_t ApplyDamage( Unit &, uint32_t );
-        uint32_t ApplyDamage( uint32_t );
+        uint32_t ApplyDamage( Unit & enemy, const uint32_t dmg );
+        uint32_t ApplyDamage( const uint32_t dmg );
         uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
         uint32_t CalculateMinDamage( const Unit & ) const;
         uint32_t CalculateMaxDamage( const Unit & ) const;
@@ -189,10 +188,10 @@ namespace Battle
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
         void PostAttackAction();
-        void ResetBlind();
         void SetBlindAnswer( bool value );
         void SpellModesAction( const Spell &, uint32_t, const HeroBase * );
-        void SpellApplyDamage( const Spell &, uint32_t, const HeroBase *, TargetInfo & );
+        void SpellApplyDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, TargetInfo & target );
+        uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const;
         void SpellRestoreAction( const Spell &, uint32_t, const HeroBase * );
         uint32_t Resurrect( uint32_t, bool, bool );
 
@@ -270,13 +269,23 @@ namespace Battle
             return idleTimer.checkDelay();
         }
 
+        // Remove temporary affection(s) (usually spell effect(s)). Multiple affections can be removed using a single call.
+        void removeAffection( const uint32_t mode );
+
         // TODO: find a better way to expose it without a million getters/setters
         AnimationState animation;
 
     private:
+        // Add a temporary affection (usually a spell effect) with the specified duration. Only one affection can be added.
+        void addAffection( const uint32_t mode, const uint32_t duration );
+
+        // Replace some temporary affection(s) with another affection. Multiple affections can be replaced by a new one (but
+        // only one) with a single call.
+        void replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration );
+
         const uint32_t _uid;
         uint32_t hp;
-        uint32_t count0;
+        uint32_t _initialCount;
         uint32_t dead;
         uint32_t shots;
         uint32_t disruptingray;

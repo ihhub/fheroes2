@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -77,8 +77,6 @@ namespace Dialog
         DIG = 0x1000,
 
         UPGRADE_DISABLE = MAX,
-
-        READONLY = 0x2000,
         BUTTONS = ( YES | OK | NO | CANCEL )
     };
 
@@ -87,7 +85,7 @@ namespace Dialog
     std::string SelectFileLoad();
     std::string SelectFileSave();
 
-    void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
+    void QuickInfo( const Maps::Tiles & tile );
 
     // These functions are able to show the location of an object on the radar. If the location should be shown on the radar, then an
     // additional area, the contents of which should be restored when the radar is redrawn (areaToRestore), can be optionally specified.

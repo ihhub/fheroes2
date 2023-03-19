@@ -103,6 +103,26 @@ namespace AI
         uint32_t patrolDistance = 0;
     };
 
+    struct PriorityTask
+    {
+        PriorityTaskType type = PriorityTaskType::ATTACK;
+        double threatLevel = 0.0;
+        std::set<int> secondaryTaskTileId;
+
+        PriorityTask() = default;
+        PriorityTask( PriorityTaskType t, double threat )
+            : type( t )
+            , threatLevel( threat )
+        {}
+
+        PriorityTask( PriorityTaskType t, double threat, int secondaryTask )
+            : type( t )
+            , threatLevel( threat )
+        {
+            secondaryTaskTileId.insert( secondaryTask );
+        }
+    };
+
     struct BattleTargetPair
     {
         int cell = -1;
@@ -254,10 +274,12 @@ namespace AI
         void CastleTurn( Castle & castle, const bool defensiveStrategy );
         bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
 
-        double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getCourierObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getCourierMainTarget( const Heroes & hero, double lowestPossibleValue ) const;
+
+        void updatePriorityTargets( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType );
 
         bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
                                 bool moreTasksForHeroes );

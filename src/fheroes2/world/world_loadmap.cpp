@@ -553,7 +553,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 break;
             case MP2::OBJ_SIGN:
             case MP2::OBJ_BOTTLE:
-                // add sign or buttle
+                // add sign or bottle
                 if ( MP2::SIZEOFMP2SIGN - 1 < pblock.size() && 0x01 == pblock[0] ) {
                     MapSign * obj = new MapSign();
                     obj->LoadFromMP2( findobject, StreamBuf( pblock ) );

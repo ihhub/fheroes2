@@ -1,5 +1,8 @@
-extractor	- expand all files from agg.
-82m2wav		- convert 82m to wav file.
-til2img		- expand sprites from til file.
-icn2img		- expand sprites from icn file.
-xmi2mid		- xmi to midi convertor.
+82m2wav   - converts the specified 82M file(s) to WAV format.
+bin2txt   - extracts various data from monster animation files.
+extractor - extracts the contents of the specified AGG file(s).
+h2dmgr    - manages the contents of the specified H2D file(s).
+icn2img   - extracts sprites in BMP or PNG format (if supported) and their offsets from the specified ICN file(s).
+pal2img   - generates an image with colors based on a provided palette file.
+til2img   - extracts sprites in BMP or PNG format (if supported) from the specified TIL file(s).
+xmi2midi  - converts the specified XMI file(s) to MIDI format.

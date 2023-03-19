@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,6 +35,7 @@
 #include "army_bar.h"
 #include "army_troop.h"
 #include "artifact.h"
+#include "artifact_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -400,6 +401,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     display.render();
 
+    const int32_t hero1ScoutAreaBonus = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
+    const int32_t hero2ScoutAreaBonus = otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
+
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
@@ -650,5 +654,16 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     armyCountBackgroundRestorerLeft.reset();
     armyCountBackgroundRestorerRight.reset();
     restorer.restore();
+
+    // If the scout area bonus is increased with the new artifact we reveal the fog and update the radar.
+    if ( hero1ScoutAreaBonus < bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
+        Scout( GetIndex() );
+        ScoutRadar();
+    }
+    if ( hero2ScoutAreaBonus < otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
+        otherHero.Scout( otherHero.GetIndex() );
+        otherHero.ScoutRadar();
+    }
+
     display.render();
 }

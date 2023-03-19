@@ -54,6 +54,14 @@ enum MusicSource
     MUSIC_EXTERNAL
 };
 
+enum class ZoomLevel : uint8_t
+{
+    ZoomLevel0 = 0,
+    ZoomLevel1 = 1,
+    ZoomLevel2 = 2,
+    ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
+};
+
 class Settings
 {
 public:
@@ -80,7 +88,7 @@ public:
 
     bool isCurrentMapPriceOfLoyalty() const
     {
-        return current_maps_file._version == GameVersion::PRICE_OF_LOYALTY;
+        return current_maps_file.version == GameVersion::PRICE_OF_LOYALTY;
     }
 
     int HeroesMoveSpeed() const
@@ -320,7 +328,7 @@ public:
     // from maps info
     bool AllowChangeRace( int f ) const
     {
-        return ( current_maps_file.rnd_races & f ) != 0;
+        return ( current_maps_file.colorsOfRandomRaces & f ) != 0;
     }
 
     const std::string & MapsFile() const
@@ -345,7 +353,7 @@ public:
 
     fheroes2::Size MapsSize() const
     {
-        return { current_maps_file.size_w, current_maps_file.size_h };
+        return { current_maps_file.width, current_maps_file.height };
     }
 
     bool GameStartWithHeroes() const
@@ -408,6 +416,16 @@ public:
         current_maps_file.file = file;
     }
 
+    ZoomLevel ViewWorldZoomLevel() const
+    {
+        return _viewWorldZoomLevel;
+    }
+
+    void SetViewWorldZoomLevel( ZoomLevel zoomLevel )
+    {
+        _viewWorldZoomLevel = zoomLevel;
+    }
+
     void SetProgramPath( const char * );
 
     static std::string GetVersion();
@@ -451,6 +469,7 @@ private:
 
     int game_type;
     int preferably_count_players;
+    ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };
