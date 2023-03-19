@@ -83,7 +83,7 @@ private:
     bool read_only;
     bool can_change;
     std::string msg;
-    int32_t troopInfoWindowOffsetY;
+    int32_t troopWindowOffsetY;
 };
 
 #endif
