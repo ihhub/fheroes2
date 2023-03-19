@@ -747,11 +747,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 void Interface::GameArea::updateMapFogDirections()
 {
     const int32_t friendColors = Players::FriendColors();
-    const int32_t worldSize = static_cast<int32_t>( world.getSize() );
 
-    for ( int32_t i = 0; i < worldSize; ++i ) {
-        world.GetTiles( i ).updateFogDirection( friendColors );
-    }
+    Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
 }
 
 void Interface::GameArea::Scroll()

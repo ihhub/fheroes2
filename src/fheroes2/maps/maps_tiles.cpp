@@ -2454,22 +2454,101 @@ void Maps::Tiles::ClearFog( const int colors )
 
 void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color )
 {
+    const int32_t worldWidth = world.w();
+
     // Do not get over the world borders.
     const int32_t minX = std::max( minPos.x, 0 );
     const int32_t minY = std::max( minPos.y, 0 );
     // Add extra 1 to reach the given maxPos point.
-    const int32_t maxX = std::min( maxPos.x + 1, world.w() );
+    const int32_t maxX = std::min( maxPos.x + 1, worldWidth );
     const int32_t maxY = std::min( maxPos.y + 1, world.h() );
 
-    for ( int32_t x = minX; x < maxX; ++x ) {
-        for ( int32_t y = minY; y < maxY; ++y ) {
+    // Fog data range is 1 tile bigger from each side as for the fog directions we have to check all tiles around.
+    const int32_t fogMinX = minX - 1;
+    const int32_t fogMinY = minY - 1;
+    const int32_t fogMaxX = maxX + 1;
+    const int32_t fogMaxY = maxY + 1;
+    const int32_t fogWidth = fogMaxX - fogMinX;
+    const int32_t fogHeight = fogMaxY - fogMinY;
+
+    std::vector<bool> isFog( static_cast<size_t>( fogWidth ) * fogHeight, true );
+    std::vector<bool>::iterator isFogIter = isFog.begin();
+    const int32_t worldMaxIndex = static_cast<int32_t>( world.getSize() ) - 1;
+
+    // Cache the 'isFog' data for the given area to use it in fog direction calculation.
+    for ( int32_t y = fogMinY; y < fogMaxY; ++y ) {
+        for ( int32_t x = fogMinX; x < fogMaxX; ++x ) {
+            const int32_t fogTileIndex = x + y * worldWidth;
+
+            if ( ( fogTileIndex < 0 ) || ( fogTileIndex > worldMaxIndex ) ) {
+                ++isFogIter;
+                continue;
+            }
+
+            *isFogIter = world.GetTiles( fogTileIndex ).isFog( color );
+
+            ++isFogIter;
+        }
+    }
+
+    // Set the pointer to 'isFog' data to correspond the first tile in given area: skip the upper row of 'isFog' and the left column.
+    isFogIter = isFog.begin() + fogWidth + 1;
+
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
             Maps::Tiles & tile = world.GetTiles( x, y );
 
-            // Do not update tile with already cleared fog direction on update.
-            if ( tile.getFogDirection() != Direction::UNKNOWN ) {
-                tile.updateFogDirection( color );
+            if ( !( *isFogIter ) ) {
+                // For the tile is without fog we set the UNKNOWN direction.
+                tile._setFogDirection( Direction::UNKNOWN );
+
+                ++isFogIter;
+                continue;
             }
+
+            // The tile is under the fog so its CENTER direction for fog is true.
+            uint16_t fogDirection = Direction::CENTER;
+
+            // Check all tiles around for fog and if it is true - logically add the direction to this tile.
+            if ( *( isFogIter - fogWidth - 1 ) ) {
+                fogDirection |= Direction::TOP_LEFT;
+            }
+
+            if ( *( isFogIter - fogWidth ) ) {
+                fogDirection |= Direction::TOP;
+            }
+
+            if ( *( isFogIter - fogWidth + 1 ) ) {
+                fogDirection |= Direction::TOP_RIGHT;
+            }
+
+            if ( *( isFogIter - 1 ) ) {
+                fogDirection |= Direction::LEFT;
+            }
+
+            if ( *( isFogIter + 1 ) ) {
+                fogDirection |= Direction::RIGHT;
+            }
+
+            if ( *( isFogIter + fogWidth - 1 ) ) {
+                fogDirection |= Direction::BOTTOM_LEFT;
+            }
+
+            if ( *( isFogIter + fogWidth ) ) {
+                fogDirection |= Direction::BOTTOM;
+            }
+
+            if ( *( isFogIter + fogWidth + 1 ) ) {
+                fogDirection |= Direction::BOTTOM_RIGHT;
+            }
+
+            tile._setFogDirection( fogDirection );
+
+            ++isFogIter;
         }
+
+        // The 'isFog' data has extra columns from the right and the left sides so we need to skip them when going to the next row.
+        isFogIter += 2;
     }
 }
 

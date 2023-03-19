@@ -426,6 +426,11 @@ namespace Maps
 
         bool isDetachedObject() const;
 
+        void _setFogDirection( const uint16_t fogDirection )
+        {
+            _fogDirection = fogDirection;
+        }
+
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
         static void UpdateMonsterPopulation( Tiles & );
