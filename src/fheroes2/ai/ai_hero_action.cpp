@@ -600,7 +600,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dstIndex );
 
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
-            auto removeProtection = [&hero, objectType, &tile]() {
+            auto removeObjectProtection = [&hero, objectType, &tile]() {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
 
@@ -611,8 +611,8 @@ namespace
                 }
             };
 
-            auto captureObject = [&hero, &tile, &removeProtection]() {
-                removeProtection();
+            auto captureObject = [&hero, &tile, &removeObjectProtection]() {
+                removeObjectProtection();
 
                 tile.QuantitySetColor( hero.GetColor() );
             };
@@ -638,7 +638,7 @@ namespace
                     // If all the guards are defeated, but the hero has lost the battle,
                     // just remove the protection from the object
                     if ( monstersLeft == 0 ) {
-                        removeProtection();
+                        removeObjectProtection();
                     }
 
                     AIBattleLose( hero, result, true );

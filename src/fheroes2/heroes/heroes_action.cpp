@@ -1940,7 +1940,7 @@ namespace
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
             };
 
-            auto removeProtection = [&hero, objectType, &tile, &updateRadar]( const bool isUpdateRadar ) {
+            auto removeObjectProtection = [&hero, objectType, &tile, &updateRadar]( const bool isUpdateRadar ) {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
 
@@ -1955,8 +1955,8 @@ namespace
                 }
             };
 
-            auto captureObject = [&hero, objectType, &tile, &updateRadar, &removeProtection]() {
-                removeProtection( false );
+            auto captureObject = [&hero, objectType, &tile, &updateRadar, &removeObjectProtection]() {
+                removeObjectProtection( false );
 
                 tile.QuantitySetColor( hero.GetColor() );
 
@@ -2061,7 +2061,7 @@ namespace
                     // If all the guards are defeated, but the hero has lost the battle,
                     // just remove the protection from the object
                     if ( monstersLeft == 0 ) {
-                        removeProtection( true );
+                        removeObjectProtection( true );
                     }
 
                     BattleLose( hero, result, true );
