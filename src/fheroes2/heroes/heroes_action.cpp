@@ -370,7 +370,7 @@ namespace
             else {
                 BattleLose( hero, res, true );
 
-                const uint32_t monstersLeft = army.GetCountMonsters( troop.GetMonster() );
+                const uint32_t monstersLeft = army.getTotalCount();
                 if ( monstersLeft > 0 ) {
                     tile.MonsterSetCount( monstersLeft );
 
@@ -1955,29 +1955,31 @@ namespace
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
             bool capture = true;
 
-            // Check guardians
             if ( tile.isCaptureObjectProtected() ) {
                 Army army( tile );
-                const Monster & mons = tile.QuantityMonster();
 
                 Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
 
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
-                    // Clear any metadata related to spells.
-                    tile.clearAdditionalMetadata();
                 }
                 else {
-                    capture = false;
-
                     BattleLose( hero, result, true );
 
-                    Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
-                    troop.SetCount( army.GetCountMonsters( mons ) );
+                    const uint32_t monstersLeft = army.getTotalCount();
+                    if ( monstersLeft > 0 ) {
+                        capture = false;
+
+                        Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
+                        troop.SetCount( monstersLeft );
+                    }
                 }
             }
 
             if ( capture ) {
+                // Clear any metadata related to spells
+                tile.clearAdditionalMetadata();
+
                 // Restore the abandoned mine
                 if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
                     Maps::Tiles::UpdateAbandonedMineSprite( tile );
