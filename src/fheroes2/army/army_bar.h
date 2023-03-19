@@ -49,6 +49,8 @@ public:
     void SetBackground( const fheroes2::Size & sz, const uint8_t fillColor );
     void SetArmy( Army * );
 
+    void setTroopWindowOffsetY(int32_t offsetY);
+
     bool isValid() const;
 
     void ResetSelected();
@@ -81,6 +83,7 @@ private:
     bool read_only;
     bool can_change;
     std::string msg;
+    int32_t troopInfoWindowOffsetY;
 };
 
 #endif
