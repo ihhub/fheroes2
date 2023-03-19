@@ -35,6 +35,11 @@ This tool converts the various graphical assets contained within the ICNs into P
 - pal2img
 
 This tool generates a PNG or BMP file from the palette file `KB.PAL`. It displays it as 16x16 tiles of 16 pixels each.
+Some colors in the game are used for the cycling animation. Use these colors only if the animation is a requirement:
+- 214, 215, 216, 217
+- 218, 219, 220, 221
+- 231, 232, 233, 234, 235
+- 238, 239, 240, 241
 
 ## How to use the tools to extract the images
 
@@ -66,4 +71,3 @@ within the issue. Also notify the fheroes2 team that you wish to work on the iss
 5. Repeat steps 3-4 until approval.
 6. Expand the review team to 3-4 members and steps 3-4 are repeated.
 7. Once everyone approves we will add this file into the `resurrection.h2d` data file and change the code in the fheroes2 source code to use it.
-
