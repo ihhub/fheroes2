@@ -69,14 +69,7 @@ namespace
     }
 }
 
-int MP2::GetICNObject( const uint8_t tileset )
-{
-    // First 2 bits are used for flags like animation.
-    // TODO: separate these 2 bits and real tile (?) index into 2 variables to avoid this bit shifting operations all over the code.
-    return getIcnIdFromObjectIcnType( tileset >> 2 );
-}
-
-int MP2::getIcnIdFromObjectIcnType( const uint8_t objectIcnType )
+int MP2::getIcnIdFromObjectIcnType( const ObjectIcnType objectIcnType )
 {
     switch ( objectIcnType ) {
     case OBJ_ICN_TYPE_UNKNOWN:
@@ -188,9 +181,8 @@ int MP2::getIcnIdFromObjectIcnType( const uint8_t objectIcnType )
     return ICN::UNKNOWN;
 }
 
-bool MP2::isHiddenForPuzzle( const int terrainType, uint8_t tileset, uint8_t index )
+bool MP2::isHiddenForPuzzle( const int terrainType, const ObjectIcnType objectIcnType, uint8_t index )
 {
-    const int objectIcnType = tileset >> 2;
     switch ( objectIcnType ) {
     case OBJ_ICN_TYPE_UNKNOWN:
     case OBJ_ICN_TYPE_UNUSED_1:
@@ -224,7 +216,7 @@ bool MP2::isHiddenForPuzzle( const int terrainType, uint8_t tileset, uint8_t ind
         break;
     }
 
-    return isDiggingHoleSprite( terrainType, tileset, index );
+    return isDiggingHoleSprite( terrainType, objectIcnType, index );
 }
 
 const char * MP2::StringObject( MapObjectType objectType, const int count )
@@ -277,7 +269,7 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
     case OBJ_NON_ACTION_DRAGON_CITY:
         return _( "Dragon City" );
     case OBJ_NON_ACTION_LIGHTHOUSE:
-        return _( "Lighthouse" );
+        return _n( "Lighthouse", "Lighthouses", count );
     case OBJ_NON_ACTION_WATER_WHEEL:
         return _n( "Water Wheel", "Water Wheels", count );
     case OBJ_NON_ACTION_MINES:
@@ -592,22 +584,22 @@ bool MP2::isActionObject( const MapObjectType objectType, const bool locatesOnWa
 bool MP2::isWaterActionObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
-    case OBJ_SEA_CHEST:
-    case OBJ_DERELICT_SHIP:
-    case OBJ_SHIPWRECK:
-    case OBJ_WHIRLPOOL:
-    case OBJ_BUOY:
+    case OBJ_ARTIFACT:
+    case OBJ_BARRIER: // Can barriers be set on water?
     case OBJ_BOTTLE:
-    case OBJ_SHIPWRECK_SURVIVOR:
+    case OBJ_BUOY:
+    case OBJ_COAST: // This is actually a land object.
+    case OBJ_DERELICT_SHIP:
     case OBJ_FLOTSAM:
     case OBJ_MAGELLANS_MAPS:
-    case OBJ_COAST:
     case OBJ_MERMAID:
-    case OBJ_SIRENS:
-    case OBJ_BARRIER:
     case OBJ_MONSTER:
-    case OBJ_ARTIFACT:
     case OBJ_RESOURCE:
+    case OBJ_SEA_CHEST:
+    case OBJ_SHIPWRECK:
+    case OBJ_SHIPWRECK_SURVIVOR:
+    case OBJ_SIRENS:
+    case OBJ_WHIRLPOOL:
         return true;
     case OBJ_CASTLE:
     case OBJ_BOAT:
@@ -732,62 +724,6 @@ bool MP2::isArtifactObject( const MapObjectType objectType )
     case OBJ_SKELETON:
     case OBJ_TREASURE_CHEST:
     case OBJ_WAGON:
-        return true;
-    default:
-        break;
-    }
-
-    return false;
-}
-
-bool MP2::isHeroUpgradeObject( const MapObjectType objectType )
-{
-    // Sort things in alphabetical order for better readability.
-    switch ( objectType ) {
-    case OBJ_FORT:
-    case OBJ_GAZEBO:
-    case OBJ_MERCENARY_CAMP:
-    case OBJ_SHRINE_FIRST_CIRCLE:
-    case OBJ_SHRINE_SECOND_CIRCLE:
-    case OBJ_SHRINE_THIRD_CIRCLE:
-    case OBJ_STANDING_STONES:
-    case OBJ_TREE_OF_KNOWLEDGE:
-    case OBJ_WITCH_DOCTORS_HUT:
-    case OBJ_WITCHS_HUT:
-    case OBJ_XANADU:
-        return true;
-    default:
-        break;
-    }
-
-    return false;
-}
-
-bool MP2::isMonsterDwelling( const MapObjectType objectType )
-{
-    // Sort things in alphabetical order for better readability.
-    switch ( objectType ) {
-    case OBJ_AIR_ALTAR:
-    case OBJ_ARCHER_HOUSE:
-    case OBJ_BARROW_MOUNDS:
-    case OBJ_CAVE:
-    case OBJ_CITY_OF_DEAD:
-    case OBJ_DESERT_TENT:
-    case OBJ_DRAGON_CITY:
-    case OBJ_DWARF_COTTAGE:
-    case OBJ_EARTH_ALTAR:
-    case OBJ_EXCAVATION:
-    case OBJ_FIRE_ALTAR:
-    case OBJ_GOBLIN_HUT:
-    case OBJ_HALFLING_HOLE:
-    case OBJ_PEASANT_HUT:
-    case OBJ_RUINS:
-    case OBJ_TREE_CITY:
-    case OBJ_TREE_HOUSE:
-    case OBJ_TROLL_BRIDGE:
-    case OBJ_WAGON_CAMP:
-    case OBJ_WATER_ALTAR:
-    case OBJ_WATCH_TOWER:
         return true;
     default:
         break;
@@ -970,49 +906,49 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     return Direction::UNKNOWN;
 }
 
-bool MP2::getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint8_t & index )
+bool MP2::getDiggingHoleSprite( const int terrainType, ObjectIcnType & objectIcnType, uint8_t & index )
 {
     switch ( terrainType ) {
     case Maps::Ground::DESERT:
-        tileSet = ( OBJ_ICN_TYPE_OBJNDSRT << 2 );
+        objectIcnType = OBJ_ICN_TYPE_OBJNDSRT;
         index = 68;
         return true;
     case Maps::Ground::SNOW:
-        tileSet = ( OBJ_ICN_TYPE_OBJNSNOW << 2 );
+        objectIcnType = OBJ_ICN_TYPE_OBJNSNOW;
         index = 11;
         return true;
     case Maps::Ground::SWAMP:
-        tileSet = ( OBJ_ICN_TYPE_OBJNSWMP << 2 );
+        objectIcnType = OBJ_ICN_TYPE_OBJNSWMP;
         index = 86;
         return true;
     case Maps::Ground::WASTELAND:
-        tileSet = ( OBJ_ICN_TYPE_OBJNCRCK << 2 );
+        objectIcnType = OBJ_ICN_TYPE_OBJNCRCK;
         index = 70;
         return true;
     case Maps::Ground::LAVA:
-        tileSet = ( OBJ_ICN_TYPE_OBJNLAVA << 2 );
+        objectIcnType = OBJ_ICN_TYPE_OBJNLAVA;
         index = 26;
         return true;
     case Maps::Ground::DIRT:
-        tileSet = ( OBJ_ICN_TYPE_OBJNDIRT << 2 );
+        objectIcnType = OBJ_ICN_TYPE_OBJNDIRT;
         index = 140;
         return true;
     case Maps::Ground::BEACH:
     case Maps::Ground::GRASS:
         // Beach doesn't have its digging hole so we use it from Grass terrain.
-        tileSet = ( OBJ_ICN_TYPE_OBJNGRA2 << 2 );
+        objectIcnType = OBJ_ICN_TYPE_OBJNGRA2;
         index = 9;
         return true;
     case Maps::Ground::WATER:
         // It is not possible to dig on water. Remember this!
-        tileSet = 0;
+        objectIcnType = OBJ_ICN_TYPE_UNKNOWN;
         index = 255;
         return false;
     default:
         // Did you add a new terrain type? Add the logic above!
         assert( 0 );
 
-        tileSet = 0;
+        objectIcnType = OBJ_ICN_TYPE_UNKNOWN;
         index = 255;
         break;
     }
@@ -1020,14 +956,14 @@ bool MP2::getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint8_
     return false;
 }
 
-bool MP2::isDiggingHoleSprite( const int terrainType, const uint8_t tileSet, const uint8_t index )
+bool MP2::isDiggingHoleSprite( const int terrainType, const ObjectIcnType objectIcnType, const uint8_t index )
 {
-    uint8_t correctTileSet = 0;
+    ObjectIcnType terrainObjectIcnType = OBJ_ICN_TYPE_UNKNOWN;
     uint8_t correctIndex = 0;
 
-    if ( !getDiggingHoleSprite( terrainType, correctTileSet, correctIndex ) ) {
+    if ( !getDiggingHoleSprite( terrainType, terrainObjectIcnType, correctIndex ) ) {
         return false;
     }
 
-    return ( ( tileSet >> 2 ) << 2 ) == correctTileSet && index == correctIndex;
+    return ( objectIcnType == terrainObjectIcnType ) && ( index == correctIndex );
 }

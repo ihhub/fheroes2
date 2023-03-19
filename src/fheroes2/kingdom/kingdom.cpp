@@ -81,7 +81,16 @@ namespace
     Funds getHandicapDependentIncome( const Funds & original, const Player::HandicapStatus handicapStatus )
     {
         const int32_t handicapPercentage = getHandicapIncomePercentage( handicapStatus );
-        return ( original * handicapPercentage + Funds( 99, 99, 99, 99, 99, 99, 99 ) ) / 100;
+        Funds corrected( original );
+        corrected.wood = std::min( corrected.wood, ( corrected.wood * handicapPercentage + 99 ) / 100 );
+        corrected.mercury = std::min( corrected.mercury, ( corrected.mercury * handicapPercentage + 99 ) / 100 );
+        corrected.ore = std::min( corrected.ore, ( corrected.ore * handicapPercentage + 99 ) / 100 );
+        corrected.sulfur = std::min( corrected.sulfur, ( corrected.sulfur * handicapPercentage + 99 ) / 100 );
+        corrected.crystal = std::min( corrected.crystal, ( corrected.crystal * handicapPercentage + 99 ) / 100 );
+        corrected.gems = std::min( corrected.gems, ( corrected.gems * handicapPercentage + 99 ) / 100 );
+        corrected.gold = std::min( corrected.gold, ( corrected.gold * handicapPercentage + 99 ) / 100 );
+
+        return corrected;
     }
 }
 
@@ -412,7 +421,6 @@ bool Kingdom::AllowPayment( const Funds & funds ) const
            && ( resource.gold >= funds.gold || 0 == funds.gold );
 }
 
-/* is visited cell */
 bool Kingdom::isVisited( const Maps::Tiles & tile ) const
 {
     return isVisited( tile.GetIndex(), tile.GetObject( false ) );
@@ -424,7 +432,6 @@ bool Kingdom::isVisited( int32_t index, const MP2::MapObjectType objectType ) co
     return visit_object.end() != it && ( *it ).isObject( objectType );
 }
 
-/* return true if object visited */
 bool Kingdom::isVisited( const MP2::MapObjectType objectType ) const
 {
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
@@ -436,8 +443,7 @@ uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) con
     return static_cast<uint32_t>( std::count_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } ) );
 }
 
-/* set visited cell */
-void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_NONE )
+void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
 {
     if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_NONE )
         visit_object.push_front( IndexObject( index, objectType ) );

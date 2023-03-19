@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -273,12 +273,12 @@ namespace fheroes2
         const Heroes & _hero;
     };
 
-    class DynamicImageDialogElement : public DialogElement
+    class AnimationDialogElement : public DialogElement
     {
     public:
-        explicit DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndices, const uint64_t delay );
+        explicit AnimationDialogElement( const int icnId, std::vector<uint32_t> backgroundIndices, const uint32_t animationIndexOffset, const uint64_t delay );
 
-        ~DynamicImageDialogElement() override = default;
+        ~AnimationDialogElement() override = default;
 
         void draw( Image & output, const Point & offset ) const override;
 
@@ -294,10 +294,43 @@ namespace fheroes2
 
         const std::vector<uint32_t> _backgroundIndices;
 
+        const uint32_t _animationIndexOffset;
+
         const uint64_t _delay;
 
         mutable uint32_t _currentIndex;
 
         Point _internalOffset;
+    };
+
+    class CustomAnimationDialogElement : public DialogElement
+    {
+    public:
+        explicit CustomAnimationDialogElement( const int icnId, Image staticImage, const Point animationPositionOffset, const uint32_t animationIndexOffset,
+                                               const uint64_t delay );
+
+        ~CustomAnimationDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        // Never call this method as a dynamic image has nothing to popup.
+        void showPopup( const int buttons ) const override;
+
+        bool update( Image & output, const Point & offset ) const override;
+
+    private:
+        const int _icnId;
+
+        const Image _staticImage;
+
+        const Point _animationPosition;
+
+        const uint32_t _animationIndexOffset;
+
+        const uint64_t _delay;
+
+        mutable uint32_t _currentIndex;
     };
 }

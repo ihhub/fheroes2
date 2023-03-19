@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,36 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdint>
-#include <cstdlib>
-#include <iostream>
+#pragma once
+
 #include <string>
-#include <vector>
 
-#include "audio.h"
-#include "tools.h"
-
-#if defined( _WIN32 )
-#undef main
-#endif
-
-int main( int argc, char ** argv )
+namespace fheroes2
 {
-    if ( argc != 3 ) {
-        std::cout << argv[0] << " infile.xmi outfile.mid" << std::endl;
-        return EXIT_SUCCESS;
-    }
-
-    std::vector<uint8_t> buf = LoadFileToMem( argv[1] );
-
-    if ( !buf.empty() ) {
-        buf = Music::Xmi2Mid( buf );
-
-        if ( buf.empty() )
-            std::cerr << ", file: " << argv[1] << std::endl;
-        else
-            SaveMemToFile( buf, std::string( argv[2] ) );
-    }
-
-    return 0;
+    // fheroes2 does not support UTF-8 so on mobile devices with virtual keyboard it might be a big problem.
+    // As a solution we should utilize an in-game virtual keyboard which supports all code pages available by the engine.
+    // The default language in the keyboard is English.
+    void openVirtualKeyboard( std::string & output );
 }

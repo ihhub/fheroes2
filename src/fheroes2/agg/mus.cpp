@@ -21,16 +21,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "mus.h"
+
 #include <array>
 #include <cassert>
 #include <string>
 
 #include "ground.h"
-#include "mp2.h"
-#include "mus.h"
 #include "race.h"
 #include "rand.h"
-#include "settings.h"
 
 namespace
 {
@@ -191,56 +190,6 @@ namespace MUS
         }
 
         return UNKNOWN;
-    }
-
-    int FromMapObject( const MP2::MapObjectType objectType )
-    {
-        if ( Settings::Get().MusicMIDI() ) {
-            return UNKNOWN;
-        }
-
-        switch ( objectType ) {
-        case MP2::OBJ_PYRAMID:
-        case MP2::OBJ_DRAGON_CITY:
-        case MP2::OBJ_CITY_OF_DEAD:
-        case MP2::OBJ_TROLL_BRIDGE:
-            return DUNGEON;
-        case MP2::OBJ_ARTESIAN_SPRING:
-        case MP2::OBJ_MAGIC_WELL:
-        case MP2::OBJ_ORACLE:
-            return WATERSPRING;
-        case MP2::OBJ_DESERT_TENT: // Changed OG selection to something more appropriate
-        case MP2::OBJ_SPHINX:
-        case MP2::OBJ_GENIE_LAMP:
-            return ARABIAN;
-        case MP2::OBJ_TREE_HOUSE:
-        case MP2::OBJ_TREE_CITY:
-        case MP2::OBJ_WAGON_CAMP:
-            return TREEHOUSE;
-        case MP2::OBJ_DAEMON_CAVE:
-            return DEMONCAVE;
-        case MP2::OBJ_GAZEBO:
-        case MP2::OBJ_TREE_OF_KNOWLEDGE:
-            return EXPERIENCE;
-        case MP2::OBJ_FORT:
-        case MP2::OBJ_MERCENARY_CAMP:
-        case MP2::OBJ_WITCH_DOCTORS_HUT:
-        case MP2::OBJ_STANDING_STONES:
-        case MP2::OBJ_WITCHS_HUT:
-            return SKILL;
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_ABANDONED_MINE:
-        case MP2::OBJ_MAGELLANS_MAPS:
-        case MP2::OBJ_OBSERVATION_TOWER:
-            return WATCHTOWER;
-        case MP2::OBJ_XANADU:
-        case MP2::OBJ_LIGHTHOUSE:
-            return XANADU;
-        default:
-            return UNKNOWN;
-        }
     }
 
     int GetBattleRandom()

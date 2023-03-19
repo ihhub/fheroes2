@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -69,25 +69,6 @@ namespace
         case fheroes2::FontSize::BUTTON_RELEASED:
         case fheroes2::FontSize::BUTTON_PRESSED:
             return 8;
-        default:
-            assert( 0 ); // Did you add a new font size? Please add implementation.
-        }
-
-        return 0;
-    }
-
-    int32_t getFontHeight( const fheroes2::FontSize fontSize )
-    {
-        switch ( fontSize ) {
-        case fheroes2::FontSize::SMALL:
-            return 8 + 2 + 1;
-        case fheroes2::FontSize::NORMAL:
-            return 13 + 3 + 1;
-        case fheroes2::FontSize::LARGE:
-            return 26 + 6 + 1;
-        case fheroes2::FontSize::BUTTON_RELEASED:
-        case fheroes2::FontSize::BUTTON_PRESSED:
-            return 16;
         default:
             assert( 0 ); // Did you add a new font size? Please add implementation.
         }
@@ -341,7 +322,7 @@ namespace
             offset = &staticOffset;
         }
 
-        const int32_t fontHeight = getFontHeight( fontType.size );
+        const int32_t fontHeight = fheroes2::getFontHeight( fontType.size );
         const int32_t yPos = y + ( rowHeight - fontHeight ) / 2;
 
         while ( character != characterEnd ) {
@@ -468,6 +449,25 @@ namespace
 
 namespace fheroes2
 {
+    int32_t getFontHeight( const fheroes2::FontSize fontSize )
+    {
+        switch ( fontSize ) {
+        case fheroes2::FontSize::SMALL:
+            return 8 + 2 + 1;
+        case fheroes2::FontSize::NORMAL:
+            return 13 + 3 + 1;
+        case fheroes2::FontSize::LARGE:
+            return 26 + 6 + 1;
+        case fheroes2::FontSize::BUTTON_RELEASED:
+        case fheroes2::FontSize::BUTTON_PRESSED:
+            return 16;
+        default:
+            assert( 0 ); // Did you add a new font size? Please add implementation.
+        }
+
+        return 0;
+    }
+
     TextBase::~TextBase() = default;
 
     Text::Text( const std::string & text, const FontType fontType )

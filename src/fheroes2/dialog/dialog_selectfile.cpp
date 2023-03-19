@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -36,8 +36,8 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
-#include "game.h"
 #include "game_hotkeys.h"
+#include "game_io.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
@@ -52,6 +52,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_keyboard.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "world.h"
@@ -123,10 +124,21 @@ public:
         fheroes2::Text header( ResizeToShortName( info.file ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
+
         body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
         body.add( { info.name, fheroes2::FontType::normalWhite() } );
-        body.add( { _( "\n\nLocation: " ), fheroes2::FontType::normalYellow() } );
-        body.add( { fullPath, fheroes2::FontType::normalWhite() } );
+
+        if ( info.worldDay > 0 || info.worldWeek > 0 || info.worldMonth > 0 ) {
+            body.add( { _( "\n\nMonth: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { std::to_string( info.worldMonth ), fheroes2::FontType::normalWhite() } );
+            body.add( { _( ", Week: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { std::to_string( info.worldWeek ), fheroes2::FontType::normalWhite() } );
+            body.add( { _( ", Day: " ), fheroes2::FontType::normalYellow() } );
+            body.add( { std::to_string( info.worldDay ), fheroes2::FontType::normalWhite() } );
+        }
+
+        body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
+        body.add( { fullPath, fheroes2::FontType::smallWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::ZERO );
     }
@@ -148,7 +160,7 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int
     char shortHours[20];
     char shortTime[20];
 
-    const tm tmi = System::GetTM( info.localtime );
+    const tm tmi = System::GetTM( info.timestamp );
 
     std::fill( shortDate, std::end( shortDate ), static_cast<char>( 0 ) );
     std::fill( shortHours, std::end( shortHours ), static_cast<char>( 0 ) );
@@ -235,7 +247,7 @@ std::string Dialog::SelectFileSave()
 
 std::string Dialog::SelectFileLoad()
 {
-    const std::string & lastfile = Game::GetLastSavename();
+    const std::string & lastfile = Game::GetLastSaveName();
     return SelectFileListSimple( _( "File to Load:" ), ( !lastfile.empty() ? lastfile : "" ), false );
 }
 
@@ -320,14 +332,11 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     display.render();
 
-    if ( isEditing ) {
-        // Show keyboard only when editing file name.
-        le.OpenVirtualKeyboard();
-    }
-
     std::string result;
     bool is_limit = false;
     std::string lastSelectedSaveFileName;
+
+    const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
     while ( le.HandleEvents() && result.empty() ) {
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -349,9 +358,17 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             break;
         }
         else if ( le.MouseClickLeft( enter_field ) && isEditing ) {
-            charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
-            if ( filename.empty() )
-                buttonOk.disable();
+            if ( isInGameKeyboardRequired ) {
+                fheroes2::openVirtualKeyboard( filename );
+                charInsertPos = filename.size();
+                listbox.Unselect();
+                isListboxSelected = false;
+            }
+            else {
+                charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
+                if ( filename.empty() )
+                    buttonOk.disable();
+            }
 
             needRedraw = true;
         }
@@ -425,10 +442,6 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         buttonOk.draw();
         buttonCancel.draw();
         display.render();
-    }
-
-    if ( isEditing ) {
-        le.CloseVirtualKeyboard();
     }
 
     return result;

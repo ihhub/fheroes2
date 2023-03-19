@@ -872,6 +872,11 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const u
 
     for ( int32_t dq = -intRadius; dq <= intRadius; ++dq ) {
         for ( int32_t dr = std::max( -intRadius, -intRadius - dq ); dr <= std::min( intRadius, intRadius - dq ); ++dr ) {
+            // Center should not be included
+            if ( dq == 0 && dr == 0 ) {
+                continue;
+            }
+
             const int32_t q = centerQ + dq;
             const int32_t r = centerR + dr;
 
@@ -914,16 +919,16 @@ bool Battle::Board::isValidMirrorImageIndex( const int32_t index, const Unit * u
     return true;
 }
 
-bool Battle::Board::CanAttackFromCell( const Unit & currentUnit, const int32_t from )
+bool Battle::Board::CanAttackFromCell( const Unit & unit, const int32_t from )
 {
-    const Position pos = Position::GetReachable( currentUnit, from );
+    const Position pos = Position::GetReachable( unit, from );
 
     // Target unit cannot be attacked if out of reach
     if ( pos.GetHead() == nullptr ) {
         return false;
     }
 
-    assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+    assert( !unit.isWide() || pos.GetTail() != nullptr );
 
     const Castle * castle = Arena::GetCastle();
 
@@ -933,17 +938,17 @@ bool Battle::Board::CanAttackFromCell( const Unit & currentUnit, const int32_t f
     }
 
     // Target unit isn't attacked from the moat
-    if ( !isMoatIndex( from, currentUnit ) ) {
+    if ( !isMoatIndex( from, unit ) ) {
         return true;
     }
 
     // The moat doesn't stop flying units
-    if ( currentUnit.isFlying() ) {
+    if ( unit.isFlying() ) {
         return true;
     }
 
     // Attacker is already near the target
-    if ( from == currentUnit.GetHeadIndex() || ( currentUnit.isWide() && from == currentUnit.GetTailIndex() ) ) {
+    if ( from == unit.GetHeadIndex() || ( unit.isWide() && from == unit.GetTailIndex() ) ) {
         return true;
     }
 
@@ -951,10 +956,10 @@ bool Battle::Board::CanAttackFromCell( const Unit & currentUnit, const int32_t f
     return false;
 }
 
-bool Battle::Board::CanAttackTargetFromPosition( const Unit & currentUnit, const Unit & target, const int32_t dst )
+bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Unit & target, const int32_t dst )
 {
     // Get the actual position of the attacker before attacking
-    const Position pos = Position::GetReachable( currentUnit, dst );
+    const Position pos = Position::GetReachable( attacker, dst );
 
     // Check that the attacker is actually capable of attacking the target from this position
     const std::array<const Cell *, 2> cells = { pos.GetHead(), pos.GetTail() };
@@ -964,7 +969,7 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & currentUnit, const
             continue;
         }
 
-        if ( !CanAttackFromCell( currentUnit, cell->GetIndex() ) ) {
+        if ( !CanAttackFromCell( attacker, cell->GetIndex() ) ) {
             continue;
         }
 

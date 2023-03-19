@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -70,7 +70,8 @@ namespace
 
     void drawGraphics( const fheroes2::Rect & optionRoi )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 15 ), _( "Graphics" ), _( "Settings" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Graphics" ), _( "Settings" ),
+                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawAudioOptions( const fheroes2::Rect & optionRoi )
@@ -80,7 +81,8 @@ namespace
 
     void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
     {
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::CSPANEL, 5 ), _( "Hot Keys" ), _( "Configure" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 0 ), _( "Hot Keys" ), _( "Configure" ),
+                              fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
     }
 
     void drawCursorTypeOptions( const fheroes2::Rect & optionRoi )
@@ -265,8 +267,7 @@ namespace fheroes2
 
                     conf.setGameLanguage( getLanguageAbbreviation( SupportedLanguage::English ) );
 
-                    fheroes2::showStandardTextMessage( _( "Attention" ),
-                                                       _( "Your version of Heroes of Might and Magic II does not support any other languages than English." ),
+                    fheroes2::showStandardTextMessage( "Attention", "Your version of Heroes of Might and Magic II does not support any other languages than English.",
                                                        Dialog::OK );
                 }
 

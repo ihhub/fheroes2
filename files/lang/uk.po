@@ -1,13 +1,12 @@
 # Ukrainian translation of fheroes2
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-24 08:29+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1600,6 +1599,10 @@ msgid "campaignBonus|Foremost Scroll"
 msgstr "Вищий сувій"
 
 #, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Баліста"
+
+#, fuzzy
 msgid "campaignBonus|Hideous Mask"
 msgstr "Мерзенна маска"
 
@@ -2694,7 +2697,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 
@@ -2797,17 +2800,6 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr ""
-
 #, fuzzy
 msgid "Attack Skill"
 msgstr "Атака"
@@ -2829,6 +2821,17 @@ msgid "Hit Points"
 msgstr ""
 
 msgid "Hit Points Left"
+msgstr ""
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+
+msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
 msgid "Followers"
@@ -2988,14 +2991,6 @@ msgstr ""
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
-msgstr ""
-
-msgid "Attention"
-msgstr ""
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
 msgstr ""
 
 #, fuzzy
@@ -3280,6 +3275,18 @@ msgstr "Мапа: "
 msgid ""
 "\n"
 "\n"
+"Month: "
+msgstr ""
+
+msgid ", Week: "
+msgstr ""
+
+msgid ", Day: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
 "Location: "
 msgstr ""
 
@@ -3316,14 +3323,9 @@ msgstr ""
 msgid "Select Skill:"
 msgstr ""
 
-msgid "Location: "
-msgstr ""
-
-msgid ""
-"\n"
-"\n"
-"Map Type:\n"
-msgstr ""
+#, fuzzy
+msgid "Map Type:\n"
+msgstr "Тип мапи"
 
 msgid "The Succession Wars"
 msgstr ""
@@ -3698,15 +3700,15 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
-msgstr ""
+#, fuzzy
+msgid "Development"
+msgstr "Розробка"
 
 msgid "Visit us at "
 msgstr ""
 
-#, fuzzy
-msgid "Development"
-msgstr "Розробка"
+msgid "QA and Support"
+msgstr ""
 
 msgid "Dev and Support"
 msgstr ""
@@ -3877,21 +3879,25 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-msgid "This file contains a save with an invalid game type."
-msgstr ""
+#, fuzzy
+msgid "The save file is corrupted."
+msgstr "Немає файлів збереження для завантаження."
 
-msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
-msgstr ""
-
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 msgid "Current game version: "
 msgstr ""
 
 msgid "Last supported version: "
+msgstr ""
+
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+msgid ""
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -4454,10 +4460,25 @@ msgstr ""
 msgid "View %{skill} Info"
 msgstr ""
 
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
+
 msgid "Kingdom Income"
 msgstr ""
 
 msgid "Kingdom Income per day."
+msgstr ""
+
+msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
 
 msgid "English"
@@ -4918,12 +4939,12 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr ""
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr ""
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
-msgstr ""
-
-msgid "You enter the faerie ring, but nothing happens."
 msgstr ""
 
 msgid ""
@@ -5211,11 +5232,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5259,6 +5275,11 @@ msgid ""
 msgstr ""
 
 msgid "You gain control of a %{name}."
+msgstr ""
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
 msgstr ""
 
 msgid ""
@@ -5540,16 +5561,14 @@ msgid ""
 "the cave mouth. Will you enter?"
 msgstr ""
 
+msgid "Except for evidence of a terrible battle, the cave is empty."
+msgstr ""
+
 msgid ""
 "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, "
 "\"you will fight and surely die. But I will give you a choice of deaths. You "
 "may fight me, or you may fight my servants. Do you prefer to fight my "
 "servants?\""
-msgstr ""
-
-msgid ""
-"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
-"gold."
 msgstr ""
 
 msgid ""
@@ -5569,17 +5588,19 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Seeing that you do not have %{count} gold, the demon slashes you with its "
+"claws, and the last thing you see is a red haze."
+msgstr ""
+
+msgid ""
 "The Demon leaps upon you and has its claws at your throat before you can "
 "even draw your sword. \"Your life is mine,\" it says. \"I will sell it back "
 "to you for %{count} gold.\""
 msgstr ""
 
 msgid ""
-"Seeing that you do not have %{count} gold, the demon slashes you with its "
-"claws, and the last thing you see is a red haze."
-msgstr ""
-
-msgid "Except for evidence of a terrible battle, the cave is empty."
+"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
+"gold."
 msgstr ""
 
 msgid ""
@@ -5685,6 +5706,9 @@ msgstr ""
 msgid "This eye seems to be intently studying its surroundings."
 msgstr ""
 
+msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgstr ""
+
 msgid ""
 "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you "
 "shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept "
@@ -5700,17 +5724,14 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
-"so here's your reward. Now begone.\""
-msgstr ""
-
-msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
 "you with a paw, knocking you to the ground. Another blow makes the world go "
 "black, and you know no more."
 msgstr ""
 
-msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgid ""
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
 msgstr ""
 
 msgid ""
@@ -5751,6 +5772,12 @@ msgstr ""
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
+msgid "This spell cannot be used on a boat."
+msgstr ""
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -5765,11 +5792,6 @@ msgid ""
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
-msgstr ""
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
 msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -5854,12 +5876,6 @@ msgid "This spell is already in use."
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
-msgstr ""
-
-msgid "This spell cannot be used on a boat."
-msgstr ""
-
-msgid "This spell can be casted only nearby water."
 msgstr ""
 
 msgid ""
@@ -6820,7 +6836,10 @@ msgstr "Місто Драконів"
 
 #, fuzzy
 msgid "Lighthouse"
-msgstr "Маяк"
+msgid_plural "Lighthouses"
+msgstr[0] "Маяк"
+msgstr[1] "Маяк"
+msgstr[2] "Маяк"
 
 #, fuzzy
 msgid "Water Wheel"
@@ -9602,23 +9621,3 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Wait this unit"
-#~ msgstr "Чекати інших"
-
-#, fuzzy
-#~ msgid "Wait"
-#~ msgstr "Чекати"
-
-#, fuzzy
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Очікування для цієї істоти. Ця істота не буде ходити доки не походять всі "
-#~ "інші істоти."
-
-#, fuzzy
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} чекає на свою чергу."

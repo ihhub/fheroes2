@@ -88,7 +88,7 @@ namespace AI
                     && ValueHasImproved( newOutcome.positionValue, previous.positionValue, newOutcome.attackValue, previous.attackValue ) );
     }
 
-    MeleeAttackOutcome BestAttackOutcome( const Arena & arena, const Unit & attacker, const Unit & defender, const Rand::DeterministicRandomGenerator & randomGenerator )
+    MeleeAttackOutcome BestAttackOutcome( Arena & arena, const Unit & attacker, const Unit & defender, const Rand::DeterministicRandomGenerator & randomGenerator )
     {
         MeleeAttackOutcome bestOutcome;
 
@@ -100,7 +100,7 @@ namespace AI
         for ( const int32_t nearbyIdx : nearbyIndexes ) {
             const Position pos = Position::GetPosition( attacker, nearbyIdx );
 
-            if ( !arena.isPositionReachable( pos, false ) ) {
+            if ( !arena.isPositionReachable( attacker, pos, false ) ) {
                 continue;
             }
 
@@ -162,7 +162,7 @@ namespace AI
             double cellThreatLevel = 0.0;
 
             for ( const Unit * enemy : enemies ) {
-                // Archers and Flyers are always threatning, skip
+                // Archers and Flyers are always threatening, skip
                 if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
                     continue;
                 }
@@ -181,20 +181,20 @@ namespace AI
         return targetCell;
     }
 
-    std::pair<int32_t, uint32_t> findNearestCellNextToUnit( const Arena & arena, const Unit & currentUnit, const Unit & target )
+    std::pair<int32_t, uint32_t> findNearestCellNextToUnit( Arena & arena, const Unit & currentUnit, const Unit & target )
     {
         std::pair<int32_t, uint32_t> result = { -1, UINT32_MAX };
 
         for ( const int32_t nearbyIdx : Board::GetAroundIndexes( target ) ) {
             const Position pos = Position::GetPosition( currentUnit, nearbyIdx );
 
-            if ( !arena.isPositionReachable( pos, false ) ) {
+            if ( !arena.isPositionReachable( currentUnit, pos, false ) ) {
                 continue;
             }
 
             assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
-            const uint32_t dist = arena.CalculateMoveDistance( pos );
+            const uint32_t dist = arena.CalculateMoveDistance( currentUnit, pos );
             if ( result.first == -1 || dist < result.second ) {
                 result = { nearbyIdx, dist };
             }
@@ -208,7 +208,7 @@ namespace AI
         // First try to find the position that is reachable on the current turn
         Position pos = Position::GetReachable( currentUnit, idx );
 
-        // If there is no such position, then use an abstract position that corresponds to the given index
+        // If there is no such position, then use an abstract position corresponding to the specified index
         if ( pos.GetHead() == nullptr ) {
             pos = Position::GetPosition( currentUnit, idx );
         }
@@ -524,13 +524,13 @@ namespace AI
                 _defendingCastle = true;
                 _myShooterStr += towerStr;
                 if ( !attackerIgnoresCover )
-                    _enemyShooterStr /= 2;
+                    _enemyShooterStr /= 1.5;
             }
             else {
                 _attackingCastle = true;
                 _enemyShooterStr += towerStr;
                 if ( !attackerIgnoresCover )
-                    _myShooterStr /= 2;
+                    _myShooterStr /= 1.5;
             }
         }
 
@@ -548,27 +548,19 @@ namespace AI
         if ( currentUnit.isFlying() ) {
             overPowerRatio = 6;
         }
-        if ( _defendingCastle ) {
-            overPowerRatio /= 2; // don't make shooters to kill us.
-        }
 
         // When we have in X times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
         const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * overPowerRatio;
         const double enemyArcherRatio = _enemyShooterStr / _enemyArmyStrength;
 
-        double enemyArcherThreshold = 0.75;
-        if ( _defendingCastle ) {
-            // Don't make shooters to kill us while we are standing in the castle.
-            enemyArcherThreshold /= 2;
-        }
-
-        _defensiveTactics = enemyArcherRatio < enemyArcherThreshold && ( _defendingCastle || _myShooterStr > _enemyShooterStr ) && !myOverpoweredArmy;
+        const double enemyArcherThreshold = 0.66;
+        _defensiveTactics = _myShooterStr > _enemyShooterStr && ( _defendingCastle || enemyArcherRatio < enemyArcherThreshold ) && !myOverpoweredArmy;
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    "Tactic " << _defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio )
     }
 
-    Actions BattlePlanner::archerDecision( const Arena & arena, const Unit & currentUnit ) const
+    Actions BattlePlanner::archerDecision( Arena & arena, const Unit & currentUnit ) const
     {
         Actions actions;
         BattleTargetPair target;
@@ -608,7 +600,7 @@ namespace AI
             }
             else {
                 // Kiting enemy: Search for a safe spot unit can move to
-                target.cell = FindMoveToRetreat( arena.getAllAvailableMoves(), currentUnit, enemies );
+                target.cell = FindMoveToRetreat( arena.getAllAvailableMoves( currentUnit ), currentUnit, enemies );
 
                 if ( target.cell != -1 ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, target cell is " << target.cell )
@@ -672,7 +664,7 @@ namespace AI
         return actions;
     }
 
-    BattleTargetPair BattlePlanner::meleeUnitOffense( const Arena & arena, const Unit & currentUnit ) const
+    BattleTargetPair BattlePlanner::meleeUnitOffense( Arena & arena, const Unit & currentUnit ) const
     {
         BattleTargetPair target;
 
@@ -717,7 +709,7 @@ namespace AI
                     const Position pos = Position::GetPosition( currentUnit, move.first );
                     assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
-                    const Indexes path = arena.GetPath( pos );
+                    const Indexes path = arena.GetPath( currentUnit, pos );
 
                     // Normally this shouldn't happen
                     if ( path.empty() ) {
@@ -748,13 +740,13 @@ namespace AI
             for ( const int32_t cellIdx : cellsUnderWallsIndexes ) {
                 const Position pos = Position::GetPosition( currentUnit, cellIdx );
 
-                if ( !arena.isPositionReachable( pos, false ) ) {
+                if ( !arena.isPositionReachable( currentUnit, pos, false ) ) {
                     continue;
                 }
 
                 assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
-                const uint32_t dist = arena.CalculateMoveDistance( pos );
+                const uint32_t dist = arena.CalculateMoveDistance( currentUnit, pos );
                 if ( target.cell == -1 || dist < shortestDist ) {
                     shortestDist = dist;
                     target.cell = cellIdx;
@@ -767,7 +759,7 @@ namespace AI
         return target;
     }
 
-    BattleTargetPair BattlePlanner::meleeUnitDefense( const Arena & arena, const Unit & currentUnit ) const
+    BattleTargetPair BattlePlanner::meleeUnitDefense( Arena & arena, const Unit & currentUnit ) const
     {
         BattleTargetPair target;
 
@@ -854,7 +846,7 @@ namespace AI
         return target;
     }
 
-    Actions BattlePlanner::berserkTurn( const Arena & arena, const Unit & currentUnit ) const
+    Actions BattlePlanner::berserkTurn( Arena & arena, const Unit & currentUnit )
     {
         assert( currentUnit.Modes( SP_BERSERKER ) );
 
@@ -932,13 +924,13 @@ namespace AI
                 for ( const int32_t cellIdx : cacheItemIter->second ) {
                     const Position pos = Position::GetPosition( currentUnit, cellIdx );
 
-                    if ( !arena.isPositionReachable( pos, false ) ) {
+                    if ( !arena.isPositionReachable( currentUnit, pos, false ) ) {
                         continue;
                     }
 
                     assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
-                    const uint32_t dist = arena.CalculateMoveDistance( pos );
+                    const uint32_t dist = arena.CalculateMoveDistance( currentUnit, pos );
                     if ( targetInfo.cell == -1 || dist < shortestDist ) {
                         shortestDist = dist;
                         targetInfo.cell = cellIdx;

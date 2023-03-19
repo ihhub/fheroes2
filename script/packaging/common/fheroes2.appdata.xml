@@ -23,8 +23,6 @@
   <url type="faq">https://github.com/ihhub/fheroes2/wiki/F.A.Q.</url>
   <url type="translate">https://github.com/ihhub/fheroes2/blob/master/docs/TRANSLATION.md</url>
   <url type="donation">https://www.patreon.com/fheroes2</url>
-  <url type="donation">https://www.paypal.com/paypalme/fheroes2</url>
-  <url type="donation">https://boosty.to/fheroes2</url>
   <content_rating type="oars-1.1">
     <content_attribute id="violence-cartoon">mild</content_attribute>
     <content_attribute id="violence-fantasy">mild</content_attribute>
@@ -35,6 +33,137 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-03-12" version="v1.0.2">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.2</url>
+      <description>
+        <p>Changes in v1.0.2 (12 March 2023):</p>
+        <ul>
+          <li>fix display of Haunted Mines on mini-map and in View World</li>
+          <li>update the Norwegian translation</li>
+          <li>allow resurrected units to act on the current turn if they have not yet had their turn</li>
+          <li>add missing part of Captain's Quarter in Sorceress Town</li>
+          <li>allow to resurrect Elementals</li>
+          <li>fix the battle casualty report when non-true Resurrect spell was used during battle</li>
+          <li>redraw hero icons to display movement bar change before action dialog box is shown</li>
+          <li>fight the guardians on dwellings on Adventure Map only once per game</li>
+          <li>change the logic of reinforcement of the guest hero's army during the castle defence</li>
+          <li>do not show Dragon City on mini-map</li>
+          <li>summon boat spell will only summon friendly boats</li>
+          <li>allow the player to refuse to level up in the Tree of Knowledge even if this level up is for free</li>
+          <li>add virtual keyboard support for touch devices</li>
+          <li>grey out Summon Boat, Town Gate and Town Portal spells if they cannot be used</li>
+          <li>clean up AI priority tasks if attacker was killed</li>
+          <li>update sounds used while visiting dwellings on Adventure Map</li>
+          <li>add logic of AI heroes using town portal</li>
+          <li>add missing symbols to button font</li>
+          <li>update Polish translation</li>
+          <li>fix high CPU usage during battle while using highest animation speeds</li>
+          <li>fix battle AI tactics estimation</li>
+          <li>fix pathfinding not being updated after revealing the fog on visiting Magellan's Map</li>
+          <li>animate lighthouse in lighthouse dialog</li>
+          <li>fix the experience calculation for AI-controlled heroes while visiting Tree of Knowledge</li>
+          <li>add a frame for a hero portrait on the quick info dialog</li>
+          <li>add missing experience being displayed in the Tree of Knowledge window</li>
+          <li>fix music effects while visiting an empty object on Adventure Map</li>
+          <li>display the world date for save files</li>
+          <li>rework AI hero task priority logic</li>
+          <li>fix invalid popup window being displayed while clicking on an empty hero list area within Adventure Map</li>
+          <li>add Graphics option icon</li>
+          <li>fix corner cases of fog rendering</li>
+          <li>fix invalid calculation of AI path leading to a crash</li>
+          <li>show sleeping hero icon for hero's portrait within castle dialog</li>
+          <li>speed up rendering on Adventure Map</li>
+          <li>properly restore the screen after closing the hero dialog during combat</li>
+          <li>render background between HEROES and TOWNS/CASTLES buttons in Kingdom Overview window</li>
+          <li>fix possible random crashes during the gameplay</li>
+          <li>fix Iron and Steel Golems animation issues</li>
+          <li>show kingdom income when gold per day income is clicked within Kingdom Overview window</li>
+          <li>fix a crash while visiting a castle after an ally captured it</li>
+          <li>speed up file searching on Windows</li>
+          <li>fix the spell id calculation for a spell scroll while loading a map</li>
+          <li>fix puzzle map window position</li>
+          <li>fix View World default adventure map position</li>
+          <li>memorize zoom level of the View World screen</li>
+          <li>fix inability to move monsters after Good Morale event</li>
+          <li>fix unintended ability to upgrade troops during battle</li>
+          <li>fix huge CPU usage in hero window during battle</li>
+          <li>redevelop standard window generation logic</li>
+          <li>update Bulgarian translation</li>
+          <li>fix volcano sounds</li>
+          <li>update Russian translation (main menu and dialog buttons)</li>
+          <li>fix issue with the puzzle rendering</li>
+          <li>fix musical effects for various objects</li>
+          <li>fix stereo audio playing in SMK files</li>
+          <li>add letter "Ў" and "’" sign to Cyrillic (cp1251) button font</li>
+          <li>add lighthouse information popup in kingdom overview</li>
+          <li>fix an invalid option for scenario 1 of Roland Campaign</li>
+          <li>optimize mini-map rendering</li>
+          <li>update Czech translation</li>
+          <li>add proper hotkeys option icon</li>
+          <li>fix title in German translation</li>
+          <li>optimize View World rendering</li>
+          <li>add tooltip damage info for single target attack spells during battle</li>
+        </ul>
+      </description>
+    </release>
+    <release date="2023-02-08" version="v1.0.1">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.1</url>
+      <description>
+        <p>Changes in v1.0.1 (08 February 2023):</p>
+        <ul>
+          <li>add the ambient sound for Abandoned Mine</li>
+          <li>add support for scaled resolutions</li>
+          <li>instantly update status bar in battle for hero's dialog options</li>
+          <li>fix invalid Kingdom income calculation</li>
+          <li>fix incorrect status bar update call</li>
+          <li>update Czech translation</li>
+          <li>add German and Russian translations of Android Toolset</li>
+          <li>Android Save File Manager: implement filtering of save files by type</li>
+          <li>fix scroll bar bottom position when dragging and fix high FPS rate when dragging scroll bar by mouse</li>
+          <li>make a narrower button font for cp-1251 (Cyrillic) characters</li>
+          <li>fix Druid projectile start position for shooting up</li>
+          <li>add PS Vita fixes and gamepad mapping improvements</li>
+          <li>add Danish translation</li>
+          <li>fix shooters projectile position during battle</li>
+          <li>fix high CPU load on Adventure map when Hero speed is set to Jump</li>
+          <li>Android toolset: add the ability to browse &amp; delete save files</li>
+          <li>fix loss of the first frame in the after attack unit animation</li>
+          <li>update spell points for campaign heroes at the start of a scenario</li>
+          <li>uncover the fog during the hero's instantaneous movement only if the hero is actually moving</li>
+          <li>do not allow to dig for Ultimate Artifact second time</li>
+          <li>show spell effect animation so as not to cover the front troops</li>
+          <li>fix screen restoration after closing monster info dialog</li>
+          <li>fix the AI resurrect spell logic</li>
+          <li>fix the Dimension Door shadow on resolutions 640+x480 &amp; 640x480+, temporarily hide auxiliary panels in "no interface" mode</li>
+          <li>rework pathfinding algorithm during battle to fix non-optimal paths for monsters</li>
+          <li>add Mossy Rock object which appears only on Swamp terrain while in the original game this object has no name</li>
+          <li>optimize Adventure Map rendering</li>
+          <li>do not do redundant redraws when dragging Adventure Map with the mouse</li>
+          <li>fix walking animations of certain monsters</li>
+          <li>fix the bridge operation when a wide friendly unit steps on it from the moat</li>
+          <li>fix creature wince animation for low morale and Lich cloud cases during battle</li>
+          <li>optimize Holy Shout spell effect rendering during battle</li>
+          <li>allow wide units to take a step back during battle</li>
+          <li>fix certain Peasant Huts being displayed as Thatched Huts with no ambient sounds on Adventure Map</li>
+          <li>update Polish translation</li>
+          <li>avoid excessing CPU usage for multiple windows in the game</li>
+          <li>set audio frequency to 44100 on Windows to avoid cracking sounds during playback</li>
+          <li>add fh2 toolset application on Android to help with setting up the main application</li>
+          <li>update French translation</li>
+          <li>reduce CPU usage in Select Language dialog</li>
+          <li>fix a case when external music was not being played on Ubuntu</li>
+          <li>fix incorrect logic for monster placement on Adventure Map</li>
+          <li>update German translation</li>
+          <li>do not lowercase creature name (or other string) when it is put first in phrase</li>
+          <li>fix forced Idle animation after switching to Static animation</li>
+          <li>fix screen flickering in SDL2</li>
+          <li>optimize Death Wave spell effect rendering during battle</li>
+          <li>automatically assemble artifacts sets if their parts were captured in the battle</li>
+          <li>fix controller support for PS Vita</li>
+          <li>add a full stop, A and E characters with accents for CP1252 button font</li>
+        </ul>
+      </description>
+    </release>
     <release date="2022-12-21" version="v1.0.0">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.0</url>
       <description>
@@ -325,7 +454,7 @@
           <li>fix crashes on Windows 8 using MIDI music</li>
           <li>fix external audio not always returning to on after turning volume to zero (Windows OS)</li>
           <li>fix horse's steps being faded while crossing terrain border using MIDI sound (Windows OS)</li>
-          <li>fix sound volume being lower during combat (Windows OS) </li>
+          <li>fix sound volume being lower during combat (Windows OS)</li>
           <li>fix no sounds situation when music is off even when sounds are not (Windows OS)</li>
           <li>show correct hero's level and experience on level up</li>
           <li>fix incorrect castle's area leading to wrong castle's info</li>
@@ -567,7 +696,7 @@
           <li>speed up data reading from AGG files</li>
           <li>update Norwegian translation</li>
           <li>add a popup window for battle log</li>
-          <li>add a mandatory requirement of h2d file being present </li>
+          <li>add a mandatory requirement of h2d file being present</li>
           <li>fix incorrect logic for palette application function</li>
           <li>fix position of armies for quick info window for both castle and enemy hero</li>
           <li>set the direction for attacking and defending units in battle in a more OG-like way</li>
@@ -686,7 +815,7 @@
           <li>improve the AI fog discovery logic</li>
           <li>AI properly uses Whirlpools for path calculation</li>
           <li>fix cases when a hero was able to create a path over another hero</li>
-          <li>display dead monster information during battle </li>
+          <li>display dead monster information during battle</li>
           <li>fix Mass Dispel usage during battle</li>
           <li>update Polish translation</li>
           <li>fix Russian small k per in both fonts</li>
@@ -806,7 +935,7 @@
           <li>fix cases when opposing heroes still exist on the map after defeat</li>
           <li>improve AI usage of Disrupting Ray spell during battle</li>
           <li>add runtime language generation</li>
-          <li>fix terrain music being played during battle </li>
+          <li>fix terrain music being played during battle</li>
           <li>fix water object passabilities</li>
           <li>allow to use mouse wheel to change system options</li>
           <li>set correct building requirements for Upgraded Jousting Arena and Upgraded Cathedral</li>
@@ -1832,7 +1961,7 @@
           <li>use single OKAY button for Config window</li>
           <li>don't shift High Score background for high resolutions</li>
           <li>shift second hero's portrait in town</li>
-          <li>change unit movement speed in battle under spells </li>
+          <li>change unit movement speed in battle under spells</li>
           <li>add dynamic color for item selection</li>
           <li>add a popup window for clicking on Income in castle construction screen</li>
           <li>remember move points of surrendered/retreated hero</li>
@@ -2241,13 +2370,13 @@
           <li>hide dismiss button for monsters if a hero has only one stack of them</li>
           <li>fix incorrect message for Shipyard by right click</li>
           <li>fix missing battle hexagonal net was not appearing if enabled until next battle</li>
-          <li>display a warning message about missing files from the original game </li>
+          <li>display a warning message about missing files from the original game</li>
           <li>disable Continue Movement button for a hero which does not have chosen path</li>
           <li>required building names are displayed on a separate line each</li>
           <li>fix no building image for already built building for right mouse click</li>
           <li>fix incorrect image for Captains Quarters</li>
           <li>renamed 'Free Heroes II' to 'fheroes2'</li>
-          <li>show disabled "Continue Movement" button for castle </li>
+          <li>show disabled "Continue Movement" button for castle</li>
           <li>fix number of monsters being displayed in a black box</li>
           <li>add a script to download a demo version of the original game</li>
           <li>set default display size to 640x480 pixels</li>

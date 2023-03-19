@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -121,8 +121,8 @@ namespace Resource
 
     int Rand( const bool includeGold );
 
-    /* return index sprite objnrsrc.icn */
-    uint32_t GetIndexSprite( int resource );
+    // Returns index sprite objnrsrc.icn
+    uint8_t GetIndexSprite( int resource );
     int FromIndexSprite( uint32_t index );
 
     // Return index sprite from resource.icn.

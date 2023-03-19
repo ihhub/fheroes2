@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@ namespace
 
 namespace fheroes2
 {
-    bool H2RReader::open( const std::string & path )
+    bool H2DReader::open( const std::string & path )
     {
         _fileNameAndOffset.clear();
         _fileStream.close();
@@ -85,7 +85,7 @@ namespace fheroes2
         return true;
     }
 
-    std::vector<uint8_t> H2RReader::getFile( const std::string & fileName )
+    std::vector<uint8_t> H2DReader::getFile( const std::string & fileName )
     {
         const auto it = _fileNameAndOffset.find( fileName );
         if ( it == _fileNameAndOffset.end() ) {
@@ -96,7 +96,7 @@ namespace fheroes2
         return _fileStream.getRaw( it->second.second );
     }
 
-    std::set<std::string> H2RReader::getAllFileNames() const
+    std::set<std::string> H2DReader::getAllFileNames() const
     {
         std::set<std::string> names;
 
@@ -107,7 +107,7 @@ namespace fheroes2
         return names;
     }
 
-    bool H2Writer::write( const std::string & path ) const
+    bool H2DWriter::write( const std::string & path ) const
     {
         if ( _fileData.empty() ) {
             // Nothing to write.
@@ -148,17 +148,17 @@ namespace fheroes2
         return true;
     }
 
-    bool H2Writer::add( const std::string & name, const std::vector<uint8_t> & data )
+    bool H2DWriter::add( const std::string & name, const std::vector<uint8_t> & data )
     {
         if ( name.empty() || data.empty() ) {
             return false;
         }
 
-        const auto result = _fileData.try_emplace( name, data );
-        return result.second;
+        _fileData[name] = data;
+        return true;
     }
 
-    bool H2Writer::add( H2RReader & reader )
+    bool H2DWriter::add( H2DReader & reader )
     {
         const std::set<std::string> names = reader.getAllFileNames();
 
@@ -171,7 +171,7 @@ namespace fheroes2
         return true;
     }
 
-    bool readImageFromH2D( H2RReader & reader, const std::string & name, Sprite & image )
+    bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image )
     {
         const std::vector<uint8_t> & data = reader.getFile( name );
         if ( data.size() < 4 + 4 + 4 + 4 + 1 ) {
@@ -198,7 +198,7 @@ namespace fheroes2
         return true;
     }
 
-    bool writeImageToH2D( H2Writer & writer, const std::string & name, const Sprite & image )
+    bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image )
     {
         assert( !image.empty() );
 

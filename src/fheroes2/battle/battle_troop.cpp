@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_troop.h"
+
 #include <algorithm>
 #include <cassert>
 #include <ostream>
@@ -37,7 +39,6 @@
 #include "battle_grave.h"
 #include "battle_interface.h"
 #include "battle_tower.h"
-#include "battle_troop.h"
 #include "castle.h"
 #include "color.h"
 #include "game_static.h"
@@ -74,8 +75,9 @@ bool Battle::ModeDuration::isZeroDuration() const
 
 void Battle::ModeDuration::DecreaseDuration()
 {
-    if ( second )
+    if ( second ) {
         --second;
+    }
 }
 
 Battle::ModesAffected::ModesAffected()
@@ -86,26 +88,23 @@ Battle::ModesAffected::ModesAffected()
 uint32_t Battle::ModesAffected::GetMode( uint32_t mode ) const
 {
     const_iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
-    return it == end() ? 0 : ( *it ).second;
+    return it == end() ? 0 : it->second;
 }
 
 void Battle::ModesAffected::AddMode( uint32_t mode, uint32_t duration )
 {
     iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
-    if ( it == end() )
+    if ( it == end() ) {
         emplace_back( mode, duration );
-    else
-        ( *it ).second = duration;
+    }
+    else {
+        it->second = duration;
+    }
 }
 
 void Battle::ModesAffected::RemoveMode( uint32_t mode )
 {
-    iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
-    if ( it != end() ) {
-        if ( it + 1 != end() )
-            std::swap( *it, back() );
-        pop_back();
-    }
+    erase( std::remove_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } ), end() );
 }
 
 void Battle::ModesAffected::DecreaseDuration()
@@ -124,7 +123,7 @@ Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const
     , animation( id )
     , _uid( uid )
     , hp( t.GetHitPoints() )
-    , count0( t.GetCount() )
+    , _initialCount( t.GetCount() )
     , dead( 0 )
     , shots( t.GetShots() )
     , disruptingray( 0 )
@@ -232,19 +231,13 @@ std::string Battle::Unit::GetShotString() const
 
 std::string Battle::Unit::GetSpeedString() const
 {
-    const uint32_t speedValue = GetSpeed( true, false );
-
-    std::string output( Speed::String( speedValue ) );
-    output += " (";
-    output += std::to_string( speedValue );
-    output += ')';
-
-    return output;
+    const uint32_t speed = GetSpeed( true, false );
+    return Troop::GetSpeedString( speed );
 }
 
 uint32_t Battle::Unit::GetInitialCount() const
 {
-    return count0;
+    return _initialCount;
 }
 
 uint32_t Battle::Unit::GetDead() const
@@ -259,7 +252,7 @@ uint32_t Battle::Unit::GetHitPointsLeft() const
 
 uint32_t Battle::Unit::GetMissingHitPoints() const
 {
-    const uint32_t totalHitPoints = count0 * Monster::GetHitPoints();
+    const uint32_t totalHitPoints = _initialCount * Monster::GetHitPoints();
     assert( totalHitPoints > hp );
     return totalHitPoints - hp;
 }
@@ -335,11 +328,6 @@ void Battle::Unit::SetRandomLuck()
 bool Battle::Unit::isFlying() const
 {
     return ArmyTroop::isFlying() && !Modes( SP_SLOW );
-}
-
-bool Battle::Unit::isValid() const
-{
-    return GetCount() != 0;
 }
 
 bool Battle::Unit::OutOfWalls() const
@@ -424,8 +412,9 @@ bool Battle::Unit::isIdling() const
 
 void Battle::Unit::NewTurn()
 {
-    if ( isRegenerating() )
+    if ( isRegenerating() ) {
         hp = ArmyTroop::GetHitPoints();
+    }
 
     ResetModes( TR_RESPONDED );
     ResetModes( TR_MOVED );
@@ -435,25 +424,25 @@ void Battle::Unit::NewTurn()
     ResetModes( MORALE_GOOD );
     ResetModes( MORALE_BAD );
 
-    // decrease spell duration
     affected.DecreaseDuration();
 
-    // remove spell duration
-    uint32_t mode = 0;
-    while ( 0 != ( mode = affected.FindZeroDuration() ) ) {
-        affected.RemoveMode( mode );
-        ResetModes( mode );
+    for ( uint32_t mode = affected.FindZeroDuration(); mode != 0; mode = affected.FindZeroDuration() ) {
+        assert( Modes( mode ) );
 
-        // cancel mirror image
-        if ( mode == CAP_MIRROROWNER && mirror ) {
+        if ( mode == CAP_MIRROROWNER ) {
+            assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+
             if ( Arena::GetInterface() ) {
-                std::vector<Unit *> images;
-                images.push_back( mirror );
-                Arena::GetInterface()->RedrawActionRemoveMirrorImage( images );
+                Arena::GetInterface()->RedrawActionRemoveMirrorImage( { mirror } );
             }
 
+            mirror->hp = 0;
             mirror->SetCount( 0 );
-            mirror = nullptr;
+            // Affection will be removed here
+            mirror->PostKilledAction();
+        }
+        else {
+            removeAffection( mode );
         }
     }
 }
@@ -608,80 +597,99 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy ) const
 
 uint32_t Battle::Unit::HowManyWillKilled( uint32_t dmg ) const
 {
+    if ( Modes( CAP_MIRRORIMAGE ) ) {
+        return GetCount();
+    }
+
     return dmg >= hp ? GetCount() : GetCount() - Monster::GetCountFromHitPoints( *this, hp - dmg );
 }
 
-uint32_t Battle::Unit::ApplyDamage( uint32_t dmg )
+uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
 {
-    if ( dmg && GetCount() ) {
-        uint32_t killed = HowManyWillKilled( dmg );
+    assert( !AllModes( CAP_MIRROROWNER | CAP_MIRRORIMAGE ) );
 
-        // mirror image dies if recieves any damage
-        if ( Modes( CAP_MIRRORIMAGE ) ) {
-            dmg = hp;
-            killed = GetCount();
-        }
-
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed )
-
-        // clean paralyze or stone magic
-        if ( Modes( IS_PARALYZE_MAGIC ) ) {
-            SetModes( TR_RESPONDED );
-            SetModes( TR_MOVED );
-            ResetModes( IS_PARALYZE_MAGIC );
-            affected.RemoveMode( IS_PARALYZE_MAGIC );
-        }
-
-        // blind
-        if ( Modes( SP_BLIND ) ) {
-            ResetBlind();
-        }
-
-        if ( killed >= GetCount() ) {
-            dead += GetCount();
-            SetCount( 0 );
-        }
-        else {
-            dead += killed;
-            SetCount( GetCount() - killed );
-        }
-        hp -= ( dmg >= hp ? hp : dmg );
-
-        return killed;
+    if ( dmg == 0 || GetCount() == 0 ) {
+        return 0;
     }
 
-    return 0;
+    const uint32_t killed = HowManyWillKilled( dmg );
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed )
+
+    if ( Modes( IS_PARALYZE_MAGIC ) ) {
+        SetModes( TR_RESPONDED );
+        SetModes( TR_MOVED );
+
+        removeAffection( IS_PARALYZE_MAGIC );
+    }
+
+    if ( Modes( SP_BLIND ) ) {
+        SetModes( TR_MOVED );
+
+        removeAffection( SP_BLIND );
+    }
+
+    if ( killed >= GetCount() ) {
+        dead += GetCount();
+
+        SetCount( 0 );
+    }
+    else {
+        dead += killed;
+
+        SetCount( GetCount() - killed );
+    }
+
+    if ( Modes( CAP_MIRRORIMAGE ) ) {
+        hp = 0;
+    }
+    else {
+        hp -= std::min( hp, dmg );
+    }
+
+    if ( Modes( CAP_MIRROROWNER ) && !isValid() ) {
+        assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+
+        mirror->ApplyDamage( mirror->hp );
+    }
+
+    return killed;
 }
 
 void Battle::Unit::PostKilledAction()
 {
-    // Remove mirror image (master)
+    assert( !AllModes( CAP_MIRROROWNER | CAP_MIRRORIMAGE ) );
+
     if ( Modes( CAP_MIRROROWNER ) ) {
-        modes = 0;
-        mirror->hp = 0;
-        mirror->SetCount( 0 );
-        mirror->mirror = nullptr;
+        assert( mirror != nullptr && mirror->Modes( CAP_MIRRORIMAGE ) && mirror->mirror == this );
+
         mirror = nullptr;
-        ResetModes( CAP_MIRROROWNER );
+
+        removeAffection( CAP_MIRROROWNER );
     }
-    // Remove mirror image (slave)
-    if ( Modes( CAP_MIRRORIMAGE ) && mirror != nullptr ) {
-        mirror->ResetModes( CAP_MIRROROWNER );
+
+    if ( Modes( CAP_MIRRORIMAGE ) ) {
+        // CAP_MIRROROWNER may have already been removed from the mirror owner,
+        // since this method may already have been called for it
+        assert( mirror != nullptr );
+
+        // But we still need to remove it if it is present
+        if ( mirror->Modes( CAP_MIRROROWNER ) ) {
+            assert( mirror->mirror == this );
+
+            mirror->mirror = nullptr;
+            mirror->removeAffection( CAP_MIRROROWNER );
+        }
+
         mirror = nullptr;
     }
 
-    ResetModes( TR_RESPONDED );
-    ResetModes( TR_SKIP );
-    ResetModes( LUCK_GOOD );
-    ResetModes( LUCK_BAD );
-    ResetModes( MORALE_GOOD );
-    ResetModes( MORALE_BAD );
-    ResetModes( IS_MAGIC );
-
-    SetModes( TR_MOVED );
+    // Remove all spells
+    removeAffection( IS_MAGIC );
+    assert( affected.empty() );
 
     // Save to the graveyard if possible
-    if ( !Modes( CAP_MIRRORIMAGE ) && !Modes( CAP_SUMMONELEM ) ) {
+    if ( !Modes( CAP_MIRRORIMAGE ) && !isElemental() ) {
         Graveyard * graveyard = Arena::GetGraveyard();
         assert( graveyard != nullptr );
 
@@ -700,26 +708,23 @@ void Battle::Unit::PostKilledAction()
         tail->SetUnit( nullptr );
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << " is dead" )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
 uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool skip_dead )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
 
-    if ( hp == 0 ) // Skip turn if already dead
-        SetModes( TR_MOVED );
-
     SetCount( GetCount() + resurrect );
     hp += points;
 
     if ( allow_overflow ) {
-        if ( count0 < GetCount() )
-            count0 = GetCount();
+        if ( _initialCount < GetCount() )
+            _initialCount = GetCount();
     }
-    else if ( GetCount() > count0 ) {
-        resurrect -= GetCount() - count0;
-        SetCount( count0 );
+    else if ( GetCount() > _initialCount ) {
+        resurrect -= GetCount() - _initialCount;
+        SetCount( _initialCount );
         hp = ArmyTroop::GetHitPoints();
     }
 
@@ -729,7 +734,7 @@ uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool ski
     return resurrect;
 }
 
-uint32_t Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg )
+uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg )
 {
     uint32_t killed = ApplyDamage( dmg );
     uint32_t resurrect;
@@ -885,7 +890,7 @@ bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
 
 bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, TargetInfo & target )
 {
-    // HACK!!! Chain lightining is the only spell which can't be casted on allies but could be applied on them
+    // HACK!!! Chain lightning is the only spell which can't be cast on allies but could be applied on them
     const bool isForceApply = ( spell.GetID() == Spell::CHAINLIGHTNING );
 
     if ( !AllowApplySpell( spell, hero, nullptr, isForceApply ) )
@@ -1002,30 +1007,14 @@ void Battle::Unit::PostAttackAction()
     }
 
     // clean berserker spell
-    if ( Modes( SP_BERSERKER ) ) {
-        ResetModes( SP_BERSERKER );
-        affected.RemoveMode( SP_BERSERKER );
-    }
+    removeAffection( SP_BERSERKER );
 
     // clean hypnotize spell
-    if ( Modes( SP_HYPNOTIZE ) ) {
-        ResetModes( SP_HYPNOTIZE );
-        affected.RemoveMode( SP_HYPNOTIZE );
-    }
+    removeAffection( SP_HYPNOTIZE );
 
     // clean luck capability
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
-}
-
-void Battle::Unit::ResetBlind()
-{
-    // remove blind action
-    if ( Modes( SP_BLIND ) ) {
-        SetModes( TR_MOVED );
-        ResetModes( SP_BLIND );
-        affected.RemoveMode( SP_BLIND );
-    }
 }
 
 void Battle::Unit::SetBlindAnswer( bool value )
@@ -1152,7 +1141,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
     if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) ) {
         attackerThreat *= -1;
     }
-    // Otherwise heavy penalty for hiting our own units
+    // Otherwise heavy penalty for hitting our own units
     else if ( attacker.GetArmyColor() == defender.GetArmyColor() ) {
         const bool isTower = ( dynamic_cast<const Battle::Tower *>( this ) != nullptr );
         if ( !isTower ) {
@@ -1197,121 +1186,79 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     switch ( spell.GetID() ) {
     case Spell::BLESS:
     case Spell::MASSBLESS:
-        if ( Modes( SP_CURSE ) ) {
-            ResetModes( SP_CURSE );
-            affected.RemoveMode( SP_CURSE );
-        }
-        SetModes( SP_BLESS );
-        affected.AddMode( SP_BLESS, duration );
+        replaceAffection( SP_CURSE, SP_BLESS, duration );
         break;
 
     case Spell::BLOODLUST:
-        SetModes( SP_BLOODLUST );
-        affected.AddMode( SP_BLOODLUST, 3 );
+        addAffection( SP_BLOODLUST, 3 );
         break;
 
     case Spell::CURSE:
     case Spell::MASSCURSE:
-        if ( Modes( SP_BLESS ) ) {
-            ResetModes( SP_BLESS );
-            affected.RemoveMode( SP_BLESS );
-        }
-        SetModes( SP_CURSE );
-        affected.AddMode( SP_CURSE, duration );
+        replaceAffection( SP_BLESS, SP_CURSE, duration );
         break;
 
     case Spell::HASTE:
     case Spell::MASSHASTE:
-        if ( Modes( SP_SLOW ) ) {
-            ResetModes( SP_SLOW );
-            affected.RemoveMode( SP_SLOW );
-        }
-        SetModes( SP_HASTE );
-        affected.AddMode( SP_HASTE, duration );
+        replaceAffection( SP_SLOW, SP_HASTE, duration );
         break;
 
     case Spell::DISPEL:
     case Spell::MASSDISPEL:
-        if ( Modes( IS_MAGIC ) ) {
-            ResetModes( IS_MAGIC );
-            affected.RemoveMode( IS_MAGIC );
-        }
+        removeAffection( IS_MAGIC );
         break;
 
     case Spell::SHIELD:
     case Spell::MASSSHIELD:
-        SetModes( SP_SHIELD );
-        affected.AddMode( SP_SHIELD, duration );
+        addAffection( SP_SHIELD, duration );
         break;
 
     case Spell::SLOW:
     case Spell::MASSSLOW:
-        if ( Modes( SP_HASTE ) ) {
-            ResetModes( SP_HASTE );
-            affected.RemoveMode( SP_HASTE );
-        }
-        SetModes( SP_SLOW );
-        affected.AddMode( SP_SLOW, duration );
+        replaceAffection( SP_HASTE, SP_SLOW, duration );
         break;
 
     case Spell::STONESKIN:
-        if ( Modes( SP_STEELSKIN ) ) {
-            ResetModes( SP_STEELSKIN );
-            affected.RemoveMode( SP_STEELSKIN );
-        }
-        SetModes( SP_STONESKIN );
-        affected.AddMode( SP_STONESKIN, duration );
+        replaceAffection( SP_STEELSKIN, SP_STONESKIN, duration );
         break;
 
     case Spell::BLIND:
-        SetModes( SP_BLIND );
+        addAffection( SP_BLIND, duration );
         blindanswer = false;
-        affected.AddMode( SP_BLIND, duration );
         break;
 
     case Spell::DRAGONSLAYER:
-        SetModes( SP_DRAGONSLAYER );
-        affected.AddMode( SP_DRAGONSLAYER, duration );
+        addAffection( SP_DRAGONSLAYER, duration );
         break;
 
     case Spell::STEELSKIN:
-        if ( Modes( SP_STONESKIN ) ) {
-            ResetModes( SP_STONESKIN );
-            affected.RemoveMode( SP_STONESKIN );
-        }
-        SetModes( SP_STEELSKIN );
-        affected.AddMode( SP_STEELSKIN, duration );
+        replaceAffection( SP_STONESKIN, SP_STEELSKIN, duration );
         break;
 
     case Spell::ANTIMAGIC:
-        ResetModes( IS_MAGIC );
-        SetModes( SP_ANTIMAGIC );
-        affected.AddMode( SP_ANTIMAGIC, duration );
+        replaceAffection( IS_MAGIC, SP_ANTIMAGIC, duration );
         break;
 
     case Spell::PARALYZE:
-        SetModes( SP_PARALYZE );
-        affected.AddMode( SP_PARALYZE, duration );
+        addAffection( SP_PARALYZE, duration );
         break;
 
     case Spell::BERSERKER:
-        SetModes( SP_BERSERKER );
-        affected.AddMode( SP_BERSERKER, duration );
+        addAffection( SP_BERSERKER, duration );
         break;
 
     case Spell::HYPNOTIZE: {
-        SetModes( SP_HYPNOTIZE );
-        affected.AddMode( SP_HYPNOTIZE, duration );
+        addAffection( SP_HYPNOTIZE, duration );
         break;
     }
 
     case Spell::PETRIFY:
-        SetModes( SP_STONE );
-        affected.AddMode( SP_STONE, duration );
+        addAffection( SP_STONE, duration );
         break;
 
     case Spell::MIRRORIMAGE:
-        affected.AddMode( CAP_MIRRORIMAGE, duration );
+        // Special case, CAP_MIRROROWNER mode will be set when mirror image unit will be created
+        affected.AddMode( CAP_MIRROROWNER, duration );
         break;
 
     case Spell::DISRUPTINGRAY:
@@ -1323,10 +1270,21 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const HeroBase * hero, TargetInfo & target )
+void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, TargetInfo & target )
+{
+    const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, hero, target.damage, false /* ignore defending hero */ );
+
+    // apply damage
+    if ( dmg ) {
+        target.damage = dmg;
+        target.killed = ApplyDamage( dmg );
+    }
+}
+
+uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const
 {
     // TODO: use fheroes2::getSpellDamage function to remove code duplication.
-    uint32_t dmg = spell.Damage() * spoint;
+    uint32_t dmg = spell.Damage() * spellPoints;
 
     switch ( GetID() ) {
     case Monster::IRON_GOLEM:
@@ -1392,6 +1350,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
     // check artifact
     if ( hero ) {
         const HeroBase * defendingHero = GetCommander();
+        const bool useDefendingHeroArts = defendingHero && !ignoreDefendingHero;
 
         switch ( spell.GetID() ) {
         case Spell::COLDRAY:
@@ -1402,7 +1361,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
                 dmg = dmg * ( 100 + value ) / 100;
             }
 
-            if ( defendingHero ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::COLD_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1425,7 +1384,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
                 dmg = dmg * ( 100 + value ) / 100;
             }
 
-            if ( defendingHero ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::FIRE_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1448,7 +1407,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
                 dmg = dmg * ( 100 + value ) / 100;
             }
 
-            if ( defendingHero != nullptr ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::LIGHTNING_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1458,7 +1417,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
 
             // update orders damage
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
-                switch ( target.damage ) {
+                switch ( targetDamage ) {
                 case 0:
                     break;
                 case 1:
@@ -1479,7 +1438,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
         }
         case Spell::ELEMENTALSTORM:
         case Spell::ARMAGEDDON: {
-            if ( defendingHero != nullptr ) {
+            if ( useDefendingHeroArts ) {
                 const std::vector<int32_t> damageReductionPercent
                     = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::ELEMENTAL_SPELL_DAMAGE_REDUCTION_PERCENT );
                 for ( const int32_t value : damageReductionPercent ) {
@@ -1494,11 +1453,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spoint, const
         }
     }
 
-    // apply damage
-    if ( dmg ) {
-        target.damage = dmg;
-        target.killed = ApplyDamage( dmg );
-    }
+    return dmg;
 }
 
 void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, const HeroBase * hero )
@@ -1507,29 +1462,29 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
     case Spell::CURE:
     case Spell::MASSCURE:
         // clear bad magic
-        if ( Modes( IS_BAD_MAGIC ) ) {
-            ResetModes( IS_BAD_MAGIC );
-            affected.RemoveMode( IS_BAD_MAGIC );
-        }
+        removeAffection( IS_BAD_MAGIC );
+
         // restore
         hp += ( spell.Restore() * spoint );
-        if ( hp > ArmyTroop::GetHitPoints() )
+        if ( hp > ArmyTroop::GetHitPoints() ) {
             hp = ArmyTroop::GetHitPoints();
+        }
         break;
 
     case Spell::RESURRECT:
     case Spell::ANIMATEDEAD:
     case Spell::RESURRECTTRUE: {
-        // remove from graveyard
         if ( !isValid() ) {
-            // TODO: buggy behaviour
-            Arena::GetGraveyard()->RemoveTroop( *this );
+            Graveyard * graveyard = Arena::GetGraveyard();
+            assert( graveyard != nullptr );
+
+            graveyard->RemoveTroop( *this );
         }
 
         const uint32_t restore = fheroes2::getResurrectPoints( spell, spoint, hero );
         const uint32_t resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
-        // Puts back the unit in the board
+        // Put the unit back on the board
         SetPosition( GetPosition() );
 
         if ( Arena::GetInterface() ) {
@@ -1575,7 +1530,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attac
     case Spell::RESURRECT:
     case Spell::RESURRECTTRUE:
     case Spell::ANIMATEDEAD:
-        if ( GetCount() == count0 )
+        if ( GetCount() == _initialCount )
             return 100;
         break;
 
@@ -1616,7 +1571,7 @@ int Battle::Unit::GetSpellMagic() const
 
 bool Battle::Unit::isHaveDamage() const
 {
-    return hp < count0 * Monster::GetHitPoints();
+    return hp < _initialCount * Monster::GetHitPoints();
 }
 
 bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
@@ -1626,13 +1581,13 @@ bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
         checkIdleDelay();
     }
 
-    // We retun true if the animation was correctly changed adn if it is valid.
+    // We return true if the animation was correctly changed and if it is valid.
     return ( animation.switchAnimation( rule, reverse ) && animation.isValid() );
 }
 
 bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool reverse )
 {
-    // We retun true if the animation was correctly changed adn if it is valid.
+    // We return true if the animation was correctly changed and if it is valid.
     return ( animation.switchAnimation( animationList, reverse ) && animation.isValid() );
 }
 
@@ -1760,4 +1715,26 @@ const HeroBase * Battle::Unit::GetCurrentOrArmyCommander() const
     assert( arena != nullptr );
 
     return arena->getCommander( GetCurrentOrArmyColor() );
+}
+
+void Battle::Unit::addAffection( const uint32_t mode, const uint32_t duration )
+{
+    assert( CountBits( mode ) == 1 );
+
+    SetModes( mode );
+
+    affected.AddMode( mode, duration );
+}
+
+void Battle::Unit::removeAffection( const uint32_t mode )
+{
+    ResetModes( mode );
+
+    affected.RemoveMode( mode );
+}
+
+void Battle::Unit::replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration )
+{
+    removeAffection( modeToReplace );
+    addAffection( replacementMode, duration );
 }

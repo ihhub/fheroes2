@@ -20,10 +20,10 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-set -e
+set -e -o pipefail
 
 PKG_FILE="android.zip"
-PKG_FILE_SHA256="187e2a8e09deeed8efbbc30e738a3192bf45d1d8644da85d53c487c0d27033a0"
+PKG_FILE_SHA256="c56ad0d27110a2ebcc773345b25bc2b962a4560783594bcd3b28058641accc3e"
 PKG_URL="https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/android-deps/$PKG_FILE"
 
 TMP_DIR="$(mktemp -d)"

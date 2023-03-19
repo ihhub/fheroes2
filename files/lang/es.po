@@ -1,13 +1,12 @@
 # Spanish translation for fheroes2
-# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-24 08:29+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1524,6 +1523,10 @@ msgstr ""
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Principal Pergamino de Conocimiento"
 
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Peto de Anduran"
+
 msgid "campaignBonus|Hideous Mask"
 msgstr "Máscara Horrenda"
 
@@ -2539,7 +2542,7 @@ msgstr ""
 "entre unidades."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
@@ -2648,18 +2651,6 @@ msgstr ""
 "veterano entrenador de gladiadores acepta adiestrarte en la habilidad que "
 "prefieras."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Tus tropas pueden ser mejoradas, pero te saldrá caro. ¿Quieres actualizarlas?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "¿Estás seguro de que desea descartar este ejército?"
-
 msgid "Attack Skill"
 msgstr "Ataque"
 
@@ -2680,6 +2671,18 @@ msgstr "Puntos de daño"
 
 msgid "Hit Points Left"
 msgstr "Vida Restante"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Tus tropas pueden ser mejoradas, pero te saldrá caro. ¿Quieres actualizarlas?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "¿Estás seguro de que desea descartar este ejército?"
 
 #, fuzzy
 msgid "Followers"
@@ -2846,15 +2849,6 @@ msgstr ""
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
-msgstr ""
-
-#, fuzzy
-msgid "Attention"
-msgstr "\"Anexión\""
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
 msgstr ""
 
 msgid ""
@@ -3150,6 +3144,18 @@ msgstr ""
 msgid ""
 "\n"
 "\n"
+"Month: "
+msgstr ""
+
+msgid ", Week: "
+msgstr ""
+
+msgid ", Day: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
 "Location: "
 msgstr ""
 
@@ -3194,14 +3200,7 @@ msgid "Select Skill:"
 msgstr "Defensa"
 
 #, fuzzy
-msgid "Location: "
-msgstr "Excavación"
-
-#, fuzzy
-msgid ""
-"\n"
-"\n"
-"Map Type:\n"
+msgid "Map Type:\n"
 msgstr "Tamaño del Mapa"
 
 #, fuzzy
@@ -3588,13 +3587,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 #, fuzzy
@@ -3771,15 +3770,11 @@ msgstr "Partida de Campaña"
 msgid "View High Scores for Campaigns."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
-msgid "This file contains a save with an invalid game type."
-msgstr ""
+#, fuzzy
+msgid "The save file is corrupted."
+msgstr "Reflejo creado."
 
-msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
-msgstr ""
-
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 #, fuzzy
@@ -3787,6 +3782,14 @@ msgid "Current game version: "
 msgstr "Modificadores actuales:"
 
 msgid "Last supported version: "
+msgstr ""
+
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+msgid ""
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -4444,6 +4447,18 @@ msgstr ""
 msgid "View %{skill} Info"
 msgstr "Ver información de %{skill}"
 
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
+
 #, fuzzy
 msgid "Kingdom Income"
 msgstr "Ingresos:"
@@ -4451,6 +4466,12 @@ msgstr "Ingresos:"
 #, fuzzy
 msgid "Kingdom Income per day."
 msgstr "Ingresos:"
+
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"El faro está ahora bajo tu control, todos tus barcos podrán recorrer mayor "
+"distancia por turno."
 
 msgid "English"
 msgstr ""
@@ -4975,15 +4996,15 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Bebes de una fuente encantada pero nada sucede."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Entras en el anillo místico de hadas pero nada sucede."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "Justo al entrar el anillo místico de las hadas tu ejército adquiere suerte "
 "para su próxima batalla"
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Entras en el anillo místico de hadas pero nada sucede."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -5385,13 +5406,6 @@ msgstr ""
 "la tierra. ¿Deseas frotar la lámpara?"
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-"Llegas a una mina de oro abandonada. La mina parece estar embrujada. "
-"¿Quieres entrar en ella?"
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5454,6 +5468,13 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "Tomas control de %{name}."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+"Llegas a una mina de oro abandonada. La mina parece estar embrujada. "
+"¿Quieres entrar en ella?"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -5835,6 +5856,9 @@ msgstr ""
 "La entrada a la Cueva es oscura, un hediondo y sufuroso olor sale de la boca "
 "de la cueva. ¿Entrarás?"
 
+msgid "Except for evidence of a terrible battle, the cave is empty."
+msgstr "Excepto por la evidencia de una terrible batalla, la Cueva está vacía."
+
 msgid ""
 "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, "
 "\"you will fight and surely die. But I will give you a choice of deaths. You "
@@ -5845,11 +5869,6 @@ msgstr ""
 "\"lucharás y seguramente morirás\". Pero podrás elegir la muerte que gustes: "
 "puedes luchar contra mi o contra mis sirvientes. ¿Prefieres luchar contra "
 "mis sirvientes?"
-
-msgid ""
-"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
-"gold."
-msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
@@ -5875,18 +5894,20 @@ msgstr ""
 "la cueva."
 
 msgid ""
+"Seeing that you do not have %{count} gold, the demon slashes you with its "
+"claws, and the last thing you see is a red haze."
+msgstr ""
+
+msgid ""
 "The Demon leaps upon you and has its claws at your throat before you can "
 "even draw your sword. \"Your life is mine,\" it says. \"I will sell it back "
 "to you for %{count} gold.\""
 msgstr ""
 
 msgid ""
-"Seeing that you do not have %{count} gold, the demon slashes you with its "
-"claws, and the last thing you see is a red haze."
+"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
+"gold."
 msgstr ""
-
-msgid "Except for evidence of a terrible battle, the cave is empty."
-msgstr "Excepto por la evidencia de una terrible batalla, la Cueva está vacía."
 
 msgid ""
 "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
@@ -6023,6 +6044,11 @@ msgstr ""
 msgid "This eye seems to be intently studying its surroundings."
 msgstr "Este ojo parece estar atentamente estudiando los alrededores."
 
+msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgstr ""
+"Te topas con una Esfinge Gigante. La Esfinge permanece extrañamente "
+"tranquila."
+
 msgid ""
 "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you "
 "shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept "
@@ -6045,13 +6071,6 @@ msgstr ""
 "¿Tú respuesta?"
 
 msgid ""
-"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
-"so here's your reward. Now begone.\""
-msgstr ""
-"Pareciendo en cierto modo decepcionada, la Esfinge suspira. Has acertado mi "
-"acertijo, por lo tanto aquí está tu recompensa. Ahora vete."
-
-msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
 "you with a paw, knocking you to the ground. Another blow makes the world go "
 "black, and you know no more."
@@ -6060,10 +6079,12 @@ msgstr ""
 "tirándote al suelo. Otro soplido hace retrodecer al mundo y no sabes nada "
 "más."
 
-msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgid ""
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
 msgstr ""
-"Te topas con una Esfinge Gigante. La Esfinge permanece extrañamente "
-"tranquila."
+"Pareciendo en cierto modo decepcionada, la Esfinge suspira. Has acertado mi "
+"acertijo, por lo tanto aquí está tu recompensa. Ahora vete."
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -6119,6 +6140,13 @@ msgstr ""
 "Tu héroe está demasiado cansado como para conjurar este hechizo hoy. Prueba "
 "de nuevo mañana."
 
+#, fuzzy
+msgid "This spell cannot be used on a boat."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6137,13 +6165,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
-"lado del campo de batalla."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "¿Estas seguro que quieres despedir este Héroe?"
@@ -6241,13 +6262,6 @@ msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Ahora se identifica totalmente a los héroes enemigos."
-
-#, fuzzy
-msgid "This spell cannot be used on a boat."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-msgid "This spell can be casted only nearby water."
-msgstr ""
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -7099,8 +7113,11 @@ msgstr ""
 msgid "Dragon City"
 msgstr "Ciudad Dragón"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Faro"
+msgid_plural "Lighthouses"
+msgstr[0] "Faro"
+msgstr[1] "Faro"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -9837,12 +9854,10 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "Necroman"
-#~ msgstr "Nigromante"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Esta unidad espera"
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "\"Anexión\""
 
 #, fuzzy
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} esperando turno."
+#~ msgid "Location: "
+#~ msgstr "Excavación"

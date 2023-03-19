@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -36,7 +38,6 @@
 #include "color.h"
 #include "cursor.h"
 #include "difficulty.h"
-#include "game.h"
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -48,11 +49,9 @@
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "math_base.h"
-#include "mp2.h"
 #include "mus.h"
 #include "players.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "settings.h"
 #include "tools.h"
 #include "world.h"
@@ -62,33 +61,9 @@ namespace
     std::string lastMapFileName;
     std::vector<Player> savedPlayers;
 
-    uint16_t save_version = CURRENT_FORMAT_VERSION;
-
-    std::string last_name;
-
     bool updateSoundsOnFocusUpdate = true;
 
     uint32_t maps_animation_frame = 0;
-
-    // TODO: this function returns a sound track based on a provided tile. It works fine for most of objects as they have only one "main" tile.
-    // However, some objects like Oracle or Volcano can be bigger than 1 tile leading to multiple sounds coming from the same object and these
-    // sounds might not be synchronized. This is mostly noticeable with 3D Audio mode on.
-    M82::SoundType getSoundTypeFromTile( const Maps::Tiles & tile )
-    {
-        // check stream first
-        if ( tile.isStream() ) {
-            return M82::LOOP0014;
-        }
-
-        const MP2::MapObjectType objectType = tile.GetObject( false );
-
-        // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Rock.
-        if ( objectType == MP2::OBJ_ROCK && tile.containsSprite( 200, 183 ) ) {
-            return M82::LOOP0019;
-        }
-
-        return M82::getAdventureMapObjectSound( objectType );
-    }
 }
 
 namespace Game
@@ -164,26 +139,6 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
 
         savedPlayers.push_back( player );
     }
-}
-
-void Game::SetLoadVersion( uint16_t ver )
-{
-    save_version = ver;
-}
-
-uint16_t Game::GetLoadVersion()
-{
-    return save_version;
-}
-
-const std::string & Game::GetLastSavename()
-{
-    return last_name;
-}
-
-void Game::SetLastSavename( const std::string & name )
-{
-    last_name = name;
 }
 
 fheroes2::GameMode Game::Credits()
@@ -290,7 +245,7 @@ void Game::EnvironmentSoundMixer()
     const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
 
     for ( const fheroes2::Point & pos : positions ) {
-        const M82::SoundType soundType = getSoundTypeFromTile( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
+        const M82::SoundType soundType = M82::getAdventureMapTileSound( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
         if ( soundType == M82::UNKNOWN ) {
             continue;
         }
@@ -324,7 +279,7 @@ void Game::EnvironmentSoundMixer()
 
             // We need to swap X and Y axes and invert Y axis as on screen Y axis goes from top to bottom.
             angle = static_cast<int16_t>( std::atan2( actualPosition.x, -actualPosition.y ) * 180 / M_PI );
-            // It is exteremely important to normalize the angle.
+            // It is extremely important to normalize the angle.
             if ( angle < 0 ) {
                 angle = 360 + angle;
             }

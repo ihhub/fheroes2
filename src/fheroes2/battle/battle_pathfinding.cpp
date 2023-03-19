@@ -18,17 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_pathfinding.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <set>
+#include <tuple>
 #include <type_traits>
 #include <vector>
 
 #include "battle_arena.h"
 #include "battle_cell.h"
-#include "battle_pathfinding.h"
 #include "battle_troop.h"
 #include "castle.h"
 #include "speed.h"
@@ -40,25 +42,42 @@ namespace
 
 namespace Battle
 {
-    void BattlePathfinder::evaluateForUnit( const Unit & unit )
+    void BattlePathfinder::reEvaluateIfNeeded( const Unit & unit )
     {
         assert( unit.GetHeadIndex() != -1 && ( !unit.isWide() || unit.GetTailIndex() != -1 ) );
 
+        const Board * board = Arena::GetBoard();
+        assert( board != nullptr );
+
+        // Passability of the board cells can change during the unit's turn even without its intervention (for example, because of a hero's spell cast),
+        // we need to keep track of this
+        std::bitset<ARENASIZE> boardStatus;
+        for ( const Cell & cell : *board ) {
+            const int32_t cellIdx = cell.GetIndex();
+            assert( Board::isValidIndex( cellIdx ) );
+
+            boardStatus[cellIdx] = cell.isPassable( true );
+        }
+
+        auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color, _boardStatus );
+        const auto newSettings = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetSpeed(), unit.isWide(), unit.isFlying(),
+                                                  unit.GetColor(), boardStatus );
+
+        // If all the current parameters match the parameters for which the current cache was built, then there is no need to rebuild it
+        if ( currentSettings == newSettings ) {
+            return;
+        }
+
+        currentSettings = newSettings;
+
         const Castle * castle = Arena::GetCastle();
         const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
-        const bool isUnitWide = unit.isWide();
-
-        _pathStart = { unit.GetHeadIndex(), unit.GetTailIndex() };
-        _unitSpeed = unit.GetSpeed();
 
         _cache.clear();
         _cache.try_emplace( _pathStart );
 
         // Flying units can land wherever they can fit
-        if ( unit.isFlying() ) {
-            const Board * board = Arena::GetBoard();
-            assert( board != nullptr );
-
+        if ( _isFlying ) {
             for ( const Cell & cell : *board ) {
                 const Position pos = Position::GetPosition( unit, cell.GetIndex() );
 
@@ -66,7 +85,7 @@ namespace Battle
                     continue;
                 }
 
-                assert( !unit.isWide() || pos.GetTail() != nullptr );
+                assert( !_isWide || pos.GetTail() != nullptr );
 
                 const int32_t headCellIdx = pos.GetHead()->GetIndex();
                 const int32_t tailCellIdx = pos.GetTail() ? pos.GetTail()->GetIndex() : -1;
@@ -84,7 +103,7 @@ namespace Battle
 
         // The index of that of the cells of the initial unit's position, which is located
         // in the moat (-1, if there is none)
-        const int32_t pathStartMoatCellIdx = [this, &unit, isMoatBuilt, isUnitWide]() {
+        const int32_t pathStartMoatCellIdx = [this, &unit, isMoatBuilt]() {
             if ( !isMoatBuilt ) {
                 return -1;
             }
@@ -95,7 +114,7 @@ namespace Battle
                 return _pathStart.first;
             }
 
-            if ( isUnitWide ) {
+            if ( _isWide ) {
                 assert( _pathStart.second != -1 );
 
                 if ( Board::isMoatIndex( _pathStart.second, unit ) ) {
@@ -115,7 +134,7 @@ namespace Battle
             const BattleNodeIndex currentNodeIdx = nodesToExplore[nodesToExploreIdx];
             const BattleNode & currentNode = _cache[currentNodeIdx];
 
-            if ( isUnitWide ) {
+            if ( _isWide ) {
                 assert( currentNodeIdx.first != -1 && currentNodeIdx.second != -1 );
 
                 const auto [currentHeadCellIdx, currentTailCellIdx] = currentNodeIdx;
@@ -202,12 +221,14 @@ namespace Battle
         }
     }
 
-    bool BattlePathfinder::isPositionReachable( const Position & position, const bool onCurrentTurn ) const
+    bool BattlePathfinder::isPositionReachable( const Unit & unit, const Position & position, const bool isOnCurrentTurn )
     {
         // Invalid positions are allowed here, but they are always unreachable
         if ( position.GetHead() == nullptr ) {
             return false;
         }
+
+        reEvaluateIfNeeded( unit );
 
         const BattleNodeIndex nodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
 
@@ -218,12 +239,14 @@ namespace Battle
 
         const auto & [index, node] = *iter;
 
-        return ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) && ( !onCurrentTurn || node._cost <= _unitSpeed );
+        return ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) && ( !isOnCurrentTurn || node._cost <= _speed );
     }
 
-    uint32_t BattlePathfinder::getDistance( const Position & position ) const
+    uint32_t BattlePathfinder::getDistance( const Unit & unit, const Position & position )
     {
         assert( position.GetHead() != nullptr );
+
+        reEvaluateIfNeeded( unit );
 
         const BattleNodeIndex nodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
 
@@ -237,12 +260,14 @@ namespace Battle
         return node._distance;
     }
 
-    Indexes BattlePathfinder::getAllAvailableMoves() const
+    Indexes BattlePathfinder::getAllAvailableMoves( const Unit & unit )
     {
+        reEvaluateIfNeeded( unit );
+
         std::set<int32_t> boardIndexes;
 
         for ( const auto & [index, node] : _cache ) {
-            if ( index == _pathStart || node._from == BattleNodeIndex{ -1, -1 } || node._cost > _unitSpeed ) {
+            if ( index == _pathStart || node._from == BattleNodeIndex{ -1, -1 } || node._cost > _speed ) {
                 continue;
             }
 
@@ -259,16 +284,20 @@ namespace Battle
         return result;
     }
 
-    Indexes BattlePathfinder::buildPath( const Position & position ) const
+    Indexes BattlePathfinder::buildPath( const Unit & unit, const Position & position )
     {
         assert( position.GetHead() != nullptr );
+
+        reEvaluateIfNeeded( unit );
 
         const BattleNodeIndex targetNodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
 
         Indexes result;
         result.reserve( Speed::INSTANT );
 
+        BattleNodeIndex lastReachableNodeIdx{ -1, -1 };
         BattleNodeIndex nodeIdx = targetNodeIdx;
+
         for ( auto iter = _cache.find( nodeIdx ); iter != _cache.end(); iter = _cache.find( nodeIdx ) ) {
             const auto & [index, node] = *iter;
 
@@ -278,16 +307,37 @@ namespace Battle
 
             nodeIdx = node._from;
 
-            // The given position may be reachable in principle, but is not reachable on the current turn.
+            // A given position may be reachable in principle, but is not reachable on the current turn.
             // Skip the steps that are not reachable on this turn.
-            if ( node._cost > _unitSpeed ) {
+            if ( node._cost > _speed ) {
                 continue;
+            }
+
+            if ( _isWide && lastReachableNodeIdx == BattleNodeIndex{ -1, -1 } ) {
+                assert( index.first != -1 && index.second != -1 );
+
+                lastReachableNodeIdx = index;
             }
 
             result.push_back( index.first );
         }
 
         std::reverse( result.begin(), result.end() );
+
+        // If a given position is not reachable on the current turn, then the last reachable position of
+        // a wide unit may be reversed in regard to the target one. Detect this and add an extra U-turn.
+        if ( _isWide && !result.empty() ) {
+            assert( lastReachableNodeIdx.first != -1 && lastReachableNodeIdx.second != -1 );
+
+            const bool isReflect = lastReachableNodeIdx.first < lastReachableNodeIdx.second;
+
+            if ( isReflect != position.isReflect() ) {
+                // The last reachable position should not be a reversed version of the target position
+                assert( !position.contains( lastReachableNodeIdx.first ) || !position.contains( lastReachableNodeIdx.second ) );
+
+                result.push_back( lastReachableNodeIdx.second );
+            }
+        }
 
         return result;
     }

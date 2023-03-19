@@ -37,7 +37,7 @@ namespace MP2
         SIZEOFMP2SIGN = 10,
         SIZEOFMP2RUMOR = 9,
         SIZEOFMP2EVENT = 50,
-        SIZEOFMP2RIDDLE = 138
+        SIZEOFMP2RIDDLE = 137
     };
 
     // Tile structure from the original map format.
@@ -215,30 +215,6 @@ namespace MP2
     {
         uint8_t id; // 0x00
         uint8_t zero[7]; // 7 byte 0x00
-        char text; // message + '/0'
-    };
-
-    // origin mp2 riddle sphinx
-    struct mp2riddle_t
-    {
-        uint8_t id; // 0x00
-        uint32_t wood;
-        uint32_t mercury;
-        uint32_t ore;
-        uint32_t sulfur;
-        uint32_t crystal;
-        uint32_t gems;
-        uint32_t golds;
-        uint16_t artifact; // 0xffff - none
-        uint8_t count; // count answers (1, 8)
-        char answer1[13];
-        char answer2[13];
-        char answer3[13];
-        char answer4[13];
-        char answer5[13];
-        char answer6[13];
-        char answer7[13];
-        char answer8[13];
         char text; // message + '/0'
     };
 
@@ -590,17 +566,14 @@ namespace MP2
         OBJ_ICN_TYPE_X_LOC2, // Objects from The Price of Loyalty expansion.
         OBJ_ICN_TYPE_X_LOC3 // Objects from The Price of Loyalty expansion.
 
-        // IMPORTANT!!! If you want to add new types firstly use unused entries and only then add new entries in this enumeration.
+        // IMPORTANT!!! If you want to add new types use UNUSED entries only.
     };
 
-    // Return Icn ID related to this tileset value.
-    int GetICNObject( const uint8_t tileset );
-
-    int getIcnIdFromObjectIcnType( const uint8_t objectIcnType );
+    int getIcnIdFromObjectIcnType( const ObjectIcnType objectIcnType );
 
     const char * StringObject( MapObjectType objectType, const int count = 1 );
 
-    bool isHiddenForPuzzle( const int terrainType, uint8_t tileset, uint8_t index );
+    bool isHiddenForPuzzle( const int terrainType, const ObjectIcnType objectIcnType, uint8_t index );
 
     // The method check whether the object is an action object depending on its location. For example, castle can't be located on water.
     bool isActionObject( const MapObjectType objectType, const bool locatesOnWater );
@@ -617,8 +590,6 @@ namespace MP2
     bool isCaptureObject( const MapObjectType objectType );
     bool isPickupObject( const MapObjectType objectType );
     bool isArtifactObject( const MapObjectType objectType );
-    bool isHeroUpgradeObject( const MapObjectType objectType );
-    bool isMonsterDwelling( const MapObjectType objectType );
     bool isAbandonedMine( const MapObjectType objectType );
     bool isProtectedObject( const MapObjectType objectType );
     // Returns true if this object can be safely visited by AI for fog discovery purposes.
@@ -634,8 +605,8 @@ namespace MP2
     // Make sure that you pass a valid action object.
     int getActionObjectDirection( const MapObjectType objectType );
 
-    bool getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint8_t & index );
-    bool isDiggingHoleSprite( const int terrainType, const uint8_t tileSet, const uint8_t index );
+    bool getDiggingHoleSprite( const int terrainType, ObjectIcnType & objectIcnType, uint8_t & index );
+    bool isDiggingHoleSprite( const int terrainType, const ObjectIcnType objectIcnType, const uint8_t index );
 }
 
 #endif

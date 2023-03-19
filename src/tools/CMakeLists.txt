@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2023                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -34,13 +34,17 @@ add_compile_definitions($<$<CONFIG:Debug>:WITH_DEBUG>)
 add_executable(82m2wav 82m2wav.cpp)
 add_executable(bin2txt bin2txt.cpp)
 add_executable(extractor extractor.cpp)
+add_executable(h2dmgr h2dmgr.cpp)
 add_executable(icn2img icn2img.cpp)
+add_executable(pal2img pal2img.cpp)
 add_executable(til2img til2img.cpp)
-add_executable(xmi2mid xmi2mid_cli.cpp)
+add_executable(xmi2midi xmi2midi.cpp)
 
 target_link_libraries(82m2wav engine)
 target_link_libraries(bin2txt engine)
 target_link_libraries(extractor engine)
+target_link_libraries(h2dmgr engine)
 target_link_libraries(icn2img engine)
+target_link_libraries(pal2img engine)
 target_link_libraries(til2img engine)
-target_link_libraries(xmi2mid engine)
+target_link_libraries(xmi2midi engine)

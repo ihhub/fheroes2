@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -395,7 +395,7 @@ const char * Resource::getDescription()
               "powerful creatures and buildings." );
 }
 
-uint32_t Resource::GetIndexSprite( int resource )
+uint8_t Resource::GetIndexSprite( int resource )
 {
     switch ( resource ) {
     case Resource::WOOD:
@@ -413,7 +413,7 @@ uint32_t Resource::GetIndexSprite( int resource )
     case Resource::GOLD:
         return 13;
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown resource type." )
         break;
     }
 

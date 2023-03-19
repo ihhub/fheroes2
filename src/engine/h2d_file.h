@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@ namespace fheroes2
     class Sprite;
 
     // Heroes 2 Data (H2D) file format used for storing files needed for the project. This format is not a part of original HoMM II.
-    class H2RReader
+    class H2DReader
     {
     public:
         // Returns true if file opening is successful.
@@ -54,7 +54,7 @@ namespace fheroes2
     };
 
     // This class is not designed to be performance optimized as it will be used very rarely and out of game running session.
-    class H2Writer
+    class H2DWriter
     {
     public:
         // Returns true if file opening is successful.
@@ -63,13 +63,13 @@ namespace fheroes2
         bool add( const std::string & name, const std::vector<uint8_t> & data );
 
         // Add all entries from a H2D reader.
-        bool add( H2RReader & reader );
+        bool add( H2DReader & reader );
 
     private:
         std::map<std::string, std::vector<uint8_t>> _fileData;
     };
 
-    bool readImageFromH2D( H2RReader & reader, const std::string & name, Sprite & image );
+    bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image );
 
-    bool writeImageToH2D( H2Writer & writer, const std::string & name, const Sprite & image );
+    bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image );
 }
