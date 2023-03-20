@@ -661,7 +661,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     const int32_t indexDest = path.GetDestinationIndex( true );
 
     if ( jumpToNextTile ) {
-        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) )
+        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
             MoveStep( *this, indexTo, false );
         }
         else {
