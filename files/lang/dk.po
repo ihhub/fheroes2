@@ -1,7 +1,7 @@
 # Danish translation for fheroes2
-# This file is distributed under the same license as the fheroes2 package.
 # Copyright (C) 2021 - 2023 fheroes2 team <fhomm2@gmail.com>
-# 
+# This file is distributed under the same license as the fheroes2 package.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
