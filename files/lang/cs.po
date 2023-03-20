@@ -1167,7 +1167,7 @@ msgid ""
 msgstr ""
 "Je tady poslední bitva. Ty i nepřátelé jste po zuby ozbrojení, všichni jsou "
 "ve spojenectví proti Tobě. Poraz Rolanda a ukonči tuto válku, v bitvě ale "
-"nesmíš přijít o Archibalda! "
+"nesmíš přijít o Archibalda!"
 
 msgid "Arrow's Flight"
 msgstr ""
