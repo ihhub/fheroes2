@@ -29,15 +29,16 @@ namespace MP2
 {
     enum MP2Info
     {
-        MP2OFFSETDATA = 428,
-        SIZEOFMP2TILE = 20,
-        SIZEOFMP2ADDON = 15,
-        SIZEOFMP2CASTLE = 70, // Refer to Castle::LoadFromMP2() method for more information.
-        SIZEOFMP2HEROES = 76,
-        SIZEOFMP2SIGN = 10,
-        SIZEOFMP2RUMOR = 9,
-        SIZEOFMP2EVENT = 50,
-        SIZEOFMP2RIDDLE = 137
+        MP2_DATA_OFFSET = 428,
+
+        MP2_ADDON_STRUCTURE_SIZE = 15, // See MP2::loadAddon().
+        MP2_CASTLE_STRUCTURE_SIZE = 70, // See to Castle::LoadFromMP2().
+        MP2_EVENT_STRUCTURE_SIZE = 50,
+        MP2_HEROES_STRUCTURE_SIZE = 76,
+        MP2_RIDDLE_STRUCTURE_SIZE = 137,
+        MP2_RUMOR_STRUCTURE_SIZE = 9,
+        MP2_SIGN_STRUCTURE_SIZE = 10,
+        MP2_TILE_STRUCTURE_SIZE = 20
     };
 
     // Tile structure from the original map format.

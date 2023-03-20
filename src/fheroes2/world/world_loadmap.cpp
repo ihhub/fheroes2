@@ -137,7 +137,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     GameStatic::uniq = fs.getLE32();
 
     // offset data
-    fs.seek( MP2::MP2OFFSETDATA - 2 * 4 );
+    fs.seek( MP2::MP2_DATA_OFFSET - 2 * 4 );
 
     // width
     switch ( fs.getLE32() ) {
@@ -185,7 +185,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     const int32_t worldSize = width * height;
 
     // seek to ADDONS block
-    fs.skip( worldSize * MP2::SIZEOFMP2TILE );
+    fs.skip( worldSize * MP2::MP2_TILE_STRUCTURE_SIZE );
 
     // read all addons
     std::vector<MP2::mp2addon_t> vec_mp2addons( fs.getLE32() /* count mp2addon_t */ );
@@ -199,7 +199,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles addons, tellg: " << endof_addons )
 
     // offset data
-    fs.seek( MP2::MP2OFFSETDATA );
+    fs.seek( MP2::MP2_DATA_OFFSET );
 
     vec_tiles.resize( worldSize );
 
@@ -440,7 +440,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             switch ( tile.GetObject() ) {
             case MP2::OBJ_CASTLE:
                 // add castle
-                if ( MP2::SIZEOFMP2CASTLE != pblock.size() ) {
+                if ( MP2::MP2_CASTLE_STRUCTURE_SIZE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read castle: "
                                    << "incorrect size block: " << pblock.size() )
@@ -461,7 +461,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_RANDOM_TOWN:
             case MP2::OBJ_RANDOM_CASTLE:
                 // add rnd castle
-                if ( MP2::SIZEOFMP2CASTLE != pblock.size() ) {
+                if ( MP2::MP2_CASTLE_STRUCTURE_SIZE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read castle: "
                                    << "incorrect size block: " << pblock.size() )
@@ -484,7 +484,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 break;
             case MP2::OBJ_JAIL:
                 // add jail
-                if ( MP2::SIZEOFMP2HEROES != pblock.size() ) {
+                if ( MP2::MP2_HEROES_STRUCTURE_SIZE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read heroes: "
                                    << "incorrect size block: " << pblock.size() )
@@ -521,7 +521,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 break;
             case MP2::OBJ_HEROES:
                 // add heroes
-                if ( MP2::SIZEOFMP2HEROES != pblock.size() ) {
+                if ( MP2::MP2_HEROES_STRUCTURE_SIZE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read heroes: "
                                    << "incorrect size block: " << pblock.size() )
@@ -554,7 +554,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_SIGN:
             case MP2::OBJ_BOTTLE:
                 // add sign or bottle
-                if ( MP2::SIZEOFMP2SIGN - 1 < pblock.size() && 0x01 == pblock[0] ) {
+                if ( MP2::MP2_SIGN_STRUCTURE_SIZE - 1 < pblock.size() && 0x01 == pblock[0] ) {
                     MapSign * obj = new MapSign();
                     obj->LoadFromMP2( findobject, StreamBuf( pblock ) );
                     map_objects.add( obj );
@@ -562,7 +562,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 break;
             case MP2::OBJ_EVENT:
                 // add event maps
-                if ( MP2::SIZEOFMP2EVENT - 1 < pblock.size() && 0x01 == pblock[0] ) {
+                if ( MP2::MP2_EVENT_STRUCTURE_SIZE - 1 < pblock.size() && 0x01 == pblock[0] ) {
                     MapEvent * obj = new MapEvent();
                     obj->LoadFromMP2( findobject, StreamBuf( pblock ) );
                     map_objects.add( obj );
@@ -570,7 +570,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 break;
             case MP2::OBJ_SPHINX:
                 // add riddle sphinx
-                if ( MP2::SIZEOFMP2RIDDLE < pblock.size() && 0x00 == pblock[0] ) {
+                if ( MP2::MP2_RIDDLE_STRUCTURE_SIZE < pblock.size() && 0x00 == pblock[0] ) {
                     MapSphinx * obj = new MapSphinx();
                     obj->LoadFromMP2( findobject, pblock );
                     map_objects.add( obj );
@@ -583,12 +583,12 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         // other events
         else if ( 0x00 == pblock[0] ) {
             // add event day
-            if ( MP2::SIZEOFMP2EVENT - 1 < pblock.size() && 1 == pblock[42] ) {
+            if ( MP2::MP2_EVENT_STRUCTURE_SIZE - 1 < pblock.size() && 1 == pblock[42] ) {
                 vec_eventsday.emplace_back();
                 vec_eventsday.back().LoadFromMP2( StreamBuf( pblock ) );
             }
             // add rumors
-            else if ( MP2::SIZEOFMP2RUMOR - 1 < pblock.size() ) {
+            else if ( MP2::MP2_RUMOR_STRUCTURE_SIZE - 1 < pblock.size() ) {
                 if ( pblock[8] ) {
                     _rumors.emplace_back( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() );
                     DEBUG_LOG( DBG_GAME, DBG_INFO, "add rumors: " << _rumors.back() )

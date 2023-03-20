@@ -116,7 +116,7 @@ Castle::Castle( int32_t cx, int32_t cy, int rc )
 
 void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 {
-    assert( data.size() == MP2::SIZEOFMP2CASTLE );
+    assert( data.size() == MP2::MP2_CASTLE_STRUCTURE_SIZE );
 
     // Structure containing information about town or castle.
     //
