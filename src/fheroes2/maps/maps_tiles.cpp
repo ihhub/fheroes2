@@ -2473,27 +2473,27 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
 
     std::vector<bool> isFog( static_cast<size_t>( fogWidth ) * fogHeight, true );
     std::vector<bool>::iterator isFogIter = isFog.begin();
-    const int32_t worldMaxIndex = static_cast<int32_t>( world.getSize() ) - 1;
+    const int32_t worldSize = static_cast<int32_t>( world.getSize() );
 
     // Cache the 'isFog' data for the given area to use it in fog direction calculation.
     for ( int32_t y = fogMinY; y < fogMaxY; ++y ) {
         for ( int32_t x = fogMinX; x < fogMaxX; ++x ) {
             const int32_t fogTileIndex = x + y * worldWidth;
 
-            if ( ( fogTileIndex < 0 ) || ( fogTileIndex > worldMaxIndex ) ) {
-                // The 'isFog' tiles outside the world borders are already set to true so we skip them.
-                ++isFogIter;
-                continue;
+            // The 'isFog' tiles outside the world borders are already set to true so we skip them.
+            if ( ( fogTileIndex > -1 ) && ( fogTileIndex < worldSize ) ) {
+                *isFogIter = world.GetTiles( fogTileIndex ).isFog( color );
             }
-
-            *isFogIter = world.GetTiles( fogTileIndex ).isFog( color );
 
             ++isFogIter;
         }
     }
 
+    const int32_t fogWidthPlusOne = fogWidth + 1;
+    const int32_t fogWidthMinusOne = fogWidth - 1;
+
     // Set the iterator to 'isFog' data to correspond the first tile in given area: skip the upper row of 'isFog' and the left column.
-    isFogIter = isFog.begin() + fogWidth + 1;
+    isFogIter = isFog.begin() + fogWidthPlusOne;
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
@@ -2502,48 +2502,46 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
             if ( !( *isFogIter ) ) {
                 // For the tile is without fog we set the UNKNOWN direction.
                 tile._setFogDirection( Direction::UNKNOWN );
-
-                ++isFogIter;
-                continue;
             }
+            else {
+                // The tile is under the fog so its CENTER direction for fog is true.
+                uint16_t fogDirection = Direction::CENTER;
 
-            // The tile is under the fog so its CENTER direction for fog is true.
-            uint16_t fogDirection = Direction::CENTER;
+                // Check all tiles around for fog and if it is true then logically add the direction to this tile.
+                if ( *( isFogIter - fogWidthPlusOne ) ) {
+                    fogDirection |= Direction::TOP_LEFT;
+                }
 
-            // Check all tiles around for fog and if it is true then logically add the direction to this tile.
-            if ( *( isFogIter - fogWidth - 1 ) ) {
-                fogDirection |= Direction::TOP_LEFT;
+                if ( *( isFogIter - fogWidth ) ) {
+                    fogDirection |= Direction::TOP;
+                }
+
+                if ( *( isFogIter - fogWidthMinusOne ) ) {
+                    fogDirection |= Direction::TOP_RIGHT;
+                }
+
+                if ( *( isFogIter - 1 ) ) {
+                    fogDirection |= Direction::LEFT;
+                }
+
+                if ( *( isFogIter + 1 ) ) {
+                    fogDirection |= Direction::RIGHT;
+                }
+
+                if ( *( isFogIter + fogWidthMinusOne ) ) {
+                    fogDirection |= Direction::BOTTOM_LEFT;
+                }
+
+                if ( *( isFogIter + fogWidth ) ) {
+                    fogDirection |= Direction::BOTTOM;
+                }
+
+                if ( *( isFogIter + fogWidthPlusOne ) ) {
+                    fogDirection |= Direction::BOTTOM_RIGHT;
+                }
+
+                tile._setFogDirection( fogDirection );
             }
-
-            if ( *( isFogIter - fogWidth ) ) {
-                fogDirection |= Direction::TOP;
-            }
-
-            if ( *( isFogIter - fogWidth + 1 ) ) {
-                fogDirection |= Direction::TOP_RIGHT;
-            }
-
-            if ( *( isFogIter - 1 ) ) {
-                fogDirection |= Direction::LEFT;
-            }
-
-            if ( *( isFogIter + 1 ) ) {
-                fogDirection |= Direction::RIGHT;
-            }
-
-            if ( *( isFogIter + fogWidth - 1 ) ) {
-                fogDirection |= Direction::BOTTOM_LEFT;
-            }
-
-            if ( *( isFogIter + fogWidth ) ) {
-                fogDirection |= Direction::BOTTOM;
-            }
-
-            if ( *( isFogIter + fogWidth + 1 ) ) {
-                fogDirection |= Direction::BOTTOM_RIGHT;
-            }
-
-            tile._setFogDirection( fogDirection );
 
             ++isFogIter;
         }
