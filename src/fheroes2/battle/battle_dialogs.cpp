@@ -724,7 +724,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     return false;
 }
 
-void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount ) const
+void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

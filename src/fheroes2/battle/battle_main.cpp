@@ -59,7 +59,7 @@
 namespace Battle
 {
     void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool, const Rand::DeterministicRandomGenerator & randomGenerator );
-    void NecromancySkillAction( HeroBase & hero, const uint32_t, const bool isControlHuman, const Battle::Arena & arena );
+    void NecromancySkillAction( HeroBase & hero, const uint32_t, const bool isControlHuman );
 }
 
 namespace
@@ -324,7 +324,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
         // necromancy capability
         if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
-            NecromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman(), arena );
+            NecromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman() );
 
         if ( winnerHero ) {
             const Heroes * kingdomHero = dynamic_cast<const Heroes *>( winnerHero );
@@ -408,7 +408,7 @@ void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, 
     hero.AppendSpellsToBook( new_spells, true );
 }
 
-void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsKilled, const bool isControlHuman, const Battle::Arena & arena )
+void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsKilled, const bool isControlHuman )
 {
     Army & army = hero.GetArmy();
 
@@ -423,7 +423,7 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
     army.JoinTroop( Monster::SKELETON, raiseCount, false );
 
     if ( isControlHuman )
-        arena.DialogBattleNecromancy( raiseCount );
+        Arena::DialogBattleNecromancy( raiseCount );
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << "skeletons" )
 }
