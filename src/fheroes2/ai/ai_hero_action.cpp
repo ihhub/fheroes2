@@ -456,21 +456,45 @@ namespace
             destroy = true;
         }
 
-        // fight
+        // Fight
         if ( !destroy ) {
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacked monster " << troop.GetName() )
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacks monster " << troop.GetName() )
+
             Army army( tile );
+
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
+
                 destroy = true;
             }
             else {
                 AIBattleLose( hero, res, true );
-                tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
-                if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
-                    Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+
+                // The army can include both the original monsters and their upgraded version
+                const uint32_t monstersLeft = army.getTotalCount();
+#ifndef NDEBUG
+                const Monster originalMonster = troop.GetMonster();
+                const Monster upgradedMonster = originalMonster.GetUpgrade();
+
+                if ( upgradedMonster == originalMonster ) {
+                    assert( monstersLeft == army.GetCountMonsters( originalMonster ) );
+                }
+                else {
+                    assert( monstersLeft == army.GetCountMonsters( originalMonster ) + army.GetCountMonsters( upgradedMonster ) );
+                }
+#endif
+
+                if ( monstersLeft > 0 ) {
+                    tile.MonsterSetCount( monstersLeft );
+
+                    if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
+                        Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+                    }
+                }
+                else {
+                    destroy = true;
                 }
             }
         }
@@ -571,43 +595,57 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
-    void AIToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void AIToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dstIndex )
     {
-        Maps::Tiles & tile = world.GetTiles( dst_index );
+        Maps::Tiles & tile = world.GetTiles( dstIndex );
 
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
-            bool capture = true;
+            auto removeObjectProtection = [&hero, objectType, &tile]() {
+                // Clear any metadata related to spells
+                tile.clearAdditionalMetadata();
 
-            // check guardians
-            if ( tile.isCaptureObjectProtected() ) {
-                Army army( tile );
-                const Monster & mons = tile.QuantityMonster();
-
-                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
-
-                if ( result.AttackerWins() ) {
-                    hero.IncreaseExperience( result.GetExperienceAttacker() );
-                    // Clear any metadata related to spells.
-                    tile.clearAdditionalMetadata();
-                }
-                else {
-                    capture = false;
-
-                    AIBattleLose( hero, result, true );
-
-                    Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
-                    troop.SetCount( army.GetCountMonsters( mons ) );
-                }
-            }
-
-            if ( capture ) {
-                // restore the abandoned mine
+                // Restore the abandoned mine
                 if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
                     Maps::Tiles::UpdateAbandonedMineSprite( tile );
                     hero.SetMapsObject( MP2::OBJ_MINES );
                 }
+            };
+
+            auto captureObject = [&hero, &tile, &removeObjectProtection]() {
+                removeObjectProtection();
 
                 tile.QuantitySetColor( hero.GetColor() );
+            };
+
+            if ( tile.isCaptureObjectProtected() ) {
+                Army army( tile );
+
+                Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+                if ( result.AttackerWins() ) {
+                    hero.IncreaseExperience( result.GetExperienceAttacker() );
+
+                    captureObject();
+                }
+                else {
+                    // The army should include only the original monsters
+                    const uint32_t monstersLeft = army.getTotalCount();
+                    assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
+
+                    Troop & troop = world.GetCapturedObject( dstIndex ).GetTroop();
+                    troop.SetCount( monstersLeft );
+
+                    // If all the guards are defeated, but the hero has lost the battle,
+                    // just remove the protection from the object
+                    if ( monstersLeft == 0 ) {
+                        removeObjectProtection();
+                    }
+
+                    AIBattleLose( hero, result, true );
+                }
+            }
+            else {
+                captureObject();
             }
         }
 
