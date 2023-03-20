@@ -425,7 +425,7 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
     if ( isControlHuman )
         Arena::DialogBattleNecromancy( raiseCount );
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << "skeletons" )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << " skeletons" )
 }
 
 uint32_t Battle::Result::AttackerResult() const
