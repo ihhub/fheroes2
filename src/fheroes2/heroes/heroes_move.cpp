@@ -971,7 +971,7 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
     _alphaValue = 255;
 }
 
-bool Heroes::Move( const bool jumpToNextTile )
+bool Heroes::Move( const bool jumpToNextTile /* = false */ )
 {
     if ( Modes( ACTION ) )
         ResetModes( ACTION );
