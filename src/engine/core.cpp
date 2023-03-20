@@ -44,9 +44,13 @@ namespace
 #if defined( TARGET_PS_VITA )
     void initHardwareInternally()
     {
+        // CPU clock speed, MHz. Possible values: 41, 83, 111, 166, 222, 333, 444, 500
         scePowerSetArmClockFrequency( 444 );
+        // CPU memory clock speed, MHz. Possible values: 55, 83, 111, 166, 222
         scePowerSetBusClockFrequency( 222 );
+        // GPU clock speed, MHz. Possible values: 41, 55, 83, 111, 166, 222
         scePowerSetGpuClockFrequency( 222 );
+        // GPU memory clock speed, MHz. Possible values: 83, 111, 166
         scePowerSetGpuXbarClockFrequency( 166 );
     }
 

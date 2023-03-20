@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -48,7 +48,7 @@ class StreamBase;
 namespace fheroes2
 {
     class Image;
-    class Sprite;
+    struct ObjectRenderingInfo;
 }
 
 namespace Interface
@@ -68,8 +68,10 @@ namespace Maps
 
     struct TilesAddon
     {
-        TilesAddon();
-        TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
+        TilesAddon() = default;
+
+        TilesAddon( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex, const bool hasObjectAnimation,
+                    const bool isMarkedAsRoad );
 
         TilesAddon( const TilesAddon & ) = default;
 
@@ -79,14 +81,14 @@ namespace Maps
 
         bool isUniq( const uint32_t id ) const
         {
-            return uniq == id;
+            return _uid == id;
         }
 
         bool isRoad() const;
 
         bool hasSpriteAnimation() const
         {
-            return object & 1;
+            return _hasObjectAnimation;
         }
 
         std::string String( int level ) const;
@@ -98,10 +100,23 @@ namespace Maps
 
         static bool PredicateSortRules1( const TilesAddon & ta1, const TilesAddon & ta2 );
 
-        uint32_t uniq;
-        uint8_t level;
-        uint8_t object;
-        uint8_t index;
+        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
+        uint32_t _uid{ 0 };
+
+        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
+        uint8_t _layerType{ OBJECT_LAYER };
+
+        // The type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
+        MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+
+        // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
+        uint8_t _imageIndex{ 255 };
+
+        // An indicator where the object has extra animation frames on Adventure Map.
+        bool _hasObjectAnimation{ false };
+
+        // An indicator that this tile is a road. Logically it shouldn't be set for addons.
+        bool _isMarkedAsRoad{ false };
     };
 
     using Addons = std::list<TilesAddon>;
@@ -122,19 +137,19 @@ namespace Maps
 
         MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
 
-        uint8_t GetObjectTileset() const
+        MP2::ObjectIcnType getObjectIcnType() const
         {
-            return objectTileset;
+            return _objectIcnType;
         }
 
         uint8_t GetObjectSpriteIndex() const
         {
-            return objectIndex;
+            return _imageIndex;
         }
 
         uint32_t GetObjectUID() const
         {
-            return uniq;
+            return _uid;
         }
 
         // Get Tile metadata field #1 (used for things like monster count or resource amount)
@@ -158,29 +173,19 @@ namespace Maps
 
         bool isWater() const
         {
-            return 30 > TileSpriteIndex();
-        }
-
-        uint32_t TileSpriteIndex() const
-        {
-            return pack_sprite_index & 0x3FFF;
-        }
-
-        uint32_t TileSpriteShape() const
-        {
-            return pack_sprite_index >> 14;
+            return 30 > _terrainImageIndex;
         }
 
         const fheroes2::Image & GetTileSurface() const;
 
-        bool isObject( const MP2::MapObjectType objectType ) const
+        bool isSameMainObject( const MP2::MapObjectType objectType ) const
         {
-            return objectType == mp2_object;
+            return objectType == _mainObjectType;
         }
 
         bool hasSpriteAnimation() const
         {
-            return objectTileset & 1;
+            return _hasObjectAnimation;
         }
 
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
@@ -194,7 +199,7 @@ namespace Maps
 
         bool isRoad() const
         {
-            return tileIsRoad || mp2_object == MP2::OBJ_CASTLE;
+            return tileIsRoad || _mainObjectType == MP2::OBJ_CASTLE;
         }
 
         bool isStream() const;
@@ -211,13 +216,23 @@ namespace Maps
             _index = index;
         }
 
-        void setBoat( int direction );
+        void resetBoatOwnerColor()
+        {
+            _boatOwnerColor = Color::NONE;
+        }
+
+        int getBoatOwnerColor() const
+        {
+            return _boatOwnerColor;
+        }
+
+        void setBoat( const int direction, const int color );
         int getBoatDirection() const;
 
         void resetObjectSprite()
         {
-            objectTileset = 0;
-            objectIndex = 255;
+            _objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+            _imageIndex = 255;
         }
 
         void FixObject();
@@ -232,7 +247,7 @@ namespace Maps
         // Set initial passability based on information read from mp2 and addon structures.
         void setInitialPassability();
 
-        // Update passability based on neigbhours around.
+        // Update passability based on neighbours around.
         void updatePassability();
 
         int getOriginalPassability() const;
@@ -254,19 +269,24 @@ namespace Maps
         void RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const;
         void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
 
-        void drawByIcnId( fheroes2::Image & output, const Interface::GameArea & area, const int32_t icnId ) const;
+        void drawByObjectIcnType( fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType ) const;
 
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterShadowSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatShadowSpritesPerTile() const;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMineGuardianSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile() const;
+        std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile() const;
 
-        void AddonsPushLevel1( const MP2::mp2tile_t & );
-        void AddonsPushLevel1( const MP2::mp2addon_t & );
-        void AddonsPushLevel1( const TilesAddon & );
-        void AddonsPushLevel2( const MP2::mp2tile_t & );
-        void AddonsPushLevel2( const MP2::mp2addon_t & );
+        void AddonsPushLevel1( const MP2::mp2tile_t & mt );
+        void AddonsPushLevel1( const MP2::mp2addon_t & ma );
+
+        void AddonsPushLevel1( TilesAddon ta )
+        {
+            addons_level1.emplace_back( ta );
+        }
+
+        void AddonsPushLevel2( const MP2::mp2tile_t & mt );
+        void AddonsPushLevel2( const MP2::mp2addon_t & ma );
 
         const Addons & getLevel1Addons() const
         {
@@ -281,25 +301,21 @@ namespace Maps
         void AddonsSort();
         void Remove( uint32_t uniqID );
         void RemoveObjectSprite();
-        void UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, int indexChange );
-        void ReplaceObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t indexToReplace, uint8_t newIndex );
+        void updateObjectImageIndex( const uint32_t objectUid, const MP2::ObjectIcnType objectIcnType, const int imageIndexOffset );
+        void replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
+                            const uint8_t originalImageIndex, const uint8_t newImageIndex );
 
         std::string String() const;
 
         bool isFog( const int colors ) const
         {
             // colors may be the union friends
-            return ( fog_colors & colors ) == colors;
+            return ( _fogColors & colors ) == colors;
         }
 
         bool isFogAllAround( const int color ) const;
+        void ClearFog( const int colors );
 
-        void ClearFog( int colors )
-        {
-            fog_colors &= ~colors;
-        }
-
-        /* monster operation */
         void MonsterSetCount( uint32_t count );
         uint32_t MonsterCount() const;
 
@@ -307,7 +323,7 @@ namespace Maps
         // (castle has a hero or garrison, dwelling has creatures, etc)
         bool isCaptureObjectProtected() const;
 
-        /* object quantity operation */
+        // Operations with tile quantities
         void QuantityUpdate( bool isFirstLoad = true );
         void QuantityReset();
         bool QuantityIsValid() const;
@@ -346,31 +362,32 @@ namespace Maps
         Heroes * GetHeroes() const;
         void SetHeroes( Heroes * );
 
-        // If tile is empty (MP2::OBJ_ZERO) then verify whether it is a coast and update the tile if needed.
+        // If tile is empty (MP2::OBJ_NONE) then verify whether it is a coast and update the tile if needed.
         void updateEmpty();
 
-        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_ZERO)
+        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_NONE)
         void setAsEmpty();
 
-        uint32_t getObjectIdByICNType( const int icnId ) const;
+        uint32_t getObjectIdByObjectIcnType( const MP2::ObjectIcnType objectIcnType ) const;
 
-        std::vector<uint8_t> getValidTileSets() const;
+        std::vector<MP2::ObjectIcnType> getValidObjectIcnTypes() const;
 
-        bool containsTileSet( const std::vector<uint8_t> & tileSets ) const;
+        bool containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType> & objectIcnTypes ) const;
 
-        bool containsSprite( uint8_t tileSetId, const uint32_t objectIdx ) const;
+        bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
 
-        static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
-        static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
-        static MP2::MapObjectType GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
-        static bool isShadowSprite( const uint8_t tileset, const uint8_t icnIndex );
-        static bool isShadowSprite( const int tileset, const uint8_t icnIndex );
-        static void UpdateAbandonedMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource );
-        static void UpdateAbandonedMineRightSprite( uint8_t & tileset, uint8_t & index );
+        static int getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
+        static int getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
+
+        static void UpdateAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource );
+
+        static void UpdateAbandonedMineRightSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex );
+
         static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
         static void UpdateAbandonedMineSprite( Tiles & tile );
+        static void setAbandonedMineObjectType( const Tiles & tile );
 
         // Some tiles have incorrect object type. This is due to original Editor issues.
         static void fixTileObjectType( Tiles & tile );
@@ -395,8 +412,6 @@ namespace Maps
 
         bool isDetachedObject() const;
 
-        void SetTerrain( uint32_t sprite_index, uint32_t shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
-
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
         static void UpdateMonsterPopulation( Tiles & );
@@ -420,14 +435,32 @@ namespace Maps
         Addons addons_level2; // top layer
 
         int32_t _index = 0;
-        uint16_t pack_sprite_index = 0;
 
-        uint32_t uniq = 0;
-        uint8_t objectTileset = 0;
-        uint8_t objectIndex = 255;
-        MP2::MapObjectType mp2_object = MP2::OBJ_ZERO;
+        uint16_t _terrainImageIndex{ 0 };
+
+        uint8_t _terrainFlags{ 0 };
+
+        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
+        uint32_t _uid{ 0 };
+
+        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
+        uint8_t _layerType{ OBJECT_LAYER };
+
+        // The type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
+        MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+
+        // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
+        uint8_t _imageIndex{ 255 };
+
+        // An indicator where the object has extra animation frames on Adventure Map.
+        bool _hasObjectAnimation{ false };
+
+        // An indicator that this tile is a road. Logically it shouldn't be set for addons.
+        bool _isMarkedAsRoad{ false };
+
+        MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
         uint16_t tilePassable = DIRECTION_ALL;
-        uint8_t fog_colors = Color::ALL;
+        uint8_t _fogColors = Color::ALL;
 
         uint8_t heroID = 0;
 
@@ -440,10 +473,11 @@ namespace Maps
 
         bool tileIsRoad = false;
 
+        // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
+        uint8_t _boatOwnerColor = Color::NONE;
+
         // This field does not persist in savegame.
         uint32_t _region = REGION_NODE_BLOCKED;
-
-        uint8_t _level = 0;
     };
 
     StreamBase & operator<<( StreamBase &, const TilesAddon & );

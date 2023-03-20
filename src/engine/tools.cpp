@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "tools.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cctype>
@@ -30,10 +32,8 @@
 #include <fstream> // IWYU pragma: keep
 #include <memory>
 
-#include "logging.h"
-#include "tools.h"
+#include "translations.h"
 
-/* trim left right space */
 std::string StringTrim( std::string str )
 {
     if ( str.empty() ) {
@@ -141,9 +141,53 @@ int GetInt( const std::string & str )
     return res;
 }
 
+void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement )
+{
+    if ( pattern == nullptr ) {
+        return;
+    }
+
+    for ( size_t position = workString.find( pattern ); position != std::string::npos; position = workString.find( pattern ) ) {
+        // To determine if the end of a sentence was before this word we parse the character before it
+        // for the presence of full stop, question mark, or exclamation mark, skipping whitespace characters.
+        const char prevWordEnd = [&workString, position]() {
+            assert( position < workString.size() );
+
+            const auto iter = std::find_if_not( workString.rbegin() + static_cast<int32_t>( workString.size() - position ), workString.rend(),
+                                                []( const unsigned char c ) { return std::isspace( c ); } );
+            if ( iter != workString.rend() ) {
+                return *iter;
+            }
+
+            // Before 'position' there is nothing, or there are only spaces.
+            return '\0';
+        }();
+
+        // Also if the insert 'position' equals zero, then it is the first word in a sentence.
+        if ( position == 0 || prevWordEnd == '.' || prevWordEnd == '?' || prevWordEnd == '!' ) {
+            // Also, 'patternReplacement' can consist of two words (for example, "Power Liches") and if
+            // it is placed as the first word in sentence, then we have to lowercase only the second word.
+            // To detect this, we look for a space mark in 'patternReplacement'.
+            const size_t spacePosition = patternReplacement.find( ' ' );
+
+            // The first (and possibly only) word of 'patternReplacement' replaces 'pattern' in 'workString'.
+            workString.replace( position, std::strlen( pattern ), patternReplacement.substr( 0, spacePosition ) );
+
+            // Check if a space mark was found to insert the rest part of 'patternReplacement' with lowercase applied.
+            if ( spacePosition != std::string::npos ) {
+                workString.insert( position + spacePosition, Translation::StringLower( patternReplacement.substr( spacePosition ) ) );
+            }
+        }
+        else {
+            // For all other cases lowercase the 'patternReplacement' and replace the 'pattern' with it in 'workString'.
+            workString.replace( position, std::strlen( pattern ), Translation::StringLower( patternReplacement ) );
+        }
+    }
+}
+
 void StringReplace( std::string & dst, const char * pred, const std::string & src )
 {
-    size_t pos = std::string::npos;
+    size_t pos;
 
     while ( std::string::npos != ( pos = dst.find( pred ) ) )
         dst.replace( pos, std::strlen( pred ), src );
@@ -158,7 +202,7 @@ std::vector<std::string> StringSplit( const std::string & str, const std::string
 {
     std::vector<std::string> vec;
     size_t pos1 = 0;
-    size_t pos2 = std::string::npos;
+    size_t pos2;
 
     while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
         vec.push_back( str.substr( pos1, pos2 - pos1 ) );
@@ -189,54 +233,6 @@ int Sign( int s )
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
 }
 
-bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path )
-{
-    std::fstream file;
-    file.open( path, std::fstream::out | std::fstream::trunc | std::fstream::binary );
-
-    if ( !file ) {
-        ERROR_LOG( "Unable to open file for writing: " << path )
-        return false;
-    }
-
-    file.write( reinterpret_cast<const char *>( data.data() ), static_cast<std::streamsize>( data.size() ) );
-
-    return true;
-}
-
-std::vector<uint8_t> LoadFileToMem( const std::string & path )
-{
-    std::fstream file;
-    file.open( path, std::fstream::in | std::fstream::binary );
-    if ( !file ) {
-        return {};
-    }
-
-    file.seekg( 0, std::fstream::end );
-    std::streamoff length = file.tellg();
-    if ( length < 1 ) {
-        return {};
-    }
-
-    std::vector<uint8_t> data( length );
-
-    size_t dataToRead = static_cast<size_t>( length );
-    size_t dataAlreadyRead = 0;
-
-    const size_t blockSize = 4 * 1024 * 1024; // read by 4 MB blocks
-
-    while ( dataToRead > 0 ) {
-        size_t readSize = dataToRead > blockSize ? blockSize : dataToRead;
-
-        file.read( reinterpret_cast<char *>( data.data() + dataAlreadyRead ), static_cast<std::streamsize>( readSize ) );
-
-        dataAlreadyRead += readSize;
-        dataToRead -= readSize;
-    }
-
-    return data;
-}
-
 namespace fheroes2
 {
     double GetAngle( const Point & start, const Point & target )
@@ -255,19 +251,32 @@ namespace fheroes2
     {
         const int dx = pt2.x - pt1.x;
         const int dy = pt2.y - pt1.y;
-        const uint32_t dist = static_cast<uint32_t>( std::hypot( std::abs( dx ), std::abs( dy ) ) );
-        // round up the integer division
-        const uint32_t length = ( step > 0 && dist >= step / 2 ) ? ( dist + step / 2 ) / step : 1;
-        const double moveX = dx / static_cast<double>( length );
-        const double moveY = dy / static_cast<double>( length );
+        const uint32_t dist = static_cast<uint32_t>( std::hypot( dx, dy ) );
+        // Round up the integer division and avoid the division by zero in calculation of total line points.
+        const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 0;
 
         std::vector<Point> line;
-        line.reserve( length );
 
-        for ( uint32_t i = 0; i <= length; ++i ) {
-            line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
+        if ( length < 2 ) {
+            // If the length is equal to 0 than 'pt2' could be closer to 'pt1' than 'step'.
+            // In this case we put 'pt1' as the start of the line.
+            line.emplace_back( pt1 );
+            // And put 'pt2' as the end of the line only if 'pt1' is not equal to 'pt2'.
+            if ( pt1 != pt2 ) {
+                line.emplace_back( pt2 );
+            }
         }
+        else {
+            // Otherwise we calculate the euclidean line, using the determined parameters.
+            const double moveX = dx / static_cast<double>( length );
+            const double moveY = dy / static_cast<double>( length );
 
+            line.reserve( length + 1 );
+
+            for ( uint32_t i = 0; i <= length; ++i ) {
+                line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
+            }
+        }
         return line;
     }
 

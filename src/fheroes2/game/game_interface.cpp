@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,6 +22,8 @@
  ***************************************************************************/
 
 #include "game_interface.h"
+
+#include <algorithm>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -60,7 +62,7 @@ void Interface::Basic::Reset()
     const bool isHideInterface = conf.isHideInterfaceEnabled();
 
     if ( isHideInterface ) {
-        conf.SetShowPanel( true );
+        conf.SetShowControlPanel( true );
 
         controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
 
@@ -131,8 +133,9 @@ void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
         }
     }
 
-    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) ) {
-        radar.Redraw();
+    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) ) {
+        // Redraw radar map only if `REDRAW_RADAR` is set.
+        radar.Redraw( combinedRedraw & REDRAW_RADAR );
     }
 
     if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) ) {
@@ -164,9 +167,13 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const Settings & conf = Settings::Get();
+    Settings & conf = Settings::Get();
     const bool isEvilInterface = conf.isEvilInterfaceEnabled();
     const bool isHideInterface = conf.isHideInterfaceEnabled();
+    const bool isIconsVisible = conf.ShowIcons();
+    const bool isButtonsVisible = conf.ShowButtons();
+    const bool isStatusVisible = conf.ShowStatus();
+    const bool isControlPanelVisible = conf.ShowControlPanel();
 
     const fheroes2::Rect & radarRect = radar.GetRect();
     const fheroes2::Rect & radarArea = radar.GetArea();
@@ -183,24 +190,42 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         buttonExit.draw();
     };
 
-    const fheroes2::Rect & visibleArea = gameArea.GetROI();
-    const bool isFadingEnabled = ( gameArea.GetROI().width > TILEWIDTH * distance ) || ( gameArea.GetROI().height > TILEWIDTH * distance );
+    const fheroes2::Rect & gameAreaROI = gameArea.GetROI();
+    const bool isFadingEnabled = ( gameAreaROI.width > TILEWIDTH * distance ) || ( gameAreaROI.height > TILEWIDTH * distance );
 
-    // We need to add an extra one cell as a hero stands exactly in the middle of a cell
-    const fheroes2::Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
-    const fheroes2::Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
-    const fheroes2::Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
+    const fheroes2::Rect spellROI = [this, from, distance, isHideInterface, &gameAreaROI]() -> fheroes2::Rect {
+        const fheroes2::Point heroPos = gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) );
+
+        const int32_t x = heroPos.x - TILEWIDTH * ( distance / 2 );
+        const int32_t y = heroPos.y - TILEWIDTH * ( distance / 2 );
+
+        // We need to add an extra cell since the hero stands exactly in the middle of a cell
+        const int32_t w = std::min( TILEWIDTH * ( distance + 1 ), gameAreaROI.width );
+        const int32_t h = std::min( TILEWIDTH * ( distance + 1 ), gameAreaROI.height );
+
+        return { isHideInterface ? x : std::max( x, BORDERWIDTH ), isHideInterface ? y : std::max( y, BORDERWIDTH ), w, h };
+    }();
+
+    if ( isHideInterface ) {
+        // There is no need to hide the radar because it will be replaced by the Dimension Door control panel
+        conf.SetShowIcons( false );
+        conf.SetShowButtons( false );
+        conf.SetShowStatus( false );
+        conf.SetShowControlPanel( false );
+
+        Redraw( REDRAW_GAMEAREA );
+    }
 
     if ( isFadingEnabled ) {
         if ( isHideInterface ) {
-            InvertedShadow( display, visibleArea, spellROI, 5, 9 );
+            InvertedShadow( display, gameAreaROI, spellROI, 5, 9 );
 
             drawControlPanel();
         }
         else {
             drawControlPanel();
 
-            fheroes2::InvertedFadeWithPalette( display, visibleArea, spellROI, 5, 300, 9 );
+            fheroes2::InvertedFadeWithPalette( display, gameAreaROI, spellROI, 5, 300, 9 );
         }
     }
     else {
@@ -216,7 +241,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     LocalEvent & le = LocalEvent::Get();
     int32_t returnValue = -1;
 
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
         const fheroes2::Point & mp = le.GetMouseCursor();
 
         if ( radarRect & mp ) {
@@ -227,7 +252,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
                 break;
             }
         }
-        else if ( visibleArea & mp ) {
+        else if ( gameAreaROI & mp ) {
             const int32_t dst = gameArea.GetValidTileIdFromPoint( mp );
 
             bool valid = ( dst >= 0 );
@@ -252,13 +277,12 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            uint32_t & frame = Game::MapsAnimationFrame();
-            ++frame;
+            Game::updateAdventureMapAnimationIndex();
 
             Redraw( REDRAW_GAMEAREA );
 
             if ( isFadingEnabled ) {
-                InvertedShadow( display, visibleArea, spellROI, 5, 9 );
+                InvertedShadow( display, gameAreaROI, spellROI, 5, 9 );
 
                 if ( isHideInterface ) {
                     drawControlPanel();
@@ -270,10 +294,19 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     }
 
     if ( isFadingEnabled ) {
-        gameArea.SetRedraw();
+        SetRedraw( REDRAW_GAMEAREA );
     }
 
-    Redraw( REDRAW_RADAR );
+    if ( isHideInterface ) {
+        conf.SetShowIcons( isIconsVisible );
+        conf.SetShowButtons( isButtonsVisible );
+        conf.SetShowStatus( isStatusVisible );
+        conf.SetShowControlPanel( isControlPanelVisible );
+
+        SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_GAMEAREA );
+    }
+
+    Redraw( REDRAW_RADAR_CURSOR );
     display.render();
 
     return returnValue;

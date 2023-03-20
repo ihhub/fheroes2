@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,6 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include "game.h"
 
 #include <algorithm>
 #include <cassert>
@@ -43,7 +45,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "direction.h"
-#include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -74,7 +75,6 @@
 #include "route.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -317,7 +317,7 @@ void ShowNewWeekDialog()
                                                                   "After regular growth, the population of %{monster} increases by %{count} percent!", count );
             else
                 message += _( "%{monster} growth +%{count}." );
-            StringReplace( message, "%{monster}", monster.GetMultiName() );
+            StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
             message += "\n \n";
         }
@@ -328,7 +328,7 @@ void ShowNewWeekDialog()
     else
         message += _( " All dwellings increase population." );
 
-    Dialog::Message( "", message, Font::BIG, Dialog::OK );
+    fheroes2::showStandardTextMessage( "", message, Dialog::OK );
 }
 
 void ShowEventDayDialog()
@@ -342,7 +342,7 @@ void ShowEventDayDialog()
                                            fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, event.resource );
         }
         else if ( !event.message.empty() ) {
-            Dialog::Message( event.title, event.message, Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
         }
     }
 }
@@ -365,7 +365,7 @@ void ShowWarningLostTownsDialog()
 int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Maps::Tiles & tile )
 {
     switch ( tile.GetObject() ) {
-    case MP2::OBJN_CASTLE:
+    case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * to_castle = world.getCastle( tile.GetCenter() );
 
@@ -400,12 +400,12 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
     case MP2::OBJ_BOAT:
         return Cursor::POINTER;
 
-    case MP2::OBJN_CASTLE:
+    case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( castle ) {
-            if ( tile.GetObject() == MP2::OBJN_CASTLE && water && tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
+            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE && water && tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
 
@@ -461,12 +461,12 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     case MP2::OBJ_MONSTER:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
 
-    case MP2::OBJN_CASTLE:
+    case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( nullptr != castle ) {
-            if ( tile.GetObject() == MP2::OBJN_CASTLE ) {
+            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE ) {
                 if ( tile.GetPassable() == 0 ) {
                     return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
@@ -626,7 +626,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
 
                 radar.SetHide( true );
-                radar.SetRedraw();
+                radar.SetRedraw( REDRAW_RADAR_CURSOR );
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -684,10 +684,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     statusWindow.Reset();
                     statusWindow.SetState( StatusType::STATUS_AITURN );
 
+#if defined( WITH_DEBUG )
                     if ( player->isAIAutoControlMode() ) {
+                        // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
                         radar.SetHide( false );
-                        radar.SetRedraw();
+                        radar.SetRedraw( REDRAW_RADAR );
                     }
+#endif
 
                     Redraw();
                     display.render();
@@ -762,6 +765,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     radar.SetHide( false );
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
+
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -1135,7 +1139,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         // fast scroll
-        if ( ( gameArea.NeedScroll() && !isMovingHero ) || gameArea.isDragScroll() ) {
+        if ( ( gameArea.NeedScroll() && !isMovingHero ) || gameArea.needDragScrollRedraw() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
                 if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
                        || isScrollBottom( le.GetMouseCursor() ) )
@@ -1146,14 +1150,13 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 gameArea.Scroll();
 
                 gameArea.SetRedraw();
-                radar.SetRedraw();
+                radar.SetRedraw( REDRAW_RADAR_CURSOR );
             }
         }
 
         // map objects animation
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            uint32_t & frame = Game::MapsAnimationFrame();
-            ++frame;
+            Game::updateAdventureMapAnimationIndex();
             gameArea.SetRedraw();
         }
 
@@ -1228,7 +1231,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     case Cursor::CASTLE: {
         // correct index for castle
         const MP2::MapObjectType objectType = tile.GetObject();
-        if ( MP2::OBJN_CASTLE != objectType && MP2::OBJ_CASTLE != objectType )
+        if ( MP2::OBJ_NON_ACTION_CASTLE != objectType && MP2::OBJ_CASTLE != objectType )
             break;
 
         Castle * to_castle = world.getCastle( tile.GetCenter() );
@@ -1288,7 +1291,7 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
             Dialog::QuickInfo( tile );
         else
             switch ( tile.GetObject() ) {
-            case MP2::OBJN_CASTLE:
+            case MP2::OBJ_NON_ACTION_CASTLE:
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
                 if ( castle ) {

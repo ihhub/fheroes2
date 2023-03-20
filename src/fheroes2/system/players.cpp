@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,7 +21,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "players.h"
+
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <ostream>
 
@@ -34,10 +37,8 @@
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "normal/ai_normal.h"
-#include "players.h"
 #include "race.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "world.h"
@@ -248,16 +249,11 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
     assert( player._ai );
     msg >> *player._ai;
 
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0920_RELEASE ) {
-        player._handicapStatus = Player::HandicapStatus::NONE;
-    }
-    else {
-        uint8_t handicapStatusInt;
+    uint8_t handicapStatusInt;
 
-        msg >> handicapStatusInt;
+    msg >> handicapStatusInt;
 
-        player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
-    }
+    player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
 
     return msg;
 }
@@ -303,9 +299,9 @@ void Players::Init( int colors )
 
 void Players::Init( const Maps::FileInfo & fi )
 {
-    if ( fi.kingdom_colors ) {
+    if ( fi.kingdomColors ) {
         clear();
-        const Colors vcolors( fi.kingdom_colors );
+        const Colors vcolors( fi.kingdomColors );
 
         Player * first = nullptr;
 

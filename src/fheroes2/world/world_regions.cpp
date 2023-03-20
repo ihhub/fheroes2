@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -240,7 +240,7 @@ void World::ComputeStaticAnalysis()
         }
     }
 
-    // Step 3. Check all castles on the map and create region centres based on them
+    // Step 3. Check all castles on the map and create region centers based on them
     std::vector<int> regionCenters;
     TileDataVector castleCenters;
     for ( const Castle * castle : vec_castles ) {
@@ -262,7 +262,7 @@ void World::ComputeStaticAnalysis()
         AppendIfFarEnough( regionCenters, ( castleIndex >= 0 && static_cast<size_t>( castleIndex ) > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
-    // Step 4. Add missing region centres based on distance (for water or if there's big chunks of space without castles)
+    // Step 4. Add missing region centers based on distance (for water or if there's big chunks of space without castles)
     const std::vector<int> & directionOffsets = GetDirectionOffsets( width );
     for ( int waterOrGround = 0; waterOrGround < 4; waterOrGround += 2 ) {
         for ( const int rowID : emptyLines[waterOrGround] ) {
@@ -357,7 +357,7 @@ void World::ComputeStaticAnalysis()
             // connect regions through teleports
             MapsIndexes exits;
 
-            if ( node.mapObject == MP2::OBJ_STONELITHS ) {
+            if ( node.mapObject == MP2::OBJ_STONE_LITHS ) {
                 exits = GetTeleportEndPoints( node.index );
             }
             else if ( node.mapObject == MP2::OBJ_WHIRLPOOL ) {
@@ -365,7 +365,7 @@ void World::ComputeStaticAnalysis()
             }
 
             for ( const int exitIndex : exits ) {
-                // neighbours is a set that will force the uniqness
+                // neighbours is a set that will force the uniqueness
                 reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
             }
         }

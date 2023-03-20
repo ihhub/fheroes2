@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -36,7 +36,6 @@
 #include "game.h"
 #include "gamedefs.h"
 #include "logging.h"
-#include "save_format_version.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -60,7 +59,7 @@ namespace
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
         GLOBAL_MONOCHROME_CURSOR = 0x00000020,
-        GLOBAL_SHOW_CPANEL = 0x00000040,
+        GLOBAL_SHOW_CONTROL_PANEL = 0x00000040,
         GLOBAL_SHOW_RADAR = 0x00000080,
         GLOBAL_SHOW_ICONS = 0x00000100,
         GLOBAL_SHOW_BUTTONS = 0x00000200,
@@ -79,7 +78,7 @@ namespace
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
         GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GLOBAL_SCREEN_NEAREST_SCALING = 0x20000000
+        GLOBAL_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
     };
 }
 
@@ -89,7 +88,7 @@ std::string Settings::GetVersion()
 }
 
 Settings::Settings()
-    : video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
+    : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
@@ -113,7 +112,7 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
-    _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+    _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
 
     if ( System::isHandheldDevice() ) {
         // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
@@ -252,22 +251,29 @@ bool Settings::Read( const std::string & filePath )
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
-        // default
-        video_mode.width = fheroes2::Display::DEFAULT_WIDTH;
-        video_mode.height = fheroes2::Display::DEFAULT_HEIGHT;
+        const std::string value = StringLower( sval );
+        size_t pos = value.find( 'x' );
 
-        std::string value = StringLower( sval );
-        const size_t pos = value.find( 'x' );
+        if ( pos != std::string::npos ) {
+            _resolutionInfo.width = GetInt( value.substr( 0, pos ) );
 
-        if ( std::string::npos != pos ) {
-            std::string width( value.substr( 0, pos ) );
-            std::string height( value.substr( pos + 1, value.length() - pos - 1 ) );
-
-            video_mode.width = GetInt( width );
-            video_mode.height = GetInt( height );
+            const size_t prevXPos = pos;
+            pos = value.find( 'x', prevXPos + 1 );
+            if ( pos != std::string::npos ) {
+                _resolutionInfo.height = GetInt( value.substr( prevXPos + 1, pos - prevXPos - 1 ) );
+                _resolutionInfo.scale = GetInt( value.substr( pos + 1, value.length() - pos - 1 ) );
+            }
+            else {
+                // This is old video mode setting without scale.
+                _resolutionInfo.height = GetInt( value.substr( prevXPos + 1, value.length() - prevXPos - 1 ) );
+                _resolutionInfo.scale = 1;
+            }
         }
         else {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value )
+            _resolutionInfo.width = fheroes2::Display::DEFAULT_WIDTH;
+            _resolutionInfo.height = fheroes2::Display::DEFAULT_HEIGHT;
+            _resolutionInfo.scale = 1;
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown video mode: " << value )
         }
     }
 
@@ -337,7 +343,7 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "screen scaling type" ) ) {
-        setNearestLinearScaling( config.StrParams( "screen scaling type" ) == "nearest" );
+        setScreenScalingTypeNearest( config.StrParams( "screen scaling type" ) == "nearest" );
     }
 
     return true;
@@ -380,8 +386,10 @@ std::string Settings::String() const
 
     os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
 
+    const fheroes2::Display & display = fheroes2::Display::instance();
+
     os << std::endl << "# video mode (game resolution)" << std::endl;
-    os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
+    os << "videomode = " << display.width() << "x" << display.height() << "x" << display.scale() << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
@@ -392,7 +400,7 @@ std::string Settings::String() const
     os << std::endl << "# music volume: 0 - 10" << std::endl;
     os << "music volume = " << music_volume << std::endl;
 
-    os << std::endl << "# run in fullscreen mode: on/off (use F4 key to switch between modes)" << std::endl;
+    os << std::endl << "# run in fullscreen mode: on/off" << std::endl;
     os << "fullscreen = " << ( _optGlobal.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
@@ -483,7 +491,7 @@ std::string Settings::String() const
     os << "cursor soft rendering = " << ( _optGlobal.Modes( GLOBAL_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
-    os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_NEAREST_SCALING ) ? "nearest" : "linear" ) << std::endl;
+    os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
 
     return os.str();
 }
@@ -685,8 +693,10 @@ void Settings::setFullScreen( const bool enable )
         _optGlobal.ResetModes( GLOBAL_FULLSCREEN );
     }
 
-    fheroes2::engine().toggleFullScreen();
-    fheroes2::Display::instance().render();
+    if ( enable != fheroes2::engine().isFullScreen() ) {
+        fheroes2::engine().toggleFullScreen();
+        fheroes2::Display::instance().render();
+    }
 }
 
 void Settings::setMonochromeCursor( const bool enable )
@@ -787,14 +797,14 @@ void Settings::setEvilInterface( const bool enable )
     }
 }
 
-void Settings::setNearestLinearScaling( const bool enable )
+void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_SCREEN_NEAREST_SCALING );
+        _optGlobal.SetModes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST );
         fheroes2::engine().setNearestScaling( true );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_SCREEN_NEAREST_SCALING );
+        _optGlobal.ResetModes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST );
         fheroes2::engine().setNearestScaling( false );
     }
 }
@@ -851,7 +861,7 @@ bool Settings::isEvilInterfaceEnabled() const
 
 bool Settings::ShowControlPanel() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOW_CPANEL );
+    return _optGlobal.Modes( GLOBAL_SHOW_CONTROL_PANEL );
 }
 
 bool Settings::ShowRadar() const
@@ -1001,9 +1011,9 @@ void Settings::SetBattleMouseShaded( bool f )
     f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
-void Settings::SetShowPanel( bool f )
+void Settings::SetShowControlPanel( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOW_CPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CPANEL );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_CONTROL_PANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CONTROL_PANEL );
 }
 
 void Settings::SetShowRadar( bool f )
@@ -1058,21 +1068,5 @@ StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_1000_RELEASE ) {
-        int dummy;
-
-        msg >> dummy;
-    }
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE3_1000_RELEASE ) {
-        BitModes dummy;
-
-        msg >> dummy >> dummy >> dummy;
-    }
-
-    return msg >> conf.players;
+    return msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> conf.players;
 }

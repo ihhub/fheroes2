@@ -1,16 +1,15 @@
 # Russian translation of fheroes2
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
-# Igor Orlov <igororlov@inbox.ru>, 2009.
-# Andrey Afletdinov <afletdinov@gmail.com>, 2009.
+# Copyright (C) 2021 - 2022 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2009 Igor Orlov <igororlov@inbox.ru>
+# Copyright (C) 2009 Andrey Afletdinov <afletdinov@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
-"PO-Revision-Date: 2022-10-10 15:27+0200\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
+"PO-Revision-Date: 2023-03-18 14:09+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -20,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -31,72 +30,140 @@ msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"НОВАЯ\n"
+"ИГРА"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+" СОХРА-\n"
+"НИТЬ\n"
+"ИГРУ"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+" ЗАГРУ-\n"
+"ЗИТЬ\n"
+"ИГРУ"
 
 msgid "INFO"
 msgstr ""
+" СЦЕНА-\n"
+"РИЙ"
 
 msgid "QUIT"
-msgstr ""
+msgstr "ВЫЙТИ"
+
+msgid "CANCEL"
+msgstr "ОТМЕНА"
+
+msgid "OKAY"
+msgstr "ОК"
+
+msgid "ACCEPT"
+msgstr "ПРИНЯТЬ"
+
+msgid "DECLINE"
+msgstr "ОТКЛОНИТЬ"
+
+msgid "LEARN"
+msgstr "ИЗУЧИТЬ"
+
+msgid "TRADE"
+msgstr "МЕНЯТЬ"
+
+msgid "YES"
+msgstr "ДА"
+
+msgid "NO"
+msgstr "НЕТ"
+
+msgid "EXIT"
+msgstr "ВЫЙТИ"
+
+msgid "DISMISS"
+msgstr "УВОЛИТЬ"
+
+msgid "UPGRADE"
+msgstr "УЛУЧШИТЬ"
+
+msgid "RESTART"
+msgstr "СНАЧАЛА"
+
+msgid "S"
+msgstr "М"
+
+msgid "M"
+msgstr "С"
+
+msgid "L"
+msgstr "Б"
+
+msgid "X-L"
+msgstr "О-Б"
+
+msgid "ALL"
+msgstr "ВСЕ"
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"ОБЫЧНАЯ\n"
+"ИГРА"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
-msgstr ""
+msgstr "КАМПАНИЯ"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
-
-msgid "CANCEL"
-msgstr ""
+"СОВМЕСТНАЯ\n"
+"ИГРА"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "НАСТРОЙКИ"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"ВОЙНЫ ЗА\n"
+"ПРЕСТОЛ"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"ЦЕНА\n"
+"ВЕРНОСТИ"
 
 msgid "HOT SEAT"
 msgstr ""
+"ЗА ОДНОЙ\n"
+"МАШИНОЙ"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 ИГРОКА"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 ИГРОКА"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 ИГРОКА"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 ИГРОКОВ"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 ИГРОКОВ"
 
 msgid "GIFT"
 msgstr "ОТДАТЬ"
@@ -106,6 +173,9 @@ msgstr "СЛОЖНОСТЬ"
 
 msgid "MIN"
 msgstr "МИН"
+
+msgid "MAX"
+msgstr "МАКС"
 
 msgid "Warrior"
 msgstr "Воин"
@@ -542,6 +612,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Показать информацию для %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr "%{monster}: лететь сюда"
+
+msgid "Move %{monster} here"
+msgstr "%{monster}: идти сюда"
+
 msgid "Shoot %{monster}"
 msgstr "Стрелять в %{monster}"
 
@@ -553,12 +629,6 @@ msgstr[2] "(ещё %{count} выстрелов)"
 
 msgid "Attack %{monster}"
 msgstr "Атаковать %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "%{monster}: лететь сюда"
-
-msgid "Move %{monster} here"
-msgstr "%{monster}: идти сюда"
 
 msgid "Turn %{turn}"
 msgstr "Раунд %{turn}"
@@ -1461,6 +1531,36 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Убийца гномов!!!!, спасайтесь кто может!\""
 
+msgid "campaignBonus|Animate Dead"
+msgstr "Поднять нежить"
+
+msgid "campaignBonus|Chain Lightning"
+msgstr "Цепь молний"
+
+msgid "campaignBonus|Fireblast"
+msgstr "Огненный взрыв"
+
+msgid "campaignBonus|Mass Curse"
+msgstr "Общее проклятие"
+
+msgid "campaignBonus|Mass Haste"
+msgstr "Общее ускорение"
+
+msgid "campaignBonus|Mirror Image"
+msgstr "Фантом"
+
+msgid "campaignBonus|Resurrect"
+msgstr "Оживление"
+
+msgid "campaignBonus|Steelskin"
+msgstr "Стальная кожа"
+
+msgid "campaignBonus|Summon Earth"
+msgstr "Элементаль"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Показать героев"
+
 msgid "campaignBonus|Ballista"
 msgstr "Баллиста"
 
@@ -1484,6 +1584,10 @@ msgstr "Символ Неудачи"
 
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Высший Свиток"
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Баллиста"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Ужасная Маска"
@@ -1652,36 +1756,6 @@ msgstr "Прод. мудрость"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Эксп. мудрость"
-
-msgid "campaignBonus|Animate Dead"
-msgstr "Поднять нежить"
-
-msgid "campaignBonus|Chain Lightning"
-msgstr "Цепь молний"
-
-msgid "campaignBonus|Fireblast"
-msgstr "Огненный взрыв"
-
-msgid "campaignBonus|Mass Curse"
-msgstr "Общее проклятие"
-
-msgid "campaignBonus|Mass Haste"
-msgstr "Общее ускорение"
-
-msgid "campaignBonus|Mirror Image"
-msgstr "Фантом"
-
-msgid "campaignBonus|Resurrect"
-msgstr "Оживление"
-
-msgid "campaignBonus|Steelskin"
-msgstr "Стальная кожа"
-
-msgid "campaignBonus|Summon Earth"
-msgstr "Элементаль"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Показать героев"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -2448,7 +2522,7 @@ msgstr ""
 "ширине стартового расположения войск в бою с интервалами между отрядами."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "Сомкнутый боевой порядок предписывает отрядам Вашей армии организовать "
@@ -2550,18 +2624,6 @@ msgstr ""
 "побеждаете их под дикие вопли толпы. Тренер гладиаторов, впечатлённый Вашим "
 "умением, соглашается обучить Вас выбранному навыку."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr "Вы не можете позволить себе улучшения для Вашей армии!"
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Ваши войска могут быть улучшены, но за это придётся заплатить. Вы согласны?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "Вы уверены, что хотите распустить этот отряд?"
-
 msgid "Attack Skill"
 msgstr "Атака"
 
@@ -2582,6 +2644,18 @@ msgstr "Здоровье"
 
 msgid "Hit Points Left"
 msgstr "Тек. здоровье"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr "Вы не можете позволить себе улучшения для Вашей армии!"
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Ваши войска могут быть улучшены, но за это придётся заплатить. Вы согласны?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Вы уверены, что хотите распустить этот отряд?"
 
 msgid "Followers"
 msgstr "Последователи"
@@ -2742,16 +2816,6 @@ msgid ""
 msgstr ""
 "Режим текстовой поддержки, который выводит дополнительную информацию об "
 "окнах и событиях в игре."
-
-msgid "Attention"
-msgstr "Внимание"
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
-msgstr ""
-"Ваша версия Heroes of Might and Magic II не поддерживает никакие языки, "
-"кроме английского."
 
 msgid ""
 "Map\n"
@@ -3011,14 +3075,20 @@ msgstr "Доступно: %{count}"
 msgid "Number to buy:"
 msgstr "Нанять:"
 
+msgid "Recruit selected monsters."
+msgstr "Нанять выбранных существ."
+
+msgid "Select maximum monsters to be recruited."
+msgstr "Выбрать максимальное количество существ для найма."
+
+msgid "Select only 1 monster to be recruited."
+msgstr "Выбрать всего 1 существо для найма."
+
 msgid "Select Game Resolution:"
 msgstr "Выбор разрешения экрана:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
-
-msgid "MAX"
-msgstr "МАКС"
 
 msgid "How many troops to move?"
 msgstr "Сколько существ перенести?"
@@ -3028,6 +3098,21 @@ msgstr "Быстрое разделение:"
 
 msgid "Map: "
 msgstr "Карта: "
+
+msgid ""
+"\n"
+"\n"
+"Month: "
+msgstr ""
+"\n"
+"\n"
+"Месяц: "
+
+msgid ", Week: "
+msgstr ", Неделя: "
+
+msgid ", Day: "
+msgstr ", День: "
 
 msgid ""
 "\n"
@@ -3071,13 +3156,8 @@ msgstr "Выберите заклинание:"
 msgid "Select Skill:"
 msgstr "Выберите навык:"
 
-msgid "Location: "
-msgstr "Путь к файлу: "
-
-msgid ""
-"\n"
-"\n"
-"Map Type:\n"
+#, fuzzy
+msgid "Map Type:\n"
 msgstr ""
 "\n"
 "\n"
@@ -3464,14 +3544,14 @@ msgstr "Количество дней, потраченных на эту кам
 msgid "Project Coordination and Core Development"
 msgstr "Координатор проекта и основной разработчик"
 
-msgid "QA and Support"
-msgstr "Контроль качества и поддержка"
+msgid "Development"
+msgstr "Разработчик"
 
 msgid "Visit us at "
 msgstr "Посетите нас"
 
-msgid "Development"
-msgstr "Разработчик"
+msgid "QA and Support"
+msgstr "Контроль качества и поддержка"
 
 msgid "Dev and Support"
 msgstr "Разработка и поддержка"
@@ -3639,17 +3719,11 @@ msgstr "Кампания"
 msgid "View High Scores for Campaigns."
 msgstr "Посмотреть очки рейтинга за кампании."
 
-msgid "This file contains a save with an invalid game type."
-msgstr "Этот файл содержит сохранение с некорректным типом игры."
+#, fuzzy
+msgid "The save file is corrupted."
+msgstr "Фантомный отряд создан!"
 
-msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
-msgstr ""
-"Этот файл сохранен в версии \"Цена верности\".\n"
-"Некоторые элементы игры будут недоступны."
-
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr "Неподдерживаемый формат сохранения: "
 
 msgid "Current game version: "
@@ -3657,6 +3731,16 @@ msgstr "Текущая версия игры: "
 
 msgid "Last supported version: "
 msgstr "Последняя поддерживаемая версия: "
+
+msgid "This file contains a save with an invalid game type."
+msgstr "Этот файл содержит сохранение с некорректным типом игры."
+
+msgid ""
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
+msgstr ""
+"Этот файл сохранён для карты дополнения \"Цена верности\", но "
+"соответствующие игровые ресурсы не обнаружены."
 
 msgid "This saved game is localized to '"
 msgstr "Эта сохранённая игра локализована на '"
@@ -4184,6 +4268,9 @@ msgstr ""
 "его, то у него попросту нет места, чтобы его унести. Весь инвентарь героя "
 "занят."
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr "Раскопки артефакта занимают целый день. Попробуйте завтра."
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
@@ -4197,9 +4284,6 @@ msgstr "Здесь ничего. Где бы это могло быть?"
 
 msgid "Try searching on clear ground."
 msgstr "Попробуйте копать на нормальной земле."
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr "Раскопки артефакта занимают целый день. Попробуйте завтра."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -4303,11 +4387,29 @@ msgstr ""
 msgid "View %{skill} Info"
 msgstr "Информация о навыке %{skill}"
 
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr "ПРОБЕЛ"
+
+msgid "Keyboard|LANG"
+msgstr "ЯЗЫК"
+
+msgid "Keyboard|ABC"
+msgstr "АБВ"
+
 msgid "Kingdom Income"
 msgstr "Доход королевства"
 
 msgid "Kingdom Income per day."
 msgstr "Ежедневный доход королевства."
+
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Вы стали хозяином маяка, теперь все Ваши корабли будут передвигаться по морю "
+"гораздо дальше."
 
 msgid "English"
 msgstr "Английский"
@@ -4819,15 +4921,15 @@ msgstr "Выпив свежей воды Вы получаете бонус уд
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Вы пьёте из фонтана, но ничего не происходит."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Вы посетили кольцо фей, но ничего не произошло."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "Ваше войско вступает в кольцо фей, чары которого принесут Вам удачу в "
 "грядущем сражении."
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Вы посетили кольцо фей, но ничего не произошло."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -5214,13 +5316,6 @@ msgstr ""
 "потереть?"
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-"Вы подошли к заброшенной шахте. Возможно в ней живут Привидения. Хотите "
-"войти и проверить это?"
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5281,6 +5376,13 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "%{name} переходит под Ваш контроль."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+"Вы подошли к заброшенной шахте. Возможно в ней живут Привидения. Хотите "
+"войти и проверить это?"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -5667,6 +5769,9 @@ msgstr ""
 "Вход в пещеру зияет чёрной дырой, из которой тянет тошнотворным сернистым "
 "зловонием. Отважитесь ли Вы войти?"
 
+msgid "Except for evidence of a terrible battle, the cave is empty."
+msgstr "Если не считать следов ужасной битвы, пещера пуста."
+
 msgid ""
 "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, "
 "\"you will fight and surely die. But I will give you a choice of deaths. You "
@@ -5677,13 +5782,6 @@ msgstr ""
 "он, - \"тебя ждут бой и верная смерть, но я дам тебе выбор. Ты можешь "
 "драться со мной или же с моими слугами. Предпочитаешь сразиться с моими "
 "слугами?\""
-
-msgid ""
-"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
-"gold."
-msgstr ""
-"После победы над слугами демона Вы обнаружили тайник с золотом из %{count} "
-"монет."
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
@@ -5708,6 +5806,13 @@ msgstr ""
 "схватки Вы прикончили чудовище и нашли %{art} в глубине пещеры."
 
 msgid ""
+"Seeing that you do not have %{count} gold, the demon slashes you with its "
+"claws, and the last thing you see is a red haze."
+msgstr ""
+"Даже %{count} жалких монет не наберется у Вас. Демон сжимает когти и перед "
+"глазами встает красная пелена. Больше Вы ничего не видите..."
+
+msgid ""
 "The Demon leaps upon you and has its claws at your throat before you can "
 "even draw your sword. \"Your life is mine,\" it says. \"I will sell it back "
 "to you for %{count} gold.\""
@@ -5717,14 +5822,11 @@ msgstr ""
 "пока я добрый.\""
 
 msgid ""
-"Seeing that you do not have %{count} gold, the demon slashes you with its "
-"claws, and the last thing you see is a red haze."
+"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
+"gold."
 msgstr ""
-"Даже %{count} жалких монет не наберется у Вас. Демон сжимает когти и перед "
-"глазами встает красная пелена. Больше Вы ничего не видите..."
-
-msgid "Except for evidence of a terrible battle, the cave is empty."
-msgstr "Если не считать следов ужасной битвы, пещера пуста."
+"После победы над слугами демона Вы обнаружили тайник с золотом из %{count} "
+"монет."
 
 msgid ""
 "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
@@ -5873,6 +5975,9 @@ msgstr ""
 msgid "This eye seems to be intently studying its surroundings."
 msgstr "Кажется, этот глаз внимательно изучает окрестности."
 
+msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgstr "Вы подошли к огромному Сфинксу, но он даже не шелохнулся."
+
 msgid ""
 "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you "
 "shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept "
@@ -5895,13 +6000,6 @@ msgstr ""
 "Ваш ответ?"
 
 msgid ""
-"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
-"so here's your reward. Now begone.\""
-msgstr ""
-"Несколько разочарованно Сфинкс промолвил: \"Ты дал верный ответ, вот твоя "
-"награда. А теперь убирайся.\""
-
-msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
 "you with a paw, knocking you to the ground. Another blow makes the world go "
 "black, and you know no more."
@@ -5909,8 +6007,12 @@ msgstr ""
 "\"Твоя догадка ошибочна,\" - сказал, улыбаясь, Сфинкс. Ухмыляющийся Сфинкс "
 "повалил Вас на землю и мир окутала непроглядная тьма."
 
-msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
-msgstr "Вы подошли к огромному Сфинксу, но он даже не шелохнулся."
+msgid ""
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
+msgstr ""
+"Несколько разочарованно Сфинкс промолвил: \"Ты дал верный ответ, вот твоя "
+"награда. А теперь убирайся.\""
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -5964,6 +6066,12 @@ msgstr ""
 "Ваш герой очень устал, и не сможет применять магию сегодня. Попробуйте ещё "
 "раз завтра."
 
+msgid "This spell cannot be used on a boat."
+msgstr "Это заклинание не действует в море."
+
+msgid "This spell can be casted only nearby water."
+msgstr "Это заклинание действует только у воды."
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -5984,13 +6092,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"Сомкнутый боевой порядок предписывает отрядам Вашей армии организовать "
-"плотное построение посередине стартового расположения войск в бою."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Вы действительно хотите уволить героя?"
@@ -6081,12 +6182,6 @@ msgstr "Это заклинание уже используется."
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."
-
-msgid "This spell cannot be used on a boat."
-msgstr "Это заклинание не действует в море."
-
-msgid "This spell can be casted only nearby water."
-msgstr "Это заклинание действует только у воды."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -6870,17 +6965,66 @@ msgstr "Нет объекта"
 msgid "Alchemist Lab"
 msgstr "Лаборатория алхимика"
 
+msgid "Sign"
+msgstr "Указатель"
+
+msgid "Buoy"
+msgstr "Буй"
+
+msgid "Skeleton"
+msgstr "Скелет"
+
 msgid "Daemon Cave"
 msgstr "Пещера демона"
+
+msgid "Treasure Chest"
+msgstr "Ларец с сокровищами"
 
 msgid "Faerie Ring"
 msgstr "Кольцо фей"
 
+msgid "Campfire"
+msgstr "Костёр"
+
+msgid "Fountain"
+msgstr "Фонтан"
+
+msgid "Gazebo"
+msgstr "Беседка"
+
+msgid "Genie Lamp"
+msgstr "Древняя лампа"
+
+msgid "Archer's House"
+msgstr "Дом стрелков"
+
+msgid "Goblin Hut"
+msgstr "Хибара гоблина"
+
+msgid "Dwarf Cottage"
+msgstr "Избушка гномов"
+
+msgid "Peasant Hut"
+msgstr "Мазанка крестьян"
+
+msgid "Stables"
+msgstr "Конюшни"
+
+msgid "Alchemist's Tower"
+msgstr "Башня алхимика"
+
+msgid "Event"
+msgstr "Событие"
+
 msgid "Dragon City"
 msgstr "Драконий город"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Маяк"
+msgid_plural "Lighthouses"
+msgstr[0] "Маяк"
+msgstr[1] "Маяк"
+msgstr[2] "Маяк"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -6891,11 +7035,17 @@ msgstr[2] "Водяных колёс"
 msgid "Mines"
 msgstr "Шахты"
 
+msgid "Monster"
+msgstr "Отряд"
+
 msgid "Obelisk"
 msgstr "Обелиск"
 
 msgid "Oasis"
 msgstr "Оазис"
+
+msgid "Resource"
+msgstr "Ресурс"
 
 msgid "Sawmill"
 msgstr "Лесопилка"
@@ -6903,11 +7053,29 @@ msgstr "Лесопилка"
 msgid "Oracle"
 msgstr "Оракул"
 
+msgid "Shrine of the First Circle"
+msgstr "Святилище 1-го круга"
+
+msgid "Shipwreck"
+msgstr "Кораблекрушение"
+
+msgid "Sea Chest"
+msgstr "Морской сундук"
+
 msgid "Desert Tent"
 msgstr "Шатёр"
 
+msgid "Stone Liths"
+msgstr "Монолиты"
+
 msgid "Wagon Camp"
 msgstr "Вагоны"
+
+msgid "Hut of the Magi"
+msgstr "Лачуга волхва"
+
+msgid "Whirlpool"
+msgstr "Водоворот"
 
 msgid "Windmill"
 msgid_plural "Windmills"
@@ -6915,20 +7083,62 @@ msgstr[0] "Ветряная мельница"
 msgstr[1] "Ветряные мельницы"
 msgstr[2] "Ветряных мельниц"
 
+msgid "Artifact"
+msgstr "Артефакт"
+
+msgid "Mermaid"
+msgstr "Русалка"
+
+msgid "Boat"
+msgstr "Корабль"
+
+msgid "Random Ultimate Artifact"
+msgstr "Случайный великий артефакт"
+
+msgid "Random Artifact"
+msgstr "Случайный артефакт"
+
+msgid "Random Resource"
+msgstr "Случайный ресурс"
+
+msgid "Random Monster"
+msgstr "Случайный Монстр"
+
 msgid "Random Town"
 msgstr "Случайный город"
 
 msgid "Random Castle"
 msgstr "Случайный замок"
 
+msgid "Eye of the Magi"
+msgstr "Око волхва"
+
+msgid "Random Monster - weak"
+msgstr "Случайный слабый монстр"
+
+msgid "Random Monster - medium"
+msgstr "Случайный средний монстр"
+
+msgid "Random Monster - strong"
+msgstr "Случайный сильный монстр"
+
+msgid "Random Monster - very strong"
+msgstr "Случайный великий монстр"
+
+msgid "Nothing Special"
+msgstr "Ничего особенного"
+
+msgid "Mossy Rock"
+msgstr "Мшистая скала"
+
 msgid "Watch Tower"
 msgstr "Обзорная башня"
 
-msgid "Tree City"
-msgstr "Древо-город"
-
 msgid "Tree House"
 msgstr "Домик на дереве"
+
+msgid "Tree City"
+msgstr "Древо-город"
 
 msgid "Ruins"
 msgstr "Руины"
@@ -6938,6 +7148,15 @@ msgstr "Форт"
 
 msgid "Abandoned Mine"
 msgstr "Заброшенная шахта"
+
+msgid "Sirens"
+msgstr "Сирены"
+
+msgid "Standing Stones"
+msgstr "Стоячие камни"
+
+msgid "Idol"
+msgstr "Идол"
 
 msgid "Tree of Knowledge"
 msgstr "Древо знаний"
@@ -6957,14 +7176,32 @@ msgstr "Нора"
 msgid "Mercenary Camp"
 msgstr "Лагерь наёмников"
 
+msgid "Shrine of the Second Circle"
+msgstr "Святилище 2-го круга"
+
+msgid "Shrine of the Third Circle"
+msgstr "Святилище 3-го круга"
+
 msgid "City of the Dead"
 msgstr "Город мёртвых"
 
 msgid "Sphinx"
 msgstr "Сфинкс"
 
+msgid "Wagon"
+msgstr "Тележка"
+
+msgid "Tar Pit"
+msgstr "Смоляная яма"
+
+msgid "Artesian Spring"
+msgstr "Артезианский источник"
+
 msgid "Troll Bridge"
 msgstr "Мост троллей"
+
+msgid "Watering Hole"
+msgstr "Промоина"
 
 msgid "Witch's Hut"
 msgstr "Хижина ведьмы"
@@ -6972,188 +7209,17 @@ msgstr "Хижина ведьмы"
 msgid "Xanadu"
 msgstr "Ксанаду"
 
-msgid "Magellan's Maps"
-msgstr "Магеллан"
-
-msgid "Derelict Ship"
-msgstr "Заброшенный корабль"
-
-msgid "Shipwreck"
-msgstr "Кораблекрушение"
-
-msgid "Observation Tower"
-msgstr "Обзорная башня"
-
-msgid "Freeman's Foundry"
-msgstr "Литейная"
-
-msgid "Watering Hole"
-msgstr "Промоина"
-
-msgid "Artesian Spring"
-msgstr "Артезианский источник"
-
-msgid "Gazebo"
-msgstr "Беседка"
-
-msgid "Archer's House"
-msgstr "Дом стрелков"
-
-msgid "Peasant Hut"
-msgstr "Мазанка крестьян"
-
-msgid "Dwarf Cottage"
-msgstr "Избушка гномов"
-
-msgid "Stone Liths"
-msgstr "Монолиты"
-
-msgid "Magic Well"
-msgstr "Волшебный колодец"
-
-msgid "Sign"
-msgstr "Указатель"
-
-msgid "Nothing Special"
-msgstr "Ничего особенного"
-
-msgid "Tar Pit"
-msgstr "Смоляная яма"
-
-msgid "Mound"
-msgstr "Курган"
-
-msgid "Dune"
-msgstr "Дюна"
-
-msgid "Stump"
-msgstr "Пень"
-
-msgid "Cactus"
-msgstr "Кактус"
-
-msgid "Trees"
-msgstr "Деревья"
-
-msgid "Dead Tree"
-msgstr "Сушина"
-
-msgid "Mountains"
-msgstr "Горы"
-
-msgid "Volcano"
-msgstr "Вулкан"
-
-msgid "Rock"
-msgstr "Камень"
-
-msgid "Flowers"
-msgstr "Цветы"
-
-msgid "Water Lake"
-msgstr "Озеро"
-
-msgid "Mandrake"
-msgstr "Мандрагора"
-
-msgid "Crater"
-msgstr "Кратер"
-
-msgid "Lava Pool"
-msgstr "Лавовый бассейн"
-
-msgid "Shrub"
-msgstr "Кустарник"
-
-msgid "Buoy"
-msgstr "Буй"
-
-msgid "Skeleton"
-msgstr "Скелет"
-
-msgid "Treasure Chest"
-msgstr "Ларец с сокровищами"
-
-msgid "Sea Chest"
-msgstr "Морской сундук"
-
-msgid "Campfire"
-msgstr "Костёр"
-
-msgid "Fountain"
-msgstr "Фонтан"
-
-msgid "Genie Lamp"
-msgstr "Древняя лампа"
-
-msgid "Goblin Hut"
-msgstr "Хибара гоблина"
-
-msgid "Monster"
-msgstr "Отряд"
-
-msgid "Resource"
-msgstr "Ресурс"
-
-msgid "Whirlpool"
-msgstr "Водоворот"
-
-msgid "Artifact"
-msgstr "Артефакт"
-
-msgid "Boat"
-msgstr "Корабль"
-
-msgid "Random Artifact"
-msgstr "Случайный артефакт"
-
-msgid "Random Resource"
-msgstr "Случайный ресурс"
-
-msgid "Random Monster - weak"
-msgstr "Случайный слабый монстр"
-
-msgid "Random Monster - medium"
-msgstr "Случайный средний монстр"
-
-msgid "Random Monster - strong"
-msgstr "Случайный сильный монстр"
-
-msgid "Random Monster - very strong"
-msgstr "Случайный великий монстр"
-
-msgid "Standing Stones"
-msgstr "Стоячие камни"
-
-msgid "Event"
-msgstr "Событие"
-
-msgid "Random Monster"
-msgstr "Случайный Монстр"
-
-msgid "Random Ultimate Artifact"
-msgstr "Случайный великий артефакт"
-
-msgid "Idol"
-msgstr "Идол"
-
-msgid "Shrine of the First Circle"
-msgstr "Святилище 1-го круга"
-
-msgid "Shrine of the Second Circle"
-msgstr "Святилище 2-го круга"
-
-msgid "Shrine of the Third Circle"
-msgstr "Святилище 3-го круга"
-
-msgid "Wagon"
-msgstr "Тележка"
-
 msgid "Lean-To"
 msgstr "Навес"
 
+msgid "Magellan's Maps"
+msgstr "Магеллан"
+
 msgid "Flotsam"
 msgstr "Обломки"
+
+msgid "Derelict Ship"
+msgstr "Заброшенный корабль"
 
 msgid "Shipwreck Survivor"
 msgstr "Тонущий матрос"
@@ -7161,11 +7227,71 @@ msgstr "Тонущий матрос"
 msgid "Bottle"
 msgstr "Бутылка"
 
+msgid "Magic Well"
+msgstr "Волшебный колодец"
+
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Волшебный сад"
 msgstr[1] "Волшебных сада"
 msgstr[2] "Волшебных садов"
+
+msgid "Observation Tower"
+msgstr "Обзорная башня"
+
+msgid "Freeman's Foundry"
+msgstr "Литейная"
+
+msgid "Reefs"
+msgstr "Рифы"
+
+msgid "Trees"
+msgstr "Деревья"
+
+msgid "Mountains"
+msgstr "Горы"
+
+msgid "Volcano"
+msgstr "Вулкан"
+
+msgid "Flowers"
+msgstr "Цветы"
+
+msgid "Rock"
+msgstr "Камень"
+
+msgid "Water Lake"
+msgstr "Озеро"
+
+msgid "Mandrake"
+msgstr "Мандрагора"
+
+msgid "Dead Tree"
+msgstr "Сушина"
+
+msgid "Stump"
+msgstr "Пень"
+
+msgid "Crater"
+msgstr "Кратер"
+
+msgid "Cactus"
+msgstr "Кактус"
+
+msgid "Mound"
+msgstr "Курган"
+
+msgid "Dune"
+msgstr "Дюна"
+
+msgid "Lava Pool"
+msgstr "Лавовый бассейн"
+
+msgid "Shrub"
+msgstr "Кустарник"
+
+msgid "Barrow Mounds"
+msgstr "Могильные курганы"
 
 msgid "Random Artifact - Treasure"
 msgstr "Случайный артефакт-сокровище"
@@ -7176,14 +7302,14 @@ msgstr "Случайный малый артефакт"
 msgid "Random Artifact - Major"
 msgstr "Случайный сильный артефакт"
 
-msgid "Jail"
-msgstr "Тюрьма"
+msgid "Barrier"
+msgstr "Барьер"
 
 msgid "Traveller's Tent"
 msgstr "Шатёр путника"
 
-msgid "Barrier"
-msgstr "Барьер"
+msgid "Jail"
+msgstr "Тюрьма"
 
 msgid "Fire Summoning Altar"
 msgstr "Алтарь Огня"
@@ -7196,30 +7322,6 @@ msgstr "Алтарь Земли"
 
 msgid "Water Summoning Altar"
 msgstr "Алтарь Воды"
-
-msgid "Barrow Mounds"
-msgstr "Могильные курганы"
-
-msgid "Stables"
-msgstr "Конюшни"
-
-msgid "Alchemist's Tower"
-msgstr "Башня алхимика"
-
-msgid "Hut of the Magi"
-msgstr "Лачуга волхва"
-
-msgid "Eye of the Magi"
-msgstr "Око волхва"
-
-msgid "Mermaid"
-msgstr "Русалка"
-
-msgid "Sirens"
-msgstr "Сирены"
-
-msgid "Reefs"
-msgstr "Рифы"
 
 msgid "Unknown Monster"
 msgstr "Неизвестный Монстр"
@@ -9824,19 +9926,15 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "Necroman"
-#~ msgstr "Некромант"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Подождать"
-
-#~ msgid "Wait"
-#~ msgstr "Ожидание"
+#~ msgid "Attention"
+#~ msgstr "Внимание"
 
 #~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr "Текущий отряд пропускает свой ход в ожидании, пока походят другие."
+#~ "Your version of Heroes of Might and Magic II does not support any other "
+#~ "languages than English."
+#~ msgstr ""
+#~ "Ваша версия Heroes of Might and Magic II не поддерживает никакие языки, "
+#~ "кроме английского."
 
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name}: ожидание хода."
+#~ msgid "Location: "
+#~ msgstr "Путь к файлу: "

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -153,25 +153,24 @@ namespace
 
     void LoadWAV( int m82, std::vector<uint8_t> & v )
     {
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) )
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, M82::GetString( m82 ) )
         const std::vector<uint8_t> & body = getDataFromAggFile( M82::GetString( m82 ), false );
 
         if ( !body.empty() ) {
-            // create WAV format
             StreamBuf wavHeader( 44 );
-            wavHeader.putLE32( 0x46464952 ); // RIFF
-            wavHeader.putLE32( static_cast<uint32_t>( body.size() ) + 0x24 ); // size
-            wavHeader.putLE32( 0x45564157 ); // WAVE
-            wavHeader.putLE32( 0x20746D66 ); // FMT
-            wavHeader.putLE32( 0x10 ); // size_t
-            wavHeader.putLE16( 0x01 ); // format
-            wavHeader.putLE16( 0x01 ); // channels
-            wavHeader.putLE32( 22050 ); // samples
-            wavHeader.putLE32( 22050 ); // byteper
-            wavHeader.putLE16( 0x01 ); // align
-            wavHeader.putLE16( 0x08 ); // bitsper
-            wavHeader.putLE32( 0x61746164 ); // DATA
-            wavHeader.putLE32( static_cast<uint32_t>( body.size() ) ); // size
+            wavHeader.putLE32( 0x46464952 ); // RIFF marker ("RIFF")
+            wavHeader.putLE32( static_cast<uint32_t>( body.size() ) + 0x24 ); // Total size minus the size of this and previous fields
+            wavHeader.putLE32( 0x45564157 ); // File type header ("WAVE")
+            wavHeader.putLE32( 0x20746D66 ); // Format sub-chunk marker ("fmt ")
+            wavHeader.putLE32( 0x10 ); // Size of the format sub-chunk
+            wavHeader.putLE16( 0x01 ); // Audio format (1 for PCM)
+            wavHeader.putLE16( 0x01 ); // Number of channels
+            wavHeader.putLE32( 22050 ); // Sample rate
+            wavHeader.putLE32( 22050 ); // Byte rate (SampleRate * BitsPerSample * NumberOfChannels) / 8
+            wavHeader.putLE16( 0x01 ); // Block align (BitsPerSample * NumberOfChannels) / 8
+            wavHeader.putLE16( 0x08 ); // Bits per sample
+            wavHeader.putLE32( 0x61746164 ); // Data sub-chunk marker ("data")
+            wavHeader.putLE32( static_cast<uint32_t>( body.size() ) ); // Size of the data sub-chunk
 
             v.reserve( body.size() + 44 );
             v.assign( wavHeader.data(), wavHeader.data() + 44 );
@@ -181,7 +180,7 @@ namespace
 
     void LoadMID( int xmi, std::vector<uint8_t> & v )
     {
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) )
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, XMI::GetString( xmi ) )
         const std::vector<uint8_t> & body = getDataFromAggFile( XMI::GetString( xmi ), xmi >= XMI::MIDI_ORIGINAL_KNIGHT );
 
         if ( !body.empty() ) {
@@ -253,6 +252,28 @@ namespace
             _loopSoundTask.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
 
             notifyWorker();
+        }
+
+        void removeMusicTask()
+        {
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            _musicTask.reset();
+
+            if ( _taskToExecute == TaskType::PlayMusic ) {
+                _taskToExecute = TaskType::None;
+            }
+        }
+
+        void removeSoundTasks()
+        {
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            _soundTasks.clear();
+
+            if ( _taskToExecute == TaskType::PlaySound ) {
+                _taskToExecute = TaskType::None;
+            }
         }
 
         void removeAllSoundTasks()
@@ -429,7 +450,7 @@ namespace
     // The music track last requested to be played
     int lastRequestedMusicTrackId{ MUS::UNKNOWN };
     // The music track that is currently being played
-    std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
+    int currentMusicTrackId{ MUS::UNKNOWN };
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -453,7 +474,7 @@ namespace
     {
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Try to play sound " << M82::GetString( m82 ) )
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, "Try to play sound " << M82::GetString( m82 ) )
 
         const std::vector<uint8_t> & v = GetWAV( m82 );
         if ( v.empty() ) {
@@ -494,7 +515,7 @@ namespace
 
         // Check if the music track is already available in the music database.
         if ( Music::Play( musicUID, playbackMode ) ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play music track " << trackId )
+            DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play music track " << trackId )
 
             currentMusicTrackId = trackId;
 
@@ -523,14 +544,14 @@ namespace
             }
 
             if ( filename.empty() ) {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Cannot find a file for " << trackId << " track." )
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "Cannot find a file for " << trackId << " track." )
             }
             else {
                 Music::Play( musicUID, filename, playbackMode );
 
                 currentMusicTrackId = trackId;
 
-                DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
+                DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
 
                 return;
             }
@@ -556,7 +577,7 @@ namespace
             }
         }
 
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
     }
 
     void getClosestSoundIdPairByAngle( const std::vector<AudioManager::AudioLoopEffectInfo> & soundToAdd, const std::vector<ChannelAudioLoopEffectInfo> & soundToReplace,
@@ -766,7 +787,7 @@ namespace
 
                 currentAudioLoopEffects[soundType].emplace_back( info, channelId );
 
-                DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Playing sound " << M82::GetString( soundType ) )
+                DEBUG_LOG( DBG_GAME, DBG_TRACE, "Playing sound " << M82::GetString( soundType ) )
             }
         }
     }
@@ -843,8 +864,7 @@ namespace AudioManager
             return;
         }
 
-        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
-        g_asyncSoundManager.removeAllTasks();
+        g_asyncSoundManager.removeSoundTasks();
 
         PlaySoundImp( m82, Settings::Get().SoundVolume() );
     }
@@ -874,8 +894,7 @@ namespace AudioManager
             return;
         }
 
-        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
-        g_asyncSoundManager.removeAllTasks();
+        g_asyncSoundManager.removeMusicTask();
 
         PlayMusicImp( trackId, Settings::Get().MusicType(), playbackMode );
     }
@@ -901,8 +920,7 @@ namespace AudioManager
             return;
         }
 
-        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
-        g_asyncSoundManager.removeAllTasks();
+        g_asyncSoundManager.removeMusicTask();
 
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
@@ -910,7 +928,7 @@ namespace AudioManager
             return;
         }
 
-        const int trackId = currentMusicTrackId.exchange( MUS::UNKNOWN );
+        const int trackId = std::exchange( currentMusicTrackId, MUS::UNKNOWN );
 
         PlayMusicImp( trackId, Settings::Get().MusicType(), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }

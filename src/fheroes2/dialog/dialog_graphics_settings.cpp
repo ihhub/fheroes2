@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,7 +64,13 @@ namespace
     void drawResolution( const fheroes2::Rect & optionRoi )
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
-        std::string resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
+        std::string resolutionName;
+        if ( display.scale() > 1 ) {
+            resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() ) + " (x" + std::to_string( display.scale() ) + ')';
+        }
+        else {
+            resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
+        }
 
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), _( "Resolution" ),
                               std::move( resolutionName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
@@ -146,12 +152,12 @@ namespace
         drawOptions();
 
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
-        fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
+        fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         okayButton.draw();
 
         display.render();
 
-        bool fullScreen = fheroes2::engine().isFullScreen();
+        bool isFullScreen = fheroes2::engine().isFullScreen();
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
@@ -194,14 +200,14 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
             }
 
-            // Fullscreen mode can be toggled using a hotkey, we need to properly reflect this change in the UI
-            if ( fullScreen != fheroes2::engine().isFullScreen() ) {
-                fullScreen = fheroes2::engine().isFullScreen();
+            // Fullscreen mode can be toggled using a global hotkey, we need to properly reflect this change in the UI
+            if ( isFullScreen != fheroes2::engine().isFullScreen() ) {
+                isFullScreen = fheroes2::engine().isFullScreen();
 
                 emptyDialogRestorer.restore();
                 drawOptions();
 
-                display.render();
+                display.render( emptyDialogRestorer.rect() );
             }
         }
 

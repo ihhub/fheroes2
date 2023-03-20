@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,11 +21,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
 #include <cstdint>
+#include <limits>
+#include <list>
+#include <ostream>
+#include <type_traits>
+#include <utility>
 
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
@@ -44,10 +52,10 @@ bool Maps::Tiles::QuantityIsValid() const
     case MP2::OBJ_RESOURCE:
     case MP2::OBJ_CAMPFIRE:
     case MP2::OBJ_FLOTSAM:
-    case MP2::OBJ_SHIPWRECKSURVIVOR:
-    case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_ABANDONEDMINE:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
+    case MP2::OBJ_TREASURE_CHEST:
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_ABANDONED_MINE:
         return true;
 
     case MP2::OBJ_PYRAMID:
@@ -55,11 +63,11 @@ bool Maps::Tiles::QuantityIsValid() const
 
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
-    case MP2::OBJ_DERELICTSHIP:
-    case MP2::OBJ_WATERWHEEL:
+    case MP2::OBJ_DERELICT_SHIP:
+    case MP2::OBJ_WATER_WHEEL:
     case MP2::OBJ_WINDMILL:
-    case MP2::OBJ_LEANTO:
-    case MP2::OBJ_MAGICGARDEN:
+    case MP2::OBJ_LEAN_TO:
+    case MP2::OBJ_MAGIC_GARDEN:
         return quantity2 != 0;
 
     case MP2::OBJ_SKELETON:
@@ -68,7 +76,7 @@ bool Maps::Tiles::QuantityIsValid() const
     case MP2::OBJ_WAGON:
         return QuantityArtifact() != Artifact::UNKNOWN || quantity2 != 0;
 
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         return QuantityVariant() != 0;
 
     default:
@@ -114,7 +122,7 @@ Skill::Secondary Maps::Tiles::QuantitySkill() const
         }
         break;
 
-    case MP2::OBJ_WITCHSHUT:
+    case MP2::OBJ_WITCHS_HUT:
         return Skill::Secondary( quantity1, Skill::Level::BASIC );
 
     default:
@@ -126,9 +134,14 @@ Skill::Secondary Maps::Tiles::QuantitySkill() const
 
 void Maps::Tiles::QuantitySetSkill( int skill )
 {
+    using Quantity1Type = decltype( quantity1 );
+    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
     switch ( GetObject( false ) ) {
-    case MP2::OBJ_WITCHSHUT:
-        quantity1 = skill;
+    case MP2::OBJ_WITCHS_HUT:
+        assert( skill >= std::numeric_limits<Quantity1Type>::min() && skill <= std::numeric_limits<Quantity1Type>::max() );
+
+        quantity1 = static_cast<Quantity1Type>( skill );
         break;
 
     default:
@@ -140,30 +153,38 @@ Spell Maps::Tiles::QuantitySpell() const
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_ARTIFACT:
-        return Spell( QuantityVariant() == 15 ? quantity1 : static_cast<int>( Spell::NONE ) );
+        if ( QuantityVariant() == 15 ) {
+            return { quantity1 };
+        }
+        return { Spell::NONE };
 
-    case MP2::OBJ_SHRINE1:
-    case MP2::OBJ_SHRINE2:
-    case MP2::OBJ_SHRINE3:
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
     case MP2::OBJ_PYRAMID:
-        return Spell( quantity1 );
+        return { quantity1 };
 
     default:
         break;
     }
 
-    return Spell( Spell::NONE );
+    return { Spell::NONE };
 }
 
 void Maps::Tiles::QuantitySetSpell( int spell )
 {
+    using Quantity1Type = decltype( quantity1 );
+    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
     switch ( GetObject( false ) ) {
     case MP2::OBJ_ARTIFACT:
-    case MP2::OBJ_SHRINE1:
-    case MP2::OBJ_SHRINE2:
-    case MP2::OBJ_SHRINE3:
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
     case MP2::OBJ_PYRAMID:
-        quantity1 = spell;
+        assert( spell >= std::numeric_limits<Quantity1Type>::min() && spell <= std::numeric_limits<Quantity1Type>::max() );
+
+        quantity1 = static_cast<Quantity1Type>( spell );
         break;
 
     default:
@@ -178,10 +199,10 @@ Artifact Maps::Tiles::QuantityArtifact() const
         return Artifact( quantity2 ? static_cast<int>( Artifact::UNKNOWN ) : quantity1 );
 
     case MP2::OBJ_SKELETON:
-    case MP2::OBJ_DAEMONCAVE:
-    case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_SHIPWRECKSURVIVOR:
+    case MP2::OBJ_DAEMON_CAVE:
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_TREASURE_CHEST:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
         return Artifact( quantity1 );
@@ -204,13 +225,32 @@ Artifact Maps::Tiles::QuantityArtifact() const
 
 void Maps::Tiles::QuantitySetArtifact( int art )
 {
-    quantity1 = art;
+    using Quantity1Type = decltype( quantity1 );
+    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
+    assert( art >= std::numeric_limits<Quantity1Type>::min() && art <= std::numeric_limits<Quantity1Type>::max() );
+
+    quantity1 = static_cast<Quantity1Type>( art );
 }
 
 void Maps::Tiles::QuantitySetResource( int res, uint32_t count )
 {
-    quantity1 = res;
-    quantity2 = res == Resource::GOLD ? count / 100 : count;
+    using Quantity1Type = decltype( quantity1 );
+    using Quantity2Type = decltype( quantity2 );
+    static_assert( std::is_same_v<Quantity1Type, uint8_t> && std::is_same_v<Quantity2Type, uint8_t>,
+                   "Types of tile's quantities have been changed, check the logic below" );
+
+    assert( res >= std::numeric_limits<Quantity1Type>::min() && res <= std::numeric_limits<Quantity1Type>::max() );
+
+    quantity1 = static_cast<Quantity1Type>( res );
+
+    if ( res == Resource::GOLD ) {
+        count = count / 100;
+    }
+
+    assert( count >= std::numeric_limits<Quantity2Type>::min() && count <= std::numeric_limits<Quantity2Type>::max() );
+
+    quantity2 = static_cast<Quantity2Type>( count );
 }
 
 uint32_t Maps::Tiles::QuantityGold() const
@@ -230,20 +270,20 @@ uint32_t Maps::Tiles::QuantityGold() const
         break;
 
     case MP2::OBJ_RESOURCE:
-    case MP2::OBJ_MAGICGARDEN:
-    case MP2::OBJ_WATERWHEEL:
-    case MP2::OBJ_TREEKNOWLEDGE:
+    case MP2::OBJ_MAGIC_GARDEN:
+    case MP2::OBJ_WATER_WHEEL:
+    case MP2::OBJ_TREE_OF_KNOWLEDGE:
         return quantity1 == Resource::GOLD ? 100 * quantity2 : 0;
 
     case MP2::OBJ_FLOTSAM:
     case MP2::OBJ_CAMPFIRE:
-    case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_TREASURE_CHEST:
+    case MP2::OBJ_DERELICT_SHIP:
     case MP2::OBJ_GRAVEYARD:
         return 100 * quantity2;
 
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         switch ( QuantityVariant() ) {
         case 2:
         case 4:
@@ -291,8 +331,8 @@ ResourceCount Maps::Tiles::QuantityResourceCount() const
         }
         break;
 
-    case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_TREASURE_CHEST:
         return ResourceCount( Resource::GOLD, QuantityGold() );
 
     case MP2::OBJ_FLOTSAM:
@@ -328,12 +368,12 @@ Funds Maps::Tiles::QuantityFunds() const
     case MP2::OBJ_FLOTSAM:
         return Funds( Resource::GOLD, QuantityGold() ) + Funds( Resource::WOOD, quantity1 );
 
-    case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_TREASURE_CHEST:
+    case MP2::OBJ_DERELICT_SHIP:
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         return Funds( Resource::GOLD, QuantityGold() );
 
     default:
@@ -345,10 +385,15 @@ Funds Maps::Tiles::QuantityFunds() const
 
 void Maps::Tiles::QuantitySetColor( int col )
 {
+    using Quantity1Type = decltype( quantity1 );
+    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
     switch ( GetObject( false ) ) {
     case MP2::OBJ_BARRIER:
-    case MP2::OBJ_TRAVELLERTENT:
-        quantity1 = col;
+    case MP2::OBJ_TRAVELLER_TENT:
+        assert( col >= std::numeric_limits<Quantity1Type>::min() && col <= std::numeric_limits<Quantity1Type>::max() );
+
+        quantity1 = static_cast<Quantity1Type>( col );
         break;
 
     default:
@@ -361,7 +406,7 @@ int Maps::Tiles::QuantityColor() const
 {
     switch ( GetObject( false ) ) {
     case MP2::OBJ_BARRIER:
-    case MP2::OBJ_TRAVELLERTENT:
+    case MP2::OBJ_TRAVELLER_TENT:
         return quantity1;
 
     default:
@@ -372,59 +417,58 @@ int Maps::Tiles::QuantityColor() const
 Monster Maps::Tiles::QuantityMonster() const
 {
     switch ( GetObject( false ) ) {
-    case MP2::OBJ_WATCHTOWER:
+    case MP2::OBJ_WATCH_TOWER:
         return Monster( Monster::ORC );
     case MP2::OBJ_EXCAVATION:
         return Monster( Monster::SKELETON );
     case MP2::OBJ_CAVE:
         return Monster( Monster::CENTAUR );
-    case MP2::OBJ_TREEHOUSE:
+    case MP2::OBJ_TREE_HOUSE:
         return Monster( Monster::SPRITE );
-    case MP2::OBJ_ARCHERHOUSE:
+    case MP2::OBJ_ARCHER_HOUSE:
         return Monster( Monster::ARCHER );
-    case MP2::OBJ_GOBLINHUT:
+    case MP2::OBJ_GOBLIN_HUT:
         return Monster( Monster::GOBLIN );
-    case MP2::OBJ_DWARFCOTT:
+    case MP2::OBJ_DWARF_COTTAGE:
         return Monster( Monster::DWARF );
-    case MP2::OBJ_HALFLINGHOLE:
+    case MP2::OBJ_HALFLING_HOLE:
         return Monster( Monster::HALFLING );
-    case MP2::OBJ_PEASANTHUT:
-    case MP2::OBJ_THATCHEDHUT:
+    case MP2::OBJ_PEASANT_HUT:
         return Monster( Monster::PEASANT );
 
     case MP2::OBJ_RUINS:
         return Monster( Monster::MEDUSA );
-    case MP2::OBJ_TREECITY:
+    case MP2::OBJ_TREE_CITY:
         return Monster( Monster::SPRITE );
-    case MP2::OBJ_WAGONCAMP:
+    case MP2::OBJ_WAGON_CAMP:
         return Monster( Monster::ROGUE );
-    case MP2::OBJ_DESERTTENT:
+    case MP2::OBJ_DESERT_TENT:
         return Monster( Monster::NOMAD );
 
-    case MP2::OBJ_TROLLBRIDGE:
+    case MP2::OBJ_TROLL_BRIDGE:
         return Monster( Monster::TROLL );
-    case MP2::OBJ_DRAGONCITY:
+    case MP2::OBJ_DRAGON_CITY:
         return Monster( Monster::RED_DRAGON );
-    case MP2::OBJ_CITYDEAD:
+    case MP2::OBJ_CITY_OF_DEAD:
         return Monster( Monster::POWER_LICH );
 
-    case MP2::OBJ_ANCIENTLAMP:
+    case MP2::OBJ_GENIE_LAMP:
         return Monster( Monster::GENIE );
 
     // loyalty version
-    case MP2::OBJ_WATERALTAR:
+    case MP2::OBJ_WATER_ALTAR:
         return Monster( Monster::WATER_ELEMENT );
-    case MP2::OBJ_AIRALTAR:
+    case MP2::OBJ_AIR_ALTAR:
         return Monster( Monster::AIR_ELEMENT );
-    case MP2::OBJ_FIREALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
         return Monster( Monster::FIRE_ELEMENT );
-    case MP2::OBJ_EARTHALTAR:
+    case MP2::OBJ_EARTH_ALTAR:
         return Monster( Monster::EARTH_ELEMENT );
-    case MP2::OBJ_BARROWMOUNDS:
+    case MP2::OBJ_BARROW_MOUNDS:
         return Monster( Monster::GHOST );
 
     case MP2::OBJ_MONSTER:
-        return Monster( objectIndex + 1 );
+        return Monster( _imageIndex + 1 );
 
     default:
         break;
@@ -448,12 +492,12 @@ void Maps::Tiles::QuantityReset()
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_WAGON:
     case MP2::OBJ_ARTIFACT:
-    case MP2::OBJ_SHIPWRECKSURVIVOR:
-    case MP2::OBJ_WATERCHEST:
-    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         QuantitySetArtifact( Artifact::UNKNOWN );
         break;
 
@@ -461,7 +505,7 @@ void Maps::Tiles::QuantityReset()
         break;
     }
 
-    if ( MP2::isPickupObject( mp2_object ) )
+    if ( MP2::isPickupObject( _mainObjectType ) )
         setAsEmpty();
 }
 
@@ -469,19 +513,19 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 {
     // TODO: don't modify first 2 bits of quantity1.
     switch ( GetObject( false ) ) {
-    case MP2::OBJ_WITCHSHUT:
+    case MP2::OBJ_WITCHS_HUT:
         QuantitySetSkill( Skill::Secondary::RandForWitchsHut() );
         break;
 
-    case MP2::OBJ_SHRINE1:
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 1 ).GetID() : Spell::RandAdventure( 1 ).GetID() );
         break;
 
-    case MP2::OBJ_SHRINE2:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 2 ).GetID() : Spell::RandAdventure( 2 ).GetID() );
         break;
 
-    case MP2::OBJ_SHRINE3:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
         QuantitySetSpell( Rand::Get( 1 ) ? Spell::RandCombat( 3 ).GetID() : Spell::RandAdventure( 3 ).GetID() );
         break;
 
@@ -493,7 +537,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         percents.Push( 1, 20 );
 
         if ( percents.Get() )
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL123 ) );
+            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) );
         else
             QuantityReset();
         break;
@@ -512,7 +556,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
         switch ( percents.Get() ) {
         case 1:
-            QuantitySetArtifact( Artifact::Rand( Rand::Get( 1 ) ? Artifact::ART_LEVEL1 : Artifact::ART_LEVEL2 ) );
+            QuantitySetArtifact( Artifact::Rand( Rand::Get( 1 ) ? Artifact::ART_LEVEL_TREASURE : Artifact::ART_LEVEL_MINOR ) );
             break;
         case 2:
             QuantitySetResource( Resource::Rand( false ), Rand::Get( 2, 5 ) );
@@ -525,18 +569,25 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     }
 
     case MP2::OBJ_ARTIFACT: {
-        const int art = Artifact::FromMP2IndexSprite( objectIndex ).GetID();
+        const int art = Artifact::FromMP2IndexSprite( _imageIndex ).GetID();
 
         if ( Artifact::UNKNOWN != art ) {
             if ( art == Artifact::SPELL_SCROLL ) {
+                static_assert( std::is_same_v<decltype( quantity1 ), uint8_t> && std::is_same_v<decltype( quantity2 ), uint8_t>,
+                               "Types of tile's quantities have been changed, check the bitwise arithmetic below" );
+                static_assert( Spell::FIREBALL < Spell::SETWGUARDIAN, "The order of spell IDs has been changed, check the logic below" );
+
+                // Spell id of a spell scroll is represented by 2 low-order bits of quantity2 and 5 high-order bits of quantity1 plus one, and cannot be random
+                const int spell
+                    = std::clamp( ( ( quantity2 & 0x03 ) << 5 ) + ( quantity1 >> 3 ) + 1, static_cast<int>( Spell::FIREBALL ), static_cast<int>( Spell::SETWGUARDIAN ) );
+
                 QuantitySetVariant( 15 );
-                // spell from origin mp2
-                QuantitySetSpell( 1 + ( quantity2 * 256 + quantity1 ) / 8 );
+                QuantitySetSpell( spell );
             }
             else {
                 // 0: 70% none
                 // 1,2,3 - 2000g, 2500g+3res, 3000g+5res,
-                // 4,5 - need have skill wisard or leadership,
+                // 4,5 - need to have skill wisdom or leadership,
                 // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
                 // 15 - spell
                 int cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
@@ -554,10 +605,32 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     }
 
     case MP2::OBJ_RESOURCE: {
-        const int res = Resource::FromIndexSprite( objectIndex );
+        int resourceType = Resource::UNKNOWN;
+
+        if ( _objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+            // The resource is located at the top.
+            resourceType = Resource::FromIndexSprite( _imageIndex );
+        }
+        else {
+            for ( TilesAddon & addon : addons_level1 ) {
+                if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+                    resourceType = Resource::FromIndexSprite( addon._imageIndex );
+                    // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
+                    // Let's swap the addon and main tile objects
+                    std::swap( addon._objectIcnType, _objectIcnType );
+                    std::swap( addon._imageIndex, _imageIndex );
+                    std::swap( addon._uid, _uid );
+                    std::swap( addon._layerType, _layerType );
+                    std::swap( addon._hasObjectAnimation, _hasObjectAnimation );
+                    std::swap( addon._isMarkedAsRoad, _isMarkedAsRoad );
+
+                    break;
+                }
+            }
+        }
         uint32_t count = 0;
 
-        switch ( res ) {
+        switch ( resourceType ) {
         case Resource::GOLD:
             count = 100 * Rand::Get( 5, 10 );
             break;
@@ -565,12 +638,21 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         case Resource::ORE:
             count = Rand::Get( 5, 10 );
             break;
-        default:
+        case Resource::MERCURY:
+        case Resource::SULFUR:
+        case Resource::CRYSTAL:
+        case Resource::GEMS:
             count = Rand::Get( 3, 6 );
+            break;
+        default:
+            // Some maps have broken resources being put which ideally we need to correct. Let's make them 0 Wood.
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << _index << " contains unknown resource type. Object ICN type " << _objectIcnType << ", image index " << _imageIndex )
+            resourceType = Resource::WOOD;
+            count = 0;
             break;
         }
 
-        QuantitySetResource( res, count );
+        QuantitySetResource( resourceType, count );
         break;
     }
 
@@ -579,7 +661,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         QuantitySetResource( Resource::Rand( false ), Rand::Get( 4, 6 ) );
         break;
 
-    case MP2::OBJ_MAGICGARDEN:
+    case MP2::OBJ_MAGIC_GARDEN:
         // 5 gems or 500 gold
         if ( Rand::Get( 1 ) )
             QuantitySetResource( Resource::GEMS, 5 );
@@ -587,7 +669,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             QuantitySetResource( Resource::GOLD, 500 );
         break;
 
-    case MP2::OBJ_WATERWHEEL:
+    case MP2::OBJ_WATER_WHEEL:
         // first week 500 gold, next week 1000 gold
         QuantitySetResource( Resource::GOLD, ( 0 == world.CountDay() ? 500 : 1000 ) );
         break;
@@ -603,7 +685,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_LEANTO:
+    case MP2::OBJ_LEAN_TO:
         // 1-4 rnd resource
         QuantitySetResource( Resource::Rand( false ), Rand::Get( 1, 4 ) );
         break;
@@ -631,7 +713,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_SHIPWRECKSURVIVOR: {
+    case MP2::OBJ_SHIPWRECK_SURVIVOR: {
         Rand::Queue percents( 3 );
         // 55%: artifact 1
         percents.Push( 1, 55 );
@@ -643,19 +725,19 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         // variant
         switch ( percents.Get() ) {
         case 1:
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL1 ) );
+            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_TREASURE ) );
             break;
         case 2:
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL2 ) );
+            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_MINOR ) );
             break;
         default:
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL3 ) );
+            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_MAJOR ) );
             break;
         }
         break;
     }
 
-    case MP2::OBJ_WATERCHEST: {
+    case MP2::OBJ_SEA_CHEST: {
         Rand::Queue percents( 3 );
         // 20% - empty
         percents.Push( 0, 20 );
@@ -676,7 +758,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             break;
         case 2:
             gold = 1000;
-            art = Artifact::Rand( Artifact::ART_LEVEL1 );
+            art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
             break;
         }
 
@@ -685,9 +767,9 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_TREASURECHEST:
+    case MP2::OBJ_TREASURE_CHEST:
         if ( isWater() ) {
-            SetObject( MP2::OBJ_WATERCHEST );
+            SetObject( MP2::OBJ_SEA_CHEST );
             QuantityUpdate();
         }
         else {
@@ -716,7 +798,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 gold = 1000;
                 break;
             default:
-                art = Artifact::Rand( Artifact::ART_LEVEL1 );
+                art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
                 break;
             }
 
@@ -725,7 +807,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         }
         break;
 
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_DERELICT_SHIP:
         QuantitySetResource( Resource::GOLD, 5000 );
         break;
 
@@ -743,14 +825,14 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         int cond = percents.Get();
 
         QuantitySetVariant( cond );
-        QuantitySetArtifact( cond == 4 ? Artifact::Rand( Artifact::ART_LEVEL123 ) : Artifact::UNKNOWN );
+        QuantitySetArtifact( cond == 4 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN );
         break;
     }
 
     case MP2::OBJ_GRAVEYARD:
         // 1000 gold + art
         QuantitySetResource( Resource::GOLD, 1000 );
-        QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL123 ) );
+        QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) );
         break;
 
     case MP2::OBJ_PYRAMID: {
@@ -760,15 +842,15 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_DAEMONCAVE: {
+    case MP2::OBJ_DAEMON_CAVE: {
         // 1000 exp or 1000 exp + 2500 gold or 1000 exp + art or (-2500 or remove hero)
         const int cond = Rand::Get( 1, 4 );
         QuantitySetVariant( cond );
-        QuantitySetArtifact( cond == 3 ? Artifact::Rand( Artifact::ART_LEVEL123 ) : Artifact::UNKNOWN );
+        QuantitySetArtifact( cond == 3 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN );
         break;
     }
 
-    case MP2::OBJ_TREEKNOWLEDGE:
+    case MP2::OBJ_TREE_OF_KNOWLEDGE:
         // variant: 10 gems, 2000 gold or free
         switch ( Rand::Get( 1, 3 ) ) {
         case 1:
@@ -783,14 +865,14 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARRIER:
-        QuantitySetColor( Tiles::ColorFromBarrierSprite( objectTileset, objectIndex ) );
+        QuantitySetColor( Tiles::getColorFromBarrierSprite( _objectIcnType, _imageIndex ) );
         break;
 
-    case MP2::OBJ_TRAVELLERTENT:
-        QuantitySetColor( Tiles::ColorFromTravellerTentSprite( objectTileset, objectIndex ) );
+    case MP2::OBJ_TRAVELLER_TENT:
+        QuantitySetColor( Tiles::getColorFromTravellerTentSprite( _objectIcnType, _imageIndex ) );
         break;
 
-    case MP2::OBJ_ALCHEMYLAB:
+    case MP2::OBJ_ALCHEMIST_LAB:
         QuantitySetResource( Resource::MERCURY, 1 );
         break;
 
@@ -799,7 +881,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_MINES: {
-        switch ( objectIndex ) {
+        switch ( _imageIndex ) {
         case 0:
             QuantitySetResource( Resource::ORE, 2 );
             break;
@@ -821,7 +903,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_ABANDONEDMINE: {
+    case MP2::OBJ_ABANDONED_MINE: {
         Troop & troop = world.GetCapturedObject( GetIndex() ).GetTroop();
 
         // Min is 3 x 13, and max is 3 x 15
@@ -832,24 +914,24 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     }
 
     case MP2::OBJ_BOAT:
-        objectTileset = 27;
-        objectIndex = 18;
+        _objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
+        _imageIndex = 18;
         break;
 
     case MP2::OBJ_EVENT:
         resetObjectSprite();
         break;
 
-    case MP2::OBJ_RNDARTIFACT:
-    case MP2::OBJ_RNDARTIFACT1:
-    case MP2::OBJ_RNDARTIFACT2:
-    case MP2::OBJ_RNDARTIFACT3:
+    case MP2::OBJ_RANDOM_ARTIFACT:
+    case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+    case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+    case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
         // modify rnd artifact sprite
         UpdateRNDArtifactSprite( *this );
         QuantityUpdate();
         break;
 
-    case MP2::OBJ_RNDRESOURCE:
+    case MP2::OBJ_RANDOM_RESOURCE:
         // modify rnd resource sprite
         UpdateRNDResourceSprite( *this );
         QuantityUpdate();
@@ -862,50 +944,45 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             UpdateMonsterInfo( *this );
         break;
 
-    case MP2::OBJ_RNDMONSTER:
-    case MP2::OBJ_RNDMONSTER1:
-    case MP2::OBJ_RNDMONSTER2:
-    case MP2::OBJ_RNDMONSTER3:
-    case MP2::OBJ_RNDMONSTER4:
+    case MP2::OBJ_RANDOM_MONSTER:
+    case MP2::OBJ_RANDOM_MONSTER_WEAK:
+    case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+    case MP2::OBJ_RANDOM_MONSTER_STRONG:
+    case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
         // modify rnd monster sprite
         UpdateMonsterInfo( *this );
         break;
 
-    case MP2::OBJ_ANCIENTLAMP:
+    case MP2::OBJ_GENIE_LAMP:
         // Genies in the lamp do not accumulate
         if ( isFirstLoad )
             MonsterSetCount( Rand::Get( 2, 4 ) );
         break;
 
-    case MP2::OBJ_WATCHTOWER:
+    case MP2::OBJ_WATCH_TOWER:
     case MP2::OBJ_EXCAVATION:
     case MP2::OBJ_CAVE:
-    case MP2::OBJ_TREEHOUSE:
-    case MP2::OBJ_ARCHERHOUSE:
-    case MP2::OBJ_GOBLINHUT:
-    case MP2::OBJ_DWARFCOTT:
-    case MP2::OBJ_HALFLINGHOLE:
-    case MP2::OBJ_PEASANTHUT:
-    case MP2::OBJ_THATCHEDHUT:
+    case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_PEASANT_HUT:
     // recruit dwelling
     case MP2::OBJ_RUINS:
-    case MP2::OBJ_TREECITY:
-    case MP2::OBJ_WAGONCAMP:
-    case MP2::OBJ_DESERTTENT:
-    case MP2::OBJ_TROLLBRIDGE:
-    case MP2::OBJ_DRAGONCITY:
-    case MP2::OBJ_CITYDEAD:
-    case MP2::OBJ_WATERALTAR:
-    case MP2::OBJ_AIRALTAR:
-    case MP2::OBJ_FIREALTAR:
-    case MP2::OBJ_EARTHALTAR:
+    case MP2::OBJ_TREE_CITY:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_TROLL_BRIDGE:
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_CITY_OF_DEAD:
+    case MP2::OBJ_WATER_ALTAR:
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_BARROW_MOUNDS:
         UpdateDwellingPopulation( *this, isFirstLoad );
         break;
-
-    case MP2::OBJ_BARROWMOUNDS:
-        UpdateDwellingPopulation( *this, isFirstLoad );
-        break;
-
     default:
         break;
     }
@@ -913,30 +990,51 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
 uint32_t Maps::Tiles::MonsterCount() const
 {
+    static_assert( std::is_same_v<decltype( quantity1 ), uint8_t> && std::is_same_v<decltype( quantity2 ), uint8_t>,
+                   "Types of tile's quantities have been changed, check the logic below" );
+
     // TODO: avoid this hacky way of storing data.
-    return ( static_cast<uint32_t>( quantity1 ) << 8 ) | quantity2;
+    return ( static_cast<uint32_t>( quantity1 ) << 8 ) + quantity2;
 }
 
 void Maps::Tiles::MonsterSetCount( uint32_t count )
 {
+    static_assert( std::is_same_v<decltype( quantity1 ), uint8_t> && std::is_same_v<decltype( quantity2 ), uint8_t>,
+                   "Types of tile's quantities have been changed, check the logic below" );
+
+    if ( count > UINT16_MAX ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "The number of monsters for tile " << _index << " is " << count << ", which is more than " << UINT16_MAX )
+
+        count = UINT16_MAX;
+    }
+
     // TODO: avoid this hacky way of storing data.
-    quantity1 = count >> 8;
-    quantity2 = 0x00FF & count;
+    quantity1 = ( count >> 8 ) & 0xFF;
+    quantity2 = count & 0xFF;
 }
 
 void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count )
 {
     tile.SetObject( MP2::OBJ_MONSTER );
 
-    // if there was another sprite here (shadow for example) push it down to Addons,
-    // except when there is already MONS32.ICN here (a random monster for example)
-    if ( tile.objectTileset != 0 && tile.objectTileset != 48 && tile.objectIndex != 255 ) {
-        tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile.uniq, tile.objectTileset, tile.objectIndex ) );
+    // If there was another object sprite here (shadow for example) push it down to Addons,
+    // except when there is already MONS32.ICN here.
+    if ( tile._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && tile._objectIcnType != MP2::OBJ_ICN_TYPE_MONS32 && tile._imageIndex != 255 ) {
+        // Push object sprite to Level 1 Addons preserving the Layer Type.
+        tile.AddonsPushLevel1( TilesAddon( tile._layerType, tile._uid, tile._objectIcnType, tile._imageIndex, false, false ) );
+
+        // Set unique UID for placed monster.
+        tile._uid = World::GetUniq();
+        tile._objectIcnType = MP2::OBJ_ICN_TYPE_MONS32;
     }
-    // replace sprite with the one for the new monster
-    tile.uniq = 0;
-    tile.objectTileset = 48; // MONS32.ICN
-    tile.objectIndex = mons.GetSpriteIndex();
+
+    using TileImageIndexType = decltype( tile._imageIndex );
+    static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
+
+    const uint32_t monsSpriteIndex = mons.GetSpriteIndex();
+    assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
+
+    tile._imageIndex = static_cast<TileImageIndexType>( monsSpriteIndex );
 
     const bool setDefinedCount = ( count > 0 );
 
@@ -973,23 +1071,23 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
     Monster mons;
 
     if ( MP2::OBJ_MONSTER == tile.GetObject() ) {
-        mons = Monster( tile.objectIndex + 1 ); // ICN::MONS32 start from PEASANT
+        mons = Monster( tile._imageIndex + 1 ); // ICN::MONS32 start from PEASANT
     }
     else {
         switch ( tile.GetObject() ) {
-        case MP2::OBJ_RNDMONSTER:
+        case MP2::OBJ_RANDOM_MONSTER:
             mons = Monster::Rand( Monster::LevelType::LEVEL_ANY ).GetID();
             break;
-        case MP2::OBJ_RNDMONSTER1:
+        case MP2::OBJ_RANDOM_MONSTER_WEAK:
             mons = Monster::Rand( Monster::LevelType::LEVEL_1 ).GetID();
             break;
-        case MP2::OBJ_RNDMONSTER2:
+        case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
             mons = Monster::Rand( Monster::LevelType::LEVEL_2 ).GetID();
             break;
-        case MP2::OBJ_RNDMONSTER3:
+        case MP2::OBJ_RANDOM_MONSTER_STRONG:
             mons = Monster::Rand( Monster::LevelType::LEVEL_3 ).GetID();
             break;
-        case MP2::OBJ_RNDMONSTER4:
+        case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
             mons = Monster::Rand( Monster::LevelType::LEVEL_4 ).GetID();
             break;
         default:
@@ -998,7 +1096,13 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 
         // fixed random sprite
         tile.SetObject( MP2::OBJ_MONSTER );
-        tile.objectIndex = mons.GetID() - 1; // ICN::MONS32 start from PEASANT
+
+        using TileImageIndexType = decltype( tile._imageIndex );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
+
+        assert( mons.GetID() > std::numeric_limits<TileImageIndexType>::min() && mons.GetID() <= std::numeric_limits<TileImageIndexType>::max() );
+
+        tile._imageIndex = static_cast<TileImageIndexType>( mons.GetID() - 1 ); // ICN::MONS32 starts from PEASANT
     }
 
     uint32_t count = 0;
@@ -1021,60 +1125,59 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 
     switch ( objectType ) {
     // join monsters
-    case MP2::OBJ_HALFLINGHOLE:
+    case MP2::OBJ_HALFLING_HOLE:
         count += isFirstLoad ? Rand::Get( 20, 40 ) : Rand::Get( 5, 10 );
         break;
-    case MP2::OBJ_PEASANTHUT:
-    case MP2::OBJ_THATCHEDHUT:
+    case MP2::OBJ_PEASANT_HUT:
         count += isFirstLoad ? Rand::Get( 20, 50 ) : Rand::Get( 5, 10 );
         break;
     case MP2::OBJ_EXCAVATION:
-    case MP2::OBJ_TREEHOUSE:
+    case MP2::OBJ_TREE_HOUSE:
         count += isFirstLoad ? Rand::Get( 10, 25 ) : Rand::Get( 4, 8 );
         break;
     case MP2::OBJ_CAVE:
         count += isFirstLoad ? Rand::Get( 10, 20 ) : Rand::Get( 3, 6 );
         break;
-    case MP2::OBJ_GOBLINHUT:
+    case MP2::OBJ_GOBLIN_HUT:
         count += isFirstLoad ? Rand::Get( 15, 40 ) : Rand::Get( 3, 6 );
         break;
 
-    case MP2::OBJ_TREECITY:
+    case MP2::OBJ_TREE_CITY:
         count += isFirstLoad ? Rand::Get( 20, 40 ) : Rand::Get( 10, 20 );
         break;
 
-    case MP2::OBJ_WATCHTOWER:
+    case MP2::OBJ_WATCH_TOWER:
         count += isFirstLoad ? Rand::Get( 7, 10 ) : Rand::Get( 2, 4 );
         break;
-    case MP2::OBJ_ARCHERHOUSE:
+    case MP2::OBJ_ARCHER_HOUSE:
         count += isFirstLoad ? Rand::Get( 10, 25 ) : Rand::Get( 2, 4 );
         break;
-    case MP2::OBJ_DWARFCOTT:
+    case MP2::OBJ_DWARF_COTTAGE:
         count += isFirstLoad ? Rand::Get( 10, 20 ) : Rand::Get( 3, 6 );
         break;
-    case MP2::OBJ_WAGONCAMP:
+    case MP2::OBJ_WAGON_CAMP:
         count += isFirstLoad ? Rand::Get( 30, 50 ) : Rand::Get( 3, 6 );
         break;
-    case MP2::OBJ_DESERTTENT:
+    case MP2::OBJ_DESERT_TENT:
         count += isFirstLoad ? Rand::Get( 10, 20 ) : Rand::Get( 1, 3 );
         break;
     case MP2::OBJ_RUINS:
         count += isFirstLoad ? Rand::Get( 3, 5 ) : Rand::Get( 1, 3 );
         break;
-    case MP2::OBJ_WATERALTAR:
-    case MP2::OBJ_AIRALTAR:
-    case MP2::OBJ_FIREALTAR:
-    case MP2::OBJ_EARTHALTAR:
-    case MP2::OBJ_BARROWMOUNDS:
+    case MP2::OBJ_WATER_ALTAR:
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_BARROW_MOUNDS:
         count += Rand::Get( 2, 5 );
         break;
 
-    case MP2::OBJ_TROLLBRIDGE:
-    case MP2::OBJ_CITYDEAD:
+    case MP2::OBJ_TROLL_BRIDGE:
+    case MP2::OBJ_CITY_OF_DEAD:
         count = isFirstLoad ? Rand::Get( 4, 6 ) : ( Color::NONE == tile.QuantityColor() ) ? count : count + Rand::Get( 1, 3 );
         break;
 
-    case MP2::OBJ_DRAGONCITY:
+    case MP2::OBJ_DRAGON_CITY:
         count = isFirstLoad ? 2 : ( Color::NONE == tile.QuantityColor() ) ? count : count + 1;
         break;
 

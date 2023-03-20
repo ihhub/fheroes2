@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,19 +34,8 @@ payment_t PaymentConditions::BuyBoat()
     return payment_t( cost_t{ 1000, 10, 0, 0, 0, 0, 0 } );
 }
 
-payment_t PaymentConditions::BuySpellBook( int shrine )
+payment_t PaymentConditions::BuySpellBook()
 {
-    switch ( shrine ) {
-    case 1:
-        return payment_t( cost_t{ 1250, 0, 0, 0, 0, 0, 0 } );
-    case 2:
-        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
-    case 3:
-        return payment_t( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
-    default:
-        break;
-    }
-
     return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
 }
 

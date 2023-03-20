@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,13 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "image.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <type_traits>
 
-#include "image.h"
 #include "image_palette.h"
 
 namespace
@@ -141,7 +142,7 @@ namespace
         138, 138, 139, 139, 140, 141, 244, 152, 152, 153, 153, 154, 154, 155, 155, 156, 156, 157, 158, 158, 159, 242, 159, 161, 161, 243, 243, 243, 243,
         164, 11,  175, 176, 176, 177, 177, 178, 179, 179, 180, 180, 181, 181, 182, 182, 182, 182, 183, 22,  23,  23,  23,  23,  108, 38,  38,  39,  39,
         40,  40,  41,  178, 180, 42,  44,  45,  23,  23,  23,  180, 181, 181, 183, 110, 200, 42,  45,  85,  86,  87,  87,  87,  21,  22,  22,  23,  66,
-        66,  67,  68,  67,  68,  68,  153, 158, 67,  70,  64,  65,  242, 243, 159, 159, 159, 159, 159, 159, 159, 159, 159, 10, // Nineth
+        66,  67,  68,  67,  68,  68,  153, 158, 67,  70,  64,  65,  242, 243, 159, 159, 159, 159, 159, 159, 159, 159, 159, 10, // Ninth
 
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   10,  11,  11,  12,  13,  14,  14,  15,  16,  16,  17,  18,  19,  19,  20,  242, 22,  22,  243,
         243, 243, 244, 244, 244, 244, 245, 245, 37,  37,  38,  176, 39,  177, 41,  41,  42,  179, 20,  180, 45,  22,  23,  23,  24,  24,  24,  24,  25,
@@ -1167,85 +1168,6 @@ namespace fheroes2
         memcpy( out.transform(), in.transform(), in.width() * in.height() );
     }
 
-    Image CreateBlurredImage( const Image & in, int32_t blurRadius )
-    {
-        if ( in.empty() )
-            return Image();
-
-        if ( blurRadius < 1 )
-            return in;
-
-        const int32_t width = in.width();
-        const int32_t height = in.height();
-        if ( blurRadius > width )
-            blurRadius = width;
-        if ( blurRadius > height )
-            blurRadius = height;
-
-        Image out( width, height );
-        std::fill( out.transform(), out.transform() + width * height, static_cast<uint8_t>( 0 ) );
-
-        uint8_t * imageOutY = out.image();
-        const uint8_t * imageIn = in.image();
-
-        const uint8_t * gamePalette = getGamePalette();
-
-        for ( int32_t y = 0; y < height; ++y, imageOutY += width ) {
-            uint8_t * imageOutX = imageOutY;
-
-            int32_t startY = y - blurRadius;
-            int32_t endY = y + blurRadius;
-            if ( startY < 0 )
-                startY = 0;
-            if ( endY > height )
-                endY = height;
-
-            const int32_t roiHeight = endY - startY;
-
-            const uint8_t * imageInStartY = imageIn + startY * width;
-
-            for ( int32_t x = 0; x < width; ++x, ++imageOutX ) {
-                int32_t startX = x - blurRadius;
-                int32_t endX = x + blurRadius;
-                if ( startX < 0 )
-                    startX = 0;
-                if ( endX > width )
-                    endX = width;
-
-                const int32_t roiWidth = endX - startX;
-
-                uint32_t sumRed = 0;
-                uint32_t sumGreen = 0;
-                uint32_t sumBlue = 0;
-
-                const uint8_t * imageInY = imageInStartY + startX;
-                const uint8_t * imageInYEnd = imageInY + roiHeight * width;
-
-                for ( ; imageInY != imageInYEnd; imageInY += width ) {
-                    const uint8_t * imageInX = imageInY;
-                    const uint8_t * imageInXEnd = imageInX + roiWidth;
-                    for ( ; imageInX != imageInXEnd; ++imageInX ) {
-                        const uint8_t * palette = gamePalette + *imageInX * 3;
-
-                        sumRed += ( *palette );
-                        ++palette;
-                        sumGreen += ( *palette );
-                        ++palette;
-                        sumBlue += ( *palette );
-                        ++palette;
-                    }
-                }
-
-                const uint32_t roiSize = static_cast<uint32_t>( roiWidth * roiHeight );
-
-                *imageOutX
-                    = GetPALColorId( static_cast<uint8_t>( sumRed / roiSize ), static_cast<uint8_t>( sumGreen / roiSize ), static_cast<uint8_t>( sumBlue / roiSize ) );
-            }
-        }
-
-        return out;
-    }
-
     Sprite CreateContour( const Image & image, uint8_t value )
     {
         const int32_t width = image.width();
@@ -1284,6 +1206,214 @@ namespace fheroes2
         }
 
         return contour;
+    }
+
+    void CreateDitheringTransition( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
+                                    const bool isVertical, const bool isReverse )
+    {
+        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
+            return;
+        }
+
+        const int32_t widthIn = in.width();
+        const int32_t offsetIn = inY * widthIn + inX;
+        const uint8_t * imageIn = in.image() + offsetIn;
+        const uint8_t * transformIn = in.transform() + offsetIn;
+
+        const int32_t widthOut = out.width();
+        const int32_t offsetOut = outY * widthOut + outX;
+        uint8_t * imageOut = out.image() + offsetOut;
+        uint8_t * transformOut = out.transform() + offsetOut;
+
+        const bool isInNonSinglelayerToOutSinglelayer = !in.singleLayer() && out.singleLayer();
+
+        if ( isVertical ) {
+            // We also go in a loop from the right part of the image to its center.
+            const uint8_t * imageInRightPoint = imageIn + width - 1;
+            const uint8_t * transformInRightPoint = transformIn + width - 1;
+
+            uint8_t * imageOutRightPoint = imageOut + width - 1;
+            uint8_t * transformOutRightPoint = transformOut + width - 1;
+
+            const int32_t halfWidth = width / 2;
+
+            // We make a symmetric transition and if width is odd we shift one line right.
+            if ( ( width % 2 ) == 1 ) {
+                if ( isReverse ) {
+                    --imageOutRightPoint;
+                    --transformOutRightPoint;
+                    --imageInRightPoint;
+                    --transformInRightPoint;
+                }
+                else {
+                    ++imageOut;
+                    ++transformOut;
+                    ++imageIn;
+                    ++transformIn;
+                }
+            }
+
+            for ( int32_t x = 0; x < halfWidth; ++x ) {
+                // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
+                // We limit the step power to 30 to not overflow the 32 bit 'stepY'.
+                const int32_t stepPower = std::min( 30, ( halfWidth - x ) / 2 + 1 );
+                const int32_t stepY = 1 << stepPower;
+
+                // The point position in dithered pattern.
+                const int32_t patternPoint = stepY / 2 * ( ( x + halfWidth ) % 2 );
+
+                for ( int32_t y = 0; y < height; ++y ) {
+                    const int32_t offsetOutX = y * widthOut;
+                    const int32_t offsetInX = y * widthIn;
+                    const int32_t offsetY = y % stepY;
+
+                    if ( isReverse == ( patternPoint != offsetY ) ) {
+                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformIn + offsetInX ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
+                        // First part of transition: we copy single pixels.
+                        *( imageOut + offsetOutX ) = *( imageIn + offsetInX );
+
+                        if ( out.singleLayer() ) {
+                            continue;
+                        }
+                        if ( in.singleLayer() ) {
+                            // Set the copied pixel visible.
+                            *( transformOut + offsetOutX ) = 0;
+                        }
+                        else {
+                            *( transformOut + offsetOutX ) = *( transformIn + offsetInX );
+                        }
+                    }
+                    else {
+                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformInRightPoint + offsetInX ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
+                        // Second part of transition: we copy image excluding single pixels.
+                        *( imageOutRightPoint + offsetOutX ) = *( imageInRightPoint + offsetInX );
+
+                        if ( out.singleLayer() ) {
+                            continue;
+                        }
+
+                        if ( in.singleLayer() ) {
+                            // Set the copied pixel visible.
+                            *( transformOutRightPoint + offsetOutX ) = 0;
+                        }
+                        else {
+                            *( transformOutRightPoint + offsetOutX ) = *( transformInRightPoint + offsetInX );
+                        }
+                    }
+                }
+
+                ++imageOut;
+                --imageOutRightPoint;
+                ++transformOut;
+                --transformOutRightPoint;
+
+                ++imageIn;
+                --imageInRightPoint;
+                ++transformIn;
+                --transformInRightPoint;
+            }
+        }
+        else {
+            // We also go in a loop from the bottom part of the image to its center.
+            const int32_t offsetInBottomOffset = ( height - 1 ) * widthIn;
+            const uint8_t * imageInBottomPoint = imageIn + offsetInBottomOffset;
+            const uint8_t * transformInBottomPoint = transformIn + offsetInBottomOffset;
+
+            const int32_t offsetOutYBottomOffset = ( height - 1 ) * widthOut;
+            uint8_t * imageOutBottomPoint = imageOut + offsetOutYBottomOffset;
+            uint8_t * transformOutBottomPoint = transformOut + offsetOutYBottomOffset;
+
+            const int32_t halfHeight = height / 2;
+
+            // We make a symmetric transition and if width is odd we shift one line down.
+            if ( ( height % 2 ) == 1 ) {
+                if ( isReverse ) {
+                    imageOutBottomPoint -= widthOut;
+                    transformOutBottomPoint -= widthOut;
+                    imageInBottomPoint -= widthIn;
+                    transformInBottomPoint -= widthIn;
+                }
+                else {
+                    imageOut += widthOut;
+                    transformOut += widthOut;
+                    imageIn += widthIn;
+                    transformIn += widthIn;
+                }
+            }
+
+            for ( int32_t y = 0; y < halfHeight; ++y ) {
+                // The step is 2 to the power, which decreases by 1 every second line and is 1 in the center.
+                // We limit the step power to 30 to not overflow the 32 bit 'stepX'.
+                const int32_t stepPower = std::min( 30, ( halfHeight - y ) / 2 + 1 );
+                const int32_t stepX = 1 << stepPower;
+
+                // The point position in dithered pattern.
+                const int32_t patternPoint = stepX / 2 * ( ( y + halfHeight ) % 2 );
+
+                for ( int32_t x = 0; x < width; ++x ) {
+                    const int32_t offsetX = x % stepX;
+
+                    if ( isReverse == ( patternPoint != offsetX ) ) {
+                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformIn + x ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
+                        // First part of transition: we copy single pixels.
+                        *( imageOut + x ) = *( imageIn + x );
+
+                        if ( out.singleLayer() ) {
+                            continue;
+                        }
+                        if ( in.singleLayer() ) {
+                            // Set the copied pixel visible.
+                            *( transformOut + x ) = 0;
+                        }
+                        else {
+                            *( transformOut + x ) = *( transformIn + x );
+                        }
+                    }
+                    else {
+                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformInBottomPoint + x ) == 1 ) ) {
+                            // Skip pixel.
+                            continue;
+                        }
+
+                        // Second part of transition: we copy image excluding single pixels.
+                        *( imageOutBottomPoint + x ) = *( imageInBottomPoint + x );
+
+                        if ( !out.singleLayer() ) {
+                            continue;
+                        }
+                        if ( in.singleLayer() ) {
+                            // Set the copied pixel visible.
+                            *( transformOutBottomPoint + x ) = 0;
+                        }
+                        else {
+                            *( transformOutBottomPoint + x ) = *( transformInBottomPoint + x );
+                        }
+                    }
+                }
+
+                imageOut += widthOut;
+                imageOutBottomPoint -= widthOut;
+                transformOut += widthOut;
+                transformOutBottomPoint -= widthOut;
+
+                imageIn += widthIn;
+                imageInBottomPoint -= widthIn;
+                transformIn += widthIn;
+                transformInBottomPoint -= widthIn;
+            }
+        }
     }
 
     Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height )
@@ -1525,8 +1655,8 @@ namespace fheroes2
         DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
-    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, const bool flip,
-                               std::vector<std::pair<Point, Sprite>> & output )
+    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, std::vector<Point> & outputSquareId,
+                               std::vector<std::pair<Point, Rect>> & outputImageInfo )
     {
         if ( original.empty() ) {
             return;
@@ -1561,24 +1691,11 @@ namespace fheroes2
                 const Rect intersection = relativeROI ^ roi;
                 assert( intersection.width > 0 && intersection.height > 0 );
 
-                if ( flip ) {
-                    Sprite cropped( intersection.width, intersection.height );
-                    Flip( original, original.width() - intersection.x + spriteRelativeOffset.x - intersection.width, intersection.y - spriteRelativeOffset.y, cropped, 0,
-                          0, intersection.width, intersection.height, true, false );
+                outputSquareId.emplace_back( offset + Point( x, y ) );
 
-                    assert( !cropped.empty() );
-                    cropped.setPosition( intersection.x - roi.x, intersection.y - roi.y );
-
-                    output.emplace_back( offset + Point( x, y ), std::move( cropped ) );
-                }
-                else {
-                    Sprite cropped
-                        = Crop( original, intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width, intersection.height );
-                    assert( !cropped.empty() );
-                    cropped.setPosition( intersection.x - roi.x, intersection.y - roi.y );
-
-                    output.emplace_back( offset + Point( x, y ), std::move( cropped ) );
-                }
+                outputImageInfo.emplace_back( fheroes2::Point( intersection.x - roi.x, intersection.y - roi.y ),
+                                              fheroes2::Rect( intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width,
+                                                              intersection.height ) );
             }
         }
     }
@@ -2044,7 +2161,7 @@ namespace fheroes2
         uint8_t * transformIn = image.transform();
         const uint8_t * imageInEnd = imageIn + height * width;
         for ( ; imageIn != imageInEnd; ++imageIn, ++transformIn ) {
-            if ( *transformIn == 0 && *imageIn == colorId ) { // modify pixels with tranform value 0
+            if ( *transformIn == 0 && *imageIn == colorId ) { // modify pixels with transform value 0
                 *transformIn = transformId;
             }
         }

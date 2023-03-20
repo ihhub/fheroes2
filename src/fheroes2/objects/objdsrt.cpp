@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -53,7 +53,7 @@ int ObjDsrt::GetPassable( const uint8_t index )
 
 bool ObjDsrt::isAction( uint32_t index )
 {
-    return MP2::OBJ_ZERO != GetActionObject( index );
+    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjDsrt::isShadow( const uint8_t index )
@@ -65,7 +65,7 @@ int ObjDsrt::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 73:
-        return MP2::OBJ_DESERTTENT;
+        return MP2::OBJ_DESERT_TENT;
     case 82:
         return MP2::OBJ_PYRAMID;
     case 84:
@@ -73,7 +73,7 @@ int ObjDsrt::GetActionObject( uint32_t index )
     case 87:
         return MP2::OBJ_SPHINX;
     case 96:
-        return MP2::OBJ_CITYDEAD;
+        return MP2::OBJ_CITY_OF_DEAD;
     case 101:
         return MP2::OBJ_EXCAVATION;
     case 104:
@@ -82,7 +82,7 @@ int ObjDsrt::GetActionObject( uint32_t index )
     case 109:
         return MP2::OBJ_OASIS;
     case 117:
-        return MP2::OBJ_DAEMONCAVE;
+        return MP2::OBJ_DAEMON_CAVE;
     case 119:
         return MP2::OBJ_SIGN;
     case 122:
@@ -93,5 +93,5 @@ int ObjDsrt::GetActionObject( uint32_t index )
         break;
     }
 
-    return MP2::OBJ_ZERO;
+    return MP2::OBJ_NONE;
 }

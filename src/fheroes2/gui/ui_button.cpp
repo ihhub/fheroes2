@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,6 +31,51 @@
 #include "localevent.h"
 #include "pal.h"
 #include "settings.h"
+
+namespace
+{
+    fheroes2::Image resizeButton( const fheroes2::Image & original, const int32_t width )
+    {
+        const int32_t height = original.height();
+        assert( height > 0 );
+
+        fheroes2::Image output;
+        output.resize( width, height );
+        output.reset();
+
+        const int32_t originalWidth = original.width();
+        if ( originalWidth >= width ) {
+            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height );
+            const int32_t secondHalf = width - width / 2;
+            fheroes2::Copy( original, originalWidth - secondHalf, 0, output, width - secondHalf, 0, secondHalf, height );
+        }
+        else {
+            const int32_t middleWidth = originalWidth / 3;
+            const int32_t overallMiddleWidth = width - middleWidth * 2;
+            const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
+            const int32_t middleLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
+
+            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, height );
+            int32_t offsetX = middleWidth;
+            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, height );
+                offsetX += middleWidth;
+            }
+
+            if ( middleLeftOver > 0 ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleLeftOver, height );
+                offsetX += middleLeftOver;
+            }
+
+            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
+            assert( offsetX + rightPartWidth == width );
+
+            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, height );
+        }
+
+        return output;
+    }
+}
 
 namespace fheroes2
 {
@@ -232,41 +277,46 @@ namespace fheroes2
 
     ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )
     {
-        const int icnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        const int buttonYesIcnID = isEvilInterface ? ICN::BUTTON_SMALL_YES_EVIL : ICN::BUTTON_SMALL_YES_GOOD;
+        const int buttonNoIcnID = isEvilInterface ? ICN::BUTTON_SMALL_NO_EVIL : ICN::BUTTON_SMALL_NO_GOOD;
+        const int buttonOkayIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
+        const int buttonCancelIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
 
         Point offset;
 
         switch ( buttonTypes ) {
         case Dialog::YES | Dialog::NO:
             offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 5 ).height();
-            createButton( offset.x, offset.y, icnId, 5, 6, Dialog::YES );
+            offset.y = area.y + area.height - AGG::GetICN( buttonYesIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonYesIcnID, 0, 1, Dialog::YES );
 
-            offset.x = area.x + area.width - AGG::GetICN( icnId, 7 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 7 ).height();
-            createButton( offset.x, offset.y, icnId, 7, 8, Dialog::NO );
+            offset.x = area.x + area.width - AGG::GetICN( buttonNoIcnID, 0 ).width();
+            offset.y = area.y + area.height - AGG::GetICN( buttonNoIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonNoIcnID, 0, 1, Dialog::NO );
             break;
 
         case Dialog::OK | Dialog::CANCEL:
             offset.x = area.x;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
-            createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
 
-            offset.x = area.x + area.width - AGG::GetICN( icnId, 3 ).width();
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
-            createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            offset.x = area.x + area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width();
+            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
 
         case Dialog::OK:
-            offset.x = area.x + ( area.width - AGG::GetICN( icnId, 1 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 1 ).height();
-            createButton( offset.x, offset.y, icnId, 1, 2, Dialog::OK );
+            offset.x = area.x + ( area.width - AGG::GetICN( buttonOkayIcnID, 0 ).width() ) / 2;
+            offset.y = area.y + area.height - AGG::GetICN( buttonOkayIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonOkayIcnID, 0, 1, Dialog::OK );
             break;
 
         case Dialog::CANCEL:
-            offset.x = area.x + ( area.width - AGG::GetICN( icnId, 3 ).width() ) / 2;
-            offset.y = area.y + area.height - AGG::GetICN( icnId, 3 ).height();
-            createButton( offset.x, offset.y, icnId, 3, 4, Dialog::CANCEL );
+            offset.x = area.x + ( area.width - AGG::GetICN( buttonCancelIcnID, 0 ).width() ) / 2;
+            offset.y = area.y + area.height - AGG::GetICN( buttonCancelIcnID, 0 ).height();
+            createButton( offset.x, offset.y, buttonCancelIcnID, 0, 1, Dialog::CANCEL );
             break;
 
         default:
@@ -471,5 +521,41 @@ namespace fheroes2
         Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );
 
         return { offsetX + shadow.x(), offsetY + shadow.y(), releasedWithBackground, pressedWithBackground, disabledWithBackground };
+    }
+
+    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset )
+    {
+        assert( width > 0 );
+
+        releasedOffset = { 7, 5 };
+        pressedOffset = { 6, 6 };
+
+        // The actual button sprite is 10 pixels longer.
+        width += 10;
+
+        const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
+        const int32_t minimumButtonSize = 16;
+        const int32_t maximumButtonSize = 200; // Why is such a wide button needed?
+        width = std::clamp( width, minimumButtonSize, maximumButtonSize );
+
+        const Sprite & originalReleased = AGG::GetICN( icnId, 0 );
+        const Sprite & originalPressed = AGG::GetICN( icnId, 1 );
+
+        const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+        const Sprite & background = AGG::GetICN( backgroundIcnId, 0 );
+
+        Image temp = resizeButton( originalReleased, width );
+        released.resize( temp.width(), temp.height() );
+        assert( background.width() >= temp.width() && background.height() >= temp.height() );
+        Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
+        Blit( temp, released );
+        released.setPosition( originalReleased.x(), originalReleased.y() );
+
+        temp = resizeButton( originalPressed, width );
+        pressed.resize( temp.width(), temp.height() );
+        assert( background.width() >= temp.width() && background.height() >= temp.height() );
+        Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
+        Blit( temp, pressed );
+        pressed.setPosition( originalPressed.x(), originalPressed.y() );
     }
 }

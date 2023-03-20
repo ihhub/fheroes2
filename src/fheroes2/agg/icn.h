@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -925,17 +925,17 @@ namespace ICN
         MONSTER_SWITCH_LEFT_ARROW,
         MONSTER_SWITCH_RIGHT_ARROW,
 
-        NON_UNIFORM_GOOD_OKAY_BUTTON,
-        NON_UNIFORM_GOOD_CANCEL_BUTTON,
         NON_UNIFORM_GOOD_RESTART_BUTTON,
-        NON_UNIFORM_EVIL_OKAY_BUTTON,
-        NON_UNIFORM_EVIL_CANCEL_BUTTON,
         NON_UNIFORM_EVIL_RESTART_BUTTON,
 
         UNIFORM_GOOD_MAX_BUTTON,
         UNIFORM_GOOD_MIN_BUTTON,
         UNIFORM_EVIL_MAX_BUTTON,
         UNIFORM_EVIL_MIN_BUTTON,
+        UNIFORM_GOOD_OKAY_BUTTON,
+        UNIFORM_EVIL_OKAY_BUTTON,
+        UNIFORM_GOOD_CANCEL_BUTTON,
+        UNIFORM_EVIL_CANCEL_BUTTON,
 
         WHITE_LARGE_FONT,
         SWAP_ARROW_LEFT_TO_RIGHT,
@@ -956,6 +956,7 @@ namespace ICN
 
         MAP_TYPE_ICON,
         BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE,
+        SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE,
 
         GOOD_ARMY_BUTTON,
         GOOD_MARKET_BUTTON,
@@ -1019,6 +1020,46 @@ namespace ICN
         BUTTON_INFO_EVIL,
         BUTTON_QUIT_GOOD,
         BUTTON_QUIT_EVIL,
+
+        BUTTON_SMALL_CANCEL_GOOD,
+        BUTTON_SMALL_CANCEL_EVIL,
+        BUTTON_SMALL_OKAY_GOOD,
+        BUTTON_SMALL_OKAY_EVIL,
+        BUTTON_SMALLER_OKAY_GOOD,
+        BUTTON_SMALLER_OKAY_EVIL,
+        BUTTON_SMALL_ACCEPT_GOOD,
+        BUTTON_SMALL_ACCEPT_EVIL,
+        BUTTON_SMALL_DECLINE_GOOD,
+        BUTTON_SMALL_DECLINE_EVIL,
+        BUTTON_SMALL_LEARN_GOOD,
+        BUTTON_SMALL_LEARN_EVIL,
+        BUTTON_SMALL_TRADE_GOOD,
+        BUTTON_SMALL_TRADE_EVIL,
+        BUTTON_SMALL_YES_GOOD,
+        BUTTON_SMALL_YES_EVIL,
+        BUTTON_SMALL_NO_GOOD,
+        BUTTON_SMALL_NO_EVIL,
+        BUTTON_SMALL_EXIT_GOOD,
+        BUTTON_SMALL_EXIT_EVIL,
+        BUTTON_SMALLER_EXIT,
+        BUTTON_SMALL_DISMISS_GOOD,
+        BUTTON_SMALL_DISMISS_EVIL,
+        BUTTON_SMALL_UPGRADE_GOOD,
+        BUTTON_SMALL_UPGRADE_EVIL,
+        BUTTON_SMALL_RESTART_GOOD,
+        BUTTON_SMALL_RESTART_EVIL,
+        BUTTON_SMALL_MIN_GOOD,
+        BUTTON_SMALL_MAX_GOOD,
+
+        BUTTON_KINGDOM_EXIT,
+
+        BUTTON_MAPSIZE_SMALL,
+        BUTTON_MAPSIZE_MEDIUM,
+        BUTTON_MAPSIZE_LARGE,
+        BUTTON_MAPSIZE_XLARGE,
+        BUTTON_MAPSIZE_ALL,
+
+        GAME_OPTION_ICON,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

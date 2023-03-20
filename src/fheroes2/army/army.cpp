@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "army.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -32,7 +34,6 @@
 #include <set>
 #include <utility>
 
-#include "army.h"
 #include "army_troop.h"
 #include "army_ui_helper.h"
 #include "artifact.h"
@@ -140,7 +141,7 @@ std::string Army::TroopSizeString( const Troop & troop )
         break;
     }
 
-    StringReplace( str, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
+    StringReplaceWithLowercase( str, "%{monster}", troop.GetMultiName() );
     return str;
 }
 
@@ -178,7 +179,10 @@ Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
 {
     reserve( troops.size() );
-    for ( const auto & troop : troops ) {
+
+    for ( const Troop * troop : troops ) {
+        assert( troop != nullptr );
+
         push_back( new Troop( *troop ) );
     }
 }
@@ -413,6 +417,16 @@ double Troops::GetStrength() const
     return strength;
 }
 
+uint32_t Troops::getTotalHP() const
+{
+    uint32_t hp = 0;
+    for ( const Troop * troop : *this ) {
+        if ( troop && troop->isValid() )
+            hp += troop->GetCount() * troop->GetHitPoints();
+    }
+    return hp;
+}
+
 void Troops::Clean()
 {
     std::for_each( begin(), end(), []( Troop * troop ) { troop->Reset(); } );
@@ -479,18 +493,54 @@ void Troops::MergeSameMonsterTroops()
 {
     for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * troop = at( slot );
-        if ( !troop || !troop->isValid() )
-            continue;
+        assert( troop != nullptr );
 
-        const int id = troop->GetID();
-        for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
-            Troop * secondaryTroop = at( secondary );
-            if ( secondaryTroop && secondaryTroop->isValid() && id == secondaryTroop->GetID() ) {
-                troop->SetCount( troop->GetCount() + secondaryTroop->GetCount() );
-                secondaryTroop->Reset();
+        if ( !troop->isValid() ) {
+            continue;
+        }
+
+        const int monsterId = troop->GetID();
+
+        for ( size_t otherSlot = slot + 1; otherSlot < size(); ++otherSlot ) {
+            Troop * otherTroop = at( otherSlot );
+            assert( otherTroop != nullptr );
+
+            if ( otherTroop->isValid() && otherTroop->isMonster( monsterId ) ) {
+                troop->SetCount( troop->GetCount() + otherTroop->GetCount() );
+
+                otherTroop->Reset();
             }
         }
     }
+}
+
+bool Troops::MergeSameMonsterOnce()
+{
+    for ( size_t slot = 0; slot < size(); ++slot ) {
+        Troop * troop = at( slot );
+        assert( troop != nullptr );
+
+        if ( !troop->isValid() ) {
+            continue;
+        }
+
+        const int monsterId = troop->GetID();
+
+        for ( size_t otherSlot = slot + 1; otherSlot < size(); ++otherSlot ) {
+            Troop * otherTroop = at( otherSlot );
+            assert( otherTroop != nullptr );
+
+            if ( otherTroop->isValid() && otherTroop->isMonster( monsterId ) ) {
+                troop->SetCount( troop->GetCount() + otherTroop->GetCount() );
+
+                otherTroop->Reset();
+
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 Troops Troops::GetOptimized() const
@@ -498,16 +548,27 @@ Troops Troops::GetOptimized() const
     Troops result;
     result.reserve( size() );
 
-    for ( const_iterator it1 = begin(); it1 != end(); ++it1 )
-        if ( ( *it1 )->isValid() ) {
-            const int monsterId = ( *it1 )->GetID();
-            iterator it2 = std::find_if( result.begin(), result.end(), [monsterId]( const Troop * troop ) { return troop->isMonster( monsterId ); } );
+    for ( const Troop * troop : *this ) {
+        assert( troop != nullptr );
 
-            if ( it2 == result.end() )
-                result.push_back( new Troop( **it1 ) );
-            else
-                ( *it2 )->SetCount( ( *it2 )->GetCount() + ( *it1 )->GetCount() );
+        if ( !troop->isValid() ) {
+            continue;
         }
+
+        const int monsterId = troop->GetID();
+        const const_iterator iter
+            = std::find_if( result.begin(), result.end(), [monsterId]( const Troop * resultTroop ) { return resultTroop->isMonster( monsterId ); } );
+
+        if ( iter == result.end() ) {
+            result.push_back( new Troop( *troop ) );
+        }
+        else {
+            Troop * resultTroop = *iter;
+            assert( resultTroop != nullptr );
+
+            resultTroop->SetCount( resultTroop->GetCount() + troop->GetCount() );
+        }
+    }
 
     return result;
 }
@@ -894,7 +955,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
     }
 
-    case MP2::OBJ_DERELICTSHIP:
+    case MP2::OBJ_DERELICT_SHIP:
         ArrangeForBattle( Monster::SKELETON, 200, tile.GetIndex(), false );
         break;
 
@@ -929,7 +990,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         }
         break;
 
-    case MP2::OBJ_CITYDEAD:
+    case MP2::OBJ_CITY_OF_DEAD:
         at( 0 )->Set( Monster::ZOMBIE, 20 );
         at( 1 )->Set( Monster::VAMPIRE_LORD, 5 );
         at( 2 )->Set( Monster::POWER_LICH, 5 );
@@ -937,7 +998,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 4 )->Set( Monster::ZOMBIE, 20 );
         break;
 
-    case MP2::OBJ_TROLLBRIDGE:
+    case MP2::OBJ_TROLL_BRIDGE:
         at( 0 )->Set( Monster::TROLL, 4 );
         at( 1 )->Set( Monster::WAR_TROLL, 4 );
         at( 2 )->Set( Monster::TROLL, 4 );
@@ -945,7 +1006,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 4 )->Set( Monster::TROLL, 4 );
         break;
 
-    case MP2::OBJ_DRAGONCITY: {
+    case MP2::OBJ_DRAGON_CITY: {
         uint32_t monsterCount = 1;
         if ( Settings::Get().isCampaignGameType() ) {
             const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
@@ -962,14 +1023,14 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
     }
 
-    case MP2::OBJ_DAEMONCAVE:
+    case MP2::OBJ_DAEMON_CAVE:
         at( 0 )->Set( Monster::EARTH_ELEMENT, 2 );
         at( 1 )->Set( Monster::EARTH_ELEMENT, 2 );
         at( 2 )->Set( Monster::EARTH_ELEMENT, 2 );
         at( 3 )->Set( Monster::EARTH_ELEMENT, 2 );
         break;
 
-    case MP2::OBJ_ABANDONEDMINE: {
+    case MP2::OBJ_ABANDONED_MINE: {
         const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
         assert( troop.isValid() );
 
@@ -1544,37 +1605,73 @@ void Army::resetInvalidMonsters() const
 void Army::ArrangeForCastleDefense( Army & garrison )
 {
     assert( this != &garrison );
+    assert( size() == maximumTroopCount && garrison.size() == maximumTroopCount );
+    // This method is designed to reinforce only the armies of heroes
+    assert( commander != nullptr && commander->isHeroes() );
     // This method is designed to take reinforcements only from the garrison, because
     // it can leave the garrison empty
     assert( garrison.commander == nullptr || garrison.commander->isCaptain() );
 
-    // There are no troops in the garrison
-    if ( !garrison.isValid() ) {
+    // If the guest hero's army is controlled by AI, then try to squeeze as many garrison troops in as possible
+    if ( isControlAI() ) {
+        // Create and fill a temporary container for convenient sorting of garrison troops
+        std::vector<Troop *> garrisonTroops;
+        garrisonTroops.reserve( garrison.Size() );
+
+        for ( Troop * troop : garrison ) {
+            assert( troop != nullptr );
+
+            if ( troop->isValid() ) {
+                garrisonTroops.push_back( troop );
+            }
+        }
+
+        // Sort the garrison troops by their strength (most powerful stacks first)
+        std::sort( garrisonTroops.begin(), garrisonTroops.end(), StrongestTroop );
+
+        // Try to reinforce the guest hero's army with garrison troops (most powerful stacks first)
+        for ( Troop * troop : garrisonTroops ) {
+            if ( JoinTroop( *troop ) ) {
+                troop->Reset();
+
+                continue;
+            }
+
+            // If there is no space for another garrison stack, we will try to combine some existing stacks...
+            if ( MergeSameMonsterOnce() ) {
+                // ... and try again
+                if ( JoinTroop( *troop ) ) {
+                    troop->Reset();
+                }
+                else {
+                    assert( 0 );
+                }
+            }
+        }
+
+        assert( size() == maximumTroopCount );
+
         return;
     }
 
-    // Create and fill a temporary container for convenient sorting of garrison troops
-    std::vector<Troop *> garrisonTroops;
+    // Otherwise, try to move the garrison troops to exactly the same slots of the guest hero's army, provided
+    // that these slots are empty
+    for ( size_t i = 0; i < maximumTroopCount; ++i ) {
+        Troop * troop = GetTroop( i );
+        Troop * garrisonTroop = garrison.GetTroop( i );
+        assert( troop != nullptr && garrisonTroop != nullptr );
 
-    garrisonTroops.reserve( garrison.Size() );
-
-    for ( size_t i = 0; i < garrison.Size(); ++i ) {
-        Troop * troop = garrison.GetTroop( i );
-        assert( troop != nullptr );
+        if ( !garrisonTroop->isValid() ) {
+            continue;
+        }
 
         if ( troop->isValid() ) {
-            garrisonTroops.push_back( troop );
+            continue;
         }
-    }
 
-    // Sort the garrison troops by their strength (most powerful stacks first)
-    std::sort( garrisonTroops.begin(), garrisonTroops.end(), StrongestTroop );
+        troop->Set( garrisonTroop->GetMonster(), garrisonTroop->GetCount() );
 
-    // Try to reinforce this army with garrison troops (most powerful stacks first)
-    for ( Troop * troop : garrisonTroops ) {
-        if ( JoinTroop( *troop ) ) {
-            troop->Reset();
-        }
+        garrisonTroop->Reset();
     }
 }
 

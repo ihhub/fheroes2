@@ -91,7 +91,7 @@ public:
 
     void appendSurrenderedHero( Heroes & hero );
 
-    Heroes * GetBestHero();
+    Heroes * GetBestHero() const;
 
     Monster GetStrongestMonster() const;
 

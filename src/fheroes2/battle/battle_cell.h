@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -62,22 +62,15 @@ namespace Battle
         Cell & operator=( Cell && ) = delete;
 
         void ResetQuality();
-        void resetReachability();
 
         void SetObject( int );
         void SetQuality( uint32_t );
 
-        void setReachableForHead();
-        void setReachableForTail();
-
         void SetArea( const fheroes2::Rect & );
 
-        bool isReachableForHead() const;
-        bool isReachableForTail() const;
-
-        // Checks that the cell is passable for the given unit located in a certain adjacent cell
+        // Checks that the cell is passable for a given unit located in a certain adjacent cell
         bool isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const;
-        // Checks that the cell is passable for the given unit, i.e. unit can occupy it with his head or tail
+        // Checks that the cell is passable for a given unit, i.e. unit can occupy it with his head or tail
         bool isPassableForUnit( const Unit & unit ) const;
         // Checks that the cell is passable, i.e. does not contain an obstacle or (optionally) a unit
         bool isPassable( const bool checkForUnit ) const;
@@ -98,8 +91,6 @@ namespace Battle
         int32_t index;
         fheroes2::Rect pos;
         int object;
-        bool _reachableForHead;
-        bool _reachableForTail;
         int32_t quality;
         Unit * troop;
         fheroes2::Point coord[7];
@@ -117,15 +108,15 @@ namespace Battle
         bool isReflect() const;
         bool contains( int cellIndex ) const;
 
-        // Returns the position that the given unit would occupy after moving to the
-        // cell with the given index (without taking into account the cell passability
-        // information) or an empty Position object if the given index is unreachable
+        // Returns the position that a given unit would occupy after moving to the cell
+        // with a given index (without taking into account the pathfinder's info) or an
+        // empty Position object if this index is unreachable in principle for this unit
         static Position GetPosition( const Unit & unit, const int32_t dst );
 
-        // Returns the reachable position for the current unit (to which the current
-        // passability information relates) which corresponds to the given index or
-        // an empty Position object if the given index is unreachable
-        static Position GetReachable( const Unit & currentUnit, const int32_t dst, const bool tryHeadFirst = true );
+        // Returns the reachable position for a given unit, which corresponds to a given
+        // index, or an empty Position object if this index is unreachable for this unit
+        // on the current turn
+        static Position GetReachable( const Unit & unit, const int32_t dst );
 
         fheroes2::Rect GetRect() const;
         Cell * GetHead();

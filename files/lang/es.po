@@ -1,13 +1,12 @@
 # Spanish translation for fheroes2
-# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 23:54+0000\n"
+"POT-Creation-Date: 2023-03-11 16:34+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -45,6 +44,57 @@ msgstr ""
 msgid "QUIT"
 msgstr ""
 
+msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "ACCEPT"
+msgstr ""
+
+msgid "DECLINE"
+msgstr ""
+
+msgid "LEARN"
+msgstr ""
+
+msgid "TRADE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "EXIT"
+msgstr ""
+
+msgid "DISMISS"
+msgstr ""
+
+msgid "UPGRADE"
+msgstr ""
+
+msgid "RESTART"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "M"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "X-L"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
 msgid ""
 "STANDARD\n"
 "GAME"
@@ -59,9 +109,6 @@ msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
-msgstr ""
-
-msgid "CANCEL"
 msgstr ""
 
 msgid "CONFIG"
@@ -102,6 +149,9 @@ msgid "DIFFICULTY"
 msgstr ""
 
 msgid "MIN"
+msgstr ""
+
+msgid "MAX"
 msgstr ""
 
 #, fuzzy
@@ -544,6 +594,12 @@ msgstr ""
 msgid "View %{monster} info"
 msgstr "Ver información de %{monster}"
 
+msgid "Fly %{monster} here"
+msgstr "%{monster} vuela aquí"
+
+msgid "Move %{monster} here"
+msgstr "Mover a %{monster} aquí"
+
 #, fuzzy
 msgid "Shoot %{monster}"
 msgstr ""
@@ -557,12 +613,6 @@ msgstr[1] ""
 
 msgid "Attack %{monster}"
 msgstr "Atacar a %{monster}"
-
-msgid "Fly %{monster} here"
-msgstr "%{monster} vuela aquí"
-
-msgid "Move %{monster} here"
-msgstr "Mover a %{monster} aquí"
 
 msgid "Turn %{turn}"
 msgstr "Turno %{turn}"
@@ -1410,6 +1460,41 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
+#, fuzzy
+msgid "campaignBonus|Animate Dead"
+msgstr "Animar Muertos"
+
+#, fuzzy
+msgid "campaignBonus|Chain Lightning"
+msgstr "Cadena de Rayos"
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Mirror Image"
+msgstr "Doble Imagen"
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+#, fuzzy
+msgid "campaignBonus|Steelskin"
+msgstr "Anillo del Mago del Poder"
+
+#, fuzzy
+msgid "campaignBonus|Summon Earth"
+msgstr "LLamar Barco"
+
+msgid "campaignBonus|View Heroes"
+msgstr "Ver Heroes"
+
 msgid "campaignBonus|Ballista"
 msgstr ""
 
@@ -1437,6 +1522,10 @@ msgstr ""
 #, fuzzy
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Principal Pergamino de Conocimiento"
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Peto de Anduran"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Máscara Horrenda"
@@ -1632,41 +1721,6 @@ msgstr "Animar Muertos"
 #, fuzzy
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Escudo Picudo"
-
-#, fuzzy
-msgid "campaignBonus|Animate Dead"
-msgstr "Animar Muertos"
-
-#, fuzzy
-msgid "campaignBonus|Chain Lightning"
-msgstr "Cadena de Rayos"
-
-msgid "campaignBonus|Fireblast"
-msgstr ""
-
-msgid "campaignBonus|Mass Curse"
-msgstr ""
-
-msgid "campaignBonus|Mass Haste"
-msgstr ""
-
-#, fuzzy
-msgid "campaignBonus|Mirror Image"
-msgstr "Doble Imagen"
-
-msgid "campaignBonus|Resurrect"
-msgstr ""
-
-#, fuzzy
-msgid "campaignBonus|Steelskin"
-msgstr "Anillo del Mago del Poder"
-
-#, fuzzy
-msgid "campaignBonus|Summon Earth"
-msgstr "LLamar Barco"
-
-msgid "campaignBonus|View Heroes"
-msgstr "Ver Heroes"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -2488,7 +2542,7 @@ msgstr ""
 "entre unidades."
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 "La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
@@ -2597,18 +2651,6 @@ msgstr ""
 "veterano entrenador de gladiadores acepta adiestrarte en la habilidad que "
 "prefieras."
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-"Tus tropas pueden ser mejoradas, pero te saldrá caro. ¿Quieres actualizarlas?"
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr "¿Estás seguro de que desea descartar este ejército?"
-
 msgid "Attack Skill"
 msgstr "Ataque"
 
@@ -2629,6 +2671,18 @@ msgstr "Puntos de daño"
 
 msgid "Hit Points Left"
 msgstr "Vida Restante"
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Tus tropas pueden ser mejoradas, pero te saldrá caro. ¿Quieres actualizarlas?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "¿Estás seguro de que desea descartar este ejército?"
 
 #, fuzzy
 msgid "Followers"
@@ -2795,15 +2849,6 @@ msgstr ""
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
-msgstr ""
-
-#, fuzzy
-msgid "Attention"
-msgstr "\"Anexión\""
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
 msgstr ""
 
 msgid ""
@@ -3071,14 +3116,20 @@ msgstr "Disponible: %{count}"
 msgid "Number to buy:"
 msgstr "NÚMERO"
 
+msgid "Recruit selected monsters."
+msgstr ""
+
+msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "Select only 1 monster to be recruited."
+msgstr ""
+
 #, fuzzy
 msgid "Select Game Resolution:"
 msgstr "Descripción seleccionada"
 
 msgid "Click to apply the selected resolution."
-msgstr ""
-
-msgid "MAX"
 msgstr ""
 
 msgid "How many troops to move?"
@@ -3088,6 +3139,18 @@ msgid "Fast separation into slots:"
 msgstr ""
 
 msgid "Map: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"Month: "
+msgstr ""
+
+msgid ", Week: "
+msgstr ""
+
+msgid ", Day: "
 msgstr ""
 
 msgid ""
@@ -3137,14 +3200,7 @@ msgid "Select Skill:"
 msgstr "Defensa"
 
 #, fuzzy
-msgid "Location: "
-msgstr "Excavación"
-
-#, fuzzy
-msgid ""
-"\n"
-"\n"
-"Map Type:\n"
+msgid "Map Type:\n"
 msgstr "Tamaño del Mapa"
 
 #, fuzzy
@@ -3531,13 +3587,13 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
+msgid "Development"
 msgstr ""
 
 msgid "Visit us at "
 msgstr ""
 
-msgid "Development"
+msgid "QA and Support"
 msgstr ""
 
 #, fuzzy
@@ -3714,15 +3770,11 @@ msgstr "Partida de Campaña"
 msgid "View High Scores for Campaigns."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
-msgid "This file contains a save with an invalid game type."
-msgstr ""
+#, fuzzy
+msgid "The save file is corrupted."
+msgstr "Reflejo creado."
 
-msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
-msgstr ""
-
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 #, fuzzy
@@ -3730,6 +3782,14 @@ msgid "Current game version: "
 msgstr "Modificadores actuales:"
 
 msgid "Last supported version: "
+msgstr ""
+
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+msgid ""
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -4271,6 +4331,9 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr "Excavar artefactos requiere un día entero, inténtalo mañana."
+
 #, fuzzy
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
@@ -4285,9 +4348,6 @@ msgstr "No hay nada aquí. ¿Dónde puede estar?"
 
 msgid "Try searching on clear ground."
 msgstr "Prueba buscando en terreno despejado"
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr "Excavar artefactos requiere un día entero, inténtalo mañana."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -4387,6 +4447,18 @@ msgstr ""
 msgid "View %{skill} Info"
 msgstr "Ver información de %{skill}"
 
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
+
 #, fuzzy
 msgid "Kingdom Income"
 msgstr "Ingresos:"
@@ -4394,6 +4466,12 @@ msgstr "Ingresos:"
 #, fuzzy
 msgid "Kingdom Income per day."
 msgstr "Ingresos:"
+
+#, fuzzy
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"El faro está ahora bajo tu control, todos tus barcos podrán recorrer mayor "
+"distancia por turno."
 
 msgid "English"
 msgstr ""
@@ -4918,15 +4996,15 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Bebes de una fuente encantada pero nada sucede."
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr "Entras en el anillo místico de hadas pero nada sucede."
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
 "Justo al entrar el anillo místico de las hadas tu ejército adquiere suerte "
 "para su próxima batalla"
-
-msgid "You enter the faerie ring, but nothing happens."
-msgstr "Entras en el anillo místico de hadas pero nada sucede."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
@@ -5328,13 +5406,6 @@ msgstr ""
 "la tierra. ¿Deseas frotar la lámpara?"
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-"Llegas a una mina de oro abandonada. La mina parece estar embrujada. "
-"¿Quieres entrar en ella?"
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5397,6 +5468,13 @@ msgstr ""
 
 msgid "You gain control of a %{name}."
 msgstr "Tomas control de %{name}."
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+"Llegas a una mina de oro abandonada. La mina parece estar embrujada. "
+"¿Quieres entrar en ella?"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -5778,6 +5856,9 @@ msgstr ""
 "La entrada a la Cueva es oscura, un hediondo y sufuroso olor sale de la boca "
 "de la cueva. ¿Entrarás?"
 
+msgid "Except for evidence of a terrible battle, the cave is empty."
+msgstr "Excepto por la evidencia de una terrible batalla, la Cueva está vacía."
+
 msgid ""
 "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, "
 "\"you will fight and surely die. But I will give you a choice of deaths. You "
@@ -5788,11 +5869,6 @@ msgstr ""
 "\"lucharás y seguramente morirás\". Pero podrás elegir la muerte que gustes: "
 "puedes luchar contra mi o contra mis sirvientes. ¿Prefieres luchar contra "
 "mis sirvientes?"
-
-msgid ""
-"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
-"gold."
-msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
@@ -5818,18 +5894,20 @@ msgstr ""
 "la cueva."
 
 msgid ""
+"Seeing that you do not have %{count} gold, the demon slashes you with its "
+"claws, and the last thing you see is a red haze."
+msgstr ""
+
+msgid ""
 "The Demon leaps upon you and has its claws at your throat before you can "
 "even draw your sword. \"Your life is mine,\" it says. \"I will sell it back "
 "to you for %{count} gold.\""
 msgstr ""
 
 msgid ""
-"Seeing that you do not have %{count} gold, the demon slashes you with its "
-"claws, and the last thing you see is a red haze."
+"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
+"gold."
 msgstr ""
-
-msgid "Except for evidence of a terrible battle, the cave is empty."
-msgstr "Excepto por la evidencia de una terrible batalla, la Cueva está vacía."
 
 msgid ""
 "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
@@ -5966,6 +6044,11 @@ msgstr ""
 msgid "This eye seems to be intently studying its surroundings."
 msgstr "Este ojo parece estar atentamente estudiando los alrededores."
 
+msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgstr ""
+"Te topas con una Esfinge Gigante. La Esfinge permanece extrañamente "
+"tranquila."
+
 msgid ""
 "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you "
 "shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept "
@@ -5988,13 +6071,6 @@ msgstr ""
 "¿Tú respuesta?"
 
 msgid ""
-"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
-"so here's your reward. Now begone.\""
-msgstr ""
-"Pareciendo en cierto modo decepcionada, la Esfinge suspira. Has acertado mi "
-"acertijo, por lo tanto aquí está tu recompensa. Ahora vete."
-
-msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
 "you with a paw, knocking you to the ground. Another blow makes the world go "
 "black, and you know no more."
@@ -6003,10 +6079,12 @@ msgstr ""
 "tirándote al suelo. Otro soplido hace retrodecer al mundo y no sabes nada "
 "más."
 
-msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgid ""
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
 msgstr ""
-"Te topas con una Esfinge Gigante. La Esfinge permanece extrañamente "
-"tranquila."
+"Pareciendo en cierto modo decepcionada, la Esfinge suspira. Has acertado mi "
+"acertijo, por lo tanto aquí está tu recompensa. Ahora vete."
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -6062,6 +6140,13 @@ msgstr ""
 "Tu héroe está demasiado cansado como para conjurar este hechizo hoy. Prueba "
 "de nuevo mañana."
 
+#, fuzzy
+msgid "This spell cannot be used on a boat."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -6080,13 +6165,6 @@ msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
-msgstr ""
-"La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
-"lado del campo de batalla."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "¿Estas seguro que quieres despedir este Héroe?"
@@ -6184,13 +6262,6 @@ msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Ahora se identifica totalmente a los héroes enemigos."
-
-#, fuzzy
-msgid "This spell cannot be used on a boat."
-msgstr "Este pueblo no se puede actualizar a castillo."
-
-msgid "This spell can be casted only nearby water."
-msgstr ""
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -6988,17 +7059,65 @@ msgstr ""
 msgid "Alchemist Lab"
 msgstr "Alquimista"
 
+msgid "Sign"
+msgstr "Señal"
+
+msgid "Buoy"
+msgstr "Boya"
+
+msgid "Skeleton"
+msgstr "Esqueleto"
+
 msgid "Daemon Cave"
 msgstr "Cueva del Demonio"
+
+msgid "Treasure Chest"
+msgstr "Cofre del Tesoro"
 
 msgid "Faerie Ring"
 msgstr "Anillo del Hada"
 
+msgid "Campfire"
+msgstr "Hoguera"
+
+msgid "Fountain"
+msgstr "Fuente"
+
+msgid "Gazebo"
+msgstr "Cenador"
+
+msgid "Genie Lamp"
+msgstr "Lampara del Genio"
+
+msgid "Archer's House"
+msgstr "Casa del Arquero"
+
+msgid "Goblin Hut"
+msgstr "Palloza"
+
+msgid "Dwarf Cottage"
+msgstr "Casita de Enanos"
+
+msgid "Peasant Hut"
+msgstr "Cabaña de Campesinos"
+
+msgid "Stables"
+msgstr "Establos"
+
+msgid "Alchemist's Tower"
+msgstr "Torre del Alquimista"
+
+msgid "Event"
+msgstr ""
+
 msgid "Dragon City"
 msgstr "Ciudad Dragón"
 
+#, fuzzy
 msgid "Lighthouse"
-msgstr "Faro"
+msgid_plural "Lighthouses"
+msgstr[0] "Faro"
+msgstr[1] "Faro"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -7008,11 +7127,17 @@ msgstr[1] "Molinos de Agua"
 msgid "Mines"
 msgstr "Minas"
 
+msgid "Monster"
+msgstr "Monstruo"
+
 msgid "Obelisk"
 msgstr "Obelisco"
 
 msgid "Oasis"
 msgstr "Oasis"
+
+msgid "Resource"
+msgstr "Recursos"
 
 msgid "Sawmill"
 msgstr "Aserradero"
@@ -7020,16 +7145,60 @@ msgstr "Aserradero"
 msgid "Oracle"
 msgstr "Oráculo"
 
+msgid "Shrine of the First Circle"
+msgstr "Capilla del Primer Círculo"
+
+#, fuzzy
+msgid "Shipwreck"
+msgstr "¡Naufragio!"
+
+msgid "Sea Chest"
+msgstr "Cofre Marino"
+
 msgid "Desert Tent"
 msgstr "Tienda del Desierto"
 
+msgid "Stone Liths"
+msgstr ""
+
 msgid "Wagon Camp"
 msgstr "Carromato"
+
+msgid "Hut of the Magi"
+msgstr "Cabaña del los Magos"
+
+msgid "Whirlpool"
+msgstr "Remolino"
 
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Molino de Viento"
 msgstr[1] "Molinos de Viento"
+
+msgid "Artifact"
+msgstr "Artefacto"
+
+msgid "Mermaid"
+msgstr "Sirena"
+
+msgid "Boat"
+msgstr "Bote"
+
+#, fuzzy
+msgid "Random Ultimate Artifact"
+msgstr "Encuentra el artefacto definitivo"
+
+#, fuzzy
+msgid "Random Artifact"
+msgstr "Artefacto"
+
+#, fuzzy
+msgid "Random Resource"
+msgstr "Recursos"
+
+#, fuzzy
+msgid "Random Monster"
+msgstr "Cualquier castillo"
 
 msgid "Random Town"
 msgstr "Cualquier torre"
@@ -7037,14 +7206,39 @@ msgstr "Cualquier torre"
 msgid "Random Castle"
 msgstr "Cualquier castillo"
 
+msgid "Eye of the Magi"
+msgstr "Ojo de los Magos"
+
+#, fuzzy
+msgid "Random Monster - weak"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monster - medium"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monster - strong"
+msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Random Monster - very strong"
+msgstr "Cualquier castillo"
+
+msgid "Nothing Special"
+msgstr "Nada especial"
+
+msgid "Mossy Rock"
+msgstr ""
+
 msgid "Watch Tower"
 msgstr "Torre de Vigilancia"
 
-msgid "Tree City"
-msgstr "Ciudad del Árbol"
-
 msgid "Tree House"
 msgstr "Casa de Árbol"
+
+msgid "Tree City"
+msgstr "Ciudad del Árbol"
 
 msgid "Ruins"
 msgstr "Ruinas"
@@ -7054,6 +7248,15 @@ msgstr "Fortaleza"
 
 msgid "Abandoned Mine"
 msgstr "Mina Abandonada"
+
+msgid "Sirens"
+msgstr "Sirenas"
+
+msgid "Standing Stones"
+msgstr "Círculo Lítico"
+
+msgid "Idol"
+msgstr "Ídolo"
 
 msgid "Tree of Knowledge"
 msgstr "Árbol del conocimiento"
@@ -7073,14 +7276,32 @@ msgstr "Hoyo de los Medianos"
 msgid "Mercenary Camp"
 msgstr "Campamento Mercenario"
 
+msgid "Shrine of the Second Circle"
+msgstr "Capilla del Segundo Círculo"
+
+msgid "Shrine of the Third Circle"
+msgstr "Capilla del Tercer Círculo"
+
 msgid "City of the Dead"
 msgstr "Ciudad de la muerte"
 
 msgid "Sphinx"
 msgstr "Esfinge"
 
+msgid "Wagon"
+msgstr "Vagón"
+
+msgid "Tar Pit"
+msgstr "Fosa de Alquitrán"
+
+msgid "Artesian Spring"
+msgstr "Pozo Artesiano"
+
 msgid "Troll Bridge"
 msgstr "Puente de los Trolls"
+
+msgid "Watering Hole"
+msgstr "Gotera"
 
 msgid "Witch's Hut"
 msgstr "Choza de brujas"
@@ -7088,15 +7309,31 @@ msgstr "Choza de brujas"
 msgid "Xanadu"
 msgstr "Xanadu"
 
+msgid "Lean-To"
+msgstr "Apoyar"
+
 msgid "Magellan's Maps"
 msgstr "Mapas de Magallanes"
+
+msgid "Flotsam"
+msgstr "Restos de un naufragio"
 
 msgid "Derelict Ship"
 msgstr "Barco Abandonado"
 
-#, fuzzy
-msgid "Shipwreck"
-msgstr "¡Naufragio!"
+msgid "Shipwreck Survivor"
+msgstr ""
+
+msgid "Bottle"
+msgstr "Botella"
+
+msgid "Magic Well"
+msgstr "Pozo Mágico"
+
+msgid "Magic Garden"
+msgid_plural "Magic Gardens"
+msgstr[0] "Jardín mágico"
+msgstr[1] "Jardines mágicos"
 
 msgid "Observation Tower"
 msgstr "Torre de observación"
@@ -7105,56 +7342,11 @@ msgstr "Torre de observación"
 msgid "Freeman's Foundry"
 msgstr "Fundición"
 
-msgid "Watering Hole"
-msgstr "Gotera"
-
-msgid "Artesian Spring"
-msgstr "Pozo Artesiano"
-
-msgid "Gazebo"
-msgstr "Cenador"
-
-msgid "Archer's House"
-msgstr "Casa del Arquero"
-
-msgid "Peasant Hut"
-msgstr "Cabaña de Campesinos"
-
-msgid "Dwarf Cottage"
-msgstr "Casita de Enanos"
-
-msgid "Stone Liths"
-msgstr ""
-
-msgid "Magic Well"
-msgstr "Pozo Mágico"
-
-msgid "Sign"
-msgstr "Señal"
-
-msgid "Nothing Special"
-msgstr "Nada especial"
-
-msgid "Tar Pit"
-msgstr "Fosa de Alquitrán"
-
-msgid "Mound"
-msgstr "Montón"
-
-msgid "Dune"
-msgstr "Duna"
-
-msgid "Stump"
-msgstr "Cepa"
-
-msgid "Cactus"
-msgstr "Cactus"
+msgid "Reefs"
+msgstr "Arrecifes"
 
 msgid "Trees"
 msgstr "Árboles"
-
-msgid "Dead Tree"
-msgstr "Árbol muerto"
 
 msgid "Mountains"
 msgstr "Montañas"
@@ -7162,11 +7354,11 @@ msgstr "Montañas"
 msgid "Volcano"
 msgstr "Volcán"
 
-msgid "Rock"
-msgstr "Roca"
-
 msgid "Flowers"
 msgstr "Flores"
+
+msgid "Rock"
+msgstr "Roca"
 
 msgid "Water Lake"
 msgstr "Lago"
@@ -7174,8 +7366,23 @@ msgstr "Lago"
 msgid "Mandrake"
 msgstr "Mandrágora"
 
+msgid "Dead Tree"
+msgstr "Árbol muerto"
+
+msgid "Stump"
+msgstr "Cepa"
+
 msgid "Crater"
 msgstr "Cráter"
+
+msgid "Cactus"
+msgstr "Cactus"
+
+msgid "Mound"
+msgstr "Montón"
+
+msgid "Dune"
+msgstr "Duna"
 
 msgid "Lava Pool"
 msgstr "Charca de Lava"
@@ -7183,114 +7390,8 @@ msgstr "Charca de Lava"
 msgid "Shrub"
 msgstr "Arbusto"
 
-msgid "Buoy"
-msgstr "Boya"
-
-msgid "Skeleton"
-msgstr "Esqueleto"
-
-msgid "Treasure Chest"
-msgstr "Cofre del Tesoro"
-
-msgid "Sea Chest"
-msgstr "Cofre Marino"
-
-msgid "Campfire"
-msgstr "Hoguera"
-
-msgid "Fountain"
-msgstr "Fuente"
-
-msgid "Genie Lamp"
-msgstr "Lampara del Genio"
-
-msgid "Goblin Hut"
-msgstr "Palloza"
-
-msgid "Monster"
-msgstr "Monstruo"
-
-msgid "Resource"
-msgstr "Recursos"
-
-msgid "Whirlpool"
-msgstr "Remolino"
-
-msgid "Artifact"
-msgstr "Artefacto"
-
-msgid "Boat"
-msgstr "Bote"
-
-#, fuzzy
-msgid "Random Artifact"
-msgstr "Artefacto"
-
-#, fuzzy
-msgid "Random Resource"
-msgstr "Recursos"
-
-#, fuzzy
-msgid "Random Monster - weak"
-msgstr "Cualquier castillo"
-
-#, fuzzy
-msgid "Random Monster - medium"
-msgstr "Cualquier castillo"
-
-#, fuzzy
-msgid "Random Monster - strong"
-msgstr "Cualquier castillo"
-
-#, fuzzy
-msgid "Random Monster - very strong"
-msgstr "Cualquier castillo"
-
-msgid "Standing Stones"
-msgstr "Círculo Lítico"
-
-msgid "Event"
-msgstr ""
-
-#, fuzzy
-msgid "Random Monster"
-msgstr "Cualquier castillo"
-
-#, fuzzy
-msgid "Random Ultimate Artifact"
-msgstr "Encuentra el artefacto definitivo"
-
-msgid "Idol"
-msgstr "Ídolo"
-
-msgid "Shrine of the First Circle"
-msgstr "Capilla del Primer Círculo"
-
-msgid "Shrine of the Second Circle"
-msgstr "Capilla del Segundo Círculo"
-
-msgid "Shrine of the Third Circle"
-msgstr "Capilla del Tercer Círculo"
-
-msgid "Wagon"
-msgstr "Vagón"
-
-msgid "Lean-To"
-msgstr "Apoyar"
-
-msgid "Flotsam"
-msgstr "Restos de un naufragio"
-
-msgid "Shipwreck Survivor"
-msgstr ""
-
-msgid "Bottle"
-msgstr "Botella"
-
-msgid "Magic Garden"
-msgid_plural "Magic Gardens"
-msgstr[0] "Jardín mágico"
-msgstr[1] "Jardines mágicos"
+msgid "Barrow Mounds"
+msgstr "Montículo de la Carretilla"
 
 msgid "Random Artifact - Treasure"
 msgstr ""
@@ -7301,14 +7402,14 @@ msgstr ""
 msgid "Random Artifact - Major"
 msgstr ""
 
-msgid "Jail"
-msgstr "Cárcel"
+msgid "Barrier"
+msgstr "Barrera"
 
 msgid "Traveller's Tent"
 msgstr "Tienda del Viajero"
 
-msgid "Barrier"
-msgstr "Barrera"
+msgid "Jail"
+msgstr "Cárcel"
 
 msgid "Fire Summoning Altar"
 msgstr "Altar del Fuego"
@@ -7321,30 +7422,6 @@ msgstr "Altar de la Tierra"
 
 msgid "Water Summoning Altar"
 msgstr "Altar del Agua"
-
-msgid "Barrow Mounds"
-msgstr "Montículo de la Carretilla"
-
-msgid "Stables"
-msgstr "Establos"
-
-msgid "Alchemist's Tower"
-msgstr "Torre del Alquimista"
-
-msgid "Hut of the Magi"
-msgstr "Cabaña del los Magos"
-
-msgid "Eye of the Magi"
-msgstr "Ojo de los Magos"
-
-msgid "Mermaid"
-msgstr "Sirena"
-
-msgid "Sirens"
-msgstr "Sirenas"
-
-msgid "Reefs"
-msgstr "Arrecifes"
 
 #, fuzzy
 msgid "Unknown Monster"
@@ -9777,12 +9854,10 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "Necroman"
-#~ msgstr "Nigromante"
-
-#~ msgid "Wait this unit"
-#~ msgstr "Esta unidad espera"
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "\"Anexión\""
 
 #, fuzzy
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} esperando turno."
+#~ msgid "Location: "
+#~ msgstr "Excavación"

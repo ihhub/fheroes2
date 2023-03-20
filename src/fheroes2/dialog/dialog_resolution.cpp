@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,8 +20,8 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -36,7 +36,6 @@
 #include "localevent.h"
 #include "math_base.h"
 #include "screen.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -46,29 +45,49 @@
 
 namespace
 {
-    const int editBoxLength = 266;
+    const int32_t editBoxLength = 266;
+    const int32_t resolutionItemHeight = 19;
+    // TODO: this is a hack over partially incorrect text height calculation. Fix it later together with the Text classes.
+    const int32_t textOffsetYCorrection = 6;
+    const std::string middleText = " x ";
 
-    std::string GetResolutionString( const fheroes2::Size & resolution )
+    std::pair<std::string, std::string> getResolutionStrings( const fheroes2::ResolutionInfo & resolution )
     {
-        return std::to_string( resolution.width ) + " x " + std::to_string( resolution.height );
+        if ( resolution.scale > 1 ) {
+            return std::make_pair( std::to_string( resolution.width ), std::to_string( resolution.height ) + " (x" + std::to_string( resolution.scale ) + ")" );
+        }
+
+        return std::make_pair( std::to_string( resolution.width ), std::to_string( resolution.height ) );
     }
 
-    class ResolutionList : public Interface::ListBox<fheroes2::Size>
+    class ResolutionList : public Interface::ListBox<fheroes2::ResolutionInfo>
     {
     public:
-        using Interface::ListBox<fheroes2::Size>::ActionListSingleClick;
-        using Interface::ListBox<fheroes2::Size>::ActionListPressRight;
-        using Interface::ListBox<fheroes2::Size>::ActionListDoubleClick;
+        using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListSingleClick;
+        using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListPressRight;
+        using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListDoubleClick;
 
         explicit ResolutionList( const fheroes2::Point & offset )
-            : Interface::ListBox<fheroes2::Size>( offset )
+            : Interface::ListBox<fheroes2::ResolutionInfo>( offset )
             , _isDoubleClicked( false )
-        {}
-
-        void RedrawItem( const fheroes2::Size & resolution, int32_t offsetX, int32_t offsetY, bool current ) override
         {
-            const Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
-            text.Blit( ( editBoxLength - text.w() ) / 2 + offsetX, offsetY, editBoxLength );
+            // Do nothing.
+        }
+
+        void RedrawItem( const fheroes2::ResolutionInfo & resolution, int32_t offsetX, int32_t offsetY, bool current ) override
+        {
+            const fheroes2::FontType fontType = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+
+            const auto [leftText, rightText] = getResolutionStrings( resolution );
+            const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
+            const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
+
+            const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
+
+            const int32_t textOffsetX = offsetX + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetY = offsetY + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2;
+
+            resolutionText.draw( textOffsetX, textOffsetY, fheroes2::Display::instance() );
         }
 
         void RedrawBackground( const fheroes2::Point & dst ) override
@@ -87,17 +106,17 @@ namespace
             // Do nothing.
         }
 
-        void ActionListSingleClick( fheroes2::Size & ) override
+        void ActionListSingleClick( fheroes2::ResolutionInfo & /*unused*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListPressRight( fheroes2::Size & ) override
+        void ActionListPressRight( fheroes2::ResolutionInfo & /*unused*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListDoubleClick( fheroes2::Size & ) override
+        void ActionListDoubleClick( fheroes2::ResolutionInfo & /*unused*/ ) override
         {
             _isDoubleClicked = true;
         }
@@ -111,14 +130,22 @@ namespace
         bool _isDoubleClicked;
     };
 
-    void RedrawInfo( const fheroes2::Point & dst, const fheroes2::Size & resolution )
+    void RedrawInfo( const fheroes2::Point & dst, const fheroes2::ResolutionInfo & resolution, fheroes2::Image & output )
     {
-        Text text( _( "Select Game Resolution:" ), Font::YELLOW_BIG );
-        text.Blit( dst.x + ( 377 - text.w() ) / 2, dst.y + 30 );
+        fheroes2::Text text( _( "Select Game Resolution:" ), fheroes2::FontType::normalYellow() );
+        text.draw( dst.x + ( 377 - text.width() ) / 2, dst.y + 32, output );
 
         if ( resolution.width > 0 && resolution.height > 0 ) {
-            text.Set( GetResolutionString( resolution ), Font::YELLOW_BIG );
-            text.Blit( dst.x + ( editBoxLength - text.w() ) / 2 + 41, dst.y + 287 + ( 19 - text.h() + 2 ) / 2, editBoxLength );
+            const fheroes2::FontType fontType = fheroes2::FontType::normalYellow();
+
+            const auto [leftText, rightText] = getResolutionStrings( resolution );
+            const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
+            const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
+
+            const int32_t textOffsetX = dst.x + 41 + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+
+            const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
+            resolutionText.draw( textOffsetX, dst.y + 287 + ( resolutionItemHeight - text.height() + textOffsetYCorrection ) / 2, output );
         }
     }
 }
@@ -127,7 +154,7 @@ namespace Dialog
 {
     bool SelectResolution()
     {
-        std::vector<fheroes2::Size> resolutions = fheroes2::engine().getAvailableResolutions();
+        std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
         if ( resolutions.empty() )
             return false;
 
@@ -147,8 +174,8 @@ namespace Dialog
 
         fheroes2::Blit( spriteShadow, display, roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
 
-        fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::REQUEST, 1, 2 );
-        fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::REQUEST, 3, 4 );
+        fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+        fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
         ResolutionList resList( roi.getPosition() );
 
@@ -161,16 +188,17 @@ namespace Dialog
                                                                                    { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
         resList.setScrollBarArea( { roi.x + 328, roi.y + 73, 12, 180 } );
         resList.setScrollBarImage( scrollbarSlider );
-        resList.SetAreaMaxItems( 11 );
-        resList.SetAreaItems( { roi.x + 41, roi.y + 55 + 3, editBoxLength, 215 } );
+        const int32_t maximumItems = 11;
+        resList.SetAreaMaxItems( maximumItems );
+        resList.SetAreaItems( { roi.x + 41, roi.y + 55 + 4, editBoxLength, resolutionItemHeight * maximumItems } );
 
         resList.SetListContent( resolutions );
 
-        const fheroes2::Size currentResolution( display.width(), display.height() );
+        const fheroes2::ResolutionInfo currentResolution{ display.width(), display.height(), display.scale() };
 
-        fheroes2::Size selectedResolution;
+        fheroes2::ResolutionInfo selectedResolution;
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
-            if ( resolutions[i].width == currentResolution.width && resolutions[i].height == currentResolution.height ) {
+            if ( resolutions[i] == currentResolution ) {
                 resList.SetCurrent( i );
                 selectedResolution = resList.GetCurrent();
                 break;
@@ -182,7 +210,7 @@ namespace Dialog
         buttonOk.draw();
         buttonCancel.draw();
 
-        RedrawInfo( roi.getPosition(), selectedResolution );
+        RedrawInfo( roi.getPosition(), selectedResolution, display );
 
         display.render();
 
@@ -200,7 +228,7 @@ namespace Dialog
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                selectedResolution = { 0, 0 };
+                selectedResolution = {};
                 break;
             }
             else if ( le.MousePressRight( buttonCancel.area() ) ) {
@@ -225,13 +253,12 @@ namespace Dialog
             resList.Redraw();
             buttonOk.draw();
             buttonCancel.draw();
-            RedrawInfo( roi.getPosition(), selectedResolution );
+            RedrawInfo( roi.getPosition(), selectedResolution, display );
             display.render();
         }
 
-        if ( selectedResolution.width > 0 && selectedResolution.height > 0
-             && ( selectedResolution.width != currentResolution.width || selectedResolution.height != currentResolution.height ) ) {
-            display.resize( selectedResolution.width, selectedResolution.height );
+        if ( selectedResolution.width > 0 && selectedResolution.height > 0 && selectedResolution.scale > 0 && selectedResolution != currentResolution ) {
+            display.setResolution( selectedResolution );
 
 #if !defined( MACOS_APP_BUNDLE )
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );

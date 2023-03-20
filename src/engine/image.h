@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -167,6 +167,11 @@ namespace fheroes2
             return _height;
         }
 
+        Rect rect() const
+        {
+            return { _x, _y, _width, _height };
+        }
+
         void restore();
         void reset();
 
@@ -224,9 +229,12 @@ namespace fheroes2
     // Copies transform the layer from in to out. Both images must be of the same size.
     void CopyTransformLayer( const Image & in, Image & out );
 
-    Image CreateBlurredImage( const Image & in, int32_t blurRadius );
-
     Sprite CreateContour( const Image & image, uint8_t value );
+
+    // Make a transition to "in" image from left to right or vertically - from top to bottom using dithering (https://en.wikipedia.org/wiki/Dither).
+    // The direction of transition can be reversed.
+    void CreateDitheringTransition( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
+                                    const bool isVertical, const bool isReverse );
 
     Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height );
 
@@ -238,8 +246,8 @@ namespace fheroes2
 
     void DrawRect( Image & image, const Rect & roi, uint8_t value );
 
-    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, const bool flip,
-                               std::vector<std::pair<Point, Sprite>> & output );
+    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, std::vector<Point> & outputSquareId,
+                               std::vector<std::pair<Point, Rect>> & outputImageInfo );
 
     // Every image in the array must be the same size. Make sure that pointers aren't nullptr!
     Image ExtractCommonPattern( const std::vector<const Image *> & input );

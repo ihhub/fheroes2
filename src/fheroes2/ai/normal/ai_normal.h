@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -103,6 +103,26 @@ namespace AI
         uint32_t patrolDistance = 0;
     };
 
+    struct PriorityTask
+    {
+        PriorityTaskType type = PriorityTaskType::ATTACK;
+        double threatLevel = 0.0;
+        std::set<int> secondaryTaskTileId;
+
+        PriorityTask() = default;
+        PriorityTask( PriorityTaskType t, double threat )
+            : type( t )
+            , threatLevel( threat )
+        {}
+
+        PriorityTask( PriorityTaskType t, double threat, int secondaryTask )
+            : type( t )
+            , threatLevel( threat )
+        {
+            secondaryTaskTileId.insert( secondaryTask );
+        }
+    };
+
     struct BattleTargetPair
     {
         int cell = -1;
@@ -154,11 +174,11 @@ namespace AI
     private:
         void analyzeBattleState( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
-        Battle::Actions berserkTurn( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        Battle::Actions archerDecision( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        static Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
 
-        BattleTargetPair meleeUnitOffense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        BattleTargetPair meleeUnitDefense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
 
         SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
 
@@ -181,7 +201,7 @@ namespace AI
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
         // the auto battle should be interrupted (one way or another)
-        const uint32_t MAX_TURNS_WITHOUT_DEATHS = 50;
+        static const uint32_t MAX_TURNS_WITHOUT_DEATHS = 50;
 
         // Member variables related to the logic of checking the limit of the number of turns
         uint32_t _currentTurnNumber = 0;
@@ -254,10 +274,12 @@ namespace AI
         void CastleTurn( Castle & castle, const bool defensiveStrategy );
         bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
 
-        double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getCourierObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getCourierMainTarget( const Heroes & hero, double lowestPossibleValue ) const;
+
+        void updatePriorityTargets( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType );
 
         bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
                                 bool moreTasksForHeroes );

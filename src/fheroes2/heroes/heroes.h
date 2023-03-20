@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,7 +31,6 @@
 #include <exception>
 #include <list>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "army.h"
@@ -65,6 +64,7 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
+    struct ObjectRenderingInfo;
 }
 
 struct HeroSeedsForLevelUp
@@ -267,7 +267,7 @@ public:
 
     Heroes();
     Heroes( int heroid, int rc );
-    Heroes( int heroID, int race, int initialLevel );
+    Heroes( const int heroID, const int race, const uint32_t additionalExperience );
     Heroes( const Heroes & ) = delete;
 
     ~Heroes() override = default;
@@ -395,7 +395,7 @@ public:
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
-    bool BuySpellBook( const Castle *, int shrine = 0 );
+    bool BuySpellBook( const Castle * castle );
 
     const Route::Path & GetPath() const
     {
@@ -463,11 +463,14 @@ public:
     void ApplyPenaltyMovement( uint32_t penalty );
     void ActionSpellCast( const Spell & spell );
 
+    // Update map in the scout area around the Hero on radar (mini-map).
+    void ScoutRadar() const;
+
     bool MayCastAdventureSpells() const;
 
     // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
-    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getHeroSpritesPerTile() const;
-    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getHeroShadowSpritesPerTile() const;
+    std::vector<fheroes2::ObjectRenderingInfo> getHeroSpritesPerTile() const;
+    std::vector<fheroes2::ObjectRenderingInfo> getHeroShadowSpritesPerTile() const;
 
     void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
 
@@ -491,8 +494,12 @@ public:
 
     void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
     void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
-    void Scoute( const int tileIndex ) const;
-    int GetScoute() const;
+    void Scout( const int tileIndex ) const;
+    int GetScoutingDistance() const;
+
+    // Returns the area in map tiles around hero's position in his scout range.
+    fheroes2::Rect GetScoutRoi() const;
+
     uint32_t GetVisionsDistance() const;
 
     bool isShipMaster() const;
@@ -515,6 +522,11 @@ public:
     const fheroes2::Sprite & GetPortrait( const int type ) const
     {
         return Heroes::GetPortrait( portrait, type );
+    }
+
+    int getPortraitId() const
+    {
+        return portrait;
     }
 
     static int GetLevelFromExperience( uint32_t );
@@ -589,8 +601,11 @@ private:
 
     Army army;
 
-    int hid; /* hero id */
-    int portrait; /* hero id */
+    // Hero ID
+    int hid;
+    // Corresponds to the ID of the hero whose portrait is applied. Usually equal to the
+    // ID of this hero, unless a custom portrait is applied.
+    int portrait;
     int _race;
     int save_maps_object;
 
@@ -637,7 +652,7 @@ struct AllHeroes : public VecHeroes
     void Init();
     void clear();
 
-    void Scoute( int ) const;
+    void Scout( int ) const;
 
     void ResetModes( const uint32_t modes ) const
     {

@@ -6,7 +6,7 @@ on:
 jobs:
   translation:
     name: Translation update
-    if: ${{ github.repository == 'ihhub/fheroes2' && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) ) }}
+    if: ${{ github.repository == 'ihhub/fheroes2' && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
@@ -33,10 +33,53 @@ jobs:
     - name: Merge PO with POT
       run: |
         make -C files/lang -j 2 merge
+    - name: Generate statistics
+      run: |
+        mkdir -p docs/json
+        for PO_FILE in files/lang/*.po; do
+            STATISTICS="$(msgfmt --statistics --output-file=/dev/null -- "$PO_FILE" 2>&1)"
+            echo "$PO_FILE: $STATISTICS"
+            if [[ "$STATISTICS" =~ ([0-9]+)\ translated\ messages? ]]; then
+                TRANSLATED="${BASH_REMATCH[1]}"
+            else
+                TRANSLATED=0
+            fi
+            if [[ "$STATISTICS" =~ ([0-9]+)\ fuzzy\ translations? ]]; then
+                FUZZY="${BASH_REMATCH[1]}"
+            else
+                FUZZY=0
+            fi
+            if [[ "$STATISTICS" =~ ([0-9]+)\ untranslated\ messages? ]]; then
+                UNTRANSLATED="${BASH_REMATCH[1]}"
+            else
+                UNTRANSLATED=0
+            fi
+            OVERALL=$((TRANSLATED + FUZZY + UNTRANSLATED))
+            if ((OVERALL == 0)); then
+                PERCENT=0
+            else
+                PERCENT=$((TRANSLATED * 100 / OVERALL))
+            fi
+            LANGUAGE="$(basename "${PO_FILE%.po}")"
+            if [[ "$(head -n1 -- "$PO_FILE")" =~ ^\#\ (.+)\ translation ]]; then
+                LABEL="${BASH_REMATCH[1]}"
+            else
+                LABEL="$LANGUAGE"
+            fi
+            if ((PERCENT < 75)); then
+                COLOR="red"
+            elif ((PERCENT < 95)); then
+                COLOR="yellow"
+            else
+                COLOR="green"
+            fi
+            jq -n -c --arg lbl "$LABEL" --arg msg "$PERCENT%" --arg clr "$COLOR" "{ schemaVersion: 1, label: \$lbl, message: \$msg, color: \$clr }" > "docs/json/lang_$LANGUAGE.json"
+        done
     - name: Commit changes
       run: |
         git diff --name-only -z -- files/lang/*.po \
-        | xargs -r0 bash -c 'set -e; for NAME in "$@"; do if [[ "$(git diff "-I^\"POT-Creation-Date:[^\"]*\"$" -- "$NAME")" != "" ]]; then git add -- "$NAME"; fi; done' dummy
+        | xargs -r0 bash -c 'set -e; for NAME in "$@"; do if [[ -n "$(git diff "-I^\"POT-Creation-Date:[^\"]*\"$" -- "$NAME")" ]]; then git add -- "$NAME"; fi; done' dummy
+        git add -- docs/json/lang_*.json
         if git commit -m "Update translation files"; then git push origin HEAD; echo "CREATE_PR=YES" >> "$GITHUB_ENV"; fi
     - name: Create PR
       if: ${{ env.CREATE_PR == 'YES' }}

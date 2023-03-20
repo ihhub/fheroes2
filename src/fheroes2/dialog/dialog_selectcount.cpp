@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -40,10 +40,12 @@
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_keyboard.h"
 #include "ui_tool.h"
 
 namespace
@@ -225,8 +227,6 @@ bool Dialog::SelectCount( const std::string & header, uint32_t min, uint32_t max
 
 bool Dialog::InputString( const std::string & header, std::string & res, const std::string & title, const size_t charLimit )
 {
-    const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
@@ -238,10 +238,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     TextBox titlebox( title, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().isEvilInterfaceEnabled() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+    const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
     const uint32_t titleHeight = title.empty() ? 0 : titlebox.h() + 10;
-    FrameBox box( 10 + titleHeight + textbox.h() + 10 + sprite.height(), true );
+    FrameBox box( 10 + titleHeight + textbox.h() + 10 + inputArea.height(), true );
     const fheroes2::Rect & box_rt = box.GetArea();
 
     if ( !title.empty() )
@@ -254,21 +257,25 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     textbox.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.y = box_rt.y + 10 + titleHeight + textbox.h() + 10;
-    dst_pt.x = box_rt.x + ( box_rt.width - sprite.width() ) / 2;
-    fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
-    const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, sprite.width(), sprite.height() );
+    dst_pt.x = box_rt.x + ( box_rt.width - inputArea.width() ) / 2;
+    fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
+    const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, inputArea.width(), inputArea.height() );
 
     Text text( "_", Font::BIG );
-    fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
-    text.Blit( dst_pt.x + ( sprite.width() - text.w() ) / 2, dst_pt.y - 1 );
+    fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
+    text.Blit( dst_pt.x + ( inputArea.width() - text.w() ) / 2, dst_pt.y - 1 );
+
+    const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
-    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( okayButtonICNID, 0 ).height();
+    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, okayButtonICNID, 0, 1 );
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
-    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, system, 3, 4 );
+    const int cancelButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
+
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, cancelButtonIcnID, 0, 1 );
 
     if ( res.empty() )
         buttonOk.disable();
@@ -281,7 +288,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
-    le.OpenVirtualKeyboard();
+
+    const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
     // message loop
     while ( le.HandleEvents() ) {
@@ -299,7 +307,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             break;
         }
 
-        if ( le.KeyPress() ) {
+        if ( isInGameKeyboardRequired ) {
+            if ( le.MouseClickLeft( text_rt ) ) {
+                fheroes2::openVirtualKeyboard( res );
+                charInsertPos = res.size();
+            }
+        }
+        else if ( le.KeyPress() ) {
             if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE )
                 charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
             redraw = true;
@@ -314,15 +328,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
             text.Set( InsertString( res, charInsertPos, "_" ) );
 
-            if ( text.w() < sprite.width() - 24 ) {
-                fheroes2::Blit( sprite, display, text_rt.x, text_rt.y );
+            if ( text.w() < inputArea.width() - 24 ) {
+                fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
                 text.Blit( text_rt.x + ( text_rt.width - text.w() ) / 2, text_rt.y + 1 );
                 display.render();
             }
         }
     }
-
-    le.CloseVirtualKeyboard();
 
     return !res.empty();
 }

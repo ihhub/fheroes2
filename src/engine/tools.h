@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,6 +28,8 @@
 #include <cstdint>
 #include <functional>
 #include <iomanip>
+#include <limits>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <type_traits>
@@ -55,15 +57,14 @@ std::string StringUpper( std::string str );
 
 std::vector<std::string> StringSplit( const std::string &, const std::string & );
 
+// Function to replace the pattern in workString with patternReplacement. Here the patternReplacement is converted to lowercase except for the first word in a sentence.
+void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement );
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );
 
 int CountBits( uint32_t );
 
 std::string InsertString( const std::string &, size_t, const char * );
-
-bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path );
-std::vector<uint8_t> LoadFileToMem( const std::string & path );
 
 namespace fheroes2
 {
@@ -98,6 +99,46 @@ namespace fheroes2
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding );
 
     std::string abbreviateNumber( const int num );
+
+    // Performs a checked conversion of an integer value of type From to an integer type To. Returns an empty std::optional<To> if
+    // the source value does not fit into the target type.
+    template <typename To, typename From, typename = typename std::enable_if_t<std::is_integral_v<To> && std::is_integral_v<From>>>
+    constexpr std::optional<To> checkedCast( const From from )
+    {
+        // Both types have the same signedness
+        if constexpr ( std::is_signed_v<From> == std::is_signed_v<To> ) {
+            if ( from < std::numeric_limits<To>::min() || from > std::numeric_limits<To>::max() ) {
+                return {};
+            }
+
+            return static_cast<To>( from );
+        }
+        // From is signed, To is unsigned
+        else if constexpr ( std::is_signed_v<From> ) {
+            if ( from < 0 ) {
+                return {};
+            }
+
+            const std::make_unsigned_t<From> unsignedFrom = from;
+            if ( unsignedFrom > std::numeric_limits<To>::max() ) {
+                return {};
+            }
+
+            return static_cast<To>( from );
+        }
+        // From is unsigned, To is signed
+        else {
+            constexpr To maxTo = std::numeric_limits<To>::max();
+            static_assert( maxTo >= 0 );
+
+            constexpr std::make_unsigned_t<To> unsignedMaxTo = maxTo;
+            if ( from > unsignedMaxTo ) {
+                return {};
+            }
+
+            return static_cast<To>( from );
+        }
+    }
 }
 
 #endif

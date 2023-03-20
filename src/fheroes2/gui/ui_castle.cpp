@@ -191,7 +191,7 @@ namespace fheroes2
             break;
         default:
             assert( 0 );
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" )
         }
 
         const Sprite & castleImage = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
@@ -266,7 +266,7 @@ namespace fheroes2
         text.set( std::to_string( kingdomTreasures.gold ), fontType );
         text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + offsetY[3] + goldImage.height() + 1, output );
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TREASURY, 1 ), output, roi.x + 1, roi.y + 166 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BUTTON_SMALLER_EXIT, 0 ), output, roi.x + 1, roi.y + 166 );
 
         return roi;
     }
