@@ -48,8 +48,7 @@ namespace fheroes2
         Spanish,
         Swedish,
         Turkish,
-        Ukrainian,
-        Slovak
+        Ukrainian
     };
 
     class LanguageSwitcher
