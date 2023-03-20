@@ -654,12 +654,13 @@ void Heroes::MoveStep( Heroes & hero, int32_t indexTo, bool newpos )
     }
 }
 
-bool Heroes::MoveStep( bool fast )
+bool Heroes::MoveStep( const bool jumpToNextTile )
 {
-    const int32_t indexTo = Maps::GetDirectionIndex( GetIndex(), path.GetFrontDirection() );
+    const int32_t heroIndex = GetIndex();
+    const int32_t indexTo = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
     const int32_t indexDest = path.GetDestinationIndex( true );
 
-    if ( fast ) {
+    if ( jumpToNextTile ) {
         if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
             MoveStep( *this, indexTo, false );
         }
@@ -674,8 +675,8 @@ bool Heroes::MoveStep( bool fast )
     }
 
     const fheroes2::Point & mp = GetCenter();
-
-    if ( ( sprite_index % heroFrameCountPerTile ) == 0 ) {
+    const int currentHeroFrameIndex = ( sprite_index % heroFrameCountPerTile );
+    if ( currentHeroFrameIndex == 0 ) {
         if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
             MoveStep( *this, indexTo, false );
 
@@ -687,18 +688,18 @@ bool Heroes::MoveStep( bool fast )
             playHeroWalkingSound( world.GetTiles( mp.x, mp.y ).GetGround() );
         }
     }
-    else if ( ( sprite_index % heroFrameCountPerTile ) == 1 ) {
+    else if ( currentHeroFrameIndex == 1 ) {
         // This is a start of hero's movement. We should clear fog around him.
         Scout( indexTo );
     }
-    else if ( ( sprite_index % heroFrameCountPerTile ) == 8 ) {
+    else if ( currentHeroFrameIndex == 8 ) {
         sprite_index -= 8;
         MoveStep( *this, indexTo, true );
 
         // if we continue to move into the same direction we must skip first frame as it's for stand position only
         if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.front().GetIndex() ) ) ) {
             if ( GetKingdom().isControlHuman() ) {
-                playHeroWalkingSound( world.GetTiles( mp.x, mp.y ).GetGround() );
+                playHeroWalkingSound( world.GetTiles( heroIndex ).GetGround() );
             }
             ++sprite_index;
         }
@@ -970,29 +971,33 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
     _alphaValue = 255;
 }
 
-bool Heroes::Move( bool fast )
+bool Heroes::Move( const bool jumpToNextTile /* = false */ )
 {
     if ( Modes( ACTION ) )
         ResetModes( ACTION );
 
     // move hero
     if ( path.isValid() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
-        // fast move for hide AI
-        if ( fast ) {
+        // Jump to the next position.
+        if ( jumpToNextTile ) {
             direction = path.GetFrontDirection();
-            MoveStep( true );
+            MoveStep( jumpToNextTile );
 
+            // TODO: why don't we check !isFreeman() like it is done for a normal movement?
             return true;
         }
 
-        // if need change through the circle
-        if ( GetDirection() != path.GetFrontDirection() ) {
-            AngleStep( path.GetFrontDirection() );
+        // The hero is changing the direction of movement.
+        const int frontDirection = path.GetFrontDirection();
+
+        if ( GetDirection() != frontDirection ) {
+            AngleStep( frontDirection );
         }
         else {
-            SetValidDirectionSprite(); // in case of AI hero
+            // Set valid direction sprite in case of AI hero appearing from fog.
+            SetValidDirectionSprite();
 
-            if ( MoveStep() ) { // move
+            if ( MoveStep( jumpToNextTile ) ) {
                 return !isFreeman();
             }
         }
