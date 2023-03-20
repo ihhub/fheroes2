@@ -59,7 +59,7 @@
 namespace Battle
 {
     void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool, const Rand::DeterministicRandomGenerator & randomGenerator );
-    void NecromancySkillAction( HeroBase & hero, const uint32_t, const bool isControlHuman );
+    void NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsKilled, const bool isControlHuman );
 }
 
 namespace
