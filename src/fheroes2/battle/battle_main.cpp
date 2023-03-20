@@ -416,18 +416,16 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
         return;
 
     const uint32_t necromancyPercent = GetNecromancyPercent( hero );
-    const uint32_t raisedMonsterType = Monster::SKELETON;
 
-    const Monster mons( Monster::SKELETON );
     uint32_t raiseCount = enemyTroopsKilled * necromancyPercent / 100;
     if ( raiseCount == 0u )
         raiseCount = 1;
-    army.JoinTroop( mons, raiseCount, false );
+    army.JoinTroop( Monster::SKELETON, raiseCount, false );
 
     if ( isControlHuman )
-        arena.DialogBattleNecromancy( raiseCount, raisedMonsterType );
+        arena.DialogBattleNecromancy( raiseCount );
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << mons.GetMultiName() )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << "skeletons" )
 }
 
 uint32_t Battle::Result::AttackerResult() const

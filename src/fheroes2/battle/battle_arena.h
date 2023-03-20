@@ -135,7 +135,7 @@ namespace Battle
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const;
         int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
-        void DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const;
+        void DialogBattleNecromancy( const uint32_t raiseCount ) const;
 
         void FadeArena( bool clearMessageLog ) const;
 
