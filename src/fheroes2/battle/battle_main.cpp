@@ -417,7 +417,7 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
 
     const uint32_t necromancyPercent = GetNecromancyPercent( hero );
 
-    uint32_t raiseCount = std::max( enemyTroopsKilled * necromancyPercent / 100, 1U);
+    uint32_t raiseCount = std::max( enemyTroopsKilled * necromancyPercent / 100, 1U );
     army.JoinTroop( Monster::SKELETON, raiseCount, false );
 
     if ( isControlHuman )
