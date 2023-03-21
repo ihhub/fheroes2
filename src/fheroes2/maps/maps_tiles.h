@@ -416,9 +416,6 @@ namespace Maps
 
         static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
 
-        static void RestoreAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource );
-        static void RestoreAbandonedMineRightSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex );
-
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
 

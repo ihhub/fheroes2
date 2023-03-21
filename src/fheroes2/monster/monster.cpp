@@ -118,6 +118,7 @@ Monster::Monster( const Spell & sp )
     case Spell::HAUNT:
         id = GHOST;
         break;
+
     default:
         break;
     }

@@ -645,51 +645,6 @@ bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
     return isShadowSprite( ta._objectIcnType, ta._imageIndex );
 }
 
-void Maps::Tiles::RestoreAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource )
-{
-    if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {
-        objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
-        imageIndex = 82;
-    }
-    else if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 8 ) {
-        objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
-        imageIndex = 112;
-    }
-    else if ( MP2::OBJ_ICN_TYPE_EXTRAOVR == objectIcnType && imageIndex == 5 ) {
-        switch ( resource ) {
-        case Resource::ORE:
-            imageIndex = 0;
-            break;
-        case Resource::SULFUR:
-            imageIndex = 1;
-            break;
-        case Resource::CRYSTAL:
-            imageIndex = 2;
-            break;
-        case Resource::GEMS:
-            imageIndex = 3;
-            break;
-        case Resource::GOLD:
-            imageIndex = 4;
-            break;
-        default:
-            break;
-        }
-    }
-}
-
-void Maps::Tiles::RestoreAbandonedMineRightSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex )
-{
-    if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 9 ) {
-        objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
-        imageIndex = 113;
-    }
-    else if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 7 ) {
-        objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
-        imageIndex = 83;
-    }
-}
-
 std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex )
 {
     std::pair<int, int> res;
@@ -2285,9 +2240,52 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile )
 
     tile.QuantitySetResource( Resource::GOLD, 1000 );
 
-    Tiles::RestoreAbandonedMineLeftSprite( tile._objectIcnType, tile._imageIndex, Resource::GOLD );
+    auto restoreLeftSprite = []( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource ) {
+        if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {
+            objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
+            imageIndex = 82;
+        }
+        else if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 8 ) {
+            objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
+            imageIndex = 112;
+        }
+        else if ( MP2::OBJ_ICN_TYPE_EXTRAOVR == objectIcnType && imageIndex == 5 ) {
+            switch ( resource ) {
+            case Resource::ORE:
+                imageIndex = 0;
+                break;
+            case Resource::SULFUR:
+                imageIndex = 1;
+                break;
+            case Resource::CRYSTAL:
+                imageIndex = 2;
+                break;
+            case Resource::GEMS:
+                imageIndex = 3;
+                break;
+            case Resource::GOLD:
+                imageIndex = 4;
+                break;
+            default:
+                break;
+            }
+        }
+    };
+
+    auto restoreRightSprite = []( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
+        if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 9 ) {
+            objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
+            imageIndex = 113;
+        }
+        else if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 7 ) {
+            objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
+            imageIndex = 83;
+        }
+    };
+
+    restoreLeftSprite( tile._objectIcnType, tile._imageIndex, Resource::GOLD );
     for ( TilesAddon & addon : tile.addons_level1 ) {
-        Tiles::RestoreAbandonedMineLeftSprite( addon._objectIcnType, addon._imageIndex, Resource::GOLD );
+        restoreLeftSprite( addon._objectIcnType, addon._imageIndex, Resource::GOLD );
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {
@@ -2295,12 +2293,12 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile )
         TilesAddon * addon = rightTile.FindAddonLevel1( tile._uid );
 
         if ( addon ) {
-            Tiles::RestoreAbandonedMineRightSprite( addon->_objectIcnType, addon->_imageIndex );
+            restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
         }
 
         if ( rightTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
             rightTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
-            Tiles::RestoreAbandonedMineRightSprite( rightTile._objectIcnType, rightTile._imageIndex );
+            restoreRightSprite( rightTile._objectIcnType, rightTile._imageIndex );
         }
     }
 
