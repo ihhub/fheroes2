@@ -27,7 +27,7 @@
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
-#include <limits>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <system_error>
@@ -36,6 +36,7 @@
 
 #include "audio.h"
 #include "system.h"
+#include "tools.h"
 
 int main( int argc, char ** argv )
 {
@@ -67,6 +68,8 @@ int main( int argc, char ** argv )
         return EXIT_FAILURE;
     }
 
+    uint32_t tracksConverted = 0;
+
     for ( const std::string & inputFileName : inputFileNames ) {
         std::cout << "Processing " << inputFileName << "..." << std::endl;
 
@@ -77,26 +80,33 @@ int main( int argc, char ** argv )
             continue;
         }
 
-        const std::streampos pos = inputStream.tellg();
-        if ( pos <= 0 ) {
-            std::cerr << "File " << inputFileName << " is empty" << std::endl;
-            return EXIT_FAILURE;
-        }
-
-        const std::make_unsigned_t<std::streamoff> posOffset = pos;
-        if ( posOffset > std::numeric_limits<size_t>::max() ) {
+        const auto size = fheroes2::checkedCast<size_t>( static_cast<std::streamoff>( inputStream.tellg() ) );
+        if ( !size ) {
             std::cerr << "File " << inputFileName << " is too large" << std::endl;
             return EXIT_FAILURE;
         }
 
-        const size_t size = static_cast<size_t>( posOffset );
+        if ( size == 0U ) {
+            std::cerr << "File " << inputFileName << " is empty" << std::endl;
+            return EXIT_FAILURE;
+        }
 
         static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
 
-        std::vector<uint8_t> buf( size );
+        std::vector<uint8_t> buf( size.value() );
 
         inputStream.seekg( 0, std::ios_base::beg );
-        inputStream.read( reinterpret_cast<char *>( buf.data() ), buf.size() );
+
+        {
+            const auto streamSize = fheroes2::checkedCast<std::streamsize>( buf.size() );
+            if ( !streamSize ) {
+                std::cerr << "File " << inputFileName << " is too large" << std::endl;
+                return EXIT_FAILURE;
+            }
+
+            inputStream.read( reinterpret_cast<char *>( buf.data() ), streamSize.value() );
+        }
+
         if ( !inputStream ) {
             std::cerr << "Error reading from file " << inputFileName << std::endl;
             return EXIT_FAILURE;
@@ -116,12 +126,25 @@ int main( int argc, char ** argv )
             return EXIT_FAILURE;
         }
 
-        outputStream.write( reinterpret_cast<char *>( buf.data() ), buf.size() );
+        {
+            const auto streamSize = fheroes2::checkedCast<std::streamsize>( buf.size() );
+            if ( !streamSize ) {
+                std::cerr << inputFileName << ": resulting MIDI is too large" << std::endl;
+                return EXIT_FAILURE;
+            }
+
+            outputStream.write( reinterpret_cast<char *>( buf.data() ), streamSize.value() );
+        }
+
         if ( !outputStream ) {
             std::cerr << "Error writing to file " << outputFilePath << std::endl;
             return EXIT_FAILURE;
         }
+
+        ++tracksConverted;
     }
+
+    std::cout << "Total converted tracks: " << tracksConverted << std::endl;
 
     return EXIT_SUCCESS;
 }

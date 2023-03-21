@@ -231,14 +231,8 @@ std::string Battle::Unit::GetShotString() const
 
 std::string Battle::Unit::GetSpeedString() const
 {
-    const uint32_t speedValue = GetSpeed( true, false );
-
-    std::string output( Speed::String( speedValue ) );
-    output += " (";
-    output += std::to_string( speedValue );
-    output += ')';
-
-    return output;
+    const uint32_t speed = GetSpeed( true, false );
+    return Troop::GetSpeedString( speed );
 }
 
 uint32_t Battle::Unit::GetInitialCount() const
@@ -740,30 +734,34 @@ uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool ski
     return resurrect;
 }
 
-uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg )
+uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected )
 {
-    uint32_t killed = ApplyDamage( dmg );
-    uint32_t resurrect;
+    killed = ApplyDamage( dmg );
 
-    if ( killed )
-        switch ( enemy.GetID() ) {
-        case Monster::GHOST:
-            resurrect = killed * static_cast<Monster &>( enemy ).GetHitPoints();
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect )
-            // grow troop
-            enemy.Resurrect( resurrect, true, false );
-            break;
-
-        case Monster::VAMPIRE_LORD:
-            resurrect = killed * Monster::GetHitPoints();
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect )
-            // restore hit points
-            enemy.Resurrect( resurrect, false, false );
-            break;
-
-        default:
-            break;
+    if ( killed == 0 ) {
+        if ( ptrResurrected != nullptr ) {
+            *ptrResurrected = 0;
         }
+        return killed;
+    }
+
+    uint32_t resurrected = 0;
+    if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
+        resurrected = killed * enemy.Monster::GetHitPoints();
+        enemy.Resurrect( resurrected, true, false );
+    }
+    else if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+        resurrected = killed * Monster::GetHitPoints();
+        enemy.Resurrect( resurrected, false, false );
+    }
+
+    if ( resurrected > 0 ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrected );
+    }
+
+    if ( ptrResurrected != nullptr ) {
+        *ptrResurrected = resurrected;
+    }
 
     return killed;
 }

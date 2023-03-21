@@ -181,10 +181,11 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
         _interface->RedrawActionAttackPart1( attacker, defender, attackTargets );
     }
 
-    TargetsApplyDamage( attacker, attackTargets );
+    uint32_t resurrected = 0;
+    TargetsApplyDamage( attacker, attackTargets, resurrected );
 
     if ( _interface ) {
-        _interface->RedrawActionAttackPart2( attacker, defender, attackTargets );
+        _interface->RedrawActionAttackPart2( attacker, defender, attackTargets, resurrected );
     }
 
     // Then apply the attacker's built-in spell
@@ -645,14 +646,16 @@ void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
     }
 }
 
-void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets )
+void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected )
 {
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
 
     for ( TargetInfo & target : targets ) {
         assert( target.defender != nullptr );
 
-        target.killed = target.defender->ApplyDamage( attacker, target.damage );
+        uint32_t resurrectIncrease = 0;
+        target.defender->ApplyDamage( attacker, target.damage, target.killed, &resurrectIncrease );
+        resurrected += resurrectIncrease;
     }
 }
 
@@ -806,6 +809,17 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
     }
 
     TargetsInfo targets;
+
+    const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, 0, hero );
+
+    if ( firstUnitResist >= _randomGenerator.Get( 1, 100 ) ) {
+        targets.emplace_back();
+        TargetInfo & res = targets.back();
+        res.defender = unit;
+        res.resist = true;
+        return targets;
+    }
+
     const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit );
     for ( size_t i = 0; i < targetUnits.size(); ++i ) {
         targets.emplace_back();
@@ -883,7 +897,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             ignoreMagicResistance = true;
 
             if ( playResistSound ) {
-                *playResistSound = false;
+                *playResistSound = true;
             }
             break;
         }
@@ -975,7 +989,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
 
         if ( _interface )
             _interface->RedrawActionTowerPart1( *tower, *unit );
-        target.killed = unit->ApplyDamage( *tower, target.damage );
+        unit->ApplyDamage( *tower, target.damage, target.killed, nullptr );
         if ( _interface )
             _interface->RedrawActionTowerPart2( *tower, target );
     }
