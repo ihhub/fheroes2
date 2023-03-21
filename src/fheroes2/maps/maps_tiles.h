@@ -383,7 +383,9 @@ namespace Maps
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
 
-        // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary gold mine
+        // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary gold mine. This method updates
+        // all sprites and sets object types for non-action tiles. The object type for the action tile (i.e. the main tile)
+        // remains unchanged and should be updated separately.
         static void RestoreAbandonedMine( Tiles & tile );
 
         // Some tiles have incorrect object type. This is due to original Editor issues.
