@@ -137,29 +137,29 @@ namespace
     void DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t resourceType )
     {
         const payment_t info = ProfitConditions::FromMine( resourceType );
-        int32_t resouceCount = 0;
+        int32_t resourceCount = 0;
 
         switch ( resourceType ) {
         case Resource::MERCURY:
-            resouceCount = info.mercury;
+            resourceCount = info.mercury;
             break;
         case Resource::WOOD:
-            resouceCount = info.wood;
+            resourceCount = info.wood;
             break;
         case Resource::ORE:
-            resouceCount = info.ore;
+            resourceCount = info.ore;
             break;
         case Resource::SULFUR:
-            resouceCount = info.sulfur;
+            resourceCount = info.sulfur;
             break;
         case Resource::CRYSTAL:
-            resouceCount = info.crystal;
+            resourceCount = info.crystal;
             break;
         case Resource::GEMS:
-            resouceCount = info.gems;
+            resourceCount = info.gems;
             break;
         case Resource::GOLD:
-            resouceCount = info.gold;
+            resourceCount = info.gold;
             break;
         default:
             // You're passing an invalid resource type. Check your logic!
@@ -168,10 +168,10 @@ namespace
         }
 
         std::string perday = _( "%{count} / day" );
-        StringReplace( perday, "%{count}", resouceCount );
+        StringReplace( perday, "%{count}", resourceCount );
 
         std::string msg = str;
-        switch ( resouceCount ) {
+        switch ( resourceCount ) {
         case 1:
             StringReplace( msg, "%{count}", _( "one" ) );
             break;
@@ -179,7 +179,7 @@ namespace
             StringReplace( msg, "%{count}", _( "two" ) );
             break;
         default:
-            StringReplace( msg, "%{count}", resouceCount );
+            StringReplace( msg, "%{count}", resourceCount );
             break;
         }
 
@@ -2081,7 +2081,7 @@ namespace
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
 
-                Maps::Tiles::RestoreAbandonedMine( tile );
+                Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
                 hero.SetMapsObject( MP2::OBJ_MINES );
                 tile.QuantitySetColor( hero.GetColor() );
 

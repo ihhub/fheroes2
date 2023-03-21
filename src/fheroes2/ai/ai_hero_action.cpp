@@ -1317,7 +1317,7 @@ namespace
         if ( result.AttackerWins() ) {
             hero.IncreaseExperience( result.GetExperienceAttacker() );
 
-            Maps::Tiles::RestoreAbandonedMine( tile );
+            Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
             hero.SetMapsObject( MP2::OBJ_MINES );
             tile.QuantitySetColor( hero.GetColor() );
         }

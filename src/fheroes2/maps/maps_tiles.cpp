@@ -32,6 +32,7 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <type_traits>
 
@@ -62,11 +63,14 @@
 #include "objtown.h"
 #include "objwatr.h"
 #include "objxloc.h"
+#include "payment.h"
+#include "profit.h"
 #include "race.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "spell.h"
 #include "til.h"
+#include "tools.h"
 #include "trees.h"
 #include "ui_object_rendering.h"
 #include "world.h"
@@ -2233,14 +2237,40 @@ void Maps::Tiles::RemoveJailSprite()
     Remove( _uid );
 }
 
-void Maps::Tiles::RestoreAbandonedMine( Tiles & tile )
+void Maps::Tiles::RestoreAbandonedMine( Tiles & tile, const int resource )
 {
     assert( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE );
     assert( tile._uid != 0 );
 
-    tile.QuantitySetResource( Resource::GOLD, 1000 );
+    const payment_t info = ProfitConditions::FromMine( resource );
+    std::optional<uint32_t> resourceCount;
 
-    auto restoreLeftSprite = []( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource ) {
+    switch ( resource ) {
+    case Resource::ORE:
+        resourceCount = fheroes2::checkedCast<uint32_t>( info.ore );
+        break;
+    case Resource::SULFUR:
+        resourceCount = fheroes2::checkedCast<uint32_t>( info.sulfur );
+        break;
+    case Resource::CRYSTAL:
+        resourceCount = fheroes2::checkedCast<uint32_t>( info.crystal );
+        break;
+    case Resource::GEMS:
+        resourceCount = fheroes2::checkedCast<uint32_t>( info.gems );
+        break;
+    case Resource::GOLD:
+        resourceCount = fheroes2::checkedCast<uint32_t>( info.gold );
+        break;
+    default:
+        assert( 0 );
+        break;
+    }
+
+    assert( resourceCount.has_value() && resourceCount > 0U );
+
+    tile.QuantitySetResource( resource, resourceCount.value() );
+
+    auto restoreLeftSprite = [resource]( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
         if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {
             objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
             imageIndex = 82;
@@ -2283,9 +2313,9 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile )
         }
     };
 
-    restoreLeftSprite( tile._objectIcnType, tile._imageIndex, Resource::GOLD );
+    restoreLeftSprite( tile._objectIcnType, tile._imageIndex );
     for ( TilesAddon & addon : tile.addons_level1 ) {
-        restoreLeftSprite( addon._objectIcnType, addon._imageIndex, Resource::GOLD );
+        restoreLeftSprite( addon._objectIcnType, addon._imageIndex );
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {

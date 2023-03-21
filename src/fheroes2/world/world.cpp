@@ -58,6 +58,7 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
+#include "spell.h"
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
@@ -1405,6 +1406,37 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1003_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
+        for ( Maps::Tiles & tile : w.vec_tiles ) {
+            if ( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE ) {
+                const int32_t spellId = Maps::getSpellIdFromTile( tile );
+
+                if ( spellId == Spell::HAUNT ) {
+                    const ResourceCount rc = tile.QuantityResourceCount();
+                    const int resource = rc.isValid() ? rc.first : Resource::GOLD;
+
+                    Maps::Tiles::RestoreAbandonedMine( tile, resource );
+
+                    Heroes * hero = tile.GetHeroes();
+                    if ( hero ) {
+                        hero->SetMapsObject( MP2::OBJ_MINES );
+                    }
+                    else {
+                        tile.SetObject( MP2::OBJ_MINES );
+                    }
+                }
+                else {
+                    Troop & guardians = w.GetCapturedObject( tile.GetIndex() ).GetTroop();
+
+                    tile.MonsterSetCount( guardians.isValid() ? guardians.GetCount() : 0 );
+
+                    guardians.Reset();
+                }
+            }
+        }
+    }
 
     return msg;
 }
