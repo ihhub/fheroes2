@@ -8890,11 +8890,11 @@ msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
 msgstr ""
-"Skapar en stor eldboll som träffar ett utvalt område, tar skada på alla "
+"Skapar ett stort eldklot som träffar ett utvalt område och skadar alla "
 "varelser i närheten."
 
 msgid "Fireball"
-msgstr "Eldboll"
+msgstr "Eldklot"
 
 msgid "Fireblast"
 msgstr "Eldexplosion"
@@ -8903,17 +8903,17 @@ msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
 "center point of the spell, rather than one."
 msgstr ""
-"En förbättrad version av Eldboll. Eldexplosion angriper två hexagonaler "
+"En förbättrad version av Eldklot. Eldexplosion angriper två hexagonaler "
 "runtomkring den centrala punkten, istället för en."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
-msgstr "Får en blixt att slå ned på en varelse."
+msgstr "Får en blixt att slå ned på vald varelse."
 
 msgid "Lightning Bolt"
 msgstr "Ljusblixt"
 
 msgid "Chain Lightning"
-msgstr ""
+msgstr "Kedjeblixt"
 
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
@@ -8931,7 +8931,8 @@ msgstr "Teleportera"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
-msgstr "Teleporterar vald varelse till valfri position på slagfältet."
+msgstr 
+"Teleporterar vald varelse till valfri position på slagfältet."
 
 msgid "Cure"
 msgstr "Hela"
@@ -8940,6 +8941,8 @@ msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
+"Skingrar all onda besvärjelser från en av dina varelser, återställer upp till "
+"%{count} hälsopoäng per Trollkonststyrka.
 
 msgid "Mass Cure"
 msgstr ""
@@ -8948,24 +8951,23 @@ msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
 "%{count} HP per level of spell power, per creature."
 msgstr ""
-"Tar bort alla negativa besvärjelser som har kastats på dina trupper och "
-"återställer upp till %{count} HP per besvärjelse-level, per varelse."
+"Tar bort alla onda besvärjelser som har kastats på dina trupper och "
+"återställer upp till %{count} hälsopoäng per Trollkonststyrka per varelse."
 
 msgid "Resurrect"
-msgstr "Återuppliva"
+msgstr "Återupplivning"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
-msgstr ""
-"Återupplivar varelser från en skadad eller död enhet tills striden slutar."
+msgstr "Återupplivar varelser från en skadad eller död enhet tills striden slutar."
 
 msgid "Resurrect True"
-msgstr ""
+msgstr "Äkta Återupplivning"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
-msgstr "Återupplivar varelser från en skadad eller död enhet permanent."
+msgstr "Återupplivar varelser från en skadad eller död varelse permanent."
 
 msgid "Haste"
-msgstr ""
+msgstr "Skynda"
 
 msgid "Increases the speed of any creature by %{count}."
 msgstr "Höjer en varelses hastighet med %{count}."
@@ -8974,26 +8976,25 @@ msgid "Increases the speed of all of your creatures by %{count}."
 msgstr "Höjer alla dina varelsers hastighet med %{count}."
 
 msgid "Mass Haste"
-msgstr ""
+msgstr "Masskyndning"
 
 msgid "Slows target to half movement rate."
-msgstr "Saktar ned målet till hälften."
+msgstr "Saktar ned varelsens hastighet till hälften."
 
 msgid "spell|Slow"
-msgstr "Långsam"
+msgstr "Förslöa"
 
 msgid "Mass Slow"
-msgstr ""
+msgstr "Massförslöning"
 
 msgid "Slows all enemies to half movement rate."
-msgstr "Saktar ned alla fiender till hälften."
+msgstr "Saktar ned alla fiendevarelser till hälften."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
 msgstr ""
 
-#, fuzzy
 msgid "spell|Blind"
-msgstr "Långsam"
+msgstr "Förblinda"
 
 msgid "Bless"
 msgstr "Välsignelse"
@@ -9002,24 +9003,26 @@ msgid "Causes the selected creatures to inflict maximum damage."
 msgstr "Får en varelse att tilldela maximal skada."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr "Får alla dina enheter att tilldela maximal skada."
+msgstr "Får alla dina varelser att tilldela maximal skada."
 
 msgid "Mass Bless"
-msgstr ""
+msgstr "Massvälsignelse"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr ""
+msgstr "Ökar vald varelses Försvarsförmåga genom förtrollning"
 
 msgid "Stoneskin"
-msgstr "Stenskinn"
+msgstr "Stenhud"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
 "version of Stoneskin."
 msgstr ""
+"Ökar Försvarförmågan för vald varelse. Detta är en förbättrad version "
+"av Stenhud."
 
 msgid "Steelskin"
-msgstr "Stålskinn"
+msgstr "Stålhud
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Får en varelse att tilldela minimal skada."
@@ -9031,36 +9034,36 @@ msgid "Causes all enemy troops to inflict minimum damage."
 msgstr "Får alla fiendetrupper att tilldela minimal skada."
 
 msgid "Mass Curse"
-msgstr ""
+msgstr "Massförbannelse"
 
 msgid "Damages all undead in the battle."
 msgstr "Skadar alla odöda i striden."
 
 msgid "Holy Word"
-msgstr "Heligt ord"
+msgstr "Heligt Ord"
 
 msgid ""
 "Damages all undead in the battle.  This is an improved version of Holy Word."
 msgstr ""
-"Skadar alla odöda i striden. Det är en förbättrad version av Heligt ord."
+"Skadar alla odöda i striden. Det är en förbättrad version av Heligt Ord."
 
 msgid "Holy Shout"
-msgstr "Heligt rop"
+msgstr "Heligt Rop"
 
 msgid "Anti-Magic"
 msgstr "Antimagi"
 
 msgid "Prevents harmful magic against the selected creatures."
-msgstr ""
+msgstr "Förhindrar onda besvärjelser mot vald varelse."
 
 msgid "Dispel Magic"
-msgstr "Skingra magi"
+msgstr "Skingra Magi"
 
 msgid "Removes all magic spells from a single target."
-msgstr ""
+msgstr "Skingrar alla besvärjelser, goda som onda från en vald varelse."
 
 msgid "Mass Dispel"
-msgstr ""
+msgstr "Masskingring"
 
 msgid "Removes all magic spells from all creatures."
 msgstr "Tar bort alla magiska besvärjelser från alla varelser."
@@ -9069,7 +9072,7 @@ msgid "Causes a magic arrow to strike the selected target."
 msgstr "Skjuter en magisk pil på valt mål."
 
 msgid "Magic Arrow"
-msgstr "Magisk pil"
+msgstr "Magisk Pil"
 
 msgid "Berserker"
 msgstr "Bärsärk"
@@ -9083,6 +9086,7 @@ msgstr "Harmageddon"
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
+"Gudomlig fasa drabbar slagfältet som orsakar stor skada till samtliga varelser.
 
 msgid "Elemental Storm"
 msgstr "Elementstorm"
@@ -9104,8 +9108,7 @@ msgid "Paralyze"
 msgstr "Paralysera"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
-msgstr ""
-"Inriktade varelser är paralyserade, de kan varken förflytta sig eller hämnas."
+msgstr "Valda varelser är paralyserade, de kan varken förflytta sig eller hämnas."
 
 msgid "Hypnotize"
 msgstr "Hypnotisera"
@@ -9119,7 +9122,7 @@ msgid "Cold Ray"
 msgstr "Köldstråle"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr "Tömmer kroppsvärme från en enskild fiendeenhet."
+msgstr "Tömmer kroppsvärme från en enskild fiendetrupp."
 
 msgid "Cold Ring"
 msgstr "Köldring"
@@ -9170,7 +9173,7 @@ msgid "Animate Dead"
 msgstr "Ge liv åt död"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
-msgstr ""
+msgstr "Återuppväcker skadade eller stupade odöda varelser permanent."
 
 msgid "Mirror Image"
 msgstr "Spegelbild"
@@ -9185,17 +9188,16 @@ msgstr ""
 "om de tar skada."
 
 msgid "Halves damage received from ranged attacks for a single unit."
-msgstr "Halverar skada från avståndsattacker för en enhet."
+msgstr "Halverar skada från projektilsattacker för en varelse."
 
 msgid "Shield"
 msgstr "Sköld"
 
 msgid "Halves damage received from ranged attacks for all of your units."
-msgstr ""
-"Halverar skadan som tas emot från avståndsattacker för alla dina enheter."
+msgstr "Halverar skadan till alla dina trupper från projektilattacker."
 
 msgid "Mass Shield"
-msgstr ""
+msgstr "Massköld"
 
 msgid "Summon Earth Elemental"
 msgstr "Framkalla Jordandar"
@@ -9282,10 +9284,10 @@ msgid "Allows the caster to magically transport to a nearby location."
 msgstr "Låter kastaren magiskt transportera sig till en närliggande plats."
 
 msgid "Dimension Door"
-msgstr "Dimensionsdörr"
+msgstr "Dimensionsportal"
 
 msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
+msgstr "För tillbaka Hjälten till någon stad eller slott som du kontrollerar."
 
 msgid "Town Gate"
 msgstr "Stadsport"
@@ -9294,13 +9296,15 @@ msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
 msgstr ""
+"För tillbaka Hjälten till valfri stad eller slott som du kontrollerar."
 
 msgid "Visions"
-msgstr "Visioner"
+msgstr "Syner"
 
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
+"Syner förutspår det sannolika utfallet av en strid med ett neutralt fiendeläger."
 
 msgid "Haunt"
 msgstr "Hemsök"
@@ -9344,6 +9348,8 @@ msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
+"Förvandlar varelsen till sten. En förstenad varelse mottar bara hälften skada "
+"från en direktattack."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr ""
@@ -9356,7 +9362,7 @@ msgstr "Din hjälte har %{point} magipoäng kvar."
 
 #, fuzzy
 msgid "View Adventure Spells"
-msgstr "Äventyrsinställningar"
+msgstr "Visa Kartbesvärjelser"
 
 msgid "View Combat Spells"
 msgstr "Visa Stridsbesvärjelser"
@@ -9370,28 +9376,28 @@ msgstr "Visa nästa blad"
 msgid "Close Spellbook"
 msgstr "Stäng Magibok"
 
-#, fuzzy
 msgid "View %{spell}"
-msgstr "Visa %{name}"
+msgstr "Visa %{spell}"
 
-#, fuzzy
 msgid "This spell does %{damage} points of damage."
-msgstr "Besvärjelsen %{spell} ger %{damage} skada."
+msgstr "%{spell}besvärjelsen ger %{damage} skada."
 
-#, fuzzy
+
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
-msgstr "Kasta %{spell} på %{monster}"
+msgstr ""
+"Denna besvärjelse framkallar\n"
+"%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
 msgstr ""
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
-msgstr ""
+msgstr "Denna besvärjelse framkallar %{count} %{monster} för att vakta gruvan."
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "Närmsta stad är %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
 msgstr ""
@@ -9433,7 +9439,7 @@ msgid "south"
 msgstr "syd"
 
 msgid "south-east"
-msgstr "sydöst"
+msgstr "sydost"
 
 msgid "The truth is out there."
 msgstr "Sanningen finns där ute."
