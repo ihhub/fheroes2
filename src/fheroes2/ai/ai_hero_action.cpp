@@ -643,6 +643,10 @@ namespace
             }
         }
 
+#ifndef WITH_DEBUG
+        (void)objectType;
+#endif
+
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
     }
 
