@@ -1,13 +1,12 @@
 # Ukrainian translation of fheroes2
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2022
+# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 02:36+0000\n"
+"POT-Creation-Date: 2023-03-21 03:14+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -665,6 +664,13 @@ msgid "View %{monster} info"
 msgstr "Дізнатися про %{monster}"
 
 #, fuzzy
+msgid "Fly %{monster} here"
+msgstr "%{monster} летітиме сюди"
+
+msgid "Move %{monster} here"
+msgstr ""
+
+#, fuzzy
 msgid "Shoot %{monster}"
 msgstr "Вистрілити у %{monster}"
 
@@ -678,13 +684,6 @@ msgstr[2] "(Залишилося %{count} пострілів)"
 #, fuzzy
 msgid "Attack %{monster}"
 msgstr "Атакувати %{monster}"
-
-#, fuzzy
-msgid "Fly %{monster} here"
-msgstr "%{monster} летітиме сюди"
-
-msgid "Move %{monster} here"
-msgstr ""
 
 msgid "Turn %{turn}"
 msgstr ""
@@ -814,6 +813,18 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} загинув."
 msgstr[1] "%{count} %{defender} загинули."
 msgstr[2] "%{count} %{defender} загинуло."
+
+msgid "1 soul is absorbed."
+msgid_plural "%{count} souls are absorbed."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "1 %{unit} is revived."
+msgid_plural "%{count} %{unit} are revived."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
@@ -1598,6 +1609,10 @@ msgstr ""
 #, fuzzy
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Вищий сувій"
+
+#, fuzzy
+msgid "campaignBonus|Gauntlets"
+msgstr "Баліста"
 
 #, fuzzy
 msgid "campaignBonus|Hideous Mask"
@@ -2694,7 +2709,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"'Grouped' combat formation bunches your army toget her in the center of your "
+"'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
 
@@ -2797,17 +2812,6 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
-msgid "You can't afford to upgrade your troops!"
-msgstr ""
-
-msgid ""
-"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
-"upgrade them?"
-msgstr ""
-
-msgid "Are you sure you want to dismiss this army?"
-msgstr ""
-
 #, fuzzy
 msgid "Attack Skill"
 msgstr "Атака"
@@ -2829,6 +2833,17 @@ msgid "Hit Points"
 msgstr ""
 
 msgid "Hit Points Left"
+msgstr ""
+
+msgid "You can't afford to upgrade your troops!"
+msgstr ""
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+
+msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
 msgid "Followers"
@@ -2988,14 +3003,6 @@ msgstr ""
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
-msgstr ""
-
-msgid "Attention"
-msgstr ""
-
-msgid ""
-"Your version of Heroes of Might and Magic II does not support any other "
-"languages than English."
 msgstr ""
 
 #, fuzzy
@@ -3280,6 +3287,18 @@ msgstr "Мапа: "
 msgid ""
 "\n"
 "\n"
+"Month: "
+msgstr ""
+
+msgid ", Week: "
+msgstr ""
+
+msgid ", Day: "
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
 "Location: "
 msgstr ""
 
@@ -3316,14 +3335,9 @@ msgstr ""
 msgid "Select Skill:"
 msgstr ""
 
-msgid "Location: "
-msgstr ""
-
-msgid ""
-"\n"
-"\n"
-"Map Type:\n"
-msgstr ""
+#, fuzzy
+msgid "Map Type:\n"
+msgstr "Тип мапи"
 
 msgid "The Succession Wars"
 msgstr ""
@@ -3698,15 +3712,15 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-msgid "QA and Support"
-msgstr ""
+#, fuzzy
+msgid "Development"
+msgstr "Розробка"
 
 msgid "Visit us at "
 msgstr ""
 
-#, fuzzy
-msgid "Development"
-msgstr "Розробка"
+msgid "QA and Support"
+msgstr ""
 
 msgid "Dev and Support"
 msgstr ""
@@ -3877,21 +3891,25 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-msgid "This file contains a save with an invalid game type."
-msgstr ""
+#, fuzzy
+msgid "The save file is corrupted."
+msgstr "Немає файлів збереження для завантаження."
 
-msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
-msgstr ""
-
-msgid "Usupported save format: "
+msgid "Unsupported save format: "
 msgstr ""
 
 msgid "Current game version: "
 msgstr ""
 
 msgid "Last supported version: "
+msgstr ""
+
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+msgid ""
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -4356,6 +4374,9 @@ msgid ""
 "it even if he found it - all his artifact slots are full."
 msgstr ""
 
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr ""
+
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
@@ -4367,9 +4388,6 @@ msgid "Nothing here. Where could it be?"
 msgstr ""
 
 msgid "Try searching on clear ground."
-msgstr ""
-
-msgid "Digging for artifacts requires a whole day, try again tomorrow."
 msgstr ""
 
 msgid "A miniature view of the known world. Left click to move viewing area."
@@ -4454,10 +4472,25 @@ msgstr ""
 msgid "View %{skill} Info"
 msgstr ""
 
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
+
 msgid "Kingdom Income"
 msgstr ""
 
 msgid "Kingdom Income per day."
+msgstr ""
+
+msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
 
 msgid "English"
@@ -4515,6 +4548,9 @@ msgid "Hungarian"
 msgstr ""
 
 msgid "Danish"
+msgstr ""
+
+msgid "Slovak"
 msgstr ""
 
 msgid ", FPS: "
@@ -4918,12 +4954,12 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr ""
 
+msgid "You enter the faerie ring, but nothing happens."
+msgstr ""
+
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
-msgstr ""
-
-msgid "You enter the faerie ring, but nothing happens."
 msgstr ""
 
 msgid ""
@@ -5211,11 +5247,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
-"wish to enter?"
-msgstr ""
-
-msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
@@ -5259,6 +5290,11 @@ msgid ""
 msgstr ""
 
 msgid "You gain control of a %{name}."
+msgstr ""
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
 msgstr ""
 
 msgid ""
@@ -5540,16 +5576,14 @@ msgid ""
 "the cave mouth. Will you enter?"
 msgstr ""
 
+msgid "Except for evidence of a terrible battle, the cave is empty."
+msgstr ""
+
 msgid ""
 "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, "
 "\"you will fight and surely die. But I will give you a choice of deaths. You "
 "may fight me, or you may fight my servants. Do you prefer to fight my "
 "servants?\""
-msgstr ""
-
-msgid ""
-"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
-"gold."
 msgstr ""
 
 msgid ""
@@ -5569,17 +5603,19 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Seeing that you do not have %{count} gold, the demon slashes you with its "
+"claws, and the last thing you see is a red haze."
+msgstr ""
+
+msgid ""
 "The Demon leaps upon you and has its claws at your throat before you can "
 "even draw your sword. \"Your life is mine,\" it says. \"I will sell it back "
 "to you for %{count} gold.\""
 msgstr ""
 
 msgid ""
-"Seeing that you do not have %{count} gold, the demon slashes you with its "
-"claws, and the last thing you see is a red haze."
-msgstr ""
-
-msgid "Except for evidence of a terrible battle, the cave is empty."
+"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
+"gold."
 msgstr ""
 
 msgid ""
@@ -5685,6 +5721,9 @@ msgstr ""
 msgid "This eye seems to be intently studying its surroundings."
 msgstr ""
 
+msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgstr ""
+
 msgid ""
 "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you "
 "shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept "
@@ -5700,17 +5739,14 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
-"so here's your reward. Now begone.\""
-msgstr ""
-
-msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
 "you with a paw, knocking you to the ground. Another blow makes the world go "
 "black, and you know no more."
 msgstr ""
 
-msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgid ""
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
 msgstr ""
 
 msgid ""
@@ -5751,6 +5787,12 @@ msgstr ""
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
+msgid "This spell cannot be used on a boat."
+msgstr ""
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
@@ -5765,11 +5807,6 @@ msgid ""
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
-msgstr ""
-
-msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
 msgstr ""
 
 msgid "Are you sure you want to dismiss this Hero?"
@@ -5854,12 +5891,6 @@ msgid "This spell is already in use."
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
-msgstr ""
-
-msgid "This spell cannot be used on a boat."
-msgstr ""
-
-msgid "This spell can be casted only nearby water."
 msgstr ""
 
 msgid ""
@@ -6747,12 +6778,72 @@ msgid "Alchemist Lab"
 msgstr "Алхімічна лабораторія"
 
 #, fuzzy
+msgid "Sign"
+msgstr "Показчик"
+
+#, fuzzy
+msgid "Buoy"
+msgstr "Буй"
+
+#, fuzzy
+msgid "Skeleton"
+msgstr "Скелет"
+
+#, fuzzy
 msgid "Daemon Cave"
 msgstr "Печера Демона"
 
 #, fuzzy
+msgid "Treasure Chest"
+msgstr "Сундук зі скарбом"
+
+#, fuzzy
 msgid "Faerie Ring"
 msgstr "Коло Фей"
+
+#, fuzzy
+msgid "Campfire"
+msgstr "Вогнище"
+
+#, fuzzy
+msgid "Fountain"
+msgstr "Фонтан"
+
+#, fuzzy
+msgid "Gazebo"
+msgstr "Альтанка"
+
+#, fuzzy
+msgid "Genie Lamp"
+msgstr "Лампа джина"
+
+#, fuzzy
+msgid "Archer's House"
+msgstr "Дім стрільця"
+
+#, fuzzy
+msgid "Goblin Hut"
+msgstr "Гоблінска хатина"
+
+#, fuzzy
+msgid "Dwarf Cottage"
+msgstr "Хатинка гнома"
+
+#, fuzzy
+msgid "Peasant Hut"
+msgstr "Селянська хата"
+
+#, fuzzy
+msgid "Stables"
+msgstr "Стайні"
+
+#, fuzzy
+msgid "Alchemist's Tower"
+msgstr "Вежа Алхіміка"
+
+#, fuzzy
+msgid "Event"
+msgstr "Подія"
 
 #, fuzzy
 msgid "Dragon City"
@@ -6760,7 +6851,10 @@ msgstr "Місто Драконів"
 
 #, fuzzy
 msgid "Lighthouse"
-msgstr "Маяк"
+msgid_plural "Lighthouses"
+msgstr[0] "Маяк"
+msgstr[1] "Маяк"
+msgstr[2] "Маяк"
 
 #, fuzzy
 msgid "Water Wheel"
@@ -6774,12 +6868,20 @@ msgid "Mines"
 msgstr "Шахти"
 
 #, fuzzy
+msgid "Monster"
+msgstr "Потвора"
+
+#, fuzzy
 msgid "Obelisk"
 msgstr "Обеліск"
 
 #, fuzzy
 msgid "Oasis"
 msgstr "Оазіс"
+
+#, fuzzy
+msgid "Resource"
+msgstr "Ресурс"
 
 #, fuzzy
 msgid "Sawmill"
@@ -6790,12 +6892,36 @@ msgid "Oracle"
 msgstr "Оракул"
 
 #, fuzzy
+msgid "Shrine of the First Circle"
+msgstr "Cвятиня 1-го кола"
+
+#, fuzzy
+msgid "Shipwreck"
+msgstr "Уламки корабля"
+
+#, fuzzy
+msgid "Sea Chest"
+msgstr "Морський сундук"
+
+#, fuzzy
 msgid "Desert Tent"
 msgstr "Пустельний намет"
 
 #, fuzzy
+msgid "Stone Liths"
+msgstr "Моноліти"
+
+#, fuzzy
 msgid "Wagon Camp"
 msgstr "Вагонний табір"
+
+#, fuzzy
+msgid "Hut of the Magi"
+msgstr "Хатина волхвів"
+
+#, fuzzy
+msgid "Whirlpool"
+msgstr "Водоверть"
 
 #, fuzzy
 msgid "Windmill"
@@ -6803,6 +6929,34 @@ msgid_plural "Windmills"
 msgstr[0] "Вітряк"
 msgstr[1] "Вітряки"
 msgstr[2] "Вітряки"
+
+#, fuzzy
+msgid "Artifact"
+msgstr "Артефакт"
+
+#, fuzzy
+msgid "Mermaid"
+msgstr "Русалка"
+
+#, fuzzy
+msgid "Boat"
+msgstr "Човен"
+
+#, fuzzy
+msgid "Random Ultimate Artifact"
+msgstr "Випадковий Унікальний артефакт"
+
+#, fuzzy
+msgid "Random Artifact"
+msgstr "Випадковий артефакт"
+
+#, fuzzy
+msgid "Random Resource"
+msgstr "Випадковий ресурс"
+
+#, fuzzy
+msgid "Random Monster"
+msgstr "Випадкова потвора"
 
 #, fuzzy
 msgid "Random Town"
@@ -6813,16 +6967,43 @@ msgid "Random Castle"
 msgstr "Випадковий замок"
 
 #, fuzzy
+msgid "Eye of the Magi"
+msgstr "Око волхвів"
+
+#, fuzzy
+msgid "Random Monster - weak"
+msgstr "Випадкова слаба потвора"
+
+#, fuzzy
+msgid "Random Monster - medium"
+msgstr "Випадкова середня потвора"
+
+#, fuzzy
+msgid "Random Monster - strong"
+msgstr "Випадкова сильна потвора"
+
+#, fuzzy
+msgid "Random Monster - very strong"
+msgstr "Випадкова велична потвора"
+
+#, fuzzy
+msgid "Nothing Special"
+msgstr "Нічого особливого"
+
+msgid "Mossy Rock"
+msgstr ""
+
+#, fuzzy
 msgid "Watch Tower"
 msgstr "Вартова вежа"
 
 #, fuzzy
-msgid "Tree City"
-msgstr "Деревоград"
-
-#, fuzzy
 msgid "Tree House"
 msgstr "Будинок на дереві"
+
+#, fuzzy
+msgid "Tree City"
+msgstr "Деревоград"
 
 #, fuzzy
 msgid "Ruins"
@@ -6835,6 +7016,18 @@ msgstr "Форт"
 #, fuzzy
 msgid "Abandoned Mine"
 msgstr "Штольня"
+
+#, fuzzy
+msgid "Sirens"
+msgstr "Сирени"
+
+#, fuzzy
+msgid "Standing Stones"
+msgstr "Стоячі камені"
+
+#, fuzzy
+msgid "Idol"
+msgstr "Ідол"
 
 #, fuzzy
 msgid "Tree of Knowledge"
@@ -6861,6 +7054,14 @@ msgid "Mercenary Camp"
 msgstr "Табір найманців"
 
 #, fuzzy
+msgid "Shrine of the Second Circle"
+msgstr "Cвятиня 2-го кола"
+
+#, fuzzy
+msgid "Shrine of the Third Circle"
+msgstr "Cвятиня 3-го кола"
+
+#, fuzzy
 msgid "City of the Dead"
 msgstr "Місто Мертвих"
 
@@ -6869,8 +7070,24 @@ msgid "Sphinx"
 msgstr "Сфінкс"
 
 #, fuzzy
+msgid "Wagon"
+msgstr "Віз"
+
+#, fuzzy
+msgid "Tar Pit"
+msgstr "Смоляна яма"
+
+#, fuzzy
+msgid "Artesian Spring"
+msgstr "Артезіанське джерело"
+
+#, fuzzy
 msgid "Troll Bridge"
 msgstr "Троль під мостом"
+
+#, fuzzy
+msgid "Watering Hole"
+msgstr "Яма з водою"
 
 #, fuzzy
 msgid "Witch's Hut"
@@ -6881,248 +7098,20 @@ msgid "Xanadu"
 msgstr "Ксанаду"
 
 #, fuzzy
-msgid "Magellan's Maps"
-msgstr "Мапи Магеллана"
-
-#, fuzzy
-msgid "Derelict Ship"
-msgstr "Покинутий корабель"
-
-#, fuzzy
-msgid "Shipwreck"
-msgstr "Уламки корабля"
-
-#, fuzzy
-msgid "Observation Tower"
-msgstr "Оглядова вежа"
-
-#, fuzzy
-msgid "Freeman's Foundry"
-msgstr "Ливарня"
-
-#, fuzzy
-msgid "Watering Hole"
-msgstr "Яма з водою"
-
-#, fuzzy
-msgid "Artesian Spring"
-msgstr "Артезіанське джерело"
-
-#, fuzzy
-msgid "Gazebo"
-msgstr "Альтанка"
-
-#, fuzzy
-msgid "Archer's House"
-msgstr "Дім стрільця"
-
-#, fuzzy
-msgid "Peasant Hut"
-msgstr "Селянська хата"
-
-#, fuzzy
-msgid "Dwarf Cottage"
-msgstr "Хатинка гнома"
-
-#, fuzzy
-msgid "Stone Liths"
-msgstr "Моноліти"
-
-#, fuzzy
-msgid "Magic Well"
-msgstr "Чарівна криниця"
-
-#, fuzzy
-msgid "Sign"
-msgstr "Показчик"
-
-#, fuzzy
-msgid "Nothing Special"
-msgstr "Нічого особливого"
-
-#, fuzzy
-msgid "Tar Pit"
-msgstr "Смоляна яма"
-
-#, fuzzy
-msgid "Mound"
-msgstr "Курган"
-
-#, fuzzy
-msgid "Dune"
-msgstr "Дюна"
-
-#, fuzzy
-msgid "Stump"
-msgstr "Пень"
-
-#, fuzzy
-msgid "Cactus"
-msgstr "Кактус"
-
-#, fuzzy
-msgid "Trees"
-msgstr "Дерева"
-
-#, fuzzy
-msgid "Dead Tree"
-msgstr "Мертве дерево"
-
-#, fuzzy
-msgid "Mountains"
-msgstr "Гори"
-
-#, fuzzy
-msgid "Volcano"
-msgstr "Вулкан"
-
-#, fuzzy
-msgid "Rock"
-msgstr "Скеля"
-
-#, fuzzy
-msgid "Flowers"
-msgstr "Квіти"
-
-#, fuzzy
-msgid "Water Lake"
-msgstr "Озеро"
-
-#, fuzzy
-msgid "Mandrake"
-msgstr "Мандрагора"
-
-#, fuzzy
-msgid "Crater"
-msgstr "Кратер"
-
-#, fuzzy
-msgid "Lava Pool"
-msgstr "Лавовий басейн"
-
-#, fuzzy
-msgid "Shrub"
-msgstr "Кущі"
-
-#, fuzzy
-msgid "Buoy"
-msgstr "Буй"
-
-#, fuzzy
-msgid "Skeleton"
-msgstr "Скелет"
-
-#, fuzzy
-msgid "Treasure Chest"
-msgstr "Сундук зі скарбом"
-
-#, fuzzy
-msgid "Sea Chest"
-msgstr "Морський сундук"
-
-#, fuzzy
-msgid "Campfire"
-msgstr "Вогнище"
-
-#, fuzzy
-msgid "Fountain"
-msgstr "Фонтан"
-
-#, fuzzy
-msgid "Genie Lamp"
-msgstr "Лампа джина"
-
-#, fuzzy
-msgid "Goblin Hut"
-msgstr "Гоблінска хатина"
-
-#, fuzzy
-msgid "Monster"
-msgstr "Потвора"
-
-#, fuzzy
-msgid "Resource"
-msgstr "Ресурс"
-
-#, fuzzy
-msgid "Whirlpool"
-msgstr "Водоверть"
-
-#, fuzzy
-msgid "Artifact"
-msgstr "Артефакт"
-
-#, fuzzy
-msgid "Boat"
-msgstr "Човен"
-
-#, fuzzy
-msgid "Random Artifact"
-msgstr "Випадковий артефакт"
-
-#, fuzzy
-msgid "Random Resource"
-msgstr "Випадковий ресурс"
-
-#, fuzzy
-msgid "Random Monster - weak"
-msgstr "Випадкова слаба потвора"
-
-#, fuzzy
-msgid "Random Monster - medium"
-msgstr "Випадкова середня потвора"
-
-#, fuzzy
-msgid "Random Monster - strong"
-msgstr "Випадкова сильна потвора"
-
-#, fuzzy
-msgid "Random Monster - very strong"
-msgstr "Випадкова велична потвора"
-
-#, fuzzy
-msgid "Standing Stones"
-msgstr "Стоячі камені"
-
-#, fuzzy
-msgid "Event"
-msgstr "Подія"
-
-#, fuzzy
-msgid "Random Monster"
-msgstr "Випадкова потвора"
-
-#, fuzzy
-msgid "Random Ultimate Artifact"
-msgstr "Випадковий Унікальний артефакт"
-
-#, fuzzy
-msgid "Idol"
-msgstr "Ідол"
-
-#, fuzzy
-msgid "Shrine of the First Circle"
-msgstr "Cвятиня 1-го кола"
-
-#, fuzzy
-msgid "Shrine of the Second Circle"
-msgstr "Cвятиня 2-го кола"
-
-#, fuzzy
-msgid "Shrine of the Third Circle"
-msgstr "Cвятиня 3-го кола"
-
-#, fuzzy
-msgid "Wagon"
-msgstr "Віз"
-
-#, fuzzy
 msgid "Lean-To"
 msgstr "Навіс"
 
 #, fuzzy
+msgid "Magellan's Maps"
+msgstr "Мапи Магеллана"
+
+#, fuzzy
 msgid "Flotsam"
 msgstr "Уламки"
+
+#, fuzzy
+msgid "Derelict Ship"
+msgstr "Покинутий корабель"
 
 #, fuzzy
 msgid "Shipwreck Survivor"
@@ -7133,11 +7122,91 @@ msgid "Bottle"
 msgstr "Пляшка"
 
 #, fuzzy
+msgid "Magic Well"
+msgstr "Чарівна криниця"
+
+#, fuzzy
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Чарівний сад"
 msgstr[1] "Чарівні сади"
 msgstr[2] "Чарівних садів"
+
+#, fuzzy
+msgid "Observation Tower"
+msgstr "Оглядова вежа"
+
+#, fuzzy
+msgid "Freeman's Foundry"
+msgstr "Ливарня"
+
+#, fuzzy
+msgid "Reefs"
+msgstr "Рифи"
+
+#, fuzzy
+msgid "Trees"
+msgstr "Дерева"
+
+#, fuzzy
+msgid "Mountains"
+msgstr "Гори"
+
+#, fuzzy
+msgid "Volcano"
+msgstr "Вулкан"
+
+#, fuzzy
+msgid "Flowers"
+msgstr "Квіти"
+
+#, fuzzy
+msgid "Rock"
+msgstr "Скеля"
+
+#, fuzzy
+msgid "Water Lake"
+msgstr "Озеро"
+
+#, fuzzy
+msgid "Mandrake"
+msgstr "Мандрагора"
+
+#, fuzzy
+msgid "Dead Tree"
+msgstr "Мертве дерево"
+
+#, fuzzy
+msgid "Stump"
+msgstr "Пень"
+
+#, fuzzy
+msgid "Crater"
+msgstr "Кратер"
+
+#, fuzzy
+msgid "Cactus"
+msgstr "Кактус"
+
+#, fuzzy
+msgid "Mound"
+msgstr "Курган"
+
+#, fuzzy
+msgid "Dune"
+msgstr "Дюна"
+
+#, fuzzy
+msgid "Lava Pool"
+msgstr "Лавовий басейн"
+
+#, fuzzy
+msgid "Shrub"
+msgstr "Кущі"
+
+#, fuzzy
+msgid "Barrow Mounds"
+msgstr "Могильні кургани"
 
 #, fuzzy
 msgid "Random Artifact - Treasure"
@@ -7152,16 +7221,16 @@ msgid "Random Artifact - Major"
 msgstr "Випадковий великий артефакт"
 
 #, fuzzy
-msgid "Jail"
-msgstr "В'язниця"
+msgid "Barrier"
+msgstr "Бар'єр"
 
 #, fuzzy
 msgid "Traveller's Tent"
 msgstr "Намет мандрівника"
 
 #, fuzzy
-msgid "Barrier"
-msgstr "Бар'єр"
+msgid "Jail"
+msgstr "В'язниця"
 
 #, fuzzy
 msgid "Fire Summoning Altar"
@@ -7178,38 +7247,6 @@ msgstr "Вівтар призову землі"
 #, fuzzy
 msgid "Water Summoning Altar"
 msgstr "Вівтар призову води"
-
-#, fuzzy
-msgid "Barrow Mounds"
-msgstr "Могильні кургани"
-
-#, fuzzy
-msgid "Stables"
-msgstr "Стайні"
-
-#, fuzzy
-msgid "Alchemist's Tower"
-msgstr "Вежа Алхіміка"
-
-#, fuzzy
-msgid "Hut of the Magi"
-msgstr "Хатина волхвів"
-
-#, fuzzy
-msgid "Eye of the Magi"
-msgstr "Око волхвів"
-
-#, fuzzy
-msgid "Mermaid"
-msgstr "Русалка"
-
-#, fuzzy
-msgid "Sirens"
-msgstr "Сирени"
-
-#, fuzzy
-msgid "Reefs"
-msgstr "Рифи"
 
 #, fuzzy
 msgid "Unknown Monster"
@@ -9599,23 +9636,3 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Wait this unit"
-#~ msgstr "Чекати інших"
-
-#, fuzzy
-#~ msgid "Wait"
-#~ msgstr "Чекати"
-
-#, fuzzy
-#~ msgid ""
-#~ "Waits the current creature. The current creature delays its turn until "
-#~ "after all other creatures have had their turn."
-#~ msgstr ""
-#~ "Очікування для цієї істоти. Ця істота не буде ходити доки не походять всі "
-#~ "інші істоти."
-
-#, fuzzy
-#~ msgid "%{name} wait their turn."
-#~ msgstr "%{name} чекає на свою чергу."

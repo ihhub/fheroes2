@@ -7,7 +7,7 @@ on:
         required: true
 
 env:
-  SONAR_SCANNER_VERSION: 4.5.0.2216
+  SONAR_SCANNER_VERSION: 4.8.0.2856
 
 jobs:
   sonarcloud:
@@ -29,9 +29,7 @@ jobs:
     - name: Initialize SonarCloud
       run: |
         mkdir -p ~/.sonarcloud
-        wget -P ~/.sonarcloud https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
         wget -P ~/.sonarcloud https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-"$SONAR_SCANNER_VERSION"-linux.zip
-        unzip ~/.sonarcloud/build-wrapper-linux-x86.zip -d ~/.sonarcloud
         unzip ~/.sonarcloud/sonar-scanner-cli-"$SONAR_SCANNER_VERSION"-linux.zip -d ~/.sonarcloud
     - name: Prepare SonarCloud cfamily cache
       uses: actions/cache@v3
@@ -43,19 +41,14 @@ jobs:
     - name: Generate version information
       run: |
         sed -i~ "s/%{version}/$(cat version.txt)/" sonar-project.properties
-    - name: Build
+    - name: Prepare compile_commands.json
       run: |
-        ~/.sonarcloud/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
-      env:
-        FHEROES2_STRICT_COMPILATION: ON
-        FHEROES2_WITH_DEBUG: ON
-        FHEROES2_WITH_IMAGE: ON
-        FHEROES2_WITH_TOOLS: ON
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DUSE_SDL_VERSION=SDL2 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - name: Analyze
       run: |
-        ~/.sonarcloud/sonar-scanner-"$SONAR_SCANNER_VERSION"-linux/bin/sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output \
-                                                                                     -Dsonar.cfamily.cache.enabled=true \
-                                                                                     -Dsonar.cfamily.cache.path="$HOME"/.sonar-cfamily-cache \
+        ~/.sonarcloud/sonar-scanner-"$SONAR_SCANNER_VERSION"-linux/bin/sonar-scanner -Dsonar.cfamily.compile-commands=build/compile_commands.json \
+                                                                                     -Dsonar.cfamily.analysisCache.mode=fs \
+                                                                                     -Dsonar.cfamily.analysisCache.path="$HOME"/.sonar-cfamily-cache \
                                                                                      -Dsonar.host.url=https://sonarcloud.io
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

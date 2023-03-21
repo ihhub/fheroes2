@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "image.h"
@@ -33,6 +34,40 @@ namespace fheroes2
 {
     class Cursor;
     class Display;
+
+    struct ResolutionInfo
+    {
+        ResolutionInfo() = default;
+
+        ResolutionInfo( const int32_t width_, const int32_t height_, const int32_t scale_ )
+            : width( width_ )
+            , height( height_ )
+            , scale( scale_ )
+        {
+            // Do nothing.
+        }
+
+        bool operator==( const ResolutionInfo & info ) const
+        {
+            return width == info.width && height == info.height && scale == info.scale;
+        }
+
+        bool operator!=( const ResolutionInfo & info ) const
+        {
+            return !operator==( info );
+        }
+
+        bool operator<( const ResolutionInfo & info ) const
+        {
+            return std::tie( width, height, scale ) < std::tie( info.width, info.height, info.scale );
+        }
+
+        int32_t width{ 0 };
+
+        int32_t height{ 0 };
+
+        int32_t scale{ 1 };
+    };
 
     class BaseRenderEngine
     {
@@ -52,6 +87,7 @@ namespace fheroes2
             return _isFullScreen;
         }
 
+        virtual std::vector<ResolutionInfo> getAvailableResolutions() const
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         virtual void setPosition( fheroes2::Point /*unused*/ )
         {
@@ -74,12 +110,12 @@ namespace fheroes2
             // Do nothing.
         }
 
-        virtual fheroes2::Rect getActiveWindowROI() const
+        virtual Rect getActiveWindowROI() const
         {
             return {};
         }
 
-        virtual fheroes2::Size getCurrentScreenResolution() const
+        virtual Size getCurrentScreenResolution() const
         {
             return {};
         }
@@ -117,7 +153,7 @@ namespace fheroes2
             // Do nothing.
         }
 
-        virtual bool allocate( int32_t &, int32_t &, bool )
+        virtual bool allocate( ResolutionInfo & /*unused*/, bool /*unused*/ )
         {
             return false;
         }
@@ -167,7 +203,10 @@ namespace fheroes2
         // Update the area which will be rendered on the next render() call.
         void updateNextRenderRoi( const Rect & roi );
 
+        // Do not call this method. It serves as a patch over the basic class.
         void resize( int32_t width_, int32_t height_ ) override;
+
+        void setResolution( ResolutionInfo info );
 
         bool isDefaultSize() const
         {
@@ -191,8 +230,13 @@ namespace fheroes2
         void release(); // to release all allocated resources. Should be used at the end of the application
 
         // Change the whole color representation on the screen. Make sure that palette exists all the time!!!
-        // nullptr input parameter is used to reset pallette to default one.
+        // nullptr input parameter is used to reset palette to default one.
         void changePalette( const uint8_t * palette = nullptr, const bool forceDefaultPaletteUpdate = false ) const;
+
+        int32_t scale() const
+        {
+            return _scale;
+        }
 
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();
@@ -207,6 +251,8 @@ namespace fheroes2
 
         // Previous area drawn on the screen.
         Rect _prevRoi;
+
+        int32_t _scale;
 
         // Only for cases of direct drawing on rendered 8-bit image.
         void linkRenderSurface( uint8_t * surface )
@@ -237,9 +283,9 @@ namespace fheroes2
 
         bool isFocusActive() const;
 
-        virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY )
+        virtual void update( const Image & image, int32_t offsetX, int32_t offsetY )
         {
-            _image = fheroes2::Sprite( image, offsetX, offsetY );
+            _image = Sprite( image, offsetX, offsetY );
         }
 
         void setPosition( int32_t x, int32_t y )

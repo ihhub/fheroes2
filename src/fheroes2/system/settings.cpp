@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -37,7 +37,6 @@
 #include "game.h"
 #include "gamedefs.h"
 #include "logging.h"
-#include "save_format_version.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -65,7 +64,7 @@ namespace
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
         GLOBAL_MONOCHROME_CURSOR = 0x00000020,
-        GLOBAL_SHOW_CPANEL = 0x00000040,
+        GLOBAL_SHOW_CONTROL_PANEL = 0x00000040,
         GLOBAL_SHOW_RADAR = 0x00000080,
         GLOBAL_SHOW_ICONS = 0x00000100,
         GLOBAL_SHOW_BUTTONS = 0x00000200,
@@ -94,7 +93,7 @@ std::string Settings::GetVersion()
 }
 
 Settings::Settings()
-    : video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
+    : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
@@ -257,22 +256,29 @@ bool Settings::Read( const std::string & filePath )
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
-        // default
-        video_mode.width = fheroes2::Display::DEFAULT_WIDTH;
-        video_mode.height = fheroes2::Display::DEFAULT_HEIGHT;
+        const std::string value = StringLower( sval );
+        size_t pos = value.find( 'x' );
 
-        std::string value = StringLower( sval );
-        const size_t pos = value.find( 'x' );
+        if ( pos != std::string::npos ) {
+            _resolutionInfo.width = GetInt( value.substr( 0, pos ) );
 
-        if ( std::string::npos != pos ) {
-            std::string width( value.substr( 0, pos ) );
-            std::string height( value.substr( pos + 1, value.length() - pos - 1 ) );
-
-            video_mode.width = GetInt( width );
-            video_mode.height = GetInt( height );
+            const size_t prevXPos = pos;
+            pos = value.find( 'x', prevXPos + 1 );
+            if ( pos != std::string::npos ) {
+                _resolutionInfo.height = GetInt( value.substr( prevXPos + 1, pos - prevXPos - 1 ) );
+                _resolutionInfo.scale = GetInt( value.substr( pos + 1, value.length() - pos - 1 ) );
+            }
+            else {
+                // This is old video mode setting without scale.
+                _resolutionInfo.height = GetInt( value.substr( prevXPos + 1, value.length() - prevXPos - 1 ) );
+                _resolutionInfo.scale = 1;
+            }
         }
         else {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown video mode: " << value )
+            _resolutionInfo.width = fheroes2::Display::DEFAULT_WIDTH;
+            _resolutionInfo.height = fheroes2::Display::DEFAULT_HEIGHT;
+            _resolutionInfo.scale = 1;
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown video mode: " << value )
         }
     }
 
@@ -395,8 +401,10 @@ std::string Settings::String() const
 
     os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
 
+    const fheroes2::Display & display = fheroes2::Display::instance();
+
     os << std::endl << "# video mode (game resolution)" << std::endl;
-    os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
+    os << "videomode = " << display.width() << "x" << display.height() << "x" << display.scale() << std::endl;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     os << std::endl << "# starting window position (x,y); used to maintain it between sessions" << std::endl;
@@ -873,7 +881,7 @@ bool Settings::isEvilInterfaceEnabled() const
 
 bool Settings::ShowControlPanel() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOW_CPANEL );
+    return _optGlobal.Modes( GLOBAL_SHOW_CONTROL_PANEL );
 }
 
 bool Settings::ShowRadar() const
@@ -1030,9 +1038,9 @@ void Settings::SetBattleMouseShaded( bool f )
     f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
-void Settings::SetShowPanel( bool f )
+void Settings::SetShowControlPanel( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOW_CPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CPANEL );
+    f ? _optGlobal.SetModes( GLOBAL_SHOW_CONTROL_PANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CONTROL_PANEL );
 }
 
 void Settings::SetShowRadar( bool f )
@@ -1087,21 +1095,5 @@ StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_1000_RELEASE ) {
-        int dummy;
-
-        msg >> dummy;
-    }
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_1000_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE3_1000_RELEASE ) {
-        BitModes dummy;
-
-        msg >> dummy >> dummy >> dummy;
-    }
-
-    return msg >> conf.players;
+    return msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> conf.players;
 }

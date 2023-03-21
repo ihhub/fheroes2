@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -68,7 +68,7 @@ public:
     const Troop * GetTroop( size_t ) const;
 
     void UpgradeMonsters( const Monster & );
-    uint32_t GetCountMonsters( const Monster & ) const;
+    uint32_t GetCountMonsters( const Monster & mons ) const;
 
     double getReinforcementValue( const Troops & reinforcement ) const;
 
@@ -86,10 +86,9 @@ public:
     bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
 
-    void MergeSameMonsterTroops();
-    Troops GetOptimized() const;
-
     virtual double GetStrength() const;
+
+    uint32_t getTotalHP() const;
 
     void Clean();
     void UpgradeTroops( const Castle & );
@@ -101,7 +100,7 @@ public:
     void SortStrongest();
 
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
-    void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
+    void AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count );
     void JoinAllTroopsOfType( const Troop & targetTroop );
 
     void addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots );
@@ -116,6 +115,13 @@ public:
 
 protected:
     void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
+
+    // Combines all stacks consisting of identical monsters
+    void MergeSameMonsterTroops();
+    // Combines two stacks consisting of identical monsters. Returns true if there was something to combine, otherwise returns false.
+    bool MergeSameMonsterOnce();
+    // Returns an optimized version of this Troops instance, i.e. all stacks of identical monsters are combined and there are no empty slots
+    Troops GetOptimized() const;
 
 private:
     // Returns the stack that best matches the specified condition or nullptr if there are no valid stacks
@@ -230,8 +236,8 @@ public:
 
     void resetInvalidMonsters() const;
 
-    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison (most
-    // powerful stacks first), by adding them either to free slots or to slots that already contain troops of the same type
+    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison. The
+    // logic of combining troops for the castle defense differs from the original game, see the implementation for details.
     void ArrangeForCastleDefense( Army & garrison );
     // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
     void ArrangeForWhirlpool();

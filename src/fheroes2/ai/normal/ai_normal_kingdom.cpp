@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -400,13 +400,26 @@ namespace AI
 
                 const double attackerThreat = attackerStrength - defenders;
                 if ( attackerThreat > 0 ) {
-                    _priorityTargets[enemy.first] = PriorityTask::ATTACK;
                     const uint32_t dist = _pathfinder.getDistance( enemy.first, castleIndex, myColor, attackerStrength );
                     if ( dist && dist < threatDistanceLimit ) {
                         // castle is under threat
                         castlesInDanger.insert( castleIndex );
 
-                        _priorityTargets[castleIndex] = PriorityTask::DEFEND;
+                        auto attackTask = _priorityTargets.find( enemy.first );
+                        if ( attackTask == _priorityTargets.end() ) {
+                            _priorityTargets[enemy.first] = { PriorityTaskType::ATTACK, attackerStrength, castleIndex };
+                        }
+                        else {
+                            attackTask->second.secondaryTaskTileId.insert( castleIndex );
+                        }
+
+                        auto defenseTask = _priorityTargets.find( castleIndex );
+                        if ( defenseTask == _priorityTargets.end() ) {
+                            _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat, enemy.first };
+                        }
+                        else {
+                            defenseTask->second.secondaryTaskTileId.insert( enemy.first );
+                        }
                     }
                 }
             }
@@ -485,7 +498,7 @@ namespace AI
                 continue;
             }
 
-            if ( objectType == MP2::OBJ_ZERO || objectType == MP2::OBJ_COAST )
+            if ( objectType == MP2::OBJ_NONE || objectType == MP2::OBJ_COAST )
                 continue;
 
             stats.validObjects.emplace_back( idx, objectType );
@@ -556,7 +569,7 @@ namespace AI
             // Step 2. Do some hero stuff.
             // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
             for ( Heroes * hero : heroes ) {
-                HeroesActionComplete( *hero, hero->GetIndex(), MP2::OBJ_ZERO );
+                HeroesActionComplete( *hero, hero->GetIndex(), MP2::OBJ_NONE );
             }
 
             // Step 3. Reassign heroes roles

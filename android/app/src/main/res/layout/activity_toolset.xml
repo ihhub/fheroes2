@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/activity_toolset_game_logo_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/activity_toolset_game_logo_img_content_description"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/activity_toolset_game_status_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:maxWidth="512dp"
+            android:padding="8dp"
+            android:text="@string/activity_toolset_game_status_lbl_text"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/activity_toolset_start_game_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:enabled="false"
+            android:minWidth="256dp"
+            android:onClick="startGameButtonClicked"
+            android:padding="8dp"
+            android:text="@string/activity_toolset_start_game_btn_text" />
+
+        <Button
+            android:id="@+id/activity_toolset_extract_homm2_assets_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:enabled="false"
+            android:minWidth="256dp"
+            android:onClick="extractHoMM2AssetsButtonClicked"
+            android:padding="8dp"
+            android:text="@string/activity_toolset_extract_homm2_assets_btn_text" />
+
+        <Button
+            android:id="@+id/activity_toolset_download_homm2_demo_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:enabled="false"
+            android:minWidth="256dp"
+            android:onClick="downloadHoMM2DemoButtonClicked"
+            android:padding="8dp"
+            android:text="@string/activity_toolset_download_homm2_demo_btn_text" />
+
+        <Button
+            android:id="@+id/activity_toolset_save_file_manager_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:enabled="false"
+            android:minWidth="256dp"
+            android:onClick="saveFileManagerButtonClicked"
+            android:padding="8dp"
+            android:text="@string/activity_toolset_save_file_manager_btn_text" />
+
+        <ProgressBar
+            android:id="@+id/activity_toolset_background_task_pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/activity_toolset_last_task_status_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:freezesText="true"
+            android:gravity="center"
+            android:maxWidth="512dp"
+            android:padding="8dp"
+            android:text=""
+            android:visibility="gone" />
+    </LinearLayout>
+</ScrollView>

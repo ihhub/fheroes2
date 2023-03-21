@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2023                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -28,8 +28,8 @@ all: $(patsubst %.po, %.mo, $(wildcard *.po))
 merge: ../../src/dist/fheroes2.pot
 	for i in $(wildcard *.po); do msgmerge -U --no-location $$i $<; done
 
-# Czech, Hungarian and Polish versions use CP1250
-cs.mo hu.mo pl.mo: %.mo: %.po
+# Czech, Hungarian, Polish and Slovak versions use CP1250
+cs.mo hu.mo pl.mo sk.mo: %.mo: %.po
 	$(call MSGFMT,CP1250)
 
 # Belarusian, Bulgarian, Ukrainian versions use CP1251
@@ -38,8 +38,8 @@ cs.mo hu.mo pl.mo: %.mo: %.po
 be.mo bg.mo ru.mo uk.mo: %.mo: %.po
 	$(call MSGFMT,CP1251)
 
-# German, French, Italian, Dutch, Norwegian, Portuguese, Spanish and Swedish translations use CP1252
-de.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
+# German, Danish, French, Italian, Dutch, Norwegian, Portuguese, Spanish and Swedish translations use CP1252
+de.mo dk.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
 	$(call MSGFMT,CP1252)
 
 # Turkish uses CP1254

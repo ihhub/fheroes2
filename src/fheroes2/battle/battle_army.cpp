@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_army.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -30,7 +32,6 @@
 #include "artifact_info.h"
 #include "battle.h"
 #include "battle_arena.h"
-#include "battle_army.h"
 #include "battle_cell.h"
 #include "battle_troop.h"
 #include "heroes.h"
@@ -49,15 +50,34 @@ Battle::Units::Units()
     reserve( unitSizeCapacity );
 }
 
-Battle::Units::Units( const Units & units, const bool filter )
-    : std::vector<Unit *>()
+Battle::Units::Units( const Units & units, const bool isRemoveInvalidUnits )
 {
     reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
     assign( units.begin(), units.end() );
 
-    if ( filter ) {
-        erase( std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ), end() );
+    if ( isRemoveInvalidUnits ) {
+        erase( std::remove_if( begin(), end(),
+                               []( const Unit * unit ) {
+                                   assert( unit != nullptr );
+
+                                   return !unit->isValid();
+                               } ),
+               end() );
     }
+}
+
+Battle::Units::Units( const Units & units, const Unit * unitToRemove )
+{
+    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
+    assign( units.begin(), units.end() );
+
+    erase( std::remove_if( begin(), end(),
+                           [unitToRemove]( const Unit * unit ) {
+                               assert( unit != nullptr );
+
+                               return !unit->isValid() || unit == unitToRemove;
+                           } ),
+           end() );
 }
 
 void Battle::Units::SortFastest()
@@ -234,14 +254,15 @@ void Battle::Force::NewTurn()
 
 Troops Battle::Force::GetKilledTroops() const
 {
-    Troops killed;
+    Troops result;
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const Unit & b = ( **it );
-        killed.PushBack( b, b.GetDead() );
+    for ( const Unit * unit : *this ) {
+        assert( unit != nullptr );
+
+        result.PushBack( *unit, std::min( unit->GetInitialCount(), unit->GetDead() ) );
     }
 
-    return killed;
+    return result;
 }
 
 bool Battle::Force::animateIdleUnits()

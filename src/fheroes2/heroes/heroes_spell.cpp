@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -45,6 +45,7 @@
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_list.h"
+#include "interface_radar.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "logging.h"
@@ -212,9 +213,13 @@ namespace
 
         Interface::Basic & I = Interface::Basic::Get();
 
+        const fheroes2::Point fromPosition = hero.GetCenter();
+        // Position of Hero on radar before casting the spell to clear it after casting.
+        const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, 1, 1 );
+
         // Before casting the spell, make sure that the game area is centered on the hero
-        I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.GetGameArea().SetCenter( fromPosition );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
         const int32_t dst = castle->GetIndex();
         assert( Maps::isValidAbsIndex( dst ) );
@@ -225,8 +230,16 @@ namespace
 
         hero.Move2Dest( dst );
 
+        // Clear previous hero position on radar.
+        I.GetRadar().SetRenderArea( fromRoi );
+
+        I.Redraw( Interface::REDRAW_RADAR );
+
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+        // Update radar image in scout area around Hero after teleport.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
@@ -288,66 +301,32 @@ namespace
 
     bool ActionSpellSummonBoat( const Heroes & hero )
     {
-        if ( hero.isShipMaster() ) {
-            Dialog::Message( "", _( "This spell cannot be used on a boat." ), Font::BIG, Dialog::OK );
-            return false;
-        }
+        assert( !hero.isShipMaster() );
 
         const int32_t center = hero.GetIndex();
-
-        const int tilePassability = world.GetTiles( center ).GetPassable();
-
-        const MapsIndexes tilesAround = Maps::GetFreeIndexesAroundTile( center );
-
-        std::vector<int32_t> possibleBoatPositions;
-
-        for ( const int32_t tileId : tilesAround ) {
-            const int direction = Maps::GetDirection( center, tileId );
-            assert( direction != Direction::UNKNOWN );
-
-            if ( ( tilePassability & direction ) != 0 ) {
-                possibleBoatPositions.emplace_back( tileId );
-            }
-        }
-
-        const fheroes2::Point & centerPoint = Maps::GetPoint( center );
-        std::sort( possibleBoatPositions.begin(), possibleBoatPositions.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
-            const fheroes2::Point & leftPoint = Maps::GetPoint( left );
-            const fheroes2::Point & rightPoint = Maps::GetPoint( right );
-            const int32_t leftDiffX = leftPoint.x - centerPoint.x;
-            const int32_t leftDiffY = leftPoint.y - centerPoint.y;
-            const int32_t rightDiffX = rightPoint.x - centerPoint.x;
-            const int32_t rightDiffY = rightPoint.y - centerPoint.y;
-
-            return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
-        } );
-
-        int32_t boatDestination = -1;
-        for ( const int32_t tileId : possibleBoatPositions ) {
-            const Maps::Tiles & tile = world.GetTiles( tileId );
-            if ( tile.isWater() ) {
-                boatDestination = tileId;
-                break;
-            }
-        }
-
-        if ( !Maps::isValidAbsIndex( boatDestination ) ) {
-            Dialog::Message( "", _( "This spell can be casted only nearby water." ), Font::BIG, Dialog::OK );
-            return false;
-        }
+        const int32_t boatDestination = fheroes2::getPossibleBoatPosition( hero );
+        assert( Maps::isValidAbsIndex( boatDestination ) );
 
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
-            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
-            if ( distance > 1 ) {
-                const Maps::Tiles & tileSource = world.GetTiles( boatSource );
+            Maps::Tiles & tileSource = world.GetTiles( boatSource );
+            const int boatColor = tileSource.getBoatOwnerColor();
+            const int heroColor = hero.GetColor();
 
+            if ( boatColor != Color::NONE && boatColor != heroColor ) {
+                continue;
+            }
+
+            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
+
+            if ( distance > 1 ) {
                 Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
                 Maps::Tiles & tileDest = world.GetTiles( boatDestination );
-                tileDest.setBoat( Direction::RIGHT );
+                tileDest.setBoat( Direction::RIGHT, heroColor );
+                tileSource.resetBoatOwnerColor();
 
                 gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 
@@ -363,9 +342,13 @@ namespace
     {
         Interface::Basic & I = Interface::Basic::Get();
 
+        const fheroes2::Point fromPosition = hero.GetCenter();
+        // Position of Hero on radar before casting the spell to clear it after casting.
+        const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, 1, 1 );
+
         // Before casting the spell, make sure that the game area is centered on the hero
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
         const int32_t src = hero.GetIndex();
         assert( Maps::isValidAbsIndex( src ) );
@@ -383,8 +366,16 @@ namespace
 
         hero.Move2Dest( dst );
 
+        // Clear previous hero position on radar.
+        I.GetRadar().SetRenderArea( fromRoi );
+
+        I.Redraw( Interface::REDRAW_RADAR );
+
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+        // Update radar image in scout area around Hero after teleport.
+        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
@@ -399,6 +390,8 @@ namespace
 
     bool ActionSpellTownGate( Heroes & hero )
     {
+        assert( !hero.isShipMaster() );
+
         const Castle * castle = fheroes2::getNearestCastleTownGate( hero );
         if ( !castle ) {
             // A hero must be able to have a destination castle. Something is wrong with the logic!
@@ -419,6 +412,8 @@ namespace
 
     bool ActionSpellTownPortal( Heroes & hero )
     {
+        assert( !hero.isShipMaster() );
+
         const Kingdom & kingdom = hero.GetKingdom();
         std::vector<int32_t> castles;
 
@@ -444,7 +439,7 @@ namespace
             return false;
         }
 
-        std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 290, 252 );
+        std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 290, 252, true );
         const fheroes2::Rect & windowArea = frameborder->windowArea();
         const fheroes2::Rect & activeArea = frameborder->activeArea();
 
@@ -601,7 +596,15 @@ namespace
             if ( spell == Spell::HAUNT ) {
                 world.CaptureObject( tile.GetIndex(), Color::NONE );
                 tile.removeOwnershipFlag( MP2::OBJ_MINES );
-                hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
+                Maps::Tiles::setAbandonedMineObjectType( tile );
+                hero.SetMapsObject( MP2::OBJ_ABANDONED_MINE );
+
+                // Update the color of haunted mine on radar.
+                Interface::Basic & I = Interface::Basic::Get();
+                const fheroes2::Point heroPosition = hero.GetCenter();
+                I.GetRadar().SetRenderArea( { heroPosition.x - 1, heroPosition.y - 1, 3, 2 } );
+
+                I.SetRedraw( Interface::REDRAW_RADAR );
             }
 
             world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );
@@ -647,10 +650,10 @@ void Heroes::ActionSpellCast( const Spell & spell )
         apply = ActionSpellDimensionDoor( *this );
         break;
     case Spell::TOWNGATE:
-        apply = isShipMaster() ? false : ActionSpellTownGate( *this );
+        apply = ActionSpellTownGate( *this );
         break;
     case Spell::TOWNPORTAL:
-        apply = isShipMaster() ? false : ActionSpellTownPortal( *this );
+        apply = ActionSpellTownPortal( *this );
         break;
     case Spell::VISIONS:
         apply = ActionSpellVisions( *this );

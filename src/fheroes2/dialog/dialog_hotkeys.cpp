@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +53,7 @@ namespace
         const fheroes2::Sprite & originalWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
         fheroes2::Sprite window = originalWindow;
 
-        // Copy the bottom of a dialog with Okay buttom from another window.
+        // Copy the bottom of a dialog with Okay button from another window.
         const fheroes2::Sprite & mapSelectionWindow = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
         fheroes2::Copy( mapSelectionWindow, 0, 409, window, 0, 315, window.width(), window.height() - 314 );
 

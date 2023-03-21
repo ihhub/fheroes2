@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,6 +35,7 @@
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "players.h"
+#include "screen.h"
 
 class StreamBase;
 
@@ -52,6 +53,14 @@ enum MusicSource
     MUSIC_MIDI_ORIGINAL,
     MUSIC_MIDI_EXPANSION,
     MUSIC_EXTERNAL
+};
+
+enum class ZoomLevel : uint8_t
+{
+    ZoomLevel0 = 0,
+    ZoomLevel1 = 1,
+    ZoomLevel2 = 2,
+    ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
 };
 
 class Settings
@@ -80,7 +89,7 @@ public:
 
     bool isCurrentMapPriceOfLoyalty() const
     {
-        return current_maps_file._version == GameVersion::PRICE_OF_LOYALTY;
+        return current_maps_file.version == GameVersion::PRICE_OF_LOYALTY;
     }
 
     int HeroesMoveSpeed() const
@@ -206,9 +215,9 @@ public:
     bool isFirstGameRun() const;
     void resetFirstGameRun();
 
-    const fheroes2::Size & VideoMode() const
+    const fheroes2::ResolutionInfo & currentResolutionInfo() const
     {
-        return video_mode;
+        return _resolutionInfo;
     }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -228,7 +237,7 @@ public:
     void SetBattleGrid( bool );
     void SetBattleMovementShaded( bool );
     void SetBattleMouseShaded( bool );
-    void SetShowPanel( bool );
+    void SetShowControlPanel( bool );
     void SetShowRadar( bool );
     void SetShowIcons( bool );
     void SetShowButtons( bool );
@@ -331,7 +340,7 @@ public:
     // from maps info
     bool AllowChangeRace( int f ) const
     {
-        return ( current_maps_file.rnd_races & f ) != 0;
+        return ( current_maps_file.colorsOfRandomRaces & f ) != 0;
     }
 
     const std::string & MapsFile() const
@@ -356,7 +365,7 @@ public:
 
     fheroes2::Size MapsSize() const
     {
-        return { current_maps_file.size_w, current_maps_file.size_h };
+        return { current_maps_file.width, current_maps_file.height };
     }
 
     bool GameStartWithHeroes() const
@@ -419,6 +428,16 @@ public:
         current_maps_file.file = file;
     }
 
+    ZoomLevel ViewWorldZoomLevel() const
+    {
+        return _viewWorldZoomLevel;
+    }
+
+    void SetViewWorldZoomLevel( ZoomLevel zoomLevel )
+    {
+        _viewWorldZoomLevel = zoomLevel;
+    }
+
     void SetProgramPath( const char * );
 
     static std::string GetVersion();
@@ -446,6 +465,7 @@ private:
     fheroes2::Point window_position{ 0, 0 };
 #endif
 
+    fheroes2::ResolutionInfo _resolutionInfo;
     int game_difficulty;
 
     std::string path_program;
@@ -467,6 +487,7 @@ private:
 
     int game_type;
     int preferably_count_players;
+    ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };

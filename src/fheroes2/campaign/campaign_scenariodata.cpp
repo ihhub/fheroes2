@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "campaign_scenariodata.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -27,14 +29,11 @@
 #include <utility>
 
 #include "artifact.h"
-#include "campaign_scenariodata.h"
 #include "dir.h"
-#include "game.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -53,7 +52,7 @@ namespace
         case 0:
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::ARMORED_GAUNTLETS, 1 );
             break;
         case 1:
         case 2:
@@ -386,6 +385,8 @@ namespace
             return _( "campaignBonus|Fizbin Medal" );
         case Artifact::FOREMOST_SCROLL:
             return _( "campaignBonus|Foremost Scroll" );
+        case Artifact::ARMORED_GAUNTLETS:
+            return _( "campaignBonus|Gauntlets" );
         case Artifact::HIDEOUS_MASK:
             return _( "campaignBonus|Hideous Mask" );
         case Artifact::MAGE_RING:
@@ -728,7 +729,7 @@ namespace Campaign
         case ScenarioBonusData::TROOP: {
             std::string description( _( "The main hero will have %{count} %{monster} at the start of the scenario." ) );
             StringReplace( description, "%{count}", std::to_string( _amount ) );
-            StringReplace( description, "%{monster}", Translation::StringLower( Monster( _subType ).GetPluralName( _amount ) ) );
+            StringReplaceWithLowercase( description, "%{monster}", Monster( _subType ).GetPluralName( _amount ) );
             return description;
         }
         case ScenarioBonusData::SPELL: {
@@ -794,17 +795,7 @@ namespace Campaign
 
     StreamBase & operator>>( StreamBase & msg, Campaign::ScenarioBonusData & data )
     {
-        msg >> data._type >> data._subType >> data._amount;
-
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE5_1000_RELEASE, "Remove the check below." );
-        if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE5_1000_RELEASE ) {
-            data._artifactSpellId = Spell::NONE;
-        }
-        else {
-            msg >> data._artifactSpellId;
-        }
-
-        return msg;
+        return msg >> data._type >> data._subType >> data._amount >> data._artifactSpellId;
     }
 
     ScenarioData::ScenarioData( const ScenarioInfoId & scenarioInfo, std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName,

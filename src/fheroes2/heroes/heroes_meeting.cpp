@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,6 +35,7 @@
 #include "army_bar.h"
 #include "army_troop.h"
 #include "artifact.h"
+#include "artifact_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -54,8 +55,6 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
-#include "ui_dialog.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace
@@ -402,6 +401,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     display.render();
 
+    const int32_t hero1ScoutAreaBonus = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
+    const int32_t hero2ScoutAreaBonus = otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
+
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
@@ -468,17 +470,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
                 selectArmy2.ResetSelected();
 
             std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
-            const std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+            std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
 
-            // Use insert instead of std::merge to make appveyour happy
-            assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
+            // MSVC 2017 fails to use the std::set<...>::merge( std::set<...> && ) overload here, so we have to use a temporary variable
+            assembledArtifacts.merge( otherHeroAssembledArtifacts );
 
-            for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
-                const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
-                fheroes2::showMessage( fheroes2::Text( Artifact( static_cast<int>( artifactSetData._assembledArtifactID ) ).GetName(),
-                                                       fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
-            }
+            std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
 
             selectArtifacts1.Redraw( display );
             selectArtifacts2.Redraw( display );
@@ -657,5 +654,16 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     armyCountBackgroundRestorerLeft.reset();
     armyCountBackgroundRestorerRight.reset();
     restorer.restore();
+
+    // If the scout area bonus is increased with the new artifact we reveal the fog and update the radar.
+    if ( hero1ScoutAreaBonus < bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
+        Scout( GetIndex() );
+        ScoutRadar();
+    }
+    if ( hero2ScoutAreaBonus < otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) {
+        otherHero.Scout( otherHero.GetIndex() );
+        otherHero.ScoutRadar();
+    }
+
     display.render();
 }

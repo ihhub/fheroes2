@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,7 +21,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
+
 #include <array>
+#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -38,9 +41,9 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_game_settings.h"
-#include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_io.h"
 #include "game_mainmenu_ui.h"
 #include "game_mode.h"
 #include "game_video.h"
@@ -292,6 +295,11 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor::Get().setVideoPlaybackCursor();
 
+    // Immediately indicate that the delay has passed to render first frame immediately.
+    Game::passCustomAnimationDelay( customDelay );
+    // Make sure that the first run is passed immediately.
+    assert( !Game::isCustomDelayNeeded( customDelay ) );
+
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( customDelay ) ) ) {
         if ( le.MouseClickLeft( campaignRoi[0] ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_ROLAND ) ) {
@@ -391,6 +399,11 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
     fheroes2::GameMode gameChoice = fheroes2::GameMode::NEW_CAMPAIGN_SELECTION;
     uint64_t customDelay = 0;
+
+    // Immediately indicate that the delay has passed to render first frame immediately.
+    Game::passCustomAnimationDelay( customDelay );
+    // Make sure that the first run is passed immediately.
+    assert( !Game::isCustomDelayNeeded( customDelay ) );
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( highlightCampaignId < videos.size() ? Game::isCustomDelayNeeded( customDelay ) : true ) ) {
@@ -511,7 +524,7 @@ fheroes2::GameMode Game::NewGame()
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     // reset last save name
-    Game::SetLastSavename( "" );
+    Game::SetLastSaveName( "" );
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

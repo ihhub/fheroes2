@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -537,184 +537,6 @@ namespace
         return 0;
     }
 
-#if defined( TARGET_PS_VITA )
-    const int totalCharactersDPad = 38;
-    bool dpadInputActive = false;
-    bool currentUpper = false;
-    int currentCharIndex = 0;
-
-    const fheroes2::Key dPadKeys[totalCharactersDPad] = {
-        // lowercase letters
-        fheroes2::Key::KEY_A, fheroes2::Key::KEY_B, fheroes2::Key::KEY_C, fheroes2::Key::KEY_D, fheroes2::Key::KEY_E, fheroes2::Key::KEY_F, fheroes2::Key::KEY_G,
-        fheroes2::Key::KEY_H, fheroes2::Key::KEY_I, fheroes2::Key::KEY_J, fheroes2::Key::KEY_K, fheroes2::Key::KEY_L, fheroes2::Key::KEY_M, fheroes2::Key::KEY_N,
-        fheroes2::Key::KEY_O, fheroes2::Key::KEY_P, fheroes2::Key::KEY_Q, fheroes2::Key::KEY_R, fheroes2::Key::KEY_S, fheroes2::Key::KEY_T, fheroes2::Key::KEY_U,
-        fheroes2::Key::KEY_V, fheroes2::Key::KEY_W, fheroes2::Key::KEY_X, fheroes2::Key::KEY_Y, fheroes2::Key::KEY_Z,
-        // space, underscore
-        fheroes2::Key::KEY_SPACE, fheroes2::Key::KEY_UNDERSCORE,
-        // nums
-        fheroes2::Key::KEY_0, fheroes2::Key::KEY_1, fheroes2::Key::KEY_2, fheroes2::Key::KEY_3, fheroes2::Key::KEY_4, fheroes2::Key::KEY_5, fheroes2::Key::KEY_6,
-        fheroes2::Key::KEY_7, fheroes2::Key::KEY_8, fheroes2::Key::KEY_9 };
-
-    char GetCurrentDPadChar()
-    {
-        return getCharacterFromPressedKey( dPadKeys[currentCharIndex],
-                                           currentUpper ? fheroes2::KeyModifier::KEY_MODIFIER_CAPS : fheroes2::KeyModifier::KEY_MODIFIER_NONE );
-    }
-
-    fheroes2::Key KeySymFromChar( const char c )
-    {
-        switch ( c ) {
-        case '!':
-            return fheroes2::Key::KEY_EXCLAIM;
-        case '"':
-            return fheroes2::Key::KEY_DOUBLE_QUOTE;
-        case '#':
-            return fheroes2::Key::KEY_HASH;
-        case '$':
-            return fheroes2::Key::KEY_DOLLAR;
-        case '&':
-            return fheroes2::Key::KEY_AMPERSAND;
-        case '\'':
-            return fheroes2::Key::KEY_QUOTE;
-        case '(':
-            return fheroes2::Key::KEY_LEFT_PARENTHESIS;
-        case ')':
-            return fheroes2::Key::KEY_RIGHT_PARENTHESIS;
-        case '*':
-            return fheroes2::Key::KEY_ASTERISK;
-        case '+':
-            return fheroes2::Key::KEY_PLUS;
-        case ',':
-            return fheroes2::Key::KEY_COMMA;
-        case '-':
-            return fheroes2::Key::KEY_MINUS;
-        case '.':
-            return fheroes2::Key::KEY_PERIOD;
-        case '/':
-            return fheroes2::Key::KEY_SLASH;
-        case ':':
-            return fheroes2::Key::KEY_COLON;
-        case ';':
-            return fheroes2::Key::KEY_SEMICOLON;
-        case '<':
-            return fheroes2::Key::KEY_LESS;
-        case '=':
-            return fheroes2::Key::KEY_EQUALS;
-        case '>':
-            return fheroes2::Key::KEY_GREATER;
-        case '?':
-            return fheroes2::Key::KEY_QUESTION;
-        case '@':
-            return fheroes2::Key::KEY_AT;
-        case '[':
-            return fheroes2::Key::KEY_LEFT_BRACKET;
-        case '\\':
-            return fheroes2::Key::KEY_BACKSLASH;
-        case ']':
-            return fheroes2::Key::KEY_RIGHT_BRACKET;
-        case '^':
-            return fheroes2::Key::KEY_CARET;
-        case '_':
-            return fheroes2::Key::KEY_UNDERSCORE;
-        case ' ':
-            return fheroes2::Key::KEY_SPACE;
-        case 'a':
-            return fheroes2::Key::KEY_A;
-        case 'b':
-            return fheroes2::Key::KEY_B;
-        case 'c':
-            return fheroes2::Key::KEY_C;
-        case 'd':
-            return fheroes2::Key::KEY_D;
-        case 'e':
-            return fheroes2::Key::KEY_E;
-        case 'f':
-            return fheroes2::Key::KEY_F;
-        case 'g':
-            return fheroes2::Key::KEY_G;
-        case 'h':
-            return fheroes2::Key::KEY_H;
-        case 'i':
-            return fheroes2::Key::KEY_I;
-        case 'j':
-            return fheroes2::Key::KEY_J;
-        case 'k':
-            return fheroes2::Key::KEY_K;
-        case 'l':
-            return fheroes2::Key::KEY_L;
-        case 'm':
-            return fheroes2::Key::KEY_M;
-        case 'n':
-            return fheroes2::Key::KEY_N;
-        case 'o':
-            return fheroes2::Key::KEY_O;
-        case 'p':
-            return fheroes2::Key::KEY_P;
-        case 'q':
-            return fheroes2::Key::KEY_Q;
-        case 'r':
-            return fheroes2::Key::KEY_R;
-        case 's':
-            return fheroes2::Key::KEY_S;
-        case 't':
-            return fheroes2::Key::KEY_T;
-        case 'u':
-            return fheroes2::Key::KEY_U;
-        case 'v':
-            return fheroes2::Key::KEY_V;
-        case 'w':
-            return fheroes2::Key::KEY_W;
-        case 'x':
-            return fheroes2::Key::KEY_X;
-        case 'y':
-            return fheroes2::Key::KEY_Y;
-        case 'z':
-            return fheroes2::Key::KEY_Z;
-        case '0':
-            return fheroes2::Key::KEY_0;
-        case '1':
-            return fheroes2::Key::KEY_1;
-        case '2':
-            return fheroes2::Key::KEY_2;
-        case '3':
-            return fheroes2::Key::KEY_3;
-        case '4':
-            return fheroes2::Key::KEY_4;
-        case '5':
-            return fheroes2::Key::KEY_5;
-        case '6':
-            return fheroes2::Key::KEY_6;
-        case '7':
-            return fheroes2::Key::KEY_7;
-        case '8':
-            return fheroes2::Key::KEY_8;
-        case '9':
-            return fheroes2::Key::KEY_9;
-        default:
-            break;
-        }
-        return fheroes2::Key::NONE;
-    }
-
-    void SetCurrentDPadCharIndex( char currentChar )
-    {
-        if ( currentChar >= 'A' && currentChar <= 'Z' ) {
-            currentUpper = true;
-            currentChar += 32;
-        }
-
-        const fheroes2::Key keySym = KeySymFromChar( currentChar );
-        for ( int i = 0; i < totalCharactersDPad; ++i ) {
-            if ( dPadKeys[i] == keySym ) {
-                currentCharIndex = i;
-                return;
-            }
-        }
-
-        currentCharIndex = 0;
-    }
-#endif
-
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     std::set<uint32_t> eventTypeStatus;
 
@@ -825,99 +647,6 @@ namespace fheroes2
 
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod )
     {
-#if defined( TARGET_PS_VITA )
-        (void)mod;
-
-        // input with D-Pad
-        if ( res.size() ) {
-            SetCurrentDPadCharIndex( res.back() );
-        }
-        else {
-            currentUpper = true;
-            currentCharIndex = 0;
-        }
-
-        switch ( key ) {
-        // delete char
-        case fheroes2::Key::KEY_LEFT: {
-            if ( !res.empty() && pos ) {
-                res.resize( res.size() - 1 );
-                --pos;
-            }
-            break;
-        }
-        // add new char
-        case fheroes2::Key::KEY_RIGHT: {
-            currentUpper = res.empty();
-            currentCharIndex = 0;
-
-            const char c = GetCurrentDPadChar();
-            if ( c )
-                res.push_back( c );
-
-            ++pos;
-            break;
-        }
-        // next char
-        case fheroes2::Key::KEY_DOWN: {
-            ++currentCharIndex;
-            if ( currentCharIndex >= totalCharactersDPad )
-                currentCharIndex = 0;
-
-            if ( !res.empty() ) {
-                res.resize( res.size() - 1 );
-            }
-            else {
-                ++pos;
-            }
-
-            const char c = GetCurrentDPadChar();
-            if ( c )
-                res.push_back( c );
-
-            break;
-        }
-        // previous char
-        case fheroes2::Key::KEY_UP: {
-            --currentCharIndex;
-            if ( currentCharIndex < 0 )
-                currentCharIndex = totalCharactersDPad - 1;
-
-            if ( !res.empty() ) {
-                res.resize( res.size() - 1 );
-            }
-            else {
-                ++pos;
-            }
-
-            const char c = GetCurrentDPadChar();
-            if ( c )
-                res.push_back( c );
-
-            break;
-        }
-        // switch uppler/lowercase
-        case fheroes2::Key::KEY_SHIFT: {
-            currentUpper = !currentUpper;
-
-            if ( !res.empty() ) {
-                res.resize( res.size() - 1 );
-            }
-            else {
-                ++pos;
-            }
-
-            const char c = GetCurrentDPadChar();
-            if ( c )
-                res.push_back( c );
-
-            break;
-        }
-
-        default:
-            break;
-        }
-#else
         switch ( key ) {
         case fheroes2::Key::KEY_BACKSPACE:
             if ( !res.empty() && pos ) {
@@ -959,7 +688,6 @@ namespace fheroes2
             }
         }
         }
-#endif
 
         return pos;
     }
@@ -1019,24 +747,6 @@ void OpenTouchpad()
     // Do nothing.
 }
 #endif
-
-void LocalEvent::OpenVirtualKeyboard()
-{
-#if defined( TARGET_PS_VITA )
-    dpadInputActive = true;
-#elif defined( ANDROID )
-    // Here we should use SDL_StartTextInput() call to open a keyboard.
-#endif
-}
-
-void LocalEvent::CloseVirtualKeyboard()
-{
-#if defined( TARGET_PS_VITA )
-    dpadInputActive = false;
-#elif defined( ANDROID )
-    // Here we should use SDL_StopTextInput() call to close a keyboard.
-#endif
-}
 
 namespace
 {
@@ -1377,6 +1087,12 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
+#if defined( TARGET_PS_VITA )
+    // Ignore rear touchpad on PS Vita
+    if ( event.touchId != 0 )
+        return;
+#endif
+
     switch ( event.type ) {
     case SDL_FINGERDOWN:
         if ( !_fingerIds.first ) {
@@ -1559,33 +1275,17 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         ResetModes( KEY_PRESSED );
     }
     else if ( modes & KEY_PRESSED ) {
-#if defined( TARGET_PS_VITA )
-        if ( dpadInputActive ) {
-            if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
-                key_value = fheroes2::Key::KEY_SHIFT;
-            }
-            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
-                key_value = fheroes2::Key::KEY_LEFT;
-            }
-            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
-                key_value = fheroes2::Key::KEY_RIGHT;
-            }
-            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_UP ) {
-                key_value = fheroes2::Key::KEY_UP;
-            }
-            else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
-                key_value = fheroes2::Key::KEY_DOWN;
-            }
-            return;
+        if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+            _controllerPointerSpeed *= CONTROLLER_TRIGGER_CURSOR_SPEEDUP;
+            key_value = fheroes2::Key::NONE;
         }
-#endif
-        if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
+        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
             key_value = fheroes2::Key::KEY_SPACE;
         }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
+        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
             key_value = fheroes2::Key::KEY_H;
         }
-        else if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
             key_value = fheroes2::Key::KEY_T;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_X ) {
@@ -1599,6 +1299,9 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_START ) {
             key_value = fheroes2::Key::KEY_ENTER;
+        }
+        else {
+            key_value = fheroes2::Key::NONE;
         }
 #if defined( TARGET_NINTENDO_SWITCH )
         // Custom button mapping for Nintendo Switch
@@ -1620,7 +1323,13 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         else if ( button.button == SWITCH_BUTTON_PLUS ) {
             key_value = fheroes2::Key::KEY_C;
         }
+        else {
+            key_value = fheroes2::Key::NONE;
+        }
 #endif
+    }
+    else if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+        _controllerPointerSpeed /= CONTROLLER_TRIGGER_CURSOR_SPEEDUP;
     }
 }
 

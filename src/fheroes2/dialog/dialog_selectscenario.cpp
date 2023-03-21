@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_selectscenario.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -31,7 +33,6 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_selectscenario.h"
 #include "difficulty.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -99,10 +100,9 @@ namespace
         fheroes2::Text header( info.name, fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "Location: " ), fheroes2::FontType::normalYellow() } );
-        body.add( { fullPath, fheroes2::FontType::normalWhite() } );
-        body.add( { _( "\n\nMap Type:\n" ), fheroes2::FontType::normalYellow() } );
-        switch ( info._version ) {
+
+        body.add( { _( "Map Type:\n" ), fheroes2::FontType::normalYellow() } );
+        switch ( info.version ) {
         case GameVersion::SUCCESSION_WARS:
             body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
             break;
@@ -115,6 +115,9 @@ namespace
             break;
         }
 
+        body.add( { _( "\n\nLocation: " ), fheroes2::FontType::smallYellow() } );
+        body.add( { fullPath, fheroes2::FontType::smallWhite() } );
+
         fheroes2::showMessage( header, body, Dialog::ZERO );
     }
 
@@ -122,7 +125,7 @@ namespace
     {
         std::string msg;
 
-        switch ( info.conditions_loss ) {
+        switch ( info.lossConditions ) {
         case Maps::FileInfo::LOSS_EVERYTHING:
             msg = _( "Lose all your heroes and towns." );
             break;
@@ -148,7 +151,7 @@ namespace
     {
         std::string msg;
 
-        switch ( info.conditions_wins ) {
+        switch ( info.victoryConditions ) {
         case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
             msg = _( "Defeat all enemy heroes and towns." );
             break;
@@ -224,29 +227,29 @@ void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
 
 void ScenarioListBox::_renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, const int32_t dsty, const bool current ) const
 {
-    fheroes2::Blit( _getPlayersCountIcon( info.kingdom_colors ), display, _offsetX + SCENARIO_LIST_COUNT_PLAYERS_OFFSET_X, dsty );
-    _renderMapIcon( info.size_w, display, _offsetX + SCENARIO_LIST_MAP_SIZE_OFFSET_X, dsty );
-    fheroes2::Blit( _getMapTypeIcon( info._version ), display, _offsetX + SCENARIO_LIST_MAP_TYPE_OFFSET_X, dsty );
+    fheroes2::Blit( _getPlayersCountIcon( info.kingdomColors ), display, _offsetX + SCENARIO_LIST_COUNT_PLAYERS_OFFSET_X, dsty );
+    _renderMapIcon( info.width, display, _offsetX + SCENARIO_LIST_MAP_SIZE_OFFSET_X, dsty );
+    fheroes2::Blit( _getMapTypeIcon( info.version ), display, _offsetX + SCENARIO_LIST_MAP_TYPE_OFFSET_X, dsty );
     _renderMapName( info, current, dsty, display );
-    fheroes2::Blit( _getWinConditionsIcon( info.conditions_wins ), display, _offsetX + SCENARIO_LIST_VICTORY_CONDITION_OFFSET_X, dsty );
-    fheroes2::Blit( _getLossConditionsIcon( info.conditions_loss ), display, _offsetX + SCENARIO_LIST_LOSS_CONDITION_OFFSET_X, dsty );
+    fheroes2::Blit( _getWinConditionsIcon( info.victoryConditions ), display, _offsetX + SCENARIO_LIST_VICTORY_CONDITION_OFFSET_X, dsty );
+    fheroes2::Blit( _getLossConditionsIcon( info.lossConditions ), display, _offsetX + SCENARIO_LIST_LOSS_CONDITION_OFFSET_X, dsty );
 }
 
 void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst )
 {
     const Maps::FileInfo & info = GetCurrent();
 
-    fheroes2::Blit( _getPlayersCountIcon( info.kingdom_colors ), display, dst.x + SELECTED_SCENARIO_COUNT_PLAYERS_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
-    _renderMapIcon( info.size_w, display, dst.x + SELECTED_SCENARIO_MAP_SIZE_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
-    fheroes2::Blit( _getMapTypeIcon( info._version ), display, dst.x + SELECTED_SCENARIO_MAP_TYPE_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
+    fheroes2::Blit( _getPlayersCountIcon( info.kingdomColors ), display, dst.x + SELECTED_SCENARIO_COUNT_PLAYERS_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
+    _renderMapIcon( info.width, display, dst.x + SELECTED_SCENARIO_MAP_SIZE_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
+    fheroes2::Blit( _getMapTypeIcon( info.version ), display, dst.x + SELECTED_SCENARIO_MAP_TYPE_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
 
     fheroes2::Text mapNameText( info.name, fheroes2::FontType::normalWhite() );
     mapNameText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_MAP_NAME_OFFSET_X, SELECTED_SCENARIO_MAP_NAME_WIDTH, mapNameText.width() ),
                       dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y + 2, display );
 
-    fheroes2::Blit( _getWinConditionsIcon( info.conditions_wins ), display, dst.x + SELECTED_SCENARIO_VICTORY_CONDITION_OFFSET_X,
+    fheroes2::Blit( _getWinConditionsIcon( info.victoryConditions ), display, dst.x + SELECTED_SCENARIO_VICTORY_CONDITION_OFFSET_X,
                     dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
-    fheroes2::Blit( _getLossConditionsIcon( info.conditions_loss ), display, dst.x + SELECTED_SCENARIO_LOSS_CONDITION_OFFSET_X,
+    fheroes2::Blit( _getLossConditionsIcon( info.lossConditions ), display, dst.x + SELECTED_SCENARIO_LOSS_CONDITION_OFFSET_X,
                     dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
 
     fheroes2::Text difficultyLabelText( _( "Map difficulty:" ), fheroes2::FontType::normalWhite() );
@@ -287,7 +290,7 @@ void ScenarioListBox::SelectMapSize( MapsFileInfoList & mapsList, const int sele
 
     SetListContent( mapsList );
 
-    if ( currentScenario.size_w == selectedSize_ || selectedSize_ == Maps::ZERO ) {
+    if ( currentScenario.width == selectedSize_ || selectedSize_ == Maps::ZERO ) {
         SetCurrent( currentScenario );
     }
 
@@ -380,7 +383,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
     xlarge.reserve( all.size() );
 
     for ( const Maps::FileInfo & info : all ) {
-        switch ( info.size_w ) {
+        switch ( info.width ) {
         case Maps::SMALL:
             small.push_back( info );
             break;

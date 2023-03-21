@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "agg_image.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -33,7 +35,7 @@
 
 #include "agg.h"
 #include "agg_file.h"
-#include "agg_image.h"
+#include "battle_cell.h"
 #include "h2d.h"
 #include "icn.h"
 #include "image.h"
@@ -47,6 +49,7 @@
 #include "til.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_button.h"
 #include "ui_font.h"
 #include "ui_language.h"
 #include "ui_text.h"
@@ -351,86 +354,6 @@ namespace
         }
     }
 
-    fheroes2::Image resizeButton( const fheroes2::Image & original, const int32_t width )
-    {
-        const int32_t height = original.height();
-        assert( height > 0 );
-
-        fheroes2::Image output;
-        output.resize( width, height );
-        output.reset();
-
-        const int32_t originalWidth = original.width();
-        if ( originalWidth >= width ) {
-            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height );
-            const int32_t secondHalf = width - width / 2;
-            fheroes2::Copy( original, originalWidth - secondHalf, 0, output, width - secondHalf, 0, secondHalf, height );
-        }
-        else {
-            const int32_t middleWidth = originalWidth / 3;
-            const int32_t overallMiddleWidth = width - middleWidth * 2;
-            const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
-            const int32_t middleLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
-
-            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, height );
-            int32_t offsetX = middleWidth;
-            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
-                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, height );
-                offsetX += middleWidth;
-            }
-
-            if ( middleLeftOver > 0 ) {
-                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleLeftOver, height );
-                offsetX += middleLeftOver;
-            }
-
-            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
-            assert( offsetX + rightPartWidth == width );
-
-            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, height );
-        }
-
-        return output;
-    }
-
-    // The height of text area is only 16 pixels.
-    void getCustomNormalButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const bool isEvilInterface, int32_t width, fheroes2::Point & releasedOffset,
-                                fheroes2::Point & pressedOffset )
-    {
-        assert( width > 0 );
-
-        releasedOffset = { 7, 5 };
-        pressedOffset = { 6, 6 };
-
-        // The actual button sprite is 10 pixels longer.
-        width += 10;
-
-        const int32_t icnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
-        const int32_t minimumButtonSize = 16;
-        const int32_t maximumButtonSize = 200; // Why is such a wide button needed?
-        width = std::clamp( width, minimumButtonSize, maximumButtonSize );
-
-        const fheroes2::Sprite & originalReleased = fheroes2::AGG::GetICN( icnId, 0 );
-        const fheroes2::Sprite & originalPressed = fheroes2::AGG::GetICN( icnId, 1 );
-
-        const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
-
-        fheroes2::Image temp = resizeButton( originalReleased, width );
-        released.resize( temp.width(), temp.height() );
-        assert( background.width() >= temp.width() && background.height() >= temp.height() );
-        fheroes2::Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
-        fheroes2::Blit( temp, released );
-        released.setPosition( originalReleased.x(), originalReleased.y() );
-
-        temp = resizeButton( originalPressed, width );
-        pressed.resize( temp.width(), temp.height() );
-        assert( background.width() >= temp.width() && background.height() >= temp.height() );
-        fheroes2::Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
-        fheroes2::Blit( temp, pressed );
-        pressed.setPosition( originalPressed.x(), originalPressed.y() );
-    }
-
     uint8_t getButtonFillingColor( const bool isReleasedState, const bool isGoodInterface = true )
     {
         if ( isGoodInterface ) {
@@ -467,11 +390,12 @@ namespace
     {
         fheroes2::Point releasedOffset;
         fheroes2::Point pressedOffset;
-        getCustomNormalButton( released, pressed, isEvilInterface, textWidth, releasedOffset, pressedOffset );
+        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, textWidth, releasedOffset, pressedOffset );
 
         const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { textWidth, 16 }, buttonFontColor );
+        renderTextOnButton( released, pressed, text, releasedOffset, pressedOffset, { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
+                            buttonFontColor );
     }
 
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
@@ -547,8 +471,7 @@ namespace fheroes2
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
-                _icnVsSprite[id][i]
-                    = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
+                _icnVsSprite[id][i] = decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
             }
         }
 
@@ -1871,7 +1794,8 @@ namespace fheroes2
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
                     // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
-                    imageArray.insert( imageArray.begin() + 96, 64, imageArray[0] );
+                    const Sprite firstSprite{ imageArray[0] };
+                    imageArray.insert( imageArray.begin() + 96, 64, firstSprite );
                     std::swap( imageArray[136], imageArray[192] ); // Move sprites for chars 0xA8
                     std::swap( imageArray[152], imageArray[225] ); // and 0xB8 to it's places.
                     imageArray.pop_back();
@@ -1879,7 +1803,8 @@ namespace fheroes2
                 }
                 // German version uses CP1252
                 if ( crc32 == 0x04745D1D || crc32 == 0xD0F0D852 ) {
-                    imageArray.insert( imageArray.begin() + 96, 124, imageArray[0] );
+                    const Sprite firstSprite{ imageArray[0] };
+                    imageArray.insert( imageArray.begin() + 96, 124, firstSprite );
                     std::swap( imageArray[164], imageArray[224] );
                     std::swap( imageArray[182], imageArray[225] );
                     std::swap( imageArray[188], imageArray[226] );
@@ -1891,7 +1816,8 @@ namespace fheroes2
                 }
                 // French version has its own special encoding but should conform to CP1252 too
                 if ( crc32 == 0xD9556567 || crc32 == 0x406967B9 ) {
-                    imageArray.insert( imageArray.begin() + 96, 160 - 32, imageArray[0] );
+                    const Sprite firstSprite{ imageArray[0] };
+                    imageArray.insert( imageArray.begin() + 96, 160 - 32, firstSprite );
                     imageArray[192 - 32] = imageArray[33];
                     imageArray[199 - 32] = imageArray[35];
                     imageArray[201 - 32] = imageArray[37];
@@ -1914,7 +1840,8 @@ namespace fheroes2
                 }
                 // Italian version uses CP1252
                 if ( crc32 == 0x219B3124 || crc32 == 0x1F3C3C74 ) {
-                    imageArray.insert( imageArray.begin() + 101, 155 - 32, imageArray[0] );
+                    const Sprite firstSprite{ imageArray[0] };
+                    imageArray.insert( imageArray.begin() + 101, 155 - 32, firstSprite );
                     imageArray[192 - 32] = imageArray[33];
                     imageArray[200 - 32] = imageArray[37];
                     imageArray[201 - 32] = imageArray[37];
@@ -2135,6 +2062,19 @@ namespace fheroes2
                     ApplyPalette( out, indexes );
                 }
                 return true;
+            case ICN::TITANMSL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 7 ) {
+                    // We need to shift Titan lightning arrow sprite position to correctly render it.
+                    _icnVsSprite[id][0].setPosition( _icnVsSprite[id][0].x(), _icnVsSprite[id][0].y() - 5 );
+                    _icnVsSprite[id][1].setPosition( _icnVsSprite[id][1].x() - 5, _icnVsSprite[id][1].y() - 5 );
+                    _icnVsSprite[id][2].setPosition( _icnVsSprite[id][2].x() - 10, _icnVsSprite[id][2].y() );
+                    _icnVsSprite[id][3].setPosition( _icnVsSprite[id][3].x() - 15, _icnVsSprite[id][3].y() );
+                    _icnVsSprite[id][4].setPosition( _icnVsSprite[id][4].x() - 10, _icnVsSprite[id][2].y() );
+                    _icnVsSprite[id][5].setPosition( _icnVsSprite[id][5].x() - 5, _icnVsSprite[id][5].y() - 5 );
+                    _icnVsSprite[id][6].setPosition( _icnVsSprite[id][6].x(), _icnVsSprite[id][6].y() - 5 );
+                }
+                return true;
             case ICN::TROLLMSL:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 1 ) {
@@ -2199,6 +2139,35 @@ namespace fheroes2
                     indexes[35] = 173;
 
                     ApplyPalette( out, indexes );
+                }
+                return true;
+            case ICN::GOLEM:
+            case ICN::GOLEM2:
+                LoadOriginalICN( id );
+                // Original Golem ICN contains 40 frames. We make the corrections only for original sprite.
+                if ( _icnVsSprite[id].size() == 40 ) {
+                    // Movement animation fix for Iron and Steel Golem: its 'MOVE_MAIN' animation is missing 1/4 of animation start.
+                    // The 'MOVE_START' (for first and one cell move) has this 1/4 of animation, but 'MOVE_TILE_START` is empty,
+                    // so we make a copy of 'MOVE_MAIN' frames to the end of sprite vector and correct their 'x' coordinate
+                    // to cover the whole cell except the last frame, that has correct coordinates.
+                    const size_t golemICNSize = _icnVsSprite[id].size();
+                    // 'MOVE_MAIN' has 7 frames and we copy only first 6.
+                    const int32_t copyFramesNum = 6;
+
+                    _icnVsSprite[id].reserve( golemICNSize + copyFramesNum );
+                    // 'MOVE_MAIN' frames starts from the 6th frame in Golem ICN sprites.
+                    size_t copyFrame = 6;
+
+                    for ( int32_t i = 0; i < copyFramesNum; ++i, ++copyFrame ) {
+                        // IMPORTANT: we MUST do a copy of a vector element if we want to insert it to the same vector.
+                        fheroes2::Sprite originalFrame = _icnVsSprite[id][copyFrame];
+                        _icnVsSprite[id].emplace_back( std::move( originalFrame ) );
+
+                        const size_t frameID = golemICNSize + i;
+                        // We have 7 'MOVE_MAIN' frames and 1/4 of cell to expand the horizontal movement, so we shift the first copied frame by "6*CELLW/(4*7)" to the
+                        // left and reduce this shift every next frame by "CELLW/(7*4)".
+                        _icnVsSprite[id][frameID].setPosition( _icnVsSprite[id][frameID].x() - ( copyFramesNum - i ) * CELLW / 28, _icnVsSprite[id][frameID].y() );
+                    }
                 }
                 return true;
             case ICN::LOCATORE:
@@ -2644,6 +2613,10 @@ namespace fheroes2
             case ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE:
                 _icnVsSprite[id].resize( 1 );
                 h2d::readImage( "barbarian_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
+                return true;
+            case ICN::SORCERESS_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE:
+                _icnVsSprite[id].resize( 1 );
+                h2d::readImage( "sorceress_castle_captain_quarter_left_side.image", _icnVsSprite[id][0] );
                 return true;
             case ICN::NECROMANCER_CASTLE_STANDALONE_CAPTAIN_QUARTERS: {
                 _icnVsSprite[id].resize( 1 );
@@ -3233,6 +3206,41 @@ namespace fheroes2
                     _icnVsSprite[id][i + 128 + 7].setPosition( 0, original.y() );
                 }
                 return true;
+            case ICN::SHADOW32:
+                LoadOriginalICN( id );
+                // The shadow sprite of hero needs to be shifted to match the hero sprite.
+                if ( _icnVsSprite[id].size() == 86 ) {
+                    // Direction: TOP (0-8), TOP_RIGHT (9-17), RIGHT (18-26), BOTTOM_RIGHT (27-35), BOTTOM (36-44)
+                    for ( int32_t i = 0; i < 45; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        original.setPosition( original.x(), original.y() - 3 );
+                    }
+
+                    // Direction:TOP_LEFT
+                    for ( int32_t i = 59; i < 68; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        original.setPosition( original.x() + 1, original.y() - 3 );
+                    }
+
+                    // Direction:LEFT
+                    for ( int32_t i = 68; i < 77; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        original.setPosition( original.x() - 5, original.y() - 3 );
+                    }
+
+                    // Direction:BOTTOM_LEFT
+                    for ( int32_t i = 77; i < 86; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        if ( i == 80 ) {
+                            // This sprite needs extra fix.
+                            original.setPosition( original.x() - 5, original.y() - 3 );
+                        }
+                        else {
+                            original.setPosition( original.x() - 10, original.y() - 3 );
+                        }
+                    }
+                }
+                return true;
             case ICN::MINI_MONSTER_IMAGE:
             case ICN::MINI_MONSTER_SHADOW: {
                 // It doesn't matter which image is being called. We are generating both of them at the same time.
@@ -3354,6 +3362,13 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::GAME_OPTION_ICON: {
+                _icnVsSprite[id].resize( 2 );
+
+                h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
+                h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
+                break;
+            }
             default:
                 break;
             }
@@ -3384,24 +3399,15 @@ namespace fheroes2
 
                 StreamBuf buffer( data );
 
-                const uint32_t count = buffer.getLE16();
-                const uint32_t width = buffer.getLE16();
-                const uint32_t height = buffer.getLE16();
-                const uint32_t size = width * height;
-                if ( headerSize + count * size != data.size() ) {
+                const size_t count = buffer.getLE16();
+                const int32_t width = buffer.getLE16();
+                const int32_t height = buffer.getLE16();
+                if ( count < 1 || width < 1 || height < 1 || ( headerSize + count * width * height ) != data.size() ) {
                     return 0;
                 }
 
                 std::vector<Image> & originalTIL = _tilVsImage[id][0];
-
-                originalTIL.resize( count );
-                for ( uint32_t i = 0; i < count; ++i ) {
-                    Image & tilImage = originalTIL[i];
-                    tilImage.resize( width, height );
-                    tilImage._disableTransformLayer();
-                    memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
-                    std::fill( tilImage.transform(), tilImage.transform() + width * height, static_cast<uint8_t>( 0 ) );
-                }
+                decodeTILImages( data.data() + headerSize, count, width, height, originalTIL );
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
                     std::vector<Image> & currentTIL = _tilVsImage[id][shapeId];
@@ -3410,7 +3416,7 @@ namespace fheroes2
                     const bool horizontalFlip = ( shapeId & 2 ) != 0;
                     const bool verticalFlip = ( shapeId & 1 ) != 0;
 
-                    for ( uint32_t i = 0; i < count; ++i ) {
+                    for ( size_t i = 0; i < count; ++i ) {
                         currentTIL[i] = Flip( originalTIL[i], horizontalFlip, verticalFlip );
                     }
                 }
