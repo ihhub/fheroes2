@@ -2324,7 +2324,7 @@ msgid "Mage Guild, Level 3"
 msgstr "Magikersamfund, nivå 3"
 
 msgid "Mage Guild, Level 4"
-msgstr "Magikersamfund nivå 4"
+msgstr "Magikersamfund, nivå 4"
 
 msgid "Mage Guild, Level 5"
 msgstr "Magikersamfund, nivå 5"
@@ -6119,8 +6119,7 @@ msgid "Basic Pathfinding"
 msgstr "Basal Stigletning"
 
 msgid "Expert Pathfinding"
-msgstr "Expert-\n"
-"stigletning"
+msgstr "Expert Stigletning"
 
 msgid "Advanced Logistics"
 msgstr "Avancerad Logistik"
@@ -6132,12 +6131,10 @@ msgid "Basic Scouting"
 msgstr "Basal Spaning"
 
 msgid "Expert Archery"
-msgstr "Expert-\n"
-"bågskytte"
+msgstr "Expert Bågskytte"
 
 msgid "Expert Logistics"
-msgstr "Expert-\n"
-"logistik"
+msgstr "Expert Logistik"
 
 msgid "Advanced Diplomacy"
 msgstr "Avancerad Diplomati"
@@ -6149,12 +6146,10 @@ msgid "Basic Diplomacy"
 msgstr "Basal Diplomati"
 
 msgid "Expert Diplomacy"
-msgstr "Expert-\n"
-"diplomati"
+msgstr "Expert Diplomati"
 
 msgid "Expert Scouting"
-msgstr "Expert-\n"
-"spaning"
+msgstr "Expert Spaning"
 
 msgid "Advanced Leadership"
 msgstr "Avancerat Ledarskap"
@@ -6169,8 +6164,7 @@ msgid "Basic Navigation"
 msgstr "Nasal Navigering"
 
 msgid "Expert Navigation"
-msgstr "Expert-\n"
-"navigering"
+msgstr "Expert Navigation"
 
 msgid "Advanced Wisdom"
 msgstr "Avancerad Visdom"
@@ -6182,12 +6176,10 @@ msgid "Basic Wisdom"
 msgstr "Basal Visdom"
 
 msgid "Expert Leadership"
-msgstr "Expert-\n"
-"ledarskap"
+msgstr "Expert Ledarskap"
 
 msgid "Expert Wisdom"
-msgstr "Expert-\n"
-"visdom"
+msgstr "Expert Visdom"
 
 msgid "Advanced Luck"
 msgstr "Avancerad Tur"
@@ -6199,12 +6191,10 @@ msgid "Basic Luck"
 msgstr "Basal Tur"
 
 msgid "Expert Luck"
-msgstr "Expert-\n"
-"tur"
+msgstr "Expert Tur"
 
 msgid "Expert Mysticism"
-msgstr "Expert-\n"
-"mystik"
+msgstr "Expert Mystik"
 
 msgid "Advanced Ballistics"
 msgstr "Avancerad Ballistik"
@@ -6219,8 +6209,7 @@ msgid "Basic Eagle Eye"
 msgstr "Basal Falkblick"
 
 msgid "Expert Ballistics"
-msgstr "Expert-\n"
-"ballistik"
+msgstr "Expert Ballistik"
 
 msgid "Advanced Necromancy"
 msgstr "Avancerad Svartkonst"
@@ -6232,19 +6221,16 @@ msgid "Basic Necromancy"
 msgstr "Basal Svartkonst"
 
 msgid "Expert Eagle Eye"
-msgstr "Expert-\n"
-"falkblick"
+msgstr "Expert Falkblick"
 
 msgid "Expert Necromancy"
-msgstr "Expert-\n"
-"svartkonst"
+msgstr "Expert Svartkonst"
 
 msgid "Advanced Estates"
 msgstr "Avancerade Ägor"
 
 msgid "Expert Estates"
-msgstr "Expert-\n"
-"ägor"
+msgstr "Expert Ägor"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
@@ -6254,7 +6240,6 @@ msgstr ""
 
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} tar bort förflyttningshandikappet för grov terräng."
-
 
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
