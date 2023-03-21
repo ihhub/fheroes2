@@ -223,7 +223,7 @@ public:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     fheroes2::Point WindowPosition() const
     {
-        return window_position;
+        return windowPosition;
     }
 #endif
 
@@ -462,7 +462,7 @@ private:
     fheroes2::Size video_mode;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    fheroes2::Point window_position{ 0, 0 };
+    fheroes2::Point windowPosition{ 0, 0 };
 #endif
 
     fheroes2::ResolutionInfo _resolutionInfo;

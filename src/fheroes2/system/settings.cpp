@@ -293,7 +293,7 @@ bool Settings::Read( const std::string & filePath )
         int default_x = SDL_WINDOWPOS_CENTERED;
         int default_y = SDL_WINDOWPOS_CENTERED;
 
-        window_position = config.PointParams( "windowposition", { default_x, default_y } );
+        windowPosition = config.PointParams( "windowposition", { default_x, default_y } );
     }
 #endif
 
@@ -408,7 +408,7 @@ std::string Settings::String() const
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     os << std::endl << "# starting window position (x,y); used to maintain it between sessions" << std::endl;
-    os << "windowposition = [ " << window_position.x << ", " << window_position.y << " ]" << std::endl;
+    os << "windowposition = [ " << windowPosition.x << ", " << windowPosition.y << " ]" << std::endl;
 #endif
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
@@ -997,7 +997,7 @@ void Settings::SetMusicVolume( int v )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void Settings::SetWindowPosition( fheroes2::Point position )
 {
-    window_position = position;
+    windowPosition = position;
 }
 #endif
 
