@@ -2890,9 +2890,8 @@ msgstr "Klicka för att anta valt språk."
 msgid "%{name} has gained a level."
 msgstr "%{name} har gått upp en level."
 
-#, fuzzy
 msgid "%{skill} +1"
-msgstr "Färdighet %{skill} +1"
+msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
 msgstr "Du har lärt dig %{skill}."
@@ -6061,16 +6060,16 @@ msgid "Current Modifiers:"
 msgstr ""
 
 msgid "skill|Basic"
-msgstr "Novis"
+msgstr "Basal"
 
 msgid "skill|Advanced"
 msgstr "Avancerad"
 
 msgid "skill|Expert"
-msgstr "Mästare"
+msgstr "Expert"
 
 msgid "Pathfinding"
-msgstr "Vägledning"
+msgstr "Stigletning"
 
 msgid "Archery"
 msgstr "Bågskytte"
@@ -6106,149 +6105,163 @@ msgid "Necromancy"
 msgstr "Svartkonst"
 
 msgid "Estates"
-msgstr "Rang"
+msgstr "Ägor"
 
 msgid "Advanced Archery"
-msgstr "Avancerat bågskytte"
+msgstr "Avancerat Bågskytte"
 
 msgid "Advanced Pathfinding"
-msgstr "Avancerad vägledning"
+msgstr "Avancerad Stigletning"
 
 msgid "Basic Archery"
-msgstr "Grundläggande bågskytte"
+msgstr "Basalt Bågskytte"
 
 msgid "Basic Pathfinding"
-msgstr "Grundläggande vägledning"
+msgstr "Basal Stigletning"
 
 msgid "Expert Pathfinding"
-msgstr "Professionell vägledning"
+msgstr "Expert-\n"
+"stigletning"
 
 msgid "Advanced Logistics"
-msgstr "Avancerad logistik"
+msgstr "Avancerad Logistik"
 
 msgid "Basic Logistics"
-msgstr "Grundläggande logistik"
+msgstr "Basal Logistik"
 
 msgid "Basic Scouting"
-msgstr ""
+msgstr "Basal Spaning"
 
 msgid "Expert Archery"
-msgstr "Professionellt bågskytte"
+msgstr "Expert-\n
+"bågskytte"
 
 msgid "Expert Logistics"
-msgstr "Professionell logistik"
+msgstr "Expert-\n"
+"logistik"
 
 msgid "Advanced Diplomacy"
-msgstr ""
+msgstr "Avancerad Diplomati"
 
 msgid "Advanced Scouting"
-msgstr ""
+msgstr "Avancerad Spaning"
 
 msgid "Basic Diplomacy"
-msgstr ""
+msgstr "Basal Diplomati"
 
 msgid "Expert Diplomacy"
-msgstr ""
+msgstr "Expert-\n"
+#diplomati"
 
 msgid "Expert Scouting"
-msgstr ""
+msgstr "Expert-\n"
+"spaning"
 
 msgid "Advanced Leadership"
-msgstr ""
+msgstr "Avancerat Ledarskap"
 
 msgid "Advanced Navigation"
-msgstr "Avancerad navigering"
+msgstr "Avancerad Navigering"
 
 msgid "Basic Leadership"
-msgstr ""
+msgstr "Basalt Ledarskap"
 
 msgid "Basic Navigation"
-msgstr "Grundläggande navigering"
+msgstr "Nasal Navigering"
 
 msgid "Expert Navigation"
-msgstr "Professionell navigering"
+msgstr "Expert-\n"
+"navigering"
 
 msgid "Advanced Wisdom"
-msgstr ""
+msgstr "Avancerad Visdom"
 
 msgid "Basic Mysticism"
-msgstr ""
+msgstr "Basal Mystik"
 
 msgid "Basic Wisdom"
-msgstr ""
+msgstr "Basal Visdom"
 
 msgid "Expert Leadership"
-msgstr "Professionellt ledarskap"
+msgstr "Expert-\n"
+"ledarskap"
 
 msgid "Expert Wisdom"
-msgstr ""
+msgstr "Expert-\n"
+"visdom"
 
 msgid "Advanced Luck"
-msgstr "Avancerad tur"
+msgstr "Avancerad Tur"
 
 msgid "Advanced Mysticism"
-msgstr ""
+msgstr "Avancerad Mystik"
 
 msgid "Basic Luck"
-msgstr "Grundläggande tur"
+msgstr "Basal Tur"
 
 msgid "Expert Luck"
-msgstr "Professionell tur"
+msgstr "Expert-\n"
+"tur"
 
 msgid "Expert Mysticism"
-msgstr ""
+msgstr "Expert-\n"
+"mystik"
 
 msgid "Advanced Ballistics"
-msgstr ""
+msgstr "Avancerad Ballistik"
 
 msgid "Advanced Eagle Eye"
-msgstr ""
+msgstr "Avancerad Falkblick"
 
 msgid "Basic Ballistics"
-msgstr ""
+msgstr "Basal Ballistik"
 
 msgid "Basic Eagle Eye"
-msgstr ""
+msgstr "Basal Falkblick"
 
 msgid "Expert Ballistics"
-msgstr ""
+msgstr "Expert-\n"
+"ballistik"
 
 msgid "Advanced Necromancy"
-msgstr ""
+msgstr "Avancerad Svartkonst"
 
 msgid "Basic Estates"
-msgstr ""
+msgstr "Basala Ägor"
 
 msgid "Basic Necromancy"
-msgstr ""
+msgstr "Basal Svartkonst"
 
 msgid "Expert Eagle Eye"
-msgstr ""
+msgstr "Expert-\n"
+"falkblick"
 
 msgid "Expert Necromancy"
-msgstr ""
+msgstr "Expert-\n"
+"svartkonst"
 
 msgid "Advanced Estates"
-msgstr ""
+msgstr "Avancerade Ägor"
 
 msgid "Expert Estates"
-msgstr ""
+msgstr "Expert-\n"
+"ägor"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
 msgstr ""
-"%{skill} reducerar förflyttningsstraffet för grov terräng med %{count} "
+"%{skill} sänker förflyttningshandikapp för grov terräng med %{count} "
 "procent."
 
-#, fuzzy
 msgid "%{skill} eliminates the movement penalty for rough terrain."
-msgstr "Reducerar förflyttningsstraffet för grov terräng med %{count} procent."
+msgstr "%{skill} tar bort förflyttningshandikappet för grov terräng."
 
-#, fuzzy
+
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
-msgstr "Höjer en varelses hastighet med %{count}."
+msgstr "%{skill} ökar skadan för varelser som avfyrar projektiler med %{count}
+"procent."
 
 msgid "%{skill} increases your hero's movement points by %{count} percent."
 msgstr "%{skill} ökar din hjältes förflyttningspoäng med %{count} procent."
@@ -6256,21 +6269,21 @@ msgstr "%{skill} ökar din hjältes förflyttningspoäng med %{count} procent."
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{skill} ökar din hjältens sikt med en ruta."
+msgstr[1] "%{skill} ökar din hjältens sikt med %{count} rutor."
 
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
 msgstr ""
+"%{skill} låter dig förhandla med monster som är svagare än din armé."
 
-#, fuzzy
 msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr "Alla varelserna vill följa med oss..."
+msgstr "Uppskattningsvis så kan %{count} procent av varelserna välja att "
+"ansluta sig till dig."
 
-#, fuzzy
 msgid "All of the creatures may offer to join you."
-msgstr "Alla varelserna vill följa med oss..."
+msgstr "Alla varelserna kan ansluta sig till dig."
 
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
@@ -6279,9 +6292,8 @@ msgstr ""
 "%{skill} ökar din hjältes förflyttningspoäng över vatten med %{count} "
 "procent."
 
-#, fuzzy
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr "Höjer din hjältes tur med %{count}."
+msgstr "%{skill} höjer din armés stridsmoral med %{count}."
 
 msgid "%{skill} allows your hero to learn third level spells."
 msgstr "%{skill} låter din hjälte lära sig tredje nivåns besvärjelser."
@@ -6295,8 +6307,8 @@ msgstr "%{skill} låter din hjälte lära sig femte nivåns besvärjelser."
 msgid "%{skill} regenerates one of your hero's spell points per day."
 msgid_plural ""
 "%{skill} regenerates %{count} of your hero's spell points per day."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{skill} återhämtar en av hjältens besvärjelsepoäng per dag."
+msgstr[1] "%{skill} återhämtar %{count} av hjältens besvärjelsepoäng per dag."
 
 msgid "%{skill} increases your hero's luck by %{count}."
 msgstr "%{skill} höjer din hjältes tur med %{count}."
@@ -6305,40 +6317,54 @@ msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
+"%{skill} ökar katapultens sannolikhet att träffa och skada slottsmurar."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
+"%{skill} ger katapulten en extra avfyrning, och varje avfyrning har en "
+"större chans att träffa och skada slottsmurar."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
+"%{skill} ger katapulten en extra avfyrning och varje avfyrning förstör muren "
+"förutom Riddarens uppgraderade slottsmur."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level enemy spell used against him in a combat."
 msgstr ""
+"%{skill} ger din hjälte en %{count}-procentschans att lära sig någon 1:a "
+"eller 2:a nivåns fiendebesvärjelse som används mot honom eller henne i strid."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) used against him in combat."
 msgstr ""
+"%{skill} ger din hjälte en %{count}-procentschans att lära sig någon 1:a "
+"till 3:e nivåns fiendebesvärjelse som används mot honom eller henne i strid."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) used against him in combat."
 msgstr ""
+"%{skill} ger din hjälte en %{count}-procentschans att lära sig någon 1:a "
+"till 4:e nivåns fiendebesvärjelse som används mot honom eller henne i strid."
 
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
+"%{skill} återuppväcker %{count}-procent av de stupade varelserna i strid "
+"som Skelett.
 
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
+"Din hjälte får &{count} guld i skatteintäkter från sina ägor.
 
 msgid "Blue"
 msgstr "Blå"
