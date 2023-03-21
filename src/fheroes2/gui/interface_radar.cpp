@@ -47,7 +47,6 @@
 #include "logging.h"
 #endif
 #include "settings.h"
-#include "spell.h"
 #include "text.h"
 #include "translations.h"
 #include "world.h"
