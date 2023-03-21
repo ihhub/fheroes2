@@ -7649,7 +7649,7 @@ msgid "Undead"
 msgstr "Odöd"
 
 msgid "No enemy retaliation"
-msgstr "Ingen fiende vedergällning"
+msgstr "Ingen fiendevedergällning"
 
 msgid "HP drain"
 msgstr "Suger hälsopoäng"
