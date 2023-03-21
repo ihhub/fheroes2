@@ -877,7 +877,7 @@ msgid "The %{name} fires with the strength of %{count} Archers"
 msgstr "%{name} avfyrar med styrkan av %{count} Bågskyttar"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr "varje med en +%{attack}bouns till deras Anfallsförmåga."
+msgstr "varje med en +%{attack}bonns till deras Anfallsförmåga."
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} förstörs."
@@ -6151,7 +6151,7 @@ msgstr "Basal Diplomati"
 
 msgid "Expert Diplomacy"
 msgstr "Expert-\n"
-#diplomati"
+"diplomati"
 
 msgid "Expert Scouting"
 msgstr "Expert-\n"
