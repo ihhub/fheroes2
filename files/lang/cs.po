@@ -8896,7 +8896,7 @@ msgid "Causes all Heroes across the land to become visible."
 msgstr ""
 
 msgid "View Heroes"
-msgstr "Zobraz Hrdiny"
+msgstr "Zobraz hrdiny"
 
 msgid "Causes the entire land to become visible."
 msgstr ""
@@ -9099,13 +9099,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Attention"
-#~ msgstr "Pozor"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Tahle verze hry Heroes of Might and Magic II nepodporuje jiné ljazyky než "
-#~ "English."
