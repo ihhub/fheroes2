@@ -2886,7 +2886,7 @@ msgid "Select Game Language:"
 msgstr "Välj spelspråk:"
 
 msgid "Click to choose the selected language."
-msgstr "Klicka för att ange valt stråk."
+msgstr "Klicka för att anta valt språk."
 
 msgid "%{name} has gained a level."
 msgstr "%{name} har gått upp en level."
