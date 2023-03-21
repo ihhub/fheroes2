@@ -500,13 +500,14 @@ msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
+"Genom att utöva svartkonst, så återuppväcker du %{count} av fiendens "
+"stupade som %{monster} för att tjäna dig."
 
 msgid "%{name} the %{race}"
 msgstr "%{name} av %{race}"
 
-#, fuzzy
 msgid "Captain of %{name}"
-msgstr "Har inte råd med %{name}."
+msgstr "Kapten över %{name}""
 
 msgid "Attack"
 msgstr "Anfall"
@@ -573,9 +574,8 @@ msgstr ""
 "Att ge upp kostar guld. Men om du betalar lösensumman kommer hjälten och "
 "alla hans eller hennes överlevande kreatur kunna rekryteras igen."
 
-#, fuzzy
 msgid "Open Hero Screen to view full information about the hero."
-msgstr "Låter kastaren få detaljerad information om fiendehjältar."
+msgstr "Öppna Hjältevyn för att få full information om hjälten."
 
 msgid "Return to the battle."
 msgstr "Återgå till striden."
@@ -584,11 +584,10 @@ msgid "Not enough gold (%{gold})"
 msgstr "För lite guld (%{gold})"
 
 msgid "%{name} states:"
-msgstr "%{name}s tillstånd:"
+msgstr "%{name}s förklarar:"
 
-#, fuzzy
 msgid "Captain of %{name} states:"
-msgstr "Har inte råd med %{name}."
+msgstr "Kaptenen över %{name} förklarar:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
@@ -611,8 +610,8 @@ msgstr "Skjut %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(1 projektil kvar)"
+msgstr[1] "(%{count} projektiler kvar)"
 
 msgid "Attack %{monster}"
 msgstr "Anfall %{monster}"
@@ -694,7 +693,7 @@ msgid "Message Bar"
 msgstr "Textfält"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Visa resultaten av en varelses handlingar."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Är du säker på att du vill fortsätta slaget i automatiskt läge?"
@@ -760,24 +759,20 @@ msgstr "Besvärjelsen %{spell} ger %{damage} skada till alla levande varelser."
 msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "%{attacker}nas anfall förblindar %{target}na!"
 
-#, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Medusas blick förvandlar %{name} till sten!"
+msgstr "%{attacker}nas blick förvandlar %{target} till sten!"
 
-#, fuzzy
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "Mumiens förbannelse har drabbat %{name}!"
+msgstr "%{attacker}nas förbannelse drabbar %{target}""
 
-#, fuzzy
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "%{name} blev paralyserad av Cykloperna!"
+msgstr "%{name} blev paralyserade av %{attacker}na!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "%{attacker} skingrar alla godartade besvärjelser från %{target}!"
 
-#, fuzzy
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "%{name} kastar %{spell} på %{troop}."
+msgstr "%{attacker} kastar %{spell} på %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Otur drabbar %{attacker}."
@@ -825,10 +820,10 @@ msgid "Damage: %{min} - %{max}"
 msgstr "Skada: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Stupar: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Stupar: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -844,27 +839,24 @@ msgstr "AI"
 msgid "Please select another hero."
 msgstr "Välj en annan hjälte."
 
-#, fuzzy
+
 msgid "Set Attack Skill"
-msgstr "Attackfärdighet"
+msgstr "Ange Anfallsförmåga"
 
-#, fuzzy
 msgid "Set Defense Skill"
-msgstr "Försvarsfärdighet"
+msgstr "Ange Försvarsförmåga"
 
-#, fuzzy
 msgid "Set Power Skill"
-msgstr "Besvärjelsestyrka"
+msgstr "Ange Besvärjelsestyrka"
 
-#, fuzzy
 msgid "Set Knowledge Skill"
-msgstr "Kunskap"
+msgstr "Ange Kunskapsnivå"
 
 msgid "%{race1} %{name1}"
 msgstr "%{name1} (%{race1})"
 
 msgid "vs"
-msgstr ""
+msgstr "vs"
 
 msgid "%{race2} %{name2}"
 msgstr "%{name2} (%{race2})"
@@ -882,10 +874,10 @@ msgid "Right Turret"
 msgstr "Höger Torn"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} avfyrar med styrkan av %{count} Bågskyttar"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "varje med en +%{attack}bouns till deras Anfallsförmåga."
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} förstörs."
@@ -897,11 +889,10 @@ msgstr ""
 "%{artifact}-artefakten är i effekt för denna strid och inaktiverar %{spell}-"
 "besvärjelsen."
 
-#, fuzzy
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] "%{count} %{name} uppstår från de döda!"
-msgstr[1] "%{count} %{name} uppstår från de döda!"
+msgstr[0] "%{count} %{name} återuppstår från de döda!"
+msgstr[1] "%{count} %{name} återuppstår från de döda!"
 
 msgid "Dwarven Alliance"
 msgstr "Dvärgallians"
