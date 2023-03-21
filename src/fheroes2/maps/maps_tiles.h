@@ -379,15 +379,11 @@ namespace Maps
         static int getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
         static int getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
 
-        static void UpdateAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource );
-
-        static void UpdateAbandonedMineRightSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex );
-
         static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
-        static void UpdateAbandonedMineSprite( Tiles & tile );
-        static void setAbandonedMineObjectType( const Tiles & tile );
+
+        static void RestoreAbandonedMine( Tiles & tile );
 
         // Some tiles have incorrect object type. This is due to original Editor issues.
         static void fixTileObjectType( Tiles & tile );
@@ -419,6 +415,9 @@ namespace Maps
         static void UpdateRNDResourceSprite( Tiles & );
 
         static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
+
+        static void RestoreAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource );
+        static void RestoreAbandonedMineRightSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex );
 
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );

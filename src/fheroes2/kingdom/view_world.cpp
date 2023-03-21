@@ -413,17 +413,6 @@ namespace
                         }
                         break;
 
-                    case MP2::OBJ_ABANDONED_MINE:
-                        // Show only Haunted mines (by a spell), initially abandoned mines are not shown.
-                        if ( ( revealMines || !tile.isFog( color ) ) && Maps::getSpellIdFromTile( tile ) == Spell::HAUNT ) {
-                            const uint32_t colorOffset = colorToOffsetICN( tile.QuantityColor() );
-                            // Do not render an unknown color.
-                            if ( colorOffset != unknownIndex ) {
-                                renderResourceIcon( colorOffset, tile.QuantityResourceCount().first, posX, posY );
-                            }
-                        }
-                        break;
-
                     case MP2::OBJ_ARTIFACT:
                         if ( revealArtifacts || !tile.isFog( color ) ) {
                             renderIcon( 14, posX, posY );

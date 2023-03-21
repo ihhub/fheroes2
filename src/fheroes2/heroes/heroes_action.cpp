@@ -1918,7 +1918,6 @@ namespace
                     radarRoi.height = 2;
                     break;
                 case MP2::OBJ_ALCHEMIST_LAB:
-                case MP2::OBJ_ABANDONED_MINE:
                 case MP2::OBJ_MINES:
                     --radarRoi.x;
                     --radarRoi.y;
@@ -1943,12 +1942,6 @@ namespace
             auto removeObjectProtection = [&hero, objectType, &tile, &updateRadar]( const bool isUpdateRadar ) {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
-
-                // Restore the abandoned mine
-                if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
-                    Maps::Tiles::UpdateAbandonedMineSprite( tile );
-                    hero.SetMapsObject( MP2::OBJ_MINES );
-                }
 
                 if ( isUpdateRadar ) {
                     updateRadar();
@@ -1979,15 +1972,9 @@ namespace
                     body = _( "You gain control of a sawmill. It will provide you with %{count} units of wood per day." );
                     break;
 
-                case MP2::OBJ_ABANDONED_MINE:
                 case MP2::OBJ_MINES: {
                     resource = tile.QuantityResourceCount().first;
                     header = Maps::GetMinesName( resource );
-
-                    if ( objectType == MP2::OBJ_ABANDONED_MINE && Maps::getSpellIdFromTile( tile ) != Spell::HAUNT ) {
-                        body = _( "You beat the Ghosts and are able to restore the mine to production." );
-                        break;
-                    }
 
                     switch ( resource ) {
                     case Resource::ORE:
@@ -2075,22 +2062,52 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
     }
 
-    void ActionToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void ActionToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dstIndex )
     {
         bool enter = false;
 
         {
             const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
-            enter = ( Dialog::Message( MP2::StringObject( MP2::OBJ_ABANDONED_MINE ),
-                                       _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ), Font::BIG,
-                                       Dialog::YES | Dialog::NO )
-                      == Dialog::YES );
+            enter
+                = ( Dialog::Message( MP2::StringObject( objectType ), _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ),
+                                     Font::BIG, Dialog::YES | Dialog::NO )
+                    == Dialog::YES );
         }
 
         if ( enter ) {
-            ActionToCaptureObject( hero, objectType, dst_index );
+            Maps::Tiles & tile = world.GetTiles( dstIndex );
+
+            Army army( tile );
+
+            Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+            if ( result.AttackerWins() ) {
+                hero.IncreaseExperience( result.GetExperienceAttacker() );
+
+                Maps::Tiles::RestoreAbandonedMine( tile );
+                hero.SetMapsObject( MP2::OBJ_MINES );
+                tile.QuantitySetColor( hero.GetColor() );
+
+                // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
+                // Set the radar update ROI according to captured object size and position.
+                const fheroes2::Point tilePoint = Maps::GetPoint( dstIndex );
+                const fheroes2::Rect radarRoi( tilePoint.x - 1, tilePoint.y - 1, 3, 2 );
+
+                Interface::Basic & I = Interface::Basic::Get();
+
+                // Update the object on radar.
+                I.GetRadar().SetRenderArea( radarRoi );
+                I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+                Dialog::Message( MP2::StringObject( objectType ), _( "You beat the Ghosts and are able to restore the mine to production." ), Font::BIG, Dialog::OK );
+            }
+            else {
+                BattleLose( hero, result, true );
+            }
         }
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
 
     void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )

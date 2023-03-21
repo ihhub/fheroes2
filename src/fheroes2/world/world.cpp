@@ -840,13 +840,11 @@ int32_t World::NextWhirlpool( const int32_t index ) const
     return Rand::Get( whilrpools );
 }
 
-/* return count captured object */
 uint32_t World::CountCapturedObject( int obj, int col ) const
 {
     return map_captureobj.GetCount( obj, col );
 }
 
-/* return count captured mines */
 uint32_t World::CountCapturedMines( int type, int color ) const
 {
     switch ( type ) {
@@ -861,21 +859,21 @@ uint32_t World::CountCapturedMines( int type, int color ) const
     return map_captureobj.GetCountMines( type, color );
 }
 
-/* capture object */
 void World::CaptureObject( int32_t index, int color )
 {
     const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, objectType, color );
 
     Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
-    if ( castle && castle->GetColor() != color )
+    if ( castle && castle->GetColor() != color ) {
         castle->ChangeColor( color );
+    }
 
-    if ( color & ( Color::ALL | Color::UNUSED ) )
+    if ( color & ( Color::ALL | Color::UNUSED ) ) {
         GetTiles( index ).setOwnershipFlag( objectType, color );
+    }
 }
 
-/* return color captured object */
 int World::ColorCapturedObject( int32_t index ) const
 {
     return map_captureobj.GetColor( index );

@@ -55,7 +55,6 @@ bool Maps::Tiles::QuantityIsValid() const
     case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_SEA_CHEST:
-    case MP2::OBJ_ABANDONED_MINE:
         return true;
 
     case MP2::OBJ_PYRAMID:
@@ -455,7 +454,10 @@ Monster Maps::Tiles::QuantityMonster() const
     case MP2::OBJ_GENIE_LAMP:
         return Monster( Monster::GENIE );
 
-    // loyalty version
+    case MP2::OBJ_ABANDONED_MINE:
+        return Monster( Monster::GHOST );
+
+    // Price of Loyalty
     case MP2::OBJ_WATER_ALTAR:
         return Monster( Monster::WATER_ELEMENT );
     case MP2::OBJ_AIR_ALTAR:
@@ -903,15 +905,12 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
     }
 
-    case MP2::OBJ_ABANDONED_MINE: {
-        Troop & troop = world.GetCapturedObject( GetIndex() ).GetTroop();
-
-        // Min is 3 x 13, and max is 3 x 15
-        troop.Set( Monster::GHOST, 3 * Rand::Get( 13, 15 ) );
-
-        QuantitySetResource( Resource::GOLD, 1000 );
+    case MP2::OBJ_ABANDONED_MINE:
+        // The number of Ghosts is set at the start of the map and does not change anymore
+        if ( isFirstLoad ) {
+            MonsterSetCount( Rand::Get( 30, 60 ) );
+        }
         break;
-    }
 
     case MP2::OBJ_BOAT:
         _objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
@@ -954,9 +953,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_GENIE_LAMP:
-        // Genies in the lamp do not accumulate
-        if ( isFirstLoad )
+        // The number of Genies is set at the start of the map and does not change anymore
+        if ( isFirstLoad ) {
             MonsterSetCount( Rand::Get( 2, 4 ) );
+        }
         break;
 
     case MP2::OBJ_WATCH_TOWER:

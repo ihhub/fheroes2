@@ -645,7 +645,6 @@ bool MP2::isQuantityObject( const MapObjectType objectType )
 {
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_ABANDONED_MINE:
     case OBJ_CAMPFIRE:
     case OBJ_DAEMON_CAVE:
     case OBJ_DERELICT_SHIP:
@@ -676,7 +675,6 @@ bool MP2::isCaptureObject( const MapObjectType objectType )
 {
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_ABANDONED_MINE:
     case OBJ_ALCHEMIST_LAB:
     case OBJ_CASTLE:
     case OBJ_LIGHTHOUSE:
@@ -771,11 +769,6 @@ bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
     // Action objects in general should be avoided for fog discovery purposes, because
     // they may be guarded or may require wasting resources
     return !isActionObject( objectType );
-}
-
-bool MP2::isAbandonedMine( const MapObjectType objectType )
-{
-    return objectType == MP2::OBJ_NON_ACTION_ABANDONED_MINE || objectType == MP2::OBJ_ABANDONED_MINE;
 }
 
 bool MP2::isNeedStayFront( const MapObjectType objectType )

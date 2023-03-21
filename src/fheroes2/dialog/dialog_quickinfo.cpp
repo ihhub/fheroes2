@@ -158,20 +158,22 @@ namespace
     std::string showGuardiansInfo( const Maps::Tiles & tile, const bool isOwned )
     {
         const MP2::MapObjectType objectType = tile.GetObject( false );
-        const bool isAbandonedMine = ( objectType == MP2::OBJ_ABANDONED_MINE );
 
         std::string str;
 
-        if ( MP2::OBJ_MINES == objectType || ( isAbandonedMine && ( Maps::getSpellIdFromTile( tile ) == Spell::HAUNT ) ) ) {
-            // For mines with guardians and for mines haunted by spell - show info like for ordinary mine.
+        if ( objectType == MP2::OBJ_MINES ) {
             str = showMineInfo( tile, isOwned );
         }
         else {
             str = MP2::StringObject( objectType );
         }
 
+        const bool isHauntedMine = ( objectType == MP2::OBJ_MINES && Maps::getSpellIdFromTile( tile ) == Spell::HAUNT );
+        const bool isAbandonedMine = ( objectType == MP2::OBJ_ABANDONED_MINE );
+
         const Troop & troop = tile.QuantityTroop();
-        if ( troop.isValid() && ( isOwned || isAbandonedMine ) ) {
+
+        if ( troop.isValid() && ( isOwned || isHauntedMine || isAbandonedMine ) ) {
             str.append( "\n \n" );
 
             if ( isOwned ) {
@@ -417,7 +419,7 @@ namespace
         const int32_t playerColor = Settings::Get().CurrentColor();
         const MP2::MapObjectType objectType = tile.GetObject( false );
 
-        if ( MP2::OBJ_ABANDONED_MINE == objectType || tile.isCaptureObjectProtected() ) {
+        if ( tile.isCaptureObjectProtected() || objectType == MP2::OBJ_ABANDONED_MINE ) {
             return showGuardiansInfo( tile, playerColor == tile.QuantityColor() );
         }
 

@@ -354,18 +354,6 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                     break;
                 }
                 continue;
-            case MP2::OBJ_ABANDONED_MINE:
-            case MP2::OBJ_NON_ACTION_ABANDONED_MINE:
-                if ( ( visibleTile || revealMines )
-                     && ( ( Maps::getSpellIdFromTile( tile ) == Spell::HAUNT )
-                          || ( Maps::getSpellIdFromTile( world.GetTiles( Maps::Tiles::getIndexOfMainTile( tile ) ) ) == Spell::HAUNT ) ) ) {
-                    // We show Haunted mines on radar with white (neutral) color.
-                    fillColor = COLOR_WHITE;
-                    break;
-                }
-
-                // If it is the initially Abandoned mine we do not show it on map and fall-through to the 'default' case.
-                [[fallthrough]];
             default:
                 if ( visibleTile ) {
                     // Castles and Towns can be partially covered by other non-action objects so we need to rely on special storage of castle's tiles.

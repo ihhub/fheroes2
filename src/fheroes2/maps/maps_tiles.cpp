@@ -646,7 +646,7 @@ bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
     return isShadowSprite( ta._objectIcnType, ta._imageIndex );
 }
 
-void Maps::Tiles::UpdateAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource )
+void Maps::Tiles::RestoreAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource )
 {
     if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {
         objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
@@ -679,7 +679,7 @@ void Maps::Tiles::UpdateAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnT
     }
 }
 
-void Maps::Tiles::UpdateAbandonedMineRightSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex )
+void Maps::Tiles::RestoreAbandonedMineRightSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex )
 {
     if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 9 ) {
         objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
@@ -1590,7 +1590,7 @@ void Maps::Tiles::redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool 
         case Spell::SETAGUARDIAN:
         case Spell::SETFGUARDIAN:
         case Spell::SETWGUARDIAN:
-            // The logic for these spells is done while rending the bottom layer. Nothing should be done here.
+            // The logic for these spells is done while rendering the bottom layer. Nothing should be done here.
             break;
         case Spell::HAUNT:
             renderFlyingGhosts = true;
@@ -2121,17 +2121,22 @@ bool Maps::Tiles::isCaptureObjectProtected() const
 {
     const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( MP2::isCaptureObject( objectType ) ) {
-        if ( MP2::OBJ_CASTLE == objectType ) {
-            Castle * castle = world.getCastleEntrance( GetCenter() );
-            if ( castle )
-                return castle->GetArmy().isValid();
-        }
-        else
-            return QuantityTroop().isValid();
+    if ( !MP2::isCaptureObject( objectType ) ) {
+        return false;
     }
 
-    return false;
+    if ( MP2::OBJ_CASTLE == objectType ) {
+        Castle * castle = world.getCastleEntrance( GetCenter() );
+        assert( castle != nullptr );
+
+        if ( castle ) {
+            return castle->GetArmy().isValid();
+        }
+
+        return false;
+    }
+
+    return QuantityTroop().isValid();
 }
 
 void Maps::Tiles::Remove( uint32_t uniqID )
@@ -2274,62 +2279,56 @@ void Maps::Tiles::RemoveJailSprite()
     Remove( _uid );
 }
 
-void Maps::Tiles::UpdateAbandonedMineSprite( Tiles & tile )
+void Maps::Tiles::RestoreAbandonedMine( Tiles & tile )
 {
-    if ( tile._uid ) {
-        const int type = tile.QuantityResourceCount().first;
+    assert( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE );
+    assert( tile._uid != 0 );
 
-        Tiles::UpdateAbandonedMineLeftSprite( tile._objectIcnType, tile._imageIndex, type );
-        for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-            Tiles::UpdateAbandonedMineLeftSprite( it->_objectIcnType, it->_imageIndex, type );
+    tile.QuantitySetResource( Resource::GOLD, 1000 );
 
-        if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {
-            Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
-            TilesAddon * mines = tile2.FindAddonLevel1( tile._uid );
+    Tiles::RestoreAbandonedMineLeftSprite( tile._objectIcnType, tile._imageIndex, Resource::GOLD );
+    for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it ) {
+        Tiles::RestoreAbandonedMineLeftSprite( it->_objectIcnType, it->_imageIndex, Resource::GOLD );
+    }
 
-            if ( mines )
-                Tiles::UpdateAbandonedMineRightSprite( mines->_objectIcnType, mines->_imageIndex );
+    if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {
+        Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
+        TilesAddon * mines = tile2.FindAddonLevel1( tile._uid );
 
-            if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-                tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
-                Tiles::UpdateAbandonedMineRightSprite( tile2._objectIcnType, tile2._imageIndex );
-            }
+        if ( mines ) {
+            Tiles::RestoreAbandonedMineRightSprite( mines->_objectIcnType, mines->_imageIndex );
+        }
+
+        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+            tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
+            Tiles::RestoreAbandonedMineRightSprite( tile2._objectIcnType, tile2._imageIndex );
         }
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
         Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
-        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
             tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        }
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::TOP ) ) {
         Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::TOP ) );
-        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
             tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        }
 
         if ( Maps::isValidDirection( tile2._index, Direction::LEFT ) ) {
             Tiles & tile3 = world.GetTiles( Maps::GetDirectionIndex( tile2._index, Direction::LEFT ) );
-            if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+            if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
                 tile3.SetObject( MP2::OBJ_NON_ACTION_MINES );
+            }
         }
 
         if ( Maps::isValidDirection( tile2._index, Direction::RIGHT ) ) {
             Tiles & tile3 = world.GetTiles( Maps::GetDirectionIndex( tile2._index, Direction::RIGHT ) );
-            if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+            if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
                 tile3.SetObject( MP2::OBJ_NON_ACTION_MINES );
-        }
-    }
-}
-
-void Maps::Tiles::setAbandonedMineObjectType( const Tiles & tile )
-{
-    for ( const int32_t direction : { Direction::LEFT, Direction::TOP_LEFT, Direction::TOP, Direction::TOP_RIGHT, Direction::RIGHT } ) {
-        if ( Maps::isValidDirection( tile._index, direction ) ) {
-            Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, direction ) );
-
-            if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_MINES ) {
-                tile2.SetObject( MP2::OBJ_NON_ACTION_ABANDONED_MINE );
             }
         }
     }

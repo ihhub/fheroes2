@@ -1041,15 +1041,6 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 3 )->Set( Monster::EARTH_ELEMENT, 2 );
         break;
 
-    case MP2::OBJ_ABANDONED_MINE: {
-        const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
-        assert( troop.isValid() );
-
-        ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), false );
-
-        break;
-    }
-
     default:
         if ( isCaptureObject ) {
             CapturedObject & capturedObject = world.GetCapturedObject( tile.GetIndex() );
