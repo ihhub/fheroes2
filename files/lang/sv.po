@@ -6634,85 +6634,85 @@ msgid "speed|Instant"
 msgstr "Ögonblicklig"
 
 msgid "week|Squirrel"
-msgstr "Ekorre"
+msgstr "Ekorrens"
 
 msgid "week|Rabbit"
-msgstr "Hare"
+msgstr "Harens"
 
 msgid "week|Gopher"
-msgstr "Sisel"
+msgstr "Siselns"
 
 msgid "week|Badger"
-msgstr "Grävling"
+msgstr "Grävlingens"
 
 msgid "week|Rat"
-msgstr "Råtta"
+msgstr "Råttans"
 
 msgid "week|Eagle"
-msgstr "Örn"
+msgstr "Örnens"
 
 msgid "week|Weasel"
-msgstr "Vessla"
+msgstr "Vesslans"
 
 msgid "week|Raven"
-msgstr "Korp"
+msgstr "Korpens"
 
 msgid "week|Mongoose"
-msgstr "Mungo"
+msgstr "Mungons"
 
 msgid "week|Dog"
-msgstr "Hund"
+msgstr "Hundens"
 
 msgid "week|Aardvark"
-msgstr "Jordsvin"
+msgstr "Jordsvinets"
 
 msgid "week|Lizard"
-msgstr "Ödla"
+msgstr "Ödlans"
 
 msgid "week|Tortoise"
-msgstr "Sköldpadda"
+msgstr "Sköldpaddans"
 
 msgid "week|Hedgehog"
-msgstr "Igelkott"
+msgstr "Igelkottens"
 
 msgid "week|Condor"
-msgstr "Kondor"
+msgstr "Kondorens"
 
 msgid "week|Ant"
-msgstr "Myra"
+msgstr "Myrans"
 
 msgid "week|Grasshopper"
-msgstr "Gräshoppa"
+msgstr "Gräshoppans"
 
 msgid "week|Dragonfly"
-msgstr "Trollslända"
+msgstr "Trollsländans"
 
 msgid "week|Spider"
-msgstr "Spindel"
+msgstr "Spindelns"
 
 msgid "week|Butterfly"
-msgstr "Fjäril"
+msgstr "Fjärilens"
 
 msgid "week|Bumblebee"
-msgstr "Humla"
+msgstr "Humlans"
 
 msgid "week|Locust"
-msgstr "Vandringsgräshoppa"
+msgstr "Vandringsgräshoppans"
 
 msgid "week|Earthworm"
-msgstr "Daggmask"
+msgstr "Daggmaskens"
 
 msgid "week|Hornet"
-msgstr "Bålgeting"
+msgstr "Bålgetingens"
 
 msgid "week|Beetle"
-msgstr "Skalbagge"
+msgstr "Skalbaggens"
 
 msgid "week|PLAGUE"
-msgstr "FARSOT"
+msgstr "FARSOTENS"
 
 msgid "week|Unnamed"
-msgstr "Namnlös"
+msgstr "de Namnlösas"
 
 msgid "Desert"
 msgstr "Öken"
