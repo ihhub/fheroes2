@@ -6161,7 +6161,7 @@ msgid "Basic Leadership"
 msgstr "Basalt Ledarskap"
 
 msgid "Basic Navigation"
-msgstr "Nasal Navigering"
+msgstr "Basal Navigering"
 
 msgid "Expert Navigation"
 msgstr "Expert Navigation"
