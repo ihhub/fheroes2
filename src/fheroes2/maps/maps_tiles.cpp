@@ -2286,48 +2286,48 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile )
     tile.QuantitySetResource( Resource::GOLD, 1000 );
 
     Tiles::RestoreAbandonedMineLeftSprite( tile._objectIcnType, tile._imageIndex, Resource::GOLD );
-    for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it ) {
-        Tiles::RestoreAbandonedMineLeftSprite( it->_objectIcnType, it->_imageIndex, Resource::GOLD );
+    for ( TilesAddon & addon : tile.addons_level1 ) {
+        Tiles::RestoreAbandonedMineLeftSprite( addon._objectIcnType, addon._imageIndex, Resource::GOLD );
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {
-        Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
-        TilesAddon * mines = tile2.FindAddonLevel1( tile._uid );
+        Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
+        TilesAddon * addon = rightTile.FindAddonLevel1( tile._uid );
 
-        if ( mines ) {
-            Tiles::RestoreAbandonedMineRightSprite( mines->_objectIcnType, mines->_imageIndex );
+        if ( addon ) {
+            Tiles::RestoreAbandonedMineRightSprite( addon->_objectIcnType, addon->_imageIndex );
         }
 
-        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-            tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
-            Tiles::RestoreAbandonedMineRightSprite( tile2._objectIcnType, tile2._imageIndex );
+        if ( rightTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+            rightTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
+            Tiles::RestoreAbandonedMineRightSprite( rightTile._objectIcnType, rightTile._imageIndex );
         }
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
-        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-            tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
+        if ( leftTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+            leftTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
         }
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::TOP ) ) {
-        Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::TOP ) );
-        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-            tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        Tiles & upperTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::TOP ) );
+        if ( upperTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+            upperTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
         }
 
-        if ( Maps::isValidDirection( tile2._index, Direction::LEFT ) ) {
-            Tiles & tile3 = world.GetTiles( Maps::GetDirectionIndex( tile2._index, Direction::LEFT ) );
-            if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-                tile3.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        if ( Maps::isValidDirection( upperTile._index, Direction::LEFT ) ) {
+            Tiles & upperLeftTile = world.GetTiles( Maps::GetDirectionIndex( upperTile._index, Direction::LEFT ) );
+            if ( upperLeftTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+                upperLeftTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
             }
         }
 
-        if ( Maps::isValidDirection( tile2._index, Direction::RIGHT ) ) {
-            Tiles & tile3 = world.GetTiles( Maps::GetDirectionIndex( tile2._index, Direction::RIGHT ) );
-            if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-                tile3.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        if ( Maps::isValidDirection( upperTile._index, Direction::RIGHT ) ) {
+            Tiles & upperRightTile = world.GetTiles( Maps::GetDirectionIndex( upperTile._index, Direction::RIGHT ) );
+            if ( upperRightTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+                upperRightTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
             }
         }
     }
