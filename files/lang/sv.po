@@ -488,7 +488,7 @@ msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "När du försöker ta %{name}, så försvinner den plötsligt."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr "När fienden försöker ta %{name}, så försvinnder den plöstligt."
+msgstr "När fienden försöker ta %{name}, så försvinner den plöstligt."
 
 msgid "You have captured an enemy artifact!"
 msgstr "Du har tillfångatagit fiendens artefakt!"
