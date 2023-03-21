@@ -355,8 +355,7 @@ msgid "You may only summon one type of elemental per combat."
 msgstr "Du kan endast inkalla en elementtyp per strid."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr ""
-"Det finns ingen fri plats intill din hjälte för att inkalla ett element."
+msgstr ""Det finns ingen fri plats intill din hjälte för att inkalla en elementande."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -5351,7 +5350,7 @@ msgid ""
 msgstr ""
 "När du närmar dig den bubblande lerpölen börjar varelser stiga upp och "
 "ställa sig runt den. I samklang säger de: \"Moder Jord vill erbjuda dig "
-"några av hennes trupper. Vill du rekrytera Jordelement?\""
+"några av hennes trupper. Vill du rekrytera Jordandar?\""
 
 msgid "You enter the structure of white stone pillars, and find nothing."
 msgstr "Du kliver in i byggnaden av vita pelare, men du hittar ingenting."
@@ -5366,7 +5365,7 @@ msgid ""
 msgstr ""
 
 msgid "No Fire Elementals approach you from the lava pool."
-msgstr "Inga eldelement kommer upp ur lavapölen."
+msgstr "Inga Eldandar kommer upp ur lavapölen."
 
 msgid ""
 "Beneath a structure that serves to hold in heat, Fire Elementals move about "
@@ -7149,16 +7148,16 @@ msgid "Jail"
 msgstr "Fängelse"
 
 msgid "Fire Summoning Altar"
-msgstr "Eldinkallningsaltare"
+msgstr "Eldaltare"
 
 msgid "Air Summoning Altar"
-msgstr "Luftinkallningsaltare"
+msgstr "Luftsaltare"
 
 msgid "Earth Summoning Altar"
-msgstr "Jordinkallningsaltare"
+msgstr "Jordaltare"
 
 msgid "Water Summoning Altar"
-msgstr "Vatteninkallningsaltare"
+msgstr "Vattenaltare"
 
 msgid "Unknown Monster"
 msgstr "Okänt Monster"
@@ -7535,33 +7534,29 @@ msgstr "Medusa"
 msgid "Medusas"
 msgstr "Medusor"
 
-#, fuzzy
 msgid "Earth Elemental"
-msgstr "Jordelement"
+msgstr "Jordande"
 
 msgid "Earth Elementals"
-msgstr "Jordelement"
+msgstr "Jordandar"
 
-#, fuzzy
 msgid "Air Elemental"
-msgstr "Luftelement"
+msgstr "Luftande"
 
 msgid "Air Elementals"
-msgstr "Luftelement"
+msgstr "Luftandar"
 
-#, fuzzy
 msgid "Fire Elemental"
-msgstr "Eldelement"
+msgstr "Eldande"
 
 msgid "Fire Elementals"
-msgstr "Eldelement"
+msgstr "Eldandar"
 
-#, fuzzy
 msgid "Water Elemental"
-msgstr "Vattenelement"
+msgstr "Vattenande"
 
 msgid "Water Elementals"
-msgstr "Vattenelement"
+msgstr "Vattenandar"
 
 msgid "Random Monsters"
 msgstr "Slumpade Monster"
@@ -8730,6 +8725,10 @@ msgid ""
 "pain. It then tosses a glowing object at you. You put up your hands to block "
 "it, but it passes right through them and sears itself into your chest."
 msgstr ""
+"Du kliver in i en nyligen nerbrunnen glänta och stöter på en Eldande sittandes på"
+"ett stenblock. Den tittar på dig med en plågad blick och kastar ett brinnande klot "
+"mot dig. Du försöker skydda dig med dina händer men du är för långsam och eldklotet "
+"träffar dig mitt på bröstet."
 
 msgid "Heart of Ice"
 msgstr "Ishjärta"
@@ -9208,28 +9207,28 @@ msgid "Mass Shield"
 msgstr ""
 
 msgid "Summon Earth Elemental"
-msgstr "Inkalla jordelement"
+msgstr "Framkalla Jordandar"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr "Kallar in Jordelement för att slåss för din armé."
+msgstr "Kallar in Jordandar för att strida för din armé."
 
 msgid "Summon Air Elemental"
-msgstr "Inkalla luftelement"
+msgstr "Framkalla Luftandar"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr "Kallar in Luftelement för att slåss för din armé."
+msgstr "Kallar in Luftelement för att strida för din armé."
 
 msgid "Summon Fire Elemental"
-msgstr "Inkalla eldelement"
+msgstr "Framkalla Eldandar"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr "Kallar in Eldelement för att slåss för din armé."
+msgstr "Kallar in Eldandar för att strida för din armé."
 
 msgid "Summon Water Elemental"
-msgstr "Inkalla vattenelement"
+msgstr "Framkalla Vattenandar"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr "Kallar in Vattenelement för att slåss för din armé."
+msgstr "Kallar in Vattenandar för att strida för din armé."
 
 msgid "Damages castle walls."
 msgstr "Skadar slottsmurar."
@@ -9323,33 +9322,29 @@ msgstr ""
 "producera resurser. (Om inte jag kan behålla den, kommer ingen att kunna "
 "det!)"
 
-#, fuzzy
 msgid "Set Earth Guardian"
-msgstr "Ange jordväktare"
+msgstr "Placera Jordväktare"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
-msgstr "Låter ett jordelement vakta en gruva mot fiendearméer."
+msgstr "Placerar Jordandar vakta en gruva mot fiendearméer."
 
-#, fuzzy
 msgid "Set Air Guardian"
-msgstr "Ange luftväktare"
+msgstr "Placera Luftväktare"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
-msgstr "Låter ett luftelement vakta en gruva mot fiendearméer."
+msgstr "Placerar Luftandar vakta en gruva mot fiendearméer."
 
-#, fuzzy
 msgid "Set Fire Guardian"
-msgstr "Ange eldväktare"
+msgstr "Placera Eldväktare"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
-msgstr "Låter ett eldelement vakta en gruva mot fiendearméer."
+msgstr "Placerar Eldandar vakta en gruva mot fiendearméer."
 
-#, fuzzy
 msgid "Set Water Guardian"
-msgstr "Ange vattenväktare"
+msgstr "Placera Vattenväktare"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
-msgstr "Låter ett vattenelement vakta en gruva mot fiendearméer."
+msgstr "Placerar Vattenandar vakta en gruva mot fiendearméer."
 
 msgid "Petrification"
 msgstr "Förstening"
