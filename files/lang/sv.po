@@ -636,7 +636,7 @@ msgid "Select spell target"
 msgstr "Välj besvärjelsemål"
 
 msgid "View Ballista info"
-msgstr "Vista Ballistinformation"
+msgstr "Visa Ballistinformation"
 
 msgid "Ballista"
 msgstr "Ballist"
