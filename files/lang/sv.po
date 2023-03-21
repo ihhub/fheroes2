@@ -1,5 +1,5 @@
 # Swedish translation for fheroes2
-# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2023 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
@@ -290,9 +290,9 @@ msgstr "Alla %{race} trupper +1"
 msgid "Multiple"
 msgstr "Flera"
 
-#, fuzzy
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr "3 uppställningstrupper -1"
+msgstr "Armén består av trupper från %{count} olika "
+"fraktioner, ger -%{penalty}"
 
 msgid "Some undead in group -1"
 msgstr "Några odöda i armén -1"
@@ -324,19 +324,16 @@ msgstr "Flytta %{name}"
 msgid "Set Count"
 msgstr "Ange Antal"
 
-#, fuzzy
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] "%{name} halverar fiendetrupperna!"
-msgstr[1] "%{name} halverar fiendetrupperna!"
+msgstr[0] "%{name} förgör hälften av fiendetrupperna!"
+msgstr[1] "%{name} förgör hälften av fiendetrupperna!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "Skadar alla odöda i striden."
+msgstr "%{name} har stängt av autom. strid"
 
-#, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "Skadar alla odöda i striden."
+msgstr ""%{name} har aktiverat autom. strid"
 
 msgid "Spell failed!"
 msgstr "Besvärjelse misslyckades!"
@@ -365,6 +362,8 @@ msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
+"Vallgraven sänker Försvarsförmågan med -%{count} och halverar truppens "
+"hastighet."
 
 msgid "Speed: %{speed}"
 msgstr "Hastighet: %{speed}"
@@ -389,9 +388,8 @@ msgstr ""
 msgid "Grid"
 msgstr "Rutnät"
 
-#, fuzzy
 msgid "Shadow Movement"
-msgstr "Fortsätt förflyttning"
+msgstr "Beskuggad Förflyttning"
 
 msgid "Shadow Cursor"
 msgstr "Skuggmarkör"
@@ -490,7 +488,7 @@ msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "När du försöker ta %{name}, så försvinner den plötsligt."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "När fienden försöker ta %{name}, så försvinnder den plöstligt."
 
 msgid "You have captured an enemy artifact!"
 msgstr "Du har tillfångatagit fiendens artefakt!"
@@ -638,10 +636,10 @@ msgid "Select spell target"
 msgstr "Välj besvärjelsemål"
 
 msgid "View Ballista info"
-msgstr ""
+msgstr "Vista Ballistinformation"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Ballist"
 
 msgid "Enable auto combat"
 msgstr "Aktivera autom. strid"
@@ -656,7 +654,7 @@ msgid "Customize system options"
 msgstr "Skräddarsy systeminställningarna"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Tillåter dig att skräddarsy stridsvyn."
 
 msgid "System Options"
 msgstr "Systemalternativ"
@@ -671,6 +669,8 @@ msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Hoppar över nuvarande varelse. Nuvarande varelse avslutar sin runda och "
+"fortsätter först vid sin nästa runda."
 
 msgid "View Captain's options"
 msgstr "Visa Kaptensalternativ"
@@ -702,11 +702,10 @@ msgstr "Är du säker på att du vill fortsätta slaget i automatiskt läge?"
 msgid "%{name} skip their turn."
 msgstr "%{name} hoppar över rundan."
 
-#, fuzzy
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] "%{attacker} tar %{damage} skada."
-msgstr[1] "%{attacker} tar %{damage} skada."
+msgstr[0] "%{attacker} ger %{damage} skada."
+msgstr[1] "%{attacker} ger %{damage} skada."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -720,13 +719,13 @@ msgstr[1] "%{count} %{defender} stupar."
 
 msgid "1 soul is absorbed."
 msgid_plural "%{count} souls are absorbed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 själ absorberas."
+msgstr[1] "%{count} själar absorberas."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 %{unit} återuppväcks."
+msgstr[1] "%{count} %{unit} återuppväcks."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Flyttade %{monster}: från [%{src}] till [%{dst}]."
