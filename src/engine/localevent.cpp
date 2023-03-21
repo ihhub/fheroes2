@@ -907,11 +907,6 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
                 }
                 break;
             }
-            if ( event.window.event == SDL_WINDOWEVENT_MOVED ) {
-                if ( _onWindowMoved ) {
-                    _onWindowMoved( event.window.data1, event.window.data2 );
-                }
-            }
             if ( HandleWindowEvent( event.window ) ) {
                 renderRoi = { 0, 0, display.width(), display.height() };
             }
@@ -1397,6 +1392,12 @@ bool LocalEvent::HandleWindowEvent( const SDL_WindowEvent & event )
     if ( event.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
         ResumeSounds();
         return true;
+    }
+
+    if ( event.event == SDL_WINDOWEVENT_MOVED ) {
+        if ( _onWindowMoved ) {
+            _onWindowMoved( event.window.data1, event.window.data2 );
+        }
     }
 
     return ( event.event == SDL_WINDOWEVENT_RESIZED );
