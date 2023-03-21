@@ -7136,7 +7136,7 @@ msgid "Fire Summoning Altar"
 msgstr "Eldaltare"
 
 msgid "Air Summoning Altar"
-msgstr "Luftsaltare"
+msgstr "Luftaltare"
 
 msgid "Earth Summoning Altar"
 msgstr "Jordaltare"
