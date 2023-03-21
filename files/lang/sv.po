@@ -847,7 +847,7 @@ msgid "Set Defense Skill"
 msgstr "Ange Försvarsförmåga"
 
 msgid "Set Power Skill"
-msgstr "Ange Besvärjelsestyrka"
+msgstr "Ange Trollkonst"
 
 msgid "Set Knowledge Skill"
 msgstr "Ange Kunskapsnivå"
