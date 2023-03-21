@@ -7586,67 +7586,61 @@ msgid "Random Monsters 4"
 msgstr "Slumpade Monster 4"
 
 msgid "Double shot"
-msgstr ""
+msgstr "Dubbel avfyrning"
 
-#, fuzzy
 msgid "2-hex monster"
-msgstr ""
-"Mängder av\n"
-"%{monster}"
+msgstr "Stor varelse"
 
 msgid "Double strike"
-msgstr ""
+msgstr "Dubbelslag"
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Dubbel skada till Odöda"
 
 msgid "% magic resistance"
-msgstr ""
+msgstr "% besvärjelseresistens"
 
 msgid "Immune to Mind spells"
-msgstr ""
+msgstr "Immun mot Sinnesbesvärjelser"
 
-#, fuzzy
 msgid "Immune to Elemental spells"
-msgstr "Inkalla jordelement"
+msgstr "Immun mot Elementbesvärjelser"
 
 msgid "Immune to Fire spells"
-msgstr ""
+msgstr "Immun mot Eldbesvärjelser"
 
 msgid "Immune to Cold spells"
-msgstr ""
+msgstr "Immun mot Köldbesvärjelser"
 
 msgid "Immune to "
 msgstr "Immun mot "
 
 msgid "% immunity to %{spell} spell"
-msgstr ""
+msgstr "% resistens mot %{spell}besvärjelse"
 
-#, fuzzy
 msgid "% damage from Elemental spells"
-msgstr "Vattenelement"
+msgstr "% skada från Elementbesvärjelser"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% chans att Skingra godartade besvärjelser"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% chans att Paralysera"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% chans att Förstena"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% chans att Förblinda"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% chans att kasta Förbannelse"
 
-#, fuzzy
 msgid "% chance to cast %{spell} spell"
-msgstr "%{color} Kastar besvärjelse: %{spell}"
+msgstr "% changs att kaste %{spell}besvärjelse"
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "Hälsoåterhämtning"
 
 msgid "Two hexes attack"
 msgstr "Två-rutsanfall"
@@ -7661,57 +7655,55 @@ msgid "Attacks all adjacent enemies"
 msgstr "Anfaller alla närliggande fiender"
 
 msgid "No melee penalty"
-msgstr ""
+msgstr "Inget närstridshandikapp"
 
 msgid "Dragon"
 msgstr "Drake"
 
 msgid "Undead"
-msgstr "Odöda"
+msgstr "Odöd"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Ingen fiende vedergällning"
 
 msgid "HP drain"
-msgstr "Suger HP"
+msgstr "Suger hälsopoäng"
 
 msgid "Cloud attack"
 msgstr "Molnattack"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Sänker fiendens stridmoral med "
 
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% chans att halvera fienden"
 
 msgid "Soul Eater"
 msgstr "Själslukare"
 
-#, fuzzy
 msgid "Elemental"
-msgstr "Luftelement"
+msgstr "Elementande"
 
 msgid "No Morale"
 msgstr "Ingen Stridsmoral"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "200% skada från Eldbesvärjelser"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "200% skada från Köldbesvärjelser"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% skada från %{spell}besvärjelse"
 
 msgid "% immunity to "
-msgstr ""
+msgstr "% resistens mot"
 
 msgid "Lightning"
 msgstr "Blixt"
 
-#, fuzzy
 msgid "% damage from "
-msgstr "Vattenelement"
+msgstr "% skada från "
 
 msgid "The three Anduran artifacts magically combine into one."
 msgstr "De tre Anduranartefakterna kombineras magiskt till en."
@@ -7719,12 +7711,11 @@ msgstr "De tre Anduranartefakterna kombineras magiskt till en."
 msgid "View Spells"
 msgstr "Visa Besvärjelser"
 
-#, fuzzy
 msgid "View %{name} Info"
-msgstr "Visa %{name}"
+msgstr "Visa %{name}information"
 
 msgid "Move %{name}"
-msgstr ""
+msgstr "Flytta %{name}"
 
 msgid "Cannot move the Spellbook"
 msgstr "Kan inte flytta Magibok"
