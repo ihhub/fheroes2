@@ -455,7 +455,7 @@ Monster Maps::Tiles::QuantityMonster() const
         return Monster( Monster::GENIE );
 
     case MP2::OBJ_ABANDONED_MINE:
-        return Monster( Monster::GHOST );
+        return { Monster::GHOST };
 
     // Price of Loyalty
     case MP2::OBJ_WATER_ALTAR:
