@@ -333,7 +333,7 @@ msgid "%{name} has turned off the auto battle"
 msgstr "%{name} har stängt av autom. strid"
 
 msgid "%{name} has turned on the auto battle"
-msgstr ""%{name} har aktiverat autom. strid"
+msgstr "%{name} har aktiverat autom. strid"
 
 msgid "Spell failed!"
 msgstr "Besvärjelse misslyckades!"
@@ -355,7 +355,7 @@ msgid "You may only summon one type of elemental per combat."
 msgstr "Du kan endast inkalla en elementtyp per strid."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr ""Det finns ingen fri plats intill din hjälte för att inkalla en elementande."
+msgstr "Det finns ingen fri plats intill din hjälte för att inkalla en elementande."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -506,7 +506,7 @@ msgid "%{name} the %{race}"
 msgstr "%{name} av %{race}"
 
 msgid "Captain of %{name}"
-msgstr "Kapten över %{name}""
+msgstr "Kapten över %{name}"
 
 msgid "Attack"
 msgstr "Anfall"
@@ -762,7 +762,7 @@ msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "%{attacker}nas blick förvandlar %{target} till sten!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "%{attacker}nas förbannelse drabbar %{target}""
+msgstr "%{attacker}nas förbannelse drabbar %{target}"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{name} blev paralyserade av %{attacker}na!"
@@ -6132,7 +6132,7 @@ msgid "Basic Scouting"
 msgstr "Basal Spaning"
 
 msgid "Expert Archery"
-msgstr "Expert-\n
+msgstr "Expert-\n"
 "bågskytte"
 
 msgid "Expert Logistics"
@@ -6259,7 +6259,7 @@ msgstr "%{skill} tar bort förflyttningshandikappet för grov terräng."
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
-msgstr "%{skill} ökar skadan för varelser som avfyrar projektiler med %{count}
+msgstr "%{skill} ökar skadan för varelser som avfyrar projektiler med %{count} "
 "procent."
 
 msgid "%{skill} increases your hero's movement points by %{count} percent."
@@ -6358,12 +6358,12 @@ msgid ""
 "brought back from the dead as Skeletons."
 msgstr ""
 "%{skill} återuppväcker %{count}-procent av de stupade varelserna i strid "
-"som Skelett.
+"som Skelett."
 
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
-"Din hjälte får &{count} guld i skatteintäkter från sina ägor.
+"Din hjälte får &{count} guld i skatteintäkter från sina ägor."
 
 msgid "Blue"
 msgstr "Blå"
@@ -8942,7 +8942,7 @@ msgid ""
 "%{count} HP per level of spell power."
 msgstr ""
 "Skingrar all onda besvärjelser från en av dina varelser, återställer upp till "
-"%{count} hälsopoäng per Trollkonststyrka.
+"%{count} hälsopoäng per Trollkonststyrka."
 
 msgid "Mass Cure"
 msgstr ""
@@ -9022,7 +9022,7 @@ msgstr ""
 "av Stenhud."
 
 msgid "Steelskin"
-msgstr "Stålhud
+msgstr "Stålhud"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Får en varelse att tilldela minimal skada."
@@ -9086,7 +9086,7 @@ msgstr "Harmageddon"
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
-"Gudomlig fasa drabbar slagfältet som orsakar stor skada till samtliga varelser.
+"Gudomlig fasa drabbar slagfältet som orsakar stor skada till samtliga varelser."
 
 msgid "Elemental Storm"
 msgstr "Elementstorm"
