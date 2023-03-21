@@ -260,15 +260,21 @@ void Troops::UpgradeMonsters( const Monster & m )
     }
 }
 
-uint32_t Troops::GetCountMonsters( const Monster & m ) const
+uint32_t Troops::GetCountMonsters( const Monster & mons ) const
 {
-    uint32_t c = 0;
+    const int monsterId = mons.GetID();
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() && **it == m )
-            c += ( *it )->GetCount();
+    uint32_t result = 0;
 
-    return c;
+    for ( const Troop * troop : *this ) {
+        assert( troop != nullptr );
+
+        if ( troop->isValid() && troop->isMonster( monsterId ) ) {
+            result += troop->GetCount();
+        }
+    }
+
+    return result;
 }
 
 double Troops::getReinforcementValue( const Troops & reinforcement ) const
@@ -837,13 +843,16 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     return true;
 }
 
-void Troops::AssignToFirstFreeSlot( const Troop & troop, const uint32_t splitCount )
+void Troops::AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count )
 {
-    for ( iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() )
-            continue;
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
 
-        ( *it )->Set( troop.GetMonster(), splitCount );
+        if ( troop->isValid() ) {
+            continue;
+        }
+
+        troop->Set( troopToAssign.GetMonster(), count );
         break;
     }
 }
@@ -853,10 +862,12 @@ void Troops::JoinAllTroopsOfType( const Troop & targetTroop )
     const int troopID = targetTroop.GetID();
     const int totalMonsterCount = GetCountMonsters( troopID );
 
-    for ( iterator it = begin(); it != end(); ++it ) {
-        Troop * troop = *it;
-        if ( !troop->isValid() || troop->GetID() != troopID )
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
+
+        if ( !troop->isValid() || troop->GetID() != troopID ) {
             continue;
+        }
 
         if ( troop == &targetTroop ) {
             troop->SetCount( totalMonsterCount );

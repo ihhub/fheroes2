@@ -5219,6 +5219,7 @@ namespace fheroes2
         case SupportedLanguage::Czech:
         case SupportedLanguage::Hungarian:
         case SupportedLanguage::Polish:
+        case SupportedLanguage::Slovak:
             generateCP1250Alphabet( icnVsSprite );
             break;
         case SupportedLanguage::Belarusian:
@@ -5285,6 +5286,7 @@ namespace fheroes2
         case SupportedLanguage::Hungarian:
         case SupportedLanguage::Czech:
         case SupportedLanguage::Danish:
+        case SupportedLanguage::Slovak:
         case SupportedLanguage::Vietnamese:
             return true;
         default:
@@ -5314,6 +5316,7 @@ namespace fheroes2
         case SupportedLanguage::Czech:
         case SupportedLanguage::Hungarian:
         case SupportedLanguage::Polish:
+        case SupportedLanguage::Slovak:
             generateCP1250GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::Belarusian:

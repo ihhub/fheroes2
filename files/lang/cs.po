@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-11 16:34+0000\n"
+"POT-Creation-Date: 2023-03-21 03:14+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -717,6 +717,18 @@ msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} umírá."
 msgstr[1] "%{count} %{defender} umírají."
+msgstr[2] ""
+
+msgid "1 soul is absorbed."
+msgid_plural "%{count} souls are absorbed."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "1 %{unit} is revived."
+msgid_plural "%{count} %{unit} are revived."
+msgstr[0] ""
+msgstr[1] ""
 msgstr[2] ""
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
@@ -2877,7 +2889,7 @@ msgid "You have learned %{skill}."
 msgstr "Naučil ses %{skill}."
 
 msgid "You may learn either:"
-msgstr "Můžeś se naučit:"
+msgstr "Můžeš se naučit:"
 
 msgid "or"
 msgstr "nebo"
@@ -2893,6 +2905,8 @@ msgid ""
 "You have received quite a bargain. I expect to make no profit on the deal. "
 "Can I interest you in any of my other wares?"
 msgstr ""
+"Nakoupil jsi opravdu výhodně. Myslím, že na tomhle obchodu skoro nic "
+"nevydělám. Zaujalo Tě ještě nějaké jiné zboží?"
 
 msgid "I can offer you %{count} for 1 unit of %{resfrom}."
 msgstr "Mohu Ti nabídnout %{count} za 1 díl %{resfrom}."
@@ -2961,7 +2975,7 @@ msgid "(no digging)"
 msgstr "(nelze kopat)"
 
 msgid "penalty: %{cost}"
-msgstr "zpomalení: %{cost}"
+msgstr "odebere: %{cost}"
 
 msgid "Uncharted Territory"
 msgstr "Neprozkoumané území"
@@ -3000,13 +3014,13 @@ msgid "Available: %{count}"
 msgstr "K dispozici: %{count}"
 
 msgid "Number to buy:"
-msgstr "Koupit:"
+msgstr "Nakoupit:"
 
 msgid "Recruit selected monsters."
 msgstr "Najmout vybrané stvůry."
 
 msgid "Select maximum monsters to be recruited."
-msgstr "Vybrat maximální počet k najmutí. "
+msgstr "Vybrat maximální počet k najmutí."
 
 msgid "Select only 1 monster to be recruited."
 msgstr "Vybrat pouze 1 stvůru k najmutí."
@@ -3145,30 +3159,26 @@ msgstr ""
 msgid "Small Maps"
 msgstr "Malé mapy"
 
-#, fuzzy
 msgid "View only maps of size small (36 x 36)."
-msgstr "Zobrazí pouze mapy velikosti \"malá\" (36x36)."
+msgstr "Zobrazí pouze mapy velikosti malá (36 x 36)."
 
 msgid "Medium Maps"
 msgstr "Střední mapy"
 
-#, fuzzy
 msgid "View only maps of size medium (72 x 72)."
-msgstr "Zobrazí pouze mapy velikosti \"střední\" (72x72)."
+msgstr "Zobrazí pouze mapy velikosti střední (72 x 72)."
 
 msgid "Large Maps"
 msgstr "Velké mapy"
 
-#, fuzzy
 msgid "View only maps of size large (108 x 108)."
-msgstr "Zobrazí pouze mapy velikosti \"velká\" (108x108)."
+msgstr "Zobrazí pouze mapy velikosti velká (108 x 108)."
 
 msgid "Extra Large Maps"
 msgstr "Velmi velké mapy"
 
-#, fuzzy
 msgid "View only maps of size extra large (144 x 144)."
-msgstr "Zobrazí pouze mapy velikosti \"velmi velká\" (144x144)."
+msgstr "Zobrazí pouze mapy velikosti Velmi velká (144 x 144)."
 
 msgid "All Maps"
 msgstr "Všechny mapy"
@@ -3836,59 +3846,76 @@ msgid "Play with 6 human players."
 msgstr ""
 
 msgid "Dragon city has fallen!  You are now the Master of the Dragons."
-msgstr ""
+msgstr "Drači město padlo! Stal ses Pánem Draků. "
 
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
 msgstr ""
+"Dobil si %{name}!\n"
+"Jsi vítěz."
 
 msgid ""
 "You have captured the enemy hero %{name}!\n"
 "Your quest is complete."
 msgstr ""
+"Zajal si hrdinu %{name}!\n"
+"Tvůj úkol byl splněn."
 
 msgid ""
 "You have found the %{name}.\n"
 "Your quest is complete."
 msgstr ""
+"Nalezl si %{name}.\n"
+"Tvůj úkol byl splněn."
 
-#, fuzzy
 msgid "Ultimate Artifact"
-msgstr "Artefakt"
+msgstr "Ultimátní Artefakt"
 
 msgid ""
 "The enemy is beaten.\n"
 "Your side has triumphed!"
 msgstr ""
+"Nepřátel je poražen.\n"
+"Tvá strana triumfovala!"
 
 msgid ""
 "You have built up over %{count} gold in your treasury.\n"
 "All enemies bow before your wealth and power."
 msgstr ""
+"Nashromáždil si %{count} zlaťáků v pokladnici.\n"
+"Všichni nepřátelé se klanějí Tvému bohatství a síle."
 
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
 msgstr ""
+"Nepřátel dobil %{name}!\n"
+"Jejich strana triumfovala."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
 "You must bow done in defeat before his wealth and power."
 msgstr ""
+"Nepřátel nashromáždil %{count} zlaťáků v jeho pokladnici.\n"
+"Příjmi porážku a zkloň se před jeho bohatstvím a silou."
 
 msgid "You have been eliminated from the game!!!"
-msgstr ""
+msgstr "Byl jsi vyřazen ze hry!!!"
 
 msgid ""
 "You have lost the hero %{name}.\n"
 "Your quest is over."
 msgstr ""
+"Přišel jsi o hrdinu %{name}.\n"
+"Úkol nebyl splněn."
 
 msgid ""
 "You have failed to complete your quest in time.\n"
 "All is lost."
 msgstr ""
+"Nepodařilo se Ti dokončit úkol včas.\n"
+"Vše je ztraceno."
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
@@ -3948,31 +3975,31 @@ msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
 
 msgid "%{color} player has been vanquished!"
-msgstr ""
+msgstr "%{color} hráč byl poražen!"
 
 msgid "Scenario:"
-msgstr ""
+msgstr "Scénář:"
 
 msgid "Game Difficulty:"
-msgstr ""
+msgstr "Obtížnost hry:"
 
 msgid "Opponents:"
-msgstr ""
+msgstr "Protivníci:"
 
 msgid "Class:"
-msgstr ""
+msgstr "Třida:"
 
 msgid "Rating %{rating}%"
 msgstr ""
 
 msgid "Click here to select which scenario to play."
-msgstr ""
+msgstr "Kliknout sem pro výběr scénáře."
 
 msgid "Scenario"
 msgstr "Scénář"
 
 msgid "Game Difficulty"
-msgstr ""
+msgstr "Obtížnost hry"
 
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
@@ -3998,13 +4025,13 @@ msgid "No maps available!"
 msgstr ""
 
 msgid "Astrologers proclaim the Month of the %{name}."
-msgstr ""
+msgstr "Astrologická předpověď, měsíc %{name}."
 
 msgid "Astrologers proclaim the Week of the %{name}."
-msgstr ""
+msgstr "Astrologická předpověď, týden %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
-msgstr ""
+msgstr "Při pravidelném nárůstu došlo ke zdvojení populace %{monster}!"
 
 msgid ""
 "After regular growth, the population of %{monster} increases by %{count} "
@@ -4013,30 +4040,36 @@ msgid_plural ""
 "After regular growth, the population of %{monster} increases by %{count} "
 "percent!"
 msgstr[0] ""
+"Při pravidelném nárůstu populace %{monster} narostla o %{count} procent!"
 msgstr[1] ""
+"Při pravidelném nárůstu populace %{monster} narostla o %{count} procent!"
 msgstr[2] ""
 
 msgid "%{monster} growth +%{count}."
-msgstr ""
+msgstr "Růst %{monster} +%{count}."
 
 msgid " All populations are halved."
-msgstr ""
+msgstr "Celá populace je na polovině."
 
 msgid " All dwellings increase population."
-msgstr ""
+msgstr "Všechna obydlí přináší novou populaci."
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
 msgstr ""
+"%{color} hráč, máš poslední den na dobití nějakého města, jinak budeš "
+"vyhoštěn z této země."
 
 msgid ""
 "%{color} player, you only have %{day} days left to capture a town, or you "
 "will be banished from this land."
 msgstr ""
+"%{color} hráč, máš pouze %{day} dní na dobití nějakého města, jinak budeš "
+"vyhoštěn z této země."
 
 msgid "%{color} player's turn."
-msgstr ""
+msgstr "Táhne %{color} hráč."
 
 msgid ""
 "Do you want to transfer control from you to the AI? The effect will take "
@@ -4047,38 +4080,41 @@ msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
+"%{color} hráči, přišel jsi o své poslední město. Pokud do týdne nedobiješ "
+"nějaké město, tak budeš vyloučen ze hry."
 
 msgid ""
 "%{color} player, your heroes abandon you, and you are banished from this "
 "land."
 msgstr ""
+"%{color} hráči, Tví hrdinové Tě opouští a Ty jsi byl vykázán z této země."
 
 msgid "Next Hero"
-msgstr ""
+msgstr "Další Hrdina"
 
 msgid "Select the next Hero."
-msgstr ""
+msgstr "Vybrat dalšího Hrdinu."
 
 msgid "Continue Movement"
-msgstr ""
+msgstr "Pokračovat v pohybu"
 
 msgid "Continue the Hero's movement along the current path."
-msgstr ""
+msgstr "Pokračování ve vytyčené cestě Hrdiny."
 
 msgid "Kingdom Summary"
-msgstr ""
+msgstr "Přehled Království"
 
 msgid "View a Summary of your Kingdom."
-msgstr ""
+msgstr "Zobraz přehled o svém království."
 
 msgid "Cast an adventure spell."
-msgstr ""
+msgstr "Seslat kouzlo."
 
 msgid "End Turn"
-msgstr ""
+msgstr "Ukončit tah"
 
 msgid "End your turn and left the computer take its turn."
-msgstr ""
+msgstr "Ukonči svůj tah a nech táhnout počítač. "
 
 msgid "Adventure Options"
 msgstr ""
@@ -4100,16 +4136,16 @@ msgstr ""
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
+"Jeden nebo více hrdinů mohou ještě popojet, určitě chceš ukončit svůj tah?"
 
 msgid "Are you sure you want to quit?"
-msgstr "Opravdu chcete skončit?"
+msgstr "Opravdu chceš skončit?"
 
-#, fuzzy
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
-msgstr "Jsi si jist, že chceš utéct?"
+msgstr "Jsi si jist, že chceš hru restartovat? (Aktuální hra bude ztracena.)"
 
 msgid "Are you sure you want to overwrite the save with this name?"
-msgstr ""
+msgstr "Jsi si jist, že chceš prěpsat soubor pod tímto názvem?"
 
 msgid "Game saved successfully."
 msgstr ""
@@ -4119,10 +4155,10 @@ msgstr ""
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
-msgstr ""
+msgstr "Jsi si jist, že chceš načíst novou hru? (Aktuální hra bude ztracena.)"
 
 msgid "Try looking on land!!!"
-msgstr ""
+msgstr "Zkus hledat v přírodě!!!"
 
 msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
@@ -4130,32 +4166,33 @@ msgid ""
 msgstr ""
 
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr ""
+msgstr "Kopání vyžaduje celodenní úsilí, zkus to opět zítra."
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
+"Po několika hodinách strávených kopáním, jsi konečné objevil %{artifact}."
 
 msgid "Congratulations!"
-msgstr ""
+msgstr "Gratulace!"
 
 msgid "Nothing here. Where could it be?"
-msgstr ""
+msgstr "Nic jsi nenašel. Kde to jen může být?"
 
 msgid "Try searching on clear ground."
-msgstr ""
+msgstr "Zkus hledat na volném místě."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 
 msgid "World Map"
-msgstr ""
+msgstr "Mapa Světa"
 
 msgid "Month: %{month} Week: %{week}"
-msgstr ""
+msgstr "Měsíc: %{month} Týden: %{week}"
 
 msgid "Day: %{day}"
-msgstr ""
+msgstr "Den: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -4306,6 +4343,9 @@ msgid "Hungarian"
 msgstr ""
 
 msgid "Danish"
+msgstr ""
+
+msgid "Slovak"
 msgstr ""
 
 msgid ", FPS: "
@@ -6120,7 +6160,7 @@ msgid "luck|Good"
 msgstr "Dobré"
 
 msgid "luck|Great"
-msgstr "Skvěé"
+msgstr "Skvělé"
 
 msgid "luck|Irish"
 msgstr "Irské"
@@ -6243,7 +6283,7 @@ msgid "speed|Crawling"
 msgstr "Plazící"
 
 msgid "speed|Very Slow"
-msgstr "velmi pomalý"
+msgstr "Velmi pomalý"
 
 msgid "speed|Slow"
 msgstr "Pomalý"

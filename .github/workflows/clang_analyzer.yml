@@ -16,10 +16,10 @@ jobs:
     - name: Install dependencies and clang-tools
       run: |
         sudo apt-get -y update
-        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools-14
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools-15
     - name: Setup clang-tools
       run: |
-        sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-14 100
+        sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-15 100
     - name: Analyze
       run: |
         scan-build --status-bugs -v -o scan-build-result make -j 2

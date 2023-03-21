@@ -231,7 +231,7 @@ namespace Battle
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
 
-        static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets );
+        static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected );
         static void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets );
 
         std::vector<int> GetCastleTargets() const;

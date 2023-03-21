@@ -65,6 +65,7 @@ namespace
             { "nl", fheroes2::SupportedLanguage::Dutch },      { "dutch", fheroes2::SupportedLanguage::Dutch },
             { "hu", fheroes2::SupportedLanguage::Hungarian },  { "hungarian", fheroes2::SupportedLanguage::Hungarian },
             { "dk", fheroes2::SupportedLanguage::Danish },     { "danish", fheroes2::SupportedLanguage::Danish },
+            { "sk", fheroes2::SupportedLanguage::Slovak },     { "slovak", fheroes2::SupportedLanguage::Slovak },
             { "vi", fheroes2::SupportedLanguage::Vietnamese }, { "vietnamese", fheroes2::SupportedLanguage::Vietnamese } };
 }
 
@@ -114,7 +115,7 @@ namespace fheroes2
                                                              SupportedLanguage::Romanian,   SupportedLanguage::Spanish,   SupportedLanguage::Portuguese,
                                                              SupportedLanguage::Swedish,    SupportedLanguage::Turkish,   SupportedLanguage::Dutch,
                                                              SupportedLanguage::Hungarian,  SupportedLanguage::Czech,     SupportedLanguage::Danish,
-                                                             SupportedLanguage::Vietnamese };
+                                                             SupportedLanguage::Slovak,     SupportedLanguage::Vietnamese };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
@@ -182,6 +183,8 @@ namespace fheroes2
             return _( "Hungarian" );
         case SupportedLanguage::Danish:
             return _( "Danish" );
+        case SupportedLanguage::Slovak:
+            return _( "Slovak" );
         case SupportedLanguage::Vietnamese:
             return _( "Vietnamese" );
         default:
@@ -232,6 +235,8 @@ namespace fheroes2
             return "hu";
         case SupportedLanguage::Danish:
             return "dk";
+        case SupportedLanguage::Slovak:
+            return "sk";
         case SupportedLanguage::Vietnamese:
             return "vi";
         default:

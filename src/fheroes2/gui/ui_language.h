@@ -44,6 +44,7 @@ namespace fheroes2
         Norwegian,
         Portuguese,
         Romanian,
+        Slovak,
         Spanish,
         Swedish,
         Turkish,

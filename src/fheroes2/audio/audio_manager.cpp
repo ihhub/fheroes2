@@ -157,21 +157,20 @@ namespace
         const std::vector<uint8_t> & body = getDataFromAggFile( M82::GetString( m82 ), false );
 
         if ( !body.empty() ) {
-            // create WAV format
             StreamBuf wavHeader( 44 );
-            wavHeader.putLE32( 0x46464952 ); // RIFF
-            wavHeader.putLE32( static_cast<uint32_t>( body.size() ) + 0x24 ); // size
-            wavHeader.putLE32( 0x45564157 ); // WAVE
-            wavHeader.putLE32( 0x20746D66 ); // FMT
-            wavHeader.putLE32( 0x10 ); // size_t
-            wavHeader.putLE16( 0x01 ); // format
-            wavHeader.putLE16( 0x01 ); // channels
-            wavHeader.putLE32( 22050 ); // samples
-            wavHeader.putLE32( 22050 ); // byteper
-            wavHeader.putLE16( 0x01 ); // align
-            wavHeader.putLE16( 0x08 ); // bitsper
-            wavHeader.putLE32( 0x61746164 ); // DATA
-            wavHeader.putLE32( static_cast<uint32_t>( body.size() ) ); // size
+            wavHeader.putLE32( 0x46464952 ); // RIFF marker ("RIFF")
+            wavHeader.putLE32( static_cast<uint32_t>( body.size() ) + 0x24 ); // Total size minus the size of this and previous fields
+            wavHeader.putLE32( 0x45564157 ); // File type header ("WAVE")
+            wavHeader.putLE32( 0x20746D66 ); // Format sub-chunk marker ("fmt ")
+            wavHeader.putLE32( 0x10 ); // Size of the format sub-chunk
+            wavHeader.putLE16( 0x01 ); // Audio format (1 for PCM)
+            wavHeader.putLE16( 0x01 ); // Number of channels
+            wavHeader.putLE32( 22050 ); // Sample rate
+            wavHeader.putLE32( 22050 ); // Byte rate (SampleRate * BitsPerSample * NumberOfChannels) / 8
+            wavHeader.putLE16( 0x01 ); // Block align (BitsPerSample * NumberOfChannels) / 8
+            wavHeader.putLE16( 0x08 ); // Bits per sample
+            wavHeader.putLE32( 0x61746164 ); // Data sub-chunk marker ("data")
+            wavHeader.putLE32( static_cast<uint32_t>( body.size() ) ); // Size of the data sub-chunk
 
             v.reserve( body.size() + 44 );
             v.assign( wavHeader.data(), wavHeader.data() + 44 );

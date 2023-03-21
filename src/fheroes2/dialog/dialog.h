@@ -85,7 +85,7 @@ namespace Dialog
     std::string SelectFileLoad();
     std::string SelectFileSave();
 
-    void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
+    void QuickInfo( const Maps::Tiles & tile );
 
     // These functions are able to show the location of an object on the radar. If the location should be shown on the radar, then an
     // additional area, the contents of which should be restored when the radar is redrawn (areaToRestore), can be optionally specified.
