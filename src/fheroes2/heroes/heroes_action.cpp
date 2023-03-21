@@ -1939,7 +1939,7 @@ namespace
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
             };
 
-            auto removeObjectProtection = [&hero, objectType, &tile, &updateRadar]( const bool isUpdateRadar ) {
+            auto removeObjectProtection = [&tile, &updateRadar]( const bool isUpdateRadar ) {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
 
