@@ -906,7 +906,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     }
 
     case MP2::OBJ_ABANDONED_MINE:
-        // The number of Ghosts is set at the start of the map and does not change anymore
+        // The number of Ghosts is set when loading the map and does not change anymore
         if ( isFirstLoad ) {
             MonsterSetCount( Rand::Get( 30, 60 ) );
         }
@@ -953,7 +953,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_GENIE_LAMP:
-        // The number of Genies is set at the start of the map and does not change anymore
+        // The number of Genies is set when loading the map and does not change anymore
         if ( isFirstLoad ) {
             MonsterSetCount( Rand::Get( 2, 4 ) );
         }
