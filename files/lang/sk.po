@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-11 16:34+0000\n"
-"PO-Revision-Date: 2023-03-21 07:08+0100\n"
+"POT-Creation-Date: 2023-03-21 03:14+0000\n"
+"PO-Revision-Date: 2023-03-20 20:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -21,8 +21,8 @@ msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
-"RÝCHLA\n"
-"BITVA"
+"LEN\n"
+"BOJ"
 
 msgid ""
 "NEW\n"
@@ -49,7 +49,7 @@ msgid "INFO"
 msgstr "INFO"
 
 msgid "QUIT"
-msgstr "OPUSŤ"
+msgstr "UKONČIŤ"
 
 msgid "CANCEL"
 msgstr "ZRUŠIŤ"
@@ -76,13 +76,13 @@ msgid "NO"
 msgstr "NIE"
 
 msgid "EXIT"
-msgstr "PREČ"
+msgstr "KONIEC"
 
 msgid "DISMISS"
-msgstr "PREPUSŤ"
+msgstr "PREPUSTIŤ"
 
 msgid "UPGRADE"
-msgstr "POVÝŠ"
+msgstr "POVÝŠIŤ"
 
 msgid "RESTART"
 msgstr "REŠTART"
@@ -100,579 +100,531 @@ msgid "X-L"
 msgstr "X-L"
 
 msgid "ALL"
-msgstr "CELÝ"
+msgstr "VŠETKY"
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
-"BEŽNÁ\n"
-"HRA"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
-msgstr "KAMPAŇ"
+msgstr ""
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
-"HRA\n"
-"VIAC\n"
-"HRÁČOV"
 
 msgid "CONFIG"
-msgstr "NASTAV"
+msgstr ""
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
-"PÔVODNÁ\n"
-"KAMPAŇ"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
-"ROZŠÍRENÁ\n"
-"KAMPAŇ"
 
 msgid "HOT SEAT"
 msgstr ""
-"HORÚCA\n"
-"PÔDA"
 
 msgid "2 PLAYERS"
-msgstr "2 HRÁČI"
+msgstr ""
 
 msgid "3 PLAYERS"
-msgstr "3 HRÁČI"
+msgstr ""
 
 msgid "4 PLAYERS"
-msgstr "4 HRÁČI"
+msgstr ""
 
 msgid "5 PLAYERS"
-msgstr "5 HRÁČOV"
+msgstr ""
 
 msgid "6 PLAYERS"
-msgstr "6 HRÁČOV"
+msgstr ""
 
 msgid "GIFT"
-msgstr "DAR"
+msgstr ""
 
 msgid "DIFFICULTY"
-msgstr "OBŤIAŽNOSŤ"
+msgstr ""
 
 msgid "MIN"
-msgstr "MIN"
+msgstr ""
 
 msgid "MAX"
-msgstr "MAX"
+msgstr ""
 
 msgid "Warrior"
-msgstr "Bojovník"
+msgstr ""
 
 msgid "Builder"
-msgstr "Staviteľ"
+msgstr ""
 
 msgid "Explorer"
-msgstr "Prieskumník"
+msgstr ""
 
 msgid "None"
-msgstr "Žiadny"
+msgstr ""
 
 msgid "Warning"
-msgstr "Pozor"
+msgstr ""
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
-msgstr "Chceš prevziať kontrolu nad hráčom? Efekt sa prejaví v ďalšom kole."
+msgstr ""
 
 msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
-"Zopár\n"
-"%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
-"Niekoľko\n"
-"%{monster}"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
-"Skupina\n"
-"%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
-"Veľa\n"
-"%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
-"Horda\n"
-"%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
-"Zástup\n"
-"%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
-"Dav\n"
-"%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
-"Mračná\n"
-"%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
-"Légia\n"
-"%{monster}"
 
 msgid "army|Few"
-msgstr "Zopár"
+msgstr ""
 
 msgid "army|Several"
-msgstr "Niekoľko"
+msgstr ""
 
 msgid "army|Pack"
-msgstr "Skupina"
+msgstr ""
 
 msgid "army|Lots"
-msgstr "Veľa"
+msgstr ""
 
 msgid "army|Horde"
-msgstr "Horda"
+msgstr ""
 
 msgid "army|Throng"
-msgstr "Zástup"
+msgstr ""
 
 msgid "army|Swarm"
-msgstr "Dav"
+msgstr ""
 
 msgid "army|Zounds"
-msgstr "Mračná"
+msgstr ""
 
 msgid "army|Legion"
-msgstr "Légia"
+msgstr ""
 
 msgid "All %{race} troops +1"
-msgstr "Všetky jednotky typu %{race} +1"
+msgstr ""
 
 msgid "Multiple"
-msgstr "Viaceré"
+msgstr ""
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr "Jednotky %{count} zoskupení -%{penalty}"
+msgstr ""
 
 msgid "Some undead in group -1"
-msgstr "Nemŕtvi v skupine -1"
+msgstr ""
 
 msgid "View %{name}"
-msgstr "Zobraz %{name}"
+msgstr ""
 
 msgid "Move the %{name} "
-msgstr "Premiestni %{name}"
+msgstr ""
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Pohyb alebo pravý klik prerozdelí: %{name}"
+msgstr ""
 
 msgid "Combine %{name} armies"
-msgstr "Skombinuj armádu: %{name}"
+msgstr ""
 
 msgid "Exchange %{name2} with %{name}"
-msgstr "Vymeň %{name2} za %{name}"
+msgstr ""
 
 msgid "Select %{name}"
-msgstr "Vyber %{name}"
+msgstr ""
 
 msgid "Cannot move last troop"
-msgstr "Nemožné pohnúť posledným"
+msgstr ""
 
 msgid "Move the %{name}"
-msgstr "Premiestni %{name}"
+msgstr ""
 
 msgid "Set Count"
-msgstr "Nastav počet"
+msgstr ""
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] "%{name} zničil polovicu nepriateľov!"
-msgstr[1] "%{name} zničili polovicu nepriateľov!"
-msgstr[2] "%{name} zničili polovicu nepriateľov!"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "%{name} has turned off the auto battle"
-msgstr "%{name} vypol automatizovaný boj"
+msgstr ""
 
 msgid "%{name} has turned on the auto battle"
-msgstr "%{name} zapol automatizovaný boj"
+msgstr ""
 
 msgid "Spell failed!"
-msgstr "Kúzlo zlyhalo!"
+msgstr ""
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
-"Pre túto bitku platí artefakt Guľa Negácie, ktorá deaktivuje všetky bojové "
-"kúzla."
 
 msgid "You have already cast a spell this round."
-msgstr "V tomto kole už bolo použité kúzlo."
+msgstr ""
 
 msgid "That spell will affect no one!"
-msgstr "Kúzlo nikoho neovplyvní!"
+msgstr ""
 
 msgid "You may only summon one type of elemental per combat."
-msgstr "Smieš vyvolať len jeden typ elementálov za boj."
+msgstr ""
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr "Blízko hrdinu nie je voľné miesto pre vyvolanie Elementála."
+msgstr ""
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
-"Priekopa redukuje obranu každého o -%{count} a spomaľuje pohyb na polovicu."
 
 msgid "Speed: %{speed}"
-msgstr "Rýchlosť: %{speed}"
+msgstr ""
 
 msgid "Speed"
-msgstr "Rýchlosť"
+msgstr ""
 
 msgid "Army Order"
-msgstr "Poradie"
+msgstr ""
 
 msgid "Off"
-msgstr "Vyp"
+msgstr ""
 
 msgid "On"
-msgstr "Zap"
+msgstr ""
 
 msgid "Auto Spell Casting"
-msgstr "Použi kúzla v bitve"
+msgstr ""
 
 msgid "Grid"
-msgstr "Mriežka"
+msgstr ""
 
 msgid "Shadow Movement"
-msgstr "Ukáž možný pohyb"
+msgstr ""
 
 msgid "Shadow Cursor"
-msgstr "Ukáž kurzor"
+msgstr ""
 
 msgid "Audio"
-msgstr "Zvuk"
+msgstr ""
 
 msgid "Settings"
-msgstr "Nastavenie"
+msgstr ""
 
 msgid "Configure"
-msgstr "Konfigurácia"
+msgstr ""
 
 msgid "Hot Keys"
-msgstr "Skratky"
+msgstr ""
 
 msgid "Damage Info"
-msgstr "Info poškodenia"
+msgstr ""
 
 msgid "Set the speed of combat actions and animations."
-msgstr "Nastav rýchlosť bojových akcií a animácií."
+msgstr ""
 
 msgid "Toggle to display army order during the battle."
-msgstr "Zobraz armádne poradie počas bitvy."
+msgstr ""
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
-"Zmeň možnosť kúzlenia počas automatizovanej bitvy. (Viď: Toto nemá vplyv na "
-"kúzlenie počítačových hráčov ani na rýchly boj.)"
 
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
-"Zmeň zobrazenie mriežky. Mriežka sa vždy nachádza v možnostiach pohybu. Toto "
-"nastavenie má vplyv len na viditeľnosť mriežky."
 
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr "Zapne alebo vypne tiene ukazujúce kde sa môžeš pohnúť alebo útočiť."
+msgstr ""
 
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
-msgstr "Zapne alebo vypne tieň zobrazujúci pozíciu kurzora."
+msgstr ""
 
 msgid "Change the audio settings of the game."
-msgstr "Zmeň nastavenie zvuku hry."
+msgstr ""
 
 msgid "Check and configure all the hot keys present in the game."
-msgstr "Zmeň nastavenia klávesových skratiek hry."
+msgstr ""
 
 msgid "Toggle to display damage information during the battle."
-msgstr "Zmeň zobrazenie poškodenia počas bitvy."
+msgstr ""
 
 msgid "Exit this menu."
-msgstr "Odíď z menu."
+msgstr ""
 
 msgid "Okay"
-msgstr "Ok"
+msgstr ""
 
 msgid "The enemy has surrendered!"
-msgstr "Nepriateľ sa vzdal!"
+msgstr ""
 
 msgid "The enemy has fled!"
-msgstr "Nepriateľ utiekol!"
+msgstr ""
 
 msgid "A glorious victory!"
-msgstr "Slávne víťazstvo!"
+msgstr ""
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr "Za odvahu v boji, %{name} získava %{exp} skúseností."
+msgstr ""
 
 msgid "The cowardly %{name} flees from battle."
-msgstr "%{name} zbabelo uteká z bitvy."
+msgstr ""
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr "%{name} sa vzdáva nepriateľovi a hanobne odchádza."
+msgstr ""
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr "Tvoje vojská sú porazené a %{name} sa ťa vzdáva."
+msgstr ""
 
 msgid "Your force suffer a bitter defeat."
-msgstr "Tvoje vojská sú porazené."
+msgstr ""
 
 msgid "Battlefield Casualties"
-msgstr "Obete bitvy"
+msgstr ""
 
 msgid "Attacker"
-msgstr "Útočník"
+msgstr ""
 
 msgid "Defender"
-msgstr "Obránca"
+msgstr ""
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr "Hneď ako siahaš po %{name}, náhle mizne."
+msgstr ""
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr "Hneď ako nepriateľ siaha po %{name}, náhle mizne."
+msgstr ""
 
 msgid "You have captured an enemy artifact!"
-msgstr "Získal si nepriateľov artefakt!"
+msgstr ""
 
 msgid "Necromancy!"
-msgstr "Nekromancia!"
+msgstr ""
 
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
-"Praktizovaním temného umenia nekromancie dokážeš priviezť %{count} mŕtvych "
-"nepriateľa aby sa vrátili do tvojich služieb ako %{monster}."
 
 msgid "%{name} the %{race}"
-msgstr "%{race} %{name}"
+msgstr ""
 
 msgid "Captain of %{name}"
-msgstr "Kapitán: %{name}"
+msgstr ""
 
 msgid "Attack"
-msgstr "Útok"
+msgstr ""
 
 msgid "Defense"
-msgstr "Obrana"
+msgstr ""
 
 msgid "Spell Power"
-msgstr "Sila kúziel"
+msgstr ""
 
 msgid "Knowledge"
-msgstr "Vedomosť"
+msgstr ""
 
 msgid "Morale"
-msgstr "Morálka"
+msgstr ""
 
 msgid "Luck"
-msgstr "Šťastie"
+msgstr ""
 
 msgid "Spell Points"
-msgstr "Body kúzla"
+msgstr ""
 
 msgid "Hero's Options"
-msgstr "Ukáž hrdinu"
+msgstr ""
 
 msgid "Cast Spell"
-msgstr "Čaruj"
+msgstr ""
 
 msgid "Retreat"
-msgstr "Uteč"
+msgstr ""
 
 msgid "Surrender"
-msgstr "Vzdaj sa"
+msgstr ""
 
 msgid "Cancel"
-msgstr "Zruš"
+msgstr ""
 
 msgid "Hero Screen"
-msgstr "Hrdina"
+msgstr ""
 
 msgid "Captain's Options"
-msgstr "Možnosti kapitána"
+msgstr ""
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
-"Kúzli. Smieš zoslať len jedno kúzlo počas kola. Po skončení pohybu všetkých "
-"bojovníkov je kolo obnovené."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
 "for you to recruit again, however, the hero will have only a novice hero's "
 "forces."
 msgstr ""
-"Ustúp s hrdinom, čo opustí tvoje jednotky. Hrdina bude k dispozícii na "
-"najatie, ale bude mať len základné jednotky."
 
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
-"Vzdanie sa stojí zlato. Avšak pokiaľ zaplatíš, hrdina a zostávajúce jednotky "
-"budú k dispozícii k nájmu."
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr "Zobraz informácie o hrdinovi."
+msgstr ""
 
 msgid "Return to the battle."
-msgstr "Späť do bitvy."
+msgstr ""
 
 msgid "Not enough gold (%{gold})"
-msgstr "Málo zlata (%{gold})"
+msgstr ""
 
 msgid "%{name} states:"
-msgstr "%{name} hovorí:"
+msgstr ""
 
 msgid "Captain of %{name} states:"
-msgstr "Kapitán z: %{name} hovorí:"
+msgstr ""
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
-"\"Príjmem tvoje vzdanie sa a umožním tebe a tvojim vojskám prechod za "
-"%{price} zlata.\""
 
 msgid "View %{monster} info"
-msgstr "Zobraz info o: %{monster}"
+msgstr ""
 
 msgid "Fly %{monster} here"
-msgstr "Leť sem s: %{monster}"
+msgstr ""
 
 msgid "Move %{monster} here"
-msgstr "Premiestni: %{monster}"
+msgstr ""
 
 msgid "Shoot %{monster}"
-msgstr "Strel do %{monster}"
+msgstr ""
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] "(ostáva 1 strela)"
-msgstr[1] "(ostávajú %{count} strely)"
-msgstr[2] "(ostáva %{count} striel)"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Attack %{monster}"
-msgstr "Útok na: %{monster}"
+msgstr ""
 
 msgid "Turn %{turn}"
-msgstr "Kolo %{turn}"
+msgstr ""
 
 msgid "Teleport here"
-msgstr "Teleport sem"
+msgstr ""
 
 msgid "Invalid teleport destination"
-msgstr "Neplatný cieľ teleportu"
+msgstr ""
 
 msgid "Cast %{spell} on %{monster}"
-msgstr "Kúzli %{spell} na %{monster}"
+msgstr ""
 
 msgid "Cast %{spell}"
-msgstr "Kúzli %{spell}"
+msgstr ""
 
 msgid "Select spell target"
-msgstr "Urči cieľ kúzla"
+msgstr ""
 
 msgid "View Ballista info"
-msgstr "Zobraz balistické info"
+msgstr ""
 
 msgid "Ballista"
-msgstr "Balista"
+msgstr ""
 
 msgid "Enable auto combat"
-msgstr "Umožni auto súboj"
+msgstr ""
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr "Umožní počítaču vybojovať boj za teba."
+msgstr ""
 
 msgid "Auto Combat"
-msgstr "Auto súboj"
+msgstr ""
 
 msgid "Customize system options"
-msgstr "Nastav systémové možnosti"
+msgstr ""
 
 msgid "Allows you to customize the combat screen."
-msgstr "Umožní ti nastaviť bojovú obrazovku."
+msgstr ""
 
 msgid "System Options"
-msgstr "Systémové nastavenia"
+msgstr ""
 
 msgid "Skip this unit"
-msgstr "Preskoč kolo"
+msgstr ""
 
 msgid "Skip"
-msgstr "Preskoč"
+msgstr ""
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
-"Preskoč bojovníka. Terajší bojovník ukončí svoje kolo a ďalej nebude k "
-"dispozícii do ďalšieho kola."
 
 msgid "View Captain's options"
-msgstr "Zobraz kapitánove možnosti"
+msgstr ""
 
 msgid "View Hero's options"
-msgstr "Zobraz hrdinove možnosti"
+msgstr ""
 
 msgid "View opposing Captain"
 msgstr ""
@@ -712,6 +664,18 @@ msgstr[2] ""
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "1 soul is absorbed."
+msgid_plural "%{count} souls are absorbed."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "1 %{unit} is revived."
+msgid_plural "%{count} %{unit} are revived."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -4109,6 +4073,9 @@ msgid "Hungarian"
 msgstr ""
 
 msgid "Danish"
+msgstr ""
+
+msgid "Slovak"
 msgstr ""
 
 msgid ", FPS: "
