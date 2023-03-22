@@ -654,10 +654,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
 
-                        // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
-
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
-                        Interface::GameArea::updateMapFogDirections();
+                        // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
+                        Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
 
                         Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
                         display.render();
@@ -712,15 +711,32 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     Redraw();
                     display.render();
 
-                    const bool isFriendlyAI = isHotSeatGame && Players::isFriends( player->GetColor(), Players::HumanColors() );
+                    if ( isHotSeatGame ) {
+                        int32_t friendColors = 0;
+
+                        const bool isFriendlyAI = Players::isFriends( player->GetColor(), Players::HumanColors() );
 
 #if defined( WITH_DEBUG )
-                    if ( isFriendlyAI || player->isAIAutoControlMode() ) {
+                        if ( isFriendlyAI || player->isAIAutoControlMode() ) {
 #else
-                    if ( isFriendlyAI ) {
+                        if ( isFriendlyAI ) {
 #endif
-                        // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
-                        Interface::GameArea::updateMapFogDirections();
+                            // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
+                            friendColors = player->GetFriends();
+                        }
+                        else {
+                            // Fully update fog directions for all human players to be able to see enemy AI hero move on tiles with discovered fog.
+                            const Colors humanColors( Players::HumanColors() );
+
+                            for ( const int32_t color : humanColors ) {
+                                const Player * humanPlayer = Players::Get( color );
+                                if ( humanPlayer ) {
+                                    friendColors |= humanPlayer->GetFriends();
+                                }
+                            }
+                        }
+
+                        Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
                     }
 
                     kingdom.ActionBeforeTurn();
