@@ -407,7 +407,8 @@ msgstr "Snabb-\n"
 "tangenter"
 
 msgid "Damage Info"
-msgstr "Skadeinformation"
+msgstr "Skade-\n"
+"information"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Ange hastigheten för animationer på slagfältet."
@@ -7687,7 +7688,7 @@ msgid "% damage from %{spell} spell"
 msgstr "% skada från %{spell}besvärjelse"
 
 msgid "% immunity to "
-msgstr "% resistens mot"
+msgstr "% resistens mot "
 
 msgid "Lightning"
 msgstr "Blixt"
@@ -8945,13 +8946,15 @@ msgstr ""
 "återställer upp till %{count} hälsopoäng per Trollkonststyrka per varelse."
 
 msgid "Resurrect"
-msgstr "Återupplivning"
+msgstr "Åter-\n"
+"upplivning"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr "Återupplivar varelser från en skadad eller död enhet tills striden slutar."
 
 msgid "Resurrect True"
-msgstr "Äkta Återupplivning"
+msgstr "Äkta\n"
+"Återupplivning"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
 msgstr "Återupplivar varelser från en skadad eller död varelse permanent."
@@ -8966,7 +8969,8 @@ msgid "Increases the speed of all of your creatures by %{count}."
 msgstr "Höjer alla dina varelsers hastighet med %{count}."
 
 msgid "Mass Haste"
-msgstr "Masskyndning"
+msgstr "Mass-\n"
+"skyndning"
 
 msgid "Slows target to half movement rate."
 msgstr "Saktar ned varelsens hastighet till hälften."
@@ -8975,7 +8979,8 @@ msgid "spell|Slow"
 msgstr "Förslöa"
 
 msgid "Mass Slow"
-msgstr "Massförslöning"
+msgstr "Mass-\n"
+"förslöelse"
 
 msgid "Slows all enemies to half movement rate."
 msgstr "Saktar ned alla fiendevarelser till hälften."
@@ -8996,7 +9001,8 @@ msgid "Causes all of your units to inflict maximum damage."
 msgstr "Får alla dina varelser att tilldela maximal skada."
 
 msgid "Mass Bless"
-msgstr "Massvälsignelse"
+msgstr "Mass-\n-"
+"välsignelse"
 
 msgid "Magically increases the defense skill of the selected creatures."
 msgstr "Ökar vald varelses Försvarsförmåga genom förtrollning"
@@ -9024,7 +9030,8 @@ msgid "Causes all enemy troops to inflict minimum damage."
 msgstr "Får alla fiendetrupper att tilldela minimal skada."
 
 msgid "Mass Curse"
-msgstr "Massförbannelse"
+msgstr "Mass-\n"
+"förbannelse"
 
 msgid "Damages all undead in the battle."
 msgstr "Skadar alla odöda i striden."
@@ -9053,7 +9060,8 @@ msgid "Removes all magic spells from a single target."
 msgstr "Skingrar alla besvärjelser, goda som onda från en vald varelse."
 
 msgid "Mass Dispel"
-msgstr "Masskingring"
+msgstr "Mass-\n"
+"skingring"
 
 msgid "Removes all magic spells from all creatures."
 msgstr "Tar bort alla magiska besvärjelser från alla varelser."
@@ -9079,7 +9087,8 @@ msgstr ""
 "Gudomlig fasa drabbar slagfältet som orsakar stor skada till samtliga varelser."
 
 msgid "Elemental Storm"
-msgstr "Elementstorm"
+msgstr "Element-\n"
+"storm"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr "Magiska element vräker ned på slagfältet, skadar alla varelser."
@@ -9223,7 +9232,8 @@ msgid "Causes all mines across the land to become visible."
 msgstr "Gör alla gruvor synliga över hela landet."
 
 msgid "View Mines"
-msgstr "Visa Gruvor"
+msgstr "Visa\n"
+"Gruvor"
 
 msgid "Causes all resources across the land to become visible."
 msgstr "Gör alla resurser synliga över hela landet."
@@ -9247,7 +9257,8 @@ msgid "Causes all Heroes across the land to become visible."
 msgstr "Gör alla Hjältar synliga över hela landet."
 
 msgid "View Heroes"
-msgstr "Visa Hjältar"
+msgstr "Visa \n"
+"Hjältar"
 
 msgid "Causes the entire land to become visible."
 msgstr "Gör hela landet synligt."
@@ -9262,7 +9273,8 @@ msgid "Identify Hero"
 msgstr "Identifiera Hjälte"
 
 msgid "Summon Boat"
-msgstr "Inkalla Skepp"
+msgstr "Inkalla\n"
+"Skepp"
 
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore "
@@ -9274,7 +9286,8 @@ msgid "Allows the caster to magically transport to a nearby location."
 msgstr "Låter kastaren magiskt transportera sig till en närliggande plats."
 
 msgid "Dimension Door"
-msgstr "Dimensionsportal"
+msgstr "Dimensions-\n"
+"portal"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr "För tillbaka Hjälten till någon stad eller slott som du kontrollerar."
@@ -9371,7 +9384,6 @@ msgstr "Visa %{spell}"
 
 msgid "This spell does %{damage} points of damage."
 msgstr "%{spell}besvärjelsen ger %{damage} skada."
-
 
 msgid ""
 "This spell summons\n"
