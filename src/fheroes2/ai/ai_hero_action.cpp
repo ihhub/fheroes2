@@ -107,19 +107,25 @@ namespace
             return false;
         }
 
-        if ( colors == 0 )
+        if ( colors == 0 ) {
             return false;
+        }
 
         const int32_t indexFrom = hero.GetIndex();
-        if ( !Maps::isValidAbsIndex( indexFrom ) )
+        if ( !Maps::isValidAbsIndex( indexFrom ) ) {
             return false;
+        }
 
-        if ( !world.GetTiles( indexFrom ).isFog( colors ) )
+        // Show AI hero animation if he is visible for human player.
+        if ( world.GetTiles( indexFrom ).getFogDirection() == Direction::UNKNOWN ) {
             return true;
+        }
 
         const Route::Path & path = hero.GetPath();
-        if ( path.isValid() && world.GetTiles( path.front().GetIndex() ).getFogDirection( colors ) != DIRECTION_ALL )
+        // Show AI hero animation if any of the tiles next to the first tile in the path is visible for human player.
+        if ( path.isValid() && world.GetTiles( path.front().GetIndex() ).getFogDirection() != DIRECTION_ALL ) {
             return true;
+        }
 
         return false;
     }

@@ -2568,27 +2568,6 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
     }
 }
 
-uint16_t Maps::Tiles::getFogDirection( const int32_t color ) const
-{
-    if ( !isFog( color ) ) {
-        // For the tile is without fog we return the UNKNOWN direction.
-        return Direction::UNKNOWN;
-    }
-
-    uint16_t fogDirection = Direction::CENTER;
-    const int32_t worldMaxIndex = static_cast<int32_t>( world.getSize() ) - 1;
-
-    for ( const int32_t direction : Direction::All() ) {
-        const int32_t fogTileIndex = GetDirectionIndex( _index, direction );
-
-        // If fog tile index is outside the world borders we consider it as a fog.
-        if ( ( fogTileIndex < 0 ) || ( fogTileIndex > worldMaxIndex ) || world.GetTiles( fogTileIndex ).isFog( color ) ) {
-            fogDirection |= direction;
-        }
-    }
-    return fogDirection;
-}
-
 void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const
 {
     // This method should not be called for a tile without fog.
