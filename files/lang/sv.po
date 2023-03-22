@@ -403,7 +403,8 @@ msgid "Configure"
 msgstr "Anpassa"
 
 msgid "Hot Keys"
-msgstr "Snabbtangenter"
+msgstr "Snabb-\n"
+"tangenter"
 
 msgid "Damage Info"
 msgstr "Skadeinformation"
@@ -3243,13 +3244,15 @@ msgid "Jump"
 msgstr "Hoppa"
 
 msgid "Hero Speed"
-msgstr "Hjältehastighet"
+msgstr "Hjälte-\n"
+"hastighet"
 
 msgid "Don't Show"
 msgstr "Visa ej"
 
 msgid "Enemy Speed"
-msgstr "Fiendehastighet"
+msgstr "Fiende-\n"
+"hastighet"
 
 msgid "Slow"
 msgstr "Långsam"
@@ -3265,7 +3268,8 @@ msgid "Very Fast"
 msgstr "Riktigt snabb"
 
 msgid "Scroll Speed"
-msgstr "Skrollhastighet"
+msgstr "Skroll-\n"
+"hastighet"
 
 msgid "Evil"
 msgstr "Ond"
@@ -3274,7 +3278,8 @@ msgid "Good"
 msgstr "God"
 
 msgid "Interface Type"
-msgstr "Gränssnittstyp"
+msgstr "Gränssnitts-\n"
+"format"
 
 msgid "Hide"
 msgstr "Dölj"
@@ -6068,7 +6073,7 @@ msgid "skill|Expert"
 msgstr "Expert"
 
 msgid "Pathfinding"
-msgstr "Stigletning"
+msgstr "Vägvisning"
 
 msgid "Archery"
 msgstr "Bågskytte"
@@ -6110,16 +6115,16 @@ msgid "Advanced Archery"
 msgstr "Avancerat Bågskytte"
 
 msgid "Advanced Pathfinding"
-msgstr "Avancerad Stigletning"
+msgstr "Avancerad Vägvisning"
 
 msgid "Basic Archery"
 msgstr "Basalt Bågskytte"
 
 msgid "Basic Pathfinding"
-msgstr "Basal Stigletning"
+msgstr "Basal Vägvisning"
 
 msgid "Expert Pathfinding"
-msgstr "Expert Stigletning"
+msgstr "Expert Vägvisning"
 
 msgid "Advanced Logistics"
 msgstr "Avancerad Logistik"
@@ -6253,8 +6258,8 @@ msgstr "%{skill} ökar din hjältes förflyttningspoäng med %{count} procent."
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] "%{skill} ökar din hjältens sikt med en ruta."
-msgstr[1] "%{skill} ökar din hjältens sikt med %{count} rutor."
+msgstr[0] "%{skill} ökar din hjältes sikt med en ruta."
+msgstr[1] "%{skill} ökar din hjältes sikt med %{count} rutor."
 
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
@@ -6348,7 +6353,7 @@ msgstr ""
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
-"Din hjälte får &{count} guld i skatteintäkter från sina ägor."
+"Din hjälte får %{count} guld i skatteintäkter från sina ägor."
 
 msgid "Blue"
 msgstr "Blå"
