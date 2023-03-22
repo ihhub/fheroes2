@@ -266,12 +266,6 @@ namespace Maps
 
         // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
         static void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
-        // Determine the fog direction by fog data for given color code of player(s) and store it in tile data.
-        void updateFogDirection( const int32_t color )
-        {
-            _fogDirection = getFogDirection( color );
-        }
-
         // Return the fog direction by fog data for given color code of player(s).
         uint16_t getFogDirection( const int32_t color ) const;
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
