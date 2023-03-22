@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-20 19:48+0100\n"
-"PO-Revision-Date: 2023-01-31 16:57+0100\n"
+"PO-Revision-Date: 2023-03-21 15:58+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
-"Language: da_DK\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,132 +31,149 @@ msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"NYT\n"
+"SPIL"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"GEM\n"
+"SPIL"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"INDLÆS\n"
+"SPIL"
 
 msgid "INFO"
-msgstr ""
+msgstr "INFO"
 
 msgid "QUIT"
-msgstr ""
+msgstr "AFSLUT"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "AFBRYD"
 
 msgid "OKAY"
-msgstr ""
+msgstr "OKAY"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ACCEPTER"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "AFSLÅ"
 
 msgid "LEARN"
-msgstr ""
+msgstr "LÆR"
 
 msgid "TRADE"
-msgstr ""
+msgstr "HANDEL"
 
 msgid "YES"
-msgstr ""
+msgstr "JA"
 
 msgid "NO"
-msgstr ""
+msgstr "NEJ"
 
 msgid "EXIT"
-msgstr ""
+msgstr "GÅ"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "AFSKEDIGE"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "OPGRADER"
 
 msgid "RESTART"
-msgstr ""
+msgstr "GENSTART"
 
 msgid "S"
-msgstr ""
+msgstr "S"
 
 msgid "M"
-msgstr ""
+msgstr "M"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "X-L"
-msgstr ""
+msgstr "XL"
 
 msgid "ALL"
-msgstr ""
+msgstr "ALT"
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"STANDARD\n"
+"SPIL"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr ""
+"KAMPAGNE\n"
+"SPIL"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"MULTI-\n"
+"PLAYER\n"
+"SPIL"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "INDSTIL"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"ORIGINAL\n"
+"KAMPAGNE"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"UDVIDELSES\n"
+"KAMPAGNE"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "LOKALT"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 SPILLERE"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 SPILLERE"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 SPILLERE"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 SPILLERE"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 SPILLERE"
 
 msgid "GIFT"
 msgstr "FORÆR"
 
 msgid "DIFFICULTY"
-msgstr "SVÆRHEDSGRAD"
+msgstr "NIVEAU"
 
 msgid "MIN"
 msgstr "MIN"
 
 msgid "MAX"
-msgstr ""
+msgstr "MAKS"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -379,19 +396,19 @@ msgid "Shadow Cursor"
 msgstr "Skygge-markør"
 
 msgid "Audio"
-msgstr ""
+msgstr "Lyd"
 
 msgid "Settings"
-msgstr ""
+msgstr "Indstillinger"
 
 msgid "Configure"
-msgstr ""
+msgstr "Indstil"
 
 msgid "Hot Keys"
-msgstr ""
+msgstr "Genvejstaster"
 
 msgid "Damage Info"
-msgstr ""
+msgstr "Skade Info"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Indstil hastighed for kamphandlinger og animationer."
@@ -429,20 +446,19 @@ msgstr ""
 "lokation, eller ej."
 
 msgid "Change the audio settings of the game."
-msgstr ""
+msgstr "Ændr spillets lydindstillinger."
 
 msgid "Check and configure all the hot keys present in the game."
-msgstr ""
+msgstr "Tjek og indstil alle spillets nuværende genvejstaster."
 
-#, fuzzy
 msgid "Toggle to display damage information during the battle."
-msgstr "Vælg om kampens hærorden skal vises eller ej."
+msgstr "Vælg om kampens skadeinformationer skal vises eller ej."
 
 msgid "Exit this menu."
-msgstr ""
+msgstr "Forlad denne menu."
 
 msgid "Okay"
-msgstr ""
+msgstr "Okay"
 
 msgid "The enemy has surrendered!"
 msgstr "Fjenden har overgivet sig!"
@@ -537,7 +553,7 @@ msgid "Surrender"
 msgstr "Overgivelse"
 
 msgid "Cancel"
-msgstr "Anuller"
+msgstr "Afbryd"
 
 msgid "Hero Screen"
 msgstr "Helteskærm"
@@ -1446,9 +1462,8 @@ msgstr "Fizbin-medaljen"
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Yppersteskriftrullen"
 
-#, fuzzy
 msgid "campaignBonus|Gauntlets"
-msgstr "Ballisten"
+msgstr "Handsker"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Den hæslige maske"
@@ -2182,7 +2197,7 @@ msgid "Tavern"
 msgstr "Værtshus"
 
 msgid "Shipyard"
-msgstr "Skipsvært"
+msgstr "Skipsværft"
 
 msgid "Well"
 msgstr "Brønd"
@@ -2294,7 +2309,7 @@ msgid ""
 msgstr ""
 
 msgid "Exit"
-msgstr ""
+msgstr "Gå"
 
 msgid "Click to show next town."
 msgstr ""
@@ -2315,10 +2330,10 @@ msgid "Town"
 msgstr ""
 
 msgid "Exit Castle"
-msgstr ""
+msgstr "Forlad borg"
 
 msgid "Exit Town"
-msgstr ""
+msgstr "Forlad by"
 
 msgid "Show Income"
 msgstr ""
@@ -2376,10 +2391,10 @@ msgid "Set garrison combat formation to 'Grouped'"
 msgstr ""
 
 msgid "Exit Castle Options"
-msgstr ""
+msgstr "Forlad borg-vindue"
 
 msgid "Castle Options"
-msgstr ""
+msgstr "Borg-vindue"
 
 msgid "Not enough resources to recruit creatures."
 msgstr ""
@@ -2442,7 +2457,7 @@ msgid "Digging"
 msgstr ""
 
 msgid "Exit this menu without doing anything."
-msgstr ""
+msgstr "Forlad denne menu, uden at gøre noget."
 
 msgid "Arena"
 msgstr ""
@@ -2525,106 +2540,106 @@ msgid "(Rate: %{percent})"
 msgstr ""
 
 msgid "off"
-msgstr ""
+msgstr "fra"
 
 msgid "Music"
-msgstr ""
+msgstr "Musik"
 
 msgid "Effects"
-msgstr ""
+msgstr "Effekter"
 
 msgid "MIDI"
-msgstr ""
+msgstr "MIDI"
 
 msgid "MIDI Expansion"
-msgstr ""
+msgstr "MIDI Udvidelse"
 
 msgid "External"
-msgstr ""
+msgstr "Ekstern"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Musik type"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D Lyd"
 
 msgid "Toggle ambient music level."
-msgstr ""
+msgstr "Indstil niveau for omgivelseslyde."
 
 msgid "Toggle foreground sounds level."
-msgstr ""
+msgstr "Indstil niveau for forgrundslyde."
 
 msgid "Change the type of music."
-msgstr ""
+msgstr "Ændr musikstil."
 
 msgid "Toggle 3D effects of foreground sounds."
-msgstr ""
+msgstr "Indstil 3D effekter for forgrundslyde."
 
 msgid "Build a new ship:"
-msgstr ""
+msgstr "Byg et nyt skib:"
 
 msgid "Resource cost:"
-msgstr ""
+msgstr "Resurseomkostninger:"
 
 msgid "Total: "
-msgstr ""
+msgstr "Total: "
 
 msgid "Need: "
-msgstr ""
+msgstr "Behov: "
 
 msgid "Load Game"
-msgstr ""
+msgstr "Indlæs spil"
 
 msgid "No save files to load."
-msgstr ""
+msgstr "Ingen gemte filer at indlæse."
 
 msgid "New Game"
-msgstr ""
+msgstr "Nyt spil"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Start et single- eller multi-player spil."
 
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Indlæs et tidligere gemt spil."
 
 msgid "Save Game"
-msgstr ""
+msgstr "Gem spil"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Gem igangværende spil."
 
 msgid "Quit"
-msgstr ""
+msgstr "Afslut"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr ""
+msgstr "Afslut FHeroes 2."
 
 msgid "Language"
-msgstr ""
+msgstr "Sprog"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafik"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Sort & Hvid"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Musemarkør"
 
 msgid "Color"
-msgstr ""
+msgstr "Farve"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Tekst support"
 
 msgid "Change the language of the game."
-msgstr ""
+msgstr "Ændr spillets sprogindstillinger."
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Vælg spillets sprog"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
+msgstr "Ændr spillets grafikindstillinger."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -2913,16 +2928,16 @@ msgid ""
 msgstr ""
 
 msgid "File to Save:"
-msgstr ""
+msgstr "Fil som skal gemmes:"
 
 msgid "File to Load:"
-msgstr ""
+msgstr "Fil til indlæsning:"
 
 msgid "Click to save the current game."
-msgstr ""
+msgstr "Klik for at gemme igangværende spil."
 
 msgid "Click to load a previously saved game."
-msgstr ""
+msgstr "Klik for at indlæse et tidligere gemt spil."
 
 msgid "Are you sure you want to delete file:"
 msgstr ""
@@ -3089,9 +3104,8 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr ""
 
-#, fuzzy
 msgid "Slow"
-msgstr "Masseforsløvning"
+msgstr "Forsløvning"
 
 msgid "Normal"
 msgstr ""
@@ -3234,19 +3248,19 @@ msgid "Best Monster:"
 msgstr ""
 
 msgid "difficulty|Easy"
-msgstr ""
+msgstr "Let"
 
 msgid "difficulty|Normal"
-msgstr ""
+msgstr "Normal"
 
 msgid "difficulty|Hard"
-msgstr ""
+msgstr "Svær"
 
 msgid "difficulty|Expert"
-msgstr ""
+msgstr "Ekspert"
 
 msgid "difficulty|Impossible"
-msgstr ""
+msgstr "Umulig"
 
 msgid "and more..."
 msgstr ""
@@ -3296,7 +3310,7 @@ msgid "Are you sure you want to restart this scenario?"
 msgstr ""
 
 msgid "Campaign Scenario loading failure"
-msgstr ""
+msgstr "Indlæsningsfejl af kampagne-scenarie"
 
 msgid "Please make sure that campaign files are correct and present."
 msgstr ""
@@ -3481,12 +3495,11 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-#, fuzzy
 msgid "The save file is corrupted."
-msgstr "Spejlbilledet er skabt."
+msgstr "Det gemte spil er korrupt."
 
 msgid "Unsupported save format: "
-msgstr ""
+msgstr "Ikke-understøttet gem-format: "
 
 msgid "Current game version: "
 msgstr ""
@@ -3495,15 +3508,17 @@ msgid "Last supported version: "
 msgstr ""
 
 msgid "This file contains a save with an invalid game type."
-msgstr ""
+msgstr "Denne fil indeholder et gemt spil af en invalid spiltype."
 
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
+"Denne fil blev gemt som et \"The Price of Loyalty\" kort, men de tilsvarende "
+"spilaktiver er ikke blevet leveret til spilmotoren."
 
 msgid "This saved game is localized to '"
-msgstr ""
+msgstr "Dette gemte spil er lokaliseret til '"
 
 msgid "' language, but the current language of the game is '"
 msgstr ""
@@ -3517,7 +3532,7 @@ msgid ""
 msgstr ""
 
 msgid "Cancel back to the main menu."
-msgstr ""
+msgstr "Afbryd og gå tilbage til hovedmenuen."
 
 msgid "A single player game playing out a single map."
 msgstr ""
@@ -3569,7 +3584,7 @@ msgid ""
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
-msgstr ""
+msgstr "Afslut FHeroes 2 og vend tilbage til operativsystemet."
 
 msgid "Credits"
 msgstr ""
@@ -3628,7 +3643,7 @@ msgid "Battle Only"
 msgstr ""
 
 msgid "Setup and play a battle without loading any map."
-msgstr ""
+msgstr "Opsæt og spil en kamp uden at indlæse et kort."
 
 msgid "2 Players"
 msgstr ""
@@ -3819,7 +3834,7 @@ msgid ""
 msgstr ""
 
 msgid "Click to accept these settings and start a new game."
-msgstr ""
+msgstr "Klik for at acceptere disse indstillinger og start et nyt spil."
 
 msgid "Click to return to the main menu."
 msgstr ""
@@ -3919,6 +3934,8 @@ msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
 msgstr ""
+"Frembring filindstillingsmenuen, som tillader dig at indlæse, gemme, starte "
+"et nyt spil eller afslutte."
 
 msgid "File Options"
 msgstr ""
@@ -3931,13 +3948,13 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to quit?"
-msgstr ""
+msgstr "Er du sikker på, om du vil afslutte?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
 
 msgid "Are you sure you want to overwrite the save with this name?"
-msgstr ""
+msgstr "Er du sikker på, om du vil overskrive det gemte spil med dette navn?"
 
 msgid "Game saved successfully."
 msgstr ""
@@ -3948,6 +3965,8 @@ msgstr ""
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
 msgstr ""
+"Er du sikker på, om du vil indlæse et nyt spil? (Dit nuværende spil vil gå "
+"tabt.)"
 
 msgid "Try looking on land!!!"
 msgstr ""
@@ -4344,7 +4363,7 @@ msgid " gives you maximum luck"
 msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
-msgstr ""
+msgstr "Du kan ikke opsamle denne artefakt, da du allerede har fuld last!"
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
@@ -5414,7 +5433,7 @@ msgid "Set army combat formation to 'Grouped'"
 msgstr ""
 
 msgid "Exit Hero Screen"
-msgstr ""
+msgstr "Forlad helteskærm"
 
 msgid "You cannot dismiss a hero in a castle"
 msgstr ""
@@ -6621,16 +6640,16 @@ msgid "Rangers"
 msgstr "Skovriddere"
 
 msgid "Pikeman"
-msgstr "Geddemand"
+msgstr "Pikenér"
 
 msgid "Pikemen"
-msgstr "Geddemænd"
+msgstr "Pikenérer"
 
 msgid "Veteran Pikeman"
-msgstr "Veteran geddemand"
+msgstr "Veteran pikenér"
 
 msgid "Veteran Pikemen"
-msgstr "Veteran geddemænd"
+msgstr "Veteran pikenérer"
 
 msgid "Swordsman"
 msgstr "Sværdkæmper"
@@ -8450,7 +8469,9 @@ msgid "Prevents harmful magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"
-msgstr "Magiophævelse"
+msgstr ""
+"Magi\n"
+"ophævelse"
 
 msgid "Removes all magic spells from a single target."
 msgstr ""
@@ -8543,7 +8564,9 @@ msgid ""
 msgstr ""
 
 msgid "Dragon Slayer"
-msgstr "Dragedræber"
+msgstr ""
+"Drage\n"
+"dræber"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
 msgstr "Øger i høj grad en enheds angrebsevne mod drager."
