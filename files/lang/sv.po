@@ -7627,7 +7627,7 @@ msgid "% chance to Curse"
 msgstr "% chans att kasta Förbannelse"
 
 msgid "% chance to cast %{spell} spell"
-msgstr "% changs att kaste %{spell}besvärjelse"
+msgstr "% chans att kasta %{spell}besvärjelse"
 
 msgid "HP regeneration"
 msgstr "Hälsoåterhämtning"
