@@ -2454,6 +2454,9 @@ void Maps::Tiles::ClearFog( const int colors )
 
 void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color )
 {
+    assert( ( minPos.x <= maxPos.x ) && ( minPos.y <= maxPos.y ) );
+
+    
     const int32_t worldWidth = world.w();
     const int32_t worldHeight = world.w();
 
@@ -2492,7 +2495,7 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
     }
 
     // Set the 'fogData' index offset from the tile index for the TOP LEFT direction from the tile.
-    const int32_t TopLeftDirectionOffset = -1 - fogDataWidth;
+    const int32_t topLeftDirectionOffset = -1 - fogDataWidth;
 
     // Calculate fog directions using the cached 'isFog' data.
     for ( int32_t y = minY; y < maxY; ++y ) {
@@ -2512,7 +2515,7 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
                 uint16_t fogDirection = Direction::CENTER;
 
                 // Check all tiles around for 'fogData' starting from the top left direction and if it is true then logically add the direction to 'fogDirection'.
-                fogDataIndex += TopLeftDirectionOffset;
+                fogDataIndex += topLeftDirectionOffset;
 
                 if ( fogData[fogDataIndex] == 1 ) {
                     fogDirection |= Direction::TOP_LEFT;

@@ -90,6 +90,37 @@ namespace
         return ( player1->isControlHuman() && !player2->isControlHuman() )
                || ( ( player1->isControlHuman() == player2->isControlHuman() ) && ( player1->GetColor() < player2->GetColor() ) );
     }
+
+    void updateFogDirectionsForHotSeatAIMove( const Player * player )
+    {
+        int32_t friendColors = 0;
+
+        const int32_t humanColors = Players::HumanColors();
+        // Check if the current AI player is a friend of any of human players to fully show his move and revealed map,
+        // otherwise his revealed map will not be shown - instead of it we will show the revealed map by all human players.
+        const bool isFriendlyAI = Players::isFriends( player->GetColor(), humanColors );
+
+#if defined( WITH_DEBUG )
+        if ( isFriendlyAI || player->isAIAutoControlMode() ) {
+#else
+        if ( isFriendlyAI ) {
+#endif
+            // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
+            friendColors = player->GetFriends();
+        }
+        else {
+            // If AI is hostile for all human players then fully update fog directions for all human players to see enemy AI hero move on tiles with
+            // discovered fog.
+            for ( const int32_t color : Colors( humanColors ) ) {
+                const Player * humanPlayer = Players::Get( color );
+                if ( humanPlayer ) {
+                    friendColors |= humanPlayer->GetFriends();
+                }
+            }
+        }
+
+        Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
+    }
 }
 
 fheroes2::GameMode Game::StartBattleOnly()
@@ -604,7 +635,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
     }
 
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
-
     if ( !isHotSeatGame ) {
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
@@ -711,32 +741,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     Redraw();
                     display.render();
 
+                    // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
                     if ( isHotSeatGame ) {
-                        int32_t friendColors = 0;
-
-                        const bool isFriendlyAI = Players::isFriends( player->GetColor(), Players::HumanColors() );
-
-#if defined( WITH_DEBUG )
-                        if ( isFriendlyAI || player->isAIAutoControlMode() ) {
-#else
-                        if ( isFriendlyAI ) {
-#endif
-                            // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
-                            friendColors = player->GetFriends();
-                        }
-                        else {
-                            // Fully update fog directions for all human players to be able to see enemy AI hero move on tiles with discovered fog.
-                            const Colors humanColors( Players::HumanColors() );
-
-                            for ( const int32_t color : humanColors ) {
-                                const Player * humanPlayer = Players::Get( color );
-                                if ( humanPlayer ) {
-                                    friendColors |= humanPlayer->GetFriends();
-                                }
-                            }
-                        }
-
-                        Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
+                        updateFogDirectionsForHotSeatAIMove( player );
                     }
 
                     kingdom.ActionBeforeTurn();
