@@ -476,6 +476,16 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 }
                 return false;
             }
+            if ( MP2::OBJ_MINES == object && (spell == Spell::SETAGUARDIAN || spell == Spell::SETEGUARDIAN || spell == Spell::SETFGUARDIAN || spell == Spell::SETWGUARDIAN) ) {
+                const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower(), hero );
+                const uint32_t currentCount = world.GetCapturedObject( tile.GetIndex() ).GetTroop().GetCount();
+                if ( newCount <= currentCount ) {
+                    if ( res != nullptr ) {
+                        *res = _( "There are already more elementals guarding the mine than the spell can generate. Casting this spell will not bring any advantage." );
+                    }
+                    return false;
+                }
+            }
             if ( MP2::OBJ_MINES != object ) {
                 if ( res != nullptr ) {
                     *res = _( "You must be standing on the entrance to a mine (sawmills and alchemists don't count) to cast this spell." );
