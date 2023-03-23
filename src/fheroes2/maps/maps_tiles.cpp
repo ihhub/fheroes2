@@ -2456,7 +2456,6 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
 {
     assert( ( minPos.x <= maxPos.x ) && ( minPos.y <= maxPos.y ) );
 
-    
     const int32_t worldWidth = world.w();
     const int32_t worldHeight = world.w();
 
