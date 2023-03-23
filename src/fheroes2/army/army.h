@@ -100,8 +100,8 @@ public:
     void SortStrongest();
 
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
-    void AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count );
-    void JoinAllTroopsOfType( const Troop & targetTroop );
+    void AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count ) const;
+    void JoinAllTroopsOfType( const Troop & targetTroop ) const;
 
     void addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots );
 
