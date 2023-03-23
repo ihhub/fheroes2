@@ -2571,7 +2571,7 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
 void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const
 {
     // This method should not be called for a tile without fog.
-    assert( _fogDirection != Direction::UNKNOWN );
+    assert( _fogDirection & Direction::CENTER );
 
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
@@ -2586,20 +2586,20 @@ void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & ar
         uint32_t index = 0;
         bool revert = false;
 
-        if ( ( _fogDirection & Direction::CENTER ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
+        if ( !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 10;
         }
-        else if ( ( contains( _fogDirection, Direction::CENTER | Direction::TOP ) ) && !( _fogDirection & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::TOP ) ) && !( _fogDirection & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 6;
         }
-        else if ( ( contains( _fogDirection, Direction::CENTER | Direction::RIGHT ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::RIGHT ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT ) ) ) {
             index = 7;
         }
-        else if ( ( contains( _fogDirection, Direction::CENTER | Direction::LEFT ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::LEFT ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT ) ) ) {
             index = 7;
             revert = true;
         }
-        else if ( ( contains( _fogDirection, Direction::CENTER | Direction::BOTTOM ) ) && !( _fogDirection & ( Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::BOTTOM ) ) && !( _fogDirection & ( Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 8;
         }
         else if ( ( contains( _fogDirection, DIRECTION_CENTER_COL ) ) && !( _fogDirection & ( Direction::LEFT | Direction::RIGHT ) ) ) {
@@ -2656,21 +2656,19 @@ void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & ar
             index = 14;
             revert = true;
         }
-        else if ( contains( _fogDirection, Direction::CENTER | Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
+        else if ( contains( _fogDirection, Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
                   && !( _fogDirection & ( Direction::TOP | Direction::RIGHT ) ) ) {
             index = 11;
         }
-        else if ( contains( _fogDirection, Direction::CENTER | Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM )
+        else if ( contains( _fogDirection, Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM )
                   && !( _fogDirection & ( Direction::TOP | Direction::LEFT ) ) ) {
             index = 11;
             revert = true;
         }
-        else if ( contains( _fogDirection, Direction::CENTER | Direction::LEFT | Direction::TOP_LEFT | Direction::TOP )
-                  && !( _fogDirection & ( Direction::BOTTOM | Direction::RIGHT ) ) ) {
+        else if ( contains( _fogDirection, Direction::LEFT | Direction::TOP_LEFT | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::RIGHT ) ) ) {
             index = 12;
         }
-        else if ( contains( _fogDirection, Direction::CENTER | Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP )
-                  && !( _fogDirection & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
+        else if ( contains( _fogDirection, Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
             index = 12;
             revert = true;
         }
@@ -2732,20 +2730,20 @@ void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & ar
             index = 30;
             revert = true;
         }
-        else if ( contains( _fogDirection, Direction::CENTER | Direction::BOTTOM | Direction::LEFT )
+        else if ( contains( _fogDirection, Direction::BOTTOM | Direction::LEFT )
                   && !( _fogDirection & ( Direction::TOP | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 27;
         }
-        else if ( contains( _fogDirection, Direction::CENTER | Direction::BOTTOM | Direction::RIGHT )
+        else if ( contains( _fogDirection, Direction::BOTTOM | Direction::RIGHT )
                   && !( _fogDirection & ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 27;
             revert = true;
         }
-        else if ( contains( _fogDirection, Direction::CENTER | Direction::LEFT | Direction::TOP )
+        else if ( contains( _fogDirection, Direction::LEFT | Direction::TOP )
                   && !( _fogDirection & ( Direction::TOP_LEFT | Direction::RIGHT | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) ) ) {
             index = 28;
         }
-        else if ( contains( _fogDirection, Direction::CENTER | Direction::RIGHT | Direction::TOP )
+        else if ( contains( _fogDirection, Direction::RIGHT | Direction::TOP )
                   && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::LEFT | Direction::BOTTOM | Direction::BOTTOM_LEFT ) ) ) {
             index = 28;
             revert = true;
