@@ -137,29 +137,29 @@ namespace
     void DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t resourceType )
     {
         const payment_t info = ProfitConditions::FromMine( resourceType );
-        int32_t resouceCount = 0;
+        int32_t resourceCount = 0;
 
         switch ( resourceType ) {
         case Resource::MERCURY:
-            resouceCount = info.mercury;
+            resourceCount = info.mercury;
             break;
         case Resource::WOOD:
-            resouceCount = info.wood;
+            resourceCount = info.wood;
             break;
         case Resource::ORE:
-            resouceCount = info.ore;
+            resourceCount = info.ore;
             break;
         case Resource::SULFUR:
-            resouceCount = info.sulfur;
+            resourceCount = info.sulfur;
             break;
         case Resource::CRYSTAL:
-            resouceCount = info.crystal;
+            resourceCount = info.crystal;
             break;
         case Resource::GEMS:
-            resouceCount = info.gems;
+            resourceCount = info.gems;
             break;
         case Resource::GOLD:
-            resouceCount = info.gold;
+            resourceCount = info.gold;
             break;
         default:
             // You're passing an invalid resource type. Check your logic!
@@ -168,10 +168,10 @@ namespace
         }
 
         std::string perday = _( "%{count} / day" );
-        StringReplace( perday, "%{count}", resouceCount );
+        StringReplace( perday, "%{count}", resourceCount );
 
         std::string msg = str;
-        switch ( resouceCount ) {
+        switch ( resourceCount ) {
         case 1:
             StringReplace( msg, "%{count}", _( "one" ) );
             break;
@@ -179,7 +179,7 @@ namespace
             StringReplace( msg, "%{count}", _( "two" ) );
             break;
         default:
-            StringReplace( msg, "%{count}", resouceCount );
+            StringReplace( msg, "%{count}", resourceCount );
             break;
         }
 
@@ -1918,7 +1918,6 @@ namespace
                     radarRoi.height = 2;
                     break;
                 case MP2::OBJ_ALCHEMIST_LAB:
-                case MP2::OBJ_ABANDONED_MINE:
                 case MP2::OBJ_MINES:
                     --radarRoi.x;
                     --radarRoi.y;
@@ -1940,23 +1939,13 @@ namespace
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
             };
 
-            auto removeObjectProtection = [&hero, objectType, &tile, &updateRadar]( const bool isUpdateRadar ) {
+            auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
-
-                // Restore the abandoned mine
-                if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
-                    Maps::Tiles::UpdateAbandonedMineSprite( tile );
-                    hero.SetMapsObject( MP2::OBJ_MINES );
-                }
-
-                if ( isUpdateRadar ) {
-                    updateRadar();
-                }
             };
 
             auto captureObject = [&hero, objectType, &tile, &updateRadar, &removeObjectProtection]() {
-                removeObjectProtection( false );
+                removeObjectProtection();
 
                 tile.QuantitySetColor( hero.GetColor() );
 
@@ -1979,15 +1968,9 @@ namespace
                     body = _( "You gain control of a sawmill. It will provide you with %{count} units of wood per day." );
                     break;
 
-                case MP2::OBJ_ABANDONED_MINE:
                 case MP2::OBJ_MINES: {
                     resource = tile.QuantityResourceCount().first;
                     header = Maps::GetMinesName( resource );
-
-                    if ( objectType == MP2::OBJ_ABANDONED_MINE && Maps::getSpellIdFromTile( tile ) != Spell::HAUNT ) {
-                        body = _( "You beat the Ghosts and are able to restore the mine to production." );
-                        break;
-                    }
 
                     switch ( resource ) {
                     case Resource::ORE:
@@ -2061,7 +2044,7 @@ namespace
                     // If all the guards are defeated, but the hero has lost the battle,
                     // just remove the protection from the object
                     if ( monstersLeft == 0 ) {
-                        removeObjectProtection( true );
+                        removeObjectProtection();
                     }
 
                     BattleLose( hero, result, true );
@@ -2075,22 +2058,52 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
     }
 
-    void ActionToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void ActionToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dstIndex )
     {
         bool enter = false;
 
         {
             const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
-            enter = ( Dialog::Message( MP2::StringObject( MP2::OBJ_ABANDONED_MINE ),
-                                       _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ), Font::BIG,
-                                       Dialog::YES | Dialog::NO )
-                      == Dialog::YES );
+            enter
+                = ( Dialog::Message( MP2::StringObject( objectType ), _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ),
+                                     Font::BIG, Dialog::YES | Dialog::NO )
+                    == Dialog::YES );
         }
 
         if ( enter ) {
-            ActionToCaptureObject( hero, objectType, dst_index );
+            Maps::Tiles & tile = world.GetTiles( dstIndex );
+
+            Army army( tile );
+
+            Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+            if ( result.AttackerWins() ) {
+                hero.IncreaseExperience( result.GetExperienceAttacker() );
+
+                Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
+                hero.SetMapsObject( MP2::OBJ_MINES );
+                tile.QuantitySetColor( hero.GetColor() );
+
+                // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
+                // Set the radar update ROI according to captured object size and position.
+                const fheroes2::Point tilePoint = Maps::GetPoint( dstIndex );
+                const fheroes2::Rect radarRoi( tilePoint.x - 1, tilePoint.y - 1, 3, 2 );
+
+                Interface::Basic & I = Interface::Basic::Get();
+
+                // Update the object on radar.
+                I.GetRadar().SetRenderArea( radarRoi );
+                I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+                Dialog::Message( MP2::StringObject( objectType ), _( "You beat the Ghosts and are able to restore the mine to production." ), Font::BIG, Dialog::OK );
+            }
+            else {
+                BattleLose( hero, result, true );
+            }
         }
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
 
     void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )

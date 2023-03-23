@@ -600,15 +600,9 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dstIndex );
 
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
-            auto removeObjectProtection = [&hero, objectType, &tile]() {
+            auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
-
-                // Restore the abandoned mine
-                if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
-                    Maps::Tiles::UpdateAbandonedMineSprite( tile );
-                    hero.SetMapsObject( MP2::OBJ_MINES );
-                }
             };
 
             auto captureObject = [&hero, &tile, &removeObjectProtection]() {
@@ -648,6 +642,10 @@ namespace
                 captureObject();
             }
         }
+
+#ifndef WITH_DEBUG
+        (void)objectType;
+#endif
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
     }
@@ -1308,9 +1306,26 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
-    void AIToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void AIToAbandonedMine( Heroes & hero, const int32_t dstIndex )
     {
-        AIToCaptureObject( hero, objectType, dst_index );
+        Maps::Tiles & tile = world.GetTiles( dstIndex );
+
+        Army army( tile );
+
+        Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+        if ( result.AttackerWins() ) {
+            hero.IncreaseExperience( result.GetExperienceAttacker() );
+
+            Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
+            hero.SetMapsObject( MP2::OBJ_MINES );
+            tile.QuantitySetColor( hero.GetColor() );
+        }
+        else {
+            AIBattleLose( hero, result, true );
+        }
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
     void AIToBarrier( const Heroes & hero, int32_t dst_index )
@@ -1609,8 +1624,9 @@ namespace AI
         case MP2::OBJ_LIGHTHOUSE:
             AIToCaptureObject( hero, objectType, dst_index );
             break;
+
         case MP2::OBJ_ABANDONED_MINE:
-            AIToAbandonedMine( hero, objectType, dst_index );
+            AIToAbandonedMine( hero, dst_index );
             break;
 
         case MP2::OBJ_SHIPWRECK_SURVIVOR:
