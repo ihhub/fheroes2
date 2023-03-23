@@ -197,7 +197,7 @@ namespace Battle
         const Rand::DeterministicRandomGenerator & GetRandomGenerator() const;
 
         static Board * GetBoard();
-        static Tower * GetTower( int );
+        static Tower * GetTower( const TowerType type );
         static Bridge * GetBridge();
         static const Castle * GetCastle();
         static Interface * GetInterface();

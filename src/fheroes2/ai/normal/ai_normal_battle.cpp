@@ -511,9 +511,9 @@ namespace AI
 
             auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
 
-            double towerStr = getTowerStrength( Arena::GetTower( TWR_CENTER ) );
-            towerStr += getTowerStrength( Arena::GetTower( TWR_LEFT ) );
-            towerStr += getTowerStrength( Arena::GetTower( TWR_RIGHT ) );
+            double towerStr = getTowerStrength( Arena::GetTower( TowerType::TWR_CENTER ) );
+            towerStr += getTowerStrength( Arena::GetTower( TowerType::TWR_LEFT ) );
+            towerStr += getTowerStrength( Arena::GetTower( TowerType::TWR_RIGHT ) );
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Castle strength: " << towerStr )
 

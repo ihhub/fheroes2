@@ -977,7 +977,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
     const uint32_t type = cmd.GetValue();
     const uint32_t uid = cmd.GetValue();
 
-    Tower * tower = GetTower( type );
+    Tower * tower = GetTower( static_cast<TowerType>( type ) );
     Unit * unit = GetTroopUID( uid );
 
     if ( unit && unit->isValid() && tower ) {
