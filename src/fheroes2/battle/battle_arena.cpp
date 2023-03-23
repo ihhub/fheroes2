@@ -30,6 +30,7 @@
 #include <iterator>
 #include <ostream>
 #include <random>
+#include <type_traits>
 #include <utility>
 
 #include "ai.h"
