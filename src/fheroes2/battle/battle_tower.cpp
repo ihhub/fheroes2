@@ -164,12 +164,12 @@ std::string Battle::Tower::GetInfo( const Castle & castle )
 
             msg.append( _( "The %{name} fires with the strength of %{count} Archers" ) );
             StringReplace( msg, "%{name}", tower.GetName() );
-            StringReplace( msg, "%{count}", tower.GetCount() );
+            StringReplace( msg, "%{count}", std::to_string( tower.GetCount() ) );
 
             if ( tower.GetAttackBonus() ) {
                 msg.append( ", " );
                 msg.append( _( "each with a +%{attack} bonus to their attack skill." ) );
-                StringReplace( msg, "%{attack}", tower.GetAttackBonus() );
+                StringReplace( msg, "%{attack}", std::to_string( tower.GetAttackBonus() ) );
             }
             else {
                 msg += '.';
