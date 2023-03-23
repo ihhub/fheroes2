@@ -49,15 +49,14 @@ namespace Battle
     class Tower : public Unit
     {
     public:
-        Tower( const Castle &, int, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t );
+        Tower( const Castle & castle, int type, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
         Tower( const Tower & ) = delete;
 
         Tower & operator=( const Tower & ) = delete;
 
         bool isValid() const override;
-        int GetColor() const override;
         uint32_t GetType() const;
-        uint32_t GetBonus() const;
+        uint32_t GetAttackBonus() const;
         uint32_t GetAttack() const override;
 
         const char * GetName() const;
@@ -71,10 +70,9 @@ namespace Battle
         static std::string GetInfo( const Castle & castle );
 
     private:
-        int type;
-        int color;
-        uint32_t bonus;
-        bool valid;
+        int _towerType;
+        uint32_t _attackBonus;
+        bool _isValid;
     };
 }
 
