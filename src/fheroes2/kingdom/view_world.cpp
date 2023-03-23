@@ -47,7 +47,6 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "spell.h"
 #include "ui_button.h"
 #include "world.h"
 
@@ -405,17 +404,6 @@ namespace
                     case MP2::OBJ_MINES:
                     case MP2::OBJ_SAWMILL:
                         if ( revealMines || !tile.isFog( color ) ) {
-                            const uint32_t colorOffset = colorToOffsetICN( tile.QuantityColor() );
-                            // Do not render an unknown color.
-                            if ( colorOffset != unknownIndex ) {
-                                renderResourceIcon( colorOffset, tile.QuantityResourceCount().first, posX, posY );
-                            }
-                        }
-                        break;
-
-                    case MP2::OBJ_ABANDONED_MINE:
-                        // Show only Haunted mines (by a spell), initially abandoned mines are not shown.
-                        if ( ( revealMines || !tile.isFog( color ) ) && Maps::getSpellIdFromTile( tile ) == Spell::HAUNT ) {
                             const uint32_t colorOffset = colorToOffsetICN( tile.QuantityColor() );
                             // Do not render an unknown color.
                             if ( colorOffset != unknownIndex ) {

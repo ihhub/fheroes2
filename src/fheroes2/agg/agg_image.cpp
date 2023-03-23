@@ -3206,6 +3206,41 @@ namespace fheroes2
                     _icnVsSprite[id][i + 128 + 7].setPosition( 0, original.y() );
                 }
                 return true;
+            case ICN::SHADOW32:
+                LoadOriginalICN( id );
+                // The shadow sprite of hero needs to be shifted to match the hero sprite.
+                if ( _icnVsSprite[id].size() == 86 ) {
+                    // Direction: TOP (0-8), TOP_RIGHT (9-17), RIGHT (18-26), BOTTOM_RIGHT (27-35), BOTTOM (36-44)
+                    for ( int32_t i = 0; i < 45; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        original.setPosition( original.x(), original.y() - 3 );
+                    }
+
+                    // Direction:TOP_LEFT
+                    for ( int32_t i = 59; i < 68; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        original.setPosition( original.x() + 1, original.y() - 3 );
+                    }
+
+                    // Direction:LEFT
+                    for ( int32_t i = 68; i < 77; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        original.setPosition( original.x() - 5, original.y() - 3 );
+                    }
+
+                    // Direction:BOTTOM_LEFT
+                    for ( int32_t i = 77; i < 86; ++i ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        if ( i == 80 ) {
+                            // This sprite needs extra fix.
+                            original.setPosition( original.x() - 5, original.y() - 3 );
+                        }
+                        else {
+                            original.setPosition( original.x() - 10, original.y() - 3 );
+                        }
+                    }
+                }
+                return true;
             case ICN::MINI_MONSTER_IMAGE:
             case ICN::MINI_MONSTER_SHADOW: {
                 // It doesn't matter which image is being called. We are generating both of them at the same time.
