@@ -123,7 +123,7 @@ namespace
 
         const Route::Path & path = hero.GetPath();
         // Show AI hero animation if any of the tiles next to the first tile in the path is visible for human player.
-        if ( path.isValid() && world.GetTiles( path.front().GetIndex() ).getFogDirection() != DIRECTION_ALL ) {
+        if ( path.isValid() && ( world.GetTiles( path.front().GetIndex() ).getFogDirection() != DIRECTION_ALL ) ) {
             return true;
         }
 
