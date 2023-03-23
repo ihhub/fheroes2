@@ -116,8 +116,8 @@ namespace
             return false;
         }
 
-        // Show AI hero animation if he is visible for human player.
-        if ( world.GetTiles( indexFrom ).getFogDirection() == Direction::UNKNOWN ) {
+        // Show AI hero animation if he is visible (or barely visible) for human player.
+        if ( world.GetTiles( indexFrom ).getFogDirection() != DIRECTION_ALL ) {
             return true;
         }
 
