@@ -4722,7 +4722,7 @@ msgstr "Při prohledávání roztrhaného oblečení jsi nic nanašel."
 msgid ""
 "You come across an old wagon left by a trader who didn't quite make it to "
 "safe terrain."
-msgstr "
+msgstr ""
 "Naražíš na starý vůz po obchodníkovi, který to očividně nedotáhl až na bezpečný "
 "terén."
 
@@ -8608,7 +8608,7 @@ msgstr ""
 "nákupu vojska a náboru hrdinů. Nejběžnější je zlato, které je potřeba "
 "prakticky ke všemu. Dřevo a ruda se používají pro většinu budov. Drahokamy, " 
 "rtuť, síra a krystal jsou vzácné magické suroviny, které se používají pro "
-"nejmocnější stvůry a budovy.
+"nejmocnější stvůry a budovy."
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -8841,7 +8841,7 @@ msgid ""
 "%{count} times the caster's spell power."
 msgstr ""
 "Převede jednu nepřátelskou jednotku pod Tvou kontrolu, pokud jsou její "
-"životy menší než %{count} násobek síly kouzel.
+"životy menší než %{count} násobek síly kouzel."
 
 msgid "Cold Ray"
 msgstr "Chladný paprsek"
