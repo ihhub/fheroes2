@@ -3388,7 +3388,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
     }
 }
 
-void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets, const uint32_t resurrects )
 {
     // Reset the delay to wait till the next frame.
     if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
@@ -3447,6 +3447,25 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
 
         status.SetMessage( msg, true );
         status.SetMessage( "", false );
+
+        if ( resurrects != 0 ) {
+            auto updateStatusBar = []( Battle::Status & statusBar, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
+                StringReplace( localMsg, "%{count}", static_cast<int32_t>( localRes ) );
+                StringReplaceWithLowercase( localMsg, "%{unit}", localUnit );
+
+                statusBar.SetMessage( localMsg, true );
+                statusBar.SetMessage( "", false );
+            };
+
+            if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
+                msg = _n( "1 soul is absorbed.", "%{count} souls are absorbed.", resurrects );
+                updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
+            }
+            else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+                msg = _n( "1 %{unit} is revived.", "%{count} %{unit} are revived.", resurrects );
+                updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
+            }
+        }
     }
 
     _movingUnit = nullptr;

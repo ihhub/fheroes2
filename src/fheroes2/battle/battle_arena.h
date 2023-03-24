@@ -135,7 +135,7 @@ namespace Battle
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const;
         int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
-        void DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const;
+        static void DialogBattleNecromancy( const uint32_t raiseCount );
 
         void FadeArena( bool clearMessageLog ) const;
 
@@ -231,7 +231,7 @@ namespace Battle
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
 
-        static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets );
+        static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected );
         static void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets );
 
         std::vector<int> GetCastleTargets() const;

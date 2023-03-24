@@ -483,10 +483,13 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
 int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps::Tiles & tile )
 {
-    if ( from_hero.Modes( Heroes::ENABLEMOVE ) )
+    if ( from_hero.Modes( Heroes::ENABLEMOVE ) ) {
         return Cursor::Get().Themes();
-    else if ( from_hero.isShipMaster() )
+    }
+
+    if ( from_hero.isShipMaster() ) {
         return GetCursorFocusShipmaster( from_hero, tile );
+    }
 
     switch ( tile.GetObject() ) {
     case MP2::OBJ_MONSTER:
@@ -496,7 +499,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
-        if ( nullptr != castle ) {
+        if ( castle ) {
             if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE ) {
                 if ( tile.GetPassable() == 0 ) {
                     return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
@@ -535,36 +538,41 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 return Cursor::HEROES;
             }
             else if ( from_hero.GetColor() == to_hero->GetColor() ) {
-                int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-                return newcur != Cursor::POINTER ? newcur : Cursor::HEROES;
+                const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+
+                return cursor != Cursor::POINTER ? cursor : Cursor::HEROES;
             }
             else if ( from_hero.isFriends( to_hero->GetColor() ) ) {
                 return Cursor::POINTER;
             }
-            else
+            else {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+            }
         }
         break;
     }
 
     case MP2::OBJ_BOAT:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+
     case MP2::OBJ_BARRIER:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+
     default:
         if ( MP2::isActionObject( tile.GetObject() ) ) {
             bool protection = false;
-            if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
-                protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
+
+            if ( MP2::isPickupObject( tile.GetObject() ) ) {
+                protection = Maps::isTileUnderProtection( tile.GetIndex() );
             }
             else {
-                protection = Maps::isTileUnderProtection( tile.GetIndex() );
+                protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
             }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
         else if ( tile.isPassableFrom( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
-            bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
+            const bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
         }

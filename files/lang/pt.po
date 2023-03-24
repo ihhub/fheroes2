@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-11 16:34+0000\n"
+"POT-Creation-Date: 2023-03-23 15:44+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -709,6 +709,16 @@ msgstr[1] ""
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "1 soul is absorbed."
+msgid_plural "%{count} souls are absorbed."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "1 %{unit} is revived."
+msgid_plural "%{count} %{unit} are revived."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -4423,6 +4433,9 @@ msgstr ""
 msgid "Danish"
 msgstr ""
 
+msgid "Slovak"
+msgstr ""
+
 msgid ", FPS: "
 msgstr ""
 
@@ -5243,9 +5256,6 @@ msgid ""
 "wood per day."
 msgstr ""
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr ""
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -5282,6 +5292,9 @@ msgstr ""
 msgid ""
 "You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
 "wish to enter?"
+msgstr ""
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
 msgstr ""
 
 msgid ""

@@ -42,6 +42,7 @@
 
 namespace
 {
+    constexpr size_t validPaletteSize = 768;
     constexpr uint8_t spriteBackground = 23;
 }
 
@@ -67,8 +68,8 @@ int main( int argc, char ** argv )
         }
 
         const std::vector<uint8_t> palette = paletteStream.getRaw();
-        if ( palette.size() != 768 ) {
-            std::cerr << "Invalid palette size of " << palette.size() << " instead of 768" << std::endl;
+        if ( palette.size() != validPaletteSize ) {
+            std::cerr << "Invalid palette size of " << palette.size() << " instead of " << validPaletteSize << std::endl;
             return EXIT_FAILURE;
         }
 
@@ -143,7 +144,7 @@ int main( int argc, char ** argv )
             if ( buf.size() != dataSize ) {
                 ++spritesFailed;
 
-                std::cerr << inputFileName << ": sprite " << spriteIdx << " has an invalid size of " << dataSize << std::endl;
+                std::cerr << inputFileName << ": invalid size of sprite " << spriteIdx << ": expected " << dataSize << ", got " << buf.size() << std::endl;
                 continue;
             }
 
@@ -179,7 +180,7 @@ int main( int argc, char ** argv )
         }
     }
 
-    std::cout << "Total extracted: " << spritesExtracted << ", failed: " << spritesFailed << std::endl;
+    std::cout << "Total extracted sprites: " << spritesExtracted << ", failed sprites: " << spritesFailed << std::endl;
 
     return ( spritesFailed == 0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

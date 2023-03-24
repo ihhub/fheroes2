@@ -141,7 +141,8 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     _audioChannel.resize( channelCount );
 
     channelCount = 0;
-    // compose sound track
+
+    // Compose the soundtrack
     for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
         if ( !soundBuffer[i].empty() ) {
             std::vector<uint8_t> & wavData = _audioChannel[channelCount];
@@ -151,21 +152,20 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
 
             ++channelCount;
 
-            // set up WAV header
             StreamBuf wavHeader( audioHeaderSize );
-            wavHeader.putLE32( 0x46464952 ); // RIFF
-            wavHeader.putLE32( originalSize + 0x24 ); // size
-            wavHeader.putLE32( 0x45564157 ); // WAVE
-            wavHeader.putLE32( 0x20746D66 ); // FMT
-            wavHeader.putLE32( 0x10 ); // 16 == PCM
-            wavHeader.putLE16( 0x01 ); // format
-            wavHeader.putLE16( channelsPerTrack[i] ); // channels
-            wavHeader.putLE32( audioRate[i] ); // samples
-            wavHeader.putLE32( audioRate[i] * audioBitDepth[i] * channelsPerTrack[i] / 8 ); // bytes per second
-            wavHeader.putLE16( audioBitDepth[i] * channelsPerTrack[i] / 8 ); // align
-            wavHeader.putLE16( audioBitDepth[i] ); // bits per channel
-            wavHeader.putLE32( 0x61746164 ); // DATA
-            wavHeader.putLE32( originalSize ); // size
+            wavHeader.putLE32( 0x46464952 ); // RIFF marker ("RIFF")
+            wavHeader.putLE32( originalSize + 0x24 ); // Total size minus the size of this and previous fields
+            wavHeader.putLE32( 0x45564157 ); // File type header ("WAVE")
+            wavHeader.putLE32( 0x20746D66 ); // Format sub-chunk marker ("fmt ")
+            wavHeader.putLE32( 0x10 ); // Size of the format sub-chunk
+            wavHeader.putLE16( 0x01 ); // Audio format (1 for PCM)
+            wavHeader.putLE16( channelsPerTrack[i] ); // Number of channels
+            wavHeader.putLE32( audioRate[i] ); // Sample rate
+            wavHeader.putLE32( audioRate[i] * audioBitDepth[i] * channelsPerTrack[i] / 8 ); // Byte rate
+            wavHeader.putLE16( audioBitDepth[i] * channelsPerTrack[i] / 8 ); // Block align
+            wavHeader.putLE16( audioBitDepth[i] ); // Bits per sample
+            wavHeader.putLE32( 0x61746164 ); // Data sub-chunk marker ("data")
+            wavHeader.putLE32( originalSize ); // Size of the data sub-chunk
 
             memcpy( wavData.data(), wavHeader.data(), audioHeaderSize );
         }

@@ -31,6 +31,7 @@
 #include <iostream>
 #include <iterator>
 #include <map>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -174,7 +175,16 @@ int main( int argc, char ** argv )
                 return EXIT_FAILURE;
             }
 
-            outputStream.write( reinterpret_cast<const char *>( buf.data() ), buf.size() );
+            {
+                const auto streamSize = fheroes2::checkedCast<std::streamsize>( buf.size() );
+                if ( !streamSize ) {
+                    std::cerr << inputFileName << ": item " << name << " is too large" << std::endl;
+                    return EXIT_FAILURE;
+                }
+
+                outputStream.write( reinterpret_cast<const char *>( buf.data() ), streamSize.value() );
+            }
+
             if ( !outputStream ) {
                 std::cerr << "Error writing to file " << outputFilePath << std::endl;
                 return EXIT_FAILURE;
@@ -184,7 +194,7 @@ int main( int argc, char ** argv )
         }
     }
 
-    std::cout << "Total extracted: " << itemsExtracted << ", failed: " << itemsFailed << std::endl;
+    std::cout << "Total extracted items: " << itemsExtracted << ", failed items: " << itemsFailed << std::endl;
 
     return ( itemsFailed == 0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
