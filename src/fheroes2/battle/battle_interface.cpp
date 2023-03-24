@@ -2189,7 +2189,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
         fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
     }
     else if ( Arena::CASTLE_TOP_ARCHER_TOWER_POS == cellId ) {
-        const Tower * ltower = Arena::GetTower( TWR_LEFT );
+        const Tower * ltower = Arena::GetTower( TowerType::TWR_LEFT );
         uint32_t index = 17;
 
         if ( castle.isBuild( BUILD_LEFTTURRET ) && ltower )
@@ -2199,7 +2199,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 153 + towerSprite.y() );
     }
     else if ( Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS == cellId ) {
-        const Tower * rtower = Arena::GetTower( TWR_RIGHT );
+        const Tower * rtower = Arena::GetTower( TowerType::TWR_RIGHT );
         uint32_t index = 17;
 
         if ( castle.isBuild( BUILD_RIGHTTURRET ) && rtower )
@@ -2220,7 +2220,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
 
 void Battle::Interface::RedrawCastleMainTower( const Castle & castle )
 {
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( castle.GetRace() ), ( Arena::GetTower( TWR_CENTER )->isValid() ? 20 : 26 ) );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( castle.GetRace() ), ( Arena::GetTower( TowerType::TWR_CENTER )->isValid() ? 20 : 26 ) );
 
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }
@@ -2693,7 +2693,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     // Add offsets to inner objects
     const fheroes2::Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
     const fheroes2::Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
-    if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
+    if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista info" );
 
