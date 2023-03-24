@@ -38,6 +38,7 @@
 #include "mp2.h"
 #include "race.h"
 #include "serialize.h"
+#include "settings.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
@@ -447,11 +448,20 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             }
         }
 
-        if ( spell == Spell::IDENTIFYHERO && hero->GetKingdom().Modes( Kingdom::IDENTIFYHERO ) ) {
-            if ( res != nullptr ) {
-                *res = _( "This spell is already in use." );
+        if ( spell == Spell::IDENTIFYHERO ) {
+            Players & players = Settings::Get().GetPlayers();
+            if ( players.size() == 1 ) {
+                if ( res != nullptr ) {
+                    *res = _( "There are no opponents. Casting this spell will not bring any advantage." );
+                }
+                return false;
             }
-            return false;
+            if ( hero->GetKingdom().Modes( Kingdom::IDENTIFYHERO ) ) {
+                if ( res != nullptr ) {
+                    *res = _( "This spell is already in use." );
+                }
+                return false;
+            }
         }
 
         if ( spell == Spell::VISIONS ) {
@@ -476,7 +486,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 }
                 return false;
             }
-            if ( MP2::OBJ_MINES == object && (spell == Spell::SETAGUARDIAN || spell == Spell::SETEGUARDIAN || spell == Spell::SETFGUARDIAN || spell == Spell::SETWGUARDIAN) ) {
+            if ( MP2::OBJ_MINES == object
+                 && ( spell == Spell::SETAGUARDIAN || spell == Spell::SETEGUARDIAN || spell == Spell::SETFGUARDIAN || spell == Spell::SETWGUARDIAN ) ) {
                 const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower(), hero );
                 const uint32_t currentCount = world.GetCapturedObject( tile.GetIndex() ).GetTroop().GetCount();
                 if ( newCount <= currentCount ) {
