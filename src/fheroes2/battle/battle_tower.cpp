@@ -38,7 +38,7 @@
 #include "tools.h"
 #include "translations.h"
 
-Battle::Tower::Tower( const Castle & castle, TowerType type, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
+Battle::Tower::Tower( const Castle & castle, const TowerType type, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
     : Unit( Troop( Monster::ARCHER, castle.CountBuildings() ), {}, false, randomGenerator, uid )
     , _towerType( type )
     , _attackBonus( castle.GetLevelMageGuild() )

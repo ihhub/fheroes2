@@ -49,7 +49,7 @@ namespace Battle
     class Tower : public Unit
     {
     public:
-        Tower( const Castle & castle, TowerType type, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
+        Tower( const Castle & castle, const TowerType type, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
         Tower( const Tower & ) = delete;
 
         Tower & operator=( const Tower & ) = delete;
