@@ -178,6 +178,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
+    , _troopWindowOffsetY( 0 )
 {
     if ( use_mini_sprite )
         SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
@@ -551,7 +552,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
             }
         }
 
-        switch ( Dialog::ArmyInfo( troop, flags ) ) {
+        switch ( Dialog::ArmyInfo( troop, flags, false, _troopWindowOffsetY ) ) {
         case Dialog::UPGRADE:
             world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetTotalUpgradeCost() );
             troop.Upgrade();
@@ -618,7 +619,7 @@ bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
             troop.Reset();
         }
         else {
-            Dialog::ArmyInfo( troop, Dialog::ZERO );
+            Dialog::ArmyInfo( troop, Dialog::ZERO, false, _troopWindowOffsetY );
         }
     }
 
