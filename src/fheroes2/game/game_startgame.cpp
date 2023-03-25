@@ -91,6 +91,8 @@ namespace
                || ( ( player1->isControlHuman() == player2->isControlHuman() ) && ( player1->GetColor() < player2->GetColor() ) );
     }
 
+    // Get colors value of players to use in fog directions update.
+    // For human allied AI returns colors of this alliance, for hostile AI - colors of all human players and their allies.
     int32_t hotSeatAIFogColors( const Player * player )
     {
         assert( player != nullptr );
