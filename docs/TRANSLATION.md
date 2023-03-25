@@ -21,6 +21,7 @@ subdirectory of the project source tree. The current instruction is designed for
 ![Brazilian Portuguese](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_pt.json)
 ![Romanian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_ro.json)
 ![Russian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_ru.json)
+![Slovak](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_sk.json)
 ![Swedish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_sv.json)
 ![Turkish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_tr.json)
 ![Ukrainian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_uk.json)
@@ -75,8 +76,10 @@ make de.mo
 
 To have this MO file used by the engine, it should then be placed in the `files/lang` folder used by the fheroes2 executable.
 The exact location of this folder depends on the operating system. On Windows, it is usually located in the app installation
-directory. On Linux, it is usually located in the `/usr/share/fheroes2` or `/usr/local/share/fheroes2`. Currently for MacOS
-users this location is dependent on what third-party package manager is used to install fheroes2.
+directory. On Linux, it is usually located in the `/usr/share/fheroes2` or `/usr/local/share/fheroes2`. Currently for MacOS 
+users this location is dependent on what third-party package manager is used to install fheroes2. The Flatpak version of the 
+fheroes2 installation from Flathub is located in the `usr/.var/app/io.github.ihhub.Fheroes2` directory.
+
 
 For Windows users who use POEdit or a similar application, it is possible to compile the MO file using such a program. However, note that
 the program will need to be set to compile the MO file in the font encoding/Charset that the language that you are translating to has been

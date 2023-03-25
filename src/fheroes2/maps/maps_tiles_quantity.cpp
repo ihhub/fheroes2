@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <limits>
 #include <list>
+#include <optional>
 #include <ostream>
 #include <type_traits>
 #include <utility>
@@ -38,10 +39,13 @@
 #include "monster.h"
 #include "mp2.h"
 #include "pairs.h"
+#include "payment.h"
+#include "profit.h"
 #include "rand.h"
 #include "resource.h"
 #include "skill.h"
 #include "spell.h"
+#include "tools.h"
 #include "week.h"
 #include "world.h"
 
@@ -55,7 +59,6 @@ bool Maps::Tiles::QuantityIsValid() const
     case MP2::OBJ_SHIPWRECK_SURVIVOR:
     case MP2::OBJ_TREASURE_CHEST:
     case MP2::OBJ_SEA_CHEST:
-    case MP2::OBJ_ABANDONED_MINE:
         return true;
 
     case MP2::OBJ_PYRAMID:
@@ -455,7 +458,10 @@ Monster Maps::Tiles::QuantityMonster() const
     case MP2::OBJ_GENIE_LAMP:
         return Monster( Monster::GENIE );
 
-    // loyalty version
+    case MP2::OBJ_ABANDONED_MINE:
+        return { Monster::GHOST };
+
+    // Price of Loyalty
     case MP2::OBJ_WATER_ALTAR:
         return Monster( Monster::WATER_ELEMENT );
     case MP2::OBJ_AIR_ALTAR:
@@ -872,46 +878,71 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         QuantitySetColor( Tiles::getColorFromTravellerTentSprite( _objectIcnType, _imageIndex ) );
         break;
 
-    case MP2::OBJ_ALCHEMIST_LAB:
-        QuantitySetResource( Resource::MERCURY, 1 );
-        break;
+    case MP2::OBJ_ALCHEMIST_LAB: {
+        const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::MERCURY ).mercury );
+        assert( resourceCount.has_value() && resourceCount > 0U );
 
-    case MP2::OBJ_SAWMILL:
-        QuantitySetResource( Resource::WOOD, 2 );
+        QuantitySetResource( Resource::MERCURY, resourceCount.value() );
         break;
+    }
+
+    case MP2::OBJ_SAWMILL: {
+        const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::WOOD ).wood );
+        assert( resourceCount.has_value() && resourceCount > 0U );
+
+        QuantitySetResource( Resource::WOOD, resourceCount.value() );
+        break;
+    }
 
     case MP2::OBJ_MINES: {
         switch ( _imageIndex ) {
-        case 0:
-            QuantitySetResource( Resource::ORE, 2 );
+        case 0: {
+            const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::ORE ).ore );
+            assert( resourceCount.has_value() && resourceCount > 0U );
+
+            QuantitySetResource( Resource::ORE, resourceCount.value() );
             break;
-        case 1:
-            QuantitySetResource( Resource::SULFUR, 1 );
+        }
+        case 1: {
+            const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::SULFUR ).sulfur );
+            assert( resourceCount.has_value() && resourceCount > 0U );
+
+            QuantitySetResource( Resource::SULFUR, resourceCount.value() );
             break;
-        case 2:
-            QuantitySetResource( Resource::CRYSTAL, 1 );
+        }
+        case 2: {
+            const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::CRYSTAL ).crystal );
+            assert( resourceCount.has_value() && resourceCount > 0U );
+
+            QuantitySetResource( Resource::CRYSTAL, resourceCount.value() );
             break;
-        case 3:
-            QuantitySetResource( Resource::GEMS, 1 );
+        }
+        case 3: {
+            const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::GEMS ).gems );
+            assert( resourceCount.has_value() && resourceCount > 0U );
+
+            QuantitySetResource( Resource::GEMS, resourceCount.value() );
             break;
-        case 4:
-            QuantitySetResource( Resource::GOLD, 1000 );
+        }
+        case 4: {
+            const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::GOLD ).gold );
+            assert( resourceCount.has_value() && resourceCount > 0U );
+
+            QuantitySetResource( Resource::GOLD, resourceCount.value() );
             break;
+        }
         default:
             break;
         }
         break;
     }
 
-    case MP2::OBJ_ABANDONED_MINE: {
-        Troop & troop = world.GetCapturedObject( GetIndex() ).GetTroop();
-
-        // Min is 3 x 13, and max is 3 x 15
-        troop.Set( Monster::GHOST, 3 * Rand::Get( 13, 15 ) );
-
-        QuantitySetResource( Resource::GOLD, 1000 );
+    case MP2::OBJ_ABANDONED_MINE:
+        // The number of Ghosts is set when loading the map and does not change anymore
+        if ( isFirstLoad ) {
+            MonsterSetCount( Rand::Get( 30, 60 ) );
+        }
         break;
-    }
 
     case MP2::OBJ_BOAT:
         _objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
@@ -954,9 +985,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_GENIE_LAMP:
-        // Genies in the lamp do not accumulate
-        if ( isFirstLoad )
+        // The number of Genies is set when loading the map and does not change anymore
+        if ( isFirstLoad ) {
             MonsterSetCount( Rand::Get( 2, 4 ) );
+        }
         break;
 
     case MP2::OBJ_WATCH_TOWER:

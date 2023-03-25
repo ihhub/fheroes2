@@ -181,10 +181,11 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
         _interface->RedrawActionAttackPart1( attacker, defender, attackTargets );
     }
 
-    TargetsApplyDamage( attacker, attackTargets );
+    uint32_t resurrected = 0;
+    TargetsApplyDamage( attacker, attackTargets, resurrected );
 
     if ( _interface ) {
-        _interface->RedrawActionAttackPart2( attacker, defender, attackTargets );
+        _interface->RedrawActionAttackPart2( attacker, defender, attackTargets, resurrected );
     }
 
     // Then apply the attacker's built-in spell
@@ -645,14 +646,16 @@ void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
     }
 }
 
-void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets )
+void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected )
 {
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
 
     for ( TargetInfo & target : targets ) {
         assert( target.defender != nullptr );
 
-        target.killed = target.defender->ApplyDamage( attacker, target.damage );
+        uint32_t resurrectIncrease = 0;
+        target.defender->ApplyDamage( attacker, target.damage, target.killed, &resurrectIncrease );
+        resurrected += resurrectIncrease;
     }
 }
 
@@ -974,7 +977,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
     const uint32_t type = cmd.GetValue();
     const uint32_t uid = cmd.GetValue();
 
-    Tower * tower = GetTower( type );
+    Tower * tower = GetTower( static_cast<TowerType>( type ) );
     Unit * unit = GetTroopUID( uid );
 
     if ( unit && unit->isValid() && tower ) {
@@ -986,7 +989,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
 
         if ( _interface )
             _interface->RedrawActionTowerPart1( *tower, *unit );
-        target.killed = unit->ApplyDamage( *tower, target.damage );
+        unit->ApplyDamage( *tower, target.damage, target.killed, nullptr );
         if ( _interface )
             _interface->RedrawActionTowerPart2( *tower, target );
     }

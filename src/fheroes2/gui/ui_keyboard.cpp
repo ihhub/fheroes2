@@ -185,13 +185,13 @@ namespace
             // Do nothing.
         }
 
-        KeyboardButton( const KeyboardButton & buttonInfo ) = delete;
+        KeyboardButton( const KeyboardButton & ) = delete;
 
         KeyboardButton( KeyboardButton && ) noexcept = default;
 
         ~KeyboardButton() = default;
 
-        KeyboardButton & operator=( const KeyboardButton & buttonInfo ) = delete;
+        KeyboardButton & operator=( const KeyboardButton & ) = delete;
 
         KeyboardButton & operator=( KeyboardButton && ) = default;
 

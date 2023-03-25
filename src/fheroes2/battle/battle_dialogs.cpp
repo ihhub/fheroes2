@@ -724,7 +724,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     return false;
 }
 
-void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const
+void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -764,7 +764,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uin
     TextBox titleBox( _( "Necromancy!" ), Font::YELLOW_BIG, bsTextWidth );
     titleBox.Blit( xOffset, yOffset );
 
-    const Monster mons( raisedMonsterType );
+    const Monster mons( Monster::SKELETON );
     std::string msg = _( "Practicing the dark arts of necromancy, you are able to raise %{count} of the enemy's dead to return under your service as %{monster}." );
     StringReplace( msg, "%{count}", raiseCount );
     StringReplace( msg, "%{monster}", mons.GetPluralName( raiseCount ) );
