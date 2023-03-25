@@ -1125,6 +1125,49 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
     }
 }
 
+void Battle::Interface::RedrawTroopMoat( const uint8_t moatCellId, const Unit & unit )
+{
+    if ( moatCellId ) {
+        // Do not draw moat fragment on bridge cell when bridge is down
+        if ( moatCellId == Arena::CASTLE_BRIDGE_POS ) {
+            const Bridge * bridge = Arena::GetBridge();
+            if ( bridge->isDown() ) {
+                return;
+            }
+        }
+
+        const Cell * moatCell = Board::GetCell( moatCellId );
+        assert( moatCell != nullptr );
+
+        const Unit * unitOnCell = moatCell->GetUnit();
+        if ( unitOnCell != &unit )
+            return;
+
+        // Draw small moat fragment at the bottom of the cell
+        const fheroes2::Rect & rect = moatCell->GetPos();
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
+        const int32_t inX = std::max( rect.x - sprite.x(), 0 );
+        const int32_t inY = rect.y - sprite.y() + 35;
+        const int32_t outX = rect.x + 1;
+        const int32_t outY = rect.y + 35;
+        const int32_t width = rect.width - 1;
+        const int32_t height = rect.height - 43;
+        fheroes2::Blit( sprite, inX, inY, _mainSurface, outX, outY, width, height );
+
+        const Settings & conf = Settings::Get();
+
+        // Apply shadow to moat fragment
+        if ( conf.BattleShowMoveShadow() && _currentUnit == &unit ) {
+            fheroes2::Blit( _hexagonCursorShadow, 0, 10, _mainSurface, outX, outY, width, height );
+        }
+
+        if ( conf.BattleShowMouseShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI )
+             && moatCellId == Arena::GetBoard()->GetIndexAbsPosition( GetMouseCursor() ) ) {
+            fheroes2::Blit( _hexagonCursorShadow, 0, 10, _mainSurface, outX, outY, width, height );
+        }
+    }
+}
+
 Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     : arena( battleArena )
     , _surfaceInnerArea( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
@@ -1376,6 +1419,8 @@ void Battle::Interface::RedrawArmies()
             Arena::CASTLE_GATE_POS,           Arena::CASTLE_BOTTOM_GATE_TOWER_POS, Arena::CASTLE_THIRD_TOP_WALL_POS,  Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS,
             Arena::CASTLE_FOURTH_TOP_WALL_POS };
 
+    const uint8_t moatCellIds[ARENAH] = { 7, 19, 28, 39, 49, 61, 72, 84, 95 };
+
     if ( castle == nullptr ) {
         RedrawKilled();
     }
@@ -1414,6 +1459,7 @@ void Battle::Interface::RedrawArmies()
             std::vector<const UnitSpellEffectInfo *> troopOverlaySpriteAfterWall;
 
             const int32_t wallCellId = wallCellIds[cellRowId];
+            const uint8_t moatCellId = castle->isBuild( BUILD_MOAT ) ? moatCellIds[cellRowId] : 0;
 
             for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
                 const int32_t cellId = cellRowId * ARENAW + cellColumnId;
@@ -1506,6 +1552,7 @@ void Battle::Interface::RedrawArmies()
 
             for ( size_t i = 0; i < troopBeforeWall.size(); ++i ) {
                 RedrawTroopSprite( *troopBeforeWall[i] );
+                RedrawTroopMoat( moatCellId, *troopBeforeWall[i] );
             }
 
             for ( size_t i = 0; i < troopCounterBeforeWall.size(); ++i ) {
@@ -1531,6 +1578,7 @@ void Battle::Interface::RedrawArmies()
 
             for ( size_t i = 0; i < troopAfterWall.size(); ++i ) {
                 RedrawTroopSprite( *troopAfterWall[i] );
+                RedrawTroopMoat( moatCellId, *troopAfterWall[i] );
             }
 
             for ( size_t i = 0; i < troopCounterAfterWall.size(); ++i ) {

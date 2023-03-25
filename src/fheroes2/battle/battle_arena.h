@@ -216,7 +216,8 @@ namespace Battle
             CASTLE_TOP_ARCHER_TOWER_POS = 19,
             CASTLE_BOTTOM_ARCHER_TOWER_POS = 85,
             CASTLE_TOP_GATE_TOWER_POS = 40,
-            CASTLE_BOTTOM_GATE_TOWER_POS = 62
+            CASTLE_BOTTOM_GATE_TOWER_POS = 62,
+            CASTLE_BRIDGE_POS = 49
         };
 
     private:
