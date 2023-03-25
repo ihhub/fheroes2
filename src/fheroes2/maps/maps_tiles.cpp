@@ -2499,11 +2499,11 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
     const int32_t fogMaxY = std::min( maxY + 1, worldHeight );
 
     const int32_t fogDataWidth = maxX - minX + 2;
-    const int32_t fogDataHeight = maxY - minY + 2;
+    const int32_t fogDataSize = fogDataWidth * ( maxY - minY + 2 );
 
     // A vector to cache 'isFog()' data. This vector type is not <bool> as using std::vector<uint8_t> gives the higher performance.
     // 1 is for the 'true' state, 0 is for the 'false' state.
-    std::vector<uint8_t> fogData( static_cast<size_t>( fogDataWidth ) * fogDataHeight, 1 );
+    std::vector<uint8_t> fogData( fogDataSize, 1 );
 
     // Set the 'fogData' index offset from the tile index.
     const int32_t fogDataOffset = 1 - minX + ( 1 - minY ) * fogDataWidth;
@@ -2522,6 +2522,9 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
     // Set the 'fogData' index offset from the tile index for the TOP LEFT direction from the tile.
     const int32_t topLeftDirectionOffset = -1 - fogDataWidth;
 
+    // Cache the maximum border for fogDataIndex corresponding the "CENTER" tile to use in assertion. Should be removed if assertion is removed.
+    const int32_t centerfogDataIndexLimit = fogDataSize + topLeftDirectionOffset;
+
     // Calculate fog directions using the cached 'isFog' data.
     for ( int32_t y = minY; y < maxY; ++y ) {
         const int32_t fogCenterDataOffsetY = y * fogDataWidth + fogDataOffset;
@@ -2539,8 +2542,13 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
                 // The tile is under the fog so its CENTER direction for fog is true.
                 uint16_t fogDirection = Direction::CENTER;
 
+                // 'fogDataIndex' should not get out of maximum 'fogData' vector index after all increments.
+                assert( fogDataIndex < centerfogDataIndexLimit );
+
                 // Check all tiles around for 'fogData' starting from the top left direction and if it is true then logically add the direction to 'fogDirection'.
                 fogDataIndex += topLeftDirectionOffset;
+
+                assert( fogDataIndex >= 0 );
 
                 if ( fogData[fogDataIndex] == 1 ) {
                     fogDirection |= Direction::TOP_LEFT;
