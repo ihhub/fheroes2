@@ -579,7 +579,7 @@ namespace
         return true;
     }
 
-    bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
+    bool ActionSpellSetGuardian( const Heroes & hero, const Spell & spell )
     {
         Maps::Tiles & tile = world.GetTiles( hero.GetIndex() );
 
@@ -590,26 +590,27 @@ namespace
 
         const uint32_t count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 
-        if ( count ) {
-            Maps::setSpellOnTile( tile, spell.GetID() );
-
-            if ( spell == Spell::HAUNT ) {
-                world.CaptureObject( tile.GetIndex(), Color::NONE );
-                tile.removeOwnershipFlag( MP2::OBJ_MINES );
-
-                // Update the color of haunted mine on radar.
-                Interface::Basic & I = Interface::Basic::Get();
-                const fheroes2::Point heroPosition = hero.GetCenter();
-                I.GetRadar().SetRenderArea( { heroPosition.x - 1, heroPosition.y - 1, 3, 2 } );
-
-                I.SetRedraw( Interface::REDRAW_RADAR );
-            }
-
-            world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );
-            return true;
+        if ( count == 0 ) {
+            return false;
         }
 
-        return false;
+        Maps::setSpellOnTile( tile, spell.GetID() );
+
+        if ( spell == Spell::HAUNT ) {
+            world.CaptureObject( tile.GetIndex(), Color::NONE );
+            tile.removeOwnershipFlag( MP2::OBJ_MINES );
+
+            // Update the color of haunted mine on radar.
+            Interface::Basic & I = Interface::Basic::Get();
+            const fheroes2::Point heroPosition = hero.GetCenter();
+            I.GetRadar().SetRenderArea( { heroPosition.x - 1, heroPosition.y - 1, 3, 2 } );
+
+            I.SetRedraw( Interface::REDRAW_RADAR );
+        }
+
+        world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );
+
+        return true;
     }
 }
 

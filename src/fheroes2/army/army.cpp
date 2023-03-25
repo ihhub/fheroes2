@@ -843,7 +843,7 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     return true;
 }
 
-void Troops::AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count )
+void Troops::AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count ) const
 {
     for ( Troop * troop : *this ) {
         assert( troop != nullptr );
@@ -857,7 +857,7 @@ void Troops::AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t 
     }
 }
 
-void Troops::JoinAllTroopsOfType( const Troop & targetTroop )
+void Troops::JoinAllTroopsOfType( const Troop & targetTroop ) const
 {
     const int troopID = targetTroop.GetID();
     const int totalMonsterCount = GetCountMonsters( troopID );
