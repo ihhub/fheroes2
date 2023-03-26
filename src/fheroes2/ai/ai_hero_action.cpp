@@ -1454,10 +1454,6 @@ namespace
         hero.SetShipMaster( true );
         hero.GetPath().Reset();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
-        }
-
         AI::Get().HeroesClearTask( hero );
 
         world.GetTiles( dst_index ).resetBoatOwnerColor();
