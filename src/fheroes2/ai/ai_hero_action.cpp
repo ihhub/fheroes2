@@ -772,6 +772,8 @@ namespace
         assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HEROES );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            // AI-controlled hero cannot activate Stone Liths from the same tile, but should move to this tile from some
+            // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut();
         }
 
@@ -834,6 +836,8 @@ namespace
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            // AI-controlled hero cannot activate Whirlpool from the same tile, but should move to this tile from some
+            // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut();
         }
 
@@ -1448,6 +1452,7 @@ namespace
         const fheroes2::Point offset( destPos - hero.GetCenter() );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut( offset );
         }
 
@@ -1997,6 +2002,7 @@ namespace AI
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 
@@ -2032,6 +2038,7 @@ namespace AI
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 
