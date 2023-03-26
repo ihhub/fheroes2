@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "audio.h"
+
 #include <algorithm>
 #include <atomic>
 #include <cassert>
@@ -42,7 +44,6 @@
 #include <SDL_stdinc.h>
 #include <SDL_version.h>
 
-#include "audio.h"
 #include "core.h"
 #include "dir.h"
 #include "logging.h"
@@ -54,12 +55,9 @@ namespace
 {
     struct AudioSpec
     {
-#if defined( _WIN32 )
-        // Value 22050 causes audio distortion on Windows
+        // Notice: Value 22050 causes music distortion on Windows.
         int frequency = 44100;
-#else
-        int frequency = 22050;
-#endif
+
         uint16_t format = AUDIO_S16;
         // Stereo audio support
         int channels = 2;
