@@ -622,8 +622,8 @@ namespace
             return MIX_MAX_VOLUME * 50 / 53;
         }
 
-        // volumePercentage is divided by 106, not 100 to reserve an extra 0.5 dB for possible sound overloads in SDL_mixer.
-        return static_cast<int>( ( std::exp( std::log( 10 + 1 ) * volumePercentage / 106 ) - 1 ) / 10 * MIX_MAX_VOLUME );
+        // MIX_MAX_VOLUME is divided by 10.6, not 10 to reserve an extra 0.5 dB for possible sound overloads in SDL_mixer.
+        return static_cast<int>( ( std::exp( std::log( 10 + 1 ) * volumePercentage / 100 ) - 1 ) / 10.6 * MIX_MAX_VOLUME );
     }
 }
 
