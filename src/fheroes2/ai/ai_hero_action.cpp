@@ -1439,8 +1439,7 @@ namespace
 
         hero.setLastGroundRegion( world.GetTiles( hero.GetIndex() ).GetRegion() );
 
-        const fheroes2::Point destPos = Maps::GetPoint( dst_index );
-        const fheroes2::Point offset( destPos - hero.GetCenter() );
+        const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
@@ -1453,10 +1452,11 @@ namespace
         hero.SetMapsObject( MP2::OBJ_NONE );
         world.GetTiles( dst_index ).resetObjectSprite();
         hero.SetShipMaster( true );
+        hero.GetPath().Reset();
+
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
         }
-        hero.GetPath().Reset();
 
         AI::Get().HeroesClearTask( hero );
 
