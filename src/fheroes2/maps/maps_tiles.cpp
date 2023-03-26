@@ -2468,38 +2468,6 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     return spriteIndices;
 }
 
-bool Maps::Tiles::isFogAllAround( const int color ) const
-{
-    const int32_t center = GetIndex();
-    const fheroes2::Point mp = Maps::GetPoint( center );
-    const int32_t width = world.w();
-    const int32_t height = world.h();
-
-    // Verify all tiles around the current one with radius of 2 to cover moving hero case as well.
-    for ( int32_t y = -2; y < 3; ++y ) {
-        const int32_t offsetY = mp.y + y;
-        if ( offsetY < 0 || offsetY >= height )
-            continue;
-
-        const int32_t centerY = center + y * width;
-
-        for ( int32_t x = -2; x < 3; ++x ) {
-            if ( x == 0 && y == 0 )
-                continue;
-
-            const int32_t offsetX = mp.x + x;
-            if ( offsetX < 0 || offsetX >= width )
-                continue;
-
-            if ( !world.GetTiles( centerY + x ).isFog( color ) ) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
 void Maps::Tiles::ClearFog( const int colors )
 {
     _fogColors &= ~colors;
@@ -2510,28 +2478,143 @@ void Maps::Tiles::ClearFog( const int colors )
     world.resetPathfinder();
 }
 
-int Maps::Tiles::GetFogDirections( int color ) const
+void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color )
 {
-    int around = 0;
-    const Directions & directions = Direction::All();
+    assert( ( minPos.x <= maxPos.x ) && ( minPos.y <= maxPos.y ) );
 
-    for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
-        if ( !Maps::isValidDirection( _index, *it ) || world.GetTiles( Maps::GetDirectionIndex( _index, *it ) ).isFog( color ) )
-            around |= *it;
+    const int32_t worldWidth = world.w();
+    const int32_t worldHeight = world.w();
 
-    if ( isFog( color ) )
-        around |= Direction::CENTER;
+    // Do not get over the world borders.
+    const int32_t minX = std::max( minPos.x, 0 );
+    const int32_t minY = std::max( minPos.y, 0 );
+    // Add extra 1 to reach the given maxPos point.
+    const int32_t maxX = std::min( maxPos.x + 1, worldWidth );
+    const int32_t maxY = std::min( maxPos.y + 1, worldHeight );
 
-    return around;
+    // Fog data range is 1 tile bigger from each side as for the fog directions we have to check all tiles around each tile in the area.
+    const int32_t fogMinX = std::max( minX - 1, 0 );
+    const int32_t fogMinY = std::max( minY - 1, 0 );
+    const int32_t fogMaxX = std::min( maxX + 1, worldWidth );
+    const int32_t fogMaxY = std::min( maxY + 1, worldHeight );
+
+    const int32_t fogDataWidth = maxX - minX + 2;
+    const int32_t fogDataSize = fogDataWidth * ( maxY - minY + 2 );
+
+    // A vector to cache 'isFog()' data. This vector type is not <bool> as using std::vector<uint8_t> gives the higher performance.
+    // 1 is for the 'true' state, 0 is for the 'false' state.
+    std::vector<uint8_t> fogData( fogDataSize, 1 );
+
+    // Set the 'fogData' index offset from the tile index.
+    const int32_t fogDataOffset = 1 - minX + ( 1 - minY ) * fogDataWidth;
+
+    // Cache the 'fogData' data for the given area to use it in fog direction calculation.
+    // The loops run only within the world area, if 'fogData' area includes tiles outside the world borders we do not update them as the are already set to 1.
+    for ( int32_t y = fogMinY; y < fogMaxY; ++y ) {
+        const int32_t fogTileOffsetY = y * worldWidth;
+        const int32_t fogDataOffsetY = y * fogDataWidth + fogDataOffset;
+
+        for ( int32_t x = fogMinX; x < fogMaxX; ++x ) {
+            fogData[x + fogDataOffsetY] = world.GetTiles( x + fogTileOffsetY ).isFog( color ) ? 1 : 0;
+        }
+    }
+
+    // Set the 'fogData' index offset from the tile index for the TOP LEFT direction from the tile.
+    const int32_t topLeftDirectionOffset = -1 - fogDataWidth;
+
+    // Cache the maximum border for fogDataIndex corresponding the "CENTER" tile to use in assertion. Should be removed if assertion is removed.
+    const int32_t centerfogDataIndexLimit = fogDataSize + topLeftDirectionOffset;
+
+    // Calculate fog directions using the cached 'isFog' data.
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        const int32_t fogCenterDataOffsetY = y * fogDataWidth + fogDataOffset;
+
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            Maps::Tiles & tile = world.GetTiles( x, y );
+
+            int32_t fogDataIndex = x + fogCenterDataOffsetY;
+
+            if ( fogData[fogDataIndex] == 0 ) {
+                // For the tile is without fog we set the UNKNOWN direction.
+                tile._setFogDirection( Direction::UNKNOWN );
+            }
+            else {
+                // The tile is under the fog so its CENTER direction for fog is true.
+                uint16_t fogDirection = Direction::CENTER;
+
+                // 'fogDataIndex' should not get out of maximum 'fogData' vector index after all increments.
+                assert( fogDataIndex < centerfogDataIndexLimit );
+
+                // Check all tiles around for 'fogData' starting from the top left direction and if it is true then logically add the direction to 'fogDirection'.
+                fogDataIndex += topLeftDirectionOffset;
+
+                assert( fogDataIndex >= 0 );
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::TOP_LEFT;
+                }
+
+                ++fogDataIndex;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::TOP;
+                }
+
+                ++fogDataIndex;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::TOP_RIGHT;
+                }
+
+                // Set index to the left direction tile of the next fog data raw.
+                fogDataIndex += fogDataWidth - 2;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::LEFT;
+                }
+
+                // Skip the center tile as it was already checked.
+                fogDataIndex += 2;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::RIGHT;
+                }
+
+                fogDataIndex += fogDataWidth - 2;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::BOTTOM_LEFT;
+                }
+
+                ++fogDataIndex;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::BOTTOM;
+                }
+
+                ++fogDataIndex;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::BOTTOM_RIGHT;
+                }
+
+                tile._setFogDirection( fogDirection );
+            }
+        }
+    }
 }
 
-void Maps::Tiles::drawFog( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const
+void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const
 {
+    // This method should not be called for a tile without fog.
+    assert( _fogDirection & Direction::CENTER );
+
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
-    const int around = GetFogDirections( color );
+    // TODO: Cache all directions into a map: have an array which represents all conditions within this method. The index can be '_fogDirection', the value is index.
+    // And another array to store revert flag.
 
-    if ( DIRECTION_ALL == around ) {
+    if ( DIRECTION_ALL == _fogDirection ) {
         const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
         area.DrawTile( dst, sf, mp );
     }
@@ -2539,191 +2622,201 @@ void Maps::Tiles::drawFog( fheroes2::Image & dst, int color, const Interface::Ga
         uint32_t index = 0;
         bool revert = false;
 
-        if ( ( around & Direction::CENTER ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
+        if ( !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 10;
         }
-        else if ( ( contains( around, Direction::CENTER | Direction::TOP ) ) && !( around & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::TOP ) ) && !( _fogDirection & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 6;
         }
-        else if ( ( contains( around, Direction::CENTER | Direction::RIGHT ) ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::RIGHT ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT ) ) ) {
             index = 7;
         }
-        else if ( ( contains( around, Direction::CENTER | Direction::LEFT ) ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::LEFT ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT ) ) ) {
             index = 7;
             revert = true;
         }
-        else if ( ( contains( around, Direction::CENTER | Direction::BOTTOM ) ) && !( around & ( Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::BOTTOM ) ) && !( _fogDirection & ( Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 8;
         }
-        else if ( ( contains( around, DIRECTION_CENTER_COL ) ) && !( around & ( Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, DIRECTION_CENTER_COL ) ) && !( _fogDirection & ( Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 9;
         }
-        else if ( ( contains( around, DIRECTION_CENTER_ROW ) ) && !( around & ( Direction::TOP | Direction::BOTTOM ) ) ) {
+        else if ( ( contains( _fogDirection, DIRECTION_CENTER_ROW ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM ) ) ) {
             index = 29;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~Direction::TOP_RIGHT ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::TOP_RIGHT ) ) ) {
             index = 15;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~Direction::TOP_LEFT ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::TOP_LEFT ) ) ) {
             index = 15;
             revert = true;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::BOTTOM_RIGHT ) ) ) {
             index = 22;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~Direction::BOTTOM_LEFT ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::BOTTOM_LEFT ) ) ) {
             index = 22;
             revert = true;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 16;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) ) {
             index = 16;
             revert = true;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT ) ) ) ) {
             index = 17;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 17;
             revert = true;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) ) {
             index = 18;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 23;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_TOP_RIGHT_CORNER ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_TOP_RIGHT_CORNER ) ) ) {
             index = 13;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_TOP_LEFT_CORNER ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_TOP_LEFT_CORNER ) ) ) {
             index = 13;
             revert = true;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_RIGHT_CORNER ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_RIGHT_CORNER ) ) ) {
             index = 14;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_LEFT_CORNER ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_LEFT_CORNER ) ) ) {
             index = 14;
             revert = true;
         }
-        else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
-                  && !( around & ( Direction::TOP | Direction::RIGHT ) ) ) {
+        else if ( contains( _fogDirection, Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
+                  && !( _fogDirection & ( Direction::TOP | Direction::RIGHT ) ) ) {
             index = 11;
         }
-        else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM )
-                  && !( around & ( Direction::TOP | Direction::LEFT ) ) ) {
+        else if ( contains( _fogDirection, Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM )
+                  && !( _fogDirection & ( Direction::TOP | Direction::LEFT ) ) ) {
             index = 11;
             revert = true;
         }
-        else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::TOP_LEFT | Direction::TOP )
-                  && !( around & ( Direction::BOTTOM | Direction::RIGHT ) ) ) {
+        else if ( contains( _fogDirection, Direction::LEFT | Direction::TOP_LEFT | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::RIGHT ) ) ) {
             index = 12;
         }
-        else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP )
-                  && !( around & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
+        else if ( contains( _fogDirection, Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
             index = 12;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_LEFT )
-                  && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_LEFT )
+                  && !( _fogDirection & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
             index = 19;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_RIGHT )
-                  && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_RIGHT )
+                  && !( _fogDirection & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 19;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_LEFT )
-                  && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_LEFT )
+                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 20;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_RIGHT )
-                  && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_RIGHT )
+                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
             index = 20;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP )
-                  && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP )
+                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
             index = 22;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT ) && !( around & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT )
+                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
             index = 24;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) && !( around & ( Direction::TOP | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_RIGHT )
+                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_LEFT ) ) ) {
             index = 24;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::LEFT | Direction::TOP_LEFT ) && !( around & ( Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::LEFT | Direction::TOP_LEFT )
+                  && !( _fogDirection & ( Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 25;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::RIGHT | Direction::TOP_RIGHT ) && !( around & ( Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::RIGHT | Direction::TOP_RIGHT )
+                  && !( _fogDirection & ( Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 25;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::BOTTOM_LEFT | Direction::LEFT ) && !( around & ( Direction::RIGHT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::BOTTOM_LEFT | Direction::LEFT )
+                  && !( _fogDirection & ( Direction::RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 26;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::BOTTOM_RIGHT | Direction::RIGHT ) && !( around & ( Direction::LEFT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::BOTTOM_RIGHT | Direction::RIGHT )
+                  && !( _fogDirection & ( Direction::LEFT | Direction::TOP_RIGHT ) ) ) {
             index = 26;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP_LEFT | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP_LEFT | Direction::TOP )
+                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_RIGHT ) ) ) {
             index = 30;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP_RIGHT | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP_RIGHT | Direction::TOP )
+                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_LEFT ) ) ) {
             index = 30;
             revert = true;
         }
-        else if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::LEFT )
-                  && !( around & ( Direction::TOP | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, Direction::BOTTOM | Direction::LEFT )
+                  && !( _fogDirection & ( Direction::TOP | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 27;
         }
-        else if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::RIGHT )
-                  && !( around & ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, Direction::BOTTOM | Direction::RIGHT )
+                  && !( _fogDirection & ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 27;
             revert = true;
         }
-        else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::TOP )
-                  && !( around & ( Direction::TOP_LEFT | Direction::RIGHT | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, Direction::LEFT | Direction::TOP )
+                  && !( _fogDirection & ( Direction::TOP_LEFT | Direction::RIGHT | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) ) ) {
             index = 28;
         }
-        else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::TOP )
-                  && !( around & ( Direction::TOP_RIGHT | Direction::LEFT | Direction::BOTTOM | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, Direction::RIGHT | Direction::TOP )
+                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::LEFT | Direction::BOTTOM | Direction::BOTTOM_LEFT ) ) ) {
             index = 28;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP )
+                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
             index = 31;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::RIGHT ) && !( around & ( Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::RIGHT )
+                  && !( _fogDirection & ( Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 32;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::LEFT ) && !( around & ( Direction::RIGHT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::LEFT )
+                  && !( _fogDirection & ( Direction::RIGHT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
             index = 32;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM ) && !( around & ( Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM )
+                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 33;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW ) && !( around & Direction::TOP ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW ) && !( _fogDirection & Direction::TOP ) ) {
             index = ( _index % 2 ) ? 0 : 1;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | DIRECTION_TOP_ROW ) && !( around & Direction::BOTTOM ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | DIRECTION_TOP_ROW ) && !( _fogDirection & Direction::BOTTOM ) ) {
             index = ( _index % 2 ) ? 4 : 5;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | DIRECTION_LEFT_COL ) && !( around & Direction::RIGHT ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | DIRECTION_LEFT_COL ) && !( _fogDirection & Direction::RIGHT ) ) {
             index = ( _index % 2 ) ? 2 : 3;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | DIRECTION_RIGHT_COL ) && !( around & Direction::LEFT ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | DIRECTION_RIGHT_COL ) && !( _fogDirection & Direction::LEFT ) ) {
             index = ( _index % 2 ) ? 2 : 3;
             revert = true;
         }
         else {
             // unknown
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << _fogDirection << ". Tile index: " << _index )
             const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
             area.DrawTile( dst, sf, mp );
             return;
