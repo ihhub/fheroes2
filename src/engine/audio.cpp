@@ -618,10 +618,12 @@ namespace
         }
 
         if ( volumePercentage >= 100 ) {
-            return MIX_MAX_VOLUME;
+            // Reserve an extra 0.5 dB for possible sound overloads in SDL_mixer, multiplying max volume by 50/53.
+            return MIX_MAX_VOLUME * 50 / 53;
         }
 
-        return static_cast<int>( ( std::exp( std::log( 10 + 1 ) * volumePercentage / 100 ) - 1 ) / 10 * MIX_MAX_VOLUME );
+        // volumePercentage is divided by 106, not 100 to reserve an extra 0.5 dB for possible sound overloads in SDL_mixer.
+        return static_cast<int>( ( std::exp( std::log( 10 + 1 ) * volumePercentage / 106 ) - 1 ) / 10 * MIX_MAX_VOLUME );
     }
 }
 
