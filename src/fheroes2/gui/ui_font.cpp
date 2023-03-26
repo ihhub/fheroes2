@@ -3826,7 +3826,7 @@ namespace
 
             // d with stroke. Needs stroke generated.
             font[240 - 32] = font[68];
-            
+
             // [242 - 32] COMBINING DOT BELOW.
 
             // o with acute accent.
