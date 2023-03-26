@@ -482,8 +482,8 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case MYSTICISM: {
-        str = _n( "%{skill} additionally regenerates one of your hero's spell points per day.",
-                  "%{skill} additionally regenerates %{count} of your hero's spell points per day.", count );
+        str = _n( "%{skill} regenerates one additional spell point per day to your hero.", "%{skill} regenerates %{count} additional spell points per day to your hero.",
+                  count );
         break;
     }
     case LUCK: {
