@@ -9041,7 +9041,7 @@ msgid ""
 "resources.  (If I can't keep it, nobody will!)"
 msgstr ""
 "V dole, který ovládáte začnou strašit duchové. Tento důl pak přestane "
-"produkovat zdroje.  (Pokud ho nebudu mít já, tak nikdo jiný!)"
+"produkovat zdroje. (Pokud ho nebudu mít já, tak nikdo jiný!)"
 
 
 msgid "Set Earth Guardian"
