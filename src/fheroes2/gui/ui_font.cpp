@@ -3469,13 +3469,7 @@ namespace
             font[202 - 32].setPosition( font[69 - 32].x(), font[69 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[202 - 32] );
 
-            // I with grave accent `.
-            font[204 - 32].resize( font[41].width(), font[41].height() + 3 );
-            font[204 - 32].reset();
-            fheroes2::Copy( font[41], 0, 0, font[204 - 32], 0, 3, font[41].width(), font[41].height() );
-            font[204 - 32].setPosition( font[41].x(), font[41].y() - 3 );
-            fheroes2::Copy( font[192 - 32], 7, 0, font[204 - 32], 3, 0, 4, 2 );
-            updateNormalFontLetterShadow( font[204 - 32] );
+            // [204 - 32] COMBINING GRAVE TONE MARK `.
 
             // I with accute accent.
             font[205 - 32].resize( font[41].width(), font[41].height() + 3 );
@@ -3485,13 +3479,10 @@ namespace
             font[205 - 32].setPosition( font[41].x(), font[41].y() - 3 );
             updateNormalFontLetterShadow( font[205 - 32] );
 
-            // O with grave accent `.
-            font[210 - 32].resize( font[47].width(), font[47].height() + 3 );
-            font[210 - 32].reset();
-            fheroes2::Copy( font[47], 0, 0, font[210 - 32], 0, 3, font[47].width(), font[47].height() );
-            font[210 - 32].setPosition( font[47].x(), font[47].y() - 3 );
-            fheroes2::Copy( font[192 - 32], 7, 0, font[210 - 32], 6, 0, 4, 2 );
-            updateNormalFontLetterShadow( font[210 - 32] );
+            // D with stroke. Needs stroke generated.
+            font[208 - 32] = font[36];
+
+            // [210 - 32] COMBINING HOOK ABOVE.
 
             // O with acute accent.
             font[211 - 32].resize( font[47].width(), font[47].height() + 3 );
@@ -3510,11 +3501,7 @@ namespace
             updateNormalFontLetterShadow( font[212 - 32] );
 
             // O with horn. Needs accent generation.
-            font[213 - 32].resize( font[79 - 32].width(), font[79 - 32].height() );
-            font[213 - 32].reset();
-            fheroes2::Copy( font[79 - 32], 0, 0, font[213 - 32], 0, 0, font[79 - 32].width(), font[79 - 32].height() );
-            font[213 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() );
-            updateNormalFontLetterShadow( font[213 - 32] );
+            font[213 - 32] = font[79 - 32];
 
             // U with grave accent `.
             font[217 - 32].resize( font[53].width(), font[53].height() + 3 );
@@ -3531,6 +3518,11 @@ namespace
             fheroes2::Copy( font[193 - 32], 7, 0, font[218 - 32], 5, 0, 4, 2 );
             font[218 - 32].setPosition( font[53].x(), font[53].y() - 3 );
             updateNormalFontLetterShadow( font[218 - 32] );
+
+            // U with horn. Needs accent generated.
+            font[221 - 32] = font[53];
+
+            // [222 - 32] COMBINING TILDE ~.
 
             // a with grave accent `.
             font[224 - 32].resize( font[65].width(), font[65].height() + 3 );
@@ -3592,11 +3584,7 @@ namespace
             font[234 - 32].setPosition( font[101 - 32].x(), font[101 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[234 - 32] );
 
-            // i with grave accent `.
-            font[236 - 32] = font[73];
-            fheroes2::FillTransform( font[236 - 32], 0, 0, font[236 - 32].width(), 3, 1 );
-            fheroes2::Copy( font[192 - 32], 7, 0, font[236 - 32], 1, 0, 4, 2 );
-            updateNormalFontLetterShadow( font[236 - 32] );
+            // [236 - 32] COMBINING ACUTE TONE MARK.
 
             // i with acute accent.
             font[237 - 32] = font[73];
@@ -3604,13 +3592,10 @@ namespace
             fheroes2::Copy( font[193 - 32], 7, 0, font[237 - 32], 1, 0, 4, 2 );
             updateNormalFontLetterShadow( font[237 - 32] );
 
-            // o with grave accent `.
-            font[242 - 32].resize( font[79].width(), font[79].height() + 3 );
-            font[242 - 32].reset();
-            fheroes2::Copy( font[79], 0, 0, font[242 - 32], 0, 3, font[79].width(), font[79].height() );
-            font[242 - 32].setPosition( font[79].x(), font[79].y() - 3 );
-            fheroes2::Copy( font[192 - 32], 7, 0, font[242 - 32], 3, 0, 4, 2 );
-            updateNormalFontLetterShadow( font[242 - 32] );
+            // d with stroke. Needs stroke generated.
+            font[240 - 32] = font[68];
+
+            // [242 - 32] COMBINING DOT BELOW.
 
             // o with acute accent.
             font[243 - 32].resize( font[79].width(), font[79].height() + 3 );
@@ -3628,12 +3613,8 @@ namespace
             font[244 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[244 - 32] );
 
-            // o with horn.
-            font[245 - 32].resize( font[111 - 32].width(), font[111 - 32].height() );
-            font[245 - 32].reset();
-            fheroes2::Copy( font[111 - 32], 0, 0, font[245 - 32], 0, 0, font[111 - 32].width(), font[111 - 32].height() );
-            font[245 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() );
-            updateNormalFontLetterShadow( font[245 - 32] );
+            // o with horn. Needs accent generated.
+            font[245 - 32] = font[111 - 32];
 
             // u with grave accent `.
             font[249 - 32].resize( font[85].width(), font[85].height() + 3 );
@@ -3650,6 +3631,9 @@ namespace
             fheroes2::Copy( font[193 - 32], 7, 0, font[250 - 32], 3, 0, 4, 2 );
             font[250 - 32].setPosition( font[85].x(), font[85].y() - 3 );
             updateNormalFontLetterShadow( font[250 - 32] );
+
+            // u with horn. Needs accent generated
+            font[253 - 32] = font[85];
         }
         // Small font.
         {
@@ -3719,13 +3703,7 @@ namespace
             font[202 - 32].setPosition( font[69 - 32].x(), font[69 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[202 - 32] );
 
-            // I with grave accent `.
-            font[204 - 32].resize( font[41].width(), font[41].height() + 4 );
-            font[204 - 32].reset();
-            fheroes2::Copy( font[41], 0, 0, font[204 - 32], 0, 4, font[41].width(), font[41].height() );
-            fheroes2::Copy( font[192 - 32], 4, 0, font[204 - 32], 1, 0, 3, 3 );
-            font[204 - 32].setPosition( font[41].x(), font[41].y() - 4 );
-            updateSmallFontLetterShadow( font[204 - 32] );
+            // [204 - 32] COMBINING GRAVE TONE MARK `.
 
             // I with acute accent.
             font[205 - 32].resize( font[41].width(), font[41].height() + 4 );
@@ -3735,13 +3713,10 @@ namespace
             font[205 - 32].setPosition( font[41].x(), font[41].y() - 4 );
             updateSmallFontLetterShadow( font[205 - 32] );
 
-            // O with grave accent `.
-            font[210 - 32].resize( font[47].width(), font[47].height() + 4 );
-            font[210 - 32].reset();
-            fheroes2::Copy( font[47], 0, 0, font[210 - 32], 0, 4, font[47].width(), font[47].height() );
-            fheroes2::Copy( font[192 - 32], 4, 0, font[210 - 32], 4, 0, 3, 3 );
-            font[210 - 32].setPosition( font[47].x(), font[47].y() - 4 );
-            updateSmallFontLetterShadow( font[210 - 32] );
+            // D with stroke. Needs stroke generated.
+            font[208 - 32] = font[36];
+
+            // [210 - 32] COMBINING HOOK ABOVE.
 
             // O with acute accent.
             font[211 - 32].resize( font[47].width(), font[47].height() + 4 );
@@ -3760,11 +3735,7 @@ namespace
             updateSmallFontLetterShadow( font[212 - 32] );
 
             // O with horn. Needs accent.
-            font[213 - 32].resize( font[79 - 32].width(), font[79 - 32].height() );
-            font[213 - 32].reset();
-            fheroes2::Copy( font[79 - 32], 0, 0, font[213 - 32], 0, 0, font[79 - 32].width(), font[79 - 32].height() );
-            font[213 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() );
-            updateSmallFontLetterShadow( font[213 - 32] );
+            font[213 - 32] = font[79 - 32];
 
             // U with grave accent `.
             font[217 - 32].resize( font[53].width(), font[53].height() + 4 );
@@ -3781,6 +3752,11 @@ namespace
             fheroes2::Copy( font[193 - 32], 4, 0, font[218 - 32], 4, 0, 3, 3 );
             font[218 - 32].setPosition( font[53].x(), font[53].y() - 4 );
             updateSmallFontLetterShadow( font[218 - 32] );
+
+            // U with horn. Needs accent generated.
+            font[221 - 32] = font[53];
+
+            // [222 - 32] COMBINING TILDE ~.
 
             // a with grave accent `.
             font[224 - 32].resize( font[65].width(), font[65].height() + 3 );
@@ -3838,13 +3814,7 @@ namespace
             font[234 - 32].setPosition( font[101 - 32].x(), font[101 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[234 - 32] );
 
-            // i with grave accent `.
-            font[236 - 32].resize( font[73].width(), font[73].height() + 1 );
-            font[236 - 32].reset();
-            fheroes2::Copy( font[73], 0, 2, font[236 - 32], 0, 3, font[73].width(), 6 );
-            fheroes2::Copy( font[192 - 32], 4, 0, font[236 - 32], 2, 0, 2, 2 );
-            font[236 - 32].setPosition( font[73].x(), font[73].y() - 1 );
-            updateSmallFontLetterShadow( font[236 - 32] );
+            // [236 - 32] COMBINING ACUTE TONE MARK.
 
             // i with acute accent.
             font[237 - 32].resize( font[73].width(), font[73].height() + 1 );
@@ -3854,13 +3824,10 @@ namespace
             font[237 - 32].setPosition( font[73].x(), font[73].y() - 1 );
             updateSmallFontLetterShadow( font[237 - 32] );
 
-            // o with grave accent `.
-            font[242 - 32].resize( font[79].width(), font[79].height() + 3 );
-            font[242 - 32].reset();
-            fheroes2::Copy( font[79], 0, 0, font[242 - 32], 0, 3, font[79].width(), font[79].height() );
-            fheroes2::Copy( font[192 - 32], 4, 0, font[242 - 32], 3, 0, 3, 2 );
-            font[242 - 32].setPosition( font[79].x(), font[79].y() - 3 );
-            updateSmallFontLetterShadow( font[242 - 32] );
+            // d with stroke. Needs stroke generated.
+            font[240 - 32] = font[68];
+            
+            // [242 - 32] COMBINING DOT BELOW.
 
             // o with acute accent.
             font[243 - 32].resize( font[79].width(), font[79].height() + 3 );
@@ -3879,11 +3846,7 @@ namespace
             updateSmallFontLetterShadow( font[244 - 32] );
 
             // o with horn. Needs accent to be generated.
-            font[245 - 32].resize( font[111 - 32].width(), font[111 - 32].height() );
-            font[245 - 32].reset();
-            fheroes2::Copy( font[111 - 32], 0, 0, font[245 - 32], 0, 0, font[111 - 32].width(), font[111 - 32].height() );
-            font[245 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() );
-            updateSmallFontLetterShadow( font[245 - 32] );
+            font[245 - 32] = font[111 - 32];
 
             // u with grave accent `.
             font[249 - 32].resize( font[85].width(), font[85].height() + 3 );
@@ -3894,13 +3857,15 @@ namespace
             updateSmallFontLetterShadow( font[249 - 32] );
 
             // u with acute accent.
-            font[250 - 32] = font[85];
             font[250 - 32].resize( font[85].width(), font[85].height() + 3 );
             font[250 - 32].reset();
             fheroes2::Copy( font[85], 0, 0, font[250 - 32], 0, 3, font[85].width(), font[85].height() );
             fheroes2::Copy( font[193 - 32], 5, 0, font[250 - 32], 3, 0, 2, 2 );
             font[250 - 32].setPosition( font[85].x(), font[85].y() - 3 );
             updateSmallFontLetterShadow( font[250 - 32] );
+
+            // u with horn.
+            font[253 - 32] = font[85];
         }
     }
 
