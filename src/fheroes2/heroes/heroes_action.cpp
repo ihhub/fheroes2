@@ -625,7 +625,7 @@ namespace
         hero.SetShipMaster( false );
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
-        hero.FadeIn( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
+        hero.FadeIn( offset );
 
         // Clear hero position marker from the boat and scout the area on radar after disembarking.
         Interface::Basic & I = Interface::Basic::Get();

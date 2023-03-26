@@ -531,8 +531,12 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     case OBJ_DRAGON_CITY:
     case OBJ_CITY_OF_DEAD:
     case OBJ_TROLL_BRIDGE:
-    // for AI
+    // TODO: former AI-related logic, OBJ_COAST should never be set
+    // TODO: as a visited object, remove this temporary check later
     case OBJ_COAST:
+        assert( 0 );
+        return true;
+    // for AI
     case OBJ_HEROES:
         return true;
     default:
