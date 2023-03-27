@@ -325,7 +325,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     // If the color is under computer control only we have to make it as an ally for human player.
     if ( lossConditions == LOSS_HERO && victoryConditions == VICTORY_DEFEAT_EVERYONE && Colors( colorsAvailableForHumans ).size() == 1 ) {
         // Each tile needs 16 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 16 + 32 + 32 = 160 bits or 20 bytes.
-        fs.seek( MP2::MP2_DATA_OFFSET + ( lossConditionsParam1 + lossConditionsParam2 * width ) * 20 );
+        fs.seek( MP2::MP2_MAP_INFO_SIZE + ( lossConditionsParam1 + lossConditionsParam2 * width ) * 20 );
 
         MP2::mp2tile_t mp2tile;
         MP2::loadTile( fs, mp2tile );

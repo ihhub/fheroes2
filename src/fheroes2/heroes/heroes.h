@@ -285,7 +285,7 @@ public:
     const Castle * inCastle() const override;
     Castle * inCastleMutable() const;
 
-    void LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf );
+    void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const std::vector<uint8_t> & data );
     void PostLoad();
 
     int GetRace() const override;
