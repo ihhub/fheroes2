@@ -532,7 +532,6 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     case OBJ_CITY_OF_DEAD:
     case OBJ_TROLL_BRIDGE:
     // for AI
-    case OBJ_COAST:
     case OBJ_HEROES:
         return true;
     default:

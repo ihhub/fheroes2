@@ -772,6 +772,8 @@ namespace
         assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HEROES );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            // AI-controlled hero cannot activate Stone Liths from the same tile, but should move to this tile from some
+            // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut();
         }
 
@@ -834,6 +836,8 @@ namespace
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            // AI-controlled hero cannot activate Whirlpool from the same tile, but should move to this tile from some
+            // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut();
         }
 
@@ -1428,26 +1432,17 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
-    void AIToBoat( Heroes & hero, int32_t dst_index )
+    void AIToBoat( Heroes & hero, const int32_t dst_index )
     {
         if ( hero.isShipMaster() )
             return;
 
-        const int32_t from_index = hero.GetIndex();
+        hero.setLastGroundRegion( world.GetTiles( hero.GetIndex() ).GetRegion() );
 
-        // disabled nearest coasts (on week MP2::isWeekLife)
-        MapsIndexes coasts = Maps::ScanAroundObjectWithDistance( from_index, 4, MP2::OBJ_COAST );
-        coasts.push_back( from_index );
-
-        for ( MapsIndexes::const_iterator it = coasts.begin(); it != coasts.end(); ++it )
-            hero.SetVisited( *it );
-
-        hero.setLastGroundRegion( world.GetTiles( from_index ).GetRegion() );
-
-        const fheroes2::Point & destPos = Maps::GetPoint( dst_index );
-        const fheroes2::Point offset( destPos - hero.GetCenter() );
+        const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut( offset );
         }
 
@@ -1457,9 +1452,6 @@ namespace
         hero.SetMapsObject( MP2::OBJ_NONE );
         world.GetTiles( dst_index ).resetObjectSprite();
         hero.SetShipMaster( true );
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
-        }
         hero.GetPath().Reset();
 
         AI::Get().HeroesClearTask( hero );
@@ -1469,7 +1461,7 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
-    void AIToCoast( Heroes & hero, int32_t dst_index )
+    void AIToCoast( Heroes & hero, const int32_t dst_index )
     {
         if ( !hero.isShipMaster() )
             return;
@@ -1478,8 +1470,8 @@ namespace
         Maps::Tiles & from = world.GetTiles( fromIndex );
 
         // Calculate the offset before making the action.
-        const fheroes2::Point & prevPosition = Maps::GetPoint( dst_index );
-        const fheroes2::Point offset( prevPosition - hero.GetCenter() );
+        const fheroes2::Point prevPos = hero.GetCenter();
+        const fheroes2::Point offset( Maps::GetPoint( dst_index ) - prevPos );
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
@@ -1488,9 +1480,10 @@ namespace
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( prevPosition );
-            hero.FadeIn( { offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() } );
+            Interface::Basic::Get().GetGameArea().SetCenter( prevPos );
+            hero.FadeIn( offset );
         }
+
         hero.ActionNewPosition( true );
 
         AI::Get().HeroesClearTask( hero );
@@ -1997,6 +1990,7 @@ namespace AI
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 
@@ -2032,6 +2026,7 @@ namespace AI
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 
