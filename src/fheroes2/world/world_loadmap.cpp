@@ -334,8 +334,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             vec_castles.AddCastle( new Castle( posX, posY, Race::NONE ) );
             break;
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 format: castle at position [" << posX << "; " << posY << "], index " << posX + posY * width
-                           << " has invalid castle type " << castleType )
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       "Invalid MP2 format: castle at position [" << posX << "; " << posY << "], index " << posX + posY * width << " has invalid castle type "
+                                                                  << castleType )
             break;
         }
 
@@ -346,7 +347,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     // If this assertion blows up it means that we are not reading the data properly from the file.
     assert( fs.tell() == afterAddonInfoPos + MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE );
 
-    if ( totalFileSize < afterAddonInfoPos + MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE + MP2::MP2_CAPTURE_OBJECT_COUNT * MP2::MP2_CAPTURE_OBJECT_POSITION_SIZE ) {
+    if ( totalFileSize
+         < afterAddonInfoPos + MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE + MP2::MP2_CAPTURE_OBJECT_COUNT * MP2::MP2_CAPTURE_OBJECT_POSITION_SIZE ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
         return false;
     }
@@ -387,15 +389,16 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_ABANDONED_MINE, Color::NONE );
             break;
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 format: unknown capture object type " << objectType << " at position [" << posX << "; " << posY << "], index "
-                          << posX + posY * width )
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       "Invalid MP2 format: unknown capture object type " << objectType << " at position [" << posX << "; " << posY << "], index "
+                                                                          << posX + posY * width )
             break;
         }
     }
 
     // If this assertion blows up it means that we are not reading the data properly from the file.
-    assert(
-        fs.tell() == afterAddonInfoPos + MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE + MP2::MP2_CAPTURE_OBJECT_COUNT * MP2::MP2_CAPTURE_OBJECT_POSITION_SIZE );
+    assert( fs.tell()
+            == afterAddonInfoPos + MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE + MP2::MP2_CAPTURE_OBJECT_COUNT * MP2::MP2_CAPTURE_OBJECT_POSITION_SIZE );
 
     // TODO: find a way to use this value properly.
     const uint8_t obeliskCount = fs.get();
@@ -490,8 +493,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 break;
             case MP2::OBJ_JAIL:
                 if ( MP2::MP2_HEROES_STRUCTURE_SIZE != pblock.size() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: expected minimum size of Jail structure is " << MP2::MP2_HEROES_STRUCTURE_SIZE
-                                   << " while loaded size is " << pblock.size() )
+                    DEBUG_LOG( DBG_GAME, DBG_WARN,
+                               "Invalid MP2 file format: expected minimum size of Jail structure is " << MP2::MP2_HEROES_STRUCTURE_SIZE << " while loaded size is "
+                                                                                                      << pblock.size() )
                 }
                 else {
                     // TODO: Byte 60 is hero info structure is always 0 so the below logic is invalid.
