@@ -2371,7 +2371,7 @@ msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
-"Marknaden används för att växla  en resurs till en annan. Ju fler "
+"Marknaden används för att växla en resurs till en annan. Ju fler "
 "marknader du kontrollerar desto bättre växlingskurs."
 
 msgid ""
