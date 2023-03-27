@@ -2252,8 +2252,8 @@ msgstr "Farmen ökar produktionen av Bönder med %{count} per vecka."
 msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
-msgstr "Kolosseum erbjuder spännande och inspirerande gladiatorspel åt de försvarande 
-trupperna, och höjer stridsmoralen med 2."
+msgstr "Kolosseum erbjuder spännande och inspirerande gladiatorspel åt de försvarande "
+"trupperna, och höjer stridsmoralen med 2."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
 msgstr "Kökkenmöddingen ökar produktionen av Vättar med %{count} per vecka."
