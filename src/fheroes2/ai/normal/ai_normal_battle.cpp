@@ -81,7 +81,7 @@ namespace AI
     {
         // Composite priority criteria:
         // Primary - Enemy is within move range and can be attacked this turn
-        // Secondary - Postion quality (to attack from, or protect friendly unit)
+        // Secondary - Position quality (to attack from, or protect friendly unit)
         // Tertiary - Enemy unit threat
         return ( newOutcome.canAttackImmediately && !previous.canAttackImmediately )
                || ( newOutcome.canAttackImmediately == previous.canAttackImmediately

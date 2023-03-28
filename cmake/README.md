@@ -134,7 +134,7 @@ the modules find the appropriate libraries:
   Set the `SDL2main` library (.a) path. (Override)
 
 These variables could be used in case of Windows projects, and when the
-libraries are not localized in a standard pathes. They can be specified when
+libraries are not localized in a standard paths. They can be specified when
 executing the `cmake` command or when using the [CMake GUI][] (They are marked
 as advanced).
 

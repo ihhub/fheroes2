@@ -1233,7 +1233,7 @@ msgstr ""
 "fotfeste i denne regionen."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Slå ned på all motstanden i dette området. Når du har klart det vil den "

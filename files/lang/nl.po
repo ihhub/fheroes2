@@ -1215,7 +1215,7 @@ msgstr ""
 "faciliteiten om in deze regio te opereren."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Elimineer alle oppositie op dit gebied. Dan is het eerste stuk van het "

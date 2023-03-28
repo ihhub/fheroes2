@@ -1227,7 +1227,7 @@ msgstr ""
 "обосноваться в этом регионе."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Сокрушите всех врагов в этой области. Тогда первая часть артефакта будет "
