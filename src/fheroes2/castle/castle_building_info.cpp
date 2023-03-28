@@ -864,7 +864,7 @@ namespace fheroes2
         case BUILD_WELL:
             return _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." );
         case BUILD_STATUE:
-            return _( "The Statue increases your town's income by %{count} per day." );
+            return _( "The Statue increases your town's income by %{count} gold per day." );
         case BUILD_LEFTTURRET:
             return _( "The Left Turret provides extra firepower during castle combat." );
         case BUILD_RIGHTTURRET:
